@@ -1,0 +1,27 @@
+<configuration>
+
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/eori-common-component-frontend.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%date{ISO8601} level=[%level] logger=[%logger] thread=[%thread] message=[%message] %replace(exception=[%xException]){'^exception=\[\]$',''}%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="eori-common-component-frontend" level="OFF"/>
+
+    <!-- turn OFF all logging (children can override) -->
+    <root level="OFF">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

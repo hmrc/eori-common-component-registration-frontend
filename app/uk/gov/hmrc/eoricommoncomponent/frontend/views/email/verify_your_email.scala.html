@@ -1,0 +1,58 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes._
+@import views.html.helper._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+
+
+@this(layout_di: layout)
+@(email:Option[String],
+service: Service,
+journey: Journey.Value)(implicit request: Request[_], messages: Messages)
+
+@layout_di(messages("cds.subscription.verify-email.title")) {
+
+<div class="column-two-thirds">
+    <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+
+
+    @helpers.form(CheckYourEmailController.submit(service, journey)) {
+
+        @CSRF.formField
+
+        <h1 class="heading-large">@Html(messages("cds.subscription.verify-email.title"))</h1>
+
+        <p id="p1">  @email.map(e => messages("cds.subscription.verify-email.para1", e)) </p>
+        <p id="p2">  @messages("cds.subscription.verify-email.para2") </p>
+
+        <div class="form-group">
+            <details>
+                <summary class="summary" role="button" aria-expanded="true">@messages("cds.subscription.verify-email.progressive-disclosure.heading")</summary>
+                <div class="details__inner panel-indent">
+                    <p id="p3">@Html(messages("cds.subscription.verify-email.progressive-disclosure.content" , CheckYourEmailController.submit(service, journey).url))</p>
+                </div>
+            </details>
+        </div>
+    }
+
+
+    @helpers.helpAndSupport()
+
+</div>
+}
+

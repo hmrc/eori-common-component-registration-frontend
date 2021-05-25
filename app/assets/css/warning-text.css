@@ -1,0 +1,43 @@
+.govuk-warning-text {
+    position: relative;
+    padding: 2px 2px 2px 0;
+}
+
+.govuk-warning-text__icon {
+    font-size: 19px;
+    font-weight: bold;
+    box-sizing: border-box;
+
+    display: inline-block;
+
+    position: absolute;
+    left: 0;
+
+    min-width: 35px;
+    min-height: 35px;
+    margin-top: -7px;
+
+
+    border: 3px solid black;
+    border-radius: 50%;
+
+    color: white;
+    background: black;
+
+    font-size: 30px;
+    line-height: 29px;
+
+    text-align: center;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.govuk-warning-text__text {
+    font-size: 19px;
+    font-weight: bold;
+    display: block;
+    padding-left: 45px;
+}

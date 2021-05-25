@@ -1,0 +1,61 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.EoriUnableToUse
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import views.html.helper._
+
+@this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help)
+
+@(service: Service, eori: String, form: Form[EoriUnableToUse])(implicit messages: Messages, request: Request[_])
+
+@layout_di(messages("ecc.what-is-your-eori.unable-to-use.title"), suppressTelephoneNumberDetection = false) {
+    <div class="column-two-thirds">
+
+        @helpers.errorSummary(form, focusOverrides = Map("answer" -> s"answer-change"))
+
+        <h1 id="page-heading" class="heading-large" >@messages("ecc.what-is-your-eori.unable-to-use.title")</h1>
+
+        <div class="panel-indent panel-indent--thick">
+            <p id="eori-number">@eori</p>
+        </div>
+
+        @helpers.form(routes.EoriUnableToUseController.submit(service), "eori-unable-to-use-form") {
+            @CSRF.formField
+
+            @helpers.inputRadioGroup(
+                form("answer"),
+                Seq(
+                    (EoriUnableToUse.changeEori, messages("ecc.what-is-your-eori.unable-to-use.changeEori")),
+                    (EoriUnableToUse.signout, messages("ecc.what-is-your-eori.unable-to-use.signout"))
+                ),
+                Map.empty,
+                None,
+                '_divClass -> "form-group",
+                '_legend -> messages("ecc.what-is-your-eori.unable-to-use.question"),
+                '_isLegendH1 -> false
+            )
+
+            <input class="button" type="submit" id="continue-button" value='@messages("cds.navigation.continue")'>
+        }
+
+        @help_di()
+
+        @feedback_di()
+    </div>
+}

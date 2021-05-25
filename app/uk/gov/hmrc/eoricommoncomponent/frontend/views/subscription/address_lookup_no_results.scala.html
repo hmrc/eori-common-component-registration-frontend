@@ -1,0 +1,57 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.AddressLookupPostcodeController
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+
+@this(layout_di: layout)
+
+@(postcode: String, service: Service, isInReviewMode: Boolean)(implicit request: Request[_], messages: Messages)
+
+@changeLink = {
+    @if(isInReviewMode) {
+        <a href="@AddressLookupPostcodeController.reviewPage(service)" id="reenter-postcode-button">@messages("cds.form.change")</a>
+    } else {
+        <a href="@AddressLookupPostcodeController.displayPage(service)" id="reenter-postcode-button">@messages("cds.form.change")</a>
+    }
+}
+
+@enterManuallyAddressLink = {
+    @if(isInReviewMode) {
+        <a href="@AddressController.reviewForm(service, Journey.Subscribe)" id="enter-manually-button">@messages("ecc.address-lookup.postcode.no-results.manual")</a>
+    } else {
+        <a href="@AddressController.createForm(service, Journey.Subscribe)" id="enter-manually-button">@messages("ecc.address-lookup.postcode.no-results.manual")</a>
+    }
+}
+
+@layout_di(messages("ecc.address-lookup.postcode.no-results")) {
+    <div class="column-two-thirds">
+        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+        <legend>
+            <h1 class="heading-large">@messages("ecc.address-lookup.postcode.no-results")</h1>
+        </legend>
+
+        <p id="hint">@messages("ecc.address-lookup.postcode.no-results.hint")</p>
+
+        <div class="mt-2 mb-2">
+            <p class="postcode-address-value">@postcode</p> <p class="postcode-address-change">@changeLink</p>
+        </div>
+
+        @enterManuallyAddressLink
+    </div>
+}

@@ -1,0 +1,116 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(field: Field, radioOptions: Seq[(String, String)], hints: Map[String, String], hintHtml: Option[Html],  args: (Symbol, Any)*)(implicit messages: Messages, formInstance: Option[Form[_]] = None)
+
+@import play.api.i18n._
+@import views.html.helper._
+
+@elements = @{
+    FieldElements(field.id, field, Html(""), args.toMap, messages)
+}
+@isLegendH1 = @{
+    elements.args.getOrElse('_isLegendH1, false).asInstanceOf[Boolean]
+}
+@legend = @{
+    elements.args.getOrElse('_legend, "").asInstanceOf[String]
+}
+@hasHint = @{
+    elements.args.contains('_hintText)
+}
+@hintId = @{
+    if(hasHint) s"${field.id}-hint" else ""
+}
+@hasHintHtml = @{
+    hintHtml.isDefined
+}
+@hintHtmlId = @{
+    if(hasHintHtml) s"${field.id}-hintHtml" else ""
+}
+
+@hasErrors = @{
+    elements.hasErrors
+}
+@errorId = @{
+    if(hasErrors) s"${field.id}-error" else ""
+}
+@describedBy = @{
+  Seq(hintId, hintHtmlId, errorId).filterNot(_.isEmpty).mkString(" ")
+}
+
+<div id="@field.id-field" class="form-group">
+    <fieldset
+        id="@field.id-fieldset"
+        @if(hasHint || hasHintHtml || hasErrors){
+            aria-describedby="@describedBy"
+        } >
+
+        <legend>
+        @if(isLegendH1){
+            <h1 class="heading-large">
+            @legend
+            </h1>
+        } else {
+            <span class="heading-medium">
+            @legend
+            </span>
+        }
+        </legend>
+
+        @if(hasErrors) {
+            <div class="form-group-error">
+        }
+
+        @if(hasHint) {
+            <p class="form-hint" id="@hintId">@elements.args.get('_hintText)</p>
+        }
+
+        @hintHtml.map{ hint =>
+            <p class="form-hint" id="@hintHtmlId">@hint</p>
+        }
+
+        @if(hasErrors) {
+            @elements.errors.map { error => <span class="error-message" id="@errorId"><span class="visually-hidden">@messages("cds.error.field.hint")</span> @messages(key = error.toString)</span> }
+            </div>
+        }
+
+        @if(hasErrors) {
+            <div class="form-group-error">
+        }
+        @radioOptions.map { case (value, label) =>
+            @defining(s"${elements.field.name}-${value.toLowerCase.replace(" ", "_")}") { inputId =>
+                <div class="multiple-choice">
+                    <input
+                    type="radio"
+                    id="@inputId"
+                    name="@elements.field.name"
+                    value="@value"
+                    @field.value.filter(_ == value).map { _ => checked="checked" }>
+                    <label for="@inputId">
+                        @label&nbsp;
+                        @hints.get(value).map { hint =>
+                            <span class="form-hint">@{Html(hint)}</span>
+                        }
+                    </label>
+                </div>
+            }
+
+        }
+        @if(hasErrors) {
+            </div>
+        }
+    </fieldset>
+</div>

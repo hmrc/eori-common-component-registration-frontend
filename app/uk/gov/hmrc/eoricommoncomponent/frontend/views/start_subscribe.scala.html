@@ -1,0 +1,90 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName
+@import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
+
+@this(layout_di: layout, appConfig: AppConfig)
+
+@(service: Service)(implicit messages: Messages, request: Request[_])
+
+@link(text: String, url: String, target: String) = {
+    <a href="@url" target="@target">@messages(text)</a>
+}
+
+@layout_di(messages("ecc.subscription.information.heading", ServiceName.longName)) {
+
+    <div class="column-two-thirds start_page">
+        <h1 class="heading-large">@messages("ecc.subscription.information.heading", ServiceName.longName)</h1>
+
+        <p class="mt-2" id="information-only-once">@messages("ecc.subscription.information.only.once")</p>
+
+        <h2 class="heading-medium" id="what-you-will-need">@messages("ecc.subscription.information.para1.heading")</h2>
+        <p id="what-you-will-need-text">@messages("ecc.subscription.information.para1", ServiceName.longName)</p>
+
+        <h3 class="heading-small" id="gb-eori">@messages("ecc.subscription.information.para2.heading")</h3>
+        <p id="gb-eori-text">@messages("ecc.subscription.information.para2")</p>
+
+        <div class="govuk-warning-text mt-2 mb-2">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+                @Html(messages("ecc.subscription.information.para2.warning"))
+            </strong>
+        </div>
+
+        <p id="gb-eori-list-heading">@messages("ecc.subscription.information.para2.text", ServiceName.longName)</p>
+
+        <ul class="numbered-list list">
+            <li>@messages("ecc.subscription.information.para2.list.first")
+                <ul class="bullets list">
+                    <li>@messages("ecc.subscription.information.para2.list.bullet.first")</li>
+                    <li>@messages("ecc.subscription.information.para2.list.bullet.second")</li>
+                    <li>@messages("ecc.subscription.information.para2.list.bullet.third")</li>
+                </ul>
+            </li>
+            <li>@Html(messages("ecc.subscription.information.para2.list.second"))</li>
+        </ul>
+
+        <h3 class="heading-small" id="organisation">@messages("ecc.subscription.information.section.organisation.subheading")</h3>
+        <p id="organisation-text">@messages("ecc.subscription.information.section.organisation.list.heading")</p>
+
+        <ul class="bullets list">
+            <li>@Html(messages("ecc.subscription.information.section.organisation.list.first"))</li>
+            <li>@messages("ecc.subscription.information.section.organisation.list.second")</li>
+            <li>@messages("ecc.subscription.information.section.organisation.list.third")</li>
+            <li>@messages("ecc.subscription.information.section.organisation.list.fourth")</li>
+        </ul>
+
+        <h3 class="heading-small mt-2" id="individual">@messages("ecc.subscription.information.section.individual.subheading")</h3>
+        <p id="individual-text">@messages("ecc.subscription.information.section.individual.para")</p>
+
+        <ul class="bullets list">
+            <li>@messages("ecc.subscription.information.section.individual.nino")</li>
+            <li>@Html(messages("ecc.subscription.information.section.individual.utr"))</li>
+        </ul>
+
+        <p class="mt-2 mb-2" id="email-confirmation">@messages("ecc.subscription.information.email.confirm")</p>
+
+        <a href="@EmailController.form(service, Journey.Subscribe)" class="button" role="button" id="continue">@messages("cds.navigation.continue")</a>
+
+        @helpers.helpAndSupport()
+    </div>
+
+}

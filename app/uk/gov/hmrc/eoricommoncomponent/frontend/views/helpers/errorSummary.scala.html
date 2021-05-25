@@ -1,0 +1,44 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(form: Form[_], errorMsgKey: String => String = key => s"cds.$key.label", fieldNameOverrides: Map[String, String] = Map.empty, focusOverrides: Map[String, String] = Map.empty)(implicit request: Request[_], messages: Messages)
+
+@if(form.hasErrors) {
+    <div id="errors" tabindex="-1" role="alert" aria-labelledby="form-error-heading" class="error-summary error-summary--show">
+        <h2 class="heading-medium error-summary-heading" id="form-error-heading">@messages("cds.field-error.heading")</h2>
+        <ul class="error-summary-list">
+            @form.globalErrors.map { error =>
+                <li class="error-list">
+                    @messages(error.messages, error.args :_*)
+                </li>
+            }
+            @defining(form.errors.filter(!_.key.isEmpty)) { fieldLevelErrors =>
+                @fieldLevelErrors.map { error =>
+                    @defining(
+                        fieldNameOverrides.getOrElse(error.key, error.key)
+                    ) { fieldName =>
+                            <li>
+                                <a href="#@focusOverrides.getOrElse(fieldName, fieldName)" class="error-list" data-focuses="">
+                                    @messages(error.messages, error.args :_*)
+                                </a>
+                            </li>
+
+                    }
+                }
+            }
+        </ul>
+    </div>
+}

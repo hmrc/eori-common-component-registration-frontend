@@ -1,0 +1,44 @@
+@*
+* Copyright 2021 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
+
+@import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
+@import uk.gov.hmrc.play.views.html.layouts.Head
+
+@this(head_di: Head)
+@()
+<meta name="viewport" content="width=device-width, initial-scale=1">
+ <!--[if gt IE 8]><!--> <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("template/govuk-template.css")" type="text/css"> <!--<![endif]-->
+
+
+@head_di(
+ linkElem = None,
+ headScripts = None)
+
+<link rel="stylesheet" href="@routes.Assets.versioned("template/govuk-template-print.css")" media="print" type="text/css" />
+<link rel="stylesheet" href="@routes.Assets.versioned("template/fonts.css")" media="all" type="text/css" />
+<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/custom.css")" type="text/css">
+<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/warning-text.css")" type="text/css">
+
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+
+<link rel="mask-icon" href="/images/gov.uk_logotype_crown.svg" color="#0b0c0c"/>
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-60x60.png"/>
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta property="og:image" content="/images/opengraph-image.png" />

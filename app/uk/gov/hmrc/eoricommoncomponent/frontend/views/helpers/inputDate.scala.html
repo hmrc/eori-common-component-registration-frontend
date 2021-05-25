@@ -1,0 +1,107 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.views.html.helpers.{Input}
+@import views.html.helper._
+@import uk.gov.hmrc.play.mappers.DateFields._
+
+@this(input_di: Input)
+@(formItem:Form[_], fieldName: String, intro: Option[Html], args: (Symbol,Any)*)(implicit messages: Messages)
+
+@dateField = @{formItem(fieldName)}
+@dayField = @{formItem(s"$fieldName.$day")}
+@monthField = @{formItem(s"$fieldName.$month")}
+@yearField = @{formItem(s"$fieldName.$year")}
+
+@formErrors = @{
+    dateField.errors ++ dayField.errors ++ monthField.errors ++ yearField.errors
+}
+
+@elements = @{ FieldElements(formItem(fieldName).id, formItem(fieldName), null, args.toMap, messages) }
+
+@isLegendH1 = @{
+elements.args.getOrElse('_isLegendH1, false).asInstanceOf[Boolean]
+}
+
+@inputClass(field: Field) = @{
+    if(dateField.hasErrors || field.hasErrors) {"form-control form-control-error"}
+    else "form-control"
+}
+
+@errorId = @{
+    if(formErrors.nonEmpty) s"$fieldName-error" else ""
+}
+
+@describedBy = @{
+    Seq(s"$fieldName-description", errorId).filterNot(_.isEmpty).mkString(" ")
+}
+
+<div class="form-group @if(formErrors.nonEmpty){form-group-error}">
+    <fieldset class="date-form-group form-date" id="@fieldName-fieldset" aria-describedby="@describedBy">
+        <legend id="@elements.field.name-field">
+            @if(isLegendH1){
+                <h1 class="heading-large">
+                    @elements.label
+                </h1>
+            } else {
+                <span class="form-label-bold">
+                    @elements.label
+                </span>
+            }
+        </legend>
+
+        <div id="@fieldName-description">
+            @intro
+
+            @if(elements.args.get('_hintText).isDefined) {
+                <span id="@fieldName-hint" class="form-hint">@elements.args.get('_hintText)</span>
+            }
+        </div>
+
+        @if(formErrors.nonEmpty) {
+            @formErrors.map { error => <span class="error-message" id="@errorId"><span class="visually-hidden">@messages("cds.error.field.hint")</span> @messages(error.message, error.args :_*)</span>}
+        }
+
+        @input_di(
+            formItem(s"$fieldName.day").copy(errors = Seq.empty),
+            '_label -> messages("date.fields.day"),
+            '_labelClass -> "form-group form-group-day",
+            '_inputClass -> inputClass(dayField),
+            '_pattern -> "[0-9]*",
+            '_inputmode -> "numeric",
+            '_emptyValueText -> " "
+        )
+        @input_di(
+            formItem(s"$fieldName.month").copy(errors = Seq.empty),
+            '_label -> messages("date.fields.month"),
+            '_labelClass -> "form-group form-group-month",
+            '_inputClass -> inputClass(monthField),
+            '_pattern -> "[0-9]*",
+            '_inputmode -> "numeric",
+            '_emptyValueText -> " "
+        )
+        @input_di(
+            formItem(s"$fieldName.year").copy(errors = Seq.empty),
+            '_label -> messages("date.fields.year"),
+            '_labelClass -> "form-group form-group-year",
+            '_inputClass -> inputClass(yearField),
+            '_pattern -> "[0-9]*",
+            '_inputmode -> "numeric",
+            '_emptyValueText -> " "
+        )
+
+    </fieldset>
+</div>

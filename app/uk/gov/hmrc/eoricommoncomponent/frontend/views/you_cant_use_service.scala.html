@@ -1,0 +1,51 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import play.api.i18n.Lang
+@import uk.gov.hmrc.auth.core.AffinityGroup
+@import uk.gov.hmrc.auth.core.AffinityGroup.Agent
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
+
+
+@this(layout_di: layout)
+@(userType: Option[AffinityGroup])(implicit messages: Messages, request: Request[_])
+
+@para1 = @{userType match {
+    case Some(Agent) => messages("cds.you-cant-use-service-agent.para1")
+    case _ => messages("cds.you-cant-use-service-standard-organisation.para1", longName)
+    }
+}
+
+@para2 = @{userType match {
+    case Some(Agent) => messages("cds.you-cant-use-service-agent.para2", longName)
+    case _ => messages("cds.you-cant-use-service-standard-organisation.para2")
+    }
+}
+
+@journey = @{if(request.path.contains("register")) Journey.Register else Journey.Subscribe}
+
+@layout_di(messages("cds.you-cant-use-service.heading")) {
+<div class="column-two-thirds">
+    <h1 class="heading-large">@messages("cds.you-cant-use-service.heading")</h1>
+    <p id="para-1">@para1</p>
+    <p id="para-2">@para2</p>
+        <a class="button" href='@logout(service, journey)' role="button">@messages("cds.sign.out")</a>
+    @helpers.helpAndSupport()
+</div>
+}

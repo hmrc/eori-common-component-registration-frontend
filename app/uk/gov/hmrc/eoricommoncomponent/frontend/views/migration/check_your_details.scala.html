@@ -1,0 +1,344 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, ExistingEori, NameIdOrganisationMatchModel}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.{AddressViewModel, CompanyRegisteredCountry}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
+@import org.joda.time.LocalDate
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressLookupParams
+@import views.html.helper._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.helpers.summaryRow
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.play.language.LanguageUtils
+
+@this(layout_di: layout, summaryRow_di: summaryRow, languageUtils: LanguageUtils)
+
+@(  isThirdCountrySubscription: Boolean,
+        isIndividualSubscriptionFlow: Boolean,
+        organisationType: Option[CdsOrganisationType],
+        contactDetails: Option[ContactDetailsModel],
+        addressDetails: Option[AddressViewModel],
+        principalEconomicActivity: Option[String],
+        eoriNumber: Option[String],
+        existingEori: Option[ExistingEori],
+        email: Option[String],
+        nameIdOrganisationDetails: Option[NameIdOrganisationMatchModel],
+        nameOrganisationDetails: Option[NameOrganisationMatchModel],
+        nameDobDetails: Option[NameDobMatchModel],
+        dateEstablished: Option[LocalDate],
+        idDetails: Option[IdMatchModel],
+        customsId: Option[CustomsId],
+        registeredCountry: Option[CompanyRegisteredCountry],
+        addressLookupParams: Option[AddressLookupParams],
+        service: Service,
+        journey: Journey.Value)(implicit request: Request[_], messages: Messages)
+
+
+    @labelForEUCountry(countryCode: String) = @{
+        messages(messageKeyForEUCountryCode(countryCode))
+    }
+
+    @messageKeyForEUCountryCode(countryCode: String) = @{
+        s"cds.country.$countryCode"
+    }
+
+    @isEUCountryCode(countryCode: String) = @{
+        messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
+    }
+
+    @transformCountryCodeToLabel(code: String) = @{
+        code match {
+            case "GB" => messages("cds.country.GB")
+            case c if isEUCountryCode(c) => labelForEUCountry(c)
+            case _ => code
+        }
+    }
+
+    @faxNumberWithPrefix(fax: String) = @{
+        s"${messages("cds.review-page.fax-prefix")} $fax"
+    }
+
+    @formatDate(date: LocalDate) = @{
+        languageUtils.Dates.formatDate(date)
+    }
+
+    @isSoleTrader = @{
+        organisationType.contains(CdsOrganisationType.SoleTrader) || organisationType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
+    }
+
+    @isCompany =@{
+        organisationType.contains(CdsOrganisationType.Company) && !isThirdCountrySubscription
+    }
+
+    @isPartnership = @{
+        organisationType.contains(CdsOrganisationType.Partnership) ||
+        organisationType.contains(CdsOrganisationType.LimitedLiabilityPartnership)
+    }
+
+    @businessDetailsLabel = @{
+        if(isIndividualSubscriptionFlow || isSoleTrader) {
+            messages("cds.form.contact-details")
+        } else if(isPartnership){
+            messages("cds.form.partner-address")
+        } else if(isCompany) {
+            messages("cds.form.company-address")
+        } else {
+            messages("cds.form.business-details")
+        }
+    }
+
+    @nameLabel = @{
+        if(isPartnership) {
+            messages("cds.partnership.name.label")
+        } else if(isCompany){
+            messages("cds.company.name.label")
+        } else {
+            messages("cds.organisation.name.label")
+        }
+
+    }
+
+    @utrLabel = @{
+        if(isIndividualSubscriptionFlow) {
+            messages("cds.utr.label")
+        } else {
+            if(isPartnership) {
+                messages("cds.partnership-utr.label")
+            } else {
+                messages("cds.company.utr.label")
+            }
+        }
+    }
+@*Check NameIdModel for UTR, if it exits use that, if it doesn't use CustomsIdModel*@
+    @utr = @{
+        nameIdOrganisationDetails match {
+            case Some(_) if !isIndividualSubscriptionFlow => None
+            case _ => customsId match {
+                case u@Some(Utr(_)) => u
+                case _ => if(isThirdCountrySubscription) Some(Utr(messages("cds.not-entered.label"))) else None
+            }
+        }
+    }
+
+    @nino = @{
+        customsId match {
+            case n@Some(Nino(_)) => n
+            case u@Some(Utr(_)) => None
+            case _ => if(isThirdCountrySubscription && isIndividualSubscriptionFlow) Some(Nino(messages("cds.not-entered.label"))) else None
+        }
+    }
+
+    @countryLocation(country: CompanyRegisteredCountry) = {
+        @labelForEUCountry(country.country)
+    }
+
+    @shouldCountryLocationBeDisplayed() = @{
+      val isOrgUtrEmpty = nameIdOrganisationDetails.forall(_.id == messages("cds.not-entered.label"))
+      val isIndividualUtrEmpty = utr.forall(_.id == messages("cds.not-entered.label"))
+      val isIndividualNinoEmpty = nino.forall(_.id == messages("cds.not-entered.label"))
+
+      val shouldCountryBeDisplayedOrg = isOrgUtrEmpty && !isIndividualSubscriptionFlow
+      val shouldCountryBeDisplayedInd = isIndividualUtrEmpty && isIndividualNinoEmpty && isIndividualSubscriptionFlow
+
+      shouldCountryBeDisplayedOrg || shouldCountryBeDisplayedInd
+    }
+
+    @addressHtml(ad: AddressViewModel) = {
+      @helpers.noMarginParagraph(ad.street)
+      @helpers.noMarginParagraph(ad.city)
+      @ad.postcode.map(helpers.noMarginParagraph(_))
+      @helpers.noMarginParagraph(transformCountryCodeToLabel(ad.countryCode))
+    }
+
+    @contactDetailsHtml(cd: ContactDetailsModel) = {
+        @helpers.noMarginParagraph(cd.fullName)
+        @helpers.noMarginParagraph(cd.telephone)
+        @cd.fax.map(fax => helpers.noMarginParagraph(faxNumberWithPrefix(fax)))
+        @cd.street.map(helpers.noMarginParagraph(_))
+        @cd.city.map(helpers.noMarginParagraph(_))
+        @cd.postcode.map(helpers.noMarginParagraph(_))
+        @cd.countryCode.map(code => helpers.noMarginParagraph(transformCountryCodeToLabel(code)))
+    }
+
+    @isAddressLookup = @{addressLookupParams.exists(_.nonEmpty())}
+
+    @isUtrAndNinoEmpty = @{
+        utr.forall(_.id == "Not entered") && nino.forall(_.id == "Not entered") && nameIdOrganisationDetails.forall(_.id.isEmpty)
+    }
+
+    @layout_di(messages("cds.form.check-answers")) {
+
+        <div class="column-two-thirds">
+            <h1 class="heading-large">@messages("cds.form.check-answers")</h1>
+
+            <dl id="review-tbl" class="govuk-check-your-answers cya-questions-short">
+                @summaryRow_di(
+                    "email",
+                    messages("subscription.enter-email.label"),
+                    Html.apply(email.getOrElse("")),
+                    None
+                )
+                @summaryRow_di(
+                    "eori-number",
+                    messages("cds.subscription.enter-eori-number.eori-number.label"),
+                    Html.apply(eoriNumber.getOrElse("")),
+                    if(existingEori.isEmpty) Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.WhatIsYourEoriController.reviewForm(service)) else None,
+                    messages("cds.subscription.enter-eori-number.eori-number.label")
+                )
+                @nameOrganisationDetails.map { d =>
+                    @if(isThirdCountrySubscription && !isIndividualSubscriptionFlow) {
+                        @summaryRow_di(
+                            "org_name",
+                            nameLabel,
+                            Html.apply(d.name),
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.NameOrgController.reviewForm(service, journey)),
+                            nameLabel
+                        )
+                    }
+                }
+                @nameDobDetails.map { nd =>
+                    @if(isIndividualSubscriptionFlow) {
+                        @summaryRow_di(
+                            "full-name",
+                            messages("subscription.check-your-details.full-name.label"),
+                            Html.apply(s"${nd.firstName} ${nd.lastName}"),
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.NameDobSoleTraderController.reviewForm(service, journey)),
+                            messages("subscription.check-your-details.full-name.label")
+                        )
+                        @summaryRow_di(
+                            "date-of-birth",
+                            messages("subscription.check-your-details.date-of-birth.label"),
+                            Html.apply(formatDate(nd.dateOfBirth)),
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.NameDobSoleTraderController.reviewForm(service, journey)),
+                            messages("subscription.check-your-details.date-of-birth.label")
+                        )
+                    }
+                }
+                @utr.map { u =>
+                    @summaryRow_di(
+                        "utr",
+                        messages("cds.utr.label"),
+                        Html.apply(u.id),
+                        if(!isThirdCountrySubscription)
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.HowCanWeIdentifyYouController.reviewForm(service, journey))
+                        else
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.HaveUtrSubscriptionController.reviewForm(service, journey)),
+                        messages("cds.utr.label")
+                    )
+                }
+                @nino.map { n =>
+                    @if(isIndividualSubscriptionFlow){
+                        @summaryRow_di(
+                            "nino",
+                            messages("cds.nino.label"),
+                            Html.apply(n.id),
+                            if(!isThirdCountrySubscription)
+                                Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.HowCanWeIdentifyYouController.reviewForm(service, journey))
+                            else
+                                Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.HaveNinoSubscriptionController.reviewForm(service, journey)),
+                            messages("cds.nino.label")
+                        )
+                    }
+                }
+                @nameIdOrganisationDetails.map { n =>
+                    @if(!isThirdCountrySubscription && !isIndividualSubscriptionFlow) {
+                        @summaryRow_di(
+                            "orgname",
+                            nameLabel,
+                            Html.apply(n.name),
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.NameIDOrgController.reviewForm(service, journey)),
+                            nameLabel
+                        )
+                    }
+                  @if(!isIndividualSubscriptionFlow){
+                        @summaryRow_di(
+                            "utr",
+                            utrLabel,
+                            Html.apply(n.id),
+                            if(!isThirdCountrySubscription)
+                                Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.NameIDOrgController.reviewForm(service, journey))
+                            else
+                                Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.HaveUtrSubscriptionController.reviewForm(service, journey)),
+                            utrLabel
+                        )
+                    }
+                }
+                @addressDetails.map { ad =>
+                    @if(!shouldCountryLocationBeDisplayed) {
+                        @summaryRow_di(
+                            "name-and-address",
+                            businessDetailsLabel,
+                            addressHtml(ad),
+                            if(isAddressLookup) Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.AddressLookupPostcodeController.reviewPage(service))
+                            else Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.reviewForm(service, journey)),
+                            businessDetailsLabel
+                        )
+                    }
+                }
+                @registeredCountry.map { country =>
+                    @if(shouldCountryLocationBeDisplayed) {
+                        @summaryRow_di(
+                            "country-location",
+                            messages("ecc.registered-company-country.summary"),
+                            countryLocation(country),
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.CompanyRegisteredCountryController.reviewPage(service)),
+                            messages("ecc.registered-company-country.summary")
+                        )
+                    }
+                }
+                @contactDetails.map { cd =>
+                    @if(isThirdCountrySubscription && isUtrAndNinoEmpty) {
+                        @summaryRow_di(
+                            "contact-details",
+                            messages("cds.form.customs-contact"),
+                            contactDetailsHtml(cd),
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.ContactDetailsController.reviewForm(service)),
+                            messages("cds.form.customs-contact")
+                        )
+                    }
+                }
+                @dateEstablished.map { de =>
+                    @if(!isIndividualSubscriptionFlow) {
+                        @summaryRow_di(
+                            "date-established",
+                            messages("cds.date-established.label"),
+                            Html.apply(formatDate(de)),
+                            Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.DateOfEstablishmentController.reviewForm(service, journey)),
+                            messages("cds.date-established.label")
+                        )
+                    }
+                }
+
+            </dl>
+
+            <h2 id="declaration">@messages("cds.form.declaration")</h2>
+            <p class="govuk-body" id="disclaimer">@messages("cds.form.disclaimer")</p>
+
+            <div class="form-group">
+                @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.RegisterWithEoriAndIdController.registerWithEoriAndId(service, journey)) {
+                    @CSRF.formField
+
+                    <p><input id="continue" class="button" type="submit" value="@messages("cds.form.send")"></p>
+                }
+
+                @helpers.helpAndSupport()
+            </div>
+        </div>
+    }
+

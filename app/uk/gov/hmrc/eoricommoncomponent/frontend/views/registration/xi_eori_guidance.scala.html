@@ -1,0 +1,48 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+
+@this(layout_di: layout, feedback_di: helpers.feedback)
+
+@()(implicit messages: Messages, request: Request[_])
+
+@layout_di(messages("ecc.subscription.outcomes.guidance.title")) {
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">@messages("ecc.subscription.outcomes.guidance.heading")</h1>
+
+        <div class="form-group">
+            <h2 id="xi-how-to-register" class="heading-medium">@messages("ecc.subscription.outcomes.guidance.xi.eori.heading")</h2>
+            <p id="xi-how-to-register-text">@Html(messages("ecc.subscription.outcomes.guidance.xi.eori.information"))</p>
+
+            <ul class="bullets list">
+                <li>@messages("ecc.subscription.outcomes.guidance.xi.eori.bullet1")</li>
+                <li>@messages("ecc.subscription.outcomes.guidance.xi.eori.bullet2")</li>
+            </ul>
+
+            <div class="govuk-warning-text mt-2 mb-2">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    @Html(messages("ecc.subscription.outcomes.guidance.xi.eori.warning.info"))
+                </strong>
+            </div>
+
+            <p id="apply-for-eori">@Html(messages("ecc.subscription.outcomes.guidance.xi.eori.href"))</p>
+        </div>
+
+        @feedback_di()
+    </div>
+}
