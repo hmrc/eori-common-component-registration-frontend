@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId, LoggedInUserWithEnrolments}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.emailForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.{EmailStatus, EmailViewModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}

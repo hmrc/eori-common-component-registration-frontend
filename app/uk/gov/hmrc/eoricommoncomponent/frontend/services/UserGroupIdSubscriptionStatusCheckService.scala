@@ -19,7 +19,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
 import uk.gov.hmrc.http.HeaderCarrier
