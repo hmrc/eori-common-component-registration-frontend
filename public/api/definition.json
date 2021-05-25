@@ -1,0 +1,30 @@
+{
+  "scopes": [
+    {
+      "key": "read:paye-charges",
+      "name": "access employer charges information",
+      "description": "Access employer charges information for particular period of a tax year"
+    }
+  ],
+  "api": {
+    "name": "Paye Charges",
+    "description": "The EPaye Charges API provides information related to charges for an employer for a given tax year.",
+    "context": "paye-charges",
+    "versions": [
+      {
+        "version": "1.0",
+        "status": "PROTOTYPED",
+        "endpoints": [
+          {
+            "uriPattern": "/empRef/{empRef}/taxYear/{taxYear}",
+            "endpointName": "Fetch Employer Charges",
+            "method": "GET",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "read:paye-charges"
+          }
+        ]
+      }
+    ]
+  }
+}

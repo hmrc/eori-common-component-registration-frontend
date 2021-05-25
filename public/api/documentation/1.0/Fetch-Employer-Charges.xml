@@ -1,0 +1,323 @@
+<endpoint>
+    <name>Fetch Employer Charges</name>
+    <description>This endpoint fetches employer charges for the given tax year.</description>
+    <section id="resource">
+        <title>Resource</title>
+        <resource>GET /empRef/{empRef}/taxYear/{taxYear}</resource>
+    </section>
+    <section id="path-parameters">
+        <title>Path Parameters</title>
+        <table>
+            <headings>
+                <cell>Name</cell>
+                <cell>Type</cell>
+                <cell>Example</cell>
+                <cell>Description</cell>
+            </headings>
+            <rows>
+                <row>
+                    <cell>
+                        <code>empRef</code>
+                    </cell>
+                    <cell>
+                        <code>String</code>
+                    </cell>
+                    <cell>
+                        <code>125/LS00015</code>
+                    </cell>
+                    <cell>The Employer Reference consists of Tax Office Number and Tax Office Reference, in format (Tax
+                        Office Number)/(Tax Office Reference). Note that the empRef must be encoded before it can be
+                        part
+                        of URL, for example, 125%2FLS00015
+                    </cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>taxYear</code>
+                    </cell>
+                    <cell>
+                        <code>String</code>
+                    </cell>
+                    <cell>
+                        <code>2014-15</code>
+                    </cell>
+                    <cell>The tax year for the charges being retrieved, in the format YYYY-YY. The supplied year values
+                        must be consecutive.
+                        For example. 2012-13 or 2014-15.
+                    </cell>
+                </row>
+            </rows>
+        </table>
+    </section>
+    <section id="authorisation">
+        <title>Authorisation</title>
+        <authorisation>
+            <type>USER</type>
+            <scope>read:paye-charges</scope>
+        </authorisation>
+    </section>
+    <section id="content-types">
+        <title>Accept Header</title>
+        <list>
+            <item>
+                <code>application/vnd.hmrc.1.0+json</code>
+            </item>
+        </list>
+    </section>
+    <section id="sample-response">
+        <title>Response</title>
+        <httpStatus>200 (OK)</httpStatus>
+        <json>
+            <![CDATA[
+                {"charges": [
+                    {
+                      "chargeType": "In Year RTI Charge-TAX",
+                      "mainType": "FPS",
+                      "period": [
+                        {
+                          "startDate": "2013-01-01",
+                          "endDate": "2013-01-31",
+                          "value": 9876.45,
+                          "outstanding": 99.96,
+                          "cleared": 123.45
+                        },
+                        {
+                          "startDate": "2013-02-01",
+                          "endDate": "2013-02-28",
+                          "value": 9876.45,
+                          "outstanding": 99.96,
+                          "cleared": 123.45
+                        }
+                      ]
+                    }
+                  ]
+                }
+            ]]>
+        </json>
+        <httpStatus>204 (No Content)</httpStatus>
+        <json></json>
+        <table>
+            <headings>
+                <cell>Name</cell>
+                <cell>Type</cell>
+                <cell>Example</cell>
+                <cell>Description</cell>
+            </headings>
+            <rows>
+                <row>
+                    <cell>
+                        <code>chargeType</code>
+                    </cell>
+                    <cell>
+                        <code>String</code>
+                    </cell>
+                    <cell>
+                        <code>In Year RTI Charge-TAX</code>
+                    </cell>
+                    <cell>Charge category, mandatory field.</cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>mainType</code>
+                    </cell>
+                    <cell>
+                        <code>String</code>
+                    </cell>
+                    <cell>
+                        <code>FPS</code>
+                    </cell>
+                    <cell>Main charges category for this charge, mandatory field</cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>period</code>
+                    </cell>
+                    <cell>
+                        <code>List</code>
+                    </cell>
+                    <cell>
+                        <code></code>
+                    </cell>
+                    <cell>List of available period data for a charge category, this may hold either a partial or full
+                        years worth of data
+                    </cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>class1NationalInsuranceEmployee</code>
+                    </cell>
+                    <cell>
+                        <code>BigDecimal</code>
+                    </cell>
+                    <cell>
+                        <code>0</code>
+                    </cell>
+                    <cell>Class 1 National Insurance for Employees from FPS/EPS return. Can be positive, negative or
+                        zero.
+                    </cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>startDate</code>
+                    </cell>
+                    <cell>
+                        <code>String (ISO 8601 Date)</code>
+                    </cell>
+                    <cell>
+                        <code>2014-12-01</code>
+                    </cell>
+                    <cell>Start date for the current period. The date is held in ISO 8601 format (YYYY-MM-DD)
+                    </cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>endDate</code>
+                    </cell>
+                    <cell>
+                        <code>String (ISO 8601 Date)</code>
+                    </cell>
+                    <cell>
+                        <code>2014-12-31</code>
+                    </cell>
+                    <cell>Start date for the current period. The date is held in ISO 8601 format (YYYY-MM-DD)
+                    </cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>value</code>
+                    </cell>
+                    <cell>
+                        <code>BigDecimal</code>
+                    </cell>
+                    <cell>
+                        <code>122.5</code>
+                    </cell>
+                    <cell>Total amount of charges for the given period. Can be positive, negative or zero.</cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>outstanding</code>
+                    </cell>
+                    <cell>
+                        <code>BigDecimal</code>
+                    </cell>
+                    <cell>
+                        <code>105.8</code>
+                    </cell>
+                    <cell>Outstanding charges for the given period. Can be positive, negative or zero.</cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>cleared</code>
+                    </cell>
+                    <cell>
+                        <code>BigDecimal</code>
+                    </cell>
+                    <cell>
+                        <code>0</code>
+                    </cell>
+                    <cell>Total of cleared charges for the given period. Can be positive, negative or zero.</cell>
+                </row>
+            </rows>
+        </table>
+    </section>
+    <section id="error-responses">
+        <title>Error Scenarios</title>
+        <table>
+            <headings>
+                <cell>Error Scenario</cell>
+                <cell>HTTP Status</cell>
+                <cell>Error Code</cell>
+                <cell>message</cell>
+            </headings>
+            <rows>
+                <row>
+                    <cell>
+                        <code>TaxYear invalid</code>
+                    </cell>
+                    <cell>
+                        <code>400 (Bad Request)</code>
+                    </cell>
+                    <cell>
+                        <code>ERROR_TAX_YEAR_INVALID</code>
+                    </cell>
+                    <cell>
+                        <code>Tax Year must be of the form yyyy-yy ex. 2012-13</code>
+                    </cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>Bad Request</code>
+                    </cell>
+                    <cell>
+                        <code>400 (Bad Request)</code>
+                    </cell>
+                    <cell>
+                        <code>BAD_REQUEST</code>
+                    </cell>
+                    <cell>
+                        <code>Bad Request</code>
+                    </cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>Unauthorized</code>
+                    </cell>
+                    <cell>
+                        <code>401 (Unauthorized)</code>
+                    </cell>
+                    <cell>
+                        <code>UNAUTHORIZED</code>
+                    </cell>
+                    <cell>
+                        <code>Bearer token is missing or not authorized</code>
+                    </cell>
+                </row>
+                <row>
+                    <cell>
+                        <code>Resource Not Found</code>
+                    </cell>
+                    <cell>
+                        <code>404 (Not Found)</code>
+                    </cell>
+                    <cell>
+                        <code>NOT_FOUND</code>
+                    </cell>
+                    <cell>
+                        <code>Resource was not found</code>
+                    </cell>
+                </row>
+
+                <row>
+                    <cell>
+                        <code>Accept header invalid</code>
+                    </cell>
+                    <cell>
+                        <code>406 (Not Acceptable)</code>
+                    </cell>
+                    <cell>
+                        <code>ACCEPT_HEADER_INVALID</code>
+                    </cell>
+                    <cell>
+                        <code>The accept header is missing or invalid</code>
+                    </cell>
+                </row>
+
+                <row>
+                    <cell>
+                        <code>Internal Server Error</code>
+                    </cell>
+                    <cell>
+                        <code>500 (Internal Server Error)</code>
+                    </cell>
+                    <cell>
+                        <code>INTERNAL_SERVER_ERROR</code>
+                    </cell>
+                    <cell>
+                        <code>Internal server error</code>
+                    </cell>
+                </row>
+            </rows>
+        </table>
+    </section>
+</endpoint>

@@ -1,0 +1,40 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+
+
+@this(layout_di: layout)
+@(service: Service, journey: Journey.Value)(implicit messages: Messages, request: Request[_])
+
+@redirectUrl = @{journey match {
+    case Journey.Register => ApplicationController.startRegister(service).url
+    case Journey.Subscribe => ApplicationController.startSubscription(service).url
+}}
+
+@layout_di(messages("cds.security-sign-out.heading")) {
+<div class="column-two-thirds">
+    <header class="page-header">
+        <h1 class="heading-large">@messages("cds.security-sign-out.heading")</h1>
+    </header>
+    <p class="form-hint" id="hint">@messages("cds.security-sign-out.note")</p>
+        <a class="button" href='@redirectUrl' role="button">@messages("cds.security-sign-in")</a>
+    @helpers.helpAndSupport()
+</div>
+}

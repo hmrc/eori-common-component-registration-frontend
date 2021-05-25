@@ -1,0 +1,40 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
+@import views.html.helper._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+
+
+@this(layout_di: layout)
+@()(implicit request: Request[_], messages: Messages)
+
+@layout_di(messages("cds.registration.you-need-a-different-service-iom.title")) {
+<div class="column-two-thirds">
+    <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+
+    <h1 class="heading-large">@messages("cds.registration.you-need-a-different-service-iom.title")</h1>
+
+    <p id="info">@messages("cds.registration.you-need-a-different-service-iom.info")</p>
+
+    <ul class="bullets">
+        <li><a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes" id="vat-registered">@messages("cds.registration.you-need-a-different-service-iom.vat-registered")</a></li>
+        <li><a href="https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no" id="not-vat-registered">@messages("cds.registration.you-need-a-different-service-iom.not-vat-registered")</a></li>
+    </ul>
+
+    @helpers.helpAndSupport()
+</div>
+}

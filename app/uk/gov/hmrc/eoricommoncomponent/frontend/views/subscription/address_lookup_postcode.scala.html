@@ -1,0 +1,90 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.AddressLookupPostcodeController
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressLookupParams
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import views.html.helper._
+
+@this(layout_di: layout)
+
+@(addressPostcodeForm: Form[AddressLookupParams], isInReviewMode: Boolean, selectedOrganisationType: CdsOrganisationType, service: Service)(implicit request: Request[_], messages: Messages)
+
+@inputText(field: String, label: String, args: (Symbol, Any)*) = {
+    @helpers.inputText(addressPostcodeForm)(field, label, args: _*)
+}
+
+@pageTitle = @{
+    if(selectedOrganisationType.id == CompanyId) {
+        messages("ecc.address-lookup.postcode.organisation.title")
+    } else if(selectedOrganisationType.id == SoleTraderId || selectedOrganisationType.id == IndividualId) {
+        messages("ecc.address-lookup.postcode.individual.title")
+    } else if(selectedOrganisationType.id == PartnershipId || selectedOrganisationType.id == LimitedLiabilityPartnershipId) {
+        messages("ecc.address-lookup.postcode.partnership.title")
+    } else if(selectedOrganisationType.id == CharityPublicBodyNotForProfitId) {
+        messages("ecc.address-lookup.postcode.charity.title")
+    } else {
+        messages("ecc.address-lookup.postcode.organisation.title")
+    }
+}
+
+@formHint = {
+    @if(selectedOrganisationType.id == CompanyId) {
+        <p class="form-hint" id="hint">@Html(messages("ecc.address-lookup.postcode.organisation.hint"))</p>
+    } else {
+        <p class="form-hint" id="hint">@Html(messages("ecc.address-lookup.postcode.default.hint"))</p>
+    }
+}
+
+@manualAddressLink = @{
+    if(isInReviewMode) uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.reviewForm(service, Journey.Subscribe)
+    else uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.createForm(service, Journey.Subscribe)
+}
+
+@layout_di(pageTitle, form = Some(addressPostcodeForm)) {
+    <div class="column-two-thirds">
+        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+
+        @helpers.errorSummary(addressPostcodeForm)
+
+        @helpers.form(AddressLookupPostcodeController.submit(service, isInReviewMode), "addressLookupPostcodeForm") {
+
+            @CSRF.formField
+
+            <legend>
+                <h1 class="heading-large">@pageTitle</h1>
+            </legend>
+            <fieldset>
+
+                @formHint
+
+                @inputText("postcode", "ecc.address-lookup.postcode.label", '_plainLabel -> true)
+                @inputText("line1", "ecc.address-lookup.postcode.line1.label", '_plainLabel -> true, '_hintText -> messages("ecc.address-lookup.postcode.line1.hint"))
+
+                <input class="button" type="submit" id="find-address-button" value='@messages("ecc.address-lookup.postcode.find-address")'>
+            </fieldset>
+
+            <div class="mt-2 mb-2">
+                <a href="@manualAddressLink" id="cannot-find-address">@messages("ecc.address-lookup.postcode.find-address.manual")</a>
+            </div>
+        }
+    </div>
+}
