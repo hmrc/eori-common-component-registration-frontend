@@ -66,7 +66,7 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
 
   private val serviceConfig = new ServicesConfig(config)
 
-  val appConfig: AppConfig = new AppConfig(config, serviceConfig, "eori-common-component-frontend")
+  val appConfig: AppConfig = new AppConfig(config, serviceConfig, "eori-common-component-registration-frontend")
 
   val getRequest = FakeRequest("GET", "")
 
