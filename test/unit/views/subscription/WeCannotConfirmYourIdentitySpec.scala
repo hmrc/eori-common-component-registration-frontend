@@ -58,7 +58,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
       doc
         .body()
         .getElementById("try-again")
-        .attr("href") mustBe "/customs-enrolment-services/atar/register/what-are-your-uk-vat-details"
+        .attr("href") mustBe "/customs-registration-services/atar/register/what-are-your-uk-vat-details"
     }
 
     "have the VAT Details link for the try again button in review mode" in {
@@ -66,7 +66,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
       doc
         .body()
         .getElementById("try-again")
-        .attr("href") mustBe "/customs-enrolment-services/atar/register/what-are-your-uk-vat-details/review"
+        .attr("href") mustBe "/customs-registration-services/atar/register/what-are-your-uk-vat-details/review"
     }
   }
 

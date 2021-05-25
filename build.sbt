@@ -12,7 +12,7 @@ import scala.language.postfixOps
 mappings in Universal ++= directory(baseDirectory.value / "public")
 // see https://stackoverflow.com/a/37180566
 
-name := "eori-common-component-frontend"
+name := "eori-common-component-registration-frontend"
 
 targetJvm := "jvm-1.8"
 
@@ -20,7 +20,7 @@ scalaVersion := "2.12.12"
 
 majorVersion := 0
 
-PlayKeys.devSettings := Seq("play.server.http.port" -> "6750")
+PlayKeys.devSettings := Seq("play.server.http.port" -> "6751")
 
 lazy val allResolvers = resolvers ++= Seq(Resolver.jcenterRepo)
 
@@ -86,10 +86,10 @@ lazy val scoverageSettings = {
     // Semicolon-separated list of regexs matching classes to exclude
     ScoverageKeys.coverageExcludedPackages := List("<empty>",
       "Reverse.*",
-      "uk\\.gov\\.hmrc\\.customs\\.rosmfrontend\\.models\\.data\\..*",
-      "uk\\.gov\\.hmrc\\.customs\\.rosmfrontend\\.view.*",
-      "uk\\.gov\\.hmrc\\.customs\\.rosmfrontend\\.models.*",
-      "uk\\.gov\\.hmrc\\.customs\\.rosmfrontend\\.config.*",
+      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.models\\.data\\..*",
+      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.view.*",
+      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.models.*",
+      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.config.*",
       "logger.*\\(.*\\)",
       ".*(AuthService|BuildInfo|Routes|TestOnly).*").mkString(";"),
     ScoverageKeys.coverageMinimum := 86,

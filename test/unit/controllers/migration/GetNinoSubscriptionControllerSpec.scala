@@ -56,7 +56,7 @@ class GetNinoSubscriptionControllerSpec extends ControllerSpec with BeforeAndAft
 
   private val matchNinoSubscriptionView = instanceOf[how_can_we_identify_you_nino]
 
-  private val nextPageFlowUrl = "/customs-enrolment-services/subscribe/address"
+  private val nextPageFlowUrl = "/customs-registration-services/subscribe/address"
 
   override protected def beforeEach: Unit = {
     super.beforeEach()
@@ -104,7 +104,7 @@ class GetNinoSubscriptionControllerSpec extends ControllerSpec with BeforeAndAft
       mockSubscriptionFlow(nextPageFlowUrl)
       submit(Journey.Subscribe, Map("nino" -> "ab 12 34 56 c")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/subscribe/address"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/subscribe/address"
       }
       verify(mockSubscriptionDetailsService).cacheCustomsId(meq(Nino("AB123456C")))(any[HeaderCarrier])
     }
@@ -119,7 +119,7 @@ class GetNinoSubscriptionControllerSpec extends ControllerSpec with BeforeAndAft
         mockSubscriptionFlow(nextPageFlowUrl)
         submit(Journey.Subscribe, Map("nino" -> "ab 12 34 56 c"), true) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/subscribe/address"
+          result.header.headers(LOCATION) shouldBe "/customs-registration-services/subscribe/address"
         }
         verify(mockSubscriptionDetailsService).cacheCustomsId(meq(Nino("AB123456C")))(any[HeaderCarrier])
       }
@@ -136,7 +136,7 @@ class GetNinoSubscriptionControllerSpec extends ControllerSpec with BeforeAndAft
           status(result) shouldBe SEE_OTHER
           result.header.headers(
             LOCATION
-          ) shouldBe "/customs-enrolment-services/atar/subscribe/matching/review-determine"
+          ) shouldBe "/customs-registration-services/atar/subscribe/matching/review-determine"
         }
         verify(mockSubscriptionDetailsService).cacheCustomsId(meq(Nino("AB123456C")))(any[HeaderCarrier])
       }

@@ -105,7 +105,7 @@ class UseThisEoriControllerSpec extends ControllerSpec with AuthActionMock with 
         val result = controller.submit(atarService)(postRequest())
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/user-location"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/user-location"
       }
     }
   }

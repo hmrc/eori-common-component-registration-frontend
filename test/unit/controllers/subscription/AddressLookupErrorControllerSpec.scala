@@ -119,7 +119,7 @@ class AddressLookupErrorControllerSpec extends ControllerSpec with AuthActionMoc
         val result = controller.displayNoResultsPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode"
         verifyZeroInteractions(mockAddressLookupNoResultsPage)
       }
 
@@ -130,7 +130,7 @@ class AddressLookupErrorControllerSpec extends ControllerSpec with AuthActionMoc
         val result = controller.reviewNoResultsPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/review"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/review"
         verifyZeroInteractions(mockAddressLookupNoResultsPage)
       }
     }

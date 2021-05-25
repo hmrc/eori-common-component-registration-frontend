@@ -20,7 +20,7 @@ case class GGCredentials(userId: String, password: String, oid: Option[String])
 
 object Env {
 
-  lazy val port: Int = Option(System.getProperty("port")).fold(6750)(_.toInt)
+  lazy val port: Int = Option(System.getProperty("port")).fold(6751)(_.toInt)
 
   lazy val frontendHost: String = Option(System.getProperty("host")).getOrElse("http://localhost:" + port)
 

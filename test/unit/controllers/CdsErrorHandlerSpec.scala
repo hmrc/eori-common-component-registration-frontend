@@ -63,7 +63,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
 
       whenReady(cdsErrorHandler.onServerError(mockRegisterRequest, SessionTimeOutException("xyz"))) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/register/display-sign-out"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/display-sign-out"
       }
     }
 
@@ -72,7 +72,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
 
       whenReady(cdsErrorHandler.onServerError(mockRegisterRequest, SessionTimeOutException("xyz"))) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/display-sign-out"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/display-sign-out"
       }
     }
 

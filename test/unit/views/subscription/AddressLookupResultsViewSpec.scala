@@ -120,10 +120,10 @@ class AddressLookupResultsViewSpec extends ViewSpec {
       val line1ChangeLink    = doc().body().getElementById("review-tbl__line1_change")
 
       postcodeChangeLink.text() must startWith("Change")
-      postcodeChangeLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address-postcode"
+      postcodeChangeLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address-postcode"
 
       line1ChangeLink.text() must startWith("Change")
-      line1ChangeLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address-postcode"
+      line1ChangeLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address-postcode"
     }
 
     "display change link to params page - review mode" in {
@@ -132,10 +132,10 @@ class AddressLookupResultsViewSpec extends ViewSpec {
       val line1ChangeLink    = reviewDoc.body().getElementById("review-tbl__line1_change")
 
       postcodeChangeLink.text() must startWith("Change")
-      postcodeChangeLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address-postcode/review"
+      postcodeChangeLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address-postcode/review"
 
       line1ChangeLink.text() must startWith("Change")
-      line1ChangeLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address-postcode/review"
+      line1ChangeLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address-postcode/review"
     }
 
     "display dropdown with label" in {
@@ -156,7 +156,7 @@ class AddressLookupResultsViewSpec extends ViewSpec {
       val manualAddressLink = doc().body().getElementById("cannot-find-address")
 
       manualAddressLink.text() mustBe "I can't find my address in the list"
-      manualAddressLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address"
+      manualAddressLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address"
     }
 
     "display review manual address link" in {
@@ -164,7 +164,7 @@ class AddressLookupResultsViewSpec extends ViewSpec {
       val manualAddressLink = reviewDoc.body().getElementById("cannot-find-address")
 
       manualAddressLink.text() mustBe "I can't find my address in the list"
-      manualAddressLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+      manualAddressLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
     }
 
     "display Continue button" in {

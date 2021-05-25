@@ -85,12 +85,12 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
         val result = action.apply(
           SessionBuilder.buildRequestWithSessionAndPathNoUser(
             method = "GET",
-            path = s"/customs-enrolment-services/atar/register/"
+            path = s"/customs-registration-services/atar/register/"
           )
         )
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).get should include(
-          "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6750%2Fcustoms-enrolment-services%2Fatar%2Fregister&origin=eori-common-component-frontend"
+          "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6751%2Fcustoms-registration-services%2Fatar%2Fregister&origin=eori-common-component-registration-frontend"
         )
       }
     }
@@ -106,12 +106,12 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
       val result: Future[Result] = action.apply(
         SessionBuilder.buildRequestWithSessionAndPathNoUser(
           method = "GET",
-          path = s"/customs-enrolment-services/atar/register/"
+          path = s"/customs-registration-services/atar/register/"
         )
       )
       status(result) shouldBe SEE_OTHER
       header(LOCATION, result).get should include(
-        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6750%2Fcustoms-enrolment-services%2Fatar%2Fregister&origin=eori-common-component-frontend"
+        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6751%2Fcustoms-registration-services%2Fatar%2Fregister&origin=eori-common-component-registration-frontend"
       )
     }
 
@@ -125,12 +125,12 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
       val result = action.apply(
         SessionBuilder.buildRequestWithSessionAndPathNoUser(
           method = "GET",
-          path = s"/customs-enrolment-services/atar/subscribe/"
+          path = s"/customs-registration-services/atar/subscribe/"
         )
       )
       status(result) shouldBe SEE_OTHER
       header(LOCATION, result).get should include(
-        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6750%2Fcustoms-enrolment-services%2Fatar%2Fsubscribe&origin=eori-common-component-frontend"
+        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6751%2Fcustoms-registration-services%2Fatar%2Fsubscribe&origin=eori-common-component-registration-frontend"
       )
     }
 

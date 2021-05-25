@@ -162,7 +162,7 @@ class GetUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMoc
       ).thenReturn(Future.successful(()))
       submit(Journey.Subscribe, Map("utr" -> "11 11 111111k")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/address"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/address"
       }
       verify(mockSubscriptionDetailsService).cacheNameAndCustomsId(meq("orgName"), meq(Utr("1111111111K")))(
         any[HeaderCarrier]
@@ -179,7 +179,7 @@ class GetUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMoc
         .thenReturn(Future.successful(Some(nameOrganisationMatchModel)))
       submit(Journey.Subscribe, ValidUtrRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/address"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/address"
       }
       verify(mockSubscriptionDetailsService).cacheCustomsId(meq(ValidUtr))(any[HeaderCarrier])
     }
@@ -208,7 +208,7 @@ class GetUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMoc
 
         submit(Journey.Subscribe, ValidUtrRequest, true) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/address"
+          result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/address"
         }
         verify(mockSubscriptionDetailsService).cacheNameAndCustomsId(any(), meq(ValidUtr))(any[HeaderCarrier])
       }
@@ -222,7 +222,7 @@ class GetUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMoc
 
         submit(Journey.Subscribe, ValidUtrRequest, true) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/address"
+          result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/address"
         }
         verify(mockSubscriptionDetailsService).cacheCustomsId(meq(ValidUtr))(any[HeaderCarrier])
       }
@@ -243,7 +243,7 @@ class GetUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMoc
           status(result) shouldBe SEE_OTHER
           result.header.headers(
             LOCATION
-          ) shouldBe "/customs-enrolment-services/atar/subscribe/matching/review-determine"
+          ) shouldBe "/customs-registration-services/atar/subscribe/matching/review-determine"
         }
         verify(mockSubscriptionDetailsService).cacheNameAndCustomsId(any(), meq(ValidUtr))(any[HeaderCarrier])
       }

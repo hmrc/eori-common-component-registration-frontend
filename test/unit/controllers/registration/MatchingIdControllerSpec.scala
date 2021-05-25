@@ -183,12 +183,12 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
         .apply(
           SessionBuilder.buildRequestWithSessionAndPathNoUserAndBasedInUkNotSelected(
             method = "GET",
-            path = "/customs-enrolment-services/atar/subscribe"
+            path = "/customs-registration-services/atar/subscribe"
           )
         )
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should include(
-        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6750%2Fcustoms-enrolment-services%2Fatar%2Fsubscribe&origin=eori-common-component-frontend"
+        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6751%2Fcustoms-registration-services%2Fatar%2Fsubscribe&origin=eori-common-component-registration-frontend"
       )
     }
 
@@ -199,11 +199,14 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
         .matchWithIdOnlyForExistingReg(atarService)
         .apply(
           SessionBuilder
-            .buildRequestWithSessionAndPathNoUser(method = "GET", path = "/customs-enrolment-services/atar/subscribe")
+            .buildRequestWithSessionAndPathNoUser(
+              method = "GET",
+              path = "/customs-registration-services/atar/subscribe"
+            )
         )
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should include(
-        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6750%2Fcustoms-enrolment-services%2Fatar%2Fsubscribe&origin=eori-common-component-frontend"
+        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6751%2Fcustoms-registration-services%2Fatar%2Fsubscribe&origin=eori-common-component-registration-frontend"
       )
     }
 
@@ -225,7 +228,7 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
         )
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori"
+      redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori"
     }
   }
 

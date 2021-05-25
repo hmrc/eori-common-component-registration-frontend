@@ -125,7 +125,7 @@ class AddressLookupPostcodeViewSpec extends ViewSpec {
       val outsideUkAddressLink = doc().body().getElementById("cannot-find-address")
 
       outsideUkAddressLink.text() mustBe "The registered address is outside the UK"
-      outsideUkAddressLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address"
+      outsideUkAddressLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address"
     }
 
     "display address is outside UK link for review mode" in {
@@ -133,7 +133,7 @@ class AddressLookupPostcodeViewSpec extends ViewSpec {
       val outsideUkAddressLink = reviewDoc.body().getElementById("cannot-find-address")
 
       outsideUkAddressLink.text() mustBe "The registered address is outside the UK"
-      outsideUkAddressLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+      outsideUkAddressLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
     }
 
     "display error summary" in {

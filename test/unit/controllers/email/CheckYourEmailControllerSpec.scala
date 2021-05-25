@@ -25,7 +25,7 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmailController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.GroupId
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
@@ -114,7 +114,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         result =>
           status(result) shouldBe SEE_OTHER
           result.header.headers("Location") should endWith(
-            "/customs-enrolment-services/atar/subscribe/matching/verify-your-email"
+            "/customs-registration-services/atar/subscribe/matching/verify-your-email"
           )
       }
     }
@@ -135,7 +135,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
       submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService, journey = Journey.Subscribe) {
         result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") should endWith("/customs-enrolment-services/atar/subscribe/check-user")
+          result.header.headers("Location") should endWith("/customs-registration-services/atar/subscribe/check-user")
       }
     }
 
@@ -156,7 +156,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         result =>
           status(result) shouldBe SEE_OTHER
           result.header.headers("Location") should endWith(
-            "/customs-enrolment-services/atar/subscribe/matching/what-is-your-email"
+            "/customs-registration-services/atar/subscribe/matching/what-is-your-email"
           )
       }
     }

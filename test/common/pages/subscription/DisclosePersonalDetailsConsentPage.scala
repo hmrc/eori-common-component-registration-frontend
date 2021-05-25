@@ -21,7 +21,7 @@ import common.support.Env._
 
 trait DisclosePersonalDetailsConsentPage extends WebPage {
 
-  val url: String = frontendHost + "/customs-enrolment-services/register/disclose-personal-details-consent"
+  val url: String = frontendHost + "/customs-registration-services/register/disclose-personal-details-consent"
 
   val fieldLevelErrorYesNoAnswer: String = "//*[@id='yes-no-answer-field']//span[@class='error-message']"
 

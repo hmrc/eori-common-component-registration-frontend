@@ -48,7 +48,9 @@ class AllowlistVerificationWithEnrolmentsWithFeatureOffSpec extends ControllerSp
 
       val result = controller
         .form(Journey.Subscribe)
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe OK
     }
@@ -58,7 +60,9 @@ class AllowlistVerificationWithEnrolmentsWithFeatureOffSpec extends ControllerSp
 
       val result = controller
         .form(Journey.Subscribe)
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe OK
     }

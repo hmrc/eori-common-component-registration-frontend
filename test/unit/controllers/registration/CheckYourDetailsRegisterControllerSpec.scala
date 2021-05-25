@@ -162,7 +162,7 @@ class CheckYourDetailsRegisterControllerSpec
           .changeAnswerText("Full name")
         page.getElementsHref(
           RegistrationReviewPage.FullNameReviewLinkXPath
-        ) shouldBe "/customs-enrolment-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
+        ) shouldBe "/customs-registration-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
 
         page.getElementsText(RegistrationReviewPage.IndividualDateOfBirthXPath) shouldBe
           strim("""
@@ -175,7 +175,7 @@ class CheckYourDetailsRegisterControllerSpec
           .changeAnswerText("Date of birth")
         page.getElementsHref(
           RegistrationReviewPage.IndividualDateOfBirthReviewLinkXPath
-        ) shouldBe "/customs-enrolment-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
+        ) shouldBe "/customs-registration-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
 
         page.elementIsPresent(RegistrationReviewPage.DateOfEstablishmentLabelXPath) shouldBe false
         page.elementIsPresent(RegistrationReviewPage.DateOfEstablishmentXPath) shouldBe false
@@ -473,7 +473,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("Date of establishment")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.DateOfEstablishmentReviewLinkXPath
-      ) shouldBe "/customs-enrolment-services/atar/register/date-established/review"
+      ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPathLabel) shouldBe "Contact"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPath) shouldBe
@@ -492,7 +492,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("Contact")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.ContactDetailsReviewLinkXPath
-      ) shouldBe "/customs-enrolment-services/atar/register/contact-details/review"
+      ) shouldBe "/customs-registration-services/atar/register/contact-details/review"
 
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ShortNameXPathLabel) shouldBe "Shortened name"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ShortNameXPath) shouldBe "Short Name"
@@ -502,7 +502,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("Shortened name")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.ShortNameReviewLinkXPath
-      ) shouldBe "/customs-enrolment-services/atar/register/company-short-name-yes-no/review"
+      ) shouldBe "/customs-registration-services/atar/register/company-short-name-yes-no/review"
 
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.NatureOfBusinessXPathLabel
@@ -514,7 +514,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("Standard Industrial Classification (SIC) code")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.NatureOfBusinessReviewLinkXPath
-      ) shouldBe "/customs-enrolment-services/atar/register/sic-code/review"
+      ) shouldBe "/customs-registration-services/atar/register/sic-code/review"
 
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersXpathLabel
@@ -534,21 +534,21 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("UK VAT Number")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersReviewLinkXpath
-      ) shouldBe "/customs-enrolment-services/atar/register/vat-registered-uk/review"
+      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationPostcodeReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Postcode of your UK VAT registration address")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationPostcodeReviewLinkXpath
-      ) shouldBe "/customs-enrolment-services/atar/register/vat-registered-uk/review"
+      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("UK VAT effective date")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateReviewLinkXpath
-      ) shouldBe "/customs-enrolment-services/atar/register/vat-registered-uk/review"
+      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
 
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersXpathLabel
@@ -564,7 +564,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("EU VAT numbers")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersReviewLinkXpath
-      ) shouldBe "/customs-enrolment-services/atar/register/vat-details-eu-confirm/review"
+      ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUDisclosureReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
@@ -577,7 +577,7 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "Yes - I want my organisation name and address on the EORI checker"
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.EUDisclosureReviewLinkXpath
-      ) shouldBe "/customs-enrolment-services/atar/register/disclose-personal-details-consent/review"
+      ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.ConfirmAndRegisterInfoXpath
       ) shouldBe "By sending this application you confirm that the information you are providing is correct and complete."
@@ -633,7 +633,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("Date of establishment")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.DateOfEstablishmentReviewLinkXPath
-      ) shouldBe "/customs-enrolment-services/atar/register/date-established/review"
+      ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPathLabel) shouldBe "Contact"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPath) shouldBe
@@ -652,7 +652,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("Contact")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.ContactDetailsReviewLinkXPath
-      ) shouldBe "/customs-enrolment-services/atar/register/contact-details/review"
+      ) shouldBe "/customs-registration-services/atar/register/contact-details/review"
 
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ShortNameXPathLabel) shouldBe "Shortened name"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ShortNameXPath) shouldBe "Short Name"
@@ -662,7 +662,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("Shortened name")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.ShortNameReviewLinkXPath
-      ) shouldBe "/customs-enrolment-services/atar/register/company-short-name-yes-no/review"
+      ) shouldBe "/customs-registration-services/atar/register/company-short-name-yes-no/review"
 
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.NatureOfBusinessXPathLabel
@@ -674,7 +674,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("Standard Industrial Classification (SIC) code")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.NatureOfBusinessReviewLinkXPath
-      ) shouldBe "/customs-enrolment-services/atar/register/sic-code/review"
+      ) shouldBe "/customs-registration-services/atar/register/sic-code/review"
 
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersXpathLabel
@@ -694,7 +694,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("UK VAT Number")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersReviewLinkXpath
-      ) shouldBe "/customs-enrolment-services/atar/register/vat-registered-uk/review"
+      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
 
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersXpathLabel
@@ -711,7 +711,7 @@ class CheckYourDetailsRegisterControllerSpec
         .changeAnswerText("EU VAT numbers")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersReviewLinkXpath
-      ) shouldBe "/customs-enrolment-services/atar/register/vat-details-eu-confirm/review"
+      ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUDisclosureReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
@@ -724,7 +724,7 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "Yes - I want my partnership name and address on the EORI checker"
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.EUDisclosureReviewLinkXpath
-      ) shouldBe "/customs-enrolment-services/atar/register/disclose-personal-details-consent/review"
+      ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.ConfirmAndRegisterInfoXpath
       ) shouldBe "By sending this application you confirm that the information you are providing is correct and complete."

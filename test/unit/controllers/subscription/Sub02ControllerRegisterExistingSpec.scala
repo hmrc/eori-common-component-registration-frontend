@@ -170,7 +170,7 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
             "Download a PDF with your registration details (21kb)"
           )
           page.getElementsHref(RegistrationCompletePage.DownloadEoriLinkXpath) should endWith(
-            "/customs-enrolment-services/subscribe/download/pdf"
+            "/customs-registration-services/subscribe/download/pdf"
           )
 
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
@@ -198,7 +198,7 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
         val result = subscriptionController.migrationEnd(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/completed-enrolment"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/completed-enrolment"
       }
     }
 

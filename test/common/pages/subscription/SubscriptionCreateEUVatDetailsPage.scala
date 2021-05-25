@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 trait SubscriptionCreateEUVatDetailsPage extends WebPage {
 
   def url(service: Service): String =
-    Env.frontendHost + s"/customs-enrolment-services/${service.code}/register/vat-registered-eu"
+    Env.frontendHost + s"/customs-registration-services/${service.code}/register/vat-registered-eu"
 
 }
 

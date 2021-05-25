@@ -102,7 +102,7 @@ class SixLineAddressControllerSpec
       RowFormBuilder,
       thirdCountrySixLineAddressForm,
       true,
-      "/customs-enrolment-services/atar/register/matching/review-determine"
+      "/customs-registration-services/atar/register/matching/review-determine"
     )
   )
 

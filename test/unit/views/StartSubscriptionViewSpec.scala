@@ -134,7 +134,7 @@ class StartSubscriptionViewSpec extends ViewSpec {
       val continueButton = doc.body().getElementById("continue")
 
       continueButton.text() mustBe "Continue"
-      continueButton.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/check-user"
+      continueButton.attr("href") mustBe "/customs-registration-services/atar/subscribe/check-user"
     }
   }
 }

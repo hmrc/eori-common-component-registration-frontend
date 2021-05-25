@@ -309,7 +309,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
         val result = controller.submit(atarService, false)(postRequest("yes-no-answer" -> "true"))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/register/company-short-name"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/register/company-short-name"
       }
 
       "user choose Yes and is in review mode" in {
@@ -321,7 +321,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
         val result = controller.submit(atarService, true)(postRequest("yes-no-answer" -> "true"))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/register/company-short-name/review"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/register/company-short-name/review"
       }
     }
 
@@ -336,7 +336,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
         val result = controller.submit(atarService, true)(postRequest("yes-no-answer" -> "false"))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/register/matching/review-determine"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/register/matching/review-determine"
       }
     }
 

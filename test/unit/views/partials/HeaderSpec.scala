@@ -80,7 +80,7 @@ class HeaderSpec extends ControllerSpec with AuthActionMock {
         .apply(
           SessionBuilder.buildRequestWithSessionAndPathNoUser(
             method = "GET",
-            path = "/customs-enrolment-services/atar/subscribe/"
+            path = "/customs-registration-services/atar/subscribe/"
           )
         )
 

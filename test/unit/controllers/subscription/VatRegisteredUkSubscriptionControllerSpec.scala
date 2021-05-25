@@ -142,7 +142,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
-          "customs-enrolment-services/atar/register/matching/review-determine"
+          "customs-registration-services/atar/register/matching/review-determine"
         )
       }
     }

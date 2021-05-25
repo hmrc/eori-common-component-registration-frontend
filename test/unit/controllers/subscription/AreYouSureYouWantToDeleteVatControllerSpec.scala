@@ -77,7 +77,7 @@ class AreYouSureYouWantToDeleteVatControllerSpec extends ControllerSpec with Aut
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe "/customs-enrolment-services/atar/register/vat-details-eu-confirm/review"
+        ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
       }
     }
 
@@ -86,7 +86,7 @@ class AreYouSureYouWantToDeleteVatControllerSpec extends ControllerSpec with Aut
         .thenReturn(Future.successful(None))
       createForm() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/register/vat-details-eu-confirm"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm"
       }
     }
   }
@@ -163,7 +163,7 @@ class AreYouSureYouWantToDeleteVatControllerSpec extends ControllerSpec with Aut
       submit(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
-          "/customs-enrolment-services/atar/register/vat-registered-eu/review"
+          "/customs-registration-services/atar/register/vat-registered-eu/review"
         )
       }
     }

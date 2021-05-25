@@ -149,14 +149,14 @@ class HowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with BeforeAnd
     "redirect to the 'Enter your business address' page when a valid utr is provided" in {
       submitForm(Map("utr" -> "1111111111k", "ninoOrUtrRadio" -> "nino")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-enrolment-services/atar/subscribe/address"
+        result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/address"
       }
     }
 
     "allow a UTR with spaces and lower case" in {
       submitForm(Map("utr" -> "21 08 83 45 03k")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-enrolment-services/atar/subscribe/address"
+        result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/address"
       }
       verify(mockSubscriptionDetailsHolderService).cacheCustomsId(meq(Utr("2108834503K")))(any())
     }
@@ -166,7 +166,7 @@ class HowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with BeforeAnd
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           "Location"
-        ) shouldBe "/customs-enrolment-services/atar/subscribe/matching/review-determine"
+        ) shouldBe "/customs-registration-services/atar/subscribe/matching/review-determine"
       }
     }
 
@@ -178,7 +178,7 @@ class HowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with BeforeAnd
 
         submitForm(Map("utr" -> "2108834503")) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode"
+          result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/address-postcode"
         }
       }
     }

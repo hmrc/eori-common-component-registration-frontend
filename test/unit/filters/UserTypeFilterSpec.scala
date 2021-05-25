@@ -53,7 +53,9 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
 
       val result = controller
         .download()
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe SEE_OTHER
     }
@@ -68,7 +70,9 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
 
       val result = controller
         .download()
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe SEE_OTHER
     }
@@ -83,7 +87,9 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
 
       val result = controller
         .download()
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       await(result).header.headers(LOCATION) should endWith("you-cannot-use-service")
     }
@@ -98,7 +104,9 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
 
       val result = controller
         .download()
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe OK
     }
@@ -113,7 +121,9 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
 
       val result = controller
         .download()
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe OK
     }

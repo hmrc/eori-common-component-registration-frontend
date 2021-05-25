@@ -53,7 +53,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
 
   private lazy val connector      = app.injector.instanceOf[EmailVerificationConnector]
   private val email               = "john.doe@example.com"
-  private val expectedContinueUrl = "/customs-enrolment-services/test-email-continue/"
+  private val expectedContinueUrl = "/customs-registration-services/test-email-continue/"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 

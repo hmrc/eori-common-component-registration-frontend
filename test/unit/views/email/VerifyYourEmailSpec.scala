@@ -46,7 +46,7 @@ class VerifyYourEmailSpec extends ViewSpec {
       doc.body
         .getElementById("p3")
         .select("a[href]")
-        .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/check-your-email"
+        .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/check-your-email"
     }
   }
 

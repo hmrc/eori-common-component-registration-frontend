@@ -240,7 +240,7 @@ class VatDetailsControllerSpec
       submitFormInReviewMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith(
-          "/customs-enrolment-services/atar/register/matching/review-determine"
+          "/customs-registration-services/atar/register/matching/review-determine"
         )
       }
     }

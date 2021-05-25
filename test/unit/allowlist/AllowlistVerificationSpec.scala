@@ -69,11 +69,11 @@ class AllowlistVerificationSpec extends ControllerSpec with BeforeAndAfterEach w
       val result = controller
         .download()
         .apply(
-          SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/atar/subscribe/", defaultUserId)
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/atar/subscribe/", defaultUserId)
         )
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some("/customs-enrolment-services/atar/subscribe/unauthorised")
+      redirectLocation(result) shouldBe Some("/customs-registration-services/atar/subscribe/unauthorised")
     }
 
     "redirect to unauthorised page when a user with no email address attempts to access a route" in {
@@ -82,11 +82,11 @@ class AllowlistVerificationSpec extends ControllerSpec with BeforeAndAfterEach w
       val result = controller
         .download()
         .apply(
-          SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/atar/subscribe/", defaultUserId)
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/atar/subscribe/", defaultUserId)
         )
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some("/customs-enrolment-services/atar/subscribe/unauthorised")
+      redirectLocation(result) shouldBe Some("/customs-registration-services/atar/subscribe/unauthorised")
     }
 
     "return OK (200) when a allowlisted user attempts to access a route" in {
@@ -94,7 +94,9 @@ class AllowlistVerificationSpec extends ControllerSpec with BeforeAndAfterEach w
 
       val result = controller
         .download()
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe OK
     }
@@ -102,7 +104,7 @@ class AllowlistVerificationSpec extends ControllerSpec with BeforeAndAfterEach w
     "return OK (200) when the session is allowlisted" in {
       AuthBuilder.withAuthorisedUser("user-2300121", mockAuthConnector, userEmail = None)
       val request = SessionBuilder
-        .buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId)
+        .buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
         .withSession("allowlisted" -> "true")
 
       val result = controller.download().apply(request)
@@ -115,7 +117,9 @@ class AllowlistVerificationSpec extends ControllerSpec with BeforeAndAfterEach w
 
       val result = controller
         .download()
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe OK
     }
@@ -125,7 +129,7 @@ class AllowlistVerificationSpec extends ControllerSpec with BeforeAndAfterEach w
 
       val result = controller
         .download()
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/register/", defaultUserId))
+        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/register/", defaultUserId))
 
       status(result) shouldBe OK
     }

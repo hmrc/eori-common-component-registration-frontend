@@ -320,7 +320,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
         val result = controller.submit(atarService, true)(postRequest("short-name" -> "short name"))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/register/matching/review-determine"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/register/matching/review-determine"
       }
     }
   }

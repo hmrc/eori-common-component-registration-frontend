@@ -148,14 +148,14 @@ class HowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with BeforeAn
     "redirect to the 'Enter your business address' page when a valid nino is provided" in {
       submitForm(Map("nino" -> "AB123456C")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-enrolment-services/atar/subscribe/address"
+        result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/address"
       }
     }
 
     "allow a NINO with spaces and lower case" in {
       submitForm(Map("nino" -> "ab 12 34 56 c")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-enrolment-services/atar/subscribe/address"
+        result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/address"
       }
       verify(mockSubscriptionDetailsHolderService).cacheCustomsId(meq(Nino("AB123456C")))(any())
     }
@@ -165,7 +165,7 @@ class HowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with BeforeAn
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           "Location"
-        ) shouldBe "/customs-enrolment-services/atar/subscribe/matching/review-determine"
+        ) shouldBe "/customs-registration-services/atar/subscribe/matching/review-determine"
       }
     }
 
@@ -177,7 +177,7 @@ class HowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with BeforeAn
 
         submitForm(Map("nino" -> "AB123456C")) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode"
+          result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/address-postcode"
         }
       }
     }

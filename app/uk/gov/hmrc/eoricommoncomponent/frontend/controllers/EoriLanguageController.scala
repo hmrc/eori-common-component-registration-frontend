@@ -27,7 +27,7 @@ class EoriLanguageController @Inject() (languageUtils: LanguageUtils, cc: Contro
 
   // TODO Find a way to include a service name in the url
   override protected def fallbackURL: String =
-    "/customs-enrolment-services/subscribe" //This will be always register for cds we might need to add a route for fallback cannot be dynamic
+    "/customs-registration-services/subscribe" //This will be always register for cds we might need to add a route for fallback cannot be dynamic
 
   override def languageMap: Map[String, Lang] =
     EoriLanguageController.languageMap

@@ -22,7 +22,7 @@ sealed trait EoriNumberPageCommon extends WebPage {
 
   override val title = "Your details"
 
-  val reviewUrl = "/customs-enrolment-services/subscribe/matching/what-is-your-eori/review"
+  val reviewUrl = "/customs-registration-services/subscribe/matching/what-is-your-eori/review"
 
   val formId: String = "eoriNumberForm"
 

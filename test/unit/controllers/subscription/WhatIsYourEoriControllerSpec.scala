@@ -192,7 +192,7 @@ class WhatIsYourEoriControllerSpec extends ControllerSpec with AuthActionMock wi
         val result = controller.createForm(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/use-this-eori"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/use-this-eori"
       }
     }
 
@@ -209,7 +209,7 @@ class WhatIsYourEoriControllerSpec extends ControllerSpec with AuthActionMock wi
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/unable-to-use-id"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/unable-to-use-id"
       }
     }
 
@@ -225,7 +225,7 @@ class WhatIsYourEoriControllerSpec extends ControllerSpec with AuthActionMock wi
         val eoriCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/user-location"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/user-location"
 
         verify(mockSubscriptionDetailsService).cacheEoriNumber(eoriCaptor.capture())(any())
 
@@ -245,7 +245,7 @@ class WhatIsYourEoriControllerSpec extends ControllerSpec with AuthActionMock wi
         val eoriCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/user-location"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/user-location"
 
         verify(mockSubscriptionDetailsService).cacheEoriNumber(eoriCaptor.capture())(any())
 
@@ -263,7 +263,7 @@ class WhatIsYourEoriControllerSpec extends ControllerSpec with AuthActionMock wi
         val result = controller.submit(true, atarService)(postRequest("eori-number" -> eori))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/review-determine"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/review-determine"
       }
     }
   }

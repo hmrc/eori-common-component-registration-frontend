@@ -163,7 +163,7 @@ class SubscriptionRecoveryControllerSpec
 
       callEnrolmentComplete(journey = Journey.Register) { result =>
         status(result) shouldBe SEE_OTHER
-        header(LOCATION, result) shouldBe Some("/customs-enrolment-services/atar/register/complete")
+        header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
       }
       verify(mockTaxEnrolmentsService, times(0))
         .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
@@ -189,7 +189,7 @@ class SubscriptionRecoveryControllerSpec
 
       callEnrolmentComplete(journey = Journey.Subscribe) { result =>
         status(result) shouldBe SEE_OTHER
-        header(LOCATION, result) shouldBe Some("/customs-enrolment-services/atar/subscribe/complete")
+        header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/subscribe/complete")
       }
 
       verify(mockTaxEnrolmentsService).issuerCall(
@@ -230,7 +230,7 @@ class SubscriptionRecoveryControllerSpec
 
       callEnrolmentComplete(journey = Journey.Subscribe) { result =>
         status(result) shouldBe SEE_OTHER
-        header(LOCATION, result) shouldBe Some("/customs-enrolment-services/atar/subscribe/complete")
+        header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/subscribe/complete")
       }
       verify(mockTaxEnrolmentsService).issuerCall(
         meq(expectedFormBundleId),
@@ -269,7 +269,7 @@ class SubscriptionRecoveryControllerSpec
 
       callEnrolmentComplete(journey = Journey.Subscribe) { result =>
         status(result) shouldBe SEE_OTHER
-        header(LOCATION, result) shouldBe Some("/customs-enrolment-services/atar/subscribe/complete")
+        header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/subscribe/complete")
       }
       verify(mockTaxEnrolmentsService).issuerCall(
         meq(expectedFormBundleId),
@@ -365,7 +365,7 @@ class SubscriptionRecoveryControllerSpec
 
     callEnrolmentComplete(journey = Journey.Register) { result =>
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result) shouldBe Some("/customs-enrolment-services/atar/register/eori-exist")
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/eori-exist")
     }
   }
 
@@ -382,7 +382,7 @@ class SubscriptionRecoveryControllerSpec
 
     callEnrolmentComplete(journey = Journey.Register) { result =>
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result) shouldBe Some("/customs-enrolment-services/atar/register/eori-exist")
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/eori-exist")
     }
   }
 
@@ -399,7 +399,7 @@ class SubscriptionRecoveryControllerSpec
 
     callEnrolmentComplete(journey = Journey.Register) { result =>
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result) shouldBe Some("/customs-enrolment-services/atar/register/eori-exist")
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/eori-exist")
     }
   }
 
@@ -440,7 +440,7 @@ class SubscriptionRecoveryControllerSpec
 
     callEnrolmentComplete(journey = Journey.Register) { result =>
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result) shouldBe Some("/customs-enrolment-services/atar/register/complete")
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
     }
   }
 

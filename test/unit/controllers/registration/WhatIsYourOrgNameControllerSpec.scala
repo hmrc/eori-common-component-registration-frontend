@@ -74,7 +74,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         "charity-public-body-not-for-profit",
         CharityPublicBodyNotForProfitOrganisation,
         "organisation",
-        "/customs-enrolment-services/atar/register/matching/utr/charity-public-body-not-for-profit",
+        "/customs-registration-services/atar/register/matching/utr/charity-public-body-not-for-profit",
         UserLocation.Uk,
         false,
         ""
@@ -83,7 +83,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         "third-country-organisation",
         ThirdCountryOrg,
         "organisation",
-        "/customs-enrolment-services/atar/register/matching/utr/third-country-organisation",
+        "/customs-registration-services/atar/register/matching/utr/third-country-organisation",
         UserLocation.ThirdCountry,
         false,
         ""
@@ -92,7 +92,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         "third-country-organisation",
         ThirdCountryOrg,
         "organisation",
-        "/customs-enrolment-services/atar/register/matching/review-determine",
+        "/customs-registration-services/atar/register/matching/review-determine",
         UserLocation.ThirdCountry,
         true,
         "Test Org Name"

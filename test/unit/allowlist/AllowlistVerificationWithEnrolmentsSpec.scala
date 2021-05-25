@@ -59,7 +59,9 @@ class AllowlistVerificationWithEnrolmentsSpec extends ControllerSpec with Before
 
       val result = controller
         .form(Journey.Subscribe)
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/subscribe/", defaultUserId))
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
+        )
 
       status(result) shouldBe OK
     }
@@ -69,7 +71,7 @@ class AllowlistVerificationWithEnrolmentsSpec extends ControllerSpec with Before
 
       val result = controller
         .form(Journey.Register)
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-enrolment-services/register/", defaultUserId))
+        .apply(SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/register/", defaultUserId))
 
       status(result) shouldBe OK
     }

@@ -256,7 +256,7 @@ class AddressControllerSpec
     "redirect to next screen" in {
       submitFormInCreateModeForOrganisation(mandatoryFields) { result =>
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some("/customs-enrolment-services/atar/register/matching/confirm")
+        redirectLocation(result) shouldBe Some("/customs-registration-services/atar/register/matching/confirm")
       }
     }
   }
@@ -266,7 +266,7 @@ class AddressControllerSpec
     "redirect to next screen" in {
       submitFormInCreateModeForIndividual(mandatoryFields) { result =>
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some("/customs-enrolment-services/atar/register/matching/confirm")
+        redirectLocation(result) shouldBe Some("/customs-registration-services/atar/register/matching/confirm")
       }
     }
   }

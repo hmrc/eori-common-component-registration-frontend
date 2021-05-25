@@ -59,7 +59,7 @@ class AllowlistFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       when(config.allowlistReferrers).thenReturn(Seq("123"))
 
       val request =
-        FakeRequest("GET", "/customs-enrolment-services/register").withHeaders(HeaderNames.REFERER -> "123")
+        FakeRequest("GET", "/customs-registration-services/register").withHeaders(HeaderNames.REFERER -> "123")
 
       val result = await(filter.apply(next)(request))
 
@@ -69,7 +69,7 @@ class AllowlistFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
   "AllowlistFilter on permitted route" should {
 
-    val requestOnPermittedRoute = FakeRequest("GET", "/customs-enrolment-services/subscribe")
+    val requestOnPermittedRoute = FakeRequest("GET", "/customs-registration-services/subscribe")
 
     "Do nothing for blank referer allowlist" in {
 
@@ -137,7 +137,9 @@ class AllowlistFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       when(config.allowlistReferrers).thenReturn(Seq("test"))
 
       val request =
-        FakeRequest("GET", "/customs-enrolment-services/subscribe/some-path").withHeaders(HeaderNames.REFERER -> "test")
+        FakeRequest("GET", "/customs-registration-services/subscribe/some-path").withHeaders(
+          HeaderNames.REFERER -> "test"
+        )
 
       val result = await(filter.apply(next)(request))
 

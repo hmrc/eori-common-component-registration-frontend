@@ -89,7 +89,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       submitForm(Map("nino" -> nino), Journey.Register) {
         result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") shouldBe "/customs-enrolment-services/atar/register/matching/confirm"
+          result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/confirm"
       }
     }
 

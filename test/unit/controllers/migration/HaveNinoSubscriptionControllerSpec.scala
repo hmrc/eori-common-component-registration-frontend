@@ -58,7 +58,7 @@ class HaveNinoSubscriptionControllerSpec extends ControllerSpec with BeforeAndAf
 
   private val ValidNinoNoRequest = Map("have-nino" -> "false")
 
-  private val nextPageFlowUrl = "/customs-enrolment-services/subscribe/address"
+  private val nextPageFlowUrl = "/customs-registration-services/subscribe/address"
 
   val controller = new HaveNinoSubscriptionController(
     mockAuthAction,
@@ -112,7 +112,7 @@ class HaveNinoSubscriptionControllerSpec extends ControllerSpec with BeforeAndAf
       mockSubscriptionFlow(nextPageFlowUrl)
       submit(Journey.Subscribe, Map("have-nino" -> "true")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/row-get-nino"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/row-get-nino"
       }
       verify(mockSubscriptionDetailsService).cacheNinoMatch(meq(Some(NinoMatchModel(Some(true), None))))(
         any[HeaderCarrier]
@@ -126,7 +126,7 @@ class HaveNinoSubscriptionControllerSpec extends ControllerSpec with BeforeAndAf
       when(mockRequestSessionData.userSubscriptionFlow(any())).thenReturn(RowIndividualFlow)
       submit(Journey.Subscribe, ValidNinoNoRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/row-country"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/row-country"
       }
       verify(mockSubscriptionDetailsService).cacheNinoMatchForNoAnswer(meq(Some(NinoMatchModel(Some(false), None))))(
         any[HeaderCarrier]

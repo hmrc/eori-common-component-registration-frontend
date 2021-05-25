@@ -40,15 +40,15 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
   private val emptyFormUnderLimit: Form[YesNo] = vatRegisteredEuYesNoAnswerForm().bind(invalidRequest)
   private val formUnderLimit: Form[YesNo]      = vatRegisteredEuYesNoAnswerForm().bind(ValidRequest)
 
-  private def removeLink(index: Int) = s"customs-enrolment-services/atar/register/vat-details-eu-remove/$index"
+  private def removeLink(index: Int) = s"customs-registration-services/atar/register/vat-details-eu-remove/$index"
 
   private def reviewRemoveLink(index: Int) =
-    s"customs-enrolment-services/atar/register/vat-details-eu-remove/$index/review"
+    s"customs-registration-services/atar/register/vat-details-eu-remove/$index/review"
 
-  private def updateLink(index: Int) = s"customs-enrolment-services/atar/register/vat-details-eu/update/$index"
+  private def updateLink(index: Int) = s"customs-registration-services/atar/register/vat-details-eu/update/$index"
 
   private def reviewUpdateLink(index: Int) =
-    s"customs-enrolment-services/atar/register/vat-details-eu/update/$index/review"
+    s"customs-registration-services/atar/register/vat-details-eu/update/$index/review"
 
   private val VatEuDetailUnderLimit = Seq(VatEUDetailsModel("12345", "FR"))
 

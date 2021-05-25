@@ -196,7 +196,9 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
       ).thenReturn(Future.successful(true))
       submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/customs-enrolment-services/atar/register/matching/confirm")
+        result.header.headers("Location") should endWith(
+          "/customs-registration-services/atar/register/matching/confirm"
+        )
       }
     }
   }

@@ -146,7 +146,7 @@ class RowIndividualNameDateOfBirthControllerSpec
             status(result) shouldBe SEE_OTHER
             result.futureValue.header.headers(
               LOCATION
-            ) shouldBe s"/customs-enrolment-services/atar/register/matching/utr/$organisationType"
+            ) shouldBe s"/customs-registration-services/atar/register/matching/utr/$organisationType"
             verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
           }
       }

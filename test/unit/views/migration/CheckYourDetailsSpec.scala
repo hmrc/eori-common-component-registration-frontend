@@ -79,25 +79,25 @@ class CheckYourDetailsSpec extends ViewSpec {
         doc().body.getElementById("review-tbl__eori-number").text mustBe "ZZ123456789112"
         doc().body
           .getElementById("review-tbl__eori-number_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/review"
 
         doc().body.getElementById("review-tbl__orgname_heading").text mustBe "Company name"
         doc().body.getElementById("review-tbl__orgname").text mustBe "Name"
         doc().body
           .getElementById("review-tbl__orgname_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/nameid/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/nameid/review"
 
         doc().body.getElementById("review-tbl__utr_heading").text mustBe "Corporation Tax UTR number"
         doc().body.getElementById("review-tbl__utr").text mustBe "UTRXXXXX"
         doc().body
           .getElementById("review-tbl__utr_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/nameid/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/nameid/review"
 
         doc().body.getElementById("review-tbl__name-and-address_heading").text mustBe "Company address"
         doc().body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         doc().body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
 
         doc().body.getElementById("review-tbl__date-established_heading").text mustBe "Date of establishment"
         doc().body.getElementById("review-tbl__date-established").text mustBe languageUtils.Dates.formatDate(
@@ -105,7 +105,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         )
         doc().body
           .getElementById("review-tbl__date-established_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/date-established/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/date-established/review"
       }
 
       "user is during UK Sole Trader UTR journey" in {
@@ -119,31 +119,31 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__eori-number").text mustBe "ZZ123456789112"
         page.body
           .getElementById("review-tbl__eori-number_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/review"
 
         page.body.getElementById("review-tbl__full-name_heading").text mustBe "Full name"
         page.body.getElementById("review-tbl__full-name").text mustBe "FName LName"
         page.body
           .getElementById("review-tbl__full-name_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__date-of-birth_heading").text mustBe "Date of birth"
         page.body.getElementById("review-tbl__date-of-birth").text mustBe "8 April 2003"
         page.body
           .getElementById("review-tbl__date-of-birth_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__utr_heading").text mustBe "UTR number"
         page.body.getElementById("review-tbl__utr").text mustBe "UTRXXXXX"
         page.body
           .getElementById("review-tbl__utr_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/chooseid/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/chooseid/review"
 
         page.body.getElementById("review-tbl__name-and-address_heading").text mustBe "Your address"
         page.body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         page.body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
       }
 
       "user is during UK Sole Trader NINo journey" in {
@@ -157,31 +157,31 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__eori-number").text mustBe "ZZ123456789112"
         page.body
           .getElementById("review-tbl__eori-number_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/review"
 
         page.body.getElementById("review-tbl__full-name_heading").text mustBe "Full name"
         page.body.getElementById("review-tbl__full-name").text mustBe "FName LName"
         page.body
           .getElementById("review-tbl__full-name_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__date-of-birth_heading").text mustBe "Date of birth"
         page.body.getElementById("review-tbl__date-of-birth").text mustBe "8 April 2003"
         page.body
           .getElementById("review-tbl__date-of-birth_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__nino_heading").text mustBe "National Insurance number"
         page.body.getElementById("review-tbl__nino").text mustBe "AB123456C"
         page.body
           .getElementById("review-tbl__nino_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/chooseid/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/chooseid/review"
 
         page.body.getElementById("review-tbl__name-and-address_heading").text mustBe "Your address"
         page.body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         page.body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
       }
 
       "user is during ROW Organisation journey without UTR" in {
@@ -200,31 +200,31 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__eori-number").text mustBe "ZZ123456789112"
         page.body
           .getElementById("review-tbl__eori-number_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/review"
 
         page.body.getElementById("review-tbl__org_name_heading").text mustBe "Organisation name"
         page.body.getElementById("review-tbl__org_name").text mustBe "Org name"
         page.body
           .getElementById("review-tbl__org_name_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/name/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/name/review"
 
         page.body.getElementById("review-tbl__utr_heading").text mustBe "UTR number"
         page.body.getElementById("review-tbl__utr").text mustBe "Not entered"
         page.body
           .getElementById("review-tbl__utr_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-utr/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-utr/review"
 
         page.body.getElementById("review-tbl__country-location_heading").text mustBe "Country location"
         page.body.getElementById("review-tbl__country-location").text mustBe "United Kingdom"
         page.body
           .getElementById("review-tbl__country-location_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-country/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-country/review"
 
         page.body.getElementById("review-tbl__contact-details_heading").text mustBe "Contact"
         page.body.getElementById("review-tbl__contact-details").text mustBe "John Doe 11111111111"
         page.body
           .getElementById("review-tbl__contact-details_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/contact-details/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/contact-details/review"
 
         page.body.getElementById("review-tbl__date-established_heading").text mustBe "Date of establishment"
         page.body.getElementById("review-tbl__date-established").text mustBe languageUtils.Dates.formatDate(
@@ -232,7 +232,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         )
         page.body
           .getElementById("review-tbl__date-established_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/date-established/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/date-established/review"
       }
 
       "user is during ROW Organisation journey with UTR" in {
@@ -246,25 +246,25 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__eori-number").text mustBe "ZZ123456789112"
         page.body
           .getElementById("review-tbl__eori-number_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/review"
 
         page.body.getElementById("review-tbl__org_name_heading").text mustBe "Organisation name"
         page.body.getElementById("review-tbl__org_name").text mustBe "Org name"
         page.body
           .getElementById("review-tbl__org_name_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/name/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/name/review"
 
         page.body.getElementById("review-tbl__utr_heading").text mustBe "Corporation Tax UTR number"
         page.body.getElementById("review-tbl__utr").text mustBe "UTRXXXXX"
         page.body
           .getElementById("review-tbl__utr_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-utr/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-utr/review"
 
         page.body.getElementById("review-tbl__name-and-address_heading").text mustBe "Organisation address"
         page.body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         page.body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
 
         page.body.getElementById("review-tbl__date-established_heading").text mustBe "Date of establishment"
         page.body.getElementById("review-tbl__date-established").text mustBe languageUtils.Dates.formatDate(
@@ -272,7 +272,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         )
         page.body
           .getElementById("review-tbl__date-established_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/date-established/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/date-established/review"
       }
 
       "user is during ROW Individual journey without UTR and NINo" in {
@@ -292,43 +292,43 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__eori-number").text mustBe "ZZ123456789112"
         page.body
           .getElementById("review-tbl__eori-number_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/review"
 
         page.body.getElementById("review-tbl__full-name_heading").text mustBe "Full name"
         page.body.getElementById("review-tbl__full-name").text mustBe "FName LName"
         page.body
           .getElementById("review-tbl__full-name_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__date-of-birth_heading").text mustBe "Date of birth"
         page.body.getElementById("review-tbl__date-of-birth").text mustBe "8 April 2003"
         page.body
           .getElementById("review-tbl__date-of-birth_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__utr_heading").text mustBe "UTR number"
         page.body.getElementById("review-tbl__utr").text mustBe "Not entered"
         page.body
           .getElementById("review-tbl__utr_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-utr/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-utr/review"
 
         page.body.getElementById("review-tbl__nino_heading").text mustBe "National Insurance number"
         page.body.getElementById("review-tbl__nino").text mustBe "Not entered"
         page.body
           .getElementById("review-tbl__nino_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-nino/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-nino/review"
 
         page.body.getElementById("review-tbl__country-location_heading").text mustBe "Country location"
         page.body.getElementById("review-tbl__country-location").text mustBe "United Kingdom"
         page.body
           .getElementById("review-tbl__country-location_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-country/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-country/review"
 
         page.body.getElementById("review-tbl__contact-details_heading").text mustBe "Contact"
         page.body.getElementById("review-tbl__contact-details").text mustBe "John Doe 11111111111"
         page.body
           .getElementById("review-tbl__contact-details_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/contact-details/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/contact-details/review"
       }
 
       "user is during ROW Individual journey with UTR" in {
@@ -343,31 +343,31 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__eori-number").text mustBe "ZZ123456789112"
         page.body
           .getElementById("review-tbl__eori-number_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/review"
 
         page.body.getElementById("review-tbl__full-name_heading").text mustBe "Full name"
         page.body.getElementById("review-tbl__full-name").text mustBe "FName LName"
         page.body
           .getElementById("review-tbl__full-name_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__date-of-birth_heading").text mustBe "Date of birth"
         page.body.getElementById("review-tbl__date-of-birth").text mustBe "8 April 2003"
         page.body
           .getElementById("review-tbl__date-of-birth_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__utr_heading").text mustBe "UTR number"
         page.body.getElementById("review-tbl__utr").text mustBe "UTRXXXXX"
         page.body
           .getElementById("review-tbl__utr_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-utr/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-utr/review"
 
         page.body.getElementById("review-tbl__name-and-address_heading").text mustBe "Your address"
         page.body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         page.body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
       }
 
       "user is during ROW Individual journey with NINo" in {
@@ -386,37 +386,37 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__eori-number").text mustBe "ZZ123456789112"
         page.body
           .getElementById("review-tbl__eori-number_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/review"
 
         page.body.getElementById("review-tbl__full-name_heading").text mustBe "Full name"
         page.body.getElementById("review-tbl__full-name").text mustBe "FName LName"
         page.body
           .getElementById("review-tbl__full-name_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__date-of-birth_heading").text mustBe "Date of birth"
         page.body.getElementById("review-tbl__date-of-birth").text mustBe "8 April 2003"
         page.body
           .getElementById("review-tbl__date-of-birth_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/namedob/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/namedob/review"
 
         page.body.getElementById("review-tbl__utr_heading").text mustBe "UTR number"
         page.body.getElementById("review-tbl__utr").text mustBe "Not entered"
         page.body
           .getElementById("review-tbl__utr_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-utr/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-utr/review"
 
         page.body.getElementById("review-tbl__nino_heading").text mustBe "National Insurance number"
         page.body.getElementById("review-tbl__nino").text mustBe "AB123456C"
         page.body
           .getElementById("review-tbl__nino_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-nino/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-nino/review"
 
         page.body.getElementById("review-tbl__name-and-address_heading").text mustBe "Your address"
         page.body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         page.body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
       }
     }
 
@@ -435,7 +435,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__country-location").text mustBe "United Kingdom"
         page.body
           .getElementById("review-tbl__country-location_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-country/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-country/review"
 
         page.body.getElementById("review-tbl__name-and-address_heading") mustBe null
         page.body.getElementById("review-tbl__name-and-address") mustBe null
@@ -456,7 +456,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__country-location").text mustBe "United Kingdom"
         page.body
           .getElementById("review-tbl__country-location_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/row-country/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/row-country/review"
 
         page.body.getElementById("review-tbl__name-and-address_heading") mustBe null
         page.body.getElementById("review-tbl__name-and-address") mustBe null
@@ -478,7 +478,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         page.body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
       }
 
       "user is during individual ROW journey with UTR" in {
@@ -494,7 +494,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         page.body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
       }
 
       "user is during individual ROW journey with NINo" in {
@@ -514,7 +514,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__name-and-address").text mustBe "Street City Postcode United Kingdom"
         page.body
           .getElementById("review-tbl__name-and-address_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
       }
     }
 
@@ -670,7 +670,7 @@ class CheckYourDetailsSpec extends ViewSpec {
         page.body.getElementById("review-tbl__utr").text mustBe individualUtr.id
         page.body
           .getElementById("review-tbl__utr_change")
-          .attr("href") mustBe "/customs-enrolment-services/atar/subscribe/chooseid/review"
+          .attr("href") mustBe "/customs-registration-services/atar/subscribe/chooseid/review"
 
         page.body.toString mustNot contain(organisationUtr)
       }

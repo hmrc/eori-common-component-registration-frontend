@@ -101,7 +101,7 @@ class VatDetailsEuConfirmControllerSpec extends ControllerSpec with BeforeAndAft
         .thenReturn(Future.successful(Seq()))
       displayForm() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/customs-enrolment-services/atar/register/vat-registered-eu")
+        result.header.headers(LOCATION) should endWith("/customs-registration-services/atar/register/vat-registered-eu")
         verify(mockSubscriptionVatEUDetailsService, times(1)).cachedEUVatDetails(any[HeaderCarrier])
       }
     }
@@ -112,7 +112,7 @@ class VatDetailsEuConfirmControllerSpec extends ControllerSpec with BeforeAndAft
       reviewForm() { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
-          "/customs-enrolment-services/atar/register/vat-registered-eu/review"
+          "/customs-registration-services/atar/register/vat-registered-eu/review"
         )
         verify(mockSubscriptionVatEUDetailsService, times(1)).cachedEUVatDetails(any[HeaderCarrier])
       }
@@ -126,12 +126,12 @@ class VatDetailsEuConfirmControllerSpec extends ControllerSpec with BeforeAndAft
         .thenReturn(Future.successful(VatEuDetailUnderLimit))
       submitForm(ValidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/customs-enrolment-services/atar/register/vat-details-eu")
+        result.header.headers(LOCATION) should endWith("/customs-registration-services/atar/register/vat-details-eu")
       }
     }
 
     "redirect to disclose personal details eu page when yes selected" in {
-      val url = "/customs-enrolment-services/register/disclose-personal-details-consent"
+      val url = "/customs-registration-services/register/disclose-personal-details-consent"
       when(mockSubscriptionVatEUDetailsService.cachedEUVatDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(VatEuDetailUnderLimit))
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]]))
@@ -155,7 +155,7 @@ class VatDetailsEuConfirmControllerSpec extends ControllerSpec with BeforeAndAft
       submitForm(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
-          "/customs-enrolment-services/atar/register/vat-details-eu/review"
+          "/customs-registration-services/atar/register/vat-details-eu/review"
         )
       }
     }
@@ -166,7 +166,7 @@ class VatDetailsEuConfirmControllerSpec extends ControllerSpec with BeforeAndAft
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
-          "/customs-enrolment-services/atar/register/matching/review-determine"
+          "/customs-registration-services/atar/register/matching/review-determine"
         )
       }
     }
@@ -179,13 +179,13 @@ class VatDetailsEuConfirmControllerSpec extends ControllerSpec with BeforeAndAft
       submitForm(invalidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
-          "/customs-enrolment-services/atar/register/matching/review-determine"
+          "/customs-registration-services/atar/register/matching/review-determine"
         )
       }
     }
 
     "redirect to disclose personal details eu page when yes selected" in {
-      val url = "/customs-enrolment-services/register/disclose-personal-details-consent"
+      val url = "/customs-registration-services/register/disclose-personal-details-consent"
       when(mockSubscriptionVatEUDetailsService.cachedEUVatDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(VatEuDetailsOnLimit))
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]]))

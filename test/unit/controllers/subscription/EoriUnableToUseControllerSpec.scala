@@ -98,7 +98,7 @@ class EoriUnableToUseControllerSpec extends ControllerSpec with AuthActionMock w
         val result = controller.displayPage(atarService)(FakeRequest("GET", ""))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori"
       }
 
       "eori is not available for display page method" in {
@@ -108,7 +108,7 @@ class EoriUnableToUseControllerSpec extends ControllerSpec with AuthActionMock w
         val result = controller.displayPage(atarService)(FakeRequest("GET", ""))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori"
       }
 
       "eori is not available for submit method" in {
@@ -118,7 +118,7 @@ class EoriUnableToUseControllerSpec extends ControllerSpec with AuthActionMock w
         val result = controller.submit(atarService)(FakeRequest("GET", ""))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori"
       }
     }
 
@@ -149,7 +149,7 @@ class EoriUnableToUseControllerSpec extends ControllerSpec with AuthActionMock w
           controller.submit(atarService)(FakeRequest("POST", "").withFormUrlEncodedBody("answer" -> "change"))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori"
         verifyZeroInteractions(eoriUnableToUsePage)
       }
     }
@@ -168,7 +168,7 @@ class EoriUnableToUseControllerSpec extends ControllerSpec with AuthActionMock w
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/signout"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/signout"
         verifyZeroInteractions(eoriUnableToUsePage)
       }
     }

@@ -341,7 +341,7 @@ ecc.subscription.outcomes.success.xi.date.info=you will need an EORI number star
 ecc.subscription.outcomes.success.xi.info.bullet1=move goods between Northern Ireland and non-EU countries
 ecc.subscription.outcomes.success.xi.info.bullet2=make a declaration in Northern Ireland
 ecc.subscription.outcomes.success.xi.info.bullet3=get a customs decision in Northern Ireland
-ecc.subscription.outcomes.success.xi.info.href=<a href="/customs-enrolment-services/register/xi-eori-guidance" target="_blank" rel="noopener noreferrer">Apply for an EORI number that starts with XI.</a>
+ecc.subscription.outcomes.success.xi.info.href=<a href="/customs-registration-services/register/xi-eori-guidance" target="_blank" rel="noopener noreferrer">Apply for an EORI number that starts with XI.</a>
 ecc.subscription.outcomes.success.xi.info2=If you have an EORI number issued by an EU country, you do not need to obtain an EORI starting with XI.
 
 ecc.subscription.status.gg.h1=Your EORI number and Government Gateway

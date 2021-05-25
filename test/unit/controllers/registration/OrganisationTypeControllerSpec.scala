@@ -184,7 +184,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         ) { result =>
           status(result) shouldBe SEE_OTHER
           result.header.headers(LOCATION) should endWith(
-            s"/customs-enrolment-services/atar/register/matching/$urlParameter"
+            s"/customs-registration-services/atar/register/matching/$urlParameter"
           )
         }
       }

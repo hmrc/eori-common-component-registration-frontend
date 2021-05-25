@@ -30,5 +30,5 @@ trait XPathRegistrationOutcomePage {
 
 abstract class RegistrationOutcomePage(val registrationOutcome: String)
     extends WebPage with XPathRegistrationOutcomePage {
-  protected val baseUrl: String = Env.frontendHost + s"/customs-enrolment-services/register/$registrationOutcome"
+  protected val baseUrl: String = Env.frontendHost + s"/customs-registration-services/register/$registrationOutcome"
 }

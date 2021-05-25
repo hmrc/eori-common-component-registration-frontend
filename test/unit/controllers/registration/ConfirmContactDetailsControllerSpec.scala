@@ -215,7 +215,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
         invokeConfirm() { result =>
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/register/address"
+          redirectLocation(result).get shouldBe "/customs-registration-services/atar/register/address"
         }
       }
 

@@ -53,7 +53,7 @@ class EmailVerificationServiceSpec
   val service = new EmailVerificationService(mockConnector)
 
   private val email       = "test@example.com"
-  private val continueUrl = "/customs-enrolment-services/test-continue-url"
+  private val continueUrl = "/customs-registration-services/test-continue-url"
 
   override protected def beforeEach(): Unit =
     reset(mockConnector)

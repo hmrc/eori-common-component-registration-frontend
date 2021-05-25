@@ -58,7 +58,7 @@ class HaveUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMo
 
   private val matchUtrSubscriptionView = instanceOf[match_utr_subscription]
 
-  private val nextPageFlowUrl = "/customs-enrolment-services/subscribe/row-nino"
+  private val nextPageFlowUrl = "/customs-registration-services/subscribe/row-nino"
 
   val controller = new HaveUtrSubscriptionController(
     mockAuthAction,
@@ -154,7 +154,7 @@ class HaveUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMo
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
       submit(Journey.Subscribe, Map("have-utr" -> "true", "utr" -> "11 11 111111k")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/row-get-utr"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/row-get-utr"
       }
       verify(mockSubscriptionDetailsService, times(1)).cacheUtrMatch(meq(Some(UtrMatchModel(Some(true), None))))(
         any[HeaderCarrier]
@@ -171,7 +171,7 @@ class HaveUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMo
         .thenReturn(Future.successful(Some(nameOrganisationMatchModel)))
       submit(Journey.Subscribe, ValidUtrRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/row-get-utr"
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/row-get-utr"
       }
       verify(mockSubscriptionDetailsService, times(1)).cacheUtrMatch(meq(Some(UtrMatchModel(Some(true), None))))(
         any[HeaderCarrier]
@@ -199,7 +199,7 @@ class HaveUtrSubscriptionControllerSpec extends ControllerSpec with AuthActionMo
           .thenReturn(Future.successful(()))
         submit(Journey.Subscribe, NoUtrRequest) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) shouldBe "/customs-enrolment-services/atar/subscribe/row-country"
+          result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/row-country"
         }
       }
     }

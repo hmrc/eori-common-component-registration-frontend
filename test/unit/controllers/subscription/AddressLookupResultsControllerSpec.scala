@@ -199,7 +199,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.displayPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results"
 
         verify(mockAddressLookupConnector).lookup(any(), any())(any())
       }
@@ -215,7 +217,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.displayPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results"
 
         verify(mockAddressLookupConnector, times(2)).lookup(any(), any())(any())
       }
@@ -231,7 +235,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results/review"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results/review"
       }
 
       "user is in review mode and connector doesn't return any addresses for submit method" in {
@@ -245,7 +249,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results/review"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results/review"
       }
 
       "user is not in review mode and connector doesn't return any addresses for submit method" in {
@@ -257,7 +261,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.submit(atarService, false)(postRequest("address" -> addressLookup.dropDownView))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results"
       }
 
       "address that come back doesn't have line 1 for display method" in {
@@ -269,7 +275,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.displayPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results"
 
         verify(mockAddressLookupConnector).lookup(any(), any())(any())
       }
@@ -283,7 +291,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.submit(atarService, false)(postRequest("address" -> addressLookup.dropDownView))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results"
 
         verify(mockAddressLookupConnector).lookup(any(), any())(any())
       }
@@ -297,7 +307,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.displayPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results"
 
         verify(mockAddressLookupConnector).lookup(any(), any())(any())
       }
@@ -314,7 +326,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.displayPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results"
       }
 
       "address that come back doesn't have line 1 for second call during review method" in {
@@ -331,7 +345,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/no-results/review"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/no-results/review"
       }
     }
 
@@ -347,7 +361,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/unavailable/review"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/unavailable/review"
       }
 
       "user is in review mode and connector request fail for the second call for display page method" in {
@@ -364,7 +378,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/unavailable/review"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/unavailable/review"
 
         verify(mockAddressLookupConnector, times(2)).lookup(any(), any())(any())
       }
@@ -377,7 +391,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.displayPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/unavailable"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/unavailable"
       }
 
       "user is in review mode and connector request fail for submit method" in {
@@ -390,7 +406,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/unavailable/review"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/unavailable/review"
       }
 
       "user is not in review mode and connector request fail for submit method" in {
@@ -401,7 +417,9 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.submit(atarService, false)(postRequest("address" -> addressLookup.dropDownView))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/unavailable"
+        redirectLocation(
+          result
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/unavailable"
       }
     }
 
@@ -414,7 +432,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.reviewPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/review"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/review"
       }
 
       "user is not in review mode and cache doesn't contain address lookup params for display page method" in {
@@ -424,7 +442,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.displayPage(atarService)(getRequest)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode"
       }
 
       "user is in review mode and cache doesn't contain address lookup params for submit method" in {
@@ -434,7 +452,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.submit(atarService, true)(postRequest("address" -> addressLookup.dropDownView))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/review"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/review"
       }
 
       "user is not in review mode and cache doesn't contain address lookup params for submit method" in {
@@ -444,7 +462,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.submit(atarService, false)(postRequest("address" -> addressLookup.dropDownView))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode"
       }
     }
 
@@ -461,7 +479,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.submit(atarService, true)(postRequest("address" -> addressLookup.dropDownView))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/review-determine"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/review-determine"
         verifyZeroInteractions(mockAddressLookupResultsPage)
       }
 
@@ -479,7 +497,7 @@ class AddressLookupResultsControllerSpec extends ControllerSpec with AuthActionM
         val result = controller.submit(atarService, false)(postRequest("address" -> addressLookup.dropDownView))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/review-determine"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/review-determine"
         verifyZeroInteractions(mockAddressLookupResultsPage)
       }
     }

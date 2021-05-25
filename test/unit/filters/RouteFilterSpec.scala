@@ -101,9 +101,9 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     "block access to multiple routes" in {
       whenRoutesToBlock(Some("cds/subscribe,register"))
 
-      thenRouteIsBlocked("/customs-enrolment-services/cds/subscribe/matching/user-location")
+      thenRouteIsBlocked("/customs-registration-services/cds/subscribe/matching/user-location")
 
-      thenRouteIsBlocked("/customs-enrolment-services/register/vat-group")
+      thenRouteIsBlocked("/customs-registration-services/register/vat-group")
     }
 
   }

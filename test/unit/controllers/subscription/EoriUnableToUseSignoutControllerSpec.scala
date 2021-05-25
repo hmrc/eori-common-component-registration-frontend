@@ -79,7 +79,7 @@ class EoriUnableToUseSignoutControllerSpec extends ControllerSpec with AuthActio
           controller.submit(atarService)(FakeRequest("POST", "").withFormUrlEncodedBody("yes-no-answer" -> "true"))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/logout"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/logout"
         verifyZeroInteractions(eoriSignoutPage)
       }
     }
@@ -94,7 +94,7 @@ class EoriUnableToUseSignoutControllerSpec extends ControllerSpec with AuthActio
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/matching/what-is-your-eori/unable-to-use-id"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori/unable-to-use-id"
         verifyZeroInteractions(eoriSignoutPage)
       }
     }

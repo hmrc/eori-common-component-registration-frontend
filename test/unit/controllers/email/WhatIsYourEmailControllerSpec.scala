@@ -23,7 +23,7 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.WhatIsYourEmailController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.GroupId
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
@@ -101,7 +101,7 @@ class WhatIsYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEa
       submitFormInCreateMode(EmailFieldsMap, journey = Journey.Subscribe) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith(
-          "/customs-enrolment-services/atar/subscribe/matching/check-your-email"
+          "/customs-registration-services/atar/subscribe/matching/check-your-email"
         )
 
       }

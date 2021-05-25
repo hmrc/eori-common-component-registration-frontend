@@ -185,7 +185,7 @@ class NameUtrOrganisationControllerSpec
         )
         page.getElementAttributeHref(
           registerWithNameAndAddressLinkAnchor
-        ) shouldBe "/customs-enrolment-services/atar/register/matching/address/charity-public-body-not-for-profit"
+        ) shouldBe "/customs-registration-services/atar/register/matching/address/charity-public-body-not-for-profit"
       }
     }
 
@@ -399,7 +399,9 @@ class NameUtrOrganisationControllerSpec
       ).thenReturn(Future.successful(true))
       submitForm(ValidNameUtrRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/customs-enrolment-services/atar/register/matching/confirm")
+        result.header.headers("Location") should endWith(
+          "/customs-registration-services/atar/register/matching/confirm"
+        )
       }
     }
   }

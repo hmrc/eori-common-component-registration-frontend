@@ -51,6 +51,6 @@ class AllowlistFilter @Inject() (appConfig: AppConfig, sessionCookieBaker: Sessi
   }
 
   private def journeyType(request: RequestHeader): Option[String] =
-    "(?<=/customs-enrolment-services/)([^\\/]*)".r.findFirstIn(request.path)
+    "(?<=/customs-registration-services/)([^\\/]*)".r.findFirstIn(request.path)
 
 }

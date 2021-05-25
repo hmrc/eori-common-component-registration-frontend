@@ -89,7 +89,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       submitForm(Map("utr" -> utr), Journey.Register) {
         result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") shouldBe "/customs-enrolment-services/atar/register/matching/confirm"
+          result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/confirm"
       }
     }
 

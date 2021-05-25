@@ -59,7 +59,7 @@ class AddressLookupNoResultsViewSpec extends ViewSpec {
       val reenterPostcodeButton = doc.body().getElementById("reenter-postcode-button")
 
       reenterPostcodeButton.text() mustBe "Change"
-      reenterPostcodeButton.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address-postcode"
+      reenterPostcodeButton.attr("href") mustBe "/customs-registration-services/atar/subscribe/address-postcode"
     }
 
     "display enter manually address link" in {
@@ -67,7 +67,7 @@ class AddressLookupNoResultsViewSpec extends ViewSpec {
       val enterManuallyAddressLink = doc.body().getElementById("enter-manually-button")
 
       enterManuallyAddressLink.text() mustBe "I want to enter my address manually."
-      enterManuallyAddressLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address"
+      enterManuallyAddressLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address"
     }
   }
 
@@ -78,7 +78,7 @@ class AddressLookupNoResultsViewSpec extends ViewSpec {
       val reenterPostcodeButton = reviewDoc.body().getElementById("reenter-postcode-button")
 
       reenterPostcodeButton.text() mustBe "Change"
-      reenterPostcodeButton.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address-postcode/review"
+      reenterPostcodeButton.attr("href") mustBe "/customs-registration-services/atar/subscribe/address-postcode/review"
     }
 
     "display review enter manually address link" in {
@@ -86,7 +86,7 @@ class AddressLookupNoResultsViewSpec extends ViewSpec {
       val enterManuallyAddressLink = reviewDoc.body().getElementById("enter-manually-button")
 
       enterManuallyAddressLink.text() mustBe "I want to enter my address manually."
-      enterManuallyAddressLink.attr("href") mustBe "/customs-enrolment-services/atar/subscribe/address/review"
+      enterManuallyAddressLink.attr("href") mustBe "/customs-registration-services/atar/subscribe/address/review"
     }
   }
 }

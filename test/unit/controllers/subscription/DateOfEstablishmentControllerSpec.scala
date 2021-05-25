@@ -389,7 +389,7 @@ class DateOfEstablishmentControllerSpec
         val result  = controller.submit(false, atarService, Journey.Subscribe).apply(session)
 
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some("/customs-enrolment-services/atar/subscribe/address-postcode")
+        redirectLocation(result) mustBe Some("/customs-registration-services/atar/subscribe/address-postcode")
       }
     }
   }

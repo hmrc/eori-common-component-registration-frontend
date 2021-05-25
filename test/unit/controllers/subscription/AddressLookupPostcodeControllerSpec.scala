@@ -182,7 +182,7 @@ class AddressLookupPostcodeControllerSpec extends ControllerSpec with AuthAction
         val result = controller.submit(atarService, false)(postRequest("postcode" -> "AA11 1AA"))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/results"
+        redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/results"
         verifyZeroInteractions(mockAddressLookupPostcodePage)
       }
 
@@ -196,7 +196,7 @@ class AddressLookupPostcodeControllerSpec extends ControllerSpec with AuthAction
         status(result) shouldBe SEE_OTHER
         redirectLocation(
           result
-        ).get shouldBe "/customs-enrolment-services/atar/subscribe/address-postcode/results/review"
+        ).get shouldBe "/customs-registration-services/atar/subscribe/address-postcode/results/review"
         verifyZeroInteractions(mockAddressLookupPostcodePage)
       }
     }
