@@ -19,7 +19,6 @@ package unit.controllers.subscription
 import common.pages.subscription.SubscriptionContactDetailsPage
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import unit.controllers.CdsPage
 
 import scala.concurrent.Future
@@ -46,12 +45,12 @@ trait SubscriptionFlowReviewModeTestSupport extends SubscriptionFlowTestSupport 
     page.getElementAttributeHref(SubscriptionContactDetailsPage.backLinkXPath) shouldBe previousPageUrl
   }
 
-  def verifyRedirectToReviewPage(journey: Journey.Value): Future[Result] => Any = { result =>
+  def verifyRedirectToReviewPage(): Future[Result] => Any = { result =>
     status(result) shouldBe SEE_OTHER
     result.header.headers(
       LOCATION
     ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
-      .determineRoute(atarService, journey)
+      .determineRoute(atarService)
       .url
   }
 

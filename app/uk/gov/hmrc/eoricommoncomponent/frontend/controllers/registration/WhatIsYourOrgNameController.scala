@@ -23,10 +23,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationNameForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.what_is_your_org_name
 import uk.gov.hmrc.http.HeaderCarrier
@@ -36,49 +34,34 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class WhatIsYourOrgNameController @Inject() (
   authAction: AuthAction,
-  requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   whatIsYourOrgNameView: what_is_your_org_name,
   subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  private def populateView(
-    name: Option[String],
-    isInReviewMode: Boolean,
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value
-  )(implicit request: Request[AnyContent]): Future[Result] = {
+  private def populateView(name: Option[String], isInReviewMode: Boolean, organisationType: String, service: Service)(
+    implicit request: Request[AnyContent]
+  ): Future[Result] = {
     val form = name.map(n => NameMatchModel(n)).fold(organisationNameForm)(organisationNameForm.fill)
-    Future.successful(Ok(whatIsYourOrgNameView(isInReviewMode, form, organisationType, service, journey)))
+    Future.successful(Ok(whatIsYourOrgNameView(isInReviewMode, form, organisationType, service)))
   }
 
-  def showForm(
-    isInReviewMode: Boolean = false,
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value
-  ): Action[AnyContent] =
+  def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionDetailsService.cachedNameDetails.flatMap(
-        details => populateView(details.map(_.name), isInReviewMode, organisationType, service, journey)
+        details => populateView(details.map(_.name), isInReviewMode, organisationType, service)
       )
     }
 
-  def submit(
-    isInReviewMode: Boolean = false,
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value
-  ): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       organisationNameForm.bindFromRequest.fold(
         formWithErrors =>
           Future.successful(
-            BadRequest(whatIsYourOrgNameView(isInReviewMode, formWithErrors, organisationType, service, journey))
+            BadRequest(whatIsYourOrgNameView(isInReviewMode, formWithErrors, organisationType, service))
           ),
-        formData => submitOrgNameDetails(isInReviewMode, formData, organisationType, service, journey)
+        formData => submitOrgNameDetails(isInReviewMode, formData, organisationType, service)
       )
     }
 
@@ -86,16 +69,13 @@ class WhatIsYourOrgNameController @Inject() (
     isInReviewMode: Boolean,
     formData: NameMatchModel,
     organisationType: String,
-    service: Service,
-    journey: Journey.Value
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] =
+    service: Service
+  )(implicit hc: HeaderCarrier): Future[Result] =
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map { _ =>
       if (isInReviewMode)
-        Redirect(DetermineReviewPageController.determineRoute(service, journey))
-      else if (UserLocation.isRow(requestSessionData))
-        Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, journey, false))
+        Redirect(DetermineReviewPageController.determineRoute(service))
       else
-        Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, journey, false))
+        Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, false))
     }
 
 }

@@ -15,7 +15,6 @@
  *@
 
 @import org.joda.time.LocalDate
-@import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.{VatRegisteredUkController => VATNumberPage, _}
@@ -24,7 +23,7 @@
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.helpers.summaryRow
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
@@ -40,7 +39,6 @@
     subscription: SubscriptionDetails,
     personalDataDisclosureConsent: Boolean,
     service: Service,
-    journey: Journey.Value,
     isUserIdentifiedByRegService: Boolean
 )(implicit request: Request[_], messages: Messages)
 
@@ -229,7 +227,7 @@
                     "full-name",
                     messages("subscription.check-your-details.full-name.label"),
                     Html.apply(individualName),
-                    if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service, journey)) else None,
+                    if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None,
                     messages("subscription.check-your-details.full-name.label")
                 )
             }
@@ -238,7 +236,7 @@
                     "date-of-birth",
                     messages("subscription.check-your-details.date-of-birth.label"),
                     Html.apply(formattedIndividualDateOfBirth.getOrElse("")),
-                    if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service, journey)) else None,
+                    if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None,
                     messages("subscription.check-your-details.date-of-birth.label")
                 )
             }
@@ -247,7 +245,7 @@
                     "business-name",
                     orgNameLabel,
                     Html.apply(orgName),
-                    if(!isUserIdentifiedByRegService) Some(WhatIsYourOrgNameController.showForm(isInReviewMode = true, organisationType = orgType, service, journey)) else None,
+                    if(!isUserIdentifiedByRegService) Some(WhatIsYourOrgNameController.showForm(isInReviewMode = true, organisationType = orgType, service)) else None,
                     orgNameLabel
                 )
             }
@@ -256,7 +254,7 @@
                     "have-utr",
                     messages("cds.matching.organisation-utr.label"),
                     Html.apply(messages("cds.not-entered.label")),
-                    cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, Journey.Register, false))
+                    cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
                 )
             }
             @if(registration.customsId.isDefined) {
@@ -272,13 +270,13 @@
                     "utr",
                     messages("cds.utr.label"),
                     Html.apply(messages("cds.not-entered.label")),
-                    cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, Journey.Register, false))
+                    cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
                 )
                 @summaryRow_di(
                     "nino",
                     messages("cds.nino.label"),
                     Html.apply(messages("cds.not-entered.label")),
-                    cdsOrgType.map(orgType => DoYouHaveNinoController.displayForm(service, Journey.Register))
+                    cdsOrgType.map(orgType => DoYouHaveNinoController.displayForm(service))
                 )
             }
             @if(isUserIdentifiedByRegService) {
@@ -287,7 +285,7 @@
                         "address",
                         businessDetailsLabel,
                         addressViewModelHtml(address),
-                        Some(AddressController.reviewForm(service, journey)),
+                        Some(AddressController.reviewForm(service)),
                         businessDetailsLabel
                     )
                 }.getOrElse {
@@ -295,7 +293,7 @@
                         "six-line-address",
                         businessDetailsLabel,
                         addressHtml(registration.address),
-                        Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service, journey)),
+                        Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service)),
                         businessDetailsLabel
                     )
                 }
@@ -304,7 +302,7 @@
                     "six-line-address",
                     businessDetailsLabel,
                     addressHtml(registration.address),
-                    Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service, journey)),
+                    Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service)),
                     businessDetailsLabel
                 )
             }
@@ -313,7 +311,7 @@
                     "doe",
                     getDateOfEstablishmentLabel,
                     Html.apply(formatDate(de)),
-                    Some(DateOfEstablishmentController.reviewForm(service, journey)),
+                    Some(DateOfEstablishmentController.reviewForm(service)),
                     getDateOfEstablishmentLabel
                 )
             }
@@ -340,28 +338,28 @@
                     "gb-vat-number",
                     messages("cds.form.gb-vat-number"),
                     Html.apply(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label"))),
-                    Some(VATNumberPage.reviewForm(service, journey)),
+                    Some(VATNumberPage.reviewForm(service)),
                     messages("cds.form.gb-vat-number")
                 )
                 @summaryRow_di(
                     "gb-vat-postcode",
                     messages("cds.form.gb-vat-postcode"),
                     Html.apply(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label"))),
-                    Some(VATNumberPage.reviewForm(service, journey)),
+                    Some(VATNumberPage.reviewForm(service)),
                     messages("cds.form.gb-vat-postcode")
                 )
                 @summaryRow_di(
                     "gb-vat-date",
                     messages("cds.form.gb-vat-date"),
                     Html.apply(subscription.ukVatDetails.map(vat => formatDate(vat.effectiveDate)).getOrElse(messages("cds.not-entered.label"))),
-                    Some(VATNumberPage.reviewForm(service, journey)),
+                    Some(VATNumberPage.reviewForm(service)),
                     messages("cds.form.gb-vat-date")
                 )
                 @summaryRow_di(
                     "eu-vat",
                     messages("cds.form.eu-vat-numbers"),
                     euVatDetails(subscription.vatEUDetails),
-                    if(subscription.vatEUDetails.nonEmpty) Some(VatDetailsEuConfirmController.reviewForm(service, journey)) else Some(VatRegisteredEuController.reviewForm(service, journey)),
+                    if(subscription.vatEUDetails.nonEmpty) Some(VatDetailsEuConfirmController.reviewForm(service)) else Some(VatRegisteredEuController.reviewForm(service)),
                     messages("cds.form.eu-vat-numbers")
                 )
                 @subscription.sicCode.map { sic =>
@@ -369,7 +367,7 @@
                         "activity",
                         messages("cds.form.sic-code"),
                         Html.apply(sic),
-                        Some(SicCodeController.submit(isInReviewMode = true, service, journey)),
+                        Some(SicCodeController.submit(isInReviewMode = true, service)),
                         messages("cds.form.sic-code")
                     )
                 }
@@ -378,7 +376,7 @@
                 "disclosure",
                 disclosureLabel,
                 Html.apply(if(personalDataDisclosureConsent) eoriCheckerConsentYes else messages("cds.eori-checker-consent.no")),
-                Some(DisclosePersonalDetailsConsentController.reviewForm(service, journey)),
+                Some(DisclosePersonalDetailsConsentController.reviewForm(service)),
                 disclosureLabel
             )
 
@@ -387,7 +385,7 @@
         <p id="disclaimer-content">@messages("cds.form.disclaimer")</p>
 
         <div class="form-group">
-            @helpers.form(CheckYourDetailsRegisterController.submitDetails(service, journey)) {
+            @helpers.form(CheckYourDetailsRegisterController.submitDetails(service)) {
                 @CSRF.formField
 
                 <p><input class="button" type="submit" value=@messages("cds.form.send")></p>

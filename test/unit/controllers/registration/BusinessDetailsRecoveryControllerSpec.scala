@@ -35,7 +35,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   ContactDetailsSubscriptionFlowPageGetEori,
   DateOfEstablishmentSubscriptionFlowPage
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -133,8 +132,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         mockSubscriptionFlowManager.startSubscriptionFlow(
           meq(Some(BusinessDetailsRecoveryPage)),
           meq(CdsOrganisationType.ThirdCountryIndividual),
-          meq(atarService),
-          meq(Journey.Register)
+          meq(atarService)
         )(any[HeaderCarrier], any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(individualDetails)
@@ -163,8 +161,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         mockSubscriptionFlowManager.startSubscriptionFlow(
           meq(Some(BusinessDetailsRecoveryPage)),
           meq(CdsOrganisationType.ThirdCountryOrganisation),
-          meq(atarService),
-          meq(Journey.Register)
+          meq(atarService)
         )(any[HeaderCarrier], any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(organisationDetails)
@@ -176,9 +173,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
       invokeContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(
-          DateOfEstablishmentController.createForm(atarService, Journey.Register).url
-        )
+        result.header.headers(LOCATION) should endWith(DateOfEstablishmentController.createForm(atarService).url)
       }
     }
 
@@ -188,20 +183,12 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def invokeConfirm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller
-        .form(atarService, Journey.Register)
-        .apply(SessionBuilder.buildRequestWithSession(userId))
-    )
+    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def invokeContinue(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller
-        .continue(atarService, Journey.Register)
-        .apply(SessionBuilder.buildRequestWithSession(userId))
-    )
+    test(controller.continue(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
 }

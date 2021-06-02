@@ -21,9 +21,9 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-
 @this(layout_di: layout)
-@(removeVatYesNoAnswer: Form[YesNo], service: Service, journey: Journey.Value, vatDetail: VatEUDetailsModel, isInReviewMode: Boolean)(implicit request: Request[_], messages: Messages)
+
+@(removeVatYesNoAnswer: Form[YesNo], service: Service, vatDetail: VatEUDetailsModel, isInReviewMode: Boolean)(implicit request: Request[_], messages: Messages)
 
 @messageKeyForEUCountryCode(countryCode: String) = @{
     s"cds.country.$countryCode"
@@ -57,7 +57,7 @@
     <fieldset>
         <legend>
             <h1 class="heading-large" id="titleHeading">@heading</h1>
-            @helpers.form(AreYouSureYouWantToDeleteVatController.submit(vatDetail.index, service, journey, isInReviewMode), "vatDetailEuRemoveCreateForm") {
+            @helpers.form(AreYouSureYouWantToDeleteVatController.submit(vatDetail.index, service, isInReviewMode), "vatDetailEuRemoveCreateForm") {
 
             @CSRF.formField
         </legend>

@@ -24,14 +24,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, En
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration.migration_success
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.xi_eori_guidance
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,7 +39,6 @@ class Sub02Controller @Inject() (
   sessionCache: SessionCache,
   subscriptionDetailsService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
-  migrationSuccessView: migration_success,
   sub01OutcomeView: sub01_outcome_processing,
   sub02RequestNotProcessed: sub02_request_not_processed,
   sub02SubscriptionInProgressView: sub02_subscription_in_progress,
@@ -57,36 +53,36 @@ class Sub02Controller @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def subscribe(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def subscribe(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       val selectedOrganisationType: Option[CdsOrganisationType] =
         requestSessionData.userSelectedOrganisationType
       val internalId = InternalId(loggedInUser.internalId)
       val groupId    = GroupId(loggedInUser.groupId)
       cdsSubscriber
-        .subscribeWithCachedDetails(selectedOrganisationType, service, journey)
+        .subscribeWithCachedDetails(selectedOrganisationType, service)
         .flatMap { subscribeResult =>
-          (subscribeResult, journey) match {
-            case (_: SubscriptionSuccessful, Journey.Register) =>
+          subscribeResult match {
+            case _: SubscriptionSuccessful =>
               subscriptionDetailsService
                 .saveKeyIdentifiers(groupId, internalId, service)
                 .map(_ => Redirect(Sub02Controller.end(service)))
-            case (_: SubscriptionPending, _) =>
+            case _: SubscriptionPending =>
               subscriptionDetailsService
                 .saveKeyIdentifiers(groupId, internalId, service)
                 .map(_ => Redirect(Sub02Controller.pending(service)))
-            case (SubscriptionFailed(EoriAlreadyExists, _), _) =>
+            case SubscriptionFailed(EoriAlreadyExists, _) =>
               Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
-            case (SubscriptionFailed(EoriAlreadyAssociated, _), _) =>
+            case SubscriptionFailed(EoriAlreadyAssociated, _) =>
               Future.successful(Redirect(Sub02Controller.eoriAlreadyAssociated(service)))
-            case (SubscriptionFailed(SubscriptionInProgress, _), _) =>
+            case SubscriptionFailed(SubscriptionInProgress, _) =>
               Future.successful(Redirect(Sub02Controller.subscriptionInProgress(service)))
-            case (SubscriptionFailed(RequestNotProcessed, _), _) =>
+            case SubscriptionFailed(RequestNotProcessed, _) =>
               Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-            case (_: SubscriptionFailed, _) =>
+            case _: SubscriptionFailed =>
               Future.successful(Redirect(Sub02Controller.rejected(service)))
             case _ =>
-              throw new IllegalArgumentException(s"Cannot redirect for subscription with journey: $journey")
+              throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
           }
         } recoverWith {
         case e: Exception =>
@@ -114,21 +110,6 @@ class Sub02Controller @Inject() (
           sub02Outcome.processedDate
         )
       ).withSession(newUserSession)
-  }
-
-  // End of normal subscription journey
-  def migrationEnd(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithServiceAction {
-    implicit request => user: LoggedInUserWithEnrolments =>
-      activatedEnrolmentForService(user, service) match {
-        case Some(_) => Future.successful(Redirect(CompletedEnrolmentController.enrolSuccess(service)))
-        case _ =>
-          if (UserLocation.isRow(requestSessionData))
-            subscriptionDetailsService.cachedCustomsId flatMap {
-              case Some(_) => renderPageWithName(service)
-              case _       => renderPageWithNameRow(service)
-            }
-          else renderPageWithName(service)
-      }
   }
 
   def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -183,33 +164,5 @@ class Sub02Controller @Inject() (
         _            <- sessionCache.remove
       } yield Ok(sub01OutcomeView(Some(sub02Outcome.fullName), sub02Outcome.processedDate)).withSession(newUserSession)
   }
-
-  private def renderPageWithName(service: Service)(implicit hc: HeaderCarrier, request: Request[_]) =
-    for {
-      name <- sessionCache.registerWithEoriAndIdResponse.map(
-        _.responseDetail.flatMap(_.responseData.map(_.trader.fullName))
-      )
-      sub02Outcome <- sessionCache.sub02Outcome
-      _            <- sessionCache.remove
-      _ <- sessionCache.saveSub02Outcome(
-        Sub02Outcome(sub02Outcome.processedDate, name.getOrElse(""), sub02Outcome.eori)
-      )
-    } yield Ok(
-      migrationSuccessView(
-        sub02Outcome.eori,
-        name.getOrElse(throw new IllegalStateException("Name not populated from reg06")),
-        sub02Outcome.processedDate,
-        service
-      )
-    ).withSession(newUserSession)
-
-  private def renderPageWithNameRow(service: Service)(implicit hc: HeaderCarrier, request: Request[_]) =
-    for {
-      sub02Outcome <- sessionCache.sub02Outcome
-      _            <- sessionCache.remove
-      _            <- sessionCache.saveSub02Outcome(sub02Outcome)
-    } yield Ok(
-      migrationSuccessView(sub02Outcome.eori, sub02Outcome.fullName, sub02Outcome.processedDate, service)
-    ).withSession(newUserSession)
 
 }

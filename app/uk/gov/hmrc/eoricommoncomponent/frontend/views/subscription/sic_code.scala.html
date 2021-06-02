@@ -23,7 +23,7 @@
 
 
 @this(subscriptionFlowCommon_di: subscription_flow_common)
-@(sicCodeForm: Form[SicCodeViewModel],isInReviewMode: Boolean, cdsOrgType: Option[CdsOrganisationType], service: Service, journey: Journey.Value, selectedUserLocation: Option[String] )(implicit request: Request[_], messages: Messages)
+@(sicCodeForm: Form[SicCodeViewModel],isInReviewMode: Boolean, cdsOrgType: Option[CdsOrganisationType], service: Service, selectedUserLocation: Option[String] )(implicit request: Request[_], messages: Messages)
 
 
 @inputText(field: String, label: String, args: (Symbol, Any)*) = {
@@ -82,7 +82,7 @@ cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
 
 @subscriptionFlowCommon_di(pageKey = pageKeyForOrgType, form = sicCodeForm) {
 
-    @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.SicCodeController.submit(isInReviewMode, service, journey), "sicCodeform") {
+    @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.SicCodeController.submit(isInReviewMode, service), "sicCodeform") {
 
         @CSRF.formField
 

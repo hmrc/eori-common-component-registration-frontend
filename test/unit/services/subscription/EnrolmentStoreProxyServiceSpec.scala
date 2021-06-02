@@ -26,12 +26,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EnrolmentStoreProxyCon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   EnrolmentResponse,
   EnrolmentStoreProxyResponse,
-  ExistingEori,
   GroupId,
   KeyValue
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.enrolmentRequest.ES1Response
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.EnrolmentStoreProxyService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -61,37 +58,12 @@ class EnrolmentStoreProxyServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val enrolmentResponseNotActive =
     EnrolmentResponse("SOME_SERVICE", "NotActive", List(identifier))
 
-  private val enrolmentStoreProxyResponse = EnrolmentStoreProxyResponse(List(enrolmentResponse))
-  private val serviceName1                = "HMRC-VAT-ORG"
+  private val serviceName1 = "HMRC-VAT-ORG"
 
   private val enrolmentResponseNoHmrcCusOrg =
     EnrolmentResponse(serviceName1, state, List(identifier))
 
-  private val enrolmentStoreProxyResponseNoHmrcCusOrg =
-    EnrolmentStoreProxyResponse(List(enrolmentResponseNoHmrcCusOrg))
-
   "EnrolmentStoreProxyService" should {
-    "return enrolment if they exist against the groupId" in {
-      when(
-        mockEnrolmentStoreProxyConnector
-          .getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
-      ).thenReturn(Future.successful(enrolmentStoreProxyResponse))
-
-      await(service.enrolmentForGroup(groupId, Service.cds)) shouldBe Some(enrolmentResponse)
-
-      verify(mockEnrolmentStoreProxyConnector).getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
-    }
-
-    "return enrolment if they exist against service  HMRC-CUS-ORG the groupId" in {
-      when(
-        mockEnrolmentStoreProxyConnector
-          .getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
-      ).thenReturn(Future.successful(enrolmentStoreProxyResponseNoHmrcCusOrg))
-
-      await(service.enrolmentForGroup(groupId, Service.cds)) shouldBe None
-
-      verify(mockEnrolmentStoreProxyConnector).getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
-    }
 
     "return all enrolments for the groupId" in {
       when(
@@ -116,40 +88,5 @@ class EnrolmentStoreProxyServiceSpec extends UnitSpec with MockitoSugar with Bef
 
       verify(mockEnrolmentStoreProxyConnector).getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
     }
-
-    "return Existing EORI" when {
-
-      "EORI is allocated to different groupId" in {
-
-        val es1Response = ES1Response(Some(Seq("groupId")), None)
-
-        when(mockEnrolmentStoreProxyConnector.queryGroupsWithAllocatedEnrolment(any())(any()))
-          .thenReturn(Future.successful(es1Response))
-
-        val existingEori = ExistingEori("Gb123456789123", "HMRC-GVMS-ORG")
-
-        val result = service.isEnrolmentInUse(Service.withName("atar").get, existingEori)
-
-        result.futureValue shouldBe Some(existingEori)
-      }
-    }
-
-    "not return existing EORI" when {
-
-      "EORI is not used for the service the user is attempting to enrol" in {
-
-        val es1Response = ES1Response(None, None)
-
-        when(mockEnrolmentStoreProxyConnector.queryGroupsWithAllocatedEnrolment(any())(any()))
-          .thenReturn(Future.successful(es1Response))
-
-        val existingEori = ExistingEori("Gb123456789123", "HMRC-GVMS-ORG")
-
-        val result = service.isEnrolmentInUse(Service.withName("atar").get, existingEori)
-
-        result.futureValue shouldBe None
-      }
-    }
   }
-
 }

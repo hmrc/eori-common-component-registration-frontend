@@ -19,13 +19,10 @@ package unit.controllers.registration
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.{AnyContent, Request, Result}
+import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.WhatIsYourOrgNameController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.what_is_your_org_name
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,34 +38,29 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
 
   private val mockAuthConnector              = mock[AuthConnector]
   private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val whatIsYourOrgNameView          = instanceOf[what_is_your_org_name]
 
-  private val controller = new WhatIsYourOrgNameController(
-    mockAuthAction,
-    mockRequestSessionData,
-    mcc,
-    whatIsYourOrgNameView,
-    mockSubscriptionDetailsService
-  )
+  private val controller =
+    new WhatIsYourOrgNameController(mockAuthAction, mcc, whatIsYourOrgNameView, mockSubscriptionDetailsService)
 
-  override def beforeEach: Unit =
-    reset(mockRequestSessionData, mockSubscriptionDetailsService)
+  override protected def afterEach: Unit = {
+    reset(mockSubscriptionDetailsService)
+
+    super.afterEach()
+  }
 
   "Submitting the form" should {
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(isInReviewMode = false, "third-country-organisation", atarService, Journey.Register),
+      controller.submit(isInReviewMode = false, "third-country-organisation", atarService),
       "and isInReviewMode is false"
     )
     "redirect to the 'Do you have a UTR? page when isInReviewMode is false" in {
 
       when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier]()))
         .thenReturn(Future.successful(()))
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
-        .thenReturn(Some(UserLocation.ThirdCountry))
 
       submitForm(isInReviewMode = false, form = ValidNameRequest) { result =>
         status(result) shouldBe SEE_OTHER
@@ -82,15 +74,13 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(isInReviewMode = true, "third-country-organisation", atarService, Journey.Register),
+      controller.submit(isInReviewMode = true, "third-country-organisation", atarService),
       "and isInReviewMode is true"
     )
     "redirect to the Determine Review page when isInReviewMode is true" in {
 
       when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier]()))
         .thenReturn(Future.successful(()))
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
-        .thenReturn(Some(UserLocation.ThirdCountry))
 
       submitForm(isInReviewMode = true, form = ValidNameRequest) { result =>
         status(result) shouldBe SEE_OTHER
@@ -107,7 +97,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
-      .submit(isInReviewMode, "third-country-organisation", atarService, Journey.Register)
+      .submit(isInReviewMode, "third-country-organisation", atarService)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)
   }

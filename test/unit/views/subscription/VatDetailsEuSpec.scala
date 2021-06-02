@@ -24,7 +24,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionForm.euVatForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_details_eu
 import util.ViewSpec
@@ -111,39 +110,22 @@ class VatDetailsEuSpec extends ViewSpec {
   }
 
   private lazy val doc: Document =
-    Jsoup.parse(
-      contentAsString(view(form, Countries.eu, updateDetails = false, atarService, Journey.Register, isInReviewMode))
-    )
+    Jsoup.parse(contentAsString(view(form, Countries.eu, updateDetails = false, atarService, isInReviewMode)))
 
   private lazy val docForEdit: Document = Jsoup.parse(
-    contentAsString(
-      view(formForUpdate, Countries.eu, updateDetails = true, atarService, Journey.Register, isInReviewMode = false)
-    )
+    contentAsString(view(formForUpdate, Countries.eu, updateDetails = true, atarService, isInReviewMode = false))
   )
 
   private lazy val docWithEmptyErrors: Document = Jsoup.parse(
-    contentAsString(
-      view(formWithNoSelectionError, Countries.eu, updateDetails = false, atarService, Journey.Register, isInReviewMode)
-    )
+    contentAsString(view(formWithNoSelectionError, Countries.eu, updateDetails = false, atarService, isInReviewMode))
   )
 
   private lazy val vatNumErrorIllegalCharacters: Document = Jsoup.parse(
-    contentAsString(
-      view(
-        formWithIncorrectVatNumber,
-        Countries.eu,
-        updateDetails = false,
-        atarService,
-        Journey.Register,
-        isInReviewMode
-      )
-    )
+    contentAsString(view(formWithIncorrectVatNumber, Countries.eu, updateDetails = false, atarService, isInReviewMode))
   )
 
   private lazy val vatNumErrorLong: Document = Jsoup.parse(
-    contentAsString(
-      view(formWithLongVatDetails, Countries.eu, updateDetails = false, atarService, Journey.Register, isInReviewMode)
-    )
+    contentAsString(view(formWithLongVatDetails, Countries.eu, updateDetails = false, atarService, isInReviewMode))
   )
 
 }

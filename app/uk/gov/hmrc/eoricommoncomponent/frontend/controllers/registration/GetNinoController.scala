@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration.how_can_we_identify_you_nino
@@ -43,34 +43,29 @@ class GetNinoController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def displayForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def displayForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
-        Ok(matchNinoRowIndividualView(subscriptionNinoForm, false, routes.GetNinoController.submit(service, journey)))
+        Ok(matchNinoRowIndividualView(subscriptionNinoForm, false, routes.GetNinoController.submit(service)))
       )
     }
 
-  def submit(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
         subscriptionNinoForm.bindFromRequest.fold(
           formWithErrors =>
             Future.successful(
-              BadRequest(
-                matchNinoRowIndividualView(formWithErrors, false, routes.GetNinoController.submit(service, journey))
-              )
+              BadRequest(matchNinoRowIndividualView(formWithErrors, false, routes.GetNinoController.submit(service)))
             ),
-          formData => matchIndividual(Nino(formData.id), service, journey, formData, GroupId(loggedInUser.groupId))
+          formData => matchIndividual(Nino(formData.id), service, formData, GroupId(loggedInUser.groupId))
         )
     }
 
-  private def matchIndividual(
-    id: CustomsId,
-    service: Service,
-    journey: Journey.Value,
-    formData: IdMatchModel,
-    groupId: GroupId
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
+  private def matchIndividual(id: CustomsId, service: Service, formData: IdMatchModel, groupId: GroupId)(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Future[Result] =
     subscriptionDetailsService.cachedNameDobDetails flatMap {
       case Some(details) =>
         matchingService
@@ -81,19 +76,19 @@ class GetNinoController @Inject() (
           )
           .map { matched =>
             if (matched)
-              Redirect(ConfirmContactDetailsController.form(service, journey))
+              Redirect(ConfirmContactDetailsController.form(service))
             else
-              matchNotFoundBadRequest(formData, service, journey)
+              matchNotFoundBadRequest(formData, service)
           }
-      case None => Future.successful(matchNotFoundBadRequest(formData, service, journey))
+      case None => Future.successful(matchNotFoundBadRequest(formData, service))
     }
 
-  private def matchNotFoundBadRequest(formData: IdMatchModel, service: Service, journey: Journey.Value)(implicit
+  private def matchNotFoundBadRequest(formData: IdMatchModel, service: Service)(implicit
     request: Request[AnyContent]
   ): Result = {
     val errorMsg  = Messages("cds.matching-error.individual-not-found")
     val errorForm = subscriptionNinoForm.withGlobalError(errorMsg).fill(formData)
-    BadRequest(matchNinoRowIndividualView(errorForm, false, routes.GetNinoController.submit(service, journey)))
+    BadRequest(matchNinoRowIndividualView(errorForm, false, routes.GetNinoController.submit(service)))
   }
 
 }

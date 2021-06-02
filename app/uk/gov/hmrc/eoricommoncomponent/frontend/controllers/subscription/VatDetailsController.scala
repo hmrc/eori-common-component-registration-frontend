@@ -36,7 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatDetailsForm.vatDetailsForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.{vat_details, we_cannot_confirm_your_identity}
@@ -58,33 +58,31 @@ class VatDetailsController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service, journey)))
+        Future.successful(Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service)))
     }
 
-  def reviewForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedUkVatDetails.map {
           case Some(vatDetails) =>
-            Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, service, journey))
-          case None => Ok(vatDetailsView(vatDetailsForm, isInReviewMode = true, service, journey))
+            Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, service))
+          case None => Ok(vatDetailsView(vatDetailsForm, isInReviewMode = true, service))
         }
     }
 
-  def submit(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       vatDetailsForm.bindFromRequest.fold(
-        formWithErrors =>
-          Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service, journey))),
-        formData => lookupVatDetails(formData, isInReviewMode, service, journey)
+        formWithErrors => Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service))),
+        formData => lookupVatDetails(formData, isInReviewMode, service)
       )
     }
 
-  private def lookupVatDetails(vatForm: VatDetails, isInReviewMode: Boolean, service: Service, journey: Journey.Value)(
-    implicit
+  private def lookupVatDetails(vatForm: VatDetails, isInReviewMode: Boolean, service: Service)(implicit
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] = {
@@ -110,7 +108,7 @@ class VatDetailsController @Inject() (
                 if (isInReviewMode)
                   Redirect(
                     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
-                      .determineRoute(service, journey)
+                      .determineRoute(service)
                   )
                 else
                   Redirect(
@@ -118,19 +116,19 @@ class VatDetailsController @Inject() (
                   )
             )
         else
-          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service, journey)))
+          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
       case Left(errorResponse) =>
         errorResponse match {
           case NotFoundResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service, journey)))
+            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
           case InvalidResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service, journey)))
+            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
           case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate()))
         }
     }
   }
 
-  def vatDetailsNotMatched(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def vatDetailsNotMatched(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(weCannotConfirmYourIdentity(isInReviewMode, service)))
     }

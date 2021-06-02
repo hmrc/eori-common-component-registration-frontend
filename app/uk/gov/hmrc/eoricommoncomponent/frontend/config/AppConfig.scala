@@ -20,7 +20,7 @@ import javax.inject.{Inject, Named, Singleton}
 import play.api.Configuration
 import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.duration.Duration
@@ -37,24 +37,14 @@ class AppConfig @Inject() (
 
   val ttl: Duration = Duration.create(config.get[String]("cds-frontend-cache.ttl"))
 
-  val allowlistReferrers: Seq[String] =
-    config.get[String]("allowlist-referrers").split(',').map(_.trim).filter(_.nonEmpty)
-
   private val contactBaseUrl = servicesConfig.baseUrl("contact-frontend")
 
   private val serviceIdentifierRegister =
     config.get[String]("microservice.services.contact-frontend.serviceIdentifierRegister")
 
-  private val serviceIdentifierSubscribe =
-    config.get[String]("microservice.services.contact-frontend.serviceIdentifierSubscribe")
+  private val feedbackLink = config.get[String]("external-url.feedback-survey")
 
-  private val feedbackLink          = config.get[String]("external-url.feedback-survey")
-  private val feedbackLinkSubscribe = config.get[String]("external-url.feedback-survey-subscribe")
-
-  def feedbackUrl(service: Service, journey: Journey.Value) = journey match {
-    case Journey.Register  => s"$feedbackLink-${service.code}"
-    case Journey.Subscribe => s"$feedbackLinkSubscribe-${service.code}"
-  }
+  def feedbackUrl(service: Service) = s"$feedbackLink-${service.code}"
 
   def externalGetEORILink(service: Service): String = {
     def registerBlocked = blockedRoutesRegex.exists(_.findFirstIn("register").isDefined)
@@ -92,20 +82,10 @@ class AppConfig @Inject() (
   def reportAProblemNonJSUrlRegister(service: Service): String =
     s"$contactBaseUrl/contact/problem_reports_nonjs?service=$serviceIdentifierRegister-${service.code}"
 
-  //get help link feedback for Subscribe journey
-  def reportAProblemPartialUrlSubscribe(service: Service): String =
-    s"$contactBaseUrl/contact/problem_reports_ajax?service=$serviceIdentifierSubscribe-${service.code}"
-
-  def reportAProblemNonJSUrlSubscribe(service: Service): String =
-    s"$contactBaseUrl/contact/problem_reports_nonjs?service=$serviceIdentifierSubscribe-${service.code}"
-
   private val betafeedbackBaseUrl = s"$contactBaseUrl/contact/beta-feedback"
 
   def betaFeedBackRegister(service: Service) =
     s"$betafeedbackBaseUrl?service=$serviceIdentifierRegister-${service.code}"
-
-  def betaFeedBackSubscribe(service: Service) =
-    s"$betafeedbackBaseUrl?service=$serviceIdentifierSubscribe-${service.code}"
 
   //email verification service
   val emailVerificationBaseUrl: String = servicesConfig.baseUrl("email-verification")
@@ -127,15 +107,19 @@ class AppConfig @Inject() (
 
   //pdf generation
   val pdfGeneratorBaseUrl: String = servicesConfig.baseUrl("pdf-generator")
-  // tax enrolments
-  val taxEnrolmentsBaseUrl: String = servicesConfig.baseUrl("tax-enrolments")
-
-  val taxEnrolmentsServiceContext: String = config.get[String]("microservice.services.tax-enrolments.context")
 
   val enrolmentStoreProxyBaseUrl: String = servicesConfig.baseUrl("enrolment-store-proxy")
 
   val enrolmentStoreProxyServiceContext: String =
     config.get[String]("microservice.services.enrolment-store-proxy.context")
+
+  private val eoriCommonComponentFrontendBaseUrl: String = servicesConfig.baseUrl("eori-common-component-frontend")
+
+  private val eoriCommonComponentFrontendContext: String =
+    config.get[String]("microservice.services.eori-common-component-frontend.context")
+
+  def eoriCommonComponentFrontend(serviceName: String) =
+    eoriCommonComponentFrontendBaseUrl + eoriCommonComponentFrontendContext + serviceName + "/subscribe"
 
   def getServiceUrl(proxyServiceName: String): String = {
     val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
@@ -143,10 +127,5 @@ class AppConfig @Inject() (
       config.get[String](s"microservice.services.eori-common-component-hods-proxy.$proxyServiceName.context")
     s"$baseUrl/$serviceContext"
   }
-
-  private val addressLookupBaseUrl: String = servicesConfig.baseUrl("address-lookup")
-  private val addressLookupContext: String = config.get[String]("microservice.services.address-lookup.context")
-
-  val addressLookup: String = addressLookupBaseUrl + addressLookupContext
 
 }

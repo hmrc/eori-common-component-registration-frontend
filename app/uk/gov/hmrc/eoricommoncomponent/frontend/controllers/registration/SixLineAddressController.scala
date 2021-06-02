@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.Subscri
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUser, SixLineAddressMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
@@ -52,8 +52,7 @@ class SixLineAddressController @Inject() (
     address: Option[Address],
     isInReviewMode: Boolean,
     organisationType: String,
-    service: Service,
-    journey: Journey.Value
+    service: Service
   )(implicit request: Request[AnyContent]): Future[Result] = {
     val formByOrgType = formsByOrganisationTypes(request)(organisationType)
     lazy val form     = address.map(ad => createSixLineAddress(ad)).fold(formByOrgType)(formByOrgType.fill)
@@ -67,32 +66,21 @@ class SixLineAddressController @Inject() (
           countriesToInclude,
           countriesInCountryPicker,
           organisationType,
-          service,
-          journey
+          service
         )
       )
     )
   }
 
-  def showForm(
-    isInReviewMode: Boolean = false,
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value
-  ): Action[AnyContent] =
+  def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       sessionCache.registrationDetails.flatMap(
-        rd => populateView(Some(rd.address), isInReviewMode, organisationType, service, journey)
+        rd => populateView(Some(rd.address), isInReviewMode, organisationType, service)
       )
     }
 
-  def submit(
-    isInReviewMode: Boolean = false,
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value
-  ): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       val (countriesToInclude, countriesInCountryPicker) =
         Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
@@ -107,20 +95,18 @@ class SixLineAddressController @Inject() (
                 countriesToInclude,
                 countriesInCountryPicker,
                 organisationType,
-                service,
-                journey
+                service
               )
             )
           ),
-        formData => submitAddressDetails(isInReviewMode, formData, service, journey)
+        formData => submitAddressDetails(isInReviewMode, formData, service)
       )
     }
 
   private def submitAddressDetails(
     isInReviewMode: Boolean,
     formData: SixLineAddressMatchModel,
-    service: Service,
-    journey: Journey.Value
+    service: Service
   )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] =
     if (isInReviewMode)
       registrationDetailsService
@@ -129,14 +115,13 @@ class SixLineAddressController @Inject() (
           _ =>
             Redirect(
               uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
-                service,
-                journey
+                service
               )
             )
         )
     else
       registrationDetailsService.cacheAddress(regDetailsCreator.registrationAddress(formData)).flatMap { _ =>
-        subscriptionFlowManager.startSubscriptionFlow(service, journey)
+        subscriptionFlowManager.startSubscriptionFlow(service)
       } map {
         case (firstSubscriptionPage, session) => Redirect(firstSubscriptionPage.url(service)).withSession(session)
       }

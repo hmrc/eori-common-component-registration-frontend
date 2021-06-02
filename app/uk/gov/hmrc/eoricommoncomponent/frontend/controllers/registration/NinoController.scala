@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_nino
 
@@ -39,15 +39,15 @@ class NinoController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def form(organisationType: String, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(matchNinoView(ninoForm, organisationType, service, journey)))
+      Future.successful(Ok(matchNinoView(ninoForm, organisationType, service)))
     }
 
-  def submit(organisationType: String, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       ninoForm.bindFromRequest.fold(
-        invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service, journey))),
+        invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
         form =>
           matchingService.matchIndividualWithNino(
             form.nino,
@@ -57,13 +57,13 @@ class NinoController @Inject() (
             case true =>
               Redirect(
                 uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
-                  .form(service, journey)
+                  .form(service)
               )
             case false =>
               val errorForm = ninoForm
                 .withGlobalError(Messages("cds.matching-error.individual-not-found"))
                 .fill(form)
-              BadRequest(matchNinoView(errorForm, organisationType, service, journey))
+              BadRequest(matchNinoView(errorForm, organisationType, service))
           }
       )
     }

@@ -32,7 +32,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   YesNo
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.businessShortNameYesNoForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
@@ -120,8 +120,7 @@ class BusinessShortNameYesNoController @Inject() (
     if (isInReviewMode)
       Redirect(
         uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
-          service,
-          Journey.Register
+          service
         )
       )
     else

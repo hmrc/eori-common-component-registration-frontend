@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatEUConfirmSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionVatEUDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_details_eu_confirm
 
@@ -45,10 +45,10 @@ class VatDetailsEuConfirmController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       vatEUDetailsService.cachedEUVatDetails map {
-        case Seq() => Redirect(VatRegisteredEuController.createForm(service, journey))
+        case Seq() => Redirect(VatRegisteredEuController.createForm(service))
         case details if details.size < EuVatDetailsLimit =>
           Ok(
             vatDetailsEuConfirmView(
@@ -56,7 +56,6 @@ class VatDetailsEuConfirmController @Inject() (
               isInReviewMode = false,
               details,
               service,
-              journey,
               vatLimitNotReached = true
             )
           )
@@ -67,17 +66,16 @@ class VatDetailsEuConfirmController @Inject() (
               isInReviewMode = false,
               details,
               service,
-              journey,
               vatLimitNotReached = false
             )
           )
       }
     }
 
-  def reviewForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       vatEUDetailsService.cachedEUVatDetails map {
-        case Seq() => Redirect(VatRegisteredEuController.reviewForm(service, journey))
+        case Seq() => Redirect(VatRegisteredEuController.reviewForm(service))
         case details if details.size < EuVatDetailsLimit =>
           Ok(
             vatDetailsEuConfirmView(
@@ -85,7 +83,6 @@ class VatDetailsEuConfirmController @Inject() (
               isInReviewMode = true,
               details,
               service,
-              journey,
               vatLimitNotReached = true
             )
           )
@@ -96,24 +93,23 @@ class VatDetailsEuConfirmController @Inject() (
               isInReviewMode = true,
               details,
               service,
-              journey,
               vatLimitNotReached = false
             )
           )
       }
     }
 
-  def submit(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       vatEUDetailsService.cachedEUVatDetails flatMap (
         details =>
           if (details.size < EuVatDetailsLimit)
-            underVatLimitSubmit(service, journey, isInReviewMode)
-          else overVatLimitSubmit(service, journey, isInReviewMode)
+            underVatLimitSubmit(service, isInReviewMode)
+          else overVatLimitSubmit(service, isInReviewMode)
       )
     }
 
-  private def underVatLimitSubmit(service: Service, journey: Journey.Value, isInReviewMode: Boolean)(implicit
+  private def underVatLimitSubmit(service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
     euVatLimitNotReachedYesNoAnswerForm
@@ -127,22 +123,21 @@ class VatDetailsEuConfirmController @Inject() (
                 isInReviewMode = isInReviewMode,
                 details,
                 service,
-                journey,
                 vatLimitNotReached = true
               )
             )
           },
-        yesNoAnswer => Future.successful(redirect(yesNoAnswer, isInReviewMode, service, journey))
+        yesNoAnswer => Future.successful(redirect(yesNoAnswer, isInReviewMode, service))
       )
 
-  private def redirect(yesNoAnswer: YesNo, isInReviewMode: Boolean, service: Service, journey: Journey.Value)(implicit
+  private def redirect(yesNoAnswer: YesNo, isInReviewMode: Boolean, service: Service)(implicit
     rc: Request[AnyContent]
   ): Result =
     (yesNoAnswer.isYes, isInReviewMode) match {
-      case (true, false) => Redirect(VatDetailsEuController.createForm(service, journey))
-      case (true, true)  => Redirect(VatDetailsEuController.reviewForm(service, journey))
+      case (true, false) => Redirect(VatDetailsEuController.createForm(service))
+      case (true, true)  => Redirect(VatDetailsEuController.reviewForm(service))
       case (false, true) =>
-        Redirect(DetermineReviewPageController.determineRoute(service, journey).url)
+        Redirect(DetermineReviewPageController.determineRoute(service).url)
       case (false, false) =>
         Redirect(
           subscriptionFlowManager
@@ -152,7 +147,7 @@ class VatDetailsEuConfirmController @Inject() (
         )
     }
 
-  private def overVatLimitSubmit(service: Service, journey: Journey.Value, isInReviewMode: Boolean)(implicit
+  private def overVatLimitSubmit(service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
     euVatLimitReachedYesNoAnswerForm
@@ -161,19 +156,12 @@ class VatDetailsEuConfirmController @Inject() (
         formWithErrors =>
           vatEUDetailsService.cachedEUVatDetails map { details =>
             BadRequest(
-              vatDetailsEuConfirmView(
-                formWithErrors,
-                isInReviewMode,
-                details,
-                service,
-                journey,
-                vatLimitNotReached = false
-              )
+              vatDetailsEuConfirmView(formWithErrors, isInReviewMode, details, service, vatLimitNotReached = false)
             )
           },
         _ =>
           if (isInReviewMode)
-            Future.successful(Redirect(DetermineReviewPageController.determineRoute(service, journey).url))
+            Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
           else
             Future.successful(
               Redirect(

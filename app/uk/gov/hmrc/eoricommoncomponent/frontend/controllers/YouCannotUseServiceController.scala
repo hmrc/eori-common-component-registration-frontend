@@ -22,12 +22,9 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.affinityGroup
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthProviders, AuthorisedFunctions}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, AuthRedirectSupport, EnrolmentExtractor}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthRedirectSupport, EnrolmentExtractor}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.unable_to_use_id
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -36,41 +33,21 @@ class YouCannotUseServiceController @Inject() (
   override val config: Configuration,
   override val env: Environment,
   override val authConnector: AuthConnector,
-  authAction: AuthAction,
-  cache: SessionCache,
   youCantUseService: you_cant_use_service,
   unauthorisedView: unauthorized,
-  unableToUseIdPage: unable_to_use_id,
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with AuthorisedFunctions with AuthRedirectSupport with EnrolmentExtractor {
 
-  def page(service: Service, journey: Journey.Value): Action[AnyContent] = Action.async { implicit request =>
+  def page(service: Service): Action[AnyContent] = Action.async { implicit request =>
     authorised(AuthProviders(GovernmentGateway))
       .retrieve(affinityGroup) { ag =>
         Future.successful(Unauthorized(youCantUseService(ag)))
       } recover withAuthRecovery(request)
   }
 
-  def unauthorisedPage(service: Service, journey: Journey.Value): Action[AnyContent] = Action { implicit request =>
+  def unauthorisedPage(service: Service): Action[AnyContent] = Action { implicit request =>
     Unauthorized(unauthorisedView())
-  }
-
-  def unableToUseIdPage(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      cache.eori.flatMap { eoriOpt =>
-        cache.remove.map { _ =>
-          eoriOpt match {
-            case Some(eori) => Ok(unableToUseIdPage(service, eori))
-            case _ =>
-              Redirect(
-                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.WhatIsYourEoriController.createForm(
-                  service
-                )
-              )
-          }
-        }
-      }
   }
 
 }

@@ -23,7 +23,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SixLineAddressMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.six_line_address
 import util.ViewSpec
@@ -109,15 +108,8 @@ class SixLineAddressSpec extends ViewSpec {
   }
 
   private lazy val doc: Document = {
-    val result = view(
-      isInReviewMode,
-      form,
-      aFewCountries,
-      ThirdCountriesInCountryPicker,
-      ThirdCountryOrganisationId,
-      atarService,
-      Journey.Subscribe
-    )
+    val result =
+      view(isInReviewMode, form, aFewCountries, ThirdCountriesInCountryPicker, ThirdCountryOrganisationId, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
@@ -128,8 +120,7 @@ class SixLineAddressSpec extends ViewSpec {
       aFewCountries,
       ThirdCountriesInCountryPicker,
       ThirdCountryOrganisationId,
-      atarService,
-      Journey.Subscribe
+      atarService
     )
     Jsoup.parse(contentAsString(result))
   }

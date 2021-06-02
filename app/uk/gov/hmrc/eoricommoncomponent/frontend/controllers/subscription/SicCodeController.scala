@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.SicCodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionForm.sicCodeform
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
@@ -49,8 +49,7 @@ class SicCodeController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  private def populateView(sicCode: Option[String], isInReviewMode: Boolean, service: Service, journey: Journey.Value)(
-    implicit
+  private def populateView(sicCode: Option[String], isInReviewMode: Boolean, service: Service)(implicit
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] = {
@@ -62,28 +61,27 @@ class SicCodeController @Inject() (
           isInReviewMode,
           requestSessionData.userSelectedOrganisationType,
           service,
-          journey,
           requestSessionData.selectedUserLocation
         )
       )
     }
   }
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        subscriptionBusinessService.cachedSicCode.flatMap(populateView(_, isInReviewMode = false, service, journey))
+        subscriptionBusinessService.cachedSicCode.flatMap(populateView(_, isInReviewMode = false, service))
     }
 
-  def reviewForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedSicCode.flatMap(
-          sic => populateView(Some(sic), isInReviewMode = true, service, journey)
+          sic => populateView(Some(sic), isInReviewMode = true, service)
         )
     }
 
-  def submit(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sicCodeform.bindFromRequest.fold(
         formWithErrors =>
@@ -95,24 +93,21 @@ class SicCodeController @Inject() (
                 isInReviewMode,
                 requestSessionData.userSelectedOrganisationType,
                 service,
-                journey,
                 requestSessionData.selectedUserLocation
               )
             )
           },
-        formData => submitNewDetails(formData, isInReviewMode, service, journey)
+        formData => submitNewDetails(formData, isInReviewMode, service)
       )
     }
 
   private def stepInformation()(implicit request: Request[AnyContent]): SubscriptionFlowInfo =
     subscriptionFlowManager.stepInformation(SicCodeSubscriptionFlowPage)
 
-  private def submitNewDetails(
-    formData: SicCodeViewModel,
-    isInReviewMode: Boolean,
-    service: Service,
-    journey: Journey.Value
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] =
+  private def submitNewDetails(formData: SicCodeViewModel, isInReviewMode: Boolean, service: Service)(implicit
+    hc: HeaderCarrier,
+    request: Request[AnyContent]
+  ): Future[Result] =
     subscriptionDetailsHolderService
       .cacheSicCode(formData.sicCode)
       .map(
@@ -120,8 +115,7 @@ class SicCodeController @Inject() (
           if (isInReviewMode)
             Redirect(
               uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
-                service,
-                journey
+                service
               )
             )
           else

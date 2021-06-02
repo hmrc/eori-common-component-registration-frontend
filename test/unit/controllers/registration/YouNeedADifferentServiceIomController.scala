@@ -23,7 +23,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.YouNeedADifferentServiceIomController
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.you_need_different_service_iom
 import util.ControllerSpec
 
@@ -39,14 +38,17 @@ class YouNeedADifferentServiceIomControllerSpec extends ControllerSpec with Befo
     when(youNeedDifferenceServiceIomPage.apply()(any(), any())).thenReturn(HtmlFormat.empty)
   }
 
-  override protected def afterEach(): Unit =
+  override protected def afterEach(): Unit = {
     reset(youNeedDifferenceServiceIomPage)
+
+    super.afterEach()
+  }
 
   "YouNeedADifferentServiceIomController on method form" should {
 
     "return youNeedDifferentServiceIom page" in {
 
-      val result = controller.form(atarService, Journey.Subscribe)(FakeRequest())
+      val result = controller.form(atarService)(FakeRequest())
 
       status(result) shouldBe OK
     }

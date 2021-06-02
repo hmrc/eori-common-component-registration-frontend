@@ -26,7 +26,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.IsleOfManController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.VatRegisteredUkController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatGroupController
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.isle_of_man
 import util.ControllerSpec
 import util.builders.AuthActionMock
@@ -95,7 +95,7 @@ class IsleOfManControllerSpec extends ControllerSpec with BeforeAndAfterEach wit
         val result = controller.submit(atarService)(FakeRequest().withJsonBody(form))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(VatGroupController.createForm(atarService, Journey.Register).url)
+        redirectLocation(result) shouldBe Some(VatGroupController.createForm(atarService).url)
       }
     }
   }

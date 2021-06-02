@@ -20,7 +20,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.email_confirmed
 import util.ViewSpec
 
@@ -31,26 +30,21 @@ class EmailConfirmedSpec extends ViewSpec {
 
   "Email Address Confirmed page" should {
     "display correct title" in {
-      migrateDoc.title must startWith("You have confirmed your email address")
+      getEoriDoc.title must startWith("You have confirmed your email address")
     }
     "have the correct h1 text" in {
-      migrateDoc.body.getElementsByTag("h1").text() mustBe "You have confirmed your email address"
+      getEoriDoc.body.getElementsByTag("h1").text() mustBe "You have confirmed your email address"
     }
     "have the correct class on the h1" in {
-      migrateDoc.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      getEoriDoc.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
     }
     "have a continue button" in {
-      migrateDoc.body.getElementsByClass("button").text() mustBe "Continue"
+      getEoriDoc.body.getElementsByClass("button").text() mustBe "Continue"
     }
-  }
-
-  lazy val migrateDoc: Document = {
-    val result = view(Journey.Subscribe)
-    Jsoup.parse(contentAsString(result))
   }
 
   lazy val getEoriDoc: Document = {
-    val result = view(Journey.Register)
+    val result = view()
     Jsoup.parse(contentAsString(result))
   }
 

@@ -33,7 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
@@ -84,13 +84,12 @@ class SixLineAddressControllerSpec
   private val testSessionData              = Map[String, String]("some_session_key" -> "some_session_value")
   private val testSubscriptionStartPageUrl = "some_page_url"
 
-  private val LineOne      = "Address line 1"
-  private val LineTwo      = "Address line 2 (optional)"
-  private val LineThree    = "Town or city"
-  private val LineFour     = "Region or state (optional)"
-  private val Postcode     = "Postcode"
-  private val CountryLabel = "Country"
-  private val testAddress  = Address(LineOne, Some(LineTwo), Some(LineThree), Some(LineFour), Some(Postcode), "FR")
+  private val LineOne     = "Address line 1"
+  private val LineTwo     = "Address line 2 (optional)"
+  private val LineThree   = "Town or city"
+  private val LineFour    = "Region or state (optional)"
+  private val Postcode    = "Postcode"
+  private val testAddress = Address(LineOne, Some(LineTwo), Some(LineThree), Some(LineFour), Some(Postcode), "FR")
 
   val organisationTypesData = Table(
     ("Organisation Type", "Form Builder", "Form", "reviewMode", "expectedRedirectURL"),
@@ -118,7 +117,7 @@ class SixLineAddressControllerSpec
     when(mockSubscriptionStartSession.data).thenReturn(testSessionData)
     when(
       mockSubscriptionFlowManager
-        .startSubscriptionFlow(any[Service], any[Journey.Value])(any[HeaderCarrier], any[Request[AnyContent]])
+        .startSubscriptionFlow(any[Service])(any[HeaderCarrier], any[Request[AnyContent]])
     ).thenReturn(Future.successful(mockFlowStart))
     when(mockRegistrationDetailsCreator.registrationAddress(any())).thenReturn(testAddress)
     when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails]())(any[HeaderCarrier]()))
@@ -146,7 +145,7 @@ class SixLineAddressControllerSpec
 
       assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
         mockAuthConnector,
-        controller.showForm(reviewMode, organisationType, atarService, Journey.Register),
+        controller.showForm(reviewMode, organisationType, atarService),
         s", for reviewMode [$reviewMode] and organisationType $organisationType"
       )
 
@@ -164,7 +163,6 @@ class SixLineAddressControllerSpec
 
         "be mandatory" in {
           assertInvalidField(organisationType)(formValues + ("line-1" -> ""))(
-            LineOne,
             fieldLevelErrorAddressLineOne,
             "Enter the first line of your address"
           )
@@ -172,7 +170,6 @@ class SixLineAddressControllerSpec
 
         "be restricted to 35 characters" in {
           assertInvalidField(organisationType)(formValues + ("line-1" -> oversizedString(35)))(
-            LineOne,
             fieldLevelErrorAddressLineOne,
             "The first line of the address must be 35 characters or less"
           )
@@ -191,7 +188,6 @@ class SixLineAddressControllerSpec
 
         "be restricted to 34 characters" in {
           assertInvalidField(organisationType)(formValues + ("line-2" -> oversizedString(34)))(
-            LineTwo,
             fieldLevelErrorAddressLineTwo,
             "The second line of the address must be 34 characters or less"
           )
@@ -202,7 +198,6 @@ class SixLineAddressControllerSpec
 
         "be mandatory" in {
           assertInvalidField(organisationType)(formValues + ("line-3" -> ""))(
-            LineThree,
             fieldLevelErrorAddressLineThree,
             "Enter your town or city"
           )
@@ -210,7 +205,6 @@ class SixLineAddressControllerSpec
 
         "be restricted to 35 characters" in {
           assertInvalidField(organisationType)(formValues + ("line-3" -> oversizedString(35)))(
-            LineThree,
             fieldLevelErrorAddressLineThree,
             "The town or city must be 35 characters or less"
           )
@@ -229,7 +223,6 @@ class SixLineAddressControllerSpec
 
         "be restricted to 35 characters" in {
           assertInvalidField(organisationType)(formValues + ("line-4" -> oversizedString(35)))(
-            LineFour,
             fieldLevelErrorAddressLineFour,
             "The Region or state must be 35 characters or less"
           )
@@ -240,7 +233,6 @@ class SixLineAddressControllerSpec
 
         "be mandatory" in {
           assertInvalidField(organisationType)(formValues - "countryCode")(
-            CountryLabel,
             fieldLevelErrorCountry,
             "Enter a valid country name"
           )
@@ -248,7 +240,6 @@ class SixLineAddressControllerSpec
 
         "be non-empty" in {
           assertInvalidField(organisationType)(formValues + ("countryCode" -> ""))(
-            CountryLabel,
             fieldLevelErrorCountry,
             "Enter a valid country name"
           )
@@ -256,7 +247,6 @@ class SixLineAddressControllerSpec
 
         "be at least 2 characters long" in {
           assertInvalidField(organisationType)(formValues + ("countryCode" -> undersizedString(2)))(
-            CountryLabel,
             fieldLevelErrorCountry,
             "Enter a valid country name"
           )
@@ -264,7 +254,6 @@ class SixLineAddressControllerSpec
 
         "be at most 2 characters long" in {
           assertInvalidField(organisationType)(formValues + ("countryCode" -> oversizedString(2)))(
-            CountryLabel,
             fieldLevelErrorCountry,
             "Enter a valid country name"
           )
@@ -276,7 +265,7 @@ class SixLineAddressControllerSpec
 
       assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
         mockAuthConnector,
-        controller.submit(reviewMode, organisationType, atarService, Journey.Register),
+        controller.submit(reviewMode, organisationType, atarService),
         s", for reviewMode [$reviewMode] and organisationType $organisationType"
       )
 
@@ -303,7 +292,6 @@ class SixLineAddressControllerSpec
     "be restricted to 9 characters" in {
       val formValues = RowFormBuilder.asForm(thirdCountrySixLineAddressForm)
       assertInvalidField("third-country-organisation")(formValues + ("postcode" -> oversizedString(9)))(
-        Postcode,
         fieldLevelErrorPostcode,
         "The postcode must be 9 characters or less"
       )
@@ -314,7 +302,6 @@ class SixLineAddressControllerSpec
     "be mandatory for Jersey" in {
       val formValues = RowFormBuilder.asForm(thirdCountrySixLineAddressForm)
       assertInvalidField("third-country-organisation")(formValues + ("postcode" -> "", "countryCode" -> "JE"))(
-        Postcode,
         fieldLevelErrorPostcode,
         "Enter a valid postcode"
       )
@@ -322,7 +309,6 @@ class SixLineAddressControllerSpec
     "be mandatory for Guernsey" in {
       val formValues = RowFormBuilder.asForm(thirdCountrySixLineAddressForm)
       assertInvalidField("third-country-organisation")(formValues + ("postcode" -> "", "countryCode" -> "GG"))(
-        Postcode,
         fieldLevelErrorPostcode,
         "Enter a valid postcode"
       )
@@ -333,7 +319,6 @@ class SixLineAddressControllerSpec
     "reject country code GB" in {
       val formValues = RowFormBuilder.asForm(thirdCountrySixLineAddressForm)
       assertInvalidField("third-country-organisation")(formValues + ("countryCode" -> "GB"))(
-        CountryLabel,
         fieldLevelErrorCountry,
         "The entered country is not acceptable"
       )
@@ -368,8 +353,7 @@ class SixLineAddressControllerSpec
 
   private def submitFormInCreateModeForIndividualRegistration(
     form: Map[String, String],
-    userId: String = defaultUserId,
-    userSelectedOrgType: Option[CdsOrganisationType] = None
+    userId: String = defaultUserId
   )(test: Future[Result] => Any) {
     val individualRegistrationDetails = RegistrationDetails.individual(
       sapNumber = "0123456789",
@@ -387,7 +371,7 @@ class SixLineAddressControllerSpec
     when(mockSubscriptionDetailsService.cachedCustomsId(any[HeaderCarrier])).thenReturn(None)
 
     test(
-      controller.submit(false, CdsOrganisationType.ThirdCountryIndividualId, atarService, Journey.Register)(
+      controller.submit(false, CdsOrganisationType.ThirdCountryIndividualId, atarService)(
         SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
       )
     )
@@ -402,7 +386,7 @@ class SixLineAddressControllerSpec
 
   def assertInvalidField(
     cdsOrgType: String
-  )(formValues: Map[String, String])(problemField: String, fieldLevelErrorXPath: String, errorMessage: String): Result =
+  )(formValues: Map[String, String])(fieldLevelErrorXPath: String, errorMessage: String): Result =
     submitForm(cdsOrgType)(formValues) { result =>
       status(result) shouldBe BAD_REQUEST
       val page = CdsPage(contentAsString(result))
@@ -420,7 +404,7 @@ class SixLineAddressControllerSpec
 
     test(
       controller
-        .showForm(reviewMode, cdsOrgType, atarService, Journey.Register)
+        .showForm(reviewMode, cdsOrgType, atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, formValues))
     )
   }
@@ -433,7 +417,7 @@ class SixLineAddressControllerSpec
 
     test(
       controller
-        .submit(reviewMode, cdsOrgType, atarService, Journey.Register)
+        .submit(reviewMode, cdsOrgType, atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, formValues))
     )
   }

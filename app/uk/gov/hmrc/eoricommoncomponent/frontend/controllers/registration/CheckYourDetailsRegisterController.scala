@@ -21,7 +21,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.check_your_details_register
@@ -39,7 +39,7 @@ class CheckYourDetailsRegisterController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def reviewDetails(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewDetails(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         for {
@@ -58,18 +58,15 @@ class CheckYourDetailsRegisterController @Inject() (
               subscription,
               consent,
               service,
-              journey,
               isUserIdentifiedByRegService
             )
           )
         }
     }
 
-  def submitDetails(service: Service, journey: Journey.Value): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
-      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        registerWithoutIdWithSubscription
-          .rowRegisterWithoutIdWithSubscription(loggedInUser, service, journey)
-    }
+  def submitDetails(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+    implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      registerWithoutIdWithSubscription.rowRegisterWithoutIdWithSubscription(loggedInUser, service)
+  }
 
 }

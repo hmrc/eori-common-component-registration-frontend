@@ -18,55 +18,44 @@ package unit.controllers.address
 
 import common.pages.subscription.AddressPage
 import common.support.testdata.subscription.BusinessDatesOrganisationTypeTables
-import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.submit
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.AddressDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, RegistrationDetails, SafeId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, RegistrationDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
+  SubscriptionBusinessService,
+  SubscriptionDetailsService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.address
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
-import unit.controllers.subscription.{
-  SubscriptionFlowCreateModeTestSupport,
-  SubscriptionFlowReviewModeTestSupport,
-  SubscriptionFlowTestSupport
-}
+import util.ControllerSpec
 import util.StringThings._
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder._
-import util.builders.SessionBuilder
+import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AddressControllerSpec
-    extends SubscriptionFlowTestSupport with BusinessDatesOrganisationTypeTables with BeforeAndAfterEach
-    with SubscriptionFlowCreateModeTestSupport with SubscriptionFlowReviewModeTestSupport {
+    extends ControllerSpec with BusinessDatesOrganisationTypeTables with BeforeAndAfterEach with AuthActionMock {
 
-  protected override val formId: String = AddressPage.formId
-
-  protected override def submitInCreateModeUrl: String =
-    submit(isInReviewMode = false, atarService, Journey.Register).url
-
-  protected override def submitInReviewModeUrl: String =
-    submit(isInReviewMode = true, atarService, Journey.Register).url
-
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache       = mock[SessionCache]
-  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val emulatedFailure                = new UnsupportedOperationException("Emulation of service call failure")
-  private val mockOrganisationType           = mock[CdsOrganisationType]
+  private val mockAuthConnector               = mock[AuthConnector]
+  private val mockAuthAction                  = authAction(mockAuthConnector)
+  private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
+  private val mockRequestSessionData          = mock[RequestSessionData]
+  private val mockCdsFrontendDataCache        = mock[SessionCache]
+  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
+  private val emulatedFailure                 = new UnsupportedOperationException("Emulation of service call failure")
+  private val mockOrganisationType            = mock[CdsOrganisationType]
 
   private val viewAddress = instanceOf[address]
 
@@ -74,7 +63,6 @@ class AddressControllerSpec
     mockAuthAction,
     mockSubscriptionBusinessService,
     mockCdsFrontendDataCache,
-    mockSubscriptionFlowManager,
     mockRequestSessionData,
     mockSubscriptionDetailsService,
     mcc,
@@ -111,40 +99,23 @@ class AddressControllerSpec
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(mockOrganisationType))
     registerSaveDetailsMockSuccess()
-    setupMockSubscriptionFlowManager(AddressDetailsSubscriptionFlowPage)
   }
 
   override protected def afterEach(): Unit = {
-    reset(
-      mockSubscriptionBusinessService,
-      mockSubscriptionFlowManager,
-      mockRequestSessionData,
-      mockSubscriptionDetailsService
-    )
+    reset(mockSubscriptionBusinessService, mockRequestSessionData, mockSubscriptionDetailsService)
 
     super.afterEach()
   }
 
   "Subscription Address Controller form in create mode" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.createForm(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "display title as 'Enter your business address'" in {
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("Enter your organisation address")
       }
-    }
-
-    "submit in create mode" in {
-      showCreateForm()(verifyFormActionInCreateMode)
-    }
-
-    "display the back link" in {
-      showCreateForm()(verifyBackLinkInCreateModeRegister)
     }
 
     "have Address input field without data if not cached previously" in {
@@ -163,13 +134,6 @@ class AddressControllerSpec
       }
     }
 
-    "display the correct text for the continue button" in {
-      showCreateForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementValue(AddressPage.continueButtonXpath) shouldBe ContinueButtonTextInCreateMode
-      }
-    }
-
   }
 
   "Subscription Address Controller form in create mode for Individual" should {
@@ -183,62 +147,11 @@ class AddressControllerSpec
     }
   }
 
-  "Subscription Address form in review mode for Individual" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForSubscribe(
-      mockAuthConnector,
-      controller.reviewForm(atarService, Journey.Subscribe)
-    )
-
-    "display title as 'Enter your address'" in {
-      showReviewForm(userSelectedOrganisationType = Some(CdsOrganisationType.Individual)) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Enter your address")
-        page.h1() shouldBe "Enter your address"
-      }
-    }
-  }
-
-  "Subscription Address form in review mode" should {
-
-    "display title as 'Enter your business address'" in {
-      showCreateForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Enter your organisation address")
-      }
-    }
-
-    "submit in review mode" in {
-      showReviewForm()(verifyFormSubmitsInReviewMode)
-    }
-
-    "retrieve the cached data" in {
-      showReviewForm() { result =>
-        CdsPage(contentAsString(result))
-        verify(mockSubscriptionBusinessService).addressOrException(any[HeaderCarrier])
-      }
-    }
-
-    "have all the required input fields without data" in {
-      showReviewForm(AddressViewModel("", "", None, "")) { result =>
-        val page = CdsPage(contentAsString(result))
-        verifyAddressFieldExistsWithNoData(page)
-      }
-    }
-
-    "display the correct text for the continue button" in {
-      showReviewForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementValue(AddressPage.continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
-      }
-    }
-  }
-
   "submitting the form with all mandatory fields filled when in create mode for organisation type" should {
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(isInReviewMode = false, atarService, Journey.Register)
+      controller.submit(isInReviewMode = false, atarService)
     )
 
     "wait until the saveSubscriptionDetailsHolder is completed before progressing" in {
@@ -271,21 +184,6 @@ class AddressControllerSpec
     }
   }
 
-  "submitting the form for Migration journey" should {
-
-    "redirect to email address page when No Nino and No Utr is provided" in {
-
-      when(mockCdsFrontendDataCache.clearAddressLookupParams(any())).thenReturn(Future.successful((): Unit))
-      submitFormInCreateModeForIndividualSubscription(
-        Map("street" -> "My street", "city" -> "My city", "postcode" -> "SE281AA", "countryCode" -> "GB")
-      ) { result =>
-        status(result) shouldBe SEE_OTHER
-
-        verify(mockCdsFrontendDataCache).clearAddressLookupParams(any())
-      }
-    }
-  }
-
   "submitting the form with all mandatory fields filled when in review mode for all organisation types" should {
 
     "wait until the saveSubscriptionDetailsHolder is completed before progressing" in {
@@ -297,9 +195,14 @@ class AddressControllerSpec
     }
 
     "redirect to review screen" in {
-      submitFormInReviewMode(mandatoryFields, userSelectedOrgType = Some(mockOrganisationType))(
-        verifyRedirectToReviewPage(Journey.Register)
-      )
+      submitFormInReviewMode(mandatoryFields, userSelectedOrgType = Some(mockOrganisationType)) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(
+          LOCATION
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
+          .determineRoute(atarService)
+          .url
+      }
     }
   }
 
@@ -424,33 +327,7 @@ class AddressControllerSpec
     when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
 
     test(
-      controller.submit(isInReviewMode = false, atarService, Journey.Register)(
-        SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-      )
-    )
-  }
-
-  private def submitFormInCreateModeForIndividualSubscription(
-    form: Map[String, String],
-    userId: String = defaultUserId
-  )(test: Future[Result] => Any) {
-    val individualRegistrationDetails = RegistrationDetails.individual(
-      sapNumber = "0123456789",
-      safeId = SafeId("safe-id"),
-      name = "John Doe",
-      address = defaultAddress,
-      dateOfBirth = LocalDate.parse("1980-07-23"),
-      customsId = None
-    )
-
-    withAuthorisedUser(userId, mockAuthConnector)
-    when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
-      .thenReturn(Some(CdsOrganisationType("individual")))
-    when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(individualRegistrationDetails)
-    when(mockSubscriptionDetailsService.cachedCustomsId(any[HeaderCarrier])).thenReturn(None)
-
-    test(
-      controller.submit(isInReviewMode = false, atarService, Journey.Subscribe)(
+      controller.submit(isInReviewMode = false, atarService)(
         SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
       )
     )
@@ -464,7 +341,7 @@ class AddressControllerSpec
     when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(individualRegistrationDetails)
 
     test(
-      controller.submit(isInReviewMode = false, atarService, Journey.Register)(
+      controller.submit(isInReviewMode = false, atarService)(
         SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
       )
     )
@@ -481,7 +358,7 @@ class AddressControllerSpec
       .thenReturn(Some(CdsOrganisationType("company")))
 
     test(
-      controller.submit(isInReviewMode = true, atarService, Journey.Register)(
+      controller.submit(isInReviewMode = true, atarService)(
         SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
       )
     )
@@ -507,22 +384,7 @@ class AddressControllerSpec
       .thenReturn(isIndividual(userSelectedOrganisationType))
     when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
 
-    test(controller.createForm(atarService, Journey.Register).apply(SessionBuilder.buildRequestWithSession(userId)))
-  }
-
-  private def showReviewForm(
-    dataToEdit: AddressViewModel = AddressPage.filledValues,
-    userId: String = defaultUserId,
-    userSelectedOrganisationType: Option[CdsOrganisationType] = None
-  )(test: Future[Result] => Any) {
-    withAuthorisedUser(userId, mockAuthConnector)
-
-    when(mockRequestSessionData.isIndividualOrSoleTrader(any[Request[AnyContent]]))
-      .thenReturn(isIndividual(userSelectedOrganisationType))
-    when(mockSubscriptionBusinessService.addressOrException(any[HeaderCarrier])).thenReturn(dataToEdit)
-    when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(individualRegistrationDetails)
-
-    test(controller.reviewForm(atarService, Journey.Register).apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def verifyAddressFieldExistsAndPopulatedCorrectly(page: CdsPage): Unit = {

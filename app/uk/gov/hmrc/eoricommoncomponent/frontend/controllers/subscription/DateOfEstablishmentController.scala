@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EtmpOrganisationType, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionForm._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
@@ -51,37 +51,36 @@ class DateOfEstablishmentController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         maybeCachedDateModel <- subscriptionBusinessService.maybeCachedDateEstablished
         orgType              <- orgTypeLookup.etmpOrgType
-      } yield populateView(maybeCachedDateModel, isInReviewMode = false, orgType, service, journey)
+      } yield populateView(maybeCachedDateModel, isInReviewMode = false, orgType, service)
     }
 
   private def populateView(
     cachedDate: Option[LocalDate],
     isInReviewMode: Boolean,
     orgType: EtmpOrganisationType,
-    service: Service,
-    journey: Journey.Value
+    service: Service
   )(implicit request: Request[AnyContent]): Result = {
     val form = cachedDate.fold(subscriptionDateOfEstablishmentForm)(subscriptionDateOfEstablishmentForm.fill)
-    Ok(dateOfEstablishmentView(form, isInReviewMode, orgType, UserLocation.isRow(requestSessionData), service, journey))
+    Ok(dateOfEstablishmentView(form, isInReviewMode, orgType, UserLocation.isRow(requestSessionData), service))
   }
 
-  def reviewForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         cachedDateModel <- fetchDate
         orgType         <- orgTypeLookup.etmpOrgType
-      } yield populateView(Some(cachedDateModel), isInReviewMode = true, orgType, service, journey)
+      } yield populateView(Some(cachedDateModel), isInReviewMode = true, orgType, service)
     }
 
   private def fetchDate(implicit hc: HeaderCarrier): Future[LocalDate] =
     subscriptionBusinessService.getCachedDateEstablished
 
-  def submit(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionDateOfEstablishmentForm.bindFromRequest.fold(
         formWithErrors =>
@@ -92,20 +91,17 @@ class DateOfEstablishmentController @Inject() (
                 isInReviewMode,
                 orgType,
                 UserLocation.isRow(requestSessionData),
-                service,
-                journey
+                service
               )
             )
           },
         date =>
           saveDateEstablished(date).map { _ =>
             if (isInReviewMode)
-              Redirect(DetermineReviewPageController.determineRoute(service, journey))
-            else if (requestSessionData.isUKJourney)
-              Redirect(routes.AddressLookupPostcodeController.displayPage(service))
+              Redirect(DetermineReviewPageController.determineRoute(service))
             else {
               val page = subscriptionFlowManager
-                .stepInformation(getSubscriptionPage(journey, UserLocation.isRow(requestSessionData)))
+                .stepInformation(DateOfEstablishmentSubscriptionFlowPage)
                 .nextPage
               Redirect(
                 page
@@ -118,13 +114,5 @@ class DateOfEstablishmentController @Inject() (
 
   private def saveDateEstablished(date: LocalDate)(implicit hc: HeaderCarrier) =
     subscriptionDetailsHolderService.cacheDateEstablished(date)
-
-  private def getSubscriptionPage(journey: Journey.Value, location: Boolean) =
-    (journey, location) match {
-      case (Journey.Subscribe, true) => RowDateOfEstablishmentSubscriptionFlowPage
-      case (Journey.Subscribe, false) =>
-        DateOfEstablishmentSubscriptionFlowPageMigrate
-      case _ => DateOfEstablishmentSubscriptionFlowPage
-    }
 
 }

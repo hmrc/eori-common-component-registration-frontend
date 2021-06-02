@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveUtrForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_organisation_utr
 
@@ -43,30 +43,20 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   private val OrganisationModeDM = "organisation"
 
-  def form(
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value,
-    isInReviewMode: Boolean = false
-  ): Action[AnyContent] =
+  def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>
         val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
 
-        Ok(matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service, journey, isInReviewMode))
+        Ok(matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service, isInReviewMode))
       }
     }
 
-  def submit(
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value,
-    isInReviewMode: Boolean = false
-  ): Action[AnyContent] =
+  def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       haveUtrForm.bindFromRequest.fold(
-        formWithErrors => Future.successful(BadRequest(view(organisationType, formWithErrors, service, journey))),
-        formData => destinationsByAnswer(formData, organisationType, service, journey, isInReviewMode)
+        formWithErrors => Future.successful(BadRequest(view(organisationType, formWithErrors, service))),
+        formData => destinationsByAnswer(formData, organisationType, service, isInReviewMode)
       )
     }
 
@@ -74,7 +64,6 @@ class DoYouHaveAUtrNumberController @Inject() (
     formData: UtrMatchModel,
     organisationType: String,
     service: Service,
-    journey: Journey.Value,
     isInReviewMode: Boolean
   )(implicit request: Request[AnyContent]): Future[Result] =
     subscriptionDetailsService.cachedUtrMatch.flatMap { cachedUtrOpt =>
@@ -82,14 +71,14 @@ class DoYouHaveAUtrNumberController @Inject() (
         case Some(true) =>
           subscriptionDetailsService.cacheUtrMatch(Some(formData)).map {
             _ =>
-              Redirect(GetUtrNumberController.form(organisationType, service, journey, isInReviewMode))
+              Redirect(GetUtrNumberController.form(organisationType, service, isInReviewMode))
           }
         case Some(false) if cachedUtrOpt.exists(_.haveUtr.exists(_ == false)) =>
-          Future.successful(noUtrDestination(organisationType, service, journey, isInReviewMode))
+          Future.successful(noUtrDestination(organisationType, service, isInReviewMode))
         case Some(false) =>
           subscriptionDetailsService.updateSubscriptionDetails.flatMap { _ =>
             subscriptionDetailsService.cacheUtrMatch(Some(formData)).map { _ =>
-              noUtrDestination(organisationType, service, journey, isInReviewMode)
+              noUtrDestination(organisationType, service, isInReviewMode)
             }
           }
         case _ =>
@@ -97,43 +86,37 @@ class DoYouHaveAUtrNumberController @Inject() (
       }
     }
 
-  private def noUtrDestination(
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value,
-    isInReviewMode: Boolean
-  ): Result =
+  private def noUtrDestination(organisationType: String, service: Service, isInReviewMode: Boolean): Result =
     organisationType match {
       case CdsOrganisationType.CharityPublicBodyNotForProfitId =>
         Redirect(VatRegisteredUkController.form(service))
       case CdsOrganisationType.ThirdCountryOrganisationId =>
-        noUtrThirdCountryOrganisationRedirect(isInReviewMode, organisationType, service, journey)
+        noUtrThirdCountryOrganisationRedirect(isInReviewMode, organisationType, service)
       case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
-        noUtrThirdCountryIndividualsRedirect(service, journey)
+        noUtrThirdCountryIndividualsRedirect(service)
       case _ =>
-        Redirect(YouNeedADifferentServiceController.form(journey))
+        Redirect(YouNeedADifferentServiceController.form())
     }
 
   private def noUtrThirdCountryOrganisationRedirect(
     isInReviewMode: Boolean,
     organisationType: String,
-    service: Service,
-    journey: Journey.Value
+    service: Service
   ): Result =
     if (isInReviewMode)
-      Redirect(DetermineReviewPageController.determineRoute(service, journey))
+      Redirect(DetermineReviewPageController.determineRoute(service))
     else
       Redirect(
         SixLineAddressController
-          .showForm(isInReviewMode = false, organisationType, service, journey)
+          .showForm(isInReviewMode = false, organisationType, service)
       )
 
-  private def noUtrThirdCountryIndividualsRedirect(service: Service, journey: Journey.Value): Result =
-    Redirect(DoYouHaveNinoController.displayForm(service, journey))
+  private def noUtrThirdCountryIndividualsRedirect(service: Service): Result =
+    Redirect(DoYouHaveNinoController.displayForm(service))
 
-  private def view(organisationType: String, form: Form[UtrMatchModel], service: Service, journey: Journey.Value)(
-    implicit request: Request[AnyContent]
+  private def view(organisationType: String, form: Form[UtrMatchModel], service: Service)(implicit
+    request: Request[AnyContent]
   ): HtmlFormat.Appendable =
-    matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service, journey)
+    matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service)
 
 }

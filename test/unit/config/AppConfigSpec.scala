@@ -24,7 +24,6 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.Configuration
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import util.ControllerSpec
 
@@ -48,10 +47,6 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
 
     "have ttl defined" in {
       appConfig.ttl shouldBe Duration(40, TimeUnit.MINUTES)
-    }
-
-    "have allowlistReferrers defined" in {
-      appConfig.allowlistReferrers shouldBe Array.empty
     }
 
     "have emailVerificationBaseUrl defined" in {
@@ -82,14 +77,6 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
       appConfig.pdfGeneratorBaseUrl shouldBe "http://localhost:9852"
     }
 
-    "have taxEnrolmentsBaseUrl defined" in {
-      appConfig.taxEnrolmentsBaseUrl shouldBe "http://localhost:6754"
-    }
-
-    "have taxEnrolmentsServiceContext defined" in {
-      appConfig.taxEnrolmentsServiceContext shouldBe "tax-enrolments"
-    }
-
     "have enrolmentStoreProxyBaseUrl defined" in {
       appConfig.enrolmentStoreProxyBaseUrl shouldBe "http://localhost:6754"
     }
@@ -99,17 +86,7 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
     }
 
     "have feedbackLink defined for register" in {
-      appConfig.feedbackUrl(
-        atarService,
-        Journey.Register
-      ) shouldBe "http://localhost:9514/feedback/eori-common-component-register-atar"
-    }
-
-    "have feedbackLink defined for subscribe" in {
-      appConfig.feedbackUrl(
-        atarService,
-        Journey.Subscribe
-      ) shouldBe "http://localhost:9514/feedback/eori-common-component-subscribe-atar"
+      appConfig.feedbackUrl(atarService) shouldBe "http://localhost:9514/feedback/eori-common-component-register-atar"
     }
 
     "have reportAProblemPartialUrl defined for register" in {
@@ -123,18 +100,6 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
         atarService
       ) shouldBe "http://localhost:9250/contact/problem_reports_nonjs?service=eori-common-component-register-atar"
     }
-
-    "have reportAProblemPartialUrl defined for subscribe" in {
-      appConfig.reportAProblemPartialUrlSubscribe(
-        atarService
-      ) shouldBe "http://localhost:9250/contact/problem_reports_ajax?service=eori-common-component-subscribe-atar"
-    }
-
-    "have reportAProblemNonJSUrl defined for subscribe" in {
-      appConfig.reportAProblemNonJSUrlSubscribe(
-        atarService
-      ) shouldBe "http://localhost:9250/contact/problem_reports_nonjs?service=eori-common-component-subscribe-atar"
-    }
   }
 
   "using getServiceUrl" should {
@@ -143,9 +108,6 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
     }
     "return service url for register-without-id" in {
       appConfig.getServiceUrl("register-without-id") shouldBe "http://localhost:6753/register-without-id"
-    }
-    "return service url for register-with-eori-and-id" in {
-      appConfig.getServiceUrl("register-with-eori-and-id") shouldBe "http://localhost:6753/register-with-eori-and-id"
     }
     "return service url for subscription-status" in {
       appConfig.getServiceUrl("subscription-status") shouldBe "http://localhost:6753/subscription-status"
@@ -163,11 +125,6 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
       appConfig.getServiceUrl(
         "vat-known-facts-control-list"
       ) shouldBe "http://localhost:6753/vat-known-facts-control-list"
-    }
-
-    "return address lookup url" in {
-
-      appConfig.addressLookup shouldBe "http://localhost:6754/v2/uk/addresses"
     }
 
     "return url for 'get EORI" when {

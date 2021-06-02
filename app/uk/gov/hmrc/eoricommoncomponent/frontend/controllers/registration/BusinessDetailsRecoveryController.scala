@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.BusinessDetailsRecoveryPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.business_details_recovery
@@ -45,7 +45,7 @@ class BusinessDetailsRecoveryController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def form(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         regDetails <- sessionCache.registrationDetails
@@ -59,7 +59,7 @@ class BusinessDetailsRecoveryController @Inject() (
       }
     }
 
-  def continue(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def continue(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => userId: LoggedInUserWithEnrolments =>
       {
         for {
@@ -70,9 +70,9 @@ class BusinessDetailsRecoveryController @Inject() (
             requestSessionData.selectedUserLocation.getOrElse(throw new IllegalStateException("Location not set"))
           regDetails match {
             case _: RegistrationDetailsIndividual =>
-              continueBasedOnJourney(service, journey, location, orgType)
+              continueBasedOnJourney(service, location, orgType)
             case _: RegistrationDetailsOrganisation =>
-              continueBasedOnJourney(service, journey, location, orgType)
+              continueBasedOnJourney(service, location, orgType)
             case _ =>
               throw new IllegalArgumentException(
                 "Required RegistrationDetailsIndividual | RegistrationDetailsOrganisation"
@@ -83,20 +83,17 @@ class BusinessDetailsRecoveryController @Inject() (
       }.flatMap(identity)
     }
 
-  private def continueBasedOnJourney(
-    service: Service,
-    journey: Journey.Value,
-    location: String,
-    orgType: Option[CdsOrganisationType]
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
+  private def continueBasedOnJourney(service: Service, location: String, orgType: Option[CdsOrganisationType])(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Future[Result] = {
 
     def startSubscription: CdsOrganisationType => Future[Result] =
       organisationType => {
         subscriptionFlowManager.startSubscriptionFlow(
           Some(BusinessDetailsRecoveryPage),
           organisationType,
-          service,
-          journey
+          service
         ) map {
           case (page, newSession) =>
             val sessionWithOrganisationType = requestSessionData
@@ -104,7 +101,7 @@ class BusinessDetailsRecoveryController @Inject() (
             val session =
               requestSessionData.existingSessionWithUserLocationAdded(
                 sessionWithOrganisationType,
-                sessionInfoBasedOnJourney(journey, Some(location))
+                sessionInfoBasedOnJourney(Some(location))
               )
             Redirect(page.url(service)).withSession(session)
         }
@@ -113,19 +110,14 @@ class BusinessDetailsRecoveryController @Inject() (
     startSubscription(orgType.getOrElse(throw new IllegalStateException("OrganisationType not found in cache")))
   }
 
-  private def sessionInfoBasedOnJourney(journey: Journey.Value, location: Option[String]): String =
-    journey match {
-      case Journey.Register =>
-        location match {
-          case Some(UserLocation.ThirdCountry)      => "third-country"
-          case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"
-          case Some(UserLocation.Eu)                => "eu"
-          case Some(UserLocation.Iom)               => "iom"
-          case Some(UserLocation.Islands)           => "islands"
-          case _                                    => throw new IllegalStateException("User Location not set")
-        }
-      case _ =>
-        location.getOrElse(throw new IllegalStateException("User Location not set"))
+  private def sessionInfoBasedOnJourney(location: Option[String]): String =
+    location match {
+      case Some(UserLocation.ThirdCountry)      => "third-country"
+      case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"
+      case Some(UserLocation.Eu)                => "eu"
+      case Some(UserLocation.Iom)               => "iom"
+      case Some(UserLocation.Islands)           => "islands"
+      case _                                    => throw new IllegalStateException("User Location not set")
     }
 
   private def concatenateAddress(registrationDetails: RegistrationDetails): AddressViewModel =

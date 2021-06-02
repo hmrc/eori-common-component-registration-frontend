@@ -30,7 +30,6 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.DisclosePersonalDetailsConsentController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.disclose_personal_details_consent
 import uk.gov.hmrc.http.HeaderCarrier
@@ -50,12 +49,12 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   protected override val submitInCreateModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.DisclosePersonalDetailsConsentController
-      .submit(isInReviewMode = false, atarService, Journey.Register)
+      .submit(isInReviewMode = false, atarService)
       .url
 
   protected override val submitInReviewModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.DisclosePersonalDetailsConsentController
-      .submit(isInReviewMode = true, atarService, Journey.Register)
+      .submit(isInReviewMode = true, atarService)
       .url
 
   private val disclosePersonalDetailsConsentView = instanceOf[disclose_personal_details_consent]
@@ -133,7 +132,7 @@ class DisclosePersonalDetailsConsentControllerSpec
         true
       ),
       (
-        OrganisationFlow, // Flow cannot be duplicated in this table and we do not have enough flows, using this to progress with tests
+        SoleTraderSubscriptionFlow, // Flow cannot be duplicated in this table and we do not have enough flows, using this to progress with tests
         "Do you want to include the company name and address on the EORI checker?",
         "HMRC will add your GB EORI number to a public checker. You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
         "Yes - I want the name and address on the EORI checker",
@@ -257,10 +256,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   "Loading the page in create mode" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.createForm(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "set form action url to submit in create mode" in {
       showCreateForm()(verifyFormActionInCreateMode)
@@ -273,10 +269,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   "Loading the page in review mode" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.reviewForm(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.reviewForm(atarService))
 
     "set form action url to submit in review mode" in {
       showReviewForm()(verifyFormSubmitsInReviewMode)
@@ -345,7 +338,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(isInReviewMode = true, atarService, Journey.Register)
+      controller.submit(isInReviewMode = true, atarService)
     )
 
     "allow resubmission in review mode when details are invalid" in {
@@ -353,7 +346,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     }
 
     "redirect to review page when details are valid" in {
-      submitFormInReviewMode(ValidRequest)(verifyRedirectToReviewPage(Journey.Register))
+      submitFormInReviewMode(ValidRequest)(verifyRedirectToReviewPage())
     }
   }
 
@@ -371,12 +364,11 @@ class DisclosePersonalDetailsConsentControllerSpec
   private def showCreateForm(
     subscriptionFlow: SubscriptionFlow = OrganisationSubscriptionFlow,
     userId: String = defaultUserId,
-    journey: Journey.Value = Journey.Register,
     isUkJourney: Boolean = true,
     isIndividual: Boolean = false,
     isPartnership: Boolean = false,
     isCharity: Boolean = false
-  )(test: (Future[Result]) => Any) {
+  )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
@@ -385,19 +377,18 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockRequestSessionData.isPartnership(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
-    test(controller.createForm(atarService, journey).apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def showReviewForm(
     subscriptionFlow: SubscriptionFlow = OrganisationSubscriptionFlow,
     previouslyAnswered: Boolean = true,
     userId: String = defaultUserId,
-    journey: Journey.Value = Journey.Register,
     isUkJourney: Boolean = true,
     isIndividual: Boolean = false,
     isPartnership: Boolean = false,
     isCharity: Boolean = false
-  )(test: (Future[Result]) => Any) {
+  )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.getCachedPersonalDataDisclosureConsent(any[HeaderCarrier]))
@@ -409,7 +400,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
 
-    test(controller.reviewForm(atarService, journey).apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def submitFormInCreateMode(form: Map[String, String])(test: Future[Result] => Any): Unit =
@@ -418,18 +409,15 @@ class DisclosePersonalDetailsConsentControllerSpec
   private def submitFormInReviewMode(form: Map[String, String])(test: Future[Result] => Any): Unit =
     submitForm(form, isInReviewMode = true)(test)
 
-  private def submitForm(
-    form: Map[String, String],
-    isInReviewMode: Boolean = false,
-    userId: String = defaultUserId,
-    journey: Journey.Value = Journey.Register
-  )(test: Future[Result] => Any) {
+  private def submitForm(form: Map[String, String], isInReviewMode: Boolean = false, userId: String = defaultUserId)(
+    test: Future[Result] => Any
+  ) {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]]))
       .thenReturn(OrganisationSubscriptionFlow)
     test(
       controller
-        .submit(isInReviewMode, atarService, journey)
+        .submit(isInReviewMode, atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     )
   }

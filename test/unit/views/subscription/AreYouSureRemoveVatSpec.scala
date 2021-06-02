@@ -25,7 +25,6 @@ import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.removeVatYesNoAnswer
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.are_you_sure_remove_vat
 import util.ViewSpec
 
@@ -70,11 +69,9 @@ class AreYouSureRemoveVatSpec extends ViewSpec {
   }
 
   private lazy val doc: Document =
-    Jsoup.parse(contentAsString(view(form, atarService, Journey.Subscribe, vatDetails, isInReviewMode = false)))
+    Jsoup.parse(contentAsString(view(form, atarService, vatDetails, isInReviewMode = false)))
 
   private lazy val docWithErrors: Document =
-    Jsoup.parse(
-      contentAsString(view(formWithError, atarService, Journey.Subscribe, vatDetails, isInReviewMode = false))
-    )
+    Jsoup.parse(contentAsString(view(formWithError, atarService, vatDetails, isInReviewMode = false)))
 
 }

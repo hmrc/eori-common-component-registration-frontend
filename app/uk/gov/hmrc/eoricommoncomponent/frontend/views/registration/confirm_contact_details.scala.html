@@ -19,18 +19,18 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.frontend._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-
 @this(layout_di: layout)
-@(name: String,
-address: AddressViewModel,
-customsId: Option[CustomsId],
-organisationType: Option[EtmpOrganisationType],
-yesNoWrongAddress: Form[YesNoWrongAddress],
-service: Service,
-journey: Journey.Value)(implicit request: Request[_], messages: Messages)
+
+@(
+    name: String,
+    address: AddressViewModel,
+    customsId: Option[CustomsId],
+    organisationType: Option[EtmpOrganisationType],
+    yesNoWrongAddress: Form[YesNoWrongAddress],
+    service: Service
+)(implicit request: Request[_], messages: Messages)
 
 @isPartnership = @{
     organisationType == Some(LLP) || organisationType == Some(Partnership)
@@ -105,7 +105,7 @@ journey: Journey.Value)(implicit request: Request[_], messages: Messages)
     @helpers.errorSummary(yesNoWrongAddress, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 
     <div class="form-group">
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController.submit(service, journey), "yes-no-wrong-address-form") {
+        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController.submit(service), "yes-no-wrong-address-form") {
             @CSRF.formField
 
             @inputRadioGroup("yes-no-wrong-address",

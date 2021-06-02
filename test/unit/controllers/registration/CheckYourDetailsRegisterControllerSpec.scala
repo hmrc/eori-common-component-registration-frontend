@@ -38,7 +38,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlow
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.{AddressViewModel, VatEUDetailsModel}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.check_your_details_register
@@ -110,10 +109,7 @@ class CheckYourDetailsRegisterControllerSpec
   }
 
   "Reviewing the details" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.reviewDetails(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.reviewDetails(atarService))
 
     "return ok when data has been provided" in {
       showForm() { result =>
@@ -849,19 +845,16 @@ class CheckYourDetailsRegisterControllerSpec
 
   "submitting the form" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForSubscribe(
-      mockAuthConnector,
-      controller.submitDetails(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submitDetails(atarService))
 
     "redirect to next screen" in {
       when(
         mockRegisterWithoutIdWithSubscription
-          .rowRegisterWithoutIdWithSubscription(any(), any(), any())(any[HeaderCarrier], any())
+          .rowRegisterWithoutIdWithSubscription(any(), any())(any[HeaderCarrier], any())
       ).thenReturn(Future.successful(Results.Ok))
-      submitForm(Map.empty, journey = Journey.Register)(verifyRedirectToNextPageIn(_))
+      submitForm(Map.empty)(verifyRedirectToNextPageIn(_))
       verify(mockRegisterWithoutIdWithSubscription, times(1))
-        .rowRegisterWithoutIdWithSubscription(any(), any(), any())(any[HeaderCarrier], any())
+        .rowRegisterWithoutIdWithSubscription(any(), any())(any[HeaderCarrier], any())
     }
   }
 
@@ -898,7 +891,7 @@ class CheckYourDetailsRegisterControllerSpec
     page.getElementsHref(
       RegistrationReviewPage.UKVatIdentificationNumbersReviewLinkXpath
     ) shouldBe VatRegisteredUkController
-      .reviewForm(atarService, Journey.Register)
+      .reviewForm(atarService)
       .url
   }
 
@@ -940,22 +933,19 @@ class CheckYourDetailsRegisterControllerSpec
 
     when(mockSubscriptionFlow.isIndividualFlow).thenReturn(isIndividualSubscriptionFlow)
 
-    test(controller.reviewDetails(atarService, Journey.Register).apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(controller.reviewDetails(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def submitForm(
     form: Map[String, String],
     userId: String = defaultUserId,
-    userSelectedOrgType: Option[CdsOrganisationType] = None,
-    journey: Journey.Value
+    userSelectedOrgType: Option[CdsOrganisationType] = None
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockRequestSession.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(userSelectedOrgType)
 
-    test(
-      controller.submitDetails(atarService, journey)(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
-    )
+    test(controller.submitDetails(atarService)(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
   private def verifyRedirectToNextPageIn(result: Result) =

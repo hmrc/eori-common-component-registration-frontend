@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServic
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,41 +43,9 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
     registration: RegistrationDetails,
     subscription: SubscriptionDetails,
     cdsOrganisationType: Option[CdsOrganisationType],
-    journey: Journey.Value,
     service: Service
   )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
     subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service))
-
-  def subscribeWithMandatoryOnly(
-    registration: RegistrationDetails,
-    subscription: SubscriptionDetails,
-    journey: Journey.Value,
-    service: Service,
-    cachedEmail: Option[String]
-  )(implicit hc: HeaderCarrier): Future[SubscriptionResult] = {
-    val email =
-      if (journey == Journey.Register) subscription.contactDetails.map(_.emailAddress) else cachedEmail
-    val request = SubscriptionRequest(SubscriptionCreateRequest(registration, subscription, email, maybe(service)))
-    subscribeWithConnector(request)
-  }
-
-  def existingReg(
-    registerWithEoriAndIdResponse: RegisterWithEoriAndIdResponse,
-    subscriptionDetails: SubscriptionDetails,
-    capturedEmail: String,
-    service: Service
-  )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
-    registerWithEoriAndIdResponse.responseDetail.flatMap(_.responseData) match {
-      case Some(data) =>
-        val request = SubscriptionRequest(
-          SubscriptionCreateRequest(data, subscriptionDetails, capturedEmail, maybe(service))
-        )
-        subscribeWithConnector(request)
-      case _ =>
-        val err = "REGO6 ResponseData is non existent. This is required to populate subscription request"
-        logger.warn(err)
-        Future.successful(throw new IllegalStateException(err))
-    }
 
   def createRequest(
     reg: RegistrationDetails,

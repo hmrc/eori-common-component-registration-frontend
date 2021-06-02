@@ -30,7 +30,7 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.confirm_individual_type
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
@@ -77,10 +77,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
 
   "Viewing the selection form" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.form(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
 
     "show the page without errors" in showForm { result =>
       status(result) shouldBe OK
@@ -95,7 +92,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
       page.formAction(
         formId
       ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.ConfirmIndividualTypeController
-        .submit(atarService, Journey.Register)
+        .submit(atarService)
         .url
     }
 
@@ -129,10 +126,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
 
   "Submitting the correct form" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.submit(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
 
     "redirect to subscription flow first page with updated session" in {
       submitForm(validRequestData) { result =>
@@ -141,8 +135,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
         verify(mockSubscriptionFlowManager).startSubscriptionFlow(
           ArgumentMatchers.any[Option[SubscriptionPage]],
           ArgumentMatchers.eq(selectedIndividualType),
-          ArgumentMatchers.eq(atarService),
-          ArgumentMatchers.eq(Journey.Register)
+          ArgumentMatchers.eq(atarService)
         )(ArgumentMatchers.any[HeaderCarrier], ArgumentMatchers.any[Request[AnyContent]])
         verify(mockRequestSessionData).sessionWithOrganisationTypeAdded(
           ArgumentMatchers.eq(anotherMockSession),
@@ -163,7 +156,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
     when(mockRequestSessionData.sessionWithoutOrganisationType(ArgumentMatchers.any[Request[AnyContent]]))
       .thenReturn(mockSession)
 
-    val result = controller.form(atarService, Journey.Register).apply(SessionBuilder.buildRequestWithSession(aUserId))
+    val result = controller.form(atarService).apply(SessionBuilder.buildRequestWithSession(aUserId))
     test(result)
   }
 
@@ -182,15 +175,12 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
       mockSubscriptionFlowManager.startSubscriptionFlow(
         ArgumentMatchers.any[Option[SubscriptionPage]],
         cdsOrganisationType = ArgumentMatchers.eq(selectedIndividualType),
-        ArgumentMatchers.any[Service],
-        ArgumentMatchers.any[Journey.Value]
+        ArgumentMatchers.any[Service]
       )(ArgumentMatchers.any[HeaderCarrier], ArgumentMatchers.any[Request[AnyContent]])
     ).thenReturn(Future.successful(mockFlowStart))
 
     val result =
-      controller.submit(atarService, Journey.Register).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(aUserId, form)
-      )
+      controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(aUserId, form))
     test(result)
   }
 

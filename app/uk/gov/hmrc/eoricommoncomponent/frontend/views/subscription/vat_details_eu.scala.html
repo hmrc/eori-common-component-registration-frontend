@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatDetailsEuController
@@ -22,13 +21,12 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-
 @this(layout_di: layout)
+
 @(vatForm: Form[VatEUDetailsModel],
   countries: List[Country],
   updateDetails: Boolean = false,
   service: Service,
-  journey: Journey.Value,
   isInReviewMode: Boolean,
   vatDetails: Option[VatEUDetailsModel] = None)(implicit request: Request[_], messages: Messages)
 
@@ -45,8 +43,8 @@
 @vatDetailsForUpdate = @{vatDetails.getOrElse(VatEUDetailsModel("",""))}
 
 @submit = @{
-    if(updateDetails) VatDetailsEuController.submitUpdate(vatDetailsForUpdate.index, service, journey, isInReviewMode)
-    else VatDetailsEuController.submit(service, journey, isInReviewMode)
+    if(updateDetails) VatDetailsEuController.submitUpdate(vatDetailsForUpdate.index, service, isInReviewMode)
+    else VatDetailsEuController.submit(service, isInReviewMode)
 }
 
 @layout_di(messages("cds.subscription.vat-enter-eu"), EUCountriesInCountryPicker, form = Some(vatForm)) {

@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.JourneyExtractor.journey
 
 @this(appConfig: AppConfig)
 
@@ -24,6 +23,8 @@
 
 <div id="what-you-think" class="mt-2">
     <p>
-     <a id="feedback_link" href="@{appConfig.feedbackUrl(service, journey)}" target="_blank" rel="noopener noreferrer">@messages("cds.subscription.outcomes.feedback")</a>
+        <a id="feedback_link" href="@{appConfig.feedbackUrl(service)}" target="_blank" rel="noopener noreferrer">
+            @messages("cds.subscription.outcomes.feedback")
+        </a>
     </p>
 </div>

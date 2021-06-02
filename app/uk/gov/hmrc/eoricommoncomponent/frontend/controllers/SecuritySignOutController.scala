@@ -21,7 +21,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SecuritySignOutController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.display_sign_out
 
@@ -36,15 +36,15 @@ class SecuritySignOutController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def displayPage(service: Service, journey: Journey.Value): Action[AnyContent] = Action { implicit request =>
-    Ok(displaySignOutView(service, journey))
+  def displayPage(service: Service): Action[AnyContent] = Action { implicit request =>
+    Ok(displaySignOutView(service))
   }
 
-  def signOut(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def signOut(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         cdsFrontendDataCache.remove map { _ =>
-          Redirect(SecuritySignOutController.displayPage(service, journey).url).withNewSession
+          Redirect(SecuritySignOutController.displayPage(service).url).withNewSession
         }
     }
 

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration
 
+// TODO Remove this object
 object JourneyType {
 
   val Subscribe = "subscribe"

@@ -31,7 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.{
   nameUtrOrganisationForm,
   nameUtrPartnershipForm
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_name_id_organisation
@@ -89,53 +89,42 @@ class NameIdOrganisationController @Inject() (
     )
   )
 
-  def form(organisationType: String, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       requireThatUrlValue(
         OrganisationTypeConfigurations.contains(organisationType),
         invalidOrganisationType(organisationType)
       )
-      Future.successful(Ok(view(organisationType, OrganisationTypeConfigurations(organisationType), service, journey)))
+      Future.successful(Ok(view(organisationType, OrganisationTypeConfigurations(organisationType), service)))
     }
 
-  def submit(organisationType: String, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       requireThatUrlValue(
         OrganisationTypeConfigurations.contains(organisationType),
         invalidOrganisationType(organisationType)
       )
       val configuration = OrganisationTypeConfigurations(organisationType)
-      bind(organisationType, configuration, service, journey, GroupId(loggedInUser.groupId))
+      bind(organisationType, configuration, service, GroupId(loggedInUser.groupId))
     }
 
   private def bind[M <: NameIdOrganisationMatch](
     organisationType: String,
     conf: Configuration[M],
     service: Service,
-    journey: Journey.Value,
     groupId: GroupId
   )(implicit request: Request[AnyContent]): Future[Result] =
     conf.form.bindFromRequest
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(organisationType, conf, formWithErrors, service, journey))),
+        formWithErrors => Future.successful(BadRequest(view(organisationType, conf, formWithErrors, service))),
         formData =>
           matchBusiness(conf.createCustomsId(formData.id), formData.name, None, conf.matchingServiceType, groupId).map {
             case true =>
-              journey match {
-                case Journey.Subscribe =>
-                  Redirect(
-                    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.createForm(
-                      service,
-                      journey
-                    ).url
-                  )
-                case _ =>
-                  Redirect(
-                    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
-                      .form(service, journey)
-                  )
-              }
-            case false => matchNotFoundBadRequest(organisationType, conf, formData, service, journey)
+              Redirect(
+                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
+                  .form(service)
+              )
+            case false => matchNotFoundBadRequest(organisationType, conf, formData, service)
           }
       )
 
@@ -154,43 +143,36 @@ class NameIdOrganisationController @Inject() (
     organisationType: String,
     conf: Configuration[M],
     formData: M,
-    service: Service,
-    journey: Journey.Value
+    service: Service
   )(implicit request: Request[AnyContent]): Result = {
     val errorMsg  = Messages("cds.matching-error.not-found")
     val errorForm = conf.form.withGlobalError(errorMsg).fill(formData)
-    BadRequest(view(organisationType, conf, errorForm, service, journey))
+    BadRequest(view(organisationType, conf, errorForm, service))
   }
 
   private def view[M <: NameIdOrganisationMatch](
     organisationType: String,
     conf: Configuration[M],
     form: Form[_ <: M],
-    service: Service,
-    journey: Journey.Value
+    service: Service
   )(implicit request: Request[AnyContent]): HtmlFormat.Appendable =
     matchNameIdOrganisationView(
       form,
       organisationType,
       conf.displayMode,
       conf.isNameAddressRegistrationAvailable,
-      service,
-      journey
+      service
     )
 
-  private def view[M <: NameIdOrganisationMatch](
-    organisationType: String,
-    conf: Configuration[M],
-    service: Service,
-    journey: Journey.Value
-  )(implicit request: Request[AnyContent]): HtmlFormat.Appendable =
+  private def view[M <: NameIdOrganisationMatch](organisationType: String, conf: Configuration[M], service: Service)(
+    implicit request: Request[AnyContent]
+  ): HtmlFormat.Appendable =
     matchNameIdOrganisationView(
       conf.form,
       organisationType,
       conf.displayMode,
       conf.isNameAddressRegistrationAvailable,
-      service,
-      journey
+      service
     )
 
 }

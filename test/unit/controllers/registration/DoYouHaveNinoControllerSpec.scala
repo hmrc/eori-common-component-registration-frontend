@@ -26,7 +26,6 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.DoYouHaveNinoController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameDobMatchModel}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_nino_row_individual
@@ -163,14 +162,14 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
   private def displayForm()(test: Future[Result] => Any): Unit =
     test(
       doYouHaveNinoController
-        .displayForm(atarService, Journey.Register)
+        .displayForm(atarService)
         .apply(SessionBuilder.buildRequestWithSession(defaultUserId))
     )
 
   private def submitForm(form: Map[String, String])(test: Future[Result] => Any) {
     test(
       doYouHaveNinoController
-        .submit(atarService, Journey.Register)
+        .submit(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )
   }

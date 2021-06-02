@@ -24,7 +24,6 @@ import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.YouNeedADifferentServiceController
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.you_need_different_service
 import util.ControllerSpec
 import util.builders.AuthActionMock
@@ -44,8 +43,11 @@ class YouNeedADifferentServiceControllerSpec extends ControllerSpec with BeforeA
     when(youNeedDifferenceServicePage.apply()(any(), any())).thenReturn(HtmlFormat.empty)
   }
 
-  override protected def afterEach(): Unit =
+  override protected def afterEach(): Unit = {
     reset(authConnector, youNeedDifferenceServicePage)
+
+    super.afterEach()
+  }
 
   "YouNeedADifferentServiceController on method form" should {
 
@@ -53,7 +55,7 @@ class YouNeedADifferentServiceControllerSpec extends ControllerSpec with BeforeA
 
       withAuthorisedUser(defaultUserId, authConnector)
 
-      val result = controller.form(Journey.Subscribe)(FakeRequest())
+      val result = controller.form()(FakeRequest())
 
       status(result) shouldBe OK
     }

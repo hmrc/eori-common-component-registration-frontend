@@ -21,7 +21,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.registration_exists
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.registration_exists_group
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -36,14 +36,14 @@ class EnrolmentAlreadyExistsController @Inject() (
 ) extends FrontendController(mcc) with I18nSupport {
 
   // Note: permitted for user with service enrolment
-  def enrolmentAlreadyExists(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def enrolmentAlreadyExists(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithServiceAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(registrationExistsView(service)))
     }
 
   // Note: permitted for user with service enrolment
-  def enrolmentAlreadyExistsForGroup(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def enrolmentAlreadyExistsForGroup(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithServiceAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(registrationExistsForGroupView(service)))

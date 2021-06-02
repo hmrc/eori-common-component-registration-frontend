@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.ninoOrUtrChoiceForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
   SubscriptionDetailsService
@@ -43,68 +43,37 @@ class HowCanWeIdentifyYouController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        populateView(service, journey, isInReviewMode = false)
+  def createForm(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+      populateView(service)
     }
 
-  def reviewForm(service: Service, journey: Journey.Value): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        populateView(service, journey, isInReviewMode = true)
-    }
-
-  private def populateView(service: Service, journey: Journey.Value, isInReviewMode: Boolean)(implicit
-    hc: HeaderCarrier,
-    request: Request[_]
-  ) =
+  private def populateView(service: Service)(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] =
     subscriptionBusinessService.getCachedNinoOrUtrChoice.map { choice =>
-      Ok(howCanWeIdentifyYouView(ninoOrUtrChoiceForm.fill(NinoOrUtrChoice(choice)), isInReviewMode, service, journey))
+      Ok(howCanWeIdentifyYouView(ninoOrUtrChoiceForm.fill(NinoOrUtrChoice(choice)), service))
     }
 
-  def submit(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       ninoOrUtrChoiceForm
         .bindFromRequest()
         .fold(
-          invalidForm =>
-            Future.successful(BadRequest(howCanWeIdentifyYouView(invalidForm, isInReviewMode, service, journey))),
-          form => storeChoice(form, isInReviewMode, service, journey)
+          invalidForm => Future.successful(BadRequest(howCanWeIdentifyYouView(invalidForm, service))),
+          form => storeChoice(form, service)
         )
     }
 
-  private def storeChoice(formData: NinoOrUtrChoice, inReviewMode: Boolean, service: Service, journey: Journey.Value)(
-    implicit hc: HeaderCarrier
-  ): Future[Result] =
+  private def storeChoice(formData: NinoOrUtrChoice, service: Service)(implicit hc: HeaderCarrier): Future[Result] =
     subscriptionDetailsHolderService
       .cacheNinoOrUtrChoice(formData)
       .map(
         _ =>
           formData.ninoOrUtrRadio match {
             case Some("nino") =>
-              Redirect(continueNino(inReviewMode, service, journey))
+              Redirect(GYEHowCanWeIdentifyYouNinoController.form(service))
             case Some("utr") =>
-              Redirect(continueUtr(inReviewMode, service, journey))
+              Redirect(GYEHowCanWeIdentifyYouUtrController.form(service))
           }
       )
-
-  private def continueNino(inReviewMode: Boolean, service: Service, journey: Journey.Value) = journey match {
-    case Journey.Subscribe =>
-      if (inReviewMode) HowCanWeIdentifyYouNinoController.reviewForm(service, journey)
-      else HowCanWeIdentifyYouNinoController.createForm(service, journey)
-    case Journey.Register =>
-      if (inReviewMode) GYEHowCanWeIdentifyYouNinoController.form(service, journey)
-      else GYEHowCanWeIdentifyYouNinoController.form(service, journey)
-  }
-
-  private def continueUtr(inReviewMode: Boolean, service: Service, journey: Journey.Value) = journey match {
-    case Journey.Subscribe =>
-      if (inReviewMode) HowCanWeIdentifyYouUtrController.reviewForm(service, journey)
-      else HowCanWeIdentifyYouUtrController.createForm(service, journey)
-    case Journey.Register =>
-      if (inReviewMode) GYEHowCanWeIdentifyYouUtrController.form(service, journey)
-      else GYEHowCanWeIdentifyYouUtrController.form(service, journey)
-  }
 
 }

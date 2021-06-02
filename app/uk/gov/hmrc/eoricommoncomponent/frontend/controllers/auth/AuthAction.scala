@@ -104,7 +104,7 @@ class AuthAction @Inject() (
       requestProcessor fold (_(request)(loggedInUser.internalId)(loggedInUser), _(request)(loggedInUser))
 
     if (checkPermittedAccess)
-      permitUserOrRedirect(loggedInUser.affinityGroup, userCredentialRole, enrolments, loggedInUser.email)(action)
+      permitUserOrRedirect(loggedInUser.affinityGroup, userCredentialRole, enrolments)(action)
     else
       action
   }

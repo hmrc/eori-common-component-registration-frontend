@@ -22,7 +22,6 @@ import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.{EmailForm, EmailViewModel}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.what_is_your_email
 import util.ViewSpec
 
@@ -36,24 +35,24 @@ class WhatIsYourEmailSpec extends ViewSpec {
 
   "What Is Your Email Address page for CDS access" should {
     "display correct title" in {
-      MigrateDoc.title() must startWith("What is your email address?")
+      GYEDoc.title() must startWith("What is your email address?")
     }
     "have the correct h1 text" in {
-      MigrateDoc.body().getElementsByClass("heading-large").text() mustBe "What is your email address?"
+      GYEDoc.body().getElementsByClass("heading-large").text() mustBe "What is your email address?"
     }
     "have the correct hint text" in {
-      MigrateDoc.body().getElementById(
+      GYEDoc.body().getElementById(
         "email-hint"
       ).text() mustBe "We will use this to send you the result of your application."
     }
     "have an input of type 'email'" in {
-      MigrateDoc.body().getElementById("email").attr("type") mustBe "email"
+      GYEDoc.body().getElementById("email").attr("type") mustBe "email"
     }
     "have an autocomplet of type 'email'" in {
-      MigrateDoc.body().getElementById("email").attr("autocomplete") mustBe "email"
+      GYEDoc.body().getElementById("email").attr("autocomplete") mustBe "email"
     }
     "associate hint with input field" in {
-      MigrateDoc.body().getElementById("email").attr("aria-describedby") mustBe "email-hint"
+      GYEDoc.body().getElementById("email").attr("aria-describedby") mustBe "email-hint"
     }
   }
   "What Is Your Email Address page with errors" should {
@@ -73,18 +72,13 @@ class WhatIsYourEmailSpec extends ViewSpec {
     }
   }
 
-  lazy val MigrateDoc: Document = {
-    val result = view(form, atarService, Journey.Subscribe)
-    Jsoup.parse(contentAsString(result))
-  }
-
   lazy val GYEDoc: Document = {
-    val result = view(form, atarService, Journey.Register)
+    val result = view(form, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   lazy val docWithErrors: Document = {
-    val result = view(formWithError, atarService, Journey.Subscribe)
+    val result = view(formWithError, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

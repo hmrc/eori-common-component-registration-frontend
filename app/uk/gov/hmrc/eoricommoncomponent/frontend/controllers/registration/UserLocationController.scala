@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.RegistrationDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegistrationDisplayService
@@ -60,20 +60,17 @@ class UserLocationController @Inject() (
   private def isAffinityOrganisation(affinityGroup: Option[AffinityGroup]): Boolean =
     affinityGroup.contains(AffinityGroup.Organisation)
 
-  private def continue(service: Service, journey: Journey.Value)(implicit
-    request: Request[AnyContent],
-    user: LoggedInUserWithEnrolments
-  ): Future[Result] =
-    Future.successful(
-      Ok(userLocationView(userLocationForm, service, journey, isAffinityOrganisation(user.affinityGroup)))
-    )
+  private def continue(
+    service: Service
+  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
+    Future.successful(Ok(userLocationView(userLocationForm, service, isAffinityOrganisation(user.affinityGroup))))
 
-  def form(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>
-      continue(service, journey)
+      continue(service)
     }
 
-  private def forRow(service: Service, journey: Journey.Value, groupId: GroupId, location: String)(implicit
+  private def forRow(service: Service, groupId: GroupId, location: String)(implicit
     request: Request[AnyContent],
     hc: HeaderCarrier
   ) =
@@ -81,53 +78,45 @@ class UserLocationController @Inject() (
       case (NewSubscription | SubscriptionRejected, Some(safeId)) =>
         registrationDisplayService
           .requestDetails(safeId)
-          .flatMap(cacheAndRedirect(service, journey, location))
+          .flatMap(cacheAndRedirect(service, location))
       case (status, _) =>
-        subscriptionStatus(status, groupId, service, journey, Some(location))
+        subscriptionStatus(status, groupId, service, Some(location))
     }.flatMap(identity)
 
-  def submit(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       userLocationForm.bindFromRequest.fold(
         formWithErrors =>
           Future.successful(
-            BadRequest(
-              userLocationView(formWithErrors, service, journey, isAffinityOrganisation(loggedInUser.affinityGroup))
-            )
+            BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup)))
           ),
         details =>
-          (journey, details.location, loggedInUser.groupId) match {
-            case (_, Some(UserLocation.Iom), Some(_)) =>
-              Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service, journey)))
-            case (Journey.Register, Some(location), Some(id)) if UserLocation.isRow(location) =>
-              forRow(service, journey, GroupId(id), location)
+          (details.location, loggedInUser.groupId) match {
+            case (Some(UserLocation.Iom), Some(_)) =>
+              Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
+            case (Some(location), Some(id)) if UserLocation.isRow(location) =>
+              forRow(service, GroupId(id), location)
             case _ =>
               Future.successful(
-                Redirect(OrganisationTypeController.form(service, journey))
+                Redirect(OrganisationTypeController.form(service))
                   .withSession(
                     requestSessionData
-                      .sessionWithUserLocationAdded(sessionInfoBasedOnJourney(journey, details.location))
+                      .sessionWithUserLocationAdded(sessionInfoBasedOnJourney(details.location))
                   )
               )
           }
       )
     }
 
-  private def sessionInfoBasedOnJourney(journey: Journey.Value, location: Option[String]): String =
-    journey match {
-      case Journey.Register =>
-        location match {
-          case Some(UserLocation.ThirdCountry)      => "third-country"
-          case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"
-          case Some(UserLocation.Eu)                => "eu"
-          case Some(UserLocation.Iom)               => "iom"
-          case Some(UserLocation.Islands)           => "islands"
-          case Some(UserLocation.Uk)                => "uk"
-          case _                                    => throw new IllegalStateException("User Location not set")
-        }
-      case _ =>
-        location.getOrElse(throw new IllegalStateException("User Location not set"))
-
+  private def sessionInfoBasedOnJourney(location: Option[String]): String =
+    location match {
+      case Some(UserLocation.ThirdCountry)      => "third-country"
+      case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"
+      case Some(UserLocation.Eu)                => "eu"
+      case Some(UserLocation.Iom)               => "iom"
+      case Some(UserLocation.Islands)           => "islands"
+      case Some(UserLocation.Uk)                => "uk"
+      case _                                    => throw new IllegalStateException("User Location not set")
     }
 
   private def subscriptionStatusBasedOnSafeId(groupId: GroupId)(implicit hc: HeaderCarrier) =
@@ -149,14 +138,13 @@ class UserLocationController @Inject() (
         safeId =>
           sessionCache
             .saveRegistrationDetails(RegistrationDetails.rdSafeId(safeId.get))
-            .map(_ => Redirect(SubscriptionRecoveryController.complete(service, Journey.Register)))
+            .map(_ => Redirect(SubscriptionRecoveryController.complete(service)))
       )
 
   def subscriptionStatus(
     preSubStatus: PreSubscriptionStatus,
     groupId: GroupId,
     service: Service,
-    journey: Journey.Value,
     location: Option[String]
   )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
     preSubStatus match {
@@ -165,12 +153,12 @@ class UserLocationController @Inject() (
       case SubscriptionExists => handleExistingSubscription(groupId, service)
       case NewSubscription | SubscriptionRejected =>
         Future.successful(
-          Redirect(OrganisationTypeController.form(service, journey))
-            .withSession(requestSessionData.sessionWithUserLocationAdded(sessionInfoBasedOnJourney(journey, location)))
+          Redirect(OrganisationTypeController.form(service))
+            .withSession(requestSessionData.sessionWithUserLocationAdded(sessionInfoBasedOnJourney(location)))
         )
     }
 
-  def cacheAndRedirect(service: Service, journey: Journey.Value, location: String)(implicit
+  def cacheAndRedirect(service: Service, location: String)(implicit
     request: Request[AnyContent],
     hc: HeaderCarrier
   ): Either[_, RegistrationDisplayResponse] => Future[Result] = {
@@ -178,8 +166,8 @@ class UserLocationController @Inject() (
     case rResponse @ Right(RegistrationDisplayResponse(_, Some(_))) =>
       registrationDisplayService.cacheDetails(rResponse.value).flatMap { _ =>
         Future.successful(
-          Redirect(BusinessDetailsRecoveryController.form(service, journey)).withSession(
-            requestSessionData.sessionWithUserLocationAdded(sessionInfoBasedOnJourney(journey, Some(location)))
+          Redirect(BusinessDetailsRecoveryController.form(service)).withSession(
+            requestSessionData.sessionWithUserLocationAdded(sessionInfoBasedOnJourney(Some(location)))
           )
         )
       }

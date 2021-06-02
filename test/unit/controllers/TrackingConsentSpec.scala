@@ -24,7 +24,6 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.HowCanWeIdentifyYouController
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
   SubscriptionDetailsService
@@ -67,11 +66,7 @@ class TrackingConsentSpec extends ControllerSpec with GuiceOneAppPerSuite with M
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionBusinessService.getCachedNinoOrUtrChoice(any[HeaderCarrier]))
       .thenReturn(Future.successful(Some("utr")))
-    test(
-      controller.createForm(atarService, Journey.Subscribe).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-      )
-    )
+    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
 }

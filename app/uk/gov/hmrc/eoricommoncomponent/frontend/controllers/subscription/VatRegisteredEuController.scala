@@ -33,7 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
@@ -57,7 +57,7 @@ class VatRegisteredEuController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(
@@ -67,14 +67,13 @@ class VatRegisteredEuController @Inject() (
               vatRegisteredEuYesNoAnswerForm(requestSessionData.isPartnership),
               isIndividualFlow,
               requestSessionData.isPartnership,
-              service,
-              journey
+              service
             )
           )
         )
     }
 
-  def reviewForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedVatRegisteredEu map { isVatRegisteredEu =>
@@ -84,14 +83,13 @@ class VatRegisteredEuController @Inject() (
               vatRegisteredEuYesNoAnswerForm(requestSessionData.isPartnership).fill(YesNo(isVatRegisteredEu)),
               isIndividualFlow,
               requestSessionData.isPartnership,
-              service,
-              journey
+              service
             )
           )
         }
     }
 
-  def submit(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       vatRegisteredEuYesNoAnswerForm(requestSessionData.isPartnership)
         .bindFromRequest()
@@ -104,34 +102,32 @@ class VatRegisteredEuController @Inject() (
                   formWithErrors,
                   isIndividualFlow,
                   requestSessionData.isPartnership,
-                  service,
-                  journey
+                  service
                 )
               )
             ),
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatRegisteredEu(yesNoAnswer).flatMap { _ =>
-              redirect(isInReviewMode, yesNoAnswer, service, journey)
+              redirect(isInReviewMode, yesNoAnswer, service)
             }
         )
     }
 
-  private def redirect(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service, journey: Journey.Value)(implicit
+  private def redirect(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service)(implicit
     rq: Request[AnyContent]
   ): Future[Result] =
     subscriptionVatEUDetailsService.cachedEUVatDetails flatMap { cachedEuVatDetails =>
       (isInReviewMode, yesNoAnswer.isYes) match {
         case (true, true) if cachedEuVatDetails.isEmpty =>
-          Future.successful(Redirect(VatDetailsEuController.reviewForm(service, journey)))
-        case (true, true)          => Future.successful(Redirect(VatDetailsEuConfirmController.reviewForm(service, journey)))
-        case (inReviewMode, false) => redirectForNoAnswer(service, journey, inReviewMode)
-        case (false, true)         => redirectForYesAnswer(service, journey, cachedEuVatDetails, isInReviewMode)
+          Future.successful(Redirect(VatDetailsEuController.reviewForm(service)))
+        case (true, true)          => Future.successful(Redirect(VatDetailsEuConfirmController.reviewForm(service)))
+        case (inReviewMode, false) => redirectForNoAnswer(service, inReviewMode)
+        case (false, true)         => redirectForYesAnswer(service, cachedEuVatDetails, isInReviewMode)
       }
     }
 
   private def redirectForYesAnswer(
     service: Service,
-    journey: Journey.Value,
     cachedEuVatDetails: Seq[VatEUDetailsModel],
     isInReviewMode: Boolean
   )(implicit rq: Request[AnyContent]): Future[Result] =
@@ -139,17 +135,17 @@ class VatRegisteredEuController @Inject() (
       case true => redirectWithFlowManager(VatRegisteredEuSubscriptionFlowPage, service)
       case _ =>
         isInReviewMode match {
-          case false => Future.successful(Redirect(VatDetailsEuConfirmController.createForm(service, journey)))
-          case _     => Future.successful(Redirect(VatDetailsEuConfirmController.reviewForm(service, journey)))
+          case false => Future.successful(Redirect(VatDetailsEuConfirmController.createForm(service)))
+          case _     => Future.successful(Redirect(VatDetailsEuConfirmController.reviewForm(service)))
         }
     }
 
-  private def redirectForNoAnswer(service: Service, journey: Journey.Value, isInReviewMode: Boolean)(implicit
+  private def redirectForNoAnswer(service: Service, isInReviewMode: Boolean)(implicit
     rq: Request[AnyContent]
   ): Future[Result] =
     subscriptionVatEUDetailsService.saveOrUpdate(Seq.empty) flatMap { _ =>
       if (isInReviewMode)
-        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service, journey).url))
+        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
       else redirectWithFlowManager(VatEUConfirmSubscriptionFlowPage, service)
     }
 

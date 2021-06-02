@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionVatEUDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_details_eu_confirm
 import uk.gov.hmrc.http.HeaderCarrier
@@ -203,24 +202,12 @@ class VatDetailsEuConfirmControllerSpec extends ControllerSpec with BeforeAndAft
 
   private def displayForm()(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(
-      test(
-        controller.createForm(atarService, Journey.Register).apply(
-          SessionBuilder.buildRequestWithSession(defaultUserId)
-        )
-      )
-    )
+    await(test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
   }
 
   private def reviewForm()(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(
-      test(
-        controller.reviewForm(atarService, Journey.Register).apply(
-          SessionBuilder.buildRequestWithSession(defaultUserId)
-        )
-      )
-    )
+    await(test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
   }
 
   private def submitForm(form: Map[String, String], isInReviewMode: Boolean = false)(test: Future[Result] => Any) {
@@ -228,7 +215,7 @@ class VatDetailsEuConfirmControllerSpec extends ControllerSpec with BeforeAndAft
     await(
       test(
         controller
-          .submit(isInReviewMode, atarService, Journey.Register)
+          .submit(isInReviewMode, atarService)
           .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
       )
     )

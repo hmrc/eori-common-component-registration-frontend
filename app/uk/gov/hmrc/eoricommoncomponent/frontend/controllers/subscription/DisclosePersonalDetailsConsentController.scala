@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineRevi
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
@@ -46,7 +46,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(
@@ -55,14 +55,13 @@ class DisclosePersonalDetailsConsentController @Inject() (
               isInReviewMode = false,
               disclosePersonalDetailsYesNoAnswerForm,
               requestSessionData,
-              service,
-              journey
+              service
             )
           )
         )
     }
 
-  def reviewForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.map { isConsentDisclosed =>
@@ -71,14 +70,13 @@ class DisclosePersonalDetailsConsentController @Inject() (
               isInReviewMode = true,
               disclosePersonalDetailsYesNoAnswerForm.fill(YesNo(isConsentDisclosed)),
               requestSessionData,
-              service,
-              journey
+              service
             )
           )
         }
     }
 
-  def submit(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       disclosePersonalDetailsYesNoAnswerForm
         .bindFromRequest()
@@ -86,13 +84,13 @@ class DisclosePersonalDetailsConsentController @Inject() (
           formWithErrors =>
             Future.successful(
               BadRequest(
-                disclosePersonalDetailsConsentView(isInReviewMode, formWithErrors, requestSessionData, service, journey)
+                disclosePersonalDetailsConsentView(isInReviewMode, formWithErrors, requestSessionData, service)
               )
             ),
           yesNoAnswer =>
             subscriptionDetailsService.cacheConsentToDisclosePersonalDetails(yesNoAnswer).flatMap { _ =>
               if (isInReviewMode)
-                Future.successful(Redirect(DetermineReviewPageController.determineRoute(service, journey).url))
+                Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
               else
                 Future.successful(
                   Redirect(

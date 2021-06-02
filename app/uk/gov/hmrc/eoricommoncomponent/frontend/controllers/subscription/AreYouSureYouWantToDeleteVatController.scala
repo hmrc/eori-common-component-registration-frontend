@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.removeVatYesNoAnswer
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionVatEUDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.are_you_sure_remove_vat
 
@@ -41,25 +41,25 @@ class AreYouSureYouWantToDeleteVatController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def createForm(index: Int, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def createForm(index: Int, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionVatEUDetailsService.vatEuDetails(index) map {
         case Some(vatDetails) =>
-          Ok(areYouSureRemoveVatView(removeVatYesNoAnswer, service, journey, vatDetails, isInReviewMode = false))
-        case _ => Redirect(VatDetailsEuConfirmController.createForm(service, journey))
+          Ok(areYouSureRemoveVatView(removeVatYesNoAnswer, service, vatDetails, isInReviewMode = false))
+        case _ => Redirect(VatDetailsEuConfirmController.createForm(service))
       }
     }
 
-  def reviewForm(index: Int, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(index: Int, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionVatEUDetailsService.vatEuDetails(index) map {
         case Some(vatDetails) =>
-          Ok(areYouSureRemoveVatView(removeVatYesNoAnswer, service, journey, vatDetails, isInReviewMode = true))
-        case _ => Redirect(VatDetailsEuConfirmController.reviewForm(service, journey))
+          Ok(areYouSureRemoveVatView(removeVatYesNoAnswer, service, vatDetails, isInReviewMode = true))
+        case _ => Redirect(VatDetailsEuConfirmController.reviewForm(service))
       }
     }
 
-  def submit(index: Int, service: Service, journey: Journey.Value, isInReviewMode: Boolean): Action[AnyContent] =
+  def submit(index: Int, service: Service, isInReviewMode: Boolean): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionVatEUDetailsService.vatEuDetails(index) flatMap {
         case Some(vatDetails) =>
@@ -68,35 +68,31 @@ class AreYouSureYouWantToDeleteVatController @Inject() (
             .fold(
               formWithErrors =>
                 Future
-                  .successful(
-                    BadRequest(areYouSureRemoveVatView(formWithErrors, service, journey, vatDetails, isInReviewMode))
-                  ),
+                  .successful(BadRequest(areYouSureRemoveVatView(formWithErrors, service, vatDetails, isInReviewMode))),
               yesNoAnswer =>
                 if (yesNoAnswer.isYes)
                   subscriptionVatEUDetailsService
-                    .removeSingleEuVatDetails(vatDetails) flatMap (
-                    _ => redirectToVatConfirm(service, journey, isInReviewMode)
-                  )
-                else redirectToVatConfirm(service, journey, isInReviewMode)
+                    .removeSingleEuVatDetails(vatDetails) flatMap (_ => redirectToVatConfirm(service, isInReviewMode))
+                else redirectToVatConfirm(service, isInReviewMode)
             )
         case _ => throw new IllegalStateException("Vat details for remove not found")
       }
     }
 
-  private def redirectToVatConfirm(service: Service, journey: Journey.Value, isInReviewMode: Boolean)(implicit
+  private def redirectToVatConfirm(service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionVatEUDetailsService.cachedEUVatDetails map {
       case Seq() =>
         if (isInReviewMode)
-          Redirect(VatRegisteredEuController.reviewForm(service, journey))
+          Redirect(VatRegisteredEuController.reviewForm(service))
         else
-          Redirect(VatRegisteredEuController.createForm(service, journey))
+          Redirect(VatRegisteredEuController.createForm(service))
       case _ =>
         if (isInReviewMode)
-          Redirect(VatDetailsEuConfirmController.reviewForm(service, journey))
+          Redirect(VatDetailsEuConfirmController.reviewForm(service))
         else
-          Redirect(VatDetailsEuConfirmController.createForm(service, journey))
+          Redirect(VatDetailsEuConfirmController.createForm(service))
     }
 
 }

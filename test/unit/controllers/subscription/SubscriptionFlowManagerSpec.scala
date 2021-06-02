@@ -25,14 +25,12 @@ import org.scalatest.prop.Tables.Table
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowManager
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{IndividualSubscriptionFlow, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   CdsOrganisationType,
   RegistrationDetailsIndividual,
   RegistrationDetailsOrganisation
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -233,13 +231,7 @@ class SubscriptionFlowManagerSpec
       (ThirdCountrySoleTraderSubscriptionFlow, VatRegisteredEuSubscriptionFlowPage, 5, 8, VatEUIdsSubscriptionFlowPage),
       (ThirdCountrySoleTraderSubscriptionFlow, VatEUIdsSubscriptionFlowPage, 6, 8, VatEUConfirmSubscriptionFlowPage),
       (ThirdCountrySoleTraderSubscriptionFlow, VatEUConfirmSubscriptionFlowPage, 7, 8, EoriConsentSubscriptionFlowPage),
-      (ThirdCountrySoleTraderSubscriptionFlow, EoriConsentSubscriptionFlowPage, 8, 8, ReviewDetailsPageGetYourEORI),
-      (OrganisationFlow, NameUtrDetailsSubscriptionFlowPage, 1, 3, DateOfEstablishmentSubscriptionFlowPageMigrate),
-      (OrganisationFlow, DateOfEstablishmentSubscriptionFlowPageMigrate, 2, 3, AddressDetailsSubscriptionFlowPage),
-      (OrganisationFlow, AddressDetailsSubscriptionFlowPage, 3, 3, ReviewDetailsPageSubscription),
-      (SoleTraderFlow, NameDobDetailsSubscriptionFlowPage, 1, 3, HowCanWeIdentifyYouSubscriptionFlowPage),
-      (SoleTraderFlow, HowCanWeIdentifyYouSubscriptionFlowPage, 2, 3, AddressDetailsSubscriptionFlowPage),
-      (SoleTraderFlow, AddressDetailsSubscriptionFlowPage, 3, 3, ReviewDetailsPageSubscription)
+      (ThirdCountrySoleTraderSubscriptionFlow, EoriConsentSubscriptionFlowPage, 8, 8, ReviewDetailsPageGetYourEORI)
     )
 
     TableDrivenPropertyChecks.forAll(values) {
@@ -276,12 +268,7 @@ class SubscriptionFlowManagerSpec
       when(mockCdsFrontendDataCache.registrationDetails(mockHC))
         .thenReturn(Future.successful(mockIndividualRegistrationDetails))
       val (subscriptionPage, session) =
-        await(
-          controller.startSubscriptionFlow(Some(ConfirmIndividualTypePage), atarService, Journey.Register)(
-            mockHC,
-            mockRequest
-          )
-        )
+        await(controller.startSubscriptionFlow(Some(ConfirmIndividualTypePage), atarService)(mockHC, mockRequest))
 
       subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
       session shouldBe mockSession
@@ -296,7 +283,7 @@ class SubscriptionFlowManagerSpec
       when(mockCdsFrontendDataCache.registrationDetails(mockHC))
         .thenReturn(Future.successful(mockOrgRegistrationDetails))
       val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(atarService, Journey.Register)(mockHC, mockRequest))
+        await(controller.startSubscriptionFlow(atarService)(mockHC, mockRequest))
 
       subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
       session shouldBe mockSession
@@ -312,104 +299,12 @@ class SubscriptionFlowManagerSpec
       when(mockCdsFrontendDataCache.registrationDetails(mockHC))
         .thenReturn(Future.successful(mockIndividualRegistrationDetails))
       val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(atarService, Journey.Register)(mockHC, mockRequest))
+        await(controller.startSubscriptionFlow(atarService)(mockHC, mockRequest))
 
       subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
       session shouldBe mockSession
       verify(mockRequestSessionData).storeUserSubscriptionFlow(
         SoleTraderSubscriptionFlow,
-        RegistrationConfirmPage.url(atarService)
-      )(mockRequest)
-    }
-
-    "start Corporate Subscription Flow when cached registration details are for an Organisation Reg-existing (a.k.a migration)" in {
-      when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(None)
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
-        .thenReturn(Future.successful(mockOrgRegistrationDetails))
-      val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(atarService, Journey.Subscribe)(mockHC, mockRequest))
-
-      subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
-      session shouldBe mockSession
-
-      verify(mockRequestSessionData)
-        .storeUserSubscriptionFlow(OrganisationFlow, RegistrationConfirmPage.url(atarService))(mockRequest)
-    }
-  }
-}
-
-class SubscriptionFlowManagerNinoUtrEnabledSpec
-    extends UnitSpec with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach with ControllerSpec {
-
-  private val mockRequestSessionData   = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache = mock[SessionCache]
-
-  val controller =
-    new SubscriptionFlowManager(mockRequestSessionData, mockCdsFrontendDataCache)(global)
-
-  private val mockSession = mock[Session]
-
-  private val mockHC      = mock[HeaderCarrier]
-  private val mockRequest = mock[Request[AnyContent]]
-
-  val noSubscriptionFlowInSessionException = new IllegalStateException("No subscription flow in session.")
-
-  override def beforeEach(): Unit = {
-    reset(mockRequestSessionData, mockSession, mockCdsFrontendDataCache)
-    when(mockRequestSessionData.storeUserSubscriptionFlow(any[SubscriptionFlow], any[String])(any[Request[AnyContent]]))
-      .thenReturn(mockSession)
-    when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[HeaderCarrier]))
-      .thenReturn(Future.successful(true))
-  }
-
-  "First Page" should {
-
-    "start Corporate Subscription Flow when selected organisation type is Sole Trader" in {
-      when(mockRequestSessionData.userSelectedOrganisationType(mockRequest))
-        .thenReturn(Some(CdsOrganisationType.SoleTrader))
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(UserLocation.Eu))
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
-        .thenReturn(Future.successful(RegistrationDetailsIndividual()))
-
-      val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(atarService, Journey.Subscribe)(mockHC, mockRequest))
-      subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
-      session shouldBe mockSession
-      verify(mockRequestSessionData).storeUserSubscriptionFlow(
-        RowIndividualFlow,
-        RegistrationConfirmPage.url(atarService)
-      )(mockRequest)
-    }
-
-    "start Corporate Subscription Flow when selected organisation type is Individual" in {
-      when(mockRequestSessionData.userSelectedOrganisationType(mockRequest))
-        .thenReturn(Some(CdsOrganisationType.Individual))
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(UserLocation.Eu))
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
-        .thenReturn(Future.successful(RegistrationDetailsIndividual()))
-
-      val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(atarService, Journey.Subscribe)(mockHC, mockRequest))
-      subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
-      session shouldBe mockSession
-      verify(mockRequestSessionData).storeUserSubscriptionFlow(
-        RowIndividualFlow,
-        RegistrationConfirmPage.url(atarService)
-      )(mockRequest)
-    }
-
-    "start Corporate Subscription Flow when cached registration details are for an Organisation" in {
-      when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(None)
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(UserLocation.Eu))
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
-        .thenReturn(Future.successful(RegistrationDetailsOrganisation()))
-
-      val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(atarService, Journey.Subscribe)(mockHC, mockRequest))
-      subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
-      session shouldBe mockSession
-      verify(mockRequestSessionData).storeUserSubscriptionFlow(
-        RowOrganisationFlow,
         RegistrationConfirmPage.url(atarService)
       )(mockRequest)
     }

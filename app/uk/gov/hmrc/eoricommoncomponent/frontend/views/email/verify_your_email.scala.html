@@ -19,11 +19,12 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-
 @this(layout_di: layout)
-@(email:Option[String],
-service: Service,
-journey: Journey.Value)(implicit request: Request[_], messages: Messages)
+
+@(
+    email:Option[String],
+    service: Service,
+)(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages("cds.subscription.verify-email.title")) {
 
@@ -31,7 +32,7 @@ journey: Journey.Value)(implicit request: Request[_], messages: Messages)
     <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
 
 
-    @helpers.form(CheckYourEmailController.submit(service, journey)) {
+    @helpers.form(CheckYourEmailController.submit(service)) {
 
         @CSRF.formField
 
@@ -44,7 +45,7 @@ journey: Journey.Value)(implicit request: Request[_], messages: Messages)
             <details>
                 <summary class="summary" role="button" aria-expanded="true">@messages("cds.subscription.verify-email.progressive-disclosure.heading")</summary>
                 <div class="details__inner panel-indent">
-                    <p id="p3">@Html(messages("cds.subscription.verify-email.progressive-disclosure.content" , CheckYourEmailController.submit(service, journey).url))</p>
+                    <p id="p3">@Html(messages("cds.subscription.verify-email.progressive-disclosure.content" , CheckYourEmailController.submit(service).url))</p>
                 </div>
             </details>
         </div>

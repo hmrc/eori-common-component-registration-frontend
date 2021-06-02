@@ -22,7 +22,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.organisation_type
 import util.ViewSpec
 
@@ -50,7 +49,7 @@ class OrganisationTypePageSpec extends ViewSpec {
 
   private lazy val doc = {
     implicit val request = withFakeCSRF(FakeRequest().withSession(("selected-user-location", "third-country")))
-    val result           = view(form, Some("third-country"), atarService, Journey.Register)
+    val result           = view(form, Some("third-country"), atarService)
     Jsoup.parse(contentAsString(result))
   }
 

@@ -21,28 +21,28 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_group
 
 @Singleton
 class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group)
     extends CdsController(mcc) {
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] = Action { implicit request =>
-    Ok(vatGroupView(vatGroupYesNoAnswerForm(), service, journey))
+  def createForm(service: Service): Action[AnyContent] = Action { implicit request =>
+    Ok(vatGroupView(vatGroupYesNoAnswerForm(), service))
   }
 
-  def submit(service: Service, journey: Journey.Value): Action[AnyContent] = Action { implicit request =>
+  def submit(service: Service): Action[AnyContent] = Action { implicit request =>
     vatGroupYesNoAnswerForm()
       .bindFromRequest()
       .fold(
-        formWithErrors => BadRequest(vatGroupView(formWithErrors, service, journey)),
+        formWithErrors => BadRequest(vatGroupView(formWithErrors, service)),
         yesNoAnswer =>
           if (yesNoAnswer.isNo)
             // TODO - need service url param here
-            Redirect(EmailController.form(service, Journey.Register))
+            Redirect(EmailController.form(service))
           else
-            Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service, journey))
+            Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service))
       )
   }
 

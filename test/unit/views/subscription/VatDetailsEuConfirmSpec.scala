@@ -26,7 +26,6 @@ import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_details_eu_confirm
 import util.ViewSpec
 import util.builders.YesNoFormBuilder._
@@ -140,53 +139,25 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
 
   private lazy val emptyDocUnderLimit: Document = Jsoup.parse(
     contentAsString(
-      view(
-        emptyFormUnderLimit,
-        isInReviewMode = false,
-        VatEuDetailUnderLimit,
-        atarService,
-        Journey.Register,
-        vatLimitNotReached = true
-      )
+      view(emptyFormUnderLimit, isInReviewMode = false, VatEuDetailUnderLimit, atarService, vatLimitNotReached = true)
     )
   )
 
   private lazy val docUnderLimit: Document = Jsoup.parse(
     contentAsString(
-      view(
-        formUnderLimit,
-        isInReviewMode = false,
-        VatEuDetailUnderLimit,
-        atarService,
-        Journey.Register,
-        vatLimitNotReached = true
-      )
+      view(formUnderLimit, isInReviewMode = false, VatEuDetailUnderLimit, atarService, vatLimitNotReached = true)
     )
   )
 
   private lazy val docOnLimit: Document = Jsoup.parse(
     contentAsString(
-      view(
-        formUnderLimit,
-        isInReviewMode = false,
-        VatEuDetailsOnLimit,
-        atarService,
-        Journey.Register,
-        vatLimitNotReached = false
-      )
+      view(formUnderLimit, isInReviewMode = false, VatEuDetailsOnLimit, atarService, vatLimitNotReached = false)
     )
   )
 
   private lazy val docOnLimitInReview: Document = Jsoup.parse(
     contentAsString(
-      view(
-        formUnderLimit,
-        isInReviewMode = true,
-        VatEuDetailsOnLimit,
-        atarService,
-        Journey.Register,
-        vatLimitNotReached = false
-      )
+      view(formUnderLimit, isInReviewMode = true, VatEuDetailsOnLimit, atarService, vatLimitNotReached = false)
     )
   )
 

@@ -18,18 +18,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import javax.inject.Inject
 import play.api.Logger
-import play.api.http.Status
 import play.api.libs.json.{Json, Reads}
 import play.mvc.Http.Status.{NO_CONTENT, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.enrolmentRequest.{
-  ES1Request,
-  ES1Response,
-  KnownFacts,
-  KnownFactsQuery
-}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.EnrolmentStoreProxyEvent
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpResponse}
@@ -89,67 +82,6 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
       path = url,
       details = Json.toJson(EnrolmentStoreProxyEvent(groupId = groupId, enrolments = response.enrolments)),
       eventType = "EnrolmentStoreProxyCall"
-    )
-
-  def queryKnownFactsByIdentifiers(
-    knownFactsQuery: KnownFactsQuery
-  )(implicit hc: HeaderCarrier): Future[Option[KnownFacts]] = {
-
-    import uk.gov.hmrc.http.HttpReads.Implicits._
-
-    val url = s"$baseUrl/$serviceContext/enrolment-store/enrolments"
-
-    // $COVERAGE-OFF$Loggers
-    logger.debug(s"QueryKnownFactsByIdentifiers: $url, body: $knownFactsQuery and hc: $hc")
-    // $COVERAGE-ON
-
-    http.POST[KnownFactsQuery, Option[KnownFacts]](url, knownFactsQuery) map {
-      response =>
-        // $COVERAGE-OFF$Loggers
-        logger.debug(s"QueryKnownFactsByIdentifiers response $response")
-        // $COVERAGE-ON
-        response
-    }
-  }
-
-  def queryGroupsWithAllocatedEnrolment(es1Request: ES1Request)(implicit hc: HeaderCarrier): Future[ES1Response] = {
-
-    val url =
-      s"$baseUrl/$serviceContext/enrolment-store/enrolments/${es1Request.enrolment}/groups?type=${es1Request.queryType.value}"
-
-    // $COVERAGE-OFF$Loggers
-    logger.debug(s"QueryGroupsWithAllocatedEnrolment: $url and hc: $hc")
-    // $COVERAGE-ON
-
-    http.GET[HttpResponse](url).map { response =>
-      response.status match {
-        case Status.OK =>
-          ES1Response.format.reads(response.json).asOpt.getOrElse(
-            throw new Exception("Incorrect format for ES1 response")
-          )
-        case Status.NO_CONTENT  => ES1Response(None, None)
-        case Status.BAD_REQUEST =>
-          // TODO - ADD alert config for this
-          // $COVERAGE-OFF$Loggers
-          logger.error(s"ES1 FAIL - Response status: 400 with body ${response.body}")
-          // $COVERAGE-ON
-          throw new Exception("ES1 call failed with 400 status")
-        case _ =>
-          //TODO - ADD alert config for this
-          // $COVERAGE-OFF$Loggers
-          logger.warn(s"ES1 FAIL - Response status: ${response.status} with body ${response.body}")
-          // $COVERAGE-ON
-          throw new Exception(s"ES1 call failed with ${response.status} status")
-      }
-    }
-  }
-
-  def auditEs1Call(url: String, response: ES1Response)(implicit hc: HeaderCarrier): Unit =
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-es1-call",
-      path = url,
-      details = Json.toJson(response),
-      eventType = "ecc-es1"
     )
 
 }

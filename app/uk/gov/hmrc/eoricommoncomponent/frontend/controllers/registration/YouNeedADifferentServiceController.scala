@@ -21,7 +21,6 @@ import play.api.mvc.{Action, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.you_need_different_service
 
 import scala.concurrent.Future
@@ -33,7 +32,7 @@ class YouNeedADifferentServiceController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def form(journey: Journey.Value): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def form(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(youNeedDifferentServiceView()))
   }

@@ -20,10 +20,9 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.WhatIsYourEoriController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CdsController, FeatureFlags}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -41,16 +40,11 @@ class MatchingIdController @Inject() (
   def matchWithIdOnly(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       matchLoggedInUserAndRedirect(loggedInUser) {
-        Redirect(UserLocationController.form(service, Journey.Register))
+        Redirect(UserLocationController.form(service))
       } {
-        Redirect(ConfirmContactDetailsController.form(service, Journey.Register))
+        Redirect(ConfirmContactDetailsController.form(service))
       }
   }
-
-  def matchWithIdOnlyForExistingReg(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { _: Request[AnyContent] => _: LoggedInUserWithEnrolments =>
-      Future.successful(Redirect(WhatIsYourEoriController.createForm(service)))
-    }
 
   private def matchLoggedInUserAndRedirect(
     loggedInUser: LoggedInUserWithEnrolments

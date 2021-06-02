@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineRev
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration._
@@ -41,15 +41,15 @@ class RowIndividualNameDateOfBirthController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def form(organisationType: String, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       Future.successful(
-        Ok(rowIndividualNameDob(thirdCountryIndividualNameDateOfBirthForm, organisationType, service, journey, false))
+        Ok(rowIndividualNameDob(thirdCountryIndividualNameDateOfBirthForm, organisationType, service, false))
       )
     }
 
-  def reviewForm(organisationType: String, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       subscriptionDetailsService.cachedNameDobDetails flatMap {
@@ -57,25 +57,20 @@ class RowIndividualNameDateOfBirthController @Inject() (
           val form = thirdCountryIndividualNameDateOfBirthForm.fill(
             IndividualNameAndDateOfBirth(firstName, middleName, lastName, dateOfBirth)
           )
-          Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, journey, true)))
-        case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service, journey)))
+          Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, true)))
+        case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service)))
       }
     }
 
-  def submit(
-    isInReviewMode: Boolean,
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value
-  ): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean, organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       thirdCountryIndividualNameDateOfBirthForm.bindFromRequest.fold(
         formWithErrors =>
           Future.successful(
-            BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, journey, isInReviewMode))
+            BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, isInReviewMode))
           ),
-        form => submitDetails(isInReviewMode, form, organisationType, service, journey)
+        form => submitDetails(isInReviewMode, form, organisationType, service)
       )
     }
 
@@ -92,17 +87,16 @@ class RowIndividualNameDateOfBirthController @Inject() (
     isInReviewMode: Boolean,
     formData: IndividualNameAndDateOfBirth,
     organisationType: String,
-    service: Service,
-    journey: Journey.Value
+    service: Service
   )(implicit hc: HeaderCarrier): Future[Result] = {
     val nameDobMatchModel =
       NameDobMatchModel(formData.firstName, formData.middleName, formData.lastName, formData.dateOfBirth)
 
     subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) map { _ =>
       if (isInReviewMode)
-        Redirect(DetermineReviewPageController.determineRoute(service, journey))
+        Redirect(DetermineReviewPageController.determineRoute(service))
       else
-        Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, journey, false))
+        Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, false))
     }
   }
 

@@ -28,7 +28,6 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_nino
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
@@ -71,7 +70,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.form(defaultOrganisationType, atarService, Journey.Register)
+      controller.form(defaultOrganisationType, atarService)
     )
 
     "show the form without errors" in {
@@ -196,7 +195,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(defaultOrganisationType, atarService, Journey.Register)
+      controller.submit(defaultOrganisationType, atarService)
     )
 
     "redirect to the confirm page when there's a successful match" in {
@@ -250,7 +249,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = controller
-      .form(organisationType, atarService, Journey.Register)
+      .form(organisationType, atarService)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)
   }
@@ -263,7 +262,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = controller
-      .submit(organisationType, atarService, Journey.Register)
+      .submit(organisationType, atarService)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)
   }

@@ -21,7 +21,7 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.sign_in_with_different_details
 
@@ -36,19 +36,13 @@ class SignInWithDifferentDetailsController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def form(service: Service, journey: Journey.Value): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        val name = journey match {
-          case Journey.Register  => cdsFrontendDataCache.registrationDetails.map(_.name)
-          case Journey.Subscribe => cdsFrontendDataCache.subscriptionDetails.map(_.name)
-          case _                 => throw new IllegalArgumentException("No a valid journey")
-        }
+  def form(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+    implicit request => _: LoggedInUserWithEnrolments =>
+      cdsFrontendDataCache.registrationDetails.map(_.name).map { n =>
+        val optionalName = if (n.isEmpty) None else Some(n) // TODO Why name can be empty? Is this logic necessary?
 
-        name map { n =>
-          val optionalName = Option(n) filter (_.nonEmpty)
-          Ok(signInWithDifferentDetailsView(optionalName))
-        }
-    }
+        Ok(signInWithDifferentDetailsView(optionalName))
+      }
+  }
 
 }

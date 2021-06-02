@@ -34,7 +34,6 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.RowIndividualNameDateOfBirthController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.row_individual_name_dob
 import uk.gov.hmrc.http.HeaderCarrier
@@ -76,10 +75,10 @@ class RowIndividualNameDateOfBirthControllerSpec
     }
 
     protected def show(с: RowIndividualNameDateOfBirthController): Action[AnyContent] =
-      с.form(organisationType, atarService, Journey.Register)
+      с.form(organisationType, atarService)
 
     protected def submit(c: RowIndividualNameDateOfBirthController): Action[AnyContent] =
-      c.submit(false, organisationType, atarService, Journey.Register)
+      c.submit(false, organisationType, atarService)
 
     def formData(thirdCountryIndividual: IndividualNameAndDateOfBirth): Map[String, String] =
       form.mapping.unbind(thirdCountryIndividual)
@@ -101,7 +100,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       withControllerFixture { controllerFixture =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
           controllerFixture.mockAuthConnector,
-          controllerFixture.controller.form(organisationType, atarService, Journey.Register)
+          controllerFixture.controller.form(organisationType, atarService)
         )
       }
 
@@ -121,7 +120,7 @@ class RowIndividualNameDateOfBirthControllerSpec
             page.getElementAttributeAction(
               webPage.formElement
             ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.RowIndividualNameDateOfBirthController
-              .form(organisationType, atarService, Journey.Register)
+              .form(organisationType, atarService)
               .url
           }
       }
@@ -132,7 +131,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       withControllerFixture { controllerFixture =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
           controllerFixture.mockAuthConnector,
-          controllerFixture.controller.submit(false, organisationType, atarService, Journey.Register)
+          controllerFixture.controller.submit(false, organisationType, atarService)
         )
       }
 

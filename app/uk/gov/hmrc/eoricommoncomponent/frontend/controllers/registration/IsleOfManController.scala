@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatGroupController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.isleOfManYesNoAnswerForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.isle_of_man
 
 @Singleton
@@ -44,7 +44,7 @@ class IsleOfManController @Inject() (view: isle_of_man, mcc: MessagesControllerC
 
   private def destinationsByAnswer(yesNoAnswer: YesNo, service: Service): Result = yesNoAnswer match {
     case theAnswer if theAnswer.isYes => Redirect(VatRegisteredUkController.form(service))
-    case _                            => Redirect(VatGroupController.createForm(service, Journey.Register))
+    case _                            => Redirect(VatGroupController.createForm(service))
   }
 
 }

@@ -19,18 +19,19 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-
 @this(layout_di: layout)
-@(isInReviewMode: Boolean,
-vatRegisteredUkYesNoAnswerForm: Form[YesNo],
-isIndividualSubscriptionFlow: Boolean,
-isPartnership: Boolean,
-service: Service,
-journey: Journey.Value)(implicit request: Request[_], messages: Messages)
+
+@(
+    isInReviewMode: Boolean,
+    vatRegisteredUkYesNoAnswerForm: Form[YesNo],
+    isIndividualSubscriptionFlow: Boolean,
+    isPartnership: Boolean,
+    service: Service
+)(implicit request: Request[_], messages: Messages)
 
 
 @formAction = @{
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatRegisteredUkController.submit(isInReviewMode, service, journey)
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatRegisteredUkController.submit(isInReviewMode, service)
 }
 
 @titleAndHeading = @{

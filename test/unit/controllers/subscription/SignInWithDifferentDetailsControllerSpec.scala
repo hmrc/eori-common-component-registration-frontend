@@ -24,7 +24,6 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SignInWithDifferentDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.sign_in_with_different_details
 import uk.gov.hmrc.http.HeaderCarrier
@@ -60,10 +59,7 @@ class SignInWithDifferentDetailsControllerSpec
   }
 
   "Displaying the form in create mode" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.form(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
 
     "display para1 as 'Test Org Name has already registered for Advance Tariff Rulings with a different Government Gateway.'" in {
       showCreateForm() { result =>
@@ -75,15 +71,9 @@ class SignInWithDifferentDetailsControllerSpec
     }
   }
 
-  private def showCreateForm(userId: String = defaultUserId, journey: Journey.Value = Journey.Register)(
-    test: Future[Result] => Any
-  ) {
+  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller.form(atarService, journey).apply(
-        SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)
-      )
-    )
+    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)))
   }
 
   private def mockFunctionWithRegistrationDetails(registrationDetails: RegistrationDetails) {

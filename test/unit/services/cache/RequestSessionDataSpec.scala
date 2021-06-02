@@ -22,13 +22,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  IndividualFlow,
-  OrganisationFlow,
-  OrganisationSubscriptionFlow,
-  SoleTraderFlow,
-  ThirdCountryIndividualSubscriptionFlow
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.OrganisationSubscriptionFlow
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 
 class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
@@ -115,42 +109,6 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
         "subscription-flow",
         "uri-before-subscription-flow"
       )
-    }
-
-    "return true for isUKJourney method" when {
-
-      "user is during organisation UK subscription journey" in {
-
-        when(mockRequest.session).thenReturn(Session(Map("subscription-flow" -> OrganisationFlow.name)))
-
-        requestSessionData.isUKJourney shouldBe true
-      }
-
-      "user is during sole trader UK subscription journey" in {
-
-        when(mockRequest.session).thenReturn(Session(Map("subscription-flow" -> SoleTraderFlow.name)))
-
-        requestSessionData.isUKJourney shouldBe true
-      }
-
-      "user is during individual UK subscription journey" in {
-
-        when(mockRequest.session).thenReturn(Session(Map("subscription-flow" -> IndividualFlow.name)))
-
-        requestSessionData.isUKJourney shouldBe true
-      }
-    }
-
-    "return false for isUKJourney method" when {
-
-      "user is on different journey" in {
-
-        when(mockRequest.session).thenReturn(
-          Session(Map("subscription-flow" -> ThirdCountryIndividualSubscriptionFlow.name))
-        )
-
-        requestSessionData.isUKJourney shouldBe false
-      }
     }
   }
 }

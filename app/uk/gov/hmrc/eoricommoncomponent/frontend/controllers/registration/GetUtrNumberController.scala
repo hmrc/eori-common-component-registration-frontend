@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration.how_can_we_identify_you_utr
@@ -47,35 +47,18 @@ class GetUtrNumberController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def form(
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value,
-    isInReviewMode: Boolean = false
-  ): Action[AnyContent] =
+  def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(view(subscriptionUtrForm, organisationType, isInReviewMode, service, journey)))
+      Future.successful(Ok(view(subscriptionUtrForm, organisationType, isInReviewMode, service)))
     }
 
-  def submit(
-    organisationType: String,
-    service: Service,
-    journey: Journey.Value,
-    isInReviewMode: Boolean = false
-  ): Action[AnyContent] =
+  def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       subscriptionUtrForm.bindFromRequest.fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, organisationType, isInReviewMode, service, journey))),
+          Future.successful(BadRequest(view(formWithErrors, organisationType, isInReviewMode, service))),
         formData =>
-          matchBusinessOrIndividual(
-            formData,
-            isInReviewMode,
-            service,
-            journey,
-            organisationType,
-            GroupId(loggedInUser.groupId)
-          )
+          matchBusinessOrIndividual(formData, isInReviewMode, service, organisationType, GroupId(loggedInUser.groupId))
       )
     }
 
@@ -99,24 +82,19 @@ class GetUtrNumberController @Inject() (
       case None => Future.successful(false)
     }
 
-  private def view(
-    form: Form[IdMatchModel],
-    organisationType: String,
-    isInReviewMode: Boolean,
-    service: Service,
-    journey: Journey.Value
-  )(implicit request: Request[AnyContent]): HtmlFormat.Appendable =
+  private def view(form: Form[IdMatchModel], organisationType: String, isInReviewMode: Boolean, service: Service)(
+    implicit request: Request[AnyContent]
+  ): HtmlFormat.Appendable =
     matchOrganisationUtrView(
       form,
       isInReviewMode,
-      routes.GetUtrNumberController.submit(organisationType, service, journey, isInReviewMode)
+      routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode)
     )
 
   private def matchBusinessOrIndividual(
     formData: IdMatchModel,
     isInReviewMode: Boolean,
     service: Service,
-    journey: Journey.Value,
     organisationType: String,
     groupId: GroupId
   )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] =
@@ -137,17 +115,16 @@ class GetUtrNumberController @Inject() (
         }
     }).map { matched =>
       if (matched)
-        Redirect(ConfirmContactDetailsController.form(service, journey))
+        Redirect(ConfirmContactDetailsController.form(service))
       else
-        matchNotFoundBadRequest(organisationType, formData, isInReviewMode, service, journey)
+        matchNotFoundBadRequest(organisationType, formData, isInReviewMode, service)
     }
 
   private def matchNotFoundBadRequest(
     organisationType: String,
     formData: IdMatchModel,
     isInReviewMode: Boolean,
-    service: Service,
-    journey: Journey.Value
+    service: Service
   )(implicit request: Request[AnyContent]): Result = {
     val errorMsg = organisationType match {
       case CdsOrganisationType.SoleTraderId | CdsOrganisationType.IndividualId |
@@ -156,7 +133,7 @@ class GetUtrNumberController @Inject() (
       case _ => Messages("cds.matching-error-organisation.not-found")
     }
     val errorForm = subscriptionUtrForm.withGlobalError(errorMsg).fill(formData)
-    BadRequest(view(errorForm, organisationType, isInReviewMode, service, journey))
+    BadRequest(view(errorForm, organisationType, isInReviewMode, service))
   }
 
 }

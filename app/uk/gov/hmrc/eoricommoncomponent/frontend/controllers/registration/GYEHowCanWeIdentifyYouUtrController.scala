@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration._
@@ -43,20 +43,20 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def form(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
         Ok(
           howCanWeIdentifyYouView(
             subscriptionUtrForm,
             isInReviewMode = false,
-            routes.GYEHowCanWeIdentifyYouUtrController.submit(service, journey)
+            routes.GYEHowCanWeIdentifyYouUtrController.submit(service)
           )
         )
       )
     }
 
-  def submit(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       subscriptionUtrForm.bindFromRequest.fold(
         formWithErrors =>
@@ -65,16 +65,16 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
               howCanWeIdentifyYouView(
                 formWithErrors,
                 isInReviewMode = false,
-                routes.GYEHowCanWeIdentifyYouUtrController.submit(service, journey)
+                routes.GYEHowCanWeIdentifyYouUtrController.submit(service)
               )
             )
           ),
         formData =>
           matchOnId(formData, GroupId(loggedInUser.groupId)).map {
             case true =>
-              Redirect(ConfirmContactDetailsController.form(service, journey))
+              Redirect(ConfirmContactDetailsController.form(service))
             case false =>
-              matchNotFoundBadRequest(formData, service, journey)
+              matchNotFoundBadRequest(formData, service)
           }
       )
     }
@@ -82,8 +82,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit hc: HeaderCarrier): Future[Boolean] =
     retrieveNameDobFromCache().flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
 
-  private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service, journey: Journey.Value)(
-    implicit request: Request[AnyContent]
+  private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service)(implicit
+    request: Request[AnyContent]
   ): Result = {
     val errorForm = subscriptionUtrForm
       .withGlobalError(Messages("cds.matching-error.individual-not-found"))
@@ -92,7 +92,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
       howCanWeIdentifyYouView(
         errorForm,
         isInReviewMode = false,
-        routes.GYEHowCanWeIdentifyYouUtrController.submit(service, journey)
+        routes.GYEHowCanWeIdentifyYouUtrController.submit(service)
       )
     )
   }

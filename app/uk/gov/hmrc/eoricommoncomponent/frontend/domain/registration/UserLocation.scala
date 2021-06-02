@@ -24,7 +24,7 @@ object UserLocation {
 
   val Uk                = "uk"
   val Iom               = "iom"
-  val Eu                = "eu"
+  val Eu                = "eu" // TODO Remove EU location
   val ThirdCountry      = "third-country"
   val ThirdCountryIncEU = "third-country-inc-eu"
   val Islands           = "islands"

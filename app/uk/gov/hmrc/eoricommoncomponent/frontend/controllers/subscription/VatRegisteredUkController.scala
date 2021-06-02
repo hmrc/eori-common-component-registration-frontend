@@ -28,7 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
@@ -50,7 +50,7 @@ class VatRegisteredUkController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def createForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(
@@ -60,14 +60,13 @@ class VatRegisteredUkController @Inject() (
               vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnership),
               isIndividualFlow,
               requestSessionData.isPartnership,
-              service,
-              journey
+              service
             )
           )
         )
     }
 
-  def reviewForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         for {
@@ -79,13 +78,12 @@ class VatRegisteredUkController @Inject() (
             vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnership).fill(yesNo),
             isIndividualFlow,
             requestSessionData.isPartnership,
-            service,
-            journey
+            service
           )
         )
     }
 
-  def submit(isInReviewMode: Boolean, service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnership)
         .bindFromRequest()
@@ -98,8 +96,7 @@ class VatRegisteredUkController @Inject() (
                   formWithErrors,
                   isIndividualFlow,
                   requestSessionData.isPartnership,
-                  service,
-                  journey
+                  service
                 )
               )
             ),
@@ -108,12 +105,10 @@ class VatRegisteredUkController @Inject() (
               _ =>
                 if (isInReviewMode)
                   if (yesNoAnswer.isYes)
-                    Future.successful(
-                      Redirect(VatDetailsController.reviewForm(service, journey = Journey.Register).url)
-                    )
+                    Future.successful(Redirect(VatDetailsController.reviewForm(service).url))
                   else {
                     subscriptionDetailsService.clearCachedUkVatDetails
-                    Future.successful(Redirect(DetermineReviewPageController.determineRoute(service, journey).url))
+                    Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
                   }
                 else if (yesNoAnswer.isYes)
                   Future.successful(

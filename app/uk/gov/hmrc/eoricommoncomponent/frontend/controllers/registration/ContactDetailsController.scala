@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.registration.ContactDetailsForm.contactDetailsCreateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
@@ -139,7 +139,7 @@ class ContactDetailsController @Inject() (
       )
       .map(
         _ =>
-          if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service, Journey.Register))
+          if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
           else
             Redirect(
               subscriptionFlowManager

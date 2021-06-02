@@ -21,7 +21,6 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.enrolment_pending_against_group_id
 import util.ViewSpec
 
@@ -49,26 +48,9 @@ class EnrolmentPendingAgainstGroupIdViewSpec extends ViewSpec {
         .getElementById("info")
         .text mustBe "The Government Gateway ID you used to sign in is part of a team that has already applied for an EORI number. This application is being processed."
     }
-
-    "display the correct text for Subscribe to same service" in {
-      migrateDoc(atarService)
-        .body()
-        .getElementById("info")
-        .text mustBe "Our records show that someone in your organisation has already applied for this service."
-    }
-
-    "display the correct text for Subscribe to different service" in {
-      migrateDoc(otherService)
-        .body()
-        .getElementById("info")
-        .text mustBe "We are currently processing a subscription request to Other Service from someone in your organisation."
-    }
   }
 
   private lazy val gyeDoc: Document =
-    Jsoup.parse(contentAsString(view(atarService, Journey.Register, Some(otherService))))
-
-  private def migrateDoc(otherService: Service): Document =
-    Jsoup.parse(contentAsString(view(atarService, Journey.Subscribe, Some(otherService))))
+    Jsoup.parse(contentAsString(view(atarService, Some(otherService))))
 
 }

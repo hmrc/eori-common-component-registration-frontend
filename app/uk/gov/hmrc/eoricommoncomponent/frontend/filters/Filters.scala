@@ -20,5 +20,5 @@ import javax.inject.Inject
 import play.api.http.EnabledFilters
 import play.http.DefaultHttpFilters
 
-class Filters @Inject() (enabledFilters: EnabledFilters, routeFilter: RouteFilter, allowlistFilter: AllowlistFilter)
-    extends DefaultHttpFilters(enabledFilters.filters :+ routeFilter :+ allowlistFilter: _*) {}
+class Filters @Inject() (enabledFilters: EnabledFilters, routeFilter: RouteFilter)
+    extends DefaultHttpFilters(enabledFilters.filters :+ routeFilter: _*) {}

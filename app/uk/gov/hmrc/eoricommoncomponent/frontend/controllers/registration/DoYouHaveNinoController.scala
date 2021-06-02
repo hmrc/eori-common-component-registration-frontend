@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveRowIndividualsNinoForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_nino_row_individual
@@ -43,33 +43,33 @@ class DoYouHaveNinoController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def displayForm(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def displayForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionDetailsService.cachedNinoMatch.map { cachedNinoOpt =>
         val form = cachedNinoOpt.fold(haveRowIndividualsNinoForm)(haveRowIndividualsNinoForm.fill(_))
 
-        Ok(matchNinoRowIndividualView(form, service, journey))
+        Ok(matchNinoRowIndividualView(form, service))
       }
     }
 
-  def submit(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         haveRowIndividualsNinoForm.bindFromRequest.fold(
-          formWithErrors => Future.successful(BadRequest(matchNinoRowIndividualView(formWithErrors, service, journey))),
+          formWithErrors => Future.successful(BadRequest(matchNinoRowIndividualView(formWithErrors, service))),
           formData =>
             subscriptionDetailsService.cachedNinoMatch.flatMap { cachedNinoOpt =>
               formData.haveNino match {
                 case Some(true) =>
                   subscriptionDetailsService
                     .cacheNinoMatch(Some(formData))
-                    .map(_ => Redirect(GetNinoController.displayForm(service, journey)))
+                    .map(_ => Redirect(GetNinoController.displayForm(service)))
                 case Some(false) if cachedNinoOpt.exists(_.haveNino.exists(_ == false)) =>
-                  Future.successful(noNinoRedirect(service, journey))
+                  Future.successful(noNinoRedirect(service))
                 case Some(false) =>
                   subscriptionDetailsService.updateSubscriptionDetails.flatMap { _ =>
                     subscriptionDetailsService.cacheNinoMatch(Some(formData)).map { _ =>
-                      noNinoRedirect(service, journey)
+                      noNinoRedirect(service)
                     }
                   }
                 case _ =>
@@ -79,10 +79,10 @@ class DoYouHaveNinoController @Inject() (
         )
     }
 
-  private def noNinoRedirect(service: Service, journey: Journey.Value)(implicit request: Request[AnyContent]): Result =
+  private def noNinoRedirect(service: Service)(implicit request: Request[AnyContent]): Result =
     requestSessionData.userSelectedOrganisationType match {
       case Some(cdsOrgType) =>
-        Redirect(SixLineAddressController.showForm(false, cdsOrgType.id, service, journey))
+        Redirect(SixLineAddressController.showForm(false, cdsOrgType.id, service))
       case _ => throw new IllegalStateException("No userSelectedOrganisationType details in session.")
     }
 

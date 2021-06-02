@@ -28,7 +28,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.GetNino
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IdMatchModel, NameDobMatchModel, Nino}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration.how_can_we_identify_you_nino
@@ -163,7 +162,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       doYouHaveNinoController
-        .displayForm(atarService, Journey.Register)
+        .displayForm(atarService)
         .apply(SessionBuilder.buildRequestWithSession(defaultUserId))
     )
   }
@@ -172,7 +171,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       doYouHaveNinoController
-        .submit(atarService, Journey.Register)
+        .submit(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )
   }

@@ -22,7 +22,7 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SecuritySignOutController
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.display_sign_out
 import uk.gov.hmrc.http.HeaderCarrier
@@ -46,7 +46,7 @@ class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
   "Security Sign Out Controller" should {
     "return Ok 200 when displayPage method is requested" in {
       when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
-      displayPage(atarService, Journey.Register) { result =>
+      displayPage(atarService) { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
         page.title should startWith("For your security, we signed you out")
@@ -55,21 +55,21 @@ class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
 
     "return Ok 303 when signOut method is requested" in {
       when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
-      signOut(atarService, Journey.Register) { result =>
+      signOut(atarService) { result =>
         status(result) shouldBe SEE_OTHER
       }
       verify(mockSessionCache).remove(any[HeaderCarrier])
     }
   }
 
-  private def displayPage(service: Service, journey: Journey.Value)(test: Future[Result] => Any) = {
+  private def displayPage(service: Service)(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(test(controller.displayPage(service, journey).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
+    await(test(controller.displayPage(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
   }
 
-  private def signOut(service: Service, journey: Journey.Value)(test: Future[Result] => Any) = {
+  private def signOut(service: Service)(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(test(controller.signOut(service, journey).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
+    await(test(controller.signOut(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
   }
 
 }
