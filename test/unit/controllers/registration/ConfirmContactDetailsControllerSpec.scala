@@ -40,10 +40,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLoo
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_contact_details
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  sub01_outcome_processing,
-  sub01_outcome_rejected
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{sub01_outcome_processing, sub01_outcome_rejected}
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec

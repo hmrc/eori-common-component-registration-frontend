@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController.logout
 @import uk.gov.hmrc.play.views.html.layouts.BetaBanner
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.JourneyName._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
@@ -40,7 +39,7 @@
             <div class="content">
                 <nav id="proposition-menu" class="header__menu" role="navigation">
                     <span class="header__menu__proposition-name">
-                    @journeyName
+                    @messages("cds.banner.registration")
                     </span>
                     <ul id="proposition-link" class="header__menu__proposition-links">
                         <li class="u--no-print">

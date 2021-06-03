@@ -50,10 +50,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.Registrati
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.user_location
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  sub01_outcome_processing,
-  sub01_outcome_rejected
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{sub01_outcome_processing, sub01_outcome_rejected}
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec

@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.partials.{footer, header, styles}
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.JourneyName._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.JourneyExtractor.journey
 @import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
@@ -34,7 +33,7 @@
 @isLoggedIn = @{!request.session.isEmpty && request.session.get("authToken").isDefined}
 
 @titleWithEnding = @{
-    title + " - " + journeyName + " - " + messages("cds.end-of-title")
+    title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
 }
 
 @titleErr = @{
