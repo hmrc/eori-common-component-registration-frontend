@@ -38,7 +38,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionDetailsService,
   SubscriptionVatEUDetailsService
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_registered_eu
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_eu
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec

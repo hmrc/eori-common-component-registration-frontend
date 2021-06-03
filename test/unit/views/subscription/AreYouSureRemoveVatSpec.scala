@@ -25,7 +25,7 @@ import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.removeVatYesNoAnswer
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.are_you_sure_remove_vat
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.are_you_sure_remove_vat
 import util.ViewSpec
 
 class AreYouSureRemoveVatSpec extends ViewSpec {

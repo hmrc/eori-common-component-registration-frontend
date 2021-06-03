@@ -38,7 +38,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.sic_code
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.StringThings._

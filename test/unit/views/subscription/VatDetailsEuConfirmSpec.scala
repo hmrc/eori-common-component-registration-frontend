@@ -26,7 +26,7 @@ import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_details_eu_confirm
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details_eu_confirm
 import util.ViewSpec
 import util.builders.YesNoFormBuilder._
 

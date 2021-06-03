@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration._
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}

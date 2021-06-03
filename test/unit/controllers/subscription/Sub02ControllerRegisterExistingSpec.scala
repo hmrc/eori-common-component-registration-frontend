@@ -26,8 +26,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.PdfGeneratorConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.xi_eori_guidance
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.xi_eori_guidance
 import util.ControllerSpec
 import util.builders.AuthBuilder._
 import util.builders.AuthActionMock

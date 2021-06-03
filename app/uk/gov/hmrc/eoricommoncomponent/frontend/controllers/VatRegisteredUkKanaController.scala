@@ -21,11 +21,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.vatRegisteredUkYesNoAnswerForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.vat_registered_uk
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk_kana
 
 @Singleton
 class VatRegisteredUkKanaController @Inject() (
-  vatRegisteredUkView: vat_registered_uk,
+  vatRegisteredUkView: vat_registered_uk_kana,
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 

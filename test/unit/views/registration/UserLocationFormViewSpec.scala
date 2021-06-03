@@ -30,8 +30,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionDa
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegistrationDisplayService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionStatusService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.user_location
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.{
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.user_location
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   sub01_outcome_processing,
   sub01_outcome_rejected
 }

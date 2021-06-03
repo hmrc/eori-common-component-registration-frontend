@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWit
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_nino
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_nino
 
 import scala.concurrent.{ExecutionContext, Future}
 

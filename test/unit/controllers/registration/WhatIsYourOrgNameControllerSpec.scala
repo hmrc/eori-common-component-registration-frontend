@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameCon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameOrganisationMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.what_is_your_org_name
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec

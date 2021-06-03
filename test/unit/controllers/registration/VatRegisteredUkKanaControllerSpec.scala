@@ -22,7 +22,7 @@ import common.pages.registration.VatRegisteredUkPage
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkKanaController
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.vat_registered_uk
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk_kana
 import unit.controllers.CdsPage
 import util.ControllerSpec
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -38,7 +38,7 @@ class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMo
   private val expectedYesRedirectUrl = s"https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes"
   private val expectedNoRedirectUrl  = s"https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no"
 
-  private val vatRegisteredUkView = instanceOf[vat_registered_uk]
+  private val vatRegisteredUkView = instanceOf[vat_registered_uk_kana]
 
   val controller = new VatRegisteredUkKanaController(vatRegisteredUkView, mcc)
 

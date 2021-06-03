@@ -28,7 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegistrationDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.six_line_address
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}

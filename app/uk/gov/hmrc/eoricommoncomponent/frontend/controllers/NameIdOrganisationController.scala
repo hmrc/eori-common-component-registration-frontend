@@ -33,7 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_name_id_organisation
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_name_id_organisation
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}

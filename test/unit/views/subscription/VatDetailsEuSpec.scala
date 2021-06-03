@@ -25,7 +25,7 @@ import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionForm.euVatForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_details_eu
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details_eu
 import util.ViewSpec
 
 class VatDetailsEuSpec extends ViewSpec {

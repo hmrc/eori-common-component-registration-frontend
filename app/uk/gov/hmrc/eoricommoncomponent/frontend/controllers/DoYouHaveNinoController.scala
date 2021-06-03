@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveRowIndiv
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_nino_row_individual
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_nino_row_individual
 
 import scala.concurrent.{ExecutionContext, Future}
 

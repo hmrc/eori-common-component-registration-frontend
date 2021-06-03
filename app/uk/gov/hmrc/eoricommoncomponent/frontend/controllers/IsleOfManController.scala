@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.isleOfManYesNoAnswerForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.isle_of_man
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.isle_of_man
 
 @Singleton
 class IsleOfManController @Inject() (view: isle_of_man, mcc: MessagesControllerComponents) extends CdsController(mcc) {

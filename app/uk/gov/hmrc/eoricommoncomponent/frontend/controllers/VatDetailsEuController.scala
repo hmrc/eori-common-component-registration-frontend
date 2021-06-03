@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionF
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionVatEUDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_details_eu
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details_eu
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}

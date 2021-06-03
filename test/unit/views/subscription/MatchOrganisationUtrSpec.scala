@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.UtrMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_organisation_utr
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
 import util.ViewSpec
 
 class MatchOrganisationUtrSpec extends ViewSpec {

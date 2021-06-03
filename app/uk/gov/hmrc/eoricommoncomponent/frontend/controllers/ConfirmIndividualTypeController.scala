@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ConfirmIndiv
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionForm.confirmIndividualTypeForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.confirm_individual_type
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_individual_type
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.we_cannot_confirm_your_identity
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.we_cannot_confirm_your_identity
 import util.ViewSpec
 
 class WeCannotConfirmYourIdentitySpec extends ViewSpec {

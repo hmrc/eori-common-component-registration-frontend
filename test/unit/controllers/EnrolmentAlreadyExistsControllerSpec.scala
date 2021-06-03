@@ -20,7 +20,7 @@ import common.pages.RegistrationCompletePage
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.{registration_exists, registration_exists_group}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{registration_exists, registration_exists_group}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}

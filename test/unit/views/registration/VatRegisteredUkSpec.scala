@@ -23,14 +23,14 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.vat_registered_uk
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk_kana
 import util.ViewSpec
 
 class VatRegisteredUkSpec extends ViewSpec {
   val form: Form[YesNo]          = vatRegisteredUkYesNoAnswerForm(false)
   val formWithError: Form[YesNo] = vatRegisteredUkYesNoAnswerForm(false).bind(Map("yes-no-answer" -> ""))
 
-  private val view     = instanceOf[vat_registered_uk]
+  private val view     = instanceOf[vat_registered_uk_kana]
   implicit val request = withFakeCSRF(FakeRequest())
 
   lazy val doc: Document           = Jsoup.parse(contentAsString(view(form)))

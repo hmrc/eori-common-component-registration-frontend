@@ -34,7 +34,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Utr
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.InvalidUrlValueException
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_name_id_organisation
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_name_id_organisation
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec

@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.sub02_eori_already_exists
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub02_eori_already_exists
 import util.ViewSpec
 
 class Sub02EoriAlreadyExistsSpec extends ViewSpec {

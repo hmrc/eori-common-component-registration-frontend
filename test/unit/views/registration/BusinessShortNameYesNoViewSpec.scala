@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   YesNo
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.business_short_name_yes_no
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_short_name_yes_no
 import util.ViewSpec
 
 class BusinessShortNameYesNoViewSpec extends ViewSpec {

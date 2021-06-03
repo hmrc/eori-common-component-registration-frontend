@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
   SubscriptionDetailsService
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.disclose_personal_details_consent
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
 
 import scala.concurrent.{ExecutionContext, Future}
 

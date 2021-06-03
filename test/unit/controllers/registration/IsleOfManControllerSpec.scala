@@ -26,7 +26,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.IsleOfManController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.isle_of_man
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.isle_of_man
 import util.ControllerSpec
 import util.builders.AuthActionMock
 

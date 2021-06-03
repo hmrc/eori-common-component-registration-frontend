@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.you_need_different_service
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_need_different_service
 
 import scala.concurrent.Future
 
