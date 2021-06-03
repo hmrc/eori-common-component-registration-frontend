@@ -46,7 +46,7 @@
 
         <h1 class="heading-large">@messages("cds.matching.individual.header")</h1>
 
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.NameDobController.submit(organisationType, service), "matchIndividualForm") {
+        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NameDobController.submit(organisationType, service), "matchIndividualForm") {
             @CSRF.formField
             @inputText("first-name", messages("cds.matching.individual.first-name"), '_autocomplete ->  "given-name")
             @inputText("last-name", messages("cds.matching.individual.last-name"), '_autocomplete ->  "family-name")

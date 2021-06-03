@@ -24,8 +24,8 @@ import play.api.test.Helpers._
 import play.mvc.Http.Status.SEE_OTHER
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.MatchingIdController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.UserLocationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.MatchingIdController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
@@ -95,7 +95,7 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
           .form(atarService)
           .url
       )
@@ -133,7 +133,7 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
           .form(atarService)
           .url
       )
@@ -153,7 +153,7 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
           .form(atarService)
           .url
       )
@@ -173,7 +173,7 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
           .form(atarService)
           .url
       )

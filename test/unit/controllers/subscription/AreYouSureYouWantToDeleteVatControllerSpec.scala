@@ -23,7 +23,7 @@ import org.mockito.Mockito.when
 import play.api.mvc.Result
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.AreYouSureYouWantToDeleteVatController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AreYouSureYouWantToDeleteVatController
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionVatEUDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.are_you_sure_remove_vat

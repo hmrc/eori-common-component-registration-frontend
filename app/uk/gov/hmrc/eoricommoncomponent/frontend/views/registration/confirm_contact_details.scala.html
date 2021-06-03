@@ -105,7 +105,7 @@
     @helpers.errorSummary(yesNoWrongAddress, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 
     <div class="form-group">
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController.submit(service), "yes-no-wrong-address-form") {
+        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service), "yes-no-wrong-address-form") {
             @CSRF.formField
 
             @inputRadioGroup("yes-no-wrong-address",

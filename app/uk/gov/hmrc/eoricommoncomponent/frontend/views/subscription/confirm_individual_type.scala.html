@@ -45,7 +45,7 @@
 
         @helpers.errorSummary(confirmationForm, focusOverrides = Map("individual-type" -> s"individual-type-${validOptions.head._1}"))
 
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.ConfirmIndividualTypeController.submit(service), "confirm-individual-type-form") {
+        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController.submit(service), "confirm-individual-type-form") {
             @CSRF.formField
         
             @inputRadioGroup("individual-type", validOptions)

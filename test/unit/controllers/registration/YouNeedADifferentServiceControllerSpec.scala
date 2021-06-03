@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.YouNeedADifferentServiceController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouNeedADifferentServiceController
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.you_need_different_service
 import util.ControllerSpec
 import util.builders.AuthActionMock

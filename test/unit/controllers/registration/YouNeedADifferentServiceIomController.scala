@@ -22,7 +22,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.YouNeedADifferentServiceIomController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouNeedADifferentServiceIomController
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.you_need_different_service_iom
 import util.ControllerSpec
 

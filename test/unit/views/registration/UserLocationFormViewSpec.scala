@@ -24,14 +24,11 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.UserLocationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegistrationDisplayService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
-  EnrolmentStoreProxyService,
-  SubscriptionStatusService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionStatusService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.user_location
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.{
@@ -111,7 +108,7 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
         page
           .formAction(
             "user-location-form"
-          ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.UserLocationController
+          ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UserLocationController
           .submit(atarService)
           .url
       }

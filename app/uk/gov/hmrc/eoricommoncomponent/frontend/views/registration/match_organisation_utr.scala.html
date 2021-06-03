@@ -71,7 +71,7 @@
 
         @helpers.errorSummary(matchOrgIdForm, focusOverrides = Map("have-utr" -> "have-utr-true"))
 
-            @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), "matchOrganisationUtrForm") {
+            @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), "matchOrganisationUtrForm") {
             @CSRF.formField
             <div class="form-group">
                 @inputRadioGroup("have-utr",

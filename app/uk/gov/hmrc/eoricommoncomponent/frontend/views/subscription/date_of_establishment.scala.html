@@ -57,7 +57,7 @@
         @helpers.errorSummary(updateFormErrors,
             focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.DateOfEstablishmentController.submit(isInReviewMode, service), "date-of-birth-form") {
+        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController.submit(isInReviewMode, service), "date-of-birth-form") {
 
             @CSRF.formField
 

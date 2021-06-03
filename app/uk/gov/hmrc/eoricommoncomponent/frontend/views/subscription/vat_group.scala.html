@@ -24,7 +24,7 @@
 @(vatGroupYesNoAnswerForm: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
 
 @formAction = @{
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatGroupController.submit(service)
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatGroupController.submit(service)
 }
 
 @inputRadioGroup(field: String, options: Seq[(String, String)]) = {

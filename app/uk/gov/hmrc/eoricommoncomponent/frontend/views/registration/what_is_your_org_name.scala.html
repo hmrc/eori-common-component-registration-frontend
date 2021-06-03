@@ -36,7 +36,7 @@
         @helpers.errorSummary(matchOrgNameForm)
 
         <div class="form-group">
-            @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.WhatIsYourOrgNameController.submit(isInReviewMode, organisationType, service), "matchOrganisationNameForm") {
+            @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrgNameController.submit(isInReviewMode, organisationType, service), "matchOrganisationNameForm") {
             @CSRF.formField
 
                 @inputText(

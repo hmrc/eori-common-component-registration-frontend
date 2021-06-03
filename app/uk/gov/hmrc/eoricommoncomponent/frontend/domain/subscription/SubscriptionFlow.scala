@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
@@ -158,7 +158,7 @@ sealed abstract class SubscriptionPage() {
 case object ContactDetailsSubscriptionFlowPageGetEori extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ContactDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController
       .createForm(service)
       .url
 
@@ -167,7 +167,7 @@ case object ContactDetailsSubscriptionFlowPageGetEori extends SubscriptionPage {
 case object DateOfEstablishmentSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.DateOfEstablishmentController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController
       .createForm(service)
       .url
 
@@ -176,7 +176,7 @@ case object DateOfEstablishmentSubscriptionFlowPage extends SubscriptionPage {
 case object VatRegisteredUkSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatRegisteredUkController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredUkController
       .createForm(service)
       .url
 
@@ -185,7 +185,7 @@ case object VatRegisteredUkSubscriptionFlowPage extends SubscriptionPage {
 case object BusinessShortNameSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.BusinessShortNameYesNoController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.BusinessShortNameYesNoController
       .displayPage(service)
       .url
 
@@ -194,7 +194,7 @@ case object BusinessShortNameSubscriptionFlowPage extends SubscriptionPage {
 case object VatDetailsSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
       .createForm(service)
       .url
 
@@ -203,7 +203,7 @@ case object VatDetailsSubscriptionFlowPage extends SubscriptionPage {
 case object VatRegisteredEuSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatRegisteredEuController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredEuController
       .createForm(service)
       .url
 
@@ -212,7 +212,7 @@ case object VatRegisteredEuSubscriptionFlowPage extends SubscriptionPage {
 case object VatEUIdsSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatDetailsEuController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsEuController
       .createForm(service)
       .url
 
@@ -221,7 +221,7 @@ case object VatEUIdsSubscriptionFlowPage extends SubscriptionPage {
 case object VatEUConfirmSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatDetailsEuConfirmController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsEuConfirmController
       .createForm(service)
       .url
 
@@ -230,7 +230,7 @@ case object VatEUConfirmSubscriptionFlowPage extends SubscriptionPage {
 case object EoriConsentSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.DisclosePersonalDetailsConsentController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
       .createForm(service)
       .url
 
@@ -239,7 +239,7 @@ case object EoriConsentSubscriptionFlowPage extends SubscriptionPage {
 case object SicCodeSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.SicCodeController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
       .createForm(service)
       .url
 
@@ -266,7 +266,7 @@ case object ReviewDetailsPageSubscription extends SubscriptionPage {
 case object RegistrationConfirmPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
       .form(service)
       .url
 
@@ -275,7 +275,7 @@ case object RegistrationConfirmPage extends SubscriptionPage {
 case object ConfirmIndividualTypePage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.ConfirmIndividualTypeController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController
       .form(service)
       .url
 
@@ -284,7 +284,7 @@ case object ConfirmIndividualTypePage extends SubscriptionPage {
 case object BusinessDetailsRecoveryPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.BusinessDetailsRecoveryController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.BusinessDetailsRecoveryController
       .form(service)
       .url
 

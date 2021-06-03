@@ -52,7 +52,7 @@ class DetermineReviewPageControllerSpec extends ControllerSpec with BeforeAndAft
         status(awaitedResult) shouldBe SEE_OTHER
         awaitedResult.header.headers.get("Location") shouldBe
           Some(
-            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.CheckYourDetailsRegisterController
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.CheckYourDetailsRegisterController
               .reviewDetails(atarService)
               .url
           )

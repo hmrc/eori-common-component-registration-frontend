@@ -17,10 +17,6 @@
 package unit.controllers.subscription
 
 import common.pages.subscription.ConfirmIndividualTypePage._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.{
-  ConfirmIndividualTypeController,
-  SubscriptionFlowManager
-}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
 import org.mockito.ArgumentMatchers
@@ -30,6 +26,7 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ConfirmIndividualTypeController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.confirm_individual_type
 import uk.gov.hmrc.http.HeaderCarrier
@@ -91,7 +88,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
       page.getElementAttributeHref(backLinkXPath) shouldBe previousPageUrl
       page.formAction(
         formId
-      ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.ConfirmIndividualTypeController
+      ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController
         .submit(atarService)
         .url
     }

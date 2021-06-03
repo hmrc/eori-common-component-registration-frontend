@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   ServiceUnavailableResponse,
   VatControlListConnector
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.VatDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatDetails
@@ -50,12 +50,12 @@ class VatDetailsControllerSpec
   protected override val formId: String = "vat-details-form"
 
   protected override val submitInCreateModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
       .submit(isInReviewMode = false, atarService)
       .url
 
   protected override val submitInReviewModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.VatDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
       .submit(isInReviewMode = true, atarService)
       .url
 

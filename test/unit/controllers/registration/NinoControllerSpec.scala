@@ -18,7 +18,7 @@ package unit.controllers.registration
 
 import common.pages.NinoMatchPage
 import common.pages.matching.NameDateOfBirthPage.{fieldLevelErrorDateOfBirth, pageLevelErrorSummaryListXPath}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.NinoController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NinoController
 import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._

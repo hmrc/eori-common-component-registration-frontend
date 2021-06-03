@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.registration
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Result}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._

@@ -26,7 +26,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SicCodeController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SicCodeController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   Company,
   Individual,
@@ -55,12 +55,12 @@ class SicCodeControllerSpec
   protected override val formId: String = SicCodePage.formId
 
   protected override def submitInCreateModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.SicCodeController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
       .submit(isInReviewMode = false, atarService)
       .url
 
   protected override def submitInReviewModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.SicCodeController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
       .submit(isInReviewMode = true, atarService)
       .url
 

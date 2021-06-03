@@ -25,8 +25,8 @@ import play.api.mvc.{AnyContent, Request}
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.BusinessShortNameController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CorporateBody
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   BusinessShortName,
