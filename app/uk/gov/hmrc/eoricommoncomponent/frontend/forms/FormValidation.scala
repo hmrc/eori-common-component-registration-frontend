@@ -22,7 +22,7 @@ import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.lift
 import uk.gov.hmrc.eoricommoncomponent.frontend.playext.form.ConditionalMapping
 import uk.gov.voa.play.form.ConditionalMappings.isAnyOf
-import uk.gov.voa.play.form.{Condition, MandatoryOptionalMapping}
+import uk.gov.voa.play.form.MandatoryOptionalMapping
 
 import scala.util.matching.Regex
 
@@ -32,11 +32,6 @@ object FormValidation {
 
   val postcodeRegex: Regex =
     "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
-
-  def mandatoryIfAllEqual(pairs: Seq[(String, String)], mapping: Mapping[String]): Mapping[Option[String]] = {
-    val condition: Condition = x => (for (pair <- pairs) yield x.get(pair._1).contains(pair._2)).forall(b => b)
-    ConditionalMapping(condition, wrapped = MandatoryOptionalMapping(mapping), elseValue = (key, data) => data.get(key))
-  }
 
   def postcodeMapping: Mapping[Option[String]] =
     ConditionalMapping(
@@ -55,36 +50,6 @@ object FormValidation {
     Constraint({
       case s if s.length > limit => Invalid(ValidationError("cds.subscription.postcode.error.too-long." + limit))
       case _                     => Valid
-    })
-
-  def validLine1: Constraint[String] =
-    Constraint({
-      case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.organisation-address.line-1.error.empty"))
-      case s if s.trim.length > 35 =>
-        Invalid(ValidationError("cds.matching.organisation-address.line-1.error.too-long"))
-      case _ => Valid
-    })
-
-  def validLine2: Constraint[String] =
-    Constraint({
-      case s if s.trim.length > 34 =>
-        Invalid(ValidationError("cds.matching.organisation-address.line-2.error.too-long"))
-      case _ => Valid
-    })
-
-  def validLine3: Constraint[String] =
-    Constraint({
-      case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.organisation-address.line-3.error.empty"))
-      case s if s.trim.length > 34 =>
-        Invalid(ValidationError("cds.matching.organisation-address.line-3.error.too-long"))
-      case _ => Valid
-    })
-
-  def validLine4: Constraint[String] =
-    Constraint({
-      case s if s.trim.length > 35 =>
-        Invalid(ValidationError("cds.matching.organisation-address.line-4.error.too-long"))
-      case _ => Valid
     })
 
   def validCity: Constraint[String] =

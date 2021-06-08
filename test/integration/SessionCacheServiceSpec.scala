@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressLookupParams
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, SessionCache, SessionTimeOutException}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -224,46 +223,6 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
       val Some(Cache(_, Some(json), _, _)) = cache
       json mustBe expectedJson
-    }
-
-    "store Address Lookup Params correctly" in {
-
-      val sessionId: SessionId = setupSession
-
-      val addressLookupParams = AddressLookupParams("AA11 1AA", None)
-
-      await(sessionCache.saveAddressLookupParams(addressLookupParams)(hc))
-
-      val cache = await(sessionCache.findById(Id(sessionId.value)))
-
-      val expectedJson = toJson(CachedData(addressLookupParams = Some(addressLookupParams)))
-
-      val Some(Cache(_, Some(json), _, _)) = cache
-
-      json mustBe expectedJson
-    }
-
-    "clear Address Lookup Params" in {
-
-      val sessionId: SessionId = setupSession
-
-      val addressLookupParams = AddressLookupParams("AA11 1AA", None)
-
-      await(sessionCache.saveAddressLookupParams(addressLookupParams)(hc))
-
-      val Some(Cache(_, Some(jsonBefore), _, _)) = await(sessionCache.findById(Id(sessionId.value)))
-
-      val expectedJsonBefore = toJson(CachedData(addressLookupParams = Some(addressLookupParams)))
-
-      jsonBefore mustBe expectedJsonBefore
-
-      await(sessionCache.clearAddressLookupParams(hc))
-
-      val Some(Cache(_, Some(jsonAfter), _, _)) = await(sessionCache.findById(Id(sessionId.value)))
-
-      val expectedJsonAfter = toJson(CachedData(addressLookupParams = Some(AddressLookupParams("", None))))
-
-      jsonAfter mustBe expectedJsonAfter
     }
 
     "remove from the cache" in {

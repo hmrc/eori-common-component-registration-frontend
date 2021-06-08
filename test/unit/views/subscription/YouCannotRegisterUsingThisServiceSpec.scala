@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_groups_cannot_register_using_this_service
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_groups_cannot_register_using_this_service
 import util.ViewSpec
 
 class YouCannotRegisterUsingThisServiceSpec extends ViewSpec {

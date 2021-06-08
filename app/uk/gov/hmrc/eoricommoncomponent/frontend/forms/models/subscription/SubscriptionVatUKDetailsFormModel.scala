@@ -29,21 +29,10 @@ case class SubscriptionVatUKDetailsFormModel(hasGbVats: Boolean, gbVats: Option[
 
 object SubscriptionVatUKDetailsFormModel {
 
-  def apply(vats: List[VatIdentification]): SubscriptionVatUKDetailsFormModel =
-    SubscriptionVatUKDetailsFormModel(vats.nonEmpty, if (vats.isEmpty) None else Some(vats))
-
   def convertRequestForGbVatsToModel(gbVatsRequest: Option[List[String]]): Option[List[VatIdentification]] =
     gbVatsRequest.map(l => l.map(id => VatIdentification.apply(Some("GB"), Some(id))))
 
   def convertModelForGbVatsToRequest(gbVatsModel: Option[List[VatIdentification]]): Option[List[String]] =
     gbVatsModel.map(list => list.map(id => id.number.getOrElse("")))
-
-  def vatsToStringLists(vatIds: List[VatIdentification]): Option[(List[String], List[String])] =
-    vatIds match {
-      case Nil => None
-      case _ =>
-        val (countryCodes, numbers) = vatIds.map(id => id.countryCode.getOrElse("") -> id.number.getOrElse("")).unzip
-        Some(countryCodes -> numbers)
-    }
 
 }

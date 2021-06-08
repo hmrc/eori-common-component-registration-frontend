@@ -25,15 +25,13 @@ import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.OrganisationTypeController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.OrganisationTypeController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegistrationDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.organisation_type
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -47,14 +45,12 @@ class OrganisationTypeViewSpec
   private val mockAuthConnector              = mock[AuthConnector]
   private val mockAuthAction                 = authAction(mockAuthConnector)
   private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val organisationTypeView           = instanceOf[organisation_type]
 
   private val organisationTypeController = new OrganisationTypeController(
     mockAuthAction,
-    mockSubscriptionFlowManager,
     mockRequestSessionData,
     mcc,
     organisationTypeView,
@@ -62,10 +58,17 @@ class OrganisationTypeViewSpec
     mockSubscriptionDetailsService
   )
 
-  override def beforeEach(): Unit = {
-    reset(mockAuthConnector, mockRequestSessionData)
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
     when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(Future.successful(None))
+  }
+
+  override protected def afterEach(): Unit = {
+    reset(mockAuthConnector, mockRequestSessionData)
+
+    super.afterEach()
   }
 
   "Organisation Type Form" should {
@@ -129,7 +132,7 @@ class OrganisationTypeViewSpec
     val request = maybeOrgType.map { orgType =>
       SessionBuilder.buildRequestWithSessionAndOrgType(userId, orgType.id)
     }.getOrElse(SessionBuilder.buildRequestWithSession(userId))
-    test(organisationTypeController.form(atarService, Journey.Register).apply(request))
+    test(organisationTypeController.form(atarService).apply(request))
   }
 
 }

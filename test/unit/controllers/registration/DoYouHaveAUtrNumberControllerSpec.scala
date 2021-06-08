@@ -26,12 +26,11 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.DoYouHaveAUtrNumberController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_organisation_utr
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -68,7 +67,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.form(CdsOrganisationType.CharityPublicBodyNotForProfitId, atarService, Journey.Register)
+      controller.form(CdsOrganisationType.CharityPublicBodyNotForProfitId, atarService)
     )
 
     "display the form" in {
@@ -89,7 +88,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(CdsOrganisationType.CharityPublicBodyNotForProfitId, atarService, Journey.Register)
+      controller.submit(CdsOrganisationType.CharityPublicBodyNotForProfitId, atarService)
     )
   }
 
@@ -246,9 +245,7 @@ class DoYouHaveAUtrNumberControllerSpec
   def showForm(organisationType: String, userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     val result =
-      controller.form(organisationType, atarService, Journey.Register).apply(
-        SessionBuilder.buildRequestWithSession(userId)
-      )
+      controller.form(organisationType, atarService).apply(SessionBuilder.buildRequestWithSession(userId))
     test(result)
   }
 
@@ -260,7 +257,7 @@ class DoYouHaveAUtrNumberControllerSpec
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
-      .submit(organisationType, atarService, Journey.Register, isInReviewMode)
+      .submit(organisationType, atarService, isInReviewMode)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)
   }

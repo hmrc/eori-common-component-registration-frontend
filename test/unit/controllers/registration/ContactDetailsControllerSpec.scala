@@ -26,16 +26,16 @@ import org.scalatest.prop.TableFor3
 import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.ContactDetailsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.contact_details
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_details
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import unit.controllers.subscription.SubscriptionFlowSpec

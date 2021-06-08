@@ -19,7 +19,7 @@ package unit.views.registration
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.subscription_outcome
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription_outcome
 import util.ViewSpec
 
 class SubscriptionCompleteSpec extends ViewSpec {

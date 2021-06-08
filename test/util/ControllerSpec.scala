@@ -115,25 +115,6 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
       )
     }
 
-  protected def assertNotLoggedInAndCdsEnrolmentChecksForSubscribe(
-    mockAuthConnector: AuthConnector,
-    action: Action[AnyContent]
-  ): Unit =
-    "redirect to GG login when request is not authenticated when the Journey is for a Subscription Journey" in {
-      AuthBuilder.withNotLoggedInUser(mockAuthConnector)
-
-      val result = action.apply(
-        SessionBuilder.buildRequestWithSessionAndPathNoUser(
-          method = "GET",
-          path = s"/customs-registration-services/atar/subscribe/"
-        )
-      )
-      status(result) shouldBe SEE_OTHER
-      header(LOCATION, result).get should include(
-        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6751%2Fcustoms-registration-services%2Fatar%2Fsubscribe&origin=eori-common-component-registration-frontend"
-      )
-    }
-
   // TODO This trait is used in only one controller, extract the necessary logic and use in the test, rest to remove
   trait AbstractControllerFixture[C <: FrontendController] {
     val mockAuthConnector = mock[AuthConnector]

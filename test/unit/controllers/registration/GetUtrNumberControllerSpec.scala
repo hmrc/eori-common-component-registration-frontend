@@ -26,7 +26,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.GetUtrNumberController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
@@ -34,10 +34,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
   MatchingResponse,
   Organisation
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration.how_can_we_identify_you_utr
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -88,7 +87,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.form(CdsOrganisationType.CharityPublicBodyNotForProfitId, atarService, Journey.Register)
+      controller.form(CdsOrganisationType.CharityPublicBodyNotForProfitId, atarService)
     )
 
     "display the form" in {
@@ -118,7 +117,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(CdsOrganisationType.CharityPublicBodyNotForProfitId, atarService, Journey.Register)
+      controller.submit(CdsOrganisationType.CharityPublicBodyNotForProfitId, atarService)
     )
 
     "ensure UTR has been entered when organisation type is 'CdsOrganisationType.CharityPublicBodyNotForProfitId'" in {
@@ -303,9 +302,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
   def showForm(organisationType: String, userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     val result =
-      controller.form(organisationType, atarService, Journey.Register).apply(
-        SessionBuilder.buildRequestWithSession(userId)
-      )
+      controller.form(organisationType, atarService).apply(SessionBuilder.buildRequestWithSession(userId))
     test(result)
   }
 
@@ -317,7 +314,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
-      .submit(organisationType, atarService, Journey.Register, isInReviewMode)
+      .submit(organisationType, atarService, isInReviewMode)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)
   }

@@ -19,10 +19,9 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import scala.concurrent.Future
 
@@ -30,13 +29,9 @@ import scala.concurrent.Future
 class DetermineReviewPageController @Inject() (authAction: AuthAction, mcc: MessagesControllerComponents)
     extends CdsController(mcc) {
 
-  def determineRoute(service: Service, journey: Journey.Value): Action[AnyContent] =
+  def determineRoute(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { _: Request[AnyContent] => _: LoggedInUserWithEnrolments =>
-      journey match {
-        case Journey.Subscribe =>
-          Future.successful(Redirect(CheckYourDetailsController.reviewDetails(service, journey).url))
-        case _ => Future.successful(Redirect(CheckYourDetailsRegisterController.reviewDetails(service, journey).url))
-      }
+      Future.successful(Redirect(CheckYourDetailsRegisterController.reviewDetails(service).url))
     }
 
 }

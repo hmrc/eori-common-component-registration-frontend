@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.sub02_subscription_in_progress
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub02_subscription_in_progress
 import util.ViewSpec
 
 class Sub02SubscriptionInProgressSpec extends ViewSpec {
@@ -62,12 +62,12 @@ class Sub02SubscriptionInProgressSpec extends ViewSpec {
         .getElementById("what-you-think")
         .text() must include("What did you think of this service?")
       doc.getElementById("feedback_link").attributes().get("href") must endWith(
-        "/feedback/eori-common-component-subscribe-atar"
+        "/feedback/eori-common-component-register-atar"
       )
     }
   }
 
-  implicit val request = withFakeCSRF(FakeRequest.apply("GET", "/atar/subscribe"))
+  implicit val request = withFakeCSRF(FakeRequest.apply("GET", "/atar/register"))
 
   lazy val doc: Document = Jsoup.parse(contentAsString(view(name, processedDate)))
 }

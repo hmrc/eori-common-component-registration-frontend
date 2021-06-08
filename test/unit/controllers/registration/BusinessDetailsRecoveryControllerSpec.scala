@@ -23,10 +23,10 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.BusinessDetailsRecoveryController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ContactDetailsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowManager
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.DateOfEstablishmentController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessDetailsRecoveryController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -35,11 +35,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   ContactDetailsSubscriptionFlowPageGetEori,
   DateOfEstablishmentSubscriptionFlowPage
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.business_details_recovery
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -133,8 +132,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         mockSubscriptionFlowManager.startSubscriptionFlow(
           meq(Some(BusinessDetailsRecoveryPage)),
           meq(CdsOrganisationType.ThirdCountryIndividual),
-          meq(atarService),
-          meq(Journey.Register)
+          meq(atarService)
         )(any[HeaderCarrier], any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(individualDetails)
@@ -163,8 +161,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         mockSubscriptionFlowManager.startSubscriptionFlow(
           meq(Some(BusinessDetailsRecoveryPage)),
           meq(CdsOrganisationType.ThirdCountryOrganisation),
-          meq(atarService),
-          meq(Journey.Register)
+          meq(atarService)
         )(any[HeaderCarrier], any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(organisationDetails)
@@ -176,9 +173,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
       invokeContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(
-          DateOfEstablishmentController.createForm(atarService, Journey.Register).url
-        )
+        result.header.headers(LOCATION) should endWith(DateOfEstablishmentController.createForm(atarService).url)
       }
     }
 
@@ -188,20 +183,12 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def invokeConfirm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller
-        .form(atarService, Journey.Register)
-        .apply(SessionBuilder.buildRequestWithSession(userId))
-    )
+    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def invokeContinue(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller
-        .continue(atarService, Journey.Register)
-        .apply(SessionBuilder.buildRequestWithSession(userId))
-    )
+    test(controller.continue(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
 }

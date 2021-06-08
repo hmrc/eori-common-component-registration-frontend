@@ -30,27 +30,3 @@ object VatIdentification {
     new VatIdentification(Option(countryCode.toUpperCase), Option(number)) {}
 
 }
-
-case class RegisteredContact(name: String, telephone: String, fax: Option[String], email: String)
-
-object RegisteredContact {
-  implicit val jsonFormat = Json.format[RegisteredContact]
-}
-
-case class RegisteredAddress(
-  street1: String,
-  street2: Option[String],
-  city: String,
-  postcode: Option[String],
-  countryCode: String
-)
-
-object RegisteredAddress {
-  implicit val jsonFormat = Json.format[RegisteredAddress]
-}
-
-case class LegalEntity(legalEntity: String)
-
-object LegalEntity {
-  implicit val jsonFormat = Json.format[LegalEntity]
-}

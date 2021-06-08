@@ -26,24 +26,21 @@ import org.scalatest.{BeforeAndAfterEach, mock => _}
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.{
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
   CheckYourDetailsRegisterController,
   ConfirmContactDetailsController
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionPage}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.confirm_contact_details
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.{
-  sub01_outcome_processing,
-  sub01_outcome_rejected
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_contact_details
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{sub01_outcome_processing, sub01_outcome_rejected}
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -117,10 +114,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   "Reviewing the details" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.form(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
 
     "return ok when data has been provided" in {
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
@@ -237,10 +231,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   "Selecting Yes" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.submit(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
 
     "redirect to the page defined by subscription flow start when service returns NewSubscription for organisation" in {
       when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
@@ -304,8 +295,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.ConfirmIndividualTypeController
-          .form(atarService, Journey.Register)
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController
+          .form(atarService)
           .url
       }
     }
@@ -333,14 +324,14 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.ConfirmIndividualTypeController
-          .form(atarService, Journey.Register)
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController
+          .form(atarService)
           .url
       }
     }
 
     val redirectUrl =
-      uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
+      uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
         .processing(atarService)
         .url
     val subscriptionStatus = SubscriptionProcessing
@@ -405,7 +396,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         result.header.headers(
           LOCATION
         ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-          .createForm(atarService, Journey.Register)
+          .createForm(atarService)
           .url
       }
     }
@@ -429,7 +420,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         result.header.headers(
           LOCATION
         ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-          .createForm(atarService, Journey.Register)
+          .createForm(atarService)
           .url
       }
     }
@@ -441,7 +432,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData(any[LoggedInUser])(any[HeaderCarrier])
+          .clearRegistrationData()(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
       when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -454,8 +445,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.OrganisationTypeController
-          .form(atarService, Journey.Register)
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.OrganisationTypeController
+          .form(atarService)
           .url
       }
     }
@@ -466,7 +457,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData(any[LoggedInUser])(any[HeaderCarrier])
+          .clearRegistrationData()(any[HeaderCarrier])
       ).thenReturn(Future.failed(emulatedFailure))
       when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -490,7 +481,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData(any[LoggedInUser])(any[HeaderCarrier])
+          .clearRegistrationData()(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
       when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -504,7 +495,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         result.header.headers(
           LOCATION
         ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-          .createForm(atarService, Journey.Register)
+          .createForm(atarService)
           .url
       }
     }
@@ -580,7 +571,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     when(mockSubscriptionStartSession.data).thenReturn(testSessionData)
     when(
       mockSubscriptionFlowManager
-        .startSubscriptionFlow(any[Service], any[Journey.Value])(any[HeaderCarrier], any[Request[AnyContent]])
+        .startSubscriptionFlow(any[Service])(any[HeaderCarrier], any[Request[AnyContent]])
     ).thenReturn(Future.successful(mockFlowStart))
   }
 
@@ -588,7 +579,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
-        .form(atarService, Journey.Register)
+        .form(atarService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
     )
   }
@@ -600,7 +591,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
-        .submit(atarService, Journey.Register)
+        .submit(atarService)
         .apply(
           SessionBuilder.buildRequestWithSessionAndFormValues(userId, Map("yes-no-wrong-address" -> selectedOption))
         )
@@ -613,7 +604,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
-        .submit(atarService, Journey.Register)
+        .submit(atarService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
     )
   }

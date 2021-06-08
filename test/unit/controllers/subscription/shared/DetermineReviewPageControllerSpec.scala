@@ -22,7 +22,6 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DetermineReviewPageController
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -44,23 +43,7 @@ class DetermineReviewPageControllerSpec extends ControllerSpec with BeforeAndAft
 
   "Determine Review controller" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.determineRoute(atarService, Journey.Register)
-    )
-
-    "redirect to to correct page when session data is set with the key journeyType.Subscribe" in {
-      determinRouteSubscription { result =>
-        val awaitedResult = await(result)
-        status(awaitedResult) shouldBe SEE_OTHER
-        awaitedResult.header.headers.get("Location") shouldBe
-          Some(
-            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.migration.routes.CheckYourDetailsController
-              .reviewDetails(atarService, Journey.Subscribe)
-              .url
-          )
-      }
-    }
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.determineRoute(atarService))
 
     "redirect to to correct page when session data is not set with JourneyType.Subscribe" in {
 
@@ -69,8 +52,8 @@ class DetermineReviewPageControllerSpec extends ControllerSpec with BeforeAndAft
         status(awaitedResult) shouldBe SEE_OTHER
         awaitedResult.header.headers.get("Location") shouldBe
           Some(
-            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.CheckYourDetailsRegisterController
-              .reviewDetails(atarService, Journey.Register)
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.CheckYourDetailsRegisterController
+              .reviewDetails(atarService)
               .url
           )
       }
@@ -82,16 +65,7 @@ class DetermineReviewPageControllerSpec extends ControllerSpec with BeforeAndAft
     withAuthorisedUser(aUserId, mockAuthConnector)
 
     val result =
-      controller.determineRoute(atarService, Journey.Register).apply(SessionBuilder.buildRequestWithSession(aUserId))
-    test(result)
-  }
-
-  private def determinRouteSubscription(test: Future[Result] => Any) {
-    val aUserId = defaultUserId
-    withAuthorisedUser(aUserId, mockAuthConnector)
-
-    val result =
-      controller.determineRoute(atarService, Journey.Subscribe).apply(SessionBuilder.buildRequestWithSession(aUserId))
+      controller.determineRoute(atarService).apply(SessionBuilder.buildRequestWithSession(aUserId))
     test(result)
   }
 

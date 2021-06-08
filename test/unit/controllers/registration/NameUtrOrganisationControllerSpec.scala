@@ -29,13 +29,12 @@ import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.NameIdOrganisationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Utr
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.InvalidUrlValueException
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.match_name_id_organisation
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_name_id_organisation
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -58,27 +57,13 @@ class NameUtrOrganisationControllerSpec
   private val controller =
     new NameIdOrganisationController(mockAuthAction, mcc, matchNameIdOrganisationView, mockMatchingService)
 
-  private val utrDescriptionPartnership    = "Partnership Self Assessment Unique Taxpayer Reference (UTR) number"
-  private val utrDescriptionCorporationTax = "Corporation Tax Unique Taxpayer Reference (UTR) number"
-  private val utrDescriptionOrganisation   = "Organisation Self Assessment Unique Taxpayer Reference (UTR) number"
-
   private val organisationTypeOrganisations =
     Table(
-      ("organisationType", "organisation", "nameDescription", "utrDescription"),
-      ("company", CompanyOrganisation, "Registered business", utrDescriptionCorporationTax),
-      ("partnership", PartnershipOrganisation, "Registered partnership", utrDescriptionPartnership),
-      (
-        "limited-liability-partnership",
-        LimitedLiabilityPartnershipOrganisation,
-        "Registered partnership",
-        utrDescriptionPartnership
-      ),
-      (
-        "charity-public-body-not-for-profit",
-        CharityPublicBodyNotForProfitOrganisation,
-        "Organisation",
-        utrDescriptionOrganisation
-      )
+      ("organisationType", "organisation"),
+      ("company", CompanyOrganisation),
+      ("partnership", PartnershipOrganisation),
+      ("limited-liability-partnership", LimitedLiabilityPartnershipOrganisation),
+      ("charity-public-body-not-for-profit", CharityPublicBodyNotForProfitOrganisation)
     )
 
   private val NameMaxLength = 105
@@ -103,7 +88,7 @@ class NameUtrOrganisationControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.form(defaultOrganisationType, atarService, Journey.Register)
+      controller.form(defaultOrganisationType, atarService)
     )
 
     "display the form" in {
@@ -117,7 +102,7 @@ class NameUtrOrganisationControllerSpec
       }
     }
 
-    forAll(organisationTypeOrganisations) { (organisationType, _, _, _) =>
+    forAll(organisationTypeOrganisations) { (organisationType, _) =>
       s"ensure the labels are correct for $organisationType" in {
         submitForm(form = ValidNameUtrRequest + ("name" -> ""), organisationType) { result =>
           status(result) shouldBe BAD_REQUEST
@@ -201,7 +186,7 @@ class NameUtrOrganisationControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(defaultOrganisationType, atarService, Journey.Register)
+      controller.submit(defaultOrganisationType, atarService)
     )
 
     "ensure a valid Organisation Type has been passed" in {
@@ -214,7 +199,7 @@ class NameUtrOrganisationControllerSpec
       thrown.getMessage should endWith(invalidOrganisationTypeMessage(invalidOrganisationType))
     }
 
-    forAll(organisationTypeOrganisations) { (organisationType, organisation, nameDescription, utrDescription) =>
+    forAll(organisationTypeOrganisations) { (organisationType, organisation) =>
       s"ensure name has been entered when organisation type is $organisationType" in {
         submitForm(form = ValidNameUtrRequest + ("name" -> ""), organisationType) { result =>
           status(result) shouldBe BAD_REQUEST
@@ -411,11 +396,7 @@ class NameUtrOrganisationControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    test(
-      controller.form(organisationType, atarService, Journey.Register).apply(
-        SessionBuilder.buildRequestWithSession(userId)
-      )
-    )
+    test(controller.form(organisationType, atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   def submitForm(
@@ -427,7 +408,7 @@ class NameUtrOrganisationControllerSpec
 
     test(
       controller
-        .submit(organisationType, atarService, Journey.Register)
+        .submit(organisationType, atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     )
   }

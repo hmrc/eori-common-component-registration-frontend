@@ -19,7 +19,7 @@ package unit.views.subscription
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.sign_in_with_different_details
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sign_in_with_different_details
 import util.ViewSpec
 
 class SignInWithDifferentDetailsSpec extends ViewSpec {
@@ -55,7 +55,7 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
 
     "have a sign out button" in {
       docWithName.body.getElementById("sign-out-button").text mustBe "Sign out"
-      docWithName.body.getElementsByClass("button").attr("href") must endWith("/subscribe/logout")
+      docWithName.body.getElementsByClass("button").attr("href") must endWith("/register/logout")
     }
   }
 
@@ -84,7 +84,7 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
 
     "have a sign out button" in {
       docWithoutName.body.getElementById("sign-out-button").text mustBe "Sign out"
-      docWithoutName.body.getElementsByClass("button").attr("href") must endWith("/subscribe/logout")
+      docWithoutName.body.getElementsByClass("button").attr("href") must endWith("/register/logout")
     }
   }
 

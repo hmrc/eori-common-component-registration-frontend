@@ -25,7 +25,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription._
-import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object SubscriptionForm {
 
@@ -48,66 +47,6 @@ object SubscriptionForm {
     fieldName -> optional(text.verifying(messageKeyOptionInvalid, trueOrFalse))
       .verifying(messageKeyOptionInvalid, _.isDefined)
       .transform[Boolean](s => s.get == trueAnswer, b => if (b) Some(trueAnswer) else None)
-
-  val subscriptionVatUKDetailsForm: Form[SubscriptionVatUKDetailsFormModel] = {
-
-    val hasGbVatsFieldName = "vat-gb-id"
-    val gbVatsNonEmpty = Constraint(
-      (vatNumbers: List[String]) =>
-        if (vatNumbers.isEmpty) Invalid("cds.subscription.vat-uk.incomplete.entry") else Valid
-    )
-    val gbVatsMapping: (String, Mapping[Option[List[VatIdentification]]]) =
-      "vat-gb-number" -> mandatoryIf(
-        isEqual(hasGbVatsFieldName, trueAnswer),
-        mapping = list(
-          text(maxLength = 15)
-            .verifying("cds.subscription.vat-uk.required.error", _.nonEmpty)
-        ).verifying(gbVatsNonEmpty)
-      ).transform[Option[List[VatIdentification]]](
-        SubscriptionVatUKDetailsFormModel.convertRequestForGbVatsToModel,
-        SubscriptionVatUKDetailsFormModel.convertModelForGbVatsToRequest
-      )
-
-    Form(
-      mapping(trueFalseFieldMapping(hasGbVatsFieldName), gbVatsMapping)(SubscriptionVatUKDetailsFormModel.apply)(
-        SubscriptionVatUKDetailsFormModel.unapply
-      )
-    )
-  }
-
-  val subscriptionVatEUDetailsForm: Form[SubscriptionVatEUDetailsFormModel] = {
-
-    val hasEuVatsFieldName = "vat-eu-id"
-    val euVatsMapping: (String, Mapping[Option[List[VatIdentification]]]) =
-
-      "eu-vats" -> mandatoryIf(
-        isEqual(hasEuVatsFieldName, trueAnswer),
-        mapping(
-          "vat-eu-country" -> list(
-            text(maxLength = 2).verifying("cds.subscription.eu-vats.vat-eu-country.required.error", _.nonEmpty)
-          ),
-          "vat-eu-number" -> list(text.verifying(validEUVATNumber))
-        )(
-          (vatCountryCodes: List[String], vatNumbers: List[String]) =>
-            SubscriptionVatEUDetailsFormModel.stringListsToVats(vatCountryCodes, vatNumbers)
-        )(SubscriptionVatEUDetailsFormModel.vatsToStringLists)
-          .verifying(
-            "cds.subscription.vat-eu.incomplete.entry",
-            vatIds =>
-              vatIds.flatMap {
-                case VatIdentification(Some(_), None) => Some(())
-                case VatIdentification(None, Some(_)) => Some(())
-                case _                                => None
-              }.isEmpty
-          )
-      )
-
-    Form(
-      mapping(trueFalseFieldMapping(hasEuVatsFieldName), euVatsMapping)(SubscriptionVatEUDetailsFormModel.apply)(
-        SubscriptionVatEUDetailsFormModel.unapply
-      )
-    )
-  }
 
   val subscriptionDateOfEstablishmentForm: Form[LocalDate] = Form(
     "date-of-establishment" -> mandatoryDateTodayOrBefore(
@@ -184,26 +123,11 @@ object SubscriptionForm {
       .verifying(errorMessage, _.fold(false)(oneOf(Set("true", "false"))))
       .transform[Boolean](str => str.contains("true"), bool => if (bool) Some("true") else Some("false"))
 
-  val eoriNumberForm = Form(
-    Forms.mapping("eori-number" -> text.verifying(validEoriWithOrWithoutGB))(EoriNumberViewModel.apply)(
-      EoriNumberViewModel.unapply
-    )
-  )
-
   val euVatForm = Form(
-    Forms.mapping("vatCountry" -> validateEuCountry, "vatNumber" -> validateEuVatNumber)(VatEUDetailsModel.apply)(
-      VatEUDetailsModel.unapply
-    )
-  )
-
-  private def validateEuVatNumber =
-    text.verifying(validEUVATNumber)
-
-  private def validateEuCountry =
-    text.verifying("cds.subscription.eu-vat-details.form-error.country", _.length == Length2)
-
-  val emailForm = Form(
-    Forms.mapping("email" -> text.verifying(validEmail))(EmailViewModel.apply)(EmailViewModel.unapply)
+    Forms.mapping(
+      "vatCountry" -> text.verifying("cds.subscription.eu-vat-details.form-error.country", _.length == Length2),
+      "vatNumber"  -> text.verifying(validEUVATNumber)
+    )(VatEUDetailsModel.apply)(VatEUDetailsModel.unapply)
   )
 
 }

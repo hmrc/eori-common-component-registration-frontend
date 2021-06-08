@@ -23,8 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.what_is_your_org_name
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
 import util.ViewSpec
 
 class MatchOrganisationNameSpec extends ViewSpec {
@@ -70,13 +69,13 @@ class MatchOrganisationNameSpec extends ViewSpec {
   lazy val doc: Document = getDoc(form)
 
   private def getDoc(form: Form[NameMatchModel]) = {
-    val result = view(false, form, organisationType, atarService, Journey.Register)
+    val result = view(false, form, organisationType, atarService)
     val doc    = Jsoup.parse(contentAsString(result))
     doc
   }
 
   lazy val docWithErrors: Document = {
-    val result = view(false, formWithError, organisationType, atarService, Journey.Register)
+    val result = view(false, formWithError, organisationType, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

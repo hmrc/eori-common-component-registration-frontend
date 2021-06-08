@@ -16,12 +16,8 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.partials.{footer, header, styles}
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.JourneyName._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.JourneyExtractor.journey
 @import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 @import uk.gov.hmrc.play.views.html.layouts.TrackingConsentSnippet
 
@@ -36,7 +32,7 @@
 @isLoggedIn = @{!request.session.isEmpty && request.session.get("authToken").isDefined}
 
 @titleWithEnding = @{
-    title + " - " + journeyName + " - " + messages("cds.end-of-title")
+    title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
 }
 
 @titleErr = @{
@@ -47,16 +43,11 @@
 }
 
 @signOutUrl = @{
-    s"/customs-registration-services/${service.code}/${journey.toString.toLowerCase}/sign-out"
+    s"/customs-registration-services/${service.code}/register/sign-out"
 }
 
 @keepAliveUrl=  @{
-    s"/customs-registration-services/${service.code}/${journey.toString.toLowerCase}/keep-alive"
-}
-
-@getHelpForm = @{
-    if(journey == Journey.Register) (reportAProblemLink(appConfig.reportAProblemPartialUrlRegister(service), appConfig.reportAProblemNonJSUrlRegister(service)))
-    else (reportAProblemLink(appConfig.reportAProblemPartialUrlSubscribe(service), appConfig.reportAProblemNonJSUrlSubscribe(service)))
+    s"/customs-registration-services/${service.code}/register/keep-alive"
 }
 
 <!DOCTYPE html>
@@ -72,7 +63,7 @@
             <!-- End Tracking Consent Snippet -->
         <title>@titleErr</title>
         @styles_di()
-        @partials.countrypickerscript(countriesInCountryPicker, journey)
+        @partials.countrypickerscript(countriesInCountryPicker)
 
     </head>
     <body class="js-no">
@@ -86,7 +77,7 @@
             <div class="grid-row">
             @content
             </div>
-            @getHelpForm
+            @reportAProblemLink(appConfig.reportAProblemPartialUrlRegister(service), appConfig.reportAProblemNonJSUrlRegister(service))
         </main>
         @footer_di(messages, request)
 

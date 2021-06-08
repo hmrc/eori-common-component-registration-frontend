@@ -21,16 +21,16 @@ import org.joda.time.{DateTime, LocalDate}
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Action, AnyContent, Request, Results}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.{
@@ -42,8 +42,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class RegisterWithoutIdWithSubscriptionServiceSpec
-    extends UnitSpec with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach {
+class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
   private val mockRegisterWithoutIdService = mock[RegisterWithoutIdService]
   private val mockSessionCache             = mock[SessionCache]
   private val mockRequestSessionData       = mock[RequestSessionData]
@@ -79,10 +78,17 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
     mockSub02Controller
   )(global)
 
-  override protected def beforeAll(): Unit =
-    when(mockLoggedInUser.userId()).thenReturn(loggedInUserId)
-
   override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
+    when(mockLoggedInUser.userId()).thenReturn(loggedInUserId)
+    when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(true))
+    mockSessionCacheRegistrationDetails()
+    when(mockRegistrationDetails.safeId).thenReturn(SafeId(""))
+  }
+
+  override protected def afterEach(): Unit = {
     reset(
       mockRegisterWithoutIdService,
       mockSessionCache,
@@ -91,10 +97,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
       mockSub02Controller,
       mockRegistrationDetails
     )
-    when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails])(any[HeaderCarrier]))
-      .thenReturn(Future.successful(true))
-    mockSessionCacheRegistrationDetails()
-    when(mockRegistrationDetails.safeId).thenReturn(SafeId(""))
+
+    super.afterEach()
   }
 
   private def mockRegisterWithoutIdOKResponse() = {
@@ -168,40 +172,9 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
 
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService, Journey.Register)(hc, rq))
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
 
-      verify(mockSub02Controller, times(1)).subscribe(any(), any())
-      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(any())
-      verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any())
-    }
-
-    "when UK, and Migration, call SUB02, do not call registerOrganisation or registerIndividual" in {
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(UserLocation.Uk))
-      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Some(CorporateBody)
-      )
-      mockRegisterWithoutIdOKResponse()
-      mockSub02ControllerCall()
-
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService, Journey.Subscribe)(hc, rq))
-
-      verify(mockSub02Controller, times(1)).subscribe(any(), any())
-      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(any())
-      verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any())
-    }
-
-    "when CorporateBody and ROW and Migration, call SUB02, do not call registerOrganisation or registerIndividual" in {
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
-        .thenReturn(Some(UserLocation.ThirdCountry))
-      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Some(CorporateBody)
-      )
-      mockRegisterWithoutIdOKResponse()
-      mockSub02ControllerCall()
-
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService, Journey.Subscribe)(hc, rq))
-
-      verify(mockSub02Controller, times(1)).subscribe(any(), any())
+      verify(mockSub02Controller, times(1)).subscribe(any())
       verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(any())
       verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any())
     }
@@ -216,9 +189,9 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
 
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService, Journey.Register)(hc, rq))
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
 
-      verify(mockSub02Controller, times(1)).subscribe(any(), any())
+      verify(mockSub02Controller, times(1)).subscribe(any())
       verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(any())
       verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any())
     }
@@ -232,10 +205,10 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
       mockSessionCacheRegistrationDetails()
       mockSessionCacheSubscriptionDetails()
 
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService, Journey.Register)(hc, rq))
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
 
       verify(mockRegisterWithoutIdService, times(1)).registerIndividual(any(), any(), any(), any(), any())(any())
-      verify(mockSub02Controller, times(1)).subscribe(any(), any())
+      verify(mockSub02Controller, times(1)).subscribe(any())
       verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(any())
       verify(mockSessionCache, times(2)).registrationDetails(any())
       verify(mockSessionCache).subscriptionDetails(any())
@@ -252,9 +225,9 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
 
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService, Journey.Register)(hc, rq))
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
 
-      verify(mockSub02Controller, times(1)).subscribe(any[Service], any[Journey.Value])
+      verify(mockSub02Controller, times(1)).subscribe(any[Service])
       verify(mockRegisterWithoutIdService, times(1)).registerOrganisation(
         anyString(),
         any(),
@@ -279,7 +252,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
       mockRegisterWithoutIdFailure()
 
       val thrown = the[RuntimeException] thrownBy {
-        await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService, Journey.Register)(hc, rq))
+        await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
       }
       thrown shouldBe emulatedFailure
     }
@@ -296,7 +269,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
       mockRegisterWithoutIdNotOKResponse()
 
       the[RuntimeException] thrownBy {
-        await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService, Journey.Register)(hc, rq))
+        await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
       } should have message "Registration of organisation FAILED"
     }
   }
@@ -304,7 +277,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec
   private def mockSub02ControllerCall() {
     val mockAction = mock[Action[AnyContent]]
     when(mockAction.apply(any[Request[AnyContent]])).thenReturn(Future.successful(Results.Ok))
-    when(mockSub02Controller.subscribe(any(), any())).thenReturn(mockAction)
+    when(mockSub02Controller.subscribe(any())).thenReturn(mockAction)
   }
 
 }

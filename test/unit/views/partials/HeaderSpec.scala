@@ -19,10 +19,8 @@ package unit.views.partials
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.GroupEnrolmentExtractor
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.EnrolmentStoreProxyService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{start, start_subscribe}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.start
 import unit.controllers.CdsPage
 import util.ControllerSpec
 import util.builders.{AuthActionMock, AuthBuilder, SessionBuilder}
@@ -35,22 +33,10 @@ class HeaderSpec extends ControllerSpec with AuthActionMock {
   private val mockAuthAction       = authAction(mockAuthConnector)
   private val mockCdsFrontendCache = mock[SessionCache]
 
-  private val mockEnrolmentStoreProxyService = mock[EnrolmentStoreProxyService]
+  private val viewStartRegister = instanceOf[start]
 
-  private val viewStartRegister       = instanceOf[start]
-  private val viewStartSubscribe      = instanceOf[start_subscribe]
-  private val groupEnrolmentExtractor = mock[GroupEnrolmentExtractor]
-
-  private val controller = new ApplicationController(
-    mockAuthAction,
-    mcc,
-    viewStartSubscribe,
-    viewStartRegister,
-    mockCdsFrontendCache,
-    groupEnrolmentExtractor,
-    mockEnrolmentStoreProxyService,
-    appConfig
-  )
+  private val controller =
+    new ApplicationController(mockAuthAction, mcc, viewStartRegister, mockCdsFrontendCache, appConfig)
 
   "Header Sign in link" should {
 
@@ -87,7 +73,7 @@ class HeaderSpec extends ControllerSpec with AuthActionMock {
       val page = CdsPage(contentAsString(result))
 
       page.getElementAttribute("//a[@id='feedback-link']", "href") should endWith(
-        "/contact/beta-feedback?service=eori-common-component-subscribe-atar"
+        "/contact/beta-feedback?service=eori-common-component-register-atar"
       )
     }
   }

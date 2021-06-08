@@ -20,9 +20,9 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-
 @this(layout_di: layout)
-@(emailForm: Form[EmailViewModel],service: Service, journey: Journey.Value)(implicit request: Request[_], messages: Messages)
+
+@(emailForm: Form[EmailViewModel],service: Service)(implicit request: Request[_], messages: Messages)
 
 @inputText(field: String, label: String, args: (Symbol, Any)*) = {
 
@@ -44,7 +44,7 @@
 
     @helpers.errorSummary(emailForm)
 
-    @helpers.form(WhatIsYourEmailController.submit(service, journey),"emailForm") {
+    @helpers.form(WhatIsYourEmailController.submit(service),"emailForm") {
 
         @CSRF.formField
 

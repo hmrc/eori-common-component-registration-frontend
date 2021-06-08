@@ -28,7 +28,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmailController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.GroupEnrolmentExtractor
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
@@ -93,119 +92,9 @@ class EmailControllerSpec
       .thenReturn(Future.successful(true))
     when(mockSave4LaterService.fetchCacheIds(any())(any()))
       .thenReturn(Future.successful(None))
-    when(groupEnrolmentExtractor.hasGroupIdEnrolmentTo(any(), any())(any()))
-      .thenReturn(Future.successful(false))
     when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
       .thenReturn(Future.successful(List.empty))
     when(mockSave4LaterService.fetchProcessingService(any())(any(), any())).thenReturn(Future.successful(None))
-  }
-
-  "Viewing the form on Subscribe" should {
-
-    "display the form with no errors" in {
-      showFormSubscription() { result =>
-        status(result) shouldBe SEE_OTHER
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(PageLevelErrorSummaryListXPath) shouldBe empty
-      }
-    }
-
-    "redirect when cache has no email status" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(None))
-      showFormSubscription() { result =>
-        status(result) shouldBe SEE_OTHER
-        await(result).header.headers("Location") should endWith("/atar/subscribe/matching/what-is-your-email")
-      }
-    }
-
-    "redirect when email not verified" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = false))))
-      when(
-        mockEmailVerificationService
-          .isEmailVerified(any[String])(any[HeaderCarrier])
-      ).thenReturn(Future.successful(Some(false)))
-      showFormSubscription() { result =>
-        status(result) shouldBe SEE_OTHER
-        await(result).header.headers("Location") should endWith("/atar/subscribe/matching/verify-your-email")
-      }
-    }
-
-    "redirect when email verified" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = true))))
-      showFormSubscription() { result =>
-        status(result) shouldBe SEE_OTHER
-        await(result).header.headers("Location") should endWith("/atar/subscribe/email-confirmed")
-      }
-    }
-
-    "block when same service subscription is in progress for group" in {
-      when(mockSave4LaterService.fetchCacheIds(any())(any()))
-        .thenReturn(Future.successful(Some(CacheIds(InternalId("int-id"), SafeId("safe-id"), Some(atarService.code)))))
-      when(mockSave4LaterService.fetchProcessingService(any())(any(), any())).thenReturn(
-        Future.successful(Some(atarService))
-      )
-      when(mockSubscriptionStatusService.getStatus(any(), any())(any()))
-        .thenReturn(Future.successful(SubscriptionProcessing))
-
-      showFormSubscription() { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("There is a problem")
-        page.getElementText(infoXpath) should include(
-          "Our records show that someone in your organisation has already applied for this service"
-        )
-      }
-    }
-
-    "block when different service subscription is in progress for group" in {
-      when(mockSave4LaterService.fetchCacheIds(any())(any()))
-        .thenReturn(Future.successful(Some(CacheIds(InternalId("int-id"), SafeId("safe-id"), Some(otherService.code)))))
-      when(mockSave4LaterService.fetchProcessingService(any())(any(), any())).thenReturn(
-        Future.successful(Some(otherService))
-      )
-      when(mockSubscriptionStatusService.getStatus(any(), any())(any()))
-        .thenReturn(Future.successful(SubscriptionProcessing))
-
-      showFormSubscription() { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("There is a problem")
-        page.getElementText(infoXpath) should include(
-          "We are currently processing a subscription request to Other Service from someone in your organisation"
-        )
-      }
-    }
-
-    "block when different subscription is in progress for user" in {
-      when(mockSave4LaterService.fetchCacheIds(any())(any()))
-        .thenReturn(Future.successful(Some(CacheIds(InternalId(defaultUserId), SafeId("safe-id"), Some("other")))))
-      when(mockSubscriptionStatusService.getStatus(any(), any())(any()))
-        .thenReturn(Future.successful(SubscriptionProcessing))
-
-      showFormSubscription() { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("There is a problem")
-        page.getElementText(infoXpath) should include(
-          "We are currently processing your subscription request to another service"
-        )
-      }
-    }
-
-    "continue when same subscription is in progress for user" in {
-      when(mockSave4LaterService.fetchCacheIds(any())(any()))
-        .thenReturn(Future.successful(Some(CacheIds(InternalId(defaultUserId), SafeId("safe-id"), Some("atar")))))
-      when(mockSubscriptionStatusService.getStatus(any(), any())(any()))
-        .thenReturn(Future.successful(SubscriptionProcessing))
-
-      showFormSubscription() { result =>
-        status(result) shouldBe SEE_OTHER
-        await(result).header.headers("Location") should endWith("/atar/subscribe/email-confirmed")
-      }
-    }
   }
 
   val atarGroupEnrolment: EnrolmentResponse =
@@ -292,19 +181,12 @@ class EmailControllerSpec
     }
   }
 
-  private def showFormSubscription(userId: String = defaultUserId)(test: Future[Result] => Any): Unit =
-    showForm(userId, Journey.Subscribe)(test)
-
   private def showFormRegister(userId: String = defaultUserId)(test: Future[Result] => Any): Unit =
-    showForm(userId, Journey.Register)(test)
+    showForm(userId)(test)
 
-  private def showForm(userId: String, journey: Journey.Value)(test: Future[Result] => Any) {
+  private def showForm(userId: String)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller
-        .form(atarService, journey)
-        .apply(SessionBuilder.buildRequestWithSessionAndPath("/atar", userId))
-    )
+    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndPath("/atar", userId)))
   }
 
 }

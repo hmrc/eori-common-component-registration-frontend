@@ -14,31 +14,17 @@
 * limitations under the License.
 *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController._
-@import views.html.language_selection
-@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EoriLanguageController._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EoriLanguageController._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController.logout
 @import uk.gov.hmrc.play.views.html.layouts.BetaBanner
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.JourneyName._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.JourneyExtractor.journey
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-
 
 @this(betaBanner_di: BetaBanner, appConfig: AppConfig)
 
 @(implicit messages: Messages, request: Request[_])
 
-
 @isLoggedIn = @{!request.session.isEmpty && request.session.get("authToken").isDefined}
-
-
-@betaFeedbackHeaderUrl = @{
-    if(journey == Journey.Register) appConfig.betaFeedBackRegister(service)
-    else appConfig.betaFeedBackSubscribe(service)
-}
 
 <header role="banner" id="global-header" class="with-proposition">
     <div class="header-wrapper">
@@ -53,13 +39,13 @@
             <div class="content">
                 <nav id="proposition-menu" class="header__menu" role="navigation">
                     <span class="header__menu__proposition-name">
-                    @journeyName
+                    @messages("cds.banner.registration")
                     </span>
                     <ul id="proposition-link" class="header__menu__proposition-links">
                         <li class="u--no-print">
-                        @if(isLoggedIn) {
-                            <a class="link--no-underline" href="@logout(service, journey)" id="sign-out">@messages("cds.sign.out")</a>
-                        }
+                            @if(isLoggedIn) {
+                                <a class="link--no-underline" href="@logout(service)" id="sign-out">@messages("cds.sign.out")</a>
+                            }
                         </li>
                     </ul>
                 </nav>
@@ -72,8 +58,8 @@
     <div class="service-info">
     @betaBanner_di(
         userLoggedIn = true,
-        betaFeedbackUrl = betaFeedbackHeaderUrl,
-        betaFeedbackUnauthenticatedUrl = betaFeedbackHeaderUrl,
+        betaFeedbackUrl = appConfig.betaFeedBackRegister(service),
+        betaFeedbackUnauthenticatedUrl = appConfig.betaFeedBackRegister(service),
         showFeedbackLinkInBetaBanner = true)
     </div>
 

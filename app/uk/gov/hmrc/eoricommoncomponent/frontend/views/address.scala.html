@@ -14,26 +14,24 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.RegistrationDetails
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionFlowInfo
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-
 @this(layout_di: layout)
-@(addressForm: Form[AddressViewModel],
-countries: List[Country],
-countriesInCountryPicker: CountriesInCountryPicker,
-isInReviewMode: Boolean,
-service: Service,
-journey: Journey.Value,
-isIndividualOrSoleTrader:Boolean,
-isPartnership:Boolean,
-isCompany:Boolean,
-isRow: Boolean = false)(implicit request: Request[_], messages: Messages)
+
+@(
+    addressForm: Form[AddressViewModel],
+    countries: List[Country],
+    countriesInCountryPicker: CountriesInCountryPicker,
+    isInReviewMode: Boolean,
+    service: Service,
+    isIndividualOrSoleTrader:Boolean,
+    isPartnership:Boolean,
+    isCompany:Boolean,
+    isRow: Boolean = false
+)(implicit request: Request[_], messages: Messages)
 
 @import views.html.helper._ 
 
@@ -84,7 +82,7 @@ isRow: Boolean = false)(implicit request: Request[_], messages: Messages)
 
     @helpers.errorSummary(addressForm)
 
-    @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.submit(isInReviewMode, service, journey), "addressDetailsForm") {
+    @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.submit(isInReviewMode, service), "addressDetailsForm") {
 
         @CSRF.formField
         <fieldset>

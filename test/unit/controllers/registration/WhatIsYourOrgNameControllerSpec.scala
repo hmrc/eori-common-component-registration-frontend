@@ -22,16 +22,14 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
-import play.api.mvc.{AnyContent, Request, Result}
+import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.WhatIsYourOrgNameController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameOrganisationMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.what_is_your_org_name
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -46,18 +44,12 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
 
   private val mockAuthConnector              = mock[AuthConnector]
   private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockNameOrganisationMatchModel = mock[NameOrganisationMatchModel]
   private val whatIsYourOrgNameView          = instanceOf[what_is_your_org_name]
 
-  private val controller = new WhatIsYourOrgNameController(
-    mockAuthAction,
-    mockRequestSessionData,
-    mcc,
-    whatIsYourOrgNameView,
-    mockSubscriptionDetailsService
-  )
+  private val controller =
+    new WhatIsYourOrgNameController(mockAuthAction, mcc, whatIsYourOrgNameView, mockSubscriptionDetailsService)
 
   private val organisationTypeOrganisations =
     Table(
@@ -106,11 +98,18 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
   private def nameError(nameDescription: String): String =
     s"Enter your registered $nameDescription name"
 
-  override def beforeEach: Unit = {
-    reset(mockRequestSessionData, mockSubscriptionDetailsService)
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
     when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier]())).thenReturn(Future.successful(()))
     when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier]()))
       .thenReturn(Future.successful(Some(mockNameOrganisationMatchModel)))
+  }
+
+  override protected def afterEach(): Unit = {
+    reset(mockSubscriptionDetailsService)
+
+    super.afterEach()
   }
 
   "Viewing the Organisation Name Matching form" should {
@@ -118,7 +117,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
     forAll(organisationTypeOrganisations) { (organisationType, _, _, _, _, reviewMode, expectedName) =>
       assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
         mockAuthConnector,
-        controller.showForm(reviewMode, organisationType, atarService, Journey.Register),
+        controller.showForm(reviewMode, organisationType, atarService),
         s", for reviewMode $reviewMode and organisationType $organisationType"
       )
 
@@ -149,7 +148,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
       (organisationType, _, nameDescription, submitLocation, userLocation, reviewMode, _) =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
           mockAuthConnector,
-          controller.submit(reviewMode, organisationType, atarService, Journey.Register),
+          controller.submit(reviewMode, organisationType, atarService),
           s", for reviewMode $reviewMode and organisationType $organisationType"
         )
 
@@ -178,8 +177,6 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         }
 
         s"redirect to the next page when successful when organisation type is $organisationType and reviewMode is $reviewMode" in {
-          when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(userLocation))
-
           submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
             status(result) shouldBe SEE_OTHER
             result.header.headers("Location") should endWith(submitLocation)
@@ -197,7 +194,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = controller
-      .showForm(isInReviewMode, organisationType, atarService, Journey.Register)
+      .showForm(isInReviewMode, organisationType, atarService)
       .apply(SessionBuilder.buildRequestWithSession(userId))
     test(result)
   }
@@ -210,7 +207,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
-      .submit(isInReviewMode, organisationType, atarService, Journey.Register)
+      .submit(isInReviewMode, organisationType, atarService)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)
   }

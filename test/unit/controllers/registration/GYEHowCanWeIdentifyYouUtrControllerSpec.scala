@@ -25,14 +25,13 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.GYEHowCanWeIdentifyYouUtrController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouUtrController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameDobMatchModel, Utr}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration.how_can_we_identify_you_utr
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -60,18 +59,12 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
   )
 
   "Viewing the form " should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.form(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
   }
 
   "Submitting the form " should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.submit(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
 
     "redirect to the Confirm page when a UTR is matched" in {
 
@@ -86,7 +79,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
           .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(true))
 
-      submitForm(Map("utr" -> utr), Journey.Register) {
+      submitForm(Map("utr" -> utr)) {
         result =>
           status(result) shouldBe SEE_OTHER
           result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/confirm"
@@ -105,7 +98,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
           .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(false))
 
-      submitForm(Map("utr" -> utr), Journey.Register) {
+      submitForm(Map("utr" -> utr)) {
         result =>
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
@@ -116,13 +109,9 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     }
   }
 
-  def submitForm(form: Map[String, String], journey: Journey.Value, userId: String = defaultUserId)(
-    test: Future[Result] => Any
-  ) {
+  def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller.submit(atarService, journey).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
-    )
+    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
 }

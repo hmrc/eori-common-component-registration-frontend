@@ -24,11 +24,9 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.GroupEnrolmentExtractor
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EnrolmentResponse
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.EnrolmentStoreProxyService
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class GroupEnrolmentExtractorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures {
@@ -39,7 +37,7 @@ class GroupEnrolmentExtractorSpec extends UnitSpec with MockitoSugar with Before
 
   private val hc = HeaderCarrier()
 
-  private val groupEnrolmentExtractor = new GroupEnrolmentExtractor(enrolmentStoreProxyService)(global)
+  private val groupEnrolmentExtractor = new GroupEnrolmentExtractor(enrolmentStoreProxyService)
 
   override protected def afterEach(): Unit = {
     reset(enrolmentStoreProxyService)
@@ -48,58 +46,6 @@ class GroupEnrolmentExtractorSpec extends UnitSpec with MockitoSugar with Before
   }
 
   "GroupEnrolmentExtractor" should {
-
-    "return false for hasGroupIdEnrolmentTo" when {
-
-      "group Id doesn't have enrolment to specific service" in {
-
-        when(enrolmentStoreProxyService.enrolmentForGroup(any(), any())(any()))
-          .thenReturn(Future.successful(None))
-
-        val result = groupEnrolmentExtractor.hasGroupIdEnrolmentTo("groupId", Service.cds)(hc)
-
-        result.futureValue shouldBe false
-      }
-    }
-
-    "return true for hasGroupIdEnrolmentTo" when {
-
-      "group Id has enrolment to specific service" in {
-
-        when(enrolmentStoreProxyService.enrolmentForGroup(any(), any())(any()))
-          .thenReturn(Future.successful(Some(enrolmentResponse)))
-
-        val result = groupEnrolmentExtractor.hasGroupIdEnrolmentTo("groupId", Service.cds)(hc)
-
-        result.futureValue shouldBe true
-      }
-    }
-
-    "return enrolmentResponse" when {
-
-      "groupId has enrolment to specfic service" in {
-
-        when(enrolmentStoreProxyService.enrolmentForGroup(any(), any())(any()))
-          .thenReturn(Future.successful(Some(enrolmentResponse)))
-
-        val result = groupEnrolmentExtractor.groupIdEnrolmentTo("groupId", Service.cds)(hc)
-
-        result.futureValue shouldBe Some(enrolmentResponse)
-      }
-    }
-
-    "return None" when {
-
-      "groupId doesn't have enrolment to specific service" in {
-
-        when(enrolmentStoreProxyService.enrolmentForGroup(any(), any())(any()))
-          .thenReturn(Future.successful(None))
-
-        val result = groupEnrolmentExtractor.groupIdEnrolmentTo("groupId", Service.cds)(hc)
-
-        result.futureValue shouldBe None
-      }
-    }
 
     "return all group enrolments" when {
 

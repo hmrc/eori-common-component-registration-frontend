@@ -32,11 +32,14 @@ class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(imp
 
   private val logger = Logger(this.getClass)
 
+  // $COVERAGE-OFF$Loggers
   private def logSuccess(method: String, url: String) =
     logger.debug(s"$method complete for call to $url")
 
   private def logFailure(method: String, url: String, e: Throwable) =
     logger.warn(s"$method request failed for call to $url: ${e.getMessage}", e)
+
+  // $COVERAGE-ON
 
   def get[T](id: String, key: String)(implicit hc: HeaderCarrier, reads: Reads[T]): Future[Option[T]] = {
     val url = s"${appConfig.handleSubscriptionBaseUrl}/save4later/$id/$key"

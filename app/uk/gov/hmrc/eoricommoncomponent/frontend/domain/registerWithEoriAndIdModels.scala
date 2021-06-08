@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import org.joda.time.DateTime
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
@@ -25,17 +24,6 @@ case class GovGatewayCredentials(email: String)
 
 object GovGatewayCredentials {
   implicit val format = Json.format[GovGatewayCredentials]
-}
-
-case class RegisterWithEoriAndIdRequestCommon(
-  receiptDate: DateTime,
-  acknowledgementReference: String,
-  requestParameters: Option[Seq[RequestParameter]] = None
-)
-
-object RegisterWithEoriAndIdRequestCommon extends CommonHeader {
-  implicit val format             = Json.format[RegisterWithEoriAndIdRequestCommon]
-  implicit val requestParamFormat = Json.format[RequestParameter]
 }
 
 case class EstablishmentAddress(
@@ -63,54 +51,6 @@ object EstablishmentAddress {
     )
   }
 
-}
-
-case class RegisterModeEori(EORI: String, fullName: String, address: EstablishmentAddress)
-
-object RegisterModeEori {
-  implicit val format = Json.format[RegisterModeEori]
-}
-
-case class RegisterWithEoriAndIdOrganisation(name: String, `type`: String)
-
-object RegisterWithEoriAndIdOrganisation {
-  implicit val formats = Json.format[RegisterWithEoriAndIdOrganisation]
-}
-
-case class RegisterModeId(
-  IDType: String,
-  IDNumber: String,
-  isNameMatched: Boolean,
-  individual: Option[Individual] = None,
-  organisation: Option[RegisterWithEoriAndIdOrganisation] = None
-) {
-  require(individual.isDefined ^ organisation.isDefined)
-}
-
-object RegisterModeId {
-  implicit val format = Json.format[RegisterModeId]
-}
-
-case class RegisterWithEoriAndIdDetail(
-  registerModeEORI: RegisterModeEori,
-  registerModeID: RegisterModeId,
-  govGatewayCredentials: Option[GovGatewayCredentials]
-)
-
-object RegisterWithEoriAndIdDetail {
-  implicit val format = Json.format[RegisterWithEoriAndIdDetail]
-}
-
-case class RegisterWithEoriAndIdRequest(requestCommon: RequestCommon, requestDetail: RegisterWithEoriAndIdDetail)
-
-object RegisterWithEoriAndIdRequest {
-  implicit val format = Json.format[RegisterWithEoriAndIdRequest]
-}
-
-case class RegisterWithEoriAndIdRequestHolder(registerWithEORIAndIDRequest: RegisterWithEoriAndIdRequest)
-
-object RegisterWithEoriAndIdRequestHolder {
-  implicit val format = Json.format[RegisterWithEoriAndIdRequestHolder]
 }
 
 case class VatIds(countryCode: String, vatNumber: String)
@@ -178,64 +118,8 @@ case class RegisterWithEoriAndIdResponse(
   responseCommon: ResponseCommon,
   responseDetail: Option[RegisterWithEoriAndIdResponseDetail],
   additionalInformation: Option[AdditionalInformation] = None
-) {
-
-  def isDoE: Boolean = {
-    val doe = for {
-      res  <- responseDetail
-      data <- res.responseData
-      doe  <- data.dateOfEstablishmentBirth
-    } yield doe
-    doe.isDefined
-  }
-
-  def isPersonType: Boolean = {
-    val pt = for {
-      res  <- responseDetail
-      data <- res.responseData
-      pt   <- data.personType
-    } yield pt
-    pt.isDefined
-  }
-
-  def isResponseData: Boolean = {
-    val data = for {
-      res  <- responseDetail
-      data <- res.responseData
-    } yield data
-    data.isDefined
-  }
-
-  def withPersonType(typeOfPerson: Option[String]): Option[RegisterWithEoriAndIdResponse] =
-    for {
-      res  <- responseDetail
-      data <- res.responseData.map(_.copy(personType = typeOfPerson.map(_.toInt)))
-    } yield this.copy(responseDetail = Some(res.copy(responseData = Some(data))))
-
-  def withDateOfEstablishment(dob: Option[String]): Option[RegisterWithEoriAndIdResponse] =
-    for {
-      res  <- responseDetail
-      data <- res.responseData.map(_.copy(dateOfEstablishmentBirth = dob))
-    } yield this.copy(responseDetail = Some(res.copy(responseData = Some(data))))
-
-  def withAdditionalInfo(request: RegisterModeId): RegisterWithEoriAndIdResponse = {
-    val customsId             = CustomsId(request.IDType, request.IDNumber)
-    val additionalInformation = AdditionalInformation(customsId, request.individual.isDefined)
-    this.copy(additionalInformation = Some(additionalInformation))
-  }
-
-}
+)
 
 object RegisterWithEoriAndIdResponse {
-  implicit val format            = Json.format[RegisterWithEoriAndIdResponse]
-  val EoriAlreadyLinked          = "600 - EORI already linked to a different ID"
-  val IDLinkedWithEori           = "602 - ID already linked to a different EORI"
-  val RejectedPreviouslyAndRetry = "601 - Rejected previously and retry failed"
-  val RequestCouldNotBeProcessed = "003 - Request could not be processed"
-}
-
-case class RegisterWithEoriAndIdResponseHolder(registerWithEORIAndIDResponse: RegisterWithEoriAndIdResponse)
-
-object RegisterWithEoriAndIdResponseHolder {
-  implicit val format = Json.format[RegisterWithEoriAndIdResponseHolder]
+  implicit val format = Json.format[RegisterWithEoriAndIdResponse]
 }

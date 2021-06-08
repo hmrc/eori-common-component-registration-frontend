@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   UnincorporatedBody
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.registration.BusinessShortNameForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.business_short_name
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_short_name
 import util.ViewSpec
 
 class BusinessShortNameViewSpec extends ViewSpec {

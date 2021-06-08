@@ -18,10 +18,10 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 
 @this(layout_di: layout, help_di: partials.if_you_need_help)
-@(service: Service, journey: Journey.Value, otherService: Option[Service])(implicit messages: Messages, request: Request[_])
+
+@(service: Service, otherService: Option[Service])(implicit messages: Messages, request: Request[_])
 
 @otherServiceName = @{
     otherService.map(other => ServiceName.longName(other)).getOrElse(messages("cds.enrolment.pending.otherService"))
@@ -30,17 +30,9 @@
 @layout_di(messages("cds.enrolment.pending.title"), suppressTelephoneNumberDetection = false) {
 <div class="column-two-thirds">
         <h1 id="page-heading" class="heading-large">@messages("cds.enrolment.pending.title")</h1>
-        @if(journey == Journey.Register) {
-            <p id="info">@messages("cds.enrolment-already-pending-against-groupid-gye.paragraph")</p>
-            <a class="button" href='@ApplicationController.logout(service, journey)' role="button">@messages("cds.sign.out")</a>
-        } else {
-          @if(otherService == Some(service)){
-              <p id="info">@messages("cds.enrolment.pending.group.sameService.paragraph1")</p>
-          } else {
-              <p id="info">@messages("cds.enrolment.pending.group.otherService.paragraph1", otherServiceName)</p>
-              <p>@messages("cds.enrolment.pending.group.otherService.paragraph2")</p>
-          }
-        }
+
+        <p id="info">@messages("cds.enrolment-already-pending-against-groupid-gye.paragraph")</p>
+        <a class="button" href='@ApplicationController.logout(service)' role="button">@messages("cds.sign.out")</a>
 
         @help_di()
 </div>

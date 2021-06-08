@@ -26,16 +26,16 @@ import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.OrganisationTypeController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.OrganisationTypeController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, RequestSessionDataKeys}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegistrationDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.organisation_type
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -59,7 +59,6 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
   private val organisationTypeController = new OrganisationTypeController(
     mockAuthAction,
-    mockSubscriptionFlowManager,
     mockRequestSessionData,
     mcc,
     organisationTypeView,
@@ -76,7 +75,8 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   private val individualXpath               = "//*[@id='organisation-type-individual']"
 
   override protected def beforeEach(): Unit = {
-    reset(mockRequestSessionData, mockRegistrationDetailsService, mockSubscriptionDetailsService)
+    super.beforeEach()
+
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
     when(
       mockRegistrationDetailsService
@@ -85,15 +85,23 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(Future.successful(None))
   }
 
+  override protected def afterEach(): Unit = {
+    reset(mockRequestSessionData, mockRegistrationDetailsService, mockSubscriptionDetailsService)
+
+    super.afterEach()
+  }
+
   "Displaying the form" should {
 
     val userLocations =
-      Table("userLocation", UserLocation.Uk, UserLocation.Eu, UserLocation.ThirdCountry)
+      Table(
+        "userLocation",
+        UserLocation.Uk,
+        UserLocation.Eu,
+        UserLocation.ThirdCountry
+      ) // TODO Add all correct locations - EU should be removed
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      organisationTypeController.form(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, organisationTypeController.form(atarService))
 
     forAll(userLocations) { userLocation =>
       s"show correct options when user has selected location of $userLocation" in {
@@ -127,11 +135,11 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      organisationTypeController.submit(atarService, Journey.Register)
+      organisationTypeController.submit(atarService)
     )
 
     "ensure an organisation type has been selected" in {
-      submitForm(Map.empty, journey = Journey.Register) { result =>
+      submitForm(Map.empty) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(EuOrgOrIndividualPage.pageLevelErrorSummaryListXPath) shouldBe ProblemWithSelectionError
@@ -153,12 +161,12 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
       )
 
     val subscriptionPage: Map[CdsOrganisationType, SubscriptionPage] = Map(
-      (CdsOrganisationType.Company, NameUtrDetailsSubscriptionFlowPage),
-      (CdsOrganisationType.SoleTrader, NameDobDetailsSubscriptionFlowPage),
-      (CdsOrganisationType.Individual, NameDobDetailsSubscriptionFlowPage),
-      (CdsOrganisationType.ThirdCountryOrganisation, NameDetailsSubscriptionFlowPage),
-      (CdsOrganisationType.ThirdCountrySoleTrader, NameDobDetailsSubscriptionFlowPage),
-      (CdsOrganisationType.ThirdCountryIndividual, NameDobDetailsSubscriptionFlowPage)
+      (CdsOrganisationType.Company, DateOfEstablishmentSubscriptionFlowPage),
+      (CdsOrganisationType.SoleTrader, ContactDetailsSubscriptionFlowPageGetEori),
+      (CdsOrganisationType.Individual, ContactDetailsSubscriptionFlowPageGetEori),
+      (CdsOrganisationType.ThirdCountryOrganisation, DateOfEstablishmentSubscriptionFlowPage),
+      (CdsOrganisationType.ThirdCountrySoleTrader, ContactDetailsSubscriptionFlowPageGetEori),
+      (CdsOrganisationType.ThirdCountryIndividual, ContactDetailsSubscriptionFlowPageGetEori)
     )
 
     forAll(urlParameters) { (cdsOrganisationType, urlParameter) =>
@@ -171,17 +179,10 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
         when(
           mockSubscriptionFlowManager
-            .startSubscriptionFlow(any(), any(), any[Service], any[Journey.Value])(
-              any[HeaderCarrier](),
-              any[Request[AnyContent]]()
-            )
+            .startSubscriptionFlow(any(), any(), any[Service])(any[HeaderCarrier](), any[Request[AnyContent]]())
         ).thenReturn(Future.successful((page, updatedMockSession)))
 
-        submitForm(
-          Map("organisation-type" -> option),
-          organisationType = Some(cdsOrganisationType),
-          journey = Journey.Register
-        ) { result =>
+        submitForm(Map("organisation-type" -> option), organisationType = Some(cdsOrganisationType)) { result =>
           status(result) shouldBe SEE_OTHER
           result.header.headers(LOCATION) should endWith(
             s"/customs-registration-services/atar/register/matching/$urlParameter"
@@ -189,59 +190,12 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         }
       }
 
-      s"return a redirect to the matching form for the correct organisation type when '$option' is selected and user Journey type is Subscribe " in {
-        val updatedMockSession =
-          Session(Map()) + (RequestSessionDataKeys.selectedOrganisationType -> CdsOrganisationType.CompanyId)
-        when(mockRequestSessionData.sessionWithOrganisationTypeAdded(any(), any())).thenReturn(updatedMockSession)
-
-        when(
-          mockSubscriptionFlowManager
-            .startSubscriptionFlow(any[Service], any[Journey.Value])(any[HeaderCarrier](), any[Request[AnyContent]]())
-        ).thenReturn(Future.successful((page, updatedMockSession)))
-
-        submitForm(
-          Map("organisation-type" -> option),
-          organisationType = Some(cdsOrganisationType),
-          journey = Journey.Subscribe
-        ) { result =>
-          status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) shouldBe page.url(atarService)
-        }
-      }
-
       s"store the correct organisation type when '$option' is selected" in {
-        submitForm(
-          Map("organisation-type" -> option),
-          organisationType = Some(cdsOrganisationType),
-          journey = Journey.Register
-        ) { result =>
+        submitForm(Map("organisation-type" -> option), organisationType = Some(cdsOrganisationType)) { result =>
           await(result) //this is needed to ensure the future is completed before the verify is called
           verify(mockRequestSessionData).sessionWithOrganisationTypeAdded(ArgumentMatchers.eq(cdsOrganisationType))(
             any[Request[AnyContent]]
           )
-        }
-      }
-
-      s"store the correct organisation type when '$option' is selected for Subscription Journey" in {
-        val updatedMockSession =
-          Session(Map()) + (RequestSessionDataKeys.selectedOrganisationType -> cdsOrganisationType.id)
-        when(
-          mockRequestSessionData
-            .sessionWithOrganisationTypeAdded(ArgumentMatchers.any[Session], ArgumentMatchers.any[CdsOrganisationType])
-        ).thenReturn(updatedMockSession)
-        when(
-          mockSubscriptionFlowManager
-            .startSubscriptionFlow(any[Service], any[Journey.Value])(any[HeaderCarrier](), any[Request[AnyContent]]())
-        ).thenReturn(Future.successful((page, updatedMockSession)))
-
-        submitForm(
-          Map("organisation-type" -> option),
-          organisationType = Some(cdsOrganisationType),
-          journey = Journey.Subscribe
-        ) { result =>
-          await(result) //this is needed to ensure the future is completed before the verify is called
-          verify(mockRequestSessionData)
-            .sessionWithOrganisationTypeAdded(ArgumentMatchers.any[Session], ArgumentMatchers.any[CdsOrganisationType])
         }
       }
     }
@@ -255,27 +209,20 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
 
-    test(
-      organisationTypeController.form(atarService, Journey.Register).apply(
-        SessionBuilder.buildRequestWithSession(userId)
-      )
-    )
+    test(organisationTypeController.form(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   def showFormWithUnauthenticatedUser(test: Future[Result] => Any) {
     withNotLoggedInUser(mockAuthConnector)
 
-    test(
-      organisationTypeController.form(atarService, Journey.Register).apply(SessionBuilder.buildRequestWithSessionNoUser)
-    )
+    test(organisationTypeController.form(atarService).apply(SessionBuilder.buildRequestWithSessionNoUser))
   }
 
   def submitForm(
     form: Map[String, String],
     userId: String = defaultUserId,
     organisationType: Option[CdsOrganisationType] = None,
-    userLocation: Option[String] = Some(UserLocation.Uk),
-    journey: Journey.Value
+    userLocation: Option[String] = Some(UserLocation.Uk)
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
@@ -287,7 +234,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
     test(
       organisationTypeController
-        .submit(atarService, journey)
+        .submit(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     )
   }

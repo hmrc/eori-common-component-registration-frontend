@@ -16,17 +16,11 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-
 @this(layout_di: layout)
-@(service: Service, journey: Journey.Value)(implicit messages: Messages, request: Request[_])
 
-@redirectUrl = @{journey match {
-    case Journey.Register => ApplicationController.startRegister(service).url
-    case Journey.Subscribe => ApplicationController.startSubscription(service).url
-}}
+@(service: Service)(implicit messages: Messages, request: Request[_])
 
 @layout_di(messages("cds.security-sign-out.heading")) {
 <div class="column-two-thirds">
@@ -34,7 +28,7 @@
         <h1 class="heading-large">@messages("cds.security-sign-out.heading")</h1>
     </header>
     <p class="form-hint" id="hint">@messages("cds.security-sign-out.note")</p>
-        <a class="button" href='@redirectUrl' role="button">@messages("cds.security-sign-in")</a>
+        <a class="button" href='@ApplicationController.startRegister(service).url' role="button">@messages("cds.security-sign-in")</a>
     @helpers.helpAndSupport()
 </div>
 }

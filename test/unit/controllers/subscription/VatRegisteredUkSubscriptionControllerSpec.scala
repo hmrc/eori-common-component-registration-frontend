@@ -23,23 +23,19 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.{
-  SubscriptionFlowManager,
-  VatRegisteredUkController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatRegisteredUkController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlow,
   SubscriptionFlowInfo,
   SubscriptionPage
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
   SubscriptionDetailsService
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_registered_uk
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -61,7 +57,14 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
 
-  override def beforeEach: Unit = {
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
+    when(mockSubscriptionDetailsService.cacheVatRegisteredUk(any[YesNo])(any[HeaderCarrier]))
+      .thenReturn(Future.successful {})
+  }
+
+  override protected def afterEach(): Unit = {
     reset(
       mockAuthConnector,
       mockSubscriptionFlowManager,
@@ -70,8 +73,8 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
       mockSubscriptionFlow,
       mockRequestSession
     )
-    when(mockSubscriptionDetailsService.cacheVatRegisteredUk(any[YesNo])(any[HeaderCarrier]))
-      .thenReturn(Future.successful {})
+
+    super.afterEach()
   }
 
   private val controller = new VatRegisteredUkController(
@@ -148,17 +151,17 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     }
   }
 
-  private def createForm(journey: Journey.Value = Journey.Register)(test: Future[Result] => Any) = {
+  private def createForm()(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
-    test(controller.createForm(atarService, journey).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
-  private def reviewForm(journey: Journey.Value = Journey.Register)(test: Future[Result] => Any) {
+  private def reviewForm()(test: Future[Result] => Any) {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
     when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[HeaderCarrier])).thenReturn(true)
-    test(controller.reviewForm(atarService, journey).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
   private def submitForm(form: Map[String, String], isInReviewMode: Boolean = false)(
@@ -168,7 +171,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     mockIsIndividual()
     test(
       controller
-        .submit(isInReviewMode: Boolean, atarService, Journey.Register)
+        .submit(isInReviewMode: Boolean, atarService)
         .apply(SessionBuilder.buildRequestWithFormValues(form))
     )
   }

@@ -58,7 +58,7 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
   implicit val mockLoggedInUser: LoggedInUser   = mock[LoggedInUser]
   implicit val mockRequest: Request[AnyContent] = mock[Request[AnyContent]]
 
-  private val mockRegistrationDetailsFunction = mock[(RegistrationDetails) => String]
+  private val mockRegistrationDetailsFunction = mock[RegistrationDetails => String]
   val registrationDetailsFunctionResult       = "Success!"
   private val mockRegistrationDetails         = mock[RegistrationDetails]
 
@@ -182,24 +182,24 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   "clearRegistrationData" should {
     "call registration data clean service" in {
-      service.clearRegistrationData(mockLoggedInUser)
+      service.clearRegistrationData()
 
-      verify(mockClearCacheAndRegistrationIdentificationService).clear(meq(mockLoggedInUser))(meq(hc))
+      verify(mockClearCacheAndRegistrationIdentificationService).clear()(meq(hc))
     }
 
     "return success when data clean succeeds" in {
-      when(mockClearCacheAndRegistrationIdentificationService.clear(meq(mockLoggedInUser))(meq(hc)))
+      when(mockClearCacheAndRegistrationIdentificationService.clear()(meq(hc)))
         .thenReturn(Future.successful(()))
 
-      await(service.clearRegistrationData(mockLoggedInUser)) should be(())
+      await(service.clearRegistrationData()) should be(())
     }
 
     "propagate error when accessing registration data clean service" in {
-      when(mockClearCacheAndRegistrationIdentificationService.clear(meq(mockLoggedInUser))(meq(hc)))
+      when(mockClearCacheAndRegistrationIdentificationService.clear()(meq(hc)))
         .thenReturn(Future.failed(emulatedFailure))
 
       val caught = intercept[Exception] {
-        await(service.clearRegistrationData(mockLoggedInUser))
+        await(service.clearRegistrationData())
       }
       caught shouldBe emulatedFailure
     }

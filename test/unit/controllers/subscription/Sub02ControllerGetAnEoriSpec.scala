@@ -27,15 +27,15 @@ import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.PdfGeneratorConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.{routes, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration.migration_success
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.xi_eori_guidance
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.xi_eori_guidance
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -58,7 +58,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val mockSubscribeOutcome           = mock[Sub02Outcome]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
-  private val migrationSuccessView            = instanceOf[migration_success]
   private val sub01OutcomeView                = instanceOf[sub01_outcome_processing]
   private val sub02RequestNotProcessed        = instanceOf[sub02_request_not_processed]
   private val sub02SubscriptionInProgressView = instanceOf[sub02_subscription_in_progress]
@@ -75,7 +74,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     mockSessionCache,
     mockSubscriptionDetailsService,
     mcc,
-    migrationSuccessView,
     sub01OutcomeView,
     sub02RequestNotProcessed,
     sub02SubscriptionInProgressView,
@@ -94,9 +92,16 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   val emulatedFailure                      = new UnsupportedOperationException("Emulated service call failure.")
 
   override def beforeEach: Unit = {
-    reset(mockAuthConnector, mockCdsSubscriber, mockPdfGeneratorService, mockSessionCache)
+    super.beforeEach()
+
     when(mockSubscriptionDetailsService.saveKeyIdentifiers(any[GroupId], any[InternalId], any[Service])(any()))
       .thenReturn(Future.successful(()))
+  }
+
+  override protected def afterEach(): Unit = {
+    reset(mockAuthConnector, mockCdsSubscriber, mockPdfGeneratorService, mockSessionCache)
+
+    super.afterEach()
   }
 
   private def assertCleanedSession(result: Future[Result]): Unit = {
@@ -109,10 +114,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   }
 
   "Subscribe" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      subscriptionController.subscribe(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, subscriptionController.subscribe(atarService))
   }
 
   "End" should {
@@ -131,11 +133,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "subscribe using selected organisation type when available" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(
         Future.successful(
           SubscriptionSuccessful(
@@ -150,21 +151,19 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         await(result)
         assertCleanedSession(result)
 
-        verify(mockCdsSubscriber).subscribeWithCachedDetails(
-          meq(Some(mockCdsOrganisationType)),
-          meq(atarService),
-          meq(Journey.Register)
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        verify(mockCdsSubscriber).subscribeWithCachedDetails(meq(Some(mockCdsOrganisationType)), meq(atarService))(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       }
     }
 
     "subscribe without a selected organisation type when selection is not available (automatic matching case)" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(
         Future.successful(
           SubscriptionSuccessful(
@@ -179,9 +178,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         await(result)
         assertCleanedSession(result)
 
-        verify(mockCdsSubscriber).subscribeWithCachedDetails(meq(None), meq(atarService), meq(Journey.Register))(
+        verify(mockCdsSubscriber).subscribeWithCachedDetails(meq(None), meq(atarService))(
           any[HeaderCarrier],
-          any[Request[AnyContent]],
           any[Messages]
         )
       }
@@ -189,11 +187,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "redirect to 'Application complete' page with EORI number when subscription successful" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(
         Future.successful(
           SubscriptionSuccessful(
@@ -215,11 +212,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "redirect to 'Registration in review' page when subscription returns pending status" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(
         Future.successful(SubscriptionPending(formBundleIdResponse, processingDate, Some(emailVerificationTimestamp)))
       )
@@ -234,11 +230,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "redirect to 'Registration rejected' page when subscription returns failed status" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(Future.successful(SubscriptionFailed("Subscription application has been rejected", processingDate)))
 
       subscribeForGetYourEORI() { result =>
@@ -251,11 +246,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "redirect to 'eori already exists' page when subscription returns failed status with EORI already exists status text" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(Future.successful(SubscriptionFailed(EoriAlreadyExists, processingDate)))
 
       subscribeForGetYourEORI() { result =>
@@ -268,11 +262,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "redirect to 'eori already associated' page when subscription returns failed status when the provided EORI already associated to Business partner record" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(Future.successful(SubscriptionFailed(EoriAlreadyAssociated, processingDate)))
 
       subscribeForGetYourEORI() { result =>
@@ -285,11 +278,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "redirect to 'subscription in-progress' page when subscription returns failed status with Subscription is already in-progress status text" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(Future.successful(SubscriptionFailed(SubscriptionInProgress, processingDate)))
 
       subscribeForGetYourEORI() { result =>
@@ -302,11 +294,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "redirect to 'request not processed' page when subscription returns failed status when the request could not be processed" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(Future.successful(SubscriptionFailed(RequestNotProcessed, processingDate)))
 
       subscribeForGetYourEORI() { result =>
@@ -315,7 +306,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.Sub02Controller
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
           .requestNotProcessed(atarService)
           .url
       }
@@ -323,11 +314,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     "fail when subscription fails unexpectedly" in {
       when(
-        mockCdsSubscriber.subscribeWithCachedDetails(
-          any[Option[CdsOrganisationType]],
-          any[Service],
-          any[Journey.Value]
-        )(any[HeaderCarrier], any[Request[AnyContent]], any[Messages])
+        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
+          any[HeaderCarrier],
+          any[Messages]
+        )
       ).thenReturn(Future.failed(emulatedFailure))
 
       val caught = intercept[Exception] {
@@ -369,7 +359,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
             "What did you think of this service?"
           )
           page.getElementsHref(RegistrationCompletePage.LeaveFeedbackLinkXpath) should endWith(
-            "/feedback/eori-common-component-subscribe-atar"
+            "/feedback/eori-common-component-register-atar"
           )
       }
     }
@@ -429,50 +419,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     }
   }
 
-  "calling migrationEnd on Sub02Controller" should {
-    val sub02Outcome = Sub02Outcome("testDate", "testFullName", Some("EoriTest"))
-
-    "render page with name for UK location" in {
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some("uk"))
-      when(mockSubscriptionDetailsService.cachedCustomsId(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(Utr("someUtr"))))
-      mockNameAndSub02OutcomeRetrieval
-      when(mockSessionCache.sub02Outcome(any[HeaderCarrier])).thenReturn(Future.successful(sub02Outcome))
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
-      when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[HeaderCarrier])).thenReturn(Future.successful(true))
-      invokeMigrationEnd { result =>
-        assertCleanedSession(result)
-        status(result) shouldBe OK
-      }
-    }
-
-    "render page with name for ROW location when customsId exists" in {
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some("eu"))
-      when(mockSubscriptionDetailsService.cachedCustomsId(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(Utr("someUtr"))))
-      mockNameAndSub02OutcomeRetrieval
-      when(mockSessionCache.sub02Outcome(any[HeaderCarrier])).thenReturn(Future.successful(sub02Outcome))
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
-      when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[HeaderCarrier])).thenReturn(Future.successful(true))
-      invokeMigrationEnd { result =>
-        assertCleanedSession(result)
-        status(result) shouldBe OK
-      }
-    }
-
-    "render page with name for ROW location when no customsId exists" in {
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some("eu"))
-      when(mockSubscriptionDetailsService.cachedCustomsId(any[HeaderCarrier])).thenReturn(Future.successful(None))
-      when(mockSessionCache.sub02Outcome(any[HeaderCarrier])).thenReturn(Future.successful(sub02Outcome))
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
-      when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[HeaderCarrier])).thenReturn(Future.successful(true))
-      invokeMigrationEnd { result =>
-        assertCleanedSession(result)
-        status(result) shouldBe OK
-      }
-    }
-  }
-
   private def mockSessionCacheForOutcomePage = {
     when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(Future.successful(mockRegDetails))
     when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[HeaderCarrier])).thenReturn(Future.successful(true))
@@ -514,14 +460,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(organisationTypeOption)
-    test(
-      subscriptionController.subscribe(atarService, Journey.Register)(SessionBuilder.buildRequestWithSession(userId))
-    )
-  }
-
-  private def invokeMigrationEnd(test: Future[Result] => Any) = {
-    withAuthorisedUser(defaultUserId, mockAuthConnector)
-    test(subscriptionController.migrationEnd(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(subscriptionController.subscribe(atarService)(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def invokeEoriAlreadyExists(test: Future[Result] => Any) = {
@@ -543,18 +482,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private def invokePending(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(subscriptionController.pending(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
-  }
-
-  private def mockNameAndSub02OutcomeRetrieval = {
-    val mrweair  = mock[RegisterWithEoriAndIdResponse]
-    val mrweaird = mock[RegisterWithEoriAndIdResponseDetail]
-    val rd       = mock[ResponseData]
-    val trader   = mock[Trader]
-    when(mockSessionCache.registerWithEoriAndIdResponse(any[HeaderCarrier])).thenReturn(Future.successful(mrweair))
-    when(mrweair.responseDetail).thenReturn(Some(mrweaird))
-    when(mrweaird.responseData).thenReturn(Some(rd))
-    when(rd.trader).thenReturn(trader)
-    when(trader.fullName).thenReturn("testName")
   }
 
 }

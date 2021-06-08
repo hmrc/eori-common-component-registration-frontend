@@ -26,11 +26,10 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.VatDetailsEuController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionVatEUDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_details_eu
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details_eu
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -272,24 +271,12 @@ class VatDetailsEuControllerSpec
 
   private def createForm()(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(
-      test(
-        controller.createForm(atarService, Journey.Register).apply(
-          SessionBuilder.buildRequestWithSession(defaultUserId)
-        )
-      )
-    )
+    await(test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
   }
 
   private def reviewForm()(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(
-      test(
-        controller.reviewForm(atarService, Journey.Register).apply(
-          SessionBuilder.buildRequestWithSession(defaultUserId)
-        )
-      )
-    )
+    await(test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
   }
 
   private def submit(form: Map[String, String], isInReviewMode: Boolean = false)(test: Future[Result] => Any) = {
@@ -297,7 +284,7 @@ class VatDetailsEuControllerSpec
     await(
       test(
         controller
-          .submit(atarService, Journey.Register, isInReviewMode: Boolean)
+          .submit(atarService, isInReviewMode: Boolean)
           .apply(SessionBuilder.buildRequestWithFormValues(form))
       )
     )
@@ -310,7 +297,7 @@ class VatDetailsEuControllerSpec
     await(
       test(
         controller
-          .submitUpdate(index, atarService, Journey.Register, isInReviewMode: Boolean)
+          .submitUpdate(index, atarService, isInReviewMode: Boolean)
           .apply(SessionBuilder.buildRequestWithFormValues(form))
       )
     )
@@ -318,13 +305,7 @@ class VatDetailsEuControllerSpec
 
   private def updateForm(index: Int)(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(
-      test(
-        controller.updateForm(index, atarService, Journey.Register).apply(
-          SessionBuilder.buildRequestWithSession(defaultUserId)
-        )
-      )
-    )
+    await(test(controller.updateForm(index, atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
   }
 
 }

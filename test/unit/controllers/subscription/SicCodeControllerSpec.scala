@@ -26,7 +26,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SicCodeController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SicCodeController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   Company,
   Individual,
@@ -36,10 +36,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.sic_code
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.StringThings._
@@ -56,13 +55,13 @@ class SicCodeControllerSpec
   protected override val formId: String = SicCodePage.formId
 
   protected override def submitInCreateModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.SicCodeController
-      .submit(isInReviewMode = false, atarService, Journey.Register)
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
+      .submit(isInReviewMode = false, atarService)
       .url
 
   protected override def submitInReviewModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.routes.SicCodeController
-      .submit(isInReviewMode = true, atarService, Journey.Register)
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
+      .submit(isInReviewMode = true, atarService)
       .url
 
   private val mockOrgTypeLookup      = mock[OrgTypeLookup]
@@ -82,7 +81,15 @@ class SicCodeControllerSpec
 
   private val emulatedFailure = new UnsupportedOperationException("Emulation of service call failure")
 
-  override def beforeEach: Unit = {
+  override protected def beforeEach: Unit = {
+    super.beforeEach()
+
+    when(mockSubscriptionBusinessService.cachedSicCode(any[HeaderCarrier])).thenReturn(None)
+    registerSaveDetailsMockSuccess()
+    setupMockSubscriptionFlowManager(SicCodeSubscriptionFlowPage)
+  }
+
+  override protected def afterEach(): Unit = {
     reset(
       mockSubscriptionBusinessService,
       mockSubscriptionFlowManager,
@@ -90,9 +97,8 @@ class SicCodeControllerSpec
       mockSubscriptionDetailsHolderService,
       mockRequestSessionData
     )
-    when(mockSubscriptionBusinessService.cachedSicCode(any[HeaderCarrier])).thenReturn(None)
-    registerSaveDetailsMockSuccess()
-    setupMockSubscriptionFlowManager(SicCodeSubscriptionFlowPage)
+
+    super.afterEach()
   }
 
   val sic = "99996"
@@ -104,10 +110,7 @@ class SicCodeControllerSpec
 
   "Subscription Sic Code form in create mode" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.createForm(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "display title as 'What is the Standard Industrial Classification (SIC) code for your organisation?' for non-partnership org type" in {
       showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company) { result =>
@@ -117,12 +120,7 @@ class SicCodeControllerSpec
     }
 
     "display correct hint text when org type is company and user location is UK" in {
-      showCreateForm(
-        orgType = CorporateBody,
-        userSelectedOrgType = Company,
-        journey = Journey.Register,
-        userLocation = Some("UK")
-      ) { result =>
+      showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company, userLocation = Some("UK")) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementText(
           sicDescriptionLabelXpath
@@ -299,7 +297,7 @@ class SicCodeControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.submit(isInReviewMode = false, atarService, Journey.Register)
+      controller.submit(isInReviewMode = false, atarService)
     )
 
     "wait until the saveSubscriptionDetailsHolder is completed before progressing" in {
@@ -334,9 +332,7 @@ class SicCodeControllerSpec
     }
 
     "redirect to review screen" in {
-      submitFormInReviewMode(populatedSicCodeFieldsMap, userSelectedOrgType = Company)(
-        verifyRedirectToReviewPage(Journey.Register)
-      )
+      submitFormInReviewMode(populatedSicCodeFieldsMap, userSelectedOrgType = Company)(verifyRedirectToReviewPage())
     }
   }
 
@@ -463,7 +459,6 @@ class SicCodeControllerSpec
     form: Map[String, String],
     userId: String = defaultUserId,
     orgType: EtmpOrganisationType = CorporateBody,
-    journey: Journey.Value = Journey.Register,
     userSelectedOrgType: CdsOrganisationType
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
@@ -474,9 +469,7 @@ class SicCodeControllerSpec
 
     test(
       controller
-        .submit(isInReviewMode = false, atarService, journey)(
-          SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-        )
+        .submit(isInReviewMode = false, atarService)(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     )
   }
 
@@ -484,7 +477,6 @@ class SicCodeControllerSpec
     form: Map[String, String],
     userId: String = defaultUserId,
     orgType: EtmpOrganisationType = CorporateBody,
-    journey: Journey.Value = Journey.Register,
     userSelectedOrgType: CdsOrganisationType
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
@@ -495,9 +487,7 @@ class SicCodeControllerSpec
 
     test(
       controller
-        .submit(isInReviewMode = true, atarService, journey)(
-          SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-        )
+        .submit(isInReviewMode = true, atarService)(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     )
   }
 
@@ -514,7 +504,6 @@ class SicCodeControllerSpec
   private def showCreateForm(
     userId: String = defaultUserId,
     orgType: EtmpOrganisationType = CorporateBody,
-    journey: Journey.Value = Journey.Register,
     userSelectedOrgType: CdsOrganisationType,
     userLocation: Option[String] = Some("uk")
   )(test: Future[Result] => Any) {
@@ -525,14 +514,13 @@ class SicCodeControllerSpec
       .thenReturn(Some(userSelectedOrgType))
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
 
-    test(controller.createForm(atarService, journey).apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def showReviewForm(
     dataToEdit: String = sic,
     userId: String = defaultUserId,
     orgType: EtmpOrganisationType = CorporateBody,
-    journey: Journey.Value = Journey.Register,
     userSelectedOrgType: CdsOrganisationType
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
@@ -542,7 +530,7 @@ class SicCodeControllerSpec
       .thenReturn(Some(userSelectedOrgType))
     when(mockSubscriptionBusinessService.getCachedSicCode(any[HeaderCarrier])).thenReturn(dataToEdit)
 
-    test(controller.reviewForm(atarService, journey).apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def verifyPrincipalEconomicActivityFieldExistsAndPopulatedCorrectly(page: CdsPage): Unit =

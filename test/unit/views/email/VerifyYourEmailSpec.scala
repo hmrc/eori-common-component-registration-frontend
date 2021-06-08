@@ -20,7 +20,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.verify_your_email
 import util.ViewSpec
 
@@ -46,13 +45,13 @@ class VerifyYourEmailSpec extends ViewSpec {
       doc.body
         .getElementById("p3")
         .select("a[href]")
-        .attr("href") mustBe "/customs-registration-services/atar/subscribe/matching/check-your-email"
+        .attr("href") mustBe "/customs-registration-services/atar/register/matching/check-your-email"
     }
   }
 
   lazy val doc: Document = {
     val email  = "test@example.com"
-    val result = view(Some(email), atarService, Journey.Subscribe)
+    val result = view(Some(email), atarService)
     Jsoup.parse(contentAsString(result))
   }
 

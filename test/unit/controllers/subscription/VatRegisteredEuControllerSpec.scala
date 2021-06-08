@@ -23,10 +23,7 @@ import org.mockito.Mockito.when
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.{
-  SubscriptionFlowManager,
-  VatRegisteredEuController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatRegisteredEuController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlow,
@@ -34,14 +31,14 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionPage
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
   SubscriptionDetailsService,
   SubscriptionVatEUDetailsService
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.vat_registered_eu
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_eu
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -182,18 +179,18 @@ class VatRegisteredEuControllerSpec extends ControllerSpec with AuthActionMock {
     }
   }
 
-  private def createForm(journey: Journey.Value = Journey.Register)(test: Future[Result] => Any) = {
+  private def createForm()(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
-    test(controller.createForm(atarService, journey).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
-  private def reviewForm(journey: Journey.Value = Journey.Register)(test: Future[Result] => Any) {
+  private def reviewForm()(test: Future[Result] => Any) {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
     when(mockSessionCache.subscriptionDetails).thenReturn(any)
     when(mockSubscriptionBusinessService.getCachedVatRegisteredEu).thenReturn(true)
-    test(controller.reviewForm(atarService, journey).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
   private def submitForm(form: Map[String, String], service: Service, isInReviewMode: Boolean = false)(
@@ -203,7 +200,7 @@ class VatRegisteredEuControllerSpec extends ControllerSpec with AuthActionMock {
     mockIsIndividual()
     test(
       controller
-        .submit(isInReviewMode: Boolean, service, Journey.Register)
+        .submit(isInReviewMode: Boolean, service)
         .apply(SessionBuilder.buildRequestWithFormValues(form))
     )
   }

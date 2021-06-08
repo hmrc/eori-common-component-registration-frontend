@@ -38,7 +38,7 @@ object AddressDetailsForm {
       )(AddressViewModel.apply)(AddressViewModel.unapply)
     )
 
-  def validLine1: Constraint[String] =
+  private def validLine1: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty     => Invalid(ValidationError("cds.subscription.address-details.street.empty.error"))
       case s if s.trim.length > 70 => Invalid(ValidationError("cds.subscription.address-details.street.too-long.error"))

@@ -20,7 +20,7 @@ import java.util.UUID
 
 import common.pages.registration.UserLocationPageOrganisation._
 import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, mock => _}
@@ -29,9 +29,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ServiceUnavailableResponse
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.UserLocationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
   ContactResponse,
@@ -44,24 +43,14 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
   ResponseDetail
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  BusinessDetailsRecoveryPage,
-  ContactDetailsSubscriptionFlowPageGetEori,
-  SubscriptionPage,
-  UserLocationPage
-}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegistrationDisplayService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration.user_location
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.{
-  sub01_outcome_processing,
-  sub01_outcome_rejected
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.user_location
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{sub01_outcome_processing, sub01_outcome_rejected}
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -81,8 +70,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockSave4LaterService          = mock[Save4LaterService]
   private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
-  private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
-  private val mockEnrolmentStoreProxyService = mock[EnrolmentStoreProxyService]
 
   private val userLocationView = instanceOf[user_location]
 
@@ -110,14 +97,9 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
   private val locationFieldName = "location"
 
-  override def beforeEach(): Unit = {
-    reset(
-      mockRequestSessionData,
-      mockSave4LaterService,
-      mockSubscriptionStatusService,
-      mockRegistrationDisplayService,
-      mockSubscriptionFlowManager
-    )
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
     when(mockRequestSessionData.sessionWithOrganisationTypeAdded(any(), any()))
       .thenReturn(Session())
     when(
@@ -128,19 +110,18 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     when(mockRegistrationDisplayService.cacheDetails(any())(any()))
       .thenReturn(Future.successful(true))
     when(mockSave4LaterService.fetchSafeId(any[GroupId]())(any[HeaderCarrier]())).thenReturn(Future.successful(None))
-    when(
-      mockEnrolmentStoreProxyService
-        .enrolmentForGroup(any(), any())(any())
-    ).thenReturn(Future.successful(None))
     when(mockSessionCache.saveRegistrationDetails(any())(any())).thenReturn(Future.successful(true))
+  }
+
+  override protected def afterEach(): Unit = {
+    reset(mockRequestSessionData, mockSave4LaterService, mockSubscriptionStatusService, mockRegistrationDisplayService)
+
+    super.afterEach()
   }
 
   "Viewing the user location form" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.form(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
     "display the form with no errors" in {
       showForm() { result =>
         status(result) shouldBe OK
@@ -152,10 +133,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
   "Submitting the form" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.submit(atarService, Journey.Register)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
 
     "ensure a location option has been selected" in {
       submitForm(Map.empty) { result =>
@@ -184,7 +162,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       submitForm(Map(locationFieldName -> UserLocation.Iom)) { result =>
         status(result) shouldBe SEE_OTHER
         val expectedUrl =
-          YouNeedADifferentServiceIomController.form(atarService, Journey.Register).url
+          YouNeedADifferentServiceIomController.form(atarService).url
         result.header.headers(LOCATION) should endWith(expectedUrl)
       }
     }
@@ -202,24 +180,13 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     "redirect to OrganisationTypeController form when 'Iom' is selected" in {
       subscriptionStatus() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(
-          OrganisationTypeController.form(atarService, Journey.Register).url
-        )
+        result.header.headers(LOCATION) should endWith(OrganisationTypeController.form(atarService).url)
       }
     }
 
     "return IllegalStateException when invalid location is selected" in {
       val error = intercept[IllegalStateException] {
         subscriptionStatus(location = Some("location")) { result =>
-          await(result)
-        }
-      }
-      error.getMessage shouldBe "User Location not set"
-    }
-
-    "return IllegalStateException when Subscribe journey is selected and location is not set" in {
-      val error = intercept[IllegalStateException] {
-        subscriptionStatus(Journey.Subscribe, None) { result =>
           await(result)
         }
       }
@@ -245,8 +212,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     implicit val hc          = mock[HeaderCarrier]
 
     "cache registration display response and redirect to BusinessDetailsRecoveryPage for individual response" in {
-      val mockSession   = mock[Session]
-      val mockFlowStart = (BusinessDetailsRecoveryPage, mockSession)
       val responseDetail = ResponseDetail(
         "",
         None,
@@ -259,28 +224,16 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         mock[Address],
         mock[ContactResponse]
       )
-      when(
-        mockSubscriptionFlowManager.startSubscriptionFlow(
-          meq(Some(UserLocationPage)),
-          meq(CdsOrganisationType.ThirdCountryIndividual),
-          meq(atarService),
-          meq(Journey.Register)
-        )(any[HeaderCarrier], any[Request[AnyContent]])
-      ).thenReturn(Future.successful(mockFlowStart))
 
       val test =
-        controller.cacheAndRedirect(atarService, Journey.Register, "third-country")
+        controller.cacheAndRedirect(atarService, "third-country")
       val result = await(test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail)))))
 
       status(result) shouldBe SEE_OTHER
-      result.header.headers(LOCATION) should endWith(
-        BusinessDetailsRecoveryController.form(atarService, Journey.Register).url
-      )
+      result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
     }
 
     "cache registration display response and redirect to BusinessDetailsRecoveryPage for organisation response" in {
-      val mockSession   = mock[Session]
-      val mockFlowStart = (BusinessDetailsRecoveryPage, mockSession)
       val responseDetail = ResponseDetail(
         "",
         None,
@@ -294,28 +247,17 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         mock[ContactResponse]
       )
 
-      when(
-        mockSubscriptionFlowManager.startSubscriptionFlow(
-          meq(Some(UserLocationPage)),
-          meq(CdsOrganisationType.ThirdCountryOrganisation),
-          meq(atarService),
-          meq(Journey.Register)
-        )(any[HeaderCarrier], any[Request[AnyContent]])
-      ).thenReturn(Future.successful(mockFlowStart))
-
       val test =
-        controller.cacheAndRedirect(atarService, Journey.Register, "third-country")
+        controller.cacheAndRedirect(atarService, "third-country")
       val result = await(test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail)))))
 
       status(result) shouldBe SEE_OTHER
-      result.header.headers(LOCATION) should endWith(
-        BusinessDetailsRecoveryController.form(atarService, Journey.Register).url
-      )
+      result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
     }
 
     "return service unavailable response when failed to retrieve registration display response" in {
       val test =
-        controller.cacheAndRedirect(atarService, Journey.Register, "third-country")
+        controller.cacheAndRedirect(atarService, "third-country")
       val result = await(test(Left(ServiceUnavailableResponse)))
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
@@ -327,7 +269,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
     test(
       controller
-        .form(atarService, Journey.Register)
+        .form(atarService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
     )
   }
@@ -337,7 +279,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
     test(
       controller
-        .submit(atarService, Journey.Register)
+        .submit(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     )
   }
@@ -351,16 +293,13 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     )
   }
 
-  private def subscriptionStatus(
-    journey: Journey.Value = Journey.Register,
-    location: Option[String] = Some(UserLocation.Iom)
-  )(test: Future[Result] => Any) = {
+  private def subscriptionStatus(location: Option[String] = Some(UserLocation.Iom))(test: Future[Result] => Any) = {
 
     val subStatus: PreSubscriptionStatus = NewSubscription
     implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
     implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
 
-    test(controller.subscriptionStatus(subStatus, GroupId("GroupId"), atarService, journey, location)(rq, hc))
+    test(controller.subscriptionStatus(subStatus, GroupId("GroupId"), atarService, location)(rq, hc))
   }
 
   private def assertCorrectSessionDataAndRedirect(selectedOptionValue: String): Unit = {
@@ -409,19 +348,12 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) should endWith(
-            SubscriptionRecoveryController
-              .complete(atarService, Journey.Register)
-              .url
-          )
+          result.header.headers(LOCATION) should endWith(SubscriptionRecoveryController.complete(atarService).url)
         }
       }
       s"redirect to BusinessDetailsRecoveryController when NewSubscription status and registration display is enabled and when '$selectedOptionValue' is selected" in {
         val mockResponseCommon = mock[ResponseCommon]
         val mockResponseDetail = mock[ResponseDetail]
-        val mockSession        = mock[Session]
-        val mockFlowStart =
-          (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 
         when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
@@ -433,14 +365,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(
             Future.successful(Right(RegistrationDisplayResponse(mockResponseCommon, Some(mockResponseDetail))))
           )
-        when(
-          mockSubscriptionFlowManager.startSubscriptionFlow(
-            any[Option[SubscriptionPage]],
-            any[CdsOrganisationType],
-            any[Service],
-            any[Journey.Value]
-          )(any[HeaderCarrier], any[Request[AnyContent]])
-        ).thenReturn(Future.successful(mockFlowStart))
 
         val controller = new UserLocationController(
           mockAuthAction,
@@ -457,7 +381,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         ) {}
 
         val result = controller
-          .submit(atarService, Journey.Register)
+          .submit(atarService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               defaultUserId,
@@ -466,17 +390,12 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           )
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(
-          BusinessDetailsRecoveryController.form(atarService, Journey.Register).url
-        )
+        result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
       }
 
       s"redirect to BusinessDetailsRecoveryController when SubscriptionRejected status and registration display is enabled and when '$selectedOptionValue' is selected" in {
         val mockResponseCommon = mock[ResponseCommon]
         val mockResponseDetail = mock[ResponseDetail]
-        val mockSession        = mock[Session]
-        val mockFlowStart =
-          (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 
         when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
@@ -488,14 +407,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(
             Future.successful(Right(RegistrationDisplayResponse(mockResponseCommon, Some(mockResponseDetail))))
           )
-        when(
-          mockSubscriptionFlowManager.startSubscriptionFlow(
-            any[Option[SubscriptionPage]],
-            any[CdsOrganisationType],
-            any[Service],
-            any[Journey.Value]
-          )(any[HeaderCarrier], any[Request[AnyContent]])
-        ).thenReturn(Future.successful(mockFlowStart))
 
         val controller = new UserLocationController(
           mockAuthAction,
@@ -512,7 +423,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         ) {}
 
         val result = controller
-          .submit(atarService, Journey.Register)
+          .submit(atarService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               defaultUserId,
@@ -521,9 +432,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           )
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(
-          BusinessDetailsRecoveryController.form(atarService, Journey.Register).url
-        )
+        result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
       }
 
     } else if (selectedOptionValue == UserLocation.Uk)
@@ -533,7 +442,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
           status(result) shouldBe SEE_OTHER
           val expectedUrl =
-            OrganisationTypeController.form(atarService, Journey.Register).url
+            OrganisationTypeController.form(atarService).url
           result.header.headers(LOCATION) should endWith(expectedUrl)
         }
       }

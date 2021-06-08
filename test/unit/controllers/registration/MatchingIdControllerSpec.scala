@@ -24,15 +24,15 @@ import play.api.test.Helpers._
 import play.mvc.Http.Status.SEE_OTHER
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.MatchingIdController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.UserLocationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.MatchingIdController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.MatchingService
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder._
-import util.builders.{AuthActionMock, AuthBuilder, SessionBuilder}
+import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
@@ -52,9 +52,16 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
   private val controller =
     new MatchingIdController(mockAuthAction, mockFeatureFlags, mockMatchingService, mcc)(global)
 
-  override def beforeEach: Unit = {
-    reset(mockMatchingService)
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
     when(mockFeatureFlags.matchingEnabled).thenReturn(true)
+  }
+
+  override protected def afterEach(): Unit = {
+    reset(mockMatchingService)
+
+    super.afterEach()
   }
 
   "MatchingIdController for GetAnEori Journey" should {
@@ -70,7 +77,7 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
         await(controller.matchWithIdOnly(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
 
       status(result) shouldBe SEE_OTHER
-      assertRedirectToUserLocationPage(result, atarService, Journey.Register)
+      assertRedirectToUserLocationPage(result, atarService)
       verifyZeroInteractions(mockMatchingService)
     }
 
@@ -88,8 +95,8 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
-          .form(atarService, Journey.Register)
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
+          .form(atarService)
           .url
       )
     }
@@ -109,7 +116,7 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
       val result = await(controller.matchWithIdOnly(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
 
       status(result) shouldBe SEE_OTHER
-      assertRedirectToUserLocationPage(result, atarService, Journey.Register)
+      assertRedirectToUserLocationPage(result, atarService)
     }
 
     "for Journey GetAnEori redirect to Confirm page when a match found with SA UTR only" in {
@@ -126,8 +133,8 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
-          .form(atarService, Journey.Register)
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
+          .form(atarService)
           .url
       )
     }
@@ -146,8 +153,8 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
-          .form(atarService, Journey.Register)
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
+          .form(atarService)
           .url
       )
     }
@@ -166,73 +173,14 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.routes.ConfirmContactDetailsController
-          .form(atarService, Journey.Register)
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
+          .form(atarService)
           .url
       )
     }
   }
 
-  "MatchingIdController for Subscribe Journey" should {
-
-    "redirect to GG login when request is not authenticated with redirect to based in UK" in {
-      AuthBuilder.withNotLoggedInUser(mockAuthConnector)
-
-      val result = controller
-        .matchWithIdOnlyForExistingReg(atarService)
-        .apply(
-          SessionBuilder.buildRequestWithSessionAndPathNoUserAndBasedInUkNotSelected(
-            method = "GET",
-            path = "/customs-registration-services/atar/subscribe"
-          )
-        )
-      status(result) shouldBe SEE_OTHER
-      result.header.headers("Location") should include(
-        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6751%2Fcustoms-registration-services%2Fatar%2Fsubscribe&origin=eori-common-component-registration-frontend"
-      )
-    }
-
-    "redirect to GG login when request is not authenticated with redirect to Subscribe when the user selects yes on based in uk" in {
-      AuthBuilder.withNotLoggedInUser(mockAuthConnector)
-
-      val result = controller
-        .matchWithIdOnlyForExistingReg(atarService)
-        .apply(
-          SessionBuilder
-            .buildRequestWithSessionAndPathNoUser(
-              method = "GET",
-              path = "/customs-registration-services/atar/subscribe"
-            )
-        )
-      status(result) shouldBe SEE_OTHER
-      result.header.headers("Location") should include(
-        "/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A6751%2Fcustoms-registration-services%2Fatar%2Fsubscribe&origin=eori-common-component-registration-frontend"
-      )
-    }
-
-    "redirect to Select Location Type page for selected journey type Subscribe " in {
-      withAuthorisedUser(userId, mockAuthConnector, ctUtrId = Some(ctUtrId))
-
-      when(
-        mockMatchingService.matchBusinessWithIdOnly(meq(Utr(ctUtrId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier]
-        )
-      )
-        .thenReturn(Future.successful(false))
-
-      val controller =
-        new MatchingIdController(mockAuthAction, mockFeatureFlags, mockMatchingService, mcc)(global)
-      val result =
-        await(
-          controller.matchWithIdOnlyForExistingReg(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
-        )
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get shouldBe "/customs-registration-services/atar/subscribe/matching/what-is-your-eori"
-    }
-  }
-
-  private def assertRedirectToUserLocationPage(result: Result, service: Service, journey: Journey.Value): Unit =
-    redirectLocation(result).get shouldBe UserLocationController.form(service, journey).url
+  private def assertRedirectToUserLocationPage(result: Result, service: Service): Unit =
+    redirectLocation(result).get shouldBe UserLocationController.form(service).url
 
 }

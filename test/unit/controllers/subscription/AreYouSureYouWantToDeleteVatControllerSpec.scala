@@ -23,11 +23,10 @@ import org.mockito.Mockito.when
 import play.api.mvc.Result
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.subscription.AreYouSureYouWantToDeleteVatController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AreYouSureYouWantToDeleteVatController
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionVatEUDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.are_you_sure_remove_vat
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.are_you_sure_remove_vat
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -205,7 +204,7 @@ class AreYouSureYouWantToDeleteVatControllerSpec extends ControllerSpec with Aut
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       controller
-        .createForm(testIndex, atarService, Journey.Register)
+        .createForm(testIndex, atarService)
         .apply(SessionBuilder.buildRequestWithSession(defaultUserId))
     )
   }
@@ -214,7 +213,7 @@ class AreYouSureYouWantToDeleteVatControllerSpec extends ControllerSpec with Aut
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       controller
-        .reviewForm(testIndex, atarService, Journey.Register)
+        .reviewForm(testIndex, atarService)
         .apply(SessionBuilder.buildRequestWithSession(defaultUserId))
     )
   }
@@ -223,7 +222,7 @@ class AreYouSureYouWantToDeleteVatControllerSpec extends ControllerSpec with Aut
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       controller
-        .submit(testIndex, atarService, Journey.Register, isInReviewMode: Boolean)
+        .submit(testIndex, atarService, isInReviewMode: Boolean)
         .apply(SessionBuilder.buildRequestWithFormValues(form))
     )
   }

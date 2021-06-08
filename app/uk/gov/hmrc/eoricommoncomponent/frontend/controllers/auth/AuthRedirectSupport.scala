@@ -19,25 +19,18 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.NoActiveSession
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.JourneyTypeFromUrl
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey.{Register, Subscribe}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
 import uk.gov.hmrc.play.bootstrap.config.AuthRedirects
 
-trait AuthRedirectSupport extends AuthRedirects with JourneyTypeFromUrl {
+trait AuthRedirectSupport extends AuthRedirects {
 
   override val config: Configuration
   override val env: Environment
 
   private def continueUrl(implicit request: Request[AnyContent]) = {
     val baseUrl = config.get[String]("external-url.company-auth-frontend.continue-url")
-    journeyFromUrl match {
-      case Subscribe =>
-        s"${baseUrl}/${service.code}/subscribe"
-      case Register =>
-        s"${baseUrl}/${service.code}/register"
-      case _ => throw new IllegalArgumentException("No valid journey found in URL: " + request.path)
-    }
+
+    s"$baseUrl/${service.code}/register"
   }
 
   def withAuthRecovery(implicit request: Request[AnyContent]): PartialFunction[Throwable, Result] = {

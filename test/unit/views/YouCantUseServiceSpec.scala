@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription.sub02_request_not_processed
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub02_request_not_processed
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_cant_use_service
 import util.ViewSpec
 
@@ -53,7 +53,7 @@ class YouCantUseServiceSpec extends ViewSpec {
     }
 
     "have a Sign out button with the correct href" in {
-      standardOrgDoc.body().getElementsByClass("button").attr("href") must endWith("/subscribe/logout")
+      standardOrgDoc.body().getElementsByClass("button").attr("href") must endWith("/register/logout")
     }
   }
 
@@ -80,7 +80,7 @@ class YouCantUseServiceSpec extends ViewSpec {
     }
 
     "have a Sign out button with the correct href" in {
-      agentDoc.body().getElementsByClass("button").attr("href") must endWith("/subscribe/logout")
+      agentDoc.body().getElementsByClass("button").attr("href") must endWith("/register/logout")
     }
   }
 

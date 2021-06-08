@@ -1,0 +1,68 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.UserLocationDetails
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+@import views.html.helper._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+
+@this(layout_di: layout, appConfig: AppConfig)
+
+@(userLocationForm: Form[UserLocationDetails], service: Service, isAffinityOrganisation: Boolean)(implicit request: Request[_], messages: Messages)
+
+@title = @{
+    if(isAffinityOrganisation) messages("cds.registration.user-location.organisation.title-and-heading")
+    else messages("cds.registration.user-location.individual.title-and-heading")
+}
+
+@validOptions = @{
+    Seq(
+        (UserLocation.Uk, messages("cds.registration.user-location.location.uk.label"), None),
+        (UserLocation.Iom, messages("cds.registration.user-location.location.isle-of-man.label"), None),
+        (UserLocation.Islands, messages("cds.registration.user-location.location.islands.label"), None),
+        (UserLocation.ThirdCountryIncEU, messages("cds.registration.user-location.location.third-country-inc-eu.label"), None)
+    )
+}
+
+@inputRadioGroup(field: String, options: Seq[(String, String, Option[String])]) = {
+@helpers.inputRadioGroup(
+    userLocationForm(field),
+    options.map { option => (option._1, option._2) },
+    options.flatMap(option => option._3.map(option._1 -> _)).toMap,
+    None,
+    '_divClass -> "form-group",
+    '_legend -> title,
+    '_isLegendH1 -> true)
+}
+
+@layout_di(title, form = Some(userLocationForm)) {
+    <div class="column-two-thirds">
+        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+
+        @helpers.errorSummary(userLocationForm, focusOverrides = Map("location" -> s"location-${validOptions.head._1}"))
+
+        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UserLocationController.submit(service), "user-location-form") {
+            @CSRF.formField
+
+            @inputRadioGroup("location", validOptions)
+
+            <input class="button" type="submit" value='@messages("cds.navigation.continue")'>
+        }
+        @helpers.helpAndSupport()
+    </div>
+}

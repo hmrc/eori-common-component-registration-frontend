@@ -24,14 +24,13 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.registration.HowCanWeIdentifyYouController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.HowCanWeIdentifyYouController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
   SubscriptionBusinessService,
   SubscriptionDetailsService
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.migration.how_can_we_identify_you
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
 import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -73,10 +72,7 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
 
   "Loading the page" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForSubscribe(
-      mockAuthConnector,
-      controller.createForm(atarService, Journey.Subscribe)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "show the form without errors" in {
       showForm(Map.empty) { result =>
@@ -89,10 +85,7 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
 
   "Submitting the form" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForSubscribe(
-      mockAuthConnector,
-      controller.submit(isInReviewMode = false, atarService, Journey.Subscribe)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
 
     "give a page level error when neither radio button is selected" in {
       submitForm(Map("ninoOrUtrRadio" -> "")) { result =>
@@ -109,85 +102,28 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
     "redirect to the 'Enter your nino' page when nino is selected" in {
       submitForm(Map("ninoOrUtrRadio" -> "nino")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/chooseid/nino"
+        result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/chooseid/nino"
       }
     }
 
     "redirect to the 'Enter your utr' page when utr is selected" in {
       submitForm(Map("ninoOrUtrRadio" -> "utr")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/chooseid/utr"
+        result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/chooseid/utr"
       }
     }
-
-    "in review mode redirect to 'Enter nino' page when nino selected" in {
-      submitFormInReviewMode(Map("ninoOrUtrRadio" -> "nino")) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/chooseid/nino/review"
-      }
-    }
-
-    "in review mode redirect to 'Enter utr' page when utr selected" in {
-      submitFormInReviewMode(Map("ninoOrUtrRadio" -> "utr")) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-registration-services/atar/subscribe/chooseid/utr/review"
-      }
-    }
-
-    "redirect to 'What information can we use to confirm your identity' page when Utr is needed to be changed" in {
-      reviewForm(Map("utr" -> "2108834503", "ninoOrUtrRadio" -> "utr")) { result =>
-        status(result) shouldBe OK
-      }
-    }
-
-    "redirect to 'What information can we use to confirm your identity' page when Nino is needed to be changed" in {
-      reviewForm(Map("nino" -> "SM2810293A", "ninoOrUtrRadio" -> "nino")) { result =>
-        status(result) shouldBe OK
-      }
-    }
-
   }
 
   def showForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionBusinessService.getCachedCustomsId(any[HeaderCarrier]))
       .thenReturn(Future.successful(Some(Utr("id"))))
-    test(
-      controller.createForm(atarService, Journey.Subscribe).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-      )
-    )
+    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
-  def submitForm(form: Map[String, String], userId: String = defaultUserId, isInReviewMode: Boolean = false)(
-    test: Future[Result] => Any
-  ) {
+  def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller
-        .submit(isInReviewMode, atarService, Journey.Subscribe)
-        .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
-    )
-  }
-
-  def submitFormInReviewMode(form: Map[String, String], userId: String = defaultUserId, isInReviewMode: Boolean = true)(
-    test: Future[Result] => Any
-  ): Unit = {
-    withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller
-        .submit(isInReviewMode, atarService, Journey.Subscribe)
-        .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
-    )
-  }
-
-  def reviewForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
-    withAuthorisedUser(userId, mockAuthConnector)
-    test(
-      controller.reviewForm(atarService, Journey.Subscribe).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-      )
-    )
+    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
 }

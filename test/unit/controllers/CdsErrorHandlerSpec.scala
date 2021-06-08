@@ -67,15 +67,6 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
       }
     }
 
-    "redirect to subscription security sign out" in {
-      val mockRegisterRequest = FakeRequest(method = "GET", "/atar/subscribe")
-
-      whenReady(cdsErrorHandler.onServerError(mockRegisterRequest, SessionTimeOutException("xyz"))) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/subscribe/display-sign-out"
-      }
-    }
-
     "Redirect to the notfound page on 404 error" in {
       whenReady(cdsErrorHandler.onClientError(mockRequest, statusCode = NOT_FOUND)) { result =>
         val page = CdsPage(contentAsString(result))

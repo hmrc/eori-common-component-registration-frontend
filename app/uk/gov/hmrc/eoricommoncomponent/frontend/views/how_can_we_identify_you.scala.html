@@ -1,0 +1,66 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NinoOrUtrChoice
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import views.html.helper._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+
+@this(layout_di: layout)
+
+@(ninoUtrForm: Form[NinoOrUtrChoice], service: Service)(implicit request: Request[_], messages: Messages)
+
+@title = @{
+    messages("subscription-journey.how-confirm-identity")
+}
+@validOptions = @{
+    Seq(
+        ("nino", messages("subscription-journey.what-is-your-nino.label"), Some(messages("subscription-journey.what-is-your-nino.hint"))),
+        ("utr", messages("subscription-journey.utr.label"), Some(messages("subscription-journey.utr.hint")))
+    )
+}
+@inputRadioGroup(field: String, options: Seq[(String, String, Option[String])]) = {
+    @helpers.inputRadioGroup(
+        ninoUtrForm(field),
+        options.map { option => (option._1, option._2) },
+        options.flatMap(option => option._3.map(option._1 -> _)).toMap,
+        None,
+        '_divClass -> "form-group",
+        '_legend -> title,
+        '_isLegendH1 -> true)
+}
+
+@layout_di(title, form = Some(ninoUtrForm)) {
+    <div class="column-two-thirds">
+        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+
+        @helpers.errorSummary(ninoUtrForm, focusOverrides = Map("ninoOrUtrRadio" -> "nino-radio"))
+
+        @helpers.form(HowCanWeIdentifyYouController.submit(service), "nino-utr-form") {
+            @CSRF.formField
+
+            @inputRadioGroup("ninoOrUtrRadio", validOptions)
+
+            <input class="button" type="submit" value='@ViewHelper.continueButtonText(false)'>
+
+            @helpers.helpAndSupport()
+        }
+    </div>
+}
+
+

@@ -20,20 +20,9 @@ import akka.routing.MurmurHash
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatIdentification
 
-case class SubscriptionVatEUDetailsFormModel(hasOtherVats: Boolean, vatIds: Option[List[VatIdentification]]) {
-
-  def toVatIds: List[VatIdentification] = (hasOtherVats, vatIds) match {
-    case (true, Some(list)) => list
-    case _                  => Nil
-  }
-
-}
+case class SubscriptionVatEUDetailsFormModel(hasOtherVats: Boolean, vatIds: Option[List[VatIdentification]])
 
 object SubscriptionVatEUDetailsFormModel {
-
-  //stupid method but the mappings are tied into this and too fragile to change
-  def apply(vatIds: List[VatIdentification]): SubscriptionVatEUDetailsFormModel =
-    SubscriptionVatEUDetailsFormModel(vatIds.nonEmpty, if (vatIds.isEmpty) None else Some(vatIds))
 
   def stringListsToVats(vatCountryCodes: List[String], vatNumbers: List[String]): List[VatIdentification] =
     vatCountryCodes.map(Some(_)).zipAll(vatNumbers.map(Some(_)), None, None).map {

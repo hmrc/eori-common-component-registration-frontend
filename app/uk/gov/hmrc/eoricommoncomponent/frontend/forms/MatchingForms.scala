@@ -24,10 +24,9 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.{JourneyType, UserLocation}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.{mandatoryDateTodayOrBefore, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
-import uk.gov.voa.play.form.ConditionalMappings._
 
 object MatchingForms {
 
@@ -84,12 +83,6 @@ object MatchingForms {
     }
   }
 
-  val journeyTypeForm: Form[JourneyTypeDetails] = Form(
-    mapping("journeytype" -> text.verifying("cds.error.option.invalid", oneOf(JourneyType.validJourneys)))(
-      JourneyTypeDetails.apply
-    )(JourneyTypeDetails.unapply)
-  )
-
   val organisationTypeDetailsForm: Form[CdsOrganisationType] = Form(
     "organisation-type" -> optional(text)
       .verifying(
@@ -120,8 +113,6 @@ object MatchingForms {
 
   private val validYesNoAnswerOptions = Set("true", "false")
 
-  def yesNoAnswerForm(implicit messages: Messages): Form[YesNo] = createYesNoAnswerForm()
-
   def disclosePersonalDetailsYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm("cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer")
 
@@ -148,15 +139,10 @@ object MatchingForms {
   def removeVatYesNoAnswer()(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm("cds.subscription.vat-details-eu.page-error.yes-no-answer")
 
-  def eoriSignoutYesNoForm()(implicit messages: Messages): Form[YesNo] =
-    createYesNoAnswerForm("ecc.unable-to-use.signout.empty")
-
   def businessShortNameYesNoForm(emptyErrorMessage: String)(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm(emptyErrorMessage)
 
-  private def createYesNoAnswerForm(
-    invalidErrorMsgKey: String = messageKeyOptionInvalid
-  )(implicit messages: Messages): Form[YesNo] = Form(
+  private def createYesNoAnswerForm(invalidErrorMsgKey: String)(implicit messages: Messages): Form[YesNo] = Form(
     mapping(
       "yes-no-answer" -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))
         .verifying(messages(invalidErrorMsgKey), _.isDefined)
@@ -233,12 +219,6 @@ object MatchingForms {
     )(NameIdOrganisationMatchModel.unapply)
   )
 
-  val nameOrganisationForm: Form[NameOrganisationMatchModel] = Form(
-    mapping("name" -> text.verifying(validBusinessName))(NameOrganisationMatchModel.apply)(
-      NameOrganisationMatchModel.unapply
-    )
-  )
-
   val ninoForm: Form[NinoMatch] = Form(
     mapping(
       "first-name" -> text.verifying(validFirstName),
@@ -258,20 +238,6 @@ object MatchingForms {
       "first-name"  -> text.verifying(validFirstName),
       "middle-name" -> optional(text.verifying(validMiddleName)),
       "last-name"   -> text.verifying(validLastName),
-      "date-of-birth" -> mandatoryDateTodayOrBefore(
-        onEmptyError = "dob.error.empty-date",
-        onInvalidDateError = "dob.error.invalid-date",
-        onDateInFutureError = "dob.error.future-date",
-        minYear = DateConverter.earliestYearDateOfBirth
-      )
-    )(NameDobMatchModel.apply)(NameDobMatchModel.unapply)
-  )
-
-  val enterNameDobFormRow: Form[NameDobMatchModel] = Form(
-    mapping(
-      "first-name"  -> text.verifying(validGivenName),
-      "middle-name" -> optional(text.verifying(validMiddleName)),
-      "last-name"   -> text.verifying(validFamilyName),
       "date-of-birth" -> mandatoryDateTodayOrBefore(
         onEmptyError = "dob.error.empty-date",
         onInvalidDateError = "dob.error.invalid-date",
@@ -444,13 +410,6 @@ object MatchingForms {
       case None => Invalid(ValidationError("cds.matching.organisation-utr.field-error.have-utr"))
       case _    => Valid
     })
-
-  val utrForm: Form[UtrMatchModel] = Form(
-    mapping(
-      "have-utr" -> optional(boolean).verifying(validHaveUtr),
-      "utr"      -> mandatoryIfTrue("have-utr", text.verifying(validUtr))
-    )(UtrMatchModel.apply)(UtrMatchModel.unapply)
-  )
 
   val haveUtrForm: Form[UtrMatchModel] = Form(
     mapping("have-utr" -> optional(boolean).verifying(validHaveUtr))(UtrMatchModel.apply)(model => Some(model.haveUtr))

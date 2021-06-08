@@ -37,7 +37,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.{AddressViewModel, VatDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpTypeOfPerson
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription._
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
@@ -65,92 +64,6 @@ class SubscriptionServiceSpec
   }
 
   "Calling Subscribe" should {
-
-    "call connector with correct values when only matching individual details with EORI are given to expect a successful subscription" in {
-      val result = makeSubscribeWhenAutoAllowed(
-        RegistrationDetailsIndividual(
-          Some(eori),
-          TaxPayerId(sapNumber),
-          SafeId("safe-id"),
-          individualName,
-          address,
-          dateOfBirth
-        ),
-        subscriptionGenerateResponse
-      )
-      assertSameJson(Json.toJson(result.actualConnectorRequest), individualAutomaticSubscriptionRequestJson)
-      result.actualServiceCallResult shouldEqual subscriptionSuccessResultIgnoreTimestamp(
-        subscriptionSuccessResult,
-        result.actualConnectorRequest
-      )
-    }
-
-    "call connector with captured email for Subscription journey" in {
-      val result = makeSubscribeWhenAutoAllowed(
-        RegistrationDetailsIndividual(
-          Some(eori),
-          TaxPayerId(sapNumber),
-          SafeId("safe-id"),
-          individualName,
-          address,
-          dateOfBirth
-        ),
-        subscriptionGenerateResponse,
-        Journey.Subscribe
-      )
-      assertSameJson(Json.toJson(result.actualConnectorRequest), individualAutomaticSubscriptionRequestJson)
-    }
-
-    "call connector with correct values when only organisation matching details with EORI and date of establishment are given" in {
-      val result = makeSubscribeWhenAutoAllowed(
-        RegistrationDetailsOrganisation(
-          Some(eori),
-          TaxPayerId(sapNumber),
-          safeId = SafeId("safe-id"),
-          businessName,
-          address,
-          Some(dateOfEstablishment),
-          Some(CorporateBody)
-        ),
-        subscriptionGenerateResponse
-      )
-
-      assertSameJson(Json.toJson(result.actualConnectorRequest), organisationAutomaticSubscriptionRequestJson)
-      result.actualServiceCallResult shouldEqual subscriptionSuccessResultIgnoreTimestamp(
-        subscriptionSuccessResult,
-        result.actualConnectorRequest
-      )
-    }
-
-    "send a request using a partial REG06 response and captured email address" in {
-      val result =
-        makeExistingRegistrationRequest(stubRegisterWithPartialResponse(), subscriptionGenerateResponse, contactEmail)
-
-      assertSameJson(
-        Json.toJson(result.actualConnectorRequest),
-        organisationAutomaticExistingRegistrationRequestJson(contactEmail)
-      )
-
-      result.actualServiceCallResult shouldBe subscriptionSuccessResultIgnoreTimestamp(
-        subscriptionSuccessResult,
-        result.actualConnectorRequest
-      )
-    }
-
-    "send a request using a complete REG06 response and captured email address" in {
-      val result =
-        makeExistingRegistrationRequest(stubRegisterWithCompleteResponse(), subscriptionGenerateResponse, contactEmail)
-
-      assertSameJson(
-        Json.toJson(result.actualConnectorRequest),
-        existingRegistrationSubcriptionRequestJson(contactEmail)
-      )
-
-      result.actualServiceCallResult shouldBe subscriptionSuccessResultIgnoreTimestamp(
-        subscriptionSuccessResult,
-        result.actualConnectorRequest
-      )
-    }
 
     "call connector with correct values when organisation type has been manually selected" in {
       val cdsOrganisationTypeGenerator             = Gen.oneOf(cdsOrganisationTypeToTypeOfPersonMap.keys.toSeq)
@@ -258,13 +171,9 @@ class SubscriptionServiceSpec
       val caught = intercept[UpstreamErrorResponse] {
         await(
           service
-            .subscribe(
-              organisationRegistrationDetails,
-              fullyPopulatedSubscriptionDetails,
-              None,
-              Journey.Register,
-              atarService
-            )(mockHeaderCarrier)
+            .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+              mockHeaderCarrier
+            )
         )
       }
       caught.statusCode shouldBe 500
@@ -280,13 +189,9 @@ class SubscriptionServiceSpec
       val caught = intercept[IllegalStateException] {
         await(
           service
-            .subscribe(
-              organisationRegistrationDetails,
-              fullyPopulatedSubscriptionDetails,
-              None,
-              Journey.Register,
-              atarService
-            )(mockHeaderCarrier)
+            .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+              mockHeaderCarrier
+            )
         )
       }
       caught.getMessage shouldEqual "POSITION parameter is missing in subscription create response"
@@ -304,13 +209,9 @@ class SubscriptionServiceSpec
         val caught = intercept[IllegalStateException] {
           await(
             service
-              .subscribe(
-                organisationRegistrationDetails,
-                fullyPopulatedSubscriptionDetails,
-                None,
-                Journey.Register,
-                atarService
-              )(mockHeaderCarrier)
+              .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+                mockHeaderCarrier
+              )
           )
         }
         caught.getMessage shouldBe "ETMPFORMBUNDLENUMBER parameter is missing in subscription create response"
@@ -334,13 +235,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe expectedFailure
@@ -357,13 +254,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe failResponse
@@ -384,13 +277,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe failResponse
@@ -407,13 +296,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe failResponse
@@ -434,13 +319,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe failResponse
@@ -459,13 +340,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe failResponse
@@ -487,13 +364,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe failResponse
@@ -512,13 +385,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe failResponse
@@ -541,13 +410,9 @@ class SubscriptionServiceSpec
 
       val res = await(
         service
-          .subscribe(
-            organisationRegistrationDetails,
-            fullyPopulatedSubscriptionDetails,
-            None,
-            Journey.Register,
-            atarService
-          )(mockHeaderCarrier)
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
       )
 
       res shouldBe failResponse
@@ -558,63 +423,17 @@ class SubscriptionServiceSpec
 
       the[IllegalStateException] thrownBy {
         val holder = fullyPopulatedSubscriptionDetails.copy(dateEstablished = None)
-        service.subscribe(organisationRegistrationDetails, holder, None, Journey.Register, atarService)(
-          mockHeaderCarrier
-        )
+        service.subscribe(organisationRegistrationDetails, holder, None, atarService)(mockHeaderCarrier)
       } should have message "Date Established must be present for an organisation subscription"
 
-    }
-
-    "throw an exception when doe/ dob is missing when subscribing" in {
-      val service = constructService(_ => None)
-      the[IllegalArgumentException] thrownBy {
-        service.existingReg(
-          stubRegisterWithPartialResponseWithNoDoe(),
-          fullyPopulatedSubscriptionDetails,
-          "",
-          atarService
-        )(mockHeaderCarrier)
-      } should have message "requirement failed"
     }
 
     "assert that Principal Economic Activity is available when subscribing for organisation" in {
       val service = constructService(_ => None)
       the[AssertionError] thrownBy {
         val holder = fullyPopulatedSubscriptionDetails.copy(sicCode = None)
-        service.subscribe(organisationRegistrationDetails, holder, None, Journey.Register, atarService)(
-          mockHeaderCarrier
-        )
+        service.subscribe(organisationRegistrationDetails, holder, None, atarService)(mockHeaderCarrier)
       } should have message "assertion failed: SicCode/Principal Economic Activity must be present for an organisation subscription"
-    }
-  }
-
-  "Calling Subscribe with service name feature disabled" should {
-
-    "call connector with without service name" in {
-
-      when(mockConfig.sub02UseServiceName).thenReturn(false)
-
-      val result = makeSubscribeWhenAutoAllowed(
-        RegistrationDetailsOrganisation(
-          Some(eori),
-          TaxPayerId(sapNumber),
-          safeId = SafeId("safe-id"),
-          businessName,
-          address,
-          Some(dateOfEstablishment),
-          Some(CorporateBody)
-        ),
-        subscriptionGenerateResponse
-      )
-
-      assertSameJson(
-        Json.toJson(result.actualConnectorRequest),
-        organisationAutomaticSubscriptionRequestWithoutServiceNameJson
-      )
-      result.actualServiceCallResult shouldEqual subscriptionSuccessResultIgnoreTimestamp(
-        subscriptionSuccessResult,
-        result.actualConnectorRequest
-      )
     }
   }
 
@@ -730,8 +549,7 @@ class SubscriptionServiceSpec
     cdsOrganisationType: Option[CdsOrganisationType],
     etmpOrganisationType: Option[EtmpOrganisationType],
     subscriptionContactDetails: ContactDetailsModel = subscriptionContactDetailsModel,
-    personalDataDisclosureConsent: Boolean = false,
-    journey: Journey.Value = Journey.Register
+    personalDataDisclosureConsent: Boolean = false
   ): Unit = {
 
     val registrationDetailsWithOrgTypeAdded =
@@ -750,8 +568,7 @@ class SubscriptionServiceSpec
       registrationDetailsWithOrgTypeAdded,
       subscriptionDetailsHolder,
       cdsOrganisationType,
-      subscriptionResponse = subscriptionGenerateResponse,
-      journey
+      subscriptionResponse = subscriptionGenerateResponse
     )
 
     result.actualServiceCallResult shouldBe subscriptionSuccessResultIgnoreTimestamp(
@@ -798,8 +615,7 @@ class SubscriptionServiceSpec
     registrationDetails: RegistrationDetails,
     subscriptionDetailsHolder: SubscriptionDetails,
     organisationType: Option[CdsOrganisationType],
-    subscriptionResponse: SubscriptionResponse,
-    journey: Journey.Value = Journey.Register
+    subscriptionResponse: SubscriptionResponse
   ): SubscriptionCallResult = {
 
     val subscribeDataCaptor = ArgumentCaptor.forClass(classOf[SubscriptionRequest])
@@ -810,50 +626,7 @@ class SubscriptionServiceSpec
     )
 
     val actualServiceCallResult = await(
-      service.subscribe(registrationDetails, subscriptionDetailsHolder, organisationType, journey, atarService)(
-        mockHeaderCarrier
-      )
-    )
-    val actualConnectorRequest = subscribeDataCaptor.getValue
-    SubscriptionCallResult(actualServiceCallResult, actualConnectorRequest)
-  }
-
-  private def makeSubscribeWhenAutoAllowed(
-    registrationDetails: RegistrationDetails,
-    subscriptionResponse: SubscriptionResponse,
-    journey: Journey.Value = Journey.Register
-  ): SubscriptionCallResult = {
-    val subscribeDataCaptor = ArgumentCaptor.forClass(classOf[SubscriptionRequest])
-    val service = constructService(
-      connectorMock =>
-        when(connectorMock.subscribe(subscribeDataCaptor.capture())(ArgumentMatchers.any()))
-          .thenReturn(Future.successful(subscriptionResponse))
-    )
-
-    val actualServiceCallResult = await(
-      service
-        .subscribeWithMandatoryOnly(registrationDetails, fullyPopulatedSubscriptionDetails, journey, atarService, None)(
-          mockHeaderCarrier
-        )
-    )
-    val actualConnectorRequest = subscribeDataCaptor.getValue
-    SubscriptionCallResult(actualServiceCallResult, actualConnectorRequest)
-  }
-
-  private def makeExistingRegistrationRequest(
-    registerWithEoriAndIdResponse: RegisterWithEoriAndIdResponse,
-    subscriptionResponse: SubscriptionResponse,
-    email: String
-  ): SubscriptionCallResult = {
-    val subscribeDataCaptor = ArgumentCaptor.forClass(classOf[SubscriptionRequest])
-    val service = constructService(
-      connectorMock =>
-        when(connectorMock.subscribe(subscribeDataCaptor.capture())(ArgumentMatchers.any()))
-          .thenReturn(Future.successful(subscriptionResponse))
-    )
-
-    val actualServiceCallResult = await(
-      service.existingReg(registerWithEoriAndIdResponse, fullyPopulatedSubscriptionDetails, email, atarService)(
+      service.subscribe(registrationDetails, subscriptionDetailsHolder, organisationType, atarService)(
         mockHeaderCarrier
       )
     )

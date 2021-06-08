@@ -51,14 +51,14 @@ class ClearCacheAndRegistrationIdentificationServiceSpec extends UnitSpec with M
       when(mockSessionCache.email).thenReturn(Future.successful("testEmail"))
       when(mockSessionCache.remove).thenReturn(Future.successful(true))
 
-      await(service.clear(mockLoggedInUser)) should be(())
+      await(service.clear()) should be(())
     }
 
     "return a failure if cache clear fails unexpectedly" in {
       when(mockSessionCache.remove).thenReturn(Future.failed(Failure))
 
       intercept[RuntimeException] {
-        await(service.clear(mockLoggedInUser))
+        await(service.clear())
       } shouldBe Failure
     }
   }

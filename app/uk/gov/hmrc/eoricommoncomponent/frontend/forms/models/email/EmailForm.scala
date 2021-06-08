@@ -45,11 +45,7 @@ object EmailForm {
     def isNo: Boolean = !isYes
   }
 
-  def confirmEmailYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] = yesNoAnswerForm()
-
-  def eoriSignoutForm()(implicit messages: Messages): Form[YesNo] = yesNoAnswerForm()
-
-  private def yesNoAnswerForm()(implicit messages: Messages): Form[YesNo] = Form(
+  def confirmEmailYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] = Form(
     mapping(
       "yes-no-answer" -> optional(
         text.verifying(

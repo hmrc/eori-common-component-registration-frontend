@@ -22,11 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.{
-  AddressViewModel,
-  CompanyRegisteredCountry,
-  VatDetails
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.{AddressViewModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.ContactDetailsAdaptor
@@ -77,26 +73,6 @@ class SubscriptionDetailsService @Inject() (
     saveSubscriptionDetails(sd => sd.copy(addressDetails = Some(noneForEmptyPostcode(address))))
   }
 
-  def cachedAddressDetails(implicit hc: HeaderCarrier): Future[Option[AddressViewModel]] =
-    sessionCache.subscriptionDetails map (_.addressDetails)
-
-  def cacheNameIdDetails(
-    nameIdOrganisationMatchModel: NameIdOrganisationMatchModel
-  )(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(nameIdOrganisationDetails = Some(nameIdOrganisationMatchModel)))
-
-  def cacheNameAndCustomsId(name: String, customsId: CustomsId)(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(
-      sd =>
-        sd.copy(
-          nameIdOrganisationDetails = Some(NameIdOrganisationMatchModel(name, customsId.id)),
-          customsId = Some(customsId)
-        )
-    )
-
-  def cachedNameIdDetails(implicit hc: HeaderCarrier): Future[Option[NameIdOrganisationMatchModel]] =
-    sessionCache.subscriptionDetails map (_.nameIdOrganisationDetails)
-
   def cacheNameDetails(
     nameOrganisationMatchModel: NameOrganisationMatchModel
   )(implicit hc: HeaderCarrier): Future[Unit] =
@@ -117,14 +93,8 @@ class SubscriptionDetailsService @Inject() (
   def cacheSicCode(sicCode: String)(implicit hc: HeaderCarrier): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(sicCode = Some(sicCode)))
 
-  def cacheEoriNumber(eoriNumber: String)(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(eoriNumber = Some(eoriNumber)))
-
   def cacheDateEstablished(date: LocalDate)(implicit hc: HeaderCarrier): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(dateEstablished = Some(date)))
-
-  def cachePersonalDataDisclosureConsent(consent: Boolean)(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(personalDataDisclosureConsent = Some(consent)))
 
   def cacheNameDobDetails(nameDob: NameDobMatchModel)(implicit hc: HeaderCarrier): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(nameDobDetails = Some(nameDob)))
@@ -132,24 +102,9 @@ class SubscriptionDetailsService @Inject() (
   def cachedNameDobDetails(implicit hc: HeaderCarrier): Future[Option[NameDobMatchModel]] =
     sessionCache.subscriptionDetails.map(_.nameDobDetails)
 
-  def cacheIdDetails(idMatchModel: IdMatchModel)(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(idDetails = Some(idMatchModel)))
-
-  def cacheCustomsId(subscriptionCustomsId: CustomsId)(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(customsId = Some(subscriptionCustomsId)))
-
   def cacheNinoOrUtrChoice(ninoOrUtrChoice: NinoOrUtrChoice)(implicit hc: HeaderCarrier): Future[Unit] =
     saveSubscriptionDetails(
       sd => sd.copy(formData = sd.formData.copy(ninoOrUtrChoice = ninoOrUtrChoice.ninoOrUtrRadio))
-    )
-
-  def cacheNinoMatchForNoAnswer(ninoMatch: Option[NinoMatchModel])(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(formData = sd.formData.copy(ninoMatch = ninoMatch), customsId = None))
-
-  def cacheUtrMatchForNoAnswer(utrMatch: Option[UtrMatchModel])(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(
-      sd =>
-        sd.copy(formData = sd.formData.copy(utrMatch = utrMatch), customsId = None, nameIdOrganisationDetails = None)
     )
 
   def cacheUtrMatch(utrMatch: Option[UtrMatchModel])(implicit hc: HeaderCarrier): Future[Unit] =
@@ -157,9 +112,6 @@ class SubscriptionDetailsService @Inject() (
 
   def cacheNinoMatch(ninoMatch: Option[NinoMatchModel])(implicit hc: HeaderCarrier): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(formData = sd.formData.copy(ninoMatch = ninoMatch)))
-
-  def clearCachedCustomsId(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(customsId = None))
 
   def cacheUkVatDetails(ukVatDetails: VatDetails)(implicit hc: HeaderCarrier): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(ukVatDetails = Some(ukVatDetails)))
@@ -192,12 +144,6 @@ class SubscriptionDetailsService @Inject() (
   def cachedCustomsId(implicit hc: HeaderCarrier): Future[Option[CustomsId]] =
     sessionCache.subscriptionDetails map (_.customsId)
 
-  def cacheExistingEoriNumber(eori: ExistingEori)(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(existingEoriNumber = Some(eori)))
-
-  def cachedExistingEoriNumber(implicit hc: HeaderCarrier): Future[Option[ExistingEori]] =
-    sessionCache.subscriptionDetails map (_.existingEoriNumber)
-
   def updateSubscriptionDetails(implicit hc: HeaderCarrier) =
     // TODO: to be refactored by redesigning the cache
     sessionCache.subscriptionDetails flatMap { subDetails =>
@@ -212,11 +158,5 @@ class SubscriptionDetailsService @Inject() (
         )
       )
     }
-
-  def cacheRegisteredCountry(country: CompanyRegisteredCountry)(implicit hc: HeaderCarrier): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(registeredCompany = Some(country)))
-
-  def cachedRegisteredCountry()(implicit hc: HeaderCarrier): Future[Option[CompanyRegisteredCountry]] =
-    sessionCache.subscriptionDetails.map(_.registeredCompany)
 
 }
