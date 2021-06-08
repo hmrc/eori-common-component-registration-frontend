@@ -24,7 +24,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.time.{Millis, Span}
-import play.api.libs.json.Reads
+import play.api.libs.json.{Json, Reads}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, GroupId, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
@@ -94,7 +94,7 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         mockSave4LaterConnector.put[EmailStatus](
           ArgumentMatchers.eq(groupId.id),
           ArgumentMatchers.eq(emailKey),
-          ArgumentMatchers.eq(emailStatus)
+          ArgumentMatchers.eq(Json.toJson(emailStatus))
         )(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
 

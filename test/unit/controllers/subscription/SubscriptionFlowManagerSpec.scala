@@ -243,7 +243,6 @@ class SubscriptionFlowManagerSpec
         expectedNextPage: SubscriptionPage
       ) =>
         when(mockRequestSessionData.userSubscriptionFlow(mockRequest)).thenReturn(flow)
-        when(mockRequestSessionData.uriBeforeSubscriptionFlow(mockRequest)).thenReturn(None)
         val actual = controller.stepInformation(currentPage)(mockRequest)
 
         s"${flow.name} flow: current step is $expectedStepNumber when currentPage is $currentPage" in {

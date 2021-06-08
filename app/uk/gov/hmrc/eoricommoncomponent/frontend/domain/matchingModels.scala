@@ -131,8 +131,6 @@ object CustomsId {
 
 case class UserLocationDetails(location: Option[String])
 
-case class JourneyTypeDetails(journeyType: String)
-
 trait NameIdOrganisationMatch {
   def name: String
   def id: String
@@ -157,17 +155,6 @@ case class NameOrganisationMatchModel(name: String) extends NameOrganisationMatc
 object NameOrganisationMatchModel {
   implicit val jsonFormat = Json.format[NameOrganisationMatchModel]
 }
-
-case class EuNameIdOrganisationMatchModel(name: String, id: String, dateEstablished: LocalDate)
-    extends NameIdOrganisationMatch
-
-case class EuIndividualMatch(
-  firstName: String,
-  middleName: Option[String],
-  lastName: String,
-  dateOfBirth: LocalDate,
-  matchingId: String
-)
 
 case class YesNo(isYes: Boolean) {
   def isNo: Boolean = !isYes

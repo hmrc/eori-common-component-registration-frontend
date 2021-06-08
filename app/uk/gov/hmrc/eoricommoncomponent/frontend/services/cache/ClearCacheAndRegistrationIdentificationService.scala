@@ -17,7 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUser
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,7 +27,7 @@ class ClearCacheAndRegistrationIdentificationService @Inject() (sessionCache: Se
 ) {
 
   // TODO Refactor this method, argument is not used
-  def clear(loggedInUser: LoggedInUser)(implicit hc: HeaderCarrier): Future[Unit] =
+  def clear()(implicit hc: HeaderCarrier): Future[Unit] =
     for {
       email <- sessionCache.email
       _     <- sessionCache.remove

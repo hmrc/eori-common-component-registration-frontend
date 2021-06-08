@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.models.enrolmentRequest
+package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
 
-case class KnownFact(identifiers: List[KeyValuePair], verifiers: List[KeyValuePair])
+case class BusinessShortName(shortNameProvided: Boolean, shortName: Option[String])
 
-object KnownFact {
-  implicit val format: OFormat[KnownFact] = Json.format[KnownFact]
+object BusinessShortName {
+  implicit val jsonFormat = Json.format[BusinessShortName]
+
+  def apply(shortName: String): BusinessShortName = BusinessShortName(true, Some(shortName))
 }

@@ -52,38 +52,6 @@ class MatchingService @Inject() (
   ): RegistrationDetails =
     detailsCreator.registrationDetails(response.registerWithIDResponse, customsId, capturedDate)
 
-  def sendOrganisationRequestForMatchingService(implicit
-    request: Request[AnyContent],
-    loggedInUser: LoggedInUserWithEnrolments,
-    headerCarrier: HeaderCarrier
-  ): Future[Boolean] =
-    for {
-      subscriptionDetailsHolder <- cache.subscriptionDetails
-      orgType = EtmpOrganisationType(
-        requestSessionData.userSelectedOrganisationType
-          .getOrElse(throw new IllegalStateException("OrganisationType number missing"))
-      ).toString
-      org = Organisation(subscriptionDetailsHolder.name, orgType)
-      eori = subscriptionDetailsHolder.eoriNumber.getOrElse(
-        throw new IllegalStateException("EORI number missing from subscription")
-      )
-      result <- matchBusiness(Eori(eori), org, subscriptionDetailsHolder.dateEstablished, GroupId(loggedInUser.groupId))
-    } yield result
-
-  def sendIndividualRequestForMatchingService(implicit
-    loggedInUser: LoggedInUserWithEnrolments,
-    headerCarrier: HeaderCarrier
-  ): Future[Boolean] =
-    for {
-      subscription <- cache.subscriptionDetails
-      nameDob = subscription.nameDobDetails.getOrElse(
-        throw new IllegalStateException("Name / DOB missing from subscription")
-      )
-      eori       = subscription.eoriNumber.getOrElse(throw new IllegalStateException("EORI number missing from subscription"))
-      individual = Individual(nameDob.firstName, None, nameDob.lastName, nameDob.dateOfBirth.toString)
-      result <- matchIndividualWithId(Eori(eori), individual, GroupId(loggedInUser.groupId))
-    } yield result
-
   def matchBusinessWithIdOnly(customsId: CustomsId, loggedInUser: LoggedInUserWithEnrolments)(implicit
     hc: HeaderCarrier
   ): Future[Boolean] =
@@ -92,19 +60,6 @@ class MatchingService @Inject() (
       foundAndStored <- storeInCacheIfFound(convert(customsId, capturedDate = None), GroupId(loggedInUser.groupId))(
         maybeMatchFound
       )
-    } yield foundAndStored
-
-  def matchBusinessWithIdOnly(
-    customsId: CustomsId,
-    loggedInUser: LoggedInUserWithEnrolments,
-    capturedDate: Option[LocalDate] = None
-  )(implicit hc: HeaderCarrier): Future[Boolean] =
-    for {
-      maybeMatchFound <- matchingConnector.lookup(idOnlyMatchRequest(customsId, loggedInUser.isAgent))
-      foundAndStored <- storeInCacheIfFound(
-        convert(customsId, capturedDate = capturedDate),
-        GroupId(loggedInUser.groupId)
-      )(maybeMatchFound)
     } yield foundAndStored
 
   def matchBusiness(customsId: CustomsId, org: Organisation, establishmentDate: Option[LocalDate], groupId: GroupId)(

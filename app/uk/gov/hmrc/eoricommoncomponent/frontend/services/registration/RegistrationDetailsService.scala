@@ -32,23 +32,11 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext) {
 
-  def cacheOrgName(orgName: String)(implicit hq: HeaderCarrier): Future[Boolean] =
-    sessionCache.registrationDetails.map {
-      case rdo: RegistrationDetailsOrganisation => rdo.copy(name = orgName)
-      case _                                    => throw new IllegalArgumentException("Expecting RegistrationDetailsOrganisation but found something else")
-    }.flatMap(updatedHolder => sessionCache.saveRegistrationDetails(updatedHolder))
-
   def cacheAddress(address: Address)(implicit hq: HeaderCarrier): Future[Boolean] =
     sessionCache.registrationDetails.map {
       case rdo: RegistrationDetailsOrganisation => rdo.copy(address = address)
       case rdi: RegistrationDetailsIndividual   => rdi.copy(address = address)
       case _                                    => throw new IllegalStateException("Incomplete cache cannot complete journey")
-    }.flatMap(updatedHolder => sessionCache.saveRegistrationDetails(updatedHolder))
-
-  def cacheNameDateOfBirth(rd: RegistrationDetailsIndividual)(implicit hq: HeaderCarrier): Future[Boolean] =
-    sessionCache.registrationDetails.map {
-      case rdi: RegistrationDetailsIndividual => rdi.copy(name = rd.name, dateOfBirth = rd.dateOfBirth)
-      case _                                  => throw new IllegalArgumentException("Expecting RegistrationDetailsIndividual but found something else")
     }.flatMap(updatedHolder => sessionCache.saveRegistrationDetails(updatedHolder))
 
   def initialiseCacheWithRegistrationDetails(

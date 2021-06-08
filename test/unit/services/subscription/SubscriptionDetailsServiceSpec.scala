@@ -24,17 +24,14 @@ import org.mockito.{ArgumentCaptor, ArgumentMatchers}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, FormData, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameOrganisationMatchModel, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.{AddressViewModel, CompanyRegisteredCountry}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
-import util.builders.RegistrationDetailsBuilder._
-import util.builders.SubscriptionInfoBuilder._
-import util.builders.{RegistrationDetailsBuilder, SubscriptionContactDetailsFormBuilder}
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
@@ -54,14 +51,9 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val mockSubscriptionDetailsHolder     = mock[SubscriptionDetails]
   private val mockpersonalDataDisclosureConsent = mock[Option[Boolean]]
 
-  private val expectedDate = LocalDate.now()
-  private val sicCode      = "someSicCode"
-
   private val addressDetails =
     AddressViewModel(street = "street", city = "city", postcode = Some("postcode"), countryCode = "GB")
 
-  private val nameId       = NameIdOrganisationMatchModel(name = "orgname", id = "ID")
-  private val customsIdUTR = Utr("utrxxxxx")
   private val utrMatch     = UtrMatchModel(Some(true), Some("utrxxxxx"))
   private val ninoMatch    = NinoMatchModel(Some(true), Some("ninoxxxxx"))
 
@@ -71,12 +63,6 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val eoriNumericLength = 15
   private val eoriId            = "GB" + Random.nextString(eoriNumericLength)
   private val eori              = Eori(eoriId)
-
-  private val contactDetailsViewModelWhenNotUsingRegisteredAddress =
-    SubscriptionContactDetailsFormBuilder.createContactDetailsViewModelWhenNotUsingRegAddress
-
-  private val contactDetailsViewModelWhenUsingRegisteredAddress =
-    SubscriptionContactDetailsFormBuilder.createContactDetailsViewModelWhenUseRegAddress
 
   override def beforeEach {
     reset(
@@ -151,179 +137,6 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
   }
 
-  "Calling cachedAddressDetails" should {
-    "return Some of AddressViewModel for addressDetails when found in subscription Details" in {
-      val mockAddressViewModel = mock[AddressViewModel]
-      when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
-        .thenReturn(SubscriptionDetails(addressDetails = Option(mockAddressViewModel)))
-      await(subscriptionDetailsHolderService.cachedAddressDetails(hc)) shouldBe Some(mockAddressViewModel)
-    }
-
-    "return None when no value found in subscription Details" in {
-      when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(SubscriptionDetails())
-      await(subscriptionDetailsHolderService.cachedAddressDetails(hc)) shouldBe None
-    }
-  }
-
-  "Calling cacheNameIdDetails" should {
-    "save Name Id Details in frontend cache" in {
-
-      await(subscriptionDetailsHolderService.cacheNameIdDetails(nameId))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.nameIdOrganisationDetails shouldBe Some(nameId)
-
-    }
-  }
-
-  "Calling cacheCustomsIdAndNinoMatch" should {
-    "save CustomsId an NinoMatchModel in frontend cache" in {
-
-      await(subscriptionDetailsHolderService.cacheNinoMatchForNoAnswer(Some(ninoMatch)))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.customsId shouldBe None
-      holder.formData.ninoMatch shouldBe Some(ninoMatch)
-    }
-  }
-
-  "Calling cacheUtrMatchForNoAnswer" should {
-    "save utrMatch in frontend cache" in {
-
-      await(subscriptionDetailsHolderService.cacheUtrMatchForNoAnswer(Some(utrMatch)))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.formData.utrMatch shouldBe Some(utrMatch)
-    }
-  }
-
-  "Calling cache SIC Code" should {
-    "save SIC Code in frontend cache" in {
-
-      await(subscriptionDetailsHolderService.cacheSicCode(sicCode))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.sicCode shouldBe Some(sicCode)
-    }
-  }
-
-  "Calling cache EORI number" should {
-    "save EORI number in frontend cache" in {
-
-      await(subscriptionDetailsHolderService.cacheEoriNumber(eoriId))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.eoriNumber shouldBe Some(eoriId)
-
-    }
-  }
-
-  "Calling cacheDateEstablished" should {
-    "save Date Of Establishment Details in frontend cache" in {
-
-      await(subscriptionDetailsHolderService.cacheDateEstablished(expectedDate))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.dateEstablished shouldBe Some(expectedDate)
-
-    }
-  }
-
-  "Calling cachePersonalDataDisclosureConsent" should {
-    "save consent details in frontend cache" in {
-
-      await(subscriptionDetailsHolderService.cachePersonalDataDisclosureConsent(consent = true))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.personalDataDisclosureConsent shouldBe Some(true)
-    }
-  }
-
-  "Calling createContactDetails" should {
-    "create and cache SubscriptionDetailsHolder with contact details when not using registered address" in {
-
-      await(subscriptionDetailsHolderService.cacheContactDetails(contactDetailsViewModelWhenNotUsingRegisteredAddress))
-
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.contactDetails shouldBe Some(contactDetailsViewModelWhenNotUsingRegisteredAddress)
-    }
-
-    "Update SubscriptionDetailsHolder with contact details when using registered address" in {
-      when(mockSessionCache.registrationDetails)
-        .thenReturn(RegistrationDetailsBuilder.withBusinessAddress(defaultAddress))
-
-      when(
-        mockContactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(
-          contactDetailsViewModelWhenUsingRegisteredAddress,
-          defaultAddress
-        )
-      ).thenReturn(contactDetailsViewModelWhenUsingRegisteredAddress)
-
-      when(mockSessionCache.subscriptionDetails).thenReturn(SubscriptionDetails())
-      when(mockSessionCache.subscriptionDetails).thenReturn(
-        SubscriptionDetails(sicCode = Some(principalEconomicActivity), dateEstablished = Some(dateOfEstablishment))
-      )
-
-      await(subscriptionDetailsHolderService.cacheContactDetails(contactDetailsViewModelWhenUsingRegisteredAddress))
-
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.contactDetails shouldBe Some(contactDetailsViewModelWhenUsingRegisteredAddress)
-      holder.sicCode shouldBe Some(principalEconomicActivity)
-      holder.dateEstablished shouldBe Some(dateOfEstablishment)
-    }
-  }
-
-  "Calling cache IdDetails" should {
-    "save CustomsId in frontend cache" in {
-      await(subscriptionDetailsHolderService.cacheIdDetails(IdMatchModel("id")))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.idDetails shouldBe Some(IdMatchModel("id"))
-    }
-  }
-
-  "Calling cache CustomsId" should {
-    "save CustomsId in frontend cache" in {
-      await(subscriptionDetailsHolderService.cacheCustomsId(customsIdUTR))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.customsId shouldBe Some(customsIdUTR)
-    }
-  }
-
-  "Clearing customsId from cache" should {
-    "set CustomsId in frontend cache to None" in {
-      await(subscriptionDetailsHolderService.clearCachedCustomsId)
-
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.customsId shouldBe None
-    }
-  }
-
   "Calling cachedCustomsId" should {
     "return Some of customsID when found in subscription Details" in {
       when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
@@ -394,105 +207,12 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
   }
 
-  "Clearing ukVatDetails from cache" should {
-    "set ukVatDetails in frontend cache to None" in {
-      await(subscriptionDetailsHolderService.clearCachedUkVatDetails)
-
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.ukVatDetails shouldBe None
-    }
-  }
-
-  "Calling cache nameDobDetails" should {
-    "save nameDobDetails in frontend cache" in {
-      await(
-        subscriptionDetailsHolderService
-          .cacheNameDobDetails(NameDobMatchModel("fname", Some("mname"), "lname", new LocalDate(2019, 1, 1)))
-      )
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.nameDobDetails shouldBe Some(NameDobMatchModel("fname", Some("mname"), "lname", new LocalDate(2019, 1, 1)))
-    }
-  }
-
   "Calling cached nameDobDetails" should {
     "return nameDobDetails from frontend cache" in {
       val nameDobDetails = NameDobMatchModel("fname", Some("mname"), "lname", new LocalDate(2019, 1, 1))
       when(mockSessionCache.subscriptionDetails)
         .thenReturn(Future.successful(SubscriptionDetails(nameDobDetails = Some(nameDobDetails))))
       await(subscriptionDetailsHolderService.cachedNameDobDetails) shouldBe Some(nameDobDetails)
-    }
-  }
-
-  "Calling updateSubscriptionDetails" should {
-    "update cache with subscription details having name and dob details only" in {
-      val businessShortName = BusinessShortName("shortName")
-      val nameDobDetails    = NameDobMatchModel("fname", Some("mname"), "lname", new LocalDate(2019, 1, 1))
-      when(mockSessionCache.subscriptionDetails).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = Some(nameDobDetails), businessShortName = Some(businessShortName))
-        )
-      )
-      when(mockSessionCache.remove).thenReturn(Future.successful(true))
-      await(subscriptionDetailsHolderService.updateSubscriptionDetails) shouldBe true
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.nameDobDetails shouldBe Some(nameDobDetails)
-      holder shouldBe SubscriptionDetails(nameDobDetails = Some(nameDobDetails))
-    }
-
-    "update cache with subscription details having organisation name details only" in {
-      val nameOrganisationDetails = NameOrganisationMatchModel("fname")
-      val businessShortName       = BusinessShortName("shortName")
-      when(mockSessionCache.subscriptionDetails).thenReturn(
-        Future.successful(
-          SubscriptionDetails(
-            nameOrganisationDetails = Some(nameOrganisationDetails),
-            businessShortName = Some(businessShortName)
-          )
-        )
-      )
-      when(mockSessionCache.remove).thenReturn(Future.successful(true))
-      await(subscriptionDetailsHolderService.updateSubscriptionDetails) shouldBe true
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.nameOrganisationDetails shouldBe Some(nameOrganisationDetails)
-      holder shouldBe SubscriptionDetails(nameOrganisationDetails = Some(nameOrganisationDetails))
-    }
-  }
-
-  "Calling cacheVatRegisteredUk" should {
-    "save VatRegisteredUk value in frontend cache" in {
-      await(subscriptionDetailsHolderService.cacheVatRegisteredUk(YesNo(true)))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.vatRegisteredUk shouldBe Some(true)
-    }
-  }
-
-  "Calling cacheConsentToDisclosePersonalDetails" should {
-    "save personalDataDisclosureConsent value in frontend cache" in {
-      await(subscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(YesNo(true)))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder = requestCaptor.getValue
-      holder.personalDataDisclosureConsent shouldBe Some(true)
-    }
-  }
-
-  "Calliing cacheRegisteredCountry" should {
-    "save country value in frontend cache" in {
-      await(subscriptionDetailsHolderService.cacheRegisteredCountry(CompanyRegisteredCountry("United Kingdom")))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val details = requestCaptor.getValue
-      details.registeredCompany shouldBe Some(CompanyRegisteredCountry("United Kingdom"))
     }
   }
 }

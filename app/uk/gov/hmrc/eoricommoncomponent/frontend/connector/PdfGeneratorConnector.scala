@@ -38,7 +38,9 @@ class PdfGeneratorConnector @Inject() (http: WSClient, appConfig: AppConfig) {
   private lazy val url = s"$baseUrl/pdf-generator-service/generate"
 
   def generatePdf(html: String)(implicit ec: ExecutionContext): Future[ByteString] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"postUrl: $url")
+    // $COVERAGE-ON
 
     http
       .url(url)

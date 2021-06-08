@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
+import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
@@ -51,7 +52,7 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
 
   def saveEmail(groupId: GroupId, emailStatus: EmailStatus)(implicit hc: HeaderCarrier): Future[Unit] = {
     logger.debug(s"saving email address $emailStatus for groupId $groupId")
-    save4LaterConnector.put[EmailStatus](groupId.id, emailKey, emailStatus)
+    save4LaterConnector.put[EmailStatus](groupId.id, emailKey, Json.toJson(emailStatus))
   }
 
   def fetchOrgType(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[CdsOrganisationType]] = {

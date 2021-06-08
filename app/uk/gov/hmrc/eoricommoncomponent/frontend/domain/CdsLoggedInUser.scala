@@ -16,20 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
-
-case class UserId(internalId: String)
-
-object UserId {
-  implicit val formats: Format[UserId] = Json.format[UserId]
-}
-
-case class CredId(id: String)
-
-object CredId {
-  implicit val format: Format[CredId] = Json.format[CredId]
-}
 
 sealed trait LoggedInUser {
   def affinityGroup: Option[AffinityGroup]
@@ -43,8 +30,6 @@ sealed trait LoggedInUser {
   }
 
 }
-
-case class CustomsLoggedInUser(affinityGroup: Option[AffinityGroup], internalId: Option[String]) extends LoggedInUser
 
 case class LoggedInUserWithEnrolments(
   affinityGroup: Option[AffinityGroup],

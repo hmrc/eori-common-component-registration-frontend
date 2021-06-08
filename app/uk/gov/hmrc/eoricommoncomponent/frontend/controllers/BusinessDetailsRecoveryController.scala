@@ -68,9 +68,9 @@ class BusinessDetailsRecoveryController @Inject() (
             requestSessionData.selectedUserLocation.getOrElse(throw new IllegalStateException("Location not set"))
           regDetails match {
             case _: RegistrationDetailsIndividual =>
-              continueBasedOnJourney(service, location, orgType)
+              continue(service, location, orgType)
             case _: RegistrationDetailsOrganisation =>
-              continueBasedOnJourney(service, location, orgType)
+              continue(service, location, orgType)
             case _ =>
               throw new IllegalArgumentException(
                 "Required RegistrationDetailsIndividual | RegistrationDetailsOrganisation"
@@ -81,34 +81,31 @@ class BusinessDetailsRecoveryController @Inject() (
       }.flatMap(identity)
     }
 
-  private def continueBasedOnJourney(service: Service, location: String, orgType: Option[CdsOrganisationType])(implicit
+  private def continue(service: Service, location: String, orgType: Option[CdsOrganisationType])(implicit
     request: Request[AnyContent],
     hc: HeaderCarrier
   ): Future[Result] = {
 
-    def startSubscription: CdsOrganisationType => Future[Result] =
-      organisationType => {
-        subscriptionFlowManager.startSubscriptionFlow(
-          Some(BusinessDetailsRecoveryPage),
-          organisationType,
-          service
-        ) map {
-          case (page, newSession) =>
-            val sessionWithOrganisationType = requestSessionData
-              .sessionWithOrganisationTypeAdded(newSession, organisationType)
-            val session =
-              requestSessionData.existingSessionWithUserLocationAdded(
-                sessionWithOrganisationType,
-                sessionInfoBasedOnJourney(Some(location))
-              )
-            Redirect(page.url(service)).withSession(session)
-        }
-      }
+    val organisationType = orgType.getOrElse(throw new IllegalStateException("OrganisationType not found in cache"))
 
-    startSubscription(orgType.getOrElse(throw new IllegalStateException("OrganisationType not found in cache")))
+    subscriptionFlowManager.startSubscriptionFlow(
+      Some(BusinessDetailsRecoveryPage),
+      organisationType,
+      service
+    ) map {
+      case (page, newSession) =>
+        val sessionWithOrganisationType = requestSessionData
+          .sessionWithOrganisationTypeAdded(newSession, organisationType)
+        val session =
+          requestSessionData.existingSessionWithUserLocationAdded(
+            sessionWithOrganisationType,
+            sessionInfo(Some(location))
+          )
+        Redirect(page.url(service)).withSession(session)
+    }
   }
 
-  private def sessionInfoBasedOnJourney(location: Option[String]): String =
+  private def sessionInfo(location: Option[String]): String =
     location match {
       case Some(UserLocation.ThirdCountry)      => "third-country"
       case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"

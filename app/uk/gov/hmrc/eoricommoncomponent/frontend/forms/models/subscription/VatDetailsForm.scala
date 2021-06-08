@@ -24,13 +24,10 @@ import play.api.libs.json.JodaReads._
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatIdentification
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 
-case class VatDetails(postcode: String, number: String, effectiveDate: LocalDate) {
-  def getVatId = VatIdentification(Some("GB"), Some(number))
-}
+case class VatDetails(postcode: String, number: String, effectiveDate: LocalDate)
 
 object VatDetails {
   implicit val format: Format[VatDetails] = Json.format[VatDetails]

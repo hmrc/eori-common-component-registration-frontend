@@ -52,7 +52,7 @@ class ConfirmContactDetailsController @Inject() (
   private val logger = Logger(this.getClass)
 
   def form(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit loggedInUser =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.registrationDetails.flatMap {
         case individual: RegistrationDetailsIndividual =>
           if (!individual.address.isValidAddress())
@@ -99,7 +99,7 @@ class ConfirmContactDetailsController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit loggedInUser =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       YesNoWrongAddress
         .createForm()
         .bindFromRequest()
@@ -147,8 +147,7 @@ class ConfirmContactDetailsController @Inject() (
     }
 
   private def checkAddressDetails(service: Service, areDetailsCorrectAnswer: YesNoWrongAddress)(implicit
-    request: Request[AnyContent],
-    loggedInUser: LoggedInUserWithEnrolments
+    request: Request[AnyContent]
   ): Future[Result] =
     sessionCache.subscriptionDetails.flatMap { subDetails =>
       sessionCache.registrationDetails.flatMap { details =>
@@ -177,8 +176,7 @@ class ConfirmContactDetailsController @Inject() (
   }
 
   private def determineRoute(detailsCorrect: YesNoWrong, service: Service)(implicit
-    request: Request[AnyContent],
-    loggedInUser: LoggedInUserWithEnrolments
+    request: Request[AnyContent]
   ): Future[Result] =
     detailsCorrect match {
       case Yes =>
@@ -194,7 +192,7 @@ class ConfirmContactDetailsController @Inject() (
         }
       case No =>
         registrationConfirmService
-          .clearRegistrationData(loggedInUser)
+          .clearRegistrationData()
           .map(
             _ =>
               Redirect(

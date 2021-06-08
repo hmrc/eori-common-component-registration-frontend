@@ -33,3 +33,9 @@ object EnrolmentResponse {
 
   implicit val jsonFormat: OFormat[EnrolmentResponse] = Json.format[EnrolmentResponse]
 }
+
+case class KeyValue(key: String, value: String)
+
+object KeyValue {
+  implicit val format = Json.format[KeyValue]
+}

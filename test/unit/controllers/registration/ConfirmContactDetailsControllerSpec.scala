@@ -432,7 +432,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData(any[LoggedInUser])(any[HeaderCarrier])
+          .clearRegistrationData()(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
       when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -457,7 +457,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData(any[LoggedInUser])(any[HeaderCarrier])
+          .clearRegistrationData()(any[HeaderCarrier])
       ).thenReturn(Future.failed(emulatedFailure))
       when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -481,7 +481,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData(any[LoggedInUser])(any[HeaderCarrier])
+          .clearRegistrationData()(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
       when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(organisationRegistrationDetails))

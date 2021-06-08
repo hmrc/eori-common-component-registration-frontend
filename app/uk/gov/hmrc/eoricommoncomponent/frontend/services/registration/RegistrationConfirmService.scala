@@ -17,7 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.registration
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUser
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
   ClearCacheAndRegistrationIdentificationService,
   RequestSessionData,
@@ -41,7 +40,7 @@ class RegistrationConfirmService @Inject() (
       subscriptionStatusService.getStatus("taxPayerID", registrationDetails.sapNumber.mdgTaxPayerId)
     }
 
-  def clearRegistrationData(loggedInUser: LoggedInUser)(implicit hc: HeaderCarrier): Future[Unit] =
-    clearDataService.clear(loggedInUser)
+  def clearRegistrationData()(implicit hc: HeaderCarrier): Future[Unit] =
+    clearDataService.clear()
 
 }

@@ -27,8 +27,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_ut
 import util.ViewSpec
 
 class MatchOrganisationUtrSpec extends ViewSpec {
-  val form: Form[UtrMatchModel]                     = utrForm
-  val formWithNoSelectionError: Form[UtrMatchModel] = utrForm.bind(Map.empty[String, String])
+  val form: Form[UtrMatchModel]                     = haveUtrForm
+  val formWithNoSelectionError: Form[UtrMatchModel] = haveUtrForm.bind(Map.empty[String, String])
   val isInReviewMode                                = false
   val previousPageUrl                               = "/"
   val nonSoleTraderType                             = "charity-public-body-not-for-profit"

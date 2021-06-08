@@ -34,14 +34,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)(implicit ec: ExecutionContext) {
 
-  def getCachedCompanyShortName(implicit hc: HeaderCarrier): Future[BusinessShortName] =
-    cdsFrontendDataCache.subscriptionDetails map {
-      _.businessShortName.getOrElse(throw new IllegalStateException("No Short Name Cached"))
-    }
-
-  def companyShortName(implicit hc: HeaderCarrier): Future[Option[BusinessShortName]] =
-    cdsFrontendDataCache.subscriptionDetails map (_.businessShortName)
-
   def cachedContactDetailsModel(implicit hc: HeaderCarrier): Future[Option[ContactDetailsModel]] =
     cdsFrontendDataCache.subscriptionDetails map (_.contactDetails)
 
@@ -59,9 +51,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
 
   def cachedSicCode(implicit hc: HeaderCarrier): Future[Option[String]] =
     cdsFrontendDataCache.subscriptionDetails map (_.sicCode)
-
-  def cachedEoriNumber(implicit hc: HeaderCarrier): Future[Option[String]] =
-    cdsFrontendDataCache.subscriptionDetails map (_.eoriNumber)
 
   def getCachedPersonalDataDisclosureConsent(implicit hc: HeaderCarrier): Future[Boolean] =
     cdsFrontendDataCache.subscriptionDetails map {
@@ -94,38 +83,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
       subscriptionDetails.addressDetails
     }
 
-  def getCachedNameIdViewModel(implicit hc: HeaderCarrier): Future[NameIdOrganisationMatchModel] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.nameIdOrganisationDetails.getOrElse(
-        throw new IllegalStateException("No Name/Utr/Id Details Cached")
-      )
-    }
-
-  def getCachedNameViewModel(implicit hc: HeaderCarrier): Future[NameOrganisationMatchModel] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.nameOrganisationDetails.getOrElse(throw new IllegalStateException("No Name Cached"))
-    }
-
-  def cachedNameIdOrganisationViewModel(implicit hc: HeaderCarrier): Future[Option[NameIdOrganisationMatchModel]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.nameIdOrganisationDetails
-    }
-
-  def cachedNameOrganisationViewModel(implicit hc: HeaderCarrier): Future[Option[NameOrganisationMatchModel]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.nameOrganisationDetails
-    }
-
-  def getCachedSubscriptionNameDobViewModel(implicit hc: HeaderCarrier): Future[NameDobMatchModel] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.nameDobDetails.getOrElse(throw new IllegalStateException("No Name/Dob Details Cached"))
-    }
-
-  def cachedSubscriptionNameDobViewModel(implicit hc: HeaderCarrier): Future[Option[NameDobMatchModel]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.nameDobDetails
-    }
-
   def getCachedCustomsId(implicit hc: HeaderCarrier): Future[Option[CustomsId]] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.customsId
@@ -134,16 +91,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
   def getCachedNinoOrUtrChoice(implicit hc: HeaderCarrier): Future[Option[String]] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.formData.ninoOrUtrChoice
-    }
-
-  def getCachedSubscriptionIdViewModel(implicit hc: HeaderCarrier): Future[IdMatchModel] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.idDetails.getOrElse(throw new IllegalStateException("No Nino/Id Details Cached"))
-    }
-
-  def maybeCachedSubscriptionIdViewModel(implicit hc: HeaderCarrier): Future[Option[IdMatchModel]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.idDetails
     }
 
   def getCachedUkVatDetails(implicit hc: HeaderCarrier): Future[Option[VatDetails]] =

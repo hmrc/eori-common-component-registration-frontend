@@ -18,7 +18,6 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.partials.{footer, header, styles}
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.JourneyExtractor.journey
 @import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 @import uk.gov.hmrc.play.views.html.layouts.TrackingConsentSnippet
 
@@ -44,11 +43,11 @@
 }
 
 @signOutUrl = @{
-    s"/customs-registration-services/${service.code}/${journey.toString.toLowerCase}/sign-out"
+    s"/customs-registration-services/${service.code}/register/sign-out"
 }
 
 @keepAliveUrl=  @{
-    s"/customs-registration-services/${service.code}/${journey.toString.toLowerCase}/keep-alive"
+    s"/customs-registration-services/${service.code}/register/keep-alive"
 }
 
 <!DOCTYPE html>
@@ -64,7 +63,7 @@
             <!-- End Tracking Consent Snippet -->
         <title>@titleErr</title>
         @styles_di()
-        @partials.countrypickerscript(countriesInCountryPicker, journey)
+        @partials.countrypickerscript(countriesInCountryPicker)
 
     </head>
     <body class="js-no">

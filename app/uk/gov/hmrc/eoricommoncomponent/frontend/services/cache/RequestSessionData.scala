@@ -29,9 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 @Singleton
 class RequestSessionData {
 
-  def uriBeforeSubscriptionFlow(implicit request: Request[AnyContent]): Option[String] =
-    request.session.data.get(RequestSessionDataKeys.uriBeforeSubscriptionFlow)
-
   def storeUserSubscriptionFlow(subscriptionFlow: SubscriptionFlow, uriBeforeSubscriptionFlow: String)(implicit
     request: Request[AnyContent]
   ): Session =
@@ -85,9 +82,6 @@ class RequestSessionData {
 
   def existingSessionWithUserLocationAdded(existingSession: Session, userLocation: String): Session =
     existingSession + (RequestSessionDataKeys.selectedUserLocation -> userLocation)
-
-  def sessionWithUnMatchedUser(unmatched: Boolean = false)(implicit request: Request[AnyContent]): Session =
-    request.session + (RequestSessionDataKeys.unmatchedUser -> unmatched.toString)
 
   def isPartnership(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
     oType =>

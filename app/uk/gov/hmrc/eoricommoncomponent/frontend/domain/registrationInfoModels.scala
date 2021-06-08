@@ -89,31 +89,3 @@ object RegistrationInfo {
   )
 
 }
-
-object IndividualRegistrationInfo {
-
-  def apply(
-    firstName: String,
-    middleName: Option[String],
-    lastName: String,
-    dateOfBirth: Option[LocalDate]
-  ): IndividualRegistrationInfo =
-    new IndividualRegistrationInfo(
-      firstName,
-      middleName,
-      lastName,
-      dateOfBirth,
-      TaxPayerId(""),
-      "",
-      None,
-      None,
-      None,
-      None,
-      "",
-      None,
-      None,
-      None,
-      false
-    )
-
-}

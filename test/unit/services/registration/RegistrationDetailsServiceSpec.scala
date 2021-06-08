@@ -44,14 +44,11 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val mockSessionCache = mock[SessionCache]
 
   private val startingOrgName      = "BEFORE Blank"
-  private val updatedOrgName       = "AFTER Test Org Name"
   private val startingSafeId       = SafeId("SAFEID")
   private val startingBlankAddress = Address("BLANK", None, None, None, None, "BLANK")
   private val updatedAddress       = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
 
   private val startingBlankFullName = "BEFORE Blank full name"
-  private val updatedFullName       = "Full name UPDATED"
-  private val updatedDateOfBirth    = LocalDate.parse("1976-04-08")
 
   private val emptyRegDetailsIndividual = RegistrationDetailsIndividual(
     None,
@@ -91,8 +88,6 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     startingDate
   )
 
-  private val updatedRegDetailsIndividual = RegistrationDetailsIndividual(updatedFullName, updatedDateOfBirth)
-
   private val registrationDetailsService = new RegistrationDetailsService(mockSessionCache)(global)
 
   val individualOrganisationTypes =
@@ -115,20 +110,6 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "Calling cacheOrgName" should {
-    "save Org Name in the cache" in {
-      when(mockSessionCache.registrationDetails).thenReturn(startingRegDetailsOrganisation)
-
-      await(registrationDetailsService.cacheOrgName(updatedOrgName))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[RegistrationDetails])
-
-      verify(mockSessionCache).registrationDetails(ArgumentMatchers.eq(hc))
-      verify(mockSessionCache).saveRegistrationDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-
-      val holder: RegistrationDetails = requestCaptor.getValue
-      holder.name shouldBe updatedOrgName
-      holder.address shouldBe startingBlankAddress
-      holder.safeId shouldBe startingSafeId
-    }
 
     "save Address in the cache for Organisation" in {
       when(mockSessionCache.registrationDetails).thenReturn(startingRegDetailsOrganisation)
@@ -160,22 +141,6 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       holder.safeId shouldBe startingSafeId
       holder.name shouldBe startingBlankFullName
       holder.dateOfBirth shouldBe startingDate
-    }
-
-    "save Name and Date of Birth in the cache" in {
-      when(mockSessionCache.registrationDetails).thenReturn(startingRegDetailsIndividual)
-
-      await(registrationDetailsService.cacheNameDateOfBirth(updatedRegDetailsIndividual))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[RegistrationDetailsIndividual])
-
-      verify(mockSessionCache).registrationDetails(ArgumentMatchers.eq(hc))
-      verify(mockSessionCache).saveRegistrationDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-
-      val holder: RegistrationDetailsIndividual = requestCaptor.getValue
-      holder.address shouldBe startingBlankAddress
-      holder.safeId shouldBe startingSafeId
-      holder.name shouldBe updatedFullName
-      holder.dateOfBirth shouldBe updatedDateOfBirth
     }
   }
 
