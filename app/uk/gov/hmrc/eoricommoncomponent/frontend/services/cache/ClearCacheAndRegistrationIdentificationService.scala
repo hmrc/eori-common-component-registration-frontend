@@ -26,7 +26,6 @@ class ClearCacheAndRegistrationIdentificationService @Inject() (sessionCache: Se
   ec: ExecutionContext
 ) {
 
-  // TODO Refactor this method, argument is not used
   def clear()(implicit hc: HeaderCarrier): Future[Unit] =
     for {
       email <- sessionCache.email
