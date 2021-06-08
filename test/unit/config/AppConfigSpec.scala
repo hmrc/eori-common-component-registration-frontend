@@ -19,11 +19,9 @@ package unit.config
 import java.util.concurrent.TimeUnit
 
 import org.mockito.Mockito
-import org.mockito.Mockito.{spy, when}
+import org.mockito.Mockito.spy
 import org.scalatest.BeforeAndAfterEach
 import play.api.Configuration
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import util.ControllerSpec
 
@@ -125,6 +123,11 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
       appConfig.getServiceUrl(
         "vat-known-facts-control-list"
       ) shouldBe "http://localhost:6753/vat-known-facts-control-list"
+    }
+    "return eori common component frontend url" in {
+      appConfig.eoriCommonComponentFrontend(
+        atarService.code
+      ) shouldBe "http://localhost:6750/customs-enrolment-services/atar/subscribe"
     }
   }
 }
