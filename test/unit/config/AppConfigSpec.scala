@@ -126,25 +126,5 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
         "vat-known-facts-control-list"
       ) shouldBe "http://localhost:6753/vat-known-facts-control-list"
     }
-
-    "return url for 'get EORI" when {
-
-      "register is blocked" in {
-        when(mockConfig.getOptional[String]("routes-to-block")).thenReturn(Some("register"))
-        when(mockConfig.get[String]("external-url.get-cds-eori")).thenReturn("/config-url")
-
-        val testAppConfig = new AppConfig(mockConfig, mockServiceConfig, "appName")
-
-        testAppConfig.externalGetEORILink(atarService) shouldBe "/config-url"
-      }
-
-      "register is un-blocked" in {
-        when(mockConfig.getOptional[String]("routes-to-block")).thenReturn(None)
-
-        val testAppConfig = new AppConfig(mockConfig, mockServiceConfig, "appName")
-
-        testAppConfig.externalGetEORILink(atarService) shouldBe ApplicationController.startRegister(atarService).url
-      }
-    }
   }
 }
