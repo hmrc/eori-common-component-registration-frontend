@@ -142,9 +142,7 @@ object MatchingForms {
   def businessShortNameYesNoForm(emptyErrorMessage: String)(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm(emptyErrorMessage)
 
-  private def createYesNoAnswerForm(
-    invalidErrorMsgKey: String
-  )(implicit messages: Messages): Form[YesNo] = Form(
+  private def createYesNoAnswerForm(invalidErrorMsgKey: String)(implicit messages: Messages): Form[YesNo] = Form(
     mapping(
       "yes-no-answer" -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))
         .verifying(messages(invalidErrorMsgKey), _.isDefined)

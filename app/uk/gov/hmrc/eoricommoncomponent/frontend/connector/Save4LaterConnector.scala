@@ -38,6 +38,7 @@ class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(imp
 
   private def logFailure(method: String, url: String, e: Throwable) =
     logger.warn(s"$method request failed for call to $url: ${e.getMessage}", e)
+
   // $COVERAGE-ON
 
   def get[T](id: String, key: String)(implicit hc: HeaderCarrier, reads: Reads[T]): Future[Option[T]] = {

@@ -88,11 +88,7 @@ class BusinessDetailsRecoveryController @Inject() (
 
     val organisationType = orgType.getOrElse(throw new IllegalStateException("OrganisationType not found in cache"))
 
-    subscriptionFlowManager.startSubscriptionFlow(
-      Some(BusinessDetailsRecoveryPage),
-      organisationType,
-      service
-    ) map {
+    subscriptionFlowManager.startSubscriptionFlow(Some(BusinessDetailsRecoveryPage), organisationType, service) map {
       case (page, newSession) =>
         val sessionWithOrganisationType = requestSessionData
           .sessionWithOrganisationTypeAdded(newSession, organisationType)

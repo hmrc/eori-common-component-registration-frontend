@@ -54,8 +54,8 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val addressDetails =
     AddressViewModel(street = "street", city = "city", postcode = Some("postcode"), countryCode = "GB")
 
-  private val utrMatch     = UtrMatchModel(Some(true), Some("utrxxxxx"))
-  private val ninoMatch    = NinoMatchModel(Some(true), Some("ninoxxxxx"))
+  private val utrMatch  = UtrMatchModel(Some(true), Some("utrxxxxx"))
+  private val ninoMatch = NinoMatchModel(Some(true), Some("ninoxxxxx"))
 
   private val subscriptionDetailsHolderService =
     new SubscriptionDetailsService(mockSessionCache, mockContactDetailsAdaptor, mockSave4LaterConnector)(global)

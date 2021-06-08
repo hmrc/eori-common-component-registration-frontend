@@ -34,4 +34,5 @@ object SubscriptionVatUKDetailsFormModel {
 
   def convertModelForGbVatsToRequest(gbVatsModel: Option[List[VatIdentification]]): Option[List[String]] =
     gbVatsModel.map(list => list.map(id => id.number.getOrElse("")))
+
 }

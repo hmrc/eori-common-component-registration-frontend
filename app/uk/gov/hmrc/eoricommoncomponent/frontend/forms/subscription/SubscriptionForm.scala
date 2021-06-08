@@ -126,8 +126,8 @@ object SubscriptionForm {
   val euVatForm = Form(
     Forms.mapping(
       "vatCountry" -> text.verifying("cds.subscription.eu-vat-details.form-error.country", _.length == Length2),
-      "vatNumber" -> text.verifying(validEUVATNumber))(VatEUDetailsModel.apply)(
-      VatEUDetailsModel.unapply
-    )
+      "vatNumber"  -> text.verifying(validEUVATNumber)
+    )(VatEUDetailsModel.apply)(VatEUDetailsModel.unapply)
   )
+
 }

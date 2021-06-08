@@ -35,6 +35,7 @@ case class EstablishmentAddress(
 
   def updateCountryFromAddress(address: AddressViewModel): EstablishmentAddress =
     this.copy(countryCode = address.countryCode)
+
 }
 
 object EstablishmentAddress {
