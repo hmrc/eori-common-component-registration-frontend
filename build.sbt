@@ -92,7 +92,7 @@ lazy val scoverageSettings = {
       "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.config.*",
       "logger.*\\(.*\\)",
       ".*(AuthService|BuildInfo|Routes|TestOnly).*").mkString(";"),
-    ScoverageKeys.coverageMinimum := 86,
+    ScoverageKeys.coverageMinimum := 85,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     parallelExecution in Test := false
