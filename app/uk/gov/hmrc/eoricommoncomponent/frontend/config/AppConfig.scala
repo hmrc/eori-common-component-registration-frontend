@@ -19,7 +19,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.config
 import javax.inject.{Inject, Named, Singleton}
 import play.api.Configuration
 import play.api.i18n.Messages
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -104,13 +103,14 @@ class AppConfig @Inject() (
   val enrolmentStoreProxyServiceContext: String =
     config.get[String]("microservice.services.enrolment-store-proxy.context")
 
-  private val eoriCommonComponentFrontendBaseUrl: String = servicesConfig.baseUrl("eori-common-component-frontend")
+  private val eoriCommonComponentFrontendBaseUrl: String =
+    config.get[String]("external-url.eori-common-component-frontend.url")
 
-  private val eoriCommonComponentFrontendContext: String =
-    config.get[String]("microservice.services.eori-common-component-frontend.context")
+  private val eoriCommonComponentFrontendStartEndpoint: String =
+    config.get[String]("external-url.eori-common-component-frontend.start-endpoint")
 
   def eoriCommonComponentFrontend(serviceName: String) =
-    eoriCommonComponentFrontendBaseUrl + eoriCommonComponentFrontendContext + serviceName + "/subscribe"
+    eoriCommonComponentFrontendBaseUrl + serviceName + eoriCommonComponentFrontendStartEndpoint
 
   def getServiceUrl(proxyServiceName: String): String = {
     val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
