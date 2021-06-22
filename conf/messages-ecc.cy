@@ -181,35 +181,35 @@ cds.subscription.contact-details.intro=Byddwn yn defnyddio’r manylion hyn i gy
 
 #Get An EORI Journey
 # Start Page
-cds.start-page.title=TRANSLATE Get a GB EORI number
+cds.start-page.title=Cael rhif EORI GB
 
-cds-start-page.intro1=TRANSLATE From 1st January 2021 if you want to move goods between Great Britain (England, Scotland and Wales) and the rest of the world you may need a GB Economic Operator and Registration Identification (EORI) number.
-cds-start-page.intro2=TRANSLATE HMRC uses this to identify you and collect duty on your goods.
-cds-start-page.intro3=TRANSLATE If you do not get a GB EORI number you may experience increased costs and delays. For example, if HMRC cannot clear your goods you may have to pay storage fees.
+cds-start-page.intro1=O 1 Ionawr 2021 ymlaen, os ydych am symud nwyddau rhwng Prydain Fawr (Cymru, Lloegr a’r Alban) a gweddill y byd, mae’n bosibl y bydd angen Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) sy’n dechrau gyda GB arnoch.
+cds-start-page.intro2=Mae CThEM yn defnyddio hwn i gadarnhau pwy ydych a chasglu tollau ar eich nwyddau.
+cds-start-page.intro3=Os na chewch rif EORI GB, gallech wynebu costau uwch ac oedi. Er enghraifft, os na all CThEM glirio’ch nwyddau, efallai y bydd yn rhaid i chi dalu ffioedd storio.
 
-cds.start-page.ni.heading=TRANSLATE If you move goods to or from Northern Ireland
-cds.start-page.ni.paragraph1=TRANSLATE From 1 January 2021 you’ll need an EORI number that starts with XI to:
-cds.start-page.ni.paragraph1.bullet1=TRANSLATE move goods between Northern Ireland and non-EU countries
-cds.start-page.ni.paragraph1.bullet2=TRANSLATE make a declaration in Northern Ireland
-cds.start-page.ni.paragraph1.bullet3=TRANSLATE get a customs decision in Northern Ireland
-cds.start-page.ni.paragraph2=TRANSLATE To get an EORI number that starts with XI, you must already have an EORI number that starts with GB. If you do not have one, apply for an EORI number that starts with GB as soon as possible.
-cds.start-page.ni.paragraph3=TRANSLATE If you already have an EORI number that starts with GB and HMRC thinks you need one that starts with XI, they’ll automatically send you one in mid-December 2020.
-cds.start-page.ni.paragraph4=TRANSLATE To get advice on moving goods between Great Britain and Northern Ireland sign up for the [Trader Support Service].
-cds.start-page.ni.paragraph4.link=TRANSLATE Trader Support Service
+cds.start-page.ni.heading=Os ydych yn symud nwyddau i Ogledd Iwerddon neu oddi yno
+cds.start-page.ni.paragraph1= O 1 Ionawr 2021 ymlaen, bydd angen rhif EORI sy’n dechrau gyda XI arnoch i wneud y canlynol:
+cds.start-page.ni.paragraph1.bullet1=symud nwyddau rhwng Gogledd Iwerddon a gwledydd nad ydynt yn rhan o’r UE
+cds.start-page.ni.paragraph1.bullet2=gwneud datganiad yng Ngogledd Iwerddon
+cds.start-page.ni.paragraph1.bullet3=cael penderfyniad tollau yng Ngogledd Iwerddon
+cds.start-page.ni.paragraph2=I gael rhif EORI sy’n dechrau gydag XI, mae’n rhaid bod gennych rif EORI sy’n dechrau gyda GB eisoes. Os nad oes gennych un, gwnewch gais am rif EORI sy’n dechrau gyda GB cyn gynted â phosibl.
+cds.start-page.ni.paragraph3= Os oes gennych rif EORI eisoes sy’n dechrau gyda GB a bod CThEM yn meddwl bod angen un arnoch sy’n dechrau gyda XI, byddant yn anfon un atoch yn awtomatig ganol mis Rhagfyr 2020.
+cds.start-page.ni.paragraph4=I gael cyngor ar symud nwyddau rhwng Prydain Fawr a Gogledd Iwerddon, cofrestrwch ar gyfer y [Gwasanaeth Cymorth i Fasnachwyr].
+cds.start-page.ni.paragraph4.link=Gwasanaeth Cymorth i Fasnachwyr
 
-cds.start-page.get.heading=TRANSLATE To get an EORI number you will need
-cds.start-page.get.bullet1=TRANSLATE VAT number (if registered), the postcode of the registered VAT address and the effective date - this is on your VAT registration certificate
-cds.start-page.get.bullet2=TRANSLATE National Insurance number (if you are an individual or sole trader)
-cds.start-page.get.bullet3=TRANSLATE Unique Taxpayer Reference (UTR). This will be on tax returns and other letters about Self Assessment
-cds.start-page.get.paragraph1=TRANSLATE You will also need
-cds.start-page.get.bullet4=TRANSLATE registered company name
-cds.start-page.get.bullet5=TRANSLATE date the business was registered
-cds.start-page.get.bullet6=TRANSLATE Standard Industrial Classification (SIC) code for the business
-cds.start-page.get.paragraph2=TRANSLATE This information can be found on the [Companies House register]
-cds.start-page.get.paragraph2.link=TRANSLATE Companies House register
-cds.start-page.get.paragraph3=TRANSLATE It takes around 5 to 10 minutes to apply for a GB EORI number. You should get it immediately and it should be ready to use to subscribe to a customs service in two hours and for use with the UK Border Agency in 48 hours, but it may take up to 5 working days if we need to make more checks.
+cds.start-page.get.heading=I gael rhif EORI, bydd angen y canlynol arnoch:
+cds.start-page.get.bullet1=rhif TAW (os yw wedi’i gofrestru), cod post y cyfeiriad TAW cofrestredig a’r dyddiad dod i rym - mae hwn ar eich tystysgrif cofrestru TAW
+cds.start-page.get.bullet2=Rhif Yswiriant Gwladol (os ydych yn unigolyn neu unig fasnachwr)
+cds.start-page.get.bullet3=Cyfeirnod Unigryw y Trethdalwr (UTR). Bydd hwn i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Hunanasesiad
+cds.start-page.get.paragraph1=Bydd angen y canlynol arnoch hefyd
+cds.start-page.get.bullet4=enw cofrestredig y cwmni
+cds.start-page.get.bullet5=y dyddiad y cofrestrwyd y busnes
+cds.start-page.get.bullet6=Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes
+cds.start-page.get.paragraph2=Mae’r wybodaeth hon i’w gweld ar [gofrestr Tŷ’r Cwmnïau]
+cds.start-page.get.paragraph2.link=Cofrestr Tŷ’r Cwmnïau
+cds.start-page.get.paragraph3=Mae’n cymryd 5 i 10 munud i wneud cais am rif EORI GB. Dylech ei gael ar unwaith a dylai fod yn barod i’w ddefnyddio i danysgrifio i wasanaeth tollau mewn dwy awr ac i’w ddefnyddio gydag Asiantaeth Ffiniau’r DU mewn 48 awr, ond gall gymryd hyd at 5 diwrnod gwaith os bydd angen i ni wneud mwy o wiriadau.
 
-cds.start-page.help.eori.contact=TRANSLATE Contact the EORI team online.
+cds.start-page.help.eori.contact=Cysylltu â’r tîm EORI ar-lein.
 
 # Start Page (end)
 
@@ -343,11 +343,11 @@ ecc.subscription.outcomes.success.xi.info.href=<a href="/customs-registration-se
 ecc.subscription.outcomes.success.xi.info2=Os oes gennych rif EORI a gyhoeddwyd gan wlad yn yr UE, nid oes angen i chi gael EORI sy’n dechrau gyda XI.
 
 ecc.subscription.status.gg.h1=Eich rhif EORI a’ch cyfrif Porth y Llywodraeth
-ecc.subscription.status.gg.p1=TRANSLATE Your EORI number is linked to the Government Gateway account you have used for this application and you will have access to {0} within two hours.
+ecc.subscription.status.gg.p1=Mae’ch rhif EORI yn gysylltiedig â’r cyfrif Porth y Llywodraeth rydych wedi’i ddefnyddio ar gyfer y cais hwn, a bydd gennych fynediad at y gwasanaeth {0} o fewn dwy awr.
 ecc.subscription.status.gg.p2=Ni allwch wneud cais am rif EORI arall gan ddefnyddio’r cyfrif Porth y Llywodraeth hwn.
 
-ecc.subscription.outcomes.guidance.title=TRANSLATE Get an XI EORI number
-ecc.subscription.outcomes.guidance.heading=TRANSLATE How to get an XI EORI number
+ecc.subscription.outcomes.guidance.title=Cael rhif EORI XI
+ecc.subscription.outcomes.guidance.heading=Sut i gael rhif EORI XI
 ecc.subscription.outcomes.guidance.xi.eori.heading=Os oes angen rhif EORI arnoch sy’n dechrau gyda XI
 ecc.subscription.outcomes.guidance.xi.eori.information=Bydd yn rhaid i chi lenwi ffurflen gais. I lenwi’ch cais yn gywir, a sicrhau eich bod yn cael eich rhif EORI cyn gynted â phosibl, mae’n rhaid i chi ateb ‘Ydw’ i’r cwestiynau:
 ecc.subscription.outcomes.guidance.xi.eori.bullet1=A ydych, neu a fyddwch, yn masnachu gyda Gogledd Iwerddon neu a ydych yn fusnes sydd wedi’i sefydlu yng Ngogledd Iwerddon?
@@ -355,10 +355,10 @@ ecc.subscription.outcomes.guidance.xi.eori.bullet2=Ymholiad ynghylch cais presen
 ecc.subscription.outcomes.guidance.xi.eori.warning.info=Peidiwch â thicio’r blwch "Ymholiad ynghylch rhif EORI a gyhoeddwyd eisoes" neu "Rhif EORI i gofrestru ar gyfer mynediad i’r system dollau".
 ecc.subscription.outcomes.guidance.xi.eori.href=<a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" target="_blank" rel="noopener noreferrer">Gwnewch gais am rif EORI XI.</a>
 
-ecc.subscription.organisation-disclose-personal-details-consent.title = TRANSLATE Do you want to include the company name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.hint = TRANSLATE HMRC will add your GB EORI number to a <a href="https://www.tax.service.gov.uk/check-eori-number" target="_blank">public checker</a>. You can also include you or your organisation''s name and address. This will help customs and freight agents identify you and process your shipments.
-ecc.subscription.organisation-disclose-personal-details-consent.individual.title = TRANSLATE Do you want to include your name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = TRANSLATE HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" target="_blank">public checker kept by the European Commission</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
-ecc.subscription.organisation-disclose-personal-details-consent.partnership.title = TRANSLATE Do you want to include the partnership name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.charity.title = TRANSLATE Do you want to include the charity name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.organisation.title = TRANSLATE Do you want to include the organisation name and address on the EORI checker?
+ecc.subscription.organisation-disclose-personal-details-consent.title = A ydych am gynnwys enw a chyfeiriad y cwmni ar y gwiriwr EORI?
+ecc.subscription.organisation-disclose-personal-details-consent.hint = Bydd CThEM yn ychwanegu’ch rhif EORI GB at <a href="https://www.tax.service.gov.uk/check-eori-number" target="_blank">wiriwr cyhoeddus</a>. Gallwch hefyd gynnwys eich enw a’ch cyfeiriad chi, neu’ch sefydliad. Bydd hyn yn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu eich llwythi.
+ecc.subscription.organisation-disclose-personal-details-consent.individual.title = A ydych am gynnwys eich enw a chyfeiriad ar y gwiriwr EORI?
+ecc.subscription.organisation-disclose-personal-details-consent.individual.hint =  Bydd CThEM yn ychwanegu eich rhif EORI at <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" target="_blank">wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd</a>. Gallwch hefyd gytuno i gynnwys eich enw a’ch cyfeiriad. Gall hyn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu’ch llwythi.
+ecc.subscription.organisation-disclose-personal-details-consent.partnership.title = A ydych am gynnwys enw a chyfeiriad y bartneriaeth ar y gwiriwr EORI?
+ecc.subscription.organisation-disclose-personal-details-consent.charity.title = A ydych am gynnwys enw a chyfeiriad yr elusen ar y gwiriwr EORI?
+ecc.subscription.organisation-disclose-personal-details-consent.organisation.title = A ydych am gynnwys enw a chyfeiriad y sefydliad ar y gwiriwr EORI?
