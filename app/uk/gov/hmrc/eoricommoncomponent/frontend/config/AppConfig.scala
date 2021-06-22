@@ -106,11 +106,8 @@ class AppConfig @Inject() (
   private val eoriCommonComponentFrontendBaseUrl: String =
     config.get[String]("external-url.eori-common-component-frontend.url")
 
-  private val eoriCommonComponentFrontendStartEndpoint: String =
-    config.get[String]("external-url.eori-common-component-frontend.start-endpoint")
-
   def eoriCommonComponentFrontend(serviceName: String) =
-    eoriCommonComponentFrontendBaseUrl + serviceName + eoriCommonComponentFrontendStartEndpoint
+    eoriCommonComponentFrontendBaseUrl + serviceName + "/subscribe"
 
   def getServiceUrl(proxyServiceName: String): String = {
     val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
