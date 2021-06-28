@@ -180,38 +180,6 @@ cds.if.you.need.help.telephone.link=Gwybodaeth am gostau galwadau
 cds.subscription.contact-details.intro=Byddwn yn defnyddio’r manylion hyn i gysylltu â chi ynglŷn â’ch cais.
 
 #Get An EORI Journey
-# Start Page
-cds.start-page.title=Cael rhif EORI GB
-
-cds-start-page.intro1=O 1 Ionawr 2021 ymlaen, os ydych am symud nwyddau rhwng Prydain Fawr (Cymru, Lloegr a’r Alban) a gweddill y byd, mae’n bosibl y bydd angen Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) sy’n dechrau gyda GB arnoch.
-cds-start-page.intro2=Mae CThEM yn defnyddio hwn i gadarnhau pwy ydych a chasglu tollau ar eich nwyddau.
-cds-start-page.intro3=Os na chewch rif EORI GB, gallech wynebu costau uwch ac oedi. Er enghraifft, os na all CThEM glirio’ch nwyddau, efallai y bydd yn rhaid i chi dalu ffioedd storio.
-
-cds.start-page.ni.heading=Os ydych yn symud nwyddau i Ogledd Iwerddon neu oddi yno
-cds.start-page.ni.paragraph1= O 1 Ionawr 2021 ymlaen, bydd angen rhif EORI sy’n dechrau gyda XI arnoch i wneud y canlynol:
-cds.start-page.ni.paragraph1.bullet1=symud nwyddau rhwng Gogledd Iwerddon a gwledydd nad ydynt yn rhan o’r UE
-cds.start-page.ni.paragraph1.bullet2=gwneud datganiad yng Ngogledd Iwerddon
-cds.start-page.ni.paragraph1.bullet3=cael penderfyniad tollau yng Ngogledd Iwerddon
-cds.start-page.ni.paragraph2=I gael rhif EORI sy’n dechrau gydag XI, mae’n rhaid bod gennych rif EORI sy’n dechrau gyda GB eisoes. Os nad oes gennych un, gwnewch gais am rif EORI sy’n dechrau gyda GB cyn gynted â phosibl.
-cds.start-page.ni.paragraph3= Os oes gennych rif EORI eisoes sy’n dechrau gyda GB a bod CThEM yn meddwl bod angen un arnoch sy’n dechrau gyda XI, byddant yn anfon un atoch yn awtomatig ganol mis Rhagfyr 2020.
-cds.start-page.ni.paragraph4=I gael cyngor ar symud nwyddau rhwng Prydain Fawr a Gogledd Iwerddon, cofrestrwch ar gyfer y [Gwasanaeth Cymorth i Fasnachwyr].
-cds.start-page.ni.paragraph4.link=Gwasanaeth Cymorth i Fasnachwyr
-
-cds.start-page.get.heading=I gael rhif EORI, bydd angen y canlynol arnoch:
-cds.start-page.get.bullet1=rhif TAW (os yw wedi’i gofrestru), cod post y cyfeiriad TAW cofrestredig a’r dyddiad dod i rym - mae hwn ar eich tystysgrif cofrestru TAW
-cds.start-page.get.bullet2=Rhif Yswiriant Gwladol (os ydych yn unigolyn neu unig fasnachwr)
-cds.start-page.get.bullet3=Cyfeirnod Unigryw y Trethdalwr (UTR). Bydd hwn i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Hunanasesiad
-cds.start-page.get.paragraph1=Bydd angen y canlynol arnoch hefyd
-cds.start-page.get.bullet4=enw cofrestredig y cwmni
-cds.start-page.get.bullet5=y dyddiad y cofrestrwyd y busnes
-cds.start-page.get.bullet6=Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes
-cds.start-page.get.paragraph2=Mae’r wybodaeth hon i’w gweld ar [gofrestr Tŷ’r Cwmnïau]
-cds.start-page.get.paragraph2.link=Cofrestr Tŷ’r Cwmnïau
-cds.start-page.get.paragraph3=Mae’n cymryd 5 i 10 munud i wneud cais am rif EORI GB. Dylech ei gael ar unwaith a dylai fod yn barod i’w ddefnyddio i danysgrifio i wasanaeth tollau mewn dwy awr ac i’w ddefnyddio gydag Asiantaeth Ffiniau’r DU mewn 48 awr, ond gall gymryd hyd at 5 diwrnod gwaith os bydd angen i ni wneud mwy o wiriadau.
-
-cds.start-page.help.eori.contact=Cysylltu â’r tîm EORI ar-lein.
-
-# Start Page (end)
 
 cds.enrolment.pending.title=Mae problem wedi codi
 cds.enrolment.pending.otherService=gwasanaeth arall
@@ -362,3 +330,28 @@ ecc.subscription.organisation-disclose-personal-details-consent.individual.hint 
 ecc.subscription.organisation-disclose-personal-details-consent.partnership.title = A ydych am gynnwys enw a chyfeiriad y bartneriaeth ar y gwiriwr EORI?
 ecc.subscription.organisation-disclose-personal-details-consent.charity.title = A ydych am gynnwys enw a chyfeiriad yr elusen ar y gwiriwr EORI?
 ecc.subscription.organisation-disclose-personal-details-consent.organisation.title = A ydych am gynnwys enw a chyfeiriad y sefydliad ar y gwiriwr EORI?
+
+ecc.start-page.title = I gael mynediad at y gwasanaeth {0}, mae angen rhif EORI GB arnoch.
+ecc.start-page.para1 = Byddwn yn gofyn i chi nodi rhai manylion ac, os cewch eich cymeradwyo, byddwn yn rhoi rhif EORI a thanysgrifiad i’r gwasanaeth {0} i chi.
+ecc.start-page.para2 = TRANSLATE If approved, your subscription will be ready to use to within 2 hours. If we need to make more checks it may take up to 5 working days.
+ecc.start-page.para3 = Dim ond unwaith y bydd angen i chi wneud hyn.
+ecc.start-page.gbeori.title = TRANSLATE What you will need to subscribe and get a GB EORI number
+ecc.start-page.gbeori.para1.title = TRANSLATE If you are UK VAT registered we will ask you for:
+ecc.start-page.gbeori.para1.bullet1 = Rhif TAW
+ecc.start-page.gbeori.para1.bullet2 = cod post y cyfeiriad a gofrestrwyd ar gyfer TAW
+ecc.start-page.gbeori.para1.bullet3 = dyddiad y daw TAW i rym
+ecc.start-page.gbeori.para2 = TRANSLATE <a href="https://www.gov.uk/log-in-register-hmrc-online-services" target="_blank">Find your VAT details (opens in new tab/window)</a>
+ecc.start-page.gbeori.para3.title = TRANSLATE We also ask for:
+ecc.start-page.gbeori.para3.bullet = Cod Dosbarthiad Diwydiannol Safonol (SIC). <a href="https://www.gov.uk/get-information-about-a-company" target="_blank">Dewch o hyd i’ch cod SIC (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.company.title = Manylion y cwmni neu sefydliad arall
+ecc.start-page.company = TRANSLATE If you are a limited company, partnership or charity, we will also ask for:
+ecc.start-page.company.bullet1 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth os ydych yn talu treth gorfforaeth yn y DU. Gallwch ddod o hyd i <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" target="_blank" rel="noopener noreferrer">UTR coll (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.company.bullet2 = Enw’r cwmni cofrestredig
+ecc.start-page.company.bullet3 = Cyfeiriad cofrestredig y cwmni
+ecc.start-page.company.bullet4 = Dyddiad sefydlu
+ecc.start-page.sole-trader.title = Manylion yr unig fasnachwr neu unigolyn
+ecc.start-page.sole-trader = TRANSLATE If you have worked in the UK or registered for self-assessment, we will ask for one of the following:
+ecc.start-page.sole-trader.bullet1 = Rhif Yswiriant Gwladol
+ecc.start-page.sole-trader.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad. Gallwch ddod o hyd i <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">UTR coll (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.start-now = Dechrau nawr
+ecc.start-page.help.eori.contact = Cysylltu â’r tîm EORI ar-lein.
