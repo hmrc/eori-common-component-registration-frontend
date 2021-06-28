@@ -47,12 +47,12 @@ object SessionBuilder {
 
   def buildRequestWithSessionNoUser = {
     val sessionId = s"session-${UUID.randomUUID}"
-    FakeRequest().withSession(SessionKeys.sessionId -> sessionId)
+    FakeRequest("GET", "/atar/register").withSession(SessionKeys.sessionId -> sessionId)
   }
 
-  def buildRequestWithSessionNoUserAndToken = {
+  def buildRequestWithSessionNoUserAndToken() = {
     val sessionId = s"session-${UUID.randomUUID}"
-    addToken(FakeRequest().withSession(SessionKeys.sessionId -> sessionId))
+    addToken(FakeRequest("GET", "/atar/register").withSession(SessionKeys.sessionId -> sessionId))
   }
 
   def buildRequestWithSessionAndPathNoUserAndBasedInUkNotSelected(method: String, path: String) = {

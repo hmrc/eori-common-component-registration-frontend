@@ -180,38 +180,6 @@ cds.if.you.need.help.telephone.link=Find out about call charges
 cds.subscription.contact-details.intro=We will use these details to contact you about your application.
 
 #Get An EORI Journey
-# Start Page
-cds.start-page.title=Get a GB EORI number
-
-cds-start-page.intro1=From 1st January 2021 if you want to move goods between Great Britain (England, Scotland and Wales) and the rest of the world you may need a GB Economic Operator and Registration Identification (EORI) number.
-cds-start-page.intro2=HMRC uses this to identify you and collect duty on your goods.
-cds-start-page.intro3=If you do not get a GB EORI number you may experience increased costs and delays. For example, if HMRC cannot clear your goods you may have to pay storage fees.
-
-cds.start-page.ni.heading=If you move goods to or from Northern Ireland
-cds.start-page.ni.paragraph1=From 1 January 2021 you’ll need an EORI number that starts with XI to:
-cds.start-page.ni.paragraph1.bullet1=move goods between Northern Ireland and non-EU countries
-cds.start-page.ni.paragraph1.bullet2=make a declaration in Northern Ireland
-cds.start-page.ni.paragraph1.bullet3=get a customs decision in Northern Ireland
-cds.start-page.ni.paragraph2=To get an EORI number that starts with XI, you must already have an EORI number that starts with GB. If you do not have one, apply for an EORI number that starts with GB as soon as possible.
-cds.start-page.ni.paragraph3=If you already have an EORI number that starts with GB and HMRC thinks you need one that starts with XI, they’ll automatically send you one in mid-December 2020.
-cds.start-page.ni.paragraph4=To get advice on moving goods between Great Britain and Northern Ireland sign up for the {0}.
-cds.start-page.ni.paragraph4.link=Trader Support Service
-
-cds.start-page.get.heading=To get an EORI number you will need
-cds.start-page.get.bullet1=VAT number (if registered), the postcode of the registered VAT address and the effective date - this is on your VAT registration certificate
-cds.start-page.get.bullet2=National Insurance number (if you are an individual or sole trader)
-cds.start-page.get.bullet3=Unique Taxpayer Reference (UTR). This will be on tax returns and other letters about Self Assessment
-cds.start-page.get.paragraph1=You will also need
-cds.start-page.get.bullet4=registered company name
-cds.start-page.get.bullet5=date the business was registered
-cds.start-page.get.bullet6=Standard Industrial Classification (SIC) code for the business
-cds.start-page.get.paragraph2=This information can be found on the {0}
-cds.start-page.get.paragraph2.link=Companies House register
-cds.start-page.get.paragraph3=It takes around 5 to 10 minutes to apply for a GB EORI number. You should get it immediately and it should be ready to use to subscribe to a customs service in two hours and for use with the UK Border Agency in 48 hours, but it may take up to 5 working days if we need to make more checks.
-
-cds.start-page.help.eori.contact=Contact the EORI team online.
-
-# Start Page (end)
 
 cds.enrolment.pending.title=There is a problem
 cds.enrolment.pending.otherService=another service
@@ -364,3 +332,28 @@ ecc.subscription.organisation-disclose-personal-details-consent.individual.hint 
 ecc.subscription.organisation-disclose-personal-details-consent.partnership.title = Do you want to include the partnership name and address on the EORI checker?
 ecc.subscription.organisation-disclose-personal-details-consent.charity.title = Do you want to include the charity name and address on the EORI checker?
 ecc.subscription.organisation-disclose-personal-details-consent.organisation.title = Do you want to include the organisation name and address on the EORI checker?
+
+ecc.start-page.title = To access {0}, you need a GB EORI number.
+ecc.start-page.para1 = We will ask you to enter some details and, if approved, we''ll give you a GB EORI number and subscription to {0}.
+ecc.start-page.para2 = If approved, your subscription will be ready to use to within 2 hours. If we need to make more checks it may take up to 5 working days.
+ecc.start-page.para3 = You only need to do this once.
+ecc.start-page.gbeori.title = What you will need to subscribe and get a GB EORI number
+ecc.start-page.gbeori.para1.title = If you are UK VAT registered we will ask you for:
+ecc.start-page.gbeori.para1.bullet1 = VAT number
+ecc.start-page.gbeori.para1.bullet2 = VAT registered address postcode
+ecc.start-page.gbeori.para1.bullet3 = VAT effective date
+ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/log-in-register-hmrc-online-services" target="_blank">Find your VAT details (opens in new tab/window)</a>
+ecc.start-page.gbeori.para3.title = We also ask for:
+ecc.start-page.gbeori.para3.bullet = Standard Industrial Classification (SIC) code. <a href="https://www.gov.uk/get-information-about-a-company" target="_blank">Find your SIC code (opens in new window or tab)</a>.
+ecc.start-page.company.title = Company or other organisation details
+ecc.start-page.company = If you are a limited company, partnership or charity, we will also ask for:
+ecc.start-page.company.bullet1 = Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" target="_blank" rel="noopener noreferrer">find a UTR number (opens in a new window or tab)</a>.
+ecc.start-page.company.bullet2 = Registered company name
+ecc.start-page.company.bullet3 = Registered company address
+ecc.start-page.company.bullet4 = Date of establishment
+ecc.start-page.sole-trader.title = Sole trader or individual details
+ecc.start-page.sole-trader = If you have worked in the UK or registered for self-assessment, we will ask for one of the following:
+ecc.start-page.sole-trader.bullet1 = National Insurance number
+ecc.start-page.sole-trader.bullet2 = Self Assessment Unique Taxpayer Reference (UTR). You can <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
+ecc.start-page.start-now = Start now
+ecc.start-page.help.eori.contact = Contact the EORI team online.
