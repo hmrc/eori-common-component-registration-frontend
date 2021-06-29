@@ -17,8 +17,7 @@
 package unit.forms.models.subscription
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.ContactDetailsSubscribeModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, ContactDetailsSubscribeModel}
 
 class ContactDetailsSubscribeModelSpec extends UnitSpec {
 

@@ -17,7 +17,7 @@
 package util.builders
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 
 object SubscriptionContactDetailsFormBuilder {
 

@@ -18,7 +18,7 @@ package unit.forms.models.subscription
 
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 class AddressViewModelSpec extends UnitSpec {
 

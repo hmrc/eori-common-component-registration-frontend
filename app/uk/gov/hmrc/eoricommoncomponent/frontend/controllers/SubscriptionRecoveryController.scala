@@ -29,9 +29,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.RandomUUIDGenerator
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.HandleSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.recovery_registration_exists
 import uk.gov.hmrc.http.HeaderCarrier

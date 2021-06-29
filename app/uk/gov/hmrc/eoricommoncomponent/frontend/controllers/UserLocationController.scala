@@ -26,10 +26,17 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.Re
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  NewSubscription,
+  PreSubscriptionStatus,
+  RegistrationDisplayService,
+  Save4LaterService,
+  SubscriptionExists,
+  SubscriptionProcessing,
+  SubscriptionRejected,
+  SubscriptionStatusService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.registration.RegistrationDisplayService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{NewSubscription, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{sub01_outcome_processing, sub01_outcome_rejected}
