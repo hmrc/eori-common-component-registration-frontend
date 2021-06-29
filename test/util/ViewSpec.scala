@@ -43,8 +43,5 @@ trait CSRFTest {
   def withFakeCSRF[T](fakeRequest: FakeRequest[T]): Request[T] =
     CSRFTokenHelper.addCSRFToken(fakeRequest)
 
-  // TODO Replace this request with registration request
-  val fakeAtarSubscribeRequest = FakeRequest("GET", "/atar/subscribe")
-
   val fakeAtarRegisterRequest = FakeRequest("GET", "/atar/register")
 }

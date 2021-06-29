@@ -24,7 +24,7 @@ import util.ViewSpec
 
 class SignInWithDifferentDetailsSpec extends ViewSpec {
 
-  implicit val request = withFakeCSRF(fakeAtarSubscribeRequest)
+  implicit val request = withFakeCSRF(fakeAtarRegisterRequest)
 
   private val view = instanceOf[sign_in_with_different_details]
 

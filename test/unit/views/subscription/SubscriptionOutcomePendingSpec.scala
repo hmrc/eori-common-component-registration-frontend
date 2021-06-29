@@ -25,7 +25,7 @@ import util.ViewSpec
 
 class SubscriptionOutcomePendingSpec extends ViewSpec {
 
-  implicit val request = withFakeCSRF(fakeAtarSubscribeRequest)
+  implicit val request = withFakeCSRF(fakeAtarRegisterRequest)
 
   private val view = instanceOf[subscription_outcome_pending]
 

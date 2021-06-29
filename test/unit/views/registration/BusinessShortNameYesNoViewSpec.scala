@@ -36,7 +36,7 @@ class BusinessShortNameYesNoViewSpec extends ViewSpec {
 
   private val view = instanceOf[business_short_name_yes_no]
 
-  implicit val request: Request[Any] = withFakeCSRF(fakeAtarSubscribeRequest)
+  implicit val request: Request[Any] = withFakeCSRF(fakeAtarRegisterRequest)
 
   private def form(errorMessage: String): Form[YesNo] =
     MatchingForms.businessShortNameYesNoForm(errorMessage)

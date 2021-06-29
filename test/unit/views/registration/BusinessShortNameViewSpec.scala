@@ -36,7 +36,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
 
   private val view = instanceOf[business_short_name]
 
-  implicit val request: Request[Any] = withFakeCSRF(fakeAtarSubscribeRequest)
+  implicit val request: Request[Any] = withFakeCSRF(fakeAtarRegisterRequest)
 
   private def form(orgType: EtmpOrganisationType, isRow: Boolean): Form[BusinessShortName] =
     BusinessShortNameForm.form(orgType, isRow)
