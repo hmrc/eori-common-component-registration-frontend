@@ -18,7 +18,7 @@ package unit.services.mapping
 
 import base.UnitSpec
 import common.support.testdata.GenTestRunner
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel.{
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel.{
   sixLineAddressLine1MaxLength,
   sixLineAddressLine2MaxLength,
   townCityMaxLength

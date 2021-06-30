@@ -27,14 +27,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatEUDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   SubscriptionBusinessService,
   SubscriptionDetailsService,
   SubscriptionVatEUDetailsService
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionVatEUDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_eu
 
 import scala.concurrent.{ExecutionContext, Future}

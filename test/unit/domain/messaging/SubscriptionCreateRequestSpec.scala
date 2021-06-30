@@ -40,9 +40,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   Trader,
   VatIds
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.{
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   AddressViewModel,
+  ContactDetailsModel,
   VatDetails,
   VatEUDetailsModel
 }

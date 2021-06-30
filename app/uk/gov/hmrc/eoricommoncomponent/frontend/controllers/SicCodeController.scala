@@ -21,15 +21,13 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.SicCodeViewModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionForm.sicCodeform
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm.sicCodeform
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.{
-  SubscriptionBusinessService,
-  SubscriptionDetailsService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
 import uk.gov.hmrc.http.HeaderCarrier
 

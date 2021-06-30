@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, GroupId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.EnrolmentStoreProxyService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.EnrolmentStoreProxyService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future

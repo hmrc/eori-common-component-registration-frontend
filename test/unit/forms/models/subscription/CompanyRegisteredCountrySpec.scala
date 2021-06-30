@@ -19,7 +19,7 @@ package unit.forms.models.subscription
 import base.{Injector, UnitSpec}
 import play.api.data.FormError
 import play.api.test.Helpers.stubMessages
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.CompanyRegisteredCountry
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.CompanyRegisteredCountry
 
 class CompanyRegisteredCountrySpec extends UnitSpec with Injector {
 

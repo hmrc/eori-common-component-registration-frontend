@@ -21,13 +21,13 @@ import play.api.libs.json.{Format, Json}
 import play.api.libs.json.JodaWrites._
 import play.api.libs.json.JodaReads._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.registration.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.{
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   AddressViewModel,
   CompanyRegisteredCountry,
-  VatDetails,
+  ContactDetailsModel,
   VatEUDetailsModel
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 
 case class SubscriptionDetails(
   businessShortName: Option[BusinessShortName] = None,

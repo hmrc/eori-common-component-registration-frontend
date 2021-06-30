@@ -26,7 +26,7 @@ import util.ViewSpec
 
 class YouCantUseServiceSpec extends ViewSpec {
 
-  private implicit val request      = withFakeCSRF(fakeAtarSubscribeRequest)
+  private implicit val request      = withFakeCSRF(fakeAtarRegisterRequest)
   private val youCantUseServiceView = instanceOf[you_cant_use_service]
   private val sub02View             = instanceOf[sub02_request_not_processed]
 

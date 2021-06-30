@@ -24,11 +24,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsEuConfirmController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails.EuVatDetailsLimit
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionForm.euVatForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm.euVatForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatEUDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionVatEUDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.subscription.SubscriptionVatEUDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details_eu
 import uk.gov.hmrc.http.HeaderCarrier
 

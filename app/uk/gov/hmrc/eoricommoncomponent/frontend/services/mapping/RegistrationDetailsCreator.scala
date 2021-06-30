@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
   RegisterWithIDResponse
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.RegistrationDisplayResponse
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 @Singleton
 class RegistrationDetailsCreator {

@@ -23,9 +23,8 @@ import org.joda.time.LocalDate
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.subscription.VatDetailsForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.subscription.SubscriptionForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
 
 import scala.util.Random
 
