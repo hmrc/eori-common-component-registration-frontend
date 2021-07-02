@@ -102,23 +102,23 @@ lazy val scoverageSettings = {
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
 val compileDependencies = Seq(
-  "uk.gov.hmrc" %% "bootstrap-frontend-play-27" % "5.1.0",
-  "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.6.0-play-27",
-  "uk.gov.hmrc" %% "domain" % "5.11.0-play-27",
-  "uk.gov.hmrc" %% "mongo-caching" % "7.0.0-play-27",
+  "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "5.6.0",
+  "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.9.0-play-28",
+  "uk.gov.hmrc" %% "domain" % "6.1.0-play-28",
+  "uk.gov.hmrc" %% "mongo-caching" % "7.0.0-play-28",
   "uk.gov.hmrc" %% "emailaddress" % "3.5.0",
   "uk.gov.hmrc" %% "logback-json-logger" % "5.1.0",
-  "com.typesafe.play" %% "play-json-joda" % "2.7.3",
-  "uk.gov.hmrc" %% "play-language" % "4.12.0-play-27",
-  "uk.gov.hmrc" %% "play-ui" % "9.1.0-play-27",
+  "com.typesafe.play" %% "play-json-joda" % "2.8.1",
+  "uk.gov.hmrc" %% "play-language" % "4.12.0-play-28",
+  "uk.gov.hmrc" %% "play-ui" % "9.6.0-play-28",
   "org.webjars.npm" % "accessible-autocomplete" % "2.0.3"
 )
 
 
 val testDependencies = Seq(
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test,it",
+  "org.scalatest" %% "scalatest" % "3.0.8" % "test,it",
   "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % "test,it",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % "test,it",
   "com.github.tomakehurst" % "wiremock-standalone" % "2.23.2" % "test, it"
     exclude("org.apache.httpcomponents", "httpclient") exclude("org.apache.httpcomponents", "httpcore"),
   "org.scalacheck" %% "scalacheck" % "1.14.0" % "test,it",
@@ -126,7 +126,7 @@ val testDependencies = Seq(
   "us.codecraft" % "xsoup" % "0.3.1" % "test,it",
   "org.mockito" % "mockito-core" % "3.0.0" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0",
-  "uk.gov.hmrc" %% "reactivemongo-test" % "5.0.0-play-27" % "test, it"
+  "uk.gov.hmrc" %% "reactivemongo-test" % "5.0.0-play-28" % "test, it"
 )
 
 libraryDependencies ++= compileDependencies ++ testDependencies
