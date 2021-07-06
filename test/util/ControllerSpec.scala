@@ -19,6 +19,7 @@ package util
 import java.util.UUID
 
 import akka.stream.Materializer
+import akka.stream.testkit.NoMaterializer
 import base.{Injector, UnitSpec}
 import common.pages.WebPage
 import org.scalatestplus.mockito.MockitoSugar
@@ -32,7 +33,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import unit.controllers.CdsPage
 import util.builders.{AuthBuilder, SessionBuilder}
 import play.api.i18n.Lang._
-import play.api.test.{FakeRequest, NoMaterializer}
+import play.api.test.FakeRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 

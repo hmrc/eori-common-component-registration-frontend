@@ -17,7 +17,8 @@
 package unit.filters
 
 import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, Materializer}
+import akka.stream.testkit.NoMaterializer
+import akka.stream.Materializer
 import base.UnitSpec
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, spy, when}
@@ -39,7 +40,7 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
   val realConfig: Configuration = Configuration.load(env)
 
   implicit val system            = ActorSystem()
-  implicit val mat: Materializer = ActorMaterializer()
+  implicit val mat: Materializer = NoMaterializer
   val mockErrorHandler           = mock[CdsErrorHandler]
   val mockConfig                 = spy(realConfig)
   val mockServicesConfig         = mock[ServicesConfig]
