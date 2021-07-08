@@ -371,3 +371,18 @@ cds.subscription.vat-details.postcode=TRANSLATE VAT registration address postcod
 cds.subscription.vat-details.postcode.required.error=TRANSLATE Enter a valid VAT registration address postcode
 cds.subscription.vat-details.vat-effective-date.hint=TRANSLATE For example, 01 11 2007
 cds.subscription.vat-details.vat-effective-date.required.error=TRANSLATE Enter your effective VAT date, for example ''01 11 2007''
+
+#Where are you based?
+cds.registration.user-location.location.isle-of-man.label=Ynys Manaw
+cds.registration.user-location.location.islands.label=Ynysoedd y Sianel
+
+#CYA page
+ecc.company-name.label=TRANSLATE Company name
+cds.company.utr.label=TRANSLATE Corporation Tax UTR
+cds.form.customs-contact=TRANSLATE Contact details
+cds.form.gb-vat-number=TRANSLATE VAT Number
+cds.form.gb-vat-postcode=TRANSLATE Postcode of your VAT registration address
+cds.form.gb-vat-date=TRANSLATE VAT effective date
+cds.form.disclosure.company=TRANSLATE Company details included on the EORI checker
+cds.form.disclaimer.header=TRANSLATE Declaration
+cds.form.disclaimer=TRANSLATE By submitting this appplication you are confirming that, to the best of your knowledge, the details you are providing are correct.

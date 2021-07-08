@@ -107,9 +107,7 @@ class VatDetailsControllerSpec
       submitFormInCreateMode(validRequest + ("postcode" -> "")) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          pageLevelErrorSummaryListXPath
-        ) shouldBe "Enter a valid VAT registration address postcode"
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter a valid VAT registration address postcode"
         page.getElementsText(
           vatPostcodeFieldLevelError
         ) shouldBe "Error: Enter a valid VAT registration address postcode"

@@ -59,7 +59,7 @@ cds.subscription.outcomes.rejected.heading=The subscription request for {1} has 
 cds.subscription.outcomes.in-processing.title=We are processing the subscription request
 cds.subscription.outcomes.in-processing.heading=We are processing the subscription request for {0}
 
-enter-email-body-text=We will use this to send you the result of your application.
+enter-email-body-text=We''ll use this to send you the result of your application.
 cds.subscription.verify-email.para2=For your security the link in the email will expire after 72 hours.
 
 cds.email-confirmed.para.get-access=You can continue with your application.
@@ -149,7 +149,7 @@ cds.matching.nino.row.yes-no.error=Select yes if you have a National Insurance n
 cds.email-confirmed.title-and-heading=You have confirmed your email address
 cds.registration.user-location.location.uk.label=United Kingdom
 cds.registration.user-location.location.third-country.label=Outside the European Union
-cds.registration.user-location.location.third-country-inc-eu.label=Rest of the world
+cds.registration.user-location.location.third-country-inc-eu.label=Rest of world
 
 cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
@@ -373,3 +373,18 @@ cds.subscription.vat-details.postcode=VAT registration address postcode
 cds.subscription.vat-details.postcode.required.error=Enter a valid VAT registration address postcode
 cds.subscription.vat-details.vat-effective-date.hint=For example, 01 11 2007
 cds.subscription.vat-details.vat-effective-date.required.error=Enter your effective VAT date, for example ''01 11 2007''
+
+#Where are you based?
+cds.registration.user-location.location.isle-of-man.label=Isle of Man
+cds.registration.user-location.location.islands.label=Channel Islands
+
+#CYA page
+ecc.company-name.label=Company name
+cds.company.utr.label=Corporation Tax UTR
+cds.form.customs-contact=Contact details
+cds.form.gb-vat-number=VAT Number
+cds.form.gb-vat-postcode=Postcode of your VAT registration address
+cds.form.gb-vat-date=VAT effective date
+cds.form.disclosure.company=Company details included on the EORI checker
+cds.form.disclaimer.header=Declaration
+cds.form.disclaimer=By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct.

@@ -298,6 +298,8 @@ class CheckYourDetailsRegisterControllerSpec
           "Registered partnership name"
         case Partnership =>
           "Registered partnership name"
+        case Company | CharityPublicBodyNotForProfit =>
+          "Company name"
         case _ =>
           "Organisation name"
       }
@@ -317,7 +319,7 @@ class CheckYourDetailsRegisterControllerSpec
         case LimitedLiabilityPartnership | Partnership =>
           "Partnership Self Assessment UTR number"
         case _ =>
-          "Corporation Tax UTR number"
+          "Corporation Tax UTR"
       }
       s"display $UtrLabelText label for ${organisationType.id}" in {
         when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]]))
@@ -440,10 +442,10 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.getElementsText(RegistrationReviewPage.EmailXPath) shouldBe contactDetailsModelWithAllValues.emailAddress
 
-      page.getElementsText(SubscriptionExistingDetailsReviewPage.BusinessNameLabelXpath) shouldBe "Organisation name"
+      page.getElementsText(SubscriptionExistingDetailsReviewPage.BusinessNameLabelXpath) shouldBe "Company name"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.BusinessNameValueXpath) shouldBe "orgName"
 
-      page.getElementsText(SubscriptionExistingDetailsReviewPage.UtrNoLabelXPath) shouldBe "Corporation Tax UTR number"
+      page.getElementsText(SubscriptionExistingDetailsReviewPage.UtrNoLabelXPath) shouldBe "Corporation Tax UTR"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.UtrNoLabelValueXPath) shouldBe "7280616009"
 
       page.getElementsText(
@@ -470,7 +472,7 @@ class CheckYourDetailsRegisterControllerSpec
         SubscriptionExistingDetailsReviewPage.DateOfEstablishmentReviewLinkXPath
       ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
-      page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPathLabel) shouldBe "Contact"
+      page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPathLabel) shouldBe "Contact details"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPath) shouldBe
         strim("""
             |John Doe
@@ -484,7 +486,7 @@ class CheckYourDetailsRegisterControllerSpec
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.ContactDetailsReviewLinkXPath
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Contact")
+        .changeAnswerText("Contact details")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.ContactDetailsReviewLinkXPath
       ) shouldBe "/customs-registration-services/atar/register/contact-details/review"
@@ -513,34 +515,34 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersXpathLabel
-      ) shouldBe "UK VAT Number"
+      ) shouldBe "VAT Number"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersXpath) shouldBe "123456789"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationPostcodeXpathLabel
-      ) shouldBe "Postcode of your UK VAT registration address"
+      ) shouldBe "Postcode of your VAT registration address"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.UKVatIdentificationPostcodeXpath) shouldBe "SE28 1AA"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateXpathLabel
-      ) shouldBe "UK VAT effective date"
+      ) shouldBe "VAT effective date"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateXpath) shouldBe "1 January 2017"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("UK VAT Number")
+        .changeAnswerText("VAT Number")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersReviewLinkXpath
       ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationPostcodeReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Postcode of your UK VAT registration address")
+        .changeAnswerText("Postcode of your VAT registration address")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationPostcodeReviewLinkXpath
       ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("UK VAT effective date")
+        .changeAnswerText("VAT effective date")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateReviewLinkXpath
       ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
@@ -563,10 +565,10 @@ class CheckYourDetailsRegisterControllerSpec
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUDisclosureReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Organisation details included on the EORI checker")
+        .changeAnswerText("Company details included on the EORI checker")
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUDisclosureConsentXPathLabel
-      ) shouldBe "Organisation details included on the EORI checker"
+      ) shouldBe "Company details included on the EORI checker"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUDisclosureConsentXPath
       ) shouldBe "Yes - I want my organisation name and address on the EORI checker"
@@ -575,7 +577,7 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.ConfirmAndRegisterInfoXpath
-      ) shouldBe "By sending this application you confirm that the information you are providing is correct and complete."
+      ) shouldBe "By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct."
     }
   }
 
@@ -630,7 +632,7 @@ class CheckYourDetailsRegisterControllerSpec
         SubscriptionExistingDetailsReviewPage.DateOfEstablishmentReviewLinkXPath
       ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
-      page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPathLabel) shouldBe "Contact"
+      page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPathLabel) shouldBe "Contact details"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.ContactDetailsXPath) shouldBe
         strim("""
             |John Doe
@@ -644,7 +646,7 @@ class CheckYourDetailsRegisterControllerSpec
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.ContactDetailsReviewLinkXPath
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Contact")
+        .changeAnswerText("Contact details")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.ContactDetailsReviewLinkXPath
       ) shouldBe "/customs-registration-services/atar/register/contact-details/review"
@@ -673,20 +675,20 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersXpathLabel
-      ) shouldBe "UK VAT Number"
+      ) shouldBe "VAT Number"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersXpath) shouldBe "123456789"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationPostcodeXpathLabel
-      ) shouldBe "Postcode of your UK VAT registration address"
+      ) shouldBe "Postcode of your VAT registration address"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.UKVatIdentificationPostcodeXpath) shouldBe "SE28 1AA"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateXpathLabel
-      ) shouldBe "UK VAT effective date"
+      ) shouldBe "VAT effective date"
       page.getElementsText(SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateXpath) shouldBe "1 January 2017"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("UK VAT Number")
+        .changeAnswerText("VAT Number")
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersReviewLinkXpath
       ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
@@ -722,7 +724,7 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.ConfirmAndRegisterInfoXpath
-      ) shouldBe "By sending this application you confirm that the information you are providing is correct and complete."
+      ) shouldBe "By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct."
     }
   }
 
@@ -886,7 +888,7 @@ class CheckYourDetailsRegisterControllerSpec
     page.getElementText(
       RegistrationReviewPage.UKVatIdentificationNumbersReviewLinkXpath
     ) shouldBe RegistrationReviewPage
-      .changeAnswerText("UK VAT Number")
+      .changeAnswerText("VAT Number")
     page.getElementsHref(
       RegistrationReviewPage.UKVatIdentificationNumbersReviewLinkXpath
     ) shouldBe VatRegisteredUkController

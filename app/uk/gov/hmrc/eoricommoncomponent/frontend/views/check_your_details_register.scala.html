@@ -43,8 +43,10 @@
 @orgNameLabel = @{
     if(isPartnership) {
         messages("cds.partner-name.label")
-    } else {
+    } else if(isRowOrganisation) {
         messages("cds.business-name.label")
+    } else {
+        messages("ecc.company-name.label")
     }
 }
 
@@ -161,8 +163,10 @@
         messages("cds.form.disclosure.partnership")
     } else if(isIndividual || isSoleTrader) {
         messages("cds.form.disclosure.individual")
-    } else {
+    } else if(isRowOrganisation) {
         messages("cds.form.disclosure")
+    } else {
+        messages("cds.form.disclosure.company")
     }
 }
 
@@ -332,6 +336,15 @@
                 )
             }
             @if(!isIndividual) {
+                @subscription.sicCode.map { sic =>
+                    @summaryRow_di(
+                        "activity",
+                        messages("cds.form.sic-code"),
+                        Html.apply(sic),
+                        Some(SicCodeController.submit(isInReviewMode = true, service)),
+                        messages("cds.form.sic-code")
+                    )
+                }
                 @summaryRow_di(
                     "gb-vat-number",
                     messages("cds.form.gb-vat-number"),
@@ -360,15 +373,6 @@
                     if(subscription.vatEUDetails.nonEmpty) Some(VatDetailsEuConfirmController.reviewForm(service)) else Some(VatRegisteredEuController.reviewForm(service)),
                     messages("cds.form.eu-vat-numbers")
                 )
-                @subscription.sicCode.map { sic =>
-                    @summaryRow_di(
-                        "activity",
-                        messages("cds.form.sic-code"),
-                        Html.apply(sic),
-                        Some(SicCodeController.submit(isInReviewMode = true, service)),
-                        messages("cds.form.sic-code")
-                    )
-                }
             }
             @summaryRow_di(
                 "disclosure",
@@ -379,6 +383,8 @@
             )
 
         </dl>
+
+        <h2 id="disclaimer-header">@messages("cds.form.disclaimer.header")</h2>
 
         <p id="disclaimer-content">@messages("cds.form.disclaimer")</p>
 

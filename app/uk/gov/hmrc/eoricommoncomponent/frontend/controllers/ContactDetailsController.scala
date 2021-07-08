@@ -48,15 +48,15 @@ class ContactDetailsController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      populateFormGYE(service)(false)
+      populateForm(service)(false)
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      populateFormGYE(service)(true)
+      populateForm(service)(true)
     }
 
-  private def populateFormGYE(
+  private def populateForm(
     service: Service
   )(isInReviewMode: Boolean)(implicit request: Request[AnyContent]): Future[Result] =
     subscriptionBusinessService.cachedContactDetailsModel.flatMap { contactDetails =>

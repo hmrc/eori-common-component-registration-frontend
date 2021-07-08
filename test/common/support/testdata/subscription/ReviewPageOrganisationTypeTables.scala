@@ -27,7 +27,6 @@ trait ReviewPageOrganisationTypeTables {
     Partnership,
     LimitedLiabilityPartnership,
     CharityPublicBodyNotForProfit,
-    EUOrganisation,
     ThirdCountryOrganisation
   )
 
