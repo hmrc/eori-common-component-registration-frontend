@@ -353,13 +353,6 @@
                     Some(VATNumberPage.reviewForm(service)),
                     messages("cds.form.gb-vat-date")
                 )
-                @summaryRow_di(
-                    "eu-vat",
-                    messages("cds.form.eu-vat-numbers"),
-                    euVatDetails(subscription.vatEUDetails),
-                    if(subscription.vatEUDetails.nonEmpty) Some(VatDetailsEuConfirmController.reviewForm(service)) else Some(VatRegisteredEuController.reviewForm(service)),
-                    messages("cds.form.eu-vat-numbers")
-                )
                 @subscription.sicCode.map { sic =>
                     @summaryRow_di(
                         "activity",

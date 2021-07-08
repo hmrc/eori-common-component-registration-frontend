@@ -90,114 +90,84 @@ class SubscriptionFlowManagerSpec
         OrganisationSubscriptionFlow,
         DateOfEstablishmentSubscriptionFlowPage,
         1,
-        10,
+        7,
         ContactDetailsSubscriptionFlowPageGetEori
       ),
       (
         OrganisationSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
         2,
-        10,
+        7,
         BusinessShortNameSubscriptionFlowPage
       ),
-      (OrganisationSubscriptionFlow, BusinessShortNameSubscriptionFlowPage, 3, 10, SicCodeSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, SicCodeSubscriptionFlowPage, 4, 10, VatRegisteredUkSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 5, 10, VatDetailsSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, VatDetailsSubscriptionFlowPage, 6, 10, VatRegisteredEuSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, VatRegisteredEuSubscriptionFlowPage, 7, 10, VatEUIdsSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, VatEUIdsSubscriptionFlowPage, 8, 10, VatEUConfirmSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, VatEUConfirmSubscriptionFlowPage, 9, 10, EoriConsentSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, EoriConsentSubscriptionFlowPage, 10, 10, ReviewDetailsPageGetYourEORI),
+      (OrganisationSubscriptionFlow, BusinessShortNameSubscriptionFlowPage, 3, 7, SicCodeSubscriptionFlowPage),
+      (OrganisationSubscriptionFlow, SicCodeSubscriptionFlowPage, 4, 7, VatRegisteredUkSubscriptionFlowPage),
+      (OrganisationSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 5, 7, VatDetailsSubscriptionFlowPage),
+      (OrganisationSubscriptionFlow, VatDetailsSubscriptionFlowPage, 6, 7, EoriConsentSubscriptionFlowPage),
+      (OrganisationSubscriptionFlow, EoriConsentSubscriptionFlowPage, 7, 7, ReviewDetailsPageGetYourEORI),
       (
         PartnershipSubscriptionFlow,
         DateOfEstablishmentSubscriptionFlowPage,
         1,
-        10,
+        7,
         ContactDetailsSubscriptionFlowPageGetEori
       ),
       (
         PartnershipSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
         2,
-        10,
+        7,
         BusinessShortNameSubscriptionFlowPage
       ),
-      (PartnershipSubscriptionFlow, BusinessShortNameSubscriptionFlowPage, 3, 10, SicCodeSubscriptionFlowPage),
-      (PartnershipSubscriptionFlow, SicCodeSubscriptionFlowPage, 4, 10, VatRegisteredUkSubscriptionFlowPage),
-      (PartnershipSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 5, 10, VatDetailsSubscriptionFlowPage),
-      (PartnershipSubscriptionFlow, VatDetailsSubscriptionFlowPage, 6, 10, VatRegisteredEuSubscriptionFlowPage),
-      (PartnershipSubscriptionFlow, VatRegisteredEuSubscriptionFlowPage, 7, 10, VatEUIdsSubscriptionFlowPage),
-      (PartnershipSubscriptionFlow, VatEUIdsSubscriptionFlowPage, 8, 10, VatEUConfirmSubscriptionFlowPage),
-      (PartnershipSubscriptionFlow, VatEUConfirmSubscriptionFlowPage, 9, 10, EoriConsentSubscriptionFlowPage),
-      (PartnershipSubscriptionFlow, EoriConsentSubscriptionFlowPage, 10, 10, ReviewDetailsPageGetYourEORI),
-      (SoleTraderSubscriptionFlow, ContactDetailsSubscriptionFlowPageGetEori, 1, 8, SicCodeSubscriptionFlowPage),
-      (SoleTraderSubscriptionFlow, SicCodeSubscriptionFlowPage, 2, 8, VatRegisteredUkSubscriptionFlowPage),
-      (SoleTraderSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 3, 8, VatDetailsSubscriptionFlowPage),
-      (SoleTraderSubscriptionFlow, VatDetailsSubscriptionFlowPage, 4, 8, VatRegisteredEuSubscriptionFlowPage),
-      (SoleTraderSubscriptionFlow, VatRegisteredEuSubscriptionFlowPage, 5, 8, VatEUIdsSubscriptionFlowPage),
-      (SoleTraderSubscriptionFlow, VatEUIdsSubscriptionFlowPage, 6, 8, VatEUConfirmSubscriptionFlowPage),
-      (SoleTraderSubscriptionFlow, VatEUConfirmSubscriptionFlowPage, 7, 8, EoriConsentSubscriptionFlowPage),
-      (SoleTraderSubscriptionFlow, EoriConsentSubscriptionFlowPage, 8, 8, ReviewDetailsPageGetYourEORI),
+      (PartnershipSubscriptionFlow, BusinessShortNameSubscriptionFlowPage, 3, 7, SicCodeSubscriptionFlowPage),
+      (PartnershipSubscriptionFlow, SicCodeSubscriptionFlowPage, 4, 7, VatRegisteredUkSubscriptionFlowPage),
+      (PartnershipSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 5, 7, VatDetailsSubscriptionFlowPage),
+      (PartnershipSubscriptionFlow, VatDetailsSubscriptionFlowPage, 6, 7, EoriConsentSubscriptionFlowPage),
+      (PartnershipSubscriptionFlow, EoriConsentSubscriptionFlowPage, 7, 7, ReviewDetailsPageGetYourEORI),
+      (SoleTraderSubscriptionFlow, ContactDetailsSubscriptionFlowPageGetEori, 1, 5, SicCodeSubscriptionFlowPage),
+      (SoleTraderSubscriptionFlow, SicCodeSubscriptionFlowPage, 2, 5, VatRegisteredUkSubscriptionFlowPage),
+      (SoleTraderSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 3, 5, VatDetailsSubscriptionFlowPage),
+      (SoleTraderSubscriptionFlow, VatDetailsSubscriptionFlowPage, 4, 5, EoriConsentSubscriptionFlowPage),
+      (SoleTraderSubscriptionFlow, EoriConsentSubscriptionFlowPage, 5, 5, ReviewDetailsPageGetYourEORI),
       (IndividualSubscriptionFlow, ContactDetailsSubscriptionFlowPageGetEori, 1, 2, EoriConsentSubscriptionFlowPage),
       (IndividualSubscriptionFlow, EoriConsentSubscriptionFlowPage, 2, 2, ReviewDetailsPageGetYourEORI),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         DateOfEstablishmentSubscriptionFlowPage,
         1,
-        10,
+        7,
         ContactDetailsSubscriptionFlowPageGetEori
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
         2,
-        10,
+        7,
         BusinessShortNameSubscriptionFlowPage
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         BusinessShortNameSubscriptionFlowPage,
         3,
-        10,
+        7,
         SicCodeSubscriptionFlowPage
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         SicCodeSubscriptionFlowPage,
         4,
-        10,
+        7,
         VatRegisteredUkSubscriptionFlowPage
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         VatRegisteredUkSubscriptionFlowPage,
         5,
-        10,
+        7,
         VatDetailsSubscriptionFlowPage
       ),
-      (
-        ThirdCountryOrganisationSubscriptionFlow,
-        VatDetailsSubscriptionFlowPage,
-        6,
-        10,
-        VatRegisteredEuSubscriptionFlowPage
-      ),
-      (
-        ThirdCountryOrganisationSubscriptionFlow,
-        VatRegisteredEuSubscriptionFlowPage,
-        7,
-        10,
-        VatEUIdsSubscriptionFlowPage
-      ),
-      (ThirdCountryOrganisationSubscriptionFlow, VatEUIdsSubscriptionFlowPage, 8, 10, VatEUConfirmSubscriptionFlowPage),
-      (
-        ThirdCountryOrganisationSubscriptionFlow,
-        VatEUConfirmSubscriptionFlowPage,
-        9,
-        10,
-        EoriConsentSubscriptionFlowPage
-      ),
-      (ThirdCountryOrganisationSubscriptionFlow, EoriConsentSubscriptionFlowPage, 10, 10, ReviewDetailsPageGetYourEORI),
+      (ThirdCountryOrganisationSubscriptionFlow, VatDetailsSubscriptionFlowPage, 6, 7, EoriConsentSubscriptionFlowPage),
+      (ThirdCountryOrganisationSubscriptionFlow, EoriConsentSubscriptionFlowPage, 7, 7, ReviewDetailsPageGetYourEORI),
       (
         ThirdCountryIndividualSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
@@ -210,28 +180,19 @@ class SubscriptionFlowManagerSpec
         ThirdCountrySoleTraderSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
         1,
-        8,
+        5,
         SicCodeSubscriptionFlowPage
       ),
-      (ThirdCountrySoleTraderSubscriptionFlow, SicCodeSubscriptionFlowPage, 2, 8, VatRegisteredUkSubscriptionFlowPage),
+      (ThirdCountrySoleTraderSubscriptionFlow, SicCodeSubscriptionFlowPage, 2, 5, VatRegisteredUkSubscriptionFlowPage),
       (
         ThirdCountrySoleTraderSubscriptionFlow,
         VatRegisteredUkSubscriptionFlowPage,
         3,
-        8,
+        5,
         VatDetailsSubscriptionFlowPage
       ),
-      (
-        ThirdCountrySoleTraderSubscriptionFlow,
-        VatDetailsSubscriptionFlowPage,
-        4,
-        8,
-        VatRegisteredEuSubscriptionFlowPage
-      ),
-      (ThirdCountrySoleTraderSubscriptionFlow, VatRegisteredEuSubscriptionFlowPage, 5, 8, VatEUIdsSubscriptionFlowPage),
-      (ThirdCountrySoleTraderSubscriptionFlow, VatEUIdsSubscriptionFlowPage, 6, 8, VatEUConfirmSubscriptionFlowPage),
-      (ThirdCountrySoleTraderSubscriptionFlow, VatEUConfirmSubscriptionFlowPage, 7, 8, EoriConsentSubscriptionFlowPage),
-      (ThirdCountrySoleTraderSubscriptionFlow, EoriConsentSubscriptionFlowPage, 8, 8, ReviewDetailsPageGetYourEORI)
+      (ThirdCountrySoleTraderSubscriptionFlow, VatDetailsSubscriptionFlowPage, 4, 5, EoriConsentSubscriptionFlowPage),
+      (ThirdCountrySoleTraderSubscriptionFlow, EoriConsentSubscriptionFlowPage, 5, 5, ReviewDetailsPageGetYourEORI)
     )
 
     TableDrivenPropertyChecks.forAll(values) {

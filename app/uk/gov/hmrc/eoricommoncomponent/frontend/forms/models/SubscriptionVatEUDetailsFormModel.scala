@@ -39,6 +39,7 @@ object SubscriptionVatEUDetailsFormModel {
 
 }
 
+// TODO Remove this model, EU Details are not in the registration journey anymore
 case class VatEUDetailsModel(vatCountry: String, vatNumber: String) {
   val index = MurmurHash.stringHash(s"$vatNumber:$vatCountry").abs
 }

@@ -37,7 +37,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionDetails,
   SubscriptionFlow
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, VatEUDetailsModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
@@ -259,7 +259,6 @@ class CheckYourDetailsRegisterControllerSpec
           RegistrationReviewPage.EmailXPath
         ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.emailAddress
         page.getElementsText(RegistrationReviewPage.UKVatIdentificationNumberXpath) shouldBe NotEntered
-        page.getElementsText(RegistrationReviewPage.EUVatDetailsXpath) shouldBe NotEntered
         page.getElementsText(RegistrationReviewPage.ContactDetailsXPath) shouldBe
           strim(s"""
                  |${contactUkDetailsModelWithMandatoryValuesOnly.fullName}
@@ -544,22 +543,6 @@ class CheckYourDetailsRegisterControllerSpec
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationDateReviewLinkXpath
       ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
-
-      page.getElementsText(
-        SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersXpathLabel
-      ) shouldBe "EU VAT numbers"
-      page.getElementsText(SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersXpath) shouldBe
-        strim("""
-            |VAT-2 - France
-            |VAT-3 - Poland
-          """)
-      page.getElementsText(
-        SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersReviewLinkXpath
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("EU VAT numbers")
-      page.getElementsHref(
-        SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersReviewLinkXpath
-      ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUDisclosureReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
@@ -690,23 +673,6 @@ class CheckYourDetailsRegisterControllerSpec
       page.getElementsHref(
         SubscriptionExistingDetailsReviewPage.UKVatIdentificationNumbersReviewLinkXpath
       ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
-
-      page.getElementsText(
-        SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersXpathLabel
-      ) shouldBe "EU VAT numbers"
-
-      page.getElementsText(SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersXpath) shouldBe
-        strim("""
-            |VAT-2 - France
-            |VAT-3 - Poland
-          """)
-      page.getElementsText(
-        SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersReviewLinkXpath
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("EU VAT numbers")
-      page.getElementsHref(
-        SubscriptionExistingDetailsReviewPage.EUVatIdentificationNumbersReviewLinkXpath
-      ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.EUDisclosureReviewLinkXpath
       ) shouldBe SubscriptionExistingDetailsReviewPage
@@ -796,33 +762,6 @@ class CheckYourDetailsRegisterControllerSpec
       showForm() { result =>
         val page = CdsPage(contentAsString(result))
         assertUkVatDetailsShowValues(page)
-        page.getElementsText(RegistrationReviewPage.EUVatDetailsXpath) shouldBe NotEntered
-      }
-    }
-
-    "display only EU ones when only for EU found in cache" in {
-      when(mockSubscriptionDetailsHolder.vatEUDetails).thenReturn(euVats)
-      mockRegistrationDetailsBasedOnOrganisationType(Individual)
-
-      showForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(RegistrationReviewPage.UKVatIdentificationNumberXpath) shouldBe NotEntered
-        assertEuVatDetailsShowValues(page)
-      }
-    }
-
-    "display country in correct form" in {
-
-      val euVatsCaseInsensitive: Seq[VatEUDetailsModel] =
-        Seq(VatEUDetailsModel("FR", "VAT-2"), VatEUDetailsModel("PL", "VAT-3"))
-
-      when(mockSubscriptionDetailsHolder.vatEUDetails).thenReturn(euVatsCaseInsensitive)
-      mockRegistrationDetailsBasedOnOrganisationType(Individual)
-
-      showForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(RegistrationReviewPage.EUVatDetailsXpath) shouldBe "VAT-2 - France VAT-3 - Poland"
-        assertEuVatDetailsShowValues(page)
       }
     }
   }
@@ -859,7 +798,6 @@ class CheckYourDetailsRegisterControllerSpec
 
   private def testCommonReviewPageFields(page: CdsPage, expectedCountry: Option[String] = Option("France")): Unit = {
     assertUkVatDetailsShowValues(page)
-    assertEuVatDetailsShowValues(page)
 
     val countryString = expectedCountry match {
       case None    => ""
@@ -892,19 +830,6 @@ class CheckYourDetailsRegisterControllerSpec
     ) shouldBe VatRegisteredUkController
       .reviewForm(atarService)
       .url
-  }
-
-  private def assertEuVatDetailsShowValues(page: CdsPage) {
-    page.getElementsText(RegistrationReviewPage.EUVatDetailsXpath) shouldBe
-      strim("""
-          |VAT-2 - France
-          |VAT-3 - Poland
-        """)
-
-    page.getElementText(
-      RegistrationReviewPage.EUVatIdentificationNumbersReviewLinkXpath
-    ) shouldBe RegistrationReviewPage
-      .changeAnswerText("EU VAT numbers")
   }
 
   def showForm(
