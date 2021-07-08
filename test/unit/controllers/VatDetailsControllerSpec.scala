@@ -109,10 +109,10 @@ class VatDetailsControllerSpec
         val page = CdsPage(contentAsString(result))
         page.getElementsText(
           pageLevelErrorSummaryListXPath
-        ) shouldBe "Enter a valid postcode of your VAT registration address"
+        ) shouldBe "Enter a valid VAT registration address postcode"
         page.getElementsText(
           vatPostcodeFieldLevelError
-        ) shouldBe "Error: Enter a valid postcode of your VAT registration address"
+        ) shouldBe "Error: Enter a valid VAT registration address postcode"
         page.getElementsText("title") should startWith("Error: ")
       }
     }

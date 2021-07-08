@@ -28,11 +28,9 @@ sealed trait SicCodePageCommon extends WebPage {
 
   val continueButtonXpath = "//*[@class='button']"
 
-  val headingXpath: String = "//*[@id='page-heading']"
+  val headingXpath: String = "//*[@id=\"sic-outer\"]/h1/label/span"
 
-  val sicDescriptionLabelXpath = "//*[@id='description']"
-
-  val sicLabelXpath = "//*label[@for='sic']"
+  val sicDescriptionLabelXpath = "//*[@id=\"sic-hint\"]"
 }
 
 trait SicCodePage extends SicCodePageCommon {}

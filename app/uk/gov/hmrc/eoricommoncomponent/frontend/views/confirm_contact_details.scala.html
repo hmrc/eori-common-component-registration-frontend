@@ -76,7 +76,7 @@
 }
 
 @addressHtml = {
-  <div id="address" class="mb-2">
+  <div id="address" class="mb-2 panel panel-border-wide">
       @helpers.noMarginParagraph(address.street)
       @helpers.noMarginParagraph(address.city)
       @address.postcode.map(code => helpers.noMarginParagraph(code))

@@ -196,7 +196,7 @@ cds.languageSelect.select.hint=Newid yr iaith ir Gymraeg
 
 cds.pdf.outcomes.eori.number=EORI number: {0}
 
-confirm-business-details.title-and-heading=Is this your registered address?
+confirm-business-details.title-and-heading=Is this your registered company address?
 confirm-business-details.partnership.title-and-heading=Is this your registered address?
 confirm-business-details.individual.title-and-heading=Is this your address?
 confirm-business-details.yes=Yes
@@ -357,3 +357,19 @@ ecc.start-page.sole-trader.bullet1 = National Insurance number
 ecc.start-page.sole-trader.bullet2 = Self Assessment Unique Taxpayer Reference (UTR). You can <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
 ecc.start-page.start-now = Start now
 ecc.start-page.help.eori.contact = Contact the EORI team online.
+
+#Sic code
+cds.subscription.sic.page.title=What is the Standard Industrial Classification (SIC) code?
+cds.subscription.sic.heading=What is the Standard Industrial Classification (SIC) code?
+cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number.</br></br> <a href="https://www.gov.uk/get-information-about-a-company" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a>. </br></br> If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab)</a>.
+
+#VAT registered
+cds.subscription.vat-registered-uk.title-and-heading=Are you or your organisation VAT registered in the UK?
+
+#VAT details
+cds.subscription.vat-details.heading=Your UK VAT Details
+cds.subscription.vat-details.intro-text=You can find these details on your VAT registration certificate or <a href="https://www.gov.uk/log-in-register-hmrc-online-services" target="_blank">find your VAT details (opens in new tab/window)</a>.
+cds.subscription.vat-details.postcode=VAT registration address postcode
+cds.subscription.vat-details.postcode.required.error=Enter a valid VAT registration address postcode
+cds.subscription.vat-details.vat-effective-date.hint=For example, 01 11 2007
+cds.subscription.vat-details.vat-effective-date.required.error=Enter your effective VAT date, for example ''01 11 2007''

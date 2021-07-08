@@ -196,7 +196,7 @@ cds.languageSelect.select.hint=Change the language to English
 
 cds.pdf.outcomes.eori.number=Rhif EORI: {0}
 
-confirm-business-details.title-and-heading=Ai dyma’ch cyfeiriad cofrestredig?
+confirm-business-details.title-and-heading=TRANSLATE Is this your registered company address?
 confirm-business-details.partnership.title-and-heading=Ai dyma’ch cyfeiriad cofrestredig?
 confirm-business-details.individual.title-and-heading= Ai dyma’ch cyfeiriad?
 confirm-business-details.yes=Iawn
@@ -355,3 +355,19 @@ ecc.start-page.sole-trader.bullet1 = Rhif Yswiriant Gwladol
 ecc.start-page.sole-trader.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad. Gallwch ddod o hyd i <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">UTR coll (yn agor ffenestr neu dab newydd)</a>.
 ecc.start-page.start-now = Dechrau nawr
 ecc.start-page.help.eori.contact = Cysylltu â’r tîm EORI ar-lein.
+
+#Sic code
+cds.subscription.sic.page.title=TRANSLATE What is the Standard Industrial Classification (SIC) code?
+cds.subscription.sic.heading=TRANSLATE What is the Standard Industrial Classification (SIC) code?
+cds.subscription.sic.description=TRANSLATE A SIC code is a 5 digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number.</br></br> <a href="https://www.gov.uk/get-information-about-a-company" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a>. </br></br> If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab)</a>.
+
+#VAT registered
+cds.subscription.vat-registered-uk.title-and-heading=TRANSLATE Are you or your organisation VAT registered in the UK?
+
+#VAT details
+cds.subscription.vat-details.heading=TRANSLATE Your UK VAT Details
+cds.subscription.vat-details.intro-text=TRANSLATE You can find these details on your VAT registration certificate or <a href="https://www.gov.uk/log-in-register-hmrc-online-services" target="_blank">find your VAT details (opens in new tab/window)</a>.
+cds.subscription.vat-details.postcode=TRANSLATE VAT registration address postcode
+cds.subscription.vat-details.postcode.required.error=TRANSLATE Enter a valid VAT registration address postcode
+cds.subscription.vat-details.vat-effective-date.hint=TRANSLATE For example, 01 11 2007
+cds.subscription.vat-details.vat-effective-date.required.error=TRANSLATE Enter your effective VAT date, for example ''01 11 2007''

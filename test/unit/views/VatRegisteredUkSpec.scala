@@ -55,7 +55,7 @@ class VatRegisteredUkSpec extends ViewSpec {
   "The 'Is your organisation VAT registered in the UK?' Page" should {
 
     "display correct title" in {
-      doc.title must startWith("Is your organisation VAT registered in the UK?")
+      doc.title must startWith("Are you or your organisation VAT registered in the UK?")
     }
 
     "have the correct class on the h1" in {

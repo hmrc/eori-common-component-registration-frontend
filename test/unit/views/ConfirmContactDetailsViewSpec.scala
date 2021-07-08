@@ -41,7 +41,7 @@ class ConfirmContactDetailsViewSpec extends ViewSpec {
 
   "Confirm Contact Details" should {
     "display correct title" in {
-      CorporateBodyDoc.title() must startWith("Is this your registered address")
+      CorporateBodyDoc.title() must startWith("Is this your registered company address")
       SoleTraderOrIndividualWithNinoDoc.title() must startWith("Is this your address")
       PartnershipBodyDoc.title() must startWith("Is this your registered address")
     }
@@ -49,7 +49,7 @@ class ConfirmContactDetailsViewSpec extends ViewSpec {
       CorporateBodyDoc
         .body()
         .getElementsByTag("h1")
-        .text() mustBe "Is this your registered address?"
+        .text() mustBe "Is this your registered company address?"
       SoleTraderOrIndividualWithNinoDoc
         .body()
         .getElementsByTag("h1")
@@ -76,7 +76,7 @@ class ConfirmContactDetailsViewSpec extends ViewSpec {
       CorporateBodyDoc
         .body()
         .getElementsByTag("legend")
-        .text() mustBe "Is this your registered address?"
+        .text() mustBe "Is this your registered company address?"
       SoleTraderOrIndividualWithNinoDoc
         .body()
         .getElementsByTag("legend")

@@ -20,7 +20,7 @@ import common.pages.WebPage
 
 trait VatRegisterUKPage extends WebPage {
 
-  override val title = "Is your organisation VAT registered in the UK?"
+  override val title = "Are you or your organisation VAT registered in the UK?"
 
   val fieldLevelErrorYesNoAnswerForUKVat = "//*[@id='yes-no-answer-field']/*[@class='error-message']"
 

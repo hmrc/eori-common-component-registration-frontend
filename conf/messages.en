@@ -1193,7 +1193,6 @@ cds.subscription.address-details.countryCode.error.label=Enter your country
 cds.subscription.address-details.country.emptyValueText=Pick a country
 
 #address check limited companies
-confirm-business-details.title-and-heading=These are the details we have about your organisation
 confirm-business-details.partnership.title-and-heading=These are the details we have about your partnership
 confirm-business-details.individual.title-and-heading=These are the details we have about you
 confirm-business-details.heading2=Are these the organisation details you want to use to get an EORI number?

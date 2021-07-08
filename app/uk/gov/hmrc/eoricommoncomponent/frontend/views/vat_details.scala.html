@@ -44,7 +44,7 @@
 
             @CSRF.formField
             <h1 class="heading-large">@messages("cds.subscription.vat-details.heading")</h1>
-            <p class="form-hint">@messages("cds.subscription.vat-details.intro-text")</p>
+            <p class="form-hint">@Html(messages("cds.subscription.vat-details.intro-text"))</p>
 
             @helpers.inputText(vatForm)("postcode", "cds.subscription.vat-details.postcode")
             @helpers.inputText(vatForm)("vat-number", "cds.subscription.vat-details.vat-number")
