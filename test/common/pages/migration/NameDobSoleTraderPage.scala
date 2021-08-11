@@ -17,7 +17,7 @@
 package common.pages.migration
 
 import common.pages.WebPage
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameDobMatchModel
 
 trait NameDobSoleTraderPage extends WebPage {

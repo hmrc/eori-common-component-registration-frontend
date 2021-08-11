@@ -108,12 +108,10 @@ val compileDependencies = Seq(
   "uk.gov.hmrc" %% "mongo-caching" % "7.0.0-play-28",
   "uk.gov.hmrc" %% "emailaddress" % "3.5.0",
   "uk.gov.hmrc" %% "logback-json-logger" % "5.1.0",
-  "com.typesafe.play" %% "play-json-joda" % "2.8.1",
-  "uk.gov.hmrc" %% "play-language" % "4.12.0-play-28",
+  "uk.gov.hmrc" %% "play-language" % "5.1.0-play-28",
   "uk.gov.hmrc" %% "play-ui" % "9.6.0-play-28",
   "org.webjars.npm" % "accessible-autocomplete" % "2.0.3"
 )
-
 
 val testDependencies = Seq(
   "org.scalatest" %% "scalatest" % "3.0.8" % "test,it",

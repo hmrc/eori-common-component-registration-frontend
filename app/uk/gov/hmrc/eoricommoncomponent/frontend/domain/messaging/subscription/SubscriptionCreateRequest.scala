@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import java.time.Clock
 import java.util.UUID
 
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.{DateTime, DateTimeZone, LocalDate}
+import java.time.{Clock, LocalDate, ZoneOffset, ZonedDateTime}
+import java.time.format.DateTimeFormatter
 import play.api.Logger
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -220,14 +219,14 @@ object SubscriptionCreateRequest {
   private def generateWithOriginatingSystem(requestParameters: Option[Seq[RequestParameter]] = None): RequestCommon =
     RequestCommon(
       regime = "CDS",
-      receiptDate = new DateTime(Clock.systemUTC().instant.toEpochMilli, DateTimeZone.UTC),
+      receiptDate = ZonedDateTime.ofInstant(Clock.systemUTC().instant, ZoneOffset.UTC),
       acknowledgementReference = UUID.randomUUID().toString.replace("-", ""),
       originatingSystem = Some("MDTP"),
       requestParameters = requestParameters
     )
 
   private def handleEmptyDate(date: Option[String]): Option[LocalDate] = date match {
-    case Some(d) => Some(LocalDate.parse(d, DateTimeFormat.forPattern("yyyy-MM-dd")))
+    case Some(d) => Some(LocalDate.parse(d, DateTimeFormatter.ofPattern("yyyy-MM-dd")))
     case None =>
       logger.warn("No establishment date returned from REG06")
       None

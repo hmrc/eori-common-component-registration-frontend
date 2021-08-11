@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging
 
-import org.joda.time.format.ISODateTimeFormat
-import org.joda.time.{DateTime, LocalDate}
+import java.time.format.DateTimeFormatter
+import java.time.{ZonedDateTime, LocalDate, LocalDateTime, ZoneOffset}
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postCodeMandatoryCountryCodes, postcodeRegex}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
@@ -108,17 +108,17 @@ object Individual {
 
 trait CommonHeader {
 
-  private def dateTimeWritesIsoUtc: Writes[DateTime] = new Writes[DateTime] {
+  private def dateTimeWritesIsoUtc: Writes[ZonedDateTime] = new Writes[ZonedDateTime] {
 
-    def writes(d: org.joda.time.DateTime): JsValue =
-      JsString(d.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()))
-
+    def writes(d: ZonedDateTime): JsValue = JsString(d.withNano(0).format(DateTimeFormatter.ISO_DATE_TIME))
   }
 
-  private def dateTimeReadsIso: Reads[DateTime] = new Reads[DateTime] {
+  private def dateTimeReadsIso: Reads[ZonedDateTime] = new Reads[ZonedDateTime] {
 
-    def reads(value: JsValue): JsResult[DateTime] =
-      try JsSuccess(ISODateTimeFormat.dateTimeParser.parseDateTime(value.as[String]))
+    def reads(value: JsValue): JsResult[ZonedDateTime] =
+      try JsSuccess(
+        ZonedDateTime.of(LocalDateTime.parse(value.as[String], DateTimeFormatter.ISO_DATE_TIME), ZoneOffset.UTC)
+      )
       catch {
         case e: Exception => JsError(s"Could not parse '${value.toString()}' as an ISO date. Reason: $e")
       }
@@ -151,7 +151,7 @@ object RequestParameter {
 
 case class RequestCommon(
   regime: String,
-  receiptDate: DateTime,
+  receiptDate: ZonedDateTime,
   acknowledgementReference: String,
   originatingSystem: Option[String] = None,
   requestParameters: Option[Seq[RequestParameter]] = None
@@ -165,7 +165,7 @@ object RequestCommon extends CommonHeader {
 case class ResponseCommon(
   status: String,
   statusText: Option[String] = None,
-  processingDate: DateTime,
+  processingDate: ZonedDateTime,
   returnParameters: Option[List[MessagingServiceParam]] = None
 )
 

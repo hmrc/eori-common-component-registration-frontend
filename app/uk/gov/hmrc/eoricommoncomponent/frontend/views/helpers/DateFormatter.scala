@@ -17,14 +17,15 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers
 
 import javax.inject.Inject
-import org.joda.time.LocalDate
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.language.LanguageUtils
 
 class DateFormatter @Inject() (languageUtils: LanguageUtils) {
 
-  val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern("dd MMM yyyy")
+  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 
   def format(dateString: String)(implicit messages: Messages): String = {
 

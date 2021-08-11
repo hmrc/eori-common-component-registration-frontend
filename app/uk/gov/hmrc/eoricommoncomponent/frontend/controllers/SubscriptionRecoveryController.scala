@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.{DateTime, LocalDate}
+import java.time.{ZonedDateTime, LocalDate}
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc.{Action, _}
@@ -114,7 +114,7 @@ class SubscriptionRecoveryController @Inject() (
   private case class SubscriptionInformation(
     processedDate: String,
     email: String,
-    emailVerificationTimestamp: Option[DateTime],
+    emailVerificationTimestamp: Option[ZonedDateTime],
     formBundleId: String,
     recipientFullName: String,
     name: String,
