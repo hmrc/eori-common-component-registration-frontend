@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging
 
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 
@@ -44,7 +44,7 @@ object RegistrationInfoRequest {
 
 }
 
-case class RegistrationInfoResponseCommon(status: String, processingDate: DateTime, taxPayerID: String)
+case class RegistrationInfoResponseCommon(status: String, processingDate: ZonedDateTime, taxPayerID: String)
 
 object RegistrationInfoResponseCommon extends CommonHeader {
   implicit val jsonFormat = Json.format[RegistrationInfoResponseCommon]

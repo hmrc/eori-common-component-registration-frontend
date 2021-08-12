@@ -18,7 +18,7 @@ package unit.controllers
 
 import common.pages.NinoMatchPage
 import common.pages.matching.NameDateOfBirthPage.{fieldLevelErrorDateOfBirth, pageLevelErrorSummaryListXPath}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.mockito.{ArgumentMatchers, Mockito}
@@ -158,7 +158,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
       val tomorrow = LocalDate.now().plusDays(1)
       submitForm(
         NinoFormBuilder.asForm + ("date-of-birth.day" -> tomorrow.getDayOfMonth.toString,
-        "date-of-birth.month"                         -> tomorrow.getMonthOfYear.toString,
+        "date-of-birth.month"                         -> tomorrow.getMonthValue.toString,
         "date-of-birth.year"                          -> tomorrow.getYear.toString)
       ) { result =>
         status(result) shouldBe BAD_REQUEST

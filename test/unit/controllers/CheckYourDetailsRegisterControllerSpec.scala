@@ -20,7 +20,7 @@ import common.pages.migration.SubscriptionExistingDetailsReviewPage
 import common.pages.registration.RegistrationReviewPage
 import common.support.testdata.subscription.SubscriptionContactDetailsModelBuilder._
 import common.support.testdata.subscription.{BusinessDatesOrganisationTypeTables, ReviewPageOrganisationTypeTables}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach

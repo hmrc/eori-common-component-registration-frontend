@@ -17,7 +17,7 @@
 package unit.services
 
 import base.UnitSpec
-import org.joda.time.{DateTime, LocalDate}
+import java.time.{ZonedDateTime, LocalDate}
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -58,12 +58,12 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
   private val emulatedFailure  = new RuntimeException("something bad happened")
 
   private val okResponse = RegisterWithoutIDResponse(
-    ResponseCommon(StatusOK, Some("All OK"), DateTime.now()),
+    ResponseCommon(StatusOK, Some("All OK"), ZonedDateTime.now()),
     Some(RegisterWithoutIdResponseDetail("TestSafeId", None))
   )
 
   private val notOKResponse = RegisterWithoutIDResponse(
-    ResponseCommon(StatusNotOK, Some("Something went wrong"), DateTime.now()),
+    ResponseCommon(StatusNotOK, Some("Something went wrong"), ZonedDateTime.now()),
     Some(RegisterWithoutIdResponseDetail("TestSafeId", None))
   )
 
@@ -156,7 +156,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       Future.successful(
         SubscriptionDetails(
           nameDobDetails =
-            Some(NameDobMatchModel("firstName", Some("middleName"), "lastName", new LocalDate(1980, 3, 31))),
+            Some(NameDobMatchModel("firstName", Some("middleName"), "lastName", LocalDate.of(1980, 3, 31))),
           contactDetails = Some(contactDetails)
         )
       )

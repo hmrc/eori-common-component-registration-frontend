@@ -17,7 +17,7 @@
 package unit.controllers
 
 import common.pages.matching.DoYouHaveNinoPage._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -84,7 +84,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   "Submitting the form" should {
     "redirect to 'These are the details we have about you' page when Y is selected and given NINO is matched" in {
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(
-        Future.successful(Some(NameDobMatchModel("First name", None, "Last name", new LocalDate(2015, 10, 15))))
+        Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
       )
       when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier]))
         .thenReturn(Future.successful(true))
@@ -93,7 +93,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         await(result)
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("register/matching/confirm")
-        val expectedIndividual = Individual.withLocalDate("First name", None, "Last name", new LocalDate(2015, 10, 15))
+        val expectedIndividual = Individual.withLocalDate("First name", None, "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
           any[HeaderCarrier]
         )
@@ -102,7 +102,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "keep the user on the same page with proper message when NINO was not recognized" in {
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(
-        Future.successful(Some(NameDobMatchModel("First name", None, "Last name", new LocalDate(2015, 10, 15))))
+        Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
       )
       when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier]))
         .thenReturn(Future.successful(false))
@@ -111,7 +111,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         await(result)
         val page = CdsPage(contentAsString(result))
         status(result) shouldBe BAD_REQUEST
-        val expectedIndividual = Individual.withLocalDate("First name", None, "Last name", new LocalDate(2015, 10, 15))
+        val expectedIndividual = Individual.withLocalDate("First name", None, "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
           any[HeaderCarrier]
         )

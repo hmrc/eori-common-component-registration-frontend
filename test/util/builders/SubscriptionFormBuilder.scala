@@ -16,7 +16,7 @@
 
 package util.builders
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatEUDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
@@ -31,7 +31,7 @@ object SubscriptionFormBuilder {
   val LegalStatus     = "corporate-body-uk"
   val ShortName       = "Short Name"
   val sic             = "9999"
-  val DateEstablished = new LocalDate("1900-11-11")
+  val DateEstablished = LocalDate.of(1900, 11, 11)
 
   private val contactDetailsModel = ContactDetailsModel(
     fullName = "John Doe",
@@ -47,9 +47,9 @@ object SubscriptionFormBuilder {
   val orgSubscriptionMandatoryMap = Map(
     "legal-status"           -> LegalStatus,
     "short-name"             -> ShortName,
-    "date-established.day"   -> DateEstablished.dayOfMonth.getAsString,
-    "date-established.month" -> DateEstablished.monthOfYear.getAsString,
-    "date-established.year"  -> DateEstablished.year.getAsString,
+    "date-established.day"   -> DateEstablished.getDayOfMonth.toString,
+    "date-established.month" -> DateEstablished.getMonthValue.toString,
+    "date-established.year"  -> DateEstablished.getYear.toString,
     "sic"                    -> sic
   )
 

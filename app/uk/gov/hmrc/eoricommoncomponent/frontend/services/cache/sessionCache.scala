@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 import play.api.Logger
 import play.api.libs.json.{JsSuccess, Json}
 import play.modules.reactivemongo.ReactiveMongoComponent

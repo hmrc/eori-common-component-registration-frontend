@@ -21,7 +21,7 @@ import common.pages.matching.{
   ThirdCountryIndividualNameAndDateOfBirthPage,
   ThirdCountrySoleTraderNameAndDateOfBirthPage
 }
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop
@@ -98,7 +98,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
           when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier]))
             .thenReturn(
               Future.successful(
-                Some(NameDobMatchModel("firstName", Some("middleName"), "lastName", new LocalDate(1980, 3, 31)))
+                Some(NameDobMatchModel("firstName", Some("middleName"), "lastName", LocalDate.of(1980, 3, 31)))
               )
             )
 

@@ -17,7 +17,7 @@
 package unit.services.cache
 
 import base.UnitSpec
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.cache.model.Id
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, ResponseCommon}
@@ -106,7 +106,7 @@ class CachedDataSpec extends UnitSpec with MockitoSugar {
   )
 
   def registerWithEoriAndIdResponse(safeId: String) = RegisterWithEoriAndIdResponse(
-    ResponseCommon("OK", None, new DateTime, None),
+    ResponseCommon("OK", None, ZonedDateTime.now(), None),
     Some(
       RegisterWithEoriAndIdResponseDetail(
         Some("PASS"),

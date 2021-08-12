@@ -17,7 +17,7 @@
 package unit.services
 
 import base.UnitSpec
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.mockito.{ArgumentCaptor, ArgumentMatchers}
@@ -208,7 +208,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   "Calling cached nameDobDetails" should {
     "return nameDobDetails from frontend cache" in {
-      val nameDobDetails = NameDobMatchModel("fname", Some("mname"), "lname", new LocalDate(2019, 1, 1))
+      val nameDobDetails = NameDobMatchModel("fname", Some("mname"), "lname", LocalDate.of(2019, 1, 1))
       when(mockSessionCache.subscriptionDetails)
         .thenReturn(Future.successful(SubscriptionDetails(nameDobDetails = Some(nameDobDetails))))
       await(subscriptionDetailsHolderService.cachedNameDobDetails) shouldBe Some(nameDobDetails)

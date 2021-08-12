@@ -18,7 +18,7 @@ package unit.controllers
 
 import common.pages.matching.AddressPageFactoring._
 import common.pages.subscription.AddressPage
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.prop.TableDrivenPropertyChecks._

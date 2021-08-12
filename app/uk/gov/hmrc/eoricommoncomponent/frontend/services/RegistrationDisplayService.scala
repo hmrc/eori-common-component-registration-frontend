@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import java.time.Clock
 
 import javax.inject.Inject
-import org.joda.time.{DateTime, DateTimeZone}
+import java.time.{Clock, ZoneOffset, ZonedDateTime}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EoriHttpResponse, RegistrationDisplayConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestParameter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration._
@@ -45,7 +45,7 @@ class RegistrationDisplayService @Inject() (
     RegistrationDisplayRequestHolder(
       RegistrationDisplayRequest(
         RequestCommon(
-          new DateTime(Clock.systemUTC().instant.toEpochMilli, DateTimeZone.UTC),
+          ZonedDateTime.ofInstant(Clock.systemUTC.instant(), ZoneOffset.UTC),
           Seq(
             RequestParameter("REGIME", "CDS"),
             RequestParameter("ID_Type", "SAFE"),

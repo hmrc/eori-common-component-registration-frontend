@@ -22,7 +22,7 @@ import common.pages.subscription.{
   SubscriptionDateOfEstablishmentPage,
   SubscriptionPartnershipDateOfEstablishmentPage
 }
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -82,9 +82,9 @@ class DateOfEstablishmentControllerSpec
   private val DateOfEstablishment       = LocalDate.parse(DateOfEstablishmentString)
 
   private val ValidRequest = Map(
-    "date-of-establishment.day"   -> DateOfEstablishment.dayOfMonth.getAsString,
-    "date-of-establishment.month" -> DateOfEstablishment.monthOfYear.getAsString,
-    "date-of-establishment.year"  -> DateOfEstablishment.year.getAsString
+    "date-of-establishment.day"   -> DateOfEstablishment.getDayOfMonth.toString,
+    "date-of-establishment.month" -> DateOfEstablishment.getMonthValue.toString,
+    "date-of-establishment.year"  -> DateOfEstablishment.getYear.toString
   )
 
   val existingSubscriptionDetailsHolder = SubscriptionDetails()
@@ -144,13 +144,13 @@ class DateOfEstablishmentControllerSpec
         val page = CdsPage(contentAsString(result))
         page.getElementValue(
           SubscriptionDateOfEstablishmentPage.dayOfDateFieldXpath
-        ) shouldBe DateOfEstablishment.dayOfMonth.getAsString
+        ) shouldBe DateOfEstablishment.getDayOfMonth.toString
         page.getElementValue(
           SubscriptionDateOfEstablishmentPage.monthOfDateFieldXpath
-        ) shouldBe DateOfEstablishment.monthOfYear.getAsString
+        ) shouldBe DateOfEstablishment.getMonthValue.toString
         page.getElementValue(
           SubscriptionDateOfEstablishmentPage.yearOfDateFieldXpath
-        ) shouldBe DateOfEstablishment.year.getAsString
+        ) shouldBe DateOfEstablishment.getYear.toString
       }
     }
 
@@ -230,13 +230,13 @@ class DateOfEstablishmentControllerSpec
         val page = CdsPage(contentAsString(result))
         page.getElementValue(
           SubscriptionDateOfEstablishmentPage.dayOfDateFieldXpath
-        ) shouldBe DateOfEstablishment.dayOfMonth.getAsString
+        ) shouldBe DateOfEstablishment.getDayOfMonth.toString
         page.getElementValue(
           SubscriptionDateOfEstablishmentPage.monthOfDateFieldXpath
-        ) shouldBe DateOfEstablishment.monthOfYear.getAsString
+        ) shouldBe DateOfEstablishment.getMonthValue.toString
         page.getElementValue(
           SubscriptionDateOfEstablishmentPage.yearOfDateFieldXpath
-        ) shouldBe DateOfEstablishment.year.getAsString
+        ) shouldBe DateOfEstablishment.getYear.toString
       }
     }
 
@@ -285,7 +285,7 @@ class DateOfEstablishmentControllerSpec
         val tomorrow = LocalDate.now().plusDays(1)
         submitFormFunction(
           ValidRequest + ("date-of-establishment.day" -> tomorrow.getDayOfMonth.toString,
-          "date-of-establishment.month"               -> tomorrow.getMonthOfYear.toString,
+          "date-of-establishment.month"               -> tomorrow.getMonthValue.toString,
           "date-of-establishment.year"                -> tomorrow.getYear.toString)
         ) { result =>
           status(result) shouldBe BAD_REQUEST
