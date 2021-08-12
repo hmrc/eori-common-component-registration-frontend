@@ -26,7 +26,7 @@ object RegistrationInfoGenerator {
     firstName = "John",
     middleName = Some("Mark"),
     lastName = "Doe",
-    dateOfBirth = Some(new LocalDate("1981-02-28")),
+    dateOfBirth = Some(LocalDate.of(1981, 2, 28)),
     taxPayerId = TaxPayerId("someTaxPayerId"),
     lineOne = "Line 1",
     lineTwo = Some("line 2"),

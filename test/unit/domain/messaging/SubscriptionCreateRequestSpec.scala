@@ -17,8 +17,7 @@
 package unit.domain.messaging
 
 import base.UnitSpec
-import com.github.nscala_time.time.Imports.LocalDate
-import org.joda.time.DateTime
+import java.time.{ZonedDateTime, LocalDate}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
@@ -105,7 +104,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
     email = emailAddress
   )
 
-  private def reg01ExpectedContactInformation(timeStamp: DateTime) = ContactInformation(
+  private def reg01ExpectedContactInformation(timeStamp: ZonedDateTime) = ContactInformation(
     Some(fullName),
     Some(false),
     None,
@@ -118,7 +117,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
     Some(timeStamp)
   )
 
-  private def reg06ExpectedContactInformation(timeStamp: DateTime) = ContactInformation(
+  private def reg06ExpectedContactInformation(timeStamp: ZonedDateTime) = ContactInformation(
     Some(fullName),
     Some(true),
     Some("addressLine1"),
@@ -131,7 +130,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
     Some(timeStamp)
   )
 
-  private def registrationExpectedContactInformation(timeStamp: DateTime) = ContactInformation(
+  private def registrationExpectedContactInformation(timeStamp: ZonedDateTime) = ContactInformation(
     Some(fullName),
     Some(true),
     Some(""),

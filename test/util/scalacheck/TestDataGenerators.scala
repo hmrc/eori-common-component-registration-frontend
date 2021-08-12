@@ -16,7 +16,7 @@
 
 package util.scalacheck
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.scalacheck.{Arbitrary, Gen}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
@@ -36,7 +36,7 @@ trait TestDataGenerators {
   val dateOfBirthGenerator = for {
     days  <- Gen.chooseNum(1, 365)
     years <- Gen.chooseNum(0, 110)
-  } yield new LocalDate() minusYears years minusDays days
+  } yield LocalDate.now() minusYears years minusDays days
 
   val maxLengthOfAddressLine: Int = MatchingForms.Length35
 

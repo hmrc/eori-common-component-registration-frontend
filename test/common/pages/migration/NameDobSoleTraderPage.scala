@@ -58,7 +58,7 @@ trait NameDobSoleTraderPage extends WebPage {
     firstName = "Test First Name",
     middleName = Some("Test Middle Name"),
     lastName = "Test Last Name",
-    dateOfBirth = new LocalDate("1983-09-03")
+    dateOfBirth = LocalDate.of(1983, 9, 3)
   )
 
 }

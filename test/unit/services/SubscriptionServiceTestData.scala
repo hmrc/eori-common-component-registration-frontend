@@ -17,7 +17,7 @@
 package unit.services
 
 import common.support.testdata.TestData
-import org.joda.time.{DateTime, LocalDate}
+import java.time.{ZoneOffset, ZonedDateTime, LocalDate}
 import org.scalacheck.Gen
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.libs.json.{JsValue, Json}
@@ -89,7 +89,7 @@ trait SubscriptionServiceTestData extends TestData {
   val responseEoriNumber                   = "ZZZ1ZZZZ23ZZZZZZZ"
   val responseFormBundleId: String         = "Form-Bundle-Id"
   val processingDateResponse: String       = "18 Aug 2016"
-  val emailVerificationTimestamp: DateTime = TestData.emailVerificationTimestamp
+  val emailVerificationTimestamp: ZonedDateTime = TestData.emailVerificationTimestamp
   val eori                                 = Eori(responseEoriNumber)
 
   val subscriptionSuccessResult =
@@ -210,7 +210,7 @@ trait SubscriptionServiceTestData extends TestData {
       responseData = Some(responseData)
     )
     RegisterWithEoriAndIdResponse(
-      ResponseCommon(status = "OK", processingDate = DateTime.now.withTimeAtStartOfDay()),
+      ResponseCommon(status = "OK", processingDate = ZonedDateTime.now().withNano(0).withZoneSameLocal(ZoneOffset.UTC)),
       Some(responseDetail)
     )
   }
@@ -232,13 +232,13 @@ trait SubscriptionServiceTestData extends TestData {
       responseData = Some(responseData)
     )
     RegisterWithEoriAndIdResponse(
-      ResponseCommon(status = "OK", processingDate = DateTime.now.withTimeAtStartOfDay()),
+      ResponseCommon(status = "OK", processingDate = ZonedDateTime.now().withNano(0).withZoneSameLocal(ZoneOffset.UTC)),
       Some(responseDetail)
     )
   }
 
   def stubRegisterWithCompleteResponse(outcomeType: String = "PASS"): RegisterWithEoriAndIdResponse = {
-    val processingDate = DateTime.now.withTimeAtStartOfDay()
+    val processingDate = ZonedDateTime.now().withNano(0).withZoneSameLocal(ZoneOffset.UTC)
     val contactDetailAddress =
       EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = Some("NE1 1BG"), countryCode = "GB")
     val responseData = ResponseData(

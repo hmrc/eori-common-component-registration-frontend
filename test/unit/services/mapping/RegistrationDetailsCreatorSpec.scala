@@ -17,7 +17,7 @@
 package unit.services.mapping
 
 import base.UnitSpec
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
@@ -59,7 +59,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         SafeId("SAFEID"),
         "fname mname lname",
         Address("Line1", None, None, None, None, "GB"),
-        new LocalDate("2019-01-01")
+        LocalDate.of(2019, 1, 1)
       )
 
       testCreator.registrationDetails(response) shouldBe expectedDetails

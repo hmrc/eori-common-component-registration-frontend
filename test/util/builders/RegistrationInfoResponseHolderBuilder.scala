@@ -17,12 +17,12 @@
 package util.builders
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{NonUKIdentification, _}
-import org.joda.time.DateTime
+import java.time.{ZonedDateTime, ZoneOffset}
 
 //TODO THIS MUST DIE !!!
 
 object RegistrationInfoResponseHolderBuilder {
-  val ProcessingDate    = new DateTime().withDate(2016, 3, 17).withTime(9, 31, 5, 0)
+  val ProcessingDate    = ZonedDateTime.of(2016, 3, 17, 9, 31, 5, 0, ZoneOffset.UTC)
   val defaultTaxPayerId = "0100086619"
 
   val address = RegistrationInfoAddress(
