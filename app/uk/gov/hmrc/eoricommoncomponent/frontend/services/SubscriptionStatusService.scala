@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import javax.inject.{Inject, Singleton}
-import java.time.{ZonedDateTime, ZoneOffset}
+import java.time.{ZoneOffset, ZonedDateTime}
 import java.time.format.DateTimeFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Sub01Outcome, SubscriptionStatusQueryParams}
@@ -40,7 +40,8 @@ class SubscriptionStatusService @Inject() (
     def createRequest =
       SubscriptionStatusQueryParams(requestCommonGenerator.receiptDate, "CDS", idType, id)
 
-    def saveToCache(processingDate: ZonedDateTime) = cache.saveSub01Outcome(Sub01Outcome(dateFormat.format(processingDate)))
+    def saveToCache(processingDate: ZonedDateTime) =
+      cache.saveSub01Outcome(Sub01Outcome(dateFormat.format(processingDate)))
 
     def checkSubscriptionStatus() =
       connector.status(createRequest).map { response =>
