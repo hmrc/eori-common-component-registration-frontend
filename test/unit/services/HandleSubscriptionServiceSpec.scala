@@ -49,10 +49,10 @@ class HandleSubscriptionServiceSpec extends UnitSpec with MockitoSugar with Befo
   val recipientDetails: RecipientDetails =
     RecipientDetails(Journey.Register, atarService.code, "Advance Tariff Rulings", "", "", None, None)
 
-  val sapNumber: TaxPayerId                        = TaxPayerId("id")
-  val eori: Option[Eori]                           = Some(Eori("eori"))
+  val sapNumber: TaxPayerId                             = TaxPayerId("id")
+  val eori: Option[Eori]                                = Some(Eori("eori"))
   val emailVerificationTimestamp: Option[ZonedDateTime] = Some(TestData.emailVerificationTimestamp)
-  val safeId: SafeId                               = SafeId("id")
+  val safeId: SafeId                                    = SafeId("id")
 
   val handleSubscriptionRequest = HandleSubscriptionRequest(
     recipientDetails,

@@ -17,7 +17,7 @@
 package unit.domain.messaging
 
 import base.UnitSpec
-import java.time.{ZonedDateTime, LocalDate}
+import java.time.{LocalDate, ZonedDateTime}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{

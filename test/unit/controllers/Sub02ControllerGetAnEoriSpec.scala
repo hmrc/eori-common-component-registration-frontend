@@ -82,11 +82,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     mockCdsSubscriber
   )(global)
 
-  val eoriNumberResponse: String           = "EORI-Number"
-  val formBundleIdResponse: String         = "Form-Bundle-Id"
-  private val processingDate               = "12 May 2018"
+  val eoriNumberResponse: String                = "EORI-Number"
+  val formBundleIdResponse: String              = "Form-Bundle-Id"
+  private val processingDate                    = "12 May 2018"
   val emailVerificationTimestamp: ZonedDateTime = TestData.emailVerificationTimestamp
-  val emulatedFailure                      = new UnsupportedOperationException("Emulated service call failure.")
+  val emulatedFailure                           = new UnsupportedOperationException("Emulated service call failure.")
 
   override def beforeEach: Unit = {
     super.beforeEach()

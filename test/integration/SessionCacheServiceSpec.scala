@@ -17,9 +17,8 @@
 package integration
 
 import java.util.UUID
-
 import common.support.testdata.registration.RegistrationInfoGenerator._
-import java.time.{ZonedDateTime, ZoneOffset}
+import java.time.{ZoneOffset, ZonedDateTime}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json.toJson

@@ -17,7 +17,7 @@
 package unit.services
 
 import common.support.testdata.TestData
-import java.time.{ZoneOffset, ZonedDateTime, LocalDate}
+import java.time.{LocalDate, ZoneOffset, ZonedDateTime}
 import org.scalacheck.Gen
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.libs.json.{JsValue, Json}
@@ -86,11 +86,11 @@ trait SubscriptionServiceTestData extends TestData {
     Some(contactCountryCode)
   )
 
-  val responseEoriNumber                   = "ZZZ1ZZZZ23ZZZZZZZ"
-  val responseFormBundleId: String         = "Form-Bundle-Id"
-  val processingDateResponse: String       = "18 Aug 2016"
+  val responseEoriNumber                        = "ZZZ1ZZZZ23ZZZZZZZ"
+  val responseFormBundleId: String              = "Form-Bundle-Id"
+  val processingDateResponse: String            = "18 Aug 2016"
   val emailVerificationTimestamp: ZonedDateTime = TestData.emailVerificationTimestamp
-  val eori                                 = Eori(responseEoriNumber)
+  val eori                                      = Eori(responseEoriNumber)
 
   val subscriptionSuccessResult =
     SubscriptionSuccessful(eori, responseFormBundleId, processingDateResponse, Some(emailVerificationTimestamp))

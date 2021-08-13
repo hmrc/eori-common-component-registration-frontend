@@ -16,7 +16,7 @@
 
 package integration
 
-import java.time.{ZonedDateTime, ZoneOffset}
+import java.time.{ZoneOffset, ZonedDateTime}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.TableFor3
