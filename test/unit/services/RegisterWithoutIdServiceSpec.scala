@@ -17,7 +17,7 @@
 package unit.services
 
 import base.UnitSpec
-import org.joda.time.{DateTime, LocalDate}
+import java.time.{LocalDate, ZonedDateTime}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.mockito._
@@ -66,7 +66,7 @@ class RegisterWithoutIdServiceSpec
     val year        = 1980
     val monthOfYear = 3
     val dayOfMonth  = 31
-    new LocalDate(year, monthOfYear, dayOfMonth)
+    LocalDate.of(year, monthOfYear, dayOfMonth)
   }
 
   private val individualNameAndDateOfBirth =
@@ -96,7 +96,7 @@ class RegisterWithoutIdServiceSpec
       ResponseCommon(
         "status",
         Some("Status text"),
-        DateTime.now(),
+        ZonedDateTime.now(),
         Some(List(MessagingServiceParam("SAP_NUMBER", sapNumber)))
       ),
       Some(RegisterWithoutIdResponseDetail(SAFEID, ARN = None))

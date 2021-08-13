@@ -19,7 +19,7 @@ package unit.services.mapping
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
@@ -35,7 +35,7 @@ class RegistrationDetailsCreatorRegistrationInfoSpec extends UnitSpec with Mocki
   private val firstName                  = "Jon"
   private val middleName                 = "middle"
   private val lastName                   = "Doe"
-  private val dob                        = new LocalDate()
+  private val dob                        = LocalDate.now()
   private val postcode                   = "SE28 1AA"
   private val countryCode                = "ZZ"
 

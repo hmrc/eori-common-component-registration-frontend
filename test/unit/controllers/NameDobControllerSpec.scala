@@ -20,7 +20,7 @@ import java.time.Year
 
 import common.pages.matching.NameDateOfBirthPage
 import common.pages.matching.NameDateOfBirthPage._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -161,7 +161,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       val futureDateError = "Date of birth must be in the past"
       submitForm(
         ValidRequest + ("date-of-birth.day" -> tomorrow.getDayOfMonth.toString,
-        "date-of-birth.month"               -> tomorrow.getMonthOfYear.toString,
+        "date-of-birth.month"               -> tomorrow.getMonthValue.toString,
         "date-of-birth.year"                -> tomorrow.getYear.toString),
         "sole-trader"
       ) { result =>

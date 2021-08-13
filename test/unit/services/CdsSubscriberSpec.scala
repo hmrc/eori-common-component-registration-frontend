@@ -19,7 +19,7 @@ package unit.services
 import base.{Injector, UnitSpec}
 import common.support.testdata.TestData
 import common.support.testdata.subscription.SubscriptionContactDetailsBuilder
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{when, _}
 import org.scalatest.BeforeAndAfterEach
@@ -225,7 +225,7 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
           any[RecipientDetails],
           any[TaxPayerId],
           any[Option[Eori]],
-          any[Option[DateTime]],
+          any[Option[ZonedDateTime]],
           any[SafeId]
         )(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
@@ -271,7 +271,7 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
           any[RecipientDetails],
           any[TaxPayerId],
           any[Option[Eori]],
-          any[Option[DateTime]],
+          any[Option[ZonedDateTime]],
           any[SafeId]
         )(any[HeaderCarrier])
       ).thenReturn(Future.failed(emulatedFailure))
@@ -309,7 +309,7 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
         any[RecipientDetails],
         any[TaxPayerId],
         any[Option[Eori]],
-        any[Option[DateTime]],
+        any[Option[ZonedDateTime]],
         any[SafeId]
       )(any[HeaderCarrier])
     ).thenReturn(Future.successful(()))
@@ -338,7 +338,7 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
         any[RecipientDetails],
         any[TaxPayerId],
         any[Option[Eori]],
-        any[Option[DateTime]],
+        any[Option[ZonedDateTime]],
         any[SafeId]
       )(any[HeaderCarrier])
     ).thenReturn(Future.successful(()))

@@ -17,7 +17,7 @@
 package unit.domain
 
 import base.UnitSpec
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
@@ -92,7 +92,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
     val year  = 1961
     val month = 4
     val day   = 12
-    new LocalDate(year, month, day)
+    LocalDate.of(year, month, day)
   }
 
   val individualDetails = RegistrationDetailsIndividual(

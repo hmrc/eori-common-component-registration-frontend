@@ -19,7 +19,7 @@ package unit.services.mapping
 import base.UnitSpec
 import common.support.testdata.GenTestRunner
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import util.scalacheck.TestDataGenerators
 
 private[mapping] abstract class RegistrationDetailsCreatorTestBase
@@ -36,7 +36,7 @@ private[mapping] trait TestMatchingModels {
   val responseCommon = ResponseCommon(
     status = "someStatus",
     statusText = Some("Status text"),
-    processingDate = new DateTime(System.currentTimeMillis),
+    processingDate = ZonedDateTime.now(),
     returnParameters = Some(List(MessagingServiceParam("SAP_NUMBER", sapNumber)))
   )
 

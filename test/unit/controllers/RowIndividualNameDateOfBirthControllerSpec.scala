@@ -21,7 +21,7 @@ import common.pages.matching.{
   ThirdCountryIndividualNameAndDateOfBirthPage,
   ThirdCountrySoleTraderNameAndDateOfBirthPage
 }
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop
@@ -322,7 +322,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           import controllerFixture._
           assertInvalidField(
             formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> tomorrow.getDayOfMonth.toString,
-            dateOfBirthMonthField                                         -> tomorrow.getMonthOfYear.toString,
+            dateOfBirthMonthField                                         -> tomorrow.getMonthValue.toString,
             dateOfBirthYearField                                          -> tomorrow.getYear.toString),
             webPage
           )(DateOfBirth, fieldLevelErrorDateOfBirth, FutureDate)

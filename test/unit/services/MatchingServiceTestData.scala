@@ -16,7 +16,7 @@
 
 package unit.services
 
-import org.joda.time.{DateTime, LocalDate}
+import java.time.{LocalDate, ZoneOffset, ZonedDateTime}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.MatchingResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Individual, RequestCommon}
@@ -47,7 +47,11 @@ trait MatchingServiceTestData {
   val someEstablishmentDate = Some(establishmentDate)
 
   val ExpectedRequestCommon =
-    RequestCommon("CDS", new DateTime("2016-07-08T08:35:13Z"), "4482baa8-1c84-4d23-a8db-3fc180325e7a")
+    RequestCommon(
+      "CDS",
+      ZonedDateTime.of(2016, 7, 8, 8, 35, 13, 0, ZoneOffset.UTC),
+      "4482baa8-1c84-4d23-a8db-3fc180325e7a"
+    )
 
   val matchedAddress = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
 

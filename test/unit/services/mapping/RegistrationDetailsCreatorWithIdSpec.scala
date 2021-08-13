@@ -16,7 +16,7 @@
 
 package unit.services.mapping
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.scalacheck.{Arbitrary, Gen}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address

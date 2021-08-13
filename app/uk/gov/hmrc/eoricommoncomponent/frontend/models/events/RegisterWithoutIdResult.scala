@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.RegisterWithoutIdResponseHolder
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.CommonHeader
@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.CommonHeader
 case class RegisterWithoutIdResult(
   status: String,
   statusText: Option[String],
-  processingDate: DateTime,
+  processingDate: ZonedDateTime,
   safeId: Option[String],
   arn: Option[String]
 )

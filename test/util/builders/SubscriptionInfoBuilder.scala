@@ -16,8 +16,8 @@
 
 package util.builders
 
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.{DateTime, LocalDate}
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, ZonedDateTime}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
@@ -41,7 +41,7 @@ object SubscriptionInfoBuilder {
   val faxNumber                    = "01632961235"
   val emailAddress                 = "john.doe@example.com"
   val dateOfEstablishmentFormatted = "31 December 2015"
-  val dateOfEstablishment          = LocalDate.parse(dateOfEstablishmentFormatted, DateTimeFormat.forPattern("d MMM YYYY"))
+  val dateOfEstablishment          = LocalDate.parse(dateOfEstablishmentFormatted, DateTimeFormatter.ofPattern("d MMMM yyyy"))
 
   val VATIdNoList      = List("VAT-1", "VAT-2", "VAT-3", "VAT-4", "VAT-5")
   val VATIdCountryList = List("GB", "FR", "ES", "PT", "IN")
@@ -157,7 +157,7 @@ object SubscriptionInfoBuilder {
   val sampleResponseCommon = ResponseCommon(
     "OK",
     Some("Status text"),
-    DateTime.now,
+    ZonedDateTime.now,
     Some(
       List(
         MessagingServiceParam("POSITION", "GENERATE"),

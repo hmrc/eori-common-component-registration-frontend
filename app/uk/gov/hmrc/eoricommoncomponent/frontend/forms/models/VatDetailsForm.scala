@@ -16,11 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.libs.json.JodaWrites._
-import play.api.libs.json.JodaReads._
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter

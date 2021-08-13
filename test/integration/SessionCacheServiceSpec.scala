@@ -17,9 +17,8 @@
 package integration
 
 import java.util.UUID
-
 import common.support.testdata.registration.RegistrationInfoGenerator._
-import org.joda.time.DateTime
+import java.time.{ZoneOffset, ZonedDateTime}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json.toJson
@@ -130,7 +129,7 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
     "store and fetch RegisterWith EORI And Id Response correctly for Reg06 response" in {
       val sessionId: SessionId = setupSession
 
-      val processingDate = DateTime.now.withTimeAtStartOfDay()
+      val processingDate = ZonedDateTime.now().withNano(0).withZoneSameLocal(ZoneOffset.UTC)
       val responseCommon = ResponseCommon(status = "OK", processingDate = processingDate)
       val trader         = Trader(fullName = "New trading", shortName = "nt")
       val establishmentAddress =

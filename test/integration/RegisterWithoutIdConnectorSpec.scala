@@ -16,7 +16,7 @@
 
 package integration
 
-import org.joda.time.DateTime
+import java.time.{ZoneOffset, ZonedDateTime}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.TableFor3
@@ -63,7 +63,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
   override def afterAll: Unit =
     stopMockServer()
 
-  private val requestDate = (new DateTime).withDate(2016, 3, 17).withTime(9, 30, 47, 114)
+  private val requestDate = ZonedDateTime.of(2016, 3, 17, 9, 30, 47, 114, ZoneOffset.UTC)
 
   private val contactDetails =
     ContactDetailsModel("John Doe", "john@example.com", "441234987654", None, true, None, None, None, None)
@@ -149,7 +149,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         |}
       """.stripMargin).toString
 
-  private val processingDate = (new DateTime).withDate(2016, 3, 17).withTime(9, 31, 5, 0)
+  private val processingDate = ZonedDateTime.of(2016, 3, 17, 9, 31, 5, 0, ZoneOffset.UTC)
 
   val registrationResponse: RegisterWithoutIdResponseHolder = RegisterWithoutIdResponseHolder(
     RegisterWithoutIDResponse(

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Eori
 
 sealed trait SubscriptionResult {
@@ -27,13 +27,13 @@ case class SubscriptionSuccessful(
   eori: Eori,
   formBundleId: String,
   processingDate: String,
-  emailVerificationTimestamp: Option[DateTime]
+  emailVerificationTimestamp: Option[ZonedDateTime]
 ) extends SubscriptionResult
 
 case class SubscriptionPending(
   formBundleId: String,
   processingDate: String,
-  emailVerificationTimestamp: Option[DateTime]
+  emailVerificationTimestamp: Option[ZonedDateTime]
 ) extends SubscriptionResult
 
 case class SubscriptionFailed(failureReason: String, processingDate: String) extends SubscriptionResult

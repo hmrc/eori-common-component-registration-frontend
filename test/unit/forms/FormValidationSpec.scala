@@ -17,15 +17,16 @@
 package unit.forms
 
 import java.time.Year
-
 import base.UnitSpec
-import org.joda.time.LocalDate
+
+import java.time.LocalDate
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
 
+import java.time.format.DateTimeFormatter
 import scala.util.Random
 
 class FormValidationSpec extends UnitSpec {
@@ -122,10 +123,11 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data = formData.updated("date-of-birth.day", todayPlusOneDay.toString("dd")).updated(
-        "date-of-birth.month",
-        todayPlusOneDay.toString("MM")
-      ).updated("date-of-birth.year", todayPlusOneDay.toString("YYYY"))
+      val data =
+        formData.updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)).updated(
+          "date-of-birth.month",
+          DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
+        ).updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
       val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.future-date")))
     }
@@ -175,10 +177,11 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data = formDataNino.updated("date-of-birth.day", todayPlusOneDay.toString("dd")).updated(
-        "date-of-birth.month",
-        todayPlusOneDay.toString("MM")
-      ).updated("date-of-birth.year", todayPlusOneDay.toString("YYYY"))
+      val data =
+        formDataNino.updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)).updated(
+          "date-of-birth.month",
+          DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
+        ).updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
       val res = ninoForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.future-date")))
     }
@@ -233,10 +236,11 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data = formDataRow.updated("date-of-birth.day", todayPlusOneDay.toString("dd")).updated(
-        "date-of-birth.month",
-        todayPlusOneDay.toString("MM")
-      ).updated("date-of-birth.year", todayPlusOneDay.toString("YYYY"))
+      val data =
+        formDataRow.updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)).updated(
+          "date-of-birth.month",
+          DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
+        ).updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
       val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.future-date")))
     }
@@ -265,10 +269,13 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when effective date in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data = formDataVAT.updated("vat-effective-date.day", todayPlusOneDay.toString("dd")).updated(
-        "vat-effective-date.month",
-        todayPlusOneDay.toString("MM")
-      ).updated("vat-effective-date.year", todayPlusOneDay.toString("YYYY"))
+      val data = formDataVAT.updated(
+        "vat-effective-date.day",
+        DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
+      ).updated("vat-effective-date.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)).updated(
+        "vat-effective-date.year",
+        DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
+      )
       val res = vatDetailsForm.bind(data)
       res.errors shouldBe Seq(FormError("vat-effective-date", Seq("vat.error.future-date")))
     }
@@ -297,10 +304,13 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when date of establishment in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data = formDataDoE.updated("date-of-establishment.day", todayPlusOneDay.toString("dd")).updated(
-        "date-of-establishment.month",
-        todayPlusOneDay.toString("MM")
-      ).updated("date-of-establishment.year", todayPlusOneDay.toString("YYYY"))
+      val data = formDataDoE.updated(
+        "date-of-establishment.day",
+        DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
+      ).updated("date-of-establishment.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)).updated(
+        "date-of-establishment.year",
+        DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
+      )
       val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.future-date")))
     }

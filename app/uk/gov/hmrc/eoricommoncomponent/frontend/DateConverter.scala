@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend
 
 import java.time.Year
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.Logger
 import play.api.data.FormError
 
