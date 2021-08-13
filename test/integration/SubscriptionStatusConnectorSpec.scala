@@ -16,18 +16,14 @@
 
 package integration
 
-import org.joda.time.DateTime
+import java.time.{ZoneOffset, ZonedDateTime}
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.Status.{FORBIDDEN, INTERNAL_SERVER_ERROR}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  SubscriptionStatusQueryParams,
-  SubscriptionStatusResponseHolder,
-  TaxPayerId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{SubscriptionStatusQueryParams, SubscriptionStatusResponseHolder, TaxPayerId}
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.{AuditService, SubscriptionStatusMessagingService}
@@ -49,7 +45,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
   private val AValidTaxPayerID            = "1234567890"
   private val taxPayerId                  = TaxPayerId(AValidTaxPayerID).mdgTaxPayerId
   private val Regime                      = "CDS"
-  private val receiptDate                 = DateTime.parse("2016-3-17T09:30:47.114")
+  private val receiptDate                 = ZonedDateTime.of(2016, 3, 17, 9, 30, 47, 114, ZoneOffset.UTC)
   private val colon: String               = "%3A"
 
   private val expectedGetUrl =

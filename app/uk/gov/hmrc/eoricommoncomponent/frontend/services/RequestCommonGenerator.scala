@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import java.time.Clock
+import java.time.{Clock, ZoneOffset, ZonedDateTime}
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.{DateTime, DateTimeZone}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RequestCommon, RequestParameter}
 
 @Singleton
@@ -34,8 +33,8 @@ class RequestCommonGenerator @Inject() (uuidGenerator: RandomUUIDGenerator, cloc
       requestParameters = requestParameters
     )
 
-  def receiptDate: DateTime =
-    new DateTime(clock.generateUtcTime.instant.toEpochMilli, DateTimeZone.UTC)
+  def receiptDate: ZonedDateTime =
+    ZonedDateTime.ofInstant(clock.generateUtcTime.instant, ZoneOffset.UTC)
 
 }
 

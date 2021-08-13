@@ -17,7 +17,7 @@
 package unit.playext.mappers
 
 import base.UnitSpec
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.data.{FormError, Mapping}
@@ -35,7 +35,7 @@ class DateTupleSpec extends UnitSpec {
   private val m = "7"
   private val y = "2010"
 
-  private val defaultDate = LocalDate.parse("2010-7-15")
+  private val defaultDate = LocalDate.of(2010, 7, 15)
 
   private def request(dayValue: String = d, monthValue: String = m, yearValue: String = y) = Map(
     s"$dateField.$day"   -> dayValue,

@@ -18,11 +18,12 @@ package unit.domain
 
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{SubscriptionStatusQueryParams, TaxPayerId}
-import org.joda.time.DateTime
+
+import java.time.{ZoneOffset, ZonedDateTime}
 
 class SubscriptionStatusQueryParamsSpec extends UnitSpec {
 
-  val receiptDate = DateTime.parse("2016-3-17T9:30:47.114")
+  val receiptDate = ZonedDateTime.of(2016, 3, 17, 9, 30, 47, 114, ZoneOffset.UTC)
   val taxPayerId  = TaxPayerId("1234567890").mdgTaxPayerId
   "SubscriptionStatusQueryParamsSpec" should {
     "create a valid URL query string" in {

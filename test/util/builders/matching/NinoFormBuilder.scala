@@ -19,13 +19,13 @@ package util.builders.matching
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NinoMatch
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 
 object NinoFormBuilder {
 
   val FirstName   = "first"
   val LastName    = "last"
-  val DateOfBirth = new LocalDate(1980, 3, 31)
+  val DateOfBirth = LocalDate.of(1980, 3, 31)
   val Nino        = "AB123456C"
 
   def asNinoMatch: NinoMatch = NinoMatch(FirstName, LastName, DateOfBirth, Nino)

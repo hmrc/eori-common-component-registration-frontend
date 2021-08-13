@@ -20,7 +20,7 @@ import java.time.{Clock, Instant}
 
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestCommon
-import org.joda.time.DateTimeZone
+import java.time.ZoneOffset
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
@@ -56,7 +56,7 @@ class RequestCommonGeneratorSpec extends UnitSpec with MockitoSugar with BeforeA
       }
 
       "create object with receipt date as current time in UTC timezone" in withFixture { requestCommon =>
-        requestCommon.receiptDate.getZone should equal(DateTimeZone.UTC)
+        requestCommon.receiptDate.getZone should equal(ZoneOffset.UTC)
         requestCommon.receiptDate.toString() shouldBe in.toString
       }
 

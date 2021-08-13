@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress
 
@@ -40,8 +40,6 @@ case class RequestDetail(
 }
 
 object RequestDetail {
-  import play.api.libs.json.JodaWrites._
-  import play.api.libs.json.JodaReads._
 
   implicit val jsonFormat = Json.format[RequestDetail]
 }

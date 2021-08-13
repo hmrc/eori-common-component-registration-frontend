@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector

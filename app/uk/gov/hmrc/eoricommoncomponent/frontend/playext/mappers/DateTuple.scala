@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.playext.mappers
 
 import java.time.Year
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.data.Forms.{optional, text, tuple}
 import play.api.data.Mapping
 import uk.gov.hmrc.play.mappers.DateFields._
@@ -33,7 +33,7 @@ object DateTuple {
   ): Mapping[Option[LocalDate]] = {
     def tuple2Date(tuple: (Option[String], Option[String], Option[String])) = tuple match {
       case (Some(day), Some(month), Some(year)) =>
-        try Some(new LocalDate(year.trim.toInt, month.trim.toInt, day.trim.toInt))
+        try Some(LocalDate.of(year.trim.toInt, month.trim.toInt, day.trim.toInt))
         catch {
           case _: Throwable => None
         }
@@ -42,7 +42,7 @@ object DateTuple {
     }
 
     def date2Tuple(maybeDate: Option[LocalDate]) = maybeDate match {
-      case Some(d) => (Some(d.getDayOfMonth.toString), Some(d.getMonthOfYear.toString), Some(d.getYear.toString))
+      case Some(d) => (Some(d.getDayOfMonth.toString), Some(d.getMonthValue.toString), Some(d.getYear.toString))
       case _       => (None, None, None)
     }
 
@@ -54,7 +54,7 @@ object DateTuple {
             if (!(isDayValid(day) && isMonthValid(month) && isYearValid(minYear)(year))) true
             else
               Try {
-                new LocalDate(year.trim.toInt, month.trim.toInt, day.trim.toInt)
+                LocalDate.of(year.trim.toInt, month.trim.toInt, day.trim.toInt)
               }.isSuccess
 
           case _ => true

@@ -17,7 +17,7 @@
 package common.pages.migration
 
 import common.pages.WebPage
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameDobMatchModel
 
 trait NameDobSoleTraderPage extends WebPage {
@@ -58,7 +58,7 @@ trait NameDobSoleTraderPage extends WebPage {
     firstName = "Test First Name",
     middleName = Some("Test Middle Name"),
     lastName = "Test Last Name",
-    dateOfBirth = new LocalDate("1983-09-03")
+    dateOfBirth = LocalDate.of(1983, 9, 3)
   )
 
 }

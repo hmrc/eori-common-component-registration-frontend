@@ -17,7 +17,7 @@
 package util.builders.matching
 
 import common.RegistrationOutcome.{PENDING, RegistrationOutcome}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, NameIdOrganisationMatch, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.nameUtrOrganisationForm
