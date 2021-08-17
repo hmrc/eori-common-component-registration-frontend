@@ -51,9 +51,11 @@
             @inputText("first-name", messages("cds.matching.individual.first-name"), '_autocomplete ->  "given-name")
             @inputText("last-name", messages("cds.matching.individual.last-name"), '_autocomplete ->  "family-name")
             <div class="form-group">
-            @inputDate_di(updateFormErrors, "date-of-birth", None,
-                '_label -> Html(messages("cds.matching.individual.date-of-birth")),
-                '_hintText -> Html(messages("cds.date-of-birth.hint"))
+            @inputDate_di(
+                form = updateFormErrors,
+                id = "date-of-birth",
+                legendContent = messages("cds.matching.individual.date-of-birth"),
+                hintText = Some(messages("cds.date-of-birth.hint"))
             )
             </div>
 

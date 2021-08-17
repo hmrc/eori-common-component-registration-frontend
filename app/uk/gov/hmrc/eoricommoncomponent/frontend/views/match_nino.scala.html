@@ -46,9 +46,11 @@
             @inputText("first-name", messages("cds.matching.nino.first-name"))
             @inputText("last-name", messages("cds.matching.nino.last-name"))
             <div class="form-group">
-            @inputDate_di(updateFormErrors, "date-of-birth", None,
-                '_label -> Html(messages("cds.matching.nino.date-of-birth")),
-                '_hintText -> Html(messages("cds.date-of-birth.hint"))
+            @inputDate_di(
+                form = updateFormErrors,
+                id = "date-of-birth",
+                legendContent = messages("cds.matching.nino.date-of-birth"),
+                hintText = Some(messages("cds.date-of-birth.hint"))
             )
             </div>
             @inputText("nino", messages("cds.matching.nino.nino"),

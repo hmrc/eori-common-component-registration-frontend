@@ -1,6 +1,9 @@
 
 #----------------------------------
 
+->         /govuk-frontend                                                                              govuk.Routes
+->         /hmrc-frontend                                                                               hmrcfrontend.Routes
+
 GET         /customs-registration-services/assets/*file                                                  @controllers.Assets.versioned(path="/public", file: Asset)
 GET         /public/*file                                                          @controllers.Assets.versioned(path="/public", file: Asset)
 

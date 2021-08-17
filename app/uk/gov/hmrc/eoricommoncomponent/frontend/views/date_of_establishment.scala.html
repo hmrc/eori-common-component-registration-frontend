@@ -61,13 +61,14 @@
 
             @CSRF.formField
 
-            @inputDate_di(formItem = updateFormErrors, fieldName = "date-of-establishment", Some(introHtml),
-                '_isLegendH1 -> true,
-                '_label -> messages(headerAndTitle),
-                '_hintText -> Html(messages("cds.date-established.hint"))
+            @inputDate_di(
+                form = dateForm,
+                legendContent = headerAndTitle,
+                hintText = Some(messages("cds.date-established.hint")),
+                id = "date-of-establishment"
             )
 
-            <input class="button" type="submit" value='@ViewHelper.continueButtonText(isInReviewMode)'>
+            <input class="govuk-button" type="submit" value='@ViewHelper.continueButtonText(isInReviewMode)'>
             }
 
         @helpers.helpAndSupport()

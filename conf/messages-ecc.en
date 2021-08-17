@@ -357,3 +357,7 @@ ecc.start-page.sole-trader.bullet1 = National Insurance number
 ecc.start-page.sole-trader.bullet2 = Self Assessment Unique Taxpayer Reference (UTR). You can <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
 ecc.start-page.start-now = Start now
 ecc.start-page.help.eori.contact = Contact the EORI team online.
+
+date.fields.day = Day
+date.fields.month = Month
+date.fields.year = Year

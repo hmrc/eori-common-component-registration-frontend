@@ -21,7 +21,6 @@ import java.time.Year
 import java.time.LocalDate
 import play.api.data.Forms.{optional, text, tuple}
 import play.api.data.Mapping
-import uk.gov.hmrc.play.mappers.DateFields._
 
 import scala.util.{Success, Try}
 
@@ -89,6 +88,6 @@ object DateTuple {
     optional(text.verifying("date.year.error", isYearValid(minYear)))
 
   private def dateTupleMapping(minYear: Int): Mapping[(Option[String], Option[String], Option[String])] =
-    tuple(day -> dayMapping, month -> monthMapping, year -> yearMapping(minYear))
+    tuple("day" -> dayMapping, "month" -> monthMapping, "year" -> yearMapping(minYear))
 
 }

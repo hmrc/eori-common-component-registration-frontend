@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import javax.inject.{Inject, Singleton}
-import java.time.{ZoneOffset, ZonedDateTime}
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Sub01Outcome, SubscriptionStatusQueryParams}

@@ -355,3 +355,7 @@ ecc.start-page.sole-trader.bullet1 = Rhif Yswiriant Gwladol
 ecc.start-page.sole-trader.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad. Gallwch ddod o hyd i <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">UTR coll (yn agor ffenestr neu dab newydd)</a>.
 ecc.start-page.start-now = Dechrau nawr
 ecc.start-page.help.eori.contact = Cysylltu â’r tîm EORI ar-lein.
+
+date.fields.day = Diwrnod
+date.fields.month = Mis
+date.fields.year = Blwyddyn

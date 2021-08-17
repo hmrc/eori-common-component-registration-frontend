@@ -16,17 +16,21 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.partials.{footer, header, styles}
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
-@import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
-@import uk.gov.hmrc.play.views.html.layouts.TrackingConsentSnippet
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcReportTechnicalIssue
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcTimeoutDialog
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.TimeoutDialog
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
+@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
+@import views.html.helper.CSPNonce
 
-@this(footer_di: footer, header_di: header, styles_di: styles, trackingConsentSnippet: TrackingConsentSnippet, appConfig: AppConfig, reportAProblemLink: ReportAProblemLink)
+@this(hmrcLayout: HmrcLayout, standardBetaBanner: StandardBetaBanner, trackingConsentSnippet: HmrcTrackingConsentSnippet, appConfig: AppConfig, reportAProblemLink: HmrcReportTechnicalIssue, hmrcTimeoutDialog: HmrcTimeoutDialog)
 
-@(title: String,
-        countriesInCountryPicker: CountriesInCountryPicker = NoCountriesInCountryPicker,
-        form: Option[Form[_]] = None,
-        suppressTelephoneNumberDetection: Boolean = true
+@(  title: String,
+    countriesInCountryPicker: CountriesInCountryPicker = NoCountriesInCountryPicker,
+    form: Option[Form[_]] = None,
+    suppressTelephoneNumberDetection: Boolean = true
 )(content: Html)(implicit messages: Messages, request: Request[_])
 
 @isLoggedIn = @{!request.session.isEmpty && request.session.get("authToken").isDefined}
@@ -50,64 +54,58 @@
     s"/customs-registration-services/${service.code}/register/keep-alive"
 }
 
-<!DOCTYPE html>
-<!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
-<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-        @if(suppressTelephoneNumberDetection) {
-            <meta name="format-detection" content="telephone=no" />
-        }
-            <!-- Tracking Consent Snippet -->
-        @trackingConsentSnippet()
-            <!-- End Tracking Consent Snippet -->
-        <title>@titleErr</title>
-        @styles_di()
-        @partials.countrypickerscript(countriesInCountryPicker)
+@theHead = {
+    @if(suppressTelephoneNumberDetection) {
+        <meta name="format-detection" content="telephone=no" />
+    }
+    <!-- Tracking Consent Snippet -->
+    @trackingConsentSnippet()
+    <!-- End Tracking Consent Snippet -->
 
-    </head>
-    <body class="js-no">
-        <div id="skiplink-container">
-            <div>
-                <a href="#content" class="skiplink">@messages("cds.skip-link")</a>
-            </div>
-        </div>
-        @header_di(messages, request)
-        <main id="content" class="centered-content" role="main">
-            <div class="grid-row">
-            @content
-            </div>
-            @reportAProblemLink(appConfig.reportAProblemPartialUrlRegister(service), appConfig.reportAProblemNonJSUrlRegister(service))
-        </main>
-        @footer_di(messages, request)
+    @partials.countrypickerscript(countriesInCountryPicker)
 
-        @if(countriesInCountryPicker!=NoCountriesInCountryPicker){
-            <script type="text/javascript">
-                    var countryPickerInputElements = document.getElementsByClassName('autocomplete__input');
-                    var form = document.getElementsByTagName('form')[0];
+    @if(isLoggedIn){
+        @hmrcTimeoutDialog(TimeoutDialog(
+            title = Some(messages("cds.timeout.message")),
+            timeout = Some(1200),
+            countdown = Some(300),
+            keepAliveUrl = Some(keepAliveUrl),
+            signOutUrl = Some(signOutUrl),
+            keepAliveButtonText = Some(messages("cds.timeout.keep-alive-button")),
+            signOutButtonText = Some(messages("cds.timeout.sign-out-button"))
+        ))
+    }
+}
 
-                    form.addEventListener('submit', function(){
-                        for(var i=0;i<countryPickerInputElements.length;i++){
-                            var input = countryPickerInputElements[i];
-                            var select = countryPickerInputElements[i].parentNode.parentNode.parentNode.querySelector('select');
-                            if (input.value.trim() == "") select.selectedIndex=0
-                        }
-                    });
-            </script>
-        }
+@mainContent = {
+    @content
+}
 
-        @if(isLoggedIn){
-            <script type="text/javascript">
-                    window.GOVUK.timeoutDialog({
-                        timeout: 1200,
-                        countdown: 300,
-                        message: '@messages("cds.timeout.message")',
-                        keepAliveUrl: '@keepAliveUrl',
-                        signOutUrl: '@signOutUrl',
-                        keepAliveButtonText: '@messages("cds.timeout.keep-alive-button")',
-                        signOutButtonText: '@messages("cds.timeout.sign-out-button")',
-                    });
-            </script>
-        }
-    </body>
-</html>
+@bodyEndBlockWrapper = {
+    @if(countriesInCountryPicker != NoCountriesInCountryPicker) {
+        <script type="text/javascript">
+                var countryPickerInputElements = document.getElementsByClassName('autocomplete__input');
+                var form = document.getElementsByTagName('form')[0];
+
+                form.addEventListener('submit', function () {
+                    for (var i = 0; i < countryPickerInputElements.length; i++) {
+                        var input = countryPickerInputElements[i];
+                        var select = countryPickerInputElements[i].parentNode.parentNode.parentNode.querySelector('select');
+                        if (input.value.trim() == "") select.selectedIndex = 0
+                    }
+                });
+        </script>
+    }
+}
+
+@hmrcLayout(
+    pageTitle = Some(titleErr),
+    isWelshTranslationAvailable = true, /* or false if your service has not been translated */
+    serviceUrl = None,
+    signOutUrl = Some(signOutUrl),
+    phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedBackRegister(service))),
+    additionalHeadBlock = Some(theHead),
+    nonce = CSPNonce.get,
+    serviceName = Some(messages("cds.banner.registration", longName)),
+    accessibilityStatementUrl = Some(service.accessibilityUrl)
+)(mainContent)
