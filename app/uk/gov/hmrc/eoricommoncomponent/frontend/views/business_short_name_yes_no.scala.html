@@ -21,7 +21,7 @@
 
 @import views.html.helper._
 
-@this(layout_di: layout)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup)
 
 @(shortNameYesNoForm: Form[YesNo], orgType: EtmpOrganisationType, isRow: Boolean, isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -50,7 +50,7 @@
 
             @CSRF.formField
 
-            @helpers.inputRadioGroup(
+            @inputRadioGroup(
                 shortNameYesNoForm("yes-no-answer"),
                 Seq("true" -> messages("cds.yes"),
                     "false" -> messages("cds.no")),

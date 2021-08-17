@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 
-@this(layout_di: layout, appConfig: AppConfig)
+@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup)
 
 @(userLocationForm: Form[UserLocationDetails], service: Service, isAffinityOrganisation: Boolean)(implicit request: Request[_], messages: Messages)
 
@@ -39,8 +39,8 @@
     )
 }
 
-@inputRadioGroup(field: String, options: Seq[(String, String, Option[String])]) = {
-@helpers.inputRadioGroup(
+@displayInputRadioGroup(field: String, options: Seq[(String, String, Option[String])]) = {
+@inputRadioGroup(
     userLocationForm(field),
     options.map { option => (option._1, option._2) },
     options.flatMap(option => option._3.map(option._1 -> _)).toMap,
@@ -59,7 +59,7 @@
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UserLocationController.submit(service), "user-location-form") {
             @CSRF.formField
 
-            @inputRadioGroup("location", validOptions)
+            @displayInputRadioGroup("location", validOptions)
 
             <input class="govuk-button" type="submit" value='@messages("cds.navigation.continue")'>
         }

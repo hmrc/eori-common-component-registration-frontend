@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 
-@this(layout_di: layout)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup)
 
 @(
     isInReviewMode: Boolean,
@@ -41,9 +41,9 @@
     else messages("cds.subscription.vat-registered-eu.title-and-heading")
 }
 
-@inputRadioGroup(field: String, options: Seq[(String, String)]) = {
+@displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
 
-@helpers.inputRadioGroup(
+@inputRadioGroup(
     vatRegisteredEuYesNoAnswerForm(field),
     options,
     Map.empty,
@@ -63,7 +63,7 @@
 
             @CSRF.formField
 
-            @inputRadioGroup("yes-no-answer", Seq("true" -> messages("cds.yes"), "false" -> messages("cds.no")))
+            @displayInputRadioGroup("yes-no-answer", Seq("true" -> messages("cds.yes"), "false" -> messages("cds.no")))
 
             <input class="govuk-button" type="submit" value='@ViewHelper.continueButtonText(isInReviewMode)'>
         }

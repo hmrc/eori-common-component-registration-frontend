@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-@this(layout_di: layout)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup)
 
 @(email:Option[String],
     confirmEmailYesNoAnswerForm: Form[YesNo],
@@ -28,9 +28,9 @@
     service: Service,
 )(implicit request: Request[_], messages: Messages)
 
-@inputRadioGroup(field: String, options: Seq[(String, String)]) = {
+@displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
 
-@helpers.inputRadioGroup(
+@inputRadioGroup(
     confirmEmailYesNoAnswerForm(field),
     options,
     Map.empty,
@@ -55,7 +55,7 @@
     @helpers.form(CheckYourEmailController.submit(service), "confirmEmailYesNoAnswerForm") {
     @CSRF.formField
 
-    @inputRadioGroup("yes-no-answer",
+    @displayInputRadioGroup("yes-no-answer",
     Seq("true" -> messages("subscription.check-your-email.yes"),
     "false" -> messages("subscription.check-your-email.no")))
 

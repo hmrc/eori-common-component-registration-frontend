@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 
-@this(layout_di: layout, appConfig: AppConfig)
+@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup)
 
 @(
     isInReviewMode: Boolean,
@@ -70,7 +70,7 @@
 
             @CSRF.formField
 
-            @helpers.inputRadioGroup(
+            @inputRadioGroup(
                 disclosePersonalDetailsYesNoAnswerForm("yes-no-answer"),
                 Seq(
                     "true" -> messages("cds.subscription.organisation-disclose-personal-details-consent.yes"),

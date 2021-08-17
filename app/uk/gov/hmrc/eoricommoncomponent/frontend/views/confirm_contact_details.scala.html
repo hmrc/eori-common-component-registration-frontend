@@ -19,7 +19,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-@this(layout_di: layout)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup)
 
 @(
     name: String,
@@ -84,8 +84,8 @@
   </div>
 }
 
-@inputRadioGroup(field: String, options: Seq[(String, String)]) = {
-    @helpers.inputRadioGroup(
+@displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
+    @inputRadioGroup(
         yesNoWrongAddress(field),
         options,
         Map.empty,
@@ -106,7 +106,7 @@
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service), "yes-no-wrong-address-form") {
             @CSRF.formField
 
-            @inputRadioGroup("yes-no-wrong-address",
+            @displayInputRadioGroup("yes-no-wrong-address",
                 Seq("yes" -> radioGroupYes,
                     "wrong-address" -> radioGroupWrongAddress))
 

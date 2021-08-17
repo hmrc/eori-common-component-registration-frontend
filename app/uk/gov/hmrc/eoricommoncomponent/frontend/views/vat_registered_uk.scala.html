@@ -19,7 +19,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-@this(layout_di: layout)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup)
 
 @(
     isInReviewMode: Boolean,
@@ -40,8 +40,8 @@
     else messages("cds.subscription.vat-registered-uk.title-and-heading")
 }
 
-@inputRadioGroup(field: String, options: Seq[(String, String)]) = {
-    @helpers.inputRadioGroup(
+@displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
+    @inputRadioGroup(
         vatRegisteredUkYesNoAnswerForm(field),
         options,
         Map.empty,
@@ -61,7 +61,7 @@
         @helpers.form(formAction, "vat-registered-uk-createForm") {
         @CSRF.formField
 
-        @inputRadioGroup("yes-no-answer",
+        @displayInputRadioGroup("yes-no-answer",
             Seq("true" -> messages("cds.yes"),
                 "false" -> messages("cds.no")))
 
