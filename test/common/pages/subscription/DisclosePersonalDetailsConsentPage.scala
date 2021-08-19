@@ -23,7 +23,7 @@ trait DisclosePersonalDetailsConsentPage extends WebPage {
 
   val url: String = frontendHost + "/customs-registration-services/register/disclose-personal-details-consent"
 
-  val fieldLevelErrorYesNoAnswer: String = "//*[@id='yes-no-answer-field']//span[@class='error-message']"
+  val fieldLevelErrorYesNoAnswer: String = "//span[@id='yes-no-answer-error' and @class='govuk-error-message']"
 
   override val title = "Do you want to include your organisation name and address on the EORI checker?"
 
@@ -31,7 +31,7 @@ trait DisclosePersonalDetailsConsentPage extends WebPage {
 
   val consentOpeningXpath = "//*[@id='consent-opening']"
   val consentBodyXpath    = "//*[@id='consent-body']"
-  val consentInfoXpath    = "//*[@id='yes-no-answer-fieldset']/p"
+  val consentInfoXpath    = "//div[@id='yes-no-answer-hint' and @class='govuk-hint govuk-body-s']"
 
   val yesToDiscloseXpath      = "//label[@for='yes-no-answer-true']"
   val noToDiscloseXpath       = "//label[@for='yes-no-answer-false']"

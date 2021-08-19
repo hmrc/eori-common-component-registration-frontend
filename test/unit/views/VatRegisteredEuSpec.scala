@@ -59,12 +59,12 @@ class VatRegisteredEuSpec extends ViewSpec {
 
     "have a page level error when no radio buttons are selected" in {
       docWithErrors.body
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text mustBe "Tell us if your organisation is VAT registered in other EU countries"
     }
 
     "have standard submit button" in {
-      individualDoc.body.getElementsByAttributeValue("type", "submit").attr("value") mustBe "Continue"
+      individualDoc.body.getElementsByClass("govuk-button").text mustBe "Continue"
     }
 
     "have different title for nonIndividuals" in {
@@ -78,7 +78,7 @@ class VatRegisteredEuSpec extends ViewSpec {
     }
 
     "have different submit button when in review mode" in {
-      nonIndividualDocInReview.body.getElementsByAttributeValue("type", "submit").attr("value") mustBe "Save and review"
+      nonIndividualDocInReview.body.getElementsByClass("govuk-button").text mustBe "Save and review"
     }
 
     "have the correct title for a partnership" in {
@@ -93,7 +93,7 @@ class VatRegisteredEuSpec extends ViewSpec {
 
     "have the correct text in the error message when no radio buttons are selected and the organisation type is a partnership" in {
       partnershipDocWithErrors.body
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text mustBe "Tell us if your partnership is VAT registered in other EU countries"
     }
 

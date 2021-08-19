@@ -60,7 +60,7 @@ class ConfirmContactDetailsViewSpec extends ViewSpec {
         .text() mustBe "Is this your registered address?"
     }
     "have the correct class on the h1" in {
-      CorporateBodyDoc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
+      CorporateBodyDoc.body().getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
     "have the address" in {
       CorporateBodyDoc.body().getElementById("address").text() mustBe "street city SE28 1AA United Kingdom"

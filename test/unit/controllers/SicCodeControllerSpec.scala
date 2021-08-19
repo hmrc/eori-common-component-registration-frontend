@@ -259,7 +259,7 @@ class SicCodeControllerSpec
     "display the correct text for the continue button" in {
       showCreateForm(userSelectedOrgType = Company) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(SicCodePage.continueButtonXpath) shouldBe ContinueButtonTextInCreateMode
+        page.getElementText(SicCodePage.continueButtonXpath) shouldBe ContinueButtonTextInCreateMode
       }
     }
   }
@@ -287,7 +287,7 @@ class SicCodeControllerSpec
     "display the correct text for the continue button" in {
       showReviewForm(userSelectedOrgType = Company) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(SicCodePage.continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
+        page.getElementText(SicCodePage.continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
       }
     }
   }

@@ -129,7 +129,7 @@ class DoYouHaveAUtrNumberControllerSpec
         page.h1 shouldBe "Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) issued in the UK?"
 
         page.getElementsText(
-          "//*[@id='have-utr-hintHtml']"
+          "//*[@id='have-utr-hint']"
         ) shouldBe "You will have a UTR number if your organisation pays corporation tax in the UK. It is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called ‘reference’, ‘UTR’ or ‘official use’."
       }
     }
@@ -190,7 +190,7 @@ class DoYouHaveAUtrNumberControllerSpec
         )
         page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
         page.getElementsText(
-          "//*[@id='have-utr-hintHtml']"
+          "//*[@id='have-utr-hint']"
         ) shouldBe "You will have a UTR number if you pay tax in the UK."
       }
     }
@@ -205,7 +205,7 @@ class DoYouHaveAUtrNumberControllerSpec
         )
         page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
         page.getElementsText(
-          "//*[@id='have-utr-hintHtml']"
+          "//*[@id='have-utr-hint']"
         ) shouldBe "You will have a UTR number if you pay tax in the UK."
       }
     }

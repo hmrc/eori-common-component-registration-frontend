@@ -24,7 +24,7 @@ trait SubscriptionVatDetailsPage extends WebPage {
 
   val vatPostcodeFieldLevelError      = "//*[@id='postcode-outer']//span[@class='error-message']"
   val vatNumberFieldLevelError        = "//*[@id='vat-number-outer']//span[@class='error-message']"
-  val vatEffectiveDateFieldLevelError = "//*[@id='vat-effective-date-fieldset']//span[@class='error-message']"
+  val vatEffectiveDateFieldLevelError = "//span[contains(@id, 'vat-effective-date-error') and contains(@class, 'govuk-error-message']"
 }
 
 object SubscriptionVatDetailsPage extends SubscriptionVatDetailsPage

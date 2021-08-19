@@ -46,7 +46,7 @@ class HeaderSpec extends ControllerSpec with AuthActionMock {
       val result = controller.startRegister(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       val page = CdsPage(contentAsString(result))
-      page.elementIsPresent("//a[@id='sign-out']") shouldBe true
+      page.elementIsPresent("//a[@class='hmrc-sign-out-nav__link']") shouldBe true
     }
 
     "not be present when a user isn't logged in" in {
@@ -72,7 +72,7 @@ class HeaderSpec extends ControllerSpec with AuthActionMock {
 
       val page = CdsPage(contentAsString(result))
 
-      page.getElementAttribute("//a[@id='feedback-link']", "href") should endWith(
+      page.getElementAttribute("//span[@class='govuk-phase-banner__text']//a[@class='govuk-link']", "href") should endWith(
         "/contact/beta-feedback?service=eori-common-component-register-atar"
       )
     }

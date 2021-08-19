@@ -147,7 +147,7 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
       submitForm(formValues) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe errorMessage
+        page.getElementsText(xpath = webPage.pageLevelErrorSummaryListXPath) shouldBe errorMessage
         withClue(
           s"Not found in the page: field level error block for '$problemField' with xpath $fieldLevelErrorXPath"
         ) {

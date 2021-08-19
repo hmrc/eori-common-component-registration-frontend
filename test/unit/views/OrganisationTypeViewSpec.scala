@@ -96,7 +96,6 @@ class OrganisationTypeViewSpec
       s"have all the required input fields while on main screen for user location ${userLocation.getOrElse("None")}" in {
         invokeOrganisationTypeWithAuthenticatedUser(userLocation = userLocation) { result =>
           val html: String = contentAsString(result)
-          html.contains("id=\"organisation-type-field\"") shouldBe true
           html.contains("id=\"organisation-type-company\"") shouldBe forUk
           html.contains("id=\"organisation-type-sole-trader\"") shouldBe forUk
           html.contains("id=\"organisation-type-individual\"") shouldBe forUk

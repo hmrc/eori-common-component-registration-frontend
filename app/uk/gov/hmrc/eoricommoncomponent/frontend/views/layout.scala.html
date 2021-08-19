@@ -24,13 +24,17 @@
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
 @import views.html.helper.CSPNonce
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukBackLink
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
 
-@this(hmrcLayout: HmrcLayout, standardBetaBanner: StandardBetaBanner, trackingConsentSnippet: HmrcTrackingConsentSnippet, appConfig: AppConfig, reportAProblemLink: HmrcReportTechnicalIssue, hmrcTimeoutDialog: HmrcTimeoutDialog)
+@this(hmrcLayout: HmrcLayout, standardBetaBanner: StandardBetaBanner, trackingConsentSnippet: HmrcTrackingConsentSnippet, appConfig: AppConfig, reportAProblemLink: HmrcReportTechnicalIssue, hmrcTimeoutDialog: HmrcTimeoutDialog, govukBackLink: GovukBackLink)
 
 @(  title: String,
     countriesInCountryPicker: CountriesInCountryPicker = NoCountriesInCountryPicker,
     form: Option[Form[_]] = None,
-    suppressTelephoneNumberDetection: Boolean = true
+    suppressTelephoneNumberDetection: Boolean = true,
+    displayBackLink: Boolean = true
 )(content: Html)(implicit messages: Messages, request: Request[_])
 
 @isLoggedIn = @{!request.session.isEmpty && request.session.get("authToken").isDefined}
@@ -78,6 +82,11 @@
 }
 
 @mainContent = {
+
+    @if(displayBackLink) {
+        @govukBackLink(BackLink(href = "javascript:history.back()", content = Text(messages("cds.navigation.back")), attributes = Map("id" -> "back-link")))
+    }
+
     @content
 }
 

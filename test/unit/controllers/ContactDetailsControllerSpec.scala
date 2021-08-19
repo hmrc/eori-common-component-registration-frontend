@@ -188,7 +188,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     "display the correct text for the continue button" in {
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(continueButtonXpath) shouldBe ContinueButtonTextInCreateMode
+        page.getElementText(continueButtonXpath) shouldBe ContinueButtonTextInCreateMode
       }
     }
 
@@ -272,7 +272,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     "display the correct text for the continue button" in {
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
+        page.getElementText(continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
       }
     }
 

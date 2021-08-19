@@ -32,7 +32,7 @@ abstract class NameDateOfBirthPage extends WebPage {
 
   val fieldLevelErrorLastName = "//*[@id='last-name-outer']//span[@class='error-message']"
 
-  val fieldLevelErrorDateOfBirth = "//*[@id='date-of-birth']//span[@class='error-message']"
+  val fieldLevelErrorDateOfBirth = "//span[contains(@id, 'date-of-birth-error') and contains(@class, 'govuk-error-message']"
 
   override val title = "Enter your details"
 

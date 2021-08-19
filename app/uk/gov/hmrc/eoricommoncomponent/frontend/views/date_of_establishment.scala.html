@@ -22,8 +22,12 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(inputDate_di: inputDate, layout_di: layout)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton)
+
 
 @(dateForm: Form[LocalDate], isInReviewMode: Boolean, orgType: EtmpOrganisationType, isRestOfWorldJourney: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -35,9 +39,9 @@
 }
 
 @introHtml = {
-@if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
-    <p id="date-of-establishment-label">@Html(messages(introText))</p>
-}
+    @if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
+        <p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
+    }
 }
 
 @headerAndTitle = @{
@@ -52,8 +56,6 @@
 
 @layout_di(messages(headerAndTitle), form = Some(dateForm)) {
     <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
         @helpers.errorSummary(updateFormErrors,
             focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 
@@ -64,12 +66,15 @@
             @inputDate_di(
                 form = dateForm,
                 legendContent = headerAndTitle,
-                hintText = Some(messages("cds.date-established.hint")),
+                hintText = Some(Html(messages("cds.date-established.hint"))),
                 id = "date-of-establishment"
             )
 
-            <input class="govuk-button" type="submit" value='@ViewHelper.continueButtonText(isInReviewMode)'>
-            }
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            ))
+
+        }
 
         @helpers.helpAndSupport()
 

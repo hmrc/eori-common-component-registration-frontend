@@ -68,8 +68,8 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
     }
 
     "should radio buttons" in {
-      docUnderLimit.body.getElementById("yes-no-answer-true").attr("checked") must not be empty
-      docUnderLimit.body.getElementById("yes-no-answer-false").attr("checked") mustBe empty
+      docUnderLimit.body.getElementById("yes-no-answer-true").attr("value") mustBe "true"
+      docUnderLimit.body.getElementById("yes-no-answer-false").attr("value") mustBe "false"
     }
 
     "have the correct class on the h1" in {
@@ -129,10 +129,10 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
 
     "display error for document with no option selected" in {
       emptyDocUnderLimit.body
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text mustBe "Tell us if your organisation is VAT registered in other EU countries"
       emptyDocUnderLimit.body
-        .getElementsByClass("error-message")
+        .getElementsByClass("govuk-error-message")
         .text mustBe "Error: Tell us if your organisation is VAT registered in other EU countries"
     }
   }

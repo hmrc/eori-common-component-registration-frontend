@@ -17,8 +17,11 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout)
+@this(layout_di: layout, govukButton: GovukButton)
 
 @(isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -28,13 +31,14 @@
 
 @layout_di(messages("cds.subscription.vat-details.cannot-identify-you.heading")) {
     <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back back-to-previous js-visible">@messages("cds.navigation.back")</a>
-
         <h1 class="heading-large">@messages("cds.subscription.vat-details.cannot-identify-you.heading")</h1>
 
         <p id="explanation">@messages("cds.subscription.vat-details.cannot-identify-you.explanation")</p>
 
-        <a id="try-again" href="@tryAgainURL" class="govuk-button" role="button"> @messages("cds.subscription.vat-details.cannot-identify-you.button") </a>
+        @govukButton(Button(
+            content = Text(messages("cds.subscription.vat-details.cannot-identify-you.button")),
+            href = Some(tryAgainURL.url)
+        ))
 
         @helpers.helpAndSupport()
     </div>

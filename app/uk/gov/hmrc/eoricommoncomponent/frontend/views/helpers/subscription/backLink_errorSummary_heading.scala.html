@@ -17,8 +17,6 @@
 @(      errorSummary: play.twirl.api.Html,
         pageHeading: String)(implicit request: Request[_], messages: Messages)
 
-
-<a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
 @errorSummary
 
 @if(pageHeading) {

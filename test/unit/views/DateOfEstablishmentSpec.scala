@@ -42,7 +42,7 @@ class DateOfEstablishmentSpec extends ViewSpec {
       doc.body.getElementsByTag("h1").text() mustBe "When was the company established?"
     }
     "have the correct class on the h1" in {
-      doc.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
     "have the correct text in the hint" in {
       doc.body.getElementById("date-of-establishment-hint").text() mustBe "For example, 31 03 1980."
@@ -62,11 +62,12 @@ class DateOfEstablishmentSpec extends ViewSpec {
       docRestOfWorld.body.getElementsByTag("h1").text() mustBe "When was the organisation established?"
     }
     "have the correct class on the h1" in {
-      docRestOfWorld.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      docRestOfWorld.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
     "have the correct text in the description" in {
+      val test = docRestOfWorld.body
       docRestOfWorld.body
-        .getElementById("date-of-establishment-description")
+        .getElementById("date-of-establishment-hint")
         .text() mustBe "For example, 31 03 1980."
     }
   }
@@ -79,7 +80,7 @@ class DateOfEstablishmentSpec extends ViewSpec {
       docLlp.body.getElementsByTag("h1").text() mustBe "When was the partnership established?"
     }
     "have the correct class on the h1" in {
-      docLlp.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      docLlp.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
   }
 

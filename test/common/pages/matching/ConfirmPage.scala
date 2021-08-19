@@ -22,7 +22,7 @@ trait ConfirmPage extends WebPage {
 
   val addressXPath = "//div[@id='address']"
 
-  val fieldLevelErrorYesNoWrongAddress = "//*[@id='yes-no-wrong-address-fieldset']//span[@class='error-message']"
+  val fieldLevelErrorYesNoWrongAddress = "//span[@id='yes-no-wrong-address-error' and @class='govuk-error-message']"
 
   override val title = "Is this your registered address"
 }

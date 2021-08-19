@@ -19,8 +19,11 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, appConfig: AppConfig)
+@this(layout_di: layout, appConfig: AppConfig, govukButton: GovukButton)
 
 @(service: Service)(implicit messages: Messages, request: Request[_])
 
@@ -31,8 +34,10 @@
 
         <p id="para1">@messages("cds.registration.you-already-have-eori.para1", longName)</p>
 
-        <a href="@{appConfig.eoriCommonComponentFrontend(service.code)}" class="govuk-button" role="button" id="continue">@messages("cds.navigation.continue")</a>
-
+        @govukButton(Button(
+            content = Text(messages("cds.navigation.continue")),
+            href=Some(appConfig.eoriCommonComponentFrontend(service.code))
+        ))
         @helpers.helpAndSupport()
 
     </div>

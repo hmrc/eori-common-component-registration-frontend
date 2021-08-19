@@ -17,7 +17,7 @@
 package common.pages.matching
 
 trait AddressPageFactoring {
-  val PageLevelErrorSummaryListXPath = "//ul[@class='error-summary-list']"
+  val PageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"
 
   val fieldLevelErrorAddressLineOne   = "//*[@id='line-1-outer']//span[@class='error-message']"
   val fieldLevelErrorAddressLineTwo   = "//*[@id='line-2-outer']//span[@class='error-message']"

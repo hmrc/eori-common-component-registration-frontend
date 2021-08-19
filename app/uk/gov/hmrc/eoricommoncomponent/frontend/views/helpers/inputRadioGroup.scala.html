@@ -54,23 +54,17 @@
     if(hasHintHtml) s"${field.id}-hintHtml" else ""
 }
 
-@hasErrors = @{
-    elements.hasErrors
-}
-@errorId = @{
-    if(hasErrors) s"${field.id}-error" else ""
-}
 @describedBy = @{
-    Seq(hintId, hintHtmlId, errorId).filterNot(_.isEmpty).mkString(" ")
+    Seq(hintId, hintHtmlId).filterNot(_.isEmpty).mkString(" ")
 }
 
 @govukRadios(Radios(
     idPrefix = Some(field.id),
     name = field.name,
     hint = if(hasHint){
-        elements.args.get('_hintText).map(hintText => Hint(content = Text(hintText.toString)))
+        elements.args.get('_hintText).map(hintText => Hint(content = Text(hintText.toString), id = Some(hintId)))
     } else {
-        hintHtml.map(hintText => Hint(content = HtmlContent(hintText), classes = "govuk-body-s"))
+        hintHtml.map(hintText => Hint(content = HtmlContent(hintText), classes = "govuk-body-s", id = Some(hintHtmlId)))
     },
     errorMessage = field.error.map{e => ErrorMessage(content = Text(messages(e.message, e.args:_*)))},
     fieldset = Some(Fieldset(

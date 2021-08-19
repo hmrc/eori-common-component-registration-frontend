@@ -83,24 +83,24 @@ class VatDetailsEuSpec extends ViewSpec {
       docForEdit.body.getElementById("vatNumber").attr("value") mustBe updateValues.get("vatNumber").get
     }
     "display error for document with empty values" in {
-      docWithEmptyErrors.body.getElementsByClass("error-summary-list").text must include("Enter your VAT number")
-      docWithEmptyErrors.body.getElementsByClass("error-summary-list").text must include(
+      docWithEmptyErrors.body.getElementsByClass("govuk-error-summary__list").text must include("Enter your VAT number")
+      docWithEmptyErrors.body.getElementsByClass("govuk-error-summary__list").text must include(
         "Enter a country in the EU other than the UK"
       )
     }
 
     "display errors for incorrect formats for field inputs" in {
-      vatNumErrorIllegalCharacters.body.getElementsByClass("error-list").text must include(
+      vatNumErrorIllegalCharacters.body.getElementsByClass("govuk-error-summary__list").text must include(
         "Enter a VAT Number without invalid characters"
       )
       vatNumErrorIllegalCharacters.body.getElementsByClass("error-message").text must include(
         "Enter a VAT Number without invalid characters"
       )
 
-      vatNumErrorLong.body.getElementsByClass("error-list").text must include(
+      vatNumErrorLong.body.getElementsByClass("govuk-error-summary__list").text must include(
         "The VAT Number must be 15 characters or less"
       )
-      vatNumErrorLong.body.getElementsByClass("error-list").text must include(
+      vatNumErrorLong.body.getElementsByClass("govuk-error-summary__list").text must include(
         "Enter a country in the EU other than the UK"
       )
       vatNumErrorLong.body.getElementsByClass("error-message").text must include(

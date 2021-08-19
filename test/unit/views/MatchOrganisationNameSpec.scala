@@ -61,7 +61,7 @@ class MatchOrganisationNameSpec extends ViewSpec {
     "diplay a page level error message" in {
       docWithErrors
         .body()
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text() mustBe "Enter your registered organisation name"
     }
   }

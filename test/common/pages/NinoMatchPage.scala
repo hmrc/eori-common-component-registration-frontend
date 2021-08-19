@@ -24,7 +24,7 @@ object NinoMatchPage extends WebPage {
 
   val fieldLevelErrorNino = "//*[@id='nino-outer']//span[@class='error-message']"
 
-  val fieldLevelErrorDateOfBirth = "//*[@id='date-of-birth']//span[@class='error-message']"
+  val fieldLevelErrorDateOfBirth = "//span[@id='date-of-birth-error' and @class='govuk-error-message']"
 
   override val title = "Enter your details"
 }

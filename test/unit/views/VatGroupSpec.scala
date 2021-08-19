@@ -44,13 +44,14 @@ class VatGroupSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      doc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body().getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
 
     "have the correct intro text" in {
+      val test = doc.body()
       doc
         .body()
-        .getElementsByClass("form-hint")
+        .getElementById("yes-no-answer-hint")
         .text mustBe "VAT groups are when two or more companies or limited liability partnerships register as one taxable 'person' for VAT purposes in the UK."
     }
 
@@ -65,14 +66,14 @@ class VatGroupSpec extends ViewSpec {
     "have a page level error when no radio buttons are selected" in {
       docWithErrors
         .body()
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text mustBe "Tell us if your organisation is part of a VAT group in the UK"
     }
 
     "have a field level error when no radio buttons are selected" in {
       docWithErrors
         .body()
-        .getElementsByClass("error-message")
+        .getElementsByClass("govuk-error-message")
         .text mustBe "Error: Tell us if your organisation is part of a VAT group in the UK"
     }
   }

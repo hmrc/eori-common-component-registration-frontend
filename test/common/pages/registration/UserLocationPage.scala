@@ -22,7 +22,7 @@ trait UserLocationPage extends WebPage {
 
   override val title = "Where are you based?"
 
-  val fieldLevelErrorLocation = "//*[@id='location-fieldset']//span[@class='error-message']"
+  val fieldLevelErrorLocation = "//span[@id='location-error' and @class='govuk-error-message']"
 
   val locationUkField                = "//*[@id='location-uk']"
   val locationIomField               = "//*[@id='location-iom']"

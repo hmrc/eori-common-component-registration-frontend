@@ -29,9 +29,6 @@
 @layout_di(messages("cds.subscription.verify-email.title")) {
 
 <div class="column-two-thirds">
-    <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
-
     @helpers.form(CheckYourEmailController.submit(service)) {
 
         @CSRF.formField

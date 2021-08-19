@@ -64,7 +64,7 @@ class AreYouSureRemoveVatSpec extends ViewSpec {
     }
 
     "have a page level error when no radio buttons are selected" in {
-      docWithErrors.body.getElementsByClass("error-summary-list").text mustBe RemoveVatDetails.pageLevelErrorMessage
+      docWithErrors.body.getElementsByClass("govuk-error-summary__list").text mustBe RemoveVatDetails.pageLevelErrorMessage
     }
   }
 

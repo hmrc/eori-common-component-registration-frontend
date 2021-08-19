@@ -110,7 +110,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
       "user is during company journey" in {
 
         docWithErrorSummary().getElementById("form-error-heading").text() mustBe "There is a problem"
-        docWithErrorSummary().getElementsByClass("error-list").get(
+        docWithErrorSummary().getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your company's shortened name"
       }
@@ -118,7 +118,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
       "user is during partnership journey" in {
 
         docWithErrorSummary(Partnership).getElementById("form-error-heading").text() mustBe "There is a problem"
-        docWithErrorSummary(Partnership).getElementsByClass("error-list").get(
+        docWithErrorSummary(Partnership).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your partnership's shortened name"
       }
@@ -126,7 +126,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
       "user is during charity journey" in {
 
         docWithErrorSummary(UnincorporatedBody).getElementById("form-error-heading").text() mustBe "There is a problem"
-        docWithErrorSummary(UnincorporatedBody).getElementsByClass("error-list").get(
+        docWithErrorSummary(UnincorporatedBody).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your charity's shortened name"
       }
@@ -134,7 +134,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
       "user is during RoW organisation journey" in {
 
         docWithErrorSummary(isRow = true).getElementById("form-error-heading").text() mustBe "There is a problem"
-        docWithErrorSummary(isRow = true).getElementsByClass("error-list").get(
+        docWithErrorSummary(isRow = true).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your organisation's shortened name"
       }

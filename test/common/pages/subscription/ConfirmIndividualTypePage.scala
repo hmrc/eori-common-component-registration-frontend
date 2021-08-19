@@ -22,7 +22,7 @@ object ConfirmIndividualTypePage extends WebPage {
 
   override val title = "Sole trader or individual"
 
-  val fieldLevelErrorIndividualTypeXPath = "//*[@id='individual-type-fieldset']//span[@class='error-message']"
+  val fieldLevelErrorIndividualTypeXPath = "//*[@class='govuk-error-message']"
 
   val formId = "confirm-individual-type-form"
 

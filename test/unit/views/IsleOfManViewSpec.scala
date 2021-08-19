@@ -43,7 +43,7 @@ class IsleOfManViewSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      doc.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
 
     "have 'yes' radio button" in {
@@ -56,13 +56,13 @@ class IsleOfManViewSpec extends ViewSpec {
 
     "have a page level error when no radio buttons are selected" in {
       docWithErrors.body
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text mustBe "Tell us if your organisation is based in the Isle of Man"
     }
 
     "have a field level error when no radio buttons are selected" in {
       docWithErrors.body
-        .getElementsByClass("error-message")
+        .getElementsByClass("govuk-error-message")
         .text mustBe "Error: Tell us if your organisation is based in the Isle of Man"
     }
   }

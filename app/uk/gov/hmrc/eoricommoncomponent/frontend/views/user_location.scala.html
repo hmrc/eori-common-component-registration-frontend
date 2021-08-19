@@ -20,8 +20,11 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup)
+@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
 
 @(userLocationForm: Form[UserLocationDetails], service: Service, isAffinityOrganisation: Boolean)(implicit request: Request[_], messages: Messages)
 
@@ -52,8 +55,6 @@
 
 @layout_di(title, form = Some(userLocationForm)) {
     <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
         @helpers.errorSummary(userLocationForm, focusOverrides = Map("location" -> s"location-${validOptions.head._1}"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UserLocationController.submit(service), "user-location-form") {
@@ -61,7 +62,9 @@
 
             @displayInputRadioGroup("location", validOptions)
 
-            <input class="govuk-button" type="submit" value='@messages("cds.navigation.continue")'>
+            @govukButton(Button(
+                content = Text(messages("cds.navigation.continue"))
+            ))
         }
         @helpers.helpAndSupport()
     </div>

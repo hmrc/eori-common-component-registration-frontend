@@ -18,10 +18,13 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
 @import views.html.helper._
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
 
 @(shortNameYesNoForm: Form[YesNo], orgType: EtmpOrganisationType, isRow: Boolean, isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -42,8 +45,6 @@
 @layout_di(messages(introText), form = Some(shortNameYesNoForm)) {
 
     <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
         @helpers.errorSummary(shortNameYesNoForm, focusOverrides = Map("yes-no-answer" -> "cds.yes"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.BusinessShortNameYesNoController.submit(service, isInReviewMode), "shortNameForm") {
@@ -62,7 +63,10 @@
                 '_isLegendH1 -> true
             )
 
-            <input class="govuk-button" type="submit" value='@ViewHelper.continueButtonText(isInReviewMode)'>
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            ))
+
         }
 
         @helpers.helpAndSupport()

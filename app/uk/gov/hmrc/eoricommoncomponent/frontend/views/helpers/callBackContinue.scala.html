@@ -15,7 +15,15 @@
  *@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+
+@this(govukButton: GovukButton)
 
 @(service: Service)(implicit request: Request[_], messages: Messages)
 
-<a id="callback-continue" href="@service.callBack" class="govuk-button" role="button">@messages("cds.navigation.continue")</a>
+@govukButton(Button(
+  content = Text(messages("cds.navigation.continue")),
+  href=Some(service.callBack)
+))

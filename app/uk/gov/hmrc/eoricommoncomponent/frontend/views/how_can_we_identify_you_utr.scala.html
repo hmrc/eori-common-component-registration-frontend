@@ -19,8 +19,12 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout)
+@this(layout_di: layout, govukButton: GovukButton)
 @(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call)(implicit request: Request[_], messages: Messages)
 
 @inputText(field: String, args: (Symbol, Any)*) = {
@@ -33,8 +37,6 @@
 
 @layout_di(messages("subscription-journey.how-confirm-identity.utr.heading"), form = Some(utrForm)) {
     <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
         @helpers.errorSummary(utrForm)
 
         @helpers.form(submit, "utrForm") {
@@ -42,7 +44,9 @@
 
             @inputText("utr")
 
-            <p><input class="govuk-button" type="submit" value='@uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper.continueButtonText(isInReviewMode)'></p>
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            ))
 
         }
 
