@@ -24,37 +24,30 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(emailForm: Form[EmailViewModel],service: Service)(implicit request: Request[_], messages: Messages)
 
-@inputText(field: String, label: String, args: (Symbol, Any)*) = {
-
-@defining(Seq(
-    '_label -> label,
-    '_isLabelH1 -> true) ++ args) { args =>
-
-    @helpers.input(
-        emailForm(field),
-        args: _*
-    )
-    }
-}
-
 @layout_di(messages("cds.subscription.enter-email.page.title"), form = Some(emailForm)) {
 
-<div class="column-two-thirds">
-    @helpers.errorSummary(emailForm)
+<div">
+    @errorSummary(emailForm.errors)
 
     @helpers.form(WhatIsYourEmailController.submit(service),"emailForm") {
 
         @CSRF.formField
 
-        @inputText("email",
-            messages("subscription.enter-email.heading"),
-            '_hintText ->  messages("enter-email-body-text"),
-            '_type ->  "email",
-            '_autocomplete ->  "email"
+        @inputText(
+            form = emailForm,
+            id = "email",
+            name = "email",
+            inputType = "email",
+            label = "subscription.enter-email.heading",
+            isPageHeading = true,
+            hint = Some(messages("enter-email-body-text")),
+            autocomplete = Some("email"),
+            classes = Some("govuk-!-width-two-thirds"),
+            labelClasses = Some("govuk-label--l")
         )
 
         @govukButton(Button(

@@ -24,7 +24,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(ninoUtrForm: Form[NinoOrUtrChoice], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -49,8 +49,8 @@
 }
 
 @layout_di(title, form = Some(ninoUtrForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(ninoUtrForm, focusOverrides = Map("ninoOrUtrRadio" -> "nino-radio"))
+    <div>
+        @errorSummary(ninoUtrForm.errors, focusOverrides = Map("ninoOrUtrRadio" -> "nino-radio"))
 
         @helpers.form(HowCanWeIdentifyYouController.submit(service), "nino-utr-form") {
             @CSRF.formField

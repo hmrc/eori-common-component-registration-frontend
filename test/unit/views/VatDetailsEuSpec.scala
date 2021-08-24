@@ -63,7 +63,7 @@ class VatDetailsEuSpec extends ViewSpec {
       doc.body.getElementById("country-outer").text must include(
         ". Start to type the name of the country and then use up and down arrows to review and enter to select a country"
       )
-      doc.body.getElementById("vatNumber-outer").text mustBe "VAT Number"
+      doc.body.getElementsByAttributeValueContaining("for","vatNumber").text mustBe "VAT Number"
     }
 
     "have the correct class on the h1" in {
@@ -93,7 +93,7 @@ class VatDetailsEuSpec extends ViewSpec {
       vatNumErrorIllegalCharacters.body.getElementsByClass("govuk-error-summary__list").text must include(
         "Enter a VAT Number without invalid characters"
       )
-      vatNumErrorIllegalCharacters.body.getElementsByClass("error-message").text must include(
+      vatNumErrorIllegalCharacters.body.getElementsByClass("govuk-error-message").text must include(
         "Enter a VAT Number without invalid characters"
       )
 
@@ -103,7 +103,7 @@ class VatDetailsEuSpec extends ViewSpec {
       vatNumErrorLong.body.getElementsByClass("govuk-error-summary__list").text must include(
         "Enter a country in the EU other than the UK"
       )
-      vatNumErrorLong.body.getElementsByClass("error-message").text must include(
+      vatNumErrorLong.body.getElementsByClass("govuk-error-message").text must include(
         "The VAT Number must be 15 characters or less"
       )
     }

@@ -111,7 +111,8 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     }
     "display the correct problem message at the top of the page" in {
       docWithNoSelectionError.body
-        .getElementById("errors")
+        .getElementsByClass("govuk-list govuk-error-summary__list")
+        .get(0)
         .getElementsByAttributeValue("href", "#have-utr-true")
         .text mustBe "Select yes if you have a UTR number"
     }
@@ -131,8 +132,13 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     }
     "display the correct problem message at the top of the page" in {
       docWithNoSelectionErrorAsSoleTrader.body
-        .getElementById("errors")
-        .text mustBe "There is a problem Select yes if you have a UTR number"
+        .getElementById("error-summary-title")
+        .text mustBe "There is a problem"
+      docWithNoSelectionErrorAsSoleTrader.body
+        .getElementsByClass("govuk-list govuk-error-summary__list")
+        .get(0)
+        .getElementsByAttributeValue("href", "#have-utr-true")
+        .text mustBe "Select yes if you have a UTR number"
     }
   }
 

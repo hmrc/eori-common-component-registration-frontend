@@ -24,7 +24,7 @@
 
 @import views.html.helper._
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(shortNameYesNoForm: Form[YesNo], orgType: EtmpOrganisationType, isRow: Boolean, isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -44,8 +44,8 @@
 
 @layout_di(messages(introText), form = Some(shortNameYesNoForm)) {
 
-    <div class="column-two-thirds">
-        @helpers.errorSummary(shortNameYesNoForm, focusOverrides = Map("yes-no-answer" -> "cds.yes"))
+    <div>
+        @errorSummary(shortNameYesNoForm.errors, focusOverrides = Map("yes-no-answer" -> "cds.yes"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.BusinessShortNameYesNoController.submit(service, isInReviewMode), "shortNameForm") {
 

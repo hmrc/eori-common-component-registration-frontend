@@ -99,17 +99,17 @@ class BusinessShortNameViewSpec extends ViewSpec {
     }
 
     "display short name input with label" in {
+      val test = doc().body()
 
-      val shortNameInput = doc().body().getElementById("short-name-outer")
-
-      shortNameInput.getElementsByTag("label").get(0).text() must startWith("Short name")
+      val shortNameInputLabel = doc().body().getElementsByAttributeValue("for","short-name")
+      shortNameInputLabel.text() must startWith("Short name")
     }
 
     "display error summary" when {
 
       "user is during company journey" in {
-
-        docWithErrorSummary().getElementById("form-error-heading").text() mustBe "There is a problem"
+        val test = docWithErrorSummary().body()
+        docWithErrorSummary().getElementById("error-summary-title").text() mustBe "There is a problem"
         docWithErrorSummary().getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your company's shortened name"
@@ -117,7 +117,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
 
       "user is during partnership journey" in {
 
-        docWithErrorSummary(Partnership).getElementById("form-error-heading").text() mustBe "There is a problem"
+        docWithErrorSummary(Partnership).getElementById("error-summary-title").text() mustBe "There is a problem"
         docWithErrorSummary(Partnership).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your partnership's shortened name"
@@ -125,7 +125,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
 
       "user is during charity journey" in {
 
-        docWithErrorSummary(UnincorporatedBody).getElementById("form-error-heading").text() mustBe "There is a problem"
+        docWithErrorSummary(UnincorporatedBody).getElementById("error-summary-title").text() mustBe "There is a problem"
         docWithErrorSummary(UnincorporatedBody).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your charity's shortened name"
@@ -133,7 +133,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
 
       "user is during RoW organisation journey" in {
 
-        docWithErrorSummary(isRow = true).getElementById("form-error-heading").text() mustBe "There is a problem"
+        docWithErrorSummary(isRow = true).getElementById("error-summary-title").text() mustBe "There is a problem"
         docWithErrorSummary(isRow = true).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your organisation's shortened name"

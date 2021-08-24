@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton)
+@this(layout_di: layout, govukButton: GovukButton, inputText : helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(vatForm: Form[VatEUDetailsModel],
   countries: List[Country],
@@ -50,8 +50,8 @@
 }
 
 @layout_di(messages("cds.subscription.vat-enter-eu"), EUCountriesInCountryPicker, form = Some(vatForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(vatForm)
+    <div>
+        @errorSummary(vatForm.errors)
 
         <h1 class="heading-large">@messages("cds.subscription.vat-enter-eu")</h1>
 
@@ -65,7 +65,13 @@
                         @helpers.countryField(vatForm, "vatCountry", "cds.subscription.vat.country", countries)
                     </div>
                     <div id="vat-eu-number1-field">
-                        @helpers.inputText(vatForm)("vatNumber", "cds.subscription.vat.number")
+                        @inputText(
+                            form = vatForm,
+                            id = "vatNumber",
+                            name = "vatNumber",
+                            label = "cds.subscription.vat.number",
+                            isPageHeading = false
+                        )
                     </div>
                 </div>
             </div>

@@ -27,7 +27,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(vatLimitYesNoAnswerForm: Form[YesNo], isInReviewMode: Boolean, vatEuDetailsList: Seq[VatEUDetailsModel], service: Service, vatLimitNotReached: Boolean)(implicit messages: Messages, request: Request[_])
 
@@ -59,8 +59,8 @@
 
 @layout_di(heading) {
 
-    <div class="column-two-thirds">
-        @helpers.errorSummary(vatLimitYesNoAnswerForm, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+    <div>
+        @errorSummary(vatLimitYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
         <fieldset>
             <legend>

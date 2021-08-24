@@ -22,7 +22,7 @@
 @(name: String, processedDate: String)(implicit messages: Messages, request: Request[_])
 
 @layout_di(messages("cds.sub02.outcome.eori-already-associated.title")) {
-    <div class="column-two-thirds">
+    <div>
         <div>
             <h1 id="page-heading" class="heading-xlarge" >@messages("cds.sub02.outcome.eori-already-associated.heading", name)</h1>
             <p class="heading-medium" id="processed-date">@messages("cds.sub02.outcome.eori-already-associated.received", dateFormatter.format(processedDate))</p>

@@ -26,7 +26,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(
     isInReviewMode: Boolean,
@@ -64,8 +64,8 @@
 }
 
 @layout_di(messages(question), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(disclosePersonalDetailsYesNoAnswerForm, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+    <div>
+        @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
         @helpers.form(DisclosePersonalDetailsConsentController.submit(isInReviewMode, service), "disclose-personal-details-createForm") {
 

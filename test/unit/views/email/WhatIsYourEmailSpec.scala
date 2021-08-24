@@ -38,7 +38,11 @@ class WhatIsYourEmailSpec extends ViewSpec {
       GYEDoc.title() must startWith("What is your email address?")
     }
     "have the correct h1 text" in {
-      GYEDoc.body().getElementsByClass("heading-large").text() mustBe "What is your email address?"
+      GYEDoc
+        .body()
+        .getElementsByClass("govuk-label govuk-label--l")
+        .attr("for", "email")
+        .text() mustBe "What is your email address?"
     }
     "have the correct hint text" in {
       GYEDoc.body().getElementById(
@@ -59,8 +63,8 @@ class WhatIsYourEmailSpec extends ViewSpec {
     "display a field level error message" in {
       docWithErrors
         .body()
-        .getElementById("email-outer")
-        .getElementsByClass("error-message")
+        .getElementById("email-error")
+        .getElementsByClass("govuk-error-message")
         .text() mustBe "Error: Enter a valid email address"
     }
 

@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(matchOrgIdForm: Form[UtrMatchModel], organisationType: String, displayMode: String, service: Service, isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
@@ -70,8 +70,8 @@
 }
 
 @layout_di(headerAndTitle, form = Some(matchOrgIdForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(matchOrgIdForm, focusOverrides = Map("have-utr" -> "have-utr-true"))
+    <div>
+        @errorSummary(matchOrgIdForm.errors, focusOverrides = Map("have-utr" -> "have-utr-true"))
 
             @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), "matchOrganisationUtrForm") {
             @CSRF.formField

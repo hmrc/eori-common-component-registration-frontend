@@ -13,6 +13,7 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.hmrcfrontend.views.Implicits.RichDateInput
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+@import play.twirl.api.HtmlFormat
 
 @this(govukDateInput: GovukDateInput)
 
@@ -23,6 +24,7 @@
         id: String = "value",
         hintText: Option[Html] = None,
         legendAsPageHeading: Boolean = true,
+        intro: Option[Html] = None
 )(implicit messages: Messages)
 
 
@@ -33,8 +35,10 @@
                 content = Text(messages(legendContent)),
                 isPageHeading = legendAsPageHeading,
                 classes = ( if(legendAsPageHeading){"govuk-fieldset__legend--xl "} else "") + legendClasses.getOrElse("")
+
             )
-        )
+        ),
+        html = intro.getOrElse(HtmlFormat.empty)
     )),
     id = id,
     items = Seq(

@@ -24,29 +24,37 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputDate_di: inputDate, govukButton: GovukButton)
+@this(layout_di: layout, inputDate_di: inputDate, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(ninoForm: Form[NinoMatch], organisationType: String, service: Service)(implicit request: Request[_], messages: Messages)
-
-@inputText(field: String, label: String, args: (Symbol, Any)*) = {
-    @defining(Seq('_label -> Html(messages(label))) ++ args) { args => @helpers.input(ninoForm(field), args: _*) }
-}
 
 @updateFormErrors =@{
     ninoForm.copy(errors = DateConverter.updateDateOfBirthErrors(ninoForm.errors))
 }
 
 @layout_di(messages("cds.matching.nino.title"), form = Some(ninoForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(updateFormErrors,
+    <div>
+        @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
         <h1>@messages("cds.matching.nino.header")</h1>
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NinoController.submit(organisationType, service), "nino-form") {
             @CSRF.formField
-            @inputText("first-name", messages("cds.matching.nino.first-name"))
-            @inputText("last-name", messages("cds.matching.nino.last-name"))
+            @inputText(
+                form = ninoForm,
+                id = "first-name",
+                name = "first-name",
+                label = "cds.matching.nino.first-name",
+                isPageHeading = false
+            )
+            @inputText(
+                form = ninoForm,
+                id = "last-name",
+                name = "last-name",
+                label = "cds.matching.nino.last-name",
+                isPageHeading = false
+            )
             <div class="form-group">
             @inputDate_di(
                 form = updateFormErrors,
@@ -55,9 +63,14 @@
                 hintText = Some(Html(messages("cds.date-of-birth.hint")))
             )
             </div>
-            @inputText("nino", messages("cds.matching.nino.nino"),
-                '_hintText -> Html(messages("cds.matching.nino.nino.hint")))
-
+            @inputText(
+                form = ninoForm,
+                id = "nino",
+                name = "nino",
+                label = "cds.matching.nino.nino",
+                hint = Some("cds.matching.nino.nino.hint"),
+                isPageHeading = false
+            )
             @govukButton(Button(
                 content = Text(messages("cds.navigation.continue"))
             ))

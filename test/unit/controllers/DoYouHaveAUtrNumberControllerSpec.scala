@@ -98,7 +98,7 @@ class DoYouHaveAUtrNumberControllerSpec
       submitForm(Map("have-utr" -> ""), CdsOrganisationType.ThirdCountryOrganisationId) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText("//*[@id='errors']") should include("Select yes if you have a UTR number")
+        page.getElementsText("//*[@id='have-utr-error']") should include("Select yes if you have a UTR number")
       }
     }
 

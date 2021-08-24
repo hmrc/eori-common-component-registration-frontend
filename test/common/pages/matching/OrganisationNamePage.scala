@@ -19,9 +19,9 @@ package common.pages.matching
 import common.pages.WebPage
 
 trait OrganisationNamePage extends WebPage {
-  val fieldLevelErrorName = "//*[@id='name-outer']//span[@class='error-message']"
+  val fieldLevelErrorName = "//span[@id='name-error' and @class='govuk-error-message']"
   val labelForName        = "//*label[@for='name']"
-  val labelForNameOuter   = "//*[@id='name-outer']//label"
+  val labelForNameOuter   = "//h1[@class='govuk-label-wrapper']//label"
 
   override val title = "What is your registered organisation name?"
 

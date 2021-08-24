@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(confirmationForm: Form[CdsOrganisationType], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -43,8 +43,8 @@
 }
 
 @layout_di(messages("cds.confirm-individual-type.title"), form = Some(confirmationForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(confirmationForm, focusOverrides = Map("individual-type" -> s"individual-type-${validOptions.head._1}"))
+    <div>
+        @errorSummary(confirmationForm.errors, focusOverrides = Map("individual-type" -> s"individual-type-${validOptions.head._1}"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController.submit(service), "confirm-individual-type-form") {
             @CSRF.formField

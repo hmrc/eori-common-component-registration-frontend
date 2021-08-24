@@ -297,7 +297,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     "display the correct text for the continue button" in {
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(
+        page.getElementText(
           DisclosePersonalDetailsConsentPage.continueButtonXpath
         ) shouldBe ContinueButtonTextInReviewMode
       }

@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(isleOfManYesNoAnswerForm: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -43,8 +43,8 @@
 }
 
 @layout_di(messages("cds.registration.isle-of-man.error.title"), form = Some(isleOfManYesNoAnswerForm)) {
-<div class="column-two-thirds">
-    @helpers.errorSummary(isleOfManYesNoAnswerForm, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+<div>
+    @errorSummary(isleOfManYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
     @helpers.form(formAction, "yes-no-form") {
 

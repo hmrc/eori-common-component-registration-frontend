@@ -24,7 +24,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(vatForm: Form[VatDetails], isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -38,8 +38,8 @@
 }
 
 @layout_di(messages("cds.subscription.vat-details.heading"), form = Some(vatForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(updateFormErrors,
+    <div>
+        @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("vat-effective-date" -> "vat-effective-date.day"))
 
         @helpers.form(formAction, "vat-details-form") {
@@ -48,8 +48,20 @@
             <h1 class="heading-large">@messages("cds.subscription.vat-details.heading")</h1>
             <p class="form-hint">@messages("cds.subscription.vat-details.intro-text")</p>
 
-            @helpers.inputText(vatForm)("postcode", "cds.subscription.vat-details.postcode")
-            @helpers.inputText(vatForm)("vat-number", "cds.subscription.vat-details.vat-number")
+            @inputText(
+                form = vatForm,
+                id = "postcode",
+                name = "postcode",
+                label = "cds.subscription.vat-details.postcode",
+                isPageHeading = false
+            )
+            @inputText(
+                form = vatForm,
+                id = "vat-number",
+                name = "vat-number",
+                label = "cds.subscription.vat-details.vat-number",
+                isPageHeading = false
+            )
             <div class="form-group">
             @inputDate_di(
                 form = updateFormErrors,

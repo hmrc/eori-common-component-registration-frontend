@@ -23,28 +23,26 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(isInReviewMode: Boolean, matchOrgNameForm: Form[_ <: NameMatch], organisationType: String, service: Service)(implicit request: Request[_], messages: Messages)
 
-    @inputText(field: String, label: String, args: (Symbol, Any)*) = {
-        @defining(Seq('_label -> Html(messages(label))) ++ args) { args =>
-            @helpers.input(matchOrgNameForm(field), args: _*)
-        }
-    }
-
     @layout_di(messages("cds.matching.organisation.name.title"), form = Some(matchOrgNameForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(matchOrgNameForm)
+    <div>
+        @errorSummary(matchOrgNameForm.errors)
 
         <div class="form-group">
             @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrgNameController.submit(isInReviewMode, organisationType, service), "matchOrganisationNameForm") {
             @CSRF.formField
 
                 @inputText(
-                    "name",
-                    messages("cds.matching.organisation.name.heading"),
-                    '_isLabelH1 -> true
+                    form = matchOrgNameForm,
+                    id = "name",
+                    name = "name",
+                    label = "cds.matching.organisation.name.heading",
+                    isPageHeading = true,
+                    classes = Some("govuk-!-width-two-thirds"),
+                    labelClasses = Some("govuk-label govuk-label--l")
                 )
 
                 @govukButton(Button(

@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 
-@this(layout_di: layout)
+@this(layout_di: layout, errorSummary: helpers.errorSummary)
 @(  pageKey: String,
     form: Form[_],
     errorMsgKeyFun: Option[String => String] = None,
@@ -31,10 +31,10 @@
 
 @layout_di(messages(qualifiedPageKey + ".page.title"), form = Some(form)) {
 
-    <div class="column-two-thirds">
+    <div>
 
         @helpers.subscription.backLink_errorSummary_heading(
-            errorSummary = helpers.errorSummary(form = form),
+            errorSummary = errorSummary(errors = form.errors),
             pageHeading = messages.translate(qualifiedPageKey + ".heading", Seq()).getOrElse("")
         )
 

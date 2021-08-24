@@ -21,8 +21,9 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import views.html.helper.CSRF
 
-@this(layout_di: layout, govukButton: GovukButton)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(
     addressForm: Form[AddressViewModel],
@@ -35,8 +36,6 @@
     isCompany:Boolean,
     isRow: Boolean = false
 )(implicit request: Request[_], messages: Messages)
-
-@import views.html.helper._ 
 
 @labelForEUCountry(countryCode: String) = @{ messages(messageKeyForEUCountryCode(countryCode)) }
 
@@ -60,13 +59,6 @@
     messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
 }
 
-@inputText(field: String, label: String, args: (Symbol, Any)*) = {
-    @defining(Seq(
-        '_plainLabel -> true) ++ args) { args =>
-        @helpers.inputText(addressForm)(field, label, args: _*)
-    }
-}
-
 @countryField = {
     @defining(Seq(
         '_plainLabel -> true)) { args =>
@@ -80,8 +72,8 @@
 
 @layout_di(titleAndHeading, countriesInCountryPicker, Some(addressForm)) {
 
-<div class="column-two-thirds">
-    @helpers.errorSummary(addressForm)
+<div>
+    @errorSummary(addressForm.errors)
 
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.submit(isInReviewMode, service), "addressDetailsForm") {
 
@@ -91,9 +83,30 @@
                 <h1 class="heading-large">@titleAndHeading</h1>
             </legend>
 
-            @inputText("street", "cds.subscription.address-details.street.label", '_autocomplete ->  "address-line1")
-            @inputText("city", "cds.subscription.address-details.city.label", '_autocomplete ->  "address-level2")
-            @inputText("postcode", postcodeKey, '_autocomplete ->  "postal-code")
+            @inputText(
+                form = addressForm,
+                id = "street",
+                name = "street",
+                label = "cds.subscription.address-details.street.label",
+                isPageHeading = false,
+                autocomplete = Some("address-line1"),
+            )
+            @inputText(
+                form = addressForm,
+                id = "city",
+                name = "city",
+                label = "cds.subscription.address-details.city.label",
+                isPageHeading = false,
+                autocomplete = Some("address-level2"),
+            )
+            @inputText(
+                form = addressForm,
+                id = "postcode",
+                name = "postcode",
+                label = postcodeKey,
+                isPageHeading = false,
+                autocomplete = Some("postal-code"),
+            )
             @countryField
         </fieldset>
 

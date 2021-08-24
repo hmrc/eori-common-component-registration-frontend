@@ -14,28 +14,51 @@
  * limitations under the License.
  *@
 
-@(form: Form[_])(field: String, label: String, args: (Symbol, Any)*)(implicit request: Request[_], messages: Messages)
+@import play.api.i18n._
+@import play.api.data.Form
+@import uk.gov.hmrc.govukfrontend.views.html.components.govukInput
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.PrefixOrSuffix
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 
-@argsOrNone(kv: (Symbol, Any)) = @{
-    args.find(_._1 == kv._1) match {
-        case None => Some(kv)
-        case _ => None
-    }
-}
-@withOtherErrors = @{
-    import views.html.helper.FieldElements
-    def fieldErrors(fld: String) = FieldElements(id = fld, form(fld), Html(""), Map.empty, messages).errors
+@this(govukInput: govukInput)
 
-    args.map {
-        case ('otherErrorFields, otherErrorFields: Seq[_]) => 'otherErrors -> otherErrorFields.flatMap(fld => fieldErrors(fld.toString))
-        case tuple => tuple
-    }
-}
-@defining(Seq(
-    argsOrNone('_label -> Html(messages(label)))).flatten ++ withOtherErrors) { args =>
+@(
+        form: Form[_],
+        id: String,
+        name: String,
+        label: String,
+        inputType: String = "text",
+        isPageHeading: Boolean,
+        headingMessageArgs: Seq[String] = Seq(),
+        hint: Option[String] = None,
+        classes: Option[String] = None,
+        labelClasses: Option[String] = None,
+        prefix: Option[PrefixOrSuffix] = None,
+        autocomplete: Option[String] = None,
+        spellcheck: Option[Boolean] = None
+)(implicit messages: Messages)
 
-    @helpers.input(
-        form(field),
-        args: _*
-    )
-}
+@govukInput(Input(
+    id,
+    name,
+    classes = classes.fold("")(x => x),
+    label = Label(
+        content = Text(messages(label, headingMessageArgs:_*)),
+        isPageHeading = isPageHeading,
+        classes = labelClasses.getOrElse(if(isPageHeading) "govuk-label--xl" else "")
+    ),
+    hint = hint.map(hintKey => Hint(
+        content = HtmlContent(messages(hintKey))
+    )),
+    value = form(name).value,
+    inputType = inputType,
+    autocomplete = autocomplete,
+    spellcheck = spellcheck,
+    prefix = prefix,
+    errorMessage = form(name).error.map(err => ErrorMessage(content = Text(messages(s"${err.message}", err.args:_*))))
+))

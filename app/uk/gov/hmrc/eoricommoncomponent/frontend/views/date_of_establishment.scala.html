@@ -26,7 +26,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 
 @(dateForm: Form[LocalDate], isInReviewMode: Boolean, orgType: EtmpOrganisationType, isRestOfWorldJourney: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
@@ -39,7 +39,7 @@
 }
 
 @introHtml = {
-    @if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
+    if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
         <p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
     }
 }
@@ -55,8 +55,8 @@
 }
 
 @layout_di(messages(headerAndTitle), form = Some(dateForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(updateFormErrors,
+    <div>
+        @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController.submit(isInReviewMode, service), "date-of-birth-form") {
@@ -67,6 +67,8 @@
                 form = dateForm,
                 legendContent = headerAndTitle,
                 hintText = Some(Html(messages("cds.date-established.hint"))),
+                intro = Some(introHtml),
+                legendAsPageHeading = true,
                 id = "date-of-establishment"
             )
 

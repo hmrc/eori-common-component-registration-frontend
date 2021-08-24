@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(
     isInReviewMode: Boolean,
@@ -57,8 +57,8 @@
 }
 
 @layout_di(titleAndHeading, form = Some(vatRegisteredEuYesNoAnswerForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(vatRegisteredEuYesNoAnswerForm, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+    <div>
+        @errorSummary(vatRegisteredEuYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
         @helpers.form(formAction, "vat-registered-eu-createForm") {
 

@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(vatGroupYesNoAnswerForm: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -44,8 +44,8 @@
 }
 
 @layout_di(messages("cds.subscription.vat-group.title-and-heading"), form = Some(vatGroupYesNoAnswerForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(vatGroupYesNoAnswerForm, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+    <div>
+        @errorSummary(vatGroupYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
         @helpers.form(formAction, "vat-group-createForm") {
 

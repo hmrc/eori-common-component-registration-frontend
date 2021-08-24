@@ -117,7 +117,7 @@ class BusinessShortNameYesNoViewSpec extends ViewSpec {
 
       "user is during company journey" in {
         docWithErrorSummary(errorMessage = "ecc.business-short-name-yes-no.company.empty").getElementById(
-          "form-error-heading"
+          "error-summary-title"
         ).text() mustBe "There is a problem"
         docWithErrorSummary(errorMessage = "ecc.business-short-name-yes-no.company.empty").getElementsByClass(
           "govuk-error-summary__list"
@@ -129,7 +129,7 @@ class BusinessShortNameYesNoViewSpec extends ViewSpec {
         docWithErrorSummary(
           Partnership,
           errorMessage = "ecc.business-short-name-yes-no.partnership.empty"
-        ).getElementById("form-error-heading").text() mustBe "There is a problem"
+        ).getElementById("error-summary-title").text() mustBe "There is a problem"
         docWithErrorSummary(
           Partnership,
           errorMessage = "ecc.business-short-name-yes-no.partnership.empty"
@@ -141,7 +141,7 @@ class BusinessShortNameYesNoViewSpec extends ViewSpec {
         docWithErrorSummary(
           UnincorporatedBody,
           errorMessage = "ecc.business-short-name-yes-no.charity.empty"
-        ).getElementById("form-error-heading").text() mustBe "There is a problem"
+        ).getElementById("error-summary-title").text() mustBe "There is a problem"
         docWithErrorSummary(
           UnincorporatedBody,
           errorMessage = "ecc.business-short-name-yes-no.charity.empty"
@@ -153,7 +153,7 @@ class BusinessShortNameYesNoViewSpec extends ViewSpec {
         docWithErrorSummary(
           isRow = true,
           errorMessage = "ecc.business-short-name-yes-no.organisation.empty"
-        ).getElementById("form-error-heading").text() mustBe "There is a problem"
+        ).getElementById("error-summary-title").text() mustBe "There is a problem"
         docWithErrorSummary(
           isRow = true,
           errorMessage = "ecc.business-short-name-yes-no.organisation.empty"

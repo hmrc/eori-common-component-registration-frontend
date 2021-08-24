@@ -22,27 +22,26 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(ninoForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call)(implicit request: Request[_], messages: Messages)
 
-@inputText(field: String, args: (Symbol, Any)*) = {
-    @defining(Seq(
-        '_label -> Html(messages("subscription-journey.how-confirm-identity.nino.heading")),
-        '_isLabelH1 -> true) ++ args) { args =>
-        @helpers.input(ninoForm(field), args: _*)
-    }
-}
-
-
 @layout_di(messages("subscription-journey.how-confirm-identity.nino.heading"), form = Some(ninoForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(ninoForm)
+    <div>
+        @errorSummary(ninoForm.errors)
 
         @helpers.form(submit, "ninoForm") {
             @CSRF.formField
 
-            @inputText("nino")
+            @inputText(
+                form = ninoForm,
+                id = "nino",
+                name = "nino",
+                label = "subscription-journey.how-confirm-identity.nino.heading",
+                isPageHeading = true,
+                classes = Some("govuk-!-width-two-thirds"),
+                labelClasses = Some("govuk-label govuk-label--l")
+            )
 
             @govukButton(Button(
                 content = Text(ViewHelper.continueButtonText(isInReviewMode))

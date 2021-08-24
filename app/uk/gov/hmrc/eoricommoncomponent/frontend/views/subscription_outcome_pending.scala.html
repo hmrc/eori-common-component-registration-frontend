@@ -25,7 +25,7 @@
 @(eori: String, processedDate: String, name: String, service: Service)(implicit messages: Messages, request: Request[_])
 
 @layout_di(messages("cds.subscription.outcomes.in-processing.title"), suppressTelephoneNumberDetection = false) {
-    <div class="column-two-thirds">
+    <div>
         <div>
             <h1 id="page-heading" class="heading-xlarge">@messages("cds.subscription.outcomes.in-processing.heading", name)</h1>
             <div class="heading-medium" id="active-from">@messages("cds.subscription.outcomes.in-processing.received", dateFormatter.format(processedDate))</div>

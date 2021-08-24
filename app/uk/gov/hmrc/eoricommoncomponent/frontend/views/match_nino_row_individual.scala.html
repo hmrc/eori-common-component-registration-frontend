@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(matchNinoIdForm: Form[NinoMatchModel], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -40,8 +40,8 @@
 }
 
 @layout_di(messages("cds.matching.nino.row.title"), form = Some(matchNinoIdForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(matchNinoIdForm, focusOverrides = Map("have-nino" -> "have-nino-true"))
+    <div>
+        @errorSummary(matchNinoIdForm.errors, focusOverrides = Map("have-nino" -> "have-nino-true"))
 
         @helpers.form(DoYouHaveNinoController.submit(service), "matchRowIndividualsNinoForm") {
             @CSRF.formField

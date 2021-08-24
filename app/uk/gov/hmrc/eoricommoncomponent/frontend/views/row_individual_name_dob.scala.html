@@ -25,34 +25,53 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputDate_di: inputDate, govukButton: GovukButton)
+@this(layout_di: layout, inputDate_di: inputDate, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(individualNameAndDateOfBirthForm: Form[IndividualNameAndDateOfBirth], organisationType: String, service: Service, isInReviewMode: Boolean)(implicit request: Request[_], messages: Messages)
-
-@inputText(field: String, label: String, args: (Symbol, Any)*) = {
-@defining(Seq('_label -> Html(messages(label)),
-    '_plainLabel -> true,
-    '_spellcheck -> false) ++ args) { args =>
-    @helpers.input(individualNameAndDateOfBirthForm(field), args: _*)
-}
-}
 
 @updateFormErrors =@{
     individualNameAndDateOfBirthForm.copy(errors = DateConverter.updateDateOfBirthErrors(individualNameAndDateOfBirthForm.errors))
 }
 
 @layout_di(messages("cds.matching.individual.title"), form = Some(individualNameAndDateOfBirthForm)) {
-    <div class="column-two-thirds">
-        @helpers.errorSummary(updateFormErrors,
+    <div>
+        @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
         <h1 class="heading-large">@messages("cds.matching.individual.header")</h1>
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController.submit(isInReviewMode, organisationType, service), s"$organisationType-form") {
             @CSRF.formField
-            @inputText("given-name", messages("cds.matching.individual.given-name"), '_autocomplete ->  "given-name")
-            @inputText("middle-name", messages("cds.matching.individual.middle-name.optional"), '_autocomplete ->  "additional-name")
-            @inputText("family-name", messages("cds.matching.individual.family-name"), '_autocomplete ->  "family-name")
+            @inputText(
+                form = individualNameAndDateOfBirthForm,
+                id = "given-name",
+                name = "given-name",
+                label = "cds.matching.individual.given-name",
+                isPageHeading = false,
+                autocomplete = Some("given-name"),
+                spellcheck =  Some(false),
+                labelClasses = Some("first-name")
+            )
+            @inputText(
+                form = individualNameAndDateOfBirthForm,
+                id = "middle-name",
+                name = "middle-name",
+                label = "cds.matching.individual.middle-name.optional",
+                isPageHeading = false,
+                autocomplete = Some("additional-name"),
+                spellcheck =  Some(false),
+                labelClasses = Some("middle-name")
+            )
+            @inputText(
+                form = individualNameAndDateOfBirthForm,
+                id = "family-name",
+                name = "family-name",
+                label = "cds.matching.individual.family-name",
+                isPageHeading = false,
+                autocomplete = Some("family-name"),
+                spellcheck =  Some(false),
+                labelClasses = Some("family-name")
+            )
             @inputDate_di(
                 form = updateFormErrors,
                 id = "date-of-birth",

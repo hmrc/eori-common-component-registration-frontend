@@ -24,7 +24,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(email:Option[String],
     confirmEmailYesNoAnswerForm: Form[YesNo],
@@ -50,8 +50,8 @@
 
 @layout_di(messages("subscription.check-your-email.confirm.question"), form = Some(confirmEmailYesNoAnswerForm)) {
 
-<div class="column-two-thirds">
-    @helpers.errorSummary(confirmEmailYesNoAnswerForm, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+<div>
+    @errorSummary(confirmEmailYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
 
     @helpers.form(CheckYourEmailController.submit(service), "confirmEmailYesNoAnswerForm") {
