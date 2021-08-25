@@ -39,7 +39,7 @@
 }
 
 @introHtml = {
-    if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
+    @if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
         <p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
     }
 }
