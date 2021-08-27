@@ -24,7 +24,6 @@
         id: String = "value",
         hintText: Option[Html] = None,
         legendAsPageHeading: Boolean = true,
-        intro: Option[Html] = None
 )(implicit messages: Messages)
 
 
@@ -38,7 +37,6 @@
 
             )
         ),
-        html = intro.getOrElse(HtmlFormat.empty)
     )),
     id = id,
     items = Seq(

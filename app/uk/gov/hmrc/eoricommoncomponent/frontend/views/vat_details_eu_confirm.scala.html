@@ -23,11 +23,18 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(
+        layout_di: layout,
+        inputRadioGroup: helpers.inputRadioGroup,
+        govukButton: GovukButton,
+        errorSummary: helpers.errorSummary,
+        goveukFieldSet: GovukFieldset
+)
 
 @(vatLimitYesNoAnswerForm: Form[YesNo], isInReviewMode: Boolean, vatEuDetailsList: Seq[VatEUDetailsModel], service: Service, vatLimitNotReached: Boolean)(implicit messages: Messages, request: Request[_])
 
@@ -57,44 +64,51 @@
     else messages("cds.subscription.vat-details-eu-confirm.heading").replace("1", vatEuDetailsList.size.toString)
 }
 
+@html = {
+    <div class="form-group">
+        <dl class="govuk-check-your-answers cya-questions-long">
+        @for((vatDetails, index) <- vatEuDetailsList.zipWithIndex) {
+            <div>
+                <dt class="cya-question" id="country-@index">
+                @labelForEUCountry(vatDetails.vatCountry)
+                </dt>
+                <dt class="cya-question" id="number-@index">
+                @vatDetails.vatNumber
+                </dt>
+                <dt >
+                    <a id='change-tbl__gb-vat_change-@index' href="@if(!isInReviewMode){@VatDetailsEuController.updateForm(vatDetails.index, service)}else{@VatDetailsEuController.reviewUpdateForm(vatDetails.index, service)}">
+                    @messages("cds.form.change")
+                    </a>
+                </dt>
+                <dt>
+                    <a id='review-tbl__gb-vat_remove-@index' href="@if(!isInReviewMode){@AreYouSureYouWantToDeleteVatController.createForm(vatDetails.index, service)}else{@AreYouSureYouWantToDeleteVatController.reviewForm(vatDetails.index, service)}">
+                    @messages("cds.multi.input.delete-entry")
+                    </a>
+                </dt>
+            </div>
+        }
+        </dl>
+    </div>
+}
+
 @layout_di(heading) {
 
     <div>
         @errorSummary(vatLimitYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
-        <fieldset>
-            <legend>
-                <h1 class="heading-large" id="titleHeading">@heading</h1>
-                @helpers.form(VatDetailsEuConfirmController.submit(isInReviewMode, service), "subscriptionVatEUDetailsConfirmForm") {
+        @helpers.form(VatDetailsEuConfirmController.submit(isInReviewMode, service), "subscriptionVatEUDetailsConfirmForm") {
 
-                @CSRF.formField
-            </legend>
-
-            <div class="form-group">
-                <dl class="govuk-check-your-answers cya-questions-long">
-                    @for((vatDetails, index) <- vatEuDetailsList.zipWithIndex) {
-                    <div>
-                        <dt class="cya-question" id="country-@index">
-                            @labelForEUCountry(vatDetails.vatCountry)
-                        </dt>
-                        <dt class="cya-question" id="number-@index">
-                            @vatDetails.vatNumber
-                        </dt>
-                        <dt >
-                            <a id='change-tbl__gb-vat_change-@index' href="@if(!isInReviewMode){@VatDetailsEuController.updateForm(vatDetails.index, service)}else{@VatDetailsEuController.reviewUpdateForm(vatDetails.index, service)}">
-                                @messages("cds.form.change")
-                            </a>
-                        </dt>
-                        <dt>
-                            <a id='review-tbl__gb-vat_remove-@index' href="@if(!isInReviewMode){@AreYouSureYouWantToDeleteVatController.createForm(vatDetails.index, service)}else{@AreYouSureYouWantToDeleteVatController.reviewForm(vatDetails.index, service)}">
-                                @messages("cds.multi.input.delete-entry")
-                            </a>
-                        </dt>
-                    </div>
-                    }
-                </dl>
-            </div>
-        </fieldset>
+            @CSRF.formField
+            @goveukFieldSet(
+                Fieldset(
+                    legend = Some(Legend(
+                        content = Text(heading),
+                        classes = "govuk-fieldset__legend--l",
+                        isPageHeading = true
+                    )),
+                    html = html
+                )
+            )
 
         @if(vatLimitNotReached) {
             @displayInputRadioGroup("yes-no-answer",

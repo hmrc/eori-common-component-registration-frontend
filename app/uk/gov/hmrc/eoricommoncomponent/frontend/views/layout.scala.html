@@ -27,17 +27,26 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukBackLink
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcReportTechnicalIssueHelper, HmrcTimeoutDialogHelper, HmrcLanguageSelectHelper}
 
-@this(hmrcLayout: HmrcLayout, standardBetaBanner: StandardBetaBanner, trackingConsentSnippet: HmrcTrackingConsentSnippet, appConfig: AppConfig, reportAProblemLink: HmrcReportTechnicalIssue, hmrcTimeoutDialog: HmrcTimeoutDialog, govukBackLink: GovukBackLink)
+@this(hmrcLayout: HmrcLayout,
+        standardBetaBanner: StandardBetaBanner,
+        trackingConsentSnippet: HmrcTrackingConsentSnippet,
+        appConfig: AppConfig,
+        reportAProblemLink: HmrcReportTechnicalIssue,
+        hmrcTimeoutDialog: HmrcTimeoutDialog,
+        govukBackLink: GovukBackLink,
+        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+        hmrcLanguageSelectHelper: HmrcLanguageSelectHelper)
+
 
 @(  title: String,
     countriesInCountryPicker: CountriesInCountryPicker = NoCountriesInCountryPicker,
     form: Option[Form[_]] = None,
     suppressTelephoneNumberDetection: Boolean = true,
     displayBackLink: Boolean = true
-)(content: Html)(implicit messages: Messages, request: Request[_])
-
-@isLoggedIn = @{!request.session.isEmpty && request.session.get("authToken").isDefined}
+)(contentBlock: Html)(implicit messages: Messages, request: Request[_])
 
 @titleWithEnding = @{
     title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
@@ -68,44 +77,30 @@
 
     @partials.countrypickerscript(countriesInCountryPicker)
 
-    @if(isLoggedIn){
-        @hmrcTimeoutDialog(TimeoutDialog(
-            title = Some(messages("cds.timeout.message")),
-            timeout = Some(1200),
-            countdown = Some(300),
-            keepAliveUrl = Some(keepAliveUrl),
-            signOutUrl = Some(signOutUrl),
-            keepAliveButtonText = Some(messages("cds.timeout.keep-alive-button")),
-            signOutButtonText = Some(messages("cds.timeout.sign-out-button"))
-        ))
-    }
+    @hmrcTimeoutDialogHelper(
+        title = Some(messages("cds.timeout.message")),
+        timeout = Some(1200),
+        countdown = Some(300),
+        keepAliveUrl = Some(keepAliveUrl),
+        signOutUrl = signOutUrl,
+        keepAliveButtonText = Some(messages("cds.timeout.keep-alive-button")),
+        signOutButtonText = Some(messages("cds.timeout.sign-out-button"))
+    )
 }
 
-@mainContent = {
-
+@beforeContent = {
+    @hmrcLanguageSelectHelper()
     @if(displayBackLink) {
         @govukBackLink(BackLink(href = "javascript:history.back()", content = Text(messages("cds.navigation.back")), attributes = Map("id" -> "back-link")))
     }
-
-    @content
 }
 
-@bodyEndBlockWrapper = {
-    @if(countriesInCountryPicker != NoCountriesInCountryPicker) {
-        <script type="text/javascript">
-                var countryPickerInputElements = document.getElementsByClassName('autocomplete__input');
-                var form = document.getElementsByTagName('form')[0];
-
-                form.addEventListener('submit', function () {
-                    for (var i = 0; i < countryPickerInputElements.length; i++) {
-                        var input = countryPickerInputElements[i];
-                        var select = countryPickerInputElements[i].parentNode.parentNode.parentNode.querySelector('select');
-                        if (input.value.trim() == "") select.selectedIndex = 0
-                    }
-                });
-        </script>
-    }
+@mainContentWithGetHelp = {
+    @contentBlock
+    @hmrcReportTechnicalIssueHelper()
 }
+
+
 
 @hmrcLayout(
     pageTitle = Some(titleErr),
@@ -116,5 +111,6 @@
     additionalHeadBlock = Some(theHead),
     nonce = CSPNonce.get,
     serviceName = Some(messages("cds.banner.registration", longName)),
-    accessibilityStatementUrl = Some(service.accessibilityUrl)
-)(mainContent)
+    accessibilityStatementUrl = Some(service.accessibilityUrl),
+    beforeContentBlock = Some(beforeContent)
+)(mainContentWithGetHelp)

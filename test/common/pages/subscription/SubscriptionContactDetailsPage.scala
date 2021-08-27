@@ -25,7 +25,7 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val formId = "contactDetailsForm"
 
   val headingXPath        = "//*[@id='contactDetailsForm']/fieldset/legend/h1"
-  val introXPathRegister  = "//*[@id='contactDetailsForm']/fieldset/legend/p"
+  val introXPathRegister  = "//*[@id='contactDetailsForm']/fieldset/span"
   val introXPathSubscribe = "//*[@id='contactDetailsForm']/fieldset/p"
 
   val fullNameFieldXPath           = "//*[@id='full-name']"
@@ -63,7 +63,7 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val cityFieldLevelErrorXPath = "//span[@id='city-error' and @class='govuk-error-message']"
   val cityFieldLabel           = "Town or city"
 
-  val countryFieldLevelErrorXPath = "//*[@id='country-outer']//span[@class='error-message']"
+  val countryFieldLevelErrorXPath = "//span[@id='countryCode-error' and @class='govuk-error-message']"
   val countryFieldLabel           = "Country"
 
   val countryCodeSelectedOptionXPath = "//*[@id='countryCode']/option[@selected]"

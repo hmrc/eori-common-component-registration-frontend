@@ -25,6 +25,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 
 @this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
@@ -38,10 +39,11 @@
     else "cds.subscription.business.date-established.label"
 }
 
-@introHtml = {
+@introAndHintHtml = {
     @if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
         <p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
     }
+    <span id="date-of-establishment-hint-text" class="govuk-hint">@Html(messages("cds.date-established.hint"))</span>
 }
 
 @headerAndTitle = @{
@@ -66,8 +68,7 @@
             @inputDate_di(
                 form = dateForm,
                 legendContent = headerAndTitle,
-                hintText = Some(Html(messages("cds.date-established.hint"))),
-                intro = Some(introHtml),
+                hintText = Some(introAndHintHtml),
                 legendAsPageHeading = true,
                 id = "date-of-establishment"
             )

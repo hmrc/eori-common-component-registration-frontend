@@ -20,11 +20,18 @@
 @import views._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset}
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, HtmlContent, Hint}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
+@this(
+        layout_di: layout,
+        govukButton: GovukButton,
+        inputText: helpers.inputText,
+        errorSummary: helpers.errorSummary,
+        countrySelect: helpers.countrySelect,
+        goveukFieldSet: GovukFieldset
+)
 
 @(contactForm: Form[ContactDetailsViewModel], countries: List[Country], contactAddress: AddressViewModel, email:Option[String]=None, isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -64,6 +71,85 @@
 
 @weWillUseThisAddress = @{Html("<span id='registered-address' class='form-label panel panel-border-wide'>" + address + "</span>")}
 
+@fieldsetHint = {
+    <span id="fieldset-hint" class="govuk-hint">@Html(messages("cds.subscription.contact-details.intro"))</span>}
+
+@html = {
+
+    @fieldsetHint
+
+    <div id="email-outer" class="form-group ">
+        <label for="email" class="form-label-bold">@messages("subscription.check-your-email.label")</label>
+        <div id="email">@email</div>
+    </div>
+    @inputText(
+        form = contactForm,
+        id = "full-name",
+        name = "full-name",
+        label = "cds.subscription.contact-details.full-name.label",
+        isPageHeading = false,
+        classes = Some("govuk-!-width-two-thirds"),
+        labelClasses = Some("full-name")
+    )
+
+    @inputText(
+        form = contactForm,
+        id = "telephone",
+        name = "telephone",
+        label = "cds.subscription.contact-details.telephone.label",
+        isPageHeading = false,
+        classes = Some("govuk-!-width-two-thirds"),
+        hint = Some(messages("cds.subscription.contact-details.telephone.hint")),
+        labelClasses = Some("telephone")
+    )
+
+
+    @helpers.hideRevealToggle(
+        contactForm("use-registered-address"),
+        isYesFirst = true,
+        isRevealedByYes = false,
+        divClass = Some("form-field"),
+        legend = messages("cds.subscription.contact-details.address-text"),
+        otherHtmlInLegend = weWillUseThisAddress) {
+
+        <div id="contact">
+            <p>@messages("cds.subscription.contact-details.change-address.label")</p>
+            @inputText(
+                form = contactForm,
+                id = "street",
+                name = "street",
+                label = "cds.subscription.contact-details.street.label",
+                isPageHeading = false,
+                autocomplete = Some("address-line1")
+            )
+            @inputText(
+                form = contactForm,
+                id = "city",
+                name = "city",
+                label = "cds.subscription.contact-details.city.label",
+                isPageHeading = false,
+                autocomplete = Some("address-level2")
+            )
+            @inputText(
+                form = contactForm,
+                id = "postcode",
+                name = "postcode",
+                label = "cds.subscription.contact-details.postcode.label",
+                isPageHeading = false,
+                autocomplete = Some("postal-code")
+            )
+            @countrySelect(
+                form = contactForm,
+                id = "countryCode",
+                name = "countryCode",
+                countries = countries,
+                label = "cds.subscription.contact-details.countryCode-auto-complete.label"
+            )
+        </div>
+
+    }
+}
+
 @layout_di(messages("cds.subscription.contact-details.page.title"), AllCountriesInCountryPicker, form = Some(contactForm)) {
 
 
@@ -74,80 +160,16 @@
 
         @CSRF.formField
 
-
-        <fieldset>
-            <legend>
-                <h1 class="govuk-heading-l">@messages("cds.subscription.contact-details.heading")</h1>
-
-                <p class="form-hint">@Html(messages("cds.subscription.contact-details.intro"))</p>
-            </legend>
-
-
-            <div id="email-outer" class="form-group ">
-                <label for="email" class="form-label-bold">@messages("subscription.check-your-email.label")</label>
-                <div id="email">@email</div>
-            </div>
-           @inputText(
-                form = contactForm,
-                id = "full-name",
-                name = "full-name",
-                label = "cds.subscription.contact-details.full-name.label",
-                isPageHeading = false,
-                classes = Some("govuk-!-width-two-thirds"),
-                labelClasses = Some("full-name")
+        @goveukFieldSet(
+            Fieldset(
+                legend = Some(Legend(
+                    content = Text(messages("cds.subscription.contact-details.heading")),
+                    classes = "govuk-fieldset__legend--l",
+                    isPageHeading = true
+                )),
+                html = html
             )
-
-            @inputText(
-                form = contactForm,
-                id = "telephone",
-                name = "telephone",
-                label = "cds.subscription.contact-details.telephone.label",
-                isPageHeading = false,
-                classes = Some("govuk-!-width-two-thirds"),
-                hint = Some(messages("cds.subscription.contact-details.telephone.hint")),
-                labelClasses = Some("telephone")
-            )
-
-
-        @helpers.hideRevealToggle(
-            contactForm("use-registered-address"),
-            isYesFirst = true,
-            isRevealedByYes = false,
-            divClass = Some("form-field"),
-            legend = messages("cds.subscription.contact-details.address-text"),
-            otherHtmlInLegend = weWillUseThisAddress) {
-
-            <div id="contact">
-                <p>@messages("cds.subscription.contact-details.change-address.label")</p>
-                @inputText(
-                    form = contactForm,
-                    id = "street",
-                    name = "street",
-                    label = "cds.subscription.contact-details.street.label",
-                    isPageHeading = false,
-                    autocomplete = Some("address-line1")
-                )
-                @inputText(
-                    form = contactForm,
-                    id = "city",
-                    name = "city",
-                    label = "cds.subscription.contact-details.city.label",
-                    isPageHeading = false,
-                    autocomplete = Some("address-level2")
-                )
-                @inputText(
-                    form = contactForm,
-                    id = "postcode",
-                    name = "postcode",
-                    label = "cds.subscription.contact-details.postcode.label",
-                    isPageHeading = false,
-                    autocomplete = Some("postal-code")
-                )
-                @helpers.countryField(contactForm, "countryCode", "cds.subscription.contact-details.countryCode-auto-complete.label", countries)
-            </div>
-
-        }
-        </fieldset>
+        )
 
         @govukButton(Button(
             content = Text(ViewHelper.continueButtonText(isInReviewMode))

@@ -96,7 +96,14 @@ class SixLineAddressSpec extends ViewSpec {
       doc
         .body()
         .getElementsByAttributeValue("for", "countryCode")
-        .text mustBe "Country . Start to type the name of the country and then use up and down arrows to review and enter to select a country"
+        .text mustBe "Country"
+    }
+
+    "have a hidden screen reader hint" in {
+      doc
+        .body()
+        .getElementById("countryCode-hint")
+        .getElementsByClass("govuk-hint govuk-visually-hidden")
     }
   }
 

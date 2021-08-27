@@ -24,7 +24,7 @@ trait AddressPageFactoring {
   val fieldLevelErrorAddressLineThree = "//span[@id='line-3-error' and @class='govuk-error-message']"
   val fieldLevelErrorAddressLineFour  = "//span[@id='line-4-error' and @class='govuk-error-message']"
   val fieldLevelErrorPostcode         = "//span[@id='postcode-error' and @class='govuk-error-message']"
-  val fieldLevelErrorCountry          = "//*[@id='country-outer']//span[@class='error-message']"
+  val fieldLevelErrorCountry          = "//span[@id='countryCode-error' and @class='govuk-error-message']"
 }
 
 object AddressPageFactoring extends AddressPageFactoring

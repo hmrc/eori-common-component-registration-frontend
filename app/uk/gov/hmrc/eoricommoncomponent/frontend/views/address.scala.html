@@ -17,13 +17,20 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 @import views.html.helper.CSRF
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
+@this(layout_di: layout,
+        govukButton: GovukButton,
+        inputText: helpers.inputText,
+        errorSummary: helpers.errorSummary,
+        countrySelect: helpers.countrySelect,
+        goveukFieldSet: GovukFieldset
+)
 
 @(
     addressForm: Form[AddressViewModel],
@@ -59,15 +66,47 @@
     messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
 }
 
-@countryField = {
-    @defining(Seq(
-        '_plainLabel -> true)) { args =>
-        @helpers.countryField(addressForm, "countryCode", "cds.subscription.address-details.country.label", countries, args: _*)
-    }
-}
 
 @postcodeKey = @{
   if(isRow) "cds.subscription.address-details.postcode.row.label" else "cds.subscription.address-details.postcode.label"
+}
+
+@html = {
+    @inputText(
+        form = addressForm,
+        id = "street",
+        name = "street",
+        label = "cds.subscription.address-details.street.label",
+        isPageHeading = false,
+        classes = Some("govuk-!-width-two-thirds"),
+        autocomplete = Some("address-line1"),
+    )
+    @inputText(
+        form = addressForm,
+        id = "city",
+        name = "city",
+        label = "cds.subscription.address-details.city.label",
+        isPageHeading = false,
+        classes = Some("govuk-!-width-two-thirds"),
+        autocomplete = Some("address-level2"),
+    )
+    @inputText(
+        form = addressForm,
+        id = "postcode",
+        name = "postcode",
+        label = postcodeKey,
+        isPageHeading = false,
+        classes = Some("govuk-!-width-two-thirds"),
+        autocomplete = Some("postal-code"),
+    )
+    @countrySelect(
+        form = addressForm,
+        id = "countryCode",
+        name = "countryCode",
+        countries = countries,
+        label = "cds.subscription.address-details.country.label",
+        classes = Some("govuk-!-width-two-thirds")
+    )
 }
 
 @layout_di(titleAndHeading, countriesInCountryPicker, Some(addressForm)) {
@@ -78,37 +117,16 @@
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.submit(isInReviewMode, service), "addressDetailsForm") {
 
         @CSRF.formField
-        <fieldset>
-            <legend>
-                <h1 class="heading-large">@titleAndHeading</h1>
-            </legend>
-
-            @inputText(
-                form = addressForm,
-                id = "street",
-                name = "street",
-                label = "cds.subscription.address-details.street.label",
-                isPageHeading = false,
-                autocomplete = Some("address-line1"),
+        @goveukFieldSet(
+            Fieldset(
+                legend = Some(Legend(
+                    content = Text(titleAndHeading),
+                    classes = "govuk-fieldset__legend--l",
+                    isPageHeading = true
+                )),
+                html = html
             )
-            @inputText(
-                form = addressForm,
-                id = "city",
-                name = "city",
-                label = "cds.subscription.address-details.city.label",
-                isPageHeading = false,
-                autocomplete = Some("address-level2"),
-            )
-            @inputText(
-                form = addressForm,
-                id = "postcode",
-                name = "postcode",
-                label = postcodeKey,
-                isPageHeading = false,
-                autocomplete = Some("postal-code"),
-            )
-            @countryField
-        </fieldset>
+        )
 
         @govukButton(Button(
             content = Text(ViewHelper.continueButtonText(isInReviewMode))

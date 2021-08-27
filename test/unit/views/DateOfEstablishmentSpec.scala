@@ -19,6 +19,7 @@ package unit.views
 import java.time
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
@@ -27,7 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
 import util.ViewSpec
 
-class DateOfEstablishmentSpec extends ViewSpec {
+class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
   val form: Form[time.LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
   val isInReviewMode             = false
   implicit val request           = withFakeCSRF(FakeRequest())
@@ -45,7 +46,7 @@ class DateOfEstablishmentSpec extends ViewSpec {
       doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
     "have the correct text in the hint" in {
-      doc.body.getElementById("date-of-establishment-hint").text() mustBe "For example, 31 03 1980."
+      doc.body.getElementById("date-of-establishment-hint").text() must include("For example, 31 03 1980.")
     }
     "have the correct text in the intro paragraph" in {
       doc.body

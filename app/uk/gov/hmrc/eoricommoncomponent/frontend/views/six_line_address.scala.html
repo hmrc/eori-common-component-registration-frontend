@@ -25,7 +25,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, countrySelect: helpers.countrySelect)
 
 @(isInReviewMode: Boolean, addressForm: Form[SixLineAddressMatchModel], countries: List[Country], countriesInCountryPicker: CountriesInCountryPicker, cdsOrgType: String, service: Service)(implicit request: Request[AnyContent], messages: Messages)
 
@@ -42,12 +42,6 @@
     }
 }
 
-@countryField = {
-@defining(Seq(
-    '_plainLabel -> true)) { args =>
-    @helpers.countryField(addressForm, "countryCode", "cds.subscription.address-details.country.label", countries, args: _*)
-}
-}
 
 @layout_di(messages(headerLabel), countriesInCountryPicker, form = Some(addressForm)) {
     <div>
@@ -98,7 +92,13 @@
                 isPageHeading = false,
                 autocomplete = Some("postal-code"),
             )
-            @countryField
+            @countrySelect(
+                form = addressForm,
+                id = "countryCode",
+                name = "countryCode",
+                countries = countries,
+                label = "cds.subscription.address-details.country.label"
+            )
 
             @govukButton(Button(
                 content = Text(ViewHelper.continueButtonText(isInReviewMode))
