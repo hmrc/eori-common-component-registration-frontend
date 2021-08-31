@@ -80,7 +80,8 @@
             content = Text(label),
             value = Some(value),
             id = Some(s"${elements.field.name}-${value.toLowerCase.replace(" ", "_")}"),
-            hint = hints.get(value).map(hint => Hint(content = Text(hint)))
+            hint = hints.get(value).map(hint => Hint(content = Text(hint))),
+            checked = field.value.fold(false)(_ == value)
         )
     }
 ))

@@ -207,8 +207,8 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
         page.getElementText(emailFieldXPath) shouldBe Email
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
-        page.radioButtonIsChecked(useRegisteredAddressYesRadioButtonXPath) shouldBe false
-        page.radioButtonIsChecked(useRegisteredAddressNoRadioButtonXPath) shouldBe true
+        page.radioButtonChecked(useRegisteredAddressYesRadioButtonXPath) shouldBe false
+        page.radioButtonChecked(useRegisteredAddressNoRadioButtonXPath) shouldBe true
         page.getElementValue(streetFieldXPath) shouldBe Street
         page.getElementValue(cityFieldXPath) shouldBe City
         page.getElementValue(postcodeFieldXPath) shouldBe Postcode
@@ -224,8 +224,8 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
         page.getElementText(emailFieldXPath) shouldBe Email
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
-        page.radioButtonIsChecked(useRegisteredAddressYesRadioButtonXPath) shouldBe true
-        page.radioButtonIsChecked(useRegisteredAddressNoRadioButtonXPath) shouldBe false
+        page.radioButtonChecked(useRegisteredAddressYesRadioButtonXPath) shouldBe true
+        page.radioButtonChecked(useRegisteredAddressNoRadioButtonXPath) shouldBe false
         page.getElementValue(streetFieldXPath) shouldBe empty
         page.getElementValue(cityFieldXPath) shouldBe empty
         page.getElementValue(postcodeFieldXPath) shouldBe empty

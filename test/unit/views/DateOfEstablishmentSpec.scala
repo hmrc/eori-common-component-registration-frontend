@@ -66,7 +66,6 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
       docRestOfWorld.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
     "have the correct text in the description" in {
-      val test = docRestOfWorld.body
       docRestOfWorld.body
         .getElementById("date-of-establishment-hint")
         .text() mustBe "For example, 31 03 1980."

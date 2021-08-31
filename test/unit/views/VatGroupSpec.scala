@@ -48,7 +48,6 @@ class VatGroupSpec extends ViewSpec {
     }
 
     "have the correct intro text" in {
-      val test = doc.body()
       doc
         .body()
         .getElementById("yes-no-answer-hint")

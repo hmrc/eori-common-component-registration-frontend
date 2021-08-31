@@ -60,7 +60,6 @@ class VatDetailsEuSpec extends ViewSpec {
 
       doc.body.getElementsByAttributeValue("for", "vatCountry").text must include("Country")
       //the full stop adds a pause after the label is read out by screenreaders
-      val test = doc.body.getElementById("vatCountry-hint").textNodes().get(0).text()
       doc.body.getElementById("vatCountry-hint").textNodes().get(0).text() must include(
         ". Start to type the name of the country and then use up and down arrows to review and enter to select a country"
       )

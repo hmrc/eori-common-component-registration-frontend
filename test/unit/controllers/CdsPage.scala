@@ -16,6 +16,7 @@
 
 package unit.controllers
 
+import com.sun.org.apache.xerces.internal.impl.xs.identity.Selector.XPath
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -59,9 +60,12 @@ case class CdsPage(html: String) {
 
   def getElementAttributeAction(xpath: String): String = getElementAttribute(xpath, "action")
 
-  def radioButtonIsChecked(xpath: String): Boolean = getElementAttribute(xpath, "checked") == "checked"
+//  def radioButtonIsChecked(xpath: String): Boolean = getElementAttribute(xpath, "checked") == "checked"
 
-  def radioButtonIsUnchecked(xpath: String): Boolean = getElementAttribute(xpath, "checked") == ""
+//  def radioButtonIsUnchecked(xpath: String): Boolean = getElementAttribute(xpath, "checked") == ""
+
+  def radioButtonChecked(xpath: String):Boolean = selectElement(xpath).hasAttr("checked")
+
 
   def title(): String = page.title()
 

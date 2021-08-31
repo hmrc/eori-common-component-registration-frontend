@@ -99,8 +99,6 @@ class BusinessShortNameViewSpec extends ViewSpec {
     }
 
     "display short name input with label" in {
-      val test = doc().body()
-
       val shortNameInputLabel = doc().body().getElementsByAttributeValue("for","short-name")
       shortNameInputLabel.text() must startWith("Short name")
     }
@@ -108,7 +106,6 @@ class BusinessShortNameViewSpec extends ViewSpec {
     "display error summary" when {
 
       "user is during company journey" in {
-        val test = docWithErrorSummary().body()
         docWithErrorSummary().getElementById("error-summary-title").text() mustBe "There is a problem"
         docWithErrorSummary().getElementsByClass("govuk-error-summary__list").get(
           0

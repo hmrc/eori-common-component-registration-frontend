@@ -281,16 +281,16 @@ class DisclosePersonalDetailsConsentControllerSpec
     "display yes when the user's previous answer of yes is in the cache" in {
       showReviewForm(previouslyAnswered = true) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe "false"
-        page.getElementValue(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe "true"
+        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe false
+        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe true
       }
     }
 
     "display no when the user's previous answer of no is in the cache" in {
       showReviewForm(previouslyAnswered = false) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe "true"
-        page.getElementValue(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe "false"
+        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe true
+        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe false
       }
     }
 
