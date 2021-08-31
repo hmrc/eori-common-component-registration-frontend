@@ -33,7 +33,7 @@
 
         @CSRF.formField
 
-        <h1 class="heading-large">@Html(messages("cds.subscription.verify-email.title"))</h1>
+        <h1 class="govuk-heading-l">@Html(messages("cds.subscription.verify-email.title"))</h1>
 
         <p id="p1">  @email.map(e => messages("cds.subscription.verify-email.para1", e)) </p>
         <p id="p2">  @messages("cds.subscription.verify-email.para2") </p>

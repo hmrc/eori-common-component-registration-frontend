@@ -26,11 +26,11 @@
 @layout_di(messages("cds.subscription.outcomes.success.title")) {
 <div>
     <div class="govuk-box-highlight">
-        <h1 id="page-heading" class="heading-xlarge">
+        <h1 id="page-heading" class="govuk-heading-xl">
             @messages("cds.subscription.outcomes.success.heading", name)<br>
             <strong id="eori-number">@eori</strong>
         </h1>
-        <p class="heading-medium" id="issued-date">@messages("cds.subscription.outcomes.success.issued") @dateFormatter.format(processedDate)</p>
+        <p class="govuk-heading-m" id="issued-date">@messages("cds.subscription.outcomes.success.issued") @dateFormatter.format(processedDate)</p>
     </div>
 
     <div id='additional-information' class="form-group">
@@ -51,9 +51,9 @@
     </div>
 
     <div id="xi-eori">
-        <h2 class="heading-medium">@messages("ecc.subscription.outcomes.success.xi")</h2>
+        <h2 class="govuk-heading-m">@messages("ecc.subscription.outcomes.success.xi")</h2>
         <p>@messages("ecc.subscription.outcomes.success.xi.date.info")</p>
-        <ul class="bullets list">
+        <ul class="govuk-list govuk-list--bullet">
             <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet1")</li>
             <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet2")</li>
             <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet3")</li>

@@ -41,7 +41,7 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      docWithName.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      docWithName.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
 
     "have the correct explanation text" in {
@@ -70,7 +70,7 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      docWithoutName.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      docWithoutName.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
 
     "have the correct explanation text" in {

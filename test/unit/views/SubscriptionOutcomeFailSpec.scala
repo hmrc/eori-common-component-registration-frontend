@@ -44,10 +44,10 @@ class SubscriptionOutcomeFailSpec extends ViewSpec {
       )
     }
     "have the correct class on the h1" in {
-      doc().body.getElementsByTag("h1").hasClass("heading-xlarge") mustBe true
+      doc().body.getElementsByTag("h1").hasClass("govuk-heading-xl") mustBe true
     }
     "have the correct class on the message" in {
-      doc().body.getElementById("active-from").hasClass("heading-medium") mustBe true
+      doc().body.getElementById("active-from").hasClass("govuk-heading-m") mustBe true
     }
     "have the correct processing date and text" in {
       doc().body.getElementById("active-from").text mustBe s"Application received by HMRC on 1 January 2019"

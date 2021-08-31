@@ -40,7 +40,7 @@ class SubscriptionCompleteSpec extends ViewSpec {
       doc.body.getElementsByTag("h1").text() must startWith(s"The EORI number for $orgName is $eori")
     }
     "have the correct class on the h1" in {
-      doc.body.getElementsByTag("h1").hasClass("heading-xlarge") mustBe true
+      doc.body.getElementsByTag("h1").hasClass("govuk-heading-xl") mustBe true
     }
     "have the correct processing date and text" in {
       doc.body.getElementById("issued-date").text mustBe s"issued by HMRC on 1 January 2019"

@@ -28,7 +28,7 @@
 }
 
 @extractMessageIfKeyExists(headerKey)
-<ul class="govuk-list">
+<ul class="govuk-list govuk-list--bullet">
     @indexes.map(i => <li class="govuk-link">${messages(bulletKeyName(i))}</li>)
 </ul>
 @extractMessageIfKeyExists(footerKey)

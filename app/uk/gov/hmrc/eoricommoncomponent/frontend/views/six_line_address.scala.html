@@ -47,7 +47,7 @@
     <div>
         @errorSummary(addressForm.errors)
 
-        <h1 class="heading-large">@messages(headerLabel)</h1>
+        <h1 class="govuk-heading-l">@messages(headerLabel)</h1>
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SixLineAddressController.submit(isInReviewMode, cdsOrgType, service), s"$cdsOrgType-form") {
         @CSRF.formField

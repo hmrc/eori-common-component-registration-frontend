@@ -68,7 +68,7 @@
     }
     <label for="@elements.field.name" @if(!isLabelH1 && !isPlainLabel) {class="form-label-bold"} @if(!isLabelH1 && isPlainLabel) {class="form-label"}>
         @if(isLabelH1) {
-            <span class="heading-large">@elements.label</span>
+            <span class="govuk-heading-l">@elements.label</span>
         }
 
         @if(!isLabelH1) {
@@ -82,7 +82,7 @@
     }
 
     @if(hasHint) {
-        <span class="form-hint" id="@hintId">@elements.args.get('_hintText)</span>
+        <span class="govuk-hint" id="@hintId">@elements.args.get('_hintText)</span>
     }
     @if(hasError) {
         @allErrors.map { error => <span class="error-message" id="@errorId"><span class="visually-hidden">@messages("cds.error.field.hint")</span> @messages(key = error.toString)</span> }

@@ -85,9 +85,8 @@ otherHtmlInLegend: Html = Html(""))(hiddenHtml: Html)(implicit messages: Message
 }
 <div id='@{s"${field.name}-field"}' class="govuk-form-group"
         data-trigger="js-toggle-trigger"
-        data-open="@if(!isRevealedByYes){@yesId}else{@noId}"
-        data-close="@if(!isRevealedByYes){@noId}else{@yesId}">
-
+        data-open="@if(isRevealedByYes){@yesId}else{@noId}"
+        data-close="@if(isRevealedByYes){@noId}else{@yesId}">
     <fieldset
         id="@field.id-fieldset"
             @if(hasHint || hasOtherHtml || hasErrors){
@@ -110,7 +109,7 @@ otherHtmlInLegend: Html = Html(""))(hiddenHtml: Html)(implicit messages: Message
             }
 
             @if(hasHint) {
-                <p class="goveuk-form-hint" id="@hintId">@hintText</p>
+                <p class="goveuk-hint" id="@hintId">@hintText</p>
             }
 
             @if(hasOtherHtml){

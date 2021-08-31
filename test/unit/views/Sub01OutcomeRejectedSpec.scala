@@ -43,10 +43,10 @@ class Sub01OutcomeRejectedSpec extends ViewSpec {
       )
     }
     "have the correct class on the h1" in {
-      docWithName().body.getElementsByTag("h1").hasClass("heading-xlarge") mustBe true
+      docWithName().body.getElementsByTag("h1").hasClass("govuk-heading-xl") mustBe true
     }
     "have the correct class on the message" in {
-      docWithName().body.getElementById("processed-date").hasClass("heading-medium") mustBe true
+      docWithName().body.getElementById("processed-date").hasClass("govuk-heading-m") mustBe true
     }
     "have the correct processing date and text" in {
       docWithName().body.getElementById("processed-date").text mustBe s"Application received by HMRC on 1 January 2019"
@@ -73,10 +73,10 @@ class Sub01OutcomeRejectedSpec extends ViewSpec {
       )
     }
     "have the correct class on the h1" in {
-      docWithoutName().body.getElementsByTag("h1").hasClass("heading-xlarge") mustBe true
+      docWithoutName().body.getElementsByTag("h1").hasClass("govuk-heading-xl") mustBe true
     }
     "have the correct class on the message" in {
-      docWithoutName().body.getElementById("processed-date").hasClass("heading-medium") mustBe true
+      docWithoutName().body.getElementById("processed-date").hasClass("govuk-heading-m") mustBe true
     }
     "have the correct processing date and text" in {
       docWithoutName().body.getElementById(

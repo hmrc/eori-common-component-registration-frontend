@@ -45,8 +45,8 @@
         @helpers.form(formAction, "vat-details-form") {
 
             @CSRF.formField
-            <h1 class="heading-large">@messages("cds.subscription.vat-details.heading")</h1>
-            <p class="form-hint">@messages("cds.subscription.vat-details.intro-text")</p>
+            <h1 class="govuk-heading-l">@messages("cds.subscription.vat-details.heading")</h1>
+            <p class="govuk-hint">@messages("cds.subscription.vat-details.intro-text")</p>
 
             @inputText(
                 form = vatForm,

@@ -22,11 +22,11 @@
 @layout_di(messages("cds.existing.reg.eori-already-exists.title"), suppressTelephoneNumberDetection = false) {
     <div>
         <div>
-            <h1 id="page-heading" class="heading-xlarge">
+            <h1 id="page-heading" class="govuk-heading-xl">
                 @messages("cds.existing.reg.eori-already-exists.title")
             </h1>
             @mayBeEori.map{ eori =>
-            <p id="eori-number" class="heading-medium">@messages("cds.existing.reg.eori.number") @eori</p>
+            <p id="eori-number" class="govuk-heading-m">@messages("cds.existing.reg.eori.number") @eori</p>
             }
         </div>
 

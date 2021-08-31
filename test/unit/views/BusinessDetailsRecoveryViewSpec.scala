@@ -45,8 +45,8 @@ class BusinessDetailsRecoveryViewSpec extends ViewSpec {
         .text() mustBe "We have saved some of the details you gave us:"
     }
     "have the correct class on the h1" in {
-      CorporateBodyDoc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
-      SoleTraderOrIndividualDoc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
+      CorporateBodyDoc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
+      SoleTraderOrIndividualDoc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
     "have the right labels in the definition list" in {
       CorporateBodyDoc.body().getElementById("name").text() mustBe "Registered organisation name"

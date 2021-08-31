@@ -27,10 +27,10 @@
 @layout_di(messages("cds.sub02.outcome.subscription-in-progress.title")) {
     <div>
         <div class="govuk-box-highlight">
-            <h1 id="page-heading" class="heading-xlarge">@messages("cds.sub02.outcome.subscription-in-progress.heading", name)</h1>
-            <p id="processed-date" class="heading-medium">@messages("cds.sub02.outcome.subscription-in-progress.received", dateFormatter.format(processedDate))</p>
+            <h1 id="page-heading" class="govuk-heading-xl">@messages("cds.sub02.outcome.subscription-in-progress.heading", name)</h1>
+            <p id="processed-date" class="govuk-heading-m">@messages("cds.sub02.outcome.subscription-in-progress.received", dateFormatter.format(processedDate))</p>
         </div>
-        <h2 id="what-happens-next" class="heading-medium">@messages("cds.sub02.outcome.subscription-in-progress.what-happens-next")</h2>
+        <h2 id="what-happens-next" class="govuk-heading-m">@messages("cds.sub02.outcome.subscription-in-progress.what-happens-next")</h2>
         <p id="we-are-processing">
             @messages("cds.sub02.outcome.subscription-in-progress.we-are-processing")<br>
             @messages("cds.sub02.outcome.subscription-in-progress.send-you-an-email")

@@ -51,7 +51,7 @@ class SixLineAddressSpec extends ViewSpec {
       doc.body().getElementsByTag("h1").text() mustBe "Enter your organisation address"
     }
     "have the correct class on the h1" in {
-      doc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
     "have an input of type 'text' for line-1" in {
       doc.body().getElementById("line-1").attr("type") mustBe "text"

@@ -36,7 +36,7 @@ class EmailConfirmedSpec extends ViewSpec {
       getEoriDoc.body.getElementsByTag("h1").text() mustBe "You have confirmed your email address"
     }
     "have the correct class on the h1" in {
-      getEoriDoc.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      getEoriDoc.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
     "have a continue button" in {
       getEoriDoc.body.getElementsByClass("govuk-button").text() mustBe "Continue"

@@ -40,7 +40,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      doc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
 
     "have the correct explanation text" in {
