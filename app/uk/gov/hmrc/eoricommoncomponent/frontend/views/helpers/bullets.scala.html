@@ -18,7 +18,7 @@
 @(headerKey: Option[String], footerKey: Option[String], bulletsKeyPrefix: String, indexes: Range)(implicit request: Request[_], messages: Messages)
 @extractMessageIfKeyExists(value: Option[String]) = @{
     value match {
-        case Some(key) => Html(s"<p>${messages(key)}</p>")
+        case Some(key) => Html(s"<p class=${'"'}govuk-body${'"'}>${messages(key)}</p>")
         case _ => ""
     }
 }

@@ -21,6 +21,6 @@
 @(message: String)(implicit messages: Messages, request: Request[_])
 
 @layout_di("Something went wrong. Please try again later.") {
-<p>@message</p>
+<p class="govuk-body">@message</p>
 
 }

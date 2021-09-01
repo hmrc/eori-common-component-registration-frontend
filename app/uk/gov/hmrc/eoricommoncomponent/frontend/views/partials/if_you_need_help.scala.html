@@ -26,11 +26,11 @@
         @additionalContent
     </p>
 
-    <p>
+    <p class="govuk-body">
         @helpers.noMarginParagraph(messages("cds.if.you.need.help.telephone1"))
         @helpers.noMarginParagraph(messages("cds.if.you.need.help.telephone2"))
     </p>
-    <p>
+    <p class="govuk-body">
         @helpers.noMarginParagraph(html = Some(link("cds.if.you.need.help.telephone.link", appConfig.callCharges, "_self")))
     </p>
 </div>

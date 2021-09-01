@@ -83,7 +83,7 @@ cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
 
         @CSRF.formField
 
-        <p id="description">@Html(messages(descriptionForOrgType))</p>
+        <p class="govuk-body" id="description">@Html(messages(descriptionForOrgType))</p>
         @inputText(
             form = sicCodeForm,
             id = "sic",

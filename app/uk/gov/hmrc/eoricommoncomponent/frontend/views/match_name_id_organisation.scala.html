@@ -76,7 +76,7 @@
                 )
 
                 @if(isNameAddressRegistrationAvailable) {
-                    <p id="address-link">
+                    <p class="govuk-body" id="address-link">
                         @Html(messages("cds.matching.name-id-organisation.not-registered",
                         uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SixLineAddressController.showForm(false, organisationType, service)))
                     </p>
