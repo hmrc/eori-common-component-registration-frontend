@@ -14,6 +14,8 @@
 @import uk.gov.hmrc.hmrcfrontend.views.Implicits.RichDateInput
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 @import play.twirl.api.HtmlFormat
+@import scala.compat.Platform.EOL
+@import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 
 @this(govukDateInput: GovukDateInput)
 
@@ -26,6 +28,9 @@
         legendAsPageHeading: Boolean = true,
 )(implicit messages: Messages)
 
+@formatedErrors = @{
+    form.errors.map(err => s"<p class = ${'"'}govuk-!-margin-top-0 govuk-!-margin-bottom-0${'"'}>${messages(err.message, err.args:_*)}</p>").mkString
+}
 
 @govukDateInput(DateInput(
     fieldset = Some(Fieldset(
@@ -67,5 +72,8 @@
     hint = hintText.map(hintHtml => Hint(
         content = HtmlContent(hintHtml)
     )),
-    errorMessage = form(id).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*))))
+    errorMessage = form.hasErrors match {
+        case true => Some(ErrorMessage(content = HtmlContent(formatedErrors)))
+        case _ => None
+    }
 ).withFormField(form(id)))

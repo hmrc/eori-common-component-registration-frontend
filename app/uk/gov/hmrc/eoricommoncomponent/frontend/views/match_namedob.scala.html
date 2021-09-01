@@ -35,7 +35,7 @@
 
 @layout_di(messages("cds.matching.individual.title"), form = Some(businessDetailsForm)) {
     <div>
-        @errorSummary(DateConverter.updateDateOfBirthErrors(businessDetailsForm.errors),
+        @errorSummary(updateFormErrors.errors),
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
         <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>

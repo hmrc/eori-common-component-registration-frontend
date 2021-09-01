@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
 import javax.inject.{Inject, Singleton}
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZoneId}
 import play.api.Logger
 import play.api.libs.json.{JsSuccess, Json}
 import play.modules.reactivemongo.ReactiveMongoComponent
@@ -112,6 +112,8 @@ class SessionCache @Inject() (
     extends CacheMongoRepository("session-cache", appConfig.ttl.toSeconds)(mongo.mongoConnector.db, ec) {
 
   private val eccLogger: Logger = Logger(this.getClass)
+
+  val now = LocalDateTime.now(ZoneId.of("Europe/London"))
 
   private def sessionId(implicit hc: HeaderCarrier): Id =
     hc.sessionId match {
