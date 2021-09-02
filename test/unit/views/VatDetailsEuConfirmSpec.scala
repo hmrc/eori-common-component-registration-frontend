@@ -74,6 +74,7 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
 
     "have the correct class on the h1" in {
       docUnderLimit.body.getElementsByTag("h1") hasClass "heading-large"
+      docUnderLimit.body().getElementsByTag("h1").attr("class") mustBe "govuk-fieldset__heading"
     }
 
     "have the correct text on the h1 for 1 vat details provided" in {

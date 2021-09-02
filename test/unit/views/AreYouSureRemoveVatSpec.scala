@@ -48,8 +48,7 @@ class AreYouSureRemoveVatSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      val test = doc.body().getElementsByTag("h1").attr("class")
-      doc.body.getElementsByTag("h1").hasClass("bollox")
+      doc.body().getElementsByTag("h1").attr("class") mustBe "govuk-fieldset__heading"
     }
 
     "have the correct text on the h1" in {

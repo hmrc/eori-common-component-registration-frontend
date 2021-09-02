@@ -42,7 +42,7 @@ class VatRegisteredEuSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      individualDoc.body.getElementsByTag("h1") hasClass "heading-large"
+      individualDoc.body.getElementsByTag("h1").attr("class") mustBe "govuk-fieldset__heading"
     }
 
     "have the correct text in the h1" in {

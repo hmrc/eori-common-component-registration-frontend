@@ -76,12 +76,12 @@
                 @vatDetails.vatNumber
                 </dt>
                 <dt >
-                    <a id='change-tbl__gb-vat_change-@index' href="@if(!isInReviewMode){@VatDetailsEuController.updateForm(vatDetails.index, service)}else{@VatDetailsEuController.reviewUpdateForm(vatDetails.index, service)}">
+                    <a id='change-tbl__gb-vat_change-@index' href="@if(!isInReviewMode){@VatDetailsEuController.updateForm(vatDetails.index, service)}else{@VatDetailsEuController.reviewUpdateForm(vatDetails.index, service)}" class="govuk-link">
                     @messages("cds.form.change")
                     </a>
                 </dt>
                 <dt>
-                    <a id='review-tbl__gb-vat_remove-@index' href="@if(!isInReviewMode){@AreYouSureYouWantToDeleteVatController.createForm(vatDetails.index, service)}else{@AreYouSureYouWantToDeleteVatController.reviewForm(vatDetails.index, service)}">
+                    <a id='review-tbl__gb-vat_remove-@index' href="@if(!isInReviewMode){@AreYouSureYouWantToDeleteVatController.createForm(vatDetails.index, service)}else{@AreYouSureYouWantToDeleteVatController.reviewForm(vatDetails.index, service)}" class="govuk-link">
                     @messages("cds.multi.input.delete-entry")
                     </a>
                 </dt>

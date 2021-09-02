@@ -67,7 +67,7 @@ class VatDetailsEuSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      doc.body.getElementsByTag("h1") hasClass "heading-large"
+      doc.body.getElementsByTag("h1").attr("class") mustBe "govuk-heading-l"
     }
 
     "have the correct text on the h1" in {

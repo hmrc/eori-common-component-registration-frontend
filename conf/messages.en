@@ -64,7 +64,7 @@ cds.enrolment-already-exists-against-groupid-gye.paragraph=The Government Gatewa
 cds.enrolment-already-exists-against-groupid-migrate.paragraph=The Government Gateway ID you used to sign in is part of a team that already has access to CDS.
 cds.enrolment-already-exists-against-groupid-gye-steps.heading=If you need to give yourself access to CDS:
 cds.enrolment-already-exists-against-groupid-migrate-steps.heading=To give yourself access to CDS:
-cds.enrolment-already-exists-against-groupid.step1=Sign in to your <a href="https://www.gov.uk/log-in-register-hmrc-online-services" target="_blank" rel="noopener noreferrer">Business tax account (opens in a new window or tab).</a>
+cds.enrolment-already-exists-against-groupid.step1=Sign in to your <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Business tax account (opens in a new window or tab).</a>
 cds.enrolment-already-exists-against-groupid.step2=Select ''manage account''.
 cds.enrolment-already-exists-against-groupid.step3=Select ''give a team member access to a tax, duty or scheme''.
 cds.enrolment-already-exists-against-groupid.step4=Select ''manage taxes and schemes'' next to your name.
@@ -337,8 +337,8 @@ cds.matching.header.company=What are your company details?
 cds.matching.intro=This will link your business, Government Gateway ID and EORI number together which helps you move and declare goods.
 cds.matching.individual.header=Enter your details
 cds.matching-lede=We will attempt to match your details against information we currently hold.
-cds.matching.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''. You can <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
-cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on partnership tax returns and other letters about your partnership. It may be called ''reference'', ''UTR'' or ''official use''. You can <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
+cds.matching.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''. You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
+cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on partnership tax returns and other letters about your partnership. It may be called ''reference'', ''UTR'' or ''official use''. You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 
@@ -361,9 +361,9 @@ cds.subscription.enter-email.email.label=email address
 cds.subscription.verify-email.title=Verify your email address
 cds.subscription.verify-email.para1=We have sent an email to {0}. Click on the link in the email to verify your email address.
 cds.subscription.verify-email.missing-email-text=your email address
-cds.subscription.verify-email.para2=You can <a href="{0}">change your email address</a> if it is not correct.
+cds.subscription.verify-email.para2=You can <a href="{0}" class="govuk-link">change your email address</a> if it is not correct.
 cds.subscription.verify-email.progressive-disclosure.heading=I did not get an email
-cds.subscription.verify-email.progressive-disclosure.content=Check your junk folder. If it is not there we can <a href="{0}">send it again</a>. If we send your email again, any previous links will stop working.
+cds.subscription.verify-email.progressive-disclosure.content=Check your junk folder. If it is not there we can <a href="{0}" class="govuk-link">send it again</a>. If we send your email again, any previous links will stop working.
 subscription.enter-email.heading=What is your email address?
 subscription.check-your-email.heading=Check  your email address
 subscription.check-your-email.label=Email address
@@ -442,7 +442,7 @@ countries-in-the-eu.list=Austria, Belgium, Bulgaria, Croatia, Republic of Cyprus
 #How can we identify you?
 subscription-journey.how-confirm-identity=What information can we use to confirm your identity?
 subscription-journey.utr.label=Self assessment UTR number
-subscription-journey.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''. You can <a href="https://www.gov.uk/find-lost-utr-number" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
+subscription-journey.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''. You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
 cds.matching.id.page-error.nino=Enter your National Insurance number
 cds.matching.id.page-error.utr=Enter your Self Assessment UTR number
 cds.matching.id.page-error.ninoOrUtrRadio=Tell us how we can identify you
@@ -486,7 +486,7 @@ cds.start-page.before-you-start.bullet1=VAT number and effective date - this is 
 cds.start-page.before-you-start.bullet2=National Insurance number (if you are an individual or sole trader)
 cds.start-page.before-you-start.bullet3=your Unique Taxpayer Reference (UTR)
 cds.start-page.cannot-use-outside-uk=You cannot currently use this service if you are based outside the UK.
-cds.start-page.find-information=You can find the following information on the <a href="https://www.gov.uk/get-information-about-a-company">Companies House register</a>
+cds.start-page.find-information=You can find the following information on the <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link">Companies House register</a>
 cds.start-page.before-you-start.bullet4=the date you started your business
 cds.start-page.before-you-start.bullet5=the Standard Industrial Classification (SIC) code for your business
 cds.start-page.it-takes=It takes around 5 to 10 minutes to apply for an EORI number. You should get it immediately, but it may take up to 2 working days if we need to make more checks.
@@ -635,11 +635,11 @@ cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Un
 cds.matching.name-id-organisation.organisation.name=Organisation name
 cds.matching.name-id-organisation.organisation.name.hint=This is on your certificate of incorporation from Companies House.
 cds.matching.name-id-organisation.organisation.utr=Organisation Self Assessment Unique Taxpayer Reference (UTR) number
-cds.matching.name-id-organisation.not-registered=If you are not registered for Self Assessment, or if your registration is in progress and you do not yet have a UTR, you can <a href="{0}">register using your name and address</a> instead.
+cds.matching.name-id-organisation.not-registered=If you are not registered for Self Assessment, or if your registration is in progress and you do not yet have a UTR, you can <a href="{0}" class="govuk-link">register using your name and address</a> instead.
 cds.matching.name-id-organisation.eu-organisation.name=Registered organisation name
 cds.matching.name-id-organisation.eu-organisation.name.hint=This is on your certificate of incorporation from Companies House.
 cds.matching.name-id-organisation.eu-organisation.eori=EORI Number
-cds.matching.name-id-organisation.eu-organisation.name-and-address=If you do not have an EORI, you can <a href="{0}">register using your name and address</a> instead.
+cds.matching.name-id-organisation.eu-organisation.name-and-address=If you do not have an EORI, you can <a href="{0}" class="govuk-link">register using your name and address</a> instead.
 cds.matching.name-id-organisation.eu-organisation.date-established=Date of establishment
 cds.matching.name-id-organisation.eu-organisation.date-established.hint=For example, 31 3 1980
 
@@ -696,11 +696,11 @@ cds.matching.utr.help-message.footer=Your accountant or tax manager would normal
 
 #You need to use a different service
 cds.matching.different-service.title-and-heading=You need to use a different service
-cds.matching.different-service.para1=You do not have a UTR number so you cannot register for an EORI. To register for an EORI you will need to use the <a href="https://www.gov.uk/eori">Get an EORI service</a>.
+cds.matching.different-service.para1=You do not have a UTR number so you cannot register for an EORI. To register for an EORI you will need to use the <a href="https://www.gov.uk/eori" class="govuk-link">Get an EORI service</a>.
 
 #You cannot register for an EORI number using this service
 cds.matching.cannot-register-using-service.title-and-heading=You need to use a different service
-cds.matching.cannot-register-using-service.para1=This service is not currently available to applicants that are part of a VAT group. You will need to use a different <a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT"> Get an EORI service.</a>
+cds.matching.cannot-register-using-service.para1=This service is not currently available to applicants that are part of a VAT group. You will need to use a different <a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT" class="govuk-link"> Get an EORI service.</a>
 
 #Nino Match
 cds.matching.nino.title=Enter your details
@@ -748,7 +748,7 @@ cds.matching.individual.page-error.family-name=Enter your family name
 cds.matching.individual.page-error.full-name=Enter your full name
 cds.matching.individual.page-error.date-of-birth=Tell us your date of birth
 cds.matching.individual.matching-id.utr=Self Assessment Unique Taxpayer Reference (UTR) number
-cds.matching.individual.not-registered=If you are not registered for Self Assessment, or if your registration is in progress and you do not yet have a UTR, you can <a href="{0}">register using your National Insurance number</a> instead.
+cds.matching.individual.not-registered=If you are not registered for Self Assessment, or if your registration is in progress and you do not yet have a UTR, you can <a href="{0}" class="govuk-link">register using your National Insurance number</a> instead.
 cds.matching.individual-address.header=Enter your address
 cds.matching.individual.line-1=Address
 cds.matching.individual.line-2=Address line 2
@@ -932,7 +932,7 @@ cds.subscription.vat-country=VAT country
 cds.subscription.vat-question-uk=Is your organisation VAT registered in the UK?
 cds.subscription.vat-question-uk.sole-trader=Are you VAT registered in the UK?
 cds.subscription.vat-question-uk.individual=Are you VAT registered in the UK?
-cds.subscription.vat-question-uk.intro=Bringing certain high value items into the UK may incur import VAT. View <a href="https://www.gov.uk/guidance/vat-imports-acquisitions-and-purchases-from-abroad">this importing guide for more</a>.
+cds.subscription.vat-question-uk.intro=Bringing certain high value items into the UK may incur import VAT. View <a href="https://www.gov.uk/guidance/vat-imports-acquisitions-and-purchases-from-abroad" class="govuk-link">this importing guide for more</a>.
 cds.subscription.vat-question-eu=Is your organisation VAT registered in other EU member countries?
 cds.subscription.vat-enter-eu=Enter the VAT details for an EU country
 cds.subscription.vat-question-eu.individual=Are you VAT registered in other EU member countries?
@@ -979,31 +979,31 @@ cds.subscription.date-of-establishment.title-and-heading=When was the organisati
 cds.subscription.partnership.date-of-establishment.title-and-heading=When was the partnership established?
 cds.subscription.date-of-establishment.date-of-establishment.label=Date of establishment
 cds.subscription.date-of-establishment.page-error.date-of-establishment=Enter your date of establishment
-cds.subscription.business.date-established.label=Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the <a href="https://beta.companieshouse.gov.uk/" target="_blank" rel="noopener noreferrer">Companies House register (opens in a new window or tab)</a>
+cds.subscription.business.date-established.label=Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in a new window or tab)</a>
 cds.subscription.llp.date-established.charity-label=Enter the date shown on the organisation’s certificate of incorporation or registration certificate.
-cds.subscription.llp.date-established.label=Enter the date shown on the partnership’s certificate of incorporation. You can find the date your business was established on the <a href="https://beta.companieshouse.gov.uk/" target="_blank" rel="noopener noreferrer">Companies House register (opens in a new window or tab)</a>
+cds.subscription.llp.date-established.label=Enter the date shown on the partnership’s certificate of incorporation. You can find the date your business was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in a new window or tab)</a>
 cds.subscription.row.date-established.label=Enter the date your organisation was established
 cds.subscription.date-of-establishment.error.required.date-of-establishment=Enter your date of establishment
 cds.subscription.date-of-establishment.error.invalid.date-of-establishment=Please enter a valid date of establishment
 cds.subscription.date-of-establishment.error.in-future.date-of-establishment=You cannot enter a date of establishment in the future
 cds.subscription.date-of-establishment.cannot-find=Can’t find the certificate?
-cds.subscription.date-of-establishment.find-it=You can find the incorporated date on the <a href="https://beta.companieshouse.gov.uk/" target="_blank"> Companies House register</a>
+cds.subscription.date-of-establishment.find-it=You can find the incorporated date on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank"> Companies House register</a>
 
 #Sic Code
 cds.subscription.sic.page.title=What is the Standard Industrial Classification (SIC) code for your organisation?
 cds.subscription.sic.heading=What is the Standard Industrial Classification (SIC) code for your organisation?
 cds.subscription.sic.nonuk.soleTrader.heading=Enter a Standard Industrial Classification (SIC) code that describes what your business does
-cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House for your SIC code (opens in a new window or tab).</a>
-cds.subscription.sic.nonuk.organisation.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
-cds.subscription.sic.nonuk.soleTrader.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
-cds.subscription.sic.uk.soleTrader.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
-cds.subscription.sic.charity-description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
+cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House for your SIC code (opens in a new window or tab).</a>
+cds.subscription.sic.nonuk.organisation.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
+cds.subscription.sic.nonuk.soleTrader.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
+cds.subscription.sic.uk.soleTrader.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
+cds.subscription.sic.charity-description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
 cds.subscription.sic.partnership.page.title=What is the Standard Industrial Classification (SIC) code for your partnership?
 cds.subscription.sic.partnership.heading=What is the Standard Industrial Classification (SIC) code for your partnership?
-cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that helps HMRC identify what your partnership does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
+cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that helps HMRC identify what your partnership does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
 cds.subscription.sic.individual.page.title=Enter a Standard Industrial Classification (SIC) code that describes what your business does
 cds.subscription.sic.individual.heading=Enter a Standard Industrial Classification (SIC) code that describes what your business does
-cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
+cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab).</a>
 cds.subscription.sic.label=SIC code
 cds.subscription.sic.error.empty=Enter a SIC code
 cds.subscription.sic.error.too-long=The SIC code must be 5 digits or less
@@ -1011,7 +1011,7 @@ cds.subscription.sic.error.too-short=The SIC code must be more than 3 digits
 cds.subscription.sic.error.wrong-format= Enter a SIC code in the right format
 cds.sic.label=SIC code
 cds.subscription.sic.sic.label=SIC code
-cds.sic.hint=Use <a href="https://beta.companieshouse.gov.uk/" target="_blank" rel="noopener noreferrer">this list</a> to find the relevant code (opens in a new window or tab)
+cds.sic.hint=Use <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">this list</a> to find the relevant code (opens in a new window or tab)
 
 #Outcome pages
 cds.subscription.outcomes.steps.Received=Received
@@ -1328,13 +1328,13 @@ footer.privacy-policy=Privacy policy
 footer.terms-conditions=Terms and conditions
 footer.accessibility=Accessibility Statement
 footer.licence=Open Government Licence
-footer.licence3=All content is available under the <a id="licence-text" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
+footer.licence3=All content is available under the <a id="licence-text" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" class="govuk-link" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
 footer.copyright=© Crown copyright
 
 #accessibility statement
 accessibility-statement.heading-and-title=Accessibility statement for Get an EORI number
 accessibility-statement.paragraph1=This accessibility statement explains how accessible this service is, what to do if you have difficulty using it, and how to report accessibility problems with the service.
-accessibility-statement.paragraph2=This service is part of the wider GOV.UK website. There is a separate <a href="https://www.gov.uk/help/accessibility">accessibility statement</a> for the main GOV.UK website.
+accessibility-statement.paragraph2=This service is part of the wider GOV.UK website. There is a separate <a href="https://www.gov.uk/help/accessibility" class="govuk-link">accessibility statement</a> for the main GOV.UK website.
 accessibility-statement.paragraph3=This page only contains information about the Get an EORI number service, available at gov.uk/eori.gov
 accessibility-statement.using-service=Using this service
 accessibility-statement.what-do=This service is for users who need an EORI number to move goods into or out of the EU (including the UK).
@@ -1352,16 +1352,16 @@ accessibility-statement.how-accessible.paragraph2=Some people may find parts of 
 accessibility-statement.how-accessible.bullet1=at one point we ask users to enter the name of a country.  When they begin to type, the field will display the names of countries. However, this feature may not be fully compatible with screen readers as whilst the filtered options are visually available, they are not announced by the screenreader.
 accessibility-statement.difficulty-using-service=What to do if you have difficulty using this service
 accessibility-statement.difficulty-using-service.bullet-intro=If you have difficulty using this service, contact us by:
-accessibility-statement.difficulty-using-service.bullet1=<a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact">online form</a>
+accessibility-statement.difficulty-using-service.bullet1=<a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" class="govuk-link">online form</a>
 accessibility-statement.difficulty-using-service.bullet2=call 0300 322 7067
 accessibility-statement.reporting-problems=Reporting accessibility problems with this service
-accessibility-statement.reporting-problems.paragraph=We are always looking to improve the accessibility of this service. If you find any problems that are not listed on this page or think we are not meeting accessibility requirements, you can <a href="https://www.tax.service.gov.uk/contact/beta-feedback-unauthenticated?service=CDS">report the accessibility problem</a>.
+accessibility-statement.reporting-problems.paragraph=We are always looking to improve the accessibility of this service. If you find any problems that are not listed on this page or think we are not meeting accessibility requirements, you can <a href="https://www.tax.service.gov.uk/contact/beta-feedback-unauthenticated?service=CDS" class="govuk-link">report the accessibility problem</a>.
 accessibility-statement.not-happy=What to do if you are not happy with how we respond to your complaint
-accessibility-statement.not-happy.paragraph=The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you are not happy with how we respond to your complaint, <a href="https://www.equalityadvisoryservice.com/">contact the Equality Advisory and Support Service</a> (EASS), or the <a href="https://www.equalityni.org/Home">Equality Commission for Northern Ireland</a> (ECNI) if you live in Northern Ireland.
+accessibility-statement.not-happy.paragraph=The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you are not happy with how we respond to your complaint, <a href="https://www.equalityadvisoryservice.com/" class="govuk-link">contact the Equality Advisory and Support Service</a> (EASS), or the <a href="https://www.equalityni.org/Home">Equality Commission for Northern Ireland</a> (ECNI) if you live in Northern Ireland.
 accessibility-statement.contact-us=Contacting us by phone or getting a visit from us in person
 accessibility-statement.contact-us.paragraph1=We provide a text relay service if you are deaf, hearing impaired or have a speech impediment.
 accessibility-statement.contact-us.paragraph2=We can provide a British Sign Language (BSL) interpreter, or you can arrange a visit from an HMRC advisor to help you complete the service.
-accessibility-statement.contact-us.paragraph3=Find out how to <a href="https://www.gov.uk/dealing-hmrc-additional-needs">contact us</a>.
+accessibility-statement.contact-us.paragraph3=Find out how to <a href="https://www.gov.uk/dealing-hmrc-additional-needs" class="govuk-link">contact us</a>.
 accessibility-statement.technical-information=Technical information about this service’s accessibility
 accessibility-statement.technical-information.paragraph1=HMRC is committed to making this service accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
 accessibility-statement.non-accessible=Non-accessible content
@@ -1370,10 +1370,10 @@ accessibility-statement.non-accessible.paragraph2=Non-compliance with the access
 accessibility-statement.non-accessible.paragraph3=We use  a text autocomplete to help users enter a valid country name.
 accessibility-statement.non-accessible.paragraph4=When a user begins to type, the field will display the names of countries. However, this feature may not be fully compatible with screen readers as whilst the filtered options are visually available, they are not announced by the screenreader . This doesn’t meet WCAG 2.1 success criterion 4.1.1 (Parsing).
 accessibility-statement.non-accessible.paragraph5=We plan to add audible announcements to the autocomplete by October 2019 to meet WCAG 2.1 success criterion 4.1.1 (Parsing).
-accessibility-statement.technical-information.paragraph2=This service is partially compliant with the <a href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1 AA standard</a>.
+accessibility-statement.technical-information.paragraph2=This service is partially compliant with the <a href="https://www.w3.org/TR/WCAG21/" class="govuk-link">Web Content Accessibility Guidelines version 2.1 AA standard</a>.
 accessibility-statement.how-tested=How we tested this service
 accessibility-statement.how-tested.paragraph1=The service was last tested on 28 February 2019 and was checked for compliance with WCAG 2.1 AA.
-accessibility-statement.how-tested.paragraph2=The service was built using parts that were tested by the <a href="http://www.digitalaccessibilitycentre.org/">Digital Accessibility Centre</a>. The full service was tested by HMRC and included disabled users.
+accessibility-statement.how-tested.paragraph2=The service was built using parts that were tested by the <a href="http://www.digitalaccessibilitycentre.org/" class="govuk-link">Digital Accessibility Centre</a>. The full service was tested by HMRC and included disabled users.
 accessibility-statement.how-tested.paragraph3=This page was prepared on 23 September 2019. It was last updated on 23 September 2019.
 
 business-details-recovery.title=We have saved some of the details you gave us

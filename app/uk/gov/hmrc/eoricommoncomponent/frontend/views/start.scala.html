@@ -31,7 +31,7 @@
 }
 
 @link(text: String, url: String, target: String) = {
-    <a href="@url" target="@target">@messages(text)</a>
+    <a href="@url" class="govuk-link" target="@target">@messages(text)</a>
 }
 
 @layout_di(messages("ecc.start-page.title", longName), suppressTelephoneNumberDetection = false, displayBackLink = false) {
