@@ -34,7 +34,7 @@ trait SubscriptionDateCommon extends WebPage {
 
   def yearOfDateFieldXpath: String = s"//*[@id='$dateFieldName.year']"
 
-  def dateOfEstablishmentHeadingXPath: String = "//h1"
+  def dateOfEstablishmentHeadingXPath: String = "//legend"
 
 }
 

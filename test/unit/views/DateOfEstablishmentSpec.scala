@@ -40,10 +40,11 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
       doc.title() must startWith("When was the company established?")
     }
     "have the correct h1 text" in {
-      doc.body.getElementsByTag("h1").text() mustBe "When was the company established?"
+      doc.body.getElementsByTag("legend").text() mustBe "When was the company established?"
     }
-    "have the correct class on the h1" in {
-      doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
+    "have the correct class on the legend" in {
+      val test = doc.body.getElementsByTag("legend")
+      doc.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
     "have the correct text in the hint" in {
       doc.body.getElementById("date-of-establishment-hint").text() must include("For example, 31 03 1980.")
@@ -60,10 +61,10 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
       docRestOfWorld.title must startWith("When was the organisation established?")
     }
     "have the correct h1 text" in {
-      docRestOfWorld.body.getElementsByTag("h1").text() mustBe "When was the organisation established?"
+      docRestOfWorld.body.getElementsByTag("legend").text() mustBe "When was the organisation established?"
     }
-    "have the correct class on the h1" in {
-      docRestOfWorld.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
+    "have the correct class on the legend" in {
+      docRestOfWorld.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
     "have the correct text in the description" in {
       docRestOfWorld.body
@@ -76,11 +77,11 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     "display correct title" in {
       docLlp.title must startWith("When was the partnership established?")
     }
-    "have the correct h1 text" in {
-      docLlp.body.getElementsByTag("h1").text() mustBe "When was the partnership established?"
+    "have the correct legend text" in {
+      docLlp.body.getElementsByTag("legend").text() mustBe "When was the partnership established?"
     }
-    "have the correct class on the h1" in {
-      docLlp.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
+    "have the correct class on the legend" in {
+      docLlp.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
   }
 
