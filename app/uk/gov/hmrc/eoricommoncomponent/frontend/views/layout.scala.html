@@ -27,7 +27,9 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukBackLink
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcReportTechnicalIssueHelper, HmrcTimeoutDialogHelper, HmrcLanguageSelectHelper}
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcTimeoutDialogHelper, HmrcLanguageSelectHelper}
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.ReportTechnicalIssue
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
 
 @this(hmrcLayout: HmrcLayout,
         standardBetaBanner: StandardBetaBanner,
@@ -36,10 +38,8 @@
         reportAProblemLink: HmrcReportTechnicalIssue,
         hmrcTimeoutDialog: HmrcTimeoutDialog,
         govukBackLink: GovukBackLink,
-        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
         hmrcLanguageSelectHelper: HmrcLanguageSelectHelper)
-
 
 @(  title: String,
     countriesInCountryPicker: CountriesInCountryPicker = NoCountriesInCountryPicker,
@@ -95,9 +95,16 @@
     }
 }
 
+@getHelpForm = @{
+    reportAProblemLink(ReportTechnicalIssue(baseUrl = Some(appConfig.contactBaseUrl),
+    serviceId = appConfig.serviceIdentifierRegister + "-" + service.code,
+    referrerUrl = Some(request.uri),
+    language = if(messages.lang.code == "cy") Cy else En))
+}
+
 @mainContentWithGetHelp = {
     @contentBlock
-    @hmrcReportTechnicalIssueHelper()
+    @getHelpForm
 }
 
 
