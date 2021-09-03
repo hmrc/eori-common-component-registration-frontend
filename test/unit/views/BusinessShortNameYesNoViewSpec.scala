@@ -133,7 +133,9 @@ class BusinessShortNameYesNoViewSpec extends ViewSpec {
         docWithErrorSummary(
           Partnership,
           errorMessage = "ecc.business-short-name-yes-no.partnership.empty"
-        ).getElementsByClass("govuk-error-summary__list").get(0).text() mustBe "Tell us if your partnership uses a shortened name"
+        ).getElementsByClass("govuk-error-summary__list").get(
+          0
+        ).text() mustBe "Tell us if your partnership uses a shortened name"
       }
 
       "user is during charity journey" in {
@@ -145,7 +147,9 @@ class BusinessShortNameYesNoViewSpec extends ViewSpec {
         docWithErrorSummary(
           UnincorporatedBody,
           errorMessage = "ecc.business-short-name-yes-no.charity.empty"
-        ).getElementsByClass("govuk-error-summary__list").get(0).text() mustBe "Tell us if your charity uses a shortened name"
+        ).getElementsByClass("govuk-error-summary__list").get(
+          0
+        ).text() mustBe "Tell us if your charity uses a shortened name"
       }
 
       "user is during RoW organisation journey" in {
@@ -157,7 +161,9 @@ class BusinessShortNameYesNoViewSpec extends ViewSpec {
         docWithErrorSummary(
           isRow = true,
           errorMessage = "ecc.business-short-name-yes-no.organisation.empty"
-        ).getElementsByClass("govuk-error-summary__list").get(0).text() mustBe "Tell us if your organisation uses a shortened name"
+        ).getElementsByClass("govuk-error-summary__list").get(
+          0
+        ).text() mustBe "Tell us if your organisation uses a shortened name"
       }
     }
   }

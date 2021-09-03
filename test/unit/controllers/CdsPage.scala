@@ -64,8 +64,7 @@ case class CdsPage(html: String) {
 
 //  def radioButtonIsUnchecked(xpath: String): Boolean = getElementAttribute(xpath, "checked") == ""
 
-  def radioButtonChecked(xpath: String):Boolean = selectElement(xpath).hasAttr("checked")
-
+  def radioButtonChecked(xpath: String): Boolean = selectElement(xpath).hasAttr("checked")
 
   def title(): String = page.title()
 

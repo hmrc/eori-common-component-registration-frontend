@@ -41,6 +41,6 @@ private[mapping] trait TestMatchingModels {
   )
 
   val zonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
-  val ukDateTime = zonedDateTime.toOffsetDateTime
+  val ukDateTime    = zonedDateTime.toOffsetDateTime
 
 }

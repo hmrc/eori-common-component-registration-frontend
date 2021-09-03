@@ -99,7 +99,7 @@ class BusinessShortNameViewSpec extends ViewSpec {
     }
 
     "display short name input with label" in {
-      val shortNameInputLabel = doc().body().getElementsByAttributeValue("for","short-name")
+      val shortNameInputLabel = doc().body().getElementsByAttributeValue("for", "short-name")
       shortNameInputLabel.text() must startWith("Short name")
     }
 

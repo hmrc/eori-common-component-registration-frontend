@@ -20,7 +20,8 @@ import common.pages.WebPage
 
 trait VatRegisteredUkPage extends WebPage {
 
-  val fieldLevelErrorYesNoAnswer: String = "//span[contains(@id, 'yes-no-answer-error') and contains(@class, 'govuk-error-message']"
+  val fieldLevelErrorYesNoAnswer: String =
+    "//span[contains(@id, 'yes-no-answer-error') and contains(@class, 'govuk-error-message']"
 
   override val title            = "Is your organisation VAT registered in the UK?"
   val problemWithSelectionError = "Tell us if your organisation is VAT registered in the UK"

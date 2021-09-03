@@ -139,7 +139,9 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(Map("have-nino" -> "")) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText("//div[@class='govuk-error-summary__body']") should include("Select yes if you have a National Insurance number")
+        page.getElementsText("//div[@class='govuk-error-summary__body']") should include(
+          "Select yes if you have a National Insurance number"
+        )
       }
     }
 

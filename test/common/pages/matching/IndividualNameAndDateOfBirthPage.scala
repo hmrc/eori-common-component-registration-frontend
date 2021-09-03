@@ -19,10 +19,12 @@ package common.pages.matching
 import common.pages.WebPage
 
 trait IndividualNameAndDateOfBirthXPath extends AddressPageFactoring {
-  val fieldLevelErrorGivenName   = "//span[@class='govuk-error-message' and @id='given-name-error]"
-  val fieldLevelErrorMiddleName  = "//span[@class='govuk-error-message' and @id='middle-name-error]"
-  val fieldLevelErrorFamilyName  = "//span[@class='govuk-error-message' and @id='family-name-error]"
-  val fieldLevelErrorDateOfBirth = "//span[contains(@id, 'date-of-birth-error') and contains(@class, 'govuk-error-message')]"
+  val fieldLevelErrorGivenName  = "//span[@class='govuk-error-message' and @id='given-name-error]"
+  val fieldLevelErrorMiddleName = "//span[@class='govuk-error-message' and @id='middle-name-error]"
+  val fieldLevelErrorFamilyName = "//span[@class='govuk-error-message' and @id='family-name-error]"
+
+  val fieldLevelErrorDateOfBirth =
+    "//span[contains(@id, 'date-of-birth-error') and contains(@class, 'govuk-error-message')]"
 
   val givenNameElement   = "//*[@id='given-name']"
   val middleNameElement  = "//*[@id='middle-name']"

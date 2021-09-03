@@ -189,9 +189,7 @@ class DoYouHaveAUtrNumberControllerSpec
           "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
         )
         page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
-        page.getElementsText(
-          "//*[@id='have-utr-hint']"
-        ) shouldBe "You will have a UTR number if you pay tax in the UK."
+        page.getElementsText("//*[@id='have-utr-hint']") shouldBe "You will have a UTR number if you pay tax in the UK."
       }
     }
     "contain a proper content for individuals" in {
@@ -204,9 +202,7 @@ class DoYouHaveAUtrNumberControllerSpec
           "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
         )
         page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
-        page.getElementsText(
-          "//*[@id='have-utr-hint']"
-        ) shouldBe "You will have a UTR number if you pay tax in the UK."
+        page.getElementsText("//*[@id='have-utr-hint']") shouldBe "You will have a UTR number if you pay tax in the UK."
       }
     }
   }
