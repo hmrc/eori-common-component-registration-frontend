@@ -17,16 +17,15 @@
 package integration
 
 import java.util.UUID
+
 import common.support.testdata.registration.RegistrationInfoGenerator._
-import java.time.{ZoneOffset, ZonedDateTime}
+
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json.toJson
 import play.modules.reactivemongo.ReactiveMongoComponent
 import uk.gov.hmrc.cache.model.{Cache, Id}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, SessionCache, SessionTimeOutException}
@@ -124,42 +123,6 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
       val expectedUpdatedJson                     = toJson(CachedData(regDetails = Some(individualRegistrationDetails)))
       val Some(Cache(_, Some(updatedJson), _, _)) = updatedCache
       updatedJson mustBe expectedUpdatedJson
-    }
-
-    "store and fetch RegisterWith EORI And Id Response correctly for Reg06 response" in {
-      val sessionId: SessionId = setupSession
-
-      val processingDate = ZonedDateTime.now().withNano(0).withZoneSameLocal(ZoneOffset.UTC)
-      val responseCommon = ResponseCommon(status = "OK", processingDate = processingDate)
-      val trader         = Trader(fullName = "New trading", shortName = "nt")
-      val establishmentAddress =
-        EstablishmentAddress(streetAndNumber = "new street", city = "leeds", countryCode = "GB")
-      val responseData: ResponseData = ResponseData(
-        SAFEID = "SomeSafeId",
-        trader = trader,
-        establishmentAddress = establishmentAddress,
-        hasInternetPublication = true,
-        startDate = "2018-01-01"
-      )
-      val registerWithEoriAndIdResponseDetail = RegisterWithEoriAndIdResponseDetail(
-        outcome = Some("PASS"),
-        caseNumber = Some("case no 1"),
-        responseData = Some(responseData)
-      )
-      val rd = RegisterWithEoriAndIdResponse(
-        responseCommon = responseCommon,
-        responseDetail = Some(registerWithEoriAndIdResponseDetail)
-      )
-
-      await(sessionCache.saveRegisterWithEoriAndIdResponse(rd)(hc))
-
-      val cache = await(sessionCache.findById(Id(sessionId.value)))
-
-      val expectedJson                     = toJson(CachedData(registerWithEoriAndIdResponse = Some(rd)))
-      val Some(Cache(_, Some(json), _, _)) = cache
-      json mustBe expectedJson
-
-      await(sessionCache.registerWithEoriAndIdResponse(hc)) mustBe rd
     }
 
     "throw exception when registration Details requested and not available in cache" in {

@@ -43,7 +43,6 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
       doc.body.getElementsByTag("legend").text() mustBe "When was the company established?"
     }
     "have the correct class on the legend" in {
-      val test = doc.body.getElementsByTag("legend")
       doc.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
     "have the correct text in the hint" in {

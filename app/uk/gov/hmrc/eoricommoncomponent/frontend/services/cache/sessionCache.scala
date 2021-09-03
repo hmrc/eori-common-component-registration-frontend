@@ -144,11 +144,6 @@ class SessionCache @Inject() (
       createdOrUpdated <- createOrUpdate(sessionId, regDetailsKey, Json.toJson(rd)) map (_ => true)
     } yield createdOrUpdated
 
-  def saveRegisterWithEoriAndIdResponse(
-    rd: RegisterWithEoriAndIdResponse
-  )(implicit hc: HeaderCarrier): Future[Boolean] =
-    createOrUpdate(sessionId, registerWithEoriAndIdResponseKey, Json.toJson(rd)) map (_ => true)
-
   def saveSub02Outcome(subscribeOutcome: Sub02Outcome)(implicit hc: HeaderCarrier): Future[Boolean] =
     createOrUpdate(sessionId, sub02OutcomeKey, Json.toJson(subscribeOutcome)) map (_ => true)
 

@@ -181,8 +181,6 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
 
-        val test = page.getElementsText(fieldLevelErrorDateOfBirth)
-
         page.getElementsText(
           pageLevelErrorSummaryListXPath
         ) shouldBe s"Enter a day between 1 and 31 Enter a month between 1 and 12 Enter a year between 1900 and ${Year.now.getValue}"

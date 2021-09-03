@@ -17,7 +17,8 @@
 package util.builders
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, ZonedDateTime}
+import java.time.{LocalDate, LocalDateTime, ZoneId}
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
@@ -157,7 +158,7 @@ object SubscriptionInfoBuilder {
   val sampleResponseCommon = ResponseCommon(
     "OK",
     Some("Status text"),
-    ZonedDateTime.now,
+    LocalDateTime.now(ZoneId.of("Europe/London")),
     Some(
       List(
         MessagingServiceParam("POSITION", "GENERATE"),

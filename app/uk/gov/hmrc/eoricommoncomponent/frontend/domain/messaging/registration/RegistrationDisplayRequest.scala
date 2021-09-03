@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration
 
-import java.time.ZonedDateTime
+import java.time.LocalDateTime
+
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{CommonHeader, RequestParameter}
 
-case class RequestCommon(receiptDate: ZonedDateTime, requestParameters: Seq[RequestParameter])
+case class RequestCommon(receiptDate: LocalDateTime, requestParameters: Seq[RequestParameter])
 
 object RequestCommon extends CommonHeader {
   implicit val format = Json.format[RequestCommon]

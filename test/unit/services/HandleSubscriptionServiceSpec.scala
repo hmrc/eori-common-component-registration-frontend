@@ -18,7 +18,8 @@ package unit.services
 
 import base.UnitSpec
 import common.support.testdata.TestData
-import java.time.ZonedDateTime
+import java.time.LocalDateTime
+
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfter
@@ -51,7 +52,7 @@ class HandleSubscriptionServiceSpec extends UnitSpec with MockitoSugar with Befo
 
   val sapNumber: TaxPayerId                             = TaxPayerId("id")
   val eori: Option[Eori]                                = Some(Eori("eori"))
-  val emailVerificationTimestamp: Option[ZonedDateTime] = Some(TestData.emailVerificationTimestamp)
+  val emailVerificationTimestamp: Option[LocalDateTime] = Some(TestData.emailVerificationTimestamp)
   val safeId: SafeId                                    = SafeId("id")
 
   val handleSubscriptionRequest = HandleSubscriptionRequest(
@@ -59,7 +60,7 @@ class HandleSubscriptionServiceSpec extends UnitSpec with MockitoSugar with Befo
     formBundleId,
     sapNumber.id,
     Some("eori"),
-    s"${emailVerificationTimestamp.get}",
+    s"${TestData.zonedEmailVerificationTimestamp.toString}",
     safeId.id
   )
 

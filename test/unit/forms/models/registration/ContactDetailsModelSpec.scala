@@ -17,9 +17,10 @@
 package unit.forms.models.registration
 
 import base.UnitSpec
-import java.time.ZonedDateTime
+import java.time.LocalDateTime
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.ContactInformation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, ContactDetailsViewModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 
 class ContactDetailsModelSpec extends UnitSpec {
@@ -94,7 +95,7 @@ class ContactDetailsModelSpec extends UnitSpec {
           Some("")
         )
 
-      def expectedContactInformation(emailVerificationTimestamp: Option[ZonedDateTime]) = ContactInformation(
+      def expectedContactInformation(emailVerificationTimestamp: Option[LocalDateTime]) = ContactInformation(
         personOfContact = Some("Full name"),
         sepCorrAddrIndicator = Some(false),
         telephoneNumber = Some("01234123123"),

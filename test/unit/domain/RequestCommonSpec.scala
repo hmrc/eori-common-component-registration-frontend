@@ -19,14 +19,19 @@ package unit.domain
 import java.util.UUID
 
 import base.UnitSpec
-import java.time.{ZoneOffset, ZonedDateTime}
+import java.time.{ZoneId, ZonedDateTime}
+
 import play.api.libs.json.{JsResultException, JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestCommon
 
 class RequestCommonSpec extends UnitSpec {
 
-  val regime                   = "CDS"
-  val validReceiptDate         = "2016-07-08T08:35:13Z"
+  val regime           = "CDS"
+  val validReceiptDate = "2016-07-08T08:35:13Z"
+
+  val validReceiptDateBst =
+    ZonedDateTime.parse(validReceiptDate).withZoneSameInstant(ZoneId.of("Europe/London")).toLocalDateTime
+
   val invalidReceiptDate       = "2016-07-08 08:35:13Z"
   val acknowledgementReference = UUID.randomUUID().toString
 
@@ -43,12 +48,12 @@ class RequestCommonSpec extends UnitSpec {
     "deserialise from valid json" in {
       val requestCommon = requestCommonAsJson().as[RequestCommon]
       requestCommon.acknowledgementReference should be(acknowledgementReference)
-      requestCommon.receiptDate.withZoneSameInstant(ZoneOffset.UTC) should equal(ZonedDateTime.parse(validReceiptDate))
+      requestCommon.receiptDate should equal(validReceiptDateBst)
       requestCommon.regime should be(regime)
     }
 
     "serialise receiptDate to ISO format" in {
-      val requestCommon = RequestCommon(regime, ZonedDateTime.parse(validReceiptDate), acknowledgementReference)
+      val requestCommon = RequestCommon(regime, validReceiptDateBst, acknowledgementReference)
       val json          = Json.toJson[RequestCommon](requestCommon)
       json should be(requestCommonAsJson())
     }

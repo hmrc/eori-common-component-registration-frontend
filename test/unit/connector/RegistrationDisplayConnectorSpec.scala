@@ -17,7 +17,8 @@
 package unit.connector
 
 import base.UnitSpec
-import java.time.ZonedDateTime
+import java.time.{LocalDateTime, ZoneId}
+
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
@@ -42,7 +43,9 @@ class RegistrationDisplayConnectorSpec extends UnitSpec with MockitoSugar {
     override val url: String = "service url"
   }
 
-  val registrationDisplayRequest = RegistrationDisplayRequest(RequestCommon(ZonedDateTime.now, Seq.empty))
+  val registrationDisplayRequest = RegistrationDisplayRequest(
+    RequestCommon(LocalDateTime.now(ZoneId.of("Europe/London")), Seq.empty)
+  )
 
   val responseCommon = ResponseCommon("OK", None, "2016-09-02T09:30:47Z", taxPayerID = Some("0100086619"))
 

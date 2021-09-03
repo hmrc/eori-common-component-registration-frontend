@@ -16,11 +16,10 @@
 
 package unit.services
 
-import java.time.{Clock, Instant}
+import java.time.{Clock, Instant, LocalDateTime, ZoneId}
 
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestCommon
-import java.time.ZoneOffset
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
@@ -34,11 +33,12 @@ class RequestCommonGeneratorSpec extends UnitSpec with MockitoSugar with BeforeA
 
   private val generator = new RequestCommonGenerator(mockUUIDGenerator, mockClock)
 
-  private val in: Instant = Instant.now(Clock.systemUTC())
+  private val instant: Instant  = Instant.now(Clock.systemUTC())
+  private val in: LocalDateTime = LocalDateTime.ofInstant(instant, ZoneId.of("Europe/London"))
 
   override def beforeEach(): Unit = {
     when(mockUUIDGenerator.generateUUIDAsString).thenReturn(expectedReference)
-    when(mockClock.generateUtcTime.instant()).thenReturn(in)
+    when(mockClock.generateUtcTime.instant()).thenReturn(instant)
   }
 
   "RequestCommonGenerator" should {
@@ -56,7 +56,6 @@ class RequestCommonGeneratorSpec extends UnitSpec with MockitoSugar with BeforeA
       }
 
       "create object with receipt date as current time in UTC timezone" in withFixture { requestCommon =>
-        requestCommon.receiptDate.getZone should equal(ZoneOffset.UTC)
         requestCommon.receiptDate.toString() shouldBe in.toString
       }
 

@@ -16,7 +16,7 @@
 
 package integration
 
-import java.time.{ZoneOffset, ZonedDateTime}
+import java.time.LocalDateTime
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -49,7 +49,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
   private val AValidTaxPayerID            = "1234567890"
   private val taxPayerId                  = TaxPayerId(AValidTaxPayerID).mdgTaxPayerId
   private val Regime                      = "CDS"
-  private val receiptDate                 = ZonedDateTime.of(2016, 3, 17, 9, 30, 47, 114, ZoneOffset.UTC)
+  private val receiptDate                 = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 114)
   private val colon: String               = "%3A"
 
   private val expectedGetUrl =

@@ -48,7 +48,7 @@ class AreYouSureRemoveVatSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      doc.body().getElementsByTag("h1").attr("class") mustBe "govuk-fieldset__heading"
+      doc.body.getElementsByTag("h1") hasClass "heading-large"
     }
 
     "have the correct text on the h1" in {

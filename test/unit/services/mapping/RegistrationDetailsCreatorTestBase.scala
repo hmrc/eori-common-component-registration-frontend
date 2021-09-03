@@ -36,7 +36,7 @@ private[mapping] trait TestMatchingModels {
   val responseCommon = ResponseCommon(
     status = "someStatus",
     statusText = Some("Status text"),
-    processingDate = ZonedDateTime.now(),
+    processingDate = LocalDateTime.now(ZoneId.of("Europe/London")),
     returnParameters = Some(List(MessagingServiceParam("SAP_NUMBER", sapNumber)))
   )
 
