@@ -72,8 +72,8 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val postcodeFieldLevelErrorXPath = "//span[@id='postcode-error' and @class='govuk-error-message']"
   val postcodeFieldLabel           = "Postcode"
 
-  val registeredAddressQuestionXPath = "//*[@id='use-registered-address-fieldset']/legend/span[1]"
-  val registeredAddressParaXPath     = "//*[@id='registered-address']"
+  val registeredAddressQuestionXPath = "//fieldset[@class='govuk-fieldset' and @aria-describedby='use-registered-address-hint']/legend/h1"
+  val registeredAddressParaXPath = "//fieldset[@class='govuk-fieldset' and @aria-describedby='use-registered-address-hint']/div[@id='use-registered-address-hint']"
 
   val useRegisteredAddressYesRadioButtonXPath = "//*[@id='use-registered-address-yes']"
   val useRegisteredAddressNoRadioButtonXPath  = "//*[@id='use-registered-address-no']"

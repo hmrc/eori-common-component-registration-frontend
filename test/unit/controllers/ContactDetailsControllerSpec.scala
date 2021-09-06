@@ -129,7 +129,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
         showFormFunction(OrganisationSubscriptionFlow, CorporateBody) { result =>
           val page = CdsPage(contentAsString(result))
           val expectedAddress =
-            s"${defaultAddress.addressLine1} ${defaultAddress.addressLine2.get}<br>${defaultAddress.addressLine3.get}<br>${defaultAddress.postalCode.get}<br>$defaultCountryName"
+            s"${defaultAddress.addressLine1} ${defaultAddress.addressLine2.get}\n<br>${defaultAddress.addressLine3.get}\n<br>${defaultAddress.postalCode.get}\n<br>$defaultCountryName"
           page.getElementsHtml(registeredAddressParaXPath) shouldBe expectedAddress
         }
       }
@@ -138,7 +138,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
         when(mockRegistrationDetails.address).thenReturn(defaultAddressWithMandatoryValuesOnly)
         showFormFunction(OrganisationSubscriptionFlow, CorporateBody) { result =>
           val page            = CdsPage(contentAsString(result))
-          val expectedAddress = s"${defaultAddressWithMandatoryValuesOnly.addressLine1}<br>$defaultCountryName"
+          val expectedAddress = s"${defaultAddressWithMandatoryValuesOnly.addressLine1}\n<br>$defaultCountryName"
           page.getElementsHtml(registeredAddressParaXPath) shouldBe expectedAddress
         }
       }
@@ -149,7 +149,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
         when(mockRegistrationDetails.address).thenReturn(euAddress)
         showFormFunction(OrganisationSubscriptionFlow, CorporateBody) { result =>
           val page            = CdsPage(contentAsString(result))
-          val expectedAddress = s"$addressFirstLine<br>Poland"
+          val expectedAddress = s"$addressFirstLine\n<br>Poland"
           page.getElementsHtml(registeredAddressParaXPath) shouldBe expectedAddress
         }
       }
@@ -160,7 +160,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
         when(mockRegistrationDetails.address).thenReturn(nonEuAddress)
         showFormFunction(OrganisationSubscriptionFlow, CorporateBody) { result =>
           val page            = CdsPage(contentAsString(result))
-          val expectedAddress = s"$addressFirstLine<br>Canada"
+          val expectedAddress = s"$addressFirstLine\n<br>Canada"
           page.getElementsHtml(registeredAddressParaXPath) shouldBe expectedAddress
         }
       }
@@ -396,16 +396,16 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     "Select Yes when validation fails and use registered address flag Yes was submitted" in {
       submitFormInCreateMode(createFormMandatoryFieldsMap - fullNameFieldName) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementAttribute(useRegisteredAddressYesRadioButtonXPath, "checked") shouldBe "checked"
-        page.getElementAttribute(useRegisteredAddressNoRadioButtonXPath, "checked") shouldBe ""
+        page.radioButtonChecked(useRegisteredAddressYesRadioButtonXPath) shouldBe true
+        page.radioButtonChecked(useRegisteredAddressNoRadioButtonXPath) shouldBe false
       }
     }
 
     "Select No when validation fails and use registered address flag No was submitted" in {
       submitFormInCreateMode(createFormMandatoryFieldsWhenNotUsingRegAddressMap - fullNameFieldName) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementAttribute(useRegisteredAddressNoRadioButtonXPath, "checked") shouldBe "checked"
-        page.getElementAttribute(useRegisteredAddressYesRadioButtonXPath, "checked") shouldBe ""
+        page.radioButtonChecked(useRegisteredAddressNoRadioButtonXPath) shouldBe true
+        page.radioButtonChecked(useRegisteredAddressYesRadioButtonXPath) shouldBe false
       }
     }
 
