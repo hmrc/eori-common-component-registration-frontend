@@ -29,7 +29,8 @@
     name: String,
     countries: Seq[Country],
     label: String,
-    classes: Option[String] = None
+    classes: Option[String] = None,
+    labelClasses: Option[String] = None
 )(implicit messages: Messages)
 
 @countryItems = @{
@@ -47,5 +48,6 @@
     items = Seq(SelectItem.defaultObject) ++ countryItems,
     label = label,
     hint = Some(Hint(content = Text(s". ${messages("cds.country-picker.hint.screen-reader")}"), classes = "govuk-visually-hidden")),
-    classes = classes
+    classes = classes,
+    labelClasses = labelClasses
 )

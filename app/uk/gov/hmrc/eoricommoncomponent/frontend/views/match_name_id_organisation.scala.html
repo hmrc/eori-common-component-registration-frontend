@@ -60,8 +60,8 @@
                     label = s"cds.matching.name-id-organisation.$displayMode.name",
                     isPageHeading = false,
                     hint =  Some(hintText),
-                    classes = Some("govuk-!-width-two-thirds"),
-                    labelClasses = Some("govuk-label govuk-label--l")
+                    classes = Some("govuk-!-width-one-half"),
+                    labelClasses = Some("govuk-label govuk-label--s")
                 )
 
                 @inputText(
@@ -71,8 +71,8 @@
                     label = s"cds.matching.name-id-organisation.$displayMode.utr",
                     hint = Some(utrHintText),
                     isPageHeading = false,
-                    classes = Some("govuk-!-width-two-thirds"),
-                    labelClasses = Some("govuk-label govuk-label--l")
+                    classes = Some("govuk-!-width-one-half"),
+                    labelClasses = Some("govuk-label govuk-label--s")
                 )
 
                 @if(isNameAddressRegistrationAvailable) {

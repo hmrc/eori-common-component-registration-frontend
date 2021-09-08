@@ -79,7 +79,7 @@
 }
 
 @addressHtml = {
-  <div id="address" class="mb-2">
+  <div id="address" class="govuk-body govuk-!-margin-top-5 govuk-!-padding-bottom-5">
       @helpers.noMarginParagraph(address.street)
       @helpers.noMarginParagraph(address.city)
       @address.postcode.map(code => helpers.noMarginParagraph(code))
@@ -93,9 +93,8 @@
         options,
         Map.empty,
         Some(addressHtml),
-        '_divClass -> "form-group",
-        '_legend -> pageTitleAndHeading,
-        '_isLegendH1 -> true
+        None,
+        '_divClass -> "form-group", '_legend -> pageTitleAndHeading, '_isLegendH1 -> true
     )
 }
 

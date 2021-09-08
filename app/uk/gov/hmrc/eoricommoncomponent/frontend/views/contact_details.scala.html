@@ -137,7 +137,7 @@
         label = "cds.subscription.contact-details.full-name.label",
         isPageHeading = false,
         classes = Some("govuk-!-width-one-half"),
-        labelClasses = Some("full-name")
+        labelClasses = Some("govuk-!-font-weight-bold")
     )
 
     @inputText(
@@ -148,14 +148,14 @@
         isPageHeading = false,
         classes = Some("govuk-!-width-one-half"),
         hint = Some(messages("cds.subscription.contact-details.telephone.hint")),
-        labelClasses = Some("telephone")
+        labelClasses = Some("govuk-!-font-weight-bold")
     )
 
     @govukRadios(Radios(
         fieldset = Some(Fieldset(
             legend = Some(Legend(
                 content = Text(messages("cds.subscription.contact-details.address-text")),
-                classes = "govuk-fieldset__legend--l",
+                classes = "govuk-fieldset__legend--m",
                 isPageHeading = true
             ))
         )),

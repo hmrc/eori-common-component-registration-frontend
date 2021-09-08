@@ -67,7 +67,9 @@
                             id = "vatCountry",
                             name = "vatCountry",
                             countries = countries,
-                            label = "cds.subscription.vat.country"
+                            classes = Some("govuk-!-width-one-half"),
+                            label = "cds.subscription.vat.country",
+                            labelClasses = Some("govuk-!-font-weight-bold")
                         )
                     </div>
                     <div id="vat-eu-number1-field">
@@ -76,6 +78,8 @@
                             id = "vatNumber",
                             name = "vatNumber",
                             label = "cds.subscription.vat.number",
+                            classes = Some("govuk-!-width-one-half"),
+                            labelClasses = Some("govuk-!-font-weight-bold"),
                             isPageHeading = false
                         )
                     </div>

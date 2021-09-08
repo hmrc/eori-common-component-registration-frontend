@@ -53,6 +53,8 @@
                 id = "postcode",
                 name = "postcode",
                 label = "cds.subscription.vat-details.postcode",
+                labelClasses = Some("govuk-!-font-weight-bold"),
+                classes = Some("govuk-!-width-one-half"),
                 isPageHeading = false
             )
             @inputText(
@@ -60,14 +62,18 @@
                 id = "vat-number",
                 name = "vat-number",
                 label = "cds.subscription.vat-details.vat-number",
+                labelClasses = Some("govuk-!-font-weight-bold"),
+                classes = Some("govuk-!-width-one-half"),
                 isPageHeading = false
             )
             <div class="form-group">
             @inputDate_di(
                 form = updateFormErrors,
                 id = "vat-effective-date",
+                legendAsPageHeading = false,
                 legendContent = messages("cds.subscription.vat-details.vat-effective-date"),
-                hintText = Some(Html(messages("cds.subscription.vat-details.vat-effective-date.hint")))
+                hintText = Some(Html(messages("cds.subscription.vat-details.vat-effective-date.hint"))),
+                legendClasses = Some("govuk-!-font-weight-bold")
             )
             </div>
 

@@ -78,7 +78,7 @@
         name = "street",
         label = "cds.subscription.address-details.street.label",
         isPageHeading = false,
-        classes = Some("govuk-!-width-two-thirds"),
+        classes = Some("govuk-!-width-one-half"),
         autocomplete = Some("address-line1"),
     )
     @inputText(
@@ -87,7 +87,7 @@
         name = "city",
         label = "cds.subscription.address-details.city.label",
         isPageHeading = false,
-        classes = Some("govuk-!-width-two-thirds"),
+        classes = Some("govuk-!-width-one-half"),
         autocomplete = Some("address-level2"),
     )
     @inputText(
@@ -96,7 +96,7 @@
         name = "postcode",
         label = postcodeKey,
         isPageHeading = false,
-        classes = Some("govuk-!-width-two-thirds"),
+        classes = Some("govuk-!-width-one-half"),
         autocomplete = Some("postal-code"),
     )
     @countrySelect(
@@ -105,7 +105,7 @@
         name = "countryCode",
         countries = countries,
         label = "cds.subscription.address-details.country.label",
-        classes = Some("govuk-!-width-two-thirds")
+        classes = Some("govuk-!-width-one-half")
     )
 }
 

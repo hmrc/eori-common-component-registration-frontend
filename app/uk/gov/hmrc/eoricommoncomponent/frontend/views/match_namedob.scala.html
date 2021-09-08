@@ -35,7 +35,7 @@
 
 @layout_di(messages("cds.matching.individual.title"), form = Some(businessDetailsForm)) {
     <div>
-        @errorSummary(updateFormErrors.errors),
+        @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
         <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>
@@ -49,9 +49,9 @@
                 name = "first-name",
                 label = "cds.matching.individual.first-name",
                 isPageHeading = false,
+                classes = Some("govuk-!-width-one-half"),
                 autocomplete = Some("given-name"),
-                spellcheck =  Some(false),
-                labelClasses = Some("first-name")
+                spellcheck =  Some(false)
             )
 
             @inputText(
@@ -60,9 +60,9 @@
                 name = "last-name",
                 label = "cds.matching.individual.last-name",
                 isPageHeading = false,
+                classes = Some("govuk-!-width-one-half"),
                 autocomplete = Some("family-name"),
-                spellcheck =  Some(false),
-                labelClasses = Some("last-name")
+                spellcheck =  Some(false)
             )
 
             <div class="form-group">
@@ -70,6 +70,8 @@
                 form = updateFormErrors,
                 id = "date-of-birth",
                 legendContent = messages("cds.matching.individual.date-of-birth"),
+                legendAsPageHeading = false,
+                legendClasses = Some("govuk-!-font-weight-bold"),
                 hintText = Some(Html(messages("cds.date-of-birth.hint")))
             )
             </div>

@@ -30,6 +30,7 @@
     radioOptions: Seq[(String, String)],
     hints: Map[String, String],
     hintHtml: Option[Html],
+    additionalClasses: Option[String],
     args: (Symbol, Any)*)(implicit messages: Messages, formInstance: Option[Form[_]] = None)
 
 @elements = @{
@@ -40,6 +41,9 @@
 }
 @legend = @{
     elements.args.getOrElse('_legend, "").asInstanceOf[String]
+}
+@legendClasses = @{
+    if(isLegendH1){"govuk-fieldset__legend--l"} else {additionalClasses.getOrElse("govuk-fieldset__legend--m")}
 }
 @hasHint = @{
     elements.args.contains('_hintText)
@@ -70,7 +74,7 @@
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = Text(legend),
-            classes = ( if(isLegendH1){"govuk-fieldset__legend--l"} else {"govuk-fieldset__legend--m"} ),
+            classes = legendClasses,
             isPageHeading = isLegendH1
         )),
         describedBy = Some(describedBy)
@@ -80,7 +84,7 @@
             content = Text(label),
             value = Some(value),
             id = Some(s"${elements.field.name}-${value.toLowerCase.replace(" ", "_")}"),
-            hint = hints.get(value).map(hint => Hint(content = Text(hint))),
+            hint = hints.get(value).map(hint => Hint(content = HtmlContent(hint))),
             checked = field.value.fold(false)(_ == value)
         )
     }

@@ -25,15 +25,6 @@
         legendAsPageHeading: Boolean = true,
 )(implicit messages: Messages)
 
-@errorHtml = @{
-    s"""</span>
-       |<span id=${'"'}$id-error${'"'} class=${'"'}govuk-error-message govuk-!-margin-bottom-1${'"'}>
-       |    <span class=${'"'}govuk-visually-hidden${'"'}>Error: </span>""".stripMargin
-}
-@formatedErrors = @{
-    s"${messages(form.errors.head.message, form.errors.head.args:_*)}" +
-    form.errors.tail.map(err => s"$errorHtml${messages(err.message, err.args:_*)}").mkString
-}
 
 @govukDateInput(DateInput(
     fieldset = Some(Fieldset(
@@ -41,8 +32,7 @@
             Legend(
                 content = Text(messages(legendContent)),
                 isPageHeading = legendAsPageHeading,
-                classes = ( if(legendAsPageHeading){"govuk-fieldset__legend--xl "} else "") + legendClasses.getOrElse("")
-
+                classes = s"${if(legendAsPageHeading){"govuk-fieldset__legend--xl "} else ""}" + legendClasses.getOrElse("")
             )
         ),
     )),
@@ -69,14 +59,9 @@
             value = form(s"$id.year").value,
             id    = s"$id.year"
         )
-
-
     ),
     hint = hintText.map(hintHtml => Hint(
         content = HtmlContent(hintHtml)
     )),
-    errorMessage = form.hasErrors match {
-        case true => Some(ErrorMessage(classes = "govuk-!-margin-bottom-1", content = HtmlContent(formatedErrors)))
-        case _ => None
-    }
+    errorMessage = form(id).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*))))
 ).withFormField(form(id)))
