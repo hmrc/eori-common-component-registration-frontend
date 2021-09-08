@@ -21,7 +21,7 @@
 
 @()(implicit messages: Messages, request: Request[_])
 
-<div id="what-you-think" class="mt-2">
+<div id="what-you-think" class="govuk-!-padding-top-5 govuk-!-padding-bottom-5">
     <p class="govuk-body">
         <a id="feedback_link" href="@{appConfig.feedbackUrl(service)}" target="_blank" class="govuk-link" rel="noopener noreferrer">
             @messages("cds.subscription.outcomes.feedback")

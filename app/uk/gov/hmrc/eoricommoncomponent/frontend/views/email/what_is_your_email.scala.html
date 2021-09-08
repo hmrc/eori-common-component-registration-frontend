@@ -30,7 +30,7 @@
 
 @layout_di(messages("cds.subscription.enter-email.page.title"), form = Some(emailForm)) {
 
-<div">
+<div>
     @errorSummary(emailForm.errors)
 
     @helpers.form(WhatIsYourEmailController.submit(service),"emailForm") {
@@ -46,7 +46,7 @@
             isPageHeading = true,
             hint = Some(messages("enter-email-body-text")),
             autocomplete = Some("email"),
-            classes = Some("govuk-!-width-two-thirds"),
+            classes = Some("govuk-!-width-one-half"),
             labelClasses = Some("govuk-label--l")
         )
 
