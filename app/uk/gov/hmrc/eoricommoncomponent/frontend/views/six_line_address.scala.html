@@ -59,6 +59,7 @@
                 label = "cds.matching.organisation-address.line-1",
                 isPageHeading = false,
                 autocomplete = Some("address-line1"),
+                classes = Some("govuk-!-width-one-half")
             )
             @inputText(
                 form = addressForm,
@@ -67,6 +68,7 @@
                 label = "cds.matching.organisation-address.line-2",
                 isPageHeading = false,
                 autocomplete = Some("address-line2"),
+                classes = Some("govuk-!-width-one-half")
             )
             @inputText(
                 form = addressForm,
@@ -75,6 +77,7 @@
                 label = "cds.matching.organisation-address.line-3",
                 isPageHeading = false,
                 autocomplete = Some("address-level2"),
+                classes = Some("govuk-!-width-one-half")
             )
             @inputText(
                 form = addressForm,
@@ -83,6 +86,7 @@
                 label = "cds.matching.organisation-address.line-4",
                 isPageHeading = false,
                 autocomplete = Some("address-level1"),
+                classes = Some("govuk-!-width-one-half")
             )
             @inputText(
                 form = addressForm,
@@ -91,13 +95,15 @@
                 label = postCodeLabel,
                 isPageHeading = false,
                 autocomplete = Some("postal-code"),
+                classes = Some("govuk-!-width-one-half")
             )
             @countrySelect(
                 form = addressForm,
                 id = "countryCode",
                 name = "countryCode",
                 countries = countries,
-                label = "cds.subscription.address-details.country.label"
+                label = "cds.subscription.address-details.country.label",
+                classes = Some("govuk-!-width-one-half")
             )
 
             @govukButton(Button(

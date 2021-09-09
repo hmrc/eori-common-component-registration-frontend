@@ -25,6 +25,18 @@
         legendAsPageHeading: Boolean = true,
 )(implicit messages: Messages)
 
+@dateErrors = @{form(id).errors ++ form(s"$id.day").errors ++ form(s"$id.month").errors ++ form(s"$id.year").errors}
+@errorHtml = @{
+    s"""</span>
+       |<span id=${'"'}$id-error${'"'} class=${'"'}govuk-error-message govuk-!-margin-bottom-1${'"'}>
+       |    <span class=${'"'}govuk-visually-hidden${'"'}>Error: </span>""".stripMargin
+}
+@formatedErrors = @{
+    if(dateErrors.nonEmpty) {
+        s"${messages(dateErrors.head.message, dateErrors.head.args: _*)}" +
+                dateErrors.tail.map(err => s"$errorHtml${messages(err.message, err.args: _*)}").mkString
+    } else {""}
+}
 
 @govukDateInput(DateInput(
     fieldset = Some(Fieldset(
@@ -63,5 +75,7 @@
     hint = hintText.map(hintHtml => Hint(
         content = HtmlContent(hintHtml)
     )),
-    errorMessage = form(id).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*))))
-).withFormField(form(id)))
+    errorMessage = form.hasErrors match {
+        case true => Some(ErrorMessage(classes = "govuk-!-margin-bottom-1", content = HtmlContent(formatedErrors)))
+        case _ => None
+    }).withFormField(form(id)))

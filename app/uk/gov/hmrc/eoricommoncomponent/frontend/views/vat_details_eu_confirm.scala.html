@@ -23,9 +23,8 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
-@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset}
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset, GovukSummaryList}
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, SummaryListRow, SummaryList, Key, Value, HtmlContent, Actions, ActionItem}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 
 @this(
@@ -33,7 +32,8 @@
         inputRadioGroup: helpers.inputRadioGroup,
         govukButton: GovukButton,
         errorSummary: helpers.errorSummary,
-        goveukFieldSet: GovukFieldset
+        goveukFieldSet: GovukFieldset,
+        govukSummaryList: GovukSummaryList
 )
 
 @(vatLimitYesNoAnswerForm: Form[YesNo], isInReviewMode: Boolean, vatEuDetailsList: Seq[VatEUDetailsModel], service: Service, vatLimitNotReached: Boolean)(implicit messages: Messages, request: Request[_])
@@ -92,6 +92,34 @@
     </div>
 }
 
+@html2 = {
+    @govukSummaryList(SummaryList(rows = vatItems))
+}
+
+@vatItems = @{
+    vatEuDetailsList.map {vatDetails =>
+        SummaryListRow(
+            key = Key(content = Text(vatDetails.vatCountry)),
+            value = Value(content = Text(vatDetails.vatNumber)),
+            actions = Some(Actions(
+                items = Seq(
+                      ActionItem(
+                        href = if(!isInReviewMode){VatDetailsEuController.updateForm(vatDetails.index, service).url} else {VatDetailsEuController.reviewUpdateForm(vatDetails.index, service).url},
+                        content = Text(messages("cds.form.change")),
+                        visuallyHiddenText = Some(messages("cds.form.change") + " " + vatDetails.vatCountry)
+                      ),
+                    ActionItem(
+                        href = if(!isInReviewMode){AreYouSureYouWantToDeleteVatController.createForm(vatDetails.index, service).url} else {AreYouSureYouWantToDeleteVatController.reviewForm(vatDetails.index, service).url},
+                        content = Text(messages("cds.multi.input.delete-entry")),
+                        visuallyHiddenText = Some(messages("cds.multi.input.delete-entry") + " " + vatDetails.vatCountry)
+                    )
+                )
+            ))
+        )
+
+    }
+}
+
 @layout_di(heading) {
 
     <div>
@@ -107,7 +135,7 @@
                         classes = "govuk-fieldset__legend--l",
                         isPageHeading = true
                     )),
-                    html = html
+                    html = html2
                 )
             )
 
