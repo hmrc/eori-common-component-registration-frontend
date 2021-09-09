@@ -66,33 +66,6 @@
 }
 
 @html = {
-    <div class="form-group">
-        <dl class="govuk-check-your-answers cya-questions-long">
-        @for((vatDetails, index) <- vatEuDetailsList.zipWithIndex) {
-            <div>
-                <dt class="cya-question" id="country-@index">
-                @labelForEUCountry(vatDetails.vatCountry)
-                </dt>
-                <dt class="cya-question" id="number-@index">
-                @vatDetails.vatNumber
-                </dt>
-                <dt >
-                    <a id='change-tbl__gb-vat_change-@index' href="@if(!isInReviewMode){@VatDetailsEuController.updateForm(vatDetails.index, service)}else{@VatDetailsEuController.reviewUpdateForm(vatDetails.index, service)}" class="govuk-link">
-                    @messages("cds.form.change")
-                    </a>
-                </dt>
-                <dt>
-                    <a id='review-tbl__gb-vat_remove-@index' href="@if(!isInReviewMode){@AreYouSureYouWantToDeleteVatController.createForm(vatDetails.index, service)}else{@AreYouSureYouWantToDeleteVatController.reviewForm(vatDetails.index, service)}" class="govuk-link">
-                    @messages("cds.multi.input.delete-entry")
-                    </a>
-                </dt>
-            </div>
-        }
-        </dl>
-    </div>
-}
-
-@html2 = {
     @govukSummaryList(SummaryList(rows = vatItems))
 }
 
@@ -113,7 +86,8 @@
                         content = Text(messages("cds.multi.input.delete-entry")),
                         visuallyHiddenText = Some(messages("cds.multi.input.delete-entry") + " " + vatDetails.vatCountry)
                     )
-                )
+                ),
+                classes = "govuk-!-width-one-third"
             ))
         )
 
@@ -135,7 +109,7 @@
                         classes = "govuk-fieldset__legend--l",
                         isPageHeading = true
                     )),
-                    html = html2
+                    html = html
                 )
             )
 

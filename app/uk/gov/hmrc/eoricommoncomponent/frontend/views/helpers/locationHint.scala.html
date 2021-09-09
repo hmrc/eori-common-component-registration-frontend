@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *@
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukDetails
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, Details, HtmlContent}
+
+@this(govukDetails : GovukDetails)
 
 @()(implicit messages: Messages)
 <div class="form-group">
-    <details>
-        <summary class="summary" role="button" aria-expanded="true">@messages("countries-in-the-eu.title")</summary>
-        <div class="details__inner panel-indent">
-            <p class="govuk-body">@messages("countries-in-the-eu.list")</p>
-        </div>
-    </details>
+    @govukDetails(Details(
+        summary = Text(messages("countries-in-the-eu.title")),
+        content = HtmlContent(s"""<p class="govuk-body">${messages("countries-in-the-eu.list")}</p>""")
+    ))
 </div>
