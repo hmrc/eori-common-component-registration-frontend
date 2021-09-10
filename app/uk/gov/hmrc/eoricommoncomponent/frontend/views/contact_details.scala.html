@@ -32,7 +32,7 @@
         govukButton: GovukButton,
         inputText: helpers.inputText,
         errorSummary: helpers.errorSummary,
-        countrySelect: helpers.countrySelect,
+        countryField: helpers.countryField,
         goveukFieldSet: GovukFieldset,
         govukRadios : GovukRadios,
         govukHint: GovukHint
@@ -111,13 +111,11 @@
             autocomplete = Some("postal-code"),
             classes = Some("govuk-!-width-one-half")
         )
-        @countrySelect(
+        @countryField(
             form = contactForm,
-            id = "countryCode",
-            name = "countryCode",
-            countries = countries,
+            field = "countryCode",
             label = "cds.subscription.contact-details.countryCode-auto-complete.label",
-            classes = Some("govuk-!-width-one-half")
+            countries = countries
         )
     </div>
 }

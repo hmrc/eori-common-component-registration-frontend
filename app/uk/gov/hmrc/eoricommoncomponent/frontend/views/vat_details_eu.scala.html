@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton, inputText : helpers.inputText, errorSummary: helpers.errorSummary, countrySelect: helpers.countrySelect)
+@this(layout_di: layout, govukButton: GovukButton, inputText : helpers.inputText, errorSummary: helpers.errorSummary, countryField: helpers.countryField)
 
 @(vatForm: Form[VatEUDetailsModel],
   countries: List[Country],
@@ -62,14 +62,11 @@
             <div id="eu-vats-field">
                 <div class="form-group">
                     <div id="vat-eu-country1-field">
-                        @countrySelect(
+                        @countryField(
                             form = vatForm,
-                            id = "vatCountry",
-                            name = "vatCountry",
-                            countries = countries,
-                            classes = Some("govuk-!-width-one-half"),
+                            field = "vatCountry",
                             label = "cds.subscription.vat.country",
-                            labelClasses = Some("govuk-!-font-weight-bold")
+                            countries = countries
                         )
                     </div>
                     <div id="vat-eu-number1-field">

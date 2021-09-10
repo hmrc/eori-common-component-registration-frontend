@@ -28,7 +28,7 @@
         govukButton: GovukButton,
         inputText: helpers.inputText,
         errorSummary: helpers.errorSummary,
-        countrySelect: helpers.countrySelect,
+        countryField: helpers.countryField,
         goveukFieldSet: GovukFieldset
 )
 
@@ -99,13 +99,11 @@
         classes = Some("govuk-!-width-one-half"),
         autocomplete = Some("postal-code"),
     )
-    @countrySelect(
+    @countryField(
         form = addressForm,
-        id = "countryCode",
-        name = "countryCode",
-        countries = countries,
+        field = "countryCode",
         label = "cds.subscription.address-details.country.label",
-        classes = Some("govuk-!-width-one-half")
+        countries = countries
     )
 }
 

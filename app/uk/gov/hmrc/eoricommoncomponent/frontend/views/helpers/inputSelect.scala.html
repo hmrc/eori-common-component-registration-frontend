@@ -1,13 +1,5 @@
 @import play.api.i18n._
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukSelect
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.select.Select
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(govukSelect: GovukSelect)
 
@@ -17,9 +9,9 @@
         name: String,
         items: Seq[SelectItem],
         label: String,
-        isPageHeading: Boolean = false,
+        isPageHeading: Boolean,
         headingMessageArgs: Seq[String] = Seq(),
-        hint: Option[Hint] = None,
+        hint: Option[Html] = None,
         classes: Option[String] = None,
         labelClasses: Option[String] = None,
         attributes: Map[String, String] = Map.empty
@@ -34,7 +26,9 @@
     isPageHeading = isPageHeading,
     classes = labelClasses.getOrElse(if(isPageHeading) "govuk-label--xl" else "")
   ),
-  hint = hint,
+  hint = hint.map(hintHtml => Hint(
+    content = HtmlContent(hintHtml)
+  )),
   errorMessage = form(name).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*)))),
   classes = classes.getOrElse(""),
   attributes = attributes

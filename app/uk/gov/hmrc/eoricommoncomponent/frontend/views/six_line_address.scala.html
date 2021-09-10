@@ -25,7 +25,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, countrySelect: helpers.countrySelect)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, countryField: helpers.countryField)
 
 @(isInReviewMode: Boolean, addressForm: Form[SixLineAddressMatchModel], countries: List[Country], countriesInCountryPicker: CountriesInCountryPicker, cdsOrgType: String, service: Service)(implicit request: Request[AnyContent], messages: Messages)
 
@@ -97,13 +97,11 @@
                 autocomplete = Some("postal-code"),
                 classes = Some("govuk-!-width-one-half")
             )
-            @countrySelect(
+            @countryField(
                 form = addressForm,
-                id = "countryCode",
-                name = "countryCode",
-                countries = countries,
+                field = "countryCode",
                 label = "cds.subscription.address-details.country.label",
-                classes = Some("govuk-!-width-one-half")
+                countries = countries
             )
 
             @govukButton(Button(
