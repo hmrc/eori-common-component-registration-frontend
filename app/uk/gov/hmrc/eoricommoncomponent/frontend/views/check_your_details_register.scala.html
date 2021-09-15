@@ -270,7 +270,7 @@
     if(isRowOrganisation && !isUserIdentifiedByRegService) {
         Seq(summaryListRow(
             key = messages("cds.matching.organisation-utr.label"),
-            value = Some(Html(registration.customsId.get.id)),
+            value = Some(Html(messages("cds.not-entered.label"))),
             call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
         ))
     } else Seq.empty[SummaryListRow]

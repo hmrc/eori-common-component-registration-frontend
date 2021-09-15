@@ -49,11 +49,11 @@ class BusinessDetailsRecoveryViewSpec extends ViewSpec {
       SoleTraderOrIndividualDoc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
     "have the right labels in the definition list" in {
-      CorporateBodyDoc.body().getElementById("name").text() mustBe "Registered organisation name"
-      CorporateBodyDoc.body().getElementById("address").text() mustBe "Registered organisation address"
+      CorporateBodyDoc.body().getElementsByClass("name").text() mustBe "Registered organisation name"
+      CorporateBodyDoc.body().getElementsByClass("address").text() mustBe "Registered organisation address"
 
-      SoleTraderOrIndividualDoc.body().getElementById("name").text() mustBe "Name"
-      SoleTraderOrIndividualDoc.body().getElementById("address").text() mustBe "Address"
+      SoleTraderOrIndividualDoc.body().getElementsByClass("name").text() mustBe "Name"
+      SoleTraderOrIndividualDoc.body().getElementsByClass("address").text() mustBe "Address"
     }
     "have the right recovery problem message" in {
       CorporateBodyDoc

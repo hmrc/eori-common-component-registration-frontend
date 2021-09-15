@@ -43,8 +43,8 @@ class AreYouSureRemoveVatSpec extends ViewSpec {
     }
 
     "should display correct values for vat details" in {
-      doc.body.getElementById("vatCountry").text mustBe "France"
-      doc.body.getElementById("vatNumber").text mustBe "12345"
+      doc.body.getElementsByClass("vatCountry").text mustBe "France"
+      doc.body.getElementsByClass("vatNumber").text mustBe "12345"
     }
 
     "have the correct class on the h1" in {
