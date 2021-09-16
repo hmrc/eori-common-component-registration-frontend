@@ -19,7 +19,7 @@
 @this(govukDetails : GovukDetails)
 
 @()(implicit messages: Messages)
-<div class="form-group">
+<div class="govuk-form-group">
     @govukDetails(Details(
         summary = Text(messages("countries-in-the-eu.title")),
         content = HtmlContent(s"""<p class="govuk-body">${messages("countries-in-the-eu.list")}</p>""")

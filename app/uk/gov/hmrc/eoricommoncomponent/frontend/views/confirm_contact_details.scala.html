@@ -94,7 +94,7 @@
         Map.empty,
         Some(addressHtml),
         None,
-        '_divClass -> "form-group", '_legend -> pageTitleAndHeading, '_isLegendH1 -> true
+        '_divClass -> "govuk-form-group", '_legend -> pageTitleAndHeading, '_isLegendH1 -> true
     )
 }
 
@@ -102,7 +102,7 @@
 <div>
     @errorSummary(yesNoWrongAddress.errors, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 
-    <div class="form-group">
+    <div class="govuk-form-group">
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service), "yes-no-wrong-address-form") {
             @CSRF.formField
 

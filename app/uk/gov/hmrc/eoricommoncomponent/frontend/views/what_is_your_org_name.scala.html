@@ -31,7 +31,7 @@
     <div>
         @errorSummary(matchOrgNameForm.errors)
 
-        <div class="form-group">
+        <div class="govuk-form-group">
             @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrgNameController.submit(isInReviewMode, organisationType, service), "matchOrganisationNameForm") {
             @CSRF.formField
 

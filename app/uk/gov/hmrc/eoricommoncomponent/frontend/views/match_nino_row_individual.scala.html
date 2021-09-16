@@ -34,7 +34,7 @@
         Map.empty,
         Some(Html(messages("cds.matching.nino.row.description"))),
         None,
-        '_divClass -> "form-group inline",
+        '_divClass -> "govuk-form-group inline",
         '_legend -> messages("cds.matching.nino.row.header"),
         '_isLegendH1 -> true
     )
@@ -47,7 +47,7 @@
         @helpers.form(DoYouHaveNinoController.submit(service), "matchRowIndividualsNinoForm") {
             @CSRF.formField
 
-            <div class="form-group">
+            <div class="govuk-form-group">
                 @displayInputRadioGroup("have-nino", Seq("true" -> messages("cds.yes"), "false" -> messages("cds.no")))
             </div>
 
