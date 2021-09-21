@@ -43,38 +43,34 @@ case class CdsPage(html: String) {
 
   def getElementsTextAtIndex(xpath: String, index: Int): String = selectElements(xpath).get(index).text()
 
-  def getSummaryListValue(xpath: String, key: String): String = {
+  def getSummaryListValue(xpath: String, key: String): String =
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
       .fold("")(_.getElementsByClass("govuk-summary-list__value").text())
-  }
 
-  def getSummaryListLink(xpath: String, key: String, action: String): String = {
+  def getSummaryListLink(xpath: String, key: String, action: String): String =
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
-      .fold("")(_.getElementsByClass("govuk-summary-list__actions")
-                .select("a.govuk-link").find(e => e.text().contains(action)).fold("")(_.text())
+      .fold("")(
+        _.getElementsByClass("govuk-summary-list__actions")
+          .select("a.govuk-link").find(e => e.text().contains(action)).fold("")(_.text())
       )
-  }
 
-  def getSummaryListHref(xpath: String, key: String, action: String): String = {
+  def getSummaryListHref(xpath: String, key: String, action: String): String =
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
       .get.getElementsByClass("govuk-summary-list__actions")
       .select("a.govuk-link").find(e => e.text().contains(action)).fold("")(_.attr("href"))
-  }
 
-  def summaryListElementPresent(xpath: String, key: String) = {
+  def summaryListElementPresent(xpath: String, key: String) =
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key).isDefined
-  }
 
-  def summaryListHrefPresent(xpath: String, key: String, action: String): Boolean = {
+  def summaryListHrefPresent(xpath: String, key: String, action: String): Boolean =
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
       .get.getElementsByClass("govuk-summary-list__actions")
       .select("a.govuk-link").find(e => e.text().contains(action)).fold(false)(_ => true)
-  }
 
   def getElementText(xpath: String): String =
     selectElement(xpath).text()

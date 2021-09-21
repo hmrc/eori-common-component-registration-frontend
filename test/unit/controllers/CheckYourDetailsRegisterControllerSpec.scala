@@ -134,7 +134,10 @@ class CheckYourDetailsRegisterControllerSpec
                 |23 July 1980
               """)
 
-        page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe false
+        page.summaryListElementPresent(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Date of establishment"
+        ) shouldBe false
       }
     }
 
@@ -151,18 +154,32 @@ class CheckYourDetailsRegisterControllerSpec
                 |Doe
               """)
 
-        page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Full name", "Change") shouldBe RegistrationReviewPage.changeAnswerText("Full name")
-        page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Full name", "Change") shouldBe "/customs-registration-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
+        page.getSummaryListLink(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Full name",
+          "Change"
+        ) shouldBe RegistrationReviewPage.changeAnswerText("Full name")
+        page.getSummaryListHref(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Full name",
+          "Change"
+        ) shouldBe "/customs-registration-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
 
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Date of birth") shouldBe
           strim("""
                 |23 July 1980
               """)
 
-        page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Date of birth", "Change"
+        page.getSummaryListLink(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Date of birth",
+          "Change"
         ) shouldBe RegistrationReviewPage
           .changeAnswerText("Date of birth")
-        page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Date of birth", "Change"
+        page.getSummaryListHref(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Date of birth",
+          "Change"
         ) shouldBe "/customs-registration-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
 
         page.elementIsPresent(RegistrationReviewPage.DateOfEstablishmentLabelXPath) shouldBe false
@@ -191,7 +208,11 @@ class CheckYourDetailsRegisterControllerSpec
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
         val page = CdsPage(contentAsString(result))
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation name") shouldBe "orgName"
-        page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Organisation name", "Change") shouldBe "/customs-registration-services/atar/register/matching/name/third-country-organisation/review"
+        page.getSummaryListHref(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Organisation name",
+          "Change"
+        ) shouldBe "/customs-registration-services/atar/register/matching/name/third-country-organisation/review"
 
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation address") shouldBe
           strim("""
@@ -203,7 +224,11 @@ class CheckYourDetailsRegisterControllerSpec
                 |United Kingdom
               """)
 
-        page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Organisation address", "Change") shouldBe RegistrationReviewPage
+        page.getSummaryListLink(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Organisation address",
+          "Change"
+        ) shouldBe RegistrationReviewPage
           .changeAnswerText("Organisation address")
       }
     }
@@ -215,7 +240,11 @@ class CheckYourDetailsRegisterControllerSpec
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
         val page = CdsPage(contentAsString(result))
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation name") shouldBe "orgName"
-        page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Organisation name", "Change") shouldBe empty
+        page.getSummaryListLink(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Organisation name",
+          "Change"
+        ) shouldBe empty
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation address") shouldBe
           strim("""|street
                  |city
@@ -244,7 +273,9 @@ class CheckYourDetailsRegisterControllerSpec
     "display all mandatory fields for an organisation" in {
       showForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Email address"
+        page.getSummaryListValue(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Email address"
         ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.emailAddress
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number") shouldBe NotEntered
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe NotEntered
@@ -272,8 +303,14 @@ class CheckYourDetailsRegisterControllerSpec
         val page = CdsPage(contentAsString(result))
         testCommonReviewPageFields(page)
 
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Standard Industrial Classification (SIC) code") shouldBe "9999"
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe "11 November 1900"
+        page.getSummaryListValue(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Standard Industrial Classification (SIC) code"
+        ) shouldBe "9999"
+        page.getSummaryListValue(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Date of establishment"
+        ) shouldBe "11 November 1900"
         page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Date of birth") shouldBe false
       }
     }
@@ -312,7 +349,7 @@ class CheckYourDetailsRegisterControllerSpec
 
         showForm(userSelectedOrgType = organisationType) { result =>
           val page = CdsPage(contentAsString(result))
-          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, UtrLabelText)  shouldBe true
+          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, UtrLabelText) shouldBe true
         }
       }
     }
@@ -329,7 +366,7 @@ class CheckYourDetailsRegisterControllerSpec
         showForm(userSelectedOrgType = organisationType) { result =>
           val page = CdsPage(contentAsString(result))
 
-          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Your address")  shouldBe true
+          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Your address") shouldBe true
         }
       }
     }
@@ -356,7 +393,7 @@ class CheckYourDetailsRegisterControllerSpec
 
         showForm(userSelectedOrgType = organisationType) { result =>
           val page = CdsPage(contentAsString(result))
-          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name")  shouldBe true
+          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
           page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe shortName
         }
       }
@@ -371,7 +408,7 @@ class CheckYourDetailsRegisterControllerSpec
 
         showForm(userSelectedOrgType = organisationType) { result =>
           val page = CdsPage(contentAsString(result))
-          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name")  shouldBe true
+          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
           page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe "Not entered"
         }
       }
@@ -391,7 +428,10 @@ class CheckYourDetailsRegisterControllerSpec
       showForm(isIndividualSubscriptionFlow = true) { result =>
         val page = CdsPage(contentAsString(result))
 
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Email address") shouldBe contactDetailsModelWithAllValues.emailAddress
+        page.getSummaryListValue(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Email address"
+        ) shouldBe contactDetailsModelWithAllValues.emailAddress
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact") shouldBe
           strim(s"""
                  |${contactDetailsModelWithAllValues.fullName}
@@ -402,8 +442,11 @@ class CheckYourDetailsRegisterControllerSpec
                  |${contactDetailsModelWithAllValues.postcode.get} France
               """)
 
-        page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name")  shouldBe false
-        page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath,  "Date of establishment")  shouldBe false
+        page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe false
+        page.summaryListElementPresent(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Date of establishment"
+        ) shouldBe false
       }
     }
   }
@@ -423,13 +466,22 @@ class CheckYourDetailsRegisterControllerSpec
       val page: CdsPage = CdsPage(contentAsString(result))
       page.title should startWith("Check your answers")
 
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Email address") shouldBe contactDetailsModelWithAllValues.emailAddress
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Email address"
+      ) shouldBe contactDetailsModelWithAllValues.emailAddress
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Organisation name") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation name") shouldBe "orgName"
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Corporation Tax UTR number") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Corporation Tax UTR number") shouldBe "7280616009"
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Corporation Tax UTR number"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Corporation Tax UTR number"
+      ) shouldBe "7280616009"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Organisation address") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation address") shouldBe
@@ -439,13 +491,28 @@ class CheckYourDetailsRegisterControllerSpec
             |SE28 1AA
             |United Kingdom
           """)
-      page.summaryListHrefPresent(RegistrationReviewPage.SummaryListRowXPath, "Organisation address", "Change") shouldBe true
+      page.summaryListHrefPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation address",
+        "Change"
+      ) shouldBe true
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe "23 July 1980"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Date of establishment"
+      ) shouldBe "23 July 1980"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Date of establishment",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Date of establishment")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment", "Change") shouldBe "/customs-registration-services/atar/register/date-established/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Date of establishment",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Contact") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact") shouldBe
@@ -458,37 +525,100 @@ class CheckYourDetailsRegisterControllerSpec
             |SE28 1AA
             |France
           """)
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Contact", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Contact",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Contact")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Contact", "Change") shouldBe "/customs-registration-services/atar/register/contact-details/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Contact",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/contact-details/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe "Short Name"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Shortened name", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Shortened name",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Shortened name")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Shortened name", "Change") shouldBe "/customs-registration-services/atar/register/company-short-name-yes-no/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Shortened name",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/company-short-name-yes-no/review"
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Standard Industrial Classification (SIC) code") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Standard Industrial Classification (SIC) code") shouldBe "9999"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Standard Industrial Classification (SIC) code", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Standard Industrial Classification (SIC) code"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Standard Industrial Classification (SIC) code"
+      ) shouldBe "9999"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Standard Industrial Classification (SIC) code",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Standard Industrial Classification (SIC) code")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Standard Industrial Classification (SIC) code", "Change") shouldBe "/customs-registration-services/atar/register/sic-code/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Standard Industrial Classification (SIC) code",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/sic-code/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number") shouldBe "123456789"
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Postcode of your UK VAT registration address") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Postcode of your UK VAT registration address") shouldBe "SE28 1AA"
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Postcode of your UK VAT registration address"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Postcode of your UK VAT registration address"
+      ) shouldBe "SE28 1AA"
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "UK VAT effective date") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT effective date") shouldBe "1 January 2017"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "UK VAT effective date"
+      ) shouldBe "1 January 2017"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "UK VAT Number",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("UK VAT Number")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number", "Change") shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Postcode of your UK VAT registration address", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "UK VAT Number",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Postcode of your UK VAT registration address",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Postcode of your UK VAT registration address")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Postcode of your UK VAT registration address", "Change") shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "UK VAT effective date", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Postcode of your UK VAT registration address",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "UK VAT effective date",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("UK VAT effective date")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "UK VAT effective date", "Change") shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "UK VAT effective date",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe
@@ -496,14 +626,36 @@ class CheckYourDetailsRegisterControllerSpec
             |VAT-2 - France
             |VAT-3 - Poland
           """)
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "EU VAT numbers",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("EU VAT numbers")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers", "Change") shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Organisation details included on the EORI checker", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "EU VAT numbers",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation details included on the EORI checker",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Organisation details included on the EORI checker")
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Organisation details included on the EORI checker") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation details included on the EORI checker") shouldBe "Yes - I want my organisation name and address on the EORI checker"
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Organisation details included on the EORI checker", "Change") shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation details included on the EORI checker"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation details included on the EORI checker"
+      ) shouldBe "Yes - I want my organisation name and address on the EORI checker"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation details included on the EORI checker",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(
         SubscriptionExistingDetailsReviewPage.ConfirmAndRegisterInfoXpath
       ) shouldBe "By sending this application you confirm that the information you are providing is correct and complete."
@@ -525,13 +677,28 @@ class CheckYourDetailsRegisterControllerSpec
       val page: CdsPage = CdsPage(contentAsString(result))
       page.title should startWith("Check your answers")
 
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Email address") shouldBe contactDetailsModelWithAllValues.emailAddress
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Email address"
+      ) shouldBe contactDetailsModelWithAllValues.emailAddress
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Registered partnership name") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered partnership name") shouldBe "orgName"
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Registered partnership name"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Registered partnership name"
+      ) shouldBe "orgName"
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Partnership Self Assessment UTR number") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Partnership Self Assessment UTR number") shouldBe "7280616009"
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Partnership Self Assessment UTR number"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Partnership Self Assessment UTR number"
+      ) shouldBe "7280616009"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Partnership address") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Partnership address") shouldBe
@@ -541,13 +708,28 @@ class CheckYourDetailsRegisterControllerSpec
             |SE28 1AA
             |United Kingdom
           """)
-      page.summaryListHrefPresent(RegistrationReviewPage.SummaryListRowXPath, "Partnership address", "Change") shouldBe true
+      page.summaryListHrefPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Partnership address",
+        "Change"
+      ) shouldBe true
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe "23 July 1980"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Date of establishment"
+      ) shouldBe "23 July 1980"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Date of establishment",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Date of establishment")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment", "Change") shouldBe "/customs-registration-services/atar/register/date-established/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Date of establishment",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Contact") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact") shouldBe
@@ -560,31 +742,78 @@ class CheckYourDetailsRegisterControllerSpec
             |SE28 1AA
             |France
           """)
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Contact", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Contact",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Contact")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Contact", "Change") shouldBe "/customs-registration-services/atar/register/contact-details/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Contact",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/contact-details/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe "Short Name"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "Shortened name", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Shortened name",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Shortened name")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Shortened name", "Change") shouldBe "/customs-registration-services/atar/register/company-short-name-yes-no/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Shortened name",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/company-short-name-yes-no/review"
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Standard Industrial Classification (SIC) code") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Standard Industrial Classification (SIC) code") shouldBe "9999"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath,"Standard Industrial Classification (SIC) code", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Standard Industrial Classification (SIC) code"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Standard Industrial Classification (SIC) code"
+      ) shouldBe "9999"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Standard Industrial Classification (SIC) code",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Standard Industrial Classification (SIC) code")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Standard Industrial Classification (SIC) code", "Change") shouldBe "/customs-registration-services/atar/register/sic-code/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Standard Industrial Classification (SIC) code",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/sic-code/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number") shouldBe "123456789"
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Postcode of your UK VAT registration address") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Postcode of your UK VAT registration address") shouldBe "SE28 1AA"
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Postcode of your UK VAT registration address"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Postcode of your UK VAT registration address"
+      ) shouldBe "SE28 1AA"
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "UK VAT effective date") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT effective date") shouldBe  "1 January 2017"
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath,"UK VAT Number", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "UK VAT effective date"
+      ) shouldBe "1 January 2017"
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "UK VAT Number",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("UK VAT Number")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number", "Change") shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "UK VAT Number",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe true
 
@@ -593,16 +822,38 @@ class CheckYourDetailsRegisterControllerSpec
                 |VAT-2 - France
                 |VAT-3 - Poland
           """)
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath,"EU VAT numbers", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "EU VAT numbers",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("EU VAT numbers")
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers", "Change") shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "EU VAT numbers",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
 
-      page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath,"Partnership details included on the EORI checker", "Change") shouldBe SubscriptionExistingDetailsReviewPage
+      page.getSummaryListLink(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Partnership details included on the EORI checker",
+        "Change"
+      ) shouldBe SubscriptionExistingDetailsReviewPage
         .changeAnswerText("Partnership details included on the EORI checker")
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Partnership details included on the EORI checker") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Partnership details included on the EORI checker") shouldBe "Yes - I want my partnership name and address on the EORI checker"
-      page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "Partnership details included on the EORI checker", "Change") shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
-        page.getElementsText(
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Partnership details included on the EORI checker"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Partnership details included on the EORI checker"
+      ) shouldBe "Yes - I want my partnership name and address on the EORI checker"
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Partnership details included on the EORI checker",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
+      page.getElementsText(
         SubscriptionExistingDetailsReviewPage.ConfirmAndRegisterInfoXpath
       ) shouldBe "By sending this application you confirm that the information you are providing is correct and complete."
     }
@@ -624,8 +875,14 @@ class CheckYourDetailsRegisterControllerSpec
     showForm(userSelectedOrgType = Individual, isIndividualSubscriptionFlow = true) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "National Insurance number") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "National Insurance number") shouldBe expectedNino
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "National Insurance number"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "National Insurance number"
+      ) shouldBe expectedNino
 
     }
   }
@@ -634,7 +891,11 @@ class CheckYourDetailsRegisterControllerSpec
     showForm() { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
 
-      page.summaryListHrefPresent(RegistrationReviewPage.SummaryListRowXPath, "Organisation address", "Change") shouldBe true
+      page.summaryListHrefPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation address",
+        "Change"
+      ) shouldBe true
     }
   }
 
@@ -645,8 +906,14 @@ class CheckYourDetailsRegisterControllerSpec
     showForm(userSelectedOrgType = CdsOrganisationType.ThirdCountryOrganisation) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Corporation Tax UTR number") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Corporation Tax UTR number") shouldBe NotEntered
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Corporation Tax UTR number"
+      ) shouldBe true
+      page.getSummaryListValue(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Corporation Tax UTR number"
+      ) shouldBe NotEntered
     }
   }
 
@@ -703,7 +970,10 @@ class CheckYourDetailsRegisterControllerSpec
 
       showForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe "VAT-2 - France VAT-3 - Poland"
+        page.getSummaryListValue(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "EU VAT numbers"
+        ) shouldBe "VAT-2 - France VAT-3 - Poland"
         assertEuVatDetailsShowValues(page)
       }
     }
@@ -748,7 +1018,10 @@ class CheckYourDetailsRegisterControllerSpec
       case Some(x) => x
     }
 
-    page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Email address") shouldBe contactDetailsModelWithAllValues.emailAddress
+    page.getSummaryListValue(
+      RegistrationReviewPage.SummaryListRowXPath,
+      "Email address"
+    ) shouldBe contactDetailsModelWithAllValues.emailAddress
 
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact") shouldBe
       strim(s"""
@@ -764,22 +1037,40 @@ class CheckYourDetailsRegisterControllerSpec
   private def assertUkVatDetailsShowValues(page: CdsPage) {
     //UK VAT Number
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number") shouldBe "123456789"
-    page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Postcode of your UK VAT registration address") shouldBe "SE28 1AA"
-    page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT effective date") shouldBe "1 January 2017"
-    page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number", "Change") shouldBe RegistrationReviewPage.changeAnswerText("UK VAT Number")
-    page.getSummaryListHref(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number", "Change") shouldBe VatRegisteredUkController
+    page.getSummaryListValue(
+      RegistrationReviewPage.SummaryListRowXPath,
+      "Postcode of your UK VAT registration address"
+    ) shouldBe "SE28 1AA"
+    page.getSummaryListValue(
+      RegistrationReviewPage.SummaryListRowXPath,
+      "UK VAT effective date"
+    ) shouldBe "1 January 2017"
+    page.getSummaryListLink(
+      RegistrationReviewPage.SummaryListRowXPath,
+      "UK VAT Number",
+      "Change"
+    ) shouldBe RegistrationReviewPage.changeAnswerText("UK VAT Number")
+    page.getSummaryListHref(
+      RegistrationReviewPage.SummaryListRowXPath,
+      "UK VAT Number",
+      "Change"
+    ) shouldBe VatRegisteredUkController
       .reviewForm(atarService)
       .url
   }
 
   private def assertEuVatDetailsShowValues(page: CdsPage) {
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe
+    page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe
       strim("""
           |VAT-2 - France
           |VAT-3 - Poland
         """)
 
-    page.getSummaryListLink(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers", "Change") shouldBe RegistrationReviewPage
+    page.getSummaryListLink(
+      RegistrationReviewPage.SummaryListRowXPath,
+      "EU VAT numbers",
+      "Change"
+    ) shouldBe RegistrationReviewPage
       .changeAnswerText("EU VAT numbers")
   }
 

@@ -98,7 +98,9 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
       VatEuDetailsOnLimit.zipWithIndex.foreach {
         case (details: VatEUDetailsModel, index: Int) =>
           docOnLimit.body.getElementsByClass("govuk-summary-list__value").get(index).text mustBe details.vatNumber
-          docOnLimit.body.getElementsByClass("govuk-summary-list__key").get(index).text mustBe Messages(s"cds.country.${details.vatCountry}")
+          docOnLimit.body.getElementsByClass("govuk-summary-list__key").get(index).text mustBe Messages(
+            s"cds.country.${details.vatCountry}"
+          )
           docOnLimit.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
             .getElementsByClass("govuk-link").get(0)
             .attr("href") must endWith(updateLink(details.index))
@@ -115,8 +117,12 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
     "have flag isInReviewMode set to true for remove and update links" in {
       VatEuDetailsOnLimit.zipWithIndex.foreach {
         case (details: VatEUDetailsModel, index: Int) =>
-          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__value").get(index).text mustBe details.vatNumber
-          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__key").get(index).text mustBe Messages(s"cds.country.${details.vatCountry}")
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__value").get(
+            index
+          ).text mustBe details.vatNumber
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__key").get(index).text mustBe Messages(
+            s"cds.country.${details.vatCountry}"
+          )
           docOnLimitInReview.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
             .getElementsByClass("govuk-link").get(0)
             .attr("href") must endWith(reviewUpdateLink(details.index))
