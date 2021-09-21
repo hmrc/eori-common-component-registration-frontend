@@ -85,9 +85,12 @@ class RegistrationReviewPage extends WebPage {
   val FullNameXPath           = "//dd[@id='review-tbl__full-name']"
   val FullNameReviewLinkXPath = "//a[@id='review-tbl__full-name_change']"
 
+  val SummaryListValueXPath           = "//dd[@class='govuk-summary-list__value']"
+  val SummaryListRowXPath           = "//div[@class='govuk-summary-list__row']"
+
   val organisationAddressValueXpath = "//*[@id='review-tbl__six_line_address']"
 
-  def changeAnswerText(heading: String): String = s"ChangeChange $heading"
+  def changeAnswerText(heading: String): String = s"Change Change $heading"
 
   override val title = "Check your answers"
 

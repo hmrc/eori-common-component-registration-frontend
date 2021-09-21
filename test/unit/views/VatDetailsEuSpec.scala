@@ -55,12 +55,13 @@ class VatDetailsEuSpec extends ViewSpec {
     }
 
     "should display correct inputs and labels" in {
+      val test = doc.body()
       doc.body.getElementsByAttributeValue("for", "vatCountry").hasText mustBe true
       doc.body.getElementById("vatNumber").hasText mustBe false
 
       doc.body.getElementsByAttributeValue("for", "vatCountry").text must include("Country")
       //the full stop adds a pause after the label is read out by screenreaders
-      doc.body.getElementById("vatCountry-hint").textNodes().get(0).text() must include(
+      doc.body.getElementById("vatCountry-hint").text() must include(
         ". Start to type the name of the country and then use up and down arrows to review and enter to select a country"
       )
       doc.body.getElementsByAttributeValueContaining("for", "vatNumber").text mustBe "VAT Number"

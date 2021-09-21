@@ -72,7 +72,7 @@ class SubscriptionExistingDetailsReviewPage extends WebPage {
   val LimitedAddressValueXpath = "//dd[@id='review-tbl__address']"
   val LimitedAddressReviewLink = "//a[@id='review-tbl__address_change']"
 
-  def changeAnswerText(heading: String): String = s"ChangeChange $heading"
+  def changeAnswerText(heading: String): String = s"Change Change $heading"
 
   override val title = "Check your details"
 

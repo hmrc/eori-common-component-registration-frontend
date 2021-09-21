@@ -339,7 +339,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           verify(mockSessionCache).remove(any[HeaderCarrier])
           page.title should startWith("Application complete")
           page.getElementsText(
-            RegistrationCompletePage.pageHeadingXpath
+            RegistrationCompletePage.panelHeadingXpath
           ) shouldBe s"The EORI number for orgName is $EORI"
           page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe EORI
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"

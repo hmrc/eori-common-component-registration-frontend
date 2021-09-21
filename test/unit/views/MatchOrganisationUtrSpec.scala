@@ -76,7 +76,7 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     }
     "display correct progressive disclosure content" in {
       doc.body
-        .getElementById("details-content-1")
+        .getElementsByClass("govuk-details__text")
         .text() mustBe "This can be found on HMRC letters to your organisation, such as: 'Notice to deliver a Company Tax Return' (CT603) 'Corporation Tax notice' (CT610) Your accountant or tax manager would normally have your UTR."
     }
   }

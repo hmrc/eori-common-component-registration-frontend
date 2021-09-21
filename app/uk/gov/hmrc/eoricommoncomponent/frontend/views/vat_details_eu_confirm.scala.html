@@ -72,7 +72,7 @@
 @vatItems = @{
     vatEuDetailsList.map {vatDetails =>
         SummaryListRow(
-            key = Key(content = Text(vatDetails.vatCountry)),
+            key = Key(content = Text(messages(s"cds.country.${vatDetails.vatCountry}"))),
             value = Value(content = Text(vatDetails.vatNumber)),
             actions = Some(Actions(
                 items = Seq(

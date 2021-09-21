@@ -49,13 +49,13 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
   private def reviewUpdateLink(index: Int) =
     s"customs-registration-services/atar/register/vat-details-eu/update/$index/review"
 
-  private val VatEuDetailUnderLimit = Seq(VatEUDetailsModel("12345", "FR"))
+  private val VatEuDetailUnderLimit = Seq(VatEUDetailsModel("FR", "12345"))
 
   private val VatEuDetailsOnLimit = VatEuDetailUnderLimit ++ Seq(
-    VatEUDetailsModel("12345", "CZ"),
-    VatEUDetailsModel("12345", "ES"),
-    VatEUDetailsModel("123456", "DK"),
-    VatEUDetailsModel("12345", "DE")
+    VatEUDetailsModel("CZ", "12345"),
+    VatEUDetailsModel("ES", "12345"),
+    VatEUDetailsModel("DK", "12345"),
+    VatEUDetailsModel("DE", "12345")
   )
 
   "Vat Details EU Page" should {
@@ -94,16 +94,17 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
     }
 
     "have vat details and links for remove and edit for each of them" in {
+      val test = docOnLimit.body
       VatEuDetailsOnLimit.zipWithIndex.foreach {
         case (details: VatEUDetailsModel, index: Int) =>
-          docOnLimit.body.getElementById(s"country-$index").text mustBe Messages(s"cds.country.${details.vatCountry}")
-          docOnLimit.body.getElementById(s"number-$index").text mustBe details.vatNumber
-          docOnLimit.body.getElementById(s"change-tbl__gb-vat_change-$index").attr("href") must endWith(
-            updateLink(details.index)
-          )
-          docOnLimit.body.getElementById(s"review-tbl__gb-vat_remove-$index").attr("href") must endWith(
-            removeLink(details.index)
-          )
+          docOnLimit.body.getElementsByClass("govuk-summary-list__value").get(index).text mustBe details.vatNumber
+          docOnLimit.body.getElementsByClass("govuk-summary-list__key").get(index).text mustBe Messages(s"cds.country.${details.vatCountry}")
+          docOnLimit.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
+            .getElementsByClass("govuk-link").get(0)
+            .attr("href") must endWith(updateLink(details.index))
+          docOnLimit.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
+            .getElementsByClass("govuk-link").get(1)
+            .attr("href") must endWith(removeLink(details.index))
       }
     }
 
@@ -114,16 +115,14 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
     "have flag isInReviewMode set to true for remove and update links" in {
       VatEuDetailsOnLimit.zipWithIndex.foreach {
         case (details: VatEUDetailsModel, index: Int) =>
-          docOnLimitInReview.body.getElementById(s"country-$index").text mustBe Messages(
-            s"cds.country.${details.vatCountry}"
-          )
-          docOnLimitInReview.body.getElementById(s"number-$index").text mustBe details.vatNumber
-          docOnLimitInReview.body.getElementById(s"change-tbl__gb-vat_change-$index").attr("href") must endWith(
-            reviewUpdateLink(details.index)
-          )
-          docOnLimitInReview.body.getElementById(s"review-tbl__gb-vat_remove-$index").attr("href") must endWith(
-            reviewRemoveLink(details.index)
-          )
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__value").get(index).text mustBe details.vatNumber
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__key").get(index).text mustBe Messages(s"cds.country.${details.vatCountry}")
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
+            .getElementsByClass("govuk-link").get(0)
+            .attr("href") must endWith(reviewUpdateLink(details.index))
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
+            .getElementsByClass("govuk-link").get(1)
+            .attr("href") must endWith(reviewRemoveLink(details.index))
       }
     }
 

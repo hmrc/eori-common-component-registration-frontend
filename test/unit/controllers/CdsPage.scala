@@ -20,6 +20,9 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import us.codecraft.xsoup.Xsoup
+import org.jsoup.select.NodeFilter
+
+import scala.collection.convert.ImplicitConversions.`iterable AsScalaIterable`
 
 case class CdsPage(html: String) {
 
@@ -36,6 +39,41 @@ case class CdsPage(html: String) {
     val element = Option(page.getElementById(elementId))
       .getOrElse(throw new IllegalStateException(s"Input element with ID '$elementId' was not found on the page."))
     element.`val`()
+  }
+
+  def getElementsTextAtIndex(xpath: String, index: Int): String = selectElements(xpath).get(index).text()
+
+  def getSummaryListValue(xpath: String, key: String): String = {
+    selectElements(xpath)
+      .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
+      .fold("")(_.getElementsByClass("govuk-summary-list__value").text())
+  }
+
+  def getSummaryListLink(xpath: String, key: String, action: String): String = {
+    selectElements(xpath)
+      .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
+      .fold("")(_.getElementsByClass("govuk-summary-list__actions")
+                .select("a.govuk-link").find(e => e.text().contains(action)).fold("")(_.text())
+      )
+  }
+
+  def getSummaryListHref(xpath: String, key: String, action: String): String = {
+    selectElements(xpath)
+      .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
+      .get.getElementsByClass("govuk-summary-list__actions")
+      .select("a.govuk-link").find(e => e.text().contains(action)).fold("")(_.attr("href"))
+  }
+
+  def summaryListElementPresent(xpath: String, key: String) = {
+    selectElements(xpath)
+      .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key).isDefined
+  }
+
+  def summaryListHrefPresent(xpath: String, key: String, action: String): Boolean = {
+    selectElements(xpath)
+      .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
+      .get.getElementsByClass("govuk-summary-list__actions")
+      .select("a.govuk-link").find(e => e.text().contains(action)).fold(false)(_ => true)
   }
 
   def getElementText(xpath: String): String =
@@ -58,10 +96,6 @@ case class CdsPage(html: String) {
   def getElementAttributeHref(xpath: String): String = getElementAttribute(xpath, "href")
 
   def getElementAttributeAction(xpath: String): String = getElementAttribute(xpath, "action")
-
-//  def radioButtonIsChecked(xpath: String): Boolean = getElementAttribute(xpath, "checked") == "checked"
-
-//  def radioButtonIsUnchecked(xpath: String): Boolean = getElementAttribute(xpath, "checked") == ""
 
   def radioButtonChecked(xpath: String): Boolean = selectElement(xpath).hasAttr("checked")
 
