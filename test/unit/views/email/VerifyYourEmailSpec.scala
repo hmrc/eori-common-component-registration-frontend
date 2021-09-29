@@ -38,7 +38,7 @@ class VerifyYourEmailSpec extends ViewSpec {
       doc.body.getElementsByTag("h1").text() mustBe "Confirm your email address"
     }
     "have the correct class on the h1" in {
-      doc.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
 
     "have an link send it again" in {

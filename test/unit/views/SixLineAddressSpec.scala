@@ -51,7 +51,7 @@ class SixLineAddressSpec extends ViewSpec {
       doc.body().getElementsByTag("h1").text() mustBe "Enter your organisation address"
     }
     "have the correct class on the h1" in {
-      doc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
     "have an input of type 'text' for line-1" in {
       doc.body().getElementById("line-1").attr("type") mustBe "text"
@@ -96,14 +96,21 @@ class SixLineAddressSpec extends ViewSpec {
       doc
         .body()
         .getElementsByAttributeValue("for", "countryCode")
-        .text mustBe "Country . Start to type the name of the country and then use up and down arrows to review and enter to select a country"
+        .text mustBe "Country"
+    }
+
+    "have a hidden screen reader hint" in {
+      doc
+        .body()
+        .getElementById("countryCode-hint")
+        .getElementsByClass("govuk-hint govuk-visually-hidden")
     }
   }
 
   "Rest of World (ROW) Enter your organisation address Page in review mode" should {
 
     "have the continue button say 'Save and review'" in {
-      docWithErrors.body().getElementsByClass("button").first().attr("value") mustBe "Save and review"
+      docWithErrors.body().getElementsByClass("govuk-button").first().text mustBe "Save and review"
     }
   }
 

@@ -19,15 +19,17 @@ package common.pages.matching
 import common.pages.WebPage
 
 trait IndividualNameAndDateOfBirthXPath extends AddressPageFactoring {
-  val fieldLevelErrorGivenName   = "//*[@id='given-name-outer']//span[@class='error-message']"
-  val fieldLevelErrorMiddleName  = "//*[@id='middle-name-outer']//span[@class='error-message']"
-  val fieldLevelErrorFamilyName  = "//*[@id='family-name-outer']//span[@class='error-message']"
-  val fieldLevelErrorDateOfBirth = "//*[@id='date-of-birth-fieldset']//span[@class='error-message']"
+  val fieldLevelErrorGivenName  = "//span[@class='govuk-error-message' and @id='given-name-error]"
+  val fieldLevelErrorMiddleName = "//span[@class='govuk-error-message' and @id='middle-name-error]"
+  val fieldLevelErrorFamilyName = "//span[@class='govuk-error-message' and @id='family-name-error]"
+
+  val fieldLevelErrorDateOfBirth =
+    "//span[contains(@id, 'date-of-birth-error') and contains(@class, 'govuk-error-message')]"
 
   val givenNameElement   = "//*[@id='given-name']"
   val middleNameElement  = "//*[@id='middle-name']"
   val familyNameElement  = "//*[@id='family-name']"
-  val dateOfBirthElement = "//*[@id='date-of-birth-fieldset']"
+  val dateOfBirthElement = "//*[@id='date-of-birth']"
   val dobDayElement      = "//*[@id='date-of-birth.day']"
   val dobMonthElement    = "//*[@id='date-of-birth.month']"
   val dobYearElement     = "//*[@id='date-of-birth.year']"

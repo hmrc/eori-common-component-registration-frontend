@@ -19,10 +19,13 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
 @import views.html.helper._
 
-@this(layout_di: layout)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(shortNameYesNoForm: Form[BusinessShortName], orgType: EtmpOrganisationType, isRow: Boolean, isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -40,31 +43,34 @@
     }
 }
 
-@inputText(field: String, label: String, args: (Symbol, Any)*) = {
-    @defining(Seq('_plainLabel -> true, '_label -> Html(messages(label))) ++ args) { args =>
-        @helpers.input(shortNameYesNoForm(field), args: _*)
-    }
-}
-
 @layout_di(messages(introText), form = Some(shortNameYesNoForm)) {
 
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
-        @helpers.errorSummary(shortNameYesNoForm, focusOverrides = Map("yes-no-answer" -> "cds.yes"))
+    <div>
+        @errorSummary(shortNameYesNoForm.errors, focusOverrides = Map("yes-no-answer" -> "cds.yes"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.BusinessShortNameController.submit(service, isInReviewMode), "shortNameForm") {
 
             @CSRF.formField
 
             <legend>
-                <h1 class="heading-large">@messages(introText)</h1>
+                <h1 class="govuk-heading-l">@messages(introText)</h1>
             </legend>
 
-            @inputText("short-name", messages("ecc.business-short-name.short-name"))
+            @inputText(
+                form = shortNameYesNoForm,
+                id = "short-name",
+                name = "short-name",
+                label = "ecc.business-short-name.short-name",
+                isPageHeading = false,
+                classes = Some("govuk-!-width-one-half"),
+                autocomplete = None,
+            )
 
-            <input class="button" type="submit" value='@ViewHelper.continueButtonText(isInReviewMode)'>
-            }
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            ))
+
+        }
 
         @helpers.helpAndSupport()
     </div>

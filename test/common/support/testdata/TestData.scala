@@ -16,12 +16,13 @@
 
 package common.support.testdata
 
-import java.time.{ZoneOffset, ZonedDateTime}
+import java.time.{LocalDateTime, ZoneId, ZoneOffset}
 
 object TestData {
-  val Eori: String               = "EN123456789012345"
-  val Name: String               = "John Doe"
-  val ProcessedDate: String      = "01 May 2016"
-  val TaxPayerID: String         = "0100086619"
-  val emailVerificationTimestamp = ZonedDateTime.now(ZoneOffset.UTC)
+  val Eori: String                    = "EN123456789012345"
+  val Name: String                    = "John Doe"
+  val ProcessedDate: String           = "01 May 2016"
+  val TaxPayerID: String              = "0100086619"
+  val emailVerificationTimestamp      = LocalDateTime.now(ZoneId.of("Europe/London"))
+  val zonedEmailVerificationTimestamp = emailVerificationTimestamp.atZone(ZoneOffset.UTC)
 }

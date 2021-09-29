@@ -18,7 +18,7 @@
 @(headerKey: Option[String], footerKey: Option[String], bulletsKeyPrefix: String, indexes: Range)(implicit request: Request[_], messages: Messages)
 @extractMessageIfKeyExists(value: Option[String]) = @{
     value match {
-        case Some(key) => Html(s"<p>${messages(key)}</p>")
+        case Some(key) => Html(s"<p class=${'"'}govuk-body${'"'}>${messages(key)}</p>")
         case _ => ""
     }
 }
@@ -28,7 +28,7 @@
 }
 
 @extractMessageIfKeyExists(headerKey)
-<ul class="bullets">
-    @indexes.map(i => Html(s"<li>${messages(bulletKeyName(i))}</li>"))
+<ul class="govuk-list govuk-list--bullet">
+    @indexes.map(i => <li>${messages(bulletKeyName(i))}</li>)
 </ul>
 @extractMessageIfKeyExists(footerKey)

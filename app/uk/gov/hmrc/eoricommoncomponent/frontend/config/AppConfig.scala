@@ -36,9 +36,9 @@ class AppConfig @Inject() (
 
   val ttl: Duration = Duration.create(config.get[String]("cds-frontend-cache.ttl"))
 
-  private val contactBaseUrl = servicesConfig.baseUrl("contact-frontend")
+  val contactBaseUrl = servicesConfig.baseUrl("contact-frontend")
 
-  private val serviceIdentifierRegister =
+  val serviceIdentifierRegister =
     config.get[String]("microservice.services.contact-frontend.serviceIdentifierRegister")
 
   private val feedbackLink = config.get[String]("external-url.feedback-survey")

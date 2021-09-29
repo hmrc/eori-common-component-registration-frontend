@@ -22,8 +22,13 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 
-@this(inputDate_di: inputDate, layout_di: layout)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+
 
 @(dateForm: Form[LocalDate], isInReviewMode: Boolean, orgType: EtmpOrganisationType, isRestOfWorldJourney: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -34,10 +39,11 @@
     else "cds.subscription.business.date-established.label"
 }
 
-@introHtml = {
-@if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
-    <p id="date-of-establishment-label">@Html(messages(introText))</p>
-}
+@introAndHintHtml = {
+    @if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
+        <p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
+    }
+    <span id="date-of-establishment-hint-text" class="govuk-hint">@Html(messages("cds.date-established.hint"))</span>
 }
 
 @headerAndTitle = @{
@@ -51,24 +57,28 @@
 }
 
 @layout_di(messages(headerAndTitle), form = Some(dateForm)) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
-        @helpers.errorSummary(updateFormErrors,
+    <div>
+        @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController.submit(isInReviewMode, service), "date-of-birth-form") {
 
             @CSRF.formField
 
-            @inputDate_di(formItem = updateFormErrors, fieldName = "date-of-establishment", Some(introHtml),
-                '_isLegendH1 -> true,
-                '_label -> messages(headerAndTitle),
-                '_hintText -> Html(messages("cds.date-established.hint"))
+            @inputDate_di(
+                form = updateFormErrors,
+                legendContent = headerAndTitle,
+                legendClasses = Some("govuk-fieldset__legend--l"),
+                hintText = Some(introAndHintHtml),
+                legendAsPageHeading = false,
+                id = "date-of-establishment"
             )
 
-            <input class="button" type="submit" value='@ViewHelper.continueButtonText(isInReviewMode)'>
-            }
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            ))
+
+        }
 
         @helpers.helpAndSupport()
 

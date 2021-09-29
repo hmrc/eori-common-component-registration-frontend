@@ -29,30 +29,37 @@
                     width: 238px;
                     height: 27px;
                 }
-                .column-two-thirds {
-                    font-family: "nta", Arial, sans-serif;
-                    line-height: 1.31579;
-                    font-weight: 400;
-                }
-                .govuk-box-highlight {
-                    margin: 1em 0 1em 0;
-                    padding: 2em 0 1em 0;
-                    color: #fff;
+
+                .govuk-panel.govuk-panel--confirmation {color: #fff;
                     background: #00703c;
+                }
+
+                .govuk-panel {
+                    padding: 25px;
                     text-align: center;
+                    min-height:180px;
+                    height:auto;
+                    margin-top:30px;
                 }
-                .bold-large {
-                    font-family: "nta", Arial, sans-serif;
-                    line-height: 1.11111;
-                    text-transform: none;
-                    font-weight: 700
+
+                .govuk-panel__title {
+                    margin-top: 30px;
+                    margin-bottom: 30px;
+                    font-family: "nta",Arial,sans-serif;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    font-weight: 700;
+                    font-size: 32px;
+                    line-height: 1.09375;
                 }
-                .heading-medium {
-                    margin-top: 1.875em;
-                    margin-bottom: .83333em
+                .govuk-panel__body_left {
+                    text-align:left;
+                    width:100%;
+                    float:left;
+
                 }
-                .service-info {
-                    padding-bottom: 0.5em
+                .govuk-panel {
+                    margin-bottom:30px
                 }
 
     </style>
@@ -180,13 +187,17 @@
         </g>
     </svg>
 </div>
-<div class="column-two-thirds">
-    <div class="govuk-box-highlight">
-        <h1 id="page-heading" class="heading-xlarge" style="margin-bottom: 0;">
+<div>
+    <div class="govuk-panel govuk-panel--confirmation">
+        <h1  id="page-heading" class="govuk-panel__title">
             @messages("cds.reg.existing.outcomes.success.heading.part1") @name
         </h1>
-        <h2 id="active-from" class="heading-large"  style="margin-top: 0;">@messages("subscription.subscription-results.active-from") @processedDate</h2>
-        <p id="eori-number" class="heading-medium">@messages("cds.reg.existing.outcomes.success.eori.number") @eori</p>
+        <div class="govuk-panel__body">
+            <div id="active-from" class="govuk-heading-s">
+                <h2 class="govuk-heading-m govuk-!-margin-top-0"><strong>@messages("subscription.subscription-results.active-from") @processedDate</strong></h2>
+                <p id="eori-number">@messages("cds.reg.existing.outcomes.success.eori.number") @eori</p>
+            </div>
+        </div>
     </div>
 </div>
 </body>

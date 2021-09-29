@@ -47,7 +47,7 @@ class HowCanWeIdentifyYouSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      doc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body().getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
 
     "have nino displayed but not selected" in {
@@ -69,14 +69,14 @@ class HowCanWeIdentifyYouSpec extends ViewSpec {
     "display an page level error if no radio button is selected" in {
       docWithRadioButtonsError
         .body()
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text() mustBe "Select how we can identify you"
     }
 
     "display an field level error if no radio button is selected" in {
       docWithRadioButtonsError
         .body()
-        .getElementsByClass("error-message")
+        .getElementsByClass("govuk-error-message")
         .text() mustBe "Error: Select how we can identify you"
     }
   }

@@ -47,7 +47,7 @@ class MatchOrganisationUtrSpec extends ViewSpec {
         .text() mustBe "Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) number?"
     }
     "have the correct class on the h1" in {
-      doc.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
     "have an input of type 'radio' for Yes I have a UTR" in {
       doc.body.getElementById("have-utr-true").attr("type") mustBe "radio"
@@ -57,18 +57,18 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     }
     "display correct intro paragraph" in {
       doc.body
-        .getElementById("have-utr-hintHtml")
+        .getElementById("have-utr-hint")
         .text() mustBe "Your organisation will have a Corporation Tax UTR number if you pay corporation tax. It is on tax returns and other letters from HMRC."
     }
     "have other html content" in {
       doc.body
-        .getElementById("have-utr-hintHtml")
+        .getElementById("have-utr-hint")
         .text() must include("Your organisation will have a Corporation Tax UTR number if you pay corporation tax")
     }
     "have aria-described-by on the fieldset" in {
       doc.body
-        .getElementById("have-utr-fieldset")
-        .attr("aria-describedby") mustBe "have-utr-hintHtml"
+        .getElementsByClass("govuk-fieldset")
+        .attr("aria-describedby") mustBe "have-utr-hintHtml have-utr-hint"
 
     }
     "display correct progressive disclosure heading" in {
@@ -76,7 +76,7 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     }
     "display correct progressive disclosure content" in {
       doc.body
-        .getElementById("details-content-1")
+        .getElementsByClass("govuk-details__text")
         .text() mustBe "This can be found on HMRC letters to your organisation, such as: 'Notice to deliver a Company Tax Return' (CT603) 'Corporation Tax notice' (CT610) Your accountant or tax manager would normally have your UTR."
     }
   }
@@ -100,18 +100,19 @@ class MatchOrganisationUtrSpec extends ViewSpec {
   "Match UTR page without selecting any radio button in the non sole trader case" should {
     "display a field level error message" in {
       docWithNoSelectionError.body
-        .getElementById("have-utr-field")
-        .getElementsByClass("error-message")
+        .getElementById("have-utr-error")
+        .getElementsByClass("govuk-error-message")
         .text mustBe "Error: Select yes if you have a UTR number"
     }
     "display a page level error message" in {
       docWithNoSelectionError.body
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text mustBe "Select yes if you have a UTR number"
     }
     "display the correct problem message at the top of the page" in {
       docWithNoSelectionError.body
-        .getElementById("errors")
+        .getElementsByClass("govuk-list govuk-error-summary__list")
+        .get(0)
         .getElementsByAttributeValue("href", "#have-utr-true")
         .text mustBe "Select yes if you have a UTR number"
     }
@@ -120,19 +121,24 @@ class MatchOrganisationUtrSpec extends ViewSpec {
   "Match Organisation UTR page without selecting any radio button in the sole trader case" should {
     "display a field level error message" in {
       docWithNoSelectionErrorAsSoleTrader.body
-        .getElementById("have-utr-field")
-        .getElementsByClass("error-message")
+        .getElementById("have-utr-error")
+        .getElementsByClass("govuk-error-message")
         .text mustBe "Error: Select yes if you have a UTR number"
     }
     "display a page level error message" in {
       docWithNoSelectionErrorAsSoleTrader.body
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text mustBe "Select yes if you have a UTR number"
     }
     "display the correct problem message at the top of the page" in {
       docWithNoSelectionErrorAsSoleTrader.body
-        .getElementById("errors")
-        .text mustBe "There is a problem Select yes if you have a UTR number"
+        .getElementById("error-summary-title")
+        .text mustBe "There is a problem"
+      docWithNoSelectionErrorAsSoleTrader.body
+        .getElementsByClass("govuk-list govuk-error-summary__list")
+        .get(0)
+        .getElementsByAttributeValue("href", "#have-utr-true")
+        .text mustBe "Select yes if you have a UTR number"
     }
   }
 

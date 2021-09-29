@@ -24,12 +24,10 @@
 @import views.html.helper._
 
 @layout_di(messages("cds.not-based-in-uk.page.title")) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back back-to-previous js-visible">@messages("cds.navigation.back")</a>
+    <div>
+        <h1 class="govuk-heading-l">@messages("cds.not-based-in-uk.heading")</h1>
 
-        <h1 class="heading-large">@messages("cds.not-based-in-uk.heading")</h1>
-
-        <p>@messages("cds.not-based-in-uk.para")</p>
+        <p class="govuk-body">@messages("cds.not-based-in-uk.para")</p>
 
         @helpers.helpAndSupport()
 

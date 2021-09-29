@@ -23,16 +23,14 @@
 @()(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages("cds.registration.you-need-a-different-service-iom.title")) {
-<div class="column-two-thirds">
-    <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+<div>
+    <h1 class="govuk-heading-l">@messages("cds.registration.you-need-a-different-service-iom.title")</h1>
 
-    <h1 class="heading-large">@messages("cds.registration.you-need-a-different-service-iom.title")</h1>
+    <p class="govuk-body" id="info">@messages("cds.registration.you-need-a-different-service-iom.info")</p>
 
-    <p id="info">@messages("cds.registration.you-need-a-different-service-iom.info")</p>
-
-    <ul class="bullets">
-        <li><a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes" id="vat-registered">@messages("cds.registration.you-need-a-different-service-iom.vat-registered")</a></li>
-        <li><a href="https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no" id="not-vat-registered">@messages("cds.registration.you-need-a-different-service-iom.not-vat-registered")</a></li>
+    <ul class="govuk-list govuk-list--bullet">
+        <li><a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes" id="vat-registered" class="govuk-link">@messages("cds.registration.you-need-a-different-service-iom.vat-registered")</a></li>
+        <li><a href="https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no" id="not-vat-registered" class="govuk-link">@messages("cds.registration.you-need-a-different-service-iom.not-vat-registered")</a></li>
     </ul>
 
     @helpers.helpAndSupport()

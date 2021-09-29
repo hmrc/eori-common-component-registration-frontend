@@ -17,14 +17,14 @@
 package common.pages.matching
 
 trait AddressPageFactoring {
-  val PageLevelErrorSummaryListXPath = "//ul[@class='error-summary-list']"
+  val PageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"
 
-  val fieldLevelErrorAddressLineOne   = "//*[@id='line-1-outer']//span[@class='error-message']"
-  val fieldLevelErrorAddressLineTwo   = "//*[@id='line-2-outer']//span[@class='error-message']"
-  val fieldLevelErrorAddressLineThree = "//*[@id='line-3-outer']//span[@class='error-message']"
-  val fieldLevelErrorAddressLineFour  = "//*[@id='line-4-outer']//span[@class='error-message']"
-  val fieldLevelErrorPostcode         = "//*[@id='postcode-outer']//span[@class='error-message']"
-  val fieldLevelErrorCountry          = "//*[@id='country-outer']//span[@class='error-message']"
+  val fieldLevelErrorAddressLineOne   = "//span[@id='line-1-error' and @class='govuk-error-message']"
+  val fieldLevelErrorAddressLineTwo   = "//span[@id='line-2-error' and @class='govuk-error-message']"
+  val fieldLevelErrorAddressLineThree = "//span[@id='line-3-error' and @class='govuk-error-message']"
+  val fieldLevelErrorAddressLineFour  = "//span[@id='line-4-error' and @class='govuk-error-message']"
+  val fieldLevelErrorPostcode         = "//span[@id='postcode-error' and @class='govuk-error-message']"
+  val fieldLevelErrorCountry          = "//span[@id='countryCode-error' and @class='govuk-error-message']"
 }
 
 object AddressPageFactoring extends AddressPageFactoring

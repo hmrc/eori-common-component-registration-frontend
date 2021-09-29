@@ -17,7 +17,8 @@
 package unit.services
 
 import base.UnitSpec
-import java.time.{LocalDate, ZonedDateTime}
+import java.time.{LocalDate, LocalDateTime, ZoneId}
+
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -58,12 +59,12 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
   private val emulatedFailure  = new RuntimeException("something bad happened")
 
   private val okResponse = RegisterWithoutIDResponse(
-    ResponseCommon(StatusOK, Some("All OK"), ZonedDateTime.now()),
+    ResponseCommon(StatusOK, Some("All OK"), LocalDateTime.now(ZoneId.of("Europe/London"))),
     Some(RegisterWithoutIdResponseDetail("TestSafeId", None))
   )
 
   private val notOKResponse = RegisterWithoutIDResponse(
-    ResponseCommon(StatusNotOK, Some("Something went wrong"), ZonedDateTime.now()),
+    ResponseCommon(StatusNotOK, Some("Something went wrong"), LocalDateTime.now(ZoneId.of("Europe/London"))),
     Some(RegisterWithoutIdResponseDetail("TestSafeId", None))
   )
 

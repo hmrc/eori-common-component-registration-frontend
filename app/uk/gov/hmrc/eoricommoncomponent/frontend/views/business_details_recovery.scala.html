@@ -18,8 +18,10 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.BusinessDetailsRecoveryController
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(layout_di: layout)
+
+@this(layout_di: layout, govukButton: GovukButton,govukSummaryList : GovukSummaryList)
 
 @(
     name: String,
@@ -57,41 +59,47 @@
     if (isIndividual) {messages("business-details-recovery.individual-address")}
     else {messages("business-details-recovery.organisation-address")}
 }
+@addressHtml = {
+    @address.street.appendBr
+    @address.city.appendBr
+    @address.postcode.map(_.appendBr)
+    @countryCodeToLabel(address.countryCode)
+}
 
 @layout_di(messages("business-details-recovery.title")) {
-<div class="column-two-thirds">
-    <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+<div>
+    <h1 class="govuk-heading-l">@messages("business-details-recovery.heading")</h1>
 
-    <h1 class="heading-large">@messages("business-details-recovery.heading")</h1>
+    @govukSummaryList(SummaryList(
+        rows = Seq(SummaryListRow(
+            key = Key(
+                content = Text(nameLabel),
+                classes = "cya-question name"
+            ),
+            value = Value(
+                content = Text(name),
+                classes = "cya-answer"
+            )),
+            SummaryListRow(
+                key = Key(
+                    content = Text(addressLabel),
+                    classes = "cya-question address"
+                ),
+                value = Value(
+                    content = HtmlContent(addressHtml),
+                    classes = "cya-answer details"
+                ))),
+        classes = "govuk-check-your-answers cya-questions-long govuk-form-group"
+    ))
 
-    <dl class="govuk-check-your-answers cya-questions-long form-group">
-        <div>
-            <dt class="cya-question" id="name">
-                @nameLabel
-            </dt>
-            <dd class="cya-answer">
-                @name
-            </dd>
-        </div>
-        <div>
-            <dt class="cya-question" id="address">
-                @addressLabel
-            </dt>
-            <dd class="cya-answer" id="details">
-                @address.street.appendBr
-                @address.city.appendBr
-                @address.postcode.map(_.appendBr)
-                @countryCodeToLabel(address.countryCode)
-            </dd>
-        </div>
-    </dl>
+    <p class="govuk-body" id="recovery-problem"> @messages("business-details-recovery.problem")</p>
 
-    <p id="recovery-problem"> @messages("business-details-recovery.problem")</p>
+    @govukButton(Button(
+        href = Some(BusinessDetailsRecoveryController.continue(service).url),
+        content = Text(messages("cds.navigation.continue"))
+    ))
 
-    <div class="form-group">
-        <a class='button' href="@BusinessDetailsRecoveryController.continue(service)">@messages("cds.navigation.continue")</a>
-    </div>
-    @helpers.helpAndSupport()
+    @helpers.helpAndSupport()CheckYourDetailsRegisterControllerSpec
 </div>
 
 }

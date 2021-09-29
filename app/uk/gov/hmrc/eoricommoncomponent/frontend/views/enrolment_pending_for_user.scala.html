@@ -27,11 +27,11 @@
 
 @layout_di(messages("cds.enrolment.pending.title"), suppressTelephoneNumberDetection = false) {
 
-    <div class="column-two-thirds">
-        <h1 id="page-heading" class="heading-large">@messages("cds.enrolment.pending.title")</h1>
-        <p id="info">@messages("cds.enrolment.pending.user.paragraph1", otherServiceName)</p>
-        <p>@messages("cds.enrolment.pending.user.paragraph2")</p>
-        <p>@messages("cds.enrolment.pending.user.paragraph3", otherServiceName, ServiceName.longName(service))</p>
+    <div>
+        <h1 id="page-heading" class="govuk-heading-l">@messages("cds.enrolment.pending.title")</h1>
+        <p class="govuk-body" id="info">@messages("cds.enrolment.pending.user.paragraph1", otherServiceName)</p>
+        <p class="govuk-body">@messages("cds.enrolment.pending.user.paragraph2")</p>
+        <p class="govuk-body">@messages("cds.enrolment.pending.user.paragraph3", otherServiceName, ServiceName.longName(service))</p>
         
         @help_di()
     </div>

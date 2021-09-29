@@ -18,8 +18,11 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout)
+@this(layout_di: layout, govukButton: GovukButton)
 
 @(orgName: Option[String])(implicit request: Request[_], messages: Messages)
 
@@ -31,16 +34,19 @@
 }
 
 @layout_di(messages("cds.subscription.sign-in-with-different-details.heading")) {
-<div class="column-two-thirds">
+<div>
 
-    <h1 class="heading-large">@messages("cds.subscription.sign-in-with-different-details.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("cds.subscription.sign-in-with-different-details.heading")</h1>
 
-    <p id="para1">@para1</p>
+    <p class="govuk-body" id="para1">@para1</p>
 
-    <p id="para2">@messages("cds.subscription.sign-in-with-different-details.para2")</p>
+    <p class="govuk-body" id="para2">@messages("cds.subscription.sign-in-with-different-details.para2")</p>
 
-    <a href="@logout(service)" class="button" role="button" id="sign-out-button">
-        @messages("cds.subscription.sign-in-with-different-details.button") </a>
+    @govukButton(Button(
+        content = Text(messages("cds.subscription.sign-in-with-different-details.button")),
+        href = Some(logout(service).url)
+    ))
+
     @helpers.helpAndSupport()
 </div>
 }

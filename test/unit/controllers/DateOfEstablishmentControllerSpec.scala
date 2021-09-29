@@ -243,7 +243,7 @@ class DateOfEstablishmentControllerSpec
     "display the correct text for the continue button" in {
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
+        page.getElementText(continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
       }
     }
 

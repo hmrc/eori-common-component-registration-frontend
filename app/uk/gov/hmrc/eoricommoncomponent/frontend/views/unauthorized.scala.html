@@ -20,14 +20,13 @@
 @this(layout_di: layout)
 @()(implicit messages: Messages, request: Request[_])
 @layout_di(messages("cds.server-errors.401.title")) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
+    <div>
         <header class="page-header">
-            <h1 class="heading-xlarge">@messages("cds.server-errors.401.heading")</h1>
+            <h1 class="govuk-heading-xl">@messages("cds.server-errors.401.heading")</h1>
 
         </header>
 
-        <p>@messages("cds.server-errors.401.message1")</p>
-        <p>@messages("cds.server-errors.401.message2")</p>
+        <p class="govuk-body">@messages("cds.server-errors.401.message1")</p>
+        <p class="govuk-body">@messages("cds.server-errors.401.message2")</p>
     </div>
 }

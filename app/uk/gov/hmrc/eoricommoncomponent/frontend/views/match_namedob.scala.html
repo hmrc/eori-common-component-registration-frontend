@@ -20,48 +20,68 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(inputDate_di: inputDate, layout_di: layout)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(businessDetailsForm: Form[NameDobMatchModel], organisationType: String, service: Service)(implicit request: Request[_], messages: Messages)
 
-@inputText(field: String, label: String, args: (Symbol, Any)*) = {
-    @defining(Seq('_label -> Html(messages(label)),
-        '_plainLabel -> true,
-        '_spellcheck -> false) ++ args) { args =>
-        @helpers.input(businessDetailsForm(field), args: _*)
-    }
-}
 
 @updateFormErrors =@{
     businessDetailsForm.copy(errors = DateConverter.updateDateOfBirthErrors(businessDetailsForm.errors))
 }
 
 @layout_di(messages("cds.matching.individual.title"), form = Some(businessDetailsForm)) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
-        @helpers.errorSummary(updateFormErrors,
+    <div>
+        @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
-        <h1 class="heading-large">@messages("cds.matching.individual.header")</h1>
+        <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NameDobController.submit(organisationType, service), "matchIndividualForm") {
             @CSRF.formField
-            @inputText("first-name", messages("cds.matching.individual.first-name"), '_autocomplete ->  "given-name")
-            @inputText("last-name", messages("cds.matching.individual.last-name"), '_autocomplete ->  "family-name")
-            <div class="form-group">
-            @inputDate_di(updateFormErrors, "date-of-birth", None,
-                '_label -> Html(messages("cds.matching.individual.date-of-birth")),
-                '_hintText -> Html(messages("cds.date-of-birth.hint"))
+
+            @inputText(
+                form = businessDetailsForm,
+                id = "first-name",
+                name = "first-name",
+                label = "cds.matching.individual.first-name",
+                isPageHeading = false,
+                classes = Some("govuk-!-width-one-half"),
+                autocomplete = Some("given-name"),
+                spellcheck =  Some(false)
+            )
+
+            @inputText(
+                form = businessDetailsForm,
+                id = "last-name",
+                name = "last-name",
+                label = "cds.matching.individual.last-name",
+                isPageHeading = false,
+                classes = Some("govuk-!-width-one-half"),
+                autocomplete = Some("family-name"),
+                spellcheck =  Some(false)
+            )
+
+            <div class="govuk-form-group">
+            @inputDate_di(
+                form = updateFormErrors,
+                id = "date-of-birth",
+                legendContent = messages("cds.matching.individual.date-of-birth"),
+                legendAsPageHeading = false,
+                legendClasses = Some("govuk-!-font-weight-bold"),
+                hintText = Some(Html(messages("cds.date-of-birth.hint")))
             )
             </div>
 
-            <p><input class='button' type='submit' value='@messages("cds.navigation.continue")'></p>
+            @govukButton(Button(
+                content = Text(messages("cds.navigation.continue"))
+            ))
 
             @helpers.helpAndSupport()
         }
-
 
     </div>
 }

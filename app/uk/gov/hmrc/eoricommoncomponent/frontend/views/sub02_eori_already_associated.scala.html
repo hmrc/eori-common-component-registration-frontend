@@ -22,15 +22,15 @@
 @(name: String, processedDate: String)(implicit messages: Messages, request: Request[_])
 
 @layout_di(messages("cds.sub02.outcome.eori-already-associated.title")) {
-    <div class="column-two-thirds">
+    <div>
         <div>
-            <h1 id="page-heading" class="heading-xlarge" >@messages("cds.sub02.outcome.eori-already-associated.heading", name)</h1>
-            <p class="heading-medium" id="processed-date">@messages("cds.sub02.outcome.eori-already-associated.received", dateFormatter.format(processedDate))</p>
+            <h1 id="page-heading" class="govuk-heading-xl" >@messages("cds.sub02.outcome.eori-already-associated.heading", name)</h1>
+            <p class="govuk-heading-m" id="processed-date">@messages("cds.sub02.outcome.eori-already-associated.received", dateFormatter.format(processedDate))</p>
         </div>
 
-        <h2 class="heading-small" id="vatRegisteredHeading">@messages("cds.subscription.outcomes.eori-already-associated.vat-registered-heading")</h2>
-        <p id="vatRegisteredPara1">@messages("cds.subscription.outcomes.eori-already-associated.vat-registered1")</p>
-        <p id="vatRegisteredPara2">@messages("cds.subscription.outcomes.eori-already-associated.vat-registered2")<br>
+        <h2 class="govuk-heading-s" id="vatRegisteredHeading">@messages("cds.subscription.outcomes.eori-already-associated.vat-registered-heading")</h2>
+        <p class="govuk-body" id="vatRegisteredPara1">@messages("cds.subscription.outcomes.eori-already-associated.vat-registered1")</p>
+        <p class="govuk-body" id="vatRegisteredPara2">@messages("cds.subscription.outcomes.eori-already-associated.vat-registered2")<br>
             @messages("cds.subscription.outcomes.eori-already-associated.vat-registered3")</p>
 
 

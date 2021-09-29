@@ -81,8 +81,8 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
       page.elementIsPresent(pageLevelErrorSummaryListXPath) shouldBe false
       assertRadioButtonIsPresent(page, soleTraderLabelXpath, "Sole trader", "sole-trader")
       assertRadioButtonIsPresent(page, individualLabelXpath, "Individual", "individual")
-      page.radioButtonIsUnchecked(optionSoleTraderXpath) shouldBe true
-      page.radioButtonIsUnchecked(optionIndividualXpath) shouldBe true
+      page.radioButtonChecked(optionSoleTraderXpath) shouldBe false
+      page.radioButtonChecked(optionIndividualXpath) shouldBe false
 
       page.getElementAttributeHref(backLinkXPath) shouldBe previousPageUrl
       page.formAction(

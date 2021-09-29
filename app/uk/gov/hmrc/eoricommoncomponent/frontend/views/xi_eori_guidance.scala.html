@@ -21,26 +21,26 @@
 @()(implicit messages: Messages, request: Request[_])
 
 @layout_di(messages("ecc.subscription.outcomes.guidance.title")) {
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@messages("ecc.subscription.outcomes.guidance.heading")</h1>
+    <div>
+        <h1 class="govuk-heading-xl">@messages("ecc.subscription.outcomes.guidance.heading")</h1>
 
-        <div class="form-group">
-            <h2 id="xi-how-to-register" class="heading-medium">@messages("ecc.subscription.outcomes.guidance.xi.eori.heading")</h2>
-            <p id="xi-how-to-register-text">@Html(messages("ecc.subscription.outcomes.guidance.xi.eori.information"))</p>
+        <div class="govuk-form-group">
+            <h2 id="xi-how-to-register" class="govuk-heading-m">@messages("ecc.subscription.outcomes.guidance.xi.eori.heading")</h2>
+            <p class="govuk-body" id="xi-how-to-register-text">@Html(messages("ecc.subscription.outcomes.guidance.xi.eori.information"))</p>
 
-            <ul class="bullets list">
+            <ul class="govuk-list govuk-list--bullet">
                 <li>@messages("ecc.subscription.outcomes.guidance.xi.eori.bullet1")</li>
                 <li>@messages("ecc.subscription.outcomes.guidance.xi.eori.bullet2")</li>
             </ul>
 
-            <div class="govuk-warning-text mt-2 mb-2">
+            <div class="govuk-warning-text govuk-!-margin-top-2 govuk-!-margin-bottom-2">
                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                 <strong class="govuk-warning-text__text">
                     @Html(messages("ecc.subscription.outcomes.guidance.xi.eori.warning.info"))
                 </strong>
             </div>
 
-            <p id="apply-for-eori">@Html(messages("ecc.subscription.outcomes.guidance.xi.eori.href"))</p>
+            <p class="govuk-body" id="apply-for-eori">@Html(messages("ecc.subscription.outcomes.guidance.xi.eori.href"))</p>
         </div>
 
         @feedback_di()

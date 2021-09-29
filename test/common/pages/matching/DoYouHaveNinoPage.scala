@@ -20,7 +20,7 @@ import common.pages.WebPage
 
 trait DoYouHaveNinoPage extends WebPage {
 
-  val fieldLevelErrorNino = "//*[@id='nino-outer']//span[@class='error-message']"
+  val fieldLevelErrorNino = "//span[@id='nino-error' and @class='govuk-error-message']"
 
   override val title = "Do you have a National Insurance number"
 

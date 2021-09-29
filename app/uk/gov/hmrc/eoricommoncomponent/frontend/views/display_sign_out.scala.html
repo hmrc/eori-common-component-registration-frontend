@@ -17,18 +17,25 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout)
+@this(layout_di: layout, govukButton: GovukButton)
 
 @(service: Service)(implicit messages: Messages, request: Request[_])
 
 @layout_di(messages("cds.security-sign-out.heading")) {
-<div class="column-two-thirds">
-    <header class="page-header">
-        <h1 class="heading-large">@messages("cds.security-sign-out.heading")</h1>
-    </header>
-    <p class="form-hint" id="hint">@messages("cds.security-sign-out.note")</p>
-        <a class="button" href='@ApplicationController.startRegister(service).url' role="button">@messages("cds.security-sign-in")</a>
+<div>
+    <h1 class="govuk-heading-l">@messages("cds.security-sign-out.heading")</h1>
+
+    <p class="govuk-hint" id="hint">@messages("cds.security-sign-out.note")</p>
+
+    @govukButton(Button(
+        content = Text(messages("cds.security-sign-in")),
+        href = Some(ApplicationController.startRegister(service).url)
+    ))
+
     @helpers.helpAndSupport()
 </div>
 }

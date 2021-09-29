@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
 import javax.inject.{Inject, Singleton}
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZoneId}
 import play.api.Logger
 import play.api.libs.json.{JsSuccess, Json}
 import play.modules.reactivemongo.ReactiveMongoComponent
@@ -113,6 +113,8 @@ class SessionCache @Inject() (
 
   private val eccLogger: Logger = Logger(this.getClass)
 
+  val now = LocalDateTime.now(ZoneId.of("Europe/London"))
+
   private def sessionId(implicit hc: HeaderCarrier): Id =
     hc.sessionId match {
       case None =>
@@ -141,11 +143,6 @@ class SessionCache @Inject() (
       _                <- save4LaterService.saveOrgType(groupId, orgType)
       createdOrUpdated <- createOrUpdate(sessionId, regDetailsKey, Json.toJson(rd)) map (_ => true)
     } yield createdOrUpdated
-
-  def saveRegisterWithEoriAndIdResponse(
-    rd: RegisterWithEoriAndIdResponse
-  )(implicit hc: HeaderCarrier): Future[Boolean] =
-    createOrUpdate(sessionId, registerWithEoriAndIdResponseKey, Json.toJson(rd)) map (_ => true)
 
   def saveSub02Outcome(subscribeOutcome: Sub02Outcome)(implicit hc: HeaderCarrier): Future[Boolean] =
     createOrUpdate(sessionId, sub02OutcomeKey, Json.toJson(subscribeOutcome)) map (_ => true)

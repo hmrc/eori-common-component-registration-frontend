@@ -22,7 +22,6 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.data.{FormError, Mapping}
 import uk.gov.hmrc.eoricommoncomponent.frontend.playext.mappers.DateTuple
-import uk.gov.hmrc.play.mappers.DateFields._
 
 class DateTupleSpec extends UnitSpec {
 
@@ -38,12 +37,12 @@ class DateTupleSpec extends UnitSpec {
   private val defaultDate = LocalDate.of(2010, 7, 15)
 
   private def request(dayValue: String = d, monthValue: String = m, yearValue: String = y) = Map(
-    s"$dateField.$day"   -> dayValue,
-    day                  -> dayValue,
-    s"$dateField.$month" -> monthValue,
-    month                -> monthValue,
-    s"$dateField.$year"  -> yearValue,
-    year                 -> yearValue
+    s"$dateField.day"   -> dayValue,
+    "day"               -> dayValue,
+    s"$dateField.month" -> monthValue,
+    "month"             -> monthValue,
+    s"$dateField.year"  -> yearValue,
+    "year"              -> yearValue
   )
 
   private val allMappings = Table(
@@ -86,27 +85,27 @@ class DateTupleSpec extends UnitSpec {
       }
 
       "reject invalid day" in {
-        assertErrorTriggered(request(dayValue = "32"), day, "date.day.error")
+        assertErrorTriggered(request(dayValue = "32"), "day", "date.day.error")
       }
 
       "reject day with characters instead of numbers" in {
-        assertErrorTriggered(request(dayValue = "foo"), day, "date.day.error")
+        assertErrorTriggered(request(dayValue = "foo"), "day", "date.day.error")
       }
 
       "reject month with characters instead of numbers" in {
-        assertErrorTriggered(request(monthValue = "foo"), month, "date.month.error")
+        assertErrorTriggered(request(monthValue = "foo"), "month", "date.month.error")
       }
 
       "reject year with characters instead of numbers" in {
-        assertErrorTriggered(request(yearValue = "foo"), year, "date.year.error")
+        assertErrorTriggered(request(yearValue = "foo"), "year", "date.year.error")
       }
 
       "reject invalid month" in {
-        assertErrorTriggered(request(monthValue = "13"), month, "date.month.error")
+        assertErrorTriggered(request(monthValue = "13"), "month", "date.month.error")
       }
 
       "reject invalid year" in {
-        assertErrorTriggered(request(yearValue = "0"), year, "date.year.error")
+        assertErrorTriggered(request(yearValue = "0"), "year", "date.year.error")
       }
 
       "return no date without day" in {

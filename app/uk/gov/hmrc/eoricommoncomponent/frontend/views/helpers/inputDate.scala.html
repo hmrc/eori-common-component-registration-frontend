@@ -1,107 +1,81 @@
 @*
- * Copyright 2021 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
+* Copyright 2021 HM Revenue & Customs
+*
+*@
 
-@import uk.gov.hmrc.play.views.html.helpers.{Input}
-@import views.html.helper._
-@import uk.gov.hmrc.play.mappers.DateFields._
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukDateInput
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.dateinput.DateInput
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.Fieldset
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.Legend
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.dateinput.InputItem
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import uk.gov.hmrc.hmrcfrontend.views.Implicits.RichDateInput
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 
-@this(input_di: Input)
-@(formItem:Form[_], fieldName: String, intro: Option[Html], args: (Symbol,Any)*)(implicit messages: Messages)
+@this(govukDateInput: GovukDateInput)
 
-@dateField = @{formItem(fieldName)}
-@dayField = @{formItem(s"$fieldName.$day")}
-@monthField = @{formItem(s"$fieldName.$month")}
-@yearField = @{formItem(s"$fieldName.$year")}
+@(
+        form: Form[_],
+        legendContent: String,
+        legendClasses: Option[String] = None,
+        id: String = "value",
+        hintText: Option[Html] = None,
+        legendAsPageHeading: Boolean = true,
+)(implicit messages: Messages)
 
-@formErrors = @{
-    dateField.errors ++ dayField.errors ++ monthField.errors ++ yearField.errors
+@dateErrors = @{form(id).errors ++ form(s"$id.day").errors ++ form(s"$id.month").errors ++ form(s"$id.year").errors}
+@errorHtml = @{
+    s"""</span>
+       |<span id=${'"'}$id-error${'"'} class=${'"'}govuk-error-message govuk-!-margin-bottom-1${'"'}>
+       |    <span class=${'"'}govuk-visually-hidden${'"'}>Error: </span>""".stripMargin
+}
+@formatedErrors = @{
+    if(dateErrors.nonEmpty) {
+        s"${messages(dateErrors.head.message, dateErrors.head.args: _*)}" +
+                dateErrors.tail.map(err => s"$errorHtml${messages(err.message, err.args: _*)}").mkString
+    } else {""}
 }
 
-@elements = @{ FieldElements(formItem(fieldName).id, formItem(fieldName), null, args.toMap, messages) }
-
-@isLegendH1 = @{
-elements.args.getOrElse('_isLegendH1, false).asInstanceOf[Boolean]
-}
-
-@inputClass(field: Field) = @{
-    if(dateField.hasErrors || field.hasErrors) {"form-control form-control-error"}
-    else "form-control"
-}
-
-@errorId = @{
-    if(formErrors.nonEmpty) s"$fieldName-error" else ""
-}
-
-@describedBy = @{
-    Seq(s"$fieldName-description", errorId).filterNot(_.isEmpty).mkString(" ")
-}
-
-<div class="form-group @if(formErrors.nonEmpty){form-group-error}">
-    <fieldset class="date-form-group form-date" id="@fieldName-fieldset" aria-describedby="@describedBy">
-        <legend id="@elements.field.name-field">
-            @if(isLegendH1){
-                <h1 class="heading-large">
-                    @elements.label
-                </h1>
-            } else {
-                <span class="form-label-bold">
-                    @elements.label
-                </span>
-            }
-        </legend>
-
-        <div id="@fieldName-description">
-            @intro
-
-            @if(elements.args.get('_hintText).isDefined) {
-                <span id="@fieldName-hint" class="form-hint">@elements.args.get('_hintText)</span>
-            }
-        </div>
-
-        @if(formErrors.nonEmpty) {
-            @formErrors.map { error => <span class="error-message" id="@errorId"><span class="visually-hidden">@messages("cds.error.field.hint")</span> @messages(error.message, error.args :_*)</span>}
-        }
-
-        @input_di(
-            formItem(s"$fieldName.day").copy(errors = Seq.empty),
-            '_label -> messages("date.fields.day"),
-            '_labelClass -> "form-group form-group-day",
-            '_inputClass -> inputClass(dayField),
-            '_pattern -> "[0-9]*",
-            '_inputmode -> "numeric",
-            '_emptyValueText -> " "
+@govukDateInput(DateInput(
+    fieldset = Some(Fieldset(
+        legend = Some(
+            Legend(
+                content = Text(messages(legendContent)),
+                isPageHeading = legendAsPageHeading,
+                classes = s"${if(legendAsPageHeading){"govuk-fieldset__legend--xl "} else ""}" + legendClasses.getOrElse("")
+            )
+        ),
+    )),
+    id = id,
+    items = Seq(
+        InputItem(
+            classes = "govuk-input--width-2",
+            name  =  s"$id.day",
+            label = Some(messages("date.fields.day")),
+            value = form(s"$id.day").value,
+            id    = s"$id.day"
+        ),
+        InputItem(
+            classes = "govuk-input--width-2",
+            name = s"$id.month",
+            label = Some(messages("date.fields.month")),
+            value = form(s"$id.month").value,
+            id    = s"$id.month"
+        ),
+        InputItem(
+            classes = "govuk-input--width-4",
+            name = s"$id.year",
+            label = Some(messages("date.fields.year")),
+            value = form(s"$id.year").value,
+            id    = s"$id.year"
         )
-        @input_di(
-            formItem(s"$fieldName.month").copy(errors = Seq.empty),
-            '_label -> messages("date.fields.month"),
-            '_labelClass -> "form-group form-group-month",
-            '_inputClass -> inputClass(monthField),
-            '_pattern -> "[0-9]*",
-            '_inputmode -> "numeric",
-            '_emptyValueText -> " "
-        )
-        @input_di(
-            formItem(s"$fieldName.year").copy(errors = Seq.empty),
-            '_label -> messages("date.fields.year"),
-            '_labelClass -> "form-group form-group-year",
-            '_inputClass -> inputClass(yearField),
-            '_pattern -> "[0-9]*",
-            '_inputmode -> "numeric",
-            '_emptyValueText -> " "
-        )
-
-    </fieldset>
-</div>
+    ),
+    hint = hintText.map(hintHtml => Hint(
+        content = HtmlContent(hintHtml)
+    )),
+    errorMessage = form.hasErrors match {
+        case true => Some(ErrorMessage(classes = "govuk-!-margin-bottom-1", content = HtmlContent(formatedErrors)))
+        case _ => None
+    }).withFormField(form(id)))

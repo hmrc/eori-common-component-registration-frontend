@@ -1,0 +1,35 @@
+@import play.api.i18n._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
+@this(govukSelect: GovukSelect)
+
+@(
+        form: Form[_],
+        id: String,
+        name: String,
+        items: Seq[SelectItem],
+        label: String,
+        isPageHeading: Boolean,
+        headingMessageArgs: Seq[String] = Seq(),
+        hint: Option[Html] = None,
+        classes: Option[String] = None,
+        labelClasses: Option[String] = None,
+        attributes: Map[String, String] = Map.empty
+)(implicit messages: Messages)
+
+@govukSelect(Select(
+  id = id,
+  name = name,
+  items = Seq(SelectItem.defaultObject) ++ items,
+  label = Label(
+    content = Text(messages(label, headingMessageArgs:_*)),
+    isPageHeading = isPageHeading,
+    classes = labelClasses.getOrElse(if(isPageHeading) "govuk-label--xl" else "")
+  ),
+  hint = hint.map(hintHtml => Hint(
+    content = HtmlContent(hintHtml)
+  )),
+  errorMessage = form(name).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*)))),
+  classes = classes.getOrElse(""),
+  attributes = attributes
+))

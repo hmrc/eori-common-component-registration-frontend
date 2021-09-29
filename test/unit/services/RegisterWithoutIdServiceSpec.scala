@@ -17,7 +17,8 @@
 package unit.services
 
 import base.UnitSpec
-import java.time.{LocalDate, ZonedDateTime}
+import java.time.{LocalDate, LocalDateTime, ZoneId}
+
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.mockito._
@@ -96,7 +97,7 @@ class RegisterWithoutIdServiceSpec
       ResponseCommon(
         "status",
         Some("Status text"),
-        ZonedDateTime.now(),
+        LocalDateTime.now(ZoneId.of("Europe/London")),
         Some(List(MessagingServiceParam("SAP_NUMBER", sapNumber)))
       ),
       Some(RegisterWithoutIdResponseDetail(SAFEID, ARN = None))

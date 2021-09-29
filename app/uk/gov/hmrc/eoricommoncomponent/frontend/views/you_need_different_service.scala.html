@@ -22,12 +22,10 @@
 @()(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages("cds.matching.different-service.title-and-heading")) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back back-to-previous js-visible">@messages("cds.navigation.back")</a>
+    <div>
+        <h1 class="govuk-heading-l">@messages("cds.matching.different-service.title-and-heading")</h1>
 
-        <h1 class="heading-large">@messages("cds.matching.different-service.title-and-heading")</h1>
-
-        <p>@Html(messages("cds.matching.different-service.para1"))</p>
+        <p class="govuk-body">@Html(messages("cds.matching.different-service.para1"))</p>
 
         @helpers.helpAndSupport()
     </div>

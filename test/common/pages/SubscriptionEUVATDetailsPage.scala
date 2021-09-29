@@ -20,7 +20,7 @@ trait SubscriptionEUVATDetailsPage extends WebPage {
 
   override val title = "Is your organisation VAT registered in other EU member countries?"
 
-  val fieldLevelErrorEUVATNumberInput = "//*[@id='vatNumber-outer']//span[@class='error-message']"
+  val fieldLevelErrorEUVATNumberInput = "//span[@id='vatNumber-error' and @class='govuk-error-message']"
 
 }
 

@@ -21,10 +21,10 @@ import common.pages.WebPage
 object NameIdOrganisationPage extends WebPage {
   val registerWithNameAndAddressLink       = "//*[@id='address-link']"
   val registerWithNameAndAddressLinkAnchor = s"$registerWithNameAndAddressLink/a"
-  val fieldLevelErrorName                  = "//*[@id='name-outer']//span[@class='error-message']"
-  val fieldLevelErrorUtr                   = "//*[@id='utr-outer']//span[@class='error-message']"
-  val labelForNameXpath                    = "//*[@id='name-outer']//label"
-  val labelForUtrXpath                     = "//*[@id='utr-outer']/label"
+  val fieldLevelErrorName                  = "//span[@id='name-error' and @class='govuk-error-message']"
+  val fieldLevelErrorUtr                   = "//span[@id='utr-error' and @class='govuk-error-message']"
+  val labelForNameXpath                    = "//div[@class='govuk-form-group']//label[@for='name']"
+  val labelForUtrXpath                     = "//div[@class='govuk-form-group']//label[@for='utr']"
   val hintForUtrHintTextXpath              = "//*[@id='utr-hint']"
   val linkInUtrHintTextXpath               = "//*[@id='utr-hint']/a"
 

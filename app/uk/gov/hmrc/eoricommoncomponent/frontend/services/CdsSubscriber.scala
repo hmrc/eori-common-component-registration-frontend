@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import javax.inject.{Inject, Singleton}
-import java.time.ZonedDateTime
+import java.time.LocalDateTime
 import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
@@ -140,7 +140,7 @@ class CdsSubscriber @Inject() (
     cdsFullName: Option[String],
     processingDate: String,
     formBundleId: String,
-    emailVerificationTimestamp: Option[ZonedDateTime]
+    emailVerificationTimestamp: Option[LocalDateTime]
   )(implicit hc: HeaderCarrier, messages: Messages): Future[Unit] =
     sessionCache.saveSub02Outcome(
       Sub02Outcome(processingDate, cdsFullName.getOrElse(name), maybeEori.map(_.id))

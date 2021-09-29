@@ -26,7 +26,7 @@ sealed trait SicCodePageCommon extends WebPage {
 
   val formId: String = "sicCodeform"
 
-  val continueButtonXpath = "//*[@class='button']"
+  val continueButtonXpath = "//*[@class='govuk-button']"
 
   val headingXpath: String = "//*[@id='page-heading']"
 

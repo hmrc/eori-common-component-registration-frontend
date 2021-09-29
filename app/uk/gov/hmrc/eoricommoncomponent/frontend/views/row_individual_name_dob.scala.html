@@ -20,41 +20,71 @@
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, inputDate_di: inputDate)
+@this(layout_di: layout, inputDate_di: inputDate, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
 @(individualNameAndDateOfBirthForm: Form[IndividualNameAndDateOfBirth], organisationType: String, service: Service, isInReviewMode: Boolean)(implicit request: Request[_], messages: Messages)
-
-@inputText(field: String, label: String, args: (Symbol, Any)*) = {
-@defining(Seq('_label -> Html(messages(label)),
-    '_plainLabel -> true,
-    '_spellcheck -> false) ++ args) { args =>
-    @helpers.input(individualNameAndDateOfBirthForm(field), args: _*)
-}
-}
 
 @updateFormErrors =@{
     individualNameAndDateOfBirthForm.copy(errors = DateConverter.updateDateOfBirthErrors(individualNameAndDateOfBirthForm.errors))
 }
 
 @layout_di(messages("cds.matching.individual.title"), form = Some(individualNameAndDateOfBirthForm)) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-        @helpers.errorSummary(updateFormErrors,
+    <div>
+        @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
-        <h1 class="heading-large">@messages("cds.matching.individual.header")</h1>
+        <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController.submit(isInReviewMode, organisationType, service), s"$organisationType-form") {
             @CSRF.formField
-            @inputText("given-name", messages("cds.matching.individual.given-name"), '_autocomplete ->  "given-name")
-            @inputText("middle-name", messages("cds.matching.individual.middle-name.optional"), '_autocomplete ->  "additional-name")
-            @inputText("family-name", messages("cds.matching.individual.family-name"), '_autocomplete ->  "family-name")
-            @inputDate_di(updateFormErrors, "date-of-birth", None,
-                '_label -> Html(messages("cds.matching.individual.what-is-your-date-of-birth")),
-                '_hintText -> Html(messages("cds.date-of-birth.hint"))
+            @inputText(
+                form = individualNameAndDateOfBirthForm,
+                id = "given-name",
+                name = "given-name",
+                label = "cds.matching.individual.given-name",
+                isPageHeading = false,
+                autocomplete = Some("given-name"),
+                spellcheck =  Some(false),
+                classes = Some("govuk-!-width-one-half"),
+                labelClasses = Some("first-name")
             )
-            <p><input class="button" type="submit" value='@uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper.continueButtonText(isInReviewMode)'></p>
+            @inputText(
+                form = individualNameAndDateOfBirthForm,
+                id = "middle-name",
+                name = "middle-name",
+                label = "cds.matching.individual.middle-name.optional",
+                isPageHeading = false,
+                autocomplete = Some("additional-name"),
+                spellcheck =  Some(false),
+                classes = Some("govuk-!-width-one-half"),
+                labelClasses = Some("middle-name")
+            )
+            @inputText(
+                form = individualNameAndDateOfBirthForm,
+                id = "family-name",
+                name = "family-name",
+                label = "cds.matching.individual.family-name",
+                isPageHeading = false,
+                autocomplete = Some("family-name"),
+                spellcheck =  Some(false),
+                classes = Some("govuk-!-width-one-half"),
+                labelClasses = Some("family-name")
+            )
+            @inputDate_di(
+                form = updateFormErrors,
+                id = "date-of-birth",
+                legendContent = messages("cds.matching.individual.what-is-your-date-of-birth"),
+                hintText = Some(Html(messages("cds.date-of-birth.hint")))
+            )
+
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            ))
         }
 
     </div>

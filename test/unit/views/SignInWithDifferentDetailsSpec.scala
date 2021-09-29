@@ -41,7 +41,7 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      docWithName.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      docWithName.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
 
     "have the correct explanation text" in {
@@ -54,8 +54,8 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
     }
 
     "have a sign out button" in {
-      docWithName.body.getElementById("sign-out-button").text mustBe "Sign out"
-      docWithName.body.getElementsByClass("button").attr("href") must endWith("/register/logout")
+      docWithName.body.getElementsByClass("govuk-button").text mustBe "Sign out"
+      docWithName.body.getElementsByClass("govuk-button").attr("href") must endWith("/register/logout")
     }
   }
 
@@ -70,7 +70,7 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      docWithoutName.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      docWithoutName.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
 
     "have the correct explanation text" in {
@@ -83,8 +83,8 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
     }
 
     "have a sign out button" in {
-      docWithoutName.body.getElementById("sign-out-button").text mustBe "Sign out"
-      docWithoutName.body.getElementsByClass("button").attr("href") must endWith("/register/logout")
+      docWithoutName.body.getElementsByClass("govuk-button").text mustBe "Sign out"
+      docWithoutName.body.getElementsByClass("govuk-button").attr("href") must endWith("/register/logout")
     }
   }
 

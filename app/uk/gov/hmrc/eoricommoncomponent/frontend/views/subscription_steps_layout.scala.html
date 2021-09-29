@@ -18,10 +18,10 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 
-@this(layout_di: layout)
+@this(layout_di: layout, errorSummary: helpers.errorSummary)
 @(pageKey: String, form: Form[_],
         isInReviewMode: Boolean,
-        fieldNameOverrides: Map[String, String] = Map.empty,
+        fieldName: Option[String] = None,
         focusOverrides: Map[String, String] = Map.empty,
         journey: Journey.Value)(content: Html)(implicit request: Request[_], messages: Messages)
 
@@ -31,11 +31,11 @@
 
 @layout_di(messages(qualifiedPageKey + ".page.title"), form = Some(form)) {
 
-    <div class="column-two-thirds">
+    <div>
 
         @helpers.subscription.backLink_errorSummary_mayBeSteps_heading(
-            errorSummary = helpers.errorSummary(form = form,
-            fieldNameOverrides = fieldNameOverrides,
+            errorSummary = errorSummary(errors = form.errors,
+            errorFieldName = fieldName,
             focusOverrides = focusOverrides),
             pageHeading = messages.translate(qualifiedPageKey + ".heading", Seq()).getOrElse(""),
             isInReviewMode = isInReviewMode, journey = journey

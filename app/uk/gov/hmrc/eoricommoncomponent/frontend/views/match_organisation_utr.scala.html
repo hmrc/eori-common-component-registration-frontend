@@ -18,18 +18,26 @@
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukDetails}
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, Details, HtmlContent}
 
-@this(layout_di: layout)
+@this(layout_di: layout,
+        inputRadioGroup: helpers.inputRadioGroup,
+        govukButton: GovukButton,
+        errorSummary: helpers.errorSummary,
+        govukDetails : GovukDetails)
 
 @(matchOrgIdForm: Form[UtrMatchModel], organisationType: String, displayMode: String, service: Service, isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
-@inputRadioGroup(field: String, options: Seq[(String, String)]) = {
-    @helpers.inputRadioGroup(
+@displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
+    @inputRadioGroup(
         matchOrgIdForm(field),
         options,
         Map.empty,
         Some(Html(hint)),
-        '_divClass -> "form-group inline",
+        None,
+        '_divClass -> "govuk-form-group inline",
         '_legend -> headerAndTitle,
         '_isLegendH1 -> true
     )
@@ -64,35 +72,37 @@
         case _ => true
     }
 }
+@htmlDetails = {
+        <p class="govuk-body">@messages("cds.matching.utr.help-message.header")</p>
+        <ul class="govuk-list govuk-list--bullet">
+
+            <li>@messages("cds.matching.utr.help-message.bullet-1")</li>
+            <li>@messages("cds.matching.utr.help-message.bullet-2")</li>
+        </ul>
+        <p class="govuk-body">@messages("cds.matching.utr.help-message.footer")</p>
+}
 
 @layout_di(headerAndTitle, form = Some(matchOrgIdForm)) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
-        @helpers.errorSummary(matchOrgIdForm, focusOverrides = Map("have-utr" -> "have-utr-true"))
+    <div>
+        @errorSummary(matchOrgIdForm.errors, focusOverrides = Map("have-utr" -> "have-utr-true"))
 
             @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), "matchOrganisationUtrForm") {
             @CSRF.formField
-            <div class="form-group">
-                @inputRadioGroup("have-utr",
+            <div class="govuk-form-group">
+                @displayInputRadioGroup("have-utr",
                     Seq("true" -> messages("cds.yes"),
                         "false" -> messages("cds.no")))
                 @if(isNotSoleTrader) {
-                <details>
-                    <summary class="summary" role="button" aria-expanded="true">@messages("cds.matching.utr.help")</summary>
-                    <div class="panel panel-border-narrow" id="details-content-1">
-                        <p>@messages("cds.matching.utr.help-message.header")</p>
-                        <ul class="bullets">
-
-                            <li>@messages("cds.matching.utr.help-message.bullet-1")</li>
-                            <li>@messages("cds.matching.utr.help-message.bullet-2")</li>
-                        </ul>
-                        <p>@messages("cds.matching.utr.help-message.footer")</p>
-                    </div>
-                </details>
+                    @govukDetails(Details(
+                        summary = Text(messages("cds.matching.utr.help")),
+                        content = HtmlContent(htmlDetails)
+                    ))
                 }
             </div>
-            <input class="button" type="submit" value='@uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper.continueButtonText(isInReviewMode)'>
+
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            ))
 
             @helpers.helpAndSupport()
         }

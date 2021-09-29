@@ -50,7 +50,7 @@ class XiEoriGuidanceViewSpec extends ViewSpec {
         "xi-how-to-register-text"
       ).text() mustBe "You need to fill in an application form. To fill in your application correctly and ensure you get your EORI number as soon as possible you must answer 'Yes' to the questions:"
 
-      val bulletList = doc.body().getElementsByTag("ul").get(2)
+      val bulletList = doc.body().getElementsByTag("ul").get(1)
 
       bulletList.getElementsByTag("li").get(
         0

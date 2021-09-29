@@ -43,7 +43,7 @@ class CheckYourEmailSpec extends ViewSpec {
       doc.body.getElementsByTag("h1").text() mustBe "Is this the email address you want to use?"
     }
     "have the correct class on the h1" in {
-      doc.body.getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
     }
 
     "have an input of type 'text'" in {

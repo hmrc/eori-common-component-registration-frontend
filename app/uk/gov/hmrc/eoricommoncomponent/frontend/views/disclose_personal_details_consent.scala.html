@@ -22,8 +22,11 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, appConfig: AppConfig)
+@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(
     isInReviewMode: Boolean,
@@ -61,16 +64,14 @@
 }
 
 @layout_di(messages(question), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
-        @helpers.errorSummary(disclosePersonalDetailsYesNoAnswerForm, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+    <div>
+        @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
         @helpers.form(DisclosePersonalDetailsConsentController.submit(isInReviewMode, service), "disclose-personal-details-createForm") {
 
             @CSRF.formField
 
-            @helpers.inputRadioGroup(
+            @inputRadioGroup(
                 disclosePersonalDetailsYesNoAnswerForm("yes-no-answer"),
                 Seq(
                     "true" -> messages("cds.subscription.organisation-disclose-personal-details-consent.yes"),
@@ -78,12 +79,15 @@
                 ),
                 Map.empty,
                 Some(Html(messages(hint))),
-                '_divClass -> "createForm-group form-group",
+                None,
+                '_divClass -> "createForm-group govuk-form-group",
                 '_legend -> messages(question),
                 '_isLegendH1 -> true
             )
 
-            <input class="button" type="submit" value='@ViewHelper.continueButtonText(isInReviewMode)'>
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            ))
         }
 
         @helpers.helpAndSupport()

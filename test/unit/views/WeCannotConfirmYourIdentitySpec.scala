@@ -40,7 +40,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
 
     "have the correct class on the h1" in {
-      doc.body().getElementsByTag("h1").hasClass("heading-large") mustBe true
+      doc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
 
     "have the correct explanation text" in {
@@ -51,13 +51,13 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
 
     "have the option to try again" in {
-      doc.body().getElementById("try-again").text mustBe "Try again"
+      doc.body().getElementsByClass("govuk-button").text mustBe "Try again"
     }
 
     "have the VAT Details link for the try again button" in {
       doc
         .body()
-        .getElementById("try-again")
+        .getElementsByClass("govuk-button")
         .attr("href") mustBe "/customs-registration-services/atar/register/what-are-your-uk-vat-details"
     }
 
@@ -65,7 +65,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
       val doc = Jsoup.parse(contentAsString(view(true, atarService)))
       doc
         .body()
-        .getElementById("try-again")
+        .getElementsByClass("govuk-button")
         .attr("href") mustBe "/customs-registration-services/atar/register/what-are-your-uk-vat-details/review"
     }
   }

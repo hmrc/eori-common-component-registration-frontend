@@ -20,8 +20,11 @@
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(ninoUtrForm: Form[NinoOrUtrChoice], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -32,31 +35,33 @@
     Seq(
         ("nino", messages("subscription-journey.what-is-your-nino.label"), Some(messages("subscription-journey.what-is-your-nino.hint"))),
         ("utr", messages("subscription-journey.utr.label"), Some(messages("subscription-journey.utr.hint")))
+//        ("utr", messages("subscription-journey.utr.label"), Some("AAAAAAhhhhhggggg"))
     )
 }
-@inputRadioGroup(field: String, options: Seq[(String, String, Option[String])]) = {
-    @helpers.inputRadioGroup(
+@displayInputRadioGroup(field: String, options: Seq[(String, String, Option[String])]) = {
+    @inputRadioGroup(
         ninoUtrForm(field),
         options.map { option => (option._1, option._2) },
         options.flatMap(option => option._3.map(option._1 -> _)).toMap,
         None,
-        '_divClass -> "form-group",
+        None,
+        '_divClass -> "govuk-form-group",
         '_legend -> title,
         '_isLegendH1 -> true)
 }
 
 @layout_di(title, form = Some(ninoUtrForm)) {
-    <div class="column-two-thirds">
-        <a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
-
-        @helpers.errorSummary(ninoUtrForm, focusOverrides = Map("ninoOrUtrRadio" -> "nino-radio"))
+    <div>
+        @errorSummary(ninoUtrForm.errors, focusOverrides = Map("ninoOrUtrRadio" -> "nino-radio"))
 
         @helpers.form(HowCanWeIdentifyYouController.submit(service), "nino-utr-form") {
             @CSRF.formField
 
-            @inputRadioGroup("ninoOrUtrRadio", validOptions)
+            @displayInputRadioGroup("ninoOrUtrRadio", validOptions)
 
-            <input class="button" type="submit" value='@ViewHelper.continueButtonText(false)'>
+            @govukButton(Button(
+                content = Text(ViewHelper.continueButtonText(false))
+            ))
 
             @helpers.helpAndSupport()
         }

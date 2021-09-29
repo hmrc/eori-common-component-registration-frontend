@@ -49,13 +49,13 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
   private def reviewUpdateLink(index: Int) =
     s"customs-registration-services/atar/register/vat-details-eu/update/$index/review"
 
-  private val VatEuDetailUnderLimit = Seq(VatEUDetailsModel("12345", "FR"))
+  private val VatEuDetailUnderLimit = Seq(VatEUDetailsModel("FR", "12345"))
 
   private val VatEuDetailsOnLimit = VatEuDetailUnderLimit ++ Seq(
-    VatEUDetailsModel("12345", "CZ"),
-    VatEUDetailsModel("12345", "ES"),
-    VatEUDetailsModel("123456", "DK"),
-    VatEUDetailsModel("12345", "DE")
+    VatEUDetailsModel("CZ", "12345"),
+    VatEUDetailsModel("ES", "12345"),
+    VatEUDetailsModel("DK", "12345"),
+    VatEUDetailsModel("DE", "12345")
   )
 
   "Vat Details EU Page" should {
@@ -68,12 +68,12 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
     }
 
     "should radio buttons" in {
-      docUnderLimit.body.getElementById("yes-no-answer-true").attr("checked") must not be empty
-      docUnderLimit.body.getElementById("yes-no-answer-false").attr("checked") mustBe empty
+      docUnderLimit.body.getElementById("yes-no-answer-true").attr("value") mustBe "true"
+      docUnderLimit.body.getElementById("yes-no-answer-false").attr("value") mustBe "false"
     }
 
     "have the correct class on the h1" in {
-      docUnderLimit.body.getElementsByTag("h1") hasClass "heading-large"
+      docUnderLimit.body().getElementsByTag("h1").attr("class") mustBe "govuk-fieldset__heading"
     }
 
     "have the correct text on the h1 for 1 vat details provided" in {
@@ -94,16 +94,19 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
     }
 
     "have vat details and links for remove and edit for each of them" in {
+      val test = docOnLimit.body
       VatEuDetailsOnLimit.zipWithIndex.foreach {
         case (details: VatEUDetailsModel, index: Int) =>
-          docOnLimit.body.getElementById(s"country-$index").text mustBe Messages(s"cds.country.${details.vatCountry}")
-          docOnLimit.body.getElementById(s"number-$index").text mustBe details.vatNumber
-          docOnLimit.body.getElementById(s"change-tbl__gb-vat_change-$index").attr("href") must endWith(
-            updateLink(details.index)
+          docOnLimit.body.getElementsByClass("govuk-summary-list__value").get(index).text mustBe details.vatNumber
+          docOnLimit.body.getElementsByClass("govuk-summary-list__key").get(index).text mustBe Messages(
+            s"cds.country.${details.vatCountry}"
           )
-          docOnLimit.body.getElementById(s"review-tbl__gb-vat_remove-$index").attr("href") must endWith(
-            removeLink(details.index)
-          )
+          docOnLimit.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
+            .getElementsByClass("govuk-link").get(0)
+            .attr("href") must endWith(updateLink(details.index))
+          docOnLimit.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
+            .getElementsByClass("govuk-link").get(1)
+            .attr("href") must endWith(removeLink(details.index))
       }
     }
 
@@ -114,25 +117,27 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
     "have flag isInReviewMode set to true for remove and update links" in {
       VatEuDetailsOnLimit.zipWithIndex.foreach {
         case (details: VatEUDetailsModel, index: Int) =>
-          docOnLimitInReview.body.getElementById(s"country-$index").text mustBe Messages(
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__value").get(
+            index
+          ).text mustBe details.vatNumber
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__key").get(index).text mustBe Messages(
             s"cds.country.${details.vatCountry}"
           )
-          docOnLimitInReview.body.getElementById(s"number-$index").text mustBe details.vatNumber
-          docOnLimitInReview.body.getElementById(s"change-tbl__gb-vat_change-$index").attr("href") must endWith(
-            reviewUpdateLink(details.index)
-          )
-          docOnLimitInReview.body.getElementById(s"review-tbl__gb-vat_remove-$index").attr("href") must endWith(
-            reviewRemoveLink(details.index)
-          )
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
+            .getElementsByClass("govuk-link").get(0)
+            .attr("href") must endWith(reviewUpdateLink(details.index))
+          docOnLimitInReview.body.getElementsByClass("govuk-summary-list__actions-list").get(index)
+            .getElementsByClass("govuk-link").get(1)
+            .attr("href") must endWith(reviewRemoveLink(details.index))
       }
     }
 
     "display error for document with no option selected" in {
       emptyDocUnderLimit.body
-        .getElementsByClass("error-summary-list")
+        .getElementsByClass("govuk-error-summary__list")
         .text mustBe "Tell us if your organisation is VAT registered in other EU countries"
       emptyDocUnderLimit.body
-        .getElementsByClass("error-message")
+        .getElementsByClass("govuk-error-message")
         .text mustBe "Error: Tell us if your organisation is VAT registered in other EU countries"
     }
   }

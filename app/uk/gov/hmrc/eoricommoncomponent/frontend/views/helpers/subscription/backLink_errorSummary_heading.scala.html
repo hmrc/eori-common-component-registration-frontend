@@ -17,10 +17,8 @@
 @(      errorSummary: play.twirl.api.Html,
         pageHeading: String)(implicit request: Request[_], messages: Messages)
 
-
-<a href="javascript:history.back()" id="back" class="link-back js-visible">@messages("cds.navigation.back")</a>
 @errorSummary
 
 @if(pageHeading) {
-<h1 class="heading-large" id="page-heading">@Html(pageHeading)</h1>
+<h1 class="govuk-heading-l" id="page-heading">@Html(pageHeading)</h1>
 }

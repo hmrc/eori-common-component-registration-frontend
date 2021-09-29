@@ -22,9 +22,12 @@ trait SubscriptionVatDetailsPage extends WebPage {
 
   override val title = "What are your UK VAT details?"
 
-  val vatPostcodeFieldLevelError      = "//*[@id='postcode-outer']//span[@class='error-message']"
-  val vatNumberFieldLevelError        = "//*[@id='vat-number-outer']//span[@class='error-message']"
-  val vatEffectiveDateFieldLevelError = "//*[@id='vat-effective-date-fieldset']//span[@class='error-message']"
+  val vatPostcodeFieldLevelError = "//span[@id='postcode-error' and @class='govuk-error-message']"
+  val vatNumberFieldLevelError   = "//span[@id='vat-number-error' and @class='govuk-error-message']"
+
+  val vatEffectiveDateFieldLevelError =
+    "//span[contains(@id, 'vat-effective-date-error') and contains(@class, 'govuk-error-message']"
+
 }
 
 object SubscriptionVatDetailsPage extends SubscriptionVatDetailsPage

@@ -99,42 +99,39 @@ class BusinessShortNameViewSpec extends ViewSpec {
     }
 
     "display short name input with label" in {
-
-      val shortNameInput = doc().body().getElementById("short-name-outer")
-
-      shortNameInput.getElementsByTag("label").get(0).text() must startWith("Short name")
+      val shortNameInputLabel = doc().body().getElementsByAttributeValue("for", "short-name")
+      shortNameInputLabel.text() must startWith("Short name")
     }
 
     "display error summary" when {
 
       "user is during company journey" in {
-
-        docWithErrorSummary().getElementById("form-error-heading").text() mustBe "There is a problem"
-        docWithErrorSummary().getElementsByClass("error-list").get(
+        docWithErrorSummary().getElementById("error-summary-title").text() mustBe "There is a problem"
+        docWithErrorSummary().getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your company's shortened name"
       }
 
       "user is during partnership journey" in {
 
-        docWithErrorSummary(Partnership).getElementById("form-error-heading").text() mustBe "There is a problem"
-        docWithErrorSummary(Partnership).getElementsByClass("error-list").get(
+        docWithErrorSummary(Partnership).getElementById("error-summary-title").text() mustBe "There is a problem"
+        docWithErrorSummary(Partnership).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your partnership's shortened name"
       }
 
       "user is during charity journey" in {
 
-        docWithErrorSummary(UnincorporatedBody).getElementById("form-error-heading").text() mustBe "There is a problem"
-        docWithErrorSummary(UnincorporatedBody).getElementsByClass("error-list").get(
+        docWithErrorSummary(UnincorporatedBody).getElementById("error-summary-title").text() mustBe "There is a problem"
+        docWithErrorSummary(UnincorporatedBody).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your charity's shortened name"
       }
 
       "user is during RoW organisation journey" in {
 
-        docWithErrorSummary(isRow = true).getElementById("form-error-heading").text() mustBe "There is a problem"
-        docWithErrorSummary(isRow = true).getElementsByClass("error-list").get(
+        docWithErrorSummary(isRow = true).getElementById("error-summary-title").text() mustBe "There is a problem"
+        docWithErrorSummary(isRow = true).getElementsByClass("govuk-error-summary__list").get(
           0
         ).text() mustBe "Enter your organisation's shortened name"
       }

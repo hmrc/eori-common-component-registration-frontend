@@ -14,31 +14,26 @@
  * limitations under the License.
  *@
 
-@(form: Form[_], errorMsgKey: String => String = key => s"cds.$key.label", fieldNameOverrides: Map[String, String] = Map.empty, focusOverrides: Map[String, String] = Map.empty)(implicit request: Request[_], messages: Messages)
 
-@if(form.hasErrors) {
-    <div id="errors" tabindex="-1" role="alert" aria-labelledby="form-error-heading" class="error-summary error-summary--show">
-        <h2 class="heading-medium error-summary-heading" id="form-error-heading">@messages("cds.field-error.heading")</h2>
-        <ul class="error-summary-list">
-            @form.globalErrors.map { error =>
-                <li class="error-list">
-                    @messages(error.messages, error.args :_*)
-                </li>
-            }
-            @defining(form.errors.filter(!_.key.isEmpty)) { fieldLevelErrors =>
-                @fieldLevelErrors.map { error =>
-                    @defining(
-                        fieldNameOverrides.getOrElse(error.key, error.key)
-                    ) { fieldName =>
-                            <li>
-                                <a href="#@focusOverrides.getOrElse(fieldName, fieldName)" class="error-list" data-focuses="">
-                                    @messages(error.messages, error.args :_*)
-                                </a>
-                            </li>
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukErrorSummary
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorSummary
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 
-                    }
-                }
-            }
-        </ul>
-    </div>
+@this(govukErrorSummary: GovukErrorSummary)
+
+@(errors: Seq[FormError], errorFieldName: Option[String] = None, focusOverrides: Map[String, String] = Map.empty)(implicit messages: Messages)
+
+@if(errors.nonEmpty) {
+    @defining(errors.map { error =>
+        ErrorLink(
+            href =  Some("#"+focusOverrides.getOrElse(error.key, error.key)),
+            content = Text(messages(error.message, error.args:_*))
+        )
+    }) { errorLinks =>
+        @govukErrorSummary(ErrorSummary(
+            errorList = errorLinks,
+            title = Text(messages("error.summary.title"))
+        ))
+    }
 }

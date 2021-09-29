@@ -14,10 +14,24 @@
  * limitations under the License.
  *@
 
-@(field: Field, radioOptions: Seq[(String, String)], hints: Map[String, String], hintHtml: Option[Html],  args: (Symbol, Any)*)(implicit messages: Messages, formInstance: Option[Form[_]] = None)
 
-@import play.api.i18n._
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukRadios
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{Radios, RadioItem}
+@import uk.gov.hmrc.govukfrontend.views.Aliases.ErrorMessage
 @import views.html.helper._
+
+@this(govukRadios : GovukRadios)
+
+@(
+    field: Field,
+    radioOptions: Seq[(String, String)],
+    hints: Map[String, String],
+    hintHtml: Option[Html],
+    additionalClasses: Option[String],
+    args: (Symbol, Any)*)(implicit messages: Messages, formInstance: Option[Form[_]] = None)
 
 @elements = @{
     FieldElements(field.id, field, Html(""), args.toMap, messages)
@@ -27,6 +41,9 @@
 }
 @legend = @{
     elements.args.getOrElse('_legend, "").asInstanceOf[String]
+}
+@legendClasses = @{
+    if(isLegendH1){"govuk-fieldset__legend--l"} else {additionalClasses.getOrElse("govuk-fieldset__legend--m")}
 }
 @hasHint = @{
     elements.args.contains('_hintText)
@@ -41,76 +58,34 @@
     if(hasHintHtml) s"${field.id}-hintHtml" else ""
 }
 
-@hasErrors = @{
-    elements.hasErrors
-}
-@errorId = @{
-    if(hasErrors) s"${field.id}-error" else ""
-}
 @describedBy = @{
-  Seq(hintId, hintHtmlId, errorId).filterNot(_.isEmpty).mkString(" ")
+    Seq(hintId, hintHtmlId).filterNot(_.isEmpty).mkString(" ")
 }
 
-<div id="@field.id-field" class="form-group">
-    <fieldset
-        id="@field.id-fieldset"
-        @if(hasHint || hasHintHtml || hasErrors){
-            aria-describedby="@describedBy"
-        } >
-
-        <legend>
-        @if(isLegendH1){
-            <h1 class="heading-large">
-            @legend
-            </h1>
-        } else {
-            <span class="heading-medium">
-            @legend
-            </span>
-        }
-        </legend>
-
-        @if(hasErrors) {
-            <div class="form-group-error">
-        }
-
-        @if(hasHint) {
-            <p class="form-hint" id="@hintId">@elements.args.get('_hintText)</p>
-        }
-
-        @hintHtml.map{ hint =>
-            <p class="form-hint" id="@hintHtmlId">@hint</p>
-        }
-
-        @if(hasErrors) {
-            @elements.errors.map { error => <span class="error-message" id="@errorId"><span class="visually-hidden">@messages("cds.error.field.hint")</span> @messages(key = error.toString)</span> }
-            </div>
-        }
-
-        @if(hasErrors) {
-            <div class="form-group-error">
-        }
-        @radioOptions.map { case (value, label) =>
-            @defining(s"${elements.field.name}-${value.toLowerCase.replace(" ", "_")}") { inputId =>
-                <div class="multiple-choice">
-                    <input
-                    type="radio"
-                    id="@inputId"
-                    name="@elements.field.name"
-                    value="@value"
-                    @field.value.filter(_ == value).map { _ => checked="checked" }>
-                    <label for="@inputId">
-                        @label&nbsp;
-                        @hints.get(value).map { hint =>
-                            <span class="form-hint">@{Html(hint)}</span>
-                        }
-                    </label>
-                </div>
-            }
-
-        }
-        @if(hasErrors) {
-            </div>
-        }
-    </fieldset>
-</div>
+@govukRadios(Radios(
+    idPrefix = Some(field.id),
+    name = field.name,
+    hint = if(hasHint){
+        elements.args.get('_hintText).map(hintText => Hint(content = Text(hintText.toString), id = Some(hintId)))
+    } else {
+        hintHtml.map(hintText => Hint(content = HtmlContent(hintText), classes = "govuk-body-s", id = Some(hintHtmlId)))
+    },
+    errorMessage = field.error.map{e => ErrorMessage(content = Text(messages(e.message, e.args:_*)))},
+    fieldset = Some(Fieldset(
+        legend = Some(Legend(
+            content = Text(legend),
+            classes = legendClasses,
+            isPageHeading = isLegendH1
+        )),
+        describedBy = Some(describedBy)
+    )),
+    items = radioOptions.map { case(value, label) =>
+        RadioItem(
+            content = Text(label),
+            value = Some(value),
+            id = Some(s"${elements.field.name}-${value.toLowerCase.replace(" ", "_")}"),
+            hint = hints.get(value).map(hint => Hint(content = HtmlContent(hint))),
+            checked = field.value.fold(false)(_ == value)
+        )
+    }
+))

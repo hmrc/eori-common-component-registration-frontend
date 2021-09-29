@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import java.time.ZonedDateTime
+import java.time.LocalDateTime
+
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{CommonHeader, MessagingServiceParam}
 
 case class MDGResponseCommon(
   status: String,
-  processingDate: ZonedDateTime,
+  processingDate: LocalDateTime,
   returnParameters: List[MessagingServiceParam],
   statusText: Option[String] = None
 )
