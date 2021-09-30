@@ -20,7 +20,6 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcReportTechnicalIssue
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcTimeoutDialog
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.TimeoutDialog
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
 @import views.html.helper.CSPNonce
@@ -33,7 +32,6 @@
 
 @this(hmrcLayout: HmrcLayout,
         standardBetaBanner: StandardBetaBanner,
-        trackingConsentSnippet: HmrcTrackingConsentSnippet,
         appConfig: AppConfig,
         reportAProblemLink: HmrcReportTechnicalIssue,
         hmrcTimeoutDialog: HmrcTimeoutDialog,
@@ -71,9 +69,6 @@
     @if(suppressTelephoneNumberDetection) {
         <meta name="format-detection" content="telephone=no" />
     }
-    <!-- Tracking Consent Snippet -->
-    @trackingConsentSnippet()
-    <!-- End Tracking Consent Snippet -->
 
     @partials.countrypickerscript(countriesInCountryPicker)
 
