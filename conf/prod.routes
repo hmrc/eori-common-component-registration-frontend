@@ -1,7 +1,7 @@
 
 #----------------------------------
 
-->         /customs-registration-services/govuk-frontend                                                 govuk.Routes
+
 ->         /customs-registration-services/hmrc-frontend                                                  hmrcfrontend.Routes
 
 GET         /customs-registration-services/assets/*file                                                  @controllers.Assets.versioned(path="/public", file: Asset)
@@ -213,6 +213,6 @@ GET         /customs-registration-services/register/xi-eori-guidance            
 
 GET         /customs-registration-services/:service/register/logout                                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.logout(service: Service)
 
-GET         /admin/metrics                                                                               @com.kenshoo.play.metrics.MetricsController.metrics
+
 
 ->          /                                                                                            health.Routes
