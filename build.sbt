@@ -153,3 +153,5 @@ TwirlKeys.templateImports ++= Seq(
   "uk.gov.hmrc.hmrcfrontend.views.html.components._",
   "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
 )
+
+testOptions in Test := Seq.empty
