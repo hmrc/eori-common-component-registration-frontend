@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 @import play.api.i18n._
 @import play.api.data.Form
-@import uk.gov.hmrc.govukfrontend.views.html.components.govukInput
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.PrefixOrSuffix
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
@@ -25,7 +24,7 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 
-@this(govukInput: govukInput)
+@this(govukInput: GovukInput)
 
 @(
         form: Form[_],
