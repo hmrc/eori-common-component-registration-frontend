@@ -28,19 +28,19 @@ class SubscriptionVatEUDetailsService @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext) {
 
-  // TODO Method return incorrect type
   def saveOrUpdate(vatEUDetail: VatEUDetailsModel)(implicit hc: HeaderCarrier): Future[Unit] =
-    subscriptionBusinessService.retrieveSubscriptionDetailsHolder map { holder =>
-      subscriptionDetailsService.saveSubscriptionDetails(
+    for {
+      holder <- subscriptionBusinessService.retrieveSubscriptionDetailsHolder
+      _ <- subscriptionDetailsService.saveSubscriptionDetails(
         _ => holder.copy(vatEUDetails = holder.vatEUDetails ++ Seq(vatEUDetail))
       )
-    }
+    } yield ()
 
-  // TODO Method return incorrect type
   def saveOrUpdate(vatEUDetailsParam: Seq[VatEUDetailsModel])(implicit hc: HeaderCarrier): Future[Unit] =
-    subscriptionBusinessService.retrieveSubscriptionDetailsHolder map { holder =>
-      subscriptionDetailsService.saveSubscriptionDetails(_ => holder.copy(vatEUDetails = vatEUDetailsParam))
-    }
+    for {
+      holder <- subscriptionBusinessService.retrieveSubscriptionDetailsHolder
+      _      <- subscriptionDetailsService.saveSubscriptionDetails(_ => holder.copy(vatEUDetails = vatEUDetailsParam))
+    } yield ()
 
   def updateVatEuDetailsModel(oldVatEUDetail: VatEUDetailsModel, newVatEUDetail: VatEUDetailsModel)(implicit
     hc: HeaderCarrier
