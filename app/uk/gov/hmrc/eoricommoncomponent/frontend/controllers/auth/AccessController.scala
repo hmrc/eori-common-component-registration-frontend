@@ -32,7 +32,7 @@ trait AccessController {
     affinityGroup: Option[AffinityGroup],
     credentialRole: Option[CredentialRole],
     enrolments: Set[Enrolment]
-  )(action: Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
+  )(action: => Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
 
     def hasEnrolment(implicit request: Request[AnyContent]): Boolean =
       Service.serviceFromRequest.exists(service => enrolments.exists(_.key.equalsIgnoreCase(service.enrolmentKey)))
