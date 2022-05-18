@@ -32,22 +32,29 @@ trait AccessController {
     affinityGroup: Option[AffinityGroup],
     credentialRole: Option[CredentialRole],
     enrolments: Set[Enrolment]
-  )(action: Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
+  )(action: => Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
 
     def hasEnrolment(implicit request: Request[AnyContent]): Boolean =
       Service.serviceFromRequest.exists(service => enrolments.exists(_.key.equalsIgnoreCase(service.enrolmentKey)))
 
     def isPermittedUserType: Boolean =
       affinityGroup match {
-        case Some(Agent)        => false
-        case Some(Organisation) => credentialRole.fold(false)(cr => cr == User)
-        case _                  => true
+        case Some(Agent) => false
+        case _           => true
+      }
+
+    def isPermittedCredentialRole: Boolean =
+      credentialRole match {
+        case Some(User) => true
+        case _          => false
       }
 
     if (!isPermittedUserType)
       Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else if (hasEnrolment)
       Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service)))
+    else if (!isPermittedCredentialRole)
+      Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else
       action
   }

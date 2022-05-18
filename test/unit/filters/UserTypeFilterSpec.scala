@@ -94,6 +94,44 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
       await(result).header.headers(LOCATION) should endWith("you-cannot-use-service")
     }
 
+    "return Redirect (303) when an organisation with an assistant account attempts to access a route with existing enrollment" in {
+      val atarEnrolment = Enrolment("HMRC-ATAR-ORG").withIdentifier("EORINumber", "GB134123")
+
+      AuthBuilder.withAuthorisedUser(
+        "user-1236213",
+        mockAuthConnector,
+        userAffinityGroup = AffinityGroup.Organisation,
+        userCredentialRole = Some(Assistant),
+        otherEnrolments = Set(atarEnrolment)
+      )
+
+      val result = controller
+        .download()
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/atar/subscribe/", defaultUserId)
+        )
+
+      await(result).header.headers(LOCATION) should endWith("enrolment-already-exists")
+    }
+
+    "return Redirect (303) when an organisation with an assistant account attempts to access a route without existing enrollment" in {
+      AuthBuilder.withAuthorisedUser(
+        "user-1236213",
+        mockAuthConnector,
+        userAffinityGroup = AffinityGroup.Organisation,
+        userCredentialRole = Some(Assistant),
+        otherEnrolments = Set.empty[Enrolment]
+      )
+
+      val result = controller
+        .download()
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/atar/subscribe/", defaultUserId)
+        )
+
+      await(result).header.headers(LOCATION) should endWith("you-cannot-use-service")
+    }
+
     "return OK (200) when an organisation with a standard account attempts to access a route" in {
       AuthBuilder.withAuthorisedUser(
         "user-1236213",
