@@ -340,7 +340,7 @@ ecc.start-page.gbeori.para1.title = TRANSLATE If you are UK VAT registered we wi
 ecc.start-page.gbeori.para1.bullet1 = Rhif TAW
 ecc.start-page.gbeori.para1.bullet2 = cod post y cyfeiriad a gofrestrwyd ar gyfer TAW
 ecc.start-page.gbeori.para1.bullet3 = dyddiad y daw TAW i rym
-ecc.start-page.gbeori.para2 = TRANSLATE <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank">Find your VAT details (opens in new tab/window)</a>
+ecc.start-page.gbeori.para2 = TRANSLATE <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your VAT details (opens in new tab/window)</a>
 ecc.start-page.gbeori.para3.title = TRANSLATE We also ask for:
 ecc.start-page.gbeori.para3.bullet = Cod Dosbarthiad Diwydiannol Safonol (SIC). <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank">Dewch o hyd i’ch cod SIC (yn agor ffenestr neu dab newydd)</a>.
 ecc.start-page.company.title = Manylion y cwmni neu sefydliad arall

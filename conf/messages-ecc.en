@@ -342,7 +342,7 @@ ecc.start-page.gbeori.para1.title = If you are UK VAT registered we will ask you
 ecc.start-page.gbeori.para1.bullet1 = VAT number
 ecc.start-page.gbeori.para1.bullet2 = VAT registered address postcode
 ecc.start-page.gbeori.para1.bullet3 = VAT effective date
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank">Find your VAT details (opens in new tab/window)</a>
+ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your VAT details (opens in new tab/window)</a>
 ecc.start-page.gbeori.para3.title = We also ask for:
 ecc.start-page.gbeori.para3.bullet = Standard Industrial Classification (SIC) code. <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank">Find your SIC code (opens in new window or tab)</a>.
 ecc.start-page.company.title = Company or other organisation details
