@@ -75,7 +75,7 @@ ecc.subscription.information.para1=Er mwyn eich tanysgrifio i’r gwasanaeth {0}
 
 ecc.subscription.information.para2.heading=Rhif EORI GB
 ecc.subscription.information.para2=Bydd angen rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (rhif EORI) GB arnoch.
-ecc.subscription.information.para2.warning=!RhybuddMae’n rhaid i’r rhif EORI GB fod yr un sy’n gysylltiedig â’r Dynodydd Defnyddiwr (ID) Porth y Llywodraeth a ddefnyddiwyd gennych i fewngofnodi. <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank">Gwiriwch y rhif EORI GB (yn agor ffenestr neu dab newydd)</a>.
+ecc.subscription.information.para2.warning=!RhybuddMae’n rhaid i’r rhif EORI GB fod yr un sy’n gysylltiedig â’r Dynodydd Defnyddiwr (ID) Porth y Llywodraeth a ddefnyddiwyd gennych i fewngofnodi. <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Gwiriwch y rhif EORI GB (yn agor ffenestr neu dab newydd)</a>.
 ecc.subscription.information.para2.text=Os nad oes gennych rif EORI, byddwch yn cael un gyda’ch tanysgrifiad i’r gwasanaeth {0}. Bydd angen i chi ddarparu’r canlynol:
 ecc.subscription.information.para2.list.first=manylion TAW os ydych wedi’ch cofrestru yn y DU
 ecc.subscription.information.para2.list.bullet.first=rhif TAW

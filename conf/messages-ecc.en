@@ -75,7 +75,7 @@ ecc.subscription.information.para1=In order to subscribe you to {0} we need some
 
 ecc.subscription.information.para2.heading=GB EORI number
 ecc.subscription.information.para2=You will need a GB Economic Operators Registration and Identification number (EORI number).
-ecc.subscription.information.para2.warning=The GB EORI number must be the one linked to the Government Gateway ID you used to sign in. <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank">Check EORI (opens in new window or tab)</a>.
+ecc.subscription.information.para2.warning=The GB EORI number must be the one linked to the Government Gateway ID you used to sign in. <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Check EORI (opens in new window or tab)</a>.
 ecc.subscription.information.para2.text=If you do not have an EORI, you will get one with your {0} subscription. You will need to provide:
 ecc.subscription.information.para2.list.first=VAT details if UK registered
 ecc.subscription.information.para2.list.bullet.first=VAT number
