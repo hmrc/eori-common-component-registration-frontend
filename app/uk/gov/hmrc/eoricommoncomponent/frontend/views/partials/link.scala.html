@@ -15,4 +15,4 @@
  *@
 
 @(text: String, url: String, target: String = "_self")(implicit messages: Messages, request: Request[_])
-<a href="@url" target="@target" class="govuk-link">@messages(text)</a>
+<a href="@url" target="@target" class="govuk-link" rel="noopener noreferrer">@messages(text)</a>
