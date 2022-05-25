@@ -861,7 +861,7 @@ cds.subscription.date-of-establishment.error.required.date-of-establishment=Nodw
 cds.subscription.date-of-establishment.error.invalid.date-of-establishment=Nodwch ddyddiad sefydlu dilys
 cds.subscription.date-of-establishment.error.in-future.date-of-establishment=Ni allwch nodi dyddiad sefydlu sydd yn y dyfodol
 cds.subscription.date-of-establishment.cannot-find=Methu dod o hyd i’r dystysgrif?
-cds.subscription.date-of-establishment.find-it=Gallwch ddod o hyd i’r dyddiad ymgorffori ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank"> gofrestr Tŷ’r Cwmnïau</a>
+cds.subscription.date-of-establishment.find-it=Gallwch ddod o hyd i’r dyddiad ymgorffori ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer"> gofrestr Tŷ’r Cwmnïau</a>
 cds.subscription.sic.page.title=Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich sefydliad?
 cds.subscription.sic.heading=Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich sefydliad?
 cds.subscription.sic.nonuk.soleTrader.heading=Nodwch god Dosbarthiad Diwydiannol Safonol (SIC) sy’n disgrifio’r hyn y mae’ch busnes yn ei wneud
