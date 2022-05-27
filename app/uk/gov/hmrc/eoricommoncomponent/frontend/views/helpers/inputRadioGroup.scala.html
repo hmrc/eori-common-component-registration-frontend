@@ -57,10 +57,6 @@
     if(hasHintHtml) s"${field.id}-hintHtml" else ""
 }
 
-@describedBy = @{
-    Seq(hintId, hintHtmlId).filterNot(_.isEmpty).mkString(" ")
-}
-
 @govukRadios(Radios(
     idPrefix = Some(field.id),
     name = field.name,
