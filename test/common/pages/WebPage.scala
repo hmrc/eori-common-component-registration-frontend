@@ -27,7 +27,7 @@ trait WebPage extends MustMatchers {
   val countrySuggestion              = By.xpath("//*[@id='countryCode__option--0']")
 
   protected def fieldLevelErrorXpath(fieldName: String) =
-    s"//span[contains(@id, '$fieldName-error') and contains(@class, 'error-message')]"
+    s"//p[contains(@id, '$fieldName-error') and contains(@class, 'error-message')]"
 
   val title: String
 

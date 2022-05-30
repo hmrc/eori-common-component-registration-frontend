@@ -24,7 +24,7 @@ object SubscriptionAmendCompanyDetailsPage extends WebPage {
 
   val formId: String = "companyDetailsForm"
 
-  val useShortNameFieldLevelErrorXpath = "//span[@class='error-message']"
+  val useShortNameFieldLevelErrorXpath = "//p[@class='error-message']"
 
   val shortNameLabelXpath                   = "//*label[@for='short-name']"
   val shortNameFieldLevelErrorXpath: String = fieldLevelErrorXpath("short-name")

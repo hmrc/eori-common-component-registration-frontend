@@ -20,7 +20,7 @@ import common.pages.WebPage
 
 trait OrganisationUtrPage extends WebPage {
 
-  val fieldLevelErrorUtr     = "//span[@id='utr-error' and @class='govuk-error-message']"
+  val fieldLevelErrorUtr     = "//p[@id='utr-error' and @class='govuk-error-message']"
   val labelForUtrXpath       = "//*[@id='utr-outer']/label"
   val linkInUtrHintTextXpath = "//*[@id='utr-hint']/a"
 
