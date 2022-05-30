@@ -39,7 +39,7 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val emailAddressFieldId              = "email"
 
   val emailReadOnlyFieldXPath = "//*[@id='email-read-only']"
-  val emailLabelXPath         = "//*[@id='email-outer']/label"
+  val emailLabelXPath         = "//*[@id='email-outer']/span"
 
   val telephoneFieldXPath           = "//*[@id='telephone']"
   val telephoneFieldLevelErrorXPath = "//span[@id='telephone-error' and @class='govuk-error-message']"

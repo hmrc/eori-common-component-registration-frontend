@@ -987,7 +987,7 @@ cds.subscription.date-of-establishment.error.required.date-of-establishment=Ente
 cds.subscription.date-of-establishment.error.invalid.date-of-establishment=Please enter a valid date of establishment
 cds.subscription.date-of-establishment.error.in-future.date-of-establishment=You cannot enter a date of establishment in the future
 cds.subscription.date-of-establishment.cannot-find=Can’t find the certificate?
-cds.subscription.date-of-establishment.find-it=You can find the incorporated date on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank"> Companies House register</a>
+cds.subscription.date-of-establishment.find-it=You can find the incorporated date on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer"> Companies House register</a>
 
 #Sic Code
 cds.subscription.sic.page.title=What is the Standard Industrial Classification (SIC) code for your organisation?
