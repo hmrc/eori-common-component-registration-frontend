@@ -52,18 +52,15 @@
 
             @CSRF.formField
 
-            <legend>
-                <h1 class="govuk-heading-l">@messages(introText)</h1>
-            </legend>
-
             @inputText(
                 form = shortNameYesNoForm,
                 id = "short-name",
                 name = "short-name",
-                label = "ecc.business-short-name.short-name",
-                isPageHeading = false,
+                label = messages(introText),
+                isPageHeading = true,
                 classes = Some("govuk-!-width-one-half"),
                 autocomplete = None,
+                labelClasses = Some("govuk-label--l")
             )
 
             @govukButton(Button(
