@@ -68,7 +68,7 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     "have aria-described-by on the fieldset" in {
       doc.body
         .getElementsByClass("govuk-fieldset")
-        .attr("aria-describedby") mustBe "have-utr-hintHtml have-utr-hint"
+        .attr("aria-describedby") mustBe "have-utr-hint"
 
     }
     "display correct progressive disclosure heading" in {
