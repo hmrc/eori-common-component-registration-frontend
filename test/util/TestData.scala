@@ -44,4 +44,7 @@ trait TestData {
       Some("/other-service/feedback")
     )
 
+  val cdsService: Service =
+    Service("other", "HMRC-CUS-ORG", "CDS", None, "/cds/accessibility", "CDS Service", "", Some("/cds/feedback"))
+
 }
