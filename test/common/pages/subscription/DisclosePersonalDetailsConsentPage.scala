@@ -23,7 +23,7 @@ trait DisclosePersonalDetailsConsentPage extends WebPage {
 
   val url: String = frontendHost + "/customs-registration-services/register/disclose-personal-details-consent"
 
-  val fieldLevelErrorYesNoAnswer: String = "//span[@id='yes-no-answer-error' and @class='govuk-error-message']"
+  val fieldLevelErrorYesNoAnswer: String = "//p[@id='yes-no-answer-error' and @class='govuk-error-message']"
 
   override val title = "Do you want to include your organisation name and address on the EORI checker?"
 

@@ -28,11 +28,11 @@ abstract class NameDateOfBirthPage extends WebPage {
 
   val middleName = "//*[@id='middle-name']"
 
-  val fieldLevelErrorFirstName = "//span[@id='first-name-error' and @class='govuk-error-message']"
+  val fieldLevelErrorFirstName = "//p[@id='first-name-error' and @class='govuk-error-message']"
 
-  val fieldLevelErrorLastName = "//span[@id='last-name-error' and @class='govuk-error-message']"
+  val fieldLevelErrorLastName = "//p[@id='last-name-error' and @class='govuk-error-message']"
 
-  val fieldLevelErrorDateOfBirth = "//span[@id='date-of-birth-error' and @class='govuk-error-message']"
+  val fieldLevelErrorDateOfBirth = "//p[@id='date-of-birth-error' and @class='govuk-error-message']"
 
   override val title = "Enter your details"
 

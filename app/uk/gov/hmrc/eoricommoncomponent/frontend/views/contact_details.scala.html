@@ -79,9 +79,8 @@
 @weWillUseThisAddress = @{Html("<span id='registered-address' class='form-label panel panel-border-wide'>" + address + "</span>")}
 
 @fieldsetHint = {
-    <span id="fieldset-hint" class="govuk-hint">@Html(messages("cds.subscription.contact-details.intro"))</span>}
-
-
+      @govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("cds.subscription.contact-details.intro")), classes = "govuk-!-margin-bottom-3"))
+}
 @addressHtml = {
     <div id="contact">
         <p class="govuk-body">@messages("cds.subscription.contact-details.change-address.label")</p>
