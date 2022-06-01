@@ -62,7 +62,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val sub02EoriAlreadyAssociatedView  = instanceOf[sub02_eori_already_associated]
   private val sub02EoriAlreadyExists          = instanceOf[sub02_eori_already_exists]
   private val sub01OutcomeRejected            = instanceOf[sub01_outcome_rejected]
-  private val subscriptionOutcomeView         = instanceOf[subscription_outcome]
+  private val subscriptionOutcomeView         = instanceOf[standalone_subscription_outcome]
   private val xiEoriGuidanceView              = instanceOf[xi_eori_guidance]
   private val EORI                            = "ZZZ1ZZZZ23ZZZZZZZ"
 

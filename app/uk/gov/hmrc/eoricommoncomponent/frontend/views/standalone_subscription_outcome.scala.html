@@ -1,0 +1,81 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.JourneyStatus
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.{longName, service}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukPanel
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Text, HtmlContent}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.panel.Panel
+@import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+
+@this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter, govukPanel: GovukPanel, appConfig: AppConfig)
+
+@(eori: String, name: String, processedDate: String)(implicit messages: Messages, request: Request[_])
+@checkEORILink = {
+    <a class="govuk-link" href=@appConfig.checkEORINumber target="_blank" rel="noopener noreferrer">@messages("cds.standalone.subscription.outcomes.success.extra.information2")</a>
+}
+@layout_di(messages("cds.subscription.outcomes.success.title"), displayBackLink = false) {
+<div>
+    @govukPanel(Panel(
+        title = HtmlContent(s"""${messages("cds.standalone.subscription.outcomes.success.heading", name)}<br><strong id="eori-number" class="govuk-!-font-weight-regular">$eori</strong>"""),
+        content = HtmlContent(s"""<p style="color:white" id="issued-date" class="govuk-heading-m">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</p>""")
+    ))
+
+    <div id='additional-information' class="govuk-form-group">
+        <p class="govuk-body">@messages("cds.standalone.subscription.outcomes.success.email")</p>
+        <ul class="govuk-list">
+            <li>
+                <a id="download-eori" href="/customs-registration-services/register/download/pdf" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori")</a>
+            <li>
+            <li>
+                <a id="download-eori-text" href="/customs-registration-services/register/download/text" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori-textfile")</a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="what-happens-next">
+        <h2 class="govuk-heading-m">@messages("cds.standalone.subscription.outcomes.success.extra.information.heading")</h2>
+        <p class="govuk-body">@Html(messages("cds.standalone.subscription.outcomes.success.extra.information1", checkEORILink))</p>
+    </div>
+
+    <div id="xi-eori">
+        <h2 class="govuk-heading-m">@messages("ecc.subscription.outcomes.success.xi")</h2>
+        <p class="govuk-body">@messages("ecc.subscription.outcomes.success.xi.date.info")</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet1")</li>
+            <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet2")</li>
+            <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet3")</li>
+        </ul>
+        <p class="govuk-body">@Html(messages("ecc.subscription.outcomes.success.xi.info.href"))</p>
+        <p class="govuk-body">@messages("ecc.subscription.outcomes.success.xi.info2")</p>
+    </div>
+
+    <div id="eori-gg">
+        <h2 class="govuk-heading-m">@messages("ecc.standalone.subscription.status.gg.h1")</h2>
+        <p class="govuk-body">@messages("ecc.standalone.subscription.status.gg.p1", longName)</p>
+        <p class="govuk-body">@messages("ecc.standalone.subscription.status.gg.p2")</p>
+    </div>
+
+    @helpers.feedbackBackContinue(service, JourneyStatus.Processing)
+
+    @help_di()
+
+    @feedback_di()
+
+</div>
+}

@@ -315,6 +315,9 @@ ecc.subscription.outcomes.success.xi.info2=If you have an EORI number issued by 
 ecc.subscription.status.gg.h1=Your EORI number and Government Gateway
 ecc.subscription.status.gg.p1=Your EORI number is linked to the Government Gateway account you have used for this application and you will have access to {0} within two hours.
 ecc.subscription.status.gg.p2=You can''t apply for another EORI number using this Government Gateway.
+ecc.standalone.subscription.status.gg.h1=Your EORI number and Government Gateway
+ecc.standalone.subscription.status.gg.p1=Your EORI number is linked to the Government Gateway account you have used for this application.
+ecc.standalone.subscription.status.gg.p2=You cannot apply for another EORI number using this Government Gateway.
 
 ecc.subscription.outcomes.guidance.title=Get an XI EORI number
 ecc.subscription.outcomes.guidance.heading=How to get an XI EORI number

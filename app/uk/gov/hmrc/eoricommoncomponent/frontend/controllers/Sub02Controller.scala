@@ -24,13 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  CdsSubscriber,
-  SubscriptionDetailsService,
-  SubscriptionFailed,
-  SubscriptionPending,
-  SubscriptionSuccessful
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CdsSubscriber, SubscriptionDetailsService, SubscriptionFailed, SubscriptionPending, SubscriptionSuccessful}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.xi_eori_guidance
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -50,7 +44,7 @@ class Sub02Controller @Inject() (
   sub02EoriAlreadyAssociatedView: sub02_eori_already_associated,
   sub02EoriAlreadyExists: sub02_eori_already_exists,
   sub01OutcomeRejected: sub01_outcome_rejected,
-  subscriptionOutcomeView: subscription_outcome,
+  standalonesubscriptionOutcomeView: standalone_subscription_outcome,
   xiEoriGuidancePage: xi_eori_guidance,
   cdsSubscriber: CdsSubscriber
 )(implicit ec: ExecutionContext)
@@ -108,7 +102,7 @@ class Sub02Controller @Inject() (
         _            <- sessionCache.remove
         _            <- sessionCache.saveSub02Outcome(sub02Outcome)
       } yield Ok(
-        subscriptionOutcomeView(
+        standalonesubscriptionOutcomeView(
           sub02Outcome.eori
             .getOrElse("EORI not populated from Sub02 response."),
           sub02Outcome.fullName,
