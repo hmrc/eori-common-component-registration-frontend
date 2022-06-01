@@ -31,7 +31,9 @@
 
         <p class="govuk-body" id="para1">@messages("cds.enrolment.already.exists.para1", longName)</p>
 
-        @callBackContinue(service)
+        @if(service.callBack.nonEmpty){
+            @callBackContinue(service)
+        }
 
         @helpers.helpAndSupport()
 

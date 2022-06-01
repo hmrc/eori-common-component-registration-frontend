@@ -39,5 +39,5 @@ object ServiceName {
     // TODO - investigate why service is sometimes missing from url
     Service.serviceFromRequest.getOrElse(empty)
 
-  private val empty = Service("", "", "", "", "", "", "", None)
+  private val empty = Service("", "", "", None, "", "", "", None)
 }
