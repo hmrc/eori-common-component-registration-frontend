@@ -24,7 +24,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CdsSubscriber, SubscriptionDetailsService, SubscriptionFailed, SubscriptionPending, SubscriptionSuccessful}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  CdsSubscriber,
+  SubscriptionDetailsService,
+  SubscriptionFailed,
+  SubscriptionPending,
+  SubscriptionSuccessful
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.xi_eori_guidance
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
