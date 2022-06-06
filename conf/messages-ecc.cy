@@ -315,7 +315,7 @@ ecc.standalone.subscription.outcomes.success.xi.info.bullet1=symud nwyddau rhwng
 ecc.standalone.subscription.outcomes.success.xi.info.bullet2=gwneud datganiad yng Ngogledd Iwerddon
 ecc.standalone.subscription.outcomes.success.xi.info.bullet3=cael penderfyniad tollau yng Ngogledd Iwerddon
 ecc.standalone.subscription.outcomes.success.xi.info.href=Gwnewch gais am rif EORI sy’n dechrau gyda XI.
-ecc.standalone.subscription.outcomes.success.xi.info2=Os oes gennych rif EORI a gyhoeddwyd gan wlad yn yr UE, nid oes angen i chi gael EORI sy’n dechrau gyda XI.
+ecc.standalone.subscription.outcomes.success.xi.info2=TRANSLATE If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI.
 
 
 ecc.subscription.status.gg.h1=Eich rhif EORI a’ch cyfrif Porth y Llywodraeth

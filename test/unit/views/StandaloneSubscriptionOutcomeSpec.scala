@@ -94,7 +94,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
       xiParagraph.getElementsByTag("p").get(1).text() mustBe "Apply for an EORI number that starts with XI."
       xiParagraph.getElementsByTag("p").get(
         2
-      ).text() mustBe "If you have an EORI number issued by an EU country, you do not need to obtain an EORI starting with XI."
+      ).text() mustBe "If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI."
     }
 
     "display GG paragraph" in {
