@@ -60,7 +60,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
       ).text() mustBe "We will send you an email to confirm your GB EORI application request has been received."
 
       val listItems = additionalInfoParagraph.getElementsByTag("li")
-      listItems.get(0).text() mustBe "Download a PDF of your EORI number(266kb)"
+      listItems.get(0).text() mustBe "Download a PDF of your GB EORI number(266kb)"
       listItems.get(0).getElementsByTag("a").attr("href") mustBe "/customs-registration-services/register/download/pdf"
       listItems.get(1).text() mustBe "Download an accessible text file of your EORI number(12kb)"
       listItems.get(1).getElementsByTag("a").attr("href") mustBe "/customs-registration-services/register/download/text"
@@ -72,7 +72,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
       whatsNextParagraph.getElementsByTag("h2").get(0).text() mustBe "What happens next"
       whatsNextParagraph.getElementsByTag(
         "p"
-      ).text() mustBe "Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the check an EORI service(opens in a new tab) . Your new GB EORI has no expiry date."
+      ).text() mustBe "Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the check an EORI service (opens in a new tab) . Your new GB EORI has no expiry date."
       whatsNextParagraph.getElementsByTag("a").attr("href") must endWith("/check-eori-number")
     }
 

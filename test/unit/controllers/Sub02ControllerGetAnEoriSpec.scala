@@ -350,7 +350,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           page.getElementsText(RegistrationCompletePage.whatHappensNextXpath) shouldBe
             strim("""
                 |What happens next Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete.
-                |If you would like to check the status of your GB EORI you can use the check an EORI service(opens in a new tab) . Your new GB EORI has no expiry date.
+                |If you would like to check the status of your GB EORI you can use the check an EORI service (opens in a new tab) . Your new GB EORI has no expiry date.
                 | """)
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
           page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include(
