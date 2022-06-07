@@ -25,16 +25,16 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val formId = "contactDetailsForm"
 
   val headingXPath        = "//*[@id='contactDetailsForm']/fieldset/legend/h1"
-  val introXPathRegister  = "//*[@id='contactDetailsForm']/fieldset/span"
+  val introXPathRegister  = "//*[@id='fieldset-hint']"
   val introXPathSubscribe = "//*[@id='contactDetailsForm']/fieldset/p"
 
   val fullNameFieldXPath           = "//*[@id='full-name']"
-  val fullNameFieldLevelErrorXPath = "//span[@id='full-name-error' and @class='govuk-error-message']"
+  val fullNameFieldLevelErrorXPath = "//p[@id='full-name-error' and @class='govuk-error-message']"
   val fullNameFieldLabel           = "Full name"
   val fullNameFieldId              = "full-name"
 
   val emailFieldXPath                  = "//*[@id='email']"
-  val emailAddressFieldLevelErrorXPath = "//span[@id='email-error' and @class='govuk-error-message']"
+  val emailAddressFieldLevelErrorXPath = "//p[@id='email-error' and @class='govuk-error-message']"
   val emailAddressFieldLabel           = "Email address"
   val emailAddressFieldId              = "email"
 
@@ -42,13 +42,13 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val emailLabelXPath         = "//*[@id='email-outer']/span"
 
   val telephoneFieldXPath           = "//*[@id='telephone']"
-  val telephoneFieldLevelErrorXPath = "//span[@id='telephone-error' and @class='govuk-error-message']"
+  val telephoneFieldLevelErrorXPath = "//p[@id='telephone-error' and @class='govuk-error-message']"
   val telephoneFieldLabel           = "Telephone"
   val telephoneHintText             = "Only enter numbers, for example 01632 960 001"
   val telephoneFieldId              = "telephone"
 
   val faxFieldXPath           = "//*[@id='fax']"
-  val faxFieldLevelErrorXPath = "//span[@id='fax-error' and @class='govuk-error-message']"
+  val faxFieldLevelErrorXPath = "//p[@id='fax-error' and @class='govuk-error-message']"
   val faxFieldLabel           = "Fax (optional)"
   val faxHintText             = "Only enter numbers, for example 01632 960 001"
   val faxFieldId              = "fax"
@@ -56,20 +56,20 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val useRegisteredAddressLabel = "Enter address"
 
   val streetFieldXPath           = "//*[@id='street']"
-  val streetFieldLevelErrorXPath = "//span[@id='street-error' and @class='govuk-error-message']"
+  val streetFieldLevelErrorXPath = "//p[@id='street-error' and @class='govuk-error-message']"
   val streetFieldLabel           = "Street"
 
   val cityFieldXPath           = "//*[@id='city']"
-  val cityFieldLevelErrorXPath = "//span[@id='city-error' and @class='govuk-error-message']"
+  val cityFieldLevelErrorXPath = "//p[@id='city-error' and @class='govuk-error-message']"
   val cityFieldLabel           = "Town or city"
 
-  val countryFieldLevelErrorXPath = "//span[@id='countryCode-error' and @class='govuk-error-message']"
+  val countryFieldLevelErrorXPath = "//p[@id='countryCode-error' and @class='govuk-error-message']"
   val countryFieldLabel           = "Country"
 
   val countryCodeSelectedOptionXPath = "//*[@id='countryCode']/option[@selected]"
 
   val postcodeFieldXPath           = "//*[@id='postcode']"
-  val postcodeFieldLevelErrorXPath = "//span[@id='postcode-error' and @class='govuk-error-message']"
+  val postcodeFieldLevelErrorXPath = "//p[@id='postcode-error' and @class='govuk-error-message']"
   val postcodeFieldLabel           = "Postcode"
 
   val registeredAddressQuestionXPath =

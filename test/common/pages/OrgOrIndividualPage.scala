@@ -19,7 +19,7 @@ package common.pages
 trait OrgOrIndividualPage extends WebPage {
 
   val fieldLevelErrorOrganisationType: String =
-    "//span[contains(@id, 'organisation-type-error') and contains(@class, 'govuk-error-message']"
+    "//p[contains(@id, 'organisation-type-error') and contains(@class, 'govuk-error-message']"
 
   override val title = "What do you want to apply as?"
 

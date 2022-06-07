@@ -19,7 +19,7 @@ package common.pages.matching
 import common.pages.WebPage
 
 trait OrganisationNamePage extends WebPage {
-  val fieldLevelErrorName = "//span[@id='name-error' and @class='govuk-error-message']"
+  val fieldLevelErrorName = "//p[@id='name-error' and @class='govuk-error-message']"
   val labelForName        = "//*label[@for='name']"
   val labelForNameOuter   = "//h1[@class='govuk-label-wrapper']//label"
 
