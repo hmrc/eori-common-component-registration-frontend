@@ -63,7 +63,7 @@ class SubscriptionTextDownloadControllerSpec extends ControllerSpec with BeforeA
 
       status(result) shouldBe OK
       contentType(result) shouldBe Some("plain/text")
-      header(CONTENT_DISPOSITION, result) shouldBe Some("attachment; filename=Subscription-EORI-number.txt")
+      header(CONTENT_DISPOSITION, result) shouldBe Some("attachment; filename=EORI-number.txt")
       contentAsString(result).filterNot(_ == '\r') shouldBe
         """HM Revenue & Customs
           |

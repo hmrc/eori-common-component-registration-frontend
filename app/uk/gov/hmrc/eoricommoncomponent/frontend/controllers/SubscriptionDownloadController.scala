@@ -49,7 +49,7 @@ class SubscriptionDownloadController @Inject() (
           pdfGenerator.generatePdf(pdfAsHtml).map { pdfByteStream =>
             Ok(pdfByteStream)
               .as("application/pdf")
-              .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=Subscription-EORI-number.pdf")
+              .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=EORI-number.pdf")
           }
         case Left(errorTemplate) => Future.successful(errorTemplate)
       }

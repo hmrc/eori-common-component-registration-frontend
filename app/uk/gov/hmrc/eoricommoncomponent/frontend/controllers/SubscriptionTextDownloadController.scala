@@ -43,7 +43,7 @@ class SubscriptionTextDownloadController @Inject() (
           .map(_.processedDate)
       } yield Ok(subscriptionTextDownloadView(eori, name, processedDate))
         .as("plain/text")
-        .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=Subscription-EORI-number.txt")
+        .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=EORI-number.txt")
   }
 
 }

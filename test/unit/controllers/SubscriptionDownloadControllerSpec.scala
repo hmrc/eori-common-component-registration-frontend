@@ -82,7 +82,7 @@ class SubscriptionDownloadControllerSpec extends ControllerSpec with AuthActionM
 
       status(result) shouldBe OK
       contentType(result) shouldBe Some("application/pdf")
-      header(CONTENT_DISPOSITION, result) shouldBe Some("attachment; filename=Subscription-EORI-number.pdf")
+      header(CONTENT_DISPOSITION, result) shouldBe Some("attachment; filename=EORI-number.pdf")
       contentAsBytes(result) shouldBe pdf
     }
 
