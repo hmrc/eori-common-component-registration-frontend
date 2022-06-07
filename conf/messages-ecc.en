@@ -361,3 +361,11 @@ ecc.start-page.help.eori.contact = Contact the EORI team online.
 date.fields.day = Day
 date.fields.month = Month
 date.fields.year = Year
+
+ecc.cannot-change-address-company.title = Please contact Companies House
+ecc.cannot-change-address-company.info = Your company''s registered address is held at {0}. You will need to update your details there and return to complete your EORI application.
+ecc.cannot-change-address-company.link = Companies House (opens in a new tab)
+
+ecc.cannot-change-address-individual.title = Please contact HMRC
+ecc.cannot-change-address-individual.info = Your registered address is held at {0}. You will need to update your details there and return to complete your EORI application.
+ecc.cannot-change-address-individual.link = HMRC (opens in a new tab)
