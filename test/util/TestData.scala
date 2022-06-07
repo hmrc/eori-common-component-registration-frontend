@@ -25,7 +25,7 @@ trait TestData {
       "atar",
       "HMRC-ATAR-ORG",
       "ATaR",
-      "/test-atar/callback",
+      Some("/test-atar/callback"),
       "/test-atar/accessibility",
       "ATaR Service",
       "",
@@ -37,11 +37,14 @@ trait TestData {
       "other",
       "HMRC-OTHER-ORG",
       "Other",
-      "/other-service/callback",
+      Some("/other-service/callback"),
       "/other-service/accessibility",
       "Other Service",
       "",
       Some("/other-service/feedback")
     )
+
+  val cdsService: Service =
+    Service("other", "HMRC-CUS-ORG", "CDS", None, "/cds/accessibility", "CDS Service", "", Some("/cds/feedback"))
 
 }
