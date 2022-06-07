@@ -1024,6 +1024,7 @@ cds.subscription.outcomes.steps.why=Why am I seeing this?
 cds.subscription.outcomes.success.title=Application complete
 cds.subscription.outcomes.success.heading=The EORI number for {0} is
 cds.subscription.outcomes.success.issued=issued by HMRC on
+cds.subscription.outcomes.success.eori=Your new EORI number starting with GB is:
 cds.subscription.outcomes.success.optional-paragraph=We have sent you a confirmation email.
 cds.subscription.outcomes.success.will-send-email=We will send you an email to confirm when you have access to CDS. This can take up to two hours.
 cds.subscription.outcomes.success.extra.information=Your EORI number will be ready to use within 48 hours. It will appear on the EORI validation checker within 5 days. It has no expiry date.

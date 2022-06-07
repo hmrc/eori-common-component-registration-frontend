@@ -29,18 +29,18 @@
 @layout_di(messages("cds.subscription.outcomes.success.title"), displayBackLink = false) {
 <div>
     @govukPanel(Panel(
-        title = HtmlContent(s"""${messages("cds.subscription.outcomes.success.heading", name)}<br><strong id="eori-number" class="govuk-!-font-weight-regular">$eori</strong>"""),
-        content = HtmlContent(s"""<p style="color:white" id="issued-date" class="govuk-heading-m">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</p>""")
+        title = HtmlContent(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")} $name"""),
+        content = HtmlContent(s""" <h5 style="color:white" id="issued-date" class="govuk-heading-s"><strong>${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</strong></h5><p style="color:white" id="eori-number" class="govuk-heading-m govuk-!-font-size-27">${messages("cds.subscription.outcomes.success.eori")} <br>$eori</p>""")
     ))
 
     <div id='additional-information' class="govuk-form-group">
         <p class="govuk-body">@messages("cds.subscription.outcomes.success.optional-paragraph")</p>
         <ul class="govuk-list">
             <li>
-                <a id="download-eori" href="/customs-registration-services/register/download/pdf" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori")</a>
+                <a id="download-subscription" href="/customs-registration-services/register/subscription-download/pdf" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori")</a>
             <li>
             <li>
-                <a id="download-eori-text" href="/customs-registration-services/register/download/text" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori-textfile")</a>
+                <a id="download-subscription-text" href="/customs-registration-services/register/subscription-download/text" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori-textfile")</a>
             </li>
         </ul>
     </div>

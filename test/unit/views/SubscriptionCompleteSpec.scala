@@ -37,7 +37,7 @@ class SubscriptionCompleteSpec extends ViewSpec {
   "'Subscription Rejected' Page with name" should {
 
     "display correct heading" in {
-      doc.body.getElementsByTag("h1").text() must startWith(s"The EORI number for $orgName is $eori")
+      doc.body.getElementsByTag("h1").text() must startWith(s"Subscription request received for $orgName")
     }
     "have the correct class on the h1" in {
       doc.body.getElementsByTag("h1").hasClass("govuk-panel__title") mustBe true

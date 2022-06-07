@@ -894,6 +894,7 @@ cds.subscription.outcomes.steps.why=Pam ydw i’n gweld hyn?
 cds.subscription.outcomes.success.title=Cais wedi’i gwblhau
 cds.subscription.outcomes.success.heading=Y rhif EORI ar gyfer {0} yw
 cds.subscription.outcomes.success.issued=cyhoeddwyd gan CThEM ar
+cds.subscription.outcomes.success.eori=TRANSLATE(Your new EORI number starting with GB is:)
 cds.subscription.outcomes.success.optional-paragraph=Rydym wedi anfon e-bost cadarnhau atoch.
 cds.subscription.outcomes.success.will-send-email=Byddwn yn anfon e-bost atoch i gadarnhau pan fydd gennych fynediad at CDS. Gall hyn gymryd hyd at ddwy awr.
 cds.subscription.outcomes.success.extra.information=Bydd eich rhif EORI yn barod i’w ddefnyddio o fewn 48 awr. Bydd yn ymddangos ar y gwiriwr dilysu EORI cyn pen 5 diwrnod. Nid oes ganddo ddyddiad dod i ben.
