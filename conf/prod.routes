@@ -212,5 +212,6 @@ GET         /customs-registration-services/register/xi-eori-guidance            
 
 GET         /customs-registration-services/:service/register/logout                                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.logout(service: Service)
 
+GET         /customs-registration-services/:service/register/you-cannot-change-address                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotChangeAddressController.page(service: Service)
 
 ->          /                                                                                            health.Routes

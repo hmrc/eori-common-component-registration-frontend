@@ -219,9 +219,12 @@ class ConfirmContactDetailsController @Inject() (
               )
           )
       case WrongAddress =>
-        if (requestSessionData.isIndividualOrSoleTrader(request))
-          Future.successful(Ok(youCannotChangeAddressIndividual()))
-        else Future.successful(Ok(youCannotChangeAddressOrganisation()))
+        Future.successful(
+          Redirect(
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+              .page(service)
+          )
+        )
       case _ =>
         throw new IllegalStateException(
           "YesNoWrongAddressForm field somehow had a value that wasn't yes, no, wrong address, or empty"

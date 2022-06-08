@@ -473,9 +473,12 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       ).thenReturn(Future.successful(true))
 
       invokeConfirmContactDetailsWithSelectedOption(selectedOption = "wrong-address") { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("Please contact Companies House")
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(
+          LOCATION
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+          .page(atarService)
+          .url
       }
     }
 
@@ -498,9 +501,12 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       ).thenReturn(true)
 
       invokeConfirmContactDetailsWithSelectedOption(selectedOption = "wrong-address") { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("Please contact HMRC")
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(
+          LOCATION
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+          .page(atarService)
+          .url
       }
     }
   }
