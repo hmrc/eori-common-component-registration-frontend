@@ -54,7 +54,7 @@ class SubscriptionCompleteSpec extends ViewSpec {
       val xiParagraph = doc.body().getElementById("xi-eori")
 
       xiParagraph.getElementsByTag("h2").get(0).text() mustBe "If you move goods to or from Northern Ireland"
-      xiParagraph.getElementsByTag("p").get(0).text() mustBe "you will need an EORI number starting with XI if you:"
+      xiParagraph.getElementsByTag("p").get(0).text() mustBe "You will need an EORI number starting with XI if you:"
 
       val xiBulletList = xiParagraph.getElementsByTag("ul").get(0)
 
@@ -77,10 +77,10 @@ class SubscriptionCompleteSpec extends ViewSpec {
       ggParagraph.getElementsByTag("h2").get(0).text() mustBe "Your EORI number and Government Gateway"
       ggParagraph.getElementsByTag("p").get(
         0
-      ).text() mustBe "Your EORI number is linked to the Government Gateway account you have used for this application and you will have access to Advance Tariff Rulings within two hours."
+      ).text() mustBe "Your EORI number is linked to the Government Gateway account you have used for this application."
       ggParagraph.getElementsByTag("p").get(
         1
-      ).text() mustBe "You can't apply for another EORI number using this Government Gateway."
+      ).text() mustBe "You cannot apply for another EORI number using this Government Gateway."
     }
   }
 }

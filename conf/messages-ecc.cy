@@ -303,7 +303,7 @@ ecc.business-short-name.organisation.empty = Nodwch enw byrrach eich sefydliad
 ecc.business-short-name.error = Rhaid i’r enw byrrach fod yn 30 o gymeriadau neu lai
 
 ecc.subscription.outcomes.success.xi=Os ydych yn symud nwyddau i Ogledd Iwerddon neu oddi yno
-ecc.subscription.outcomes.success.xi.date.info=bydd angen rhif EORI sy’n dechrau gyda XI arnoch os ydych yn:
+ecc.subscription.outcomes.success.xi.date.info=TRANSLATE You will need an EORI number starting with XI if you:
 ecc.subscription.outcomes.success.xi.info.bullet1=symud nwyddau rhwng Gogledd Iwerddon a gwledydd nad ydynt yn rhan o’r UE
 ecc.subscription.outcomes.success.xi.info.bullet2=gwneud datganiad yng Ngogledd Iwerddon
 ecc.subscription.outcomes.success.xi.info.bullet3=cael penderfyniad tollau yng Ngogledd Iwerddon
@@ -311,8 +311,8 @@ ecc.subscription.outcomes.success.xi.info.href=<a href="/customs-registration-se
 ecc.subscription.outcomes.success.xi.info2=Os oes gennych rif EORI a gyhoeddwyd gan wlad yn yr UE, nid oes angen i chi gael EORI sy’n dechrau gyda XI.
 
 ecc.subscription.status.gg.h1=Eich rhif EORI a’ch cyfrif Porth y Llywodraeth
-ecc.subscription.status.gg.p1=Mae’ch rhif EORI yn gysylltiedig â’r cyfrif Porth y Llywodraeth rydych wedi’i ddefnyddio ar gyfer y cais hwn, a bydd gennych fynediad at y gwasanaeth {0} o fewn dwy awr.
-ecc.subscription.status.gg.p2=Ni allwch wneud cais am rif EORI arall gan ddefnyddio’r cyfrif Porth y Llywodraeth hwn.
+ecc.subscription.status.gg.p1=TRANSLATE Your EORI number is linked to the Government Gateway account you have used for this application.
+ecc.subscription.status.gg.p2=TRANSLATE You cannot apply for another EORI number using this Government Gateway.
 
 ecc.subscription.outcomes.guidance.title=Cael rhif EORI XI
 ecc.subscription.outcomes.guidance.heading=Sut i gael rhif EORI XI

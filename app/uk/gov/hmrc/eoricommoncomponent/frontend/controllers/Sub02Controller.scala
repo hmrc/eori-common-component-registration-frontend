@@ -107,7 +107,8 @@ class Sub02Controller @Inject() (
         sub02Outcome <- sessionCache.sub02Outcome
         _            <- sessionCache.remove
         _            <- sessionCache.saveSub02Outcome(sub02Outcome)
-      } yield Ok(
+      } yield service.code match {
+        case "eori-only" => Ok(
         subscriptionOutcomeView(
           sub02Outcome.eori
             .getOrElse("EORI not populated from Sub02 response."),
@@ -115,6 +116,15 @@ class Sub02Controller @Inject() (
           sub02Outcome.processedDate
         )
       ).withSession(newUserSession)
+      case _ => Ok(
+        subscriptionOutcomeView(
+          sub02Outcome.eori
+            .getOrElse("EORI not populated from Sub02 response."),
+          sub02Outcome.fullName,
+          sub02Outcome.processedDate
+        )
+        ).withSession(newUserSession)
+        }
   }
 
   def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
