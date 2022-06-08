@@ -62,7 +62,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val sub02EoriAlreadyAssociatedView  = instanceOf[sub02_eori_already_associated]
   private val sub02EoriAlreadyExists          = instanceOf[sub02_eori_already_exists]
   private val sub01OutcomeRejected            = instanceOf[sub01_outcome_rejected]
-  private val subscriptionOutcomeView         = instanceOf[subscription_outcome]
+  private val subscriptionOutcomeView         = instanceOf[standalone_subscription_outcome]
   private val xiEoriGuidanceView              = instanceOf[xi_eori_guidance]
   private val EORI                            = "ZZZ1ZZZZ23ZZZZZZZ"
 
@@ -340,17 +340,17 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           page.title should startWith("Application complete")
           page.getElementsText(
             RegistrationCompletePage.panelHeadingXpath
-          ) shouldBe s"The EORI number for orgName is $EORI"
+          ) shouldBe s"Your new EORI number starting with GB for orgName is $EORI"
           page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe EORI
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
           page.getElementsText(RegistrationCompletePage.additionalInformationXpath) should include(
-            messages("cds.subscription.outcomes.success.optional-paragraph")
+            messages("cds.standalone.subscription.outcomes.success.email")
           )
           page.getElementsText(RegistrationCompletePage.whatHappensNextXpath) shouldBe
             strim("""
-                |Your EORI number will be ready to use within 48 hours. It will appear on the EORI validation checker within 5 days. It has no expiry date.
-                |You should only share it with trusted business partners or approved customs representatives. For example, you should give it to your courier or freight forwarder. They will use it to make customs declarations on your behalf.
+                |What happens next Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete.
+                |If you would like to check the status of your GB EORI you can use the check an EORI service (opens in a new tab) . Your new GB EORI has no expiry date.
                 | """)
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
           page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include(
