@@ -310,7 +310,7 @@ ecc.subscription.outcomes.success.xi.info.bullet3=cael penderfyniad tollau yng N
 ecc.subscription.outcomes.success.xi.info.href=<a href="/customs-registration-services/register/xi-eori-guidance" class="govuk-link" target="_blank" rel="noopener noreferrer">Gwnewch gais am rif EORI sy’n dechrau gyda XI.</a>
 ecc.subscription.outcomes.success.xi.info2=Os oes gennych rif EORI a gyhoeddwyd gan wlad yn yr UE, nid oes angen i chi gael EORI sy’n dechrau gyda XI.
 ecc.standalone.subscription.outcomes.success.xi=Os ydych yn symud nwyddau i Ogledd Iwerddon neu oddi yno
-ecc.standalone.subscription.outcomes.success.xi.date.info=bydd angen rhif EORI sy’n dechrau gyda XI arnoch os ydych yn:
+ecc.standalone.subscription.outcomes.success.xi.date.info=TRANSLATE bydd angen rhif EORI sy’n dechrau gyda XI arnoch os ydych yn:
 ecc.standalone.subscription.outcomes.success.xi.info.bullet1=symud nwyddau rhwng Gogledd Iwerddon a gwledydd nad ydynt yn rhan o’r UE
 ecc.standalone.subscription.outcomes.success.xi.info.bullet2=gwneud datganiad yng Ngogledd Iwerddon
 ecc.standalone.subscription.outcomes.success.xi.info.bullet3=cael penderfyniad tollau yng Ngogledd Iwerddon
