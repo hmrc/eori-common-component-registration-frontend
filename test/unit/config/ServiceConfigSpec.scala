@@ -41,6 +41,23 @@ class ServiceConfigSpec extends ControllerSpec {
       |services-config.gvms.friendlyNameWelsh=Symud_Cerbydau_Nwyddau_(GVMS)
       """.stripMargin)
 
+  private val configurationFullNoCallbackUrl: Config =
+    ConfigFactory.parseString("""
+                                |services-config.list="atar,gvms"
+                                |services-config.atar.enrolment=HMRC-ATAR-ORG
+                                |services-config.atar.shortName=ATaR
+
+                                |services-config.atar.accessibility=/advance-tariff-application/accessibility
+                                |services-config.atar.friendlyName=Advance_Tariff_Rulings
+                                |services-config.atar.friendlyNameWelsh=Dyfarniadau_Tariffau_Uwch_(ATaR)
+                                |services-config.gvms.enrolment=HMRC-GVMS-ORG
+                                |services-config.gvms.shortName=GVMS
+                                |services-config.gvms.callBack=/goods-movement
+                                |services-config.gvms.accessibility=/goods-movement/accessibility
+                                |services-config.gvms.friendlyName=Goods_Movement
+                                |services-config.gvms.friendlyNameWelsh=Symud_Cerbydau_Nwyddau_(GVMS)
+      """.stripMargin)
+
   private val configurationMissingWelsh: Config =
     ConfigFactory.parseString("""
                                 |services-config.list=atar
@@ -84,7 +101,24 @@ class ServiceConfigSpec extends ControllerSpec {
         "atar",
         "HMRC-ATAR-ORG",
         "ATaR",
-        "/advance-tariff-application",
+        Some("/advance-tariff-application"),
+        "/advance-tariff-application/accessibility",
+        "Advance Tariff Rulings",
+        "Dyfarniadau Tariffau Uwch (ATaR)",
+        None
+      )
+    }
+
+    "retrieve values for full config with no callback url" in {
+
+      val config = new ServiceConfig(Configuration(configurationFullNoCallbackUrl))
+
+      config.supportedServicesMap.size shouldBe 2
+      config.supportedServicesMap("atar") shouldBe Service(
+        "atar",
+        "HMRC-ATAR-ORG",
+        "ATaR",
+        None,
         "/advance-tariff-application/accessibility",
         "Advance Tariff Rulings",
         "Dyfarniadau Tariffau Uwch (ATaR)",
