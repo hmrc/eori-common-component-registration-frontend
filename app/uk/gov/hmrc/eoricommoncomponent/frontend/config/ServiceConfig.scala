@@ -35,7 +35,7 @@ class ServiceConfig(configuration: Configuration) {
         code = service,
         enrolmentKey = configuration.get[String](s"services-config.$service.enrolment"),
         shortName = configuration.get[String](s"services-config.$service.shortName"),
-        callBack = configuration.get[String](s"services-config.$service.callBack"),
+        callBack = configuration.getOptional[String](s"services-config.$service.callBack").filter(_.nonEmpty),
         accessibilityUrl = configuration.get[String](s"services-config.$service.accessibility"),
         friendlyName = englishFriendlyName,
         friendlyNameWelsh = welshFriendlyName,
