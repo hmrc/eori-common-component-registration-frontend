@@ -22,12 +22,31 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, No, WrongAddress, Yes, YesNoWrong, YesNoWrongAddress}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
+  AddressViewModel,
+  No,
+  WrongAddress,
+  Yes,
+  YesNoWrong,
+  YesNoWrongAddress
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{NewSubscription, RegistrationConfirmService, SubscriptionExists, SubscriptionProcessing, SubscriptionRejected}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  NewSubscription,
+  RegistrationConfirmService,
+  SubscriptionExists,
+  SubscriptionProcessing,
+  SubscriptionRejected
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{confirm_contact_details, sub01_outcome_processing, sub01_outcome_rejected, you_cannot_change_address_individual, you_cannot_change_address_organisation}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  confirm_contact_details,
+  sub01_outcome_processing,
+  sub01_outcome_rejected,
+  you_cannot_change_address_individual,
+  you_cannot_change_address_organisation
+}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -54,43 +73,43 @@ class ConfirmContactDetailsController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.registrationDetails.flatMap {
         case individual: RegistrationDetailsIndividual =>
-          if (!individual.address.isValidAddress())
+          /* if (!individual.address.isValidAddress())
             checkAddressDetails(service, YesNoWrongAddress(Some("wrong-address")))
-          else
-            Future.successful(
-              Ok(
-                confirmContactDetailsView(
-                  individual.name,
-                  concatenateAddress(individual),
-                  individual.customsId,
-                  None,
-                  YesNoWrongAddress.createForm(),
-                  service
-                )
+          else*/
+          Future.successful(
+            Ok(
+              confirmContactDetailsView(
+                individual.name,
+                concatenateAddress(individual),
+                individual.customsId,
+                None,
+                YesNoWrongAddress.createForm(),
+                service
               )
             )
+          )
         case org: RegistrationDetailsOrganisation =>
-          if (!org.address.isValidAddress())
+          /*if (!org.address.isValidAddress())
             checkAddressDetails(service, YesNoWrongAddress(Some("wrong-address")))
-          else
-            orgTypeLookup.etmpOrgTypeOpt.flatMap {
-              case Some(ot) =>
-                Future.successful(
-                  Ok(
-                    confirmContactDetailsView(
-                      org.name,
-                      concatenateAddress(org),
-                      org.customsId,
-                      Some(ot),
-                      YesNoWrongAddress.createForm(),
-                      service
-                    )
+          else*/
+          orgTypeLookup.etmpOrgTypeOpt.flatMap {
+            case Some(ot) =>
+              Future.successful(
+                Ok(
+                  confirmContactDetailsView(
+                    org.name,
+                    concatenateAddress(org),
+                    org.customsId,
+                    Some(ot),
+                    YesNoWrongAddress.createForm(),
+                    service
                   )
                 )
-              case None =>
-                logger.warn("[ConfirmContactDetailsController.form] organisation type None")
-                sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
-            }
+              )
+            case None =>
+              logger.warn("[ConfirmContactDetailsController.form] organisation type None")
+              sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
+          }
         case _ =>
           logger.warn("[ConfirmContactDetailsController.form] registrationDetails not found")
           sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
@@ -200,7 +219,8 @@ class ConfirmContactDetailsController @Inject() (
               )
           )
       case WrongAddress =>
-        if (requestSessionData.isIndividualOrSoleTrader(request)) Future.successful(Ok(youCannotChangeAddressIndividual()))
+        if (requestSessionData.isIndividualOrSoleTrader(request))
+          Future.successful(Ok(youCannotChangeAddressIndividual()))
         else Future.successful(Ok(youCannotChangeAddressOrganisation()))
       case _ =>
         throw new IllegalStateException(
