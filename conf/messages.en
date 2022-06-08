@@ -1064,6 +1064,15 @@ cds.subscription.outcomes.rejected.vat-registered-heading=If you are VAT registe
 cds.subscription.outcomes.rejected.vat-registered1=Your EORI number will be in the following format:
 cds.subscription.outcomes.rejected.vat-registered2=GB XXXXXXXXX 000
 cds.subscription.outcomes.rejected.vat-registered3=Where XXXXXXXXX is your VAT number.
+cds.standalone.subscription.outcomes.success.heading=Your new EORI number starting with GB for {0} is
+cds.standalone.subscription.outcomes.success.email=We will send you an email to confirm your GB EORI application request has been received.
+cds.standalone.subscription.outcomes.success.extra.information.heading=What happens next
+cds.standalone.subscription.outcomes.success.extra.information1=Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the {0}. Your new GB EORI has no expiry date.
+cds.standalone.subscription.outcomes.success.extra.information2=check an EORI service (opens in a new tab)
+cds.standalone.subscription.outcomes.success.issued=issued by HMRC on
+cds.standalone.subscription.outcomes.success.title=Application complete
+cds.standalone.subscription.outcomes.success.download-eori=Download a PDF of your GB EORI number(266kb)
+cds.standalone.subscription.outcomes.success.download-eori-textfile=Download an accessible text file of your EORI number(12kb)
 
 # Reg Existing Complete
 cds.reg.existing.outcomes.success.title=EORI Registration Complete
