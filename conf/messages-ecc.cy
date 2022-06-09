@@ -319,7 +319,7 @@ ecc.standalone.subscription.outcomes.success.xi.info2=TRANSLATE If you have an E
 
 
 ecc.subscription.status.gg.h1=Eich rhif EORI a’ch cyfrif Porth y Llywodraeth
-ecc.subscription.status.gg.p1=Mae’ch rhif EORI yn gysylltiedig â’r cyfrif Porth y Llywodraeth rydych wedi’i ddefnyddio ar gyfer y cais hwn, a bydd gennych fynediad at y gwasanaeth {0} o fewn dwy awr.
+ecc.subscription.status.gg.p1=TRANSLATE Your EORI number is linked to the Government Gateway account you have used for this application.
 ecc.subscription.status.gg.p2=Ni allwch wneud cais am rif EORI arall gan ddefnyddio’r cyfrif Porth y Llywodraeth hwn.
 ecc.standalone.subscription.status.gg.h1=Eich rhif EORI a’ch cyfrif Porth y Llywodraeth
 ecc.standalone.subscription.status.gg.p1=TRANSLATE Your EORI number is linked to the Government Gateway account you have used for this application.
