@@ -109,22 +109,24 @@ class Sub02Controller @Inject() (
         _            <- sessionCache.remove
         _            <- sessionCache.saveSub02Outcome(sub02Outcome)
       } yield service.code match {
-        case "eori-only" => Ok(
-          standaloneOutcomeView(
-            sub02Outcome.eori
-              .getOrElse("EORI not populated from Sub02 response."),
-            sub02Outcome.fullName,
-            sub02Outcome.processedDate
-          )
-        ).withSession(newUserSession)
-        case _ => Ok(
-          subscriptionOutcomeView(
-            sub02Outcome.eori
-              .getOrElse("EORI not populated from Sub02 response."),
-            sub02Outcome.fullName,
-            sub02Outcome.processedDate
-          )
-        ).withSession(newUserSession)
+        case "eori-only" =>
+          Ok(
+            standaloneOutcomeView(
+              sub02Outcome.eori
+                .getOrElse("EORI not populated from Sub02 response."),
+              sub02Outcome.fullName,
+              sub02Outcome.processedDate
+            )
+          ).withSession(newUserSession)
+        case _ =>
+          Ok(
+            subscriptionOutcomeView(
+              sub02Outcome.eori
+                .getOrElse("EORI not populated from Sub02 response."),
+              sub02Outcome.fullName,
+              sub02Outcome.processedDate
+            )
+          ).withSession(newUserSession)
       }
   }
 
