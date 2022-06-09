@@ -320,7 +320,7 @@ ecc.standalone.subscription.outcomes.success.xi.info2=TRANSLATE If you have an E
 
 ecc.subscription.status.gg.h1=Eich rhif EORI a’ch cyfrif Porth y Llywodraeth
 ecc.subscription.status.gg.p1=TRANSLATE Your EORI number is linked to the Government Gateway account you have used for this application.
-ecc.subscription.status.gg.p2=Ni allwch wneud cais am rif EORI arall gan ddefnyddio’r cyfrif Porth y Llywodraeth hwn.
+ecc.subscription.status.gg.p2=TRANSLATE You cannot apply for another EORI number using this Government Gateway.
 ecc.standalone.subscription.status.gg.h1=Eich rhif EORI a’ch cyfrif Porth y Llywodraeth
 ecc.standalone.subscription.status.gg.p1=TRANSLATE Your EORI number is linked to the Government Gateway account you have used for this application.
 ecc.standalone.subscription.status.gg.p2=TRANSLATE You cannot apply for another EORI number using this Government Gateway.
