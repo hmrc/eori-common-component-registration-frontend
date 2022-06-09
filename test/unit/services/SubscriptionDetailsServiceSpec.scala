@@ -113,29 +113,6 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
   }
 
-  "Calling cacheAddressDetails" should {
-    "save Address Details in frontend cache" in {
-
-      await(subscriptionDetailsHolderService.cacheAddressDetails(addressDetails))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.addressDetails shouldBe Some(addressDetails)
-
-    }
-
-    "should not save emptry strings in postcode field" in {
-
-      await(subscriptionDetailsHolderService.cacheAddressDetails(addressDetails.copy(postcode = Some(""))))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.addressDetails shouldBe Some(addressDetails.copy(postcode = None))
-    }
-  }
-
   "Calling cachedCustomsId" should {
     "return Some of customsID when found in subscription Details" in {
       when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))

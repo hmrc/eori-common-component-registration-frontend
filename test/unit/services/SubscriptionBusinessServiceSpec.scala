@@ -208,38 +208,6 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
     }
   }
 
-  "Calling mayBeCachedAddressViewModel" should {
-    "retrieve cached data if already stored in cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
-      when(mockSubscriptionDetailsHolder.addressDetails).thenReturn(mayBeCachedAddressViewModel)
-      await(subscriptionBusinessService.address) shouldBe mayBeCachedAddressViewModel
-      verify(mockCdsFrontendDataCache).subscriptionDetails
-    }
-
-    "return None if no data has been found in the cache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
-      when(mockSubscriptionDetailsHolder.addressDetails).thenReturn(None)
-      await(subscriptionBusinessService.address) shouldBe None
-    }
-  }
-
-  "Calling getCachedAddressViewModel" should {
-    "retrieve any previously cached Address Details from the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
-      when(mockSubscriptionDetailsHolder.addressDetails).thenReturn(mayBeCachedAddressViewModel)
-      await(subscriptionBusinessService.addressOrException) shouldBe mayBeCachedAddressViewModel.get
-    }
-
-    "throw exception when cache address details is not saved in cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
-      when(mockSubscriptionDetailsHolder.addressDetails).thenReturn(None)
-      val thrown = intercept[IllegalStateException] {
-        await(subscriptionBusinessService.addressOrException)
-      }
-      thrown.getMessage shouldBe "No Address Details Cached"
-    }
-  }
-
   "Calling getCachedCustomsId" should {
     "retrieve any previously cached Named Id from the cdsFrontendCache" in {
       when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
