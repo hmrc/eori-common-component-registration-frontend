@@ -19,12 +19,15 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{you_cannot_change_address_individual, you_cannot_change_address_organisation}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  you_cannot_change_address_individual,
+  you_cannot_change_address_organisation
+}
 import util.ViewSpec
 
 class YouCannotChangeAddressIndividualSpec extends ViewSpec {
 
-  private implicit val request = withFakeCSRF(fakeAtarRegisterRequest)
+  private implicit val request            = withFakeCSRF(fakeAtarRegisterRequest)
   private val youCantChangeAddressIndView = instanceOf[you_cannot_change_address_individual]
 
   "You cannot change address for individual" should {
@@ -45,8 +48,6 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
 
   }
 
-
   private lazy val indDoc: Document = Jsoup.parse(contentAsString(youCantChangeAddressIndView()))
-
 
 }

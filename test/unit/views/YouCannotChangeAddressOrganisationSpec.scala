@@ -20,12 +20,16 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{sub02_request_not_processed, you_cannot_change_address_organisation, you_cant_use_service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  sub02_request_not_processed,
+  you_cannot_change_address_organisation,
+  you_cant_use_service
+}
 import util.ViewSpec
 
 class YouCannotChangeAddressOrganisationSpec extends ViewSpec {
 
-  private implicit val request      = withFakeCSRF(fakeAtarRegisterRequest)
+  private implicit val request            = withFakeCSRF(fakeAtarRegisterRequest)
   private val youCantChangeAddressOrgView = instanceOf[you_cannot_change_address_organisation]
 
   "You cannot change address for Organisation page" should {
@@ -46,8 +50,6 @@ class YouCannotChangeAddressOrganisationSpec extends ViewSpec {
 
   }
 
-
-  private lazy val orgDoc: Document      = Jsoup.parse(contentAsString(youCantChangeAddressOrgView()))
-
+  private lazy val orgDoc: Document = Jsoup.parse(contentAsString(youCantChangeAddressOrgView()))
 
 }
