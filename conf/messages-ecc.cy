@@ -170,7 +170,7 @@ cds.form.declaration=Datganiad
 cds.form.send=Cadarnhau ac anfon
 
 cds.mig.existing.outcomes.application-received.title=Cais am danysgrifiad wedi dod i law
-cds.reg.existing.outcomes.success.heading.part1=Cais am danysgrifiad wedi dod i law ar gyfer
+cds.reg.existing.outcomes.success.heading.part1=TRANSLATE Subscription request received for
 
 cds.if.you.need.help.heading=Os oes angen help arnoch
 cds.if.you.need.help.telephone1=Ffôn: 0300 200 1900
