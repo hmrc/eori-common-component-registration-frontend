@@ -22,8 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   AddressViewModel,
   CompanyRegisteredCountry,
-  ContactDetailsModel,
-  VatEUDetailsModel
+  ContactDetailsModel
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 
@@ -32,8 +31,6 @@ case class SubscriptionDetails(
   dateEstablished: Option[LocalDate] = None,
   vatRegisteredUk: Option[Boolean] = None,
   ukVatDetails: Option[VatDetails] = None,
-  vatRegisteredEu: Option[Boolean] = None,
-  vatEUDetails: Seq[VatEUDetailsModel] = Nil,
   personalDataDisclosureConsent: Option[Boolean] = None,
   contactDetails: Option[ContactDetailsModel] = None,
   sicCode: Option[String] = None,
@@ -57,8 +54,6 @@ case class SubscriptionDetails(
     ) orElse nameDetails
       .map(_.name) getOrElse (throw new IllegalArgumentException("Name is missing"))
 
-  def vatIdentificationList: List[VatIdentification] =
-    vatEUDetails.map(x => VatIdentification(countryCode = x.vatCountry, number = x.vatNumber)).toList
 
 }
 

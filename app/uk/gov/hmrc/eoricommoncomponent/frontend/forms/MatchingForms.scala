@@ -130,15 +130,6 @@ object MatchingForms {
   def vatGroupYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm("cds.subscription.vat-group.page-error.yes-no-answer")
 
-  def euVatLimitNotReachedYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
-    createOptionalVatYesNoAnswerForm("cds.subscription.vat-details-eu-confirm.select-one-error.yes-no-answer", "false")
-
-  def euVatLimitReachedYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
-    createOptionalVatYesNoAnswerForm("cds.subscription.vat-details-eu-confirm.select-one-error.yes-no-answer", "true")
-
-  def removeVatYesNoAnswer()(implicit messages: Messages): Form[YesNo] =
-    createYesNoAnswerForm("cds.subscription.vat-details-eu.page-error.yes-no-answer")
-
   def businessShortNameYesNoForm(emptyErrorMessage: String)(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm(emptyErrorMessage)
 

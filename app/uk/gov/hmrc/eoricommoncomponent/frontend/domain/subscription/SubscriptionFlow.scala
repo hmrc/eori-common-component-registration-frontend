@@ -31,9 +31,6 @@ object SubscriptionFlows {
       SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
-      VatRegisteredEuSubscriptionFlowPage,
-      VatEUIdsSubscriptionFlowPage,
-      VatEUConfirmSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage
     )
   )
@@ -47,9 +44,6 @@ object SubscriptionFlows {
       VatRegisteredUkSubscriptionFlowPage,
       //VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
-      VatRegisteredEuSubscriptionFlowPage,
-      VatEUIdsSubscriptionFlowPage,
-      VatEUConfirmSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage
     )
   )
@@ -62,9 +56,6 @@ object SubscriptionFlows {
       SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
-      VatRegisteredEuSubscriptionFlowPage,
-      VatEUIdsSubscriptionFlowPage,
-      VatEUConfirmSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage
     )
   )
@@ -78,9 +69,6 @@ object SubscriptionFlows {
       SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
-      VatRegisteredEuSubscriptionFlowPage,
-      VatEUIdsSubscriptionFlowPage,
-      VatEUConfirmSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage
     )
   )
@@ -94,9 +82,6 @@ object SubscriptionFlows {
       VatRegisteredUkSubscriptionFlowPage,
       //VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
-      VatRegisteredEuSubscriptionFlowPage,
-      VatEUIdsSubscriptionFlowPage,
-      VatEUConfirmSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage
     )
   )
@@ -200,32 +185,6 @@ case object VatDetailsSubscriptionFlowPage extends SubscriptionPage {
 
 }
 
-case object VatRegisteredEuSubscriptionFlowPage extends SubscriptionPage {
-
-  override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredEuController
-      .createForm(service)
-      .url
-
-}
-
-case object VatEUIdsSubscriptionFlowPage extends SubscriptionPage {
-
-  override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsEuController
-      .createForm(service)
-      .url
-
-}
-
-case object VatEUConfirmSubscriptionFlowPage extends SubscriptionPage {
-
-  override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsEuConfirmController
-      .createForm(service)
-      .url
-
-}
 
 case object EoriConsentSubscriptionFlowPage extends SubscriptionPage {
 

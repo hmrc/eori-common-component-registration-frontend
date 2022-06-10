@@ -26,8 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatEUDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   SubscriptionBusinessService,
-  SubscriptionDetailsService,
-  SubscriptionVatEUDetailsService
+  SubscriptionDetailsService
 }
 import uk.gov.hmrc.http.HeaderCarrier
 

@@ -176,8 +176,7 @@ object SubscriptionCreateRequest {
     service: Option[Service]
   ): SubscriptionRequest = {
     val org                                = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
-    val ukVatId: Option[VatIdentification] = sub.ukVatDetails.map(vd => VatIdentification(Some("GB"), Some(vd.number)))
-    val euVatIds                           = sub.vatIdentificationList
+    val ukVatId: Option[List[VatIdentification]] = sub.ukVatDetails.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
 
     SubscriptionRequest(
       SubscriptionCreateRequest(
@@ -190,7 +189,7 @@ object SubscriptionCreateRequest {
           establishmentInTheCustomsTerritoryOfTheUnion = None,
           typeOfLegalEntity = org.map(_.legalStatus),
           contactInformation = sub.contactDetails.map(c => createContactInformation(c.contactDetails)),
-          vatIDs = createVatIds(Some(ukVatId ++: euVatIds)),
+          vatIDs = createVatIds(ukVatId),
           consentToDisclosureOfPersonalData = sub.personalDataDisclosureConsent.map(bool => if (bool) "1" else "0"),
           shortName = sub.businessShortName flatMap (_.shortName),
           dateOfEstablishment = Some(dateEstablished),
@@ -235,7 +234,7 @@ object SubscriptionCreateRequest {
   private def createVatIds(vis: Option[List[VatIdentification]]): Option[List[VatId]] = {
     def removeEmpty: List[VatIdentification] => List[VatId] = _.flatMap {
       case VatIdentification(None, None) => None
-      case VatIdentification(cc, n)      => Some(VatId(cc, n))
+      case VatIdentification(cc, n) => Some(VatId(cc, n))
     }
 
     def removeEmptyList: List[VatId] => Option[List[VatId]] = {

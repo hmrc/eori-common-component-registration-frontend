@@ -24,7 +24,6 @@ import uk.gov.hmrc.emailaddress.EmailAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{SicCodeViewModel, VatEUDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
 
 object SubscriptionForm {
@@ -71,14 +70,6 @@ object SubscriptionForm {
       case _                         => Valid
     })
 
-  private def validEUVATNumber: Constraint[String] =
-    Constraint("constraints.eu.vat")({
-      case v if v.trim.isEmpty => Invalid(ValidationError("cds.subscription.eu-vats.vat-eu-number.required.error"))
-      case v if v.length > 15  => Invalid(ValidationError("cds.subscription.eu-vats.vat-eu-number.too-long"))
-      case v if !v.matches("^[a-zA-Z0-9]*$") =>
-        Invalid(ValidationError("cds.subscription.eu-vats.vat-eu-number.invalid"))
-      case _ => Valid
-    })
 
   def validEoriWithOrWithoutGB: Constraint[String] =
     Constraint({
@@ -124,11 +115,5 @@ object SubscriptionForm {
       .verifying(errorMessage, _.fold(false)(oneOf(Set("true", "false"))))
       .transform[Boolean](str => str.contains("true"), bool => if (bool) Some("true") else Some("false"))
 
-  val euVatForm = Form(
-    Forms.mapping(
-      "vatCountry" -> text.verifying("cds.subscription.eu-vat-details.form-error.country", _.length == Length2),
-      "vatNumber"  -> text.verifying(validEUVATNumber)
-    )(VatEUDetailsModel.apply)(VatEUDetailsModel.unapply)
-  )
 
 }
