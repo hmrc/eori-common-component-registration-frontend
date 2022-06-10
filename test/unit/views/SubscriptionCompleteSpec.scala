@@ -32,7 +32,7 @@ class SubscriptionCompleteSpec extends ViewSpec {
 
   private val view = instanceOf[subscription_outcome]
 
-  private val doc: Document = Jsoup.parse(contentAsString(view(eori, orgName, issuedDate)))
+  private val doc: Document = Jsoup.parse(contentAsString(view(atarService, eori, orgName, issuedDate)))
 
   "'Subscription Rejected' Page with name" should {
 

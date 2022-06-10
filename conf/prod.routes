@@ -57,11 +57,9 @@ GET         /customs-registration-services/:service/register/you-need-different-
 GET         /customs-registration-services/:service/register/review-details                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.reviewDetails(service: Service)
 POST        /customs-registration-services/:service/register/subscribe                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.submitDetails(service: Service)
 
-GET         /customs-registration-services/register/download/pdf                                         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EoriDownloadController.download()
-GET         /customs-registration-services/register/download/text                                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EoriTextDownloadController.download()
+GET         /customs-registration-services/:service/register/download/pdf                                         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadPDFController.download(service: Service)
+GET         /customs-registration-services/:service/register/download/text                                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadTextController.download(service: Service)
 
-GET         /customs-registration-services/register/subscription-download/pdf                                         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionDownloadController.download()
-GET         /customs-registration-services/register/subscription-download/text                                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionTextDownloadController.download()
 
 GET         /customs-registration-services/:service/register/processing                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController.processing(service: Service)
 GET         /customs-registration-services/:service/register/status-rejected                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController.rejected(service: Service)

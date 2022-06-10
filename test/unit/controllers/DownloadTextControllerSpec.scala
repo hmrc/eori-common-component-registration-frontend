@@ -22,10 +22,10 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status.OK
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EoriTextDownloadController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadTextController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.eori_number_text_download
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_number_text_download, subscription_text_download}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -34,12 +34,13 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class EoriTextDownloadControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
+class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
   val mockAuthConnector = mock[AuthConnector]
   val mockAuthAction    = authAction(mockAuthConnector)
   val mockCache         = mock[SessionCache]
 
-  private val eoriNumberTextDownloadView = instanceOf[eori_number_text_download]
+  private val eoriNumberTextDownloadView   = instanceOf[eori_number_text_download]
+  private val subscriptionTextDownloadView = instanceOf[subscription_text_download]
 
   override def beforeEach: Unit = {
     val mockSubscribeOutcome = mock[Sub02Outcome]
@@ -49,17 +50,23 @@ class EoriTextDownloadControllerSpec extends ControllerSpec with BeforeAndAfterE
     when(mockSubscribeOutcome.fullName).thenReturn("Test Company")
   }
 
-  val controller = new EoriTextDownloadController(mockAuthAction, mockCache, eoriNumberTextDownloadView, mcc)
+  val controller =
+    new DownloadTextController(mockAuthAction, mockCache, eoriNumberTextDownloadView, subscriptionTextDownloadView, mcc)
 
   "download" should {
 
-    assertNotLoggedInUserShouldBeRedirectedToLoginPage(mockAuthConnector, "EORI download", controller.download())
+    assertNotLoggedInUserShouldBeRedirectedToLoginPage(
+      mockAuthConnector,
+      "EORI download",
+      controller.download(eoriOnlyService)
+    )
 
     "download eori text file for authenticated user" in {
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
-      val result = await(controller.download().apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+      val result =
+        await(controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
 
       status(result) shouldBe OK
       contentType(result) shouldBe Some("plain/text")
@@ -76,7 +83,8 @@ class EoriTextDownloadControllerSpec extends ControllerSpec with BeforeAndAfterE
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
-      val result = await(controller.download().apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+      val result =
+        await(controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
 
       val content = contentAsString(result)
       val lines   = content.split('\n').drop(1)

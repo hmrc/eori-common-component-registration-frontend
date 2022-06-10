@@ -121,6 +121,7 @@ class Sub02Controller @Inject() (
         case _ =>
           Ok(
             subscriptionOutcomeView(
+              service,
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
               sub02Outcome.fullName,
