@@ -91,5 +91,44 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
       lines.length shouldBe 4
       lines.forall(_.endsWith('\r'.toString)) shouldBe true
     }
+
+    assertNotLoggedInUserShouldBeRedirectedToLoginPage(
+      mockAuthConnector,
+      "Subscription download",
+      controller.download(atarService)
+    )
+
+    "download subscription text file for authenticated user" in {
+
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+
+      val result =
+        await(controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+
+      status(result) shouldBe OK
+      contentType(result) shouldBe Some("plain/text")
+      header(CONTENT_DISPOSITION, result) shouldBe Some("attachment; filename=EORI-number.txt")
+      contentAsString(result).filterNot(_ == '\r') shouldBe
+        """HM Revenue & Customs
+          |
+          |Subscription request received for Test Company
+          |
+          |issued by HMRC on 23 June 2018
+          |
+          |Your new EORI number starting with GB is: ZZ123456789000""".stripMargin
+    }
+
+    "have Windows-friendly line terminators in the subscription text file" in {
+
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+
+      val result =
+        await(controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+
+      val content = contentAsString(result)
+      val lines   = content.split('\n').drop(1)
+      lines.length shouldBe 6
+      lines.forall(_.endsWith('\r'.toString)) shouldBe true
+    }
   }
 }

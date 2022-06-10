@@ -103,5 +103,51 @@ class DownloadPDFControllerSpec extends ControllerSpec with AuthActionMock {
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
     }
+
+    assertNotLoggedInUserShouldBeRedirectedToLoginPage(
+      mockAuthConnector,
+      "Subscription download",
+      controller.download(atarService)
+    )
+
+    "download Subscription PDF for an authenticated user" in {
+      val mockSubscribeOutcome = mock[Sub02Outcome]
+      when(mockCdsFrontendDataCache.sub02Outcome(any[HeaderCarrier]))
+        .thenReturn(Future.successful(mockSubscribeOutcome))
+      when(mockSubscribeOutcome.processedDate).thenReturn("01 May 2016")
+      when(mockSubscribeOutcome.eori).thenReturn(Some("EN123456789012345"))
+      when(mockSubscribeOutcome.fullName).thenReturn("John Doe")
+
+      val pdf  = ByteString("this is a pdf")
+      val html = subscriptionDownloadView("EN123456789012345", "John Doe", "01 May 2016").toString()
+      when(mockPdfGenerator.generatePdf(ArgumentMatchers.eq(html))(ArgumentMatchers.any[ExecutionContext])).thenReturn(
+        Future(pdf)
+      )
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+
+      val result =
+        await(controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+
+      status(result) shouldBe OK
+      contentType(result) shouldBe Some("application/pdf")
+      header(CONTENT_DISPOSITION, result) shouldBe Some("attachment; filename=EORI-number.pdf")
+      contentAsBytes(result) shouldBe pdf
+    }
+
+    "display the service unavailable page if the subscription eori is missing from Sub02Outcome" in {
+      val mockSubscribeOutcome = mock[Sub02Outcome]
+      when(mockCdsFrontendDataCache.sub02Outcome(any[HeaderCarrier]))
+        .thenReturn(Future.successful(mockSubscribeOutcome))
+      when(mockSubscribeOutcome.processedDate).thenReturn("01 May 2016")
+      when(mockSubscribeOutcome.eori).thenReturn(None)
+      when(mockSubscribeOutcome.fullName).thenReturn("John Doe")
+
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+
+      val result =
+        await(controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+
+      status(result) shouldBe INTERNAL_SERVER_ERROR
+    }
   }
 }
