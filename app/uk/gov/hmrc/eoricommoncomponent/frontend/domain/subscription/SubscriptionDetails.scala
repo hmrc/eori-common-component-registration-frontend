@@ -54,12 +54,9 @@ case class SubscriptionDetails(
     ) orElse nameDetails
       .map(_.name) getOrElse (throw new IllegalArgumentException("Name is missing"))
 
-
 }
 
 object SubscriptionDetails {
-  val EuVatDetailsLimit = 5
-
   implicit val format: Format[SubscriptionDetails] = Json.format[SubscriptionDetails]
 }
 

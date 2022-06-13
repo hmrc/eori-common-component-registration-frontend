@@ -27,12 +27,6 @@ class SubscriptionVatUKDetailsFormModelSpec extends UnitSpec {
   val gbVatIdentifications =
     List(VatIdentification(Some("GB"), Some("123456789")), VatIdentification(Some("GB"), Some("223456789")))
 
-  val euVatNumbers   = List("123456789", "223456789")
-  val euCountryCodes = List("ES", "PL")
-
-  val euVatIdentifications =
-    List(VatIdentification(Some("ES"), Some("123456789")), VatIdentification(Some("PL"), Some("223456789")))
-
   "SubscriptionVatUKDetailsFormModel" should {
 
     "convert to GB vat identifications when vat numbers for GB are provided as a list" in {

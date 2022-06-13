@@ -123,10 +123,6 @@ object MatchingForms {
     if (isPartnership) createYesNoAnswerForm("cds.registration.vat-registered-uk.partnership.error.yes-no-answer")
     else createYesNoAnswerForm("cds.registration.vat-registered-uk.error.yes-no-answer")
 
-  def vatRegisteredEuYesNoAnswerForm(isPartnership: Boolean = false)(implicit messages: Messages): Form[YesNo] =
-    if (isPartnership) createYesNoAnswerForm("cds.subscription.vat-registered-eu.partnership.page-error.yes-no-answer")
-    else createYesNoAnswerForm("cds.subscription.vat-registered-eu.page-error.yes-no-answer")
-
   def vatGroupYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm("cds.subscription.vat-group.page-error.yes-no-answer")
 
@@ -138,16 +134,6 @@ object MatchingForms {
       "yes-no-answer" -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))
         .verifying(messages(invalidErrorMsgKey), _.isDefined)
         .transform[Boolean](str => str.get.toBoolean, bool => Option(String.valueOf(bool)))
-    )(YesNo.apply)(YesNo.unapply)
-  )
-
-  private def createOptionalVatYesNoAnswerForm(invalidErrorMsgKey: String, vatLimitReached: String)(implicit
-    messages: Messages
-  ): Form[YesNo] = Form(
-    mapping(
-      "yes-no-answer" -> optional(text)
-        .verifying(messages(invalidErrorMsgKey), x => x.fold(vatLimitReached.toBoolean)(oneOf(validYesNoAnswerOptions)))
-        .transform[Boolean](str => str.getOrElse(vatLimitReached).toBoolean, bool => Option(String.valueOf(bool)))
     )(YesNo.apply)(YesNo.unapply)
   )
 

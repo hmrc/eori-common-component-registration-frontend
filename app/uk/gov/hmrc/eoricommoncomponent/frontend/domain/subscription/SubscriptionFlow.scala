@@ -185,7 +185,6 @@ case object VatDetailsSubscriptionFlowPage extends SubscriptionPage {
 
 }
 
-
 case object EoriConsentSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =

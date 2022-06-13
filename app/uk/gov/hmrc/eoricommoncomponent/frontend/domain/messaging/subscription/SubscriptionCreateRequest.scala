@@ -175,8 +175,9 @@ object SubscriptionCreateRequest {
     dateEstablished: LocalDate,
     service: Option[Service]
   ): SubscriptionRequest = {
-    val org                                = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
-    val ukVatId: Option[List[VatIdentification]] = sub.ukVatDetails.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
+    val org = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
+    val ukVatId: Option[List[VatIdentification]] =
+      sub.ukVatDetails.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
 
     SubscriptionRequest(
       SubscriptionCreateRequest(
@@ -234,7 +235,7 @@ object SubscriptionCreateRequest {
   private def createVatIds(vis: Option[List[VatIdentification]]): Option[List[VatId]] = {
     def removeEmpty: List[VatIdentification] => List[VatId] = _.flatMap {
       case VatIdentification(None, None) => None
-      case VatIdentification(cc, n) => Some(VatId(cc, n))
+      case VatIdentification(cc, n)      => Some(VatId(cc, n))
     }
 
     def removeEmptyList: List[VatId] => Option[List[VatId]] = {

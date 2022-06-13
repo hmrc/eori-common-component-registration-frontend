@@ -37,8 +37,6 @@ object SubscriptionForm {
       .transform[CdsOrganisationType](CdsOrganisationType.forId, _.id)
   )
 
-  private val Length2 = 2
-
   private val trueAnswer                     = "true"
   private val falseAnswer                    = "false"
   private val trueOrFalse: String => Boolean = oneOf(Set(trueAnswer, falseAnswer))
@@ -69,7 +67,6 @@ object SubscriptionForm {
       case s if s.length > 5         => Invalid(ValidationError("cds.subscription.sic.error.too-long"))
       case _                         => Valid
     })
-
 
   def validEoriWithOrWithoutGB: Constraint[String] =
     Constraint({
@@ -114,6 +111,5 @@ object SubscriptionForm {
     optional(text)
       .verifying(errorMessage, _.fold(false)(oneOf(Set("true", "false"))))
       .transform[Boolean](str => str.contains("true"), bool => if (bool) Some("true") else Some("false"))
-
 
 }

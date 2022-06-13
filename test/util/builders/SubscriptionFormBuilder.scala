@@ -16,17 +16,15 @@
 
 package util.builders
 
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatEUDetailsModel}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
+
+import java.time.LocalDate
 
 object SubscriptionFormBuilder {
 
   val gbVatDetails: Option[VatDetails] =
     Some(VatDetails("SE28 1AA", "123456789", LocalDate.parse("2017-01-01")))
-
-  val euVats: List[VatEUDetailsModel] = List(VatEUDetailsModel("FR", "VAT-2"), VatEUDetailsModel("PL", "VAT-3"))
 
   val LegalStatus     = "corporate-body-uk"
   val ShortName       = "Short Name"
@@ -84,8 +82,7 @@ object SubscriptionFormBuilder {
     businessShortName = Some(BusinessShortName(ShortName)),
     dateEstablished = Some(DateEstablished),
     sicCode = Some(sic),
-    ukVatDetails = gbVatDetails,
-    vatEUDetails = euVats
+    ukVatDetails = gbVatDetails
   )
 
 }
