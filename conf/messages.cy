@@ -475,8 +475,7 @@ cds.registration.you-need-a-different-service-iom.title=Rhaid i chi ddefnyddio g
 cds.registration.you-need-a-different-service-iom.info=I wneud cais am rif EORI fel masnachwr o Ynys Manaw, mae angen i chi ddefnyddio ffurflen ar-lein, yn dibynnu a ydych chi:
 cds.registration.you-need-a-different-service-iom.vat-registered=wedi cofrestru ar gyfer TAW
 cds.registration.you-need-a-different-service-iom.not-vat-registered=heb gofrestru ar gyfer TAW
-cds.registration.isle-of-man.error.title=Ydych chi neu’ch sefydliad wedi’i leoli ar Ynys Manaw?
-cds.registration.isle-of-man.error.yes-no-answer=Rhowch wybod i ni a yw’ch sefydliad wedi’i leoli ar Ynys Manaw
+
 cds.registration.part-of-vat-group.title=Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer=Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
 cds.matching.organisation-type.user.header=Fel beth rydych am wneud cais?

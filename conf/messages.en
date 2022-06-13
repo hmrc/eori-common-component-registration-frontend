@@ -528,9 +528,6 @@ cds.registration.you-need-a-different-service-iom.info=To apply for an EORI numb
 cds.registration.you-need-a-different-service-iom.vat-registered=VAT-registered
 cds.registration.you-need-a-different-service-iom.not-vat-registered=not VAT-registered
 
-cds.registration.isle-of-man.error.title=Are you or your organisation based in the Isle of Man?
-cds.registration.isle-of-man.error.yes-no-answer=Tell us if your organisation is based in the Isle of Man
-
 cds.registration.part-of-vat-group.title=Are you applying for a business that is part of a VAT group?
 cds.registration.part-of-vat-group.page-error.yes-no-answer=Tell us if you are applying for a business that is part of a VAT group
 

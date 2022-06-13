@@ -46,9 +46,6 @@ GET         /customs-registration-services/:service/register/matching/verify-you
 # register Get An Eori
 GET         /customs-registration-services/:service/register                                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.startRegister(service: Service)
 
-GET         /customs-registration-services/:service/register/isle-of-man                                 @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.IsleOfManController.form(service: Service)
-POST        /customs-registration-services/:service/register/isle-of-man                                 @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.IsleOfManController.submit(service: Service)
-
 GET         /customs-registration-services/:service/register/are-you-vat-registered-in-uk                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkKanaController.form(service: Service)
 POST        /customs-registration-services/:service/register/are-you-vat-registered-in-uk                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkKanaController.submit(service: Service)
 
