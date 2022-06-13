@@ -21,10 +21,10 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EoriTextDownloadController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadTextController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Sub02Outcome
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.eori_number_text_download
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_number_text_download, subscription_text_download}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.{AuthActionMock, AuthBuilder, SessionBuilder}
@@ -34,13 +34,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector          = mock[AuthConnector]
-  private val mockAuthAction             = authAction(mockAuthConnector)
-  private val mockCache                  = mock[SessionCache]
-  private val eoriNumberTextDownloadView = instanceOf[eori_number_text_download]
+  private val mockAuthConnector            = mock[AuthConnector]
+  private val mockAuthAction               = authAction(mockAuthConnector)
+  private val mockCache                    = mock[SessionCache]
+  private val eoriNumberTextDownloadView   = instanceOf[eori_number_text_download]
+  private val subscriptionTextDownloadView = instanceOf[subscription_text_download]
 
   private val controller =
-    new EoriTextDownloadController(mockAuthAction, mockCache, eoriNumberTextDownloadView, mcc)
+    new DownloadTextController(mockAuthAction, mockCache, eoriNumberTextDownloadView, subscriptionTextDownloadView, mcc)
 
   override def beforeEach(): Unit =
     when(mockCache.sub02Outcome(any[HeaderCarrier]))
@@ -52,7 +53,7 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
       AuthBuilder.withAuthorisedUser("user-1236213", mockAuthConnector, userAffinityGroup = AffinityGroup.Agent)
 
       val result = controller
-        .download()
+        .download(atarService)
         .apply(
           SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
         )
@@ -69,7 +70,7 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
       )
 
       val result = controller
-        .download()
+        .download(atarService)
         .apply(
           SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
         )
@@ -86,7 +87,7 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
       )
 
       val result = controller
-        .download()
+        .download(atarService)
         .apply(
           SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
         )
@@ -106,7 +107,7 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
       )
 
       val result = controller
-        .download()
+        .download(atarService)
         .apply(
           SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/atar/subscribe/", defaultUserId)
         )
@@ -124,7 +125,7 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
       )
 
       val result = controller
-        .download()
+        .download(atarService)
         .apply(
           SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/atar/subscribe/", defaultUserId)
         )
@@ -141,7 +142,7 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
       )
 
       val result = controller
-        .download()
+        .download(atarService)
         .apply(
           SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
         )
@@ -158,7 +159,7 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
       )
 
       val result = controller
-        .download()
+        .download(atarService)
         .apply(
           SessionBuilder.buildRequestWithSessionAndPath("/customs-registration-services/subscribe/", defaultUserId)
         )

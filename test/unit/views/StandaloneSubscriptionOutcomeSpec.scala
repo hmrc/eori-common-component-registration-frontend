@@ -60,10 +60,14 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
       ).text() mustBe "We will send you an email to confirm your GB EORI application request has been received."
 
       val listItems = additionalInfoParagraph.getElementsByTag("li")
-      listItems.get(0).text() mustBe "Download a PDF of your GB EORI number(266kb)"
-      listItems.get(0).getElementsByTag("a").attr("href") mustBe "/customs-registration-services/register/download/pdf"
+      listItems.get(0).text() mustBe "Download a PDF of your EORI number(266kb)"
+      listItems.get(0).getElementsByTag("a").attr(
+        "href"
+      ) mustBe "/customs-registration-services/atar/register/download/pdf"
       listItems.get(1).text() mustBe "Download an accessible text file of your EORI number(12kb)"
-      listItems.get(1).getElementsByTag("a").attr("href") mustBe "/customs-registration-services/register/download/text"
+      listItems.get(1).getElementsByTag("a").attr(
+        "href"
+      ) mustBe "/customs-registration-services/atar/register/download/text"
     }
 
     "display whats happens next paragraph" in {

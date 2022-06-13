@@ -50,7 +50,8 @@ class Sub02Controller @Inject() (
   sub02EoriAlreadyAssociatedView: sub02_eori_already_associated,
   sub02EoriAlreadyExists: sub02_eori_already_exists,
   sub01OutcomeRejected: sub01_outcome_rejected,
-  standalonesubscriptionOutcomeView: standalone_subscription_outcome,
+  standaloneOutcomeView: standalone_subscription_outcome,
+  subscriptionOutcomeView: subscription_outcome,
   xiEoriGuidancePage: xi_eori_guidance,
   cdsSubscriber: CdsSubscriber
 )(implicit ec: ExecutionContext)
@@ -107,14 +108,26 @@ class Sub02Controller @Inject() (
         sub02Outcome <- sessionCache.sub02Outcome
         _            <- sessionCache.remove
         _            <- sessionCache.saveSub02Outcome(sub02Outcome)
-      } yield Ok(
-        standalonesubscriptionOutcomeView(
-          sub02Outcome.eori
-            .getOrElse("EORI not populated from Sub02 response."),
-          sub02Outcome.fullName,
-          sub02Outcome.processedDate
-        )
-      ).withSession(newUserSession)
+      } yield
+        if (service.code.equalsIgnoreCase("eori-only"))
+          Ok(
+            standaloneOutcomeView(
+              sub02Outcome.eori
+                .getOrElse("EORI not populated from Sub02 response."),
+              sub02Outcome.fullName,
+              sub02Outcome.processedDate
+            )
+          ).withSession(newUserSession)
+        else
+          Ok(
+            subscriptionOutcomeView(
+              service,
+              sub02Outcome.eori
+                .getOrElse("EORI not populated from Sub02 response."),
+              sub02Outcome.fullName,
+              sub02Outcome.processedDate
+            )
+          ).withSession(newUserSession)
   }
 
   def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
