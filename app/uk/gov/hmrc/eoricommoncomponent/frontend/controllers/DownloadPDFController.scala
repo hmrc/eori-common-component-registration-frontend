@@ -21,28 +21,33 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.PdfGeneratorConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, Sub02Outcome}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.eori_number_download
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_number_download, subscription_download}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EoriDownloadController @Inject() (
+class DownloadPDFController @Inject() (
   authAction: AuthAction,
   cdsFrontendDataCache: SessionCache,
   mcc: MessagesControllerComponents,
   errorTemplateView: error_template,
   eoriNumberDownloadView: eori_number_download,
+  subscriptionDownloadView: subscription_download,
   pdfGenerator: PdfGeneratorConnector
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def download(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def download(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       cdsFrontendDataCache.sub02Outcome.map {
         case Sub02Outcome(processedDate, fullName, Some(eori)) =>
-          Right(eoriNumberDownloadView(eori, fullName, processedDate).body)
+          if (service.code.equalsIgnoreCase("eori-only"))
+            Right(eoriNumberDownloadView(eori, fullName, processedDate).body)
+          else
+            Right(subscriptionDownloadView(eori, fullName, processedDate).body)
         case _ => Left(InternalServerError(errorTemplateView()))
       }.flatMap {
         case Right(pdfAsHtml) =>
