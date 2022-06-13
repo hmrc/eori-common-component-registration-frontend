@@ -64,7 +64,9 @@ class SubscriptionCompleteSpec extends ViewSpec {
       xiBulletList.getElementsByTag("li").get(1).text() mustBe "make a declaration in Northern Ireland"
       xiBulletList.getElementsByTag("li").get(2).text() mustBe "get a customs decision in Northern Ireland"
 
-      xiParagraph.getElementsByTag("p").get(1).text() mustBe "Apply for an EORI number that starts with XI."
+      xiParagraph.getElementsByTag("p").get(
+        1
+      ).text() mustBe "Apply for an EORI number that starts with XI (opens in a new tab)."
       xiParagraph.getElementsByTag("p").get(
         2
       ).text() mustBe "If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI."
