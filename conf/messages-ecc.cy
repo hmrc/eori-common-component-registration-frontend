@@ -314,7 +314,7 @@ ecc.standalone.subscription.outcomes.success.xi.date.info=TRANSLATE You will nee
 ecc.standalone.subscription.outcomes.success.xi.info.bullet1=symud nwyddau rhwng Gogledd Iwerddon a gwledydd nad ydynt yn rhan o’r UE
 ecc.standalone.subscription.outcomes.success.xi.info.bullet2=gwneud datganiad yng Ngogledd Iwerddon
 ecc.standalone.subscription.outcomes.success.xi.info.bullet3=cael penderfyniad tollau yng Ngogledd Iwerddon
-ecc.standalone.subscription.outcomes.success.xi.info.href=Gwnewch gais am rif EORI sy’n dechrau gyda XI.
+ecc.standalone.subscription.outcomes.success.xi.info.href=TRANSLATE Apply for an EORI number that starts with XI (opens in new tab).
 ecc.standalone.subscription.outcomes.success.xi.info2=TRANSLATE If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI.
 
 
