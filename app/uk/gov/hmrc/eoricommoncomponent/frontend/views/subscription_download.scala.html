@@ -194,8 +194,8 @@
 </div>
 <div>
     @govukPanel(Panel(
-        title = HtmlContent(s"""${messages("cds.standalone.subscription.outcomes.success.heading", name)}<br><strong id="eori-number" class="govuk-!-font-weight-regular">$eori</strong>"""),
-        content = HtmlContent(s"""<p style="color:white" id="issued-date" class="govuk-heading-m">${messages("cds.standalone.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</p>""")
+        title = HtmlContent(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")} $name"""),
+        content = HtmlContent(s""" <h5 style="color:white" id="issued-date" class="govuk-heading-s"><strong>${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</strong></h5><p style="color:white" id="eori" class="govuk-heading-m govuk-!-font-size-27">${messages("cds.subscription.outcomes.success.eori")} <br>$eori</p>""")
     ))
 </div>
 </body>

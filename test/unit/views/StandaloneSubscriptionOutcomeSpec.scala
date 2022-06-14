@@ -19,10 +19,10 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription_outcome
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.standalone_subscription_outcome
 import util.ViewSpec
 
-class SubscriptionCompleteSpec extends ViewSpec {
+class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
 
   implicit val request = withFakeCSRF(fakeAtarRegisterRequest)
 
@@ -30,14 +30,16 @@ class SubscriptionCompleteSpec extends ViewSpec {
   val orgName    = "Test Organisation Name"
   val issuedDate = "01 Jan 2019"
 
-  private val view = instanceOf[subscription_outcome]
+  private val view = instanceOf[standalone_subscription_outcome]
 
-  private val doc: Document = Jsoup.parse(contentAsString(view(atarService, eori, orgName, issuedDate)))
+  private val doc: Document = Jsoup.parse(contentAsString(view(eori, orgName, issuedDate)))
 
-  "'Subscription Rejected' Page with name" should {
+  "'Standalone Subscription Outcome' Page with name" should {
 
     "display correct heading" in {
-      doc.body.getElementsByTag("h1").text() must startWith(s"Subscription request received for $orgName")
+      doc.body.getElementsByTag("h1").text() must startWith(
+        s"Your new EORI number starting with GB for $orgName is $eori"
+      )
     }
     "have the correct class on the h1" in {
       doc.body.getElementsByTag("h1").hasClass("govuk-panel__title") mustBe true
@@ -48,6 +50,35 @@ class SubscriptionCompleteSpec extends ViewSpec {
   }
 
   "Subscription outcome page" should {
+
+    "display additional information paragraph" in {
+
+      val additionalInfoParagraph = doc.body().getElementById("additional-information")
+
+      additionalInfoParagraph.getElementsByTag(
+        "p"
+      ).text() mustBe "We will send you an email to confirm your GB EORI application request has been received."
+
+      val listItems = additionalInfoParagraph.getElementsByTag("li")
+      listItems.get(0).text() mustBe "Download a PDF of your EORI number(266kb)"
+      listItems.get(0).getElementsByTag("a").attr(
+        "href"
+      ) mustBe "/customs-registration-services/atar/register/download/pdf"
+      listItems.get(1).text() mustBe "Download an accessible text file of your EORI number(12kb)"
+      listItems.get(1).getElementsByTag("a").attr(
+        "href"
+      ) mustBe "/customs-registration-services/atar/register/download/text"
+    }
+
+    "display whats happens next paragraph" in {
+
+      val whatsNextParagraph = doc.body().getElementById("what-happens-next")
+      whatsNextParagraph.getElementsByTag("h2").get(0).text() mustBe "What happens next"
+      whatsNextParagraph.getElementsByTag(
+        "p"
+      ).text() mustBe "Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the check an EORI service (opens in a new tab) . Your new GB EORI has no expiry date."
+      whatsNextParagraph.getElementsByTag("a").attr("href") must endWith("/check-eori-number")
+    }
 
     "display XI EORI paragraph" in {
 

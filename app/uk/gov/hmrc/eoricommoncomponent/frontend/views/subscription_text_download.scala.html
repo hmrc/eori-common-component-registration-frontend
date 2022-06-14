@@ -19,6 +19,8 @@
 @this(dateFormatter: DateFormatter)
 @(eori: String, entityName: String, processedDate: String)(implicit messages: Messages)@CR ={@Html("\r")}@Html(messages("cds.subscription.text-download.hmrc"))@CR
 @CR
-@messages("cds.standalone.subscription.outcomes.success.heading", entityName) @eori@CR
+@messages("cds.reg.existing.outcomes.success.heading.part1") @entityName@CR
 @CR
-@messages("cds.standalone.subscription.outcomes.success.issued") @dateFormatter.format(processedDate)@CR
+@messages("cds.subscription.outcomes.success.issued") @dateFormatter.format(processedDate)@CR
+@CR
+@messages("cds.subscription.outcomes.success.eori") @eori@CR
