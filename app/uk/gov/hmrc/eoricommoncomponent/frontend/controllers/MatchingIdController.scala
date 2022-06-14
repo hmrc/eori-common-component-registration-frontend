@@ -41,7 +41,7 @@ class MatchingIdController @Inject() (
       matchLoggedInUserAndRedirect(loggedInUser) {
         Redirect(UserLocationController.form(service))
       } {
-        Redirect(ConfirmContactDetailsController.form(service))
+        Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
       }
   }
 

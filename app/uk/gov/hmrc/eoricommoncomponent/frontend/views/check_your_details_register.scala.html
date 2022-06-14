@@ -312,7 +312,7 @@
             address => Seq(summaryListRow(
                 key = businessDetailsLabel,
                 value = Some(addressViewModelHtml(address)),
-                call = Some(ConfirmContactDetailsController.form(service))
+                call = Some(ConfirmContactDetailsController.form(service, isInReviewMode = true))
             ))
         }
     } else {

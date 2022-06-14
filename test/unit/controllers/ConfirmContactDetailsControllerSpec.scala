@@ -234,6 +234,23 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       }
     }
 
+    "redirect to Review page while on review mode when service returns NewSubscription for organisation" in {
+      when(mockSubscriptionPage.url(atarService)).thenReturn(testSubscriptionStartPageUrl)
+      when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
+        .thenReturn(Future.successful(subscriptionDetailsHolder))
+      when(
+        mockSessionCache
+          .saveSubscriptionDetails(any[SubscriptionDetails])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(true))
+
+      mockCacheWithRegistrationDetails(organisationRegistrationDetails)
+      mockNewSubscriptionFromSubscriptionStatus()
+      invokeConfirmContactDetailsWithSelectedOption(isInReviewMode = true) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("/register/matching/review-determine")
+      }
+    }
+
     "redirect to the page defined by subscription flow start when service returns NewSubscription for individual with selected type" in {
       when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(subscriptionDetailsHolder))
@@ -596,12 +613,13 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   private def invokeConfirmContactDetailsWithSelectedOption(
     userId: String = defaultUserId,
-    selectedOption: String = "yes"
+    selectedOption: String = "yes",
+    isInReviewMode: Boolean = false
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
-        .submit(atarService)
+        .submit(atarService, isInReviewMode)
         .apply(
           SessionBuilder.buildRequestWithSessionAndFormValues(userId, Map("yes-no-wrong-address" -> selectedOption))
         )

@@ -69,7 +69,7 @@ class ConfirmContactDetailsController @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def form(service: Service): Action[AnyContent] =
+  def form(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.registrationDetails.flatMap {
         case individual: RegistrationDetailsIndividual =>
@@ -79,6 +79,7 @@ class ConfirmContactDetailsController @Inject() (
           Future.successful(
             Ok(
               confirmContactDetailsView(
+                isInReviewMode,
                 individual.name,
                 concatenateAddress(individual),
                 individual.customsId,
@@ -97,6 +98,7 @@ class ConfirmContactDetailsController @Inject() (
               Future.successful(
                 Ok(
                   confirmContactDetailsView(
+                    isInReviewMode,
                     org.name,
                     concatenateAddress(org),
                     org.customsId,
@@ -116,7 +118,7 @@ class ConfirmContactDetailsController @Inject() (
       }
     }
 
-  def submit(service: Service): Action[AnyContent] =
+  def submit(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       YesNoWrongAddress
         .createForm()
@@ -128,6 +130,7 @@ class ConfirmContactDetailsController @Inject() (
                 Future.successful(
                   BadRequest(
                     confirmContactDetailsView(
+                      isInReviewMode,
                       individual.name,
                       concatenateAddress(individual),
                       individual.customsId,
@@ -143,6 +146,7 @@ class ConfirmContactDetailsController @Inject() (
                     Future.successful(
                       BadRequest(
                         confirmContactDetailsView(
+                          isInReviewMode,
                           org.name,
                           concatenateAddress(org),
                           org.customsId,
@@ -160,19 +164,21 @@ class ConfirmContactDetailsController @Inject() (
                 logger.warn("[ConfirmContactDetailsController.submit] registrationDetails not found")
                 sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
             },
-          areDetailsCorrectAnswer => checkAddressDetails(service, areDetailsCorrectAnswer)
+          areDetailsCorrectAnswer => checkAddressDetails(service, isInReviewMode, areDetailsCorrectAnswer)
         )
     }
 
-  private def checkAddressDetails(service: Service, areDetailsCorrectAnswer: YesNoWrongAddress)(implicit
-    request: Request[AnyContent]
-  ): Future[Result] =
+  private def checkAddressDetails(
+    service: Service,
+    isInReviewMode: Boolean,
+    areDetailsCorrectAnswer: YesNoWrongAddress
+  )(implicit request: Request[AnyContent]): Future[Result] =
     sessionCache.subscriptionDetails.flatMap { subDetails =>
       sessionCache.registrationDetails.flatMap { details =>
         sessionCache
           .saveSubscriptionDetails(subDetails.copy(addressDetails = Some(concatenateAddress(details))))
           .flatMap { _ =>
-            determineRoute(areDetailsCorrectAnswer.areDetailsCorrect, service)
+            determineRoute(areDetailsCorrectAnswer.areDetailsCorrect, service, isInReviewMode)
           }
       }
     }
@@ -193,14 +199,14 @@ class ConfirmContactDetailsController @Inject() (
       } yield Ok(sub01OutcomeRejected(Some(name), processedDate, service))
   }
 
-  private def determineRoute(detailsCorrect: YesNoWrong, service: Service)(implicit
+  private def determineRoute(detailsCorrect: YesNoWrong, service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
     detailsCorrect match {
       case Yes =>
         registrationConfirmService.currentSubscriptionStatus flatMap {
           case NewSubscription | SubscriptionRejected =>
-            onNewSubscription(service)
+            onNewSubscription(service, isInReviewMode)
           case SubscriptionProcessing =>
             Future.successful(Redirect(ConfirmContactDetailsController.processing(service)))
           case SubscriptionExists =>
@@ -231,7 +237,9 @@ class ConfirmContactDetailsController @Inject() (
         )
     }
 
-  private def onNewSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] = {
+  private def onNewSubscription(service: Service, isInReviewMode: Boolean)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] = {
     lazy val noSelectedOrganisationType =
       requestSessionData.userSelectedOrganisationType.isEmpty
     sessionCache.registrationDetails flatMap {
@@ -244,9 +252,12 @@ class ConfirmContactDetailsController @Inject() (
         )
 
       case _ =>
-        subscriptionFlowManager.startSubscriptionFlow(service).map {
-          case (page, newSession) => Redirect(page.url(service)).withSession(newSession)
-        }
+        if (isInReviewMode)
+          Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
+        else
+          subscriptionFlowManager.startSubscriptionFlow(service).map {
+            case (page, newSession) => Redirect(page.url(service)).withSession(newSession)
+          }
     }
   }
 
