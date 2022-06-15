@@ -73,45 +73,55 @@ class ConfirmContactDetailsController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.registrationDetails.flatMap {
         case individual: RegistrationDetailsIndividual =>
-          /* if (!individual.address.isValidAddress())
-            checkAddressDetails(service, YesNoWrongAddress(Some("wrong-address")))
-          else*/
-          Future.successful(
-            Ok(
-              confirmContactDetailsView(
-                isInReviewMode,
-                individual.name,
-                concatenateAddress(individual),
-                individual.customsId,
-                None,
-                YesNoWrongAddress.createForm(),
-                service
+          if (!individual.address.isValidAddress())
+            Future.successful(
+              Redirect(
+                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+                  .page(service)
               )
             )
-          )
-        case org: RegistrationDetailsOrganisation =>
-          /*if (!org.address.isValidAddress())
-            checkAddressDetails(service, YesNoWrongAddress(Some("wrong-address")))
-          else*/
-          orgTypeLookup.etmpOrgTypeOpt.flatMap {
-            case Some(ot) =>
-              Future.successful(
-                Ok(
-                  confirmContactDetailsView(
-                    isInReviewMode,
-                    org.name,
-                    concatenateAddress(org),
-                    org.customsId,
-                    Some(ot),
-                    YesNoWrongAddress.createForm(),
-                    service
-                  )
+          else
+            Future.successful(
+              Ok(
+                confirmContactDetailsView(
+                  isInReviewMode,
+                  individual.name,
+                  concatenateAddress(individual),
+                  individual.customsId,
+                  None,
+                  YesNoWrongAddress.createForm(),
+                  service
                 )
               )
-            case None =>
-              logger.warn("[ConfirmContactDetailsController.form] organisation type None")
-              sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
-          }
+            )
+        case org: RegistrationDetailsOrganisation =>
+          if (!org.address.isValidAddress())
+            Future.successful(
+              Redirect(
+                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+                  .page(service)
+              )
+            )
+          else
+            orgTypeLookup.etmpOrgTypeOpt.flatMap {
+              case Some(ot) =>
+                Future.successful(
+                  Ok(
+                    confirmContactDetailsView(
+                      isInReviewMode,
+                      org.name,
+                      concatenateAddress(org),
+                      org.customsId,
+                      Some(ot),
+                      YesNoWrongAddress.createForm(),
+                      service
+                    )
+                  )
+                )
+              case None =>
+                logger.warn("[ConfirmContactDetailsController.form] organisation type None")
+                sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
+            }
         case _ =>
           logger.warn("[ConfirmContactDetailsController.form] registrationDetails not found")
           sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))

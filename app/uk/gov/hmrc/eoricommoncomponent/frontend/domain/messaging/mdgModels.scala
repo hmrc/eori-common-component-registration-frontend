@@ -37,8 +37,7 @@ case class Address(
   addressLine4: Option[String],
   postalCode: Option[String],
   countryCode: String
-) /*{
-
+) {
 
   private def isValidCountry: Boolean     = Countries.all.exists(_.countryCode == countryCode)
   private def hasValidPostcode: Boolean   = this.postalCode.exists(_.matches(postcodeRegex.regex))
@@ -49,8 +48,7 @@ case class Address(
       if (isPostcodeRequired) hasValidPostcode else true
     else false
 
-
-}*/
+}
 
 object Address {
   implicit val jsonFormat = Json.format[Address]

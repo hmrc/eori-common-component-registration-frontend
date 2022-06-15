@@ -375,8 +375,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         ) shouldBe "Application received by HMRC on 22 May 2016"
       }
     }
-    /*
-    "redirect to Address Page when the postcode return from REG01(Register with Id) response is invalid for a Organisation" in {
+    "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a Organisation" in {
       val address: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("AAA 123"), "GB")
       mockCacheWithRegistrationDetails(organisationRegistrationDetails.copy(address = address))
 
@@ -394,13 +393,13 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-          .createForm(atarService)
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+          .page(atarService)
           .url
       }
     }
 
-    "redirect to Address Page when the postcode return from REG01(Register with Id) response is invalid for a SoleTrader/Individual" in {
+    "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a SoleTrader/Individual" in {
       val address: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), None, "GB")
       mockCacheWithRegistrationDetails(individualRegistrationDetails.copy(address = address))
 
@@ -418,11 +417,11 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-          .createForm(atarService)
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+          .page(atarService)
           .url
       }
-    }*/
+    }
   }
 
   "Selecting No" should {

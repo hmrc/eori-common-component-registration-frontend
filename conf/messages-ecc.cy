@@ -378,3 +378,11 @@ ecc.cannot-change-address-company.link = TRANSLATE Companies House (opens in a n
 ecc.cannot-change-address-individual.title = TRANSLATE Please contact HMRC
 ecc.cannot-change-address-individual.info = TRANSLATE Your registered address is held at {0}. You will need to update your details there and return to complete your EORI application.
 ecc.cannot-change-address-individual.link = TRANSLATE HMRC (opens in a new tab)
+
+ecc.address-invalid-individual.title = TRANSLATE Please contact HMRC
+ecc.address-invalid-individual.info = TRANSLATE The registered address we hold for you seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
+ecc.address-invalid-individual.link = TRANSLATE HMRC (opens in a new tab)
+
+ecc.address-invalid-company.title = TRANSLATE Please contact Companies House
+ecc.address-invalid-company.info = TRANSLATE The registered address we hold for your organisation seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
+ecc.address-invalid-company.link = TRANSLATE Companies House (opens in a new tab)
