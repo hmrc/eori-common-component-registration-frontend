@@ -76,7 +76,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
       whatsNextParagraph.getElementsByTag("h2").get(0).text() mustBe "What happens next"
       whatsNextParagraph.getElementsByTag(
         "p"
-      ).text() mustBe "Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the check an EORI service (opens in a new tab) . Your new GB EORI has no expiry date."
+      ).text() mustBe "Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the check an EORI service (opens in new tab) . Your new GB EORI has no expiry date."
       whatsNextParagraph.getElementsByTag("a").attr("href") must endWith("/check-eori-number")
     }
 
@@ -95,7 +95,9 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
       xiBulletList.getElementsByTag("li").get(1).text() mustBe "make a declaration in Northern Ireland"
       xiBulletList.getElementsByTag("li").get(2).text() mustBe "get a customs decision in Northern Ireland"
 
-      xiParagraph.getElementsByTag("p").get(1).text() mustBe "Apply for an EORI number that starts with XI."
+      xiParagraph.getElementsByTag("p").get(
+        1
+      ).text() mustBe "Apply for an EORI number that starts with XI (opens in new tab)."
       xiParagraph.getElementsByTag("p").get(
         2
       ).text() mustBe "If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI."

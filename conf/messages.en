@@ -528,9 +528,6 @@ cds.registration.you-need-a-different-service-iom.info=To apply for an EORI numb
 cds.registration.you-need-a-different-service-iom.vat-registered=VAT-registered
 cds.registration.you-need-a-different-service-iom.not-vat-registered=not VAT-registered
 
-cds.registration.isle-of-man.error.title=Are you or your organisation based in the Isle of Man?
-cds.registration.isle-of-man.error.yes-no-answer=Tell us if your organisation is based in the Isle of Man
-
 cds.registration.part-of-vat-group.title=Are you applying for a business that is part of a VAT group?
 cds.registration.part-of-vat-group.page-error.yes-no-answer=Tell us if you are applying for a business that is part of a VAT group
 
@@ -1030,7 +1027,7 @@ cds.subscription.outcomes.success.will-send-email=We will send you an email to c
 cds.subscription.outcomes.success.extra.information.next=What happens next
 cds.subscription.outcomes.success.extra.information=We will send a second email to confirm when your subscription to get a goods movement reference is active. This can take up to 2 hours.
 cds.subscription.outcomes.success.extra.information1=Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the {0}. Your new GB EORI has no expiry date.
-cds.subscription.outcomes.success.extra.information2=check an EORI service (opens in a new tab)
+cds.subscription.outcomes.success.extra.information2=check an EORI service (opens in new tab)
 cds.subscription.outcomes.success.download-eori=Download a PDF of your EORI number(266kb)
 cds.subscription.outcomes.success.download-eori-textfile=Download an accessible text file of your EORI number(12kb)
 cds.subscription.outcomes.invalid.sub-title=There is a problem with the EORI you have supplied, please contact us for more information
@@ -1068,7 +1065,7 @@ cds.standalone.subscription.outcomes.success.heading=Your new EORI number starti
 cds.standalone.subscription.outcomes.success.email=We will send you an email to confirm your GB EORI application request has been received.
 cds.standalone.subscription.outcomes.success.extra.information.heading=What happens next
 cds.standalone.subscription.outcomes.success.extra.information1=Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the {0}. Your new GB EORI has no expiry date.
-cds.standalone.subscription.outcomes.success.extra.information2=check an EORI service (opens in a new tab)
+cds.standalone.subscription.outcomes.success.extra.information2=check an EORI service (opens in new tab)
 cds.standalone.subscription.outcomes.success.issued=issued by HMRC on
 cds.standalone.subscription.outcomes.success.title=Application complete
 cds.standalone.subscription.outcomes.success.download-eori=Download a PDF of your EORI number(266kb)
