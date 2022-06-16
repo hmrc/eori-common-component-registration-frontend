@@ -62,7 +62,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val sub02EoriAlreadyAssociatedView  = instanceOf[sub02_eori_already_associated]
   private val sub02EoriAlreadyExists          = instanceOf[sub02_eori_already_exists]
   private val sub01OutcomeRejected            = instanceOf[sub01_outcome_rejected]
-  private val subscriptionOutcomeView         = instanceOf[standalone_subscription_outcome]
+  private val standAloneOutcomeView           = instanceOf[standalone_subscription_outcome]
+  private val subscriptionOutcomeView         = instanceOf[subscription_outcome]
   private val xiEoriGuidanceView              = instanceOf[xi_eori_guidance]
   private val EORI                            = "ZZZ1ZZZZ23ZZZZZZZ"
 
@@ -78,6 +79,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     sub02EoriAlreadyAssociatedView,
     sub02EoriAlreadyExists,
     sub01OutcomeRejected,
+    standAloneOutcomeView,
     subscriptionOutcomeView,
     xiEoriGuidanceView,
     mockCdsSubscriber
@@ -327,8 +329,46 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       caught.getCause shouldBe emulatedFailure
     }
 
-    "allow authenticated users to access the end page" in {
-      invokeEndPageWithAuthenticatedUser() {
+    "allow authenticated users to access the end Subscription outcome page" in {
+      invokeEndSubscriptionPageWithAuthenticatedUser() {
+        mockSessionCacheForOutcomePage
+        when(mockSubscribeOutcome.eori).thenReturn(Some(EORI))
+        when(mockSubscribeOutcome.fullName).thenReturn("orgName")
+
+        result =>
+          status(result) shouldBe OK
+          val page = CdsPage(contentAsString(result))
+          verify(mockSessionCache).remove(any[HeaderCarrier])
+          page.title should startWith("Application complete")
+          page.getElementsText(
+            RegistrationCompletePage.panelHeadingXpath
+          ) shouldBe s"Subscription request received for orgName"
+          page.getElementsText(
+            RegistrationCompletePage.eoriXpath
+          ) shouldBe s"Your new EORI number starting with GB is: $EORI"
+          page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
+
+          page.getElementsText(RegistrationCompletePage.additionalInformationXpath) should include(
+            messages("cds.subscription.outcomes.success.optional-paragraph")
+          )
+          page.getElementsText(RegistrationCompletePage.whatHappensNextXpath) shouldBe
+            strim("""
+                |What happens next We will send a second email to confirm when your subscription to get a goods movement reference is active. This can take up to 2 hours.
+                |Your new GB EORI number will be ready to use within 48 hours.
+                |Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the check an EORI service (opens in new tab) . Your new GB EORI has no expiry date.
+                | """)
+          page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
+          page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include(
+            "What did you think of this service?"
+          )
+          page.getElementsHref(RegistrationCompletePage.LeaveFeedbackLinkXpath) should endWith(
+            "/feedback/eori-common-component-register-atar"
+          )
+      }
+    }
+
+    "allow authenticated users to access the end standalone outcome page" in {
+      invokeEndStandAloneWithAuthenticatedUser() {
         mockSessionCacheForOutcomePage
         when(mockSubscribeOutcome.eori).thenReturn(Some(EORI))
         when(mockSubscribeOutcome.fullName).thenReturn("orgName")
@@ -350,14 +390,14 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           page.getElementsText(RegistrationCompletePage.whatHappensNextXpath) shouldBe
             strim("""
                 |What happens next Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete.
-                |If you would like to check the status of your GB EORI you can use the check an EORI service (opens in a new tab) . Your new GB EORI has no expiry date.
+                |If you would like to check the status of your GB EORI you can use the check an EORI service (opens in new tab) . Your new GB EORI has no expiry date.
                 | """)
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
           page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include(
             "What did you think of this service?"
           )
           page.getElementsHref(RegistrationCompletePage.LeaveFeedbackLinkXpath) should endWith(
-            "/feedback/eori-common-component-register-atar"
+            "feedback/eori-common-component-register-eori-only"
           )
       }
     }
@@ -426,7 +466,17 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     when(mockSubscribeOutcome.processedDate).thenReturn("22 May 2016")
   }
 
-  def invokeEndPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def invokeEndStandAloneWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    mockSessionCacheForOutcomePage
+    test(
+      subscriptionController.end(eoriOnlyService).apply(
+        SessionBuilder.buildRequestWithSessionAndPath("/eori-only/subscribe", userId)
+      )
+    )
+  }
+
+  def invokeEndSubscriptionPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     mockSessionCacheForOutcomePage
     test(

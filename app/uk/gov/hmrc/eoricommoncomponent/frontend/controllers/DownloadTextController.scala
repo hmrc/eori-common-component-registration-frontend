@@ -20,30 +20,38 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.eori_number_text_download
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_number_text_download, subscription_text_download}
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class EoriTextDownloadController @Inject() (
+class DownloadTextController @Inject() (
   authAction: AuthAction,
   cdsFrontendDataCache: SessionCache,
   eoriNumberTextDownloadView: eori_number_text_download,
+  subscriptionTextDownloadView: subscription_text_download,
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def download(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def download(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
         Some(eori) <- cdsFrontendDataCache.sub02Outcome.map(_.eori)
         name       <- cdsFrontendDataCache.sub02Outcome.map(_.fullName.trim)
         processedDate <- cdsFrontendDataCache.sub02Outcome
           .map(_.processedDate)
-      } yield Ok(eoriNumberTextDownloadView(eori, name, processedDate))
-        .as("plain/text")
-        .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=EORI-number.txt")
+      } yield
+        if (service.code.equalsIgnoreCase("eori-only"))
+          Ok(eoriNumberTextDownloadView(eori, name, processedDate))
+            .as("plain/text")
+            .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=EORI-number.txt")
+        else
+          Ok(subscriptionTextDownloadView(eori, name, processedDate))
+            .as("plain/text")
+            .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=EORI-number.txt")
   }
 
 }

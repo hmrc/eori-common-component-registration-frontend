@@ -116,9 +116,6 @@ object MatchingForms {
   def disclosePersonalDetailsYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm("cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer")
 
-  def isleOfManYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
-    createYesNoAnswerForm("cds.registration.isle-of-man.error.yes-no-answer")
-
   def vatRegisteredUkYesNoAnswerForm(isPartnership: Boolean = false)(implicit messages: Messages): Form[YesNo] =
     if (isPartnership) createYesNoAnswerForm("cds.registration.vat-registered-uk.partnership.error.yes-no-answer")
     else createYesNoAnswerForm("cds.registration.vat-registered-uk.error.yes-no-answer")

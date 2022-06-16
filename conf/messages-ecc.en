@@ -305,26 +305,27 @@ ecc.business-short-name.organisation.empty = Enter your organisation''s shortene
 ecc.business-short-name.error = The shortened name must be 30 characters or less
 
 ecc.subscription.outcomes.success.xi=If you move goods to or from Northern Ireland
-ecc.subscription.outcomes.success.xi.date.info=you will need an EORI number starting with XI if you:
+ecc.subscription.outcomes.success.xi.date.info=You will need an EORI number starting with XI if you:
 ecc.subscription.outcomes.success.xi.info.bullet1=move goods between Northern Ireland and non-EU countries
 ecc.subscription.outcomes.success.xi.info.bullet2=make a declaration in Northern Ireland
 ecc.subscription.outcomes.success.xi.info.bullet3=get a customs decision in Northern Ireland
-ecc.subscription.outcomes.success.xi.info.href=<a href="/customs-registration-services/register/xi-eori-guidance" class="govuk-link" target="_blank" rel="noopener noreferrer">Apply for an EORI number that starts with XI.</a>
-ecc.subscription.outcomes.success.xi.info2=If you have an EORI number issued by an EU country, you do not need to obtain an EORI starting with XI.
+ecc.subscription.outcomes.success.xi.info.href=Apply for an EORI number that starts with XI (opens in new tab).
+ecc.subscription.outcomes.success.xi.info2=If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI.
 ecc.standalone.subscription.outcomes.success.xi=If you move goods to or from Northern Ireland
 ecc.standalone.subscription.outcomes.success.xi.date.info=You will need an EORI number starting with XI if you:
 ecc.standalone.subscription.outcomes.success.xi.info.bullet1=move goods between Northern Ireland and non-EU countries
 ecc.standalone.subscription.outcomes.success.xi.info.bullet2=make a declaration in Northern Ireland
 ecc.standalone.subscription.outcomes.success.xi.info.bullet3=get a customs decision in Northern Ireland
-ecc.standalone.subscription.outcomes.success.xi.info.href=Apply for an EORI number that starts with XI.
+ecc.standalone.subscription.outcomes.success.xi.info.href=Apply for an EORI number that starts with XI (opens in new tab).
 ecc.standalone.subscription.outcomes.success.xi.info2=If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI.
 
 ecc.subscription.status.gg.h1=Your EORI number and Government Gateway
-ecc.subscription.status.gg.p1=Your EORI number is linked to the Government Gateway account you have used for this application and you will have access to {0} within two hours.
-ecc.subscription.status.gg.p2=You can''t apply for another EORI number using this Government Gateway.
+ecc.subscription.status.gg.p1=Your EORI number is linked to the Government Gateway account you have used for this application.
+ecc.subscription.status.gg.p2=You cannot apply for another EORI number using this Government Gateway.
 ecc.standalone.subscription.status.gg.h1=Your EORI number and Government Gateway
 ecc.standalone.subscription.status.gg.p1=Your EORI number is linked to the Government Gateway account you have used for this application.
 ecc.standalone.subscription.status.gg.p2=You cannot apply for another EORI number using this Government Gateway.
+
 
 ecc.subscription.outcomes.guidance.title=Get an XI EORI number
 ecc.subscription.outcomes.guidance.heading=How to get an XI EORI number

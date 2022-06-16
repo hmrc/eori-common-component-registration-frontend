@@ -21,33 +21,40 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukPanel
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Text, HtmlContent}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.panel.Panel
+@import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-@this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter, govukPanel: GovukPanel)
+@this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter, govukPanel: GovukPanel, appConfig: AppConfig)
 
-@(eori: String, name: String, processedDate: String)(implicit messages: Messages, request: Request[_])
+@(service: Service, eori: String, name: String, processedDate: String)(implicit messages: Messages, request: Request[_])
+
+@checkEORILink = {
+<a class="govuk-link" href=@appConfig.checkEORINumber target="_blank" rel="noopener noreferrer">@messages("cds.subscription.outcomes.success.extra.information2")</a>
+}
 
 @layout_di(messages("cds.subscription.outcomes.success.title"), displayBackLink = false) {
 <div>
     @govukPanel(Panel(
-        title = HtmlContent(s"""${messages("cds.subscription.outcomes.success.heading", name)}<br><strong id="eori-number" class="govuk-!-font-weight-regular">$eori</strong>"""),
-        content = HtmlContent(s"""<p style="color:white" id="issued-date" class="govuk-heading-m">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</p>""")
+        title = HtmlContent(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")} $name"""),
+        content = HtmlContent(s""" <h2 style="color:white" id="issued-date" class="govuk-heading-s"><strong>${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</strong></h2><p style="color:white" id="eori-number" class="govuk-heading-m govuk-!-font-size-27">${messages("cds.subscription.outcomes.success.eori")} <br>$eori</p>""")
     ))
 
     <div id='additional-information' class="govuk-form-group">
         <p class="govuk-body">@messages("cds.subscription.outcomes.success.optional-paragraph")</p>
         <ul class="govuk-list">
             <li>
-                <a id="download-eori" href="/customs-registration-services/register/download/pdf" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori")</a>
+                <a id="download-subscription" href="@{s"/customs-registration-services/${service.code}/register/download/pdf"}" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori")</a>
             <li>
             <li>
-                <a id="download-eori-text" href="/customs-registration-services/register/download/text" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori-textfile")</a>
+                <a id="download-subscription-text" href="@{s"/customs-registration-services/${service.code}/register/download/text"}" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori-textfile")</a>
             </li>
         </ul>
     </div>
 
     <div id="what-happens-next">
+        <h2 class="govuk-heading-m">@messages("cds.subscription.outcomes.success.extra.information.next")</h2>
         <p class="govuk-body">@messages("cds.subscription.outcomes.success.extra.information")</p>
-        <p class="govuk-body">@messages("cds.subscription.outcomes.success.extra.information2")</p>
+        <p class="govuk-body">@Html(messages("cds.subscription.outcomes.success.extra.information1", checkEORILink))</p>
     </div>
 
     <div id="xi-eori">
@@ -58,7 +65,7 @@
             <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet2")</li>
             <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet3")</li>
         </ul>
-        <p class="govuk-body">@Html(messages("ecc.subscription.outcomes.success.xi.info.href"))</p>
+        <p class="govuk-body"><a href="/customs-registration-services/register/xi-eori-guidance" class="govuk-link" target="_blank" rel="noopener noreferrer">@messages("ecc.subscription.outcomes.success.xi.info.href")</a></p>
         <p class="govuk-body">@messages("ecc.subscription.outcomes.success.xi.info2")</p>
     </div>
 
