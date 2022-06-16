@@ -94,7 +94,6 @@ class VatDetailsEuConfirmSpec extends ViewSpec {
     }
 
     "have vat details and links for remove and edit for each of them" in {
-      val test = docOnLimit.body
       VatEuDetailsOnLimit.zipWithIndex.foreach {
         case (details: VatEUDetailsModel, index: Int) =>
           docOnLimit.body.getElementsByClass("govuk-summary-list__value").get(index).text mustBe details.vatNumber

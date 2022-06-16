@@ -55,7 +55,6 @@ class VatDetailsEuSpec extends ViewSpec {
     }
 
     "should display correct inputs and labels" in {
-      val test = doc.body()
       doc.body.getElementsByAttributeValue("for", "vatCountry").hasText mustBe true
       doc.body.getElementById("vatNumber").hasText mustBe false
 

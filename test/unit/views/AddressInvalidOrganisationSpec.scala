@@ -19,7 +19,7 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address_invalid_individual, address_invalid_organisation}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.address_invalid_organisation
 import util.ViewSpec
 
 class AddressInvalidOrganisationSpec extends ViewSpec {

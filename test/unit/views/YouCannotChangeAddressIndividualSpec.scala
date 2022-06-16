@@ -19,10 +19,7 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  you_cannot_change_address_individual,
-  you_cannot_change_address_organisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_cannot_change_address_individual
 import util.ViewSpec
 
 class YouCannotChangeAddressIndividualSpec extends ViewSpec {

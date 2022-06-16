@@ -16,19 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import javax.inject.{Inject, Singleton}
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  ContactDetailsModel,
-  VatDetails,
-  VatEUDetailsModel
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails, VatEUDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

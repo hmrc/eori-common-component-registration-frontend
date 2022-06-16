@@ -19,10 +19,7 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  address_invalid_individual,
-  you_cannot_change_address_individual
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.address_invalid_individual
 import util.ViewSpec
 
 class AddressInvalidIndividualSpec extends ViewSpec {

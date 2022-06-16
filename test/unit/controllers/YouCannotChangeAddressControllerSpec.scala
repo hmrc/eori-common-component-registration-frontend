@@ -16,32 +16,21 @@
 
 package unit.controllers
 
-import common.pages.RemoveVatDetails
-import common.pages.subscription.{SubscriptionCreateEUVatDetailsPage, VatDetailsEuConfirmPage}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.mvc.Result
-import play.api.test.Helpers.{LOCATION, _}
+import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
-  AreYouSureYouWantToDeleteVatController,
-  YouCannotChangeAddressController
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatEUDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionVatEUDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotChangeAddressController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  are_you_sure_remove_vat,
   you_cannot_change_address_individual,
   you_cannot_change_address_organisation
 }
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.YesNoFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
-import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class YouCannotChangeAddressControllerSpec extends ControllerSpec with AuthActionMock {

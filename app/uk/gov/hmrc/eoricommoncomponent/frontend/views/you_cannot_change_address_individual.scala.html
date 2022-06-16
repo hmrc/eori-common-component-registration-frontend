@@ -22,7 +22,7 @@
 @this(layout_di: layout,appConfig:AppConfig)
 @()(implicit request: Request[_], messages: Messages)
 @link = {
-    <a id="feedback_link" href="@{appConfig.hmrcChangeDetails}" target="_blank" class="govuk-link" rel="noopener noreferrer">
+    <a id="contact_link" href="@{appConfig.hmrcChangeDetails}" target="_blank" class="govuk-link" rel="noopener noreferrer">
     @messages("ecc.cannot-change-address-individual.link")
     </a>
 }
