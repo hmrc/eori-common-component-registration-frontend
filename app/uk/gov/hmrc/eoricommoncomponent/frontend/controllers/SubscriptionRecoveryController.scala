@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator, TaxEnrolmentsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.recovery_registration_exists
@@ -42,6 +42,7 @@ import scala.util.Random
 class SubscriptionRecoveryController @Inject() (
   authAction: AuthAction,
   handleSubscriptionService: HandleSubscriptionService,
+  taxEnrolmentService: TaxEnrolmentsService,
   sessionCache: SessionCache,
   SUB09Connector: SUB09SubscriptionDisplayConnector,
   mcc: MessagesControllerComponents,
@@ -178,7 +179,7 @@ class SubscriptionRecoveryController @Inject() (
       // Subscribe Call for enrolment
       _ <- subscribe(service, subscriptionInformation)
       // Issuer Call for enrolment
-      res <- Future.successful(NO_CONTENT)
+      res <- issue(service, subscriptionInformation)
     } yield res match {
       case NO_CONTENT => redirect
       case _          => throw new IllegalArgumentException("Tax Enrolment issuer call failed")
@@ -213,6 +214,16 @@ class SubscriptionRecoveryController @Inject() (
         subscriptionInformation.emailVerificationTimestamp,
         subscriptionInformation.safeId
       )
+
+  private def issue(service: Service, subscriptionInformation: SubscriptionInformation)(implicit
+                                                                                        hc: HeaderCarrier
+  ): Future[Int] =
+    taxEnrolmentService.issuerCall(
+      subscriptionInformation.formBundleId,
+      subscriptionInformation.eori,
+      subscriptionInformation.dateOfEstablishment,
+      service
+    )
 
   private def getDateOfBirthOrDateOfEstablishment(
     response: SubscriptionDisplayResponse,

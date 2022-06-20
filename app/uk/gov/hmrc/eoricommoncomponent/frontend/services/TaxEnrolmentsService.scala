@@ -15,24 +15,18 @@
  */
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.TaxEnrolmentsConnector
 import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, KeyValue, SafeId, TaxEnrolmentsRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.TaxEnrolmentsRequest._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TaxEnrolmentsService @Inject()(taxEnrolmentsConnector: TaxEnrolmentsConnector) {
 
-  private val serviceName = "HMRC-CUS-ORG"
-
-  def doesEnrolmentExist(safeId: SafeId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
-    taxEnrolmentsConnector.getEnrolments(safeId.id).map { enrolments =>
-      enrolments.exists(_.serviceName == serviceName)
-    }
 
   def issuerCall(formBundleId: String, eori: Eori, dateOfEstablishment: Option[LocalDate], service: Service)(
     implicit hc: HeaderCarrier,

@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{TaxEnrolmentsRequest, TaxEnrolmentsResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{IssuerCall, IssuerRequest, IssuerResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
-import uk.gov.hmrc.http.{HttpClient, _}
+import uk.gov.hmrc.http._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,19 +38,6 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
   private val baseUrl        = appConfig.taxEnrolmentsBaseUrl
   val serviceContext: String = appConfig.taxEnrolmentsServiceContext
 
-  private val loggerComponentId = "TaxEnrolmentsConnector"
-
-  def getEnrolments(safeId: String)(implicit hc: HeaderCarrier): Future[List[TaxEnrolmentsResponse]] = {
-    val url = s"$baseUrl/$serviceContext/businesspartners/$safeId/subscriptions"
-    http.GET[List[TaxEnrolmentsResponse]](url) map { resp =>
-      CdsLogger.info(s"[$loggerComponentId] tax-enrolments. url: $url")
-      resp
-    } recover {
-      case e: Throwable =>
-        CdsLogger.error(s"[$loggerComponentId][status] tax-enrolments failed. url: $url, error: $e", e)
-        throw e
-    }
-  }
 
   /**
     *
@@ -66,7 +53,6 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
     request: TaxEnrolmentsRequest,
     formBundleId: String
   )(implicit hc: HeaderCarrier): Future[Int] = {
-    val loggerId = s"[$loggerComponentId]"
     val url = s"$baseUrl/$serviceContext/subscriptions/$formBundleId/issuer"
 
     logger.debug(s"[Enrol: $url, body: $request and hc: $hc")

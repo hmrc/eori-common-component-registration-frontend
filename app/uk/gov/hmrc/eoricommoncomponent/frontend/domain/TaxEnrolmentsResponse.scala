@@ -26,12 +26,6 @@ object TaxEnrolmentsResponse {
   implicit val jsonFormat = Json.format[TaxEnrolmentsResponse]
 }
 
-case class KeyValue(key: String, value: String)
-
-object KeyValue {
-  implicit val format = Json.format[KeyValue]
-}
-
 case class TaxEnrolmentsRequest(
   serviceName: String,
   identifiers: List[KeyValue],
