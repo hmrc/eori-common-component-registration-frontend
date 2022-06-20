@@ -18,7 +18,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import java.time.{LocalDate, LocalDateTime}
-
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc.{Action, _}
@@ -37,6 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.recovery_registration
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Random
 
 @Singleton
 class SubscriptionRecoveryController @Inject() (
@@ -149,7 +149,7 @@ class SubscriptionRecoveryController @Inject() (
       processedDate,
       email,
       emailVerificationTimestamp,
-      formBundleId,
+      enrichFormBundleId(service, formBundleId),
       recipientFullName,
       name,
       eori,
@@ -159,6 +159,13 @@ class SubscriptionRecoveryController @Inject() (
 
     completeEnrolment(service, subscriptionInformation)(redirect)
   }
+
+  private def enrichFormBundleId(service: Service, formBundleId: String) =
+    if (service.enrolmentKey.equalsIgnoreCase(Service.cds.enrolmentKey))
+      s"$formBundleId${Random.nextInt(1000)}cds"
+    else
+      formBundleId + service.code + "-" + (100000 + Random.nextInt(900000)).toString
+
 
   private def completeEnrolment(service: Service, subscriptionInformation: SubscriptionInformation)(
     redirect: => Result
