@@ -16,6 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-case class IssuerCall(request: RegisterWithIdSubmitted, response: RegisterWithIdConfirmation)
 
+import play.api.libs.json.Json
 
+case class IssuerCall(request: IssuerRequest, response: IssuerResponse)
+
+object IssuerCall {
+  implicit val format = Json.format[IssuerCall]
+}
