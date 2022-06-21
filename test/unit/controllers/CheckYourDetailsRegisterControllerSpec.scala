@@ -20,7 +20,6 @@ import common.pages.migration.SubscriptionExistingDetailsReviewPage
 import common.pages.registration.RegistrationReviewPage
 import common.support.testdata.subscription.SubscriptionContactDetailsModelBuilder._
 import common.support.testdata.subscription.{BusinessDatesOrganisationTypeTables, ReviewPageOrganisationTypeTables}
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -37,7 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionDetails,
   SubscriptionFlow
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, VatEUDetailsModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
@@ -54,6 +53,7 @@ import util.builders.RegistrationDetailsBuilder.{
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -94,7 +94,6 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(mockSubscriptionFlow)
     when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(None)
-    when(mockSubscriptionDetailsHolder.vatEUDetails).thenReturn(Nil)
     when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(None)
     when(mockSubscriptionDetailsHolder.businessShortName).thenReturn(None)
     when(mockSubscriptionDetailsHolder.dateEstablished).thenReturn(None)
@@ -278,7 +277,6 @@ class CheckYourDetailsRegisterControllerSpec
           "Email address"
         ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.emailAddress
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number") shouldBe NotEntered
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe NotEntered
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact") shouldBe
           strim(s"""
                  |${contactUkDetailsModelWithMandatoryValuesOnly.fullName}
@@ -620,23 +618,6 @@ class CheckYourDetailsRegisterControllerSpec
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe
-        strim("""
-            |VAT-2 - France
-            |VAT-3 - Poland
-          """)
-      page.getSummaryListLink(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "EU VAT numbers",
-        "Change"
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("EU VAT numbers")
-      page.getSummaryListHref(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "EU VAT numbers",
-        "Change"
-      ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
         "Organisation details included on the EORI checker",
@@ -815,25 +796,6 @@ class CheckYourDetailsRegisterControllerSpec
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe true
-
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe
-        strim("""
-                |VAT-2 - France
-                |VAT-3 - Poland
-          """)
-      page.getSummaryListLink(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "EU VAT numbers",
-        "Change"
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("EU VAT numbers")
-      page.getSummaryListHref(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "EU VAT numbers",
-        "Change"
-      ) shouldBe "/customs-registration-services/atar/register/vat-details-eu-confirm/review"
-
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
         "Partnership details included on the EORI checker",
@@ -938,43 +900,13 @@ class CheckYourDetailsRegisterControllerSpec
   }
 
   "VAT details" should {
-    "display only UK ones when only for UK found in cache" in {
+    "display only UK vat details when found in cache" in {
       when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(gbVatDetails)
       mockRegistrationDetailsBasedOnOrganisationType(Individual)
 
       showForm() { result =>
         val page = CdsPage(contentAsString(result))
         assertUkVatDetailsShowValues(page)
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe NotEntered
-      }
-    }
-
-    "display only EU ones when only for EU found in cache" in {
-      when(mockSubscriptionDetailsHolder.vatEUDetails).thenReturn(euVats)
-      mockRegistrationDetailsBasedOnOrganisationType(Individual)
-
-      showForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "UK VAT Number") shouldBe NotEntered
-        assertEuVatDetailsShowValues(page)
-      }
-    }
-
-    "display country in correct form" in {
-
-      val euVatsCaseInsensitive: Seq[VatEUDetailsModel] =
-        Seq(VatEUDetailsModel("FR", "VAT-2"), VatEUDetailsModel("PL", "VAT-3"))
-
-      when(mockSubscriptionDetailsHolder.vatEUDetails).thenReturn(euVatsCaseInsensitive)
-      mockRegistrationDetailsBasedOnOrganisationType(Individual)
-
-      showForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getSummaryListValue(
-          RegistrationReviewPage.SummaryListRowXPath,
-          "EU VAT numbers"
-        ) shouldBe "VAT-2 - France VAT-3 - Poland"
-        assertEuVatDetailsShowValues(page)
       }
     }
   }
@@ -1011,7 +943,6 @@ class CheckYourDetailsRegisterControllerSpec
 
   private def testCommonReviewPageFields(page: CdsPage, expectedCountry: Option[String] = Option("France")): Unit = {
     assertUkVatDetailsShowValues(page)
-    assertEuVatDetailsShowValues(page)
 
     val countryString = expectedCountry match {
       case None    => ""
@@ -1057,21 +988,6 @@ class CheckYourDetailsRegisterControllerSpec
     ) shouldBe VatRegisteredUkController
       .reviewForm(atarService)
       .url
-  }
-
-  private def assertEuVatDetailsShowValues(page: CdsPage) {
-    page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "EU VAT numbers") shouldBe
-      strim("""
-          |VAT-2 - France
-          |VAT-3 - Poland
-        """)
-
-    page.getSummaryListLink(
-      RegistrationReviewPage.SummaryListRowXPath,
-      "EU VAT numbers",
-      "Change"
-    ) shouldBe RegistrationReviewPage
-      .changeAnswerText("EU VAT numbers")
   }
 
   def showForm(
