@@ -53,6 +53,8 @@ class VatDetailsUkSpec extends ViewSpec {
 
       doc.body.getElementById("intro-link").text() must include("Find your VAT details (opens in new tab).")
 
+      doc.body.getElementsByTag("label")[0].text() must include("VAT registration address postcode")
+
     }
 
   }
