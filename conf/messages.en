@@ -857,7 +857,7 @@ cds.multi.input.add-another=Add another
 cds.multi.input.delete-entry=Remove
 #Subscription VAT details
 cds.subscription.vat-details.heading=Your UK VAT details
-cds.subscription.vat-details.intro-text=You can find your VAT details on your VAT registration certificate. To view this login to your tax account and select ''More VAT details''. Select the '''View VAT certificate'' link under the heading '''Help with tax''.
+cds.subscription.vat-details.intro-text=You can find your VAT details on your VAT registration certificate. To view this login to your tax account and select ''More VAT details''. Select the ''View VAT certificate'' link under the heading ''Help with tax''.
 cds.subscription.vat-details.intro-text.link=Find your VAT details (opens in new tab).
 cds.subscription.vat-details.postcode=VAT registration address postcode
 cds.subscription.vat-details.postcode.required.error=Enter a valid postcode of your VAT registration address
