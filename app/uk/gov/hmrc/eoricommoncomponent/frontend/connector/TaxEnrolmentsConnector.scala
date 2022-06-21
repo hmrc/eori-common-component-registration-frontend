@@ -31,13 +31,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
-                                                                                                  ec: ExecutionContext
+  ec: ExecutionContext
 ) {
 
   private val logger         = Logger(this.getClass)
   private val baseUrl        = appConfig.taxEnrolmentsBaseUrl
   val serviceContext: String = appConfig.taxEnrolmentsServiceContext
-
 
   /**
     *
@@ -49,10 +48,7 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
     *  This is a issuer call which ETMP makes but we will do this for migrated users
     *  when subscription status((Subscription Create Api CALL)) is 04 (SubscriptionExists)
     */
-  def enrol(
-    request: TaxEnrolmentsRequest,
-    formBundleId: String
-  )(implicit hc: HeaderCarrier): Future[Int] = {
+  def enrol(request: TaxEnrolmentsRequest, formBundleId: String)(implicit hc: HeaderCarrier): Future[Int] = {
     val url = s"$baseUrl/$serviceContext/subscriptions/$formBundleId/issuer"
 
     logger.debug(s"[Enrol: $url, body: $request and hc: $hc")
@@ -63,9 +59,8 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
     }
   }
 
-
   private def auditCall(url: String, request: TaxEnrolmentsRequest, response: HttpResponse)(implicit
-                                                                                            hc: HeaderCarrier
+    hc: HeaderCarrier
   ): Unit = {
     val issuerRequest  = IssuerRequest(request)
     val issuerResponse = IssuerResponse(response)

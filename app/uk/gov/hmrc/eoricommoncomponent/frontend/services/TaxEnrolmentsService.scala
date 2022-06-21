@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.TaxEnrolmentsConnector
 import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, KeyValue, SafeId, TaxEnrolmentsRequest}
@@ -25,11 +26,10 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TaxEnrolmentsService @Inject()(taxEnrolmentsConnector: TaxEnrolmentsConnector) {
+class TaxEnrolmentsService @Inject() (taxEnrolmentsConnector: TaxEnrolmentsConnector) {
 
-
-  def issuerCall(formBundleId: String, eori: Eori, dateOfEstablishment: Option[LocalDate], service: Service)(
-    implicit hc: HeaderCarrier,
+  def issuerCall(formBundleId: String, eori: Eori, dateOfEstablishment: Option[LocalDate], service: Service)(implicit
+    hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[Int] = {
     val identifiers = List(KeyValue(key = "EORINUMBER", value = eori.id))
@@ -39,4 +39,5 @@ class TaxEnrolmentsService @Inject()(taxEnrolmentsConnector: TaxEnrolmentsConnec
       TaxEnrolmentsRequest(serviceName = service.enrolmentKey, identifiers = identifiers, verifiers = verifiers)
     taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId)
   }
+
 }

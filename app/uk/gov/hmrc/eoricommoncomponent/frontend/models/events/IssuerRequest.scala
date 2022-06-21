@@ -19,13 +19,12 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{KeyValue, TaxEnrolmentsRequest}
 
-
 case class IssuerRequest(
-                          serviceName: String,
-                          identifiers: List[KeyValue],
-                          verifiers: Option[List[KeyValue]],
-                          supscriptionState: String
-                        )
+  serviceName: String,
+  identifiers: List[KeyValue],
+  verifiers: Option[List[KeyValue]],
+  supscriptionState: String
+)
 
 object IssuerRequest {
   implicit val format = Json.format[IssuerRequest]
@@ -39,4 +38,3 @@ object IssuerRequest {
     )
 
 }
-

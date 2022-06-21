@@ -29,7 +29,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator, TaxEnrolmentsService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  HandleSubscriptionService,
+  RandomUUIDGenerator,
+  TaxEnrolmentsService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.recovery_registration_exists
@@ -167,7 +171,6 @@ class SubscriptionRecoveryController @Inject() (
     else
       formBundleId + service.code + "-" + (100000 + Random.nextInt(900000)).toString
 
-
   private def completeEnrolment(service: Service, subscriptionInformation: SubscriptionInformation)(
     redirect: => Result
   )(implicit hc: HeaderCarrier, messages: Messages): Future[Result] =
@@ -216,7 +219,7 @@ class SubscriptionRecoveryController @Inject() (
       )
 
   private def issue(service: Service, subscriptionInformation: SubscriptionInformation)(implicit
-                                                                                        hc: HeaderCarrier
+    hc: HeaderCarrier
   ): Future[Int] =
     taxEnrolmentService.issuerCall(
       subscriptionInformation.formBundleId,

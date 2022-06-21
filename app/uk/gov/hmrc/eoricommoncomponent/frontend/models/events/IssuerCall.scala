@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-
 import play.api.libs.json.Json
 
 case class IssuerCall(request: IssuerRequest, response: IssuerResponse)
