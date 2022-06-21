@@ -133,13 +133,6 @@ class SubscriptionDetailsService @Inject() (
       }
     else Future.successful(view)
 
-  def cacheVatRegisteredEu(yesNoAnswer: YesNo)(implicit hq: HeaderCarrier): Future[Unit] =
-    for {
-      existingHolder <- sessionCache.subscriptionDetails
-      updatedHolder = existingHolder.copy(vatRegisteredEu = Some(yesNoAnswer.isYes))
-      _ <- sessionCache.saveSubscriptionDetails(updatedHolder)
-    } yield ()
-
   def cachedCustomsId(implicit hc: HeaderCarrier): Future[Option[CustomsId]] =
     sessionCache.subscriptionDetails map (_.customsId)
 

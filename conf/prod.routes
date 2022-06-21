@@ -151,26 +151,6 @@ POST        /customs-registration-services/:service/register/date-established   
 GET         /customs-registration-services/:service/register/date-established/review                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfEstablishmentController.reviewForm(service: Service)
 POST        /customs-registration-services/:service/register/date-established/review                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfEstablishmentController.submit(isInReviewMode: Boolean = true, service: Service)
 
-GET         /customs-registration-services/:service/register/vat-details-eu                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController.createForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-details-eu                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController.submit(service: Service, isInReviewMode: Boolean = false)
-GET         /customs-registration-services/:service/register/vat-details-eu/review                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController.reviewForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-details-eu/review                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController.submit(service: Service, isInReviewMode: Boolean = true)
-
-GET         /customs-registration-services/:service/register/vat-details-eu/update/:index                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController.updateForm(index: Int, service: Service)
-POST        /customs-registration-services/:service/register/vat-details-eu/update/:index                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController.submitUpdate(index: Int, service: Service, isInReviewMode: Boolean = false)
-GET         /customs-registration-services/:service/register/vat-details-eu/update/:index/review         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController.reviewUpdateForm(index: Int, service: Service)
-POST        /customs-registration-services/:service/register/vat-details-eu/update/:index/review         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuController.submitUpdate(index: Int, service: Service, isInReviewMode: Boolean = true)
-
-GET         /customs-registration-services/:service/register/vat-details-eu-confirm                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuConfirmController.createForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-details-eu-confirm                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuConfirmController.submit(isInReviewMode: Boolean = false, service: Service)
-GET         /customs-registration-services/:service/register/vat-details-eu-confirm/review               @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuConfirmController.reviewForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-details-eu-confirm/review               @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsEuConfirmController.submit(isInReviewMode: Boolean = true, service: Service)
-
-GET         /customs-registration-services/:service/register/vat-details-eu-remove/:index                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AreYouSureYouWantToDeleteVatController.createForm(index: Int, service: Service)
-POST        /customs-registration-services/:service/register/vat-details-eu-remove/:index                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AreYouSureYouWantToDeleteVatController.submit(index: Int, service: Service, isInReviewMode: Boolean = false)
-GET         /customs-registration-services/:service/register/vat-details-eu-remove/:index/review         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AreYouSureYouWantToDeleteVatController.reviewForm(index: Int, service: Service)
-POST        /customs-registration-services/:service/register/vat-details-eu-remove/:index/review         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AreYouSureYouWantToDeleteVatController.submit(index: Int, service: Service, isInReviewMode: Boolean = true)
-
 GET         /customs-registration-services/:service/register/what-are-your-uk-vat-details                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/what-are-your-uk-vat-details                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController.submit(isInReviewMode: Boolean = false, service: Service)
 GET         /customs-registration-services/:service/register/what-are-your-uk-vat-details/review         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController.reviewForm(service: Service)
@@ -188,11 +168,6 @@ GET         /customs-registration-services/:service/register/vat-registered-uk  
 POST        /customs-registration-services/:service/register/vat-registered-uk                           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkController.submit(isInReviewMode: Boolean = false, service: Service)
 GET         /customs-registration-services/:service/register/vat-registered-uk/review                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkController.reviewForm(service: Service)
 POST        /customs-registration-services/:service/register/vat-registered-uk/review                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkController.submit(isInReviewMode: Boolean = true, service: Service)
-
-GET         /customs-registration-services/:service/register/vat-registered-eu                           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredEuController.createForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-registered-eu                           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredEuController.submit(isInReviewMode: Boolean = false, service: Service)
-GET         /customs-registration-services/:service/register/vat-registered-eu/review                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredEuController.reviewForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-registered-eu/review                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredEuController.submit(isInReviewMode: Boolean = true, service: Service)
 
 GET         /customs-registration-services/:service/register/vat-group                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/vat-group                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.submit(service: Service)

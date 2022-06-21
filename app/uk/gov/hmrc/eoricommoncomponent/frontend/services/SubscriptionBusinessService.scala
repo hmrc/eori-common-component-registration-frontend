@@ -20,12 +20,7 @@ import javax.inject.{Inject, Singleton}
 import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  ContactDetailsModel,
-  VatDetails,
-  VatEUDetailsModel
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -66,13 +61,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
       )
     }
 
-  def getCachedVatRegisteredEu(implicit hc: HeaderCarrier): Future[Boolean] =
-    cdsFrontendDataCache.subscriptionDetails map {
-      _.vatRegisteredEu.getOrElse(
-        throw new IllegalStateException("Whether the business is VAT registered in the EU has not been Cached")
-      )
-    }
-
   def addressOrException(implicit hc: HeaderCarrier): Future[AddressViewModel] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.addressDetails.getOrElse(throw new IllegalStateException("No Address Details Cached"))
@@ -97,9 +85,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.ukVatDetails
     }
-
-  def getCachedVatEuDetailsModel(implicit hc: HeaderCarrier): Future[Seq[VatEUDetailsModel]] =
-    cdsFrontendDataCache.subscriptionDetails map (_.vatEUDetails)
 
   def retrieveSubscriptionDetailsHolder(implicit hc: HeaderCarrier): Future[SubscriptionDetails] =
     cdsFrontendDataCache.subscriptionDetails
