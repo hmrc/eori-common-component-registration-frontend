@@ -222,23 +222,6 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
     }
   }
 
-  "Calling getCachedVatRegisteredEu" should {
-    "retrieve any previously cached vat registered EU boolean from the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
-      when(mockSubscriptionDetailsHolder.vatRegisteredEu).thenReturn(Some(true))
-      await(subscriptionBusinessService.getCachedVatRegisteredEu) shouldBe true
-    }
-
-    "throw exception when there is no vat registered EU boolean in the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
-      when(mockSubscriptionDetailsHolder.vatRegisteredEu).thenReturn(None)
-      val thrown = intercept[IllegalStateException] {
-        await(subscriptionBusinessService.getCachedVatRegisteredEu)
-      }
-      thrown.getMessage shouldBe "Whether the business is VAT registered in the EU has not been Cached"
-    }
-  }
-
   "Calling getCachedVatRegisteredUk" should {
     "retrieve any previously cached vat registered UK boolean from the cdsFrontendCache" in {
       when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)

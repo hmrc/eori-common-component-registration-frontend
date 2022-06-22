@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatEUDetailsModel}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 @import uk.gov.hmrc.play.language.LanguageUtils
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukSummaryList}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, SummaryListRow, SummaryList, Key, Value, HtmlContent, Actions, ActionItem}
@@ -200,15 +200,6 @@
     @details.postcode.map(helpers.noMarginParagraph(_))
     @transformCountryCodeToOptionalLabel(details.countryCode).map(helpers.noMarginParagraph(_))
 }
-@euVatDetails(details: Seq[VatEUDetailsModel]) = {
-    @if(details.nonEmpty) {
-        @details.map { vatModel =>
-            @helpers.noMarginParagraph(s"${vatModel.vatNumber} - ${euCountry(vatModel.vatCountry)}")
-        }
-    }else {
-        @messages("cds.not-entered.label")
-    }
-}
 
 @summaryListRow(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "") = @{
     SummaryListRow(
@@ -377,11 +368,6 @@
                 value = Some(Html(subscription.ukVatDetails.map(vat => formatDate(vat.effectiveDate)).getOrElse(messages("cds.not-entered.label")))),
                 call = Some(VATNumberPage.reviewForm(service))
             ),
-            summaryListRow(
-                key = messages("cds.form.eu-vat-numbers"),
-                value = Some(euVatDetails(subscription.vatEUDetails)),
-                call = if(subscription.vatEUDetails.nonEmpty) Some(VatDetailsEuConfirmController.reviewForm(service)) else Some(VatRegisteredEuController.reviewForm(service)),
-            )
         ) ++ sicCodeDisplay
     } else Seq.empty[SummaryListRow]
 }

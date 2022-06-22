@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails, VatEUDetailsModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -68,6 +68,16 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
       )
     }
 
+  def addressOrException(implicit hc: HeaderCarrier): Future[AddressViewModel] =
+    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
+      subscriptionDetails.addressDetails.getOrElse(throw new IllegalStateException("No Address Details Cached"))
+    }
+
+  def address(implicit hc: HeaderCarrier): Future[Option[AddressViewModel]] =
+    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
+      subscriptionDetails.addressDetails
+    }
+
   def getCachedCustomsId(implicit hc: HeaderCarrier): Future[Option[CustomsId]] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.customsId
@@ -82,9 +92,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.ukVatDetails
     }
-
-  def getCachedVatEuDetailsModel(implicit hc: HeaderCarrier): Future[Seq[VatEUDetailsModel]] =
-    cdsFrontendDataCache.subscriptionDetails map (_.vatEUDetails)
 
   def retrieveSubscriptionDetailsHolder(implicit hc: HeaderCarrier): Future[SubscriptionDetails] =
     cdsFrontendDataCache.subscriptionDetails

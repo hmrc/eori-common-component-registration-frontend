@@ -854,7 +854,6 @@ cds.subscription-details.consent.denied=Not consented
 cds.subscription-details.amend.legal-entity.user.header=Edit legal entity
 cds.subscription-details.amend.legal-entity.submitButton=Save and go to dashboard
 cds.multi.input.add-another=Add another
-cds.multi.input.delete-entry=Remove
 #Subscription VAT details
 cds.subscription.vat-details.heading=What are your UK VAT details?
 cds.subscription.vat-details.intro-text=You can find these details on your VAT registration certificate.
@@ -880,9 +879,6 @@ cds.subscription.vat-details.page-error.vat-eu-country5=Enter a valid country na
 cds.subscription.vat-details.page-error.is-eu-vat-registered=Confirm whether the company is VAT registered in the European Union
 cds.subscription.vat-details.page-error.vatCountry=Enter a valid country name
 cds.subscription.vat-details.page-error.vatNumber=Enter your VAT number
-cds.subscription.vat-details.page-duplicate-vat-error=You have already entered this VAT number. Enter a different VAT number
-cds.subscription.vat-details.page-remove-vat-heading=Are you sure you want to remove these VAT details?
-cds.subscription.vat-details-eu.page-error.yes-no-answer=Tell us if you want to remove these VAT details
 
 cds.subscription.vat-details.page-error.vat-effective-date=Enter the effective date
 
@@ -900,7 +896,6 @@ cds.subscription.vat-registration.steps=VAT details
 cds.subscription.vat.number=VAT Number
 cds.subscription.vat.effectiveDate=VAT Effective Date
 cds.subscription.vat.postcode=UK VAT postcode
-cds.subscription.vat.country=EU Country
 cds.subscription.vat-gb-id.label=VAT registered in UK answer
 cds.subscription.vat-eu-id.label=VAT registered in EU answer
 cds.subscription.vat-uk.incomplete.entry=Incomplete UK VAT entry
@@ -925,14 +920,10 @@ cds.subscription.vat-registration-number-entry.hint=You can find this on the VAT
 cds.subscription.vat-registration-uk.page.title=Is your organisation VAT registered in the UK?
 cds.subscription.vat-registration-uk-individual.page.title=Are you VAT registered in the UK?
 cds.subscription.vat-registration-eu.page.title=EU VAT registration
-cds.subscription.vat-country=VAT country
 cds.subscription.vat-question-uk=Is your organisation VAT registered in the UK?
 cds.subscription.vat-question-uk.sole-trader=Are you VAT registered in the UK?
 cds.subscription.vat-question-uk.individual=Are you VAT registered in the UK?
 cds.subscription.vat-question-uk.intro=Bringing certain high value items into the UK may incur import VAT. View <a href="https://www.gov.uk/guidance/vat-imports-acquisitions-and-purchases-from-abroad" class="govuk-link">this importing guide for more</a>.
-cds.subscription.vat-question-eu=Is your organisation VAT registered in other EU member countries?
-cds.subscription.vat-enter-eu=Enter the VAT details for an EU country
-cds.subscription.vat-question-eu.individual=Are you VAT registered in other EU member countries?
 cds.subscription.vat-registration.page-error.vat-gb-id=Confirm whether the organisation is VAT registered in the UK
 cds.subscription.vat-registration.page-error.vat-eu-id=Confirm whether the company is VAT registered in the European Union
 cds.subscription.vat-registration.page-error.vat-gb-number_=Enter the UK VAT number
@@ -940,13 +931,6 @@ cds.subscription.vat-registration.page-error.eu-vats.vat-eu-country_=Enter the c
 cds.subscription.vat-registration.page-error.eu-vats.vat-eu-number_=Enter the VAT number
 cds.subscription.vat-registration.form-error.vat-gb-id=Confirm whether the organisation is VAT registered in the UK
 cds.subscription.vat-registration.form-error.vat-eu-id=Confirm whether the company is VAT registered in the European Union
-
-cds.subscription.vat-details-eu-confirm.heading=You have added VAT details for 1 EU member country
-cds.subscription.vat-details-eu-multiple-confirm.heading=You have added VAT details for 1 EU member countries
-cds.subscription.vat-details-eu-confirm.add-another-country=Do you need to add VAT details for another EU member country?
-cds.subscription.vat-details-eu-confirm.add-another-country.hint=You can add VAT details for 5 EU member countries
-cds.subscription.vat-details-eu-confirm.max-amount-reached=You have added the maximum number of VAT details
-cds.subscription.vat-details-eu-confirm.select-one-error.yes-no-answer=Tell us if you need to add VAT details for another EU country
 
 #Subscription Short Name
 cds.subscription.business.short-name.title-and-heading=Does your organisation use a shortened name?
@@ -1161,12 +1145,6 @@ cds.subscription.vat-group.intro-text=VAT groups are when two or more companies 
 cds.subscription.vat-group.page-error.yes-no-answer=Tell us if your organisation is part of a VAT group in the UK
 cds.subscription.vat-group.partnership.page-error.yes-no-answer=Tell us if your partnership is part of a VAT group in the UK
 cds.subscription.vat-registration.form-error.vat-group=Tell us if your organisation is part of a VAT group in the UK
-
-cds.subscription.vat-registered-eu.title-and-heading=Is your organisation VAT registered in other EU member countries?
-cds.subscription.vat-registered-eu.partnership.title-and-heading=Is your partnership VAT registered in other EU member countries?
-cds.subscription.vat-registered-eu.page-error.yes-no-answer=Tell us if your organisation is VAT registered in other EU countries
-cds.subscription.vat-registered-eu.partnership.page-error.yes-no-answer=Tell us if your partnership is VAT registered in other EU countries
-
 
 cds.subscription.based-in-uk.form-error.yes-no-answer=Confirm whether you are registering for a business (or individual) that is in the UK
 cds.subscription.step-of-steps=Step {0} of {1} - {2}

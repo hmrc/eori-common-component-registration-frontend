@@ -17,36 +17,18 @@
 package unit.domain.messaging
 
 import base.UnitSpec
-import java.time.{LocalDate, LocalDateTime}
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   ContactInformation,
   SubscriptionCreateRequest,
   VatId
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  CdsOrganisationType,
-  ContactDetail,
-  CorporateBody,
-  Eori,
-  EstablishmentAddress,
-  RegistrationDetailsIndividual,
-  RegistrationDetailsOrganisation,
-  ResponseData,
-  SafeId,
-  TaxPayerId,
-  Trader,
-  VatIds
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  ContactDetailsModel,
-  VatDetails,
-  VatEUDetailsModel
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+
+import java.time.{LocalDate, LocalDateTime}
 
 class SubscriptionCreateRequestSpec extends UnitSpec {
 
@@ -279,7 +261,6 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       )
       val subscriptionDetails = SubscriptionDetails(
         ukVatDetails = Some(VatDetails("AA11 1AA", "123456", LocalDate.now())),
-        vatEUDetails = Seq(VatEUDetailsModel("FR", "654321")),
         addressDetails = Some(addressViewModel),
         contactDetails = Some(contactDetails),
         personalDataDisclosureConsent = Some(true),
@@ -309,7 +290,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       requestDetails.contactInformation shouldBe Some(
         registrationExpectedContactInformation(requestDetails.contactInformation.get.emailVerificationTimestamp.get)
       )
-      requestDetails.vatIDs shouldBe Some(Seq(VatId(Some("GB"), Some("123456")), VatId(Some("FR"), Some("654321"))))
+      requestDetails.vatIDs shouldBe Some(Seq(VatId(Some("GB"), Some("123456"))))
       requestDetails.consentToDisclosureOfPersonalData shouldBe Some("1")
       requestDetails.shortName shouldBe Some("short name")
       requestDetails.dateOfEstablishment shouldBe Some(dateOfBirthOrEstablishment)
