@@ -61,23 +61,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
       )
     }
 
-  def getCachedVatRegisteredEu(implicit hc: HeaderCarrier): Future[Boolean] =
-    cdsFrontendDataCache.subscriptionDetails map {
-      _.vatRegisteredEu.getOrElse(
-        throw new IllegalStateException("Whether the business is VAT registered in the EU has not been Cached")
-      )
-    }
-
-  def addressOrException(implicit hc: HeaderCarrier): Future[AddressViewModel] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.addressDetails.getOrElse(throw new IllegalStateException("No Address Details Cached"))
-    }
-
-  def address(implicit hc: HeaderCarrier): Future[Option[AddressViewModel]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.addressDetails
-    }
-
   def getCachedCustomsId(implicit hc: HeaderCarrier): Future[Option[CustomsId]] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.customsId
