@@ -20,7 +20,7 @@ import common.pages.WebPage
 
 trait SubscriptionVatDetailsPage extends WebPage {
 
-  override val title = "What are your UK VAT details?"
+  override val title = "Your UK VAT details"
 
   val vatPostcodeFieldLevelError = "//p[@id='postcode-error' and @class='govuk-error-message']"
   val vatNumberFieldLevelError   = "//p[@id='vat-number-error' and @class='govuk-error-message']"

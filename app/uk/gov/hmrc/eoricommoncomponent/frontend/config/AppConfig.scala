@@ -59,6 +59,7 @@ class AppConfig @Inject() (
   val checkEORINumber: String                            = config.get[String]("external-url.check-eori-number")
   val companyHouseRegister: String                       = config.get[String]("external-url.company-house-register")
   val hmrcChangeDetails: String                          = config.get[String]("external-url.hmrc-change-details")
+  val vatUKDetails: String                               = config.get[String]("external-url.vat-uk-details")
   def callCharges()(implicit messages: Messages): String = config.get[String](s"external-url.call-charges-$languageKey")
 
   val blockedRoutesRegex: Seq[Regex] =
