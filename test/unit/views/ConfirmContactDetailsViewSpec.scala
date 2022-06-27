@@ -123,17 +123,17 @@ class ConfirmContactDetailsViewSpec extends ViewSpec {
   }
 
   private lazy val CorporateBodyDoc: Document = {
-    val result = view(name, address, customsIdUtr, corporateBody, form, atarService)
+    val result = view(false, name, address, customsIdUtr, corporateBody, form, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   private lazy val SoleTraderOrIndividualWithNinoDoc: Document = {
-    val result = view(name, address, customsIdNino, None, form, atarService)
+    val result = view(false, name, address, customsIdNino, None, form, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   private lazy val PartnershipBodyDoc: Document = {
-    val result = view(name, address, customsIdUtr, partnership, form, atarService)
+    val result = view(false, name, address, customsIdUtr, partnership, form, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

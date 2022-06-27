@@ -16,33 +16,19 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  No,
-  WrongAddress,
-  Yes,
-  YesNoWrong,
-  YesNoWrongAddress
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  NewSubscription,
-  RegistrationConfirmService,
-  SubscriptionExists,
-  SubscriptionProcessing,
-  SubscriptionRejected
-}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_contact_details
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{sub01_outcome_processing, sub01_outcome_rejected}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -56,22 +42,30 @@ class ConfirmContactDetailsController @Inject() (
   mcc: MessagesControllerComponents,
   confirmContactDetailsView: confirm_contact_details,
   sub01OutcomeProcessingView: sub01_outcome_processing,
-  sub01OutcomeRejected: sub01_outcome_rejected
+  sub01OutcomeRejected: sub01_outcome_rejected,
+  youCannotChangeAddressOrganisation: you_cannot_change_address_organisation,
+  youCannotChangeAddressIndividual: you_cannot_change_address_individual
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   private val logger = Logger(this.getClass)
 
-  def form(service: Service): Action[AnyContent] =
+  def form(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.registrationDetails.flatMap {
         case individual: RegistrationDetailsIndividual =>
           if (!individual.address.isValidAddress())
-            checkAddressDetails(service, YesNoWrongAddress(Some("wrong-address")))
+            Future.successful(
+              Redirect(
+                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+                  .page(service)
+              )
+            )
           else
             Future.successful(
               Ok(
                 confirmContactDetailsView(
+                  isInReviewMode,
                   individual.name,
                   concatenateAddress(individual),
                   individual.customsId,
@@ -83,13 +77,19 @@ class ConfirmContactDetailsController @Inject() (
             )
         case org: RegistrationDetailsOrganisation =>
           if (!org.address.isValidAddress())
-            checkAddressDetails(service, YesNoWrongAddress(Some("wrong-address")))
+            Future.successful(
+              Redirect(
+                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+                  .page(service)
+              )
+            )
           else
             orgTypeLookup.etmpOrgTypeOpt.flatMap {
               case Some(ot) =>
                 Future.successful(
                   Ok(
                     confirmContactDetailsView(
+                      isInReviewMode,
                       org.name,
                       concatenateAddress(org),
                       org.customsId,
@@ -109,7 +109,7 @@ class ConfirmContactDetailsController @Inject() (
       }
     }
 
-  def submit(service: Service): Action[AnyContent] =
+  def submit(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       YesNoWrongAddress
         .createForm()
@@ -121,6 +121,7 @@ class ConfirmContactDetailsController @Inject() (
                 Future.successful(
                   BadRequest(
                     confirmContactDetailsView(
+                      isInReviewMode,
                       individual.name,
                       concatenateAddress(individual),
                       individual.customsId,
@@ -136,6 +137,7 @@ class ConfirmContactDetailsController @Inject() (
                     Future.successful(
                       BadRequest(
                         confirmContactDetailsView(
+                          isInReviewMode,
                           org.name,
                           concatenateAddress(org),
                           org.customsId,
@@ -153,19 +155,21 @@ class ConfirmContactDetailsController @Inject() (
                 logger.warn("[ConfirmContactDetailsController.submit] registrationDetails not found")
                 sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
             },
-          areDetailsCorrectAnswer => checkAddressDetails(service, areDetailsCorrectAnswer)
+          areDetailsCorrectAnswer => checkAddressDetails(service, isInReviewMode, areDetailsCorrectAnswer)
         )
     }
 
-  private def checkAddressDetails(service: Service, areDetailsCorrectAnswer: YesNoWrongAddress)(implicit
-    request: Request[AnyContent]
-  ): Future[Result] =
+  private def checkAddressDetails(
+    service: Service,
+    isInReviewMode: Boolean,
+    areDetailsCorrectAnswer: YesNoWrongAddress
+  )(implicit request: Request[AnyContent]): Future[Result] =
     sessionCache.subscriptionDetails.flatMap { subDetails =>
       sessionCache.registrationDetails.flatMap { details =>
         sessionCache
           .saveSubscriptionDetails(subDetails.copy(addressDetails = Some(concatenateAddress(details))))
           .flatMap { _ =>
-            determineRoute(areDetailsCorrectAnswer.areDetailsCorrect, service)
+            determineRoute(areDetailsCorrectAnswer.areDetailsCorrect, service, isInReviewMode)
           }
       }
     }
@@ -186,14 +190,14 @@ class ConfirmContactDetailsController @Inject() (
       } yield Ok(sub01OutcomeRejected(Some(name), processedDate, service))
   }
 
-  private def determineRoute(detailsCorrect: YesNoWrong, service: Service)(implicit
+  private def determineRoute(detailsCorrect: YesNoWrong, service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
     detailsCorrect match {
       case Yes =>
         registrationConfirmService.currentSubscriptionStatus flatMap {
           case NewSubscription | SubscriptionRejected =>
-            onNewSubscription(service)
+            onNewSubscription(service, isInReviewMode)
           case SubscriptionProcessing =>
             Future.successful(Redirect(ConfirmContactDetailsController.processing(service)))
           case SubscriptionExists =>
@@ -214,8 +218,8 @@ class ConfirmContactDetailsController @Inject() (
       case WrongAddress =>
         Future.successful(
           Redirect(
-            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-              .createForm(service)
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+              .page(service)
           )
         )
       case _ =>
@@ -224,23 +228,27 @@ class ConfirmContactDetailsController @Inject() (
         )
     }
 
-  private def onNewSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] = {
+  private def onNewSubscription(service: Service, isInReviewMode: Boolean)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] = {
     lazy val noSelectedOrganisationType =
       requestSessionData.userSelectedOrganisationType.isEmpty
-    sessionCache.registrationDetails flatMap {
-      case _: RegistrationDetailsIndividual if noSelectedOrganisationType =>
-        Future.successful(
-          Redirect(
-            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController
-              .form(service)
+    if (isInReviewMode)
+      Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
+    else
+      sessionCache.registrationDetails flatMap {
+        case _: RegistrationDetailsIndividual if noSelectedOrganisationType =>
+          Future.successful(
+            Redirect(
+              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController
+                .form(service)
+            )
           )
-        )
-
-      case _ =>
-        subscriptionFlowManager.startSubscriptionFlow(service).map {
-          case (page, newSession) => Redirect(page.url(service)).withSession(newSession)
-        }
-    }
+        case _ =>
+          subscriptionFlowManager.startSubscriptionFlow(service).map {
+            case (page, newSession) => Redirect(page.url(service)).withSession(newSession)
+          }
+      }
   }
 
   private def concatenateAddress(registrationDetails: RegistrationDetails): AddressViewModel =

@@ -56,7 +56,7 @@ class NinoController @Inject() (
             case true =>
               Redirect(
                 uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-                  .form(service)
+                  .form(service, isInReviewMode = false)
               )
             case false =>
               val errorForm = ninoForm
