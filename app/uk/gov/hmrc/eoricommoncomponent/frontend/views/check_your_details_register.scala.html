@@ -158,6 +158,16 @@
 
 @orgType = @{cdsOrgType.fold("")(orgType => orgType.id)}
 
+@headerTitle = @{
+    if(isPartnership){
+        messages("cds.form.check-answers-partnership-details")
+    } else if(isIndividual || isSoleTrader) {
+        messages("cds.form.check-answers-your-details")
+    } else {
+    messages("cds.form.check-answers-company-details")
+    }
+}
+
 @disclosureLabel = @{
     if (isPartnership) {
         messages("cds.form.disclosure.partnership")
@@ -193,9 +203,6 @@
     @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(helpers.noMarginParagraph(_))
 }
 @contactDetailsHtml(details: ContactDetailsModel) = {
-    @helpers.noMarginParagraph(details.fullName)
-    @helpers.noMarginParagraph(details.telephone)
-    @optionalFaxNumberWithPrefix(details.fax).map(helpers.noMarginParagraph(_))
     @details.street.map(helpers.noMarginParagraph(_))
     @details.city.map(helpers.noMarginParagraph(_))
     @details.postcode.map(helpers.noMarginParagraph(_))
@@ -259,7 +266,7 @@
 @organisationUtr = @{
     if(isRowOrganisation && !isUserIdentifiedByRegService) {
         Seq(summaryListRow(
-            key = messages("cds.matching.organisation-utr.label"),
+            key = messages("cds.company.utr.label"),
             value = Some(Html(messages("cds.not-entered.label"))),
             call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
         ))
@@ -316,22 +323,8 @@
     }
 }
 
-@details = @{
-    Seq(subscription.dateEstablished.map { de =>
-            summaryListRow(
-                key = getDateOfEstablishmentLabel,
-                value = Some(Html(formatDate(de))),
-                call = Some(DateOfEstablishmentController.reviewForm(service))
-            )
-        },
-        subscription.contactDetails.map { contactDetails =>
-            summaryListRow(
-                key = messages("cds.form.customs-contact"),
-                value = Some(contactDetailsHtml(contactDetails)),
-                call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
-            )
-        },
-        subscription.businessShortName.map { n =>
+@shortName = @{
+    Seq(subscription.businessShortName.map { n =>
             summaryListRow(
                 key = messages("cds.form.shortened-name"),
                 value = Some(Html(n.shortName.getOrElse(messages("cds.not-entered.label")))),
@@ -339,6 +332,33 @@
             )
         }
     ).flatten
+}
+
+@dateOfEstablishment = @{
+    Seq(subscription.dateEstablished.map { de =>
+            summaryListRow(
+                key = getDateOfEstablishmentLabel,
+                value = Some(Html(formatDate(de))),
+                call = Some(DateOfEstablishmentController.reviewForm(service))
+            )
+        }
+    ).flatten
+}
+
+@contactName = @{
+    Seq(summaryListRow(
+        key = messages("cds.form.check-answers.contact-name"),
+        value = subscription.contactDetails.map(cd => Html(cd.fullName)),
+        call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
+    ))
+}
+
+@contactTelephone = @{
+    Seq(summaryListRow(
+        key = messages("cds.form.check-answers.contact-telephone"),
+        value = subscription.contactDetails.map(cd => Html(cd.telephone)),
+        call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
+    ))
 }
 
 @sicCodeDisplay = @{
@@ -369,7 +389,7 @@
                 value = Some(Html(subscription.ukVatDetails.map(vat => formatDate(vat.effectiveDate)).getOrElse(messages("cds.not-entered.label")))),
                 call = Some(VATNumberPage.reviewForm(service))
             ),
-        ) ++ sicCodeDisplay
+        )
     } else Seq.empty[SummaryListRow]
 }
 
@@ -383,21 +403,51 @@
   )
 }
 
+@details = @{
+    Seq(subscription.contactDetails.map { contactDetails =>
+        summaryListRow(
+                key = messages("cds.form.customs-contact-address"),
+                value = Some(contactDetailsHtml(contactDetails)),
+                call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
+            )
+        }
+    ).flatten
+}
+
 @layout_di(messages("cds.form.check-answers"), displayBackLink = false) {
     <div>
         <h1 class="govuk-heading-l">@messages("cds.form.check-answers")</h1>
+        <div>
+            <h2 class="govuk-heading-m">@messages("cds.form.check-answers-company-details")</h2>
+            @govukSummaryList(SummaryList(
+            rows =
+            individualNameDob ++
+            organisationName ++
+            organisationUtr ++
+            customsId ++
+            individualUtr ++
+            registeredAddress ++
+            dateOfEstablishment ++
+            sicCodeDisplay ++
+            summary ++
+            shortName
+            ))
+        </div>
+        <div>
+            <h2 class="govuk-heading-m">@messages("cds.form.check-answers-vat-details")</h2>
+            @govukSummaryList(SummaryList(
+                rows = vatDetails
+            ))
+        </div>
+        <div>
+            <h2 class="govuk-heading-m">@messages("cds.form.check-answers-contact-details")</h2>
         @govukSummaryList(SummaryList(
-            rows = email ++
-                    individualNameDob ++
-                    organisationName ++
-                    organisationUtr ++
-                    customsId ++
-                    individualUtr ++
-                    registeredAddress ++
-                    details ++
-                    vatDetails ++
-                    summary
+            rows = contactName ++
+                   email ++
+                   contactTelephone ++
+                   details
         ))
+        </div>
         <p class="govuk-body" id="disclaimer-content">@messages("cds.form.disclaimer")</p>
         <div class="govuk-form-group">
             @helpers.form(CheckYourDetailsRegisterController.submitDetails(service)) {
