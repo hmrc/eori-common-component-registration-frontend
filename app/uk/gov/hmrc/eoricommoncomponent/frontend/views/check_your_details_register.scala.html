@@ -371,6 +371,13 @@
     }).flatten
 }
 
+@vatLabel = @{
+    if(!isIndividual)
+        messages("cds.form.check-answers-vat-details")
+    else
+        None
+}
+
 @vatDetails = @{
     if(!isIndividual) {
         Seq(
@@ -433,12 +440,15 @@
             shortName
             ))
         </div>
+        @if(!isIndividual){
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-vat-details")</h2>
+
             @govukSummaryList(SummaryList(
                 rows = vatDetails
             ))
         </div>
+        }
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-contact-details")</h2>
         @govukSummaryList(SummaryList(
