@@ -74,7 +74,7 @@ class GetNinoController @Inject() (
           )
           .map { matched =>
             if (matched)
-              Redirect(ConfirmContactDetailsController.form(service))
+              Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
             else
               matchNotFoundBadRequest(formData, service)
           }

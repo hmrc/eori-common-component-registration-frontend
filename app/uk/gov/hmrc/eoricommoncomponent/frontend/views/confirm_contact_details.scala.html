@@ -22,10 +22,12 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 
 @this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 @(
+    isInReviewMode: Boolean,
     name: String,
     address: AddressViewModel,
     customsId: Option[CustomsId],
@@ -104,7 +106,7 @@
     @errorSummary(yesNoWrongAddress.errors, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 
     <div class="govuk-form-group">
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service), "yes-no-wrong-address-form") {
+        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service,isInReviewMode), "yes-no-wrong-address-form") {
             @CSRF.formField
 
             @displayInputRadioGroup("yes-no-wrong-address",
@@ -112,9 +114,10 @@
                     "wrong-address" -> radioGroupWrongAddress))
 
             @govukButton(Button(
-                content = Text(messages("cds.navigation.continue")),
+                content = Text(ViewHelper.continueButtonText(isInReviewMode)),
                 classes = "govuk-!-margin-top-5"
             ))
+
         }
         @helpers.helpAndSupport()
     </div>

@@ -17,7 +17,6 @@
 package unit.controllers
 
 import java.util.UUID
-
 import common.pages.matching.ConfirmPage
 import common.pages.{RegistrationProcessingPage, RegistrationRejectedPage}
 import org.mockito.ArgumentMatchers._
@@ -41,7 +40,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   confirm_contact_details,
   sub01_outcome_processing,
-  sub01_outcome_rejected
+  sub01_outcome_rejected,
+  you_cannot_change_address_individual,
+  you_cannot_change_address_organisation
 }
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -66,9 +67,11 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private val mockOrgTypeLookup             = mock[OrgTypeLookup]
   private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
 
-  private val confirmContactDetailsView  = instanceOf[confirm_contact_details]
-  private val sub01OutcomeProcessingView = instanceOf[sub01_outcome_processing]
-  private val sub01OutcomeRejected       = instanceOf[sub01_outcome_rejected]
+  private val confirmContactDetailsView         = instanceOf[confirm_contact_details]
+  private val sub01OutcomeProcessingView        = instanceOf[sub01_outcome_processing]
+  private val sub01OutcomeRejected              = instanceOf[sub01_outcome_rejected]
+  private val youCannotChangeAddressOrganistion = instanceOf[you_cannot_change_address_organisation]
+  private val youCannotChangeAddressIndividual  = instanceOf[you_cannot_change_address_individual]
 
   private val controller = new ConfirmContactDetailsController(
     mockAuthAction,
@@ -80,7 +83,9 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     mcc,
     confirmContactDetailsView,
     sub01OutcomeProcessingView,
-    sub01OutcomeRejected
+    sub01OutcomeRejected,
+    youCannotChangeAddressOrganistion,
+    youCannotChangeAddressIndividual
   )
 
   private val mockSubscriptionPage         = mock[SubscriptionPage]
@@ -191,31 +196,6 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       }
     }
 
-    "redirect to address page" when {
-
-      "address doesn't have all required details" in {
-
-        mockCacheWithRegistrationDetails(
-          organisationRegistrationDetails
-            .withBusinessAddress(Address("line1", None, None, None, None, "GB"))
-        )
-        when(
-          mockOrgTypeLookup
-            .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
-        ).thenReturn(Future.successful(Some(Partnership)))
-        when(mockSessionCache.subscriptionDetails(any())).thenReturn(
-          Future.successful(SubscriptionDetails(addressDetails = None))
-        )
-        when(mockSessionCache.saveSubscriptionDetails(any())(any())).thenReturn(Future.successful(true))
-
-        invokeConfirm() { result =>
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get shouldBe "/customs-registration-services/atar/register/address"
-        }
-      }
-
-    }
-
     "display back link correctly" in {
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
@@ -251,6 +231,23 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         testSessionData foreach (
           newSessionValue => result.session(mockRequestHeader).data should contain(newSessionValue)
         )
+      }
+    }
+
+    "redirect to Review page while on review mode when service returns NewSubscription for organisation" in {
+      when(mockSubscriptionPage.url(atarService)).thenReturn(testSubscriptionStartPageUrl)
+      when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
+        .thenReturn(Future.successful(subscriptionDetailsHolder))
+      when(
+        mockSessionCache
+          .saveSubscriptionDetails(any[SubscriptionDetails])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(true))
+
+      mockCacheWithRegistrationDetails(organisationRegistrationDetails)
+      mockNewSubscriptionFromSubscriptionStatus()
+      invokeConfirmContactDetailsWithSelectedOption(isInReviewMode = true) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("/register/matching/review-determine")
       }
     }
 
@@ -291,6 +288,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockRequestSessionData
           .userSelectedOrganisationType(any[Request[AnyContent]])
       ).thenReturn(None)
+
       mockNewSubscriptionFromSubscriptionStatus()
       invokeConfirmContactDetailsWithSelectedOption() { result =>
         status(result) shouldBe SEE_OTHER
@@ -377,8 +375,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         ) shouldBe "Application received by HMRC on 22 May 2016"
       }
     }
-
-    "redirect to Address Page when the postcode return from REG01(Register with Id) response is invalid for a Organisation" in {
+    "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a Organisation" in {
       val address: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("AAA 123"), "GB")
       mockCacheWithRegistrationDetails(organisationRegistrationDetails.copy(address = address))
 
@@ -396,13 +393,13 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-          .createForm(atarService)
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+          .page(atarService)
           .url
       }
     }
 
-    "redirect to Address Page when the postcode return from REG01(Register with Id) response is invalid for a SoleTrader/Individual" in {
+    "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a SoleTrader/Individual" in {
       val address: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), None, "GB")
       mockCacheWithRegistrationDetails(individualRegistrationDetails.copy(address = address))
 
@@ -420,8 +417,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-          .createForm(atarService)
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+          .page(atarService)
           .url
       }
     }
@@ -477,7 +474,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   }
 
   "Selecting wrong address" should {
-    "clear data and redirect to organisation type page" in {
+    "clear data and display contact companies house  for organisation " in {
       when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
@@ -495,8 +492,36 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-          .createForm(atarService)
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+          .page(atarService)
+          .url
+      }
+    }
+
+    "clear data and display contact HMRC  for individual " in {
+      when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
+        .thenReturn(Future.successful(subscriptionDetailsHolder))
+      when(
+        mockRegistrationConfirmService
+          .clearRegistrationData()(any[HeaderCarrier])
+      ).thenReturn(Future.successful(()))
+      when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+        .thenReturn(Future.successful(individualRegistrationDetails))
+      when(
+        mockSessionCache
+          .saveSubscriptionDetails(any[SubscriptionDetails])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(true))
+      when(
+        mockRequestSessionData
+          .isIndividualOrSoleTrader(any[Request[AnyContent]])
+      ).thenReturn(true)
+
+      invokeConfirmContactDetailsWithSelectedOption(selectedOption = "wrong-address") { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(
+          LOCATION
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+          .page(atarService)
           .url
       }
     }
@@ -587,12 +612,13 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   private def invokeConfirmContactDetailsWithSelectedOption(
     userId: String = defaultUserId,
-    selectedOption: String = "yes"
+    selectedOption: String = "yes",
+    isInReviewMode: Boolean = false
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
-        .submit(atarService)
+        .submit(atarService, isInReviewMode)
         .apply(
           SessionBuilder.buildRequestWithSessionAndFormValues(userId, Map("yes-no-wrong-address" -> selectedOption))
         )

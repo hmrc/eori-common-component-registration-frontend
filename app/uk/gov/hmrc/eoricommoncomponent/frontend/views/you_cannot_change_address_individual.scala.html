@@ -1,0 +1,38 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.helper._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+
+
+@this(layout_di: layout,appConfig:AppConfig)
+@()(implicit request: Request[_], messages: Messages)
+@link = {
+    <a id="contact_link" href="@{appConfig.hmrcChangeDetails}" target="_blank" class="govuk-link" rel="noopener noreferrer">
+    @messages("ecc.cannot-change-address-individual.link")
+    </a>
+}
+
+@layout_di(messages("ecc.cannot-change-address-individual.title")) {
+    <div>
+        <h1 class="govuk-heading-l">@messages("ecc.cannot-change-address-individual.title")</h1>
+
+        <p class="govuk-body" id="contact-info">@Html(messages("ecc.cannot-change-address-individual.info", link))</p>
+
+        @helpers.helpAndSupport()
+    </div>
+}

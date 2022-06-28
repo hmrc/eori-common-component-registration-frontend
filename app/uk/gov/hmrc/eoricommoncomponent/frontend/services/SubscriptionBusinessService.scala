@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import javax.inject.{Inject, Singleton}
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -59,16 +59,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
       _.vatRegisteredUk.getOrElse(
         throw new IllegalStateException("Whether the business is VAT registered in the UK has not been Cached")
       )
-    }
-
-  def addressOrException(implicit hc: HeaderCarrier): Future[AddressViewModel] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.addressDetails.getOrElse(throw new IllegalStateException("No Address Details Cached"))
-    }
-
-  def address(implicit hc: HeaderCarrier): Future[Option[AddressViewModel]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.addressDetails
     }
 
   def getCachedCustomsId(implicit hc: HeaderCarrier): Future[Option[CustomsId]] =

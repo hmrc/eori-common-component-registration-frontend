@@ -503,6 +503,11 @@ class CheckYourDetailsRegisterControllerSpec
         "Registered company address",
         "Change"
       ) shouldBe true
+      page.getSummaryListHref(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation address",
+        "Change"
+      ) shouldBe "/customs-registration-services/atar/register/matching/confirm/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe true
       page.getSummaryListValue(
