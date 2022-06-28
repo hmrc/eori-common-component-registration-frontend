@@ -225,7 +225,7 @@ case object RegistrationConfirmPage extends SubscriptionPage {
 
   override def url(service: Service): String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-      .form(service)
+      .form(service, isInReviewMode = false)
       .url
 
 }

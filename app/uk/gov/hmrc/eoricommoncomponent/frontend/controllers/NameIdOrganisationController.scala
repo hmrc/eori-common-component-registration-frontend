@@ -121,7 +121,7 @@ class NameIdOrganisationController @Inject() (
             case true =>
               Redirect(
                 uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-                  .form(service)
+                  .form(service, isInReviewMode = false)
               )
             case false => matchNotFoundBadRequest(organisationType, conf, formData, service)
           }

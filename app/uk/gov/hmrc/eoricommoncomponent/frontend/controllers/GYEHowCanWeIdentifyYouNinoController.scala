@@ -71,7 +71,7 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
         formData =>
           matchOnId(formData, GroupId(loggedInUser.groupId)).map {
             case true =>
-              Redirect(ConfirmContactDetailsController.form(service))
+              Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
             case false =>
               matchNotFoundBadRequest(formData, service)
           }

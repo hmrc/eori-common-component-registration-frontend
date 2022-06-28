@@ -113,7 +113,7 @@ class GetUtrNumberController @Inject() (
         }
     }).map { matched =>
       if (matched)
-        Redirect(ConfirmContactDetailsController.form(service))
+        Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
       else
         matchNotFoundBadRequest(organisationType, formData, isInReviewMode, service)
     }
