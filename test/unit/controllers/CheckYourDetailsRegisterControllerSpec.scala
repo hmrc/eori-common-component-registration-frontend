@@ -331,6 +331,8 @@ class CheckYourDetailsRegisterControllerSpec
           "Registered partnership name"
         case Partnership =>
           "Registered partnership name"
+        case CharityPublicBodyNotForProfit =>
+          "Organisation name"
         case _ =>
           "Registered company name"
       }
@@ -505,7 +507,7 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe true
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Organisation address",
+        "Registered company address",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/matching/confirm/review"
 
@@ -526,6 +528,8 @@ class CheckYourDetailsRegisterControllerSpec
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
+      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Contact name") shouldBe true
+      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact name") shouldBe "John Doe"
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
         strim("""
