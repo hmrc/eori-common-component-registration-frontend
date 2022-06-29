@@ -979,6 +979,7 @@ cds.form.check-answers-vat-details=TRANSLATE VAT details
 cds.form.check-answers-contact-details=TRANSLATE Contact details
 cds.form.date-of-birth.label=Dyddiad geni
 cds.check-answers.error-heading=Ni allwn brosesu’ch cais. I fynd yn eich blaen:
+cds.form.check-answers-declaration=TRANSLATE Declaration
 cds.form.disclaimer=TRANSLATE You confirm that, to the best of your knowledge, the details you are providing are correct.
 cds.subscription.organisation-disclose-personal-details-consent.heading=A ydych am gynnwys enw a chyfeiriad eich sefydliad ar y gwiriwr EORI?
 cds.subscription.organisation-disclose-personal-details-consent.declaration=Bydd CThEM yn ychwanegu eich rhif EORI at wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd. Gallwch hefyd gytuno i gynnwys enw a chyfeiriad eich sefydliad. Gall hyn helpu asiantau tollau a chludo nwyddau i’ch adnabod a phrosesu eich llwythi.
