@@ -384,13 +384,6 @@
     }).flatten
 }
 
-@vatLabel = @{
-    if(!isIndividual)
-        messages("cds.form.check-answers-vat-details")
-    else
-        None
-}
-
 @vatDetails = @{
     if(!isIndividual) {
         Seq(
