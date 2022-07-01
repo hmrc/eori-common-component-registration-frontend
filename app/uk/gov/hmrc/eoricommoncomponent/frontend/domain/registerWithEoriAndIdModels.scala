@@ -20,6 +20,9 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
+import java.lang.reflect.Field
+import java.time.LocalDate
+
 case class GovGatewayCredentials(email: String)
 
 object GovGatewayCredentials {
@@ -112,6 +115,71 @@ case class AdditionalInformation(id: CustomsId, isIndividual: Boolean)
 
 object AdditionalInformation {
   implicit val format = Json.format[AdditionalInformation]
+}
+trait CaseClassAuditHelper {
+
+  def toMap(caseClassObject: AnyRef = this, ignoredFields: List[String] = List.empty): Map[String, String] =
+    (Map[String, String]() /: caseClassObject.getClass.getDeclaredFields
+      .filterNot(field => ignoredFields.contains(field.getName))) {
+
+      def getKeyValue(acc: Map[String, String], value: Any) =
+        value match {
+          case v: CaseClassAuditHelper => v.toMap()
+          case _                       => acc
+        }
+
+      def fetchValue(acc: Map[String, String], f: Field, value: Any) =
+        if (isLeafNode(value))
+          acc + (f.getName -> value.toString)
+        else
+          getKeyValue(acc, value)
+
+      (acc, f) =>
+        f.setAccessible(true)
+        val value = f.get(caseClassObject)
+        if (value != null)
+          if (isScalaOption(value)) {
+            val option = value.asInstanceOf[Option[Any]]
+            if (option.isDefined)
+              fetchValue(acc, f, option.get)
+            else
+              acc
+          } else
+            fetchValue(acc, f, value)
+        else
+          acc
+    }
+
+  def prefixMapKey(prefix: String, map: Map[String, String]): Map[String, String] =
+    map.map(x => prefix + x._1 -> x._2)
+
+  def prefixMapKey(prefix: String, list: Seq[String]): Map[String, String] =
+    list.zipWithIndex.map(kv => prefix + (kv._2 + 1) -> kv._1).toMap
+
+  def convertToMap(list: Seq[Map[String, String]]): Map[String, String] =
+    list.zipWithIndex
+      .flatMap(
+        kv =>
+          kv._1.map { x =>
+            (x._1 + "." + kv._2) -> x._2
+          }
+      )
+      .toMap
+
+  private def isLeafNode(value: Any) =
+    value match {
+      case _: String     => true
+      case _: Int        => true
+      case _: Long       => true
+      case _: Boolean    => true
+      case _: Double     => true
+      case _: BigDecimal => true
+      case _: Float      => true
+      case _: LocalDate   => true
+      case _             => false
+    }
+
+  private def isScalaOption(value: Object): Boolean = value.getClass.getSuperclass.equals(Class.forName("scala.Option"))
 }
 
 case class RegisterWithEoriAndIdResponse(

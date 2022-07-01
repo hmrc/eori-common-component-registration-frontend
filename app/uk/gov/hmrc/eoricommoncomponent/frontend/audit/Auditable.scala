@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.AuditExtensions._
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
+import uk.gov.hmrc.play.audit.model.{Audit, DataEvent, ExtendedDataEvent}
 
 import scala.concurrent.ExecutionContext
 
@@ -30,6 +30,24 @@ import scala.concurrent.ExecutionContext
 class Auditable @Inject() (auditConnector: AuditConnector, appConfig: AppConfig)(implicit ec: ExecutionContext) {
 
   private val auditSource: String = appConfig.appName
+
+  private val audit: Audit = Audit(auditSource, auditConnector)
+
+  def sendDataEvent(
+                     transactionName: String,
+                     path: String = "N/A",
+                     tags: Map[String, String] = Map.empty,
+                     detail: Map[String, String],
+                     eventType: String
+                   )(implicit hc: HeaderCarrier): Unit =
+    audit.sendDataEvent(
+      DataEvent(
+        auditSource,
+        eventType,
+        tags = hc.toAuditTags(transactionName, path) ++ tags,
+        detail = hc.toAuditDetails(detail.toSeq: _*)
+      )
+    )
 
   def sendExtendedDataEvent(
     transactionName: String,
