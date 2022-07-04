@@ -36,7 +36,12 @@ class TaxEnrolmentsService @Inject() (taxEnrolmentsConnector: TaxEnrolmentsConne
     val verifiers =
       dateOfEstablishment.map(doe => List(KeyValue(key = "DATEOFESTABLISHMENT", value = pattern.format(doe))))
     val taxEnrolmentsRequest =
-      TaxEnrolmentsRequest(serviceName = service.enrolmentKey, identifiers = identifiers, verifiers = verifiers)
+      TaxEnrolmentsRequest(
+        serviceName = service.enrolmentKey,
+        identifiers = identifiers,
+        verifiers = verifiers,
+        subscriptionState = "SUCCEEDED"
+      )
     taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId)
   }
 

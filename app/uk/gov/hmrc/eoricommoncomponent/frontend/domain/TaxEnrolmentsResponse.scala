@@ -30,7 +30,7 @@ case class TaxEnrolmentsRequest(
   serviceName: String,
   identifiers: List[KeyValue],
   verifiers: Option[List[KeyValue]] = None,
-  subscriptionState: String = "SUCCEEDED"
+  subscriptionState: String
 )
 
 object TaxEnrolmentsRequest {
