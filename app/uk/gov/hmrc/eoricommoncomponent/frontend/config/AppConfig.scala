@@ -112,6 +112,10 @@ class AppConfig @Inject() (
   def eoriCommonComponentFrontend(serviceName: String) =
     eoriCommonComponentFrontendBaseUrl + serviceName + "/subscribe"
 
+  val taxEnrolmentsBaseUrl: String = servicesConfig.baseUrl("tax-enrolments")
+
+  val taxEnrolmentsServiceContext: String = config.get[String]("microservice.services.tax-enrolments.context")
+
   def getServiceUrl(proxyServiceName: String): String = {
     val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
     val serviceContext =

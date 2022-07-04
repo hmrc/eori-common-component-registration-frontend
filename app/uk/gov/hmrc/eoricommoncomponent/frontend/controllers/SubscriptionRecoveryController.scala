@@ -18,7 +18,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import java.time.{LocalDate, LocalDateTime}
-
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc.{Action, _}
@@ -30,18 +29,24 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  HandleSubscriptionService,
+  RandomUUIDGenerator,
+  TaxEnrolmentsService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.recovery_registration_exists
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Random
 
 @Singleton
 class SubscriptionRecoveryController @Inject() (
   authAction: AuthAction,
   handleSubscriptionService: HandleSubscriptionService,
+  taxEnrolmentService: TaxEnrolmentsService,
   sessionCache: SessionCache,
   SUB09Connector: SUB09SubscriptionDisplayConnector,
   mcc: MessagesControllerComponents,
@@ -149,7 +154,7 @@ class SubscriptionRecoveryController @Inject() (
       processedDate,
       email,
       emailVerificationTimestamp,
-      formBundleId,
+      enrichFormBundleId(service, formBundleId),
       recipientFullName,
       name,
       eori,
@@ -159,6 +164,12 @@ class SubscriptionRecoveryController @Inject() (
 
     completeEnrolment(service, subscriptionInformation)(redirect)
   }
+
+  private def enrichFormBundleId(service: Service, formBundleId: String) =
+    if (service.enrolmentKey.equalsIgnoreCase(Service.cds.enrolmentKey))
+      s"$formBundleId${Random.nextInt(1000)}cds"
+    else
+      formBundleId + service.code + "-" + (100000 + Random.nextInt(900000)).toString
 
   private def completeEnrolment(service: Service, subscriptionInformation: SubscriptionInformation)(
     redirect: => Result
@@ -171,7 +182,7 @@ class SubscriptionRecoveryController @Inject() (
       // Subscribe Call for enrolment
       _ <- subscribe(service, subscriptionInformation)
       // Issuer Call for enrolment
-      res <- Future.successful(NO_CONTENT)
+      res <- issue(service, subscriptionInformation)
     } yield res match {
       case NO_CONTENT => redirect
       case _          => throw new IllegalArgumentException("Tax Enrolment issuer call failed")
@@ -206,6 +217,16 @@ class SubscriptionRecoveryController @Inject() (
         subscriptionInformation.emailVerificationTimestamp,
         subscriptionInformation.safeId
       )
+
+  private def issue(service: Service, subscriptionInformation: SubscriptionInformation)(implicit
+    hc: HeaderCarrier
+  ): Future[Int] =
+    taxEnrolmentService.issuerCall(
+      subscriptionInformation.formBundleId,
+      subscriptionInformation.eori,
+      subscriptionInformation.dateOfEstablishment,
+      service
+    )
 
   private def getDateOfBirthOrDateOfEstablishment(
     response: SubscriptionDisplayResponse,

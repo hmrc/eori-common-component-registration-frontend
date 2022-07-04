@@ -23,6 +23,23 @@ import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status.OK
 
 object TaxEnrolmentsService {
+  val validTaxEnrolmentsIssuerRequestJson = Json.parse("""{
+                                                         |    "serviceName": "HMRC-CUS-ORG",
+                                                         |    "identifiers": [
+                                                         |        {
+                                                         |            "key": "EORINUMBER",
+                                                         |            "value": "GB9999999999"
+                                                         |        }
+                                                         |    ],
+                                                         |    "verifiers": [
+                                                         |        {
+                                                         |            "key": "DATEOFESTABLISHMENT",
+                                                         |            "value": "28/04/2010"
+                                                         |        }
+                                                         |    ],
+                                                         |    "subscriptionState": "SUCCEEDED"
+                                                         |
+                                                         |}""".stripMargin)
 
   private val responseWithOk: JsValue =
     Json.parse("""[{
