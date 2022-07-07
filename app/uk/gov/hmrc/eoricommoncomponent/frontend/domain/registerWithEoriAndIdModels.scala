@@ -116,6 +116,7 @@ case class AdditionalInformation(id: CustomsId, isIndividual: Boolean)
 object AdditionalInformation {
   implicit val format = Json.format[AdditionalInformation]
 }
+
 trait CaseClassAuditHelper {
 
   def toMap(caseClassObject: AnyRef = this, ignoredFields: List[String] = List.empty): Map[String, String] =
@@ -175,7 +176,7 @@ trait CaseClassAuditHelper {
       case _: Double     => true
       case _: BigDecimal => true
       case _: Float      => true
-      case _: LocalDate   => true
+      case _: LocalDate  => true
       case _             => false
     }
 

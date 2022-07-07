@@ -20,7 +20,15 @@ import play.api.Logger
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.{BadRequest, Forbidden, HttpErrorResponse, ServiceUnavailable, UnhandledException, VerifiedEmailRequest, VerifiedEmailResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.{
+  BadRequest,
+  Forbidden,
+  HttpErrorResponse,
+  ServiceUnavailable,
+  UnhandledException,
+  VerifiedEmailRequest,
+  VerifiedEmailResponse
+}
 import uk.gov.hmrc.http.{ForbiddenException, HttpClient, _}
 
 import javax.inject.Inject

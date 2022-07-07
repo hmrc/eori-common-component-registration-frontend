@@ -29,7 +29,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator, UpdateVerifiedEmailService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  HandleSubscriptionService,
+  RandomUUIDGenerator,
+  UpdateVerifiedEmailService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.recovery_registration_exists
@@ -174,7 +178,8 @@ class SubscriptionRecoveryController @Inject() (
       // Update Recovered Subscription Information
       _ <- updateSubscription(subscriptionInformation)
       // Update Email
-     _ <- if (service.enrolmentKey == Service.cds.enrolmentKey) updateEmail(subscriptionInformation) else Future.successful(None)
+      _ <- if (service.enrolmentKey == Service.cds.enrolmentKey) updateEmail(subscriptionInformation)
+      else Future.successful(None)
       // Subscribe Call for enrolment
       _ <- subscribe(service, subscriptionInformation)
       // Issuer Call for enrolment
@@ -185,8 +190,8 @@ class SubscriptionRecoveryController @Inject() (
     }
 
   private def updateEmail(
-                           subscriptionInformation: SubscriptionInformation
-                         )(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
+    subscriptionInformation: SubscriptionInformation
+  )(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
     updateVerifiedEmailService
       .updateVerifiedEmail(newEmail = subscriptionInformation.email, eori = subscriptionInformation.eori.id)
       .map {

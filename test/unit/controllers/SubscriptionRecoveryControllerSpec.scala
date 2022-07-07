@@ -34,7 +34,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  HandleSubscriptionService,
+  RandomUUIDGenerator,
+  UpdateVerifiedEmailService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, recovery_registration_exists}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -59,13 +63,14 @@ class SubscriptionRecoveryControllerSpec
   private val mockRandomUUIDGenerator               = mock[RandomUUIDGenerator]
   private val contactDetails                        = mock[ContactDetailsModel]
   private val mockRequestSessionData                = mock[RequestSessionData]
-
-  private val errorTemplateView = instanceOf[error_template]
-  private val alreadyHaveEori   = instanceOf[recovery_registration_exists]
+  private val mockUpdateVerifiedEmailService        = mock[UpdateVerifiedEmailService]
+  private val errorTemplateView                     = instanceOf[error_template]
+  private val alreadyHaveEori                       = instanceOf[recovery_registration_exists]
 
   private val controller = new SubscriptionRecoveryController(
     mockAuthAction,
     mockHandleSubscriptionService,
+    mockUpdateVerifiedEmailService,
     mockSessionCache,
     mockSUB09SubscriptionDisplayConnector,
     mcc,
@@ -151,6 +156,40 @@ class SubscriptionRecoveryControllerSpec
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
       }
+    }
+
+    "call Enrolment Complete with no email verification( SUB22) with successful SUB09 call for Get Your EORI  for non cds services " in {
+
+      setupMockCommon()
+      when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+        .thenReturn(Future.successful(mockOrgRegistrationDetails))
+      when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
+      when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(true))
+
+      callEnrolmentComplete() { result =>
+        status(result) shouldBe SEE_OTHER
+        header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
+      }
+
+      verify(mockUpdateVerifiedEmailService, never()).updateVerifiedEmail(any(), any(), any())(any[HeaderCarrier])
+    }
+    "call Enrolment Complete with email verification( SUB22) triggered with successful SUB09 call for Get Your EORI  for cds journey " in {
+
+      setupMockCommon()
+      when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+        .thenReturn(Future.successful(mockOrgRegistrationDetails))
+      when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
+      when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(true))
+      when(mockUpdateVerifiedEmailService.updateVerifiedEmail(any(), any(), any())(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(true)))
+      callEnrolmentCDSComplete() { result =>
+        status(result) shouldBe SEE_OTHER
+        header(LOCATION, result) shouldBe Some("/customs-registration-services/cds/register/complete")
+      }
+
+      verify(mockUpdateVerifiedEmailService, times(1)).updateVerifiedEmail(any(), any(), any())(any[HeaderCarrier])
     }
 
     "call Enrolment Complete with unsuccessful SUB09 call" in {
@@ -313,6 +352,12 @@ class SubscriptionRecoveryControllerSpec
 
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.complete(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+  }
+
+  def callEnrolmentCDSComplete(userId: String = defaultUserId)(test: Future[Result] => Any) {
+
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(controller.complete(cdsService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   def callExistingEori(userId: String = defaultUserId)(test: Future[Result] => Any) {

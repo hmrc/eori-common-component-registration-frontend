@@ -17,19 +17,32 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import org.joda.time.format.ISODateTimeFormat
+import play.api.Logger
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
+  UpdateCustomsDataStoreConnector,
+  UpdateVerifiedEmailConnector
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.format.DateTimeFormatter
+import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpdateVerifiedEmailService @Inject()(
+class UpdateVerifiedEmailService @Inject() (
   reqCommonGenerator: RequestCommonGenerator,
   updateVerifiedEmailConnector: UpdateVerifiedEmailConnector,
   customsDataStoreConnector: UpdateCustomsDataStoreConnector
 )(implicit ec: ExecutionContext) {
 
-  def updateVerifiedEmail(currentEmail: Option[String] = None, newEmail: String, eori: String)(
-    implicit hc: HeaderCarrier
+  private val logger = Logger(this.getClass)
+
+  def updateVerifiedEmail(currentEmail: Option[String] = None, newEmail: String, eori: String)(implicit
+    hc: HeaderCarrier
   ): Future[Option[Boolean]] = {
 
     val requestDetail = RequestDetail(
@@ -48,21 +61,22 @@ class UpdateVerifiedEmailService @Inject()(
       case Right(res)
           if res.updateVerifiedEmailResponse.responseCommon.returnParameters
             .exists(msp => msp.head.paramName == MessagingServiceParam.formBundleIdParamName) =>
-        CdsLogger.debug("[UpdateVerifiedEmailService][updateVerifiedEmail] - successfully updated verified email")
+        logger.debug("[UpdateVerifiedEmailService][updateVerifiedEmail] - successfully updated verified email")
         customsDataStoreConnector.updateCustomsDataStore(customsDataStoreRequest)
         Some(true)
       case Right(res) =>
         val statusText = res.updateVerifiedEmailResponse.responseCommon.statusText
-        CdsLogger.debug(
+        logger.debug(
           "[UpdateVerifiedEmailService][updateVerifiedEmail]" +
             s" - updating verified email unsuccessful with business error/status code: ${statusText.getOrElse("Status text empty")}"
         )
         Some(false)
       case Left(res) =>
-        CdsLogger.warn(
+        logger.warn(
           s"[UpdateVerifiedEmailService][updateVerifiedEmail] - updating verified email unsuccessful with response: $res"
         )
         None
     }
   }
+
 }
