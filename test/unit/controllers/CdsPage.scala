@@ -99,6 +99,8 @@ case class CdsPage(html: String) {
 
   def h1(): String = page.getElementsByTag("h1").text()
 
+  def h2(): String = page.getElementsByTag("h2").text()
+
   def formAction(formId: String): String = {
     val element = Option(page.getElementById(formId))
     element.fold(throw new IllegalStateException(s"Element with ID $formId was not found on the page."))(

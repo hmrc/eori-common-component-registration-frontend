@@ -17,8 +17,7 @@
 package unit.controllers
 
 import java.time.{LocalDate, LocalDateTime}
-
-import org.mockito.ArgumentMatchers.{any, anyString}
+import org.mockito.ArgumentMatchers.{any, anyString, contains, matches, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
@@ -33,10 +32,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecovery
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   HandleSubscriptionService,
   RandomUUIDGenerator,
+  TaxEnrolmentsService,
   UpdateVerifiedEmailService
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, recovery_registration_exists}
@@ -47,7 +48,7 @@ import util.builders.SubscriptionInfoBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SubscriptionRecoveryControllerSpec
     extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
@@ -58,6 +59,7 @@ class SubscriptionRecoveryControllerSpec
   private val mockSUB09SubscriptionDisplayConnector = mock[SUB09SubscriptionDisplayConnector]
   private val mockSub01Outcome                      = mock[Sub01Outcome]
   private val mockHandleSubscriptionService         = mock[HandleSubscriptionService]
+  private val mockTaxEnrolmentService               = mock[TaxEnrolmentsService]
   private val mockOrgRegistrationDetails            = mock[RegistrationDetailsOrganisation]
   private val mockSubscriptionDetailsHolder         = mock[SubscriptionDetails]
   private val mockRandomUUIDGenerator               = mock[RandomUUIDGenerator]
@@ -70,6 +72,7 @@ class SubscriptionRecoveryControllerSpec
   private val controller = new SubscriptionRecoveryController(
     mockAuthAction,
     mockHandleSubscriptionService,
+    mockTaxEnrolmentService,
     mockUpdateVerifiedEmailService,
     mockSessionCache,
     mockSUB09SubscriptionDisplayConnector,
@@ -101,7 +104,13 @@ class SubscriptionRecoveryControllerSpec
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
-
+    reset(
+      mockSessionCache,
+      mockOrgRegistrationDetails,
+      mockRequestSessionData,
+      mockHandleSubscriptionService,
+      mockTaxEnrolmentService
+    )
     when(mockRandomUUIDGenerator.generateUUIDAsString).thenReturn("MOCKUUID12345")
   }
 
@@ -151,11 +160,62 @@ class SubscriptionRecoveryControllerSpec
       when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
       when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
         .thenReturn(Future.successful(true))
+      when(
+        mockTaxEnrolmentService
+          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
+            any[HeaderCarrier],
+            any[ExecutionContext]
+          )
+      ).thenReturn(Future.successful(NO_CONTENT))
+
+      val expectedFormBundleId = fullyPopulatedResponse.responseCommon.returnParameters
+        .flatMap(_.find(_.paramName.equals("ETMPFORMBUNDLENUMBER")).map(_.paramValue))
+        .get
 
       callEnrolmentComplete() { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
       }
+      verify(mockTaxEnrolmentService).issuerCall(
+        contains(expectedFormBundleId),
+        meq(Eori("12345")),
+        any[Option[LocalDate]],
+        meq(atarService)
+      )(any[HeaderCarrier], any[ExecutionContext])
+
+    }
+
+    "call Enrolment Complete with successful SUB09 call for Get Your EORI journey using CDS formBundle enrichment when service is CDS" in {
+
+      setupMockCommon()
+      when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+        .thenReturn(Future.successful(mockOrgRegistrationDetails))
+      when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
+      when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(true))
+      when(
+        mockTaxEnrolmentService
+          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
+            any[HeaderCarrier],
+            any[ExecutionContext]
+          )
+      ).thenReturn(Future.successful(NO_CONTENT))
+
+      val expectedFormBundleId = fullyPopulatedResponse.responseCommon.returnParameters
+        .flatMap(_.find(_.paramName.equals("ETMPFORMBUNDLENUMBER")).map(_.paramValue))
+        .get
+
+      callEnrolmentComplete() { result =>
+        status(result) shouldBe SEE_OTHER
+        header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
+      }
+      verify(mockTaxEnrolmentService).issuerCall(
+        contains(expectedFormBundleId),
+        meq(Eori("12345")),
+        any[Option[LocalDate]],
+        meq(atarService)
+      )(any[HeaderCarrier], any[ExecutionContext])
+
     }
 
     "call Enrolment Complete with no email verification( SUB22) with successful SUB09 call for Get Your EORI  for non cds services " in {
@@ -320,6 +380,19 @@ class SubscriptionRecoveryControllerSpec
   }
 
   "call Enrolment Complete with successful SUB09 call without personOfContact should not throw exception" in {
+
+    when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
+      .thenReturn(Future.successful(mockSubscriptionDetailsHolder))
+
+    when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(Some(contactDetails))
+    when(contactDetails.emailAddress).thenReturn("test@example.com")
+    when(mockSubscriptionDetailsHolder.email).thenReturn(Some("test@example.com"))
+    when(mockSessionCache.email(any[HeaderCarrier])).thenReturn(Future.successful("test@example.com"))
+
+    when(mockSub01Outcome.processedDate).thenReturn("01 May 2016")
+
+    when(mockSubscriptionDetailsHolder.nameDobDetails)
+      .thenReturn(Some(NameDobMatchModel("fname", Some("mName"), "lname", LocalDate.parse("2019-01-01"))))
     when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
       .thenReturn(Future.successful(mockOrgRegistrationDetails))
     when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testSapNumber"))
@@ -341,11 +414,29 @@ class SubscriptionRecoveryControllerSpec
         any[SafeId]
       )(any[HeaderCarrier])
     ).thenReturn(Future.successful(result = ()))
+    val expectedFormBundleId = fullyPopulatedResponse.responseCommon.returnParameters
+      .flatMap(_.find(_.paramName.equals("ETMPFORMBUNDLENUMBER")).map(_.paramValue))
+      .get
+    when(
+      mockTaxEnrolmentService
+        .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
+          any[HeaderCarrier],
+          any[ExecutionContext]
+        )
+    ).thenReturn(Future.successful(NO_CONTENT))
 
     callEnrolmentComplete() { result =>
       status(result) shouldBe SEE_OTHER
       header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
     }
+
+    verify(mockTaxEnrolmentService).issuerCall(
+      contains(expectedFormBundleId),
+      meq(Eori("12345")),
+      any[Option[LocalDate]],
+      meq(atarService)
+    )(any[HeaderCarrier], any[ExecutionContext])
+
   }
 
   def callEnrolmentComplete(userId: String = defaultUserId)(test: Future[Result] => Any) {
