@@ -20,7 +20,6 @@ import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.json._
 
-import java.time.format.DateTimeFormatter
 import java.time._
 
 // $COVERAGE-OFF$

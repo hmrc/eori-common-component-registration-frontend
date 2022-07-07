@@ -226,7 +226,13 @@ class SubscriptionRecoveryControllerSpec
       when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
       when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
         .thenReturn(Future.successful(true))
-
+      when(
+        mockTaxEnrolmentService
+          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
+            any[HeaderCarrier],
+            any[ExecutionContext]
+          )
+      ).thenReturn(Future.successful(NO_CONTENT))
       callEnrolmentComplete() { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
@@ -244,6 +250,13 @@ class SubscriptionRecoveryControllerSpec
         .thenReturn(Future.successful(true))
       when(mockUpdateVerifiedEmailService.updateVerifiedEmail(any(), any(), any())(any[HeaderCarrier]))
         .thenReturn(Future.successful(Some(true)))
+      when(
+        mockTaxEnrolmentService
+          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
+            any[HeaderCarrier],
+            any[ExecutionContext]
+          )
+      ).thenReturn(Future.successful(NO_CONTENT))
       callEnrolmentCDSComplete() { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result) shouldBe Some("/customs-registration-services/cds/register/complete")

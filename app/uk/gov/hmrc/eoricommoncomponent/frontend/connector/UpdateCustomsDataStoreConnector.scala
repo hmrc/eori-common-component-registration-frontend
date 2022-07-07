@@ -42,9 +42,7 @@ class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: Ap
     logger.info(s"[$LoggerComponentId][call] postUrl: $url")
     val headers           = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON)
     val headersForLogging = hc.headers(explicitlyIncludedHeaders) ++ hc.extraHeaders ++ headers
-    auditCallRequest(url, request)
     http.POST[CustomsDataStoreRequest, HttpResponse](url, request, headers) map { response =>
-      auditCallResponse(url, response)
       response.status match {
         case OK | NO_CONTENT =>
           logger.info(
@@ -68,25 +66,5 @@ class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: Ap
         Future.failed(e)
     }
   }
-
-  private def auditCallRequest(url: String, request: CustomsDataStoreRequest)(implicit hc: HeaderCarrier): Unit =
-    Future.successful {
-      audit.sendDataEvent(
-        transactionName = "update-data-store",
-        path = url,
-        detail = request.toMap(),
-        eventType = "Customs-Data-Store-Update-Request"
-      )
-    }
-
-  private def auditCallResponse(url: String, response: HttpResponse)(implicit hc: HeaderCarrier): Unit =
-    Future.successful {
-      audit.sendDataEvent(
-        transactionName = "customs-data-store",
-        path = url,
-        detail = Map("status" -> response.status.toString),
-        eventType = "Customs-Data-Store-Update-Response"
-      )
-    }
 
 }

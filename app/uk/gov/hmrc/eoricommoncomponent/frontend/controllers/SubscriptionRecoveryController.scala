@@ -156,7 +156,7 @@ class SubscriptionRecoveryController @Inject() (
       processedDate,
       email,
       emailVerificationTimestamp,
-      formBundleId,
+      enrichFormBundleId(service, formBundleId),
       recipientFullName,
       name,
       eori,

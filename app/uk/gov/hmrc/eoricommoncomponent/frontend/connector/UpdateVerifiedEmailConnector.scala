@@ -20,15 +20,7 @@ import play.api.Logger
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.{
-  BadRequest,
-  Forbidden,
-  HttpErrorResponse,
-  ServiceUnavailable,
-  UnhandledException,
-  VerifiedEmailRequest,
-  VerifiedEmailResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
 import uk.gov.hmrc.http.{ForbiddenException, HttpClient, _}
 
 import javax.inject.Inject
@@ -47,9 +39,7 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpCl
     val newEmail = request.updateVerifiedEmailRequest.requestDetail.emailAddress
     val eori     = request.updateVerifiedEmailRequest.requestDetail.IDNumber
 
-    auditRequest(currentEmail, newEmail, eori, "changeEmailAddressVerified")
     http.PUT[VerifiedEmailRequest, VerifiedEmailResponse](url, request) map { resp =>
-      auditRequest(currentEmail, newEmail, eori, "changeEmailAddressConfirmed")
       Right(resp)
     } recover {
       case _: BadRequestException | Upstream4xxResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)
@@ -63,25 +53,5 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpCl
         Left(UnhandledException)
     }
   }
-
-  private def auditRequest(currentEmail: Option[String], newEmail: String, eoriNumber: String, auditType: String)(
-    implicit hc: HeaderCarrier
-  ): Unit =
-    currentEmail.fold(
-      audit.sendDataEvent(
-        transactionName = "UpdateVerifiedEmailRequestSubmitted",
-        path = url,
-        detail = Map("newEmailAddress" -> newEmail, "eori" -> eoriNumber),
-        eventType = auditType
-      )
-    )(
-      emailAddress =>
-        audit.sendDataEvent(
-          transactionName = "UpdateVerifiedEmailRequestSubmitted",
-          path = url,
-          detail = Map("currentEmailAddress" -> emailAddress, "newEmailAddress" -> newEmail, "eori" -> eoriNumber),
-          eventType = auditType
-        )
-    )
 
 }
