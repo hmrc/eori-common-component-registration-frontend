@@ -215,7 +215,9 @@ cds.subscription.organisation-disclose-personal-details-consent.yes=Iawn - Rwyf 
 cds.subscription.organisation-disclose-personal-details-consent.no=Na - Dangoswch fy rhif EORI yn unig
 
 subscription-journey.how-confirm-identity.nino.heading=Nodwch eich rhif Yswiriant Gwladol
+subscription-journey.how-confirm-identity.nino.hint=TRANSLATE It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
 subscription-journey.how-confirm-identity.utr.heading=Nodwch eich Cyfeirnod Unigryw y Trethdalwr
+subscription-journey.how-confirm-identity.utr.hint=TRANSLATE This is 10 numbers, for example 1234567890, which may be followed by a K.
 
 ecc.reg06.outcome.why-heading = Pam nad oedd y cais yn llwyddiannus
 ecc.reg06.outcome.eori = Rhif EORI {0}
