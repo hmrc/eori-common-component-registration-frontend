@@ -45,7 +45,7 @@ trait TestData {
     )
 
   val cdsService: Service =
-    Service("CDS", "HMRC-CUS-ORG", "CDS", None, "/cds/accessibility", "CDS Service", "", Some("/cds/feedback"))
+    Service("cds", "HMRC-CUS-ORG", "CDS", None, "/cds/accessibility", "CDS Service", "", Some("/cds/feedback"))
 
   val eoriOnlyService: Service =
     Service("eori-only", "HMRC-CUS-ORG", "CDS", None, "/cds/accessibility", "CDS Service", "", Some("/cds/feedback"))

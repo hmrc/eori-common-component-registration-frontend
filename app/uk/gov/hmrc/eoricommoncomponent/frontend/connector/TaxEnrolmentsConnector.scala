@@ -17,11 +17,10 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import play.api.Logger
-import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{TaxEnrolmentsRequest, TaxEnrolmentsResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.TaxEnrolmentsRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{IssuerCall, IssuerRequest, IssuerResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
 import uk.gov.hmrc.http._

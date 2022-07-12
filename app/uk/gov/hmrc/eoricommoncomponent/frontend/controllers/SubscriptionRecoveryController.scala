@@ -32,7 +32,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   HandleSubscriptionService,
   RandomUUIDGenerator,
-  TaxEnrolmentsService
+  TaxEnrolmentsService,
+  UpdateVerifiedEmailService
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
@@ -47,6 +48,7 @@ class SubscriptionRecoveryController @Inject() (
   authAction: AuthAction,
   handleSubscriptionService: HandleSubscriptionService,
   taxEnrolmentService: TaxEnrolmentsService,
+  updateVerifiedEmailService: UpdateVerifiedEmailService,
   sessionCache: SessionCache,
   SUB09Connector: SUB09SubscriptionDisplayConnector,
   mcc: MessagesControllerComponents,
@@ -178,7 +180,8 @@ class SubscriptionRecoveryController @Inject() (
       // Update Recovered Subscription Information
       _ <- updateSubscription(subscriptionInformation)
       // Update Email
-//      _ <- updateEmail(journey, subscriptionInformation)  // TODO - ECC-307
+      _ <- if (service.enrolmentKey == Service.cds.enrolmentKey) updateEmail(subscriptionInformation)
+      else Future.successful(None)
       // Subscribe Call for enrolment
       _ <- subscribe(service, subscriptionInformation)
       // Issuer Call for enrolment
@@ -187,6 +190,16 @@ class SubscriptionRecoveryController @Inject() (
       case NO_CONTENT => redirect
       case _          => throw new IllegalArgumentException("Tax Enrolment issuer call failed")
     }
+
+  private def updateEmail(
+    subscriptionInformation: SubscriptionInformation
+  )(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
+    updateVerifiedEmailService
+      .updateVerifiedEmail(newEmail = subscriptionInformation.email, eori = subscriptionInformation.eori.id)
+      .map {
+        case true => Some(true)
+        case _    => throw new IllegalArgumentException("UpdateEmail failed")
+      }
 
   private def updateSubscription(subscriptionInformation: SubscriptionInformation)(implicit hc: HeaderCarrier) =
     sessionCache.saveSub02Outcome(
