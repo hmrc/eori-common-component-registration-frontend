@@ -41,7 +41,7 @@ class UpdateVerifiedEmailService @Inject() (
 
   def updateVerifiedEmail(currentEmail: Option[String] = None, newEmail: String, eori: String)(implicit
     hc: HeaderCarrier
-  ): Future[Option[Boolean]] = {
+  ): Future[Boolean] = {
 
     val requestDetail = RequestDetail(
       IDType = "EORI",
@@ -61,19 +61,19 @@ class UpdateVerifiedEmailService @Inject() (
             .exists(msp => msp.head.paramName == MessagingServiceParam.formBundleIdParamName) =>
         logger.debug("[UpdateVerifiedEmailService][updateVerifiedEmail] - successfully updated verified email")
         customsDataStoreConnector.updateCustomsDataStore(customsDataStoreRequest)
-        Some(true)
+        true
       case Right(res) =>
         val statusText = res.updateVerifiedEmailResponse.responseCommon.statusText
         logger.debug(
           "[UpdateVerifiedEmailService][updateVerifiedEmail]" +
             s" - updating verified email unsuccessful with business error/status code: ${statusText.getOrElse("Status text empty")}"
         )
-        Some(false)
+        false
       case Left(res) =>
         logger.warn(
           s"[UpdateVerifiedEmailService][updateVerifiedEmail] - updating verified email unsuccessful with response: $res"
         )
-        None
+        false
     }
   }
 

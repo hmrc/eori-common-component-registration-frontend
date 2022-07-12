@@ -18,7 +18,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import play.api.Logger
 import play.mvc.Http.Status._
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
 import uk.gov.hmrc.http.{ForbiddenException, HttpClient, _}
@@ -28,7 +27,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.control.NonFatal
 
-class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpClient, audit: Auditable) {
+class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpClient) {
 
   private val url: String = appConfig.getServiceUrl("update-verified-email")
   private val logger      = Logger(this.getClass)

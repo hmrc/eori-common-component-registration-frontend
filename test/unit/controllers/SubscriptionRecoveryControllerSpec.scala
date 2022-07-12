@@ -249,7 +249,7 @@ class SubscriptionRecoveryControllerSpec
       when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
         .thenReturn(Future.successful(true))
       when(mockUpdateVerifiedEmailService.updateVerifiedEmail(any(), any(), any())(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(true)))
+        .thenReturn(Future.successful(true))
       when(
         mockTaxEnrolmentService
           .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(

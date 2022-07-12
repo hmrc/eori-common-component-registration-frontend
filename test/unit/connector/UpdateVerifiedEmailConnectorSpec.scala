@@ -27,7 +27,6 @@ import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.libs.json.Writes
 import play.api.test.Injecting
 import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR}
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateVerifiedEmailConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
@@ -41,7 +40,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class UpdateVerifiedEmailConnectorSpec
     extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfter with Injecting with GuiceOneAppPerTest {
 
-  private val mockAuditable  = mock[Auditable]
   private val mockAppConfig  = mock[AppConfig]
   private val mockHttpClient = mock[HttpClient]
 
@@ -82,13 +80,10 @@ class UpdateVerifiedEmailConnectorSpec
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  val connector = new UpdateVerifiedEmailConnector(mockAppConfig, mockHttpClient, mockAuditable)
+  val connector = new UpdateVerifiedEmailConnector(mockAppConfig, mockHttpClient)
 
   before {
-    reset(mockAuditable, mockAppConfig, mockHttpClient)
-    doNothing()
-      .when(mockAuditable)
-      .sendDataEvent(any(), any(), any(), any(), any())(any[HeaderCarrier])
+    reset(mockAppConfig, mockHttpClient)
     when(mockAppConfig.getServiceUrl("update-verified-email"))
       .thenReturn("testUrl/update-verified-email")
   }
