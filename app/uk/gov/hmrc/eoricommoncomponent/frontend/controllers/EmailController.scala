@@ -40,7 +40,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerification
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_pending_against_group_id,
-  enrolment_pending_for_user
+  enrolment_pending_for_user,
+  eori_exists_group
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -56,7 +57,8 @@ class EmailController @Inject() (
   userGroupIdSubscriptionStatusCheckService: UserGroupIdSubscriptionStatusCheckService,
   groupEnrolment: GroupEnrolmentExtractor,
   enrolmentPendingForUser: enrolment_pending_for_user,
-  enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id
+  enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id,
+  eoriExistsForGroupView: eori_exists_group,
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
@@ -108,10 +110,13 @@ class EmailController @Inject() (
   )(implicit hc: HeaderCarrier, request: Request[AnyContent], user: LoggedInUserWithEnrolments) =
     groupEnrolment.groupIdEnrolments(user.groupId.getOrElse(throw MissingGroupId())).flatMap {
       groupEnrolments =>
-        if (groupEnrolments.exists(_.service == service.enrolmentKey))
+        if (groupEnrolments.exists(_.service == service.enrolmentKey)) {
           // user has specified service
-          Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
-        else
+          existingEoriForGroup(groupEnrolments) match {
+            case Some(existingEori) if service.code == "eori-only" => Future.successful(Ok(eoriExistsForGroupView(existingEori.id)))
+            case _ => Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
+          }
+        } else
           existingEoriForUserOrGroup(user, groupEnrolments) match {
             case Some(_) =>
               // user already has EORI

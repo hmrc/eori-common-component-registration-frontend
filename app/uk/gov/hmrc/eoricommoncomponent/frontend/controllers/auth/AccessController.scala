@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
 
 import scala.concurrent.Future
 
-trait AccessController {
+trait AccessController extends EnrolmentExtractor {
 
   def permitUserOrRedirect(
     affinityGroup: Option[AffinityGroup],
@@ -49,11 +49,23 @@ trait AccessController {
         case _          => false
       }
 
+    def isAdminUser: Boolean =
+      credentialRole match {
+        case Some(User) => true
+        case _          => false
+      }
+
     if (!isPermittedUserType)
       Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
-    else if (hasEnrolment)
+    else if (hasEnrolment) {
+      if(service.code.equalsIgnoreCase("eori-only")){
+        if(isAdminUser)
+          Future.successful(Redirect(routes.EnrolmentAlreadyExistsStandaloneController.enrolmentAlreadyExists(service)))
+        else
+          Future.successful(Redirect(routes.EnrolmentAlreadyExistsStandaloneController.enrolmentAlreadyExistsAdminUser(service)))
+      }
       Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service)))
-    else if (!isPermittedCredentialRole)
+    } else if (!isPermittedCredentialRole)
       Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else
       action

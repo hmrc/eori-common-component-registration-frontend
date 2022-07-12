@@ -16,39 +16,42 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.Inject
 import play.api.i18n.I18nSupport
-import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_exists_user, registration_exists, registration_exists_group}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_exists_user, registration_exists_group}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
-class EnrolmentAlreadyExistsController @Inject() (
+class EnrolmentAlreadyExistsStandaloneController @Inject()(
   authAction: AuthAction,
-  registrationExistsView: registration_exists,
-  registrationExistsForGroupView: registration_exists_group,
   eoriExistsView: eori_exists_user,
+  eoriExistsForGroupView: registration_exists_group,
   mcc: MessagesControllerComponents
 ) extends FrontendController(mcc) with I18nSupport with EnrolmentExtractor {
 
-  // Note: permitted for user with service enrolment
   def enrolmentAlreadyExists(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(registrationExistsView(service)))
+      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+        val eoriNumber  = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
+        Future.successful(Ok(eoriExistsView(eoriNumber.getOrElse(throw new IllegalStateException("EORI number could not be retrieved")), false)))
     }
 
-  // Note: permitted for user with service enrolment
+  def enrolmentAlreadyExistsAdminUser(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserAction {
+      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+        val eoriNumber  = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
+        Future.successful(Ok(eoriExistsView(eoriNumber.getOrElse(throw new IllegalStateException("EORI number could not be retrieved")), true)))
+    }
+
   def enrolmentAlreadyExistsForGroup(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(registrationExistsForGroupView(service)))
+        Future.successful(Ok(eoriExistsForGroupView(service)))
     }
 
 }
