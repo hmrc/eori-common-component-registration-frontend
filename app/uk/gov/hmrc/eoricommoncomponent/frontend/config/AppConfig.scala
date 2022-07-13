@@ -61,7 +61,7 @@ class AppConfig @Inject() (
   val hmrcChangeDetails: String                          = config.get[String]("external-url.hmrc-change-details")
   val vatUKDetails: String                               = config.get[String]("external-url.vat-uk-details")
   val cdsServices: String                                = config.get[String]("external-url.cds-services")
-  val addAccessToTeamMember: String                          = config.get[String]("external-url.adding-access-to-team-member")
+  val addAccessToTeamMember: String                      = config.get[String]("external-url.adding-access-to-team-member")
   def callCharges()(implicit messages: Messages): String = config.get[String](s"external-url.call-charges-$languageKey")
 
   val blockedRoutesRegex: Seq[Regex] =

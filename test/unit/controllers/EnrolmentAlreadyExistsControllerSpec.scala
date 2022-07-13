@@ -20,20 +20,31 @@ import common.pages.RegistrationCompletePage
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{registration_exists, registration_exists_group}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_exists_user_standalone,
+  registration_exists,
+  registration_exists_group
+}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
 class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActionMock {
 
-  private val registrationExistsView      = instanceOf[registration_exists]
-  private val registrationExistsGroupView = instanceOf[registration_exists_group]
-  private val mockAuthConnector           = mock[AuthConnector]
-  private val mockAuthAction              = authAction(mockAuthConnector)
+  private val registrationExistsView        = instanceOf[registration_exists]
+  private val registrationExistsGroupView   = instanceOf[registration_exists_group]
+  private val enrolmentExistsStandaloneView = instanceOf[enrolment_exists_user_standalone]
+  private val mockAuthConnector             = mock[AuthConnector]
+  private val mockAuthAction                = authAction(mockAuthConnector)
 
   val controller =
-    new EnrolmentAlreadyExistsController(mockAuthAction, registrationExistsView, registrationExistsGroupView, mcc)
+    new EnrolmentAlreadyExistsController(
+      mockAuthAction,
+      registrationExistsView,
+      registrationExistsGroupView,
+      enrolmentExistsStandaloneView,
+      mcc
+    )
 
   val paragraphXpath = "//*[@id='para1']"
 

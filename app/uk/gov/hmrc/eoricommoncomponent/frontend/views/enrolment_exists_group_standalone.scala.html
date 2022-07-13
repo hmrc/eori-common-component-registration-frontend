@@ -26,7 +26,7 @@
 
 @link = {
     <a id="eori_link" href="@{appConfig.addAccessToTeamMember}" target="_blank" class="govuk-link" rel="noopener noreferrer">
-    @messages("ecc.eori-exisits-group.cds.link")
+    @messages("ecc.eori-exists-group.cds.link")
     </a>
 }
 
@@ -35,12 +35,12 @@
 
         <h1 id="page-heading" class="govuk-heading-l">@messages("ecc.eori-exists-group.heading")</h1>
 
-        <p class="govuk-body" id="eori-number">@messages("ecc.eori-exisits-group.eori-number.label") @eoriNumber</p>
+        <p class="govuk-body" id="eori-number">@messages("ecc.eori-exists-group.eori-number.label") @eoriNumber</p>
 
-        <h2 id="cds-header" class="govuk-heading-m">@messages("ecc.eori-exisits-group.cds.start.label")</h2>
+        <h2 id="cds-header" class="govuk-heading-m">@messages("ecc.eori-exists-group.cds.start.label")</h2>
 
-        <p class="govuk-body" id="cds-info1">@Html(messages("ecc.eori-exisits-group.cds.para1"))</p>
-        <p class="govuk-body" id="cds-info2">@Html(messages("ecc.eori-exisits-group.cds.para2", link))</p>
+        <p class="govuk-body" id="cds-info1">@Html(messages("ecc.eori-exists-group.cds.para1"))</p>
+        <p class="govuk-body" id="cds-info2">@Html(messages("ecc.eori-exists-group.cds.para2", link))</p>
 
         @helpers.helpAndSupport()
 

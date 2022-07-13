@@ -24,7 +24,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, En
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_exists_user, registration_exists, registration_exists_group}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_exists_user_standalone,
+  registration_exists,
+  registration_exists_group
+}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.Future
@@ -33,7 +37,7 @@ class EnrolmentAlreadyExistsController @Inject() (
   authAction: AuthAction,
   registrationExistsView: registration_exists,
   registrationExistsForGroupView: registration_exists_group,
-  eoriExistsView: eori_exists_user,
+  enrolmentExistsStandaloneView: enrolment_exists_user_standalone,
   mcc: MessagesControllerComponents
 ) extends FrontendController(mcc) with I18nSupport with EnrolmentExtractor {
 
@@ -49,6 +53,20 @@ class EnrolmentAlreadyExistsController @Inject() (
     authAction.ggAuthorisedUserAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(registrationExistsForGroupView(service)))
+    }
+
+  def enrolmentAlreadyExistsStandalone(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserAction {
+      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+        val eoriNumber = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
+        Future.successful(
+          Ok(
+            enrolmentExistsStandaloneView(
+              eoriNumber.getOrElse(throw new IllegalStateException("EORI number could not be retrieved")),
+              loggedInUser.isAdminUser
+            )
+          )
+        )
     }
 
 }

@@ -50,10 +50,10 @@
 
         <h2 id="cds-header" class="govuk-heading-m">@messages("ecc.eori-exists-user.cds.label")</h2>
 
-        <p class="govuk-body" id="cds-info1">@Html(messages("ecc.eori-exists-user.cds.info1", link(appConfig.cdsServices, "ecc.eori-exists-user.cds.link1"))))</p>
+        <p class="govuk-body" id="cds-info1">@Html(messages("ecc.eori-exists-user.cds.info1", link(appConfig.cdsServices, "ecc.eori-exists-user.cds.link1")))</p>
 
         @if(isAdminUser){
-            <p class="govuk-body" id="cds-info2">@Html(messages("ecc.eori-exists-user.cds.info2", link(appConfig.addAccessToTeamMember, "ecc.eori-exists-user.cds.link2"))))</p>
+            <p class="govuk-body" id="cds-info2">@Html(messages("ecc.eori-exists-user.cds.info2", link(appConfig.addAccessToTeamMember, "ecc.eori-exists-user.cds.link2")))</p>
         }
 
         @helpers.helpAndSupport()

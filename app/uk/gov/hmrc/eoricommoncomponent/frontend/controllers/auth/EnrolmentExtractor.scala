@@ -62,10 +62,8 @@ trait EnrolmentExtractor {
   def existingEoriForUserOrGroup(
     loggedInUser: LoggedInUserWithEnrolments,
     groupEnrolments: List[EnrolmentResponse]
-  ): Option[ExistingEori] = {
+  ): Option[ExistingEori] =
     existingEoriForUser(loggedInUser.enrolments.enrolments).orElse(existingEoriForGroup(groupEnrolments))
-  }
-
 
   def existingEoriForUser(loggedInUserEnrolments: Set[Enrolment]): Option[ExistingEori] = {
     val userEnrolmentWithEori = loggedInUserEnrolments.find(_.identifiers.exists(_.key == EoriIdentifier))
@@ -74,8 +72,7 @@ trait EnrolmentExtractor {
     )
   }
 
-  def existingEoriForGroup(groupEnrolments: List[EnrolmentResponse]): Option[ExistingEori] = {
+  def existingEoriForGroup(groupEnrolments: List[EnrolmentResponse]): Option[ExistingEori] =
     groupEnrolments.find(_.eori.exists(_.nonEmpty)).map(enrolment => ExistingEori(enrolment.eori, enrolment.service))
-  }
 
 }

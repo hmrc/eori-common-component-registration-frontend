@@ -11,9 +11,7 @@ GET         /customs-registration-services/language/:lang                       
 # enrolment-already-exists
 GET         /customs-registration-services/:service/register/enrolment-already-exists                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service: Service)
 GET         /customs-registration-services/:service/register/enrolment-already-exists-for-group          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service: Service)
-GET         /customs-registration-services/:service/register/cds-enrolment-exists                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsStandaloneController.enrolmentAlreadyExists(service: Service)
-GET         /customs-registration-services/:service/register/cds-enrolment-exists-admin                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsStandaloneController.enrolmentAlreadyExistsAdminUser(service: Service)
-GET         /customs-registration-services/:service/register/cds-enrolment-exists-for-group              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsStandaloneController.enrolmentAlreadyExistsForGroup(service: Service)
+GET         /customs-registration-services/:service/register/cds-enrolment-exists                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service: Service)
 
 # eori-already-exists
 GET         /customs-registration-services/:service/register/you-already-have-an-eori                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouAlreadyHaveEoriController.display(service: Service)

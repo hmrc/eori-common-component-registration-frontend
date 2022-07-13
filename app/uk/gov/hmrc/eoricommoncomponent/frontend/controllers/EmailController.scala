@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
+import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{
   AuthAction,
@@ -38,10 +39,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_exists_group_standalone,
   enrolment_pending_against_group_id,
-  enrolment_pending_for_user,
-  eori_exists_group
+  enrolment_pending_for_user
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -58,7 +60,7 @@ class EmailController @Inject() (
   groupEnrolment: GroupEnrolmentExtractor,
   enrolmentPendingForUser: enrolment_pending_for_user,
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id,
-  eoriExistsForGroupView: eori_exists_group,
+  enrolmentExistsForGroupStandaloneView: enrolment_exists_group_standalone
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
@@ -110,13 +112,20 @@ class EmailController @Inject() (
   )(implicit hc: HeaderCarrier, request: Request[AnyContent], user: LoggedInUserWithEnrolments) =
     groupEnrolment.groupIdEnrolments(user.groupId.getOrElse(throw MissingGroupId())).flatMap {
       groupEnrolments =>
-        if (groupEnrolments.exists(_.service == service.enrolmentKey)) {
+        if (groupEnrolments.exists(_.service == service.enrolmentKey))
           // user has specified service
-          existingEoriForGroup(groupEnrolments) match {
-            case Some(existingEori) if service.code == "eori-only" => Future.successful(Ok(eoriExistsForGroupView(existingEori.id)))
-            case _ => Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
-          }
-        } else
+          if (service.code.equalsIgnoreCase("eori-only")) {
+            val eoriNumber = existingEoriForGroup(groupEnrolments).map(_.id)
+            Future.successful(
+              Ok(
+                enrolmentExistsForGroupStandaloneView(
+                  eoriNumber.getOrElse(throw new IllegalStateException("EORI number could not be retrieved"))
+                )
+              )
+            )
+          } else
+            Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
+        else
           existingEoriForUserOrGroup(user, groupEnrolments) match {
             case Some(_) =>
               // user already has EORI
