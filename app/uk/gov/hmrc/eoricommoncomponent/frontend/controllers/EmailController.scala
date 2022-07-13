@@ -119,7 +119,8 @@ class EmailController @Inject() (
             Future.successful(
               Ok(
                 enrolmentExistsForGroupStandaloneView(
-                  eoriNumber.getOrElse(throw new IllegalStateException("EORI number could not be retrieved"))
+                  eoriNumber.getOrElse(throw new IllegalStateException("EORI number could not be retrieved")),
+                  user.isAdminUser
                 )
               )
             )
