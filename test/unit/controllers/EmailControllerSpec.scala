@@ -109,6 +109,81 @@ class EmailControllerSpec
 
   "Viewing the form on Register" should {
 
+    "display the form with no errors" in {
+      showFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(PageLevelErrorSummaryListXPath) shouldBe empty
+      }
+    }
+
+    "redirect when cache has no email status" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(None))
+      showFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/atar/register/matching/what-is-your-email")
+      }
+    }
+
+    "redirect when email not verified" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = false))))
+      when(
+        mockEmailVerificationService
+          .isEmailVerified(any[String])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(Some(false)))
+      showFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/atar/register/matching/verify-your-email")
+      }
+    }
+
+    "redirect when email verified" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = true))))
+      showFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/atar/register/email-confirmed")
+      }
+    }
+
+    "block when subscription is in progress" in {
+      when(mockSave4LaterService.fetchCacheIds(any())(any()))
+        .thenReturn(Future.successful(Some(CacheIds(InternalId("int-id"), SafeId("safe-id"), Some("atar")))))
+      when(mockSubscriptionStatusService.getStatus(any(), any())(any()))
+        .thenReturn(Future.successful(SubscriptionProcessing))
+
+      showFormRegister() { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.title should startWith("There is a problem")
+        page.getElementText(infoXpath) should include(
+          "The Government Gateway ID you used to sign in is part of a team that has already applied for an EORI number"
+        )
+      }
+    }
+
+    "redirect when group enrolled to service" in {
+      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
+        .thenReturn(Future.successful(List(atarGroupEnrolment)))
+
+      showFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/atar/register/enrolment-already-exists-for-group")
+      }
+    }
+
+    "redirect when user has existing EORI" in {
+      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
+        .thenReturn(Future.successful(List(cdsGroupEnrolment)))
+
+      showFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/atar/register/you-already-have-an-eori")
+      }
+    }
+
     "redirect when group enrolled to service in standalone journey" in {
       when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
         .thenReturn(Future.successful(List(cdsGroupEnrolment)))
