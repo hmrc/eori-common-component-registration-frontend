@@ -16,37 +16,21 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.mvc.Results.Redirect
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{
-  AuthAction,
-  EnrolmentExtractor,
-  GroupEnrolmentExtractor
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes.{
-  CheckYourEmailController,
-  WhatIsYourEmailController
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  EnrolmentAlreadyExistsController,
-  YouAlreadyHaveEoriController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor, GroupEnrolmentExtractor}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes.{CheckYourEmailController, WhatIsYourEmailController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EnrolmentAlreadyExistsController, YouAlreadyHaveEoriController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  enrolment_exists_group_standalone,
-  enrolment_pending_against_group_id,
-  enrolment_pending_for_user
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{enrolment_exists_group_standalone, enrolment_pending_against_group_id, enrolment_pending_for_user}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
