@@ -54,11 +54,11 @@ class StartViewSpec extends ViewSpec {
       doc.getElementById("gb-eori-para1-bullet1").text() mustBe "VAT number"
       doc.getElementById("gb-eori-para1-bullet2").text() mustBe "VAT registered address postcode"
       doc.getElementById("gb-eori-para1-bullet3").text() mustBe "VAT effective date"
-      doc.getElementById("gb-eori-para2").text() mustBe "Find your VAT details (opens in new tab/window)"
+      doc.getElementById("gb-eori-para2").text() mustBe "Find your VAT details (opens in new tab)"
       doc.getElementById("gb-eori-para3-heading").text() mustBe "We also ask for:"
       doc.getElementById(
         "gb-eori-para3-bullet1"
-      ).text() mustBe "Standard Industrial Classification (SIC) code. Find your SIC code (opens in new window or tab)."
+      ).text() mustBe "Standard Industrial Classification (SIC) code. Find your SIC code (opens in new tab)."
     }
 
     "have correct company section" in {
@@ -69,7 +69,7 @@ class StartViewSpec extends ViewSpec {
       ).text() mustBe "If you are a limited company, partnership or charity, we will also ask for:"
       doc.getElementById(
         "company-para-bullet1"
-      ).text() mustBe "Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can find a UTR number (opens in a new window or tab)."
+      ).text() mustBe "Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can find a UTR number (opens in new tab)."
       doc.getElementById("company-para-bullet2").text() mustBe "Registered company name"
       doc.getElementById("company-para-bullet3").text() mustBe "Registered company address"
       doc.getElementById("company-para-bullet4").text() mustBe "Date of establishment"
@@ -84,7 +84,7 @@ class StartViewSpec extends ViewSpec {
       doc.getElementById("sole-trader-para-bullet1").text() mustBe "National Insurance number"
       doc.getElementById(
         "sole-trader-para-bullet2"
-      ).text() mustBe "Self Assessment Unique Taxpayer Reference (UTR). You can find a lost UTR number (opens in a new window or tab)."
+      ).text() mustBe "Self Assessment Unique Taxpayer Reference (UTR). You can find a lost UTR number (opens in new tab)."
     }
   }
 }

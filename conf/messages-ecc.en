@@ -75,17 +75,17 @@ ecc.subscription.information.para1=In order to subscribe you to {0} we need some
 
 ecc.subscription.information.para2.heading=GB EORI number
 ecc.subscription.information.para2=You will need a GB Economic Operators Registration and Identification number (EORI number).
-ecc.subscription.information.para2.warning=The GB EORI number must be the one linked to the Government Gateway ID you used to sign in. <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Check EORI (opens in new window or tab)</a>.
+ecc.subscription.information.para2.warning=The GB EORI number must be the one linked to the Government Gateway ID you used to sign in. <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Check EORI (opens in new tab)</a>.
 ecc.subscription.information.para2.text=If you do not have an EORI, you will get one with your {0} subscription. You will need to provide:
 ecc.subscription.information.para2.list.first=VAT details if UK registered
 ecc.subscription.information.para2.list.bullet.first=VAT number
 ecc.subscription.information.para2.list.bullet.second=VAT registered address postcode
 ecc.subscription.information.para2.list.bullet.third=VAT effective date
-ecc.subscription.information.para2.list.second=Standard Industrial Classification (SIC) code. <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link">Find your SIC code (opens in new window or tab)</a>.
+ecc.subscription.information.para2.list.second=Standard Industrial Classification (SIC) code. <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link">Find your SIC code (opens in new tab)</a>.
 
 ecc.subscription.information.section.organisation.subheading=Company or other organisation details
 ecc.subscription.information.section.organisation.list.heading=If you are a limited company, partnership or charity, you will need:
-ecc.subscription.information.section.organisation.list.first=Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in a new window or tab)</a>.
+ecc.subscription.information.section.organisation.list.first=Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
 ecc.subscription.information.section.organisation.list.second=Registered company name
 ecc.subscription.information.section.organisation.list.third=Registered company address
 ecc.subscription.information.section.organisation.list.fourth=Date of establishment
@@ -93,7 +93,7 @@ ecc.subscription.information.section.organisation.list.fourth=Date of establishm
 ecc.subscription.information.section.individual.subheading=Sole trader or individual details
 ecc.subscription.information.section.individual.para=If you have worked in the UK or registered for self-assessment, you will need one of the following:
 ecc.subscription.information.section.individual.nino=National Insurance number
-ecc.subscription.information.section.individual.utr=Self Assessment Unique Taxpayer Reference (UTR). You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
+ecc.subscription.information.section.individual.utr=Self Assessment Unique Taxpayer Reference (UTR). You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in new tab)</a>.
 
 ecc.subscription.information.only.once=This only needs to be done once.
 ecc.subscription.information.email.confirm=We’ll process your application and email you with the result within 2 hours.
@@ -355,19 +355,19 @@ ecc.start-page.gbeori.para1.title = If you are UK VAT registered we will ask you
 ecc.start-page.gbeori.para1.bullet1 = VAT number
 ecc.start-page.gbeori.para1.bullet2 = VAT registered address postcode
 ecc.start-page.gbeori.para1.bullet3 = VAT effective date
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your VAT details (opens in new tab/window)</a>
+ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your VAT details (opens in new tab)</a>
 ecc.start-page.gbeori.para3.title = We also ask for:
-ecc.start-page.gbeori.para3.bullet = Standard Industrial Classification (SIC) code. <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a>.
+ecc.start-page.gbeori.para3.bullet = Standard Industrial Classification (SIC) code. <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a>.
 ecc.start-page.company.title = Company or other organisation details
 ecc.start-page.company = If you are a limited company, partnership or charity, we will also ask for:
-ecc.start-page.company.bullet1 = Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in a new window or tab)</a>.
+ecc.start-page.company.bullet1 = Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
 ecc.start-page.company.bullet2 = Registered company name
 ecc.start-page.company.bullet3 = Registered company address
 ecc.start-page.company.bullet4 = Date of establishment
 ecc.start-page.sole-trader.title = Sole trader or individual details
 ecc.start-page.sole-trader = If you have worked in the UK or registered for self-assessment, we will ask for one of the following:
 ecc.start-page.sole-trader.bullet1 = National Insurance number
-ecc.start-page.sole-trader.bullet2 = Self Assessment Unique Taxpayer Reference (UTR). You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in a new window or tab)</a>.
+ecc.start-page.sole-trader.bullet2 = Self Assessment Unique Taxpayer Reference (UTR). You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in new tab)</a>.
 ecc.start-page.start-now = Start now
 ecc.start-page.help.eori.contact = Contact the EORI team online.
 
@@ -377,16 +377,39 @@ date.fields.year = Year
 
 ecc.cannot-change-address-company.title = Please contact Companies House
 ecc.cannot-change-address-company.info = Your company''s registered address is held at {0}. You will need to update your details there and return to complete your EORI application.
-ecc.cannot-change-address-company.link = Companies House (opens in a new tab)
+ecc.cannot-change-address-company.link = Companies House (opens in new tab)
 
 ecc.cannot-change-address-individual.title = Please contact HMRC
 ecc.cannot-change-address-individual.info = Your registered address is held at {0}. You will need to update your details there and return to complete your EORI application.
-ecc.cannot-change-address-individual.link = HMRC (opens in a new tab)
+ecc.cannot-change-address-individual.link = HMRC (opens in new tab)
 
 ecc.address-invalid-individual.title = Please contact HMRC
 ecc.address-invalid-individual.info = The registered address we hold for you seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
-ecc.address-invalid-individual.link = HMRC (opens in a new tab)
+ecc.address-invalid-individual.link = HMRC (opens in new tab)
 
 ecc.address-invalid-company.title = Please contact Companies House
 ecc.address-invalid-company.info = The registered address we hold for your organisation seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
-ecc.address-invalid-company.link = Companies House (opens in a new tab)
+ecc.address-invalid-company.link = Companies House (opens in new tab)
+
+ecc.eori-exists-standard-user.heading = You already have an EORI number
+ecc.eori-exists-standard-user.title = You already have an EORI number
+
+ecc.eori-exists-user.heading = Your business or organisation already has an EORI number
+ecc.eori-exists-user.title = Your business or organisation already has an EORI number
+ecc.eori-exists-user.eori-number.label = EORI number:
+ecc.eori-exists-user.cds.label = Customs Declaration Service
+ecc.eori-exists-user.cds.info1 = You can now use any of the online customs services for the {0}.
+ecc.eori-exists-user.cds.info2 = You can also {0}.
+ecc.eori-exists-user.cds.link1 = Customs Declaration Service (CDS)
+ecc.eori-exists-user.cds.link2 = add team members and give them access to CDS (opens in new tab)
+
+
+ecc.eori-exists-group.heading = Your business or organisation already has an EORI number
+ecc.eori-exists-group.title = Your business or organisation already has an EORI number
+ecc.eori-exists-group.eori-number.label = EORI number:
+ecc.eori-exists-group.cds.start.label = Start using the Customs Declaration Service (CDS)
+ecc.eori-exists-group.admin.cds.para1 = If you want access to CDS, you need to ask the person who set up your Government Gateway user ID, or another person with administrator permissions in your Government Gateway team.
+ecc.eori-exists-group.admin.cds.para2 = They will need to sign in and follow steps 6,7,8 and 9 to {0}.
+ecc.eori-exists-group.cds.para1 = If you want access to CDS, you need to go to manage account, and follow steps 6, 7, 8 and 9 to {0}.
+ecc.eori-exists-group.cds.admin.link = give a team member access to a tax duty or scheme (opens in new tab)
+ecc.eori-exists-group.cds.link = give yourself access to a tax, duty or scheme (opens in new tab)
