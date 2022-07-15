@@ -127,22 +127,6 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
 
     }
 
-    "throw exception if EORI Number is not available against any enrolment in standalone journey" in {
-      withAuthorisedUser(
-        defaultUserId,
-        mockAuthConnector,
-        userCredentialRole = Some(Assistant),
-        otherEnrolments = Set(Enrolment("HMRC-CUS-ORG"))
-      )
-      intercept[IllegalStateException] {
-        await(
-          controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
-            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
-          )
-        )
-      }
-    }
-
     "redirect to the enrolment already exists for group page" in {
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)

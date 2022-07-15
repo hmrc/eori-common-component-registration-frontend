@@ -22,7 +22,7 @@
 
 @this(layout_di: layout, appConfig: AppConfig)
 
-@(eoriNumber: String, isAdminUser: Boolean)(implicit messages: Messages, request: Request[_])
+@(eoriNumber: Option[String], isAdminUser: Boolean)(implicit messages: Messages, request: Request[_])
 
 
 @link(url: String, text: String) = {
@@ -43,7 +43,9 @@
 
         <h1 id="page-heading" class="govuk-heading-l">@messages("ecc.eori-exists-group.heading")</h1>
 
-        <p class="govuk-body" id="eori-number">@messages("ecc.eori-exists-group.eori-number.label") @eoriNumber</p>
+        @if(eoriNumber.isDefined) {
+            <p class="govuk-body" id="eori-number">@messages("ecc.eori-exists-group.eori-number.label") @eoriNumber</p>
+        }
 
         <h2 id="cds-header" class="govuk-heading-m">@messages("ecc.eori-exists-group.cds.start.label")</h2>
 

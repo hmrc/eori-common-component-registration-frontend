@@ -114,14 +114,7 @@ class EmailController @Inject() (
           // user has specified service
           if (service.code.equalsIgnoreCase("eori-only")) {
             val eoriNumber = existingEoriForGroup(groupEnrolments).map(_.id)
-            Future.successful(
-              Ok(
-                enrolmentExistsForGroupStandaloneView(
-                  eoriNumber.getOrElse(throw new IllegalStateException("EORI number could not be retrieved")),
-                  user.isAdminUser
-                )
-              )
-            )
+            Future.successful(Ok(enrolmentExistsForGroupStandaloneView(eoriNumber, user.isAdminUser)))
           } else
             Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
         else

@@ -57,14 +57,7 @@ class EnrolmentAlreadyExistsController @Inject() (
     authAction.ggAuthorisedUserAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
         val eoriNumber = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
-        Future.successful(
-          Ok(
-            enrolmentExistsStandaloneView(
-              eoriNumber.getOrElse(throw new IllegalStateException("EORI number could not be retrieved")),
-              loggedInUser.isAdminUser
-            )
-          )
-        )
+        Future.successful(Ok(enrolmentExistsStandaloneView(eoriNumber, loggedInUser.isAdminUser)))
     }
 
 }
