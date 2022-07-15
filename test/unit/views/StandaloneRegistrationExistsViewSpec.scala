@@ -29,7 +29,7 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
   private val view                   = instanceOf[enrolment_exists_user_standalone]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 
-  "Standalong Registration Exists page" should {
+  "Standalone Registration Exists page" should {
 
     "admin user" should {
       "display correct title" in {
