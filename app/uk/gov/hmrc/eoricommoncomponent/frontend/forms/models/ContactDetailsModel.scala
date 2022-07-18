@@ -45,17 +45,8 @@ case class ContactDetailsModel(
     countryCode.getOrElse("")
   )
 
-  def toContactDetailsViewModel: ContactDetailsViewModel = ContactDetailsViewModel(
-    fullName,
-    Some(emailAddress),
-    telephone,
-    fax,
-    useAddressFromRegistrationDetails,
-    trim(street),
-    trim(city),
-    trim(postcode),
-    countryCode
-  )
+  def toContactsInfoViewModel: ContactDetailsViewModel =
+    ContactDetailsViewModel(fullName, Some(emailAddress), telephone)
 
   def toRowContactInformation(): ContactInformation = ContactInformation(
     personOfContact = Some(fullName),
@@ -78,28 +69,18 @@ object ContactDetailsModel {
 }
 
 //TODO remove email address read from cache and populate the contact details
-case class ContactDetailsViewModel(
-  fullName: String,
-  emailAddress: Option[String],
-  telephone: String,
-  fax: Option[String],
-  useAddressFromRegistrationDetails: Boolean = true,
-  street: Option[String],
-  city: Option[String],
-  postcode: Option[String],
-  countryCode: Option[String]
-) {
+case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: String) {
 
-  def toContactDetailsModel: ContactDetailsModel = ContactDetailsModel(
+  def toContactInfoDetailsModel: ContactDetailsModel = ContactDetailsModel(
     fullName,
     emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
     telephone,
-    fax,
-    useAddressFromRegistrationDetails,
-    trim(street),
-    trim(city),
-    trim(postcode),
-    countryCode
+    fax = None,
+    useAddressFromRegistrationDetails = false,
+    street = None,
+    city = None,
+    postcode = None,
+    countryCode = None
   )
 
 }
