@@ -32,10 +32,10 @@
 
 @info =@{
     if(isAdminUser)
-        Html(messages("ecc.eori-exists-group.admin.cds.para1"))
-    else
         Html(messages("ecc.eori-exists-group.cds.para1", link(appConfig.addAccessToTeamMember, "ecc.eori-exists-group.cds.link")))
-    }
+    else
+        Html(messages("ecc.eori-exists-group.admin.cds.para1"))
+}
 
 
 @layout_di(messages("ecc.eori-exists-group.title")) {
@@ -51,7 +51,7 @@
 
         <p class="govuk-body" id="cds-info1">@info</p>
 
-        @if(isAdminUser){
+        @if(!isAdminUser){
             <p class="govuk-body" id="cds-info2">@Html(messages("ecc.eori-exists-group.admin.cds.para2", link(appConfig.addAccessToTeamMember, "ecc.eori-exists-group.cds.admin.link")))</p>
         }
 

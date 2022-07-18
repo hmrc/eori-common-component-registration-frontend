@@ -32,7 +32,7 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
   private val view                   = instanceOf[enrolment_exists_group_standalone]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 
-  "Standalong Registration Exists page" should {
+  "Standalone Registration Exists page" should {
 
     "admin user" should {
       "display correct title" in {
@@ -57,16 +57,11 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
         )
       }
 
-      "display tell user about CDS access and link for accessing CDS services" in {
-        val info = adminDoc.body.getElementById("cds-info1")
-        info.text mustBe "If you want access to CDS, you need to ask the person who set up your Government Gateway user ID, or another person with administrator permissions in your Government Gateway team."
-
-      }
-
-      "display tell admin user on how to add CDS access for the team members" in {
-        val link = adminDoc.body.getElementById("cds-info2")
-        link.text mustBe "They will need to sign in and follow steps 6,7,8 and 9 to give a team member access to a tax duty or scheme (opens in new tab) ."
+      "display user about CDS access and link for accessing CDS services" in {
+        val link = adminDoc.body.getElementById("cds-info1")
+        link.text mustBe "If you want access to CDS, you need to go to manage account, and follow steps 6, 7, 8 and 9 to give yourself access to a tax, duty or scheme (opens in new tab) ."
         link.getElementsByTag("a").attr("href") must endWith("/use-hmrcs-business-tax-account#adding-a-team-member")
+        adminDoc.body.getElementById("cds-info2") mustBe null
       }
     }
 
@@ -95,9 +90,16 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
         )
       }
 
+
       "display tell user about CDS access and link for accessing CDS services" in {
-        val link = standardDoc.body.getElementById("cds-info1")
-        link.text mustBe "If you want access to CDS, you need to go to manage account, and follow steps 6, 7, 8 and 9 to give yourself access to a tax, duty or scheme (opens in new tab) ."
+        val info = standardDoc.body.getElementById("cds-info1")
+        info.text mustBe "If you want access to CDS, you need to ask the person who set up your Government Gateway user ID, or another person with administrator permissions in your Government Gateway team."
+
+      }
+
+      "display tell admin user on how to add CDS access for the team members" in {
+        val link = standardDoc.body.getElementById("cds-info2")
+        link.text mustBe "They will need to sign in and follow steps 6,7,8 and 9 to give a team member access to a tax duty or scheme (opens in new tab) ."
         link.getElementsByTag("a").attr("href") must endWith("/use-hmrcs-business-tax-account#adding-a-team-member")
       }
 
