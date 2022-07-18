@@ -22,7 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_already_have_eori
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{standalone_already_have_eori, you_already_have_eori}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.Future
@@ -30,6 +30,7 @@ import scala.concurrent.Future
 class YouAlreadyHaveEoriController @Inject() (
   authAction: AuthAction,
   eoriExistsView: you_already_have_eori,
+  standAloneView: standalone_already_have_eori,
   mcc: MessagesControllerComponents
 ) extends FrontendController(mcc) with I18nSupport {
 
@@ -38,6 +39,13 @@ class YouAlreadyHaveEoriController @Inject() (
     authAction.ggAuthorisedUserWithServiceAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(eoriExistsView(service)))
+    }
+
+  // Note: permitted for user with service enrolment
+  def displayStandAlone(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserWithServiceAction {
+      implicit request => _: LoggedInUserWithEnrolments =>
+        Future.successful(Ok(standAloneView(service)))
     }
 
 }

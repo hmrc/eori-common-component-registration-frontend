@@ -15,6 +15,9 @@ GET         /customs-registration-services/:service/register/enrolment-already-e
 # eori-already-exists
 GET         /customs-registration-services/:service/register/you-already-have-an-eori                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouAlreadyHaveEoriController.display(service: Service)
 
+# standalone-eori-already-exists
+GET         /customs-registration-services/:service/register/standalone_already_have_eori                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouAlreadyHaveEoriController.displayStandAlone(service: Service)
+
 GET         /customs-registration-services/:service/register/display-sign-out                            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SecuritySignOutController.displayPage(service: Service)
 GET         /customs-registration-services/:service/register/sign-out                                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SecuritySignOutController.signOut(service: Service)
 
