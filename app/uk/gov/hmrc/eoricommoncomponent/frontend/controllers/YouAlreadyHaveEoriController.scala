@@ -41,11 +41,4 @@ class YouAlreadyHaveEoriController @Inject() (
         Future.successful(Ok(eoriExistsView(service)))
     }
 
-  // Note: permitted for user with service enrolment
-  def displayStandAlone(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithServiceAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(standAloneView(service)))
-    }
-
 }

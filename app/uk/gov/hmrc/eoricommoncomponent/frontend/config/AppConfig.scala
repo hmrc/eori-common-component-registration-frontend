@@ -60,6 +60,7 @@ class AppConfig @Inject() (
   val companyHouseRegister: String                       = config.get[String]("external-url.company-house-register")
   val hmrcChangeDetails: String                          = config.get[String]("external-url.hmrc-change-details")
   val vatUKDetails: String                               = config.get[String]("external-url.vat-uk-details")
+  val getAccessToCDS: String                             = config.get[String]("external-url.get-access-to-cds")
   def callCharges()(implicit messages: Messages): String = config.get[String](s"external-url.call-charges-$languageKey")
 
   val blockedRoutesRegex: Seq[Regex] =

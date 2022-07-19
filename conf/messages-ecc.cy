@@ -69,6 +69,17 @@ cds.subscription.outcomes.success.will-send-email=Byddwn yn anfon e-bost atoch i
 cds.registration.you-already-have-eori.title=Mae gennych EORI eisoes
 cds.registration.you-already-have-eori.para1=Rydym wedi canfod bod gennych EORI eisoes. Gallwch fynd yn eich blaen a thanysgrifio i’r gwasanaeth {0}.
 
+cds.registration.you-already-have-eori.individual.title=TRANSLATE You already have an EORI number
+cds.registration.you-already-have-eori.group.title=TRANSLATE Your business or organisation already has an EORI number
+
+ecc.you-already-have-eori.eori-number.label=TRANSLATE EORI number:
+ecc.you-already-have-eori.admin.info1=TRANSLATE Start using the Customs Declaration Service (CDS)
+ecc.you-already-have-eori.admin.info2.text=TRANSLATE You can {0}
+ecc.you-already-have-eori.admin.info2.link=TRANSLATE subscribe to CDS and give access to other team members.
+
+cds.registration.you-already-have-eori.individual.heading=TRANSLATE You already have an EORI number
+cds.registration.you-already-have-eori.group.heading=TRANSLATE Your business or organisation already has an EORI number
+
 ecc.subscription.information.heading=Mae’n rhaid i chi danysgrifio i ddefnyddio’r gwasanaeth {0}
 ecc.subscription.information.para1.heading=Yr hyn y bydd ei angen arnoch
 ecc.subscription.information.para1=Er mwyn eich tanysgrifio i’r gwasanaeth {0}, bydd arnom angen ychydig o wybodaeth gennych. Sicrhewch fod gennych yr holl fanylion cywir cyn i chi ddechrau, fel arall mae’n bosibl y caiff eich cais ei oedi.

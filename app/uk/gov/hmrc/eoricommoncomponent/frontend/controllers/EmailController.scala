@@ -40,7 +40,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerification
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_pending_against_group_id,
-  enrolment_pending_for_user
+  enrolment_pending_for_user,
+  standalone_already_have_eori
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -55,6 +56,7 @@ class EmailController @Inject() (
   save4LaterService: Save4LaterService,
   userGroupIdSubscriptionStatusCheckService: UserGroupIdSubscriptionStatusCheckService,
   groupEnrolment: GroupEnrolmentExtractor,
+  standaloneAlreadyhaveEoriView: standalone_already_have_eori,
   enrolmentPendingForUser: enrolment_pending_for_user,
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id
 )(implicit ec: ExecutionContext)
@@ -113,11 +115,14 @@ class EmailController @Inject() (
           Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
         else
           existingEoriForUserOrGroup(user, groupEnrolments) match {
-            case Some(_) =>
+            case enrollments @ Some(_) =>
               // user already has EORI
-              if (service.code.equalsIgnoreCase("eori-only"))
-                Future.successful(Redirect(YouAlreadyHaveEoriController.displayStandAlone(service)))
-              else
+              if (service.code.equalsIgnoreCase("eori-only")) {
+                var eoriNumber = enrollments.map(_.id)
+                Future.successful(
+                  Ok(standaloneAlreadyhaveEoriView(eoriNumber, user.isIndividualUser, user.isAdminUser, service))
+                )
+              } else
                 Future.successful(Redirect(YouAlreadyHaveEoriController.display(service)))
             case None =>
               userGroupIdSubscriptionStatusCheckService
