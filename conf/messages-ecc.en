@@ -339,9 +339,9 @@ ecc.subscription.outcomes.guidance.xi.eori.warning.info=Do not tick the box "Que
 ecc.subscription.outcomes.guidance.xi.eori.href=<a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" class="govuk-link" target="_blank" rel="noopener noreferrer">Apply for an XI EORI.</a>
 
 ecc.subscription.organisation-disclose-personal-details-consent.title = Do you want to include the company name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.hint = HMRC will add your GB EORI number to a <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker</a>. You can also include you or your organisation''s name and address. This will help customs and freight agents identify you and process your shipments.
+ecc.subscription.organisation-disclose-personal-details-consent.hint = HMRC will add your GB EORI number to a <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker (opens in new tab)</a>. You can also include you or your organisation''s name and address. This will help customs and freight agents identify you and process your shipments.
 ecc.subscription.organisation-disclose-personal-details-consent.individual.title = Do you want to include your name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker kept by the European Commission</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
+ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker kept by the European Commission (opens in new tab)</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
 ecc.subscription.organisation-disclose-personal-details-consent.partnership.title = Do you want to include the partnership name and address on the EORI checker?
 ecc.subscription.organisation-disclose-personal-details-consent.charity.title = Do you want to include the charity name and address on the EORI checker?
 ecc.subscription.organisation-disclose-personal-details-consent.organisation.title = Do you want to include the organisation name and address on the EORI checker?
@@ -390,26 +390,3 @@ ecc.address-invalid-individual.link = HMRC (opens in new tab)
 ecc.address-invalid-company.title = Please contact Companies House
 ecc.address-invalid-company.info = The registered address we hold for your organisation seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
 ecc.address-invalid-company.link = Companies House (opens in new tab)
-
-ecc.eori-exists-standard-user.heading = You already have an EORI number
-ecc.eori-exists-standard-user.title = You already have an EORI number
-
-ecc.eori-exists-user.heading = Your business or organisation already has an EORI number
-ecc.eori-exists-user.title = Your business or organisation already has an EORI number
-ecc.eori-exists-user.eori-number.label = EORI number:
-ecc.eori-exists-user.cds.label = Customs Declaration Service
-ecc.eori-exists-user.cds.info1 = You can now use any of the online customs services for the {0}.
-ecc.eori-exists-user.cds.info2 = You can also {0}.
-ecc.eori-exists-user.cds.link1 = Customs Declaration Service (CDS)
-ecc.eori-exists-user.cds.link2 = add team members and give them access to CDS (opens in new tab)
-
-
-ecc.eori-exists-group.heading = Your business or organisation already has an EORI number
-ecc.eori-exists-group.title = Your business or organisation already has an EORI number
-ecc.eori-exists-group.eori-number.label = EORI number:
-ecc.eori-exists-group.cds.start.label = Start using the Customs Declaration Service (CDS)
-ecc.eori-exists-group.admin.cds.para1 = If you want access to CDS, you need to ask the person who set up your Government Gateway user ID, or another person with administrator permissions in your Government Gateway team.
-ecc.eori-exists-group.admin.cds.para2 = They will need to sign in and follow steps 6,7,8 and 9 to {0}.
-ecc.eori-exists-group.cds.para1 = If you want access to CDS, you need to go to manage account, and follow steps 6, 7, 8 and 9 to {0}.
-ecc.eori-exists-group.cds.admin.link = give a team member access to a tax duty or scheme (opens in new tab)
-ecc.eori-exists-group.cds.link = give yourself access to a tax, duty or scheme (opens in new tab)
