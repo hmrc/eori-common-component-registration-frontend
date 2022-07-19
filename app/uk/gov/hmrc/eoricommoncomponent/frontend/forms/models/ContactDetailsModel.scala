@@ -88,3 +88,23 @@ case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String
 object ContactDetailsViewModel {
   implicit val jsonFormat: OFormat[ContactDetailsViewModel] = Json.format[ContactDetailsViewModel]
 }
+
+case class ContactAddressViewModel(fullName: String, emailAddress: Option[String], telephone: String) {
+
+  def toContactInfoDetailsModel: ContactDetailsModel = ContactDetailsModel(
+    fullName,
+    emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
+    telephone,
+    fax = None,
+    useAddressFromRegistrationDetails = false,
+    street = None,
+    city = None,
+    postcode = None,
+    countryCode = None
+  )
+
+}
+
+object ContactAddressViewModel {
+  implicit val jsonFormat: OFormat[ContactAddressViewModel] = Json.format[ContactAddressViewModel]
+}

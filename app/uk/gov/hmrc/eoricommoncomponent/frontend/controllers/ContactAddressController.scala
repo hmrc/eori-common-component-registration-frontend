@@ -22,13 +22,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetailsSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm.contactDetailsCreateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsViewModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
+  AddressViewModel,
+  ContactDetailsViewModel,
+  YesNoWrongAddress
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -40,7 +42,6 @@ class ContactAddressController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   cdsFrontendDataCache: SessionCache,
   subscriptionFlowManager: SubscriptionFlowManager,
-  subscriptionDetailsService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
   contactAddressView: contact_address
 )(implicit ec: ExecutionContext)
@@ -59,55 +60,45 @@ class ContactAddressController @Inject() (
   private def populateFormGYE(
     service: Service
   )(isInReviewMode: Boolean)(implicit request: Request[AnyContent]): Future[Result] =
-    subscriptionBusinessService.cachedContactDetailsModel.flatMap { contactDetails =>
-      cdsFrontendDataCache.email.flatMap { email =>
-        populateOkView(contactDetails.map(_.toContactsInfoViewModel), isInReviewMode = isInReviewMode, service)
-      }
-    }
+    populateOkView(isInReviewMode = isInReviewMode, service)
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      contactDetailsCreateForm().bindFromRequest.fold(
-        formWithErrors =>
-          createContactDetails().map { contactDetails =>
-            BadRequest(contactAddressView(formWithErrors, Countries.all, contactDetails, isInReviewMode, service))
-          },
-        formData => storeContactDetails(formData, isInReviewMode, service)
-      )
+      YesNoWrongAddress
+        .createForm()
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            createContactDetails().map { contactAddressDetails =>
+              BadRequest(contactAddressView(contactAddressDetails, isInReviewMode, formWithErrors, service))
+            },
+          formData => storeContactDetails(formData, isInReviewMode, service)
+        )
     }
 
   private def createContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] =
     cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
 
-  private def populateOkView(
-    contactDetailsModel: Option[ContactDetailsViewModel],
-    isInReviewMode: Boolean,
-    service: Service
-  )(implicit request: Request[AnyContent]): Future[Result] = {
-    val form = contactDetailsModel
-      .fold(contactDetailsCreateForm())(f => contactDetailsCreateForm().fill(f))
-
+  private def populateOkView(isInReviewMode: Boolean, service: Service)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] =
     createContactDetails() map (
-      contactDetails => Ok(contactAddressView(form, Countries.all, contactDetails, isInReviewMode, service))
+      contactDetails => Ok(contactAddressView(contactDetails, isInReviewMode, YesNoWrongAddress.createForm(), service))
     )
-  }
 
-  private def storeContactDetails(formData: ContactDetailsViewModel, inReviewMode: Boolean, service: Service)(implicit
+  private def storeContactDetails(formData: YesNoWrongAddress, inReviewMode: Boolean, service: Service)(implicit
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
-    subscriptionDetailsService
-      .cacheContactDetails(formData.toContactInfoDetailsModel, isInReviewMode = inReviewMode)
-      .map(
-        _ =>
-          if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
-          else
-            Redirect(
-              subscriptionFlowManager
-                .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
-                .nextPage
-                .url(service)
-            )
+    if (inReviewMode) Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
+    else
+      Future.successful(
+        Redirect(
+          subscriptionFlowManager
+            .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
+            .nextPage
+            .url(service)
+        )
       )
 
 }

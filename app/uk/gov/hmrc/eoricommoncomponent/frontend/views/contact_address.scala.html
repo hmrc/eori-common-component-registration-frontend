@@ -14,9 +14,8 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsViewModel}
-@import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, YesNoWrongAddress}
 @import views.html.helper._
 @import views._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -29,18 +28,18 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 
 @this(
-layout_di: layout,
-govukButton: GovukButton,
-inputText: helpers.inputText,
-errorSummary: helpers.errorSummary,
-countryField: helpers.countryField,
-goveukFieldSet: GovukFieldset,
-govukRadios : GovukRadios,
-govukHint: GovukHint
+    layout_di: layout,
+    inputRadioGroup: helpers.inputRadioGroup,
+    govukButton: GovukButton,
+    inputText: helpers.inputText,
+    errorSummary: helpers.errorSummary,
+    goveukFieldSet: GovukFieldset,
+    govukRadios : GovukRadios,
+    govukHint: GovukHint
 )
 
 
-@(contactForm: Form[ContactDetailsViewModel], countries: List[Country], contactAddress: AddressViewModel, isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
+@(contactAddress: AddressViewModel, isInReviewMode: Boolean, yesNoWrongAddress: Form[YesNoWrongAddress], service: Service)(implicit request: Request[_], messages: Messages)
 
 @fieldsetHint = {
 @govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("cds.subscription.contact-details.intro")), classes = "govuk-!-margin-bottom-3"))
@@ -59,118 +58,73 @@ messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
 }
 
 @countryCodeToLabel(code: String) = @{
-code match {
-case "GB" => messages("cds.country.GB")
-case c if isEUCountryCode(c) => labelForEUCountry(c)
-case nonEuCode => nonEuCode
-}
+    code match {
+    case "GB" => messages("cds.country.GB")
+    case c if isEUCountryCode(c) => labelForEUCountry(c)
+    case nonEuCode => nonEuCode
+    }
 }
 
 @fourLineBusinessAddress = @{
-List(contactAddress.street,
-contactAddress.city,
-contactAddress.postcode.getOrElse(""),
-countryCodeToLabel(contactAddress.countryCode)
-).filter(_.nonEmpty)
+    List(contactAddress.street,
+    contactAddress.city,
+    contactAddress.postcode.getOrElse(""),
+    countryCodeToLabel(contactAddress.countryCode)
+    ).filter(_.nonEmpty)
 }
 
-@yesNoAnswerElements = @{
-FieldElements("use-registered-address", contactForm("use-registered-address"), Html(""), args = Map.empty, messages)
+@hintHtml = {
+<div class="govuk-inset-text">@{Html(fourLineBusinessAddress.mkString("<br>"))}</div>
 }
 
 @address = @{Html(fourLineBusinessAddress.mkString("<br>")) }
 
-@addressHtml = {
-<div id="contact">
-    <p class="govuk-body">@messages("cds.subscription.contact-details.change-address.label")</p>
-    @inputText(
-    form = contactForm,
-    id = "street",
-    name = "street",
-    label = "cds.subscription.contact-details.street.label",
-    isPageHeading = false,
-    autocomplete = Some("address-line1"),
-    classes = Some("govuk-!-width-one-half")
-    )
-    @inputText(
-    form = contactForm,
-    id = "city",
-    name = "city",
-    label = "cds.subscription.contact-details.city.label",
-    isPageHeading = false,
-    autocomplete = Some("address-level2"),
-    classes = Some("govuk-!-width-one-half")
-    )
-    @inputText(
-    form = contactForm,
-    id = "postcode",
-    name = "postcode",
-    label = "cds.subscription.contact-details.postcode.label",
-    isPageHeading = false,
-    autocomplete = Some("postal-code"),
-    classes = Some("govuk-!-width-one-half")
-    )
-    @countryField(
-    form = contactForm,
-    field = "countryCode",
-    label = "cds.subscription.contact-details.countryCode-auto-complete.label",
-    countries = countries,
-    labelClasses = None
-    )
-</div>
+
+@radioGroupYes = @{
+messages("confirm-contact-address-details.yes")
 }
 
-@html = {
-
-@fieldsetHint
-
-@govukRadios(Radios(
-hint = Some(Hint(content = HtmlContent(address), classes = "govuk-inset-text")),
-idPrefix = Some(contactForm("use-registered-address").id),
-name = contactForm("use-registered-address").name,
-items = Seq(
-RadioItem(
-content = Text(messages("cds.yes")),
-id = Some(s"${contactForm("use-registered-address").id}-yes"),
-value = Some("true"),
-checked = contactForm("use-registered-address").value.fold(false)(_ == "true")
-),
-RadioItem(
-content = Text(messages("cds.no")),
-id = Some(s"${contactForm("use-registered-address").id}-no"),
-value = Some("false"),
-conditionalHtml = Some(addressHtml),
-checked = contactForm("use-registered-address").value.fold(false)(_ == "false")
-)
-)
-))
+@radioGroupNo = @{
+messages("confirm-contact-address-details.no")
 }
 
-@layout_di(messages("cds.subscription.contact-details.page.title")) {
+@radioGroupWrongAddress = @{
+ messages("confirm-contact-address-details.manual")
+}
+
+
+@displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
+    @inputRadioGroup(
+        yesNoWrongAddress(field),
+        options,
+        Map.empty,
+        Some(hintHtml),
+        None,
+        '_divClass -> "govuk-form-group", '_legend -> messages("ecc.subscription.contact-address.heading"), '_isLegendH1 -> true
+    )
+}
+
+@layout_di(messages("cds.subscription.contact-details.page.title"), form = Some(yesNoWrongAddress)) {
 
 
 <div>
-    @errorSummary(contactForm.errors, focusOverrides = Map("use-registered-address" -> "use-registered-address-yes"))
+    @errorSummary(yesNoWrongAddress.errors, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.submit(isInReviewMode, service), "contactDetailsForm") {
 
     @CSRF.formField
 
-    @goveukFieldSet(
-    Fieldset(
-    legend = Some(Legend(
-    content = Text(messages("cds.subscription.contact-details.heading")),
-    classes = "govuk-fieldset__legend--l",
-    isPageHeading = true
-    )),
-    html = html
-    )
-    )
+
+
+   @displayInputRadioGroup("yes-no-wrong-address",
+    Seq("yes" -> radioGroupYes,
+    "no" -> radioGroupNo,
+    "wrong-address" -> radioGroupWrongAddress))
 
     @govukButton(Button(
     content = Text(ViewHelper.continueButtonText(isInReviewMode))
     ))
-    }
+}
     @helpers.helpAndSupport()
 </div>
 }

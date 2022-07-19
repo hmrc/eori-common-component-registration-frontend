@@ -205,6 +205,11 @@ confirm-business-details.partnership.yes-wrong-address=No, I want to change the 
 confirm-business-details.individual.yes-wrong-address=No, I want to change my address
 yes-no-wrong-address.error=Select yes if this is your address
 
+confirm-contact-address-details.yes=Yes
+confirm-contact-address-details.no=No, I want you to use a different contact address
+confirm-contact-address-details.manual=I want to enter the contact address manually
+ecc.subscription.contact-address.heading=Do you want us to use this address to send you any information about your application?
+
 cds.enter-address-details.company.title-and-heading=Enter your full registered company address
 
 cds.existing.reg.eori-already-exists.title=You already have an EORI

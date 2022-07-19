@@ -205,6 +205,11 @@ confirm-business-details.partnership.yes-wrong-address=Na, hoffwn newid y cyfeir
 confirm-business-details.individual.yes-wrong-address= Na, hoffwn newid fy nghyfeiriad
 yes-no-wrong-address.error=Dewiswch ‘Iawn’ os mai dyma’ch cyfeiriad
 
+confirm-contact-address-details.yes=TRANSLATE Yes
+confirm-contact-address-details.no=TRANSLATE No, I want you to use a different contact address
+confirm-contact-address-details.manual=TRANSLATE I want to enter the contact address manually
+ecc.subscription.contact-address.heading=TRANSLATE Do you want us to use this address to send you any information about your application?
+
 cds.existing.reg.eori-already-exists.title=Mae gennych EORI eisoes
 cds.existing.reg.eori.number=Rhif EORI:
 
