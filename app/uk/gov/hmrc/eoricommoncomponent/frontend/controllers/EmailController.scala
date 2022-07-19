@@ -118,7 +118,7 @@ class EmailController @Inject() (
             case enrollments @ Some(_) =>
               // user already has EORI
               if (service.code.equalsIgnoreCase("eori-only")) {
-                var eoriNumber = enrollments.map(_.id)
+                val eoriNumber = enrollments.map(_.id)
                 Future.successful(
                   Ok(standaloneAlreadyhaveEoriView(eoriNumber, user.isIndividualUser, user.isAdminUser, service))
                 )
