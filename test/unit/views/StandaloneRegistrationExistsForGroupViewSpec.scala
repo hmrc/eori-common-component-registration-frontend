@@ -90,7 +90,6 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
         )
       }
 
-
       "display tell user about CDS access and link for accessing CDS services" in {
         val info = standardDoc.body.getElementById("cds-info1")
         info.text mustBe "If you want access to CDS, you need to ask the person who set up your Government Gateway user ID, or another person with administrator permissions in your Government Gateway team."

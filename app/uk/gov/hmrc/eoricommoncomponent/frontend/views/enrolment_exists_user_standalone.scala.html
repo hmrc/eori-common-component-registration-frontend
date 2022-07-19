@@ -21,8 +21,8 @@
 
 @(eoriNumber: Option[String], isAdminUser: Boolean)(implicit messages: Messages, request: Request[_])
 
-@link(url: String, text: String) = {
-    <a href="@url" target="_blank" class="govuk-link" rel="noopener noreferrer">@messages(text)</a>
+@link(url: String, target: String = "_self", text: String) = {
+    <a href="@url" target="@target" class="govuk-link" rel="noopener noreferrer">@messages(text)</a>
 }
 
 
@@ -50,10 +50,10 @@
         }
         <h2 id="cds-header" class="govuk-heading-m">@messages("ecc.eori-exists-user.cds.label")</h2>
 
-        <p class="govuk-body" id="cds-info1">@Html(messages("ecc.eori-exists-user.cds.info1", link(appConfig.cdsServices, "ecc.eori-exists-user.cds.link1")))</p>
+        <p class="govuk-body" id="cds-info1">@Html(messages("ecc.eori-exists-user.cds.info1", link(appConfig.cdsServices, "_self", "ecc.eori-exists-user.cds.link1")))</p>
 
         @if(isAdminUser){
-            <p class="govuk-body" id="cds-info2">@Html(messages("ecc.eori-exists-user.cds.info2", link(appConfig.addAccessToTeamMember, "ecc.eori-exists-user.cds.link2")))</p>
+            <p class="govuk-body" id="cds-info2">@Html(messages("ecc.eori-exists-user.cds.info2", link(appConfig.addAccessToTeamMember,"_blank", "ecc.eori-exists-user.cds.link2")))</p>
         }
 
         @helpers.helpAndSupport()
