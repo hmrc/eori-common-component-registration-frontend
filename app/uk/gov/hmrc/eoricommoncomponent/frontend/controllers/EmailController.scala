@@ -40,8 +40,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, Use
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_exists_group_standalone,
   enrolment_pending_against_group_id,
-  enrolment_pending_for_user,
-  standalone_already_have_eori
+  enrolment_pending_for_user
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -57,7 +56,6 @@ class EmailController @Inject() (
   save4LaterService: Save4LaterService,
   userGroupIdSubscriptionStatusCheckService: UserGroupIdSubscriptionStatusCheckService,
   groupEnrolment: GroupEnrolmentExtractor,
-  standaloneAlreadyhaveEoriView: standalone_already_have_eori,
   enrolmentPendingForUser: enrolment_pending_for_user,
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id
 )(implicit ec: ExecutionContext)

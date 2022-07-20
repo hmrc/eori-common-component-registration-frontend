@@ -20,21 +20,31 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouAlreadyHaveEoriController
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_already_have_eori
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{standalone_already_have_eori, you_already_have_eori}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
 class YouAlreadyHaveEoriControllerSpec extends ControllerSpec with AuthActionMock {
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockSessionCache  = mock[SessionCache]
 
   private val youAlreadyHaveEoriView = instanceOf[you_already_have_eori]
+  private val standAloneHaveEoriView = instanceOf[standalone_already_have_eori]
 
   private val controller =
-    new YouAlreadyHaveEoriController(mockAuthAction, youAlreadyHaveEoriView, mcc)
+    new YouAlreadyHaveEoriController(
+      mockAuthAction,
+      mockSessionCache,
+      youAlreadyHaveEoriView,
+      standAloneHaveEoriView,
+      mcc
+    )
 
   "YouAlreadyHaveEoriController" should {
     "display correct page" in {
