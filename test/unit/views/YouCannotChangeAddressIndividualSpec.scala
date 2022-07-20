@@ -40,7 +40,7 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
     "display correct info" in {
       indDoc.body
         .getElementById("contact-info")
-        .text mustBe "Your registered address is held at HMRC (opens in a new tab) . You will need to update your details there and return to complete your EORI application."
+        .text mustBe "Your registered address is held at HMRC (opens in new tab) . You will need to update your details there and return to complete your EORI application."
     }
 
   }
