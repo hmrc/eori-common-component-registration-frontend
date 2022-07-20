@@ -128,14 +128,13 @@ class EmailController @Inject() (
             Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
         else
           existingEoriForUserOrGroup(user, groupEnrolments) match {
-            case enrollments @ Some(_) =>
+            case Some(eori) =>
               // user already has EORI
-              if (service.code.equalsIgnoreCase("eori-only")) {
-                val eoriNumber = enrollments.map(_.id)
-                Future.successful(
-                  Ok(standaloneAlreadyhaveEoriView(eoriNumber, user.isIndividualUser, user.isAdminUser, service))
+              if (service.code.equalsIgnoreCase("eori-only"))
+                sessionCache.saveEori(Eori(eori.id)).map(
+                  _ => Redirect(YouAlreadyHaveEoriController.displayStandAlone(service))
                 )
-              } else
+              else
                 Future.successful(Redirect(YouAlreadyHaveEoriController.display(service)))
             case None =>
               userGroupIdSubscriptionStatusCheckService

@@ -26,21 +26,21 @@
 
 @this(layout_di: layout, appConfig: AppConfig, govukButton: GovukButton)
 
-@(eoriNumber: Option[String], isIndividualUser : Boolean, isAdminUser: Boolean, service: Service)(implicit messages: Messages, request: Request[_])
+@(eoriNumber: Option[String], isIndividual : Boolean, isAdminUser: Boolean, service: Service)(implicit messages: Messages, request: Request[_])
 
 @link(url: String, text: String) = {
 <a href="@url" target="_self" class="govuk-link" rel="noopener noreferrer">@messages(text)</a>
 }
 
 @titleLabel = @{
-if(isIndividualUser)
+if(isIndividual)
     messages("cds.registration.you-already-have-eori.individual.title")
 else
     messages("cds.registration.you-already-have-eori.group.title")
 }
 
 @headerLabel = @{
-    if(isIndividualUser)
+    if(isIndividual)
         messages("cds.registration.you-already-have-eori.individual.heading")
     else
         messages("cds.registration.you-already-have-eori.group.heading")
