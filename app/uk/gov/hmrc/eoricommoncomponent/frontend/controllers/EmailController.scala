@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.Logger
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{
   AuthAction,
   EnrolmentExtractor,
@@ -56,6 +57,7 @@ class EmailController @Inject() (
   save4LaterService: Save4LaterService,
   userGroupIdSubscriptionStatusCheckService: UserGroupIdSubscriptionStatusCheckService,
   groupEnrolment: GroupEnrolmentExtractor,
+  appConfig: AppConfig,
   enrolmentPendingForUser: enrolment_pending_for_user,
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id
 )(implicit ec: ExecutionContext)
@@ -111,7 +113,7 @@ class EmailController @Inject() (
       groupEnrolments =>
         if (groupEnrolments.exists(_.service == service.enrolmentKey))
           // user has specified service
-          if (service.code.equalsIgnoreCase("eori-only"))
+          if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
             existingEoriForUserOrGroup(user, groupEnrolments) match {
               case Some(eori) =>
                 sessionCache.saveEori(Eori(eori.id)).map(

@@ -21,8 +21,9 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{Assistant, AuthConnector, Enrolment}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Eori
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, GroupId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_exists_group_standalone,
@@ -46,12 +47,14 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
   private val enrolmentExistsGroupStandaloneView = instanceOf[enrolment_exists_group_standalone]
   private val mockAuthConnector                  = mock[AuthConnector]
   private val mockSessionCache                   = mock[SessionCache]
+  private val mockAppConfig                      = mock[AppConfig]
   private val mockAuthAction                     = authAction(mockAuthConnector)
 
   val controller =
     new EnrolmentAlreadyExistsController(
       mockAuthAction,
       mockSessionCache,
+      mockAppConfig,
       registrationExistsView,
       registrationExistsGroupView,
       enrolmentExistsStandaloneView,
@@ -85,6 +88,20 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
       page.getElementsText(paragraphXpath) should include(
         "Our records show that this Government Gateway user ID has already been used to subscribe to Advance Tariff Rulings"
       )
+
+    }
+
+    "redirect to enrolment already exists standalone if its standalone journey" in {
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
+      val result =
+        await(
+          controller.enrolmentAlreadyExists(eoriOnlyService).apply(
+            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
+          )
+        )
+      status(result) shouldBe SEE_OTHER
+      await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists")
 
     }
 

@@ -59,9 +59,8 @@ class UpdateVerifiedEmailService @Inject() (
       case Right(res)
           if res.updateVerifiedEmailResponse.responseCommon.returnParameters
             .exists(msp => msp.head.paramName == MessagingServiceParam.formBundleIdParamName) =>
-        // $COVERAGE-OFF$Loggers
         logger.debug("[UpdateVerifiedEmailService][updateVerifiedEmail] - successfully updated verified email")
-        // $COVERAGE-ON
+
         customsDataStoreConnector.updateCustomsDataStore(customsDataStoreRequest)
         true
       case Right(res) =>
