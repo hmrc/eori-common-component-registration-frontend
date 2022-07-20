@@ -51,6 +51,10 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
         adminDoc.body().getElementById("eori-number").text() mustBe "EORI number: testEORI"
       }
 
+      "not display EORI Number if Eori number is None" in {
+        adminNoEoriDoc.body().getElementById("eori-number") mustBe null
+      }
+
       "display sub heading for CDS" in {
         adminDoc.body().getElementsByTag("h2").text() must startWith(
           "Start using the Customs Declaration Service (CDS)"
@@ -84,6 +88,10 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
         standardDoc.body().getElementById("eori-number").text() mustBe "EORI number: testEORI"
       }
 
+      "not display EORI Number if EORI number is None" in {
+        standardNoEoriDoc.body().getElementById("eori-number") mustBe null
+      }
+
       "display sub heading for CDS" in {
         standardDoc.body().getElementsByTag("h2").text() must startWith(
           "Start using the Customs Declaration Service (CDS)"
@@ -106,7 +114,8 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
   }
 
-  private lazy val adminDoc: Document    = Jsoup.parse(contentAsString(view(Some("testEORI"), true)))
-  private lazy val standardDoc: Document = Jsoup.parse(contentAsString(view(Some("testEORI"), false)))
-
+  private lazy val adminDoc: Document          = Jsoup.parse(contentAsString(view(Some("testEORI"), true)))
+  private lazy val standardDoc: Document       = Jsoup.parse(contentAsString(view(Some("testEORI"), false)))
+  private lazy val adminNoEoriDoc: Document    = Jsoup.parse(contentAsString(view(None, true)))
+  private lazy val standardNoEoriDoc: Document = Jsoup.parse(contentAsString(view(None, false)))
 }

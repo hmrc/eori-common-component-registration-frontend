@@ -77,8 +77,7 @@ class EmailControllerSpec
     userGroupIdSubscriptionStatusCheckService,
     groupEnrolmentExtractor,
     enrolmentPendingForUserView,
-    enrolmentPendingAgainstGroupIdView,
-    enrolmentExistsGroupStandaloneView
+    enrolmentPendingAgainstGroupIdView
   )
 
   private val emailStatus = EmailStatus(Some("test@example.com"))
@@ -184,14 +183,23 @@ class EmailControllerSpec
       }
     }
 
-    "redirect when group enrolled to service in standalone journey" in {
+    "redirect and display when group enrolled to service and Eori is retreived in standalone journey " in {
       when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
         .thenReturn(Future.successful(List(cdsGroupEnrolment)))
-
+      when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(true))
       showStandaloneFormRegister() { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("Your business or organisation already has an EORI number")
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists-for-group")
+      }
+    }
+
+    "redirect and display when group enrolled to service even if Eori couldn't be retrieved in standalone journey " in {
+      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
+        .thenReturn(Future.successful(List(cdsGroupEnrolment.copy(identifiers = List()))))
+      showStandaloneFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists-for-group")
       }
     }
 
