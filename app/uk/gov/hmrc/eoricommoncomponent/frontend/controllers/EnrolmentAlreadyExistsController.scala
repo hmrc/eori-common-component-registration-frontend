@@ -17,11 +17,14 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.i18n.I18nSupport
+import play.api.mvc.Results.Redirect
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_exists_group_standalone,
   enrolment_exists_user_standalone,
@@ -36,6 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EnrolmentAlreadyExistsController @Inject() (
   authAction: AuthAction,
   sessionCache: SessionCache,
+  appConfig: AppConfig,
   registrationExistsView: registration_exists,
   registrationExistsForGroupView: registration_exists_group,
   enrolmentExistsStandaloneView: enrolment_exists_user_standalone,
@@ -48,7 +52,10 @@ class EnrolmentAlreadyExistsController @Inject() (
   def enrolmentAlreadyExists(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(registrationExistsView(service)))
+        if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
+          Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service)))
+        else
+          Future.successful(Ok(registrationExistsView(service)))
     }
 
   // Note: permitted for user with service enrolment

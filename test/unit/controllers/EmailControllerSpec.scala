@@ -24,6 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmailController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.GroupEnrolmentExtractor
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -54,6 +55,7 @@ class EmailControllerSpec
 
   private val mockAuthConnector                  = mock[AuthConnector]
   private val mockAuthAction                     = authAction(mockAuthConnector)
+  private val mockAppConfig                      = mock[AppConfig]
   private val mockEmailVerificationService       = mock[EmailVerificationService]
   private val mockSave4LaterService              = mock[Save4LaterService]
   private val mockSessionCache                   = mock[SessionCache]
@@ -76,6 +78,7 @@ class EmailControllerSpec
     mockSave4LaterService,
     userGroupIdSubscriptionStatusCheckService,
     groupEnrolmentExtractor,
+    mockAppConfig,
     enrolmentPendingForUserView,
     enrolmentPendingAgainstGroupIdView
   )
@@ -188,6 +191,7 @@ class EmailControllerSpec
         .thenReturn(Future.successful(List(cdsGroupEnrolment)))
       when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
         .thenReturn(Future.successful(true))
+      when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
       showStandaloneFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
         await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists-for-group")
@@ -197,6 +201,7 @@ class EmailControllerSpec
     "redirect and display when group enrolled to service even if Eori couldn't be retrieved in standalone journey " in {
       when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
         .thenReturn(Future.successful(List(cdsGroupEnrolment.copy(identifiers = List()))))
+      when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
       showStandaloneFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
         await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists-for-group")
