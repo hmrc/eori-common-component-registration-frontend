@@ -389,4 +389,27 @@ ecc.address-invalid-individual.link = HMRC (opens in new tab)
 
 ecc.address-invalid-company.title = Please contact Companies House
 ecc.address-invalid-company.info = The registered address we hold for your organisation seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
-ecc.address-invalid-company.link = Companies House (opens in new tab)
+ecc.address-invalid-company.link = Companies House (opens in a new tab)
+
+ecc.eori-exists-standard-user.heading = You already have an EORI number
+ecc.eori-exists-standard-user.title = You already have an EORI number
+
+ecc.eori-exists-user.heading = Your business or organisation already has an EORI number
+ecc.eori-exists-user.title = Your business or organisation already has an EORI number
+ecc.eori-exists-user.eori-number.label = EORI number:
+ecc.eori-exists-user.cds.label = Customs Declaration Service
+ecc.eori-exists-user.cds.info1 = You can now use any of the online customs services for the {0}.
+ecc.eori-exists-user.cds.info2 = You can also {0}.
+ecc.eori-exists-user.cds.link1 = Customs Declaration Service (CDS)
+ecc.eori-exists-user.cds.link2 = add team members and give them access to CDS (opens in new tab)
+
+
+ecc.eori-exists-group.heading = Your business or organisation already has an EORI number
+ecc.eori-exists-group.title = Your business or organisation already has an EORI number
+ecc.eori-exists-group.eori-number.label = EORI number:
+ecc.eori-exists-group.cds.start.label = Start using the Customs Declaration Service (CDS)
+ecc.eori-exists-group.admin.cds.para1 = If you want access to CDS, you need to ask the person who set up your Government Gateway user ID, or another person with administrator permissions in your Government Gateway team.
+ecc.eori-exists-group.admin.cds.para2 = They will need to sign in and follow steps 6,7,8 and 9 to {0}.
+ecc.eori-exists-group.cds.para1 = If you want access to CDS, you need to go to manage account, and follow steps 6, 7, 8 and 9 to {0}.
+ecc.eori-exists-group.cds.admin.link = give a team member access to a tax duty or scheme (opens in new tab)
+ecc.eori-exists-group.cds.link = give yourself access to a tax, duty or scheme (opens in new tab)

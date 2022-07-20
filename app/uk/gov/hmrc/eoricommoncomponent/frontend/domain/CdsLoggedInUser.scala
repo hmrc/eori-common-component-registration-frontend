@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
+import uk.gov.hmrc.auth.core.{AffinityGroup, CredentialRole, Enrolments, User}
 
 sealed trait LoggedInUser {
   def affinityGroup: Option[AffinityGroup]
@@ -36,5 +36,13 @@ case class LoggedInUserWithEnrolments(
   internalId: Option[String],
   enrolments: Enrolments,
   email: Option[String],
-  groupId: Option[String]
-) extends LoggedInUser
+  groupId: Option[String],
+  userCredentialRole: Option[CredentialRole]
+) extends LoggedInUser {
+
+  def isAdminUser: Boolean = (userCredentialRole, affinityGroup) match {
+    case (Some(User), Some(AffinityGroup.Organisation)) => true
+    case _                                              => false
+  }
+
+}

@@ -60,6 +60,8 @@ class AppConfig @Inject() (
   val companyHouseRegister: String                       = config.get[String]("external-url.company-house-register")
   val hmrcChangeDetails: String                          = config.get[String]("external-url.hmrc-change-details")
   val vatUKDetails: String                               = config.get[String]("external-url.vat-uk-details")
+  val cdsServices: String                                = config.get[String]("external-url.cds-services")
+  val addAccessToTeamMember: String                      = config.get[String]("external-url.adding-access-to-team-member")
   def callCharges()(implicit messages: Messages): String = config.get[String](s"external-url.call-charges-$languageKey")
 
   val blockedRoutesRegex: Seq[Regex] =
@@ -115,6 +117,8 @@ class AppConfig @Inject() (
   val taxEnrolmentsBaseUrl: String = servicesConfig.baseUrl("tax-enrolments")
 
   val taxEnrolmentsServiceContext: String = config.get[String]("microservice.services.tax-enrolments.context")
+
+  val standaloneServiceCode: String = config.get[String]("application.standalone.service.code")
 
   def getServiceUrl(proxyServiceName: String): String = {
     val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")

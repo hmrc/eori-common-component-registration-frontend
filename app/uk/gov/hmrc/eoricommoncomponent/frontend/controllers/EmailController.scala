@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{
   AuthAction,
   EnrolmentExtractor,
@@ -32,18 +32,20 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   EnrolmentAlreadyExistsController,
   YouAlreadyHaveEoriController
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId, LoggedInUserWithEnrolments}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, GroupId, InternalId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_exists_group_standalone,
   enrolment_pending_against_group_id,
   enrolment_pending_for_user
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -55,6 +57,7 @@ class EmailController @Inject() (
   save4LaterService: Save4LaterService,
   userGroupIdSubscriptionStatusCheckService: UserGroupIdSubscriptionStatusCheckService,
   groupEnrolment: GroupEnrolmentExtractor,
+  appConfig: AppConfig,
   enrolmentPendingForUser: enrolment_pending_for_user,
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id
 )(implicit ec: ExecutionContext)
@@ -110,7 +113,19 @@ class EmailController @Inject() (
       groupEnrolments =>
         if (groupEnrolments.exists(_.service == service.enrolmentKey))
           // user has specified service
-          Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
+          if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
+            existingEoriForUserOrGroup(user, groupEnrolments) match {
+              case Some(eori) =>
+                sessionCache.saveEori(Eori(eori.id)).map(
+                  _ => Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
+                )
+              case None =>
+                Future.successful(
+                  Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
+                )
+            }
+          else
+            Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
         else
           existingEoriForUserOrGroup(user, groupEnrolments) match {
             case Some(_) =>

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
+import uk.gov.hmrc.auth.core.Enrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
@@ -61,14 +62,17 @@ trait EnrolmentExtractor {
   def existingEoriForUserOrGroup(
     loggedInUser: LoggedInUserWithEnrolments,
     groupEnrolments: List[EnrolmentResponse]
-  ): Option[ExistingEori] = {
-    val userEnrolmentWithEori = loggedInUser.enrolments.enrolments.find(_.identifiers.exists(_.key == EoriIdentifier))
-    val existingEoriForUser = userEnrolmentWithEori.map(
+  ): Option[ExistingEori] =
+    existingEoriForUser(loggedInUser.enrolments.enrolments).orElse(existingEoriForGroup(groupEnrolments))
+
+  def existingEoriForUser(loggedInUserEnrolments: Set[Enrolment]): Option[ExistingEori] = {
+    val userEnrolmentWithEori = loggedInUserEnrolments.find(_.identifiers.exists(_.key == EoriIdentifier))
+    userEnrolmentWithEori.map(
       enrolment => ExistingEori(enrolment.getIdentifier(EoriIdentifier).map(_.value), enrolment.key)
     )
-    existingEoriForUser.orElse(
-      groupEnrolments.find(_.eori.exists(_.nonEmpty)).map(enrolment => ExistingEori(enrolment.eori, enrolment.service))
-    )
   }
+
+  def existingEoriForGroup(groupEnrolments: List[EnrolmentResponse]): Option[ExistingEori] =
+    groupEnrolments.find(_.eori.exists(_.nonEmpty)).map(enrolment => ExistingEori(enrolment.eori, enrolment.service))
 
 }
