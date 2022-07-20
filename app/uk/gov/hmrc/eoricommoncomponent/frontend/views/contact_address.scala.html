@@ -39,7 +39,7 @@
 )
 
 
-@(contactAddress: AddressViewModel, isInReviewMode: Boolean, yesNoWrongAddress: Form[YesNoWrongAddress], service: Service)(implicit request: Request[_], messages: Messages)
+@(contactAddress: AddressViewModel, isInReviewMode: Boolean, yesNoAddress: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
 
 @fieldsetHint = {
 @govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("cds.subscription.contact-details.intro")), classes = "govuk-!-margin-bottom-3"))
@@ -88,27 +88,23 @@ messages("confirm-contact-address-details.yes")
 messages("confirm-contact-address-details.no")
 }
 
-@radioGroupWrongAddress = @{
- messages("confirm-contact-address-details.manual")
-}
-
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
     @inputRadioGroup(
-        yesNoWrongAddress(field),
+        yesNoAddress(field),
         options,
         Map.empty,
         Some(hintHtml),
         None,
-        '_divClass -> "govuk-form-group", '_legend -> messages("ecc.subscription.contact-address.heading"), '_isLegendH1 -> true
+        '_divClass -> "createForm-group govuk-form-group", '_legend -> messages("ecc.subscription.contact-address.heading"), '_isLegendH1 -> true
     )
 }
 
-@layout_di(messages("cds.subscription.contact-details.page.title"), form = Some(yesNoWrongAddress)) {
+@layout_di(messages("cds.subscription.contact-details.page.title"), form = Some(yesNoAddress)) {
 
 
 <div>
-    @errorSummary(yesNoWrongAddress.errors, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
+    @errorSummary(yesNoAddress.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.submit(isInReviewMode, service), "contactDetailsForm") {
 
@@ -116,10 +112,10 @@ messages("confirm-contact-address-details.no")
 
 
 
-   @displayInputRadioGroup("yes-no-wrong-address",
+   @displayInputRadioGroup("yes-no-answer",
     Seq("yes" -> radioGroupYes,
-    "no" -> radioGroupNo,
-    "wrong-address" -> radioGroupWrongAddress))
+        "no" -> radioGroupNo
+    ))
 
     @govukButton(Button(
     content = Text(ViewHelper.continueButtonText(isInReviewMode))

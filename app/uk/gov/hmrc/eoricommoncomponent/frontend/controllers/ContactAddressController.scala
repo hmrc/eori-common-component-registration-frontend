@@ -21,12 +21,9 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetailsSubscriptionFlowPageGetEori
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  ContactDetailsViewModel,
-  YesNoWrongAddress
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -64,15 +61,14 @@ class ContactAddressController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      YesNoWrongAddress
-        .createForm()
+      contactAddressDetailsYesNoAnswerForm
         .bindFromRequest()
         .fold(
           formWithErrors =>
             createContactDetails().map { contactAddressDetails =>
               BadRequest(contactAddressView(contactAddressDetails, isInReviewMode, formWithErrors, service))
             },
-          formData => storeContactDetails(formData, isInReviewMode, service)
+          yesNoAnswer => locationByAnswer(isInReviewMode, yesNoAnswer, service)
         )
     }
 
@@ -83,15 +79,14 @@ class ContactAddressController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] =
     createContactDetails() map (
-      contactDetails => Ok(contactAddressView(contactDetails, isInReviewMode, YesNoWrongAddress.createForm(), service))
+      contactDetails =>
+        Ok(contactAddressView(contactDetails, isInReviewMode, contactAddressDetailsYesNoAnswerForm, service))
     )
 
-  private def storeContactDetails(formData: YesNoWrongAddress, inReviewMode: Boolean, service: Service)(implicit
-    hc: HeaderCarrier,
+  private def locationByAnswer(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service)(implicit
     request: Request[AnyContent]
-  ): Future[Result] =
-    if (inReviewMode) Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
-    else
+  ): Future[Result] = yesNoAnswer match {
+    case theAnswer if theAnswer.isYes =>
       Future.successful(
         Redirect(
           subscriptionFlowManager
@@ -100,5 +95,7 @@ class ContactAddressController @Inject() (
             .url(service)
         )
       )
+    case _ => Future(Redirect(ContactAddressController.createForm(service)))
+  }
 
 }
