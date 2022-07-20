@@ -40,7 +40,7 @@ class YouCannotChangeAddressOrganisationSpec extends ViewSpec {
     "display correct info" in {
       orgDoc.body
         .getElementById("contact-info")
-        .text mustBe "Your company's registered address is held at Companies House (opens in a new tab) . You will need to update your details there and return to complete your EORI application."
+        .text mustBe "Your company's registered address is held at Companies House (opens in new tab) . You will need to update your details there and return to complete your EORI application."
     }
 
   }

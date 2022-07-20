@@ -40,7 +40,7 @@ class AddressInvalidOrganisationSpec extends ViewSpec {
     "display correct info" in {
       indDoc.body
         .getElementById("contact-info")
-        .text mustBe "The registered address we hold for your organisation seems to be incorrect. You will need to contact Companies House (opens in a new tab) to update your details and return to complete your EORI application."
+        .text mustBe "The registered address we hold for your organisation seems to be incorrect. You will need to contact Companies House (opens in new tab) to update your details and return to complete your EORI application."
     }
 
   }

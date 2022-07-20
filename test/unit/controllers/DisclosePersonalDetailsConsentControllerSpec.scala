@@ -89,7 +89,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         ThirdCountryIndividualSubscriptionFlow,
         "Do you want to include your name and address on the EORI checker?",
-        "HMRC will add your EORI number to a public checker kept by the European Commission. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.",
+        "HMRC will add your EORI number to a public checker kept by the European Commission (opens in new tab). You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.",
         "Yes - I want the name and address on the EORI checker",
         "No - Just show my EORI number",
         false,
@@ -100,7 +100,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         ThirdCountryOrganisationSubscriptionFlow,
         "Do you want to include the organisation name and address on the EORI checker?",
-        "HMRC will add your GB EORI number to a public checker. You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
+        "HMRC will add your GB EORI number to a public checker (opens in new tab). You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
         "Yes - I want the name and address on the EORI checker",
         "No - Just show my EORI number",
         false,
@@ -111,7 +111,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         PartnershipSubscriptionFlow,
         "Do you want to include the partnership name and address on the EORI checker?",
-        "HMRC will add your GB EORI number to a public checker. You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
+        "HMRC will add your GB EORI number to a public checker (opens in new tab). You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
         "Yes - I want the name and address on the EORI checker",
         "No - Just show my EORI number",
         true,
@@ -122,7 +122,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         OrganisationSubscriptionFlow,
         "Do you want to include the charity name and address on the EORI checker?",
-        "HMRC will add your GB EORI number to a public checker. You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
+        "HMRC will add your GB EORI number to a public checker (opens in new tab). You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
         "Yes - I want the name and address on the EORI checker",
         "No - Just show my EORI number",
         true,
@@ -133,7 +133,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         SoleTraderSubscriptionFlow, // Flow cannot be duplicated in this table and we do not have enough flows, using this to progress with tests
         "Do you want to include the company name and address on the EORI checker?",
-        "HMRC will add your GB EORI number to a public checker. You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
+        "HMRC will add your GB EORI number to a public checker (opens in new tab). You can also include you or your organisation's name and address. This will help customs and freight agents identify you and process your shipments.",
         "Yes - I want the name and address on the EORI checker",
         "No - Just show my EORI number",
         true,

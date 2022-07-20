@@ -52,7 +52,10 @@ trait AccessController {
     if (!isPermittedUserType)
       Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else if (hasEnrolment)
-      Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service)))
+      if (service.code.equalsIgnoreCase("eori-only"))
+        Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service)))
+      else
+        Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service)))
     else if (!isPermittedCredentialRole)
       Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else
