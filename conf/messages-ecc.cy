@@ -75,17 +75,17 @@ ecc.subscription.information.para1=Er mwyn eich tanysgrifio i’r gwasanaeth {0}
 
 ecc.subscription.information.para2.heading=Rhif EORI GB
 ecc.subscription.information.para2=Bydd angen rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (rhif EORI) GB arnoch.
-ecc.subscription.information.para2.warning=!RhybuddMae’n rhaid i’r rhif EORI GB fod yr un sy’n gysylltiedig â’r Dynodydd Defnyddiwr (ID) Porth y Llywodraeth a ddefnyddiwyd gennych i fewngofnodi. <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Gwiriwch y rhif EORI GB (yn agor ffenestr neu dab newydd)</a>.
+ecc.subscription.information.para2.warning=!RhybuddMae’n rhaid i’r rhif EORI GB fod yr un sy’n gysylltiedig â’r Dynodydd Defnyddiwr (ID) Porth y Llywodraeth a ddefnyddiwyd gennych i fewngofnodi. <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Gwiriwch y rhif EORI GB (yn agor tab newydd)</a>.
 ecc.subscription.information.para2.text=Os nad oes gennych rif EORI, byddwch yn cael un gyda’ch tanysgrifiad i’r gwasanaeth {0}. Bydd angen i chi ddarparu’r canlynol:
 ecc.subscription.information.para2.list.first=manylion TAW os ydych wedi’ch cofrestru yn y DU
 ecc.subscription.information.para2.list.bullet.first=rhif TAW
 ecc.subscription.information.para2.list.bullet.second=cod post y cyfeiriad a gofrestrwyd ar gyfer TAW
 ecc.subscription.information.para2.list.bullet.third=dyddiad y daw TAW i rym
-ecc.subscription.information.para2.list.second=Cod Dosbarthiad Diwydiannol Safonol (SIC). <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link">Dewch o hyd i’ch cod SIC (yn agor ffenestr neu dab newydd)</a>.
+ecc.subscription.information.para2.list.second=Cod Dosbarthiad Diwydiannol Safonol (SIC). <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link">Dewch o hyd i’ch cod SIC (yn agor tab newydd)</a>.
 
 ecc.subscription.information.section.organisation.subheading=Manylion y cwmni neu sefydliad arall
 ecc.subscription.information.section.organisation.list.heading=Os ydych yn gwmni cyfyngedig, partneriaeth neu elusen, bydd angen y canlynol arnoch:
-ecc.subscription.information.section.organisation.list.first=Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth os ydych yn talu treth gorfforaeth yn y DU. Gallwch ddod o hyd i <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">UTR coll (yn agor ffenestr neu dab newydd)</a>.
+ecc.subscription.information.section.organisation.list.first=Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth os ydych yn talu treth gorfforaeth yn y DU. Gallwch ddod o hyd i <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">UTR coll (yn agor tab newydd)</a>.
 ecc.subscription.information.section.organisation.list.second=Enw’r cwmni cofrestredig
 ecc.subscription.information.section.organisation.list.third=Cyfeiriad cofrestredig y cwmni
 ecc.subscription.information.section.organisation.list.fourth=Dyddiad sefydlu
@@ -93,7 +93,7 @@ ecc.subscription.information.section.organisation.list.fourth=Dyddiad sefydlu
 ecc.subscription.information.section.individual.subheading=Manylion yr unig fasnachwr neu unigolyn
 ecc.subscription.information.section.individual.para=Os ydych wedi gweithio yn y DU neu wedi cofrestru ar gyfer Hunanasesiad, bydd angen un o’r canlynol arnoch:
 ecc.subscription.information.section.individual.nino=Rhif Yswiriant Gwladol
-ecc.subscription.information.section.individual.utr=Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad. Gallwch ddod o hyd i <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">UTR coll (yn agor ffenestr neu dab newydd)</a>.
+ecc.subscription.information.section.individual.utr=Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad. Gallwch ddod o hyd i <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">UTR coll (yn agor tab newydd)</a>.
 
 ecc.subscription.information.only.once=Dim ond unwaith y mae angen gwneud hyn.
 ecc.subscription.information.email.confirm=Byddwn yn prosesu’ch cais ac yn anfon e-bost atoch gyda’r canlyniad cyn pen 2 awr.
@@ -337,9 +337,9 @@ ecc.subscription.outcomes.guidance.xi.eori.warning.info=Peidiwch â thicio’r b
 ecc.subscription.outcomes.guidance.xi.eori.href=<a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" class="govuk-link" target="_blank" rel="noopener noreferrer">Gwnewch gais am rif EORI XI.</a>
 
 ecc.subscription.organisation-disclose-personal-details-consent.title = A ydych am gynnwys enw a chyfeiriad y cwmni ar y gwiriwr EORI?
-ecc.subscription.organisation-disclose-personal-details-consent.hint = Bydd CThEM yn ychwanegu’ch rhif EORI GB at <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">wiriwr cyhoeddus</a>. Gallwch hefyd gynnwys eich enw a’ch cyfeiriad chi, neu’ch sefydliad. Bydd hyn yn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu eich llwythi.
+ecc.subscription.organisation-disclose-personal-details-consent.hint = Bydd CThEM yn ychwanegu’ch rhif EORI GB at <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">wiriwr cyhoeddus (yn agor tab newydd)</a>. Gallwch hefyd gynnwys eich enw a’ch cyfeiriad chi, neu’ch sefydliad. Bydd hyn yn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu eich llwythi.
 ecc.subscription.organisation-disclose-personal-details-consent.individual.title = A ydych am gynnwys eich enw a chyfeiriad ar y gwiriwr EORI?
-ecc.subscription.organisation-disclose-personal-details-consent.individual.hint =  Bydd CThEM yn ychwanegu eich rhif EORI at <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd</a>. Gallwch hefyd gytuno i gynnwys eich enw a’ch cyfeiriad. Gall hyn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu’ch llwythi.
+ecc.subscription.organisation-disclose-personal-details-consent.individual.hint =  Bydd CThEM yn ychwanegu eich rhif EORI at <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd (yn agor tab newydd)</a>. Gallwch hefyd gytuno i gynnwys eich enw a’ch cyfeiriad. Gall hyn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu’ch llwythi.
 ecc.subscription.organisation-disclose-personal-details-consent.partnership.title = A ydych am gynnwys enw a chyfeiriad y bartneriaeth ar y gwiriwr EORI?
 ecc.subscription.organisation-disclose-personal-details-consent.charity.title = A ydych am gynnwys enw a chyfeiriad yr elusen ar y gwiriwr EORI?
 ecc.subscription.organisation-disclose-personal-details-consent.organisation.title = A ydych am gynnwys enw a chyfeiriad y sefydliad ar y gwiriwr EORI?
@@ -353,19 +353,19 @@ ecc.start-page.gbeori.para1.title = TRANSLATE If you are UK VAT registered we wi
 ecc.start-page.gbeori.para1.bullet1 = Rhif TAW
 ecc.start-page.gbeori.para1.bullet2 = cod post y cyfeiriad a gofrestrwyd ar gyfer TAW
 ecc.start-page.gbeori.para1.bullet3 = dyddiad y daw TAW i rym
-ecc.start-page.gbeori.para2 = TRANSLATE <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your VAT details (opens in new tab/window)</a>
+ecc.start-page.gbeori.para2 = TRANSLATE <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your VAT details (opens in new tab)</a>
 ecc.start-page.gbeori.para3.title = TRANSLATE We also ask for:
-ecc.start-page.gbeori.para3.bullet = Cod Dosbarthiad Diwydiannol Safonol (SIC). <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i’ch cod SIC (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.gbeori.para3.bullet = Cod Dosbarthiad Diwydiannol Safonol (SIC). <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i’ch cod SIC (yn agor tab newydd)</a>.
 ecc.start-page.company.title = Manylion y cwmni neu sefydliad arall
 ecc.start-page.company = TRANSLATE If you are a limited company, partnership or charity, we will also ask for:
-ecc.start-page.company.bullet1 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth os ydych yn talu treth gorfforaeth yn y DU. Gallwch ddod o hyd i <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">UTR coll (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.company.bullet1 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth os ydych yn talu treth gorfforaeth yn y DU. Gallwch ddod o hyd i <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">UTR coll (yn agor tab newydd)</a>.
 ecc.start-page.company.bullet2 = Enw’r cwmni cofrestredig
 ecc.start-page.company.bullet3 = Cyfeiriad cofrestredig y cwmni
 ecc.start-page.company.bullet4 = Dyddiad sefydlu
 ecc.start-page.sole-trader.title = Manylion yr unig fasnachwr neu unigolyn
 ecc.start-page.sole-trader = TRANSLATE If you have worked in the UK or registered for self-assessment, we will ask for one of the following:
 ecc.start-page.sole-trader.bullet1 = Rhif Yswiriant Gwladol
-ecc.start-page.sole-trader.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad. Gallwch ddod o hyd i <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">UTR coll (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.sole-trader.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad. Gallwch ddod o hyd i <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">UTR coll (yn agor tab newydd)</a>.
 ecc.start-page.start-now = Dechrau nawr
 ecc.start-page.help.eori.contact = Cysylltu â’r tîm EORI ar-lein.
 
@@ -375,19 +375,19 @@ date.fields.year = Blwyddyn
 
 ecc.cannot-change-address-company.title = TRANSLATE Please contact Companies House
 ecc.cannot-change-address-company.info = TRANSLATE Your company''s registered address is held at {0}. You will need to update your details there and return to complete your EORI application.
-ecc.cannot-change-address-company.link = TRANSLATE Companies House (opens in a new tab)
+ecc.cannot-change-address-company.link = TRANSLATE Companies House (opens in new tab)
 
 ecc.cannot-change-address-individual.title = TRANSLATE Please contact HMRC
 ecc.cannot-change-address-individual.info = TRANSLATE Your registered address is held at {0}. You will need to update your details there and return to complete your EORI application.
-ecc.cannot-change-address-individual.link = TRANSLATE HMRC (opens in a new tab)
+ecc.cannot-change-address-individual.link = TRANSLATE HMRC (opens in new tab)
 
 ecc.address-invalid-individual.title = TRANSLATE Please contact HMRC
 ecc.address-invalid-individual.info = TRANSLATE The registered address we hold for you seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
-ecc.address-invalid-individual.link = TRANSLATE HMRC (opens in a new tab)
+ecc.address-invalid-individual.link = TRANSLATE HMRC (opens in new tab)
 
 ecc.address-invalid-company.title = TRANSLATE Please contact Companies House
 ecc.address-invalid-company.info = TRANSLATE The registered address we hold for your organisation seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
-ecc.address-invalid-company.link = TRANSLATE Companies House (opens in a new tab)
+ecc.address-invalid-company.link = TRANSLATE Companies House (opens in new tab)
 
 ecc.eori-exists-standard-user.heading = TRANSLATE You already have an EORI number
 ecc.eori-exists-standard-user.title = TRANSLATE You already have an EORI number

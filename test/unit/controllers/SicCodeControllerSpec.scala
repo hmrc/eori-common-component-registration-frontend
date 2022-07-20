@@ -123,7 +123,7 @@ class SicCodeControllerSpec
         val page = CdsPage(contentAsString(result))
         page.getElementText(
           sicDescriptionLabelXpath
-        ) shouldBe "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on Companies House for your SIC code (opens in a new window or tab)."
+        ) shouldBe "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on Companies House for your SIC code (opens in new tab)."
       }
     }
 
@@ -214,9 +214,9 @@ class SicCodeControllerSpec
         showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) {
           val hintText = userSelectedOrgType match {
             case SoleTrader =>
-              "A SIC code is a 5 digit number that helps HMRC identify what your business does. If you do not have one, you can search for a relevant SIC code on Companies House (opens in a new window or tab)."
+              "A SIC code is a 5 digit number that helps HMRC identify what your business does. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
             case _ =>
-              "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. If you do not have one, you can search for a relevant SIC code on Companies House (opens in a new window or tab)."
+              "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
           }
           result =>
             val page = CdsPage(contentAsString(result))
@@ -436,7 +436,7 @@ class SicCodeControllerSpec
         if (userSelectedOrgType == SoleTrader) {
           page.getElementsText(
             sicDescriptionLabelXpath
-          ) shouldBe "A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on Companies House (opens in a new window or tab)."
+          ) shouldBe "A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
           page.getElementText(
             SicCodePage.headingXpath
           ) shouldBe "Enter a Standard Industrial Classification (SIC) code that describes what your business does"
@@ -444,7 +444,7 @@ class SicCodeControllerSpec
         } else {
           page.getElementsText(
             sicDescriptionLabelXpath
-          ) shouldBe "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on Companies House (opens in a new window or tab)."
+          ) shouldBe "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
           page.getElementText(
             SicCodePage.headingXpath
           ) shouldBe "What is the Standard Industrial Classification (SIC) code for your organisation?"
