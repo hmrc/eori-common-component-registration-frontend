@@ -24,6 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmailController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.GroupEnrolmentExtractor
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -37,6 +38,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   UserGroupIdSubscriptionStatusCheckService
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_exists_group_standalone,
   enrolment_pending_against_group_id,
   enrolment_pending_for_user
 }
@@ -53,6 +55,7 @@ class EmailControllerSpec
 
   private val mockAuthConnector                  = mock[AuthConnector]
   private val mockAuthAction                     = authAction(mockAuthConnector)
+  private val mockAppConfig                      = mock[AppConfig]
   private val mockEmailVerificationService       = mock[EmailVerificationService]
   private val mockSave4LaterService              = mock[Save4LaterService]
   private val mockSessionCache                   = mock[SessionCache]
@@ -60,6 +63,7 @@ class EmailControllerSpec
   private val groupEnrolmentExtractor            = mock[GroupEnrolmentExtractor]
   private val enrolmentPendingAgainstGroupIdView = instanceOf[enrolment_pending_against_group_id]
   private val enrolmentPendingForUserView        = instanceOf[enrolment_pending_for_user]
+  private val enrolmentExistsGroupStandaloneView = instanceOf[enrolment_exists_group_standalone]
 
   private val infoXpath = "//*[@id='info']"
 
@@ -74,6 +78,7 @@ class EmailControllerSpec
     mockSave4LaterService,
     userGroupIdSubscriptionStatusCheckService,
     groupEnrolmentExtractor,
+    mockAppConfig,
     enrolmentPendingForUserView,
     enrolmentPendingAgainstGroupIdView
   )
@@ -180,6 +185,29 @@ class EmailControllerSpec
         await(result).header.headers("Location") should endWith("/atar/register/you-already-have-an-eori")
       }
     }
+
+    "redirect and display when group enrolled to service and Eori is retreived in standalone journey " in {
+      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
+        .thenReturn(Future.successful(List(cdsGroupEnrolment)))
+      when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(true))
+      when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
+      showStandaloneFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists-for-group")
+      }
+    }
+
+    "redirect and display when group enrolled to service even if Eori couldn't be retrieved in standalone journey " in {
+      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
+        .thenReturn(Future.successful(List(cdsGroupEnrolment.copy(identifiers = List()))))
+      when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
+      showStandaloneFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists-for-group")
+      }
+    }
+
   }
 
   private def showFormRegister(userId: String = defaultUserId)(test: Future[Result] => Any): Unit =
@@ -188,6 +216,14 @@ class EmailControllerSpec
   private def showForm(userId: String)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndPath("/atar", userId)))
+  }
+
+  private def showStandaloneFormRegister(userId: String = defaultUserId)(test: Future[Result] => Any): Unit =
+    showStandaloneForm(userId)(test)
+
+  private def showStandaloneForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(controller.form(eoriOnlyService).apply(SessionBuilder.buildRequestWithSessionAndPath("/eori-only", userId)))
   }
 
 }

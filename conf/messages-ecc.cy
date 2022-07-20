@@ -388,3 +388,26 @@ ecc.address-invalid-individual.link = TRANSLATE HMRC (opens in a new tab)
 ecc.address-invalid-company.title = TRANSLATE Please contact Companies House
 ecc.address-invalid-company.info = TRANSLATE The registered address we hold for your organisation seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
 ecc.address-invalid-company.link = TRANSLATE Companies House (opens in a new tab)
+
+ecc.eori-exists-standard-user.heading = TRANSLATE You already have an EORI number
+ecc.eori-exists-standard-user.title = TRANSLATE You already have an EORI number
+
+ecc.eori-exists-user.heading = TRANSLATE Your business or organisation already has an EORI number
+ecc.eori-exists-user.title = TRANSLATE Your business or organisation already has an EORI number
+ecc.eori-exists-user.eori-number.label = TRANSLATE EORI number:
+ecc.eori-exists-user.cds.label = TRANSLATE Customs Declaration Service
+ecc.eori-exists-user.cds.info1 = TRANSLATE You can now use any of the online customs services for the {0}.
+ecc.eori-exists-user.cds.info2 = TRANSLATE You can also {0}.
+ecc.eori-exists-user.cds.link1 = TRANSLATE Customs Declaration Service (CDS)
+ecc.eori-exists-user.cds.link2 = TRANSLATE add team members and give them access to CDS (opens in new tab)
+
+
+ecc.eori-exists-group.heading = TRANSLATE Your business or organisation already has an EORI number
+ecc.eori-exists-group.title = TRANSLATE Your business or organisation already has an EORI number
+ecc.eori-exists-group.eori-number.label = TRANSLATE EORI number:
+ecc.eori-exists-group.cds.start.label = TRANSLATE Start using the Customs Declaration Service (CDS)
+ecc.eori-exists-group.admin.cds.para1 =TRANSLATE If you want access to CDS, you need to ask the person who set up your Government Gateway user ID, or another person with administrator permissions in your Government Gateway team.
+ecc.eori-exists-group.admin.cds.para2 =TRANSLATE They will need to sign in and follow steps 6,7,8 and 9 to {0}.
+ecc.eori-exists-group.cds.para1 = TRANSLATEIf you want access to CDS, you need to go to manage account, and follow steps 6, 7, 8 and 9 to {0}.
+ecc.eori-exists-group.cds.admin.link =TRANSLATE give a team member access to a tax duty or scheme (opens in new tab)
+ecc.eori-exists-group.cds.link =TRANSLATE give yourself access to a tax, duty or scheme (opens in new tab)
