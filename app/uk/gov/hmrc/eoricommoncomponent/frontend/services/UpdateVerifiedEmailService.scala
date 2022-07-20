@@ -60,19 +60,24 @@ class UpdateVerifiedEmailService @Inject() (
           if res.updateVerifiedEmailResponse.responseCommon.returnParameters
             .exists(msp => msp.head.paramName == MessagingServiceParam.formBundleIdParamName) =>
         logger.debug("[UpdateVerifiedEmailService][updateVerifiedEmail] - successfully updated verified email")
+
         customsDataStoreConnector.updateCustomsDataStore(customsDataStoreRequest)
         true
       case Right(res) =>
         val statusText = res.updateVerifiedEmailResponse.responseCommon.statusText
+        // $COVERAGE-OFF$Loggers
         logger.debug(
           "[UpdateVerifiedEmailService][updateVerifiedEmail]" +
             s" - updating verified email unsuccessful with business error/status code: ${statusText.getOrElse("Status text empty")}"
         )
+        // $COVERAGE-ON
         false
       case Left(res) =>
+        // $COVERAGE-OFF$Loggers
         logger.warn(
           s"[UpdateVerifiedEmailService][updateVerifiedEmail] - updating verified email unsuccessful with response: $res"
         )
+        // $COVERAGE-ON
         false
     }
   }

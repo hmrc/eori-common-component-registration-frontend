@@ -82,8 +82,14 @@ class AuthAction @Inject() (
         case currentUserEmail ~ userCredentialRole ~ userAffinityGroup ~ userInternalId ~ userAllEnrolments ~ groupId =>
           transformRequest(
             Right(requestProcessor),
-            LoggedInUserWithEnrolments(userAffinityGroup, userInternalId, userAllEnrolments, currentUserEmail, groupId),
-            userCredentialRole,
+            LoggedInUserWithEnrolments(
+              userAffinityGroup,
+              userInternalId,
+              userAllEnrolments,
+              currentUserEmail,
+              groupId,
+              userCredentialRole
+            ),
             checkPermittedAccess,
             checkServiceEnrolment
           )
@@ -93,7 +99,6 @@ class AuthAction @Inject() (
   private def transformRequest(
     requestProcessor: Either[RequestProcessorExtended, RequestProcessorSimple],
     loggedInUser: LoggedInUserWithEnrolments,
-    userCredentialRole: Option[CredentialRole],
     checkPermittedAccess: Boolean,
     checkServiceEnrolment: Boolean
   )(implicit request: Request[AnyContent]) = {
@@ -104,7 +109,7 @@ class AuthAction @Inject() (
       requestProcessor fold (_(request)(loggedInUser.internalId)(loggedInUser), _(request)(loggedInUser))
 
     if (checkPermittedAccess)
-      permitUserOrRedirect(loggedInUser.affinityGroup, userCredentialRole, enrolments)(action)
+      permitUserOrRedirect(loggedInUser.affinityGroup, loggedInUser.userCredentialRole, enrolments)(action)
     else
       action
   }
