@@ -92,12 +92,12 @@ class StandaloneEoriAlreadyExistsViewSpec extends ViewSpec {
   }
 
   private lazy val individualDoc: Document =
-    Jsoup.parse(contentAsString(view(Some("GBXXXXXXXX"), true, false, eoriOnlyService)))
+    Jsoup.parse(contentAsString(view(Some("GBXXXXXXXX"), false, eoriOnlyService)))
 
   private lazy val orgDoc: Document =
-    Jsoup.parse(contentAsString(view(Some("GBXXXXXXXX"), false, true, eoriOnlyService)))
+    Jsoup.parse(contentAsString(view(Some("GBXXXXXXXX"), true, eoriOnlyService)))
 
-  private lazy val standardDocNoEori: Document = Jsoup.parse(contentAsString(view(None, false, true, eoriOnlyService)))
-  private lazy val adminDocNoEORI: Document    = Jsoup.parse(contentAsString(view(None, false, true, eoriOnlyService)))
+  private lazy val standardDocNoEori: Document = Jsoup.parse(contentAsString(view(None, true, eoriOnlyService)))
+  private lazy val adminDocNoEORI: Document    = Jsoup.parse(contentAsString(view(None, true, eoriOnlyService)))
 
 }

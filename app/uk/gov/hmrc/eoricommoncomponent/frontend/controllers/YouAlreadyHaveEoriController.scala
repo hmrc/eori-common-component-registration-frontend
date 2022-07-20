@@ -48,10 +48,7 @@ class YouAlreadyHaveEoriController @Inject() (
   def displayStandAlone(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithServiceAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        sessionCache.eori.map(
-          eoriNumber =>
-            Ok(standAloneEoriExistsView(eoriNumber, loggedInUser.isIndividual, loggedInUser.isAdminUser, service))
-        )
+        sessionCache.eori.map(eoriNumber => Ok(standAloneEoriExistsView(eoriNumber, loggedInUser.isAdminUser, service)))
     }
 
 }

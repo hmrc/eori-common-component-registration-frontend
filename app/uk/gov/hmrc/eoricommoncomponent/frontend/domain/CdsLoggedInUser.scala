@@ -45,9 +45,4 @@ case class LoggedInUserWithEnrolments(
     case _                                              => false
   }
 
-  def isIndividual: Boolean = affinityGroup match {
-    case Some(AffinityGroup.Individual) => true
-    case _                              => false
-  }
-
 }
