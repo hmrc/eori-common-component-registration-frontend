@@ -389,7 +389,7 @@ ecc.address-invalid-individual.link = HMRC (opens in new tab)
 
 ecc.address-invalid-company.title = Please contact Companies House
 ecc.address-invalid-company.info = The registered address we hold for your organisation seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
-ecc.address-invalid-company.link = Companies House (opens in a new tab)
+ecc.address-invalid-company.link = Companies House (opens in new tab)
 
 ecc.eori-exists-standard-user.heading = You already have an EORI number
 ecc.eori-exists-standard-user.title = You already have an EORI number
