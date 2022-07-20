@@ -128,9 +128,14 @@ class EmailController @Inject() (
             Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
         else
           existingEoriForUserOrGroup(user, groupEnrolments) match {
-            case Some(_) =>
+            case Some(eori) =>
               // user already has EORI
-              Future.successful(Redirect(YouAlreadyHaveEoriController.display(service)))
+              if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
+                sessionCache.saveEori(Eori(eori.id)).map(
+                  _ => Redirect(YouAlreadyHaveEoriController.displayStandAlone(service))
+                )
+              else
+                Future.successful(Redirect(YouAlreadyHaveEoriController.display(service)))
             case None =>
               userGroupIdSubscriptionStatusCheckService
                 .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(continue(service))(

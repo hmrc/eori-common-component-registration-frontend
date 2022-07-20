@@ -208,6 +208,17 @@ class EmailControllerSpec
       }
     }
 
+    "redirect and display when not enrolled to CDS and Display Eori in standalone journey " in {
+      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
+        .thenReturn(Future.successful(List(atarGroupEnrolment)))
+      when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(true))
+      showStandaloneFormRegister() { result =>
+        status(result) shouldBe SEE_OTHER
+        await(result).header.headers("Location") should endWith("/eori-only/register/already-have-an-eori")
+      }
+    }
+
   }
 
   private def showFormRegister(userId: String = defaultUserId)(test: Future[Result] => Any): Unit =
