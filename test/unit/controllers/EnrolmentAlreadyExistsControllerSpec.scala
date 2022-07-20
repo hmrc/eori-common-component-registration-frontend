@@ -17,25 +17,51 @@
 package unit.controllers
 
 import common.pages.RegistrationCompletePage
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.auth.core.{Assistant, AuthConnector, Enrolment}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{registration_exists, registration_exists_group}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Eori
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_exists_group_standalone,
+  enrolment_exists_user_standalone,
+  registration_exists,
+  registration_exists_group
+}
+import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import scala.concurrent.ExecutionContext.global
+import scala.concurrent.Future
+
 class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActionMock {
 
-  private val registrationExistsView      = instanceOf[registration_exists]
-  private val registrationExistsGroupView = instanceOf[registration_exists_group]
-  private val mockAuthConnector           = mock[AuthConnector]
-  private val mockAuthAction              = authAction(mockAuthConnector)
+  private val registrationExistsView             = instanceOf[registration_exists]
+  private val registrationExistsGroupView        = instanceOf[registration_exists_group]
+  private val enrolmentExistsStandaloneView      = instanceOf[enrolment_exists_user_standalone]
+  private val enrolmentExistsGroupStandaloneView = instanceOf[enrolment_exists_group_standalone]
+  private val mockAuthConnector                  = mock[AuthConnector]
+  private val mockSessionCache                   = mock[SessionCache]
+  private val mockAuthAction                     = authAction(mockAuthConnector)
 
   val controller =
-    new EnrolmentAlreadyExistsController(mockAuthAction, registrationExistsView, registrationExistsGroupView, mcc)
+    new EnrolmentAlreadyExistsController(
+      mockAuthAction,
+      mockSessionCache,
+      registrationExistsView,
+      registrationExistsGroupView,
+      enrolmentExistsStandaloneView,
+      enrolmentExistsGroupStandaloneView,
+      mcc
+    )(global)
 
   val paragraphXpath = "//*[@id='para1']"
+
+  private val eori = Eori("GB123456789012")
 
   "Enrolment already exists controller" should {
 
@@ -62,6 +88,57 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
 
     }
 
+    "display enrolment already exists page for admin user on standalone journey" in {
+
+      withAuthorisedUser(
+        defaultUserId,
+        mockAuthConnector,
+        otherEnrolments = Set(Enrolment("HMRC-CUS-ORG").withIdentifier("EORINumber", eori.id))
+      )
+
+      val result =
+        await(
+          controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
+            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
+          )
+        )
+
+      status(result) shouldBe OK
+
+      val page = CdsPage(contentAsString(result))
+
+      page.title should startWith("Your business or organisation already has an EORI number")
+      page.getElementsText(
+        RegistrationCompletePage.pageHeadingXpath
+      ) shouldBe "Your business or organisation already has an EORI number"
+
+    }
+
+    "display enrolment already exists page for standard user on standalone journey" in {
+
+      withAuthorisedUser(
+        defaultUserId,
+        mockAuthConnector,
+        userCredentialRole = Some(Assistant),
+        otherEnrolments = Set(Enrolment("HMRC-CUS-ORG").withIdentifier("EORINumber", eori.id))
+      )
+
+      val result =
+        await(
+          controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
+            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
+          )
+        )
+
+      status(result) shouldBe OK
+
+      val page = CdsPage(contentAsString(result))
+
+      page.title should startWith("You already have an EORI number")
+      page.getElementsText(RegistrationCompletePage.pageHeadingXpath) shouldBe "You already have an EORI number"
+
+    }
+
     "redirect to the enrolment already exists for group page" in {
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
@@ -82,6 +159,29 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
       page.getElementsText(paragraphXpath) should include(
         "Your organisation is already subscribed to Advance Tariff Rulings"
       )
+
+    }
+
+    "redirect to the enrolment already exists for group page for standalone journey" in {
+
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockSessionCache.eori(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some("testEori")))
+      val result =
+        await(
+          controller.enrolmentAlreadyExistsForGroupStandalone(eoriOnlyService).apply(
+            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
+          )
+        )
+
+      status(result) shouldBe OK
+
+      val page = CdsPage(contentAsString(result))
+
+      page.title should startWith("Your business or organisation already has an EORI number")
+      page.getElementsText(
+        RegistrationCompletePage.pageHeadingXpath
+      ) shouldBe "Your business or organisation already has an EORI number"
 
     }
   }

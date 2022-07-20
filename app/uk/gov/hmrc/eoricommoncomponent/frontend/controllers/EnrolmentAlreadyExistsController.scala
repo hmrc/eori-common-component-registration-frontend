@@ -16,24 +16,33 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration_exists
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.registration_exists_group
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_exists_group_standalone,
+  enrolment_exists_user_standalone,
+  registration_exists,
+  registration_exists_group
+}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import scala.concurrent.Future
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class EnrolmentAlreadyExistsController @Inject() (
   authAction: AuthAction,
+  sessionCache: SessionCache,
   registrationExistsView: registration_exists,
   registrationExistsForGroupView: registration_exists_group,
+  enrolmentExistsStandaloneView: enrolment_exists_user_standalone,
+  enrolmentExistsForGroupStandaloneView: enrolment_exists_group_standalone,
   mcc: MessagesControllerComponents
-) extends FrontendController(mcc) with I18nSupport {
+)(implicit ec: ExecutionContext)
+    extends FrontendController(mcc) with I18nSupport with EnrolmentExtractor {
 
   // Note: permitted for user with service enrolment
   def enrolmentAlreadyExists(service: Service): Action[AnyContent] =
@@ -47,6 +56,22 @@ class EnrolmentAlreadyExistsController @Inject() (
     authAction.ggAuthorisedUserAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(registrationExistsForGroupView(service)))
+    }
+
+  def enrolmentAlreadyExistsStandalone(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserAction {
+      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+        val eoriNumber = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
+        Future.successful(Ok(enrolmentExistsStandaloneView(eoriNumber, loggedInUser.isAdminUser)))
+    }
+
+  def enrolmentAlreadyExistsForGroupStandalone(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserAction {
+      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+        sessionCache.eori.map(
+          eoriNumber => Ok(enrolmentExistsForGroupStandaloneView(eoriNumber, loggedInUser.isAdminUser))
+        )
+
     }
 
 }

@@ -40,11 +40,6 @@ case class LoggedInUserWithEnrolments(
   userCredentialRole: Option[CredentialRole]
 ) extends LoggedInUser {
 
-  def isIndividualUser: Boolean = affinityGroup match {
-    case Some(AffinityGroup.Individual) => true
-    case _                              => false
-  }
-
   def isAdminUser: Boolean = (userCredentialRole, affinityGroup) match {
     case (Some(User), Some(AffinityGroup.Organisation)) => true
     case _                                              => false

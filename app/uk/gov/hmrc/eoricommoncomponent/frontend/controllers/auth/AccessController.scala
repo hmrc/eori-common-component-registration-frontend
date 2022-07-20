@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, Request, Result}
-import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
+import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core.{AffinityGroup, CredentialRole, Enrolment, User}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -52,7 +52,10 @@ trait AccessController {
     if (!isPermittedUserType)
       Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else if (hasEnrolment)
-      Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service)))
+      if (service.code.equalsIgnoreCase("eori-only"))
+        Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service)))
+      else
+        Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service)))
     else if (!isPermittedCredentialRole)
       Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else
