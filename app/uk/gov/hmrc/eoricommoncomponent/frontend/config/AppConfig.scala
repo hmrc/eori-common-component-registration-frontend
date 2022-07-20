@@ -119,6 +119,8 @@ class AppConfig @Inject() (
 
   val taxEnrolmentsServiceContext: String = config.get[String]("microservice.services.tax-enrolments.context")
 
+  val standaloneServiceCode: String = config.get[String]("application.standalone.service.code")
+
   def getServiceUrl(proxyServiceName: String): String = {
     val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
     val serviceContext =

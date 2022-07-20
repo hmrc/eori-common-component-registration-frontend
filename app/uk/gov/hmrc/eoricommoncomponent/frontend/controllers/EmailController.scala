@@ -130,7 +130,7 @@ class EmailController @Inject() (
           existingEoriForUserOrGroup(user, groupEnrolments) match {
             case Some(eori) =>
               // user already has EORI
-              if (service.code.equalsIgnoreCase("eori-only"))
+              if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
                 sessionCache.saveEori(Eori(eori.id)).map(
                   _ => Redirect(YouAlreadyHaveEoriController.displayStandAlone(service))
                 )
