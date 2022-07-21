@@ -188,7 +188,7 @@ cds.if.you.need.help.telephone1=Ffôn: 0300 200 1900
 cds.if.you.need.help.telephone2=Dydd Llun i Ddydd Gwener, 08.00 i 16.00 (heblaw am wyliau cyhoeddus)
 cds.if.you.need.help.telephone.link=Gwybodaeth am gostau galwadau
 
-cds.subscription.contact-details.intro=Byddwn yn defnyddio’r manylion hyn i gysylltu â chi ynglŷn â’ch cais.
+cds.subscription.contact-details.intro=TRANSLATE We’ll use these details to send you the result of your GB EORI application.
 
 #Get An EORI Journey
 
@@ -218,6 +218,8 @@ yes-no-wrong-address.error=Dewiswch ‘Iawn’ os mai dyma’ch cyfeiriad
 
 confirm-contact-address-details.yes=TRANSLATE Yes
 confirm-contact-address-details.no=TRANSLATE I want to enter the contact address manually
+
+ecc.contact-address-details.error.yes-no-answer=TRANSLATE Select yes if the contact address is right
 
 ecc.subscription.contact-address.heading=TRANSLATE Do you want us to use this address to send you any information about your application?
 
