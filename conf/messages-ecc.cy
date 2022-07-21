@@ -219,7 +219,7 @@ yes-no-wrong-address.error=Dewiswch ‘Iawn’ os mai dyma’ch cyfeiriad
 confirm-contact-address-details.yes=TRANSLATE Yes
 confirm-contact-address-details.no=TRANSLATE I want to enter the contact address manually
 
-ecc.contact-address-details.error.yes-no-answer=TRANSLATE Select yes if the contact address is right
+ecc.contact-address-details.error.yes-no-answer=Dewiswch ‘Iawn’ os yw’r cyfeiriad cyswllt yn gywir
 
 ecc.subscription.contact-address.heading=TRANSLATE Do you want us to use this address to send you any information about your application?
 
