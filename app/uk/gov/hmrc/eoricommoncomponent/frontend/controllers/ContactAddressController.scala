@@ -20,7 +20,9 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetailsSubscriptionFlowPageGetEori
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -78,10 +80,10 @@ class ContactAddressController @Inject() (
   private def populateOkView(isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
-    createContactDetails() map (
+    createContactDetails() map {
       contactDetails =>
         Ok(contactAddressView(contactDetails, isInReviewMode, contactAddressDetailsYesNoAnswerForm, service))
-    )
+    }
 
   private def locationByAnswer(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service)(implicit
     request: Request[AnyContent]
@@ -90,12 +92,12 @@ class ContactAddressController @Inject() (
       Future.successful(
         Redirect(
           subscriptionFlowManager
-            .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
+            .stepInformation(ContactAddressSubscriptionFlowPageGetEori)
             .nextPage
             .url(service)
         )
       )
-    case _ => Future(Redirect(ContactAddressController.createForm(service)))
+    case _ => Future(Redirect(AddressController.createForm(service)))
   }
 
 }
