@@ -56,7 +56,9 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
 
   def getCachedContactAddressConfirmation(implicit hc: HeaderCarrier): Future[Boolean] =
     cdsFrontendDataCache.subscriptionDetails map {
-      _.contactAddressConfirmation.getOrElse(throw new IllegalStateException("No Contact Address Confirmation Cached"))
+      _.contactAddressConfirmed.getOrElse(
+        throw new IllegalStateException("Whether the Contact Address confirmation has not been Cached")
+      )
     }
 
   def getCachedVatRegisteredUk(implicit hc: HeaderCarrier): Future[Boolean] =
