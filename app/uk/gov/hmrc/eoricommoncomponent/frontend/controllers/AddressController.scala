@@ -71,14 +71,22 @@ class AddressController @Inject() (
           formWithErrors => populateCountriesToInclude(isInReviewMode, service, formWithErrors, BadRequest),
           address => {
             subscriptionDetailsService.cacheAddressDetails(address)
-            updateRegistrationAddress(address).flatMap { _ =>
-              showReviewPage(address, isInReviewMode, service)
+            updateContactAddress(address).flatMap { _ =>
+              subscriptionDetailsService.cacheAddressDetails(address).flatMap { _ =>
+                Future.successful(
+                  Redirect(
+                    subscriptionFlowManager
+                      .stepInformation(ContactAddressSubscriptionFlowPageGetEori)
+                      .nextPage.url(service)
+                  )
+                )
+              }
             }
           }
         )
     }
 
-  private def updateRegistrationAddress(address: AddressViewModel)(implicit hc: HeaderCarrier): Future[Boolean] =
+  private def updateContactAddress(address: AddressViewModel)(implicit hc: HeaderCarrier): Future[Boolean] =
     sessionCache.registrationDetails.map {
       case org: RegistrationDetailsOrganisation =>
         org.copy(address = Address(address))
@@ -129,16 +137,5 @@ class AddressController @Inject() (
     lazy val form = address.fold(addressDetailsCreateForm())(addressDetailsCreateForm().fill(_))
     populateCountriesToInclude(isInReviewMode, service, form, Ok)
   }
-
-  private def showReviewPage(address: AddressViewModel, inReviewMode: Boolean, service: Service)(implicit
-    hc: HeaderCarrier
-  ): Future[Result] =
-    subscriptionDetailsService.cacheAddressDetails(address).flatMap { _ =>
-      if (inReviewMode)
-        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
-      else
-        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
-
-    }
 
 }
