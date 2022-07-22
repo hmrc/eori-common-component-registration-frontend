@@ -223,6 +223,7 @@ ecc.contact-address-details.error.yes-no-answer=Dewiswch ‘Iawn’ os yw’r cy
 
 ecc.subscription.contact-address.heading=TRANSLATE Do you want us to use this address to send you any information about your application?
 ecc.subscription.contact-address.title=TRANSLATE Do you want us to use this address to send you any information about your application?
+ecc.manual-address-details.heading.hint=TRANSLATE We will use this address to contact you about your GB EORI application.
 
 cds.existing.reg.eori-already-exists.title=Mae gennych EORI eisoes
 cds.existing.reg.eori.number=Rhif EORI:

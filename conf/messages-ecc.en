@@ -222,6 +222,8 @@ ecc.contact-address-details.error.yes-no-answer=Select yes if the contact addres
 
 ecc.subscription.contact-address.heading=Do you want us to use this address to send you any information about your application?
 ecc.subscription.contact-address.title=Do you want us to use this address to send you any information about your application?
+ecc.manual-address-details.heading.hint=We will use this address to contact you about your GB EORI application.
+
 
 cds.enter-address-details.company.title-and-heading=Enter your full registered company address
 

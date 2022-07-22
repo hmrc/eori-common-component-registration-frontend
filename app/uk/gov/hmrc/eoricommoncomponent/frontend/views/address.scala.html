@@ -30,7 +30,8 @@ govukButton: GovukButton,
 inputText: helpers.inputText,
 errorSummary: helpers.errorSummary,
 countryField: helpers.countryField,
-goveukFieldSet: GovukFieldset
+goveukFieldSet: GovukFieldset,
+govukHint: GovukHint
 )
 
 @(
@@ -59,7 +60,12 @@ messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
 if(isRow) "cds.subscription.address-details.postcode.row.label" else "cds.subscription.address-details.postcode.label"
 }
 
+@fieldsetHint = {
+@govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("ecc.manual-address-details.heading.hint")), classes = "govuk-!-margin-bottom-3"))
+}
+
 @html = {
+@fieldsetHint
 @inputText(
 form = addressForm,
 id = "street",
