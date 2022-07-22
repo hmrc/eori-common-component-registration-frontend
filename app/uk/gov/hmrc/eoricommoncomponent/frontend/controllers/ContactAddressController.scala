@@ -89,14 +89,16 @@ class ContactAddressController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] = yesNoAnswer match {
     case theAnswer if theAnswer.isYes =>
-      Future.successful(
-        Redirect(
-          subscriptionFlowManager
-            .stepInformation(ContactAddressSubscriptionFlowPageGetEori)
-            .nextPage
-            .url(service)
+      if (isInReviewMode) Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
+      else
+        Future.successful(
+          Redirect(
+            subscriptionFlowManager
+              .stepInformation(ContactAddressSubscriptionFlowPageGetEori)
+              .nextPage
+              .url(service)
+          )
         )
-      )
     case _ => Future(Redirect(AddressController.createForm(service)))
   }
 
