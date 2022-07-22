@@ -421,7 +421,7 @@
         summaryListRow(
                 key = messages("cds.form.customs-contact-address"),
                 value = Some(contactDetailsHtml(contactDetails)),
-                call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
+                call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.reviewForm(service))
             )
         }
     ).flatten
