@@ -51,22 +51,9 @@ isRow: Boolean = false
 s"cds.country.$countryCode"
 }
 
-@titleAndHeading = @{
-if (isIndividualOrSoleTrader) {
-messages("cds.enter-address-details.individual.title-and-heading")
-} else if(isPartnership) {
-messages("cds.enter-address-details.partnership.title-and-heading")
-} else if(isCompany && !isRow) {
-messages("cds.enter-address-details.company.title-and-heading")
-} else {
-messages("cds.enter-address-details.organisation.title-and-heading")
-}
-}
-
 @isEUCountryCode(countryCode: String) = @{
 messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
 }
-
 
 @postcodeKey = @{
 if(isRow) "cds.subscription.address-details.postcode.row.label" else "cds.subscription.address-details.postcode.label"
@@ -109,7 +96,7 @@ labelClasses = None
 )
 }
 
-@layout_di(titleAndHeading, countriesInCountryPicker, Some(addressForm)) {
+@layout_di(messages("cds.enter-address-details.title"), countriesInCountryPicker, Some(addressForm)) {
 
 <div>
     @errorSummary(addressForm.errors)
@@ -120,7 +107,7 @@ labelClasses = None
     @goveukFieldSet(
     Fieldset(
     legend = Some(Legend(
-    content = Text(titleAndHeading),
+    content = Text(messages("cds.enter-address-details.heading")),
     classes = "govuk-fieldset__legend--l",
     isPageHeading = true
     )),

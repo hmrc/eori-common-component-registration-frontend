@@ -1168,7 +1168,8 @@ cds.subscription.name-id-details.page-error.utr=Enter your Corporation Tax UTR n
 cds.subscription.name-id-details.utr.label=Corporation Tax Utr number
 #enter address
 cds.enter-address-details.organisation.title-and-heading=Enter your organisation address
-cds.enter-address-details.individual.title-and-heading=Enter your address
+cds.enter-address-details.title=EORI application contact address
+cds.enter-address-details.heading=EORI application contact address
 cds.enter-address-details.partnership.title-and-heading=Enter your partnership address
 cds.enter-address-details.company.title-and-heading=Enter your company address
 
