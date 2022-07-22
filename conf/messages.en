@@ -1231,7 +1231,7 @@ cds.sole-trader.address-check.page-error.yes-no-answer=Tell us if this is these 
 cds.sole-trader.address-check.field-error.yes-no-answer=Select yes if these details are correct
 
 #contact details
-cds.subscription.contact-details.page.title=Who can we contact?
+cds.subscription.contact-details.page.title=EORI application contact details
 cds.subscription.contact-details.steps=contact
 cds.subscription.contact-details.heading=EORI application contact details
 cds.subscription.contact-details.intro=We will use these details to contact you about your EORI number. We will also use them to contact you if there are any issues with your customs activities.

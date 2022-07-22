@@ -221,6 +221,7 @@ confirm-contact-address-details.no=I want to enter the contact address manually
 ecc.contact-address-details.error.yes-no-answer=Select yes if the contact address is right
 
 ecc.subscription.contact-address.heading=Do you want us to use this address to send you any information about your application?
+ecc.subscription.contact-address.title=Do you want us to use this address to send you any information about your application?
 
 cds.enter-address-details.company.title-and-heading=Enter your full registered company address
 

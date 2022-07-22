@@ -222,6 +222,7 @@ confirm-contact-address-details.no=TRANSLATE I want to enter the contact address
 ecc.contact-address-details.error.yes-no-answer=Dewiswch ‘Iawn’ os yw’r cyfeiriad cyswllt yn gywir
 
 ecc.subscription.contact-address.heading=TRANSLATE Do you want us to use this address to send you any information about your application?
+ecc.subscription.contact-address.title=TRANSLATE Do you want us to use this address to send you any information about your application?
 
 cds.existing.reg.eori-already-exists.title=Mae gennych EORI eisoes
 cds.existing.reg.eori.number=Rhif EORI:
