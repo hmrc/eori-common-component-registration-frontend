@@ -32,7 +32,7 @@ object AddressDetailsForm {
         "city"     -> text.verifying(validCity),
         "postcode" -> postcodeMapping,
         "countryCode" -> text.verifying(
-          "cds.subscription.address-details.countryCode.error.label",
+          "cds.matching-error.country.invalid",
           s => s.trim.nonEmpty && s != messages("cds.subscription.address-details.country.emptyValueText")
         )
       )(AddressViewModel.apply)(AddressViewModel.unapply)

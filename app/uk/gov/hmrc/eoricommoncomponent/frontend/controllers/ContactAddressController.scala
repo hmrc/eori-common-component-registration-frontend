@@ -67,25 +67,20 @@ class ContactAddressController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors =>
-            createContactDetails(isInReviewMode).map { contactAddressDetails =>
+            createContactDetails().map { contactAddressDetails =>
               BadRequest(contactAddressView(contactAddressDetails, isInReviewMode, formWithErrors, service))
             },
           yesNoAnswer => locationByAnswer(isInReviewMode, yesNoAnswer, service)
         )
     }
 
-  private def createContactDetails(
-    isInReviewMode: Boolean
-  )(implicit request: Request[AnyContent]): Future[AddressViewModel] =
-    if (!isInReviewMode)
-      Future.successful(AddressViewModel(street = "", city = "", postcode = Some(""), countryCode = ""))
-    else
-      cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
+  private def createContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] =
+    cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
 
   private def populateOkView(isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
-    createContactDetails(isInReviewMode) map {
+    createContactDetails() map {
       contactDetails =>
         Ok(contactAddressView(contactDetails, isInReviewMode, contactAddressDetailsYesNoAnswerForm, service))
     }

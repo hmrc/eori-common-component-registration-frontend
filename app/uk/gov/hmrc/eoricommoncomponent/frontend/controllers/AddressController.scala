@@ -133,9 +133,12 @@ class AddressController @Inject() (
   private def populateOkView(address: Option[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
     hc: HeaderCarrier,
     request: Request[AnyContent]
-  ): Future[Result] = {
-    lazy val form = address.fold(addressDetailsCreateForm())(addressDetailsCreateForm().fill(_))
-    populateCountriesToInclude(isInReviewMode, service, form, Ok)
-  }
+  ): Future[Result] =
+    if (!isInReviewMode)
+      populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm, Ok)
+    else {
+      lazy val form = address.fold(addressDetailsCreateForm())(addressDetailsCreateForm().fill(_))
+      populateCountriesToInclude(isInReviewMode, service, form, Ok)
+    }
 
 }
