@@ -52,14 +52,14 @@ class AddressController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionBusinessService.address.flatMap {
+      subscriptionBusinessService.contactAddress.flatMap {
         populateOkView(_, isInReviewMode = false, service)
       }
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionBusinessService.addressOrException flatMap { cdm =>
+      subscriptionBusinessService.contactAddressOrException flatMap { cdm =>
         populateOkView(Some(cdm), isInReviewMode = true, service)
       }
     }
@@ -69,32 +69,18 @@ class AddressController @Inject() (
       addressDetailsCreateForm().bindFromRequest
         .fold(
           formWithErrors => populateCountriesToInclude(isInReviewMode, service, formWithErrors, BadRequest),
-          address => {
-            subscriptionDetailsService.cacheAddressDetails(address)
-            updateContactAddress(address).flatMap { _ =>
-              subscriptionDetailsService.cacheAddressDetails(address).flatMap { _ =>
-                Future.successful(
-                  Redirect(
-                    subscriptionFlowManager
-                      .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
-                      .nextPage.url(service)
-                  )
+          address =>
+            subscriptionDetailsService.cacheContactAddressDetails(address).flatMap { _ =>
+              Future.successful(
+                Redirect(
+                  subscriptionFlowManager
+                    .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
+                    .nextPage.url(service)
                 )
-              }
+              )
             }
-          }
         )
     }
-
-  private def updateContactAddress(address: AddressViewModel)(implicit hc: HeaderCarrier): Future[Boolean] =
-    sessionCache.registrationDetails.map {
-      case org: RegistrationDetailsOrganisation =>
-        org.copy(address = Address(address))
-      case ind: RegistrationDetailsIndividual =>
-        ind.copy(address = Address(address))
-    }.map { rd =>
-      sessionCache.saveRegistrationDetails(rd)
-    }.flatMap(identity)
 
   private def populateCountriesToInclude(
     isInReviewMode: Boolean,

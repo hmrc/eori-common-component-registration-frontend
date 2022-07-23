@@ -75,7 +75,20 @@ class ContactAddressController @Inject() (
     }
 
   private def createContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] =
-    cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
+    cdsFrontendDataCache.subscriptionDetails flatMap { sd =>
+      sd.contactAddressDetails match {
+        case Some(addressDetails) =>
+          Future.successful(
+            AddressViewModel(
+              addressDetails.street,
+              addressDetails.city,
+              addressDetails.postcode,
+              addressDetails.countryCode
+            )
+          )
+        case _ => cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
+      }
+    }
 
   private def populateOkView(isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
