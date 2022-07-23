@@ -417,10 +417,10 @@
 }
 
 @details = @{
-    Seq(subscription.contactDetails.map { contactDetails =>
+    Seq(subscription.contactAddressDetails.map { contactAddress =>
         summaryListRow(
                 key = messages("cds.form.customs-contact-address"),
-                value = Some(contactDetailsHtml(contactDetails)),
+                value = Some(addressViewModelHtml(contactAddress)),
                 call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.reviewForm(service))
             )
         }
