@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ContactAddressController @Inject() (
   authAction: AuthAction,
-  subscriptionBusinessService: SubscriptionBusinessService,
+  subscriptionDetailsService: SubscriptionDetailsService,
   cdsFrontendDataCache: SessionCache,
   subscriptionFlowManager: SubscriptionFlowManager,
   mcc: MessagesControllerComponents,
@@ -86,7 +86,12 @@ class ContactAddressController @Inject() (
               addressDetails.countryCode
             )
           )
-        case _ => cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
+        case _ =>
+          cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address)).map {
+            address =>
+              subscriptionDetailsService.cacheContactAddressDetails(address)
+              address
+          }
       }
     }
 
@@ -102,7 +107,8 @@ class ContactAddressController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] = yesNoAnswer match {
     case theAnswer if theAnswer.isYes =>
-      if (isInReviewMode) Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
+      if (isInReviewMode)
+        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
       else
         Future.successful(
           Redirect(
@@ -112,7 +118,9 @@ class ContactAddressController @Inject() (
               .url(service)
           )
         )
-    case _ => Future(Redirect(AddressController.createForm(service)))
+    case _ =>
+      Future(Redirect(AddressController.createForm(service)))
+
   }
 
 }
