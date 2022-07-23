@@ -33,7 +33,6 @@ case class SubscriptionDetails(
   ukVatDetails: Option[VatDetails] = None,
   personalDataDisclosureConsent: Option[Boolean] = None,
   contactDetails: Option[ContactDetailsModel] = None,
-  contactAddressConfirmed: Option[Boolean] = None,
   contactAddressDetails: Option[AddressViewModel] = None,
   sicCode: Option[String] = None,
   eoriNumber: Option[String] = None,

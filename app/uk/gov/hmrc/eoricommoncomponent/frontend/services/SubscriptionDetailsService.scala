@@ -121,9 +121,6 @@ class SubscriptionDetailsService @Inject() (
   def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit hq: HeaderCarrier) =
     saveSubscriptionDetails(sd => sd.copy(vatRegisteredUk = Some(yesNoAnswer.isYes)))
 
-  def cacheContactAddressDetails(yesNoAnswer: YesNo)(implicit hq: HeaderCarrier) =
-    saveSubscriptionDetails(sd => sd.copy(contactAddressConfirmed = Some(yesNoAnswer.isYes)))
-
   def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit hq: HeaderCarrier) =
     saveSubscriptionDetails(sd => sd.copy(personalDataDisclosureConsent = Some(yesNoAnswer.isYes)))
 

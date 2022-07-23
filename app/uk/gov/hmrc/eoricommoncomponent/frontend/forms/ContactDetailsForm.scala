@@ -19,13 +19,8 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm._
-import uk.gov.hmrc.eoricommoncomponent.frontend.playext.form.ConditionalMapping
-import uk.gov.voa.play.form.ConditionalMappings.isEqual
-import uk.gov.voa.play.form.MandatoryOptionalMapping
 
 object ContactDetailsForm {
 
