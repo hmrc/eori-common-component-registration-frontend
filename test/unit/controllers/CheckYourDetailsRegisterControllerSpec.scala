@@ -85,6 +85,9 @@ class CheckYourDetailsRegisterControllerSpec
   private val addressDetails =
     AddressViewModel(street = "street", city = "city", postcode = Some("SE28 1AA"), countryCode = "GB")
 
+  private val contactAddressDetails =
+    AddressViewModel(street = "street", city = "city", postcode = Some("SE28 1AA"), countryCode = "FR")
+
   private val shortName = "Company Details Short name"
 
   private val NotEntered: String = "Not entered"
@@ -101,7 +104,8 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSubscriptionDetailsHolder.nameDobDetails).thenReturn(None)
     when(mockSubscriptionDetailsHolder.addressDetails).thenReturn(Some(addressDetails))
     when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(Some(true))
-    //when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
+    when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
+    when(mockSubscriptionDetailsHolder.contactAddressDetails).thenReturn(Some(contactAddressDetails))
     when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(mockSubscriptionDetailsHolder)
     when(mockRequestSession.isPartnership(any[Request[AnyContent]])).thenReturn(false)
   }
@@ -285,12 +289,13 @@ class CheckYourDetailsRegisterControllerSpec
           "Email address"
         ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.emailAddress
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "VAT number") shouldBe NotEntered
-      /* page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
-          strim(s"""
-                 |${contactUkDetailsModelWithMandatoryValuesOnly.street.get}
-                 |${contactUkDetailsModelWithMandatoryValuesOnly.city.get}
-                 |United Kingdom
-              """)*/
+        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
+          strim("""
+                |street
+                |city
+                |SE28 1AA
+                |France
+              """)
       }
     }
 
@@ -299,6 +304,7 @@ class CheckYourDetailsRegisterControllerSpec
         detailsHolderWithAllFields.copy(
           contactDetails = Some(contactDetailsModelWithAllValues),
           addressDetails = Some(addressDetails),
+          contactAddressDetails = Some(contactAddressDetails),
           nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
         )
       )
@@ -427,6 +433,7 @@ class CheckYourDetailsRegisterControllerSpec
         dateEstablished = None,
         businessShortName = None,
         addressDetails = Some(addressDetails),
+        contactAddressDetails = Some(contactAddressDetails),
         nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
       )
       when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(holder)
@@ -438,11 +445,13 @@ class CheckYourDetailsRegisterControllerSpec
           RegistrationReviewPage.SummaryListRowXPath,
           "Email address"
         ) shouldBe contactDetailsModelWithAllValues.emailAddress
+
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
-          strim(s"""             
-                 |${contactDetailsModelWithAllValues.street.get}
-                 |${contactDetailsModelWithAllValues.city.get}
-                 |${contactDetailsModelWithAllValues.postcode.get} France
+          strim("""
+                |street
+                |city
+                |SE28 1AA
+                |France
               """)
 
         page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe false
@@ -461,6 +470,7 @@ class CheckYourDetailsRegisterControllerSpec
       contactDetails = Some(contactDetailsModelWithAllValues),
       dateEstablished = Some(LocalDate.parse("1980-07-23")),
       addressDetails = Some(addressDetails),
+      contactAddressDetails = Some(contactAddressDetails),
       nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName"))
     )
     when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(holder)
@@ -529,8 +539,8 @@ class CheckYourDetailsRegisterControllerSpec
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
         strim("""
-            |Line 1
-            |city name
+            |street
+            |city
             |SE28 1AA
             |France
           """)
@@ -661,6 +671,7 @@ class CheckYourDetailsRegisterControllerSpec
       contactDetails = Some(contactDetailsModelWithAllValues),
       dateEstablished = Some(LocalDate.parse("1980-07-23")),
       addressDetails = Some(addressDetails),
+      contactAddressDetails = Some(contactAddressDetails),
       nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName"))
     )
     when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(holder)
@@ -727,9 +738,9 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
-        strim("""           
-            |Line 1
-            |city name
+        strim("""
+            |street
+            |city
             |SE28 1AA
             |France
           """)
@@ -961,10 +972,10 @@ class CheckYourDetailsRegisterControllerSpec
     ) shouldBe contactDetailsModelWithAllValues.emailAddress
 
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
-      strim(s"""
-           |${contactDetailsModelWithAllValues.street.get}
-           |${contactDetailsModelWithAllValues.city.get}
-           |${contactDetailsModelWithAllValues.postcode.get} $countryString
+      strim("""
+                |street
+                |city                
+                |France
               """)
   }
 

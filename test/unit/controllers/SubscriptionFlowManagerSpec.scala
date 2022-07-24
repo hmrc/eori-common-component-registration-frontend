@@ -138,12 +138,26 @@ class SubscriptionFlowManagerSpec
       (PartnershipSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 6, 8, VatDetailsSubscriptionFlowPage),
       (PartnershipSubscriptionFlow, VatDetailsSubscriptionFlowPage, 7, 8, EoriConsentSubscriptionFlowPage),
       (PartnershipSubscriptionFlow, EoriConsentSubscriptionFlowPage, 8, 8, ReviewDetailsPageGetYourEORI),
-      (SoleTraderSubscriptionFlow, ContactDetailsSubscriptionFlowPageGetEori, 1, 6, SicCodeSubscriptionFlowPage),
+      (
+        SoleTraderSubscriptionFlow,
+        ContactDetailsSubscriptionFlowPageGetEori,
+        1,
+        6,
+        ContactAddressSubscriptionFlowPageGetEori
+      ),
+      (SoleTraderSubscriptionFlow, ContactAddressSubscriptionFlowPageGetEori, 2, 6, SicCodeSubscriptionFlowPage),
       (SoleTraderSubscriptionFlow, SicCodeSubscriptionFlowPage, 3, 6, VatRegisteredUkSubscriptionFlowPage),
       (SoleTraderSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 4, 6, VatDetailsSubscriptionFlowPage),
       (SoleTraderSubscriptionFlow, VatDetailsSubscriptionFlowPage, 5, 6, EoriConsentSubscriptionFlowPage),
       (SoleTraderSubscriptionFlow, EoriConsentSubscriptionFlowPage, 6, 6, ReviewDetailsPageGetYourEORI),
-      (IndividualSubscriptionFlow, ContactDetailsSubscriptionFlowPageGetEori, 1, 3, EoriConsentSubscriptionFlowPage),
+      (
+        IndividualSubscriptionFlow,
+        ContactDetailsSubscriptionFlowPageGetEori,
+        1,
+        3,
+        ContactAddressSubscriptionFlowPageGetEori
+      ),
+      (IndividualSubscriptionFlow, ContactAddressSubscriptionFlowPageGetEori, 2, 3, EoriConsentSubscriptionFlowPage),
       (IndividualSubscriptionFlow, EoriConsentSubscriptionFlowPage, 3, 3, ReviewDetailsPageGetYourEORI),
       (
         ThirdCountryOrganisationSubscriptionFlow,

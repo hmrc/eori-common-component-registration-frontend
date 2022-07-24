@@ -125,7 +125,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
         page.getElementsText(headingXPath) shouldBe "EORI application contact details"
         page.getElementsText(
           introXPathRegister
-        ) shouldBe "W’ll use these details to send you the result of your GB EORI"
+        ) shouldBe "We’ll use these details to send you the result of your GB EORI application."
       }
     }
 

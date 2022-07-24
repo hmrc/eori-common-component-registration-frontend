@@ -359,19 +359,25 @@
 }
 
 @contactName = @{
-    Seq(summaryListRow(
-        key = messages("cds.form.check-answers.contact-name"),
-        value = subscription.contactDetails.map(cd => Html(cd.fullName)),
-        call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
-    ))
+    Seq(subscription.contactDetails.map { cd =>
+        summaryListRow(
+            key = messages("cds.form.check-answers.contact-name"),
+            value = Some(Html(cd.fullName)),
+            call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
+            )
+        }
+    ).flatten
 }
 
 @contactTelephone = @{
-    Seq(summaryListRow(
-        key = messages("cds.form.check-answers.contact-telephone"),
-        value = subscription.contactDetails.map(cd => Html(cd.telephone)),
-        call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
-    ))
+    Seq(subscription.contactDetails.map { cd =>
+        summaryListRow(
+            key = messages("cds.form.check-answers.contact-telephone"),
+            value = Some(Html(cd.telephone)),
+            call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
+            )
+        }
+    ).flatten
 }
 
 @sicCodeDisplay = @{
