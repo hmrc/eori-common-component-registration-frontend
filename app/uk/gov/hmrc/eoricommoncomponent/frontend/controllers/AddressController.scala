@@ -27,7 +27,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -39,8 +38,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddressController @Inject() (
   authorise: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
-  sessionCache: SessionCache,
-  requestSessionData: RequestSessionData,
   subscriptionDetailsService: SubscriptionDetailsService,
   subscriptionFlowManager: SubscriptionFlowManager,
   mcc: MessagesControllerComponents,
@@ -86,33 +83,7 @@ class AddressController @Inject() (
     form: Form[AddressViewModel],
     status: Status
   )(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
-    sessionCache.registrationDetails flatMap { rd =>
-      subscriptionDetailsService.cachedCustomsId flatMap { cid =>
-        val (countriesToInclude, countriesInCountryPicker) =
-          (rd.customsId, cid) match {
-            case (Some(_: Utr | _: Nino), _) | (_, Some(_: Utr | _: Nino)) =>
-              Countries.getCountryParameters(None)
-            case _ =>
-              Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
-          }
-        val isRow = UserLocation.isRow(requestSessionData)
-        Future.successful(
-          status(
-            addressView(
-              form,
-              countriesToInclude,
-              countriesInCountryPicker,
-              isInReviewMode,
-              service,
-              requestSessionData.isIndividualOrSoleTrader,
-              requestSessionData.isPartnership,
-              requestSessionData.isCompany,
-              isRow
-            )
-          )
-        )
-      }
-    }
+    Future.successful(status(addressView(form, Countries.all, isInReviewMode, service)))
 
   private def populateOkView(address: Option[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
     hc: HeaderCarrier,

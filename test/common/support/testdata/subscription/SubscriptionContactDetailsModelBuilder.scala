@@ -16,20 +16,16 @@
 
 package common.support.testdata.subscription
 
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, ContactDetailsViewModel}
 
 object SubscriptionContactDetailsModelBuilder {
 
-  val contactUkDetailsModelWithMandatoryValuesOnly = ContactDetailsModel(
-    fullName = "John Doe",
-    emailAddress = "john.doe@example.com",
-    telephone = "01632961234",
-    fax = None,
-    street = Some("Line 1"),
-    city = Some("city name"),
-    postcode = None,
-    countryCode = Some("GB")
-  )
+  val contactUkDetailsModelWithMandatoryValuesOnly =
+    ContactDetailsViewModel(
+      fullName = "John Doe",
+      emailAddress = Some("john.doe@example.com"),
+      telephone = "01632961234"
+    )
 
   val contactDetailsModelWithAllValues = ContactDetailsModel(
     fullName = "John Doe",
