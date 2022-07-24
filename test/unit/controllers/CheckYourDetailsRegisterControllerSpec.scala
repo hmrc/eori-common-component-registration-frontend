@@ -88,6 +88,9 @@ class CheckYourDetailsRegisterControllerSpec
   private val contactAddressDetails =
     AddressViewModel(street = "street", city = "city", postcode = Some("SE28 1AA"), countryCode = "FR")
 
+  private val contactAddressDetailsMandatoryOnly =
+    AddressViewModel(street = "street", city = "city", postcode = None, countryCode = "FR")
+
   private val shortName = "Company Details Short name"
 
   private val NotEntered: String = "Not entered"
@@ -304,7 +307,7 @@ class CheckYourDetailsRegisterControllerSpec
         detailsHolderWithAllFields.copy(
           contactDetails = Some(contactDetailsModelWithAllValues),
           addressDetails = Some(addressDetails),
-          contactAddressDetails = Some(contactAddressDetails),
+          contactAddressDetails = Some(contactAddressDetailsMandatoryOnly),
           nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
         )
       )
@@ -974,7 +977,7 @@ class CheckYourDetailsRegisterControllerSpec
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
       strim("""
                 |street
-                |city                
+                |city
                 |France
               """)
   }
