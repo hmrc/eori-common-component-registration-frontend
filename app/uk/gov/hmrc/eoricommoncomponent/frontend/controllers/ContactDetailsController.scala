@@ -97,22 +97,26 @@ class ContactDetailsController @Inject() (
     email: String,
     inReviewMode: Boolean,
     service: Service
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] =
-    subscriptionDetailsService
-      .cacheContactDetails(
-        formData.copy(emailAddress = Some(email)).toContactInfoDetailsModel,
-        isInReviewMode = inReviewMode
-      )
-      .map(
-        _ =>
-          if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
-          else
-            Redirect(
-              subscriptionFlowManager
-                .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
-                .nextPage
-                .url(service)
-            )
-      )
+  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] = {
+    subscriptionBusinessService.cachedContactDetailsModel flatMap{
+      contactDetails =>
+        subscriptionDetailsService
+          .cacheContactDetails(
+            formData.copy(emailAddress = Some(email)).toContactInfoDetailsModel(contactDetails),
+            isInReviewMode = inReviewMode
+          )
+          .map(
+            _ =>
+              if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
+              else
+                Redirect(
+                  subscriptionFlowManager
+                    .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
+                    .nextPage
+                    .url(service)
+                )
+          )
+    }
+  }
 
 }
