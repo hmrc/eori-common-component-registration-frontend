@@ -48,6 +48,11 @@ case class ContactDetailsModel(
   def toContactsInfoViewModel: ContactDetailsViewModel =
     ContactDetailsViewModel(fullName, Some(emailAddress), telephone)
 
+  def toAddressViewModel: Option[AddressViewModel] =
+    Some(
+      AddressViewModel(trim(street).getOrElse(""), trim(city).getOrElse(""), trim(postcode), countryCode.getOrElse(""))
+    )
+
   def toRowContactInformation(): ContactInformation = ContactInformation(
     personOfContact = Some(fullName),
     sepCorrAddrIndicator = Some(false),

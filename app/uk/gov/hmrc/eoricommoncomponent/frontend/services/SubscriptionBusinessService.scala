@@ -61,16 +61,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
       )
     }
 
-  def contactAddressOrException(implicit hc: HeaderCarrier): Future[AddressViewModel] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.contactAddressDetails.getOrElse(throw new IllegalStateException("No Address Details Cached"))
-    }
-
-  def contactAddress(implicit hc: HeaderCarrier): Future[Option[AddressViewModel]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
-      subscriptionDetails.contactAddressDetails
-    }
-
   def getCachedCustomsId(implicit hc: HeaderCarrier): Future[Option[CustomsId]] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.customsId

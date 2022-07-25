@@ -76,7 +76,7 @@ class ContactAddressController @Inject() (
   private def fetchContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] =
     cdsFrontendDataCache.subscriptionDetails flatMap { sd =>
       sd.contactDetails match {
-        case Some(contactDetails) if(contactDetails.street.isDefined) =>
+        case Some(contactDetails) if contactDetails.street.isDefined =>
           Future.successful(
             AddressViewModel(
               contactDetails.street.getOrElse(""),
@@ -93,7 +93,7 @@ class ContactAddressController @Inject() (
   private def saveAddress()(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
     for {
       addressDetails <- fetchContactDetails()
-      contactDetails      <- subscriptionBusinessService.cachedContactDetailsModel
+      contactDetails <- subscriptionBusinessService.cachedContactDetailsModel
     } yield subscriptionDetailsService.cacheContactAddressDetails(
       addressDetails,
       contactDetails.getOrElse(throw new IllegalStateException("Address not found in cache"))

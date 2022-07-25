@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetailsSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
@@ -47,15 +47,16 @@ class AddressController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionBusinessService.contactAddress.flatMap {
-        populateOkView(_, isInReviewMode = false, service)
-      }
+      populateOkView(None, isInReviewMode = false, service)
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionBusinessService.contactAddressOrException flatMap { cdm =>
-        populateOkView(Some(cdm), isInReviewMode = true, service)
+      subscriptionBusinessService.cachedContactDetailsModel.flatMap {
+        case Some(cdm) =>
+          populateOkView(cdm.toAddressViewModel, isInReviewMode = true, service)
+        case None =>
+          populateOkView(None, isInReviewMode = true, service)
       }
     }
 
