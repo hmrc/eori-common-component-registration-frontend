@@ -65,17 +65,26 @@ class AddressController @Inject() (
         .fold(
           formWithErrors => populateCountriesToInclude(isInReviewMode, service, formWithErrors, BadRequest),
           address =>
-            subscriptionDetailsService.cacheContactAddressDetails(address).flatMap { _ =>
-              Future.successful(
-                Redirect(
-                  subscriptionFlowManager
-                    .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
-                    .nextPage.url(service)
+            saveAddress(address).flatMap(
+              _ =>
+                Future.successful(
+                  Redirect(
+                    subscriptionFlowManager
+                      .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
+                      .nextPage.url(service)
+                  )
                 )
-              )
-            }
+            )
         )
     }
+
+  private def saveAddress(ad: AddressViewModel)(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
+    for {
+      contactDetails <- subscriptionBusinessService.cachedContactDetailsModel
+    } yield subscriptionDetailsService.cacheContactAddressDetails(
+      ad,
+      contactDetails.getOrElse(throw new IllegalStateException("Address not found in cache"))
+    )
 
   private def populateCountriesToInclude(
     isInReviewMode: Boolean,
