@@ -97,8 +97,8 @@ class ContactDetailsController @Inject() (
     email: String,
     inReviewMode: Boolean,
     service: Service
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] = {
-    subscriptionBusinessService.cachedContactDetailsModel flatMap{
+  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] =
+    subscriptionBusinessService.cachedContactDetailsModel flatMap {
       contactDetails =>
         subscriptionDetailsService
           .cacheContactDetails(
@@ -117,6 +117,5 @@ class ContactDetailsController @Inject() (
                 )
           )
     }
-  }
 
 }

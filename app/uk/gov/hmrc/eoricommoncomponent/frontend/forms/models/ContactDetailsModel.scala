@@ -76,20 +76,22 @@ object ContactDetailsModel {
 //TODO remove email address read from cache and populate the contact details
 case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: String) {
 
-  def toContactInfoDetailsModel(contactDetails: Option[ContactDetailsModel]): ContactDetailsModel = {
+  def toContactInfoDetailsModel(contactDetails: Option[ContactDetailsModel]): ContactDetailsModel =
     contactDetails match {
-      case Some(cd ) => ContactDetailsModel(
-        fullName,
-        emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
-        telephone,
-        fax = cd.fax,
-        useAddressFromRegistrationDetails = false,
-        street = cd.street,
-        city = cd.city,
-        postcode = cd.postcode,
-        countryCode = cd.countryCode
-      )
-      case None => ContactDetailsModel(
+      case Some(cd) =>
+        ContactDetailsModel(
+          fullName,
+          emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
+          telephone,
+          fax = cd.fax,
+          useAddressFromRegistrationDetails = false,
+          street = cd.street,
+          city = cd.city,
+          postcode = cd.postcode,
+          countryCode = cd.countryCode
+        )
+      case None =>
+        ContactDetailsModel(
           fullName,
           emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
           telephone,
@@ -101,11 +103,6 @@ case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String
           countryCode = None
         )
     }
-    if(contactDetails.isDefined)
-
-    else
-
-  }
 
 }
 
