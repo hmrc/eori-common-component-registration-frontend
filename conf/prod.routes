@@ -100,6 +100,12 @@ POST        /customs-registration-services/:service/register/matching/address/:o
 GET         /customs-registration-services/:service/register/matching/address/:organisationType/review   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SixLineAddressController.showForm(isInReviewMode: Boolean = true, organisationType, service: Service)
 POST        /customs-registration-services/:service/register/matching/address/:organisationType/review   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SixLineAddressController.submit(isInReviewMode: Boolean = true, organisationType, service: Service)
 
+
+GET         /customs-registration-services/:service/register/address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController.createForm(service: Service)
+POST        /customs-registration-services/:service/register/address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController.submit(isInReviewMode:Boolean = false, service: Service)
+GET         /customs-registration-services/:service/register/address/review                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController.reviewForm(service: Service)
+POST        /customs-registration-services/:service/register/address/review                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController.submit(isInReviewMode:Boolean = true, service: Service)
+
 GET         /customs-registration-services/:service/register/matching/:organisationType                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController.form(organisationType, service: Service)
 POST        /customs-registration-services/:service/register/matching/:organisationType                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController.submit(organisationType, service: Service)
 GET         /customs-registration-services/:service/register/matching/name/:organisationType             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController.showForm(isInReviewMode: Boolean = false, organisationType, service: Service)
@@ -183,6 +189,11 @@ GET         /customs-registration-services/:service/register/contact-details    
 POST        /customs-registration-services/:service/register/contact-details                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactDetailsController.submit(isInReviewMode:Boolean = false, service: Service)
 GET         /customs-registration-services/:service/register/contact-details/review                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactDetailsController.reviewForm(service: Service)
 POST        /customs-registration-services/:service/register/contact-details/review                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactDetailsController.submit(isInReviewMode:Boolean = true, service: Service)
+
+GET         /customs-registration-services/:service/register/contact-address                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactAddressController.createForm(service: Service)
+POST        /customs-registration-services/:service/register/contact-address                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactAddressController.submit(isInReviewMode:Boolean = false, service: Service)
+GET         /customs-registration-services/:service/register/contact-address/review                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactAddressController.reviewForm(service: Service)
+POST        /customs-registration-services/:service/register/contact-address/review                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactAddressController.submit(isInReviewMode:Boolean = true, service: Service)
 
 GET         /customs-registration-services/register/xi-eori-guidance                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.xiEoriGuidance
 

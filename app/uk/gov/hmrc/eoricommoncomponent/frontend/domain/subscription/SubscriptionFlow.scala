@@ -23,11 +23,18 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 object SubscriptionFlows {
 
   private val individualFlowConfig =
-    createFlowConfig(List(ContactDetailsSubscriptionFlowPageGetEori, EoriConsentSubscriptionFlowPage))
+    createFlowConfig(
+      List(
+        ContactDetailsSubscriptionFlowPageGetEori,
+        ContactAddressSubscriptionFlowPageGetEori,
+        EoriConsentSubscriptionFlowPage
+      )
+    )
 
   private val soleTraderFlowConfig = createFlowConfig(
     List(
       ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori,
       SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
@@ -39,6 +46,7 @@ object SubscriptionFlows {
     List(
       DateOfEstablishmentSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
@@ -52,6 +60,7 @@ object SubscriptionFlows {
     List(
       DateOfEstablishmentSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
@@ -61,11 +70,18 @@ object SubscriptionFlows {
   )
 
   private val thirdCountryIndividualFlowConfig =
-    createFlowConfig(List(ContactDetailsSubscriptionFlowPageGetEori, EoriConsentSubscriptionFlowPage))
+    createFlowConfig(
+      List(
+        ContactDetailsSubscriptionFlowPageGetEori,
+        ContactAddressSubscriptionFlowPageGetEori,
+        EoriConsentSubscriptionFlowPage
+      )
+    )
 
   private val thirdCountrySoleTraderFlowConfig = createFlowConfig(
     List(
       ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori,
       SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
@@ -77,6 +93,7 @@ object SubscriptionFlows {
     List(
       DateOfEstablishmentSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
@@ -144,6 +161,15 @@ case object ContactDetailsSubscriptionFlowPageGetEori extends SubscriptionPage {
 
   override def url(service: Service): String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController
+      .createForm(service)
+      .url
+
+}
+
+case object ContactAddressSubscriptionFlowPageGetEori extends SubscriptionPage {
+
+  override def url(service: Service): String =
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController
       .createForm(service)
       .url
 

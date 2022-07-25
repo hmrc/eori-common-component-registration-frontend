@@ -1,0 +1,131 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
+@import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset}
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
+@import views.html.helper.CSRF
+
+@this(layout_di: layout,
+    govukButton: GovukButton,
+    inputText: helpers.inputText,
+    errorSummary: helpers.errorSummary,
+    countryField: helpers.countryField,
+    goveukFieldSet: GovukFieldset,
+    govukHint: GovukHint
+)
+
+@(
+    addressForm: Form[AddressViewModel],
+    countries: List[Country],
+    isInReviewMode: Boolean,
+    service: Service
+)(implicit request: Request[_], messages: Messages)
+
+@labelForEUCountry(countryCode: String) = @{ messages(messageKeyForEUCountryCode(countryCode)) }
+
+@messageKeyForEUCountryCode(countryCode: String) = @{
+    s"cds.country.$countryCode"
+}
+
+@isEUCountryCode(countryCode: String) = @{
+    messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
+}
+
+@fieldsetHint = {
+    @govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("ecc.manual-address-details.heading.hint")), classes = "govuk-!-margin-bottom-3"))
+}
+
+@html = {
+
+<div id="contact">
+@fieldsetHint
+
+@inputText(
+    form = addressForm,
+    id = "street",
+    name = "street",
+    label = "cds.subscription.contact-details.street.label",
+    isPageHeading = false,
+    classes = Some("govuk-!-width-one-half"),
+    autocomplete = Some("address-line1")
+)
+
+@inputText(
+    form = addressForm,
+    id = "city",
+    name = "city",
+    label = "cds.subscription.contact-details.city.label",
+    isPageHeading = false,
+    classes = Some("govuk-!-width-one-half"),
+    autocomplete = Some("address-level2")
+)
+
+@inputText(
+    form = addressForm,
+    id = "postcode",
+    name = "postcode",
+    label = "cds.subscription.contact-details.postcode.label",
+    isPageHeading = false,
+    classes = Some("govuk-!-width-one-half"),
+    autocomplete = Some("postal-code")
+)
+
+@countryField(
+    form = addressForm,
+    field = "countryCode",
+    label = "cds.subscription.contact-details.countryCode-auto-complete.label",
+    countries = countries,
+    labelClasses = None
+)
+</div>
+}
+
+@layout_di(messages("cds.enter-address-details.title"), AllCountriesInCountryPicker, Some(addressForm)) {
+
+<div>
+    @errorSummary(addressForm.errors)
+
+    @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController.submit(isInReviewMode, service), "addressDetailsForm") {
+
+    @CSRF.formField
+
+    @goveukFieldSet(
+        Fieldset(
+            legend = Some(Legend(
+            content = Text(messages("cds.enter-address-details.heading")),
+            classes = "govuk-fieldset__legend--l",
+            isPageHeading = true
+            )),
+            html = html
+        )
+    )
+
+    @govukButton(Button(
+            content = Text(ViewHelper.continueButtonText(isInReviewMode))
+        ))
+    }
+
+    @helpers.helpAndSupport()
+
+</div>
+}
