@@ -41,7 +41,8 @@ class AddressController @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService,
   subscriptionFlowManager: SubscriptionFlowManager,
   mcc: MessagesControllerComponents,
-  addressView: address
+  addressView: address,
+  errorTemplate: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -55,8 +56,8 @@ class AddressController @Inject() (
       subscriptionBusinessService.cachedContactDetailsModel.flatMap {
         case Some(cdm) =>
           populateOkView(cdm.toAddressViewModel, isInReviewMode = true, service)
-        case None =>
-          populateOkView(None, isInReviewMode = true, service)
+        case _ =>
+          Future.successful(InternalServerError(errorTemplate()))
       }
     }
 
