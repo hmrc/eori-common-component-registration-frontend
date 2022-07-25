@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolmen
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
 import uk.gov.hmrc.http.HeaderCarrier
@@ -37,6 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ContactAddressController @Inject() (
   authAction: AuthAction,
   subscriptionDetailsService: SubscriptionDetailsService,
+  subscriptionBusinessService: SubscriptionBusinessService,
   cdsFrontendDataCache: SessionCache,
   subscriptionFlowManager: SubscriptionFlowManager,
   mcc: MessagesControllerComponents,
@@ -65,14 +66,14 @@ class ContactAddressController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors =>
-            createContactDetails().map { contactAddressDetails =>
+            fetchContactDetails().map { contactAddressDetails =>
               BadRequest(contactAddressView(contactAddressDetails, isInReviewMode, formWithErrors, service))
             },
-          yesNoAnswer => locationByAnswer(isInReviewMode, yesNoAnswer, service)
+          yesNoAnswer => saveAddress().flatMap(_ => locationByAnswer(isInReviewMode, yesNoAnswer, service))
         )
     }
 
-  private def createContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] =
+  private def fetchContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] =
     cdsFrontendDataCache.subscriptionDetails flatMap { sd =>
       sd.contactAddressDetails match {
         case Some(addressDetails) =>
@@ -85,18 +86,23 @@ class ContactAddressController @Inject() (
             )
           )
         case _ =>
-          cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address)).map {
-            address =>
-              subscriptionDetailsService.cacheContactAddressDetails(address)
-              address
-          }
+          cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
       }
     }
+
+  private def saveAddress()(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
+    for {
+      registrationDetails <- cdsFrontendDataCache.registrationDetails
+      contactDetails      <- subscriptionBusinessService.cachedContactDetailsModel
+    } yield subscriptionDetailsService.cacheContactAddressDetails(
+      AddressViewModel(registrationDetails.address),
+      contactDetails.getOrElse(throw new IllegalStateException("Address not found in cache"))
+    )
 
   private def populateOkView(isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
-    createContactDetails() map {
+    fetchContactDetails() map {
       contactDetails =>
         Ok(contactAddressView(contactDetails, isInReviewMode, contactAddressDetailsYesNoAnswerForm, service))
     }
