@@ -74,10 +74,10 @@ countryCodeToLabel(contactAddress.countryCode)
 }
 
 @hintHtml = {
-<div class="govuk-inset-text">@{Html(fourLineBusinessAddress.mkString("<br>"))}</div>
+<div class="govuk-inset-text" id="contact-address">@{Html(fourLineBusinessAddress.mkString("<br>"))}</div>
 }
 
-@address = @{Html(fourLineBusinessAddress.mkString("<br>")) }
+
 
 @radioGroupYes = @{
 messages("confirm-contact-address-details.yes")
