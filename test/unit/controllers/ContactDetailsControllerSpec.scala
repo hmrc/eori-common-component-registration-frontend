@@ -320,6 +320,110 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     }
 
   }
+  "submitting the form in Review mode" should {
+
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
+      mockAuthConnector,
+      controller.submit(isInReviewMode = true, atarService)
+    )
+
+    "produce validation error when full name is not submitted" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (fullNameFieldName -> "")) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your contact name"
+        page.getElementsText(fullNameFieldLevelErrorXPath) shouldBe "Error: Enter your contact name"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "produce validation error when full name more than 70 characters" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (fullNameFieldName -> oversizedString(70))) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "The full name can be a maximum of 70 characters"
+        page.getElementsText(
+          fullNameFieldLevelErrorXPath
+        ) shouldBe "Error: The full name can be a maximum of 70 characters"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "produce validation error when Telephone is not submitted" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (telephoneFieldName -> "")) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your contact telephone number"
+        page.getElementsText(telephoneFieldLevelErrorXPath) shouldBe "Error: Enter your contact telephone number"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "produce validation error when Telephone more than 24 characters" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (telephoneFieldName -> oversizedString(24))) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "The telephone number must be 24 digits or less"
+        page.getElementsText(
+          telephoneFieldLevelErrorXPath
+        ) shouldBe "Error: The telephone number must be 24 digits or less"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "produce validation error when Telephone contains invalid characters" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (telephoneFieldName -> "$£")) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Please enter a valid telephone number"
+        page.getElementsText(telephoneFieldLevelErrorXPath) shouldBe "Error: Please enter a valid telephone number"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "Allow when Telephone contains plus character" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (telephoneFieldName -> "+")) { result =>
+        status(result) shouldBe SEE_OTHER
+      }
+    }
+
+    "allow when fax contains plus character" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (faxFieldName -> "+")) { result =>
+        status(result) shouldBe SEE_OTHER
+      }
+    }
+
+    "display page level errors when nothing is entered" in {
+      submitFormInReviewMode(createFormAllFieldsEmptyMap) { result =>
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe
+          "Enter your contact name " +
+            "Enter your contact telephone number"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "fail when system fails to create contact details" in {
+      val unsupportedException = new UnsupportedOperationException("Emulation of service call failure")
+
+      registerSaveContactDetailsMockFailure(unsupportedException)
+
+      val caught = intercept[RuntimeException] {
+        submitFormInReviewMode(createFormMandatoryFieldsMap) { result =>
+          await(result)
+        }
+      }
+      caught shouldBe unsupportedException
+    }
+
+    "redirect to review page when details are valid" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("/review-determine")
+      }
+    }
+
+  }
 
   private def mockFunctionWithRegistrationDetails(registrationDetails: RegistrationDetails) {
     when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(registrationDetails)
@@ -332,6 +436,16 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     test(
       controller
         .submit(isInReviewMode = false, atarService)(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
+    )
+  }
+
+  private def submitFormInReviewMode(form: Map[String, String], userId: String = defaultUserId)(
+    test: Future[Result] => Any
+  ) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(
+      controller
+        .submit(isInReviewMode = true, atarService)(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     )
   }
 

@@ -155,6 +155,15 @@ class AddressControllerSpec
         page.getElementText(AddressPage.continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
       }
     }
+
+    "throw internal server error if contactDetailsModel is None" in {
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+        .thenReturn(None)
+      val result =
+        await(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+      status(result) shouldBe INTERNAL_SERVER_ERROR
+    }
   }
   "Submitting the form in review mode" should {
     "redirect to review page when details are valid" in {
