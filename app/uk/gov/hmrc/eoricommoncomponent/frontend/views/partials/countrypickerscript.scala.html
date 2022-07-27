@@ -30,11 +30,11 @@
 }
 
 @if(countriesInCountryPicker != NoCountriesInCountryPicker){
-  <script type="text/javascript">
+  <script>
     function countryFilter(country) {
       return @countryFilter;
     }
   </script>
-  <script src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")" type="text/javascript"></script>
+  <script src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
 
 }
