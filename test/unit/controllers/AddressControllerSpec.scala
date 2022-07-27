@@ -78,6 +78,18 @@ class AddressControllerSpec
   val mandatoryFields      = Map("city" -> "city", "street" -> "street", "postcode" -> "SE28 1AA", "countryCode" -> "GB")
   val mandatoryFieldsEmpty = Map("city" -> "", "street" -> "", "postcode" -> "", "countryCode" -> "")
 
+  val invalidStreetField =
+    Map(
+      "street"      -> "",
+      "city"        -> "address line 1 address line 2 street town city name postcode United Kingdom",
+      "street"      -> "",
+      "postcode"    -> "",
+      "countryCode" -> ""
+    )
+
+  val invalidCityField =
+    Map("city" -> "address line 1 city postcode United Kingdom", "street" -> "", "postcode" -> "", "countryCode" -> "")
+
   val aFewCountries = List(
     Country("France", "country:FR"),
     Country("Germany", "country:DE"),
@@ -100,7 +112,7 @@ class AddressControllerSpec
   private val validRequest =
     Map("street" -> "streetName", "city" -> "cityName", "postcode" -> "SE281AA", "countryCode" -> "GB")
 
-  private val inValidRequest = Map("city" -> "cityName", "postcode" -> "SE281AA", "countryCode" -> "GB")
+  private val inValidRequest = Map("city" -> "", "postcode" -> "SE281AA", "countryCode" -> "GB")
 
   override def beforeEach: Unit = {
     super.beforeEach()
@@ -175,11 +187,31 @@ class AddressControllerSpec
   }
   "Submitting the form in create mode" should {
 
-    "display a relevant error if street is chosen" in {
+    "display a relevant error if street is not chosen" in {
       submitFormInCreateMode(inValidRequest) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(AddressPage.streetFieldLevelErrorXPath) shouldBe problemWithSelectionError
+      }
+    }
+
+    "display a relevant error if city exceed 35 chars" in {
+      submitFormInCreateMode(invalidCityField) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          AddressPage.cityFieldLevelErrorXPath
+        ) shouldBe "Error: The town or city must be 35 characters or less"
+      }
+    }
+
+    "display a relevant error if line exceed 70 chars" in {
+      submitFormInCreateMode(invalidStreetField) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          AddressPage.streetFieldLevelErrorXPath
+        ) shouldBe "Error: Enter the first line of your address"
       }
     }
 
