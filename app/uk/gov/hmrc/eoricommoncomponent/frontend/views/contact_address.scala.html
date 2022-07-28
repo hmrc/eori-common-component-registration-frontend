@@ -110,13 +110,14 @@ None,
     @CSRF.formField
 
     @displayInputRadioGroup("yes-no-answer",
-    Seq("true" -> radioGroupYes,
-    "false" -> radioGroupNo
+        Seq("true" -> radioGroupYes,
+            "false" -> radioGroupNo
     ))
 
     @govukButton(Button(
-    content = Text(ViewHelper.continueButtonText(isInReviewMode))
+        content = Text(ViewHelper.continueButtonText(isInReviewMode))
     ))
+
     }
     @helpers.helpAndSupport()
 </div>
