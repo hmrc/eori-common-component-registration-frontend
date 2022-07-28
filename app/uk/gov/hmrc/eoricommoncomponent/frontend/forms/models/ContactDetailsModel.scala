@@ -45,7 +45,7 @@ case class ContactDetailsModel(
     countryCode.getOrElse("")
   )
 
-  def toContactsInfoViewModel: ContactDetailsViewModel =
+  def toContactInfoViewModel: ContactDetailsViewModel =
     ContactDetailsViewModel(fullName, Some(emailAddress), telephone)
 
   def toAddressViewModel: Option[AddressViewModel] =

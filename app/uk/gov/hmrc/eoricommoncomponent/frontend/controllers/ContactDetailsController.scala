@@ -61,7 +61,7 @@ class ContactDetailsController @Inject() (
     subscriptionBusinessService.cachedContactDetailsModel.flatMap { contactDetails =>
       cdsFrontendDataCache.email.flatMap { email =>
         populateOkView(
-          contactDetails.map(_.toContactsInfoViewModel),
+          contactDetails.map(_.toContactInfoViewModel),
           Some(email),
           isInReviewMode = isInReviewMode,
           service
