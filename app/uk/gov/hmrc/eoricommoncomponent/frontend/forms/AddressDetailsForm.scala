@@ -45,9 +45,9 @@ object AddressDetailsForm {
 
   private def validCountry: Constraint[String] =
     Constraint({
-      case s if s.trim.isEmpty     => Invalid(ValidationError("cds.matching-error.country.invalid"))
-      case s if s.trim.length != 2 => Invalid(ValidationError("cds.matching-error.country.invalid"))
-      case _                       => Valid
+      case s if s.trim.isEmpty           => Invalid(ValidationError("cds.matching-error.country.invalid"))
+      case s if s.trim.length != Length2 => Invalid(ValidationError("cds.matching-error.country.invalid"))
+      case _                             => Valid
     })
 
 }
