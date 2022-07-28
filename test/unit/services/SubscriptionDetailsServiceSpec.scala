@@ -25,7 +25,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
@@ -187,5 +187,40 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
         .thenReturn(Future.successful(SubscriptionDetails(nameDobDetails = Some(nameDobDetails))))
       await(subscriptionDetailsHolderService.cachedNameDobDetails) shouldBe Some(nameDobDetails)
     }
+  }
+
+  "calling cacheContactAddressDetails" should {
+    val addressViewModel = AddressViewModel("Address Line 1", "city", Some("postcode"), "GB")
+    val contactDetailsModel = ContactDetailsModel(
+      fullName = "John Doe",
+      emailAddress = "john.doe@example.com",
+      telephone = "234234",
+      None,
+      false,
+      Some("streetName"),
+      Some("cityName"),
+      Some("SE281AA"),
+      Some("GB")
+    )
+    val updatedContactDetailsModel = ContactDetailsModel(
+      fullName = "John Doe",
+      emailAddress = "john.doe@example.com",
+      telephone = "234234",
+      None,
+      false,
+      Some("Address Line 1"),
+      Some("city"),
+      Some("postcode"),
+      Some("GB")
+    )
+
+    "save contact address details in frontend cache when cacheContactAddressDetails is called" in {
+      await(subscriptionDetailsHolderService.cacheContactAddressDetails(addressViewModel, contactDetailsModel))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.contactDetails shouldBe Some(updatedContactDetailsModel)
+    }
+
   }
 }

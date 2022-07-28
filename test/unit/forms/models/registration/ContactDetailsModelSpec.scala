@@ -25,59 +25,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewM
 
 class ContactDetailsModelSpec extends UnitSpec {
 
-  private val contactDetailsModel = ContactDetailsModel(
-    "name",
-    "a@b.com",
-    "1234566",
-    Some("1234556"),
-    false,
-    Some("street"),
-    Some("city"),
-    Some("postCode"),
-    Some("GB")
-  )
-
-  private val contactDetailsViewModel = ContactDetailsViewModel(
-    "name",
-    Some("a@b.com"),
-    "1234566",
-    Some("1234556"),
-    false,
-    Some("street"),
-    Some("city"),
-    Some("postCode"),
-    Some("GB")
-  )
-
-  private def pad(line: String) = s" $line "
-
-  "ContactDetailsModel" should {
-    "trim address" in {
-
-      val withSpaces = contactDetailsModel.copy(
-        street = Some(pad("street")),
-        city = Some(pad("city")),
-        postcode = Some(pad("postCode"))
-      )
-
-      withSpaces.contactDetails shouldBe contactDetailsModel.contactDetails
-      withSpaces.toContactDetailsViewModel shouldBe contactDetailsModel.toContactDetailsViewModel
-    }
-  }
-
-  "ContactDetailsViewModel" should {
-    "trim address" in {
-
-      val withSpaces = contactDetailsViewModel.copy(
-        street = Some(pad("street")),
-        city = Some(pad("city")),
-        postcode = Some(pad("postCode"))
-      )
-
-      withSpaces.toContactDetailsModel shouldBe contactDetailsModel
-    }
-  }
-
   "Contact Details model" should {
 
     "correctly convert data with address data" in {
@@ -108,6 +55,47 @@ class ContactDetailsModelSpec extends UnitSpec {
       val timestamp = contactInformation.emailVerificationTimestamp
 
       contactInformation shouldBe expectedContactInformation(timestamp)
+    }
+
+    "correctly convert ContactDetailsViewModel and update ContactDetailsModel" in {
+
+      val contactDetails =
+        ContactDetailsViewModel("Full name", Some("email"), "01234123123")
+      val contactDetailsModel =
+        ContactDetailsModel(
+          "Name",
+          "emailAddress",
+          "012341231234",
+          None,
+          false,
+          Some("street"),
+          Some("city"),
+          Some("postcode"),
+          Some("countryCode")
+        )
+      contactDetails.toContactInfoDetailsModel(Some(contactDetailsModel)) shouldBe ContactDetailsModel(
+        "Full name",
+        "email",
+        "01234123123",
+        None,
+        false,
+        Some("street"),
+        Some("city"),
+        Some("postcode"),
+        Some("countryCode")
+      )
+
+      contactDetails.toContactInfoDetailsModel(None) shouldBe ContactDetailsModel(
+        "Full name",
+        "email",
+        "01234123123",
+        None,
+        false,
+        None,
+        None,
+        None,
+        None
+      )
     }
   }
 }

@@ -187,7 +187,7 @@ cds.if.you.need.help.telephone1=Telephone: 0300 322 7067
 cds.if.you.need.help.telephone2=Monday to Friday, 8am to 6pm (except public holidays)
 cds.if.you.need.help.telephone.link=Find out about call charges
 
-cds.subscription.contact-details.intro=We will use these details to contact you about your application.
+cds.subscription.contact-details.intro=We’ll use these details to send you the result of your GB EORI application.
 
 #Get An EORI Journey
 
@@ -214,6 +214,16 @@ confirm-business-details.yes-wrong-address=No, I want to change the address
 confirm-business-details.partnership.yes-wrong-address=No, I want to change the address
 confirm-business-details.individual.yes-wrong-address=No, I want to change my address
 yes-no-wrong-address.error=Select yes if this is your address
+
+confirm-contact-address-details.yes=Yes
+confirm-contact-address-details.no=I want to enter the contact address manually
+
+ecc.contact-address-details.error.yes-no-answer=Select yes if the contact address is right
+
+ecc.subscription.contact-address.heading=Do you want us to use this address to send you any information about your application?
+ecc.subscription.contact-address.title=Do you want us to use this address to send you any information about your application?
+ecc.manual-address-details.heading.hint=We will use this address to contact you about your GB EORI application.
+
 
 cds.enter-address-details.company.title-and-heading=Enter your full registered company address
 

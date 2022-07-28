@@ -41,11 +41,6 @@ object SubscriptionForm {
   private val falseAnswer                    = "false"
   private val trueOrFalse: String => Boolean = oneOf(Set(trueAnswer, falseAnswer))
 
-  def trueFalseFieldMapping(fieldName: String): (String, Mapping[Boolean]) =
-    fieldName -> optional(text.verifying(messageKeyOptionInvalid, trueOrFalse))
-      .verifying(messageKeyOptionInvalid, _.isDefined)
-      .transform[Boolean](s => s.get == trueAnswer, b => if (b) Some(trueAnswer) else None)
-
   val subscriptionDateOfEstablishmentForm: Form[LocalDate] = Form(
     "date-of-establishment" -> mandatoryDateTodayOrBefore(
       onEmptyError = "doe.error.empty-date",
@@ -102,14 +97,5 @@ object SubscriptionForm {
       case s if s.length > 70  => Invalid(ValidationError("cds.subscription.full-name.error.too-long"))
       case _                   => Valid
     })
-
-  val validMultipleChoice = optional(text)
-    .verifying(messageKeyOptionInvalid, _.fold(false)(oneOf(Set("true", "false"))))
-    .transform[Boolean](str => str.contains("true"), bool => if (bool) Some("true") else Some("false"))
-
-  def validMultipleChoiceWithCustomError(errorMessage: String = messageKeyOptionInvalid) =
-    optional(text)
-      .verifying(errorMessage, _.fold(false)(oneOf(Set("true", "false"))))
-      .transform[Boolean](str => str.contains("true"), bool => if (bool) Some("true") else Some("false"))
 
 }

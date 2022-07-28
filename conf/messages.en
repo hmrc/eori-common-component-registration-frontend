@@ -1168,7 +1168,8 @@ cds.subscription.name-id-details.page-error.utr=Enter your Corporation Tax UTR n
 cds.subscription.name-id-details.utr.label=Corporation Tax Utr number
 #enter address
 cds.enter-address-details.organisation.title-and-heading=Enter your organisation address
-cds.enter-address-details.individual.title-and-heading=Enter your address
+cds.enter-address-details.title=EORI application contact address
+cds.enter-address-details.heading=EORI application contact address
 cds.enter-address-details.partnership.title-and-heading=Enter your partnership address
 cds.enter-address-details.company.title-and-heading=Enter your company address
 
@@ -1231,9 +1232,9 @@ cds.sole-trader.address-check.page-error.yes-no-answer=Tell us if this is these 
 cds.sole-trader.address-check.field-error.yes-no-answer=Select yes if these details are correct
 
 #contact details
-cds.subscription.contact-details.page.title=Who can we contact?
+cds.subscription.contact-details.page.title=EORI application contact details
 cds.subscription.contact-details.steps=contact
-cds.subscription.contact-details.heading=Who can we contact?
+cds.subscription.contact-details.heading=EORI application contact details
 cds.subscription.contact-details.intro=We will use these details to contact you about your EORI number. We will also use them to contact you if there are any issues with your customs activities.
 cds.subscription.contact-details.full-name.label=Full name
 cds.subscription.contact-details.email.label=Email address

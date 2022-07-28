@@ -45,17 +45,13 @@ case class ContactDetailsModel(
     countryCode.getOrElse("")
   )
 
-  def toContactDetailsViewModel: ContactDetailsViewModel = ContactDetailsViewModel(
-    fullName,
-    Some(emailAddress),
-    telephone,
-    fax,
-    useAddressFromRegistrationDetails,
-    trim(street),
-    trim(city),
-    trim(postcode),
-    countryCode
-  )
+  def toContactInfoViewModel: ContactDetailsViewModel =
+    ContactDetailsViewModel(fullName, Some(emailAddress), telephone)
+
+  def toAddressViewModel: Option[AddressViewModel] =
+    Some(
+      AddressViewModel(trim(street).getOrElse(""), trim(city).getOrElse(""), trim(postcode), countryCode.getOrElse(""))
+    )
 
   def toRowContactInformation(): ContactInformation = ContactInformation(
     personOfContact = Some(fullName),
@@ -78,29 +74,35 @@ object ContactDetailsModel {
 }
 
 //TODO remove email address read from cache and populate the contact details
-case class ContactDetailsViewModel(
-  fullName: String,
-  emailAddress: Option[String],
-  telephone: String,
-  fax: Option[String],
-  useAddressFromRegistrationDetails: Boolean = true,
-  street: Option[String],
-  city: Option[String],
-  postcode: Option[String],
-  countryCode: Option[String]
-) {
+case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: String) {
 
-  def toContactDetailsModel: ContactDetailsModel = ContactDetailsModel(
-    fullName,
-    emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
-    telephone,
-    fax,
-    useAddressFromRegistrationDetails,
-    trim(street),
-    trim(city),
-    trim(postcode),
-    countryCode
-  )
+  def toContactInfoDetailsModel(contactDetails: Option[ContactDetailsModel]): ContactDetailsModel =
+    contactDetails match {
+      case Some(cd) =>
+        ContactDetailsModel(
+          fullName,
+          emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
+          telephone,
+          fax = cd.fax,
+          useAddressFromRegistrationDetails = false,
+          street = cd.street,
+          city = cd.city,
+          postcode = cd.postcode,
+          countryCode = cd.countryCode
+        )
+      case None =>
+        ContactDetailsModel(
+          fullName,
+          emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
+          telephone,
+          fax = None,
+          useAddressFromRegistrationDetails = false,
+          street = None,
+          city = None,
+          postcode = None,
+          countryCode = None
+        )
+    }
 
 }
 

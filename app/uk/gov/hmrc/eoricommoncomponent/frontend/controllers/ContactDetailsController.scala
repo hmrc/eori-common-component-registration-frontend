@@ -23,11 +23,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetailsSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm.contactDetailsCreateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsViewModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_details
 import uk.gov.hmrc.http.HeaderCarrier
@@ -62,7 +61,7 @@ class ContactDetailsController @Inject() (
     subscriptionBusinessService.cachedContactDetailsModel.flatMap { contactDetails =>
       cdsFrontendDataCache.email.flatMap { email =>
         populateOkView(
-          contactDetails.map(_.toContactDetailsViewModel),
+          contactDetails.map(_.toContactInfoViewModel),
           Some(email),
           isInReviewMode = isInReviewMode,
           service
@@ -75,36 +74,11 @@ class ContactDetailsController @Inject() (
       cdsFrontendDataCache.email flatMap { email =>
         contactDetailsCreateForm().bindFromRequest.fold(
           formWithErrors =>
-            createContactDetails().map { contactDetails =>
-              BadRequest(
-                contactDetailsView(formWithErrors, Countries.all, contactDetails, Some(email), isInReviewMode, service)
-              )
-            },
+            Future.successful(BadRequest(contactDetailsView(formWithErrors, Some(email), isInReviewMode, service))),
           formData => storeContactDetails(formData, email, isInReviewMode, service)
         )
       }
     }
-
-  private def createContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] =
-    cdsFrontendDataCache.subscriptionDetails flatMap { sd =>
-      sd.contactDetails match {
-        case Some(contactDetails) =>
-          Future.successful(
-            AddressViewModel(
-              contactDetails.street.getOrElse(""),
-              contactDetails.city.getOrElse(""),
-              contactDetails.postcode,
-              contactDetails.countryCode.getOrElse("")
-            )
-          )
-        case _ => cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
-      }
-    }
-
-  private def clearFieldsIfNecessary(cdm: ContactDetailsViewModel, isInReviewMode: Boolean): ContactDetailsViewModel =
-    if (!isInReviewMode && cdm.useAddressFromRegistrationDetails)
-      cdm.copy(postcode = None, city = None, countryCode = None, street = None)
-    else cdm
 
   private def populateOkView(
     contactDetailsModel: Option[ContactDetailsViewModel],
@@ -113,12 +87,9 @@ class ContactDetailsController @Inject() (
     service: Service
   )(implicit request: Request[AnyContent]): Future[Result] = {
     val form = contactDetailsModel
-      .map(clearFieldsIfNecessary(_, isInReviewMode))
       .fold(contactDetailsCreateForm())(f => contactDetailsCreateForm().fill(f))
 
-    createContactDetails() map (
-      contactDetails => Ok(contactDetailsView(form, Countries.all, contactDetails, email, isInReviewMode, service))
-    )
+    Future.successful(Ok(contactDetailsView(form, email, isInReviewMode, service)))
   }
 
   private def storeContactDetails(
@@ -127,21 +98,24 @@ class ContactDetailsController @Inject() (
     inReviewMode: Boolean,
     service: Service
   )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] =
-    subscriptionDetailsService
-      .cacheContactDetails(
-        formData.copy(emailAddress = Some(email)).toContactDetailsModel,
-        isInReviewMode = inReviewMode
-      )
-      .map(
-        _ =>
-          if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
-          else
-            Redirect(
-              subscriptionFlowManager
-                .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
-                .nextPage
-                .url(service)
-            )
-      )
+    subscriptionBusinessService.cachedContactDetailsModel flatMap {
+      contactDetails =>
+        subscriptionDetailsService
+          .cacheContactDetails(
+            formData.copy(emailAddress = Some(email)).toContactInfoDetailsModel(contactDetails),
+            isInReviewMode = inReviewMode
+          )
+          .map(
+            _ =>
+              if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
+              else
+                Redirect(
+                  subscriptionFlowManager
+                    .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
+                    .nextPage
+                    .url(service)
+                )
+          )
+    }
 
 }

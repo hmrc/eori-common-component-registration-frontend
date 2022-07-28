@@ -544,7 +544,7 @@ class CheckYourDetailsRegisterControllerSpec
         RegistrationReviewPage.SummaryListRowXPath,
         "Contact address",
         "Change"
-      ) shouldBe "/customs-registration-services/atar/register/contact-details/review"
+      ) shouldBe "/customs-registration-services/atar/register/contact-address/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe "Short Name"
@@ -743,7 +743,7 @@ class CheckYourDetailsRegisterControllerSpec
         RegistrationReviewPage.SummaryListRowXPath,
         "Contact address",
         "Change"
-      ) shouldBe "/customs-registration-services/atar/register/contact-details/review"
+      ) shouldBe "/customs-registration-services/atar/register/contact-address/review"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe "Short Name"
