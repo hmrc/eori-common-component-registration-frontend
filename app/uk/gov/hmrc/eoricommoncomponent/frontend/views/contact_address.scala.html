@@ -94,18 +94,19 @@
 
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.submit(isInReviewMode, service), "contactAddressDetailsYesNoAnswerForm") {
 
-    @CSRF.formField
+        @CSRF.formField
 
-    @displayInputRadioGroup("yes-no-answer",
-        Seq("true" -> messages("confirm-contact-address-details.yes"),
-            "false" -> messages("confirm-contact-address-details.no")
-    ))
+        @displayInputRadioGroup("yes-no-answer",
+            Seq("true" -> messages("confirm-contact-address-details.yes"),
+                "false" -> messages("confirm-contact-address-details.no")
+        ))
 
-    @govukButton(Button(
-        content = Text(ViewHelper.continueButtonText(isInReviewMode))
-    ))
+        @govukButton(Button(
+            content = Text(ViewHelper.continueButtonText(isInReviewMode))
+        ))
 
     }
+
     @helpers.helpAndSupport()
 </div>
 }
