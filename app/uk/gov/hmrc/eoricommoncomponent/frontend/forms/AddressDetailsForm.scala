@@ -24,24 +24,29 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postcodeMa
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 object AddressDetailsForm {
+  private val Length2 = 2
 
   def addressDetailsCreateForm()(implicit messages: Messages): Form[AddressViewModel] =
     Form(
       mapping(
-        "street"   -> text.verifying(validLine1),
-        "city"     -> text.verifying(validCity),
-        "postcode" -> postcodeMapping,
-        "countryCode" -> text.verifying(
-          "cds.matching-error.country.invalid",
-          s => s.trim.nonEmpty && s != messages("cds.subscription.address-details.country.emptyValueText")
-        )
+        "street"      -> text.verifying(validStreet),
+        "city"        -> text.verifying(validCity),
+        "postcode"    -> postcodeMapping,
+        "countryCode" -> text.verifying(validCountry)
       )(AddressViewModel.apply)(AddressViewModel.unapply)
     )
 
-  private def validLine1: Constraint[String] =
+  private def validStreet: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty     => Invalid(ValidationError("cds.subscription.address-details.street.empty.error"))
       case s if s.trim.length > 70 => Invalid(ValidationError("cds.subscription.address-details.street.too-long.error"))
+      case _                       => Valid
+    })
+
+  private def validCountry: Constraint[String] =
+    Constraint({
+      case s if s.trim.isEmpty     => Invalid(ValidationError("cds.matching-error.country.invalid"))
+      case s if s.trim.length != 2 => Invalid(ValidationError("cds.matching-error.country.invalid"))
       case _                       => Valid
     })
 
