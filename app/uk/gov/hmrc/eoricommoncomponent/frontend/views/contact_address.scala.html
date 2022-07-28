@@ -28,75 +28,76 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 
 @this(
-layout_di: layout,
-inputRadioGroup: helpers.inputRadioGroup,
-govukButton: GovukButton,
-inputText: helpers.inputText,
-errorSummary: helpers.errorSummary,
-goveukFieldSet: GovukFieldset,
-govukRadios : GovukRadios,
-govukHint: GovukHint
+    layout_di: layout,
+    inputRadioGroup: helpers.inputRadioGroup,
+    govukButton: GovukButton,
+    inputText: helpers.inputText,
+    errorSummary: helpers.errorSummary,
+    goveukFieldSet: GovukFieldset,
+    govukRadios : GovukRadios,
+    govukHint: GovukHint
 )
 
 
 @(contactAddress: AddressViewModel, isInReviewMode: Boolean, contactAddressDetailsYesNoAnswerForm: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
 
 @fieldsetHint = {
-@govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("cds.subscription.contact-details.intro")), classes = "govuk-!-margin-bottom-3"))
+    @govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("cds.subscription.contact-details.intro")), classes = "govuk-!-margin-bottom-3"))
 }
 
 @labelForEUCountry(countryCode: String) = @{
-messages(messageKeyForEUCountryCode(countryCode))
+    messages(messageKeyForEUCountryCode(countryCode))
 }
 
 @messageKeyForEUCountryCode(countryCode: String) = @{
-s"cds.country.$countryCode"
+    s"cds.country.$countryCode"
 }
 
 @isEUCountryCode(countryCode: String) = @{
-messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
+    messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
 }
 
 @countryCodeToLabel(code: String) = @{
-code match {
-case "GB" => messages("cds.country.GB")
-case c if isEUCountryCode(c) => labelForEUCountry(c)
-case nonEuCode => nonEuCode
+    code match {
+        case "GB" => messages("cds.country.GB")
+        case c if isEUCountryCode(c) => labelForEUCountry(c)
+        case nonEuCode => nonEuCode
 }
 }
 
 @fourLineBusinessAddress = @{
-List(contactAddress.street,
-contactAddress.city,
-contactAddress.postcode.getOrElse(""),
-countryCodeToLabel(contactAddress.countryCode)
-).filter(_.nonEmpty)
+    List(contactAddress.street,
+        contactAddress.city,
+        contactAddress.postcode.getOrElse(""),
+        countryCodeToLabel(contactAddress.countryCode)
+    ).filter(_.nonEmpty)
 }
 
 @hintHtml = {
-<div class="govuk-inset-text" id="contact-address">@{Html(fourLineBusinessAddress.mkString("<br>"))}</div>
+    <div class="govuk-inset-text" id="contact-address">@{Html(fourLineBusinessAddress.mkString("<br>"))}</div>
 }
 
 
 
 @radioGroupYes = @{
-messages("confirm-contact-address-details.yes")
+    messages("confirm-contact-address-details.yes")
 }
 
 @radioGroupNo = @{
-messages("confirm-contact-address-details.no")
+    messages("confirm-contact-address-details.no")
 }
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
-@inputRadioGroup(
-contactAddressDetailsYesNoAnswerForm(field),
-options,
-Map.empty,
-Some(hintHtml),
-None,
-'_divClass -> "createForm-group govuk-form-group",
-'_legend -> messages("ecc.subscription.contact-address.heading"), '_isLegendH1 -> true
-)
+    @inputRadioGroup(
+        contactAddressDetailsYesNoAnswerForm(field),
+        options,
+        Map.empty,
+        Some(hintHtml),
+        None,
+        '_divClass -> "createForm-group govuk-form-group",
+        '_legend -> messages("ecc.subscription.contact-address.heading"),
+        '_isLegendH1 -> true
+    )
 }
 
 @layout_di(messages("ecc.subscription.contact-address.title"), form = Some(contactAddressDetailsYesNoAnswerForm)) {
