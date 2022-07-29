@@ -40,29 +40,23 @@ class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: Ap
   def updateCustomsDataStore(request: CustomsDataStoreRequest)(implicit hc: HeaderCarrier): Future[Unit] = {
     val url = s"${appConfig.handleSubscriptionBaseUrl}/customs/update/datastore"
     logger.info(s"[$LoggerComponentId][call] postUrl: $url")
-    val headers           = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON)
-    val headersForLogging = hc.headers(explicitlyIncludedHeaders) ++ hc.extraHeaders ++ headers
+    val headers = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON)
     http.POST[CustomsDataStoreRequest, HttpResponse](url, request, headers) map { response =>
       response.status match {
         case OK | NO_CONTENT =>
-          logger.info(
-            s"[$LoggerComponentId][call] complete for call to $url and headers $headersForLogging. Status:${response.status}"
-          )
+          logger.info(s"[$LoggerComponentId][call] complete for call to $url with status:${response.status}")
           ()
         case _ => throw new BadRequestException(s"Status:${response.status}")
       }
     } recoverWith {
       case e: BadRequestException =>
         logger.error(
-          s"[$LoggerComponentId][call] request failed with BAD_REQUEST status for call to $url and headers $headersForLogging: ${e.getMessage}",
+          s"[$LoggerComponentId][call] request failed with BAD_REQUEST status for call to $url: ${e.getMessage}",
           e
         )
         Future.failed(e)
       case NonFatal(e) =>
-        logger.error(
-          s"[$LoggerComponentId][call] request failed for call to $url and headers $headersForLogging: ${e.getMessage}",
-          e
-        )
+        logger.error(s"[$LoggerComponentId][call] request failed for call to $url: ${e.getMessage}", e)
         Future.failed(e)
     }
   }
