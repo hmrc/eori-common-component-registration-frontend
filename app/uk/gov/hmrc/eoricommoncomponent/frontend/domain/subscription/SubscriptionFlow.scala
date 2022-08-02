@@ -25,9 +25,9 @@ object SubscriptionFlows {
   private val individualFlowConfig =
     createFlowConfig(
       List(
+        EoriConsentSubscriptionFlowPage,
         ContactDetailsSubscriptionFlowPageGetEori,
-        ContactAddressSubscriptionFlowPageGetEori,
-        EoriConsentSubscriptionFlowPage
+        ContactAddressSubscriptionFlowPageGetEori
       )
     )
 
@@ -36,9 +36,9 @@ object SubscriptionFlows {
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori,
       SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
-      VatDetailsSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage
+      VatDetailsSubscriptionFlowPage
     )
   )
 
@@ -49,10 +49,10 @@ object SubscriptionFlows {
       ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       //VatGroupFlowPage,
-      VatDetailsSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage
+      VatDetailsSubscriptionFlowPage
     )
   )
 
@@ -63,9 +63,9 @@ object SubscriptionFlows {
       ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
-      VatDetailsSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage
+      VatDetailsSubscriptionFlowPage
     )
   )
 
