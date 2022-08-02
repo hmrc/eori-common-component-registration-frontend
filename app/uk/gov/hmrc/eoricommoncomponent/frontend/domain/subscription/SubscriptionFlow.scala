@@ -45,11 +45,11 @@ object SubscriptionFlows {
   private val corporateFlowConfig = createFlowConfig(
     List(
       DateOfEstablishmentSubscriptionFlowPage,
+      SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
-      SicCodeSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       //VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage
@@ -59,11 +59,11 @@ object SubscriptionFlows {
   private val partnershipFlowConfig = createFlowConfig(
     List(
       DateOfEstablishmentSubscriptionFlowPage,
+      SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
-      SicCodeSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage
     )
