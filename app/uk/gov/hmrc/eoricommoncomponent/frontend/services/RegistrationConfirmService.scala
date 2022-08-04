@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
   ClearCacheAndRegistrationIdentificationService,
@@ -34,7 +36,7 @@ class RegistrationConfirmService @Inject() (
   val clearDataService: ClearCacheAndRegistrationIdentificationService
 )(implicit ec: ExecutionContext) {
 
-  def currentSubscriptionStatus(implicit hc: HeaderCarrier): Future[PreSubscriptionStatus] =
+  def currentSubscriptionStatus(implicit hc: HeaderCarrier, service: Service): Future[PreSubscriptionStatus] =
     cdsFrontendCache.registrationDetails flatMap { registrationDetails =>
       subscriptionStatusService.getStatus("taxPayerID", registrationDetails.sapNumber.mdgTaxPayerId)
     }
