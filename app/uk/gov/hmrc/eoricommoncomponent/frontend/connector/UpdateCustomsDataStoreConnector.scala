@@ -18,12 +18,13 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import play.api.Logger
 import play.api.http.HeaderNames._
+import play.api.libs.json.Json
 import play.mvc.Http.MimeTypes
 import play.mvc.Http.Status.{NO_CONTENT, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
-import uk.gov.hmrc.http.HeaderNames.explicitlyIncludedHeaders
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{CustomsDataStoreUpdate, UpdateRequest, UpdateResponse}
 import uk.gov.hmrc.http.{HttpClient, _}
 
 import javax.inject.{Inject, Singleton}
@@ -42,6 +43,7 @@ class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: Ap
     logger.info(s"[$LoggerComponentId][call] postUrl: $url")
     val headers = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON)
     http.POST[CustomsDataStoreRequest, HttpResponse](url, request, headers) map { response =>
+      auditCall(url, request, response)
       response.status match {
         case OK | NO_CONTENT =>
           logger.info(s"[$LoggerComponentId][call] complete for call to $url with status:${response.status}")
@@ -59,6 +61,19 @@ class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: Ap
         logger.error(s"[$LoggerComponentId][call] request failed for call to $url: ${e.getMessage}", e)
         Future.failed(e)
     }
+  }
+
+  private def auditCall(url: String, request: CustomsDataStoreRequest, response: HttpResponse)(implicit
+    hc: HeaderCarrier
+  ): Unit = {
+    val updateRequest  = UpdateRequest(request)
+    val updateResponse = UpdateResponse(response)
+    audit.sendExtendedDataEvent(
+      transactionName = "customs-data-store",
+      path = url,
+      details = Json.toJson(CustomsDataStoreUpdate(updateRequest, updateResponse)),
+      eventType = "CustomsDataStoreUpdate"
+    )
   }
 
 }
