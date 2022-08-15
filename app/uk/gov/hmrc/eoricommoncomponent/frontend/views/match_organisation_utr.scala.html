@@ -21,11 +21,13 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukDetails}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, Details, HtmlContent}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 
 @this(layout_di: layout,
         inputRadioGroup: helpers.inputRadioGroup,
         govukButton: GovukButton,
         errorSummary: helpers.errorSummary,
+        appConfig: AppConfig,
         govukDetails : GovukDetails)
 
 @(matchOrgIdForm: Form[UtrMatchModel], organisationType: String, displayMode: String, service: Service, isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
@@ -58,11 +60,15 @@
     organisationType match {
         case CdsOrganisationType.ThirdCountryOrganisationId => messages("cds.matching.row-organisation.utr.paragraph")
         case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
-            messages("ecc.matching.row-sole-trader-individual.utr.paragraph")
+            messages("ecc.matching.row-sole-trader-individual.utr.paragraph", utrlink)
         case CdsOrganisationType.IndividualId | CdsOrganisationType.SoleTraderId =>
             messages("cds.matching.row-sole-trader-individual.utr.paragraph")
         case _ => messages("cds.matching.organisation.utr.paragraph")
     }
+}
+
+@utrlink = {
+<a href="@appConfig.findLostUtr" class="govuk-link" target="_blank" rel="noopener noreferrer">@messages("cds.matching.row-lost-urt.hint.link", messages("cds.navigation.opens-in-new-tab"))</a>
 }
 
 @isNotSoleTrader = @{
