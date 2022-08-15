@@ -103,7 +103,7 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
   private val logger = LoggerFactory.getLogger(this.getClass)
 
   def requestReceived(inRequest: Request, inResponse: Response): Unit = {
-    logger.asInstanceOf[ch.qos.logback.classic.Logger].setLevel(Level.INFO) // Comment out this line to avoid logging
+    // logger.asInstanceOf[ch.qos.logback.classic.Logger].setLevel(Level.INFO) // Comment out this line to avoid logging
     logger.info("Test logging")
     logger.info(s"WireMock request at URL: ${inRequest.getAbsoluteUrl}")
     logger.info(s"WireMock request headers: ${inRequest.getHeaders}")
