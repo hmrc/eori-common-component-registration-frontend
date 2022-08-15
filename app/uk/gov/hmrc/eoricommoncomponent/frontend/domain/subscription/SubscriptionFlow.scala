@@ -25,47 +25,47 @@ object SubscriptionFlows {
   private val individualFlowConfig =
     createFlowConfig(
       List(
+        EoriConsentSubscriptionFlowPage,
         ContactDetailsSubscriptionFlowPageGetEori,
-        ContactAddressSubscriptionFlowPageGetEori,
-        EoriConsentSubscriptionFlowPage
+        ContactAddressSubscriptionFlowPageGetEori
       )
     )
 
   private val soleTraderFlowConfig = createFlowConfig(
     List(
-      ContactDetailsSubscriptionFlowPageGetEori,
-      ContactAddressSubscriptionFlowPageGetEori,
       SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
     )
   )
 
   private val corporateFlowConfig = createFlowConfig(
     List(
       DateOfEstablishmentSubscriptionFlowPage,
-      ContactDetailsSubscriptionFlowPageGetEori,
-      ContactAddressSubscriptionFlowPageGetEori,
-      BusinessShortNameSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       //VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori,
+      BusinessShortNameSubscriptionFlowPage
     )
   )
 
   private val partnershipFlowConfig = createFlowConfig(
     List(
       DateOfEstablishmentSubscriptionFlowPage,
-      ContactDetailsSubscriptionFlowPageGetEori,
-      ContactAddressSubscriptionFlowPageGetEori,
-      BusinessShortNameSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori,
+      BusinessShortNameSubscriptionFlowPage
     )
   )
 
