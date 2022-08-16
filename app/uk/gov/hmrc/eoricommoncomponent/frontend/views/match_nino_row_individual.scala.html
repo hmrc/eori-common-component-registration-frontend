@@ -32,12 +32,17 @@
         matchNinoIdForm(field),
         options,
         Map.empty,
-        Some(Html(messages("cds.matching.nino.row.description"))),
+        Some(label),
         None,
         '_divClass -> "govuk-form-group inline",
         '_legend -> messages("cds.matching.nino.row.header"),
         '_isLegendH1 -> true
     )
+}
+
+@label = {
+<p class="govuk-body">@messages("cds.matching.nino.row.description")</p>
+<p class="govuk-body">@Html(messages("cds.matching.nino.nino.hint"))</p>
 }
 
 @layout_di(messages("cds.matching.nino.row.title"), form = Some(matchNinoIdForm)) {
