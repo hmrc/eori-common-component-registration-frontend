@@ -16,9 +16,12 @@
 
 package integration
 
+import ch.qos.logback.classic.Level
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
+import com.github.tomakehurst.wiremock.http.{Request, Response}
 import org.scalatest.concurrent.ScalaFutures
+import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -30,6 +33,23 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Ha
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, HandleSubscriptionService}
+
+object HandleSubscriptionConnectorSpec {
+  private val logger = LoggerFactory.getLogger(this.getClass)
+
+  def requestReceived(inRequest: Request, inResponse: Response): Unit = {
+    logger.info("Test logging")
+    logger.info(s"WireMock request at URL: ${inRequest.getAbsoluteUrl}")
+    logger.info(s"WireMock request headers: ${inRequest.getAbsoluteUrl}")
+    logger.info(s"WireMock response body: ${inRequest.getAbsoluteUrl}")
+
+    println("Test logging")
+    println(s"WireMock request at URL: ${inRequest.getAbsoluteUrl}")
+    println(s"WireMock request headers: ${inRequest.getHeaders}")
+    println(s"WireMock response body: ${Json.prettyPrint(Json.parse(inRequest.getBodyAsString))}")
+  }
+
+}
 
 class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -80,9 +100,21 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
   private val handleSubscriptionRequest = serviceRequestJson.as[HandleSubscriptionRequest]
 
+  private val logger = LoggerFactory.getLogger(this.getClass)
+
+  def requestReceived(inRequest: Request, inResponse: Response): Unit = {
+    // logger.asInstanceOf[ch.qos.logback.classic.Logger].setLevel(Level.INFO) // Comment out this line to avoid logging
+    logger.info("Test logging")
+    logger.info(s"WireMock request at URL: ${inRequest.getAbsoluteUrl}")
+    logger.info(s"WireMock request headers: ${inRequest.getHeaders}")
+    logger.info(s"WireMock response body: ${Json.prettyPrint(Json.parse(inRequest.getBodyAsString))}}")
+    logger.info(s"WireMock response headers: ${inRequest.getHeaders}")
+  }
+
   before {
     resetMockServer()
     AuditService.stubAuditService()
+    wireMockServer.addMockServiceRequestListener(requestReceived)
   }
 
   override def beforeAll: Unit =
