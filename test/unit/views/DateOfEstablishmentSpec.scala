@@ -16,7 +16,6 @@
 
 package unit.views
 
-import java.time
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatestplus.mockito.MockitoSugar
@@ -28,10 +27,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
 import util.ViewSpec
 
+import java.time
+
 class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
   val form: Form[time.LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
-  val isInReviewMode             = false
-  implicit val request           = withFakeCSRF(FakeRequest())
+  val isInReviewMode = false
+  implicit val request = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[date_of_establishment]
 
