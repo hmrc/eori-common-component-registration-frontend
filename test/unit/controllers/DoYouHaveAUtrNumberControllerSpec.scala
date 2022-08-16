@@ -189,7 +189,7 @@ class DoYouHaveAUtrNumberControllerSpec
           "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
         )
         page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
-        page.getElementsText("//*[@id='have-utr-hint']") shouldBe "You will have a UTR number if you pay tax in the UK."
+        page.getElementsText("//*[@id='have-utr-hint']") shouldBe "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can find a lost UTR number ."
       }
     }
     "contain a proper content for individuals" in {
@@ -202,7 +202,7 @@ class DoYouHaveAUtrNumberControllerSpec
           "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
         )
         page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
-        page.getElementsText("//*[@id='have-utr-hint']") shouldBe "You will have a UTR number if you pay tax in the UK."
+        page.getElementsText("//*[@id='have-utr-hint']") shouldBe "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can find a lost UTR number ."
       }
     }
   }
