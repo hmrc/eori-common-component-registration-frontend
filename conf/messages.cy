@@ -836,6 +836,7 @@ cds.subscription.date-of-birth.error.in-future.date-of-birth=Ni allwch nodi dydd
 cds.subscription.date-of-establishment.steps=eich manylion
 cds.subscription.date-of-establishment.title-and-heading=Pryd y cafodd y sefydliad ei sefydlu?
 cds.subscription.partnership.date-of-establishment.title-and-heading=Pryd y cafodd y bartneriaeth ei sefydlu?
+cds.subscription.partnership.date-of-establishment.hint=Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r sefydliad. Gallwch ddod o hyd i ddyddiad sefydlu’ch sefydliad ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
 cds.subscription.date-of-establishment.date-of-establishment.label=Dyddiad sefydlu
 cds.subscription.date-of-establishment.page-error.date-of-establishment=Nodwch eich dyddiad sefydlu
 cds.subscription.business.date-established.label=Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r sefydliad. Gallwch ddod o hyd i ddyddiad sefydlu’ch sefydliad ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
