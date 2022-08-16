@@ -17,7 +17,6 @@
 package unit.controllers
 
 import common.pages.matching.OrganisationUtrPage._
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -37,19 +36,20 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.OrganisationUtrFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DoYouHaveAUtrNumberControllerSpec
-    extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
+  extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockMatchingConnector          = mock[MatchingServiceConnector]
-  private val mockMatchingRequestHolder      = mock[MatchingRequestHolder]
-  private val mockMatchingResponse           = mock[MatchingResponse]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingConnector = mock[MatchingServiceConnector]
+  private val mockMatchingRequestHolder = mock[MatchingRequestHolder]
+  private val mockMatchingResponse = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val matchOrganisationUtrView       = instanceOf[match_organisation_utr]
+  private val matchOrganisationUtrView = instanceOf[match_organisation_utr]
 
   implicit val hc = mock[HeaderCarrier]
 
@@ -245,11 +245,11 @@ class DoYouHaveAUtrNumberControllerSpec
   }
 
   def submitForm(
-    form: Map[String, String],
-    organisationType: String,
-    userId: String = defaultUserId,
-    isInReviewMode: Boolean = false
-  )(test: Future[Result] => Any) {
+                  form: Map[String, String],
+                  organisationType: String,
+                  userId: String = defaultUserId,
+                  isInReviewMode: Boolean = false
+                )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .submit(organisationType, atarService, isInReviewMode)
