@@ -46,7 +46,7 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
       doc.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
     "have the correct text in the hint" in {
-      doc.body.getElementById("date-of-establishment-hint").text() must include("For example, 31 03 1980.")
+      doc.body.getElementById("date-of-establishment-hint").text() must include("Enter the date shown on the organisation’s certificate of incorporation.")
     }
     "have the correct text in the intro paragraph" in {
       doc.body
@@ -68,7 +68,7 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     "have the correct text in the description" in {
       docRestOfWorld.body
         .getElementById("date-of-establishment-hint")
-        .text() mustBe "For example, 31 03 1980."
+        .text() mustBe "Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the Companies House register (opens in new tab)"
     }
   }
 

@@ -970,6 +970,7 @@ cds.subscription.date-of-establishment.error.invalid.date-of-establishment=Pleas
 cds.subscription.date-of-establishment.error.in-future.date-of-establishment=You cannot enter a date of establishment in the future
 cds.subscription.date-of-establishment.cannot-find=Can’t find the certificate?
 cds.subscription.date-of-establishment.find-it=You can find the incorporated date on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer"> Companies House register</a>
+cds.subscription.partnership.date-of-establishment.hint=Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 
 #Sic Code
 cds.subscription.sic.page.title=What is the Standard Industrial Classification (SIC) code for your organisation?
