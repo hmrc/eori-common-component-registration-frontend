@@ -31,8 +31,8 @@ import java.time
 
 class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
   val form: Form[time.LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
-  val isInReviewMode = false
-  implicit val request = withFakeCSRF(FakeRequest())
+  val isInReviewMode             = false
+  implicit val request           = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[date_of_establishment]
 
@@ -47,7 +47,9 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
       doc.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
     "have the correct text in the hint" in {
-      doc.body.getElementById("date-of-establishment-hint").text() must include("Enter the date shown on the organisation’s certificate of incorporation.")
+      doc.body.getElementById("date-of-establishment-hint").text() must include(
+        "Enter the date shown on the organisation’s certificate of incorporation."
+      )
     }
     "have the correct text in the intro paragraph" in {
       doc.body
