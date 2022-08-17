@@ -957,10 +957,11 @@ cds.subscription.date-of-birth.error.in-future.date-of-birth=You cannot enter a 
 #Subscription Date of Establishment
 
 cds.subscription.date-of-establishment.steps=your details
-cds.subscription.date-of-establishment.title-and-heading=When was the organisation established?
-cds.subscription.partnership.date-of-establishment.title-and-heading=When was the partnership established?
+cds.subscription.date-of-establishment.title-and-heading=Date when the organisation was established
+cds.subscription.partnership.date-of-establishment.title-and-heading=Date when the partnership was established
 cds.subscription.date-of-establishment.date-of-establishment.label=Date of establishment
 cds.subscription.date-of-establishment.page-error.date-of-establishment=Enter your date of establishment
+cds.subscription.business.date-established.subheading=When was the {0} established?
 cds.subscription.business.date-established.label=Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 cds.subscription.llp.date-established.charity-label=Enter the date shown on the organisation’s certificate of incorporation or registration certificate.
 cds.subscription.llp.date-established.label=Enter the date shown on the partnership’s certificate of incorporation. You can find the date your business was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>

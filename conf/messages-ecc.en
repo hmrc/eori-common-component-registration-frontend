@@ -166,7 +166,7 @@ cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique 
 cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.organisation.utr=Organisation Self Assessment Unique Taxpayer Reference (UTR)
 
-cds.subscription.date-of-establishment.company.title-and-heading=When was the company established?
+cds.subscription.date-of-establishment.company.title-and-heading=Date when the company was established
 
 cds.subscription.address-details.postcode.row.label=Postal code
 
