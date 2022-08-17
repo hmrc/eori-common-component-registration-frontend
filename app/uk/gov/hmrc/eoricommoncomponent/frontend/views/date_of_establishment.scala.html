@@ -26,9 +26,8 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
-@import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 
-@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary, appCongif: AppConfig)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 
 @(dateForm: Form[LocalDate], isInReviewMode: Boolean, orgType: EtmpOrganisationType, isRestOfWorldJourney: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
@@ -40,11 +39,19 @@
     else "cds.subscription.business.date-established.label"
 }
 
+@orgTypeText = @{
+    if (orgType == Partnership || orgType == LLP) "partnership"
+    else if(orgType == CorporateBody && !isRestOfWorldJourney) "company"
+    else "organisation"
+}
+
 @introAndHintHtml = {
-    @if(orgType != LLP && orgType != Partnership && !isRestOfWorldJourney){
-        <p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
-    }
-    <span id="date-of-establishment-hint-text" class="govuk-hint">@Html(messages("cds.subscription.partnership.date-of-establishment.hint"))</span>
+<p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
+
+<h3 class="govuk-heading-s">
+    @messages("cds.subscription.business.date-established.subheading", orgTypeText)
+</h3>
+<span id="date-of-establishment-hint-text" class="govuk-hint">@Html(messages("cds.date-established.hint"))</span>
 }
 
 @headerAndTitle = @{
