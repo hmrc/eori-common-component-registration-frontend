@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
   RegistrationDisplayResponseHolder
 }
 import uk.gov.hmrc.http.HeaderCarrier
+import util.externalservices
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, RegistrationDisplay}
 
@@ -34,17 +35,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(
-      Map(
-        "microservice.services.eori-common-component-hods-proxy.host"                         -> Host,
-        "microservice.services.eori-common-component-hods-proxy.port"                         -> Port,
-        "microservice.services.eori-common-component-hods-proxy.registration-display.context" -> "registration-display",
-        "auditing.consumer.baseUri.host"                                                      -> Host,
-        "auditing.consumer.baseUri.port"                                                      -> Port
-      )
+  override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(
+    Map(
+      "microservice.services.eori-common-component-hods-proxy.host"                         -> Host,
+      "microservice.services.eori-common-component-hods-proxy.port"                         -> Port,
+      "microservice.services.eori-common-component-hods-proxy.registration-display.context" -> "registration-display",
+      "auditing.consumer.baseUri.host"                                                      -> Host,
+      "auditing.consumer.baseUri.port"                                                      -> Port
     )
-    .build()
+  ).build()
 
   implicit val hc = HeaderCarrier()
 
@@ -53,157 +52,200 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
     AuditService.stubAuditService()
   }
 
-  override def beforeAll(): Unit =
-    startMockServer()
+  override def beforeAll(): Unit = startMockServer()
 
-  override def afterAll(): Unit =
-    stopMockServer()
+  override def afterAll(): Unit = stopMockServer()
 
   val servicePostUrl = "/registration-display"
 
   private lazy val Connector = app.injector.instanceOf[RegistrationDisplayConnector]
 
-  private val serviceRequestJson =
-    Json.parse(s"""
-         |{
-         |   "registrationDisplayRequest":{
-         |      "requestCommon":{
-         |         "receiptDate":"2019-04-09T14:00:00Z",
-         |         "requestParameters":[
-         |            {
-         |               "paramName":"REGIME",
-         |               "paramValue":"CDS"
-         |            },
-         |            {
-         |               "paramName":"ID_Type",
-         |               "paramValue":"SAFE"
-         |            },
-         |            {
-         |               "paramName":"ID_Value",
-         |               "paramValue":"XE111123456789"
-         |            }
-         |         ]
-         |      }
-         |   }
-         |}
+  private val serviceRequestJson = Json.parse(s"""
+       |{
+       |   "registrationDisplayRequest":{
+       |      "requestCommon":{
+       |         "receiptDate":"2019-04-09T14:00:00Z",
+       |         "requestParameters":[
+       |            {
+       |               "paramName":"REGIME",
+       |               "paramValue":"CDS"
+       |            },
+       |            {
+       |               "paramName":"ID_Type",
+       |               "paramValue":"SAFE"
+       |            },
+       |            {
+       |               "paramName":"ID_Value",
+       |               "paramValue":"XE111123456789"
+       |            }
+       |         ]
+       |      }
+       |   }
+       |}
     """.stripMargin)
 
-  private val serviceRegistrationDisplayResponseJson =
-    Json.parse(s"""
-         |{
-         |   "registrationDisplayResponse":{
-         |      "responseCommon":{
-         |         "status":"OK",
-         |         "processingDate":"2016-09-02T09:30:47Z",
-         |         "taxPayerID":"0100086619"
-         |      },
-         |      "responseDetail":{
-         |         "SAFEID":"XY0000100086619",
-         |         "isEditable":true,
-         |         "isAnAgent":false,
-         |         "isAnIndividual":true,
-         |         "individual":{
-         |            "firstName":"John",
-         |            "lastName":"Doe",
-         |            "dateOfBirth":"1989-09-21"
-         |         },
-         |         "address":{
-         |            "addressLine1":"Street",
-         |            "addressLine2":"City",
-         |            "postalCode":"SE28 1AA",
-         |            "countryCode":"GB"
-         |         },
-         |         "contactDetails":{
-         |            "phoneNumber":"07584673896",
-         |            "emailAddress":"John.Doe@example.com"
-         |         }
-         |      }
-         |   }
-         |}
+  private val serviceRegistrationDisplayResponseJson = Json.parse(s"""
+       |{
+       |   "registrationDisplayResponse":{
+       |      "responseCommon":{
+       |         "status":"OK",
+       |         "processingDate":"2016-09-02T09:30:47Z",
+       |         "taxPayerID":"0100086619"
+       |      },
+       |      "responseDetail":{
+       |         "SAFEID":"XY0000100086619",
+       |         "isEditable":true,
+       |         "isAnAgent":false,
+       |         "isAnIndividual":true,
+       |         "individual":{
+       |            "firstName":"John",
+       |            "lastName":"Doe",
+       |            "dateOfBirth":"1989-09-21"
+       |         },
+       |         "address":{
+       |            "addressLine1":"Street",
+       |            "addressLine2":"City",
+       |            "postalCode":"SE28 1AA",
+       |            "countryCode":"GB"
+       |         },
+       |         "contactDetails":{
+       |            "phoneNumber":"07584673896",
+       |            "emailAddress":"John.Doe@example.com"
+       |         }
+       |      }
+       |   }
+       |}
       """.stripMargin)
 
   private val serviceRegistrationError500WithDetailsResponseJson =
     Json.parse("""{
-        |     "errorDetail": {
-        |         "timestamp": "2016-06-12T19:35:45.260000Z",
-        |         "correlationID": "f058ebd6-02f7-4d3f-942e-904344e8cde5",
-        |         "errorCode": "500",
-        |         "errorMessage": "Internal error",
-        |         "source": "Back End",
-        |         "sourceFaultDetail": {
-        |             "detail": [
-        |             "Connection Timeout"
-        |           ]
-        |         }
-        |     }
-        |}""".stripMargin)
+      |     "errorDetail": {
+      |         "timestamp": "2016-06-12T19:35:45.260000Z",
+      |         "correlationID": "f058ebd6-02f7-4d3f-942e-904344e8cde5",
+      |         "errorCode": "500",
+      |         "errorMessage": "Internal error",
+      |         "source": "Back End",
+      |         "sourceFaultDetail": {
+      |             "detail": [
+      |             "Connection Timeout"
+      |           ]
+      |         }
+      |     }
+      |}""".stripMargin)
 
   private val serviceRegistrationError500WithoutDetailsResponseJson =
     Json.parse("""
-        |{
-        | "errorDetail": {
-        | "timestamp": "2016-08-16T18:22:00.000Z",
-        | "correlationID": "f058ebd6-02f7-4d3f-942e-904344e8cde5",
-        | "errorCode": "500",
-        | "errorMessage": "Internal error",
-        | "source": "Internal error"
-        | }
-        |}
-        |""".stripMargin)
+      |{
+      | "errorDetail": {
+      | "timestamp": "2016-08-16T18:22:00.000Z",
+      | "correlationID": "f058ebd6-02f7-4d3f-942e-904344e8cde5",
+      | "errorCode": "500",
+      | "errorMessage": "Internal error",
+      | "source": "Internal error"
+      | }
+      |}
+      |""".stripMargin)
 
   private val serviceRegistrationError200ResponseWithErrorJson =
     Json.parse("""
-        | {
-        | "registrationDisplayResponse": {
-        | "responseCommon": {
-        | "status": "OK",
-        | "statusText":"004 - Duplicate submission acknowledgment reference",
-        | "processingDate": "2016-08-17T19:33:47Z",
-        | "returnParameters": [{
-        | "paramName": "POSITION",
-        | "paramValue": "FAIL"
-        | }]
-        | }
-        | }
-        |}
-        |""".stripMargin)
+      | {
+      | "registrationDisplayResponse": {
+      | "responseCommon": {
+      | "status": "OK",
+      | "statusText":"004 - Duplicate submission acknowledgment reference",
+      | "processingDate": "2016-08-17T19:33:47Z",
+      | "returnParameters": [{
+      | "paramName": "POSITION",
+      | "paramValue": "FAIL"
+      | }]
+      | }
+      | }
+      |}
+      |""".stripMargin)
 
   private val serviceRegistrationError400ResponseJson =
     Json.parse("""
-        |{
-        |  "errorDetail": {
-        |    "timestamp": "2014-01-19T11:31:47Z",
-        |    "correlationId": "f05uigd6-02f7-4d3f-942e-904365e8cde5",
-        |    "errorCode": "400",
-        |    "errorMessage": "REGIME missing or invalid",
-        |    "source": "Back End",
-        |    "sourceFaultDetail": {
-        |      "detail": [
-        |        "001 - REGIME missing or invalid"
-        |      ]
-        |    }
-        |  }
-        |}
-        |""".stripMargin)
+      |{
+      |  "errorDetail": {
+      |    "timestamp": "2014-01-19T11:31:47Z",
+      |    "correlationId": "f05uigd6-02f7-4d3f-942e-904365e8cde5",
+      |    "errorCode": "400",
+      |    "errorMessage": "REGIME missing or invalid",
+      |    "source": "Back End",
+      |    "sourceFaultDetail": {
+      |      "detail": [
+      |        "001 - REGIME missing or invalid"
+      |      ]
+      |    }
+      |  }
+      |}
+      |""".stripMargin)
 
   private val serviceRegistrationError405ResponseJson =
     Json.parse("""
-        |{
-        |  "errorDetail": {
-        |    "timestamp": "2014-01-19T11:31:47Z",
-        |    "correlationId": "f05uigd6-02f7-4d3f-942e-904365e8cde5",
-        |    "errorCode": "405",
-        |    "errorMessage": "Method not allowed",
-        |    "source": "Back End",
-        |    "sourceFaultDetail": {
-        |      "detail": [
-        |        "405 - Method not allowed"
-        |      ]
-        |    }
-        |  }
-        |}
-        |
-        |""".stripMargin)
+      |{
+      |  "errorDetail": {
+      |    "timestamp": "2014-01-19T11:31:47Z",
+      |    "correlationId": "f05uigd6-02f7-4d3f-942e-904365e8cde5",
+      |    "errorCode": "405",
+      |    "errorMessage": "Method not allowed",
+      |    "source": "Back End",
+      |    "sourceFaultDetail": {
+      |      "detail": [
+      |        "405 - Method not allowed"
+      |      ]
+      |    }
+      |  }
+      |}
+      |
+      |""".stripMargin)
+
+  val expectedAuditEventJson = Json.parse("""
+    |{
+    |  "auditSource": "eori-common-component-registration-frontend",
+    |  "auditType": "RegistrationDisplay",
+    |  "tags": {
+    |    "clientIP": "-",
+    |    "path": "http://localhost:11111/registration-display",
+    |    "X-Session-ID": "-",
+    |    "Akamai-Reputation": "-",
+    |    "X-Request-ID": "-",
+    |    "deviceID": "-",
+    |    "clientPort": "-",
+    |    "transactionName": "ecc-registration-display"
+    |  },
+    |  "detail": {
+    |    "request": {
+    |      "safeId": "XE111123456789"
+    |    },
+    |    "response": {
+    |      "safeId": "XY0000100086619",
+    |      "status": "OK",
+    |      "processingDate": "2016-09-02T09:30:47Z",
+    |      "isEditable": true,
+    |      "isAnAgent": false,
+    |      "isAnIndividual": true,
+    |      "individual": {
+    |        "firstName": "John",
+    |        "lastName": "Doe",
+    |        "dateOfBirth": "1989-09-21"
+    |      },
+    |      "address": {
+    |        "addressLine1": "Street",
+    |        "addressLine2": "City",
+    |        "postalCode": "SE28 1AA",
+    |        "countryCode": "GB"
+    |      },
+    |      "contactDetails": {
+    |        "phoneNumber": "07584673896",
+    |        "emailAddress": "John.Doe@example.com"
+    |      }
+    |    }
+    |  },
+    |  "metadata": {
+    |    "metricsKey": null
+    |  }
+    |}""".stripMargin)
 
   "RegistrationDisplayConnector" should {
     "return RegistrationDisplayResponse with status successful response when registration-display returns 200" in {
@@ -215,30 +257,31 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
       await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must be(
         Right(serviceRegistrationDisplayResponseJson.as[RegistrationDisplayResponseHolder].registrationDisplayResponse)
       )
+      AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson)
     }
 
     "return error RegistrationResponse when registration-display returns 500 with details" in {
       RegistrationDisplay.returnResponseWhenReceiveRequest(
         servicePostUrl,
         serviceRequestJson.toString(),
-        serviceRegistrationError500WithDetailsResponseJson.toString(),
+        serviceRegistrationError500WithDetailsResponseJson
+          .toString(),
         INTERNAL_SERVER_ERROR
       )
-      await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must be(
-        Left(ServiceUnavailableResponse)
-      )
+      await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must
+        be(Left(ServiceUnavailableResponse))
     }
 
     "return error RegistrationResponse with registration-display returns 500 without details" in {
       RegistrationDisplay.returnResponseWhenReceiveRequest(
         servicePostUrl,
         serviceRequestJson.toString(),
-        serviceRegistrationError500WithoutDetailsResponseJson.toString(),
+        serviceRegistrationError500WithoutDetailsResponseJson
+          .toString(),
         INTERNAL_SERVER_ERROR
       )
-      await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must be(
-        Left(ServiceUnavailableResponse)
-      )
+      await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must
+        be(Left(ServiceUnavailableResponse))
     }
 
     "return error RegistrationResponse when registration-display returns 200 with error message" in {
@@ -249,8 +292,7 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
       await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must be(
         Right(
-          serviceRegistrationError200ResponseWithErrorJson
-            .as[RegistrationDisplayResponseHolder]
+          serviceRegistrationError200ResponseWithErrorJson.as[RegistrationDisplayResponseHolder]
             .registrationDisplayResponse
         )
       )
@@ -263,9 +305,8 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceRegistrationError400ResponseJson.toString(),
         BAD_REQUEST
       )
-      await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must be(
-        Left(ServiceUnavailableResponse)
-      )
+      await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must
+        be(Left(ServiceUnavailableResponse))
     }
 
     "return error RegistrationResponse when registration-display returns 405" in {
@@ -275,9 +316,8 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceRegistrationError405ResponseJson.toString(),
         METHOD_NOT_ALLOWED
       )
-      await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must be(
-        Left(ServiceUnavailableResponse)
-      )
+      await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must
+        be(Left(ServiceUnavailableResponse))
     }
   }
 }
