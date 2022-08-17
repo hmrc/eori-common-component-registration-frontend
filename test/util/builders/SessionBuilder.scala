@@ -40,10 +40,10 @@ object SessionBuilder {
     userId: String,
     form: Map[String, String]
   ): FakeRequest[AnyContentAsFormUrlEncoded] =
-    buildRequestWithSession(userId).withFormUrlEncodedBody(form.toList: _*)
+    buildRequestWithSession(userId).withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
 
   def buildRequestWithFormValues(form: Map[String, String]): FakeRequest[AnyContentAsFormUrlEncoded] =
-    buildRequestWithSessionNoUserAndToken.withFormUrlEncodedBody(form.toList: _*)
+    buildRequestWithSessionNoUserAndToken.withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
 
   def buildRequestWithSessionNoUser = {
     val sessionId = s"session-${UUID.randomUUID}"
