@@ -35,35 +35,12 @@
     service: Service
 )(implicit request: Request[AnyContent], messages: Messages)
 
-@question = @{
-    if(!requestSessionData.isRegistrationUKJourney) {
-        if(requestSessionData.isIndividualOrSoleTrader) {
-          "ecc.subscription.organisation-disclose-personal-details-consent.individual.title"
-        } else {
-          "ecc.subscription.organisation-disclose-personal-details-consent.organisation.title"
-        }
-    } else {
-        if(requestSessionData.isIndividualOrSoleTrader) {
-            "ecc.subscription.organisation-disclose-personal-details-consent.individual.title"
-        } else if(requestSessionData.isPartnership) {
-            "ecc.subscription.organisation-disclose-personal-details-consent.partnership.title"
-        } else if(requestSessionData.isCharity) {
-            "ecc.subscription.organisation-disclose-personal-details-consent.charity.title"
-        } else {
-            "ecc.subscription.organisation-disclose-personal-details-consent.title"
-        }
-    }
+@hint = {
+<p class="govuk-hint">@Html(messages("ecc.subscription.organisation-disclose-personal-details-consent.hint"))</p>
+<p class="govuk-hint">@messages("ecc.subscription.organisation-disclose-personal-details-consent.hint2")</p>
 }
 
-@hint = @{
-   if(requestSessionData.isIndividualOrSoleTrader) {
-        "ecc.subscription.organisation-disclose-personal-details-consent.individual.hint"
-   } else {
-        "ecc.subscription.organisation-disclose-personal-details-consent.hint"
-   }
-}
-
-@layout_di(messages(question), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
+@layout_di(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
     <div>
         @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
@@ -78,10 +55,10 @@
                     "false" -> messages("cds.subscription.organisation-disclose-personal-details-consent.no")
                 ),
                 Map.empty,
-                Some(Html(messages(hint))),
+                Some(hint),
                 None,
                 '_divClass -> "createForm-group govuk-form-group",
-                '_legend -> messages(question),
+                '_legend -> messages("ecc.subscription.organisation-disclose-personal-details-consent.title"),
                 '_isLegendH1 -> true
             )
 
