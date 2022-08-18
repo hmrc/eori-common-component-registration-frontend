@@ -17,6 +17,7 @@
 package unit.controllers
 
 import java.util.UUID
+
 import common.pages.registration.UserLocationPageOrganisation._
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
@@ -43,7 +44,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
   ResponseDetail
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
@@ -329,7 +329,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
         when(
           mockSubscriptionStatusService
-            .getStatus(any[String], any[String])(any[HeaderCarrier], any[Service])
+            .getStatus(any[String], any[String])(any[HeaderCarrier])
         ).thenReturn(Future.successful(SubscriptionProcessing))
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
@@ -343,7 +343,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
         when(
           mockSubscriptionStatusService
-            .getStatus(any[String], any[String])(any[HeaderCarrier], any[Service])
+            .getStatus(any[String], any[String])(any[HeaderCarrier])
         ).thenReturn(Future.successful(SubscriptionExists))
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
@@ -359,7 +359,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
         when(
           mockSubscriptionStatusService
-            .getStatus(any[String], any[String])(any[HeaderCarrier], any[Service])
+            .getStatus(any[String], any[String])(any[HeaderCarrier])
         ).thenReturn(Future.successful(SubscriptionRejected))
         when(mockRegistrationDisplayService.requestDetails(any())(any(), any()))
           .thenReturn(
@@ -401,7 +401,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
         when(
           mockSubscriptionStatusService
-            .getStatus(any[String], any[String])(any[HeaderCarrier], any[Service])
+            .getStatus(any[String], any[String])(any[HeaderCarrier])
         ).thenReturn(Future.successful(NewSubscription))
         when(mockRegistrationDisplayService.requestDetails(any())(any(), any()))
           .thenReturn(

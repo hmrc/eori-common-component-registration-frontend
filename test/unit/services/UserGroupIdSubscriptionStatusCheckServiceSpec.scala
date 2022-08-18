@@ -27,7 +27,6 @@ import play.api.mvc.Result
 import play.api.mvc.Results.Redirect
 import play.api.test.Helpers.LOCATION
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CacheIds, GroupId, InternalId, SafeId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   NewSubscription,
   PreSubscriptionStatus,
@@ -78,7 +77,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         mockSave4LaterService
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(Some(cacheIds.copy(serviceCode = Some("otherService")))))
-      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Service]))
+      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
         .thenReturn(Future.successful(SubscriptionProcessing))
 
       val result: Result = service
@@ -95,7 +94,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         mockSave4LaterService
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(Some(cacheIds.copy(internalId = InternalId("otherUserInternalId")))))
-      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Service]))
+      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
         .thenReturn(Future.successful(SubscriptionProcessing))
 
       val result: Result = service
@@ -112,7 +111,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         mockSave4LaterService
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(Some(cacheIds.copy(serviceCode = Some(atarService.code)))))
-      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Service]))
+      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
         .thenReturn(Future.successful(SubscriptionProcessing))
 
       val result: Result = service
@@ -144,7 +143,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         mockSave4LaterService
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(Some(cacheIds.copy(serviceCode = Some("other")))))
-      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Service]))
+      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
         .thenReturn(Future.successful(NewSubscription))
       when(mockSave4LaterService.deleteCacheIds(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
 
@@ -177,7 +176,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
       mockSave4LaterService
         .fetchCacheIds(any())(any[HeaderCarrier])
     ).thenReturn(Future.successful(Some(cacheIds)))
-    when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Service]))
+    when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
       .thenReturn(Future.successful(status))
     when(mockSave4LaterService.deleteCachedGroupId(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
 

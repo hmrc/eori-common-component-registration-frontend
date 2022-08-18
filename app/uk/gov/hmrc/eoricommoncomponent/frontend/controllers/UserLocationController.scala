@@ -77,7 +77,7 @@ class UserLocationController @Inject() (
     request: Request[AnyContent],
     hc: HeaderCarrier
   ) =
-    subscriptionStatusBasedOnSafeId(groupId)(hc, service).map {
+    subscriptionStatusBasedOnSafeId(groupId).map {
       case (NewSubscription | SubscriptionRejected, Some(safeId)) =>
         registrationDisplayService
           .requestDetails(safeId)
@@ -122,7 +122,7 @@ class UserLocationController @Inject() (
       case _                                    => throw new IllegalStateException("User Location not set")
     }
 
-  private def subscriptionStatusBasedOnSafeId(groupId: GroupId)(implicit hc: HeaderCarrier, service: Service) =
+  private def subscriptionStatusBasedOnSafeId(groupId: GroupId)(implicit hc: HeaderCarrier) =
     for {
       mayBeSafeId <- save4LaterService.fetchSafeId(groupId)
       preSubscriptionStatus <- mayBeSafeId match {
