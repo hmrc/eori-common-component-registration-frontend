@@ -41,7 +41,7 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
           val sameService = cacheIds.serviceCode.contains(service.code)
 
           subscriptionStatusService
-            .getStatus(idType, cacheIds.safeId.id)(hc, service)
+            .getStatus(idType, cacheIds.safeId.id)
             .flatMap { status =>
               if (status != SubscriptionProcessing)
                 if (sameService)
