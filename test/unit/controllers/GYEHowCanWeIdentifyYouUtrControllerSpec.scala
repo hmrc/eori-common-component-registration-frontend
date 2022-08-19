@@ -59,6 +59,15 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
   "Viewing the form " should {
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
+
+    "display howCanWeIdentifyYouView for logged in user" in {
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      form(){ result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith("Enter your Unique Tax Reference number")
+      }
+    }
   }
 
   "Submitting the form " should {
@@ -106,6 +115,23 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
           ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
       }
     }
+
+    "display error when no input" in {
+
+      when(mockFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+        Future.successful(
+          SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
+        )
+      )
+      submitForm(Map("utr" -> "")) {
+        result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
+          ) shouldBe "Enter your UTR number"
+      }
+    }
   }
 
   def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
@@ -113,4 +139,8 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
+  def form( userId: String = defaultUserId)(test: Future[Result] => Any) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+  }
 }
