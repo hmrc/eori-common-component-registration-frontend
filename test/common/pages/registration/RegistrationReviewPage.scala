@@ -86,7 +86,7 @@ class RegistrationReviewPage extends WebPage {
 
   val organisationAddressValueXpath = "//*[@id='review-tbl__six_line_address']"
 
-  def changeAnswerText(heading: String): String = s"Change Change $heading"
+  def changeAnswerText(heading: String): String = s"Change $heading"
 
   override val title = "Check your answers"
 
