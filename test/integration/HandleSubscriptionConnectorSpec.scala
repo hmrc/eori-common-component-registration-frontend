@@ -16,7 +16,6 @@
 
 package integration
 
-import ch.qos.logback.classic.Level
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import com.github.tomakehurst.wiremock.http.{Request, Response}

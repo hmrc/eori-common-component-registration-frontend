@@ -19,10 +19,10 @@ package unit.connector
 import base.UnitSpec
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{any, eq => meq}
-import org.mockito.Mockito.{doNothing, reset, when}
+import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.libs.json.Writes
 import play.api.test.Injecting
@@ -30,10 +30,10 @@ import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateVerifiedEmailConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.{UpdateVerifiedEmailRequest, UpdateVerifiedEmailResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.{RequestDetail, UpdateVerifiedEmailRequest, UpdateVerifiedEmailResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RequestCommon, ResponseCommon}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, MethodNotAllowedException, _}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.RequestDetail
+
 import java.time.{LocalDateTime, ZoneOffset}
 import scala.concurrent.{ExecutionContext, Future}
 

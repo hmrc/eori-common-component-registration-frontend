@@ -62,7 +62,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
     "display howCanWeIdentifyYouView for logged in user" in {
       withAuthorisedUser(defaultUserId, mockAuthConnector)
-      form(){ result =>
+      form() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("Enter your Unique Tax Reference number")
@@ -139,8 +139,9 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
-  def form( userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def form(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
+
 }

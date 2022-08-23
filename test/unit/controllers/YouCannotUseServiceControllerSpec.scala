@@ -33,13 +33,20 @@ import scala.concurrent.Future
 class YouCannotUseServiceControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockEnv = mock[Environment]
-  private val mockAppConfig = mock[Configuration]
+  private val mockEnv           = mock[Environment]
+  private val mockAppConfig     = mock[Configuration]
   private val youCantUseService = instanceOf[you_cant_use_service]
-  private val unauthorisedView = instanceOf[unauthorized]
+  private val unauthorisedView  = instanceOf[unauthorized]
 
   private val controller =
-    new YouCannotUseServiceController(mockAppConfig, mockEnv, mockAuthConnector, youCantUseService, unauthorisedView, mcc)(global)
+    new YouCannotUseServiceController(
+      mockAppConfig,
+      mockEnv,
+      mockAuthConnector,
+      youCantUseService,
+      unauthorisedView,
+      mcc
+    )(global)
 
   "Accessing the page" should {
 

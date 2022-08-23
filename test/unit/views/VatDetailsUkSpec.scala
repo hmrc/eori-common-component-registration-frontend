@@ -26,7 +26,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
-import java.time.LocalDate
 
 class VatDetailsUkSpec extends ViewSpec {
 

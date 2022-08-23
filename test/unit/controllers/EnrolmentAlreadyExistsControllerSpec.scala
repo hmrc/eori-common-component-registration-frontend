@@ -23,14 +23,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{Assistant, AuthConnector, Enrolment}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, GroupId}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Eori
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  enrolment_exists_group_standalone,
-  enrolment_exists_user_standalone,
-  registration_exists,
-  registration_exists_group
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{enrolment_exists_group_standalone, enrolment_exists_user_standalone, registration_exists, registration_exists_group}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser

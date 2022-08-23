@@ -87,6 +87,8 @@ class VatDetailsControllerSpec
     "vat-effective-date.year"  -> "2009"
   )
 
+  private val defaultVatControlResponse = VatControlListResponse(Some("Z9 1AA"), Some("2009-11-24"))
+
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager, mockVatControlListConnector)
     setupMockSubscriptionFlowManager(VatDetailsSubscriptionFlowPage)
@@ -98,6 +100,31 @@ class VatDetailsControllerSpec
 
     "display the form" in {
       showCreateForm()(verifyFormActionInCreateMode)
+    }
+  }
+
+  "Review form" should {
+
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
+
+    "display the form with cached details" in {
+      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(
+        Some(VatDetails("123", "123", LocalDate.now()))
+      )
+      reviewForm() { result =>
+        status(result) shouldBe OK
+        verifyFormActionInCreateMode
+        CdsPage(contentAsString(result)).title should startWith("Your UK VAT details")
+      }
+    }
+
+    "display the form with no cached details" in {
+      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(None)
+      reviewForm() { result =>
+        status(result) shouldBe OK
+        verifyFormActionInCreateMode
+        CdsPage(contentAsString(result)).title should startWith("Your UK VAT details")
+      }
     }
   }
 
@@ -250,6 +277,14 @@ class VatDetailsControllerSpec
       }
     }
 
+    "redirect to cannot confirm your identity when postcode is None" in {
+      val vatControlResponse = VatControlListResponse(None, Some("2009-11-24"))
+      submitForm(validRequest, false,vatControllerResponse = vatControlResponse) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
+      }
+    }
+
     "redirect to cannot confirm your identity when postcode does not match and it is in review mode" in {
       submitFormInReviewMode(validRequest + ("postcode" -> "NA1 7NO")) { result =>
         status(result) shouldBe SEE_OTHER
@@ -260,6 +295,14 @@ class VatDetailsControllerSpec
     "redirect to cannot confirm your identity url when effective is not associated with the vrn" in {
       val updatedRequest = validRequest + ("vat-effective-date.day" -> "25")
       submitFormInCreateMode(updatedRequest) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
+      }
+    }
+
+    "redirect to cannot confirm your identity when effective date is None" in {
+      val vatControlResponse = VatControlListResponse(Some("Z9 1AA"), None)
+      submitForm(validRequest, false,vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
       }
@@ -292,6 +335,18 @@ class VatDetailsControllerSpec
     }
   }
 
+  "vatDetailsNotMatched" should {
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.vatDetailsNotMatched(false, atarService))
+
+    "display weCannotConfirmYourIdentity" in {
+      vatDetailsNotMatched(){
+        result =>
+          status(result) shouldBe(OK)
+          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+      }
+    }
+  }
+
   private def showCreateForm(userId: String = defaultUserId, cachedDate: Option[LocalDate] = None)(
     test: Future[Result] => Any
   ) {
@@ -300,6 +355,11 @@ class VatDetailsControllerSpec
       .thenReturn(Future.successful(cachedDate))
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+  }
+
+  private def reviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
   private def submitFormInCreateMode(form: Map[String, String])(test: Future[Result] => Any): Unit =
@@ -321,14 +381,13 @@ class VatDetailsControllerSpec
     )
   }
 
-  private def submitForm(form: Map[String, String], isInReviewMode: Boolean, userId: String = defaultUserId)(
+  private def submitForm(form: Map[String, String], isInReviewMode: Boolean, userId: String = defaultUserId, vatControllerResponse: VatControlListResponse = defaultVatControlResponse)(
     test: Future[Result] => Any
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
-    val vatControlResponse = VatControlListResponse(Some("Z9 1AA"), Some("2009-11-24"))
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
-      .thenReturn(Future.successful(Right(vatControlResponse)))
+      .thenReturn(Future.successful(Right(vatControllerResponse)))
     when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[HeaderCarrier]))
       .thenReturn(Future.successful(()))
     test(
@@ -338,4 +397,8 @@ class VatDetailsControllerSpec
     )
   }
 
+  private def vatDetailsNotMatched(userId: String = defaultUserId)(test: Future[Result] => Any) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(controller.vatDetailsNotMatched(false, atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+  }
 }

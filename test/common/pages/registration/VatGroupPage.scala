@@ -28,5 +28,3 @@ trait VatGroupPage extends WebPage {
 }
 
 object VatGroupPage extends VatGroupPage
-
-

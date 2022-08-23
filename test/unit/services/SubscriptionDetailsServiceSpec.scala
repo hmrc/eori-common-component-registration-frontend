@@ -24,8 +24,8 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, FormData, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
@@ -222,5 +222,215 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       holder.contactDetails shouldBe Some(updatedContactDetailsModel)
     }
 
+  }
+
+  "cacheCompanyShortName" should {
+    val businessShortName = BusinessShortName("short")
+    "save subscription details with company short name" in {
+      await(subscriptionDetailsHolderService.cacheCompanyShortName(businessShortName))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.businessShortName shouldBe Some(businessShortName)
+    }
+  }
+
+  "cachedCompanyShortName" should {
+    val businessShortName = BusinessShortName("short")
+    val subscriptionDetails = SubscriptionDetails(businessShortName = Some(businessShortName))
+    "return the business short name of subscription details" in {
+      when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
+      await(subscriptionDetailsHolderService.cachedCompanyShortName) shouldBe Some(businessShortName)
+    }
+  }
+
+  "cacheContactDetails" should {
+    val contactDetails = ContactDetailsModel(
+      fullName = "Name",
+      emailAddress = "email@mail.com",
+      telephone = "01234567",
+      fax = None,
+      street = None,
+      city = None,
+      postcode = None,
+      countryCode = None
+    )
+
+    val registrationDetails = RegistrationDetailsIndividual(
+      fullName = "Name",
+      dateOfBirth = LocalDate.now()
+    )
+    "save subscription details with contact details" in {
+      when(mockSessionCache.registrationDetails) thenReturn Future.successful(registrationDetails)
+      when(mockContactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(any(), any())) thenReturn contactDetails
+      await(subscriptionDetailsHolderService.cacheContactDetails(contactDetails))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.contactDetails shouldBe Some(contactDetails)
+    }
+
+    "save subscription details with contact details in review mode" in {
+      when(mockSessionCache.registrationDetails) thenReturn Future.successful(registrationDetails)
+      when(mockContactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(any(), any())) thenReturn contactDetails
+      await(subscriptionDetailsHolderService.cacheContactDetails(contactDetails, true))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.contactDetails shouldBe Some(contactDetails)
+    }
+  }
+
+  "cacheSicCode" should {
+    val sicCode = "1234"
+    "save subscription details with sic code" in {
+      await(subscriptionDetailsHolderService.cacheSicCode(sicCode))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.sicCode shouldBe Some(sicCode)
+    }
+  }
+
+  "cacheDateEstablished" should {
+    val dateEstablished = LocalDate.now()
+    "save subscription details with date established" in {
+      await(subscriptionDetailsHolderService.cacheDateEstablished(dateEstablished))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.dateEstablished shouldBe Some(dateEstablished)
+    }
+  }
+
+  "cacheNameDobDetails" should {
+    val nameDobDetails = NameDobMatchModel(
+      firstName = "Name",
+      middleName = None,
+      lastName = "Lastname",
+      dateOfBirth = LocalDate.now()
+    )
+    "save subscription details with date established" in {
+      await(subscriptionDetailsHolderService.cacheNameDobDetails(nameDobDetails))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.nameDobDetails shouldBe Some(nameDobDetails)
+    }
+  }
+
+  "cacheNinoOrUtrChoice" should {
+    val ninoOrUtrChoice = NinoOrUtrChoice(
+      ninoOrUtrRadio = Some("utr")
+    )
+    "save subscription details with nino or utr choice" in {
+      await(subscriptionDetailsHolderService.cacheNinoOrUtrChoice(ninoOrUtrChoice))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.formData.ninoOrUtrChoice shouldBe ninoOrUtrChoice.ninoOrUtrRadio
+    }
+  }
+
+  "cacheUtrMatch" should {
+    val utrMatch = UtrMatchModel(
+      Some(true)
+    )
+    "save subscription details with utr match" in {
+      await(subscriptionDetailsHolderService.cacheUtrMatch(Some(utrMatch)))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.formData.utrMatch shouldBe Some(utrMatch)
+    }
+  }
+
+  "cacheNinoMatch" should {
+    val ninoMatch = NinoMatchModel(
+      Some(true)
+    )
+    "save subscription details with nino match" in {
+      await(subscriptionDetailsHolderService.cacheNinoMatch(Some(ninoMatch)))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.formData.ninoMatch shouldBe Some(ninoMatch)
+    }
+  }
+
+  "cacheUkVatDetails" should {
+    val ukVatDetails = VatDetails(
+      postcode = "12345",
+      number = "12345",
+      effectiveDate = LocalDate.now()
+    )
+    "save subscription details with vat details" in {
+      await(subscriptionDetailsHolderService.cacheUkVatDetails(ukVatDetails))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.ukVatDetails shouldBe Some(ukVatDetails)
+    }
+  }
+
+  "clearCachedUkVatDetails" should {
+    val ukVatDetails = VatDetails(
+      postcode = "12345",
+      number = "12345",
+      effectiveDate = LocalDate.now()
+    )
+
+    val subscriptionDetails = SubscriptionDetails(ukVatDetails = Some(ukVatDetails))
+    "save subscription details with vat details set to none" in {
+      when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
+      await(subscriptionDetailsHolderService.clearCachedUkVatDetails(hc))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.ukVatDetails shouldBe None
+    }
+  }
+
+  "cacheVatRegisteredUk" should {
+    val yesNoAnswer = YesNo(
+      true
+    )
+    "save subscription details with vat registered uk" in {
+      await(subscriptionDetailsHolderService.cacheVatRegisteredUk(yesNoAnswer))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.vatRegisteredUk shouldBe Some(yesNoAnswer.isYes)
+    }
+  }
+
+  "cacheConsentToDisclosePersonalDetails" should {
+    val yesNoAnswer = YesNo(
+      true
+    )
+    "save subscription details with consent to disclose personal details" in {
+      await(subscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(yesNoAnswer))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.personalDataDisclosureConsent shouldBe Some(yesNoAnswer.isYes)
+    }
+  }
+
+  "updateSubscriptionDetails" should {
+    val subscriptionDetails = SubscriptionDetails()
+    "save subscription details with details updated from cache" in {
+      when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
+      when(mockSessionCache.saveRegistrationDetails(any())(any())) thenReturn Future.successful(true)
+      when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
+      when(mockSessionCache.saveSubscriptionDetails(any())(any())) thenReturn Future.successful(true)
+      await(subscriptionDetailsHolderService.updateSubscriptionDetails(hc))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.nameDobDetails shouldBe subscriptionDetails.nameDobDetails
+      holder.nameOrganisationDetails shouldBe subscriptionDetails.nameOrganisationDetails
+      holder.formData shouldBe subscriptionDetails.formData
+    }
   }
 }

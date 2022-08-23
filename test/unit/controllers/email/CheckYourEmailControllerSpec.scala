@@ -158,6 +158,31 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
       } should have message "CreateEmailVerificationRequest Failed"
     }
 
+    "throw  IllegalStateException when save4LaterService.fetchEmail returns None" in {
+      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(true)))
+      when(mockSave4LaterService.fetchEmail(any())(any())) thenReturn Future.successful(None)
+      the[IllegalStateException] thrownBy {
+        submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
+          result =>
+            status(result) shouldBe SEE_OTHER
+        }
+      } should have message "[CheckYourEmailController][submitNewDetails] - emailStatus cache none"
+    }
+
+    "throw  IllegalStateException when save4LaterService.fetchEmail returns EmailStatus with undefined email" in {
+      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(true)))
+      val emailStatus = EmailStatus(None)
+      when(mockSave4LaterService.fetchEmail(any())(any())) thenReturn Future.successful(Some(emailStatus))
+      the[IllegalStateException] thrownBy {
+        submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
+          result =>
+            status(result) shouldBe SEE_OTHER
+        }
+      } should have message "[CheckYourEmailController][submitNewDetails] - emailStatus.email none"
+    }
+
     "redirect to What is Your Email Address Page on selecting No radio button" in {
       submitForm(ValidRequest + (yesNoInputName -> answerNo), service = atarService) {
         result =>
@@ -218,9 +243,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         .thenReturn(Future.successful(None))
       emailConfirmed(defaultUserId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
-          routes.SecuritySignOutController.signOut(atarService).url
-        )
+        result.header.headers("Location") should endWith(routes.SecuritySignOutController.signOut(atarService).url)
       }
     }
 
@@ -229,9 +252,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         .thenReturn(Future.successful(Some(EmailStatus(Some(email), isConfirmed = Some(true)))))
       emailConfirmed(defaultUserId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
-          routes.MatchingIdController.matchWithIdOnly(atarService).url
-        )
+        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
       }
     }
 
@@ -248,11 +269,9 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
 
   "Email Confirmed Continue" should {
     "redirect to MatchingIdController" in {
-      emailConfirmedContinue(){ result =>
+      emailConfirmedContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
-          routes.MatchingIdController.matchWithIdOnly(atarService).url
-        )
+        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
       }
     }
   }
@@ -283,7 +302,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
     test(result)
   }
 
-  private def emailConfirmed(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def emailConfirmed(userId: String)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .emailConfirmed(atarService)

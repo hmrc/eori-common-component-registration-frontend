@@ -21,10 +21,10 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{VatGroupController, routes}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ControllerSpec
-import util.builders.YesNoFormBuilder.{ValidRequest, invalidRequest}
+import util.builders.YesNoFormBuilder.{invalidRequest, ValidRequest}
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import java.util.UUID
@@ -32,11 +32,11 @@ import scala.concurrent.Future
 
 class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val yesNoInputName = "yes-no-answer"
-  private val answerYes = true.toString
-  private val answerNo = false.toString
+  private val yesNoInputName         = "yes-no-answer"
+  private val answerYes              = true.toString
+  private val answerNo               = false.toString
   private val expectedYesRedirectUrl = routes.VatGroupsCannotRegisterUsingThisServiceController.form(atarService).url
-  private val expectedNoRedirectUrl = EmailController.form(atarService).url
+  private val expectedNoRedirectUrl  = EmailController.form(atarService).url
 
   private val vatGroupView = instanceOf[vat_group]
 

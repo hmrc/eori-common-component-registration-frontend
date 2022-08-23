@@ -16,30 +16,21 @@
 
 package unit.controllers
 
-import java.time.{LocalDate, LocalDateTime}
-import org.mockito.ArgumentMatchers.{any, anyString, contains, matches, eq => meq}
+import org.mockito.ArgumentMatchers.{any, anyString, contains, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  SUB09SubscriptionDisplayConnector,
-  ServiceUnavailableResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  HandleSubscriptionService,
-  RandomUUIDGenerator,
-  TaxEnrolmentsService,
-  UpdateVerifiedEmailService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator, TaxEnrolmentsService, UpdateVerifiedEmailService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, recovery_registration_exists}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -47,6 +38,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SubscriptionInfoBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.{ExecutionContext, Future}
 
