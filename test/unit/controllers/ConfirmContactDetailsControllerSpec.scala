@@ -290,7 +290,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockRegistrationConfirmService
-          .currentSubscriptionStatus(any[HeaderCarrier], any[Service])
+          .currentSubscriptionStatus(any[HeaderCarrier])
       ).thenReturn(Future.successful(SubscriptionExists))
       mockSubscriptionFlowStart()
       invokeConfirmContactDetailsWithSelectedOption() { result =>

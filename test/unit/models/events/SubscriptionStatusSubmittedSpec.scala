@@ -26,7 +26,6 @@ import java.time.LocalDateTime
 class SubscriptionStatusSubmittedSpec extends WordSpec with MustMatchers with EitherValues with OptionValues {
 
   "SubscriptionStatusSubmitted" should {
-    val originatingService = "atar"
     "have taxPayerId set to request.id if request.idType is taxPayerId and safeId set to None if request.idType is not SAFE" in {
       val request = SubscriptionStatusQueryParams(
         receiptDate = LocalDateTime.now(),
@@ -35,7 +34,7 @@ class SubscriptionStatusSubmittedSpec extends WordSpec with MustMatchers with Ei
         id = "testId"
       )
 
-      val result = SubscriptionStatusSubmitted(request, originatingService)
+      val result = SubscriptionStatusSubmitted(request)
       result.taxPayerId mustBe Some(request.id)
       result.safeId mustNot (be(defined))
     }
@@ -48,7 +47,7 @@ class SubscriptionStatusSubmittedSpec extends WordSpec with MustMatchers with Ei
         id = "testId"
       )
 
-      val result = SubscriptionStatusSubmitted(request, originatingService)
+      val result = SubscriptionStatusSubmitted(request)
       result.safeId mustBe Some(request.id)
       result.taxPayerId mustNot (be(defined))
     }

@@ -344,8 +344,8 @@ class VatDetailsControllerSpec
     "display weCannotConfirmYourIdentity" in {
       vatDetailsNotMatched() {
         result =>
-          status(result) shouldBeOK
-            CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+          status(result) shouldBe OK
+          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
       }
     }
   }
