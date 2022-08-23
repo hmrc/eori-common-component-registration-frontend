@@ -58,26 +58,13 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     "display correct intro paragraph" in {
       doc.body
         .getElementById("have-utr-hint")
-        .text() mustBe "Your organisation will have a Corporation Tax UTR number if you pay corporation tax. It is on tax returns and other letters from HMRC."
-    }
-    "have other html content" in {
-      doc.body
-        .getElementById("have-utr-hint")
-        .text() must include("Your organisation will have a Corporation Tax UTR number if you pay corporation tax")
+        .text() mustBe "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called reference, UTR or official use. You can find a lost UTR number ."
     }
     "have aria-described-by on the fieldset" in {
       doc.body
         .getElementsByClass("govuk-fieldset")
         .attr("aria-describedby") mustBe "have-utr-hint"
 
-    }
-    "display correct progressive disclosure heading" in {
-      doc.body.getElementsByTag("summary").text() mustBe "Can’t find your Corporation Tax UTR number?"
-    }
-    "display correct progressive disclosure content" in {
-      doc.body
-        .getElementsByClass("govuk-details__text")
-        .text() mustBe "This can be found on HMRC letters to your organisation, such as: 'Notice to deliver a Company Tax Return' (CT603) 'Corporation Tax notice' (CT610) Your accountant or tax manager would normally have your UTR."
     }
   }
 
