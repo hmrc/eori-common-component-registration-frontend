@@ -425,7 +425,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
       when(
         mockRegistrationConfirmService
-          .currentSubscriptionStatus(any[HeaderCarrier], any[Service])
+          .currentSubscriptionStatus(any[HeaderCarrier])
       ).thenReturn(Future.successful(SubscriptionRejected))
 
       invokeConfirmContactDetailsWithSelectedOption() { result =>
@@ -446,7 +446,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     s"redirect to $redirectUrl when subscription status is $subscriptionStatus" in {
       when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(subscriptionDetailsHolder))
-      when(mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any[Service]))
+      when(mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier]))
         .thenReturn(Future.successful(subscriptionStatus))
       when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -698,7 +698,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private def mockNewSubscriptionFromSubscriptionStatus() =
     when(
       mockRegistrationConfirmService
-        .currentSubscriptionStatus(any[HeaderCarrier], any[Service])
+        .currentSubscriptionStatus(any[HeaderCarrier])
     ).thenReturn(Future.successful(NewSubscription))
 
   private def mockSubscriptionFlowStart() {

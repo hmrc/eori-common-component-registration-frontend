@@ -358,12 +358,8 @@ ecc.subscription.outcomes.guidance.xi.eori.href=<a href="https://www.tax.service
 
 ecc.subscription.organisation-disclose-personal-details-consent.title = A ydych am gynnwys enw a chyfeiriad y cwmni ar y gwiriwr EORI?
 ecc.subscription.organisation-disclose-personal-details-consent.hint = Bydd CThEM yn ychwanegu’ch rhif EORI GB at <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">wiriwr cyhoeddus (yn agor tab newydd)</a>. Gallwch hefyd gynnwys eich enw a’ch cyfeiriad chi, neu’ch sefydliad. Bydd hyn yn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu eich llwythi.
-ecc.subscription.organisation-disclose-personal-details-consent.individual.title = A ydych am gynnwys eich enw a chyfeiriad ar y gwiriwr EORI?
 ecc.subscription.organisation-disclose-personal-details-consent.individual.hint =  Bydd CThEM yn ychwanegu eich rhif EORI at <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd (yn agor tab newydd)</a>. Gallwch hefyd gytuno i gynnwys eich enw a’ch cyfeiriad. Gall hyn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu’ch llwythi.
-ecc.subscription.organisation-disclose-personal-details-consent.partnership.title = A ydych am gynnwys enw a chyfeiriad y bartneriaeth ar y gwiriwr EORI?
-ecc.subscription.organisation-disclose-personal-details-consent.charity.title = A ydych am gynnwys enw a chyfeiriad yr elusen ar y gwiriwr EORI?
-ecc.subscription.organisation-disclose-personal-details-consent.organisation.title = A ydych am gynnwys enw a chyfeiriad y sefydliad ar y gwiriwr EORI?
-
+ecc.subscription.organisation-disclose-personal-details-consent.hint2 = needs translation
 ecc.start-page.title = I gael mynediad at y gwasanaeth {0}, mae angen rhif EORI GB arnoch.
 ecc.start-page.para1 = Byddwn yn gofyn i chi nodi rhai manylion ac, os cewch eich cymeradwyo, byddwn yn rhoi rhif EORI a thanysgrifiad i’r gwasanaeth {0} i chi.
 ecc.start-page.para2 = TRANSLATE If approved, your subscription will be ready to use to within 2 hours. If we need to make more checks it may take up to 5 working days.

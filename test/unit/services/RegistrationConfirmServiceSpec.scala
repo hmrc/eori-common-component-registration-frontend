@@ -24,7 +24,6 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
   ClearCacheAndRegistrationIdentificationService,
   RequestSessionData,
@@ -50,7 +49,6 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
   )(global)
 
   implicit val hc: HeaderCarrier                = mock[HeaderCarrier]
-  implicit val originatingService: Service      = mock[Service]
   implicit val mockLoggedInUser: LoggedInUser   = mock[LoggedInUser]
   implicit val mockRequest: Request[AnyContent] = mock[Request[AnyContent]]
 
@@ -83,7 +81,7 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
       inOrder.verify(mockCdsFrontendDataCache).registrationDetails(meq(hc))
       inOrder
         .verify(mockSubscriptionStatusService)
-        .getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(meq(hc), meq(originatingService))
+        .getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(meq(hc))
     }
 
     "return expected status for EU Individual registered without ID when subscription status is new" in {
@@ -120,7 +118,7 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
       inOrder.verify(mockCdsFrontendDataCache).registrationDetails(meq(hc))
       inOrder
         .verify(mockSubscriptionStatusService)
-        .getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(meq(hc), meq(originatingService))
+        .getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(meq(hc))
       inOrder.verifyNoMoreInteractions()
     }
 
@@ -135,7 +133,7 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
       inOrder.verify(mockCdsFrontendDataCache).registrationDetails(meq(hc))
       inOrder
         .verify(mockSubscriptionStatusService)
-        .getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(meq(hc), meq(originatingService))
+        .getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(meq(hc))
       inOrder.verifyNoMoreInteractions()
     }
 
@@ -152,10 +150,7 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
     "propagate SubscriptionStatusService access error" in {
       mockGetStatus(mock[PreSubscriptionStatus])
       when(
-        mockSubscriptionStatusService.getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(
-          meq(hc),
-          meq(originatingService)
-        )
+        mockSubscriptionStatusService.getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(meq(hc))
       ).thenReturn(Future.failed(emulatedFailure))
 
       val caught = intercept[Exception] {
@@ -168,10 +163,7 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
       when(mockRegistrationDetails.sapNumber).thenReturn(TaxPayerId(sapNumber))
       when(mockCdsFrontendDataCache.registrationDetails(meq(hc))).thenReturn(Future.successful(mockRegistrationDetails))
       when(
-        mockSubscriptionStatusService.getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(
-          meq(hc),
-          meq(originatingService)
-        )
+        mockSubscriptionStatusService.getStatus(meq("taxPayerID"), meq(TaxPayerId(sapNumber).mdgTaxPayerId))(meq(hc))
       ).thenReturn(Future.successful(expectedResult))
 
     }

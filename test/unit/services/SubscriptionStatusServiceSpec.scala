@@ -17,7 +17,6 @@
 package unit.services
 
 import base.UnitSpec
-
 import java.time.LocalDateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
@@ -35,7 +34,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   SubscriptionStatusResponseHolder,
   TaxPayerId
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
@@ -58,8 +56,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
   lazy val service =
     new SubscriptionStatusService(mockConnector, mockRequestCommonGenerator, mockSessionCache)(global)
 
-  implicit val hc: HeaderCarrier           = HeaderCarrier()
-  implicit val priginatingService: Service = Service.cds
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach() {
     reset(mockConfig)
@@ -82,7 +79,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
 
     forAll(statusesWithoutEori) { (status, statusObject: PreSubscriptionStatus) =>
       s"return $statusObject when response status is $status" in {
-        when(mockConnector.status(meq(request))(any[HeaderCarrier], any[Service])).thenReturn(
+        when(mockConnector.status(meq(request))(any[HeaderCarrier])).thenReturn(
           Future.successful(responseHolderWithStatusAndProcessingDateWithoutEori(status).subscriptionStatusResponse)
         )
         when(mockRequestCommonGenerator.receiptDate).thenReturn(receiptDate)
@@ -92,7 +89,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
     }
 
     "store processing date in cache" in {
-      when(mockConnector.status(meq(request))(any[HeaderCarrier], any[Service])).thenReturn(
+      when(mockConnector.status(meq(request))(any[HeaderCarrier])).thenReturn(
         Future.successful(
           responseHolderWithStatusAndProcessingDateWithoutEori("01", "2018-05-22T09:30:00Z").subscriptionStatusResponse
         )
@@ -105,7 +102,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
     }
 
     "return failed future for getStatus when connector fails with INTERNAL_SERVER_ERROR" in {
-      when(mockConnector.status(any[SubscriptionStatusQueryParams])(any[HeaderCarrier], any[Service]))
+      when(mockConnector.status(any[SubscriptionStatusQueryParams])(any[HeaderCarrier]))
         .thenReturn(Future.failed(UpstreamErrorResponse("failure", INTERNAL_SERVER_ERROR, 1)))
 
       val caught = intercept[UpstreamErrorResponse] {
@@ -116,7 +113,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
     }
 
     "return failed future for getStatus when connector fails with BAD_REQUEST" in {
-      when(mockConnector.status(any[SubscriptionStatusQueryParams])(any[HeaderCarrier], any[Service]))
+      when(mockConnector.status(any[SubscriptionStatusQueryParams])(any[HeaderCarrier]))
         .thenReturn(Future.failed(UpstreamErrorResponse("failure", BAD_REQUEST, 1)))
 
       val caught = intercept[UpstreamErrorResponse] {
