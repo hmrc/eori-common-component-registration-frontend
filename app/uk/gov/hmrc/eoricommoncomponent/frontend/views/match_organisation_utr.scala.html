@@ -58,12 +58,12 @@
 
 @hint = @{
     organisationType match {
-        case CdsOrganisationType.ThirdCountryOrganisationId => messages("cds.matching.row-organisation.utr.paragraph")
+        case CdsOrganisationType.ThirdCountryOrganisationId => messages("cds.matching.row-organisation.utr.paragraph", utrlink)
         case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
             messages("ecc.matching.row-sole-trader-individual.utr.paragraph", utrlink)
         case CdsOrganisationType.IndividualId | CdsOrganisationType.SoleTraderId =>
-            messages("cds.matching.row-sole-trader-individual.utr.paragraph")
-        case _ => messages("cds.matching.organisation.utr.paragraph")
+            messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrlink)
+        case _ => messages("cds.matching.organisation.utr.paragraph", utrlink)
     }
 }
 
@@ -78,15 +78,6 @@
         case _ => true
     }
 }
-@htmlDetails = {
-        <p class="govuk-body">@messages("cds.matching.utr.help-message.header")</p>
-        <ul class="govuk-list govuk-list--bullet">
-
-            <li>@messages("cds.matching.utr.help-message.bullet-1")</li>
-            <li>@messages("cds.matching.utr.help-message.bullet-2")</li>
-        </ul>
-        <p class="govuk-body">@messages("cds.matching.utr.help-message.footer")</p>
-}
 
 @layout_di(headerAndTitle, form = Some(matchOrgIdForm)) {
     <div>
@@ -98,12 +89,6 @@
                 @displayInputRadioGroup("have-utr",
                     Seq("true" -> messages("cds.yes"),
                         "false" -> messages("cds.no")))
-                @if(isNotSoleTrader) {
-                    @govukDetails(Details(
-                        summary = Text(messages("cds.matching.utr.help")),
-                        content = HtmlContent(htmlDetails)
-                    ))
-                }
             </div>
 
             @govukButton(Button(
