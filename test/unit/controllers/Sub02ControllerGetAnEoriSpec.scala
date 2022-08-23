@@ -444,6 +444,30 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     }
   }
 
+  "calling eoriAlreadyAssociated on Sub02Controller" should {
+    "render Already Associated page" in {
+      when(mockSessionCache.sub02Outcome(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
+      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      invokeEoriAlreadyAssociated { result =>
+        assertCleanedSession(result)
+
+        status(result) shouldBe OK
+      }
+    }
+  }
+
+  "calling RequestNotProcessed on Sub02Controller" should {
+    "render Request Not Processed page" in {
+      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      invokeRequestNotProcessed { result =>
+        assertCleanedSession(result)
+
+        status(result) shouldBe OK
+      }
+    }
+  }
+
   "calling pending on Sub02Controller" should {
     "render sub01 processing page" in {
       when(mockSessionCache.sub02Outcome(any[HeaderCarrier]))
@@ -522,6 +546,24 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       subscriptionController.subscriptionInProgress(atarService).apply(
+        SessionBuilder.buildRequestWithSession(defaultUserId)
+      )
+    )
+  }
+
+  private def invokeEoriAlreadyAssociated(test: Future[Result] => Any) = {
+    withAuthorisedUser(defaultUserId, mockAuthConnector)
+    test(
+      subscriptionController.eoriAlreadyAssociated(atarService).apply(
+        SessionBuilder.buildRequestWithSession(defaultUserId)
+      )
+    )
+  }
+
+  private def invokeRequestNotProcessed(test: Future[Result] => Any) = {
+    withAuthorisedUser(defaultUserId, mockAuthConnector)
+    test(
+      subscriptionController.requestNotProcessed(atarService).apply(
         SessionBuilder.buildRequestWithSession(defaultUserId)
       )
     )

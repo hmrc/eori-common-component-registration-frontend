@@ -53,6 +53,9 @@ class AppConfig @Inject() (
   def findLostUtr()(implicit messages: Messages): String =
     config.get[String](s"external-url.find-lost-utr-$languageKey")
 
+  def companiesHouseRegister()(implicit messages: Messages): String =
+    config.get[String](s"external-url.company-house-register-$languageKey")
+
   val traderSupportService: String                       = config.get[String]("external-url.trader-support-service")
   val getCompanyInformation: String                      = config.get[String]("external-url.get-company-information")
   val contactEORITeam: String                            = config.get[String]("external-url.contact-eori-team")

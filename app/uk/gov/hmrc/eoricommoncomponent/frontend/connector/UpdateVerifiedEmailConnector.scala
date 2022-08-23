@@ -34,10 +34,7 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpCl
 
   def updateVerifiedEmail(request: VerifiedEmailRequest, currentEmail: Option[String])(implicit
     hc: HeaderCarrier
-  ): Future[Either[HttpErrorResponse, VerifiedEmailResponse]] = {
-    val newEmail = request.updateVerifiedEmailRequest.requestDetail.emailAddress
-    val eori     = request.updateVerifiedEmailRequest.requestDetail.IDNumber
-
+  ): Future[Either[HttpErrorResponse, VerifiedEmailResponse]] =
     http.PUT[VerifiedEmailRequest, VerifiedEmailResponse](url, request) map { resp =>
       Right(resp)
     } recover {
@@ -51,6 +48,5 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpCl
         )
         Left(UnhandledException)
     }
-  }
 
 }

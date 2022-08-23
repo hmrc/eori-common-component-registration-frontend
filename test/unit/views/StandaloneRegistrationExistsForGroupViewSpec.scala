@@ -21,10 +21,7 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  enrolment_exists_group_standalone,
-  enrolment_exists_user_standalone
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.enrolment_exists_group_standalone
 import util.ViewSpec
 
 class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {

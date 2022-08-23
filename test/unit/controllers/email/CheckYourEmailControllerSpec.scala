@@ -25,6 +25,7 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmailController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.GroupId
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -100,6 +101,15 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         page.title() should startWith("Is this the email address you want to use?")
       }
     }
+
+    "display title as 'Check your email address' when no email saved in session" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(None))
+      showForm() { result =>
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith("Is this the email address you want to use?")
+      }
+    }
   }
 
   "Submitting the Check Your Email Page" should {
@@ -148,6 +158,31 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
       } should have message "CreateEmailVerificationRequest Failed"
     }
 
+    "throw  IllegalStateException when save4LaterService.fetchEmail returns None" in {
+      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(true)))
+      when(mockSave4LaterService.fetchEmail(any())(any())) thenReturn Future.successful(None)
+      the[IllegalStateException] thrownBy {
+        submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
+          result =>
+            status(result) shouldBe SEE_OTHER
+        }
+      } should have message "[CheckYourEmailController][submitNewDetails] - emailStatus cache none"
+    }
+
+    "throw  IllegalStateException when save4LaterService.fetchEmail returns EmailStatus with undefined email" in {
+      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(true)))
+      val emailStatus = EmailStatus(None)
+      when(mockSave4LaterService.fetchEmail(any())(any())) thenReturn Future.successful(Some(emailStatus))
+      the[IllegalStateException] thrownBy {
+        submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
+          result =>
+            status(result) shouldBe SEE_OTHER
+        }
+      } should have message "[CheckYourEmailController][submitNewDetails] - emailStatus.email none"
+    }
+
     "redirect to What is Your Email Address Page on selecting No radio button" in {
       submitForm(ValidRequest + (yesNoInputName -> answerNo), service = atarService) {
         result =>
@@ -168,6 +203,19 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         ) shouldBe s"Error: $problemWithSelectionError"
       }
     }
+
+    "display an error message when no email in session" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(None))
+      submitForm(ValidRequest - yesNoInputName, service = atarService) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(CheckYourEmailPage.pageLevelErrorSummaryListXPath) shouldBe problemWithSelectionError
+        page.getElementsText(
+          CheckYourEmailPage.fieldLevelErrorYesNoAnswer
+        ) shouldBe s"Error: $problemWithSelectionError"
+      }
+    }
   }
 
   "Redirecting to Verify Your Email Address Page" should {
@@ -175,6 +223,55 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
       verifyEmailViewForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("Confirm your email address")
+      }
+    }
+
+    "display title as 'Confirm your email address' when no email in session" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(None))
+
+      verifyEmailViewForm() { result =>
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith("Confirm your email address")
+      }
+    }
+  }
+
+  "Email Confirmed" should {
+    "redirect to SecuritySignOutController when no email in session" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(None))
+      emailConfirmed(defaultUserId) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith(routes.SecuritySignOutController.signOut(atarService).url)
+      }
+    }
+
+    "redirect to MatchingIdController when email is confirmed" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(EmailStatus(Some(email), isConfirmed = Some(true)))))
+      emailConfirmed(defaultUserId) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
+      }
+    }
+
+    "display emailConfirmedView when email is not confirmed" in {
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(EmailStatus(Some(email)))))
+      emailConfirmed(defaultUserId) { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith("You have confirmed your email address")
+      }
+    }
+  }
+
+  "Email Confirmed Continue" should {
+    "redirect to MatchingIdController" in {
+      emailConfirmedContinue() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
       }
     }
   }
@@ -202,6 +299,21 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
     val result = controller
       .verifyEmailView(atarService)
       .apply(SessionBuilder.buildRequestWithSession(userId))
+    test(result)
+  }
+
+  private def emailConfirmed(userId: String)(test: Future[Result] => Any) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    val result = controller
+      .emailConfirmed(atarService)
+      .apply(SessionBuilder.buildRequestWithSession(userId))
+    test(result)
+  }
+
+  private def emailConfirmedContinue()(test: Future[Result] => Any) {
+    val result = controller
+      .emailConfirmedContinue(atarService)
+      .apply(SessionBuilder.buildRequestWithSessionNoUser)
     test(result)
   }
 

@@ -52,6 +52,7 @@ import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 
 class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
@@ -165,6 +166,50 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       }
     }
 
+    "redirect to OrganisationTypeController when no org type found in cache" in {
+      mockCacheWithRegistrationDetails(organisationRegistrationDetails)
+      when(
+        mockOrgTypeLookup
+          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+      ).thenReturn(Future.successful(None))
+
+      when(mockSessionCache.remove(any())) thenReturn Future.successful(true)
+
+      invokeConfirm() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") shouldBe OrganisationTypeController.form(atarService).url
+      }
+    }
+
+    "redirect to OrganisationTypeController when org type is different than individual or organisation" in {
+      val details = RegistrationDetailsSafeId(
+        safeId = SafeId("123"),
+        address = Address(
+          addressLine1 = "test",
+          addressLine2 = None,
+          addressLine3 = None,
+          addressLine4 = None,
+          postalCode = None,
+          countryCode = "123"
+        ),
+        sapNumber = TaxPayerId("123"),
+        customsId = None,
+        name = "name"
+      )
+      mockCacheWithRegistrationDetails(details)
+      when(
+        mockOrgTypeLookup
+          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+      ).thenReturn(Future.successful(Some(Partnership)))
+
+      when(mockSessionCache.remove(any())) thenReturn Future.successful(true)
+
+      invokeConfirm() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") shouldBe OrganisationTypeController.form(atarService).url
+      }
+    }
+
     "display all fields when all are provided from the cache for sole trader" in {
       mockCacheWithRegistrationDetails(soleTraderRegistrationDetails)
       when(
@@ -231,6 +276,70 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         testSessionData foreach (
           newSessionValue => result.session(mockRequestHeader).data should contain(newSessionValue)
         )
+      }
+    }
+
+    "redirect to SubscriptionRecoveryController when service returns SubscriptionExists for organisation" in {
+      when(mockSessionCache.subscriptionDetails(any[HeaderCarrier]))
+        .thenReturn(Future.successful(subscriptionDetailsHolder))
+      when(
+        mockSessionCache
+          .saveSubscriptionDetails(any[SubscriptionDetails])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(true))
+
+      mockCacheWithRegistrationDetails(organisationRegistrationDetails)
+      when(
+        mockRegistrationConfirmService
+          .currentSubscriptionStatus(any[HeaderCarrier])
+      ).thenReturn(Future.successful(SubscriptionExists))
+      mockSubscriptionFlowStart()
+      invokeConfirmContactDetailsWithSelectedOption() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) shouldBe SubscriptionRecoveryController.complete(atarService).url
+      }
+    }
+
+    "redirect to OrganisationTypeController when no org type found in cache" in {
+      mockCacheWithRegistrationDetails(organisationRegistrationDetails)
+      when(
+        mockOrgTypeLookup
+          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+      ).thenReturn(Future.successful(None))
+
+      when(mockSessionCache.remove(any())) thenReturn Future.successful(true)
+
+      invokeConfirmContactDetailsWithoutOptionSelected() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") shouldBe OrganisationTypeController.form(atarService).url
+      }
+    }
+
+    "redirect to OrganisationTypeController when org type is different than individual or organisation" in {
+      val details = RegistrationDetailsSafeId(
+        safeId = SafeId("123"),
+        address = Address(
+          addressLine1 = "test",
+          addressLine2 = None,
+          addressLine3 = None,
+          addressLine4 = None,
+          postalCode = None,
+          countryCode = "123"
+        ),
+        sapNumber = TaxPayerId("123"),
+        customsId = None,
+        name = "name"
+      )
+      mockCacheWithRegistrationDetails(details)
+      when(
+        mockOrgTypeLookup
+          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+      ).thenReturn(Future.successful(Some(Partnership)))
+
+      when(mockSessionCache.remove(any())) thenReturn Future.successful(true)
+
+      invokeConfirmContactDetailsWithoutOptionSelected() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") shouldBe OrganisationTypeController.form(atarService).url
       }
     }
 

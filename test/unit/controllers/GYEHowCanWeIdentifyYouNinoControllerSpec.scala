@@ -59,6 +59,15 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
   "Viewing the form " should {
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
+
+    "display howCanWeIdentifyYouView for logged in user" in {
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      form() { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith("Enter your National Insurance number")
+      }
+    }
   }
 
   "Submitting the form " should {
@@ -107,11 +116,38 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       }
     }
 
+    "display error when no input" in {
+
+      val nino = "AB123456C"
+      when(mockFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+        Future.successful(
+          SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
+        )
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier])
+      ).thenReturn(Future.successful(true))
+
+      submitForm(Map("nino" -> "")) {
+        result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
+          ) shouldBe "Enter your National Insurance number"
+      }
+    }
   }
 
   def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
+  }
+
+  def form(userId: String = defaultUserId)(test: Future[Result] => Any) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
 }

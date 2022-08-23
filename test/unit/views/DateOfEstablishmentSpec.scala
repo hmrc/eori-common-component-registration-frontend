@@ -16,7 +16,6 @@
 
 package unit.views
 
-import java.time
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatestplus.mockito.MockitoSugar
@@ -28,6 +27,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
 import util.ViewSpec
 
+import java.time
+
 class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
   val form: Form[time.LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
   val isInReviewMode             = false
@@ -37,16 +38,18 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
 
   "On a UK journey the 'When was the organisation established?' page" should {
     "display correct title" in {
-      doc.title() must startWith("When was the company established?")
+      doc.title() must startWith("Date when the company was established")
     }
     "have the correct h1 text" in {
-      doc.body.getElementsByTag("legend").text() mustBe "When was the company established?"
+      doc.body.getElementsByTag("legend").text() mustBe "Date when the company was established"
     }
     "have the correct class on the legend" in {
       doc.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
     "have the correct text in the hint" in {
-      doc.body.getElementById("date-of-establishment-hint").text() must include("For example, 31 03 1980.")
+      doc.body.getElementById("date-of-establishment-hint").text() must include(
+        "Enter the date shown on the organisation’s certificate of incorporation."
+      )
     }
     "have the correct text in the intro paragraph" in {
       doc.body
@@ -57,10 +60,10 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
 
   "On a RoW journey the 'When was the organisation established?' page" should {
     "display correct title" in {
-      docRestOfWorld.title must startWith("When was the organisation established?")
+      docRestOfWorld.title must startWith("Date when the organisation was established")
     }
     "have the correct h1 text" in {
-      docRestOfWorld.body.getElementsByTag("legend").text() mustBe "When was the organisation established?"
+      docRestOfWorld.body.getElementsByTag("legend").text() mustBe "Date when the organisation was established"
     }
     "have the correct class on the legend" in {
       docRestOfWorld.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
@@ -68,19 +71,24 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     "have the correct text in the description" in {
       docRestOfWorld.body
         .getElementById("date-of-establishment-hint")
-        .text() mustBe "For example, 31 03 1980."
+        .text() mustBe "Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the Companies House register (opens in new tab) When was the organisation established? For example, 31 03 1980."
     }
   }
 
   "On an LLP org type journey Date Established page" should {
     "display correct title" in {
-      docLlp.title must startWith("When was the partnership established?")
+      docLlp.title must startWith("Date when the partnership was established")
     }
     "have the correct legend text" in {
-      docLlp.body.getElementsByTag("legend").text() mustBe "When was the partnership established?"
+      docLlp.body.getElementsByTag("legend").text() mustBe "Date when the partnership was established"
     }
     "have the correct class on the legend" in {
       docLlp.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
+    }
+    "have the correct text in the description" in {
+      docLlp.body
+        .getElementById("date-of-establishment-hint")
+        .text() mustBe "Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the Companies House register (opens in new tab) When was the partnership established? For example, 31 03 1980."
     }
   }
 

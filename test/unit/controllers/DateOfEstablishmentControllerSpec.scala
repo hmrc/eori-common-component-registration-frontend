@@ -158,10 +158,10 @@ class DateOfEstablishmentControllerSpec
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(Partnership)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("When was the partnership established?")
+        page.title should startWith("Date when the partnership was established")
         page.getElementsText(
           SubscriptionPartnershipDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "When was the partnership established?"
+        ) shouldBe "Date when the partnership was established"
       }
     }
 
@@ -169,10 +169,10 @@ class DateOfEstablishmentControllerSpec
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(LLP)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("When was the partnership established?")
+        page.title should startWith("Date when the partnership was established")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "When was the partnership established?"
+        ) shouldBe "Date when the partnership was established"
       }
     }
 
@@ -181,10 +181,10 @@ class DateOfEstablishmentControllerSpec
         .thenReturn(UnincorporatedBody)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("When was the organisation established?")
+        page.title should startWith("Date when the organisation was established")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "When was the organisation established?"
+        ) shouldBe "Date when the organisation was established"
       }
     }
 
@@ -195,10 +195,10 @@ class DateOfEstablishmentControllerSpec
         page.getElementText(SubscriptionDateOfEstablishmentPage.dateOfEstablishmentLabelXPath) should startWith(
           "Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the Companies House register (opens in new tab)"
         )
-        page.title should startWith("When was the company established?")
+        page.title should startWith("Date when the company was established")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "When was the company established?"
+        ) shouldBe "Date when the company was established"
       }
     }
   }

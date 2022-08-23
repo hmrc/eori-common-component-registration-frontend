@@ -166,7 +166,7 @@ cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique 
 cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.organisation.utr=Organisation Self Assessment Unique Taxpayer Reference (UTR)
 
-cds.subscription.date-of-establishment.company.title-and-heading=When was the company established?
+cds.subscription.date-of-establishment.company.title-and-heading=Date when the company was established
 
 cds.subscription.address-details.postcode.row.label=Postal code
 
@@ -174,7 +174,7 @@ cds.matching.row-organisation.utr.title-and-heading=Does your organisation have 
 cds.matching.row-organisation.utr.paragraph=You will have a UTR number if your organisation pays corporation tax in the UK. It is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 cds.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?
 ecc.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?
-ecc.matching.row-sole-trader-individual.utr.paragraph=You will have a UTR number if you pay tax in the UK.
+ecc.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
 
 cds.form.declaration=Declaration
 cds.form.send=Confirm and send
@@ -233,8 +233,8 @@ cds.existing.reg.eori.number=EORI number:
 cds.subscription.organisation-disclose-personal-details-consent.heading=Do you want to include your name and address on the EORI checker?
 cds.subscription.organisation-disclose-personal-details-consent.declaration=HMRC will add your GB EORI number to a {0}. You can also include you or your organisation’s name and address. This will help customs and freight agents identify you and process your shipments.
 cds.subscription.organisation-disclose-personal-details-consent.declaration.link=public checker
-cds.subscription.organisation-disclose-personal-details-consent.yes=Yes - I want the name and address on the EORI checker
-cds.subscription.organisation-disclose-personal-details-consent.no=No - Just show my EORI number
+cds.subscription.organisation-disclose-personal-details-consent.yes=Yes - I want to help agents identify my shipments quickly
+cds.subscription.organisation-disclose-personal-details-consent.no=No - just show my EORI number
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
@@ -358,13 +358,10 @@ ecc.subscription.outcomes.guidance.xi.eori.bullet2=Query regarding a current EOR
 ecc.subscription.outcomes.guidance.xi.eori.warning.info=Do not tick the box "Query regarding an EORI number already issued" or "EORI number to register for customs system access".
 ecc.subscription.outcomes.guidance.xi.eori.href=<a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" class="govuk-link" target="_blank" rel="noopener noreferrer">Apply for an XI EORI.</a>
 
-ecc.subscription.organisation-disclose-personal-details-consent.title = Do you want to include the company name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.hint = HMRC will add your GB EORI number to a <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker (opens in new tab)</a>. You can also include you or your organisation''s name and address. This will help customs and freight agents identify you and process your shipments.
-ecc.subscription.organisation-disclose-personal-details-consent.individual.title = Do you want to include your name and address on the EORI checker?
+ecc.subscription.organisation-disclose-personal-details-consent.title = Can we add your name and address to the EORI checker?
+ecc.subscription.organisation-disclose-personal-details-consent.hint =HMRC will add your new EORI number to the <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Check an EORI number service (opens in new tab)</a>. This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number.
+ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.
 ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker kept by the European Commission (opens in new tab)</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
-ecc.subscription.organisation-disclose-personal-details-consent.partnership.title = Do you want to include the partnership name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.charity.title = Do you want to include the charity name and address on the EORI checker?
-ecc.subscription.organisation-disclose-personal-details-consent.organisation.title = Do you want to include the organisation name and address on the EORI checker?
 
 ecc.start-page.title = To access {0}, you need a GB EORI number.
 ecc.start-page.para1 = We will ask you to enter some details and, if approved, we''ll give you a GB EORI number and subscription to {0}.
