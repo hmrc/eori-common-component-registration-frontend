@@ -82,13 +82,6 @@ class AddressSpec extends ViewSpec {
         .getElementsByAttributeValue("for", "countryCode")
         .text mustBe "Country"
     }
-
-    "have a hidden screen reader hint" in {
-      doc
-        .body()
-        .getElementById("countryCode-hint")
-        .getElementsByClass("govuk-hint govuk-visually-hidden")
-    }
   }
 
   "Address Page in review mode" should {
