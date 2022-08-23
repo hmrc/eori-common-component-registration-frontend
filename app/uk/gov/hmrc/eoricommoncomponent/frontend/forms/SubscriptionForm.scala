@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
-import java.time.LocalDate
-import play.api.data.Forms.{optional, text}
+import play.api.data.Forms.text
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import play.api.data.{Form, Forms, Mapping}
+import play.api.data.{Form, Forms}
 import uk.gov.hmrc.emailaddress.EmailAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
+
+import java.time.LocalDate
 
 object SubscriptionForm {
 

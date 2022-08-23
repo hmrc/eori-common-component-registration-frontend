@@ -38,7 +38,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   UserGroupIdSubscriptionStatusCheckService
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  enrolment_exists_group_standalone,
   enrolment_pending_against_group_id,
   enrolment_pending_for_user
 }
@@ -63,7 +62,6 @@ class EmailControllerSpec
   private val groupEnrolmentExtractor            = mock[GroupEnrolmentExtractor]
   private val enrolmentPendingAgainstGroupIdView = instanceOf[enrolment_pending_against_group_id]
   private val enrolmentPendingForUserView        = instanceOf[enrolment_pending_for_user]
-  private val enrolmentExistsGroupStandaloneView = instanceOf[enrolment_exists_group_standalone]
 
   private val infoXpath = "//*[@id='info']"
 
@@ -232,7 +230,7 @@ class EmailControllerSpec
   private def showStandaloneFormRegister(userId: String = defaultUserId)(test: Future[Result] => Any): Unit =
     showStandaloneForm(userId)(test)
 
-  private def showStandaloneForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
+  private def showStandaloneForm(userId: String)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.form(eoriOnlyService).apply(SessionBuilder.buildRequestWithSessionAndPath("/eori-only", userId)))
   }
