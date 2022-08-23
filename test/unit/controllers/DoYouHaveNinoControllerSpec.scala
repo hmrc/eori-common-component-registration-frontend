@@ -88,7 +88,9 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     "display the form with cached nino" in {
 
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(Some(NinoMatchModel(Some(true), Some("12345")))))
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(
+        Future.successful(Some(NinoMatchModel(Some(true), Some("12345"))))
+      )
 
       displayForm() { result =>
         status(result) shouldBe OK
@@ -97,7 +99,6 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
         page.getElementsText(fieldLevelErrorNino) shouldBe empty
       }
     }
-
 
     "ensure the labels are correct" in {
 
@@ -152,7 +153,9 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
       when(mockRequestSessionData.userSelectedOrganisationType(any()))
         .thenReturn(Some(CdsOrganisationType.ThirdCountrySoleTrader))
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(Some(NinoMatchModel(Some(false)))))
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(
+        Future.successful(Some(NinoMatchModel(Some(false))))
+      )
       when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
       submitForm(noNinoSubmitData) { result =>

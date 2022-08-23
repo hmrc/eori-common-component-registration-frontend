@@ -184,7 +184,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     "redirect to OrganisationTypeController when org type is different than individual or organisation" in {
       val details = RegistrationDetailsSafeId(
         safeId = SafeId("123"),
-        address =  Address(
+        address = Address(
           addressLine1 = "test",
           addressLine2 = None,
           addressLine3 = None,
@@ -194,7 +194,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         ),
         sapNumber = TaxPayerId("123"),
         customsId = None,
-      name = "name"
+        name = "name"
       )
       mockCacheWithRegistrationDetails(details)
       when(
@@ -317,7 +317,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     "redirect to OrganisationTypeController when org type is different than individual or organisation" in {
       val details = RegistrationDetailsSafeId(
         safeId = SafeId("123"),
-        address =  Address(
+        address = Address(
           addressLine1 = "test",
           addressLine2 = None,
           addressLine3 = None,

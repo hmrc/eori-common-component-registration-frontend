@@ -279,7 +279,7 @@ class VatDetailsControllerSpec
 
     "redirect to cannot confirm your identity when postcode is None" in {
       val vatControlResponse = VatControlListResponse(None, Some("2009-11-24"))
-      submitForm(validRequest, false,vatControllerResponse = vatControlResponse) { result =>
+      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
       }
@@ -302,7 +302,7 @@ class VatDetailsControllerSpec
 
     "redirect to cannot confirm your identity when effective date is None" in {
       val vatControlResponse = VatControlListResponse(Some("Z9 1AA"), None)
-      submitForm(validRequest, false,vatControllerResponse = vatControlResponse) { result =>
+      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
       }
@@ -336,13 +336,16 @@ class VatDetailsControllerSpec
   }
 
   "vatDetailsNotMatched" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.vatDetailsNotMatched(false, atarService))
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
+      mockAuthConnector,
+      controller.vatDetailsNotMatched(false, atarService)
+    )
 
     "display weCannotConfirmYourIdentity" in {
-      vatDetailsNotMatched(){
+      vatDetailsNotMatched() {
         result =>
-          status(result) shouldBe(OK)
-          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+          status(result) shouldBeOK
+            CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
       }
     }
   }
@@ -381,9 +384,12 @@ class VatDetailsControllerSpec
     )
   }
 
-  private def submitForm(form: Map[String, String], isInReviewMode: Boolean, userId: String = defaultUserId, vatControllerResponse: VatControlListResponse = defaultVatControlResponse)(
-    test: Future[Result] => Any
-  ) {
+  private def submitForm(
+    form: Map[String, String],
+    isInReviewMode: Boolean,
+    userId: String = defaultUserId,
+    vatControllerResponse: VatControlListResponse = defaultVatControlResponse
+  )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
@@ -401,4 +407,5 @@ class VatDetailsControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.vatDetailsNotMatched(false, atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
+
 }

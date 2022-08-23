@@ -236,7 +236,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cachedCompanyShortName" should {
-    val businessShortName = BusinessShortName("short")
+    val businessShortName   = BusinessShortName("short")
     val subscriptionDetails = SubscriptionDetails(businessShortName = Some(businessShortName))
     "return the business short name of subscription details" in {
       when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
@@ -256,13 +256,12 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       countryCode = None
     )
 
-    val registrationDetails = RegistrationDetailsIndividual(
-      fullName = "Name",
-      dateOfBirth = LocalDate.now()
-    )
+    val registrationDetails = RegistrationDetailsIndividual(fullName = "Name", dateOfBirth = LocalDate.now())
     "save subscription details with contact details" in {
       when(mockSessionCache.registrationDetails) thenReturn Future.successful(registrationDetails)
-      when(mockContactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(any(), any())) thenReturn contactDetails
+      when(
+        mockContactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(any(), any())
+      ) thenReturn contactDetails
       await(subscriptionDetailsHolderService.cacheContactDetails(contactDetails))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
       verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
@@ -272,7 +271,9 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
     "save subscription details with contact details in review mode" in {
       when(mockSessionCache.registrationDetails) thenReturn Future.successful(registrationDetails)
-      when(mockContactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(any(), any())) thenReturn contactDetails
+      when(
+        mockContactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(any(), any())
+      ) thenReturn contactDetails
       await(subscriptionDetailsHolderService.cacheContactDetails(contactDetails, true))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
       verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(hc))
@@ -304,12 +305,8 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheNameDobDetails" should {
-    val nameDobDetails = NameDobMatchModel(
-      firstName = "Name",
-      middleName = None,
-      lastName = "Lastname",
-      dateOfBirth = LocalDate.now()
-    )
+    val nameDobDetails =
+      NameDobMatchModel(firstName = "Name", middleName = None, lastName = "Lastname", dateOfBirth = LocalDate.now())
     "save subscription details with date established" in {
       await(subscriptionDetailsHolderService.cacheNameDobDetails(nameDobDetails))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -320,9 +317,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheNinoOrUtrChoice" should {
-    val ninoOrUtrChoice = NinoOrUtrChoice(
-      ninoOrUtrRadio = Some("utr")
-    )
+    val ninoOrUtrChoice = NinoOrUtrChoice(ninoOrUtrRadio = Some("utr"))
     "save subscription details with nino or utr choice" in {
       await(subscriptionDetailsHolderService.cacheNinoOrUtrChoice(ninoOrUtrChoice))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -333,9 +328,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheUtrMatch" should {
-    val utrMatch = UtrMatchModel(
-      Some(true)
-    )
+    val utrMatch = UtrMatchModel(Some(true))
     "save subscription details with utr match" in {
       await(subscriptionDetailsHolderService.cacheUtrMatch(Some(utrMatch)))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -346,9 +339,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheNinoMatch" should {
-    val ninoMatch = NinoMatchModel(
-      Some(true)
-    )
+    val ninoMatch = NinoMatchModel(Some(true))
     "save subscription details with nino match" in {
       await(subscriptionDetailsHolderService.cacheNinoMatch(Some(ninoMatch)))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -359,11 +350,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheUkVatDetails" should {
-    val ukVatDetails = VatDetails(
-      postcode = "12345",
-      number = "12345",
-      effectiveDate = LocalDate.now()
-    )
+    val ukVatDetails = VatDetails(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
     "save subscription details with vat details" in {
       await(subscriptionDetailsHolderService.cacheUkVatDetails(ukVatDetails))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -374,11 +361,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "clearCachedUkVatDetails" should {
-    val ukVatDetails = VatDetails(
-      postcode = "12345",
-      number = "12345",
-      effectiveDate = LocalDate.now()
-    )
+    val ukVatDetails = VatDetails(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
 
     val subscriptionDetails = SubscriptionDetails(ukVatDetails = Some(ukVatDetails))
     "save subscription details with vat details set to none" in {
@@ -392,9 +375,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheVatRegisteredUk" should {
-    val yesNoAnswer = YesNo(
-      true
-    )
+    val yesNoAnswer = YesNo(true)
     "save subscription details with vat registered uk" in {
       await(subscriptionDetailsHolderService.cacheVatRegisteredUk(yesNoAnswer))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -405,9 +386,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheConsentToDisclosePersonalDetails" should {
-    val yesNoAnswer = YesNo(
-      true
-    )
+    val yesNoAnswer = YesNo(true)
     "save subscription details with consent to disclose personal details" in {
       await(subscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(yesNoAnswer))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
