@@ -62,8 +62,8 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
   val NinoField      = "Error: Enter your National Insurance number"
   val DateOfBirth    = "Date of birth"
 
-  val InvalidNinoPage  = "Enter a National Insurance number in the right format"
-  val InvalidNinoField = "Error: Enter a National Insurance number in the right format"
+  val InvalidNinoPage  = "Enter a correct National Insurance number"
+  val InvalidNinoField = "Error: Enter a correct National Insurance number"
 
   "loading the page" should {
 
