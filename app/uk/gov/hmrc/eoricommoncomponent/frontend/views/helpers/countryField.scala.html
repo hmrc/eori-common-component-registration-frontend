@@ -22,9 +22,6 @@
 
 @(form: Form[_], field: String, label: String, countries: List[Country], labelClasses: Option[String], args: (Symbol, Any)*)(implicit messages: Messages)
 
-@hintHtml = {
-    <span class="govuk-visually-hidden">@Html(". " + messages("cds.country-picker.hint.screen-reader"))</span>
-}
 <div class ="govuk-!-width-one-half">
 @inputSelect(
     form = form,
@@ -36,7 +33,6 @@
         selected = form(field).value.contains(c.countryCode)
     )),
     label = messages(label),
-    hint = Some(hintHtml),
     classes = Some("govuk-!-width-one-half"),
     isPageHeading = false,
     labelClasses = labelClasses
@@ -67,5 +63,12 @@
     inputElement.addEventListener('blur', function(){
         if(this.value === "") selectElement.selectedIndex=0;
     });
+
+    var menu = document.getElementById('countryCode-select');
+    var template = document.createElement('div');
+    template.setAttribute("id","countryCode-hint");
+    template.classList.add("govuk-hint");
+    template.innerHTML = "<span class='govuk-visually-hidden'>"+'. @messages("cds.country-picker.hint.screen-reader")'+"</span>";
+    menu.parentNode.insertBefore(template, menu);
 }())
 </script>
