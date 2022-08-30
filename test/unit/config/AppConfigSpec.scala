@@ -44,7 +44,7 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
     }
 
     "have ttl defined" in {
-      appConfig.ttl shouldBe Duration(40, TimeUnit.MINUTES)
+      appConfig.ttl shouldBe Duration(15, TimeUnit.MINUTES)
     }
 
     "have emailVerificationBaseUrl defined" in {
