@@ -56,7 +56,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionDetailsService.cacheVatRegisteredUk(any[YesNo])(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsService.cacheVatRegisteredUk(any[YesNo])(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful {})
   }
 
@@ -156,7 +156,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
   private def reviewForm()(test: Future[Result] => Any) {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
-    when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[HeaderCarrier])).thenReturn(true)
+    when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[HeaderCarrier], any[Request[_]])).thenReturn(true)
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 

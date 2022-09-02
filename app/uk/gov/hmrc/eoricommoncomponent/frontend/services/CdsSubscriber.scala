@@ -19,12 +19,9 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDateTime
 import play.api.i18n.Messages
+import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  ContactDetails,
-  RecipientDetails,
-  SubscriptionDetails
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{ContactDetails, RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,13 +37,15 @@ class CdsSubscriber @Inject() (
 
   def subscribeWithCachedDetails(cdsOrganisationType: Option[CdsOrganisationType], service: Service)(implicit
     hc: HeaderCarrier,
-    messages: Messages
+    messages: Messages,
+                                                                                                     request: Request[_]
   ): Future[SubscriptionResult] =
     subscribeEori(cdsOrganisationType, service)
 
   private def subscribeEori(cdsOrganisationType: Option[CdsOrganisationType], service: Service)(implicit
     hc: HeaderCarrier,
-    messages: Messages
+    messages: Messages,
+                                                                                                request: Request[_]
   ): Future[SubscriptionResult] =
     for {
       registrationDetails <- sessionCache.registrationDetails
@@ -62,7 +61,7 @@ class CdsSubscriber @Inject() (
     registrationDetails: RegistrationDetails,
     mayBeCdsOrganisationType: Option[CdsOrganisationType],
     service: Service
-  )(implicit hc: HeaderCarrier): Future[(SubscriptionResult, Option[SubscriptionDetails])] =
+  )(implicit hc: HeaderCarrier, request: Request[_]): Future[(SubscriptionResult, Option[SubscriptionDetails])] =
     for {
       subscriptionDetailsHolder <- sessionCache.subscriptionDetails
       subscriptionResult <- subscriptionService.subscribe(
@@ -78,7 +77,7 @@ class CdsSubscriber @Inject() (
     regDetails: RegistrationDetails,
     subscriptionDetails: Option[SubscriptionDetails],
     service: Service
-  )(implicit hc: HeaderCarrier, messages: Messages): Future[Unit] =
+  )(implicit hc: HeaderCarrier, messages: Messages, request: Request[_]): Future[Unit] =
     subscriptionResult match {
       case success: SubscriptionSuccessful =>
         val safeId = regDetails.safeId
@@ -141,7 +140,7 @@ class CdsSubscriber @Inject() (
     processingDate: String,
     formBundleId: String,
     emailVerificationTimestamp: Option[LocalDateTime]
-  )(implicit hc: HeaderCarrier, messages: Messages): Future[Unit] =
+  )(implicit hc: HeaderCarrier, messages: Messages, request: Request[_]): Future[Unit] =
     sessionCache.saveSub02Outcome(
       Sub02Outcome(processingDate, cdsFullName.getOrElse(name), maybeEori.map(_.id))
     ).flatMap { _ =>

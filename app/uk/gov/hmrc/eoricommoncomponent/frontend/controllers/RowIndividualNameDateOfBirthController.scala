@@ -86,7 +86,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     formData: IndividualNameAndDateOfBirth,
     organisationType: String,
     service: Service
-  )(implicit hc: HeaderCarrier): Future[Result] = {
+  )(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
     val nameDobMatchModel =
       NameDobMatchModel(formData.firstName, formData.middleName, formData.lastName, formData.dateOfBirth)
 

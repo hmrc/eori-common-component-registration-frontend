@@ -52,7 +52,7 @@ class NameDobController @Inject() (
     }
 
   private def submitNewDetails(formData: NameDobMatchModel, service: Service)(implicit
-    hc: HeaderCarrier
+    hc: HeaderCarrier, request: Request[_]
   ): Future[Result] =
     cdsFrontendDataCache.saveSubscriptionDetails(SubscriptionDetails(nameDobDetails = Some(formData))).map { _ =>
       Redirect(

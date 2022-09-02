@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import java.time.{Clock, LocalDateTime, ZoneId}
+import play.api.mvc.Request
 
+import java.time.{Clock, LocalDateTime, ZoneId}
 import javax.inject.Inject
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EoriHttpResponse, RegistrationDisplayConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestParameter
@@ -54,7 +55,7 @@ class RegistrationDisplayService @Inject() (
       )
     )
 
-  def cacheDetails(response: RegistrationDisplayResponse)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def cacheDetails(response: RegistrationDisplayResponse)(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] = {
     val registrationDetails: RegistrationDisplayResponse => RegistrationDetails = details =>
       creator.registrationDetails(details)
     sessionCache.saveRegistrationDetails(registrationDetails(response))

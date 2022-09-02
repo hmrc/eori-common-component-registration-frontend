@@ -16,14 +16,15 @@
 
 package unit.models.events
 
-import org.scalatest.Matchers.defined
-import org.scalatest.{EitherValues, MustMatchers, OptionValues, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.{EitherValues, OptionValues}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SubscriptionStatusQueryParams
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.SubscriptionStatusSubmitted
 
 import java.time.LocalDateTime
 
-class SubscriptionStatusSubmittedSpec extends WordSpec with MustMatchers with EitherValues with OptionValues {
+class SubscriptionStatusSubmittedSpec extends AnyWordSpec with Matchers with EitherValues with OptionValues {
 
   "SubscriptionStatusSubmitted" should {
     "have taxPayerId set to request.id if request.idType is taxPayerId and safeId set to None if request.idType is not SAFE" in {

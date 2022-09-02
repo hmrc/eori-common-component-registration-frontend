@@ -17,14 +17,14 @@
 package unit.controllers
 
 import java.time.Year
-
 import common.pages.matching.NameDateOfBirthPage
 import common.pages.matching.NameDateOfBirthPage._
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameDobController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
@@ -54,7 +54,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     s"The $field name must be $maxLength characters or less"
 
   override def beforeEach: Unit =
-    when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[HeaderCarrier]))
+    when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]]))
       .thenReturn(Future.successful(true))
 
   "Viewing the Individual Matching with ID form" should {

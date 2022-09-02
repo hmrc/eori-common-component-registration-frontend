@@ -21,6 +21,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.http.Status.OK
+import play.api.mvc.Request
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.PdfGeneratorConnector
@@ -66,7 +67,7 @@ class DownloadPDFControllerSpec extends ControllerSpec with AuthActionMock {
 
     "download EORI PDF for an authenticated user" in {
       val mockSubscribeOutcome = mock[Sub02Outcome]
-      when(mockCdsFrontendDataCache.sub02Outcome(any[HeaderCarrier]))
+      when(mockCdsFrontendDataCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(mockSubscribeOutcome))
       when(mockSubscribeOutcome.processedDate).thenReturn("01 May 2016")
       when(mockSubscribeOutcome.eori).thenReturn(Some("EN123456789012345"))
@@ -90,7 +91,7 @@ class DownloadPDFControllerSpec extends ControllerSpec with AuthActionMock {
 
     "display the service unavailable page if the eori is missing from Sub02Outcome" in {
       val mockSubscribeOutcome = mock[Sub02Outcome]
-      when(mockCdsFrontendDataCache.sub02Outcome(any[HeaderCarrier]))
+      when(mockCdsFrontendDataCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(mockSubscribeOutcome))
       when(mockSubscribeOutcome.processedDate).thenReturn("01 May 2016")
       when(mockSubscribeOutcome.eori).thenReturn(None)
@@ -112,7 +113,7 @@ class DownloadPDFControllerSpec extends ControllerSpec with AuthActionMock {
 
     "download Subscription PDF for an authenticated user" in {
       val mockSubscribeOutcome = mock[Sub02Outcome]
-      when(mockCdsFrontendDataCache.sub02Outcome(any[HeaderCarrier]))
+      when(mockCdsFrontendDataCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(mockSubscribeOutcome))
       when(mockSubscribeOutcome.processedDate).thenReturn("01 May 2016")
       when(mockSubscribeOutcome.eori).thenReturn(Some("EN123456789012345"))
@@ -136,7 +137,7 @@ class DownloadPDFControllerSpec extends ControllerSpec with AuthActionMock {
 
     "display the service unavailable page if the subscription eori is missing from Sub02Outcome" in {
       val mockSubscribeOutcome = mock[Sub02Outcome]
-      when(mockCdsFrontendDataCache.sub02Outcome(any[HeaderCarrier]))
+      when(mockCdsFrontendDataCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(mockSubscribeOutcome))
       when(mockSubscribeOutcome.processedDate).thenReturn("01 May 2016")
       when(mockSubscribeOutcome.eori).thenReturn(None)

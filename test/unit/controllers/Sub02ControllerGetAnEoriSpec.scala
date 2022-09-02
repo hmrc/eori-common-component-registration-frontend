@@ -94,7 +94,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   override def beforeEach: Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionDetailsService.saveKeyIdentifiers(any[GroupId], any[InternalId], any[Service])(any()))
+    when(mockSubscriptionDetailsService.saveKeyIdentifiers(any[GroupId], any[InternalId], any[Service])(any(), any()))
       .thenReturn(Future.successful(()))
   }
 
@@ -135,7 +135,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(
         Future.successful(
@@ -153,7 +154,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
         verify(mockCdsSubscriber).subscribeWithCachedDetails(meq(Some(mockCdsOrganisationType)), meq(atarService))(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       }
     }
@@ -162,7 +164,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(
         Future.successful(
@@ -180,7 +183,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
         verify(mockCdsSubscriber).subscribeWithCachedDetails(meq(None), meq(atarService))(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       }
     }
@@ -189,7 +193,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(
         Future.successful(
@@ -214,7 +219,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(
         Future.successful(SubscriptionPending(formBundleIdResponse, processingDate, Some(emailVerificationTimestamp)))
@@ -232,7 +238,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(Future.successful(SubscriptionFailed("Subscription application has been rejected", processingDate)))
 
@@ -248,7 +255,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(Future.successful(SubscriptionFailed(EoriAlreadyExists, processingDate)))
 
@@ -264,7 +272,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(Future.successful(SubscriptionFailed(EoriAlreadyAssociated, processingDate)))
 
@@ -280,7 +289,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(Future.successful(SubscriptionFailed(SubscriptionInProgress, processingDate)))
 
@@ -296,7 +306,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(Future.successful(SubscriptionFailed(RequestNotProcessed, processingDate)))
 
@@ -316,7 +327,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(
         mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
           any[HeaderCarrier],
-          any[Messages]
+          any[Messages],
+          any[Request[_]]
         )
       ).thenReturn(Future.failed(emulatedFailure))
 
@@ -338,7 +350,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
-          verify(mockSessionCache).remove(any[HeaderCarrier])
+          verify(mockSessionCache).remove(any[Request[_]])
           page.title should startWith("Application complete")
           page.getElementsText(
             RegistrationCompletePage.panelHeadingXpath
@@ -376,7 +388,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
-          verify(mockSessionCache).remove(any[HeaderCarrier])
+          verify(mockSessionCache).remove(any[Request[_]])
           page.title should startWith("Application complete")
           page.getElementsText(
             RegistrationCompletePage.panelHeadingXpath
@@ -420,9 +432,9 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling eoriAlreadyExists on Sub02Controller" should {
     "render eori already exists page" in {
-      when(mockSessionCache.sub02Outcome(any[HeaderCarrier]))
+      when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokeEoriAlreadyExists { result =>
         assertCleanedSession(result)
 
@@ -433,9 +445,9 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling subscriptionInProgress on Sub02Controller" should {
     "render subscription in-progress page" in {
-      when(mockSessionCache.sub02Outcome(any[HeaderCarrier]))
+      when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokeSubscriptionInProgress { result =>
         assertCleanedSession(result)
 
@@ -446,9 +458,9 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling eoriAlreadyAssociated on Sub02Controller" should {
     "render Already Associated page" in {
-      when(mockSessionCache.sub02Outcome(any[HeaderCarrier]))
+      when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokeEoriAlreadyAssociated { result =>
         assertCleanedSession(result)
 
@@ -459,7 +471,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling RequestNotProcessed on Sub02Controller" should {
     "render Request Not Processed page" in {
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokeRequestNotProcessed { result =>
         assertCleanedSession(result)
 
@@ -470,9 +482,9 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling pending on Sub02Controller" should {
     "render sub01 processing page" in {
-      when(mockSessionCache.sub02Outcome(any[HeaderCarrier]))
+      when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokePending { result =>
         assertCleanedSession(result)
 
@@ -482,11 +494,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   }
 
   private def mockSessionCacheForOutcomePage = {
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(Future.successful(mockRegDetails))
-    when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[HeaderCarrier])).thenReturn(Future.successful(true))
+    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(Future.successful(mockRegDetails))
+    when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
     when(mockRegDetails.name).thenReturn("orgName")
-    when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
-    when(mockSessionCache.sub02Outcome(any[HeaderCarrier])).thenReturn(Future.successful(mockSubscribeOutcome))
+    when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
+    when(mockSessionCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
     when(mockSubscribeOutcome.processedDate).thenReturn("22 May 2016")
   }
 

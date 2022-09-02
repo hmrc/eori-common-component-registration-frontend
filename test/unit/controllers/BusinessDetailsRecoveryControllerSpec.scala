@@ -179,7 +179,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
     }
 
   private def mockCacheWithRegistrationDetails(details: RegistrationDetails): Unit =
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
       .thenReturn(Future.successful(details))
 
   private def invokeConfirm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {

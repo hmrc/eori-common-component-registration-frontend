@@ -68,7 +68,7 @@ class WhatIsYourOrgNameController @Inject() (
     formData: NameMatchModel,
     organisationType: String,
     service: Service
-  )(implicit hc: HeaderCarrier): Future[Result] =
+  )(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] =
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map { _ =>
       if (isInReviewMode)
         Redirect(DetermineReviewPageController.determineRoute(service))

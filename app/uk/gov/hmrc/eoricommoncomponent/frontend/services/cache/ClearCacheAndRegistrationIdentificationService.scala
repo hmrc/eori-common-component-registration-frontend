@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
+import play.api.mvc.Request
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -26,7 +28,7 @@ class ClearCacheAndRegistrationIdentificationService @Inject() (sessionCache: Se
   ec: ExecutionContext
 ) {
 
-  def clear()(implicit hc: HeaderCarrier): Future[Unit] =
+  def clear()(implicit hc: HeaderCarrier, request: Request[_]): Future[Unit] =
     for {
       email <- sessionCache.email
       _     <- sessionCache.remove

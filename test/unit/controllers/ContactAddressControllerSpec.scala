@@ -100,11 +100,11 @@ class ContactAddressControllerSpec
   override def beforeEach: Unit = {
     super.beforeEach()
 
-    when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
+    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]]))
       .thenReturn(mockSubscriptionFlowInfo)
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
-    when(mockCdsFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(subscriptionDetailsHolder)
+    when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(subscriptionDetailsHolder)
   }
 
   private val problemWithSelectionError = "Error: Select yes if the contact address is right"
@@ -136,7 +136,7 @@ class ContactAddressControllerSpec
     }
 
     "populate the form with registered organisation address if contact details is not present" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(SubscriptionDetails())
+      when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(SubscriptionDetails())
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementsText(ContactAddressPage.addressXpath) shouldBe "Line 1 line 2 line 3 SE28 1AA United Kingdom"
@@ -155,7 +155,7 @@ class ContactAddressControllerSpec
       }
     }
     "display the correct text for the continue button" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier], any[Request[_]]))
         .thenReturn(Some(contactDetailsModel))
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
@@ -219,9 +219,9 @@ class ContactAddressControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
-    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful(()))
 
     test(
@@ -236,9 +236,9 @@ class ContactAddressControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
-    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful(()))
 
     test(
@@ -263,7 +263,7 @@ class ContactAddressControllerSpec
   private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
+    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
@@ -271,7 +271,7 @@ class ContactAddressControllerSpec
   private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))

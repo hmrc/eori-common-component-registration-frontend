@@ -98,7 +98,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
 
       "yes/no asnwer is presented in cache" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any()))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any()))
           .thenReturn(Some(BusinessShortName(false, None)))
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
 
@@ -125,7 +125,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
 
       "yes/no answer is not presented in cache" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any())).thenReturn(None)
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any())).thenReturn(None)
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
 
         val result = controller.displayPage(atarService)(getRequest)
@@ -151,7 +151,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
 
       "user is RoW" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any())).thenReturn(None)
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any())).thenReturn(None)
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(false)
 
         val result = controller.displayPage(atarService)(getRequest)
@@ -180,7 +180,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
 
       "yes/no asnwer is presented in cache" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any()))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any()))
           .thenReturn(Some(BusinessShortName(false, None)))
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
 
@@ -207,7 +207,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
 
       "yes/no answer is not presented in cache" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any())).thenReturn(None)
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any())).thenReturn(None)
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
 
         val result = controller.reviewPage(atarService)(getRequest)
@@ -233,7 +233,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
 
       "user is RoW" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any())).thenReturn(None)
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any())).thenReturn(None)
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(false)
 
         val result = controller.reviewPage(atarService)(getRequest)
@@ -302,8 +302,8 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
       "user choose Yes and is not in review mode" in {
 
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any())).thenReturn(Future.successful(None))
-        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any())).thenReturn(Future.successful((): Unit))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any())).thenReturn(Future.successful(None))
+        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any(), any())).thenReturn(Future.successful((): Unit))
 
         val result = controller.submit(atarService, false)(postRequest("yes-no-answer" -> "true"))
 
@@ -314,8 +314,8 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
       "user choose Yes and is in review mode" in {
 
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any())).thenReturn(Future.successful(None))
-        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any())).thenReturn(Future.successful((): Unit))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any())).thenReturn(Future.successful(None))
+        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any(), any())).thenReturn(Future.successful((): Unit))
 
         val result = controller.submit(atarService, true)(postRequest("yes-no-answer" -> "true"))
 
@@ -329,8 +329,8 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
       "user choose No and is in review mode" in {
 
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any())).thenReturn(Future.successful(None))
-        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any())).thenReturn(Future.successful((): Unit))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any())).thenReturn(Future.successful(None))
+        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any(), any())).thenReturn(Future.successful((): Unit))
 
         val result = controller.submit(atarService, true)(postRequest("yes-no-answer" -> "false"))
 
@@ -344,8 +344,8 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
       "user choose No and is not in review mode" in {
 
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any())).thenReturn(Future.successful(None))
-        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any())).thenReturn(Future.successful((): Unit))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any())).thenReturn(Future.successful(None))
+        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any(), any())).thenReturn(Future.successful((): Unit))
 
         val result = controller.submit(atarService, false)(postRequest("yes-no-answer" -> "false"))
 

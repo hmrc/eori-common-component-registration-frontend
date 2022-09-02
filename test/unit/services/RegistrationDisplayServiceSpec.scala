@@ -20,17 +20,11 @@ import base.UnitSpec
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{RegistrationDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.ResponseDetail
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
-  RegistrationDisplayResponse,
-  ResponseCommon
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  RegistrationDetailsIndividual,
-  RegistrationDetailsOrganisation,
-  SafeId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayResponse, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetailsIndividual, RegistrationDetailsOrganisation, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDisplayService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
@@ -43,7 +37,7 @@ class RegistrationDisplayServiceSpec extends UnitSpec with MockitoSugar {
   val mockConnector = mock[RegistrationDisplayConnector]
   val mockCreator   = mock[RegistrationDetailsCreator]
   val testService   = new RegistrationDisplayService(mockCache, mockConnector, mockCreator)
-
+  implicit val request: Request[Any] = mock[Request[Any]]
   val mockResponseCommon  = mock[ResponseCommon]
   val mockResponseDetail  = mock[ResponseDetail]
   val mockDisplayResponse = mock[RegistrationDisplayResponse]
@@ -70,7 +64,7 @@ class RegistrationDisplayServiceSpec extends UnitSpec with MockitoSugar {
         .thenReturn(RegistrationDetailsIndividual())
       when(mockCache.saveRegistrationDetails(any[RegistrationDetailsIndividual])(any()))
         .thenReturn(Future.successful(true))
-      await(testService.cacheDetails(mockDisplayResponse)(HeaderCarrier())) shouldBe true
+      await(testService.cacheDetails(mockDisplayResponse)(HeaderCarrier(), request)) shouldBe true
     }
 
     "return false when unable to cache details" in {
@@ -78,7 +72,7 @@ class RegistrationDisplayServiceSpec extends UnitSpec with MockitoSugar {
         .thenReturn(RegistrationDetailsOrganisation())
       when(mockCache.saveRegistrationDetails(any[RegistrationDetailsOrganisation])(any()))
         .thenReturn(Future.successful(false))
-      await(testService.cacheDetails(mockDisplayResponse)(HeaderCarrier())) shouldBe false
+      await(testService.cacheDetails(mockDisplayResponse)(HeaderCarrier(), request)) shouldBe false
     }
   }
 }

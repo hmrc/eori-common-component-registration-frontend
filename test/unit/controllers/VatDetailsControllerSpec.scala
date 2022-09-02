@@ -17,27 +17,19 @@
 package unit.controllers
 
 import common.pages.subscription.SubscriptionVatDetailsPage._
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  InvalidResponse,
-  NotFoundResponse,
-  ServiceUnavailableResponse,
-  VatControlListConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{InvalidResponse, NotFoundResponse, ServiceUnavailableResponse, VatControlListConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  error_template,
-  vat_details,
-  we_cannot_confirm_your_identity
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, vat_details, we_cannot_confirm_your_identity}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
@@ -108,7 +100,7 @@ class VatDetailsControllerSpec
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "display the form with cached details" in {
-      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(
+      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any(), any())) thenReturn Future.successful(
         Some(VatDetails("123", "123", LocalDate.now()))
       )
       reviewForm() { result =>
@@ -119,7 +111,7 @@ class VatDetailsControllerSpec
     }
 
     "display the form with no cached details" in {
-      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(None)
+      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any(), any())) thenReturn Future.successful(None)
       reviewForm() { result =>
         status(result) shouldBe OK
         verifyFormActionInCreateMode
@@ -354,7 +346,7 @@ class VatDetailsControllerSpec
     test: Future[Result] => Any
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
-    when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful(cachedDate))
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
@@ -375,7 +367,7 @@ class VatDetailsControllerSpec
     form: Map[String, String]
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller
@@ -394,7 +386,7 @@ class VatDetailsControllerSpec
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(vatControllerResponse)))
-    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller

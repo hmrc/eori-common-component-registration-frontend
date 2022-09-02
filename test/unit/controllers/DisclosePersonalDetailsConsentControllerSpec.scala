@@ -146,7 +146,7 @@ class DisclosePersonalDetailsConsentControllerSpec
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(any[YesNo])(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(any[YesNo])(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful {})
     setupMockSubscriptionFlowManager(EoriConsentSubscriptionFlowPage)
   }
@@ -390,7 +390,7 @@ class DisclosePersonalDetailsConsentControllerSpec
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.getCachedPersonalDataDisclosureConsent(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.getCachedPersonalDataDisclosureConsent(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(previouslyAnswered)
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)

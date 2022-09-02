@@ -60,7 +60,7 @@ class HowCanWeIdentifyYouController @Inject() (
         )
     }
 
-  private def storeChoice(formData: NinoOrUtrChoice, service: Service)(implicit hc: HeaderCarrier): Future[Result] =
+  private def storeChoice(formData: NinoOrUtrChoice, service: Service)(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] =
     subscriptionDetailsHolderService
       .cacheNinoOrUtrChoice(formData)
       .map(

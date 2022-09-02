@@ -83,7 +83,7 @@ class SicCodeControllerSpec
   override protected def beforeEach: Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionBusinessService.cachedSicCode(any[HeaderCarrier])).thenReturn(None)
+    when(mockSubscriptionBusinessService.cachedSicCode(any[HeaderCarrier], any[Request[_]])).thenReturn(None)
     registerSaveDetailsMockSuccess()
     setupMockSubscriptionFlowManager(SicCodeSubscriptionFlowPage)
   }
@@ -249,7 +249,7 @@ class SicCodeControllerSpec
     }
 
     "have SIC code input field prepopulated if cached previously" in {
-      when(mockSubscriptionBusinessService.cachedSicCode(any[HeaderCarrier])).thenReturn(Future.successful(Some(sic)))
+      when(mockSubscriptionBusinessService.cachedSicCode(any[HeaderCarrier], any[Request[_]])).thenReturn(Future.successful(Some(sic)))
       showCreateForm(userSelectedOrgType = Company) { result =>
         val page = CdsPage(contentAsString(result))
         verifyPrincipalEconomicActivityFieldExistsAndPopulatedCorrectly(page)
@@ -273,7 +273,7 @@ class SicCodeControllerSpec
     "retrieve the cached data" in {
       showReviewForm(userSelectedOrgType = Company) { result =>
         CdsPage(contentAsString(result))
-        verify(mockSubscriptionBusinessService).getCachedSicCode(any[HeaderCarrier])
+        verify(mockSubscriptionBusinessService).getCachedSicCode(any[HeaderCarrier], any[Request[_]])
       }
     }
 
@@ -491,12 +491,12 @@ class SicCodeControllerSpec
   }
 
   private def registerSaveDetailsMockSuccess() {
-    when(mockSubscriptionDetailsHolderService.cacheSicCode(anyString())(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsHolderService.cacheSicCode(anyString())(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful(()))
   }
 
   private def registerSaveDetailsMockFailure(exception: Throwable) {
-    when(mockSubscriptionDetailsHolderService.cacheSicCode(anyString)(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsHolderService.cacheSicCode(anyString)(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.failed(exception))
   }
 
@@ -527,7 +527,7 @@ class SicCodeControllerSpec
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(orgType)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
-    when(mockSubscriptionBusinessService.getCachedSicCode(any[HeaderCarrier])).thenReturn(dataToEdit)
+    when(mockSubscriptionBusinessService.getCachedSicCode(any[HeaderCarrier], any[Request[_]])).thenReturn(dataToEdit)
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }

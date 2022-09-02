@@ -17,12 +17,13 @@
 package unit.controllers
 
 import common.pages.RegisterHowCanWeIdentifyYouPage
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfter
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouUtrController
@@ -77,14 +78,14 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     "redirect to the Confirm page when a UTR is matched" in {
 
       val utr = "2108834503"
-      when(mockFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(
           SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
         )
       )
       when(
         mockMatchingService
-          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(any[HeaderCarrier])
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(Future.successful(true))
 
       submitForm(Map("utr" -> utr)) {
@@ -96,14 +97,14 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
     "give a page level error when a UTR is not matched" in {
       val utr = "2108834503"
-      when(mockFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(
           SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
         )
       )
       when(
         mockMatchingService
-          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(any[HeaderCarrier])
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(Future.successful(false))
 
       submitForm(Map("utr" -> utr)) {
@@ -118,7 +119,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
     "display error when no input" in {
 
-      when(mockFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(
           SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
         )

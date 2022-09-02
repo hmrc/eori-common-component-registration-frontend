@@ -19,6 +19,7 @@ package unit.controllers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.Request
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController
@@ -64,7 +65,7 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
   "Navigating to logout" should {
     "logout an authenticated user for register" in {
       withAuthorisedUser(defaultUserId, mockAuthConnector)
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
 
       val result =
         controller.logout(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))

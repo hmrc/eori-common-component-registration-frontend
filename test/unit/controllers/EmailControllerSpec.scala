@@ -21,7 +21,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
@@ -31,16 +31,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  Save4LaterService,
-  SubscriptionProcessing,
-  SubscriptionStatusService,
-  UserGroupIdSubscriptionStatusCheckService
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  enrolment_pending_against_group_id,
-  enrolment_pending_for_user
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, SubscriptionProcessing, SubscriptionStatusService, UserGroupIdSubscriptionStatusCheckService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{enrolment_pending_against_group_id, enrolment_pending_for_user}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -92,7 +84,7 @@ class EmailControllerSpec
     ).thenReturn(Future.successful(Some(true)))
     when(mockSave4LaterService.saveEmail(any(), any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(()))
-    when(mockSessionCache.saveEmail(any())(any[HeaderCarrier]))
+    when(mockSessionCache.saveEmail(any())(any[Request[_]]))
       .thenReturn(Future.successful(true))
     when(mockSave4LaterService.fetchCacheIds(any())(any()))
       .thenReturn(Future.successful(None))
@@ -151,7 +143,7 @@ class EmailControllerSpec
     "block when subscription is in progress" in {
       when(mockSave4LaterService.fetchCacheIds(any())(any()))
         .thenReturn(Future.successful(Some(CacheIds(InternalId("int-id"), SafeId("safe-id"), Some("atar")))))
-      when(mockSubscriptionStatusService.getStatus(any(), any())(any()))
+      when(mockSubscriptionStatusService.getStatus(any(), any())(any(), any()))
         .thenReturn(Future.successful(SubscriptionProcessing))
 
       showFormRegister() { result =>
@@ -187,7 +179,7 @@ class EmailControllerSpec
     "redirect and display when group enrolled to service and Eori is retreived in standalone journey " in {
       when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
         .thenReturn(Future.successful(List(cdsGroupEnrolment)))
-      when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
+      when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
         .thenReturn(Future.successful(true))
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
       showStandaloneFormRegister() { result =>
@@ -209,7 +201,7 @@ class EmailControllerSpec
     "redirect and display when not enrolled to CDS and Display Eori in standalone journey " in {
       when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
         .thenReturn(Future.successful(List(atarGroupEnrolment)))
-      when(mockSessionCache.saveEori(any[Eori])(any[HeaderCarrier]))
+      when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
         .thenReturn(Future.successful(true))
       showStandaloneFormRegister() { result =>
         status(result) shouldBe SEE_OTHER

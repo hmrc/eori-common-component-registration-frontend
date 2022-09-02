@@ -17,11 +17,12 @@
 package unit.controllers
 
 import common.pages.matching.DoYouHaveNinoPage._
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetNinoController
@@ -83,10 +84,10 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
   "Submitting the form" should {
     "redirect to 'These are the details we have about you' page when Y is selected and given NINO is matched" in {
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier], any[Request[_]])).thenReturn(
         Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
       )
-      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier]))
+      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier], any[Request[_]]))
         .thenReturn(Future.successful(true))
 
       submitForm(yesNinoSubmitData) { result =>
@@ -95,16 +96,17 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         result.header.headers("Location") should endWith("register/matching/confirm")
         val expectedIndividual = Individual.withLocalDate("First name", None, "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
-          any[HeaderCarrier]
+          any[HeaderCarrier],
+          any[Request[_]]
         )
       }
     }
 
     "keep the user on the same page with proper message when NINO was not recognized" in {
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier], any[Request[_]])).thenReturn(
         Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
       )
-      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier]))
+      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier], any[Request[_]]))
         .thenReturn(Future.successful(false))
 
       submitForm(yesNinoSubmitData) { result =>
@@ -113,7 +115,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         status(result) shouldBe BAD_REQUEST
         val expectedIndividual = Individual.withLocalDate("First name", None, "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
-          any[HeaderCarrier]
+          any[HeaderCarrier],
+          any[Request[_]]
         )
 
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe notMatchedError
@@ -121,8 +124,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     "keep the user on the same page with error message when NINO was not recognized for no name in cache" in {
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(Future.successful(None))
-      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier], any[Request[_]])).thenReturn(Future.successful(None))
+      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier], any[Request[_]]))
         .thenReturn(Future.successful(false))
 
       submitForm(yesNinoSubmitData) { result =>

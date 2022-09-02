@@ -20,7 +20,7 @@ import base.UnitSpec
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterEach, mock => _}
+import org.scalatest.{BeforeAndAfterEach}
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CorporateBody, Partnership}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -57,7 +57,7 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
 
     "give org type from cache" in {
       when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
-      when(mockCache.registrationDetails(any[HeaderCarrier]))
+      when(mockCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(RegistrationDetailsBuilder.partnershipRegistrationDetails))
 
       val orgType = await(lookup.etmpOrgType(req, hc))
@@ -67,7 +67,7 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
 
     "throw an exception when neither the request session or cache contains the org type" in {
       when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
-      when(mockCache.registrationDetails(any[HeaderCarrier]))
+      when(mockCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(RegistrationDetailsBuilder.emptyETMPOrgTypeRegistrationDetails))
 
       val thrown = intercept[IllegalStateException] {
@@ -79,7 +79,7 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
 
     "throw an exception when different type of registration details is retrieved" in {
       when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
-      when(mockCache.registrationDetails(any[HeaderCarrier]))
+      when(mockCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(RegistrationDetailsBuilder.individualRegistrationDetails))
 
       val thrown = intercept[IllegalStateException] {

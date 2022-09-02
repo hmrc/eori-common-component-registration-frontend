@@ -21,11 +21,9 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUser
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  ClearCacheAndRegistrationIdentificationService,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{ClearCacheAndRegistrationIdentificationService, SessionCache}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.global
@@ -35,7 +33,7 @@ class ClearCacheAndRegistrationIdentificationServiceSpec extends UnitSpec with M
   val mockSessionCache: SessionCache = mock[SessionCache]
   val loggedInUserId                 = "user-id"
   val Failure                        = new RuntimeException("something bad has happened")
-
+  implicit val request: Request[Any] = mock[Request[Any]]
   implicit val headerCarrier: HeaderCarrier = mock[HeaderCarrier]
   val mockLoggedInUser: LoggedInUser        = mock[LoggedInUser]
 
@@ -48,14 +46,14 @@ class ClearCacheAndRegistrationIdentificationServiceSpec extends UnitSpec with M
   "ClearCacheAndRegistrationIdentificationService" should {
     "clear cache and database" in {
       when(mockSessionCache.saveEmail(any())(any())).thenReturn(Future.successful(true))
-      when(mockSessionCache.email).thenReturn(Future.successful("testEmail"))
-      when(mockSessionCache.remove).thenReturn(Future.successful(true))
+      when(mockSessionCache.email(any())).thenReturn(Future.successful("testEmail"))
+      when(mockSessionCache.remove(any())).thenReturn(Future.successful(true))
 
       await(service.clear()) should be(())
     }
 
     "return a failure if cache clear fails unexpectedly" in {
-      when(mockSessionCache.remove).thenReturn(Future.failed(Failure))
+      when(mockSessionCache.remove(any())).thenReturn(Future.failed(Failure))
 
       intercept[RuntimeException] {
         await(service.clear())

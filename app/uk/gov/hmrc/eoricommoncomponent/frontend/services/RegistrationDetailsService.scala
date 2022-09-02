@@ -16,14 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.mvc.Request
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  CdsOrganisationType,
-  RegistrationDetailsIndividual,
-  RegistrationDetailsOrganisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, RegistrationDetailsIndividual, RegistrationDetailsOrganisation}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -32,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext) {
 
-  def cacheAddress(address: Address)(implicit hq: HeaderCarrier): Future[Boolean] =
+  def cacheAddress(address: Address)(implicit hq: HeaderCarrier, request: Request[_]): Future[Boolean] =
     sessionCache.registrationDetails.map {
       case rdo: RegistrationDetailsOrganisation => rdo.copy(address = address)
       case rdi: RegistrationDetailsIndividual   => rdi.copy(address = address)
@@ -41,7 +39,7 @@ class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit
 
   def initialiseCacheWithRegistrationDetails(
     organisationType: CdsOrganisationType
-  )(implicit hq: HeaderCarrier): Future[Boolean] =
+  )(implicit hq: HeaderCarrier, request: Request[_]): Future[Boolean] =
     sessionCache.subscriptionDetails flatMap { subDetails =>
       sessionCache.saveSubscriptionDetails(
         subDetails.copy(formData = subDetails.formData.copy(organisationType = Some(organisationType)))

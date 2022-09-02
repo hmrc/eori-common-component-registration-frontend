@@ -69,7 +69,7 @@ class DoYouHaveNinoController @Inject() (
                     }
                   }
                 case _ =>
-                  throw new IllegalArgumentException("Have NINO should be Some(true) or Some(false) but was None")
+                  throw new IllegalArgumentException("Have NINO must be Some(true) or Some(false) but was None")
               }
             }
         )

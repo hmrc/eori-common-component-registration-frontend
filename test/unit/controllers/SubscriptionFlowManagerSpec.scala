@@ -62,7 +62,7 @@ class SubscriptionFlowManagerSpec
     reset(mockRequestSessionData, mockSession, mockCdsFrontendDataCache)
     when(mockRequestSessionData.storeUserSubscriptionFlow(any[SubscriptionFlow], any[String])(any[Request[AnyContent]]))
       .thenReturn(mockSession)
-    when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[HeaderCarrier]))
+    when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]]))
       .thenReturn(Future.successful(true))
   }
 
@@ -262,7 +262,7 @@ class SubscriptionFlowManagerSpec
     "start Individual Subscription Flow for individual" in {
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(None)
 
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
+      when(mockCdsFrontendDataCache.registrationDetails(mockRequest))
         .thenReturn(Future.successful(mockIndividualRegistrationDetails))
       val (subscriptionPage, session) =
         await(controller.startSubscriptionFlow(Some(ConfirmIndividualTypePage), atarService)(mockHC, mockRequest))
@@ -277,7 +277,7 @@ class SubscriptionFlowManagerSpec
     "start Corporate Subscription Flow when cached registration details are for an Organisation" in {
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(None)
 
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
+      when(mockCdsFrontendDataCache.registrationDetails(mockRequest))
         .thenReturn(Future.successful(mockOrgRegistrationDetails))
       val (subscriptionPage, session) =
         await(controller.startSubscriptionFlow(atarService)(mockHC, mockRequest))
@@ -293,7 +293,7 @@ class SubscriptionFlowManagerSpec
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest))
         .thenReturn(Some(CdsOrganisationType.SoleTrader))
 
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
+      when(mockCdsFrontendDataCache.registrationDetails(mockRequest))
         .thenReturn(Future.successful(mockIndividualRegistrationDetails))
       val (subscriptionPage, session) =
         await(controller.startSubscriptionFlow(atarService)(mockHC, mockRequest))

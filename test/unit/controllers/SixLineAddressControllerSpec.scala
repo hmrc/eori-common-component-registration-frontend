@@ -23,7 +23,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, mock => _}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -117,9 +117,9 @@ class SixLineAddressControllerSpec
         .startSubscriptionFlow(any[Service])(any[HeaderCarrier], any[Request[AnyContent]])
     ).thenReturn(Future.successful(mockFlowStart))
     when(mockRegistrationDetailsCreator.registrationAddress(any())).thenReturn(testAddress)
-    when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails]())(any[HeaderCarrier]()))
+    when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails]())(any[Request[_]]()))
       .thenReturn(Future.successful(true))
-    when(mockRegistrationDetailsService.cacheAddress(any())(any[HeaderCarrier]())).thenReturn(Future.successful(true))
+    when(mockRegistrationDetailsService.cacheAddress(any())(any[HeaderCarrier](), any[Request[_]])).thenReturn(Future.successful(true))
   }
 
   forAll(organisationTypesData) { (organisationType, formBuilder, form, reviewMode, expectedRedirectURL) =>
@@ -127,11 +127,11 @@ class SixLineAddressControllerSpec
 
     organisationType match {
       case "third-country-organisation" =>
-        when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+        when(mockSessionCache.registrationDetails(any[Request[_]]))
           .thenReturn(Future.successful(mockRegistrationDetailsOrganisation))
         when(mockRegistrationDetailsOrganisation.address).thenReturn(testAddress)
       case _ =>
-        when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+        when(mockSessionCache.registrationDetails(any[Request[_]]))
           .thenReturn(Future.successful(mockRegistrationDetailsIndividual))
         when(mockRegistrationDetailsIndividual.name).thenReturn("Test individual name")
     }
@@ -364,8 +364,8 @@ class SixLineAddressControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(CdsOrganisationType.ThirdCountryIndividual))
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(individualRegistrationDetails)
-    when(mockSubscriptionDetailsService.cachedCustomsId(any[HeaderCarrier])).thenReturn(None)
+    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
+    when(mockSubscriptionDetailsService.cachedCustomsId(any[HeaderCarrier], any[Request[_]])).thenReturn(None)
 
     test(
       controller.submit(false, CdsOrganisationType.ThirdCountryIndividualId, atarService)(

@@ -61,7 +61,7 @@ class OrganisationTypeViewSpec
     super.beforeEach()
 
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
-    when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(Future.successful(None))
+    when(mockSubscriptionDetailsService.cachedOrganisationType(any(), any())).thenReturn(Future.successful(None))
   }
 
   override protected def afterEach(): Unit = {

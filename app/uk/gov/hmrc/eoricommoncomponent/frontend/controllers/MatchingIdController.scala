@@ -47,7 +47,7 @@ class MatchingIdController @Inject() (
 
   private def matchLoggedInUserAndRedirect(
     loggedInUser: LoggedInUserWithEnrolments
-  )(redirectOrganisationTypePage: => Result)(redirectToConfirmationPage: => Result)(implicit hc: HeaderCarrier) =
+  )(redirectOrganisationTypePage: => Result)(redirectToConfirmationPage: => Result)(implicit hc: HeaderCarrier, request: Request[_]) =
     if (featureFlags.matchingEnabled) {
       lazy val ctUtr = enrolledCtUtr(loggedInUser)
       lazy val saUtr = enrolledSaUtr(loggedInUser)

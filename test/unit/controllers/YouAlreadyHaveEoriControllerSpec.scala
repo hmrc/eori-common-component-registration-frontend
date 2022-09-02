@@ -16,7 +16,7 @@
 
 package unit.controllers
 
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouAlreadyHaveEoriController
@@ -25,6 +25,7 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
@@ -61,7 +62,7 @@ class YouAlreadyHaveEoriControllerSpec extends ControllerSpec with AuthActionMoc
 
     "display correct page for Standalone" in {
       withAuthorisedUser(defaultUserId, mockAuthConnector)
-      when(mockSessionCache.eori(any[HeaderCarrier]))
+      when(mockSessionCache.eori(any[Request[_]]))
         .thenReturn(Future.successful(Some("testEori")))
       displayStandAlone { result =>
         status(result) shouldBe OK

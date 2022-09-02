@@ -19,7 +19,7 @@ package unit.controllers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController
@@ -59,7 +59,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
     )
     "redirect to the 'Do you have a UTR? page when isInReviewMode is false" in {
 
-      when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier]()))
+      when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier](), any[Request[_]]))
         .thenReturn(Future.successful(()))
 
       submitForm(isInReviewMode = false, form = ValidNameRequest) { result =>
@@ -67,7 +67,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
         result.header.headers("Location") should endWith(
           "/customs-registration-services/atar/register/matching/utr/third-country-organisation"
         )
-        verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any())
+        verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any(), any())
       }
 
     }
@@ -79,7 +79,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
     )
     "redirect to the Determine Review page when isInReviewMode is true" in {
 
-      when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier]()))
+      when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier](), any[Request[_]]))
         .thenReturn(Future.successful(()))
 
       submitForm(isInReviewMode = true, form = ValidNameRequest) { result =>
@@ -87,7 +87,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
         result.header.headers("Location") should endWith(
           "/customs-registration-services/atar/register/matching/review-determine"
         )
-        verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any())
+        verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any(), any())
       }
     }
   }

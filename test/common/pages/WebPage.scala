@@ -17,9 +17,9 @@
 package common.pages
 
 import org.openqa.selenium.By
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 
-trait WebPage extends MustMatchers {
+trait WebPage extends Matchers {
 
   val backLinkXPath: String          = "//*[@id='back-link']"
   val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"

@@ -17,12 +17,13 @@
 package unit.controllers
 
 import common.pages.RegisterHowCanWeIdentifyYouPage
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfter
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouNinoController
@@ -77,14 +78,14 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     "redirect to the Confirm page when a nino is matched" in {
 
       val nino = "AB123456C"
-      when(mockFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(
           SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
         )
       )
       when(
         mockMatchingService
-          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier])
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(Future.successful(true))
 
       submitForm(Map("nino" -> nino)) {
@@ -96,14 +97,14 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
     "give a page level error when a nino is not matched" in {
       val nino = "AB123456C"
-      when(mockFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(
           SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
         )
       )
       when(
         mockMatchingService
-          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier])
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(Future.successful(false))
 
       submitForm(Map("nino" -> nino)) {
@@ -119,14 +120,14 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     "display error when no input" in {
 
       val nino = "AB123456C"
-      when(mockFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(
           SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
         )
       )
       when(
         mockMatchingService
-          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier])
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(Future.successful(true))
 
       submitForm(Map("nino" -> "")) {

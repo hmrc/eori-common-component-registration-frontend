@@ -22,7 +22,7 @@ import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveNinoController
@@ -59,8 +59,8 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
     super.beforeEach()
 
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
-    when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+    when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any[HeaderCarrier], any[Request[_]])).thenReturn(Future.successful(()))
+    when(mockSubscriptionDetailsService.updateSubscriptionDetails(any(), any())).thenReturn(Future.successful(true))
   }
 
   override protected def afterEach(): Unit = {
@@ -76,7 +76,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     "display the form" in {
 
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any(), any())).thenReturn(Future.successful(None))
 
       displayForm() { result =>
         status(result) shouldBe OK
@@ -88,7 +88,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     "display the form with cached nino" in {
 
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any(), any())).thenReturn(
         Future.successful(Some(NinoMatchModel(Some(true), Some("12345"))))
       )
 
@@ -102,7 +102,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     "ensure the labels are correct" in {
 
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any(), any())).thenReturn(Future.successful(None))
 
       displayForm() { result =>
         status(result) shouldBe OK
@@ -123,10 +123,10 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     "redirect to 'Get Nino' page when Y is selected" in {
 
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier], any[Request[_]])).thenReturn(
         Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
       )
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any(), any())).thenReturn(Future.successful(None))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
@@ -139,8 +139,8 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
       when(mockRequestSessionData.userSelectedOrganisationType(any()))
         .thenReturn(Some(CdsOrganisationType.ThirdCountrySoleTrader))
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any())).thenReturn(Future.successful((): Unit))
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any(), any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any(), any())).thenReturn(Future.successful((): Unit))
 
       submitForm(noNinoSubmitData) { result =>
         await(result)
@@ -153,10 +153,10 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
       when(mockRequestSessionData.userSelectedOrganisationType(any()))
         .thenReturn(Some(CdsOrganisationType.ThirdCountrySoleTrader))
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any(), any())).thenReturn(
         Future.successful(Some(NinoMatchModel(Some(false))))
       )
-      when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any())).thenReturn(Future.successful((): Unit))
+      when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any(), any())).thenReturn(Future.successful((): Unit))
 
       submitForm(noNinoSubmitData) { result =>
         await(result)
@@ -180,8 +180,8 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
       when(mockRequestSessionData.userSelectedOrganisationType(any()))
         .thenReturn(None)
-      when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any())).thenReturn(Future.successful((): Unit))
+      when(mockSubscriptionDetailsService.cachedNinoMatch(any(), any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any(), any())).thenReturn(Future.successful((): Unit))
 
       intercept[IllegalStateException] {
         submitForm(form = noNinoSubmitData) { result =>

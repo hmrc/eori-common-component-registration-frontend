@@ -91,7 +91,7 @@ class CheckYourDetailsRegisterControllerSpec
 
   override def beforeEach: Unit = {
     reset(mockSessionCache, mockSubscriptionDetailsHolder, mockSubscriptionFlow)
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
+    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(mockSubscriptionFlow)
     when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(None)
     when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(None)
@@ -102,7 +102,7 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSubscriptionDetailsHolder.addressDetails).thenReturn(Some(addressDetails))
     when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(Some(true))
     when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
-    when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(mockSubscriptionDetailsHolder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetailsHolder)
     when(mockRequestSession.isPartnership(any[Request[AnyContent]])).thenReturn(false)
   }
 
@@ -142,7 +142,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     "display the sole trader name and dob from the cache when user has NOT been identified" in {
       when(mockSubscriptionDetailsHolder.name).thenReturn("John Doe")
-      when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+      when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(individualRegistrationDetailsNotIdentifiedByReg01)
 
       showForm(userSelectedOrgType = SoleTrader) { result =>
@@ -202,7 +202,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     "display the business name and six line address from the cache when user wasnt registered" in {
       when(mockSubscriptionDetailsHolder.name).thenReturn("orgName")
-      when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+      when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(organisationRegistrationDetailsWithEmptySafeId)
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
         val page = CdsPage(contentAsString(result))
@@ -295,7 +295,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display all fields including date of establishment when all are provided" in {
-      when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
         detailsHolderWithAllFields.copy(
           contactDetails = Some(contactDetailsModelWithAllValues),
           addressDetails = Some(addressDetails),
@@ -421,7 +421,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display all fields when all are provided for an individual" in {
-      when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(individualRegistrationDetails)
+      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
       val holder = detailsHolderWithAllFields.copy(
         contactDetails = Some(contactDetailsModelWithAllValues),
         dateEstablished = None,
@@ -429,7 +429,7 @@ class CheckYourDetailsRegisterControllerSpec
         addressDetails = Some(addressDetails),
         nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
       )
-      when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(holder)
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
 
       showForm(isIndividualSubscriptionFlow = true) { result =>
         val page = CdsPage(contentAsString(result))
@@ -455,7 +455,7 @@ class CheckYourDetailsRegisterControllerSpec
   }
 
   "display the review page check-your-details for Company" in {
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
       .thenReturn(incorporatedRegistrationDetails.copy(customsId = Some(Utr("7280616009"))))
     val holder = detailsHolderWithAllFields.copy(
       contactDetails = Some(contactDetailsModelWithAllValues),
@@ -463,7 +463,7 @@ class CheckYourDetailsRegisterControllerSpec
       addressDetails = Some(addressDetails),
       nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName"))
     )
-    when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(holder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
 
     showForm(userSelectedOrgType = Company) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
@@ -655,7 +655,7 @@ class CheckYourDetailsRegisterControllerSpec
   }
 
   "display the review page check-your-details for LLP" in {
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
       .thenReturn(incorporatedRegistrationDetails.copy(customsId = Some(Utr("7280616009"))))
     val holder = detailsHolderWithAllFields.copy(
       contactDetails = Some(contactDetailsModelWithAllValues),
@@ -663,7 +663,7 @@ class CheckYourDetailsRegisterControllerSpec
       addressDetails = Some(addressDetails),
       nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName"))
     )
-    when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(holder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
 
     showForm(userSelectedOrgType = LimitedLiabilityPartnership) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
@@ -834,7 +834,7 @@ class CheckYourDetailsRegisterControllerSpec
   "display the review page check-your-details for an individual with nino" in {
     val expectedNino = "someNino"
 
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
       .thenReturn(individualRegistrationDetails.copy(customsId = Some(Nino(expectedNino))))
     val holder = detailsHolderWithAllFields.copy(
       contactDetails = Some(contactDetailsModelWithAllValues),
@@ -842,7 +842,7 @@ class CheckYourDetailsRegisterControllerSpec
       addressDetails = Some(addressDetails),
       nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
     )
-    when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(holder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
 
     showForm(userSelectedOrgType = Individual, isIndividualSubscriptionFlow = true) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
@@ -874,7 +874,7 @@ class CheckYourDetailsRegisterControllerSpec
   }
 
   "display the form with 'UTR Not entered'" in {
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
       .thenReturn(organisationRegistrationDetailsWithEmptySafeId)
 
     showForm(userSelectedOrgType = CdsOrganisationType.ThirdCountryOrganisation) { result =>
@@ -888,7 +888,7 @@ class CheckYourDetailsRegisterControllerSpec
   "display the review page check-your-details for an individual with UTR" in {
     val expectedUtr = "someUTR"
 
-    when(mockSessionCache.registrationDetails(any[HeaderCarrier]))
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
       .thenReturn(individualRegistrationDetails.copy(customsId = Some(Utr(expectedUtr))))
     val holder = detailsHolderWithAllFields.copy(
       contactDetails = Some(contactDetailsModelWithAllValues),
@@ -896,7 +896,7 @@ class CheckYourDetailsRegisterControllerSpec
       addressDetails = Some(addressDetails),
       nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
     )
-    when(mockSessionCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(holder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
 
     showForm(userSelectedOrgType = Individual, isIndividualSubscriptionFlow = true) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
@@ -1036,11 +1036,11 @@ class CheckYourDetailsRegisterControllerSpec
   private def mockRegistrationDetailsBasedOnOrganisationType(orgType: CdsOrganisationType) =
     orgType match {
       case SoleTrader | Individual =>
-        when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(individualRegistrationDetails)
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
       case Partnership =>
-        when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(partnershipRegistrationDetails)
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(partnershipRegistrationDetails)
       case _ =>
-        when(mockSessionCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     }
 
 }

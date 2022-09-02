@@ -306,7 +306,8 @@ class DateOfEstablishmentControllerSpec
         submitFormInCreateMode(ValidRequest) { result =>
           await(result)
           verify(mockSubscriptionDetailsHolderService).cacheDateEstablished(meq(DateOfEstablishment))(
-            any[HeaderCarrier]
+            any[HeaderCarrier],
+            any[Request[_]]
           )
         }
       }
@@ -350,7 +351,7 @@ class DateOfEstablishmentControllerSpec
     test: Future[Result] => Any
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
-    when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful(cachedDate))
 
     val result = controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
@@ -360,7 +361,7 @@ class DateOfEstablishmentControllerSpec
   private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.getCachedDateEstablished(any[HeaderCarrier])).thenReturn(DateOfEstablishment)
+    when(mockSubscriptionBusinessService.getCachedDateEstablished(any[HeaderCarrier], any[Request[_]])).thenReturn(DateOfEstablishment)
 
     val result = controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
     test(result)
@@ -377,7 +378,7 @@ class DateOfEstablishmentControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionDetailsHolderService.cacheDateEstablished(any[LocalDate])(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsHolderService.cacheDateEstablished(any[LocalDate])(any[HeaderCarrier], any[Request[_]]))
       .thenReturn(Future.successful(()))
     val result = controller
       .submit(isInReviewMode, atarService)

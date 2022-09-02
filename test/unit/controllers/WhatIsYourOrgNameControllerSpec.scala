@@ -22,7 +22,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController
@@ -100,8 +100,8 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier]())).thenReturn(Future.successful(()))
-    when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier]()))
+    when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier](), any[Request[_]])).thenReturn(Future.successful(()))
+    when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier](), any[Request[_]]))
       .thenReturn(Future.successful(Some(mockNameOrganisationMatchModel)))
   }
 
@@ -179,7 +179,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
           submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
             status(result) shouldBe SEE_OTHER
             result.header.headers("Location") should endWith(submitLocation)
-            verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any[HeaderCarrier])
+            verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any[HeaderCarrier], any[Request[_]])
           }
         }
     }

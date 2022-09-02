@@ -18,7 +18,7 @@ package unit.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, _}
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SecuritySignOutController
@@ -45,7 +45,7 @@ class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
 
   "Security Sign Out Controller" should {
     "return Ok 200 when displayPage method is requested" in {
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       displayPage(atarService) { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
@@ -54,11 +54,11 @@ class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
     }
 
     "return Ok 303 when signOut method is requested" in {
-      when(mockSessionCache.remove(any[HeaderCarrier])).thenReturn(Future.successful(true))
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       signOut(atarService) { result =>
         status(result) shouldBe SEE_OTHER
       }
-      verify(mockSessionCache).remove(any[HeaderCarrier])
+      verify(mockSessionCache).remove(any[Request[_]])
     }
   }
 

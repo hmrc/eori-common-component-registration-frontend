@@ -84,7 +84,7 @@ class UserLocationController @Inject() (
           .flatMap(cacheAndRedirect(service, location))
       case (status, _) =>
         subscriptionStatus(status, groupId, service, Some(location))
-    }.flatMap(identity)
+    }.flatMap(identity _)
 
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
@@ -122,7 +122,7 @@ class UserLocationController @Inject() (
       case _                                    => throw new IllegalStateException("User Location not set")
     }
 
-  private def subscriptionStatusBasedOnSafeId(groupId: GroupId)(implicit hc: HeaderCarrier) =
+  private def subscriptionStatusBasedOnSafeId(groupId: GroupId)(implicit hc: HeaderCarrier, request: Request[_]) =
     for {
       mayBeSafeId <- save4LaterService.fetchSafeId(groupId)
       preSubscriptionStatus <- mayBeSafeId match {
@@ -133,7 +133,7 @@ class UserLocationController @Inject() (
     } yield (preSubscriptionStatus, mayBeSafeId)
 
   private def handleExistingSubscription(groupId: GroupId, service: Service)(implicit
-    hc: HeaderCarrier
+    hc: HeaderCarrier, request: Request[_]
   ): Future[Result] =
     save4LaterService
       .fetchSafeId(groupId)

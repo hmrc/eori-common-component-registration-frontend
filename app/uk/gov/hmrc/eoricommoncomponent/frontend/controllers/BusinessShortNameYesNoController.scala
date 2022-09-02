@@ -94,7 +94,7 @@ class BusinessShortNameYesNoController @Inject() (
       }
     }
 
-  private def saveYesOption(isInReviewMode: Boolean, service: Service)(implicit hc: HeaderCarrier): Future[Result] =
+  private def saveYesOption(isInReviewMode: Boolean, service: Service)(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] =
     subscriptionDetailsService.cachedCompanyShortName.flatMap { businessShortName =>
       val updatedBusinessShortName =
         businessShortName.map(_.copy(shortNameProvided = true)).getOrElse(BusinessShortName(true, None))
