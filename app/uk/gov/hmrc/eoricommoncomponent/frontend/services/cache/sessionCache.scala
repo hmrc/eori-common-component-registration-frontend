@@ -48,7 +48,7 @@ sealed case class CachedData(
 )
 
 object CachedData {
-  val regDetailsKey                    = "regDetails"
+  val regDetailsKey                    = "regDetails" //
   val regInfoKey                       = "regInfo"
   val subDetailsKey                    = "subDetails"
   val sub01OutcomeKey                  = "sub01Outcome"
@@ -58,7 +58,7 @@ object CachedData {
   val keepAliveKey                     = "keepAlive"
   val safeIdKey                        = "safeId"
   val groupIdKey                       = "cachedGroupId"
-  val groupEnrolmentKey                = "groupEnrolment"
+  val groupEnrolmentKey                = "groupEnrolment" //
   val eoriKey                          = "eori"
   implicit val format                  = Json.format[CachedData]
 }
@@ -125,6 +125,9 @@ class SessionCache @Inject() (
 
   def saveRegistrationInfo(rd: RegistrationInfo)(implicit request: Request[_]): Future[Boolean] =
     putData(regInfoKey, Json.toJson(rd)) map (_ => true)
+
+  def saveRegisterWithEoriAndIdResponse(rd: RegisterWithEoriAndIdResponse)(implicit request: Request[_]): Future[Boolean] =
+    putData(registerWithEoriAndIdResponseKey, Json.toJson(rd)) map (_ => true)
 
   def saveSubscriptionDetails(rdh: SubscriptionDetails)(implicit request: Request[_]): Future[Boolean] =
     putData(subDetailsKey, Json.toJson(rdh)) map (_ => true)
