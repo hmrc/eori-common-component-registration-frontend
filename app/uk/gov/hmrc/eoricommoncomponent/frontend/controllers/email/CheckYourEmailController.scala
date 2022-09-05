@@ -144,7 +144,10 @@ class CheckYourEmailController @Inject() (
   def emailConfirmedContinue(service: Service): Action[AnyContent] =
     Action(_ => Redirect(MatchingIdController.matchWithIdOnly(service)))
 
-  private def submitNewDetails(groupId: GroupId, service: Service)(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] =
+  private def submitNewDetails(groupId: GroupId, service: Service)(implicit
+    hc: HeaderCarrier,
+    request: Request[_]
+  ): Future[Result] =
     save4LaterService.fetchEmail(groupId) flatMap {
       _.fold {
         logger.warn("[CheckYourEmailController][submitNewDetails] -  emailStatus cache none")

@@ -26,7 +26,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SignInWithDifferentD
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sign_in_with_different_details
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder

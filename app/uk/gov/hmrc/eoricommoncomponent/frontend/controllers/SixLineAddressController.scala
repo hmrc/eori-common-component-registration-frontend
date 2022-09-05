@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -101,11 +100,9 @@ class SixLineAddressController @Inject() (
       )
     }
 
-  private def submitAddressDetails(
-    isInReviewMode: Boolean,
-    formData: SixLineAddressMatchModel,
-    service: Service
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[Result] =
+  private def submitAddressDetails(isInReviewMode: Boolean, formData: SixLineAddressMatchModel, service: Service)(
+    implicit request: Request[AnyContent]
+  ): Future[Result] =
     if (isInReviewMode)
       registrationDetailsService
         .cacheAddress(regDetailsCreator.registrationAddress(formData))

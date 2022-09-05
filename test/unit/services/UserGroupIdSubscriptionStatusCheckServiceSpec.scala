@@ -27,7 +27,16 @@ import play.api.mvc.{Request, Result}
 import play.api.mvc.Results.Redirect
 import play.api.test.Helpers.LOCATION
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CacheIds, GroupId, InternalId, SafeId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{NewSubscription, PreSubscriptionStatus, Save4LaterService, SubscriptionExists, SubscriptionProcessing, SubscriptionRejected, SubscriptionStatusService, UserGroupIdSubscriptionStatusCheckService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  NewSubscription,
+  PreSubscriptionStatus,
+  Save4LaterService,
+  SubscriptionExists,
+  SubscriptionProcessing,
+  SubscriptionRejected,
+  SubscriptionStatusService,
+  UserGroupIdSubscriptionStatusCheckService
+}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.TestData
 
@@ -44,7 +53,8 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
   private val groupId                       = GroupId("groupId-123")
   private val internalId                    = InternalId("internalId-123")
   private val cacheIds                      = CacheIds(internalId, safeId, Some("atar"))
-  implicit val request: Request[Any] = mock[Request[Any]]
+  implicit val request: Request[Any]        = mock[Request[Any]]
+
   private val service =
     new UserGroupIdSubscriptionStatusCheckService(mockSubscriptionStatusService, mockSave4LaterService)
 

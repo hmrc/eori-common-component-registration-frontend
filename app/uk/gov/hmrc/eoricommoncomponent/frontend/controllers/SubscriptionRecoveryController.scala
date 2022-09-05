@@ -139,7 +139,9 @@ class SubscriptionRecoveryController @Inject() (
     subscriptionDisplayResponse: SubscriptionDisplayResponse,
     dateOfEstablishment: Option[LocalDate],
     service: Service
-  )(redirect: => Result)(implicit headerCarrier: HeaderCarrier, request: Request[_], messages: Messages): Future[Result] = {
+  )(
+    redirect: => Result
+  )(implicit headerCarrier: HeaderCarrier, request: Request[_], messages: Messages): Future[Result] = {
     val formBundleId =
       subscriptionDisplayResponse.responseCommon.returnParameters
         .flatMap(_.find(_.paramName.equals("ETMPFORMBUNDLENUMBER")).map(_.paramValue))
@@ -201,7 +203,7 @@ class SubscriptionRecoveryController @Inject() (
         case _    => throw new IllegalArgumentException("UpdateEmail failed")
       }
 
-  private def updateSubscription(subscriptionInformation: SubscriptionInformation)(implicit hc: HeaderCarrier, request: Request[_]) =
+  private def updateSubscription(subscriptionInformation: SubscriptionInformation)(implicit request: Request[_]) =
     sessionCache.saveSub02Outcome(
       Sub02Outcome(
         subscriptionInformation.processedDate,

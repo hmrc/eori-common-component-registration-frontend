@@ -16,7 +16,11 @@
 
 package unit.controllers
 
-import common.pages.matching.{IndividualNameAndDateOfBirthPage, ThirdCountryIndividualNameAndDateOfBirthPage, ThirdCountrySoleTraderNameAndDateOfBirthPage}
+import common.pages.matching.{
+  IndividualNameAndDateOfBirthPage,
+  ThirdCountryIndividualNameAndDateOfBirthPage,
+  ThirdCountrySoleTraderNameAndDateOfBirthPage
+}
 
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
@@ -33,7 +37,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfB
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.scalacheck.TestDataGenerators
@@ -61,12 +64,12 @@ class RowIndividualNameDateOfBirthControllerSpec
     )(global)
 
     def saveRegistrationDetailsMockSuccess() {
-      when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[HeaderCarrier], any[Request[_]]))
+      when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
         .thenReturn(Future.successful(()))
     }
 
     def registerIndividualMockFailure(exception: Throwable) {
-      when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[HeaderCarrier], any[Request[_]]))
+      when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
         .thenReturn(Future.failed(exception))
     }
 
@@ -142,7 +145,7 @@ class RowIndividualNameDateOfBirthControllerSpec
             result.futureValue.header.headers(
               LOCATION
             ) shouldBe s"/customs-registration-services/atar/register/matching/utr/$organisationType"
-            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any(), any())
+            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
           }
       }
 

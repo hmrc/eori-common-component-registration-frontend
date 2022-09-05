@@ -127,7 +127,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       invokeConfirm() { result =>
@@ -139,7 +139,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(limitedLiabilityPartnershipRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenThrow(new IllegalStateException("No Registration details in cache."))
 
       invokeConfirm() { result =>
@@ -154,7 +154,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       invokeConfirm() { result =>
@@ -170,7 +170,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(None))
 
       when(mockSessionCache.remove(any())) thenReturn Future.successful(true)
@@ -199,7 +199,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(details)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       when(mockSessionCache.remove(any())) thenReturn Future.successful(true)
@@ -214,7 +214,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(soleTraderRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       invokeConfirm() { result =>
@@ -230,7 +230,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(soleTraderRegistrationDetails.copy(customsId = Some(Nino("QQ123456C"))))
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       invokeConfirm() { result =>
@@ -245,7 +245,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       invokeConfirm() { result =>
@@ -303,7 +303,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(None))
 
       when(mockSessionCache.remove(any())) thenReturn Future.successful(true)
@@ -332,7 +332,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(details)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       when(mockSessionCache.remove(any())) thenReturn Future.successful(true)
@@ -490,7 +490,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       when(mockSessionCache.subscriptionDetails(any())).thenReturn(
@@ -514,7 +514,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       when(mockSessionCache.subscriptionDetails(any())).thenReturn(
@@ -539,7 +539,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData()(any[HeaderCarrier], any[Request[_]])
+          .clearRegistrationData()(any[Request[_]])
       ).thenReturn(Future.successful(()))
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -564,7 +564,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData()(any[HeaderCarrier], any[Request[_]])
+          .clearRegistrationData()(any[Request[_]])
       ).thenReturn(Future.failed(emulatedFailure))
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -588,7 +588,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData()(any[HeaderCarrier], any[Request[_]])
+          .clearRegistrationData()(any[Request[_]])
       ).thenReturn(Future.successful(()))
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -612,7 +612,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
         mockRegistrationConfirmService
-          .clearRegistrationData()(any[HeaderCarrier], any[Request[_]])
+          .clearRegistrationData()(any[Request[_]])
       ).thenReturn(Future.successful(()))
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(individualRegistrationDetails))
@@ -642,7 +642,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       invokeConfirmContactDetailsWithoutOptionSelected() { result =>
@@ -659,7 +659,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(individualRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       invokeConfirmContactDetailsWithoutOptionSelected() { result =>
@@ -677,7 +677,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
       invokeConfirmContactDetailsWithSelectedOption(selectedOption = invalidOption) { result =>
@@ -706,7 +706,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     when(mockSubscriptionStartSession.data).thenReturn(testSessionData)
     when(
       mockSubscriptionFlowManager
-        .startSubscriptionFlow(any[Service])(any[HeaderCarrier], any[Request[AnyContent]])
+        .startSubscriptionFlow(any[Service])(any[Request[AnyContent]])
     ).thenReturn(Future.successful(mockFlowStart))
   }
 

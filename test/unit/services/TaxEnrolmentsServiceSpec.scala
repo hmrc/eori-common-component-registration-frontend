@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.TaxEnrolmentsService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.LocalDate
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter {

@@ -25,7 +25,6 @@ import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CorporateBody, Partnership}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.RegistrationDetailsBuilder
 
 import scala.concurrent.ExecutionContext.global
@@ -35,7 +34,6 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
 
   private val mockCache          = mock[SessionCache]
   private val mockReqSessionData = mock[RequestSessionData]
-  private val hc                 = mock[HeaderCarrier]
   private val req                = mock[Request[AnyContent]]
 
   override def beforeEach {
@@ -50,7 +48,7 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
       when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
         .thenReturn(Some(CdsOrganisationType.Company))
 
-      val orgType = await(lookup.etmpOrgType(req, hc))
+      val orgType = await(lookup.etmpOrgType(req))
 
       orgType shouldBe CorporateBody
     }
@@ -60,7 +58,7 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
       when(mockCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(RegistrationDetailsBuilder.partnershipRegistrationDetails))
 
-      val orgType = await(lookup.etmpOrgType(req, hc))
+      val orgType = await(lookup.etmpOrgType(req))
 
       orgType shouldBe Partnership
     }
@@ -71,7 +69,7 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
         .thenReturn(Future.successful(RegistrationDetailsBuilder.emptyETMPOrgTypeRegistrationDetails))
 
       val thrown = intercept[IllegalStateException] {
-        await(lookup.etmpOrgType(req, hc))
+        await(lookup.etmpOrgType(req))
       }
 
       thrown.getMessage shouldBe "Unable to retrieve Org Type from the cache"
@@ -83,7 +81,7 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
         .thenReturn(Future.successful(RegistrationDetailsBuilder.individualRegistrationDetails))
 
       val thrown = intercept[IllegalStateException] {
-        await(lookup.etmpOrgType(req, hc))
+        await(lookup.etmpOrgType(req))
       }
 
       thrown.getMessage shouldBe "No Registration details in cache."

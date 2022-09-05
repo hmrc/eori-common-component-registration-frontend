@@ -59,7 +59,7 @@ class DoYouHaveAUtrNumberControllerSpec
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[HeaderCarrier], any[Request[_]])).thenReturn(Future.successful(()))
+    when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
   }
 
   "Viewing the Utr Organisation Matching form" should {
@@ -71,7 +71,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "display the form" in {
 
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
 
       showForm(CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe OK
@@ -104,9 +104,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "display 'use different service' when org type is not valid page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any(), any())).thenReturn(Future.successful(true))
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any(), any())).thenReturn(Future.successful((): Unit))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.CompanyId) { result =>
         status(result) shouldBe SEE_OTHER
@@ -119,7 +119,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "when ThirdCountryOrganisationId is passed" in {
 
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
 
       showForm(CdsOrganisationType.ThirdCountryOrganisationId) { result =>
         val page = CdsPage(contentAsString(result))
@@ -139,8 +139,8 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Get UTR page based on YES answer" in {
 
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier], any[Request[_]]))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
 
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId) { result =>
@@ -152,9 +152,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Confirm Details page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any(), any())).thenReturn(Future.successful(true))
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any(), any())).thenReturn(Future.successful((): Unit))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId) { result =>
         status(result) shouldBe SEE_OTHER
@@ -166,9 +166,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Review page while on review mode" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any(), any())).thenReturn(Future.successful(true))
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any(), any())).thenReturn(Future.successful((): Unit))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId, isInReviewMode = true) { result =>
         status(await(result)) shouldBe SEE_OTHER
@@ -181,7 +181,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "contain a proper content for sole traders" in {
 
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
 
       showForm(CdsOrganisationType.ThirdCountrySoleTraderId, defaultUserId) { result =>
         val page = CdsPage(contentAsString(result))
@@ -195,7 +195,7 @@ class DoYouHaveAUtrNumberControllerSpec
     }
     "contain a proper content for individuals" in {
 
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
 
       showForm(CdsOrganisationType.ThirdCountryIndividualId, defaultUserId) { result =>
         val page = CdsPage(contentAsString(result))
@@ -213,11 +213,11 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Get UTR page based on YES answer and organisation type sole trader" in {
 
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier], any[Request[_]]))
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameDobMatchModel("", None, "", LocalDate.now()))))
       when(mockMatchingConnector.lookup(mockMatchingRequestHolder))
         .thenReturn(Future.successful(Option(mockMatchingResponse)))
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
@@ -227,9 +227,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Nino page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any(), any())).thenReturn(Future.successful(true))
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any(), any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any(), any())).thenReturn(Future.successful((): Unit))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         status(result) shouldBe SEE_OTHER

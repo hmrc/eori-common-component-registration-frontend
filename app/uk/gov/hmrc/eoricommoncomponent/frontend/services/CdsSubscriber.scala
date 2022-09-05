@@ -21,7 +21,11 @@ import java.time.LocalDateTime
 import play.api.i18n.Messages
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{ContactDetails, RecipientDetails, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
+  ContactDetails,
+  RecipientDetails,
+  SubscriptionDetails
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
@@ -38,14 +42,14 @@ class CdsSubscriber @Inject() (
   def subscribeWithCachedDetails(cdsOrganisationType: Option[CdsOrganisationType], service: Service)(implicit
     hc: HeaderCarrier,
     messages: Messages,
-                                                                                                     request: Request[_]
+    request: Request[_]
   ): Future[SubscriptionResult] =
     subscribeEori(cdsOrganisationType, service)
 
   private def subscribeEori(cdsOrganisationType: Option[CdsOrganisationType], service: Service)(implicit
     hc: HeaderCarrier,
     messages: Messages,
-                                                                                                request: Request[_]
+    request: Request[_]
   ): Future[SubscriptionResult] =
     for {
       registrationDetails <- sessionCache.registrationDetails

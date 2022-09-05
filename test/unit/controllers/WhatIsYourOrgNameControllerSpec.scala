@@ -30,7 +30,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameOrganisationMatchMode
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.OrganisationNameFormBuilder._
@@ -100,8 +99,8 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[HeaderCarrier](), any[Request[_]])).thenReturn(Future.successful(()))
-    when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier](), any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[Request[_]])).thenReturn(Future.successful(()))
+    when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
       .thenReturn(Future.successful(Some(mockNameOrganisationMatchModel)))
   }
 
@@ -179,7 +178,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
           submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
             status(result) shouldBe SEE_OTHER
             result.header.headers("Location") should endWith(submitLocation)
-            verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any[HeaderCarrier], any[Request[_]])
+            verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any[Request[_]])
           }
         }
     }

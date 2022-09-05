@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadPDFControlle
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Sub02Outcome
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_number_download, error_template, subscription_download}
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}

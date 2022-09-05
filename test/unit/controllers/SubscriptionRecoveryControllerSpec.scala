@@ -23,14 +23,22 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
+  SUB09SubscriptionDisplayConnector,
+  ServiceUnavailableResponse
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator, TaxEnrolmentsService, UpdateVerifiedEmailService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  HandleSubscriptionService,
+  RandomUUIDGenerator,
+  TaxEnrolmentsService,
+  UpdateVerifiedEmailService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, recovery_registration_exists}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -40,7 +48,7 @@ import util.builders.{AuthActionMock, SessionBuilder}
 
 import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.ExecutionContext.global
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class SubscriptionRecoveryControllerSpec
     extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
@@ -154,10 +162,7 @@ class SubscriptionRecoveryControllerSpec
         .thenReturn(Future.successful(true))
       when(
         mockTaxEnrolmentService
-          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
-            any[HeaderCarrier],
-            any[ExecutionContext]
-          )
+          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
       ).thenReturn(Future.successful(NO_CONTENT))
 
       val expectedFormBundleId = fullyPopulatedResponse.responseCommon.returnParameters
@@ -173,7 +178,7 @@ class SubscriptionRecoveryControllerSpec
         meq(Eori("12345")),
         any[Option[LocalDate]],
         meq(atarService)
-      )(any[HeaderCarrier], any[ExecutionContext])
+      )(any[HeaderCarrier])
 
     }
 
@@ -187,10 +192,7 @@ class SubscriptionRecoveryControllerSpec
         .thenReturn(Future.successful(true))
       when(
         mockTaxEnrolmentService
-          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
-            any[HeaderCarrier],
-            any[ExecutionContext]
-          )
+          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
       ).thenReturn(Future.successful(NO_CONTENT))
 
       val expectedFormBundleId = fullyPopulatedResponse.responseCommon.returnParameters
@@ -206,7 +208,7 @@ class SubscriptionRecoveryControllerSpec
         meq(Eori("12345")),
         any[Option[LocalDate]],
         meq(atarService)
-      )(any[HeaderCarrier], any[ExecutionContext])
+      )(any[HeaderCarrier])
 
     }
 
@@ -220,10 +222,7 @@ class SubscriptionRecoveryControllerSpec
         .thenReturn(Future.successful(true))
       when(
         mockTaxEnrolmentService
-          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
-            any[HeaderCarrier],
-            any[ExecutionContext]
-          )
+          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
       ).thenReturn(Future.successful(NO_CONTENT))
       callEnrolmentComplete() { result =>
         status(result) shouldBe SEE_OTHER
@@ -244,10 +243,7 @@ class SubscriptionRecoveryControllerSpec
         .thenReturn(Future.successful(true))
       when(
         mockTaxEnrolmentService
-          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
-            any[HeaderCarrier],
-            any[ExecutionContext]
-          )
+          .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
       ).thenReturn(Future.successful(NO_CONTENT))
       callEnrolmentCDSComplete() { result =>
         status(result) shouldBe SEE_OTHER
@@ -424,10 +420,7 @@ class SubscriptionRecoveryControllerSpec
       .get
     when(
       mockTaxEnrolmentService
-        .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(
-          any[HeaderCarrier],
-          any[ExecutionContext]
-        )
+        .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
     ).thenReturn(Future.successful(NO_CONTENT))
 
     callEnrolmentComplete() { result =>
@@ -440,7 +433,7 @@ class SubscriptionRecoveryControllerSpec
       meq(Eori("12345")),
       any[Option[LocalDate]],
       meq(atarService)
-    )(any[HeaderCarrier], any[ExecutionContext])
+    )(any[HeaderCarrier])
 
   }
 

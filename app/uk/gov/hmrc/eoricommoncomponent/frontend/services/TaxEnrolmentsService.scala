@@ -24,14 +24,13 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
 class TaxEnrolmentsService @Inject() (taxEnrolmentsConnector: TaxEnrolmentsConnector) {
 
   def issuerCall(formBundleId: String, eori: Eori, dateOfEstablishment: Option[LocalDate], service: Service)(implicit
-    hc: HeaderCarrier,
-    ec: ExecutionContext
+    hc: HeaderCarrier
   ): Future[Int] = {
     val identifiers = List(KeyValue(key = "EORINUMBER", value = eori.id))
     val verifiers =

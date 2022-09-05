@@ -71,7 +71,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     when(businessShortNamePage.apply(any(), any(), any(), any(), any())(any(), any()))
       .thenReturn(HtmlFormat.empty)
-    when(orgTypeLookup.etmpOrgType(any(), any())).thenReturn(Future.successful(CorporateBody))
+    when(orgTypeLookup.etmpOrgType(any())).thenReturn(Future.successful(CorporateBody))
 
     when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]]))
       .thenReturn(mockSubscriptionFlowInfo)
@@ -98,7 +98,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
 
       "short name is presented in cache" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any()))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any()))
           .thenReturn(Future.successful(Some(BusinessShortName("short name"))))
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
 
@@ -124,7 +124,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
 
       "short name is not presented in cache" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any()))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any()))
           .thenReturn(Future.successful(None))
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
 
@@ -150,7 +150,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
 
       "user is RoW" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any()))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any()))
           .thenReturn(Future.successful(None))
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(false)
 
@@ -179,7 +179,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
 
       "short name is presented in cache" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any()))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any()))
           .thenReturn(Future.successful(Some(BusinessShortName("short name"))))
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
 
@@ -205,7 +205,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
 
       "short name is not presented in cache" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any()))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any()))
           .thenReturn(Future.successful(None))
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
 
@@ -231,7 +231,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
 
       "user is RoW" in {
 
-        when(mockSubscriptionDetailsService.cachedCompanyShortName(any(), any()))
+        when(mockSubscriptionDetailsService.cachedCompanyShortName(any()))
           .thenReturn(Future.successful(None))
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(false)
 
@@ -300,7 +300,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
       "user provided the correct short name" in {
 
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
-        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any(), any())).thenReturn(Future.successful((): Unit))
+        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any())).thenReturn(Future.successful((): Unit))
 
         val result = controller.submit(atarService, false)(postRequest("short-name" -> "short name"))
 
@@ -314,7 +314,7 @@ class BusinessShortNameControllerSpec extends ControllerSpec with AuthActionMock
       "user is in review mode" in {
 
         when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(true)
-        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any(), any())).thenReturn(Future.successful((): Unit))
+        when(mockSubscriptionDetailsService.cacheCompanyShortName(any())(any())).thenReturn(Future.successful((): Unit))
 
         val result = controller.submit(atarService, true)(postRequest("short-name" -> "short name"))
 

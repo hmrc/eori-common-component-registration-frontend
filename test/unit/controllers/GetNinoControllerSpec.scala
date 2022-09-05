@@ -84,10 +84,15 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
   "Submitting the form" should {
     "redirect to 'These are the details we have about you' page when Y is selected and given NINO is matched" in {
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier], any[Request[_]])).thenReturn(
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(
         Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
       )
-      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier], any[Request[_]]))
+      when(
+        mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+      )
         .thenReturn(Future.successful(true))
 
       submitForm(yesNinoSubmitData) { result =>
@@ -103,10 +108,15 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     "keep the user on the same page with proper message when NINO was not recognized" in {
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier], any[Request[_]])).thenReturn(
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(
         Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
       )
-      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier], any[Request[_]]))
+      when(
+        mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+      )
         .thenReturn(Future.successful(false))
 
       submitForm(yesNinoSubmitData) { result =>
@@ -124,8 +134,13 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     "keep the user on the same page with error message when NINO was not recognized for no name in cache" in {
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier], any[Request[_]])).thenReturn(Future.successful(None))
-      when(mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(any[HeaderCarrier], any[Request[_]]))
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
+      when(
+        mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+      )
         .thenReturn(Future.successful(false))
 
       submitForm(yesNinoSubmitData) { result =>

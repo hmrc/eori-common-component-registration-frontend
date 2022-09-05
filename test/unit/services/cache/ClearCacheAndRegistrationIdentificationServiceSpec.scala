@@ -23,17 +23,20 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUser
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{ClearCacheAndRegistrationIdentificationService, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  ClearCacheAndRegistrationIdentificationService,
+  SessionCache
+}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class ClearCacheAndRegistrationIdentificationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll {
-  val mockSessionCache: SessionCache = mock[SessionCache]
-  val loggedInUserId                 = "user-id"
-  val Failure                        = new RuntimeException("something bad has happened")
-  implicit val request: Request[Any] = mock[Request[Any]]
+  val mockSessionCache: SessionCache        = mock[SessionCache]
+  val loggedInUserId                        = "user-id"
+  val Failure                               = new RuntimeException("something bad has happened")
+  implicit val request: Request[Any]        = mock[Request[Any]]
   implicit val headerCarrier: HeaderCarrier = mock[HeaderCarrier]
   val mockLoggedInUser: LoggedInUser        = mock[LoggedInUser]
 

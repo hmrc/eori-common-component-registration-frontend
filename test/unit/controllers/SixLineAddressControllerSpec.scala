@@ -38,7 +38,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder.defaultAddress
@@ -114,12 +113,12 @@ class SixLineAddressControllerSpec
     when(mockSubscriptionStartSession.data).thenReturn(testSessionData)
     when(
       mockSubscriptionFlowManager
-        .startSubscriptionFlow(any[Service])(any[HeaderCarrier], any[Request[AnyContent]])
+        .startSubscriptionFlow(any[Service])(any[Request[AnyContent]])
     ).thenReturn(Future.successful(mockFlowStart))
     when(mockRegistrationDetailsCreator.registrationAddress(any())).thenReturn(testAddress)
     when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails]())(any[Request[_]]()))
       .thenReturn(Future.successful(true))
-    when(mockRegistrationDetailsService.cacheAddress(any())(any[HeaderCarrier](), any[Request[_]])).thenReturn(Future.successful(true))
+    when(mockRegistrationDetailsService.cacheAddress(any())(any[Request[_]])).thenReturn(Future.successful(true))
   }
 
   forAll(organisationTypesData) { (organisationType, formBuilder, form, reviewMode, expectedRedirectURL) =>
@@ -365,7 +364,7 @@ class SixLineAddressControllerSpec
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(CdsOrganisationType.ThirdCountryIndividual))
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
-    when(mockSubscriptionDetailsService.cachedCustomsId(any[HeaderCarrier], any[Request[_]])).thenReturn(None)
+    when(mockSubscriptionDetailsService.cachedCustomsId(any[Request[_]])).thenReturn(None)
 
     test(
       controller.submit(false, CdsOrganisationType.ThirdCountryIndividualId, atarService)(

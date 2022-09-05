@@ -27,7 +27,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsServ
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_short_name
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -52,7 +51,6 @@ class BusinessShortNameController @Inject() (
   }
 
   private def populateView(service: Service, isInReviewMode: Boolean)(implicit
-    hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionDetailsService.cachedCompanyShortName.flatMap { companyShortName =>

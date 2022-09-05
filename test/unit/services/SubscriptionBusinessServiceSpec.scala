@@ -39,8 +39,8 @@ import scala.util.Random
 
 class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
-  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
-  implicit val request: Request[Any] = mock[Request[Any]]
+  implicit val hc: HeaderCarrier                = mock[HeaderCarrier]
+  implicit val request: Request[Any]            = mock[Request[Any]]
   private val mockCdsFrontendDataCache          = mock[SessionCache]
   private val mockRegistrationDetailsCreator    = mock[RegistrationDetailsCreator]
   private val registrationInfo                  = mock[RegistrationInfo]

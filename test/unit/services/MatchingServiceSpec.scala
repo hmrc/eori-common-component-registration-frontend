@@ -25,7 +25,11 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse, Organisation}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
+  MatchingRequestHolder,
+  MatchingResponse,
+  Organisation
+}
 import util.builders.matching.NinoFormBuilder
 import play.api.libs.json._
 import play.api.mvc.{AnyContent, Request}
@@ -52,7 +56,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
   private val mockCache                  = mock[SessionCache]
   private val loggedInCtUser             = mock[LoggedInUserWithEnrolments]
   private val mockGroupId                = mock[GroupId]
-  implicit val request: Request[Any] = mock[Request[Any]]
+  implicit val request: Request[Any]     = mock[Request[Any]]
 
   private val service = new MatchingService(
     mockMatchingServiceConnector,
@@ -71,16 +75,13 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       .thenReturn(ExpectedRequestCommon)
 
     when(
-      mockCache.saveRegistrationDetails(
-        any[RegistrationDetails],
-        any[GroupId],
-        any[Option[CdsOrganisationType]]
-      )(any[HeaderCarrier], any[Request[_]])
+      mockCache.saveRegistrationDetails(any[RegistrationDetails], any[GroupId], any[Option[CdsOrganisationType]])(
+        any[HeaderCarrier],
+        any[Request[_]]
+      )
     ).thenReturn(true)
 
-    when(
-      mockCache.saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]])
-    ).thenReturn(true)
+    when(mockCache.saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]])).thenReturn(true)
     when(loggedInCtUser.isAgent).thenReturn(false)
   }
 

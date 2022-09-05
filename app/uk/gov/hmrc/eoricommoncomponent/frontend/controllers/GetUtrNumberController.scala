@@ -69,7 +69,10 @@ class GetUtrNumberController @Inject() (
   )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Boolean] =
     matchingService.matchBusiness(id, Organisation(name, matchingServiceType), dateEstablished, groupId)
 
-  private def matchIndividual(id: CustomsId, groupId: GroupId)(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] =
+  private def matchIndividual(id: CustomsId, groupId: GroupId)(implicit
+    hc: HeaderCarrier,
+    request: Request[_]
+  ): Future[Boolean] =
     subscriptionDetailsService.cachedNameDobDetails flatMap {
       case Some(details) =>
         matchingService.matchIndividualWithId(

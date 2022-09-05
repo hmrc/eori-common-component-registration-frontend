@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 

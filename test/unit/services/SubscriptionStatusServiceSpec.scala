@@ -30,7 +30,12 @@ import play.api.libs.json.Json
 import play.api.mvc.Request
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Sub01Outcome, SubscriptionStatusQueryParams, SubscriptionStatusResponseHolder, TaxPayerId}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
+  Sub01Outcome,
+  SubscriptionStatusQueryParams,
+  SubscriptionStatusResponseHolder,
+  TaxPayerId
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
@@ -53,7 +58,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
   lazy val service =
     new SubscriptionStatusService(mockConnector, mockRequestCommonGenerator, mockSessionCache)(global)
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val hc: HeaderCarrier         = HeaderCarrier()
   implicit val mockRequest: Request[Any] = mock[Request[Any]]
 
   override protected def beforeEach() {

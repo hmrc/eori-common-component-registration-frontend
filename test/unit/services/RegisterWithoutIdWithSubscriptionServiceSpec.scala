@@ -112,7 +112,12 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
         any[Option[CdsOrganisationType]]
       )(any[HeaderCarrier], any[Request[_]])
     ).thenReturn(Future.successful(okResponse), Nil: _*)
-    when(mockRegisterWithoutIdService.registerIndividual(any(), any(), any(), any(), any())( any[Request[_]], any[HeaderCarrier]))
+    when(
+      mockRegisterWithoutIdService.registerIndividual(any(), any(), any(), any(), any())(
+        any[Request[_]],
+        any[HeaderCarrier]
+      )
+    )
       .thenReturn(Future.successful(okResponse), Nil: _*)
   }
 
@@ -126,7 +131,12 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
         any[Option[CdsOrganisationType]]
       )(any[HeaderCarrier], any[Request[_]])
     ).thenReturn(Future.successful(notOKResponse), Nil: _*)
-    when(mockRegisterWithoutIdService.registerIndividual(any(), any(), any(), any(), any())(any[Request[_]], any[HeaderCarrier]))
+    when(
+      mockRegisterWithoutIdService.registerIndividual(any(), any(), any(), any(), any())(
+        any[Request[_]],
+        any[HeaderCarrier]
+      )
+    )
       .thenReturn(Future.successful(notOKResponse), Nil: _*)
   }
 
@@ -140,7 +150,12 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
         any[Option[CdsOrganisationType]]
       )(any[HeaderCarrier], any[Request[_]])
     ).thenReturn(Future.failed(emulatedFailure))
-    when(mockRegisterWithoutIdService.registerIndividual(any(), any(), any(), any(), any())(any[Request[_]], any[HeaderCarrier]))
+    when(
+      mockRegisterWithoutIdService.registerIndividual(any(), any(), any(), any(), any())(
+        any[Request[_]],
+        any[HeaderCarrier]
+      )
+    )
       .thenReturn(Future.failed(emulatedFailure))
   }
 
@@ -167,25 +182,24 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
 
     "when UK, call SUB02, do not call registerOrganisation or registerIndividual" in {
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(UserLocation.Uk))
-      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Some(CorporateBody)
-      )
+      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]])).thenReturn(Some(CorporateBody))
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
 
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
 
       verify(mockSub02Controller, times(1)).subscribe(any())
-      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(any(), any())
+      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
+        any(),
+        any()
+      )
       verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
     }
 
     "when CorporateBody and ROW and GYE, call SUB02, do not call Register without id" in {
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.ThirdCountry))
-      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Some(CorporateBody)
-      )
+      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]])).thenReturn(Some(CorporateBody))
       when(mockRegistrationDetails.safeId).thenReturn(SafeId("SAFEID"))
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
@@ -193,14 +207,17 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
 
       verify(mockSub02Controller, times(1)).subscribe(any())
-      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(any(), any())
+      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
+        any(),
+        any()
+      )
       verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
     }
 
     "when NA and ROW, call SUB02, call registerIndividual, do not call registerOrganisation" in {
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.ThirdCountry))
-      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(Some(NA))
+      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]])).thenReturn(Some(NA))
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
       mockSessionCacheRegistrationDetails()
@@ -210,7 +227,10 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
 
       verify(mockRegisterWithoutIdService, times(1)).registerIndividual(any(), any(), any(), any(), any())(any(), any())
       verify(mockSub02Controller, times(1)).subscribe(any())
-      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(any(), any())
+      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
+        any(),
+        any()
+      )
       verify(mockSessionCache, times(2)).registrationDetails(any())
       verify(mockSessionCache).subscriptionDetails(any())
     }
@@ -218,9 +238,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     "when CorporateBody and ROW, call Register without id Successfully, then call SUB02" in {
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.ThirdCountry))
-      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Some(CorporateBody)
-      )
+      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]])).thenReturn(Some(CorporateBody))
       mockSessionCacheRegistrationDetails()
       mockSessionCacheSubscriptionDetails()
       mockRegisterWithoutIdOKResponse()
@@ -244,9 +262,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     "when CorporateBody and ROW, call Register without id which fails, do not call SUB02" in {
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.ThirdCountry))
-      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Some(CorporateBody)
-      )
+      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]])).thenReturn(Some(CorporateBody))
       mockSessionCacheRegistrationDetails()
       mockSessionCacheSubscriptionDetails()
 
@@ -261,9 +277,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     "when CorporateBody and ROW, call register without id, which returns NotOK status, do not call Sub02" in {
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.ThirdCountry))
-      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Some(CorporateBody)
-      )
+      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]])).thenReturn(Some(CorporateBody))
       mockSessionCacheRegistrationDetails()
       mockSessionCacheSubscriptionDetails()
 

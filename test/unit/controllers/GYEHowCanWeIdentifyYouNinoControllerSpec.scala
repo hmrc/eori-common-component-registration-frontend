@@ -85,7 +85,10 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       )
       when(
         mockMatchingService
-          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
       ).thenReturn(Future.successful(true))
 
       submitForm(Map("nino" -> nino)) {
@@ -104,7 +107,10 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       )
       when(
         mockMatchingService
-          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
       ).thenReturn(Future.successful(false))
 
       submitForm(Map("nino" -> nino)) {
@@ -127,7 +133,10 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       )
       when(
         mockMatchingService
-          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
       ).thenReturn(Future.successful(true))
 
       submitForm(Map("nino" -> "")) {

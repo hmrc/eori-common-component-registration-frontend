@@ -103,6 +103,7 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     LimitedLiabilityPartnership,
     CharityPublicBodyNotForProfit
   )
+
   implicit val request: Request[Any] = mock[Request[Any]]
 
   override def beforeEach {

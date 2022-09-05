@@ -16,9 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
-import javax.inject.{Inject, Singleton}
-import java.time.{LocalDateTime, ZoneId}
-import play.api.Logger
 import play.api.libs.json.{Json, Reads, Writes}
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
@@ -27,10 +24,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.CachedData._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
-import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 import uk.gov.hmrc.mongo.cache.{DataKey, SessionCacheRepository}
+import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 import uk.gov.hmrc.play.http.logging.Mdc.preservingMdc
 
+import java.time.{LocalDateTime, ZoneId}
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NoStackTrace
 
@@ -48,7 +47,7 @@ sealed case class CachedData(
 )
 
 object CachedData {
-  val regDetailsKey                    = "regDetails" //
+  val regDetailsKey                    = "regDetails"     //
   val regInfoKey                       = "regInfo"
   val subDetailsKey                    = "subDetails"
   val sub01OutcomeKey                  = "sub01Outcome"
@@ -70,14 +69,13 @@ class SessionCache @Inject() (
   save4LaterService: Save4LaterService,
   timestampSupport: TimestampSupport
 )(implicit ec: ExecutionContext)
-    extends SessionCacheRepository(mongo,
+    extends SessionCacheRepository(
+      mongo,
       "session-cache",
       ttl = appConfig.ttl,
       timestampSupport = timestampSupport,
       sessionIdKey = SessionKeys.sessionId
     )(ec) {
-
-  private val eccLogger: Logger = Logger(this.getClass)
 
   val now = LocalDateTime.now(ZoneId.of("Europe/London"))
 
@@ -97,10 +95,11 @@ class SessionCache @Inject() (
   def saveRegistrationDetails(rd: RegistrationDetails)(implicit request: Request[_]): Future[Boolean] =
     putData(regDetailsKey, Json.toJson(rd)) map (_ => true)
 
-  def saveRegistrationDetails(rd: RegistrationDetails, groupId: GroupId, orgType: Option[CdsOrganisationType] = None)(
-    implicit hc: HeaderCarrier,
-    request: Request[_]
-  ): Future[Boolean] =
+  def saveRegistrationDetails(
+    rd: RegistrationDetails,
+    groupId: GroupId,
+    orgType: Option[CdsOrganisationType] = None
+  )(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] =
     for {
       _                <- save4LaterService.saveOrgType(groupId, orgType)
       createdOrUpdated <- putData(regDetailsKey, Json.toJson(rd)) map (_ => true)
@@ -118,7 +117,7 @@ class SessionCache @Inject() (
     } yield createdOrUpdated
 
   def saveSub02Outcome(subscribeOutcome: Sub02Outcome)(implicit request: Request[_]): Future[Boolean] =
-    putData( sub02OutcomeKey, Json.toJson(subscribeOutcome)) map (_ => true)
+    putData(sub02OutcomeKey, Json.toJson(subscribeOutcome)) map (_ => true)
 
   def saveSub01Outcome(sub01Outcome: Sub01Outcome)(implicit request: Request[_]): Future[Boolean] =
     putData(sub01OutcomeKey, Json.toJson(sub01Outcome)) map (_ => true)
@@ -126,7 +125,9 @@ class SessionCache @Inject() (
   def saveRegistrationInfo(rd: RegistrationInfo)(implicit request: Request[_]): Future[Boolean] =
     putData(regInfoKey, Json.toJson(rd)) map (_ => true)
 
-  def saveRegisterWithEoriAndIdResponse(rd: RegisterWithEoriAndIdResponse)(implicit request: Request[_]): Future[Boolean] =
+  def saveRegisterWithEoriAndIdResponse(
+    rd: RegisterWithEoriAndIdResponse
+  )(implicit request: Request[_]): Future[Boolean] =
     putData(registerWithEoriAndIdResponseKey, Json.toJson(rd)) map (_ => true)
 
   def saveSubscriptionDetails(rdh: SubscriptionDetails)(implicit request: Request[_]): Future[Boolean] =

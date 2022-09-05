@@ -28,7 +28,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.HowCanWeIdentifyYouC
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -58,12 +57,10 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
 
     Mockito.reset(mockSubscriptionDetailsHolderService)
 
-    when(mockSubscriptionDetailsHolderService.cacheNinoOrUtrChoice(any[NinoOrUtrChoice])(any[HeaderCarrier], any[Request[_]]))
+    when(mockSubscriptionDetailsHolderService.cacheNinoOrUtrChoice(any[NinoOrUtrChoice])(any[Request[_]]))
       .thenReturn(Future.successful(()))
 
-    when(mockSubscriptionBusinessService.getCachedNinoOrUtrChoice(any[HeaderCarrier], any[Request[_]])).thenReturn(
-      Future.successful(None)
-    )
+    when(mockSubscriptionBusinessService.getCachedNinoOrUtrChoice(any[Request[_]])).thenReturn(Future.successful(None))
   }
 
   "Loading the page" should {
@@ -112,7 +109,7 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
 
   def showForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
-    when(mockSubscriptionBusinessService.getCachedCustomsId(any[HeaderCarrier], any[Request[_]]))
+    when(mockSubscriptionBusinessService.getCachedCustomsId(any[Request[_]]))
       .thenReturn(Future.successful(Some(Utr("id"))))
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }

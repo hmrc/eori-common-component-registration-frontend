@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_individual_type
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -132,7 +131,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
           ArgumentMatchers.any[Option[SubscriptionPage]],
           ArgumentMatchers.eq(selectedIndividualType),
           ArgumentMatchers.eq(atarService)
-        )(ArgumentMatchers.any[HeaderCarrier], ArgumentMatchers.any[Request[AnyContent]])
+        )(ArgumentMatchers.any[Request[AnyContent]])
         verify(mockRequestSessionData).sessionWithOrganisationTypeAdded(
           ArgumentMatchers.eq(anotherMockSession),
           ArgumentMatchers.eq(selectedIndividualType)
@@ -172,7 +171,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
         ArgumentMatchers.any[Option[SubscriptionPage]],
         cdsOrganisationType = ArgumentMatchers.eq(selectedIndividualType),
         ArgumentMatchers.any[Service]
-      )(ArgumentMatchers.any[HeaderCarrier], ArgumentMatchers.any[Request[AnyContent]])
+      )(ArgumentMatchers.any[Request[AnyContent]])
     ).thenReturn(Future.successful(mockFlowStart))
 
     val result =

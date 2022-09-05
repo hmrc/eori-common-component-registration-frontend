@@ -77,6 +77,7 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
 
   private val cdsSubscriber =
     new CdsSubscriber(mockSubscriptionService, mockCdsFrontendDataCache, mockHandleSubscriptionService)(global)
+
   implicit val request: Request[Any] = mock[Request[Any]]
 
   override protected def beforeEach(): Unit = {
@@ -261,7 +262,9 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
       whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) {
         result =>
           result shouldBe SubscriptionFailed("EORI already exists", processingDate)
-          verify(mockCdsFrontendDataCache).saveSub02Outcome(meq(Sub02Outcome(processingDate, expectedName)))(meq(request))
+          verify(mockCdsFrontendDataCache).saveSub02Outcome(meq(Sub02Outcome(processingDate, expectedName)))(
+            meq(request)
+          )
           verifyNoInteractions(mockHandleSubscriptionService)
       }
     }

@@ -35,7 +35,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsServ
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
-import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder._
 import util.builders.SessionBuilder
@@ -155,7 +154,7 @@ class ContactAddressControllerSpec
       }
     }
     "display the correct text for the continue button" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier], any[Request[_]]))
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
         .thenReturn(Some(contactDetailsModel))
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
@@ -219,9 +218,9 @@ class ContactAddressControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier], any[Request[_]]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
-    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[HeaderCarrier], any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[Request[_]]))
       .thenReturn(Future.successful(()))
 
     test(
@@ -236,9 +235,9 @@ class ContactAddressControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier], any[Request[_]]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
-    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[HeaderCarrier], any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[Request[_]]))
       .thenReturn(Future.successful(()))
 
     test(
@@ -271,7 +270,7 @@ class ContactAddressControllerSpec
   private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier], any[Request[_]]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))

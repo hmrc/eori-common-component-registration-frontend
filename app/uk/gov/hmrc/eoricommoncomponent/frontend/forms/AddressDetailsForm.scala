@@ -19,14 +19,13 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 import play.api.data.Form
 import play.api.data.Forms.{mapping, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postcodeMapping, validCity}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 object AddressDetailsForm {
   private val Length2 = 2
 
-  def addressDetailsCreateForm()(implicit messages: Messages): Form[AddressViewModel] =
+  def addressDetailsCreateForm(): Form[AddressViewModel] =
     Form(
       mapping(
         "street"      -> text.verifying(validStreet),

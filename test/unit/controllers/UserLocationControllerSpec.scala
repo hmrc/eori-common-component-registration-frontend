@@ -107,7 +107,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         .sessionWithUserLocationAdded(any[String])(any[Request[AnyContent]])
     ).thenReturn(Session())
     when(mockRequestSessionData.existingSessionWithUserLocationAdded(any[Session], any[String])).thenReturn(Session())
-    when(mockRegistrationDisplayService.cacheDetails(any())(any(), any()))
+    when(mockRegistrationDisplayService.cacheDetails(any())(any()))
       .thenReturn(Future.successful(true))
     when(mockSave4LaterService.fetchSafeId(any[GroupId]())(any[HeaderCarrier]())).thenReturn(Future.successful(None))
     when(mockSessionCache.saveRegistrationDetails(any())(any())).thenReturn(Future.successful(true))
@@ -209,7 +209,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       errorTemplate
     ) {}
     implicit val fakeRequest = FakeRequest()
-    implicit val hc          = mock[HeaderCarrier]
 
     "cache registration display response and redirect to BusinessDetailsRecoveryPage for individual response" in {
       val responseDetail = ResponseDetail(

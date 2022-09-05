@@ -27,7 +27,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -82,8 +81,7 @@ class BusinessDetailsRecoveryController @Inject() (
     }
 
   private def continue(service: Service, location: String, orgType: Option[CdsOrganisationType])(implicit
-    request: Request[AnyContent],
-    hc: HeaderCarrier
+    request: Request[AnyContent]
   ): Future[Result] = {
 
     val organisationType = orgType.getOrElse(throw new IllegalStateException("OrganisationType not found in cache"))

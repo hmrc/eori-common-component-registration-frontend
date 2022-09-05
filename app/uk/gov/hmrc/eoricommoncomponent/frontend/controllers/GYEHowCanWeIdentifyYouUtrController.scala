@@ -78,7 +78,10 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
       )
     }
 
-  private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] =
+  private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
+    hc: HeaderCarrier,
+    request: Request[_]
+  ): Future[Boolean] =
     retrieveNameDobFromCache().flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
 
   private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service)(implicit
@@ -97,7 +100,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   }
 
   // TODO Get rid of `.get`. Now if there is no information Exception will be thrown, understand what must happen if this is not provided
-  private def retrieveNameDobFromCache()(implicit hc: HeaderCarrier, request: Request[_]): Future[Individual] =
+  private def retrieveNameDobFromCache()(implicit request: Request[_]): Future[Individual] =
     cdsFrontendDataCache.subscriptionDetails.map(_.nameDobDetails.get).map { nameDobDetails =>
       Individual.withLocalDate(
         firstName = nameDobDetails.firstName,

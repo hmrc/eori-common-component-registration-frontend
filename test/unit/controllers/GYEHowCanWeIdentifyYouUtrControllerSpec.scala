@@ -85,7 +85,10 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       )
       when(
         mockMatchingService
-          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
       ).thenReturn(Future.successful(true))
 
       submitForm(Map("utr" -> utr)) {
@@ -104,7 +107,10 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       )
       when(
         mockMatchingService
-          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(any[HeaderCarrier], any[Request[_]])
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
       ).thenReturn(Future.successful(false))
 
       submitForm(Map("utr" -> utr)) {

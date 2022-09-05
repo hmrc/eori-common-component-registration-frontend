@@ -38,10 +38,6 @@ object SubscriptionForm {
       .transform[CdsOrganisationType](CdsOrganisationType.forId, _.id)
   )
 
-  private val trueAnswer                     = "true"
-  private val falseAnswer                    = "false"
-  private val trueOrFalse: String => Boolean = oneOf(Set(trueAnswer, falseAnswer))
-
   val subscriptionDateOfEstablishmentForm: Form[LocalDate] = Form(
     "date-of-establishment" -> mandatoryDateTodayOrBefore(
       onEmptyError = "doe.error.empty-date",

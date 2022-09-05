@@ -133,7 +133,8 @@ class UserLocationController @Inject() (
     } yield (preSubscriptionStatus, mayBeSafeId)
 
   private def handleExistingSubscription(groupId: GroupId, service: Service)(implicit
-    hc: HeaderCarrier, request: Request[_]
+    hc: HeaderCarrier,
+    request: Request[_]
   ): Future[Result] =
     save4LaterService
       .fetchSafeId(groupId)
@@ -162,8 +163,7 @@ class UserLocationController @Inject() (
     }
 
   def cacheAndRedirect(service: Service, location: String)(implicit
-    request: Request[AnyContent],
-    hc: HeaderCarrier
+    request: Request[AnyContent]
   ): Either[_, RegistrationDisplayResponse] => Future[Result] = {
 
     case rResponse @ Right(RegistrationDisplayResponse(_, Some(_))) =>

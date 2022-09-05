@@ -37,7 +37,10 @@ class SubscriptionStatusService @Inject() (
 
   private val dateFormat = DateTimeFormatter.ofPattern("d MMM yyyy")
 
-  def getStatus(idType: String, id: String)(implicit hc: HeaderCarrier, request: Request[_]): Future[PreSubscriptionStatus] = {
+  def getStatus(idType: String, id: String)(implicit
+    hc: HeaderCarrier,
+    request: Request[_]
+  ): Future[PreSubscriptionStatus] = {
 
     def createRequest =
       SubscriptionStatusQueryParams(requestCommonGenerator.receiptDate, "CDS", idType, id)

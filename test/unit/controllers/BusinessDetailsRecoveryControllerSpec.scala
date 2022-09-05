@@ -95,7 +95,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockOrgTypeLookup
-          .etmpOrgType(any[Request[AnyContent]], any[HeaderCarrier])
+          .etmpOrgType(any[Request[AnyContent]])
       ).thenReturn(Future.successful(CorporateBody))
       invokeConfirm() { result =>
         status(result) shouldBe OK
@@ -134,7 +134,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
           meq(Some(BusinessDetailsRecoveryPage)),
           meq(CdsOrganisationType.ThirdCountryIndividual),
           meq(atarService)
-        )(any[HeaderCarrier], any[Request[AnyContent]])
+        )(any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(individualDetails)
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(s"$location"))
@@ -163,7 +163,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
           meq(Some(BusinessDetailsRecoveryPage)),
           meq(CdsOrganisationType.ThirdCountryOrganisation),
           meq(atarService)
-        )(any[HeaderCarrier], any[Request[AnyContent]])
+        )(any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(organisationDetails)
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(s"$location"))
