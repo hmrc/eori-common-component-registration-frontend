@@ -358,10 +358,7 @@ subscription.start-page.before-you-start.bullet5=the Standard Industrial Classif
 cds.subscription.enter-email.page.title=What is your email address?
 cds.subscription.check-your-email.page.title=Check  your email address
 cds.subscription.enter-email.email.label=email address
-cds.subscription.verify-email.title=Verify your email address
-cds.subscription.verify-email.para1=We have sent an email to {0}. Click on the link in the email to verify your email address.
 cds.subscription.verify-email.missing-email-text=your email address
-cds.subscription.verify-email.para2=You can <a href="{0}" class="govuk-link">change your email address</a> if it is not correct.
 cds.subscription.verify-email.progressive-disclosure.heading=I did not get an email
 cds.subscription.verify-email.progressive-disclosure.content=Check your junk folder. If it is not there we can <a href="{0}" class="govuk-link">send it again</a>. If we send your email again, any previous links will stop working.
 subscription.enter-email.heading=What is your email address?
@@ -370,9 +367,7 @@ subscription.check-your-email.label=Email address
 subscription.check-your-email.confirm.label=We will send you a link to confirm your email address.
 subscription.check-your-email.confirm.question=Is this the email address you want to use?
 subscription.check-your-email.yes=Yes
-subscription.check-your-email.no=No, I need to change this email
 
-enter-email-body-text=We’ll use this to send you:
 subscription.enter-email-hint-text=the result of your application to get access to CDS
 registration.enter-email-hint-text=the result of your EORI application
 enter-email-hint-text-1=updates on changes to CDS declarations and services
@@ -385,11 +380,8 @@ subscription.subscription-results.subscription-complete=Subscription complete
 subscription.subscription-results.active-from=on
 cds.subscription.enter-email.page-error.email=Enter your email address
 cds.subscription.contact-details.form-error.email.wrong-format=Enter a valid email address
-cds.subscription.check-your-email.page-error.yes-no-answer=Tell us if this is the correct email address
 
-cds.email-confirmed.title-and-heading=Email address confirmed
 cds.email-confirmed.para.get-eori=You can continue with your application to get an EORI number.
-cds.email-confirmed.para.get-access=You can continue with your application to get access to CDS.
 
 subscription.check-your-details.full-name.label=Full name
 subscription.check-your-details.date-of-birth.label=Date of birth
@@ -437,7 +429,6 @@ cds.subscription.last-name.error.too-long=The last name must be 35 characters or
 cds.subscription.family-name.error.too-long=The family name must be 35 characters or less
 
 countries-in-the-eu.title=Countries in the EU
-countries-in-the-eu.list=Austria, Belgium, Bulgaria, Croatia, Republic of Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden and the UK.
 
 #How can we identify you?
 subscription-journey.how-confirm-identity=What information can we use to confirm your identity?
@@ -458,7 +449,6 @@ cds.subscription.nino.error.wrong-length=The National Insurance number must be 9
 
 #What is your Eori
 ecc.subscription.enter-eori-number.page.title=What is your EORI number?
-ecc.subscription.enter-eori-number.heading=What is your EORI number?
 ecc.subscription.enter-eori-number.hint=The number starts with GB and is then followed by 12 digits, For example, GB345834921000.
 ecc.matching-error.eori=Enter an EORI number in the right format
 ecc.matching-error.eori.isEmpty=Enter your EORI number
@@ -506,14 +496,11 @@ cds.registration.journey-type.option3=Get an EORI
 # User location
 cds.registration.user-location.individual.title-and-heading=Where are you based?
 cds.registration.user-location.organisation.title-and-heading=Where is your organisation established?
-cds.registration.user-location.location.uk.label=UK
 cds.registration.user-location.location.isle-of-man.label=The Isle of Man
 cds.registration.user-location.location.islands.label=The Channel Islands
 cds.registration.user-location.location.islands-or-iom.label=Channel Islands or the Isle of Man
-cds.registration.user-location.location.third-country.label=Outside the EU
 cds.registration.user-location.location.eu.summary=Countries in the EU
 cds.registration.user-location.location.eu.hint=When trading, Channel Islands, Isle of Man, Akrotiri and Dhekelia, Faroe Islands are within the EU customs union.
-cds.registration.user-location.error.location=Tell us where you are based
 
 # Pre Journey Checks
 cds.registration.based-in-uk.title=Are you or your organisation based in the UK?
@@ -552,13 +539,12 @@ cds.matching.organisation-type.radio.eu-individual.label=EU Individual
 cds.matching.organisation-type.radio.third-country-organisation.label=Third country organisation
 cds.matching.organisation-type.radio.third-country-sole-trader.label=Third country sole trader
 cds.matching.organisation-type.radio.third-country-individual.label=Third country individual
-cds.matching.organisation-type.page-error.organisation-type-field.error.required=Tell us what you want to apply as
 
 # Sub01 Outcomes
-cds.sub01.outcome.processing.heading=The EORI application for {0} is being processed
-cds.sub01.outcome.processing.heading-noname=The EORI application is being processed
-cds.sub01.outcome.processing.title=The EORI application is being processed
-cds.sub01.outcome.processing.we-are-processing=We are processing your EORI application. This can take up to 5 working days. You will need to sign back in to see the result of your registration.
+#cds.sub01.outcome.processing.heading=The EORI application for {0} is being processed
+#cds.sub01.outcome.processing.heading-noname=The EORI application is being processed
+#cds.sub01.outcome.processing.title=The EORI application is being processed
+#cds.sub01.outcome.processing.we-are-processing=We are processing your EORI application. This can take up to 5 working days. You will need to sign back in to see the result of your registration.
 cds.sub01.outcome.rejected.heading=The EORI application for {0} has been unsuccessful
 cds.sub01.outcome.rejected.heading-noname=The EORI application has been unsuccessful
 cds.sub01.outcome.rejected.title=The EORI application has been unsuccessful
@@ -588,7 +574,6 @@ cds.sub02.outcome.subscription-in-progress.send-you-an-email=We will send you an
 
 # Reg06 Outcome EORI already linked 600 and 602
 cds.reg06.outcome.eori-already-linked.title-and-heading=The application for
-cds.reg06.outcome.eori-already-linked.heading={0} has been unsuccessful
 
 cds.reg06.outcome.eori-already-linked.received=Application received on {0}
 cds.subscription.outcomes.eori-already-linked.use-cds-heading=To use CDS
@@ -607,31 +592,24 @@ cds.matching.organisation-address.line-1=Address line 1
 cds.matching.organisation-address.line-2=Address line 2 (optional)
 cds.matching.organisation-address.line-3=Town or city
 cds.matching.organisation-address.line-4=Region or state (optional)
-cds.matching.organisation-address.postcode-optional=Postcode (optional)
 cds.matching.organisation-address.postcode=Postcode
 cds.matching.organisation-address.countryCode=Country
 cds.matching.organisation-address.line-1.error.empty=Enter the first line of your address
 cds.matching.organisation-address.line-1.error.too-long=The first line of the address must be 35 characters or less
 cds.matching.organisation-address.line-2.error.too-long=The second line of the address must be 34 characters or less
-cds.matching.organisation-address.line-3.error.empty=Enter your town or city
-cds.matching.organisation-address.line-3.error.too-long=The town or city must be 35 characters or less
-cds.matching.organisation-address.line-4.error.too-long=The Region or state must be 35 characters or less	
+cds.matching.organisation-address.line-4.error.too-long=The Region or state must be 35 characters or less
 cds.matching.organisation-address.postcode.error.empty=Enter a valid postcode
 cds.matching.organisation-address.country.error.empty=Enter your country
 
 # Name and Utr for an Organisation Match
 cds.matching.name-id-organisation.company.name=Company name
 cds.matching.name-id-organisation.company.name.hint=This is on your certificate of incorporation from Companies House.
-cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR) number
 cds.matching.name-id-organisation.registered-company.name=Registered company name
 cds.matching.name-id-organisation.registered-company.name.hint=This is on your certificate of incorporation from Companies House.
-cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique Taxpayer Reference (UTR) number
 cds.matching.name-id-organisation.partnership.name=Registered partnership name
 cds.matching.name-id-organisation.partnership.name.hint=This is on your certificate of incorporation from Companies House.
-cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR) number
 cds.matching.name-id-organisation.organisation.name=Organisation name
 cds.matching.name-id-organisation.organisation.name.hint=This is on your certificate of incorporation from Companies House.
-cds.matching.name-id-organisation.organisation.utr=Organisation Self Assessment Unique Taxpayer Reference (UTR) number
 cds.matching.name-id-organisation.not-registered=If you are not registered for Self Assessment, or if your registration is in progress and you do not yet have a UTR, you can <a href="{0}" class="govuk-link">register using your name and address</a> instead.
 cds.matching.name-id-organisation.eu-organisation.name=Registered organisation name
 cds.matching.name-id-organisation.eu-organisation.name.hint=This is on your certificate of incorporation from Companies House.
@@ -671,12 +649,9 @@ cds.matching.organisation.utr.paragraph=This is 10 numbers, for example 12345678
 cds.matching.organisation-utr.label=Corporation Tax UTR number
 cds.matching.organisation-utr.error.utr=Enter the Corporation Tax UTR number
 cds.matching.organisation-utr.error.have-utr=Tell us if you have a Corporation Tax UTR number
-cds.matching.organisation-utr.field-error.have-utr=Tell us if you have a UTR number
+#cds.matching.organisation-utr.field-error.have-utr=Tell us if you have a UTR number
 
 #Matching UTR ROW
-cds.matching.row-organisation.utr.title-and-heading=Does your organisation have a Unique Taxpayer Reference (UTR) number issued in the UK?
-cds.matching.row-organisation.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called reference, UTR or official use. You can {0}.
-cds.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?
 cds.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
 
 #Matching UTR Sole Trader
@@ -711,7 +686,6 @@ cds.matching.nino.page-error.nino=Enter a National Insurance number
 cds.matching.nino.invalid=Enter a correct National Insurance number
 
 #Matching NINO Non-UK
-cds.matching.nino.row.yes-no.error=Tell us if you have a National Insurance number
 cds.matching.nino.row.error=Enter your National Insurance number
 cds.matching.nino.row.title=Do you have a National Insurance number?
 cds.matching.nino.row.header=Do you have a National Insurance number issued in the UK?
@@ -724,7 +698,6 @@ cds.matching.nino.date-of-birth=Date of birth
 #Nino Or UTR
 cds.matching.id.page-error.nino-text-field=Enter your National Insurance number
 cds.matching.id.page-error.utr-text-field=Enter your Unique Taxpayer Reference (UTR) number
-cds.subscription.nino.utr.invalid=Tell us how we can identify you
 
 #Individual Match
 cds.matching.individual.first-name=First name
@@ -888,8 +861,6 @@ cds.subscription.vat-details.cannot-identify-you.explanation=The UK VAT details 
 cds.subscription.vat-details.cannot-identify-you.button=Try again
 
 cds.subscription.sign-in-with-different-details.heading=You need to sign in with different details
-cds.subscription.sign-in-with-different-details.para1={0} has already registered for CDS with a different Government Gateway.
-cds.subscription.sign-in-with-different-details.para1-noname=You have already registered for CDS with a different Government Gateway.
 cds.subscription.sign-in-with-different-details.para2=You need to sign in with the Government Gateway you used to register.
 cds.subscription.sign-in-with-different-details.button=Sign out
 cds.security-sign-in=Sign in
@@ -1010,7 +981,6 @@ cds.subscription.outcomes.success.heading=The EORI number for {0} is
 cds.subscription.outcomes.success.issued=issued by HMRC on
 cds.subscription.outcomes.success.eori=Your new EORI number starting with GB is:
 cds.subscription.outcomes.success.optional-paragraph=We have sent you an email to confirm your subscription request to get a goods movement reference.
-cds.subscription.outcomes.success.will-send-email=We will send you an email to confirm when you have access to CDS. This can take up to two hours.
 cds.subscription.outcomes.success.extra.information.next=What happens next
 cds.subscription.outcomes.success.extra.information=We will send a second email to confirm when your subscription to get a goods movement reference is active. This can take up to 2 hours.
 cds.subscription.outcomes.success.extra.information1=Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the {0}. Your new GB EORI has no expiry date.
@@ -1026,12 +996,9 @@ cds.subscription.outcomes.processing.why-steps.1=Either yourself or someone else
 cds.subscription.outcomes.in-processing.title-and-heading=We are processing the registration for {0}
 cds.subscription.outcomes.in-processing.received=Application received by HMRC on {0}
 cds.subscription.outcomes.inprocessing.eori=EORI number: {0}
-cds.subscription.outcomes.inprocessing.we-are-processing=We are processing your registration to CDS. This can take up to 5 working days. You will need to sign back in to see the result of your registration.
 cds.subscription.outcomes.in-processing.sub-title=Your application is being processed
 cds.subscription.outcomes.in-processing.why-steps.1=Your registration is processing but not yet complete.
 cds.subscription.outcomes.in-processing.next-steps.1=You will receive an email once your application has been processed.
-cds.subscription.outcomes.rejected.title=EORI rejected
-cds.subscription.outcomes.rejected.heading=Registration rejected
 cds.subscription.outcomes.rejected.title-and-heading=The application for {0} has been unsuccessful
 cds.subscription.outcomes.rejected.sub-title=Your Customs registration has been rejected.
 cds.subscription.outcomes.rejected.optional-paragraph=We have sent you an email.
@@ -1060,13 +1027,11 @@ cds.standalone.subscription.outcomes.success.download-eori-textfile=Download an 
 
 # Reg Existing Complete
 cds.reg.existing.outcomes.success.title=EORI Registration Complete
-cds.reg.existing.outcomes.success.heading.part1=Application received for
 cds.reg.existing.outcomes.success.heading.part2=the Customs Declaration Service
 cds.reg.existing.outcomes.success.eori.number=EORI number:
 cds.reg.existing.outcomes.success.download-eori=Download a PDF with your registration details (40kb)
 cds.reg.existing.outcomes.success.download-eori.21kb=Download a PDF with your registration details (21kb)
 cds.reg.existing.outcomes.success.download-eori-textfile=Download an accessible text file with your registration details (1 kb)
-cds.mig.existing.outcomes.application-received.title=Application received
 
 # Enrolment Already Exists
 cds.enrolment.already.exists.outcomes.success.heading=You already have access to the Customs Declaration Service
@@ -1096,7 +1061,6 @@ cds.global.title=Get an EORI number
 cds.form.change=Change
 cds.form.start-again=Start again
 cds.form.register=Register
-cds.form.send=Send
 cds.form.name=Name
 cds.form.partner-address=Partnership address
 cds.form.company-address=Company address
@@ -1109,7 +1073,6 @@ cds.form.gb-vat-postcode=Postcode of your VAT registration address
 cds.form.gb-vat-date=VAT effective date
 cds.form.eu-vat-numbers=EU VAT numbers
 cds.form.customs-contact=Contact
-cds.form.contact-details=Address
 cds.form.partnership.contact-details=Partnership address
 cds.form.disclosure=Registered company details included on the EORI checker
 cds.form.disclosure.individual=Details included on the EORI checker
@@ -1133,11 +1096,6 @@ cds.form.check-answers-declaration=Declaration
 cds.form.disclaimer=You confirm that, to the best of your knowledge, the details you are providing are correct.
 
 #disclose personal details consent
-cds.subscription.organisation-disclose-personal-details-consent.heading=Do you want to include your organisation name and address on the EORI checker?
-cds.subscription.organisation-disclose-personal-details-consent.declaration=HMRC will add your EORI number to a public checker kept by the European Commission. You can also agree to include your organisation name and address. This can help customs and freight agents identify you and process your shipments.
-cds.subscription.organisation-disclose-personal-details-consent.yes=Yes - I want to help agents identify my shipments quickly
-cds.subscription.organisation-disclose-personal-details-consent.no=No - just show my EORI number
-
 cds.subscription.organisation-disclose-personal-details-consent.partner.heading=Do you want to include your partnership name and address on the EORI checker?
 cds.subscription.organisation-disclose-personal-details-consent.partner.declaration=HMRC will add your EORI number to a public checker kept by the European Commission. You can also agree to include your partnership name and address. This can help customs and freight agents identify you and process your shipments.
 cds.subscription.organisation-disclose-personal-details-consent.partner.yes=Yes - I want my partnership name and address on the EORI checker
@@ -1173,7 +1131,6 @@ cds.enter-address-details.organisation.title-and-heading=Enter your organisation
 cds.enter-address-details.title=EORI application contact address
 cds.enter-address-details.heading=EORI application contact address
 cds.enter-address-details.partnership.title-and-heading=Enter your partnership address
-cds.enter-address-details.company.title-and-heading=Enter your company address
 
 cds.subscription.address-details.street.label=Address line 1
 cds.subscription.address-details.city.label=Town or city
@@ -1196,18 +1153,11 @@ cds.subscription.address-details.countryCode.error.label=Enter your country
 cds.subscription.address-details.country.emptyValueText=Pick a country
 
 #address check limited companies
-confirm-business-details.title-and-heading=These are the details we have about your organisation
-confirm-business-details.partnership.title-and-heading=These are the details we have about your partnership
-confirm-business-details.individual.title-and-heading=These are the details we have about you
 confirm-business-details.heading2=Are these the organisation details you want to use to get an EORI number?
 confirm-business-details.partnership.heading2=Are these the partnership details you want to use to get an EORI number?
-confirm-business-details.yes=Yes, these are the details I want to use
-confirm-business-details.yes-wrong-address=No, I need to change my organisation address
-confirm-business-details.partnership.yes-wrong-address=No, I need to change my partnership address
 confirm-business-details.no=No, I need to enter all my organisation details again
 confirm-business-details.partnership.no=No, I need to enter all my partnership details again
 confirm-business-details.page-error.yes-no-wrong-address=Tell us if this is the business you want to register
-yes-no-wrong-address.error=Tell us if these are the details you want to use
 confirm-business-details.yes-no-wrong-address.error.label=Please answer this question
 confirm-business-details.UTR=Corporation Tax UTR number
 confirm-business-details.registered-business-name=Registered organisation name
@@ -1237,7 +1187,6 @@ cds.sole-trader.address-check.field-error.yes-no-answer=Select yes if these deta
 cds.subscription.contact-details.page.title=EORI application contact details
 cds.subscription.contact-details.steps=contact
 cds.subscription.contact-details.heading=EORI application contact details
-cds.subscription.contact-details.intro=We will use these details to contact you about your EORI number. We will also use them to contact you if there are any issues with your customs activities.
 cds.subscription.contact-details.full-name.label=Full name
 cds.subscription.contact-details.email.label=Email address
 cds.subscription.contact-details.telephone.label=Telephone
@@ -1272,7 +1221,6 @@ cds.subscription.contact-details.page-error.full-name=Enter your contact name
 cds.subscription.contact-details.page-error.email=Enter a valid email address
 cds.subscription.contact-details.page-error.telephone=Enter your contact telephone number
 cds.subscription.contact-details.use-registered-address.label=Enter address
-cds.subscription.contact-details.error.use-registered-address=Tell us if the contact address is right
 cds.subscription.contact-details.form-error.use-registered-address=Tell us if the contact address is right
 
 #text file messages
