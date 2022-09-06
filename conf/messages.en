@@ -541,10 +541,6 @@ cds.matching.organisation-type.radio.third-country-sole-trader.label=Third count
 cds.matching.organisation-type.radio.third-country-individual.label=Third country individual
 
 # Sub01 Outcomes
-#cds.sub01.outcome.processing.heading=The EORI application for {0} is being processed
-#cds.sub01.outcome.processing.heading-noname=The EORI application is being processed
-#cds.sub01.outcome.processing.title=The EORI application is being processed
-#cds.sub01.outcome.processing.we-are-processing=We are processing your EORI application. This can take up to 5 working days. You will need to sign back in to see the result of your registration.
 cds.sub01.outcome.rejected.heading=The EORI application for {0} has been unsuccessful
 cds.sub01.outcome.rejected.heading-noname=The EORI application has been unsuccessful
 cds.sub01.outcome.rejected.title=The EORI application has been unsuccessful
