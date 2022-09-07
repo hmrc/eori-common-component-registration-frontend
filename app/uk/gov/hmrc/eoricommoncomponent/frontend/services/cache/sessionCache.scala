@@ -47,7 +47,7 @@ sealed case class CachedData(
 )
 
 object CachedData {
-  val regDetailsKey                    = "regDetails"     //
+  val regDetailsKey                    = "regDetails"
   val regInfoKey                       = "regInfo"
   val subDetailsKey                    = "subDetails"
   val sub01OutcomeKey                  = "sub01Outcome"
@@ -57,7 +57,7 @@ object CachedData {
   val keepAliveKey                     = "keepAlive"
   val safeIdKey                        = "safeId"
   val groupIdKey                       = "cachedGroupId"
-  val groupEnrolmentKey                = "groupEnrolment" //
+  val groupEnrolmentKey                = "groupEnrolment"
   val eoriKey                          = "eori"
   implicit val format                  = Json.format[CachedData]
 }
@@ -80,7 +80,11 @@ class SessionCache @Inject() (
   val now = LocalDateTime.now(ZoneId.of("Europe/London"))
 
   def sessionId(implicit request: Request[_]): String =
-    request.session.get("sessionId").getOrElse("Session Id is not available")
+    request.session.get("sessionId") match {
+      case None =>
+        throw new IllegalStateException("Session id is not available")
+      case Some(sessionId) => sessionId
+    }
 
   def putData[A: Writes](key: String, data: A)(implicit request: Request[_]): Future[A] =
     preservingMdc {
