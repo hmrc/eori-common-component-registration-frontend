@@ -31,32 +31,45 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
 )(implicit ec: ExecutionContext) {
   private val idType = "SAFE"
 
-  def checksToProceed(groupId: GroupId, internalId: InternalId, service: Service)(continue: => Future[Result])(
-    userIsInProcess: => Future[Result]
-  )(otherUserWithinGroupIsInProcess: => Future[Result])(implicit hc: HeaderCarrier): Future[Result] =
+  def checksToProceed(groupId: GroupId, internalId: InternalId, service: Service)
+                     (
+                       continue: => Future[Result]
+                     )(userIsInProcess: => Future[Result])(
+                       existingApplicationInProcess: => Future[Result])(
+                       otherUserWithinGroupIsInProcess: => Future[Result]
+                     )(implicit hc: HeaderCarrier): Future[Result] = {
     save4Later.fetchCacheIds(groupId)
-      .flatMap {
-        case Some(cacheIds) =>
-          val sameUser    = cacheIds.internalId == internalId
-          val sameService = cacheIds.serviceCode.contains(service.code)
+          .flatMap {
+            case Some(cacheIds) => {
+              val sameService = cacheIds.serviceCode.contains(service.code)
 
-          subscriptionStatusService
-            .getStatus(idType, cacheIds.safeId.id)
-            .flatMap { status =>
-              if (status != SubscriptionProcessing)
-                if (sameService)
-                  save4Later.deleteCachedGroupId(groupId).flatMap(_ => continue)
-                else
-                  save4Later.deleteCacheIds(groupId).flatMap(_ => continue)
-              else
-                (sameUser, sameService) match {
-                  case (true, true)  => continue
-                  case (true, false) => userIsInProcess
-                  case (false, _)    => otherUserWithinGroupIsInProcess
+              subscriptionStatusService
+                .getStatus(idType, cacheIds.safeId.id)
+                .flatMap {
+                  case NewSubscription | SubscriptionRejected => {
+                    if (sameService)
+                      save4Later.deleteCachedGroupId(groupId).flatMap(_ => continue)
+                    else
+                      save4Later.deleteCacheIds(groupId).flatMap(_ => continue)
+                  }
+                  case SubscriptionProcessing => {
+                    if (cacheIds.internalId == internalId) {
+                      existingApplicationInProcess
+                    } else {
+                      otherUserWithinGroupIsInProcess
+                    }
+                  }
+                  case _ => {
+                    if (cacheIds.internalId == internalId) {
+                      userIsInProcess
+                    } else {
+                      otherUserWithinGroupIsInProcess
+                    }
+                  }
                 }
             }
-        case _ =>
-          continue
-      }
-
+            case _ =>
+                continue
+          }
+  }
 }
