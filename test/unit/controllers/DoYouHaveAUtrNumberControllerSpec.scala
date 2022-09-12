@@ -21,7 +21,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
@@ -59,7 +59,7 @@ class DoYouHaveAUtrNumberControllerSpec
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
+    when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
   }
 
   "Viewing the Utr Organisation Matching form" should {
@@ -140,7 +140,7 @@ class DoYouHaveAUtrNumberControllerSpec
     "redirect to Get UTR page based on YES answer" in {
 
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
 
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId) { result =>
@@ -213,7 +213,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Get UTR page based on YES answer and organisation type sole trader" in {
 
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameDobMatchModel("", None, "", LocalDate.now()))))
       when(mockMatchingConnector.lookup(mockMatchingRequestHolder))
         .thenReturn(Future.successful(Option(mockMatchingResponse)))

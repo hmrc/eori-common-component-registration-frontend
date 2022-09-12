@@ -81,7 +81,7 @@ class DoYouHaveAUtrNumberController @Inject() (
             }
           }
         case _ =>
-          throw new IllegalArgumentException("Have UTR should be Some(true) or Some(false) but was None")
+          throw new IllegalArgumentException("Have UTR must be Some(true) or Some(false) but was None")
       }
     }
 

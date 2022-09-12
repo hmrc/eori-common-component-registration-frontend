@@ -71,7 +71,7 @@ class BusinessShortNameYesNoControllerSpec extends ControllerSpec with AuthActio
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     when(businessShortNameYesNoPage.apply(any(), any(), any(), any(), any())(any(), any()))
       .thenReturn(HtmlFormat.empty)
-    when(orgTypeLookup.etmpOrgType(any(), any())).thenReturn(Future.successful(CorporateBody))
+    when(orgTypeLookup.etmpOrgType(any())).thenReturn(Future.successful(CorporateBody))
 
     when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]]))
       .thenReturn(mockSubscriptionFlowInfo)

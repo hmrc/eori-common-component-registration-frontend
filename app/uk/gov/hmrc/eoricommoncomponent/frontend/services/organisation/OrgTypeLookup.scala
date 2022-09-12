@@ -16,12 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EtmpOrganisationType, RegistrationDetailsOrganisation}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -29,7 +28,7 @@ class OrgTypeLookup @Inject() (requestSessionData: RequestSessionData, sessionCa
   ec: ExecutionContext
 ) {
 
-  def etmpOrgTypeOpt(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Option[EtmpOrganisationType]] =
+  def etmpOrgTypeOpt(implicit request: Request[AnyContent]): Future[Option[EtmpOrganisationType]] =
     requestSessionData.userSelectedOrganisationType match {
       case Some(cdsOrgType) => Future.successful(Some(EtmpOrganisationType(cdsOrgType)))
       case None =>
@@ -39,7 +38,7 @@ class OrgTypeLookup @Inject() (requestSessionData: RequestSessionData, sessionCa
         }
     }
 
-  def etmpOrgType(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[EtmpOrganisationType] =
+  def etmpOrgType(implicit request: Request[AnyContent]): Future[EtmpOrganisationType] =
     requestSessionData.userSelectedOrganisationType match {
       case Some(cdsOrgType) => Future.successful(EtmpOrganisationType(cdsOrgType))
       case None =>

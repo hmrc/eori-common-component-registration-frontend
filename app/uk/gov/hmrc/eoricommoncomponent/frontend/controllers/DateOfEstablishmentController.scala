@@ -29,9 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -74,7 +72,7 @@ class DateOfEstablishmentController @Inject() (
       } yield populateView(Some(cachedDateModel), isInReviewMode = true, orgType, service)
     }
 
-  private def fetchDate(implicit hc: HeaderCarrier): Future[LocalDate] =
+  private def fetchDate(implicit request: Request[_]): Future[LocalDate] =
     subscriptionBusinessService.getCachedDateEstablished
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
@@ -109,7 +107,7 @@ class DateOfEstablishmentController @Inject() (
       )
     }
 
-  private def saveDateEstablished(date: LocalDate)(implicit hc: HeaderCarrier) =
+  private def saveDateEstablished(date: LocalDate)(implicit request: Request[_]) =
     subscriptionDetailsHolderService.cacheDateEstablished(date)
 
 }

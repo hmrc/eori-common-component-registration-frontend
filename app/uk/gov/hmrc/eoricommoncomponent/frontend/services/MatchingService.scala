@@ -52,7 +52,8 @@ class MatchingService @Inject() (
     detailsCreator.registrationDetails(response.registerWithIDResponse, customsId, capturedDate)
 
   def matchBusinessWithIdOnly(customsId: CustomsId, loggedInUser: LoggedInUserWithEnrolments)(implicit
-    hc: HeaderCarrier
+    hc: HeaderCarrier,
+    request: Request[_]
   ): Future[Boolean] =
     for {
       maybeMatchFound <- matchingConnector.lookup(idOnlyMatchRequest(customsId, loggedInUser.isAgent))
@@ -85,14 +86,16 @@ class MatchingService @Inject() (
   }
 
   def matchIndividualWithId(customsId: CustomsId, individual: Individual, groupId: GroupId)(implicit
-    hc: HeaderCarrier
+    hc: HeaderCarrier,
+    request: Request[_]
   ): Future[Boolean] =
     matchingConnector
       .lookup(individualIdMatchRequest(customsId, individual))
       .flatMap(storeInCacheIfFound(convert(customsId, toLocalDate(individual.dateOfBirth)), groupId))
 
   def matchIndividualWithNino(nino: String, individual: Individual, groupId: GroupId)(implicit
-    hc: HeaderCarrier
+    hc: HeaderCarrier,
+    request: Request[_]
   ): Future[Boolean] =
     matchingConnector
       .lookup(individualNinoMatchRequest(nino, individual))
@@ -107,7 +110,7 @@ class MatchingService @Inject() (
     convert: MatchingResponse => RegistrationDetails,
     groupId: GroupId,
     orgType: Option[CdsOrganisationType] = None
-  )(mayBeMatchSuccess: Option[MatchingResponse])(implicit hc: HeaderCarrier): Future[Boolean] =
+  )(mayBeMatchSuccess: Option[MatchingResponse])(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] =
     mayBeMatchSuccess.map(convert).fold(Future.successful(false)) { details =>
       cache.saveRegistrationDetails(details, groupId, orgType)
     }

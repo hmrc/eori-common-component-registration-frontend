@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,9 +31,11 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
 )(implicit ec: ExecutionContext) {
   private val idType = "SAFE"
 
-  def checksToProceed(groupId: GroupId, internalId: InternalId, service: Service)(continue: => Future[Result])(
-    userIsInProcess: => Future[Result]
-  )(otherUserWithinGroupIsInProcess: => Future[Result])(implicit hc: HeaderCarrier): Future[Result] =
+  def checksToProceed(groupId: GroupId, internalId: InternalId, service: Service)(
+    continue: => Future[Result]
+  )(userIsInProcess: => Future[Result])(
+    otherUserWithinGroupIsInProcess: => Future[Result]
+  )(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] =
     save4Later.fetchCacheIds(groupId)
       .flatMap {
         case Some(cacheIds) =>

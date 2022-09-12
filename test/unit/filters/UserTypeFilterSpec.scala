@@ -19,13 +19,13 @@ package unit.filters
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.Request
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadTextController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Sub02Outcome
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_number_text_download, subscription_text_download}
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.{AuthActionMock, AuthBuilder, SessionBuilder}
 
@@ -44,7 +44,7 @@ class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with Aut
     new DownloadTextController(mockAuthAction, mockCache, eoriNumberTextDownloadView, subscriptionTextDownloadView, mcc)
 
   override def beforeEach(): Unit =
-    when(mockCache.sub02Outcome(any[HeaderCarrier]))
+    when(mockCache.sub02Outcome(any[Request[_]]))
       .thenReturn(Future.successful(Sub02Outcome("20/01/2019", "John Doe", Some("GB123456789012"))))
 
   "User Type Filter verification" should {

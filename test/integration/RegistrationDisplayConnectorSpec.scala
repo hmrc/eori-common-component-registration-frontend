@@ -27,7 +27,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
   RegistrationDisplayResponseHolder
 }
 import uk.gov.hmrc.http.HeaderCarrier
-import util.externalservices
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, RegistrationDisplay}
 

@@ -145,7 +145,8 @@ class EmailController @Inject() (
 
   private def checkWithEmailService(email: String, emailStatus: EmailStatus, service: Service)(implicit
     hc: HeaderCarrier,
-    userWithEnrolments: LoggedInUserWithEnrolments
+    userWithEnrolments: LoggedInUserWithEnrolments,
+    request: Request[_]
   ): Future[Result] =
     emailVerificationService.isEmailVerified(email).flatMap {
       case Some(true) =>

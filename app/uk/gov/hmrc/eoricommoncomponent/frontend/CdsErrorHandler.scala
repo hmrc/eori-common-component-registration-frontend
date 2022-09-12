@@ -44,7 +44,7 @@ class CdsErrorHandler @Inject() (
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
     request: Request[_]
-  ): Html = throw new IllegalStateException("This method should not be used any more.")
+  ): Html = throw new IllegalStateException("This method must not be used any more.")
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = {
 

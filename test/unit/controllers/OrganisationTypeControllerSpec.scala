@@ -34,7 +34,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, RequestSessionDataKeys}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -77,7 +76,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
     when(
       mockRegistrationDetailsService
-        .initialiseCacheWithRegistrationDetails(any[CdsOrganisationType]())(any[HeaderCarrier]())
+        .initialiseCacheWithRegistrationDetails(any[CdsOrganisationType]())(any[Request[_]])
     ).thenReturn(Future.successful(true))
     when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(Future.successful(None))
   }
@@ -176,7 +175,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
         when(
           mockSubscriptionFlowManager
-            .startSubscriptionFlow(any(), any(), any[Service])(any[HeaderCarrier](), any[Request[AnyContent]]())
+            .startSubscriptionFlow(any(), any(), any[Service])(any[Request[AnyContent]]())
         ).thenReturn(Future.successful((page, updatedMockSession)))
 
         submitForm(Map("organisation-type" -> option), organisationType = Some(cdsOrganisationType)) { result =>

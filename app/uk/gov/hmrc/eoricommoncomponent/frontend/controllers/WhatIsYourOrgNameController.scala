@@ -25,7 +25,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -68,7 +67,7 @@ class WhatIsYourOrgNameController @Inject() (
     formData: NameMatchModel,
     organisationType: String,
     service: Service
-  )(implicit hc: HeaderCarrier): Future[Result] =
+  )(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map { _ =>
       if (isInReviewMode)
         Redirect(DetermineReviewPageController.determineRoute(service))

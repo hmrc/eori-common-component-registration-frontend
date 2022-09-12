@@ -21,6 +21,7 @@ import common.pages.matching.{
   ThirdCountryIndividualNameAndDateOfBirthPage,
   ThirdCountrySoleTraderNameAndDateOfBirthPage
 }
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -36,7 +37,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfB
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.scalacheck.TestDataGenerators
@@ -46,7 +46,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RowIndividualNameDateOfBirthControllerSpec
-    extends ControllerSpec with Checkers with TestDataGenerators with BeforeAndAfterEach with ScalaFutures
+    extends ControllerSpec with TestDataGenerators with Checkers with BeforeAndAfterEach with ScalaFutures
     with AuthActionMock {
 
   class ControllerFixture(organisationType: String, form: Form[IndividualNameAndDateOfBirth])
@@ -64,12 +64,12 @@ class RowIndividualNameDateOfBirthControllerSpec
     )(global)
 
     def saveRegistrationDetailsMockSuccess() {
-      when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
         .thenReturn(Future.successful(()))
     }
 
     def registerIndividualMockFailure(exception: Throwable) {
-      when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
         .thenReturn(Future.failed(exception))
     }
 

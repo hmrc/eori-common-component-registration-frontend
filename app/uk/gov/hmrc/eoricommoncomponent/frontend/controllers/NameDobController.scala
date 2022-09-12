@@ -25,7 +25,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.enterNameDob
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -52,7 +51,7 @@ class NameDobController @Inject() (
     }
 
   private def submitNewDetails(formData: NameDobMatchModel, service: Service)(implicit
-    hc: HeaderCarrier
+    request: Request[_]
   ): Future[Result] =
     cdsFrontendDataCache.saveSubscriptionDetails(SubscriptionDetails(nameDobDetails = Some(formData))).map { _ =>
       Redirect(

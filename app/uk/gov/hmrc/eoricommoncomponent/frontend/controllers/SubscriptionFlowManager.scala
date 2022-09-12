@@ -24,7 +24,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{Subscriptio
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Constants.ONE
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -66,18 +65,17 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
 
   def startSubscriptionFlow(
     service: Service
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[(SubscriptionPage, Session)] =
+  )(implicit request: Request[AnyContent]): Future[(SubscriptionPage, Session)] =
     startSubscriptionFlow(None, requestSessionData.userSelectedOrganisationType, service)
 
   def startSubscriptionFlow(
     previousPage: Option[SubscriptionPage] = None,
     cdsOrganisationType: CdsOrganisationType,
     service: Service
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[(SubscriptionPage, Session)] =
+  )(implicit request: Request[AnyContent]): Future[(SubscriptionPage, Session)] =
     startSubscriptionFlow(previousPage, Some(cdsOrganisationType), service)
 
   def startSubscriptionFlow(previousPage: Option[SubscriptionPage], service: Service)(implicit
-    hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[(SubscriptionPage, Session)] =
     startSubscriptionFlow(previousPage, requestSessionData.userSelectedOrganisationType, service)
@@ -86,7 +84,7 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
     previousPage: Option[SubscriptionPage],
     orgType: => Option[CdsOrganisationType],
     service: Service
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]): Future[(SubscriptionPage, Session)] = {
+  )(implicit request: Request[AnyContent]): Future[(SubscriptionPage, Session)] = {
     val maybePreviousPageUrl = previousPage.map(page => page.url(service))
     cdsFrontendDataCache.registrationDetails map { registrationDetails =>
       val flow = selectFlow(registrationDetails, orgType)

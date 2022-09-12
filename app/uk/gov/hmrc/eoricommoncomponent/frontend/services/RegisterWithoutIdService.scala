@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.mvc.Request
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.RegisterWithoutIdConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -42,9 +44,9 @@ class RegisterWithoutIdService @Inject() (
     contactDetail: Option[ContactDetailsModel],
     loggedInUser: LoggedInUserWithEnrolments,
     orgType: Option[CdsOrganisationType] = None
-  )(implicit hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {
+  )(implicit hc: HeaderCarrier, request: Request[_]): Future[RegisterWithoutIDResponse] = {
 
-    val request = RegisterWithoutIDRequest(
+    val requestWithoutId = RegisterWithoutIDRequest(
       requestCommonGenerator.generate(),
       RegisterWithoutIdReqDetails.organisation(
         OrganisationName(orgName),
@@ -54,7 +56,7 @@ class RegisterWithoutIdService @Inject() (
     )
 
     for {
-      response <- connector.register(request)
+      response <- connector.register(requestWithoutId)
       registrationDetails = detailsCreator.registrationDetails(response, orgName, createSixLineAddress(address))
       _ <- save(registrationDetails, loggedInUser, orgType)
     } yield response
@@ -66,7 +68,7 @@ class RegisterWithoutIdService @Inject() (
     contactDetail: Option[ContactDetailsModel],
     loggedInUser: LoggedInUserWithEnrolments,
     orgType: Option[CdsOrganisationType] = None
-  )(implicit hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {
+  )(implicit request: Request[_], hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {
     import individualNameAndDateOfBirth._
     val individual =
       Individual.withLocalDate(firstName, middleName, lastName, dateOfBirth)
@@ -75,10 +77,10 @@ class RegisterWithoutIdService @Inject() (
       individual = individual,
       contactDetail = contactDetail.getOrElse(throw new IllegalStateException("No contact details in cache"))
     )
-    val request =
+    val requestWithoutId =
       RegisterWithoutIDRequest(requestCommonGenerator.generate(), reqDetails)
     for {
-      response <- connector.register(request)
+      response <- connector.register(requestWithoutId)
       registrationDetails = detailsCreator.registrationDetails(
         response,
         individualNameAndDateOfBirth,
@@ -94,7 +96,7 @@ class RegisterWithoutIdService @Inject() (
     registrationDetails: RegistrationDetails,
     loggedInUser: LoggedInUserWithEnrolments,
     orgType: Option[CdsOrganisationType]
-  )(implicit hc: HeaderCarrier) =
+  )(implicit hc: HeaderCarrier, request: Request[_]) =
     if (registrationDetails.safeId.id.nonEmpty)
       sessionCache.saveRegistrationDetailsWithoutId(
         registrationDetails: RegistrationDetails,

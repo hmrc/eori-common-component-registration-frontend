@@ -16,10 +16,11 @@
 
 package unit.util
 
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{InvalidUrlValueException, Require}
 
-class RequireSpec extends WordSpec with MustMatchers {
+class RequireSpec extends AnyWordSpec with Matchers {
 
   "Require requireThatUrlValue" should {
 

@@ -78,7 +78,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
   override def beforeEach: Unit = {
     reset(mockMatchingService, mockSubscriptionDetailsService)
 
-    when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
+    when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
   }
 
   "Viewing the Utr Organisation Matching form" should {
@@ -142,7 +142,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     }
 
     "send a request to the business matching service when organisation type is 'CdsOrganisationType.CharityPublicBodyNotForProfitId'" in {
-      when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
       when(
         mockMatchingService.matchBusiness(any[Utr], any[Organisation], any[Option[LocalDate]], any())(
@@ -162,7 +162,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     }
 
     "return a Bad Request when business match is unsuccessful" in {
-      when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
       when(
         mockMatchingService.matchBusiness(
@@ -181,7 +181,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     }
 
     "redirect to the confirm page when match is successful" in {
-      when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
       when(
         mockMatchingService.matchBusiness(
@@ -213,7 +213,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
 
   "submitting the form for ROW organisation" should {
     "redirect to Confirm Details page when UTR entered" in {
-      when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
       when(
         mockMatchingService.matchBusiness(meq(ValidUtr), meq(thirdCountryOrganisation), meq(None), any())(
@@ -253,11 +253,16 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
 
   "submitting the form for ROW" should {
     "redirect to Confirm Details page when UTR entered and organisation type sole trader" in {
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameDobMatchModel("", None, "", LocalDate.now()))))
       when(mockMatchingConnector.lookup(mockMatchingRequestHolder))
         .thenReturn(Future.successful(Option(mockMatchingResponse)))
-      when(mockMatchingService.matchIndividualWithId(meq(ValidUtr), any[Individual], any())(any[HeaderCarrier]))
+      when(
+        mockMatchingService.matchIndividualWithId(meq(ValidUtr), any[Individual], any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+      )
         .thenReturn(Future.successful(true))
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         await(result)
@@ -267,8 +272,13 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     }
 
     "redirect to bad request page when cachedNameDobDetails is None" in {
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(Future.successful(None))
-      when(mockMatchingService.matchIndividualWithId(meq(ValidUtr), any[Individual], any())(any[HeaderCarrier]))
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
+      when(
+        mockMatchingService.matchIndividualWithId(meq(ValidUtr), any[Individual], any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+      )
         .thenReturn(Future.successful(false))
       submitForm(ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         status(result) shouldBe BAD_REQUEST
@@ -279,7 +289,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     }
 
     "redirect to bad request page when orgName not found" in {
-      when(mockSubscriptionDetailsService.cachedNameDetails(any[HeaderCarrier])).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]])).thenReturn(Future.successful(None))
       when(
         mockMatchingService.matchBusiness(
           meq(ValidUtr),
