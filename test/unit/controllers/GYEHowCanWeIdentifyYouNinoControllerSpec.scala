@@ -153,15 +153,16 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
       val nino = "AB123456C"
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = None)
-        )
+        Future.successful(SubscriptionDetails(nameDobDetails = None))
       )
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       val caught = intercept[DataUnavailableException] {
         await(
-          controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("nino" -> nino))))
+          controller.submit(atarService).apply(
+            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("nino" -> nino))
+          )
+        )
       }
 
       caught.message should startWith("NameDob is not cached in data")

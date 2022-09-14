@@ -100,7 +100,9 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   }
 
   private def retrieveNameDobFromCache()(implicit request: Request[_]): Future[Individual] =
-    cdsFrontendDataCache.subscriptionDetails.map(_.nameDobDetails.getOrElse(throw DataUnavailableException(s"NameDob is not cached in data"))).map { nameDobDetails =>
+    cdsFrontendDataCache.subscriptionDetails.map(
+      _.nameDobDetails.getOrElse(throw DataUnavailableException(s"NameDob is not cached in data"))
+    ).map { nameDobDetails =>
       Individual.withLocalDate(
         firstName = nameDobDetails.firstName,
         middleName = None,

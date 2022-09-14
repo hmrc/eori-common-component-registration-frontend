@@ -144,15 +144,16 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
       val utr = "2108834503"
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = None)
-        )
+        Future.successful(SubscriptionDetails(nameDobDetails = None))
       )
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       val caught = intercept[DataUnavailableException] {
         await(
-          controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("utr" -> utr))))
+          controller.submit(atarService).apply(
+            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("utr" -> utr))
+          )
+        )
       }
 
       caught.message should startWith("NameDob is not cached in data")
