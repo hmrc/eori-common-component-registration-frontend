@@ -31,7 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameDobMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -138,6 +138,24 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
             RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
           ) shouldBe "Enter your UTR number"
       }
+    }
+
+    "throw exception when no NameDob present in cache" in {
+
+      val utr = "2108834503"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(
+          SubscriptionDetails(nameDobDetails = None)
+        )
+      )
+
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      val caught = intercept[DataUnavailableException] {
+        await(
+          controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("utr" -> utr))))
+      }
+
+      caught.message should startWith("NameDob is not cached in data")
     }
   }
 
