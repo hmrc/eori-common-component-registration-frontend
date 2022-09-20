@@ -151,7 +151,7 @@ class EmailControllerSpec
     "block when subscription is in progress" in {
       when(mockSave4LaterService.fetchCacheIds(any())(any()))
         .thenReturn(Future.successful(Some(CacheIds(InternalId("int-id"), SafeId("safe-id"), Some("atar")))))
-      when(mockSubscriptionStatusService.getStatus(any(), any())(any(), any()))
+      when(mockSubscriptionStatusService.getStatus(any(), any())(any(), any(), any()))
         .thenReturn(Future.successful(SubscriptionProcessing))
 
       showFormRegister() { result =>

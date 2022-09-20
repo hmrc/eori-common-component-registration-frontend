@@ -23,6 +23,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Sub01Outcome, SubscriptionStatusQueryParams}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -39,6 +40,7 @@ class SubscriptionStatusService @Inject() (
 
   def getStatus(idType: String, id: String)(implicit
     hc: HeaderCarrier,
+    originatingService: Service,
     request: Request[_]
   ): Future[PreSubscriptionStatus] = {
 

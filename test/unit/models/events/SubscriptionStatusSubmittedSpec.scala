@@ -20,11 +20,14 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.{EitherValues, OptionValues}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SubscriptionStatusQueryParams
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.SubscriptionStatusSubmitted
 
 import java.time.LocalDateTime
 
 class SubscriptionStatusSubmittedSpec extends AnyWordSpec with Matchers with EitherValues with OptionValues {
+
+  val service: String = Service.cds.code
 
   "SubscriptionStatusSubmitted" should {
     "have taxPayerId set to request.id if request.idType is taxPayerId and safeId set to None if request.idType is not SAFE" in {
@@ -35,7 +38,7 @@ class SubscriptionStatusSubmittedSpec extends AnyWordSpec with Matchers with Eit
         id = "testId"
       )
 
-      val result = SubscriptionStatusSubmitted(request)
+      val result = SubscriptionStatusSubmitted(request, service)
       result.taxPayerId mustBe Some(request.id)
       result.safeId mustNot (be(defined))
     }
@@ -48,7 +51,7 @@ class SubscriptionStatusSubmittedSpec extends AnyWordSpec with Matchers with Eit
         id = "testId"
       )
 
-      val result = SubscriptionStatusSubmitted(request)
+      val result = SubscriptionStatusSubmitted(request, service)
       result.safeId mustBe Some(request.id)
       result.taxPayerId mustNot (be(defined))
     }

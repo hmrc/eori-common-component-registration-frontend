@@ -195,7 +195,7 @@ class ConfirmContactDetailsController @Inject() (
   ): Future[Result] =
     detailsCorrect match {
       case Yes =>
-        registrationConfirmService.currentSubscriptionStatus flatMap {
+        registrationConfirmService.currentSubscriptionStatus(hc, service, request) flatMap {
           case NewSubscription | SubscriptionRejected =>
             onNewSubscription(service, isInReviewMode)
           case SubscriptionProcessing =>

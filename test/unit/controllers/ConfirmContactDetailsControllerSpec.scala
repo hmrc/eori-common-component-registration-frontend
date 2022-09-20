@@ -290,7 +290,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockCacheWithRegistrationDetails(organisationRegistrationDetails)
       when(
         mockRegistrationConfirmService
-          .currentSubscriptionStatus(any[HeaderCarrier], any[Request[_]])
+          .currentSubscriptionStatus(any[HeaderCarrier], any[Service], any[Request[_]])
       ).thenReturn(Future.successful(SubscriptionExists))
       mockSubscriptionFlowStart()
       invokeConfirmContactDetailsWithSelectedOption() { result =>
@@ -425,7 +425,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
       when(
         mockRegistrationConfirmService
-          .currentSubscriptionStatus(any[HeaderCarrier], any[Request[_]])
+          .currentSubscriptionStatus(any[HeaderCarrier], any[Service], any[Request[_]])
       ).thenReturn(Future.successful(SubscriptionRejected))
 
       invokeConfirmContactDetailsWithSelectedOption() { result =>
@@ -446,7 +446,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     s"redirect to $redirectUrl when subscription status is $subscriptionStatus" in {
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
         .thenReturn(Future.successful(subscriptionDetailsHolder))
-      when(mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any[Request[_]]))
+      when(mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any[Service], any[Request[_]]))
         .thenReturn(Future.successful(subscriptionStatus))
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(organisationRegistrationDetails))
@@ -698,7 +698,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private def mockNewSubscriptionFromSubscriptionStatus() =
     when(
       mockRegistrationConfirmService
-        .currentSubscriptionStatus(any[HeaderCarrier], any[Request[_]])
+        .currentSubscriptionStatus(any[HeaderCarrier], any[Service], any[Request[_]])
     ).thenReturn(Future.successful(NewSubscription))
 
   private def mockSubscriptionFlowStart() {
