@@ -77,6 +77,41 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         |}
       """.stripMargin)
 
+  val auditEventBodyJson = Json.parse("""{
+    |  "auditSource" : "eori-common-component-registration-frontend",
+    |  "auditType" : "SubscriptionStatus",
+    |  "tags" : {
+    |    "clientIP" : "-",
+    |    "path" : "http://localhost:11111/subscription-status",
+    |    "X-Session-ID" : "-",
+    |    "Akamai-Reputation" : "-",
+    |    "X-Request-ID" : "-",
+    |    "deviceID" : "-",
+    |    "clientPort" : "-",
+    |    "transactionName" : "ecc-subscription-status"
+    |  },
+    |  "detail" : {
+    |    "request" : {
+    |      "receiptDate" : "2016-03-17T09:30:47.000000114",
+    |      "regime" : "CDS",
+    |      "originatingService" : "cds"
+    |    },
+    |    "response" : {
+    |      "status" : "OK",
+    |      "processingDate" : "2016-03-17T09:30:47",
+    |      "subscriptionStatus" : "00"
+    |    }
+    |  },
+    |  "dataPipeline" : {
+    |    "redaction" : {
+    |      "containsRedactions" : false
+    |    }
+    |  },
+    |  "metadata" : {
+    |    "metricsKey" : null
+    |  }
+    |}""".stripMargin)
+
   before {
     resetMockServer()
     AuditService.stubAuditService()
@@ -98,6 +133,19 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       await(subscriptionStatusConnector.status(request)) must be(
         responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
       )
+    }
+
+    "audit subscription status submitted event" in {
+
+      SubscriptionStatusMessagingService.returnTheSubscriptionResponseWhenReceiveRequest(
+        expectedGetUrl,
+        responseWithOk.toString
+      )
+      await(subscriptionStatusConnector.status(request)) must be(
+        responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
+      )
+
+      AuditService.verifyXAuditWriteWithBody(auditEventBodyJson)
     }
 
     "fail when Internal Server Error" in {
