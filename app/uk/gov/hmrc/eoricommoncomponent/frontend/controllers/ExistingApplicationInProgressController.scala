@@ -23,13 +23,19 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, En
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{enrolment_exists_group_standalone, enrolment_exists_user_standalone, existing_application_in_progress, registration_exists, registration_exists_group}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_exists_group_standalone,
+  enrolment_exists_user_standalone,
+  existing_application_in_progress,
+  registration_exists,
+  registration_exists_group
+}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ExistingApplicationInProgressController @Inject()(
+class ExistingApplicationInProgressController @Inject() (
   authAction: AuthAction,
   sessionCache: SessionCache,
   appConfig: AppConfig,
@@ -45,4 +51,5 @@ class ExistingApplicationInProgressController @Inject()(
           mayBeSubscriptionCreateOutcome <- sessionCache.sub01Outcome
         } yield Ok(existingApplicationInProgressView(mayBeSubscriptionCreateOutcome.processedDate))
     }
+
 }

@@ -27,7 +27,16 @@ import play.api.mvc.{Request, Result}
 import play.api.mvc.Results.Redirect
 import play.api.test.Helpers.LOCATION
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CacheIds, GroupId, InternalId, SafeId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{NewSubscription, PreSubscriptionStatus, Save4LaterService, SubscriptionExists, SubscriptionProcessing, SubscriptionRejected, SubscriptionStatusService, UserGroupIdSubscriptionStatusCheckService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  NewSubscription,
+  PreSubscriptionStatus,
+  Save4LaterService,
+  SubscriptionExists,
+  SubscriptionProcessing,
+  SubscriptionRejected,
+  SubscriptionStatusService,
+  UserGroupIdSubscriptionStatusCheckService
+}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.TestData
 
@@ -51,7 +60,9 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
 
   private def continue: Future[Result]        = Future.successful(Redirect("/continue"))
   private def userIsInProcess: Future[Result] = Future.successful(Redirect("/blocked/userIsInProcess"))
-  private def existingApplicationInProcess: Future[Result] = Future.successful(Redirect("/blocked/existingApplicationInProcess"))
+
+  private def existingApplicationInProcess: Future[Result] =
+    Future.successful(Redirect("/blocked/existingApplicationInProcess"))
 
   private def otherUserWithinGroupIsInProcess: Future[Result] =
     Future.successful(Redirect("/blocked/otherUserWithinGroupIsInProcess"))
@@ -61,8 +72,6 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
 
   override def beforeEach() =
     reset(mockSubscriptionStatusService, mockSave4LaterService)
-
-
 
   "checksToProceed" should {
     "Allow the user when there's no cache against groupId" in {
@@ -148,7 +157,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         mockSave4LaterService
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(Some(cacheIds)))
-      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
+      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Request[_]]))
         .thenReturn(Future.successful(SubscriptionProcessing))
 
       val result: Result = service
@@ -164,7 +173,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         mockSave4LaterService
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(Some(cacheIds.copy(internalId = InternalId("other")))))
-      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
+      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Request[_]]))
         .thenReturn(Future.successful(SubscriptionProcessing))
 
       val result: Result = service
@@ -180,7 +189,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         mockSave4LaterService
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(Some(cacheIds)))
-      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
+      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Request[_]]))
         .thenReturn(Future.successful(SubscriptionExists))
 
       val result: Result = service
@@ -196,7 +205,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         mockSave4LaterService
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(Some(cacheIds.copy(internalId = InternalId("other")))))
-      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier]))
+      when(mockSubscriptionStatusService.getStatus(any[String], any[String])(any[HeaderCarrier], any[Request[_]]))
         .thenReturn(Future.successful(SubscriptionExists))
 
       val result: Result = service

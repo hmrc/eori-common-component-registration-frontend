@@ -19,16 +19,30 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor, GroupEnrolmentExtractor}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes.{CheckYourEmailController, WhatIsYourEmailController}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EnrolmentAlreadyExistsController, YouAlreadyHaveEoriController, ExistingApplicationInProgressController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{
+  AuthAction,
+  EnrolmentExtractor,
+  GroupEnrolmentExtractor
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes.{
+  CheckYourEmailController,
+  WhatIsYourEmailController
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  EnrolmentAlreadyExistsController,
+  ExistingApplicationInProgressController,
+  YouAlreadyHaveEoriController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, GroupId, InternalId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{enrolment_pending_against_group_id, enrolment_pending_for_user}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  enrolment_pending_against_group_id,
+  enrolment_pending_for_user
+}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -88,8 +102,8 @@ class EmailController @Inject() (
     }
 
   private def existingApplicationInProcess(
-                                            service: Service
-                                          )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
+    service: Service
+  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
     Future.successful(Redirect(ExistingApplicationInProgressController.show(service)))
 
   def form(service: Service): Action[AnyContent] =
