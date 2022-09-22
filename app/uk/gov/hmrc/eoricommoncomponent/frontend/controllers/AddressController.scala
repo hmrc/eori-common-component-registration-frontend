@@ -27,7 +27,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -78,7 +77,7 @@ class AddressController @Inject() (
         )
     }
 
-  private def saveAddress(ad: AddressViewModel)(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
+  private def saveAddress(ad: AddressViewModel)(implicit request: Request[AnyContent]) =
     for {
       contactDetails <- subscriptionBusinessService.cachedContactDetailsModel
     } yield subscriptionDetailsService.cacheContactAddressDetails(
@@ -91,11 +90,10 @@ class AddressController @Inject() (
     service: Service,
     form: Form[AddressViewModel],
     status: Status
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
+  )(implicit request: Request[AnyContent]) =
     Future.successful(status(addressView(form, Countries.all, isInReviewMode, service)))
 
   private def populateOkView(address: Option[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
-    hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
     if (!isInReviewMode)

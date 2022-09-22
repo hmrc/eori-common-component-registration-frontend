@@ -22,7 +22,7 @@ import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveNinoController
@@ -30,7 +30,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, Nam
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_nino_row_individual
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -59,7 +58,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
     super.beforeEach()
 
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
+    when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
     when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
   }
 
@@ -123,7 +122,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     "redirect to 'Get Nino' page when Y is selected" in {
 
-      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(
         Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
       )
       when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))

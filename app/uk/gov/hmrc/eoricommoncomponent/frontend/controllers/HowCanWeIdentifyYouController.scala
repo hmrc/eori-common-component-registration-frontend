@@ -24,9 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.ninoOrUtrChoiceForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,7 +43,7 @@ class HowCanWeIdentifyYouController @Inject() (
       populateView(service)
     }
 
-  private def populateView(service: Service)(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] =
+  private def populateView(service: Service)(implicit request: Request[_]): Future[Result] =
     subscriptionBusinessService.getCachedNinoOrUtrChoice.map { choice =>
       Ok(howCanWeIdentifyYouView(ninoOrUtrChoiceForm.fill(NinoOrUtrChoice(choice)), service))
     }
@@ -60,7 +58,7 @@ class HowCanWeIdentifyYouController @Inject() (
         )
     }
 
-  private def storeChoice(formData: NinoOrUtrChoice, service: Service)(implicit hc: HeaderCarrier): Future[Result] =
+  private def storeChoice(formData: NinoOrUtrChoice, service: Service)(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsHolderService
       .cacheNinoOrUtrChoice(formData)
       .map(

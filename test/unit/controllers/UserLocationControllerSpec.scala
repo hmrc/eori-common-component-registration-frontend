@@ -22,7 +22,7 @@ import common.pages.registration.UserLocationPageOrganisation._
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach, mock => _}
+import org.scalatest.{BeforeAndAfterEach}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.FakeRequest
@@ -209,7 +209,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       errorTemplate
     ) {}
     implicit val fakeRequest = FakeRequest()
-    implicit val hc          = mock[HeaderCarrier]
 
     "cache registration display response and redirect to BusinessDetailsRecoveryPage for individual response" in {
       val responseDetail = ResponseDetail(
@@ -329,7 +328,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
         when(
           mockSubscriptionStatusService
-            .getStatus(any[String], any[String])(any[HeaderCarrier])
+            .getStatus(any[String], any[String])(any[HeaderCarrier], any[Request[_]])
         ).thenReturn(Future.successful(SubscriptionProcessing))
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
@@ -343,7 +342,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
         when(
           mockSubscriptionStatusService
-            .getStatus(any[String], any[String])(any[HeaderCarrier])
+            .getStatus(any[String], any[String])(any[HeaderCarrier], any[Request[_]])
         ).thenReturn(Future.successful(SubscriptionExists))
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
@@ -359,7 +358,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
         when(
           mockSubscriptionStatusService
-            .getStatus(any[String], any[String])(any[HeaderCarrier])
+            .getStatus(any[String], any[String])(any[HeaderCarrier], any[Request[_]])
         ).thenReturn(Future.successful(SubscriptionRejected))
         when(mockRegistrationDisplayService.requestDetails(any())(any(), any()))
           .thenReturn(
@@ -401,7 +400,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           .thenReturn(Future.successful(Some(SafeId("safeid"))))
         when(
           mockSubscriptionStatusService
-            .getStatus(any[String], any[String])(any[HeaderCarrier])
+            .getStatus(any[String], any[String])(any[HeaderCarrier], any[Request[_]])
         ).thenReturn(Future.successful(NewSubscription))
         when(mockRegistrationDisplayService.requestDetails(any())(any(), any()))
           .thenReturn(
@@ -453,7 +452,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
       val processedDate = Sub01Outcome("01/01/2011")
 
-      when(mockSessionCache.sub01Outcome(any[HeaderCarrier]))
+      when(mockSessionCache.sub01Outcome(any[Request[_]]))
         .thenReturn(Future.successful(processedDate))
       processing() { result =>
         status(result) shouldBe OK

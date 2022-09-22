@@ -21,6 +21,7 @@ import common.pages.matching.{
   ThirdCountryIndividualNameAndDateOfBirthPage,
   ThirdCountrySoleTraderNameAndDateOfBirthPage
 }
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -37,7 +38,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.scalacheck.TestDataGenerators
@@ -95,7 +95,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       "show the form in review mode without errors, the input fields are prepopulated from the cache" in withControllerFixture {
         controllerFixture =>
           import controllerFixture._
-          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier]))
+          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
             .thenReturn(
               Future.successful(
                 Some(NameDobMatchModel("firstName", Some("middleName"), "lastName", LocalDate.of(1980, 3, 31)))
@@ -129,7 +129,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       "should redirect to sign out page if cachedNameDobDetails not found" in withControllerFixture {
         controllerFixture =>
           import controllerFixture._
-          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[HeaderCarrier])).thenReturn(None)
+          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(None)
 
           controllerFixture.showForm { result =>
             status(result) shouldBe SEE_OTHER
@@ -150,7 +150,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       "redirect to 'review' page" in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[HeaderCarrier]))
+          when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
             .thenReturn(Future.successful(()))
 
           submitForm(formData(individualNameAndDateOfBirth)) { result =>

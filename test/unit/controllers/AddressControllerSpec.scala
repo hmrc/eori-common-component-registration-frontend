@@ -30,7 +30,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsServ
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
-import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.{
   CdsPage,
   SubscriptionFlowCreateModeTestSupport,
@@ -117,7 +116,7 @@ class AddressControllerSpec
   override def beforeEach: Unit = {
     super.beforeEach()
 
-    when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
+    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]]))
       .thenReturn(mockSubscriptionFlowInfo)
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
@@ -148,7 +147,7 @@ class AddressControllerSpec
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.reviewForm(atarService))
 
     "populate form if address is in the cache" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
         .thenReturn(Some(contactDetailsModel))
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
@@ -160,7 +159,7 @@ class AddressControllerSpec
     }
 
     "display the correct text for the continue button" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
         .thenReturn(Some(contactDetailsModel))
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
@@ -170,7 +169,7 @@ class AddressControllerSpec
 
     "throw internal server error if contactDetailsModel is None" in {
       withAuthorisedUser(defaultUserId, mockAuthConnector)
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
         .thenReturn(None)
       val result =
         await(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
@@ -222,9 +221,9 @@ class AddressControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
-    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[Request[_]]))
       .thenReturn(Future.successful(()))
 
     test(
@@ -239,9 +238,9 @@ class AddressControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
-    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[Request[_]]))
       .thenReturn(Future.successful(()))
 
     test(
@@ -266,7 +265,7 @@ class AddressControllerSpec
   private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(organisationRegistrationDetails)
+    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
@@ -274,7 +273,7 @@ class AddressControllerSpec
   private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))

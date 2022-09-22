@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.mvc.Request
+
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Sub01Outcome, SubscriptionStatusQueryParams}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -36,7 +37,10 @@ class SubscriptionStatusService @Inject() (
 
   private val dateFormat = DateTimeFormatter.ofPattern("d MMM yyyy")
 
-  def getStatus(idType: String, id: String)(implicit hc: HeaderCarrier): Future[PreSubscriptionStatus] = {
+  def getStatus(idType: String, id: String)(implicit
+    hc: HeaderCarrier,
+    request: Request[_]
+  ): Future[PreSubscriptionStatus] = {
 
     def createRequest =
       SubscriptionStatusQueryParams(requestCommonGenerator.receiptDate, "CDS", idType, id)

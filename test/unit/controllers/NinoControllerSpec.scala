@@ -18,12 +18,13 @@ package unit.controllers
 
 import common.pages.NinoMatchPage
 import common.pages.matching.NameDateOfBirthPage.{fieldLevelErrorDateOfBirth, pageLevelErrorSummaryListXPath}
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.mockito.{ArgumentMatchers, Mockito}
 import org.scalatest.BeforeAndAfter
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NinoController
@@ -203,7 +204,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           ArgumentMatchers.eq(NinoFormBuilder.Nino),
           ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
           any()
-        )(any[HeaderCarrier])
+        )(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(Future.successful(true))
 
       submitForm(form = NinoFormBuilder.asForm) { result =>
@@ -215,7 +216,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           "/customs-registration-services/atar/register/matching/confirm"
         )
 
-        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier])
+        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }
     }
 
@@ -225,7 +226,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           ArgumentMatchers.eq(NinoFormBuilder.Nino),
           ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
           any()
-        )(any[HeaderCarrier])
+        )(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(Future.successful(false))
 
       submitForm(form = NinoFormBuilder.asForm) { result =>
@@ -235,7 +236,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           NinoMatchPage.pageLevelErrorSummaryListXPath
         ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
 
-        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier])
+        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }
     }
   }

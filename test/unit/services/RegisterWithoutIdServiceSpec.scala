@@ -126,18 +126,19 @@ class RegisterWithoutIdServiceSpec
     when(
       mockSessionCache
         .saveRegistrationDetails(any[RegistrationDetails], any[GroupId], any[Option[CdsOrganisationType]])(
-          any[HeaderCarrier]
+          any[HeaderCarrier],
+          any[Request[_]]
         )
     ).thenReturn(Future.successful(true))
     when(
       mockSessionCache
-        .saveRegistrationDetails(any[RegistrationDetails])(any[HeaderCarrier])
+        .saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]])
     ).thenReturn(Future.successful(true))
 
     when(mockReqCommonGen.generate()).thenReturn(mockRequestCommon)
     when(
       mockSessionCache
-        .saveRegistrationDetails(any[RegistrationDetails])(any[HeaderCarrier])
+        .saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]])
     ).thenReturn(Future.successful(true))
   }
 
@@ -246,7 +247,7 @@ class RegisterWithoutIdServiceSpec
       await(service.registerOrganisation(orgName, address, contactDetails, mockLoggedInUser))
 
       verify(mockSessionCache).saveRegistrationDetails(ArgumentMatchers.eq(mockDetailsOrganisation))(
-        ArgumentMatchers.eq(hc)
+        ArgumentMatchers.eq(rq)
       )
     }
 
@@ -255,7 +256,7 @@ class RegisterWithoutIdServiceSpec
 
       when(
         mockSessionCache
-          .saveRegistrationDetails(any[RegistrationDetails])(any[HeaderCarrier])
+          .saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]])
       ).thenReturn(Future.failed(emulatedFailure))
 
       val caught = intercept[RuntimeException] {
@@ -269,7 +270,8 @@ class RegisterWithoutIdServiceSpec
       when(
         mockSessionCache
           .saveRegistrationDetails(any[RegistrationDetails], any[GroupId], any[Option[CdsOrganisationType]])(
-            any[HeaderCarrier]
+            any[HeaderCarrier],
+            any[Request[_]]
           )
       ).thenReturn(Future.successful(true))
       service
@@ -333,7 +335,7 @@ class RegisterWithoutIdServiceSpec
       ) should be(registrationResponse.registerWithoutIDResponse)
 
       verify(mockSessionCache).saveRegistrationDetails(ArgumentMatchers.eq(mockDetailsIndividual))(
-        ArgumentMatchers.eq(hc)
+        ArgumentMatchers.eq(rq)
       )
     }
 
@@ -342,7 +344,7 @@ class RegisterWithoutIdServiceSpec
 
       when(
         mockSessionCache
-          .saveRegistrationDetails(any[RegistrationDetails])(any[HeaderCarrier])
+          .saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]])
       ).thenReturn(Future.failed(emulatedFailure))
 
       val caught = intercept[RuntimeException] {

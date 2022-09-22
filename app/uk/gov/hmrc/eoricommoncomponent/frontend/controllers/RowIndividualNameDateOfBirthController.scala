@@ -26,7 +26,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -86,7 +85,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     formData: IndividualNameAndDateOfBirth,
     organisationType: String,
     service: Service
-  )(implicit hc: HeaderCarrier): Future[Result] = {
+  )(implicit request: Request[_]): Future[Result] = {
     val nameDobMatchModel =
       NameDobMatchModel(formData.firstName, formData.middleName, formData.lastName, formData.dateOfBirth)
 

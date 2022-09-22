@@ -23,7 +23,6 @@ import play.mvc.Http.Status.{NO_CONTENT, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
-import uk.gov.hmrc.http.HeaderNames.explicitlyIncludedHeaders
 import uk.gov.hmrc.http.{HttpClient, _}
 
 import javax.inject.{Inject, Singleton}

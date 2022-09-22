@@ -35,7 +35,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsServ
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_short_name_yes_no
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -60,7 +59,6 @@ class BusinessShortNameYesNoController @Inject() (
   }
 
   private def populateView(service: Service, isInReviewMode: Boolean)(implicit
-    hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionDetailsService.cachedCompanyShortName.flatMap { companyShortName =>
@@ -94,7 +92,7 @@ class BusinessShortNameYesNoController @Inject() (
       }
     }
 
-  private def saveYesOption(isInReviewMode: Boolean, service: Service)(implicit hc: HeaderCarrier): Future[Result] =
+  private def saveYesOption(isInReviewMode: Boolean, service: Service)(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsService.cachedCompanyShortName.flatMap { businessShortName =>
       val updatedBusinessShortName =
         businessShortName.map(_.copy(shortNameProvided = true)).getOrElse(BusinessShortName(true, None))
@@ -107,7 +105,6 @@ class BusinessShortNameYesNoController @Inject() (
     }
 
   private def saveNoOption(isInReviewMode: Boolean, service: Service)(implicit
-    hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionDetailsService.cacheCompanyShortName(BusinessShortName(false, None)).map { _ =>

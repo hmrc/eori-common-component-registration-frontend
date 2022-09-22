@@ -19,6 +19,7 @@ package unit.controllers
 import common.pages.RegistrationCompletePage
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import play.api.mvc.Request
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{Assistant, AuthConnector, Enrolment}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
@@ -31,7 +32,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   registration_exists,
   registration_exists_group
 }
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -182,7 +182,7 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
     "redirect to the enrolment already exists for group page for standalone journey" in {
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
-      when(mockSessionCache.eori(any[HeaderCarrier]))
+      when(mockSessionCache.eori(any[Request[_]]))
         .thenReturn(Future.successful(Some("testEori")))
       val result =
         await(

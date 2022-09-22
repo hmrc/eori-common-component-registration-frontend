@@ -33,7 +33,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_details
-import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 import util.builders.SubscriptionContactDetailsFormBuilder._
@@ -79,12 +78,12 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       mockSubscriptionFlowManager,
       mockSubscriptionDetailsHolderService
     )
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier])).thenReturn(None)
-    when(mockCdsFrontendDataCache.subscriptionDetails(any[HeaderCarrier])).thenReturn(mockSubscriptionDetails)
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(None)
+    when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetails)
     registerSaveContactDetailsMockSuccess()
     mockFunctionWithRegistrationDetails(mockRegistrationDetails)
     setupMockSubscriptionFlowManager(ContactDetailsSubscriptionFlowPageGetEori)
-    when(mockCdsFrontendDataCache.email(any[HeaderCarrier])).thenReturn(Future.successful(Email))
+    when(mockCdsFrontendDataCache.email(any[Request[_]])).thenReturn(Future.successful(Email))
   }
 
   val orgTypeFlows: TableFor3[SubscriptionFlow, String, EtmpOrganisationType] =
@@ -137,7 +136,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     }
 
     "fill fields with contact details if stored in cache (new address entered)" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
         .thenReturn(Some(contactDetailsModel))
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
@@ -148,7 +147,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     }
 
     "restore state properly if registered address was used" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
         .thenReturn(Some(contactDetailsModelWithRegisteredAddress))
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
@@ -419,7 +418,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   }
 
   private def mockFunctionWithRegistrationDetails(registrationDetails: RegistrationDetails) {
-    when(mockCdsFrontendDataCache.registrationDetails(any[HeaderCarrier])).thenReturn(registrationDetails)
+    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(registrationDetails)
   }
 
   private def submitFormInCreateMode(form: Map[String, String], userId: String = defaultUserId)(
@@ -448,7 +447,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   )(test: Future[Result] => Any) {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(orgType)
+    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
     when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
@@ -461,7 +460,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     withAuthorisedUser(defaultUserId, mockAuthConnector)
 
     when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
@@ -470,14 +469,14 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   private def registerSaveContactDetailsMockSuccess() {
     when(
       mockSubscriptionDetailsHolderService
-        .cacheContactDetails(any[ContactDetailsModel], any[Boolean])(any[HeaderCarrier])
+        .cacheContactDetails(any[ContactDetailsModel], any[Boolean])(any[Request[_]])
     ).thenReturn(Future.successful(()))
   }
 
   private def registerSaveContactDetailsMockFailure(exception: Throwable) {
     when(
       mockSubscriptionDetailsHolderService
-        .cacheContactDetails(any[ContactDetailsModel], any[Boolean])(any[HeaderCarrier])
+        .cacheContactDetails(any[ContactDetailsModel], any[Boolean])(any[Request[_]])
     ).thenReturn(Future.failed(exception))
   }
 

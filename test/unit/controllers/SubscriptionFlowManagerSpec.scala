@@ -32,7 +32,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   RegistrationDetailsOrganisation
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 
 import scala.concurrent.ExecutionContext.global
@@ -51,7 +50,6 @@ class SubscriptionFlowManagerSpec
   private val mockIndividualRegistrationDetails = mock[RegistrationDetailsIndividual]
   private val mockSession                       = mock[Session]
 
-  private val mockHC      = mock[HeaderCarrier]
   private val mockRequest = mock[Request[AnyContent]]
 
   private val mockSubscriptionFlow = mock[SubscriptionFlow]
@@ -62,7 +60,7 @@ class SubscriptionFlowManagerSpec
     reset(mockRequestSessionData, mockSession, mockCdsFrontendDataCache)
     when(mockRequestSessionData.storeUserSubscriptionFlow(any[SubscriptionFlow], any[String])(any[Request[AnyContent]]))
       .thenReturn(mockSession)
-    when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[HeaderCarrier]))
+    when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]]))
       .thenReturn(Future.successful(true))
   }
 
@@ -262,10 +260,10 @@ class SubscriptionFlowManagerSpec
     "start Individual Subscription Flow for individual" in {
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(None)
 
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
+      when(mockCdsFrontendDataCache.registrationDetails(mockRequest))
         .thenReturn(Future.successful(mockIndividualRegistrationDetails))
       val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(Some(ConfirmIndividualTypePage), atarService)(mockHC, mockRequest))
+        await(controller.startSubscriptionFlow(Some(ConfirmIndividualTypePage), atarService)(mockRequest))
 
       subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
       session shouldBe mockSession
@@ -277,10 +275,10 @@ class SubscriptionFlowManagerSpec
     "start Corporate Subscription Flow when cached registration details are for an Organisation" in {
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(None)
 
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
+      when(mockCdsFrontendDataCache.registrationDetails(mockRequest))
         .thenReturn(Future.successful(mockOrgRegistrationDetails))
       val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(atarService)(mockHC, mockRequest))
+        await(controller.startSubscriptionFlow(atarService)(mockRequest))
 
       subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
       session shouldBe mockSession
@@ -293,10 +291,10 @@ class SubscriptionFlowManagerSpec
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest))
         .thenReturn(Some(CdsOrganisationType.SoleTrader))
 
-      when(mockCdsFrontendDataCache.registrationDetails(mockHC))
+      when(mockCdsFrontendDataCache.registrationDetails(mockRequest))
         .thenReturn(Future.successful(mockIndividualRegistrationDetails))
       val (subscriptionPage, session) =
-        await(controller.startSubscriptionFlow(atarService)(mockHC, mockRequest))
+        await(controller.startSubscriptionFlow(atarService)(mockRequest))
 
       subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
       session shouldBe mockSession

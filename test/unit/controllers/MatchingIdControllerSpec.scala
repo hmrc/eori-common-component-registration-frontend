@@ -19,7 +19,7 @@ package unit.controllers
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import play.mvc.Http.Status.SEE_OTHER
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -77,7 +77,7 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       status(result) shouldBe SEE_OTHER
       assertRedirectToUserLocationPage(result, atarService)
-      verifyZeroInteractions(mockMatchingService)
+      verifyNoInteractions(mockMatchingService)
     }
 
     "for Journey GetAnEori redirect to Confirm page when a match found with CT UTR only" in {
@@ -85,7 +85,8 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       when(
         mockMatchingService.matchBusinessWithIdOnly(meq(Utr(ctUtrId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier]
+          any[HeaderCarrier],
+          any[Request[_]]
         )
       )
         .thenReturn(Future.successful(true))
@@ -105,7 +106,8 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       when(
         mockMatchingService.matchBusinessWithIdOnly(meq(Utr(saUtrId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier]
+          any[HeaderCarrier],
+          any[Request[_]]
         )
       )
         .thenReturn(Future.successful(false))
@@ -123,7 +125,8 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       when(
         mockMatchingService.matchBusinessWithIdOnly(meq(Utr(saUtrId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier]
+          any[HeaderCarrier],
+          any[Request[_]]
         )
       )
         .thenReturn(Future.successful(true))
@@ -143,7 +146,8 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       when(
         mockMatchingService.matchBusinessWithIdOnly(meq(Nino(payeNinoId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier]
+          any[HeaderCarrier],
+          any[Request[_]]
         )
       )
         .thenReturn(Future.successful(true))
@@ -163,7 +167,8 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
       when(
         mockMatchingService.matchBusinessWithIdOnly(meq(Utr(ctUtrId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier]
+          any[HeaderCarrier],
+          any[Request[_]]
         )
       )
         .thenReturn(Future.successful(true))

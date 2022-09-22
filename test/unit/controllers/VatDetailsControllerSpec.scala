@@ -17,11 +17,12 @@
 package unit.controllers
 
 import common.pages.subscription.SubscriptionVatDetailsPage._
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   InvalidResponse,
@@ -354,7 +355,7 @@ class VatDetailsControllerSpec
     test: Future[Result] => Any
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
-    when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[HeaderCarrier]))
+    when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[Request[_]]))
       .thenReturn(Future.successful(cachedDate))
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
@@ -375,7 +376,7 @@ class VatDetailsControllerSpec
     form: Map[String, String]
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller
@@ -394,7 +395,7 @@ class VatDetailsControllerSpec
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(vatControllerResponse)))
-    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[HeaderCarrier]))
+    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller

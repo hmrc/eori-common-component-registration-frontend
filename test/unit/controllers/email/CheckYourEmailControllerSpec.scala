@@ -21,7 +21,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.libs.json.Json
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmailController
@@ -133,7 +133,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         mockSave4LaterService
           .saveEmail(any[GroupId], any[EmailStatus])(any[HeaderCarrier])
       ).thenReturn(Future.successful(unit))
-      when(mockSessionCache.saveEmail(any[String])(any[HeaderCarrier]))
+      when(mockSessionCache.saveEmail(any[String])(any[Request[_]]))
         .thenReturn(Future.successful(true))
 
       when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))

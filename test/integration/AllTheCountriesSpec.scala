@@ -16,11 +16,12 @@
 
 package integration
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 
-class AllTheCountriesSpec extends WordSpec with Matchers with GuiceOneAppPerSuite {
+class AllTheCountriesSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   "Countries" should {
     "be filtered according to the enum values that MDG accepts " in {

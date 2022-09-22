@@ -27,7 +27,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -89,7 +88,7 @@ class ContactAddressController @Inject() (
       }
     }
 
-  private def saveAddress()(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
+  private def saveAddress()(implicit request: Request[AnyContent]) =
     for {
       addressDetails <- fetchContactDetails()
       contactDetails <- subscriptionBusinessService.cachedContactDetailsModel

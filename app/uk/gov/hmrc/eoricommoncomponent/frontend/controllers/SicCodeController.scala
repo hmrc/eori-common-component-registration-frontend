@@ -27,9 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,7 +45,6 @@ class SicCodeController @Inject() (
     extends CdsController(mcc) {
 
   private def populateView(sicCode: Option[String], isInReviewMode: Boolean, service: Service)(implicit
-    hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] = {
     lazy val form = sicCode.map(SicCodeViewModel).fold(sicCodeform)(sicCodeform.fill)
@@ -102,7 +99,6 @@ class SicCodeController @Inject() (
     subscriptionFlowManager.stepInformation(SicCodeSubscriptionFlowPage)
 
   private def submitNewDetails(formData: SicCodeViewModel, isInReviewMode: Boolean, service: Service)(implicit
-    hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionDetailsHolderService

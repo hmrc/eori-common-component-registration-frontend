@@ -17,151 +17,145 @@
 package integration
 
 import java.util.UUID
-
 import common.support.testdata.registration.RegistrationInfoGenerator._
-
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json.toJson
-import play.modules.reactivemongo.ReactiveMongoComponent
-import uk.gov.hmrc.cache.model.{Cache, Id}
+import play.api.mvc.{Request, Session}
+import play.libs.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
+  ContactDetail,
+  EstablishmentAddress,
+  RegisterWithEoriAndIdResponse,
+  RegisterWithEoriAndIdResponseDetail,
+  RegistrationDetails,
+  ResponseData,
+  SafeId,
+  Sub01Outcome,
+  Sub02Outcome,
+  Trader,
+  Utr,
+  VatIds
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, SessionCache, SessionTimeOutException}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, DataUnavailableException, SessionCache}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.SessionId
-import uk.gov.hmrc.mongo.{MongoConnector, MongoSpecSupport}
+import uk.gov.hmrc.mongo.CurrentTimestampSupport
+import uk.gov.hmrc.mongo.cache.{CacheItem, DataKey}
+import uk.gov.hmrc.mongo.test.MongoSupport
 import util.builders.RegistrationDetailsBuilder._
 
+import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with MongoSpecSupport {
+class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with MongoSupport {
 
   lazy val appConfig = app.injector.instanceOf[AppConfig]
 
-  private val reactiveMongoComponent = new ReactiveMongoComponent {
-    override def mongoConnector: MongoConnector = mongoConnectorForTest
-  }
+  val mockTimeStampSupport = new CurrentTimestampSupport()
 
-  private val save4LaterService = app.injector.instanceOf[Save4LaterService]
-
-  val sessionCache = new SessionCache(appConfig, reactiveMongoComponent, save4LaterService)
-
-  val hc = mock[HeaderCarrier]
+  private val save4LaterService      = app.injector.instanceOf[Save4LaterService]
+  implicit val request: Request[Any] = mock[Request[Any]]
+  val hc: HeaderCarrier              = mock[HeaderCarrier]
+  val sessionCache                   = new SessionCache(appConfig, mongoComponent, save4LaterService, mockTimeStampSupport)
 
   "Session cache" should {
 
     "store, fetch and update Subscription details handler correctly" in {
-      val sessionId: SessionId = setupSession
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
 
       val holder = SubscriptionDetails(businessShortName = Some(BusinessShortName("some business name")))
 
-      await(sessionCache.saveSubscriptionDetails(holder)(hc))
+      await(sessionCache.saveSubscriptionDetails(holder)(request))
 
-      val expectedJson                     = toJson(CachedData(subDetails = Some(holder)))
-      val cache                            = await(sessionCache.findById(Id(sessionId.value)))
-      val Some(Cache(_, Some(json), _, _)) = cache
+      val expectedJson                   = toJson(CachedData(subDetails = Some(holder)))
+      val cache                          = await(sessionCache.cacheRepo.findById(request))
+      val Some(CacheItem(_, json, _, _)) = cache
       json mustBe expectedJson
 
-      await(sessionCache.subscriptionDetails(hc)) mustBe holder
+      await(sessionCache.subscriptionDetails(request)) mustBe holder
 
       val updatedHolder = SubscriptionDetails(
         businessShortName = Some(BusinessShortName("different business name")),
         sicCode = Some("sic")
       )
 
-      await(sessionCache.saveSubscriptionDetails(updatedHolder)(hc))
+      await(sessionCache.saveSubscriptionDetails(updatedHolder)(request))
 
-      val expectedUpdatedJson                     = toJson(CachedData(subDetails = Some(updatedHolder)))
-      val updatedCache                            = await(sessionCache.findById(Id(sessionId.value)))
-      val Some(Cache(_, Some(updatedJson), _, _)) = updatedCache
+      val expectedUpdatedJson                   = toJson(CachedData(subDetails = Some(updatedHolder)))
+      val updatedCache                          = await(sessionCache.cacheRepo.findById(request))
+      val Some(CacheItem(_, updatedJson, _, _)) = updatedCache
       updatedJson mustBe expectedUpdatedJson
     }
 
     "provide default when subscription details holder not in cache" in {
-      when(hc.sessionId).thenReturn(Some(SessionId("does-not-exist")))
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
 
-      val e1 = intercept[SessionTimeOutException] {
-        await(sessionCache.subscriptionDetails(hc))
-      }
-      e1.errorMessage mustBe "No match session id for signed in user with session : does-not-exist"
+      await(sessionCache.putSession(DataKey("regDetails"), data = Json.toJson(individualRegistrationDetails)))
 
-      val s1 = setupSession
-
-      val e2 = intercept[SessionTimeOutException] {
-        await(sessionCache.subscriptionDetails(hc))
-      }
-      e2.errorMessage mustBe s"No match session id for signed in user with session : ${s1.value}"
-
-      val s2 = setupSession
-      await(
-        sessionCache.insert(
-          Cache(Id(s2.value), data = Some(toJson(CachedData(regDetails = Some(individualRegistrationDetails)))))
-        )
-      )
-
-      await(sessionCache.subscriptionDetails(hc)) mustBe SubscriptionDetails()
+      await(sessionCache.subscriptionDetails(request)) mustBe SubscriptionDetails()
     }
 
     "store, fetch and update Registration details correctly" in {
-      val sessionId: SessionId = setupSession
+      await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(request))
 
-      await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(hc))
+      val cache = await(sessionCache.cacheRepo.findById(request))
 
-      val cache = await(sessionCache.findById(Id(sessionId.value)))
-
-      val expectedJson                     = toJson(CachedData(regDetails = Some(organisationRegistrationDetails)))
-      val Some(Cache(_, Some(json), _, _)) = cache
+      val expectedJson                   = toJson(CachedData(regDetails = Some(organisationRegistrationDetails)))
+      val Some(CacheItem(_, json, _, _)) = cache
       json mustBe expectedJson
 
-      await(sessionCache.registrationDetails(hc)) mustBe organisationRegistrationDetails
-      await(sessionCache.saveRegistrationDetails(individualRegistrationDetails)(hc))
+      await(sessionCache.registrationDetails(request)) mustBe organisationRegistrationDetails
+      await(sessionCache.saveRegistrationDetails(individualRegistrationDetails)(request))
 
-      val updatedCache = await(sessionCache.findById(Id(sessionId.value)))
+      val updatedCache = await(sessionCache.cacheRepo.findById(request))
 
-      val expectedUpdatedJson                     = toJson(CachedData(regDetails = Some(individualRegistrationDetails)))
-      val Some(Cache(_, Some(updatedJson), _, _)) = updatedCache
+      val expectedUpdatedJson                   = toJson(CachedData(regDetails = Some(individualRegistrationDetails)))
+      val Some(CacheItem(_, updatedJson, _, _)) = updatedCache
       updatedJson mustBe expectedUpdatedJson
     }
 
     "throw exception when registration Details requested and not available in cache" in {
-      val s = setupSession
-      await(sessionCache.insert(Cache(Id(s.value), data = Some(toJson(CachedData())))))
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
 
-      val caught = intercept[IllegalStateException] {
-        await(sessionCache.registrationDetails(hc))
+      val caught = intercept[DataUnavailableException] {
+        await(sessionCache.registrationDetails(request))
       }
-      caught.getMessage mustBe s"regDetails is not cached in data for the sessionId: ${s.value}"
+      caught.getMessage mustBe s"regDetails is not cached in data for the sessionId: sessionId-123"
     }
 
     "store, fetch and update Registration Info correctly" in {
-      val sessionId: SessionId = setupSession
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
 
-      await(sessionCache.saveRegistrationInfo(organisationRegistrationInfoWithAllOptionalValues)(hc))
+      await(sessionCache.saveRegistrationInfo(organisationRegistrationInfoWithAllOptionalValues)(request))
 
-      val cache = await(sessionCache.findById(Id(sessionId.value)))
+      val cache = await(sessionCache.cacheRepo.findById(request))
 
-      val expectedJson                     = toJson(CachedData(regInfo = Some(organisationRegistrationInfoWithAllOptionalValues)))
-      val Some(Cache(_, Some(json), _, _)) = cache
+      val expectedJson                   = toJson(CachedData(regInfo = Some(organisationRegistrationInfoWithAllOptionalValues)))
+      val Some(CacheItem(_, json, _, _)) = cache
       json mustBe expectedJson
 
-      await(sessionCache.registrationInfo(hc)) mustBe organisationRegistrationInfoWithAllOptionalValues
-      await(sessionCache.saveRegistrationInfo(individualRegistrationInfoWithAllOptionalValues)(hc))
+      await(sessionCache.registrationInfo(request)) mustBe organisationRegistrationInfoWithAllOptionalValues
+      await(sessionCache.saveRegistrationInfo(individualRegistrationInfoWithAllOptionalValues)(request))
 
-      val updatedCache = await(sessionCache.findById(Id(sessionId.value)))
+      val updatedCache = await(sessionCache.cacheRepo.findById(request))
 
-      val expectedUpdatedJson                     = toJson(CachedData(regInfo = Some(individualRegistrationInfoWithAllOptionalValues)))
-      val Some(Cache(_, Some(updatedJson), _, _)) = updatedCache
+      val expectedUpdatedJson                   = toJson(CachedData(regInfo = Some(individualRegistrationInfoWithAllOptionalValues)))
+      val Some(CacheItem(_, updatedJson, _, _)) = updatedCache
       updatedJson mustBe expectedUpdatedJson
     }
 
     "throw exception when registration info requested and not available in cache" in {
-      val s = setupSession
-      await(sessionCache.insert(Cache(Id(s.value), data = Some(toJson(CachedData())))))
+      val s: SessionId = setupSession
+      when(request.session).thenReturn(Session(Map(("sessionId", s.value))))
 
-      val caught = intercept[IllegalStateException] {
-        await(sessionCache.registrationInfo(hc))
+      val caught = intercept[DataUnavailableException] {
+        await(sessionCache.registrationInfo(request))
       }
       caught.getMessage mustBe s"regInfo is not cached in data for the sessionId: ${s.value}"
     }
@@ -169,11 +163,11 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
     "store Registration Details, Info and Subscription Details Holder correctly" in {
       val sessionId: SessionId = setupSession
 
-      await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(hc))
+      await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(request))
       val holder = SubscriptionDetails()
-      await(sessionCache.saveSubscriptionDetails(holder)(hc))
-      await(sessionCache.saveRegistrationInfo(organisationRegistrationInfoWithAllOptionalValues)(hc))
-      val cache = await(sessionCache.findById(Id(sessionId.value)))
+      await(sessionCache.saveSubscriptionDetails(holder)(request))
+      await(sessionCache.saveRegistrationInfo(organisationRegistrationInfoWithAllOptionalValues)(request))
+      val cache = await(sessionCache.cacheRepo.findById(request))
 
       val expectedJson = toJson(
         CachedData(
@@ -183,19 +177,221 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
         )
       )
 
-      val Some(Cache(_, Some(json), _, _)) = cache
+      val Some(CacheItem(_, json, _, _)) = cache
       json mustBe expectedJson
     }
 
     "remove from the cache" in {
       val sessionId: SessionId = setupSession
-      await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(hc))
+      await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(request))
 
-      await(sessionCache.remove(hc))
+      await(sessionCache.remove(request))
 
-      val cached = await(sessionCache.findById(Id(sessionId.value)))
+      val cached = await(sessionCache.cacheRepo.findById(request))
       cached mustBe None
     }
+
+    "throw DataUnavailableException when groupEnrolment is not present in cache" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
+      val caught = intercept[DataUnavailableException] {
+        await(sessionCache.groupEnrolment(request))
+      }
+      caught.getMessage startsWith s"${CachedData.groupEnrolmentKey} is not cached in data for the sessionId: sessionId-123"
+    }
+
+    "throw DataUnavailableException when registrationDetails is not present in cache" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
+      val caught = intercept[DataUnavailableException] {
+        await(sessionCache.registrationDetails(request))
+      }
+      caught.getMessage startsWith s"${CachedData.regDetailsKey} is not cached in data for the sessionId: sessionId-123"
+    }
+
+    "throw IllegalStateException when registerWithEoriAndIdResponse is not present in cache" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
+      val caught = intercept[DataUnavailableException] {
+        await(sessionCache.registerWithEoriAndIdResponse(request))
+      }
+      caught.getMessage startsWith s"${CachedData.registerWithEoriAndIdResponseKey} is not cached in data for the sessionId: sessionId-123"
+    }
+
+    "return empty subscription details if the subscription details are missing" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
+
+      val response = await(sessionCache.subscriptionDetails(request))
+      response mustBe SubscriptionDetails()
+    }
+
+    "throw DataUnavailableException when sub02Outcome is not present in cache" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
+      val caught = intercept[DataUnavailableException] {
+        await(sessionCache.sub02Outcome(request))
+      }
+      caught.getMessage startsWith s"${CachedData.sub02OutcomeKey} is not cached in data for the sessionId: sessionId-123"
+    }
+
+    "throw DataUnavailableException when sub01Outcome is not present in cache" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("regDetails"), data = Json.toJson(individualRegistrationDetails)))
+      val caught = intercept[DataUnavailableException] {
+        await(sessionCache.sub02Outcome(request))
+      }
+      caught.getMessage startsWith s"${CachedData.sub01OutcomeKey} is not cached in data for the sessionId: sessionId-123"
+    }
+
+    "throw DataUnavailableException when email is not present in cache" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
+      val caught = intercept[DataUnavailableException] {
+        await(sessionCache.email(request))
+      }
+      caught.getMessage startsWith s"${CachedData.emailKey} is not cached in data for the sessionId: sessionId-123"
+    }
+
+    "fetchSafeIdFromReg06Response returns None if reg06response is not present in cache" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
+      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
+      val response = await(sessionCache.fetchSafeIdFromReg06Response(request))
+      response mustBe None
+    }
+
+    "fetch safeId correctly from registration details" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+      val registrationDetails: RegistrationDetails = RegistrationDetails.individual(
+        sapNumber = "0123456789",
+        safeId = SafeId("safe-id"),
+        name = "John Doe",
+        address = defaultAddress,
+        dateOfBirth = LocalDate.parse("1980-07-23"),
+        customsId = Some(Utr("123UTRNO"))
+      )
+      await(sessionCache.saveRegistrationDetails(registrationDetails)(request))
+      await(sessionCache.safeId(request)) mustBe SafeId("safe-id")
+    }
+
+    "fetch safeId correctly from registerWithEoriAndIdResponse details" in {
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+      def registerWithEoriAndIdResponse = RegisterWithEoriAndIdResponse(
+        ResponseCommon("OK", None, LocalDateTime.now(), None),
+        Some(
+          RegisterWithEoriAndIdResponseDetail(
+            Some("PASS"),
+            Some("C001"),
+            responseData = Some(
+              ResponseData(
+                "someSafeId",
+                Trader("John Doe", "Mr D"),
+                EstablishmentAddress("Line 1", "City Name", Some("SE28 1AA"), "GB"),
+                Some(
+                  ContactDetail(
+                    EstablishmentAddress("Line 1", "City Name", Some("SE28 1AA"), "GB"),
+                    "John Contact Doe",
+                    Some("1234567"),
+                    Some("89067"),
+                    Some("john.doe@example.com")
+                  )
+                ),
+                VATIDs = Some(Seq(VatIds("AD", "1234"), VatIds("GB", "4567"))),
+                hasInternetPublication = false,
+                principalEconomicActivity = Some("P001"),
+                hasEstablishmentInCustomsTerritory = Some(true),
+                legalStatus = Some("Official"),
+                thirdCountryIDNumber = Some(Seq("1234", "67890")),
+                personType = Some(9),
+                dateOfEstablishmentBirth = Some("2018-05-16"),
+                startDate = "2018-05-15",
+                expiryDate = Some("2018-05-16")
+              )
+            )
+          )
+        )
+      )
+      await(sessionCache.saveRegisterWithEoriAndIdResponse(registerWithEoriAndIdResponse)(request))
+
+      await(sessionCache.safeId(request)) mustBe SafeId("someSafeId")
+    }
+
+    "store and fetch email correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val email = "email@email.com"
+
+      await(sessionCache.saveEmail(email)(request))
+
+      val cache = await(sessionCache.cacheRepo.findById(request))
+
+      val expectedJson = toJson(CachedData(email = Some(email)))
+
+      val Some(CacheItem(_, json, _, _)) = cache
+
+      json mustBe expectedJson
+      await(sessionCache.email(request)) mustBe email
+
+    }
+
+    "store subscription details correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val subscriptionDetails = SubscriptionDetails(email = Some("email@email.com"))
+
+      await(sessionCache.saveSubscriptionDetails(subscriptionDetails)(request))
+
+      val cache = await(sessionCache.cacheRepo.findById(request))
+
+      val expectedJson = toJson(CachedData(subDetails = Some(subscriptionDetails)))
+
+      val Some(CacheItem(_, json, _, _)) = cache
+
+      json mustBe expectedJson
+    }
+
+    "store and fetch sub01Outcome details correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val sub01Outcome = Sub01Outcome(LocalDate.of(1961, 4, 12).toString)
+
+      await(sessionCache.saveSub01Outcome(sub01Outcome)(request))
+
+      val cache = await(sessionCache.cacheRepo.findById(request))
+
+      val expectedJson = toJson(CachedData(sub01Outcome = Some(sub01Outcome)))
+
+      val Some(CacheItem(_, json, _, _)) = cache
+
+      json mustBe expectedJson
+      await(sessionCache.sub01Outcome(request)) mustBe sub01Outcome
+    }
+
+    "store and fetch sub02Outcome details correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val sub02Outcome = Sub02Outcome(LocalDate.of(1961, 4, 12).toString, "fullName", Some("GB123456789123"))
+
+      await(sessionCache.saveSub02Outcome(sub02Outcome)(request))
+
+      val cache = await(sessionCache.cacheRepo.findById(request))
+
+      val expectedJson = toJson(CachedData(sub02Outcome = Some(sub02Outcome)))
+
+      val Some(CacheItem(_, json, _, _)) = cache
+
+      json mustBe expectedJson
+      await(sessionCache.sub02Outcome(request)) mustBe sub02Outcome
+    }
+
+    "store keepAlive details correctly" in {
+      await(sessionCache.keepAlive(request)) mustBe true
+    }
+
   }
 
   private def setupSession: SessionId = {

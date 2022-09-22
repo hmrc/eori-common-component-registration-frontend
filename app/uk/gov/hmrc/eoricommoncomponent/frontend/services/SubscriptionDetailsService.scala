@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
@@ -37,7 +38,8 @@ class SubscriptionDetailsService @Inject() (
 )(implicit ec: ExecutionContext) {
 
   def saveKeyIdentifiers(groupId: GroupId, internalId: InternalId, service: Service)(implicit
-    hc: HeaderCarrier
+    hc: HeaderCarrier,
+    request: Request[_]
   ): Future[Unit] = {
     val key = CachedData.groupIdKey
     sessionCache.safeId.flatMap { safeId =>
@@ -48,26 +50,27 @@ class SubscriptionDetailsService @Inject() (
 
   def saveSubscriptionDetails(
     insertNewDetails: SubscriptionDetails => SubscriptionDetails
-  )(implicit hc: HeaderCarrier): Future[Unit] = sessionCache.subscriptionDetails flatMap { subDetails =>
-    sessionCache.saveSubscriptionDetails(insertNewDetails(subDetails)).map(_ => ())
+  )(implicit request: Request[_]): Future[Unit] = sessionCache.subscriptionDetails flatMap {
+    subDetails =>
+      sessionCache.saveSubscriptionDetails(insertNewDetails(subDetails)).map(_ => ())
 
   }
 
-  def cacheCompanyShortName(shortName: BusinessShortName)(implicit hc: HeaderCarrier): Future[Unit] =
+  def cacheCompanyShortName(shortName: BusinessShortName)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(businessShortName = Some(shortName)))
 
-  def cachedCompanyShortName(implicit hc: HeaderCarrier): Future[Option[BusinessShortName]] =
+  def cachedCompanyShortName(implicit request: Request[_]): Future[Option[BusinessShortName]] =
     sessionCache.subscriptionDetails.map(_.businessShortName)
 
   def cacheContactDetails(contactDetailsModel: ContactDetailsModel, isInReviewMode: Boolean = false)(implicit
-    hc: HeaderCarrier
+    request: Request[_]
   ): Future[Unit] =
     contactDetails(contactDetailsModel, isInReviewMode) flatMap { contactDetails =>
       saveSubscriptionDetails(sd => sd.copy(contactDetails = Some(contactDetails)))
     }
 
   def cacheContactAddressDetails(address: AddressViewModel, contactDetails: ContactDetailsModel)(implicit
-    hc: HeaderCarrier
+    request: Request[_]
   ): Future[Unit] = {
     val updatedAddress = address.copy(postcode = address.postcode.filter(_.nonEmpty))
     saveSubscriptionDetails(
@@ -92,58 +95,58 @@ class SubscriptionDetailsService @Inject() (
 
   def cacheNameDetails(
     nameOrganisationMatchModel: NameOrganisationMatchModel
-  )(implicit hc: HeaderCarrier): Future[Unit] =
+  )(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(nameOrganisationDetails = Some(nameOrganisationMatchModel)))
 
-  def cachedNameDetails(implicit hc: HeaderCarrier): Future[Option[NameOrganisationMatchModel]] =
+  def cachedNameDetails(implicit request: Request[_]): Future[Option[NameOrganisationMatchModel]] =
     sessionCache.subscriptionDetails map (_.nameOrganisationDetails)
 
-  def cachedUtrMatch(implicit hc: HeaderCarrier): Future[Option[UtrMatchModel]] =
+  def cachedUtrMatch(implicit request: Request[_]): Future[Option[UtrMatchModel]] =
     sessionCache.subscriptionDetails map (_.formData.utrMatch)
 
-  def cachedNinoMatch(implicit hc: HeaderCarrier): Future[Option[NinoMatchModel]] =
+  def cachedNinoMatch(implicit request: Request[_]): Future[Option[NinoMatchModel]] =
     sessionCache.subscriptionDetails map (_.formData.ninoMatch)
 
-  def cachedOrganisationType(implicit hc: HeaderCarrier): Future[Option[CdsOrganisationType]] =
+  def cachedOrganisationType(implicit request: Request[_]): Future[Option[CdsOrganisationType]] =
     sessionCache.subscriptionDetails map (_.formData.organisationType)
 
-  def cacheSicCode(sicCode: String)(implicit hc: HeaderCarrier): Future[Unit] =
+  def cacheSicCode(sicCode: String)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(sicCode = Some(sicCode)))
 
-  def cacheDateEstablished(date: LocalDate)(implicit hc: HeaderCarrier): Future[Unit] =
+  def cacheDateEstablished(date: LocalDate)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(dateEstablished = Some(date)))
 
-  def cacheNameDobDetails(nameDob: NameDobMatchModel)(implicit hc: HeaderCarrier): Future[Unit] =
+  def cacheNameDobDetails(nameDob: NameDobMatchModel)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(nameDobDetails = Some(nameDob)))
 
-  def cachedNameDobDetails(implicit hc: HeaderCarrier): Future[Option[NameDobMatchModel]] =
+  def cachedNameDobDetails(implicit request: Request[_]): Future[Option[NameDobMatchModel]] =
     sessionCache.subscriptionDetails.map(_.nameDobDetails)
 
-  def cacheNinoOrUtrChoice(ninoOrUtrChoice: NinoOrUtrChoice)(implicit hc: HeaderCarrier): Future[Unit] =
+  def cacheNinoOrUtrChoice(ninoOrUtrChoice: NinoOrUtrChoice)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(
       sd => sd.copy(formData = sd.formData.copy(ninoOrUtrChoice = ninoOrUtrChoice.ninoOrUtrRadio))
     )
 
-  def cacheUtrMatch(utrMatch: Option[UtrMatchModel])(implicit hc: HeaderCarrier): Future[Unit] =
+  def cacheUtrMatch(utrMatch: Option[UtrMatchModel])(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(formData = sd.formData.copy(utrMatch = utrMatch)))
 
-  def cacheNinoMatch(ninoMatch: Option[NinoMatchModel])(implicit hc: HeaderCarrier): Future[Unit] =
+  def cacheNinoMatch(ninoMatch: Option[NinoMatchModel])(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(formData = sd.formData.copy(ninoMatch = ninoMatch)))
 
-  def cacheUkVatDetails(ukVatDetails: VatDetails)(implicit hc: HeaderCarrier): Future[Unit] =
+  def cacheUkVatDetails(ukVatDetails: VatDetails)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(ukVatDetails = Some(ukVatDetails)))
 
-  def clearCachedUkVatDetails(implicit hc: HeaderCarrier): Future[Unit] =
+  def clearCachedUkVatDetails(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(ukVatDetails = None))
 
-  def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit hq: HeaderCarrier) =
+  def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(vatRegisteredUk = Some(yesNoAnswer.isYes)))
 
-  def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit hq: HeaderCarrier) =
+  def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(personalDataDisclosureConsent = Some(yesNoAnswer.isYes)))
 
   private def contactDetails(view: ContactDetailsModel, isInReviewMode: Boolean)(implicit
-    hc: HeaderCarrier
+    request: Request[_]
   ): Future[ContactDetailsModel] =
     if (!isInReviewMode && view.useAddressFromRegistrationDetails)
       sessionCache.registrationDetails map { registrationDetails =>
@@ -151,10 +154,10 @@ class SubscriptionDetailsService @Inject() (
       }
     else Future.successful(view)
 
-  def cachedCustomsId(implicit hc: HeaderCarrier): Future[Option[CustomsId]] =
+  def cachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =
     sessionCache.subscriptionDetails map (_.customsId)
 
-  def updateSubscriptionDetails(implicit hc: HeaderCarrier) =
+  def updateSubscriptionDetails(implicit request: Request[_]) =
     // TODO: to be refactored by redesigning the cache
     sessionCache.subscriptionDetails flatMap { subDetails =>
       sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())

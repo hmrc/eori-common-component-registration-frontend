@@ -139,7 +139,9 @@ class SubscriptionRecoveryController @Inject() (
     subscriptionDisplayResponse: SubscriptionDisplayResponse,
     dateOfEstablishment: Option[LocalDate],
     service: Service
-  )(redirect: => Result)(implicit headerCarrier: HeaderCarrier, messages: Messages): Future[Result] = {
+  )(
+    redirect: => Result
+  )(implicit headerCarrier: HeaderCarrier, request: Request[_], messages: Messages): Future[Result] = {
     val formBundleId =
       subscriptionDisplayResponse.responseCommon.returnParameters
         .flatMap(_.find(_.paramName.equals("ETMPFORMBUNDLENUMBER")).map(_.paramValue))
@@ -164,7 +166,7 @@ class SubscriptionRecoveryController @Inject() (
       dateOfEstablishment
     )
 
-    completeEnrolment(service, subscriptionInformation)(redirect)
+    completeEnrolment(service, subscriptionInformation)(redirect)(headerCarrier, request, messages)
   }
 
   private def enrichFormBundleId(service: Service, formBundleId: String) =
@@ -175,7 +177,7 @@ class SubscriptionRecoveryController @Inject() (
 
   private def completeEnrolment(service: Service, subscriptionInformation: SubscriptionInformation)(
     redirect: => Result
-  )(implicit hc: HeaderCarrier, messages: Messages): Future[Result] =
+  )(implicit hc: HeaderCarrier, request: Request[_], messages: Messages): Future[Result] =
     for {
       // Update Recovered Subscription Information
       _ <- updateSubscription(subscriptionInformation)
@@ -183,7 +185,7 @@ class SubscriptionRecoveryController @Inject() (
       _ <- if (service.enrolmentKey == Service.cds.enrolmentKey) updateEmail(subscriptionInformation)
       else Future.successful(None)
       // Subscribe Call for enrolment
-      _ <- subscribe(service, subscriptionInformation)
+      _ <- subscribe(service, subscriptionInformation)(hc, messages)
       // Issuer Call for enrolment
       res <- issue(service, subscriptionInformation)
     } yield res match {
@@ -201,7 +203,7 @@ class SubscriptionRecoveryController @Inject() (
         case _    => throw new IllegalArgumentException("UpdateEmail failed")
       }
 
-  private def updateSubscription(subscriptionInformation: SubscriptionInformation)(implicit hc: HeaderCarrier) =
+  private def updateSubscription(subscriptionInformation: SubscriptionInformation)(implicit request: Request[_]) =
     sessionCache.saveSub02Outcome(
       Sub02Outcome(
         subscriptionInformation.processedDate,
