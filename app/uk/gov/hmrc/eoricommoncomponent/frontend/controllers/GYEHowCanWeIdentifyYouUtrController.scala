@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -99,9 +99,10 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     )
   }
 
-  // TODO Get rid of `.get`. Now if there is no information Exception will be thrown, understand what must happen if this is not provided
   private def retrieveNameDobFromCache()(implicit request: Request[_]): Future[Individual] =
-    cdsFrontendDataCache.subscriptionDetails.map(_.nameDobDetails.get).map { nameDobDetails =>
+    cdsFrontendDataCache.subscriptionDetails.map(
+      _.nameDobDetails.getOrElse(throw DataUnavailableException(s"NameDob is not cached in data"))
+    ).map { nameDobDetails =>
       Individual.withLocalDate(
         firstName = nameDobDetails.firstName,
         middleName = None,
