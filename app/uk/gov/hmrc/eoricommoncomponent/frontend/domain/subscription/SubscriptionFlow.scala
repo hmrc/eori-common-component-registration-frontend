@@ -82,10 +82,10 @@ object SubscriptionFlows {
     List(
       SicCodeSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage,
-      ContactDetailsSubscriptionFlowPageGetEori,
-      ContactAddressSubscriptionFlowPageGetEori,
       VatRegisteredUkSubscriptionFlowPage,
-      VatDetailsSubscriptionFlowPage
+      VatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
     )
   )
 
@@ -94,12 +94,12 @@ object SubscriptionFlows {
       DateOfEstablishmentSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage,
+      VatRegisteredUkSubscriptionFlowPage,
+      VatDetailsSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori,
-      BusinessShortNameSubscriptionFlowPage,
-      VatRegisteredUkSubscriptionFlowPage,
-      //VatGroupFlowPage,
-      VatDetailsSubscriptionFlowPage
+      BusinessShortNameSubscriptionFlowPage
+      //VatGroupFlowPage
     )
   )
 
