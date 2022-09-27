@@ -22,6 +22,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
   SubscriptionStatus,
   SubscriptionStatusResult,
@@ -41,7 +42,9 @@ class SubscriptionStatusConnector @Inject() (http: HttpClient, appConfig: AppCon
   private val logger = Logger(this.getClass)
   private val url    = appConfig.getServiceUrl("subscription-status")
 
-  def status(request: SubscriptionStatusQueryParams)(implicit hc: HeaderCarrier): Future[SubscriptionStatusResponse] = {
+  def status(
+    request: SubscriptionStatusQueryParams
+  )(implicit hc: HeaderCarrier, originatingService: Service): Future[SubscriptionStatusResponse] = {
 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"Status SUB01: $url, queryParams: ${request.queryParams} and hc: $hc")
@@ -65,9 +68,9 @@ class SubscriptionStatusConnector @Inject() (http: HttpClient, appConfig: AppCon
     url: String,
     request: SubscriptionStatusQueryParams,
     response: SubscriptionStatusResponseHolder
-  )(implicit hc: HeaderCarrier): Unit = {
+  )(implicit hc: HeaderCarrier, originatingService: Service): Unit = {
 
-    val subscriptionStatusSubmitted = SubscriptionStatusSubmitted(request)
+    val subscriptionStatusSubmitted = SubscriptionStatusSubmitted(request, originatingService.code)
     val subscriptionStatusResult    = SubscriptionStatusResult(response)
 
     audit.sendExtendedDataEvent(

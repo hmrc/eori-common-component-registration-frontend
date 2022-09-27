@@ -23,18 +23,20 @@ case class SubscriptionStatusSubmitted(
   taxPayerId: Option[String],
   safeId: Option[String],
   receiptDate: String,
-  regime: String
+  regime: String,
+  originatingService: String
 )
 
 object SubscriptionStatusSubmitted {
   implicit val format = Json.format[SubscriptionStatusSubmitted]
 
-  def apply(request: SubscriptionStatusQueryParams): SubscriptionStatusSubmitted =
+  def apply(request: SubscriptionStatusQueryParams, originatingService: String): SubscriptionStatusSubmitted =
     SubscriptionStatusSubmitted(
       taxPayerId = if (request.idType == "taxPayerId") Some(request.id) else None,
       safeId = if (request.idType == "SAFE") Some(request.id) else None,
       receiptDate = request.receiptDate.toString,
-      regime = request.regime
+      regime = request.regime,
+      originatingService = originatingService
     )
 
 }
