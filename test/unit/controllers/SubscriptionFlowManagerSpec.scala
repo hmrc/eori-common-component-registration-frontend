@@ -150,32 +150,32 @@ class SubscriptionFlowManagerSpec
         DateOfEstablishmentSubscriptionFlowPage,
         1,
         8,
+        SicCodeSubscriptionFlowPage
+      ),
+      (
+        ThirdCountryOrganisationSubscriptionFlow,
+        SicCodeSubscriptionFlowPage,
+        2,
+        8,
         ContactDetailsSubscriptionFlowPageGetEori
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
-        2,
+        3,
         8,
         ContactAddressSubscriptionFlowPageGetEori
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         ContactAddressSubscriptionFlowPageGetEori,
-        3,
+        4,
         8,
         BusinessShortNameSubscriptionFlowPage
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         BusinessShortNameSubscriptionFlowPage,
-        4,
-        8,
-        SicCodeSubscriptionFlowPage
-      ),
-      (
-        ThirdCountryOrganisationSubscriptionFlow,
-        SicCodeSubscriptionFlowPage,
         5,
         8,
         VatRegisteredUkSubscriptionFlowPage
