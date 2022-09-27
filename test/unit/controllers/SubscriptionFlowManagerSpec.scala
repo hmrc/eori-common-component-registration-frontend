@@ -167,7 +167,13 @@ class SubscriptionFlowManagerSpec
         8,
         VatDetailsSubscriptionFlowPage
       ),
-      (ThirdCountryOrganisationSubscriptionFlow, VatDetailsSubscriptionFlowPage, 5, 8, ContactDetailsSubscriptionFlowPageGetEori),
+      (
+        ThirdCountryOrganisationSubscriptionFlow,
+        VatDetailsSubscriptionFlowPage,
+        5,
+        8,
+        ContactDetailsSubscriptionFlowPageGetEori
+      ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
@@ -219,7 +225,13 @@ class SubscriptionFlowManagerSpec
         6,
         VatDetailsSubscriptionFlowPage
       ),
-      (ThirdCountrySoleTraderSubscriptionFlow, VatDetailsSubscriptionFlowPage, 4, 6, ContactDetailsSubscriptionFlowPageGetEori),
+      (
+        ThirdCountrySoleTraderSubscriptionFlow,
+        VatDetailsSubscriptionFlowPage,
+        4,
+        6,
+        ContactDetailsSubscriptionFlowPageGetEori
+      ),
       (
         ThirdCountrySoleTraderSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
