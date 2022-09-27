@@ -92,10 +92,10 @@ object SubscriptionFlows {
   private val thirdCountryCorporateFlowConfig = createFlowConfig(
     List(
       DateOfEstablishmentSubscriptionFlowPage,
+      SicCodeSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
-      SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       //VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
