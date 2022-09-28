@@ -71,9 +71,9 @@
 @hintTextOptions = @{
 
     lazy val nonUkOptionHints = Seq(
-        CdsOrganisationType.CompanyId -> messages("cds.matching.organisation-type.radio.organisation.hint-text"),
-        CdsOrganisationType.SoleTraderId -> messages("cds.matching.organisation-type.radio.sole-trader.hint-text"),
-        CdsOrganisationType.IndividualId -> messages("cds.matching.organisation-type.radio.individual.hint-text"))
+        CdsOrganisationType.ThirdCountryOrganisationId -> messages("cds.matching.organisation-type.radio.organisation.hint-text"),
+        CdsOrganisationType.ThirdCountrySoleTraderId -> messages("cds.matching.organisation-type.radio.sole-trader.hint-text"),
+        CdsOrganisationType.ThirdCountryIndividualId -> messages("cds.matching.organisation-type.radio.individual.hint-text"))
 
     if (selectedUserLocation == Some(UserLocation.Uk)) Seq.empty else nonUkOptionHints
 }
