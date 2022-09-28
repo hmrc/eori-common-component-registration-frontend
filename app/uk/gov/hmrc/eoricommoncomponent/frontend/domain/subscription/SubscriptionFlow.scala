@@ -80,9 +80,9 @@ object SubscriptionFlows {
 
   private val thirdCountrySoleTraderFlowConfig = createFlowConfig(
     List(
+      SicCodeSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori,
-      SicCodeSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage
