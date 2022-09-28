@@ -60,21 +60,38 @@ cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
 }
 
 @pageKeyForOrgType = @{
-    if(isIndividual || isSoleTrader) { "sic.individual"}
-    else if (isPartnership) "sic.partnership"
-    else "sic"
+    (isNonUk, isRowOrganisation, isSoleTrader, isCompany) match {
+        case (true, true, false, false) => "sic.organisation"
+        case (false, true, false, false) => "sic.organisation"
+        case (false, false, false, true) => "sic.organisation"
+        case _ =>
+            if(isIndividual || isSoleTrader) { "sic.individual" }
+            else if(isPartnership) "sic.partnership"
+            else "sic"
+    }
 }
 
 @descriptionForOrgType = @{
     (isNonUk, isRowOrganisation, isSoleTrader) match {
-        case (true, true, false) => "cds.subscription.sic.nonuk.organisation.description"
+        case (true, true, false) => "cds.subscription.sic.organisation.description"
+        case (false, true, false) => "cds.subscription.sic.organisation.description"
         case (true, false, true) => "cds.subscription.sic.nonuk.soleTrader.description"
         case (false, false, true) => "cds.subscription.sic.uk.soleTrader.description"
         case _ =>
-        if (isCompany) "cds.subscription.sic.description"
-        else if(isIndividual || isSoleTrader) { "cds.subscription.sic.individual.description"}
-        else if (isPartnership) "cds.subscription.sic.partnership.description"
-        else "cds.subscription.sic.charity-description"
+            if (isCompany) "cds.subscription.sic.organisation.description"
+            else if(isIndividual || isSoleTrader) { "cds.subscription.sic.individual.description"}
+            else if (isPartnership) "cds.subscription.sic.partnership.description"
+            else "cds.subscription.sic.charity-description"
+    }
+}
+
+@hintForOrgType = @{
+    (isNonUk, isRowOrganisation, isSoleTrader, isCompany) match {
+        case (true, true, false, false) => "cds.subscription.sic.organisation.hint"
+        case (false, true, false, false) => "cds.subscription.sic.organisation.hint"
+        case (false, fale, false, true) => "cds.subscription.sic.organisation.hint"
+        case _ =>
+            ""
     }
 }
 
@@ -84,13 +101,14 @@ cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
 
         @CSRF.formField
 
+        <p class="govuk-hint" id="hint">@Html(messages(hintForOrgType))</p>
         <p class="govuk-body" id="description">@Html(messages(descriptionForOrgType))</p>
         @inputText(
             form = sicCodeForm,
             id = "sic",
             name = "sic",
             classes = Some("govuk-!-width-one-half"),
-            label = "cds.subscription.sic.label",
+            label = "",
             labelClasses = Some("govuk-!-font-weight-bold"),
             isPageHeading = false
         )

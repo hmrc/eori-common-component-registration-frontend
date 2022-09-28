@@ -28,14 +28,13 @@ object SubscriptionAmendCompanyDetailsPage extends WebPage {
 
   val shortNameLabelXpath                   = "//*label[@for='short-name']"
   val shortNameFieldLevelErrorXpath: String = fieldLevelErrorXpath("short-name")
-
-  val sicLabelXpath                   = "//*label[@for='sic']"
-  val sicFieldLevelErrorXpath: String = fieldLevelErrorXpath("sic")
+  val sicIdXpath                            = "//*[@id='sic']"
+  val sicFieldLevelErrorXpath: String       = fieldLevelErrorXpath("sic")
 
   val eoriNumberLabelXpath                   = "//*label[@for='eori-number']"
   val eoriNumberFieldLevelErrorXpath: String = fieldLevelErrorXpath("eori-number")
   val emailLabelXpath                        = "//*label[@for='email']"
   val emailFieldLevelErrorXpath: String      = fieldLevelErrorXpath("email")
   val cantFindCertificateLink                = "//*[@id='companyDetailsForm']/details/summary/span"
-
+  
 }
