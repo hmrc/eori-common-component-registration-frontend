@@ -95,7 +95,8 @@ class ConfirmContactDetailsController @Inject() (
                       org.customsId,
                       Some(ot),
                       YesNoWrongAddress.createForm(),
-                      service
+                      service,
+                      requestSessionData.selectedUserLocation.getOrElse("uk").equalsIgnoreCase("uk")
                     )
                   )
                 )

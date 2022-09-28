@@ -1542,7 +1542,8 @@ cds.languageSelect.select.hint=Newid yr iaith ir Gymraeg
 
 cds.pdf.outcomes.eori.number=EORI number: {0}
 
-confirm-business-details.title-and-heading=Is this your registered address?
+confirm-business-details.title-and-heading=Is this your registered company address?
+confirm-business-details.row.title-and-heading=Is this your registered organisation address?
 confirm-business-details.partnership.title-and-heading=Is this your registered address?
 confirm-business-details.individual.title-and-heading=Is this your address?
 confirm-business-details.yes=Yes
