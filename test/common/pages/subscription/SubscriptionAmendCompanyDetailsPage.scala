@@ -36,5 +36,5 @@ object SubscriptionAmendCompanyDetailsPage extends WebPage {
   val emailLabelXpath                        = "//*label[@for='email']"
   val emailFieldLevelErrorXpath: String      = fieldLevelErrorXpath("email")
   val cantFindCertificateLink                = "//*[@id='companyDetailsForm']/details/summary/span"
-  
+
 }
