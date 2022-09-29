@@ -81,11 +81,11 @@ object SubscriptionFlows {
   private val thirdCountrySoleTraderFlowConfig = createFlowConfig(
     List(
       SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori,
       VatRegisteredUkSubscriptionFlowPage,
-      VatDetailsSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage
+      VatDetailsSubscriptionFlowPage
     )
   )
 
@@ -93,13 +93,13 @@ object SubscriptionFlows {
     List(
       DateOfEstablishmentSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori,
       BusinessShortNameSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       //VatGroupFlowPage,
-      VatDetailsSubscriptionFlowPage,
-      EoriConsentSubscriptionFlowPage
+      VatDetailsSubscriptionFlowPage
     )
   )
 
