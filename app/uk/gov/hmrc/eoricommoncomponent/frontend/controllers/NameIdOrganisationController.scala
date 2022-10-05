@@ -83,8 +83,7 @@ class NameIdOrganisationController @Inject() (
     CdsOrganisationType.LimitedLiabilityPartnershipId -> UtrConfiguration("LLP", displayMode = PartnershipDM),
     CdsOrganisationType.CharityPublicBodyNotForProfitId -> UtrConfiguration(
       "Unincorporated Body",
-      displayMode = OrganisationModeDM,
-      isNameAddressRegistrationAvailable = true
+      displayMode = OrganisationModeDM
     )
   )
 
