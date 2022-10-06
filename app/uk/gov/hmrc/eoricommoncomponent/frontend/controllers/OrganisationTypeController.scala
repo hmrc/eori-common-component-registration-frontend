@@ -63,7 +63,7 @@ class OrganisationTypeController @Inject() (
       Individual                    -> individualMatching(IndividualId, service),
       Partnership                   -> nameIdOrganisationMatching(PartnershipId, service),
       LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service),
-      CharityPublicBodyNotForProfit -> whatIsYourOrgNameMatching(CharityPublicBodyNotForProfitId, service),
+      CharityPublicBodyNotForProfit -> nameIdOrganisationMatching(CharityPublicBodyNotForProfitId, service),
       ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
       ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
       ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service)

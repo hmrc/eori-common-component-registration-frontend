@@ -161,20 +161,13 @@ class NameUtrOrganisationControllerSpec
       thrown.getMessage should endWith(invalidOrganisationTypeMessage(invalidOrganisationType))
     }
 
-    "show the option for registering with name and address instead of UTR when organisation type is Charity, public body or not for profit organisation" in {
-      showForm(organisationType = "charity-public-body-not-for-profit") { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(registerWithNameAndAddressLink) should startWith(
-          "If you are not registered for Self Assessment"
-        )
-        page.getElementAttributeHref(
-          registerWithNameAndAddressLinkAnchor
-        ) shouldBe "/customs-registration-services/atar/register/matching/address/charity-public-body-not-for-profit"
-      }
-    }
-
-    "hide the option for registering with name and address instead of UTR when organisation type is not Charity, public body or not for profit organisation" in {
+    "hide the option for registering with name and address instead of UTR for organisations" in {
       showForm(organisationType = "limited-liability-partnership") { result =>
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(registerWithNameAndAddressLink) shouldBe empty
+      }
+
+      showForm(organisationType = "charity-public-body-not-for-profit") { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementsText(registerWithNameAndAddressLink) shouldBe empty
       }
