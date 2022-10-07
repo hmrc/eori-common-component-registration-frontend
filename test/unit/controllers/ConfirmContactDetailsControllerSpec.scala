@@ -130,6 +130,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
           .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
 
+      when(mockRequestSessionData.selectedUserLocation(any())) thenReturn None
+
       invokeConfirm() { result =>
         status(result) shouldBe OK
       }
@@ -156,6 +158,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockOrgTypeLookup
           .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
+
+      when(mockRequestSessionData.selectedUserLocation(any())) thenReturn None
 
       invokeConfirm() { result =>
         val page = CdsPage(contentAsString(result))
@@ -247,6 +251,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockOrgTypeLookup
           .etmpOrgTypeOpt(any[Request[AnyContent]])
       ).thenReturn(Future.successful(Some(Partnership)))
+
+      when(mockRequestSessionData.selectedUserLocation(any())) thenReturn None
 
       invokeConfirm() { result =>
         val page = CdsPage(contentAsString(result))

@@ -1038,7 +1038,7 @@ cds.subscription.address-details.page-error.postcode=Nodwch eich cod post
 cds.subscription.address-details.page-error.countryCode=Nodwch eich gwlad
 cds.subscription.address-details.countryCode.error.label=Nodwch eich gwlad
 cds.subscription.address-details.country.emptyValueText=Dewiswch wlad
-confirm-business-details.title-and-heading=Dyma’r manylion sydd gennym am eich sefydliad
+confirm-business-details.title-and-heading=Dyma’r manylion sydd gennym am eich sefydliad TRANSLATE
 confirm-business-details.partnership.title-and-heading=Dyma’r manylion sydd gennym am eich partneriaeth
 confirm-business-details.individual.title-and-heading=Dyma’r manylion sydd gennym amdanoch
 confirm-business-details.heading2=Ai dyma fanylion y sefydliad rydych am eu defnyddio i gael rhif EORI?
@@ -1442,7 +1442,8 @@ cds.languageSelect.select.hint=Change the language to English
 
 cds.pdf.outcomes.eori.number=Rhif EORI: {0}
 
-confirm-business-details.title-and-heading=Ai dyma’ch cyfeiriad cofrestredig?
+confirm-business-details.title-and-heading=Is this your registered company address?TRANSLATE
+confirm-business-details.row.title-and-heading=Is this your registered organisation address?TRANSLATE
 confirm-business-details.partnership.title-and-heading=Ai dyma’ch cyfeiriad cofrestredig?
 confirm-business-details.individual.title-and-heading= Ai dyma’ch cyfeiriad?
 confirm-business-details.yes=Iawn
