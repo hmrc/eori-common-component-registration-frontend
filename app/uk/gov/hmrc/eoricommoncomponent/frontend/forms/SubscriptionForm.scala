@@ -53,11 +53,14 @@ object SubscriptionForm {
 
   private def validSicCode: Constraint[String] =
     Constraint("constraints.sic")({
-      case s if s.filterNot(_.isWhitespace).isEmpty       => Invalid(ValidationError("cds.subscription.sic.error.empty"))
-      case s if !s.filterNot(_.isWhitespace).matches("[0-9]*") => Invalid(ValidationError("cds.subscription.sic.error.wrong-format"))
-      case s if s.filterNot(_.isWhitespace).length < 4         => Invalid(ValidationError("cds.subscription.sic.error.too-short"))
-      case s if s.filterNot(_.isWhitespace).length > 5         => Invalid(ValidationError("cds.subscription.sic.error.too-long"))
-      case _                         => Valid
+      case s if s.filterNot(_.isWhitespace).isEmpty => Invalid(ValidationError("cds.subscription.sic.error.empty"))
+      case s if !s.filterNot(_.isWhitespace).matches("[0-9]*") =>
+        Invalid(ValidationError("cds.subscription.sic.error.wrong-format"))
+      case s if s.filterNot(_.isWhitespace).length < 4 =>
+        Invalid(ValidationError("cds.subscription.sic.error.too-short"))
+      case s if s.filterNot(_.isWhitespace).length > 5 =>
+        Invalid(ValidationError("cds.subscription.sic.error.too-long"))
+      case _ => Valid
     })
 
   def validEoriWithOrWithoutGB: Constraint[String] =
