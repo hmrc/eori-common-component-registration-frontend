@@ -94,14 +94,10 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
     |    "transactionName" : "customs-data-store"
     |  },
     |  "detail" : {
-    |    "request" : {
     |      "eori" : "GBXXXXXXXXX0000",
     |      "address" : "a@example.com",
-    |      "timestamp" : "timestamp"
-    |    },
-    |    "response" : {
+    |      "timestamp" : "timestamp",
     |      "status" : "204"
-    |    }
     |  },
     |  "generatedAt" : "2022-09-20T11:03:17.981Z",
     |  "dataPipeline" : {
@@ -129,14 +125,10 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
    |    "transactionName" : "customs-data-store"
    |  },
    |  "detail" : {
-   |    "request" : {
    |      "eori" : "GBXXXXXXXXX0000",
    |      "address" : "a@example.com",
-   |      "timestamp" : "timestamp"
-   |    },
-   |    "response" : {
+   |      "timestamp" : "timestamp",
    |      "status" : "204"
-   |    }
    |  },
    |  "dataPipeline" : {
    |    "redaction" : {

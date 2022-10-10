@@ -91,16 +91,12 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
     |    "transactionName" : "ecc-subscription-status"
     |  },
     |  "detail" : {
-    |    "request" : {
     |      "receiptDate" : "2016-03-17T09:30:47.000000114",
     |      "regime" : "CDS",
-    |      "originatingService" : "cds"
-    |    },
-    |    "response" : {
+    |      "originatingService" : "cds",
     |      "status" : "OK",
     |      "processingDate" : "2016-03-17T09:30:47",
     |      "subscriptionStatus" : "00"
-    |    }
     |  },
     |  "dataPipeline" : {
     |    "redaction" : {

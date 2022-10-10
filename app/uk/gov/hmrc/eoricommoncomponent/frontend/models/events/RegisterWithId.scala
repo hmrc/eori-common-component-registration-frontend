@@ -16,10 +16,17 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.json.Json
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Writes}
 
 case class RegisterWithId(request: RegisterWithIdSubmitted, response: RegisterWithIdConfirmation)
 
 object RegisterWithId {
-  implicit val format = Json.format[RegisterWithId]
+
+  //writes for flattened Audit event
+  implicit val writes: Writes[RegisterWithId] =
+    JsPath
+      .write[RegisterWithIdSubmitted]
+      .and(JsPath.write[RegisterWithIdConfirmation])(unlift(RegisterWithId.unapply))
+
 }

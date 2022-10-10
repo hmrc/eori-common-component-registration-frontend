@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.json.Json
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.http.HttpResponse
 
@@ -43,5 +44,11 @@ object UpdateResponse {
 case class CustomsDataStoreUpdate(request: UpdateRequest, response: UpdateResponse)
 
 object CustomsDataStoreUpdate {
-  implicit val format = Json.format[CustomsDataStoreUpdate]
+
+  //writes for flattened Audit event
+  implicit val writes: Writes[CustomsDataStoreUpdate] =
+    JsPath
+      .write[UpdateRequest]
+      .and(JsPath.write[UpdateResponse])(unlift(CustomsDataStoreUpdate.unapply))
+
 }
