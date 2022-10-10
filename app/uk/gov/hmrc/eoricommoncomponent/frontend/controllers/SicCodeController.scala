@@ -102,7 +102,7 @@ class SicCodeController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionDetailsHolderService
-      .cacheSicCode(formData.sicCode)
+      .cacheSicCode(formData.sicCode.filterNot(_.isWhitespace))
       .map(
         _ =>
           if (isInReviewMode)
