@@ -78,10 +78,10 @@ class MatchingServiceConnector @Inject() (http: HttpClient, appConfig: AppConfig
     val registerWithIdConfirmation = RegisterWithIdConfirmation(response)
 
     audit.sendExtendedDataEvent(
-      transactionName = "ecc-registration-with-id",
+      transactionName = "ecc-registration",
       path = url,
       details = Json.toJson(RegisterWithId(registerWithIdSubmitted, registerWithIdConfirmation)),
-      eventType = "RegistrationWithId"
+      eventType = "Registration"
     )
   }
 
