@@ -23,7 +23,7 @@ import java.time.LocalDate
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{SicCodeViewModel, VatDetailsForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
 
 import java.time.format.DateTimeFormatter
@@ -42,6 +42,8 @@ class FormValidationSpec extends UnitSpec {
   lazy val vatDetailsForm = VatDetailsForm.vatDetailsForm
 
   lazy val dateOfEstablishmentForm: Form[LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
+
+  lazy val sicCodeForm: Form[SicCodeViewModel] = SubscriptionForm.sicCodeform
 
   val formData = Map(
     "first-name"          -> "ff",
@@ -83,6 +85,8 @@ class FormValidationSpec extends UnitSpec {
     "date-of-establishment.month" -> "1",
     "date-of-establishment.year"  -> "2019"
   )
+
+  val formDataSic = Map("sic" -> "99111")
 
   "NameDobForm" should {
 
@@ -323,6 +327,50 @@ class FormValidationSpec extends UnitSpec {
       val data = formDataDoE.updated("date-of-establishment.year", "999")
       val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.year", Seq("date.year.error")))
+    }
+  }
+
+  "sicCodeForm" should {
+
+    "only accept valid form" in {
+      val data = formDataSic
+      val res  = sicCodeForm.bind(data)
+      assert(res.errors.isEmpty)
+    }
+    "accept sic code with leading whitespace" in {
+      val data = formDataSic.updated("sic", " 10009")
+      val res  = sicCodeForm.bind(data)
+      assert(res.errors.isEmpty)
+    }
+    "accept sic code with trailing whitespace" in {
+      val data = formDataSic.updated("sic", "10009 ")
+      val res  = sicCodeForm.bind(data)
+      assert(res.errors.isEmpty)
+    }
+    "accept sic code with multiple whitespaces" in {
+      val data = formDataSic.updated("sic", " 100 09 ")
+      val res  = sicCodeForm.bind(data)
+      assert(res.errors.isEmpty)
+    }
+    "fail sic code with only whitespaces - empty string" in {
+      val data = formDataSic.updated("sic", "    ")
+      val res  = sicCodeForm.bind(data)
+      res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.empty")))
+    }
+    "fail sic code with invalid characters - wrong format" in {
+      val data = formDataSic.updated("sic", "111k2")
+      val res  = sicCodeForm.bind(data)
+      res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.wrong-format")))
+    }
+    "fail sic code too short" in {
+      val data = formDataSic.updated("sic", "111")
+      val res  = sicCodeForm.bind(data)
+      res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.too-short")))
+    }
+    "fail sic code too long" in {
+      val data = formDataSic.updated("sic", "111111")
+      val res  = sicCodeForm.bind(data)
+      res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.too-long")))
     }
   }
 }
