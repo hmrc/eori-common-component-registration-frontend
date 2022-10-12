@@ -16,10 +16,17 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.json.Json
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Writes}
 
 case class SubscriptionStatus(request: SubscriptionStatusSubmitted, response: SubscriptionStatusResult)
 
 object SubscriptionStatus {
-  implicit val format = Json.format[SubscriptionStatus]
+
+  //writes for flattened Audit event
+  implicit val writes: Writes[SubscriptionStatus] =
+    JsPath
+      .write[SubscriptionStatusSubmitted]
+      .and(JsPath.write[SubscriptionStatusResult])(unlift(SubscriptionStatus.unapply))
+
 }

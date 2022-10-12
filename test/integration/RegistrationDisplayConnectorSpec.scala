@@ -214,10 +214,7 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
     |    "transactionName": "ecc-registration-display"
     |  },
     |  "detail": {
-    |    "request": {
-    |      "safeId": "XE111123456789"
-    |    },
-    |    "response": {
+    |      "safeId": "XE111123456789",
     |      "safeId": "XY0000100086619",
     |      "status": "OK",
     |      "processingDate": "2016-09-02T09:30:47Z",
@@ -239,7 +236,6 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
     |        "phoneNumber": "07584673896",
     |        "emailAddress": "John.Doe@example.com"
     |      }
-    |    }
     |  },
     |  "metadata": {
     |    "metricsKey": null

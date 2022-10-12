@@ -66,10 +66,10 @@ class RegisterWithoutIdConnector @Inject() (http: HttpClient, appConfig: AppConf
     implicit hc: HeaderCarrier
   ): Unit =
     audit.sendExtendedDataEvent(
-      transactionName = "ecc-registration-without-id",
+      transactionName = "ecc-registration",
       path = url,
       details = Json.toJson(RegisterWithoutId(request, response)),
-      eventType = "RegistrationWithoutId"
+      eventType = "Registration"
     )
 
 }
