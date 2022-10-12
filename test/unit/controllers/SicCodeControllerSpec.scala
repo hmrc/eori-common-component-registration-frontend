@@ -416,6 +416,12 @@ class SicCodeControllerSpec
         status(result) shouldBe SEE_OTHER
       }
     }
+
+    "allow 5 digit number with whitespace" in {
+      submitFormInCreateMode(Map("sic" -> " 20 92 0 "), userSelectedOrgType = Company) { result =>
+        status(result) shouldBe SEE_OTHER
+      }
+    }
   }
 
   val formModelsROW = Table(

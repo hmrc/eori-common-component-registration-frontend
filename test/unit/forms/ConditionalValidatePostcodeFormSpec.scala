@@ -32,13 +32,13 @@ class ConditionalValidatePostcodeFormSpec extends UnitSpec {
       "only accept valid postcode " in {
         val data = Map("postcode" -> "N9 0DL", "countryCode" -> countryCode)
         val res  = form.bind(data)
-        assert(res.errors.isEmpty)
+        res.errors shouldBe Seq.empty
       }
 
       "fail when a postcode is invalid" in {
         val data = Map("postcode" -> "", "countryCode" -> countryCode)
         val res  = form.bind(data)
-        assert(res.errors.nonEmpty)
+        res.errors should not be empty
       }
     }
 
@@ -46,17 +46,17 @@ class ConditionalValidatePostcodeFormSpec extends UnitSpec {
       "only accept up to 9 Chars" in {
         val data = Map("postcode" -> "123456789", "countryCode" -> "FR")
         val res  = form.bind(data)
-        assert(res.errors.isEmpty)
+        res.errors shouldBe Seq.empty
       }
       "fail when a postcode is over 9 Chars" in {
         val data = Map("postcode" -> "A10Character", "countryCode" -> "FR")
         val res  = form.bind(data)
-        assert(res.errors.nonEmpty)
+        res.errors should not be empty
       }
       "accept an empty postcode" in {
         val data = Map("postcode" -> "", "countryCode" -> "FR")
         val res  = form.bind(data)
-        assert(res.errors.isEmpty)
+        res.errors shouldBe Seq.empty
       }
     }
   }
