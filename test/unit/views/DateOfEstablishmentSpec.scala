@@ -41,7 +41,10 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
       doc.title() must startWith("Date when the company was established")
     }
     "have the correct h1 text" in {
-      doc.body.getElementsByTag("legend").text() mustBe "Date when the company was established"
+      doc.body.getElementsByTag("h1").text() mustBe "Date when the company was established"
+    }
+    "have the correct h2 text" in {
+      doc.body.getElementsByTag("h2").text() startsWith "When was the company established?"
     }
     "have the correct class on the legend" in {
       doc.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
