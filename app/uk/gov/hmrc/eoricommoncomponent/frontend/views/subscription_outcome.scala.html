@@ -32,7 +32,7 @@
 <a class="govuk-link" href=@appConfig.checkEORINumber target="_blank" rel="noopener noreferrer">@messages("cds.subscription.outcomes.success.extra.information2")</a>
 }
 
-@layout_di(messages("cds.subscription.outcomes.success.title"), displayBackLink = false) {
+@layout_di(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")} $name""", displayBackLink = false) {
 <div>
     @govukPanel(Panel(
         title = HtmlContent(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")} $name"""),

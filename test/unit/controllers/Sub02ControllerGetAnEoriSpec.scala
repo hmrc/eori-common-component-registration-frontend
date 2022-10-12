@@ -351,7 +351,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
           verify(mockSessionCache).remove(any[Request[_]])
-          page.title should startWith("Application complete")
+          page.title should startWith("Subscription request received for orgName")
           page.getElementsText(
             RegistrationCompletePage.panelHeadingXpath
           ) shouldBe s"Subscription request received for orgName"
