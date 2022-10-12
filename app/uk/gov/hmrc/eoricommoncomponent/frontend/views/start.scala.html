@@ -71,6 +71,10 @@
             <li id="sole-trader-para-bullet2">@Html(messages("ecc.start-page.sole-trader.bullet2"))</li>
         </ul>
 
+        <p class="govuk-!-margin-top-2">
+        @help_di(Some(link(messages("ecc.start-page.help.eori.contact"), appConfig.contactEORITeam, "_self")))
+        </p>
+
         <p>
             @govukButton(Button(
                 href = Some(startLink.url),
@@ -79,9 +83,7 @@
             ))
         </p>
 
-        <p class="govuk-!-margin-top-2">
-            @help_di(Some(link(messages("ecc.start-page.help.eori.contact"), appConfig.contactEORITeam, "_self")))
-        </p>
+
 
         @helpers.helpAndSupport()
     </div>
