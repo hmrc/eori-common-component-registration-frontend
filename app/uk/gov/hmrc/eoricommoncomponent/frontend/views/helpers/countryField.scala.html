@@ -39,36 +39,10 @@
 )
 </div>
 <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/location-autocomplete.min.css")" type="text/css">
-
+<script type="text/javascript" src="@routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")"></script>
 <script>
-(function(){
-    var selectElements = document.getElementsByTagName('select');
-    var selectElement = selectElements[selectElements.length - 1]
-
-    openregisterLocationPicker({
-        defaultValue: '',
-        selectElement: selectElement,
-        tNoResults: () => '@messages("cds.country-picker.no-results")',
-        url: '@routes.Assets.versioned("javascripts/location-autocomplete-graph.json")'
-    })
-
-    var inputElement = document.getElementsByClassName('autocomplete__input')
-    inputElement = inputElement[inputElement.length - 1];
-    inputElement.setAttribute('autocomplete', 'country-name');
-
-    if (selectElement.classList.contains("form-control-error")) {
-        inputElement.classList.add("form-control-error");
-    }
-
-    inputElement.addEventListener('blur', function(){
-        if(this.value === "") selectElement.selectedIndex=0;
-    });
-
-    var menu = document.getElementById('countryCode-select');
-    var template = document.createElement('div');
-    template.setAttribute("id","countryCode-hint");
-    template.classList.add("govuk-hint");
-    template.innerHTML = "<span class='govuk-visually-hidden'>"+'. @messages("cds.country-picker.hint.screen-reader")'+"</span>";
-    menu.parentNode.insertBefore(template, menu);
-}())
+accessibleAutocomplete.enhanceSelectElement({
+defaultValue: '',
+selectElement: document.querySelector('#countryCode')
+})
 </script>
