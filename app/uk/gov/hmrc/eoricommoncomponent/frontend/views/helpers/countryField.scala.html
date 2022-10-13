@@ -43,6 +43,25 @@
 <script>
 accessibleAutocomplete.enhanceSelectElement({
 defaultValue: '',
-selectElement: document.querySelector('#countryCode')
+selectElement: document.querySelector('#countryCode'),
+    tNoResults: () => '@messages("cds.country-picker.no-results")',
+    url: '@routes.Assets.versioned("javascripts/location-autocomplete-graph.json")'
 })
+
+(function(){
+    if (selectElement.classList.contains("form-control-error")) {
+        inputElement.classList.add("form-control-error");
+    }
+
+    inputElement.addEventListener('blur', function(){
+        if(this.value === "") selectElement.selectedIndex=0;
+    });
+
+    var menu = document.getElementById('countryCode-select');
+    var template = document.createElement('div');
+    template.setAttribute("id","countryCode-hint");
+    template.classList.add("govuk-hint");
+    template.innerHTML = "<span class='govuk-visually-hidden'>"+'. @messages("cds.country-picker.hint.screen-reader")'+"</span>";
+    menu.parentNode.insertBefore(template, menu);
+}())
 </script>
