@@ -49,6 +49,10 @@ selectElement: document.querySelector('#countryCode'),
 })
 
 (function(){
+    var inputElement = document.getElementsByClassName('autocomplete__input')
+    inputElement = inputElement[inputElement.length - 1];
+    inputElement.setAttribute('autocomplete', 'country-name');
+
     if (selectElement.classList.contains("form-control-error")) {
         inputElement.classList.add("form-control-error");
     }
