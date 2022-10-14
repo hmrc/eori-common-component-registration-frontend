@@ -24,6 +24,8 @@ import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.{localDate, maxDate, minDate}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
 case class VatDetails(postcode: String, number: String, effectiveDate: LocalDate)
 
@@ -31,7 +33,7 @@ object VatDetails {
   implicit val format: Format[VatDetails] = Json.format[VatDetails]
 }
 
-object VatDetailsForm {
+object VatDetailsForm extends Mappings {
 
   def validPostcode: Constraint[String] =
     Constraint({
@@ -46,17 +48,22 @@ object VatDetailsForm {
       case _                               => Valid
     })
 
-  val vatDetailsForm = Form(
-    mapping(
-      "postcode"   -> text.verifying(validPostcode),
-      "vat-number" -> text.verifying(validVatNumber),
-      "vat-effective-date" -> mandatoryDateTodayOrBefore(
-        onEmptyError = "vat.error.empty-date",
-        onInvalidDateError = "vat.error.invalid-date",
-        onDateInFutureError = "vat.error.future-date",
-        minYear = DateConverter.earliestYearEffectiveVatDate
-      )
-    )(VatDetails.apply)(VatDetails.unapply)
-  )
+  val vatDetailsForm = {
+
+    val minimumDate = LocalDate.of(DateConverter.earliestYearEffectiveVatDate, 1, 1)
+    val today       = LocalDate.now()
+
+    Form(
+      mapping(
+        "postcode"   -> text.verifying(validPostcode),
+        "vat-number" -> text.verifying(validVatNumber),
+        "vat-effective-date" -> localDate(
+          emptyKey = "vat.error.empty-date",
+          invalidKey = "vat.error.invalid-date"
+        ).verifying(minDate(minimumDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+          .verifying(maxDate(today, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+      )(VatDetails.apply)(VatDetails.unapply)
+    )
+  }
 
 }

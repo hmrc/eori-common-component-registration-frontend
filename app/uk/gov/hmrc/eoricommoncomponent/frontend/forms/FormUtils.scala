@@ -20,27 +20,13 @@ import java.time.LocalDate
 import play.api.data.Forms.{optional, text}
 import play.api.data.Mapping
 import play.api.data.validation._
-import uk.gov.hmrc.eoricommoncomponent.frontend.playext.mappers.DateTuple._
 
 object FormUtils {
 
-  val messageKeyMandatoryField    = "cds.error.mandatory.field"
-  val messageKeyInvalidDateFormat = "cds.error.invalid.date.format"
-  val messageKeyFutureDate        = "cds.error.future-date"
-
-  val messageKeyOptionInvalid = "cds.error.option.invalid"
+  val messageKeyMandatoryField = "cds.error.mandatory.field"
 
   def formatInput(value: String): String                      = value.replaceAll(" ", "").toUpperCase
   def formatInput(maybeValue: Option[String]): Option[String] = maybeValue.map(value => formatInput(value))
-
-  def mandatoryDate(
-    onEmptyError: String = messageKeyMandatoryField,
-    onInvalidDateError: String = messageKeyInvalidDateFormat,
-    minYear: Int
-  ): Mapping[LocalDate] =
-    dateTuple(onInvalidDateError, minYear)
-      .verifying(onEmptyError, d => d.isDefined)
-      .transform(_.get, Option(_))
 
   def mandatoryString(
     onEmptyError: String
@@ -53,21 +39,6 @@ object FormUtils {
     optional(text.verifying(nonEmptyString(onEmptyError)).verifying(constraints: _*))
       .verifying(onEmptyError, _.isDefined)
       .transform[String](o => o.get, s => Some(s))
-
-  def mandatoryDateTodayOrBefore(
-    onEmptyError: String = messageKeyMandatoryField,
-    onInvalidDateError: String = messageKeyInvalidDateFormat,
-    onDateInFutureError: String = messageKeyFutureDate,
-    minYear: Int
-  ): Mapping[LocalDate] =
-    mandatoryDate(onEmptyError, onInvalidDateError, minYear)
-      .verifying(
-        onDateInFutureError,
-        d => {
-          val today = LocalDate.now()
-          d.isEqual(today) || d.isBefore(today)
-        }
-      )
 
   def nonEmptyString(error: => String = messageKeyMandatoryField): Constraint[String] = Constraint { s =>
     Option(s).filter(_.trim.nonEmpty).fold[ValidationResult](ifEmpty = Invalid(error))(_ => Valid)

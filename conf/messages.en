@@ -1461,14 +1461,17 @@ date.year.error=Enter a year between {0} and {1}
 dob.error.empty-date=Enter your date of birth
 dob.error.future-date=Date of birth must be in the past
 dob.error.invalid-date=Date of birth must be a real date
+dob.error.minMax=Date of birth must be between {0} and today
 
 doe.error.empty-date=Enter your date of establishment
 doe.error.future-date=Date of establishment must be in the past
 doe.error.invalid-date=Date of establishment must be a real date
+doe.error.minMax=Date of establishment must be between {0} and today
 
 vat.error.empty-date=Enter your effective VAT date
 vat.error.future-date=Effective VAT date must be in the past
 vat.error.invalid-date=Effective VAT date must be a real date
+vat.error.minMax=Effective VAT date must be between {0} and today
 
 cds.feedback.continue=More about {0}
 
