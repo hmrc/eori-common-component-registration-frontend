@@ -249,8 +249,8 @@ class VatDetailsControllerSpec
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Effective VAT date must be in the past"
-        page.getElementsText(vatEffectiveDateFieldLevelError) shouldBe "Error: Effective VAT date must be in the past"
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Effective VAT date must be between 1970 and today"
+        page.getElementsText(vatEffectiveDateFieldLevelError) shouldBe "Error: Effective VAT date must be between 1970 and today"
         page.getElementsText("title") should startWith("Error: ")
       }
     }

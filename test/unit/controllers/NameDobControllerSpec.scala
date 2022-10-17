@@ -149,15 +149,15 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(ValidRequest + ("date-of-birth.day" -> "32"), "individual") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter a day between 1 and 31"
-        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Enter a day between 1 and 31"
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Date of birth must be a real date"
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Date of birth must be a real date"
         page.getElementsText("title") should startWith("Error: ")
       }
     }
 
     "not be in the future" in {
       val tomorrow        = LocalDate.now().plusDays(1)
-      val futureDateError = "Date of birth must be in the past"
+      val futureDateError = "Date of birth must be between 1900 and today"
       submitForm(
         ValidRequest + ("date-of-birth.day" -> tomorrow.getDayOfMonth.toString,
         "date-of-birth.month"               -> tomorrow.getMonthValue.toString,
@@ -182,10 +182,10 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
         page.getElementsText(
           pageLevelErrorSummaryListXPath
-        ) shouldBe s"Enter a day between 1 and 31 Enter a month between 1 and 12 Enter a year between 1900 and ${Year.now.getValue}"
+        ) shouldBe s"Date of birth must be a real date"
         page.getElementsText(
           fieldLevelErrorDateOfBirth
-        ) shouldBe s"Error: Enter a day between 1 and 31 Error: Enter a month between 1 and 12 Error: Enter a year between 1900 and ${Year.now.getValue}"
+        ) shouldBe s"Error: Date of birth must be a real date"
         page.getElementsText("title") should startWith("Error: ")
       }
     }

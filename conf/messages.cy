@@ -1359,14 +1359,17 @@ date.year.error=Nodwch flwyddyn rhwng {0} a {1}
 dob.error.empty-date=Nodwch eich dyddiad geni
 dob.error.future-date=Mae’n rhaid i’r dyddiad geni fod yn y gorffennol
 dob.error.invalid-date=Mae’n rhaid i’r dyddiad geni fod yn ddyddiad go iawn
+dob.error.minMax=TRANSLATE Date of birth must be between {0} and today
 
 doe.error.empty-date=Nodwch eich dyddiad sefydlu
 doe.error.future-date=Mae’n rhaid i’r dyddiad sefydlu fod yn y gorffennol
 doe.error.invalid-date=Mae’n rhaid i’r dyddiad sefydlu fod yn ddyddiad go iawn
+doe.error.minMax=TRANSLATE Date of establishment must be between {0} and today
 
 vat.error.empty-date=Nodwch eich dyddiad dod i rym ar gyfer TAW
 vat.error.future-date=Mae’n rhaid i’r dyddiad dod i rym ar gyfer TAW fod yn y gorffennol
 vat.error.invalid-date=Mae’n rhaid i’r dyddiad dod i rym ar gyfer TAW fod yn ddyddiad go iawn
+vat.error.minMax=TRANSLATE Effective VAT date must be between {0} and today
 
 cds.feedback.continue=Rhagor am {0}
 
