@@ -22,20 +22,13 @@ import java.time.LocalDate
 
 trait Constraints {
 
-  protected def maxLength(maximum: Int, errorKey: String): Constraint[String] =
+  protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
     Constraint {
-      case str if str.length <= maximum =>
-        Valid
-      case _ =>
-        Invalid(errorKey, maximum)
-    }
-
-  protected def minLength(minimum: Int, errorKey: String): Constraint[String] =
-    Constraint {
-      case str if str.length >= minimum =>
-        Valid
-      case _ =>
-        Invalid(errorKey, minimum)
+      input =>
+        constraints
+          .map(_.apply(input))
+          .find(_ != Valid)
+          .getOrElse(Valid)
     }
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =

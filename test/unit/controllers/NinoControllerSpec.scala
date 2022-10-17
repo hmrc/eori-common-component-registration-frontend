@@ -151,7 +151,9 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe "Date of birth must be a real date"
-        page.getElementsText(NinoMatchPage.fieldLevelErrorDateOfBirth) shouldBe "Error: Date of birth must be a real date"
+        page.getElementsText(
+          NinoMatchPage.fieldLevelErrorDateOfBirth
+        ) shouldBe "Error: Date of birth must be a real date"
       }
     }
 

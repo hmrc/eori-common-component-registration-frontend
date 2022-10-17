@@ -180,12 +180,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
 
-        page.getElementsText(
-          pageLevelErrorSummaryListXPath
-        ) shouldBe s"Date of birth must be a real date"
-        page.getElementsText(
-          fieldLevelErrorDateOfBirth
-        ) shouldBe s"Error: Date of birth must be a real date"
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe s"Date of birth must be a real date"
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe s"Error: Date of birth must be a real date"
         page.getElementsText("title") should startWith("Error: ")
       }
     }
