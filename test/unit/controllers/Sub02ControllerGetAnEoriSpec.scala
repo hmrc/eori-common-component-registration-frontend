@@ -18,8 +18,8 @@ package unit.controllers
 
 import common.pages.{RegistrationCompletePage, RegistrationRejectedPage}
 import common.support.testdata.TestData
-import java.time.LocalDateTime
 
+import java.time.LocalDateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -30,6 +30,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, Sub02Controller}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
@@ -52,7 +53,9 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val mockCdsOrganisationType        = mock[CdsOrganisationType]
   private val mockRegDetails                 = mock[RegistrationDetails]
   private val mockSubscribeOutcome           = mock[Sub02Outcome]
+  private val mockSubscribe01Outcome         = mock[Sub01Outcome]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockSubscriptionDetails        = mock[SubscriptionDetails]
 
   private val sub01OutcomeView                = instanceOf[sub01_outcome_processing]
   private val sub02RequestNotProcessed        = instanceOf[sub02_request_not_processed]
@@ -343,7 +346,12 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       invokeEndSubscriptionPageWithAuthenticatedUser() {
         mockSessionCacheForOutcomePage
         when(mockSubscribeOutcome.eori).thenReturn(Some(EORI))
-        when(mockSubscribeOutcome.fullName).thenReturn("orgName")
+        when(mockSubscriptionDetails.name).thenReturn("orgName")
+        when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
+        when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
+          Future.successful(mockSubscriptionDetails)
+        )
+        when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
 
         result =>
           status(result) shouldBe OK
@@ -381,7 +389,12 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       invokeEndStandAloneWithAuthenticatedUser() {
         mockSessionCacheForOutcomePage
         when(mockSubscribeOutcome.eori).thenReturn(Some(EORI))
-        when(mockSubscribeOutcome.fullName).thenReturn("orgName")
+        when(mockSubscriptionDetails.name).thenReturn("orgName")
+        when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
+        when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
+          Future.successful(mockSubscriptionDetails)
+        )
+        when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
 
         result =>
           status(result) shouldBe OK
