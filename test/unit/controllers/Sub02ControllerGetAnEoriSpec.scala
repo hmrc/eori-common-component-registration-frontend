@@ -20,7 +20,7 @@ import common.pages.{RegistrationCompletePage, RegistrationRejectedPage}
 import common.support.testdata.TestData
 
 import java.time.LocalDateTime
-import org.mockito.ArgumentMatchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers.{any, eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.i18n.Messages
@@ -428,6 +428,12 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     "allow authenticated users to access the rejected page" in {
       invokeRejectedPageWithAuthenticatedUser() {
         mockSessionCacheForOutcomePage
+        when(mockSubscriptionDetails.name).thenReturn("orgName")
+        when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
+        when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
+          Future.successful(mockSubscriptionDetails)
+        )
+        when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
 
         result =>
           status(result) shouldBe OK
@@ -443,6 +449,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling eoriAlreadyExists on Sub02Controller" should {
     "render eori already exists page" in {
+      when(mockSubscriptionDetails.name).thenReturn("orgName")
+      when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
+      when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
       when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
@@ -456,6 +466,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling subscriptionInProgress on Sub02Controller" should {
     "render subscription in-progress page" in {
+
+      when(mockSubscriptionDetails.name).thenReturn("orgName")
+      when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
+      when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
       when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
@@ -469,6 +484,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling eoriAlreadyAssociated on Sub02Controller" should {
     "render Already Associated page" in {
+      when(mockSubscriptionDetails.name).thenReturn("orgName")
+      when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
+      when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
+
       when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
@@ -493,8 +513,12 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling pending on Sub02Controller" should {
     "render sub01 processing page" in {
-      when(mockSessionCache.sub02Outcome(any[Request[_]]))
-        .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
+
+      when(mockSubscriptionDetails.name).thenReturn("testFullName")
+      when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
+      when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
+
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokePending { result =>
         assertCleanedSession(result)
