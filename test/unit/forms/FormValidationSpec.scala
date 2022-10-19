@@ -124,7 +124,10 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth is missing" in {
       val data = formData.updated("date-of-birth.day", "").updated("date-of-birth.month", "")
       val res  = nameDobForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.empty-date")))
+      res.errors shouldBe Seq(
+        FormError("date-of-birth.day", Seq("dob.error.empty-date")),
+        FormError("date-of-birth.month", "")
+      )
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
@@ -178,7 +181,10 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth is missing" in {
       val data = formDataNino.updated("date-of-birth.day", "").updated("date-of-birth.month", "")
       val res  = ninoForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.empty-date")))
+      res.errors shouldBe Seq(
+        FormError("date-of-birth.day", Seq("dob.error.empty-date")),
+        FormError("date-of-birth.month", "")
+      )
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
@@ -237,7 +243,10 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth is missing" in {
       val data = formDataRow.updated("date-of-birth.day", "").updated("date-of-birth.month", "")
       val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.empty-date")))
+      res.errors shouldBe Seq(
+        FormError("date-of-birth.day", Seq("dob.error.empty-date")),
+        FormError("date-of-birth.month", "")
+      )
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
@@ -270,7 +279,10 @@ class FormValidationSpec extends UnitSpec {
     "fail when effective date is missing" in {
       val data = formDataVAT.updated("vat-effective-date.day", "").updated("vat-effective-date.month", "")
       val res  = vatDetailsForm.bind(data)
-      res.errors shouldBe Seq(FormError("vat-effective-date", Seq("vat.error.empty-date")))
+      res.errors shouldBe Seq(
+        FormError("vat-effective-date.day", Seq("vat.error.empty-date")),
+        FormError("vat-effective-date.month", "")
+      )
     }
     "fail when effective date in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
@@ -305,7 +317,11 @@ class FormValidationSpec extends UnitSpec {
     "fail when date of establishment is missing" in {
       val data = formDataDoE.updated("date-of-establishment.day", "").updated("date-of-establishment.month", "")
       val res  = dateOfEstablishmentForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.empty-date")))
+      res.errors shouldBe Seq(
+        FormError("date-of-establishment.day", Seq("doe.error.empty-date")),
+        FormError("date-of-establishment.month", "")
+      )
+
     }
     "fail when date of establishment in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)

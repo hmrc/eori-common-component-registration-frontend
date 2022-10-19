@@ -64,6 +64,15 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
         formatDate(key, data).left.map {
           _.map(_.copy(key = key, args = args))
         }
+      case 2 =>
+        Left(List(FormError(s"$key.${missingFields.head}", emptyKey, args)))
+      case 1 =>
+        Left(
+          List(
+            FormError(s"$key.${missingFields.head}", emptyKey, args),
+            (FormError(s"$key.${missingFields.last}", "", args))
+          )
+        )
       case _ =>
         Left(List(FormError(key, emptyKey, args)))
     }
