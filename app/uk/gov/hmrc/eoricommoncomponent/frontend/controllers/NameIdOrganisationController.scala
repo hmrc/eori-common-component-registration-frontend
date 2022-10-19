@@ -118,15 +118,21 @@ class NameIdOrganisationController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(organisationType, conf, formWithErrors, service))),
         formData =>
-          matchBusiness(conf.createCustomsId(formData.id), formData.name, None, conf.matchingServiceType, groupId).map {
+          matchBusiness(
+            conf.createCustomsId(formData.id),
+            formData.name,
+            None,
+            conf.matchingServiceType,
+            groupId
+          ) flatMap {
             case true =>
-              subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) flatMap {
-                Redirect(
-                  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-                    .form(service, isInReviewMode = false)
-                )
+              subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map {
+                _ =>
+                  Redirect(
+                    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
+                      .form(service, isInReviewMode = false)
+                  )
               }
-
             case false => Future.successful(matchNotFoundBadRequest(organisationType, conf, formData, service))
           }
       )
