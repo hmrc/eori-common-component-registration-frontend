@@ -276,6 +276,9 @@ class NameUtrOrganisationControllerSpec
             any[HeaderCarrier]
           )
         ).thenReturn(Future.successful(true))
+        when(
+          mockSubscriptionDetailService.cacheNameDetails(any[NameOrganisationMatchModel])(any[Request[AnyContent]])
+        ).thenReturn(Future.successful())
         submitForm(ValidNameUtrRequest, organisationType) { result =>
           await(result)
           verify(mockMatchingService).matchBusiness(meq(ValidUtr), meq(organisation), meq(None), any())(
