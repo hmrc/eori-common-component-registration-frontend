@@ -852,10 +852,10 @@ cds.subscription.date-of-establishment.find-it=Gallwch ddod o hyd i’r dyddiad 
 cds.subscription.sic.page.title=Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich sefydliad?
 cds.subscription.sic.heading=Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich sefydliad?
 cds.subscription.sic.description=Mae cod SIC yn rhif 5 digid sy’n helpu CThEM i nodi’r hyn y mae’ch sefydliad yn ei wneud. Gallwch chwilio’r gofrestr ar wefan <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Tŷ’r Cwmnïau am eich cod SIC (yn agor tab newydd).</a>
-cds.subscription.sic.organisation.page.title=What is your Standard Industrial Classification (SIC) code?
-cds.subscription.sic.organisation.heading=What is your Standard Industrial Classification (SIC) code?
-cds.subscription.sic.organisation.description=<a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab)</a>
-cds.subscription.sic.organisation.hint=A SIC code is a 5-digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number.
+cds.subscription.sic.organisation.page.title=TRANSLATE What is your Standard Industrial Classification (SIC) code?
+cds.subscription.sic.organisation.heading=TRANSLATE What is your Standard Industrial Classification (SIC) code?
+cds.subscription.sic.organisation.description=TRANSLATE <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab)</a>
+cds.subscription.sic.organisation.hint=TRANSLATE A SIC code is a 5-digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number.
 cds.subscription.sic.uk.soleTrader.description=Mae cod SIC yn rhif 5 digid sy’n helpu CThEM i nodi’r hyn y mae’ch busnes yn ei wneud. Os nad oes gennych un, gallwch chwilio am god SIC perthnasol ar wefan <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Tŷ’r Cwmnïau (yn agor tab newydd).</a>
 cds.subscription.sic.nonuk.soleTrader.description=Mae cod SIC yn rhif 5 digid sy’n helpu CThEM i nodi’r hyn y mae’ch busnes yn ei wneud. Mewn rhai gwledydd fe’i hadweinir hefyd fel rhif masnach. Os nad oes gennych un, gallwch chwilio am god SIC perthnasol ar wefan <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Tŷ’r Cwmnïau (yn agor tab newydd).</a>
 cds.subscription.sic.nonuk.soleTrader.heading=Nodwch god Dosbarthiad Diwydiannol Safonol (SIC) sy’n disgrifio’r hyn y mae’ch busnes yn ei wneud
@@ -1359,14 +1359,17 @@ date.year.error=Nodwch flwyddyn rhwng {0} a {1}
 dob.error.empty-date=Nodwch eich dyddiad geni
 dob.error.future-date=Mae’n rhaid i’r dyddiad geni fod yn y gorffennol
 dob.error.invalid-date=Mae’n rhaid i’r dyddiad geni fod yn ddyddiad go iawn
+dob.error.minMax=Mae’n rhaid i’r dyddiad geni fod rhwng {0} a heddiw
 
 doe.error.empty-date=Nodwch eich dyddiad sefydlu
 doe.error.future-date=Mae’n rhaid i’r dyddiad sefydlu fod yn y gorffennol
 doe.error.invalid-date=Mae’n rhaid i’r dyddiad sefydlu fod yn ddyddiad go iawn
+doe.error.minMax=Mae’n rhaid i’r dyddiad sefydlu fod rhwng {0} a heddiw
 
 vat.error.empty-date=Nodwch eich dyddiad dod i rym ar gyfer TAW
 vat.error.future-date=Mae’n rhaid i’r dyddiad dod i rym ar gyfer TAW fod yn y gorffennol
 vat.error.invalid-date=Mae’n rhaid i’r dyddiad dod i rym ar gyfer TAW fod yn ddyddiad go iawn
+vat.error.minMax=Mae’n rhaid i’r dyddiad y daw TAW i rym fod rhwng {0} a heddiw
 
 cds.feedback.continue=Rhagor am {0}
 
