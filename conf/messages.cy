@@ -342,6 +342,7 @@ subscription.check-your-email.heading=Gwirio’ch cyfeiriad e-bost
 subscription.check-your-email.label=Cyfeiriad e-bost
 subscription.check-your-email.confirm.label=Byddwn yn anfon cysylltiad atoch i gadarnhau’ch cyfeiriad e-bost.
 subscription.check-your-email.confirm.question=Ai dyma’r cyfeiriad e-bost rydych am ei ddefnyddio?
+subscription.check-your-email.confirm.title=//TODO Get Welsh
 subscription.check-your-email.yes=Iawn
 subscription.check-your-email.no=Na, mae angen i mi newid yr e-bost hwn
 enter-email-body-text=Byddwn yn defnyddio hwn i anfon y canlynol atoch:
