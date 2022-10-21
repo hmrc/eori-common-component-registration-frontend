@@ -311,14 +311,14 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> "32"), webPage)(
             DateOfBirth,
             fieldLevelErrorDateOfBirth,
-            "Enter a day between 1 and 31"
+            "Date of birth must be a real date"
           )
       }
 
       "not be in the future " in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           val tomorrow   = LocalDate.now().plusDays(1)
-          val FutureDate = "Date of birth must be in the past"
+          val FutureDate = "Date of birth must be between 1900 and today"
           import controllerFixture._
           assertInvalidField(
             formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> tomorrow.getDayOfMonth.toString,
@@ -335,7 +335,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
             DateOfBirth,
             fieldLevelErrorDateOfBirth,
-            "Enter a month between 1 and 12"
+            "Date of birth must be a real date"
           )
       }
     }

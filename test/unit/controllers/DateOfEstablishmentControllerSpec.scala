@@ -90,10 +90,10 @@ class DateOfEstablishmentControllerSpec
 
   private val DateOfEstablishmentMissingErrorPage     = "Enter your date of establishment"
   private val DateOfEstablishmentMissingErrorField    = "Error: Enter your date of establishment"
-  private val DateOfEstablishmentInvalidDayErrorPage  = "Enter a day between 1 and 31"
-  private val DateOfEstablishmentInvalidDayErrorField = "Error: Enter a day between 1 and 31"
-  private val DateOfEstablishmentInFutureErrorPage    = "Date of establishment must be in the past"
-  private val DateOfEstablishmentInFutureErrorField   = "Error: Date of establishment must be in the past"
+  private val DateOfEstablishmentInvalidDayErrorPage  = "Date of establishment must be a real date"
+  private val DateOfEstablishmentInvalidDayErrorField = "Error: Date of establishment must be a real date"
+  private val DateOfEstablishmentInFutureErrorPage    = "Date of establishment must be between 1000 and today"
+  private val DateOfEstablishmentInFutureErrorField   = "Error: Date of establishment must be between 1000 and today"
 
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager, mockSubscriptionBusinessService, mockSubscriptionDetailsHolderService)

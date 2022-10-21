@@ -25,10 +25,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.{mandatoryDateTodayOrBefore, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.{_}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
-object MatchingForms {
+import java.time.LocalDate
+
+object MatchingForms extends Mappings {
 
   val Length35          = 35
   val Length34          = 34
@@ -196,33 +199,36 @@ object MatchingForms {
     )(NameIdOrganisationMatchModel.unapply)
   )
 
-  val ninoForm: Form[NinoMatch] = Form(
-    mapping(
-      "first-name" -> text.verifying(validFirstName),
-      "last-name"  -> text.verifying(validLastName),
-      "date-of-birth" -> mandatoryDateTodayOrBefore(
-        onEmptyError = "dob.error.empty-date",
-        onInvalidDateError = "dob.error.invalid-date",
-        onDateInFutureError = "dob.error.future-date",
-        minYear = DateConverter.earliestYearDateOfBirth
-      ),
-      "nino" -> text.verifying(validNino)
-    )(NinoMatch.apply)(NinoMatch.unapply)
-  )
+  val ninoForm: Form[NinoMatch] =
+    Form(
+      mapping(
+        "first-name" -> text.verifying(validFirstName),
+        "last-name"  -> text.verifying(validLastName),
+        validateDateOfBirth,
+        "nino" -> text.verifying(validNino)
+      )(NinoMatch.apply)(NinoMatch.unapply)
+    )
 
-  val enterNameDobForm: Form[NameDobMatchModel] = Form(
-    mapping(
-      "first-name"  -> text.verifying(validFirstName),
-      "middle-name" -> optional(text.verifying(validMiddleName)),
-      "last-name"   -> text.verifying(validLastName),
-      "date-of-birth" -> mandatoryDateTodayOrBefore(
-        onEmptyError = "dob.error.empty-date",
-        onInvalidDateError = "dob.error.invalid-date",
-        onDateInFutureError = "dob.error.future-date",
-        minYear = DateConverter.earliestYearDateOfBirth
-      )
-    )(NameDobMatchModel.apply)(NameDobMatchModel.unapply)
-  )
+  val enterNameDobForm: Form[NameDobMatchModel] =
+    Form(
+      mapping(
+        "first-name"  -> text.verifying(validFirstName),
+        "middle-name" -> optional(text.verifying(validMiddleName)),
+        "last-name"   -> text.verifying(validLastName),
+        validateDateOfBirth
+      )(NameDobMatchModel.apply)(NameDobMatchModel.unapply)
+    )
+
+  private def validateDateOfBirth = {
+
+    val minimumDate = LocalDate.of(DateConverter.earliestYearDateOfBirth, 1, 1)
+    val today       = LocalDate.now()
+
+    "date-of-birth" -> localDate(emptyKey = "dob.error.empty-date", invalidKey = "dob.error.invalid-date").verifying(
+      minDate(minimumDate, "dob.error.minMax", DateConverter.earliestYearDateOfBirth.toString)
+    )
+      .verifying(maxDate(today, "dob.error.minMax", DateConverter.earliestYearDateOfBirth.toString))
+  }
 
   private def validFirstName: Constraint[String] =
     Constraint("constraints.first-name")({
@@ -369,12 +375,7 @@ object MatchingForms {
         "given-name"  -> text.verifying(validGivenName),
         "middle-name" -> optional(text.verifying(validMiddleName)),
         "family-name" -> text.verifying(validFamilyName),
-        "date-of-birth" -> mandatoryDateTodayOrBefore(
-          onEmptyError = "dob.error.empty-date",
-          onInvalidDateError = "dob.error.invalid-date",
-          onDateInFutureError = "dob.error.future-date",
-          minYear = DateConverter.earliestYearDateOfBirth
-        )
+        validateDateOfBirth
       )(IndividualNameAndDateOfBirth.apply)(IndividualNameAndDateOfBirth.unapply)
     )
 

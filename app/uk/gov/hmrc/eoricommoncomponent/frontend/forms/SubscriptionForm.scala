@@ -16,18 +16,19 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
-import play.api.data.Forms.text
+import play.api.data.Forms.{localDate, of, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import play.api.data.{Form, Forms}
+import play.api.data.{FieldMapping, Form, Forms}
 import uk.gov.hmrc.emailaddress.EmailAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
 import java.time.LocalDate
 
-object SubscriptionForm {
+object SubscriptionForm extends Mappings {
 
   private val validConfirmIndividualTypes = Set(CdsOrganisationType.SoleTraderId, CdsOrganisationType.IndividualId)
 
@@ -38,14 +39,19 @@ object SubscriptionForm {
       .transform[CdsOrganisationType](CdsOrganisationType.forId, _.id)
   )
 
-  val subscriptionDateOfEstablishmentForm: Form[LocalDate] = Form(
-    "date-of-establishment" -> mandatoryDateTodayOrBefore(
-      onEmptyError = "doe.error.empty-date",
-      onInvalidDateError = "doe.error.invalid-date",
-      onDateInFutureError = "doe.error.future-date",
-      minYear = DateConverter.earliestYearDateOfEstablishment
+  val subscriptionDateOfEstablishmentForm: Form[LocalDate] = {
+
+    val minimumDate = LocalDate.of(DateConverter.earliestYearDateOfEstablishment, 1, 1)
+    val today       = LocalDate.now()
+
+    Form(
+      "date-of-establishment" -> localDate(
+        emptyKey = "doe.error.empty-date",
+        invalidKey = "doe.error.invalid-date"
+      ).verifying(minDate(minimumDate, "doe.error.minMax", DateConverter.earliestYearDateOfEstablishment.toString))
+        .verifying(maxDate(today, "doe.error.minMax", DateConverter.earliestYearDateOfEstablishment.toString))
     )
-  )
+  }
 
   val sicCodeform = Form(
     Forms.mapping("sic" -> text.verifying(validSicCode))(SicCodeViewModel.apply)(SicCodeViewModel.unapply)
