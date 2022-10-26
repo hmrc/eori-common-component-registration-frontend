@@ -1399,7 +1399,14 @@ cds.subscription.outcomes.in-processing.heading=We are processing the subscripti
 
 enter-email-body-text=We will use this to send you the result of your application.
 cds.subscription.verify-email.para2=For your security the link in the email will expire after 72 hours.
-
+cds.subscription.enter-email.list-heading=The email address you give us here will be the only one we’ll use to:
+cds.subscription.enter-email.list-bullet-1=update you about changes to the Customs Declaration Service (CDS)
+cds.subscription.enter-email.list-bullet-2=notify you of urgent updates about goods in customs, if you submit import or export declarations
+cds.subscription.enter-email.list-bullet-3=send duty deferment Direct Debit notices and postponed VAT statements for your imports
+cds.subscription.enter-email.heading=What email address can we use for customs notifications?
+subscription.enter-email.heading=What is your email address?
+cds.subscription.enter-email.hint=You can change this email at a later date. For example, if different teams are involved, you may decide to set up a shared email inbox for customs notifications.
+cds.subscription.enter-email.para=Enter the email address to be used for CDS
 cds.email-confirmed.para.get-access=You can continue with your application.
 
 cds.subscription.outcomes.success.will-send-email=We will send you an email to confirm when you have access to {0}. This can take up to two hours.
