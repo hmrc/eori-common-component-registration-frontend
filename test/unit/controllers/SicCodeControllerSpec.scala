@@ -135,35 +135,35 @@ class SicCodeControllerSpec
       }
     }
 
-    "display title as 'What is the Standard Industrial Classification (SIC) code for your partnership?' for Partnership org type" in {
+    "display title as 'What is your Standard Industrial Classification (SIC) code?' for Partnership org type" in {
       showCreateForm(orgType = Partnership, userSelectedOrgType = CdsPartnership) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("What is the Standard Industrial Classification (SIC) code for your partnership?")
+        page.title should startWith("What is your Standard Industrial Classification (SIC) code?")
       }
     }
 
-    "display heading as 'What is the Standard Industrial Classification (SIC) code for your partnership?' for Partnership org type" in {
+    "display heading as 'What is the Standard Industrial Classification (SIC) code?' for Partnership org type" in {
       showCreateForm(orgType = Partnership, userSelectedOrgType = CdsPartnership) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementText(
           SicCodePage.headingXpath
-        ) shouldBe "What is the Standard Industrial Classification (SIC) code for your partnership?"
+        ) shouldBe "What is your Standard Industrial Classification (SIC) code?"
       }
     }
 
-    "display title as 'What is the Standard Industrial Classification (SIC) code for your partnership?' for LLP org type" in {
+    "display title as 'What is the Standard Industrial Classification (SIC) code?' for LLP org type" in {
       showCreateForm(orgType = LLP, userSelectedOrgType = CdsPartnership) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("What is the Standard Industrial Classification (SIC) code for your partnership?")
+        page.title should startWith("What is your Standard Industrial Classification (SIC) code?")
       }
     }
 
-    "display heading as 'What is the Standard Industrial Classification (SIC) code for your partnership?' for LLP org type" in {
+    "display heading as 'What is the Standard Industrial Classification (SIC) code?' for LLP org type" in {
       showCreateForm(orgType = LLP, userSelectedOrgType = CdsPartnership) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementText(
           SicCodePage.headingXpath
-        ) shouldBe "What is the Standard Industrial Classification (SIC) code for your partnership?"
+        ) shouldBe "What is your Standard Industrial Classification (SIC) code?"
       }
     }
 
@@ -188,36 +188,55 @@ class SicCodeControllerSpec
     val formModes = Table(("userSelectedOrgType", "orgType"), (SoleTrader, "SoleTrader"), (Individual, "Individual"))
 
     forAll(formModes) { (userSelectedOrgType, orgType) =>
-      s"display title as 'Enter a Standard Industrial Classification (SIC) code that describes what your business does' for $orgType (NA) org type" in {
+      s"display title as 'What is your Standard Industrial Classification (SIC) code?' for $orgType (NA) org type" in {
         showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) { result =>
           val page = CdsPage(contentAsString(result))
-          page.title should startWith(
-            "Enter a Standard Industrial Classification (SIC) code that describes what your business does"
-          )
+          userSelectedOrgType match {
+
+            case Individual =>
+              page.title should startWith(
+                "Enter a Standard Industrial Classification (SIC) code that describes what your business does"
+              )
+            case _ =>
+              page.title should startWith("What is your Standard Industrial Classification (SIC) code?")
+          }
         }
       }
 
-      s"display heading as 'Enter a Standard Industrial Classification (SIC) code that describes what your business does' for $orgType (NA) org type" in {
+      s"display heading as 'What is your Standard Industrial Classification (SIC) code?' for $orgType (NA) org type" in {
         showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) { result =>
           val page = CdsPage(contentAsString(result))
-          page.getElementText(
-            SicCodePage.headingXpath
-          ) shouldBe "Enter a Standard Industrial Classification (SIC) code that describes what your business does"
+          userSelectedOrgType match {
+            case Individual =>
+              page.getElementText(SicCodePage.headingXpath) should startWith(
+                "Enter a Standard Industrial Classification (SIC) code that describes what your business does"
+              )
+            case _ =>
+              page.getElementText(SicCodePage.headingXpath) should startWith(
+                "What is your Standard Industrial Classification (SIC) code"
+              )
+          }
         }
       }
 
       s"display correct description for $orgType (NA) org type" in {
         showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) {
-          val hintText = userSelectedOrgType match {
-            case SoleTrader =>
-              "A SIC code is a 5 digit number that helps HMRC identify what your business does. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
-            case _ =>
-              "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
-          }
           result =>
             val page = CdsPage(contentAsString(result))
-            page.getElementText(SicCodePage.sicDescriptionLabelXpath) should startWith(hintText)
-            page.getElementsHref("//*[@id='description']/a") shouldBe "https://resources.companieshouse.gov.uk/sic/"
+            userSelectedOrgType match {
+              case Individual =>
+                page.getElementText(SicCodePage.sicDescriptionLabelXpath) should startWith(
+                  "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
+                )
+                page.getElementsHref("//*[@id='description']/a") shouldBe "https://resources.companieshouse.gov.uk/sic/"
+              case _ =>
+                page.getElementText(SicCodePage.sicDescriptionLabelXpath) should startWith(
+                  "Find your SIC code (opens in new window or tab) If you do not have one, you can search for a relevant SIC code on Companies House (opens in a new window or tab)"
+                )
+                page.getElementsHref(
+                  "//*[@id='description']/a"
+                ) shouldBe "https://www.gov.uk/get-information-about-a-company"
+            }
         }
       }
 
