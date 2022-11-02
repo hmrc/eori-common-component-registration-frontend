@@ -14,19 +14,14 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsViewModel}
-@import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsViewModel}
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 @import views.html.helper._
-@import views._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset, GovukHint}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{Radios, RadioItem}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 
 @this(
 layout_di: layout,
@@ -40,13 +35,10 @@ govukHint: GovukHint
 
 @(contactForm: Form[ContactDetailsViewModel], email:Option[String]=None, isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
-@fieldsetHint = {
-@govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("cds.subscription.contact-details.intro")), classes = "govuk-!-margin-bottom-3"))
-}
 
 @html = {
 
-@fieldsetHint
+<p id="contact-details-intro" class="govuk-label govuk-!-margin-bottom-6">@messages("cds.subscription.contact-details.intro")</p>
 
 <div id="email-outer" class="govuk-form-group ">
     <span class="govuk-label govuk-!-font-weight-bold">@messages("subscription.check-your-email.label")</span>
