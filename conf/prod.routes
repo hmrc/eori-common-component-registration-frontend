@@ -203,4 +203,6 @@ GET         /customs-registration-services/:service/register/you-cannot-change-a
 
 GET         /customs-registration-services/:service/register/address-invalid                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressInvalidController.page(service: Service)
 
+GET         /admin/metrics                                                                                @com.kenshoo.play.metrics.MetricsController.metrics
+
 ->          /                                                                                            health.Routes
