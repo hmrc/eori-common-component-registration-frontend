@@ -135,9 +135,9 @@ class NameUtrOrganisationControllerSpec
 
           val UtrHintText = organisationType match {
             case "partnership" | "limited-liability-partnership" =>
-              "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on partnership tax returns and other letters about your partnership. It may be called 'reference', 'UTR' or 'official use'. You can find a lost UTR number (opens in new tab)."
+              "You can find a lost UTR This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called 'reference', 'UTR' or 'official use'."
             case _ =>
-              "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called 'reference', 'UTR' or 'official use'. You can find a lost UTR number (opens in new tab)."
+              "You can find a lost UTR This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called 'reference', 'UTR' or 'official use'."
           }
 
           val UtrHintTextLink = "https://www.gov.uk/find-lost-utr-number"
