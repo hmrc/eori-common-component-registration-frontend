@@ -50,6 +50,13 @@
     title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
 }
 
+@banner = @{
+    if(service.code.equalsIgnoreCase(appConfig.standaloneServiceCode)) {
+        messages("cds.banner.registration")
+    }
+    else messages("cds.banner.subscription", longName)
+}
+
 @titleErr = @{
     form match {
         case Some(f) if f.errors.nonEmpty => s"%s: %s".format(messages("cds.error.page-title"), titleWithEnding)
@@ -112,7 +119,7 @@
     phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedBackRegister(service))),
     additionalHeadBlock = Some(theHead),
     nonce = CSPNonce.get,
-    serviceName = Some(messages("cds.banner.registration", longName)),
+    serviceName = Some(messages(banner)),
     accessibilityStatementUrl = Some(service.accessibilityUrl),
     beforeContentBlock = Some(beforeContent)
 )(mainContentWithGetHelp)
