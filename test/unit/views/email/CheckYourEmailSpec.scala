@@ -52,4 +52,5 @@ class CheckYourEmailSpec extends ViewSpec {
     val result = view(Some(email), form, isInReviewMode, atarService)
     Jsoup.parse(contentAsString(result))
   }
+
 }
