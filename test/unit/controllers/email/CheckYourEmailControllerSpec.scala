@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.GroupId
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UpdateVerifiedEmailService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
@@ -59,6 +59,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
 
   private val mockSave4LaterService = mock[Save4LaterService]
   private val mockSessionCache      = mock[SessionCache]
+  private val mockUpdateVerifiedEmailService = mock[UpdateVerifiedEmailService]
 
   private val checkYourEmailView = instanceOf[check_your_email]
   private val emailConfirmedView = instanceOf[email_confirmed]
@@ -67,6 +68,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
   private val controller = new CheckYourEmailController(
     mockAuthAction,
     mockSave4LaterService,
+    mockUpdateVerifiedEmailService,
     mockSessionCache,
     mcc,
     checkYourEmailView,
