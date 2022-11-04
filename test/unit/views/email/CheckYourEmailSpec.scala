@@ -40,14 +40,10 @@ class CheckYourEmailSpec extends ViewSpec {
       doc.title must startWith("Is this the email address you want to use?")
     }
     "have the correct h1 text" in {
-      doc.body.getElementsByTag("h1").text() mustBe "Is this the email address you want to use?"
+      doc.body.getElementsByTag("h1").text() mustBe "Is test@example.com the email address you want to use?"
     }
     "have the correct class on the h1" in {
       doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
-    }
-
-    "have an input of type 'text'" in {
-      doc.body.getElementById("email").text() mustBe "test@example.com"
     }
   }
 
@@ -56,5 +52,4 @@ class CheckYourEmailSpec extends ViewSpec {
     val result = view(Some(email), form, isInReviewMode, atarService)
     Jsoup.parse(contentAsString(result))
   }
-
 }

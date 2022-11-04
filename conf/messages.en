@@ -365,7 +365,8 @@ subscription.enter-email.heading=What is your email address?
 subscription.check-your-email.heading=Check  your email address
 subscription.check-your-email.label=Email address
 subscription.check-your-email.confirm.label=We will send you a link to confirm your email address.
-subscription.check-your-email.confirm.question=Is this the email address you want to use?
+subscription.check-your-email.confirm.question=Is {0} the email address you want to use?
+subscription.check-your-email.confirm.title=Is this the email address you want to use?
 subscription.check-your-email.yes=Yes
 
 subscription.enter-email-hint-text=the result of your application to get access to CDS
