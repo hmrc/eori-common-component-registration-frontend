@@ -114,10 +114,10 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     "display the correct text in the heading and intro" in {
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(headingXPath) shouldBe "EORI application contact details"
+        page.getElementsText(headingXPath) shouldBe "EORI number application contact details"
         page.getElementsText(
           introXPathRegister
-        ) shouldBe "We’ll use these details to send you the result of your GB EORI application."
+        ) shouldBe "We will use these details to contact you about your EORI number application."
       }
     }
 

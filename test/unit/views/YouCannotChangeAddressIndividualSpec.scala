@@ -30,17 +30,17 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
   "You cannot change address for individual" should {
 
     "display correct title" in {
-      indDoc.title must startWith("Please contact HMRC")
+      indDoc.title must startWith("Contact HMRC")
     }
 
     "display correct heading" in {
-      indDoc.body.getElementsByTag("h1").text mustBe "Please contact HMRC"
+      indDoc.body.getElementsByTag("h1").text mustBe "Contact HMRC"
     }
 
     "display correct info" in {
       indDoc.body
         .getElementById("contact-info")
-        .text mustBe "Your registered address is held at HMRC (opens in new tab) . You will need to update your details there and return to complete your EORI application."
+        .text mustBe "Your registered address is held at HMRC (opens in new tab) . You will need to update your details there and return to complete your EORI number application."
     }
 
   }

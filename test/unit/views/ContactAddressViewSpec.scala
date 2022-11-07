@@ -39,14 +39,14 @@ class ContactAddressViewSpec extends ViewSpec {
   "Confirm Contact Details" should {
     "display correct title" in {
       doc.title() must startWith(
-        "Do you want us to use this address to send you any information about your application?"
+        "Do you want us to use this address to send you information about your EORI number application?"
       )
     }
     "have the correct h1 text" in {
       doc
         .body()
         .getElementsByTag("h1")
-        .text() mustBe "Do you want us to use this address to send you any information about your application?"
+        .text() mustBe "Do you want us to use this address to send you information about your EORI number application?"
     }
     "have the correct class on the h1" in {
       doc.body().getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
@@ -58,7 +58,7 @@ class ContactAddressViewSpec extends ViewSpec {
       doc
         .body()
         .getElementsByTag("legend")
-        .text() mustBe "Do you want us to use this address to send you any information about your application?"
+        .text() mustBe "Do you want us to use this address to send you information about your EORI number application?"
     }
     "have an input of type 'radio' for Yes option" in {
       doc.body().getElementById("yes-no-answer-true").attr("type") mustBe "radio"

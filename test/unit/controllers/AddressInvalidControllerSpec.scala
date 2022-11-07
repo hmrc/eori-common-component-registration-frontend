@@ -53,7 +53,7 @@ class AddressInvalidControllerSpec extends ControllerSpec with AuthActionMock {
       createForm() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("Please contact HMRC")
+        page.title should startWith("Contact HMRC")
       }
     }
     "display contact Companies House page for organisation" in {
@@ -61,7 +61,7 @@ class AddressInvalidControllerSpec extends ControllerSpec with AuthActionMock {
       createForm() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("Please contact Companies House")
+        page.title should startWith("Contact Companies House")
       }
     }
   }

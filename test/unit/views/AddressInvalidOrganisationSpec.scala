@@ -30,11 +30,11 @@ class AddressInvalidOrganisationSpec extends ViewSpec {
   "Address Invalid Organisation page" should {
 
     "display correct title" in {
-      indDoc.title must startWith("Please contact Companies House")
+      indDoc.title must startWith("Contact Companies House")
     }
 
     "display correct heading" in {
-      indDoc.body.getElementsByTag("h1").text mustBe "Please contact Companies House"
+      indDoc.body.getElementsByTag("h1").text mustBe "Contact Companies House"
     }
 
     "display correct info" in {
