@@ -27,14 +27,13 @@ import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.PdfGeneratorConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, Sub02Controller}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{xi_eori_guidance, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder._
@@ -51,7 +50,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val mockSessionCache               = mock[SessionCache]
   private val mockCdsSubscriber              = mock[CdsSubscriber]
   private val mockCdsOrganisationType        = mock[CdsOrganisationType]
-  private val mockPdfGeneratorService        = mock[PdfGeneratorConnector]
   private val mockRegDetails                 = mock[RegistrationDetails]
   private val mockSubscribeOutcome           = mock[Sub02Outcome]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
@@ -99,7 +97,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockAuthConnector, mockCdsSubscriber, mockPdfGeneratorService, mockSessionCache)
+    reset(mockAuthConnector, mockCdsSubscriber, mockSessionCache)
 
     super.afterEach()
   }

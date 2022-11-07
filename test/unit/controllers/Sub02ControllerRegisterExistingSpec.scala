@@ -22,11 +22,10 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.PdfGeneratorConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CdsSubscriber, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{xi_eori_guidance, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.builders.AuthBuilder._
@@ -40,7 +39,6 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
   private val mockRequestSessionData         = mock[RequestSessionData]
   private val mockSessionCache               = mock[SessionCache]
   private val mockCdsSubscriber              = mock[CdsSubscriber]
-  private val mockPdfGeneratorService        = mock[PdfGeneratorConnector]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
   private val sub01OutcomeView                = instanceOf[sub01_outcome_processing]
@@ -88,7 +86,7 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockAuthConnector, mockCdsSubscriber, mockPdfGeneratorService, mockSessionCache, xiEoriGuidanceView)
+    reset(mockAuthConnector, mockCdsSubscriber, mockSessionCache, xiEoriGuidanceView)
 
     super.afterEach()
   }

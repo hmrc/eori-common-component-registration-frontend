@@ -54,7 +54,6 @@ GET         /customs-registration-services/:service/register/you-need-different-
 GET         /customs-registration-services/:service/register/review-details                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.reviewDetails(service: Service)
 POST        /customs-registration-services/:service/register/subscribe                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.submitDetails(service: Service)
 
-GET         /customs-registration-services/:service/register/download/pdf                                         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadPDFController.download(service: Service)
 GET         /customs-registration-services/:service/register/download/text                                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadTextController.download(service: Service)
 
 

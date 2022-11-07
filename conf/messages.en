@@ -400,7 +400,6 @@ subscription.check-your-details.contactpreference=Contact preference
 subscription.confirmation.is-subscribed={0} is subscribed to Customs Declaration Services
 subscription.confirmation.being-processed=The EORI registration for<br>{0}<br>is being processed
 subscription.confirmation.been-rejected=The EORI registration for<br>{0}<br>has been rejected
-subscription.confirmation.download-pdf=Download a PDF with your subscription details
 subscription.confirmation.download-accessible-text=Download an accessible text file with your subscription details
 subscription.confirmation.what-happens-next-sentence1-processing=We will send you an email when your application has been processed.
 subscription.confirmation.what-happens-next-sentence1-rejected=You can phone HMRC to discuss your application on 0300 322 7067. Open 8am to 6pm, Monday to Friday (except public holidays).
@@ -984,7 +983,6 @@ cds.subscription.outcomes.success.extra.information.next=What happens next
 cds.subscription.outcomes.success.extra.information=We will send a second email to confirm when your subscription to get a goods movement reference is active. This can take up to 2 hours.
 cds.subscription.outcomes.success.extra.information1=Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the {0}. Your new GB EORI has no expiry date.
 cds.subscription.outcomes.success.extra.information2=check an EORI service (opens in new tab)
-cds.subscription.outcomes.success.download-eori=Download a PDF of your EORI number(266kb)
 cds.subscription.outcomes.success.download-eori-textfile=Download an accessible text file of your EORI number(12kb)
 cds.subscription.outcomes.invalid.sub-title=There is a problem with the EORI you have supplied, please contact us for more information
 cds.subscription.outcomes.processing.title=CDS Registration Pending
@@ -1021,15 +1019,12 @@ cds.standalone.subscription.outcomes.success.extra.information1=Your new GB EORI
 cds.standalone.subscription.outcomes.success.extra.information2=check an EORI service (opens in new tab)
 cds.standalone.subscription.outcomes.success.issued=issued by HMRC on
 cds.standalone.subscription.outcomes.success.title=Application complete
-cds.standalone.subscription.outcomes.success.download-eori=Download a PDF of your EORI number(266kb)
 cds.standalone.subscription.outcomes.success.download-eori-textfile=Download an accessible text file of your EORI number(12kb)
 
 # Reg Existing Complete
 cds.reg.existing.outcomes.success.title=EORI Registration Complete
 cds.reg.existing.outcomes.success.heading.part2=the Customs Declaration Service
 cds.reg.existing.outcomes.success.eori.number=EORI number:
-cds.reg.existing.outcomes.success.download-eori=Download a PDF with your registration details (40kb)
-cds.reg.existing.outcomes.success.download-eori.21kb=Download a PDF with your registration details (21kb)
 cds.reg.existing.outcomes.success.download-eori-textfile=Download an accessible text file with your registration details (1 kb)
 
 # Enrolment Already Exists
@@ -1552,8 +1547,6 @@ cds.enrolment.pending.group.sameService.paragraph1=Our records show that someone
 cds.languageSelect.current.label=English
 cds.languageSelect.select.label=Cymraeg
 cds.languageSelect.select.hint=Newid yr iaith ir Gymraeg
-
-cds.pdf.outcomes.eori.number=EORI number: {0}
 
 confirm-business-details.title-and-heading=Is this your registered company address?
 confirm-business-details.row.title-and-heading=Is this your registered organisation address?
