@@ -134,10 +134,10 @@ class AddressControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
-    "display title as 'EORI application contact address'" in {
+    "display title as 'EORI number application contact address'" in {
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("EORI application contact address")
+        page.title() should startWith("EORI number application contact address")
       }
     }
 
@@ -151,7 +151,7 @@ class AddressControllerSpec
         .thenReturn(Some(contactDetailsModel))
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("EORI application contact address")
+        page.title() should startWith("EORI number application contact address")
         page.getElementValue(AddressPage.streetFieldXPath) shouldBe "streetName"
         page.getElementValue(AddressPage.cityFieldXPath) shouldBe "cityName"
         page.getElementValue(AddressPage.postcodeFieldXPath) shouldBe "SE281AA"
