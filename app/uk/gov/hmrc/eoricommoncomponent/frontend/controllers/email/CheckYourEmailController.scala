@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.{YesNo, confirmEmailYesNoAnswerForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.{confirmEmailYesNoAnswerForm, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UpdateVerifiedEmailService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -169,12 +169,13 @@ class CheckYourEmailController @Inject() (
               "[CheckYourEmailController][sendVerification] - " +
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
-              if(service.enrolmentKey == Service.cds.enrolmentKey) {
-                for {
-                  maybeEori <- cdsFrontendDataCache.eori
-                  verifiedEmailStatus <- Future.successful(updateVerifiedEmailService.updateVerifiedEmail(None, email, maybeEori.get))
-                } yield verifiedEmailStatus
-              }
+            if (service.enrolmentKey == Service.cds.enrolmentKey)
+              for {
+                maybeEori <- cdsFrontendDataCache.eori
+                verifiedEmailStatus <- Future.successful(
+                  updateVerifiedEmailService.updateVerifiedEmail(None, email, maybeEori.get)
+                )
+              } yield verifiedEmailStatus
 
             save4LaterService
               .saveEmail(groupId, emailStatus.copy(isVerified = true))

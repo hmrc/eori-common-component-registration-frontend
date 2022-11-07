@@ -57,8 +57,8 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
 
   private val mockEmailVerificationService = mock[EmailVerificationService]
 
-  private val mockSave4LaterService = mock[Save4LaterService]
-  private val mockSessionCache      = mock[SessionCache]
+  private val mockSave4LaterService          = mock[Save4LaterService]
+  private val mockSessionCache               = mock[SessionCache]
   private val mockUpdateVerifiedEmailService = mock[UpdateVerifiedEmailService]
 
   private val checkYourEmailView = instanceOf[check_your_email]
@@ -216,6 +216,62 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         page.getElementsText(
           CheckYourEmailPage.fieldLevelErrorYesNoAnswer
         ) shouldBe s"Error: $problemWithSelectionError"
+      }
+    }
+
+    "call update verified Email Address page for verified email - CDS" in {
+      when(mockSessionCache.eori(any[Request[_]])).thenReturn(Future.successful(Some("GB777777777771")))
+      when(
+        mockUpdateVerifiedEmailService.updateVerifiedEmail(any[Option[String]], any[String], any[String])(
+          any[HeaderCarrier]
+        )
+      )
+        .thenReturn(Future.successful(true))
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = true))))
+      when(
+        mockSave4LaterService
+          .saveEmail(any[GroupId], any[EmailStatus])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(unit))
+      when(mockSessionCache.saveEmail(any[String])(any[Request[_]]))
+        .thenReturn(Future.successful(true))
+
+      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(false)))
+
+      submitForm(ValidRequest + (yesNoInputName -> answerYes), service = cdsService) {
+        result =>
+          status(result) shouldBe SEE_OTHER
+          result.header.headers("Location") should endWith("/customs-registration-services/cds/register/check-user")
+      }
+    }
+
+    "call update verified Email Address page for verified email - EORI only" in {
+      when(mockSessionCache.eori(any[Request[_]])).thenReturn(Future.successful(Some("GB777777777771")))
+      when(
+        mockUpdateVerifiedEmailService.updateVerifiedEmail(any[Option[String]], any[String], any[String])(
+          any[HeaderCarrier]
+        )
+      )
+        .thenReturn(Future.successful(true))
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = true))))
+      when(
+        mockSave4LaterService
+          .saveEmail(any[GroupId], any[EmailStatus])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(unit))
+      when(mockSessionCache.saveEmail(any[String])(any[Request[_]]))
+        .thenReturn(Future.successful(true))
+
+      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(false)))
+
+      submitForm(ValidRequest + (yesNoInputName -> answerYes), service = eoriOnlyService) {
+        result =>
+          status(result) shouldBe SEE_OTHER
+          result.header.headers("Location") should endWith(
+            "/customs-registration-services/eori-only/register/check-user"
+          )
       }
     }
   }
