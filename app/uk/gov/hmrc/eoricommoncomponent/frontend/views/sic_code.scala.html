@@ -64,10 +64,11 @@
         case (true, true, false, false) => "sic.organisation"
         case (false, true, false, false) => "sic.organisation"
         case (false, false, false, true) => "sic.organisation"
+        case (true, false, true, false) => "sic.individual"
         case _ =>
-            if(isIndividual || isSoleTrader) { "sic.individual" }
-            else if(isPartnership) "sic.partnership"
-            else "sic"
+            if (isSoleTrader || isPartnership) "sic.organisation"
+            else if(isIndividual) "sic.individual"
+            else "sic.organisation"
     }
 }
 
@@ -76,12 +77,11 @@
         case (true, true, false) => "cds.subscription.sic.organisation.description"
         case (false, true, false) => "cds.subscription.sic.organisation.description"
         case (true, false, true) => "cds.subscription.sic.nonuk.soleTrader.description"
-        case (false, false, true) => "cds.subscription.sic.uk.soleTrader.description"
         case _ =>
-            if (isCompany) "cds.subscription.sic.organisation.description"
-            else if(isIndividual || isSoleTrader) { "cds.subscription.sic.individual.description"}
-            else if (isPartnership) "cds.subscription.sic.partnership.description"
-                else "cds.subscription.sic.charity-description"
+            if (isSoleTrader || isPartnership) "cds.subscription.sic.organisation.description"
+            else if (isCompany) "cds.subscription.sic.organisation.description"
+            else if(isIndividual) { "cds.subscription.sic.individual.description"}
+                else "cds.subscription.sic.organisation.description"
     }
 }
 
@@ -89,9 +89,10 @@
     (isNonUk, isRowOrganisation, isSoleTrader, isCompany) match {
         case (true, true, false, false) => "cds.subscription.sic.organisation.hint"
         case (false, true, false, false) => "cds.subscription.sic.organisation.hint"
-        case (false, fale, false, true) => "cds.subscription.sic.organisation.hint"
+        case (false, false, false, true) => "cds.subscription.sic.organisation.hint"
         case _ =>
-            ""
+            if (!isNonUk && !isIndividual) "cds.subscription.sic.organisation.hint"
+            else ""
     }
 }
 
