@@ -326,8 +326,8 @@ cds.matching.header.company = Beth yw manylion eich cwmni?
 cds.matching.intro = Bydd hyn yn cysylltu’ch busnes, eich Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth a’ch rhif EORI â’i gilydd sy’n eich helpu i symud a datgan nwyddau.
 cds.matching.individual.header = Nodwch eich manylion
 cds.matching-lede = Byddwn yn ceisio paru’ch manylion â’r wybodaeth sydd gennym ar hyn o bryd.
-cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Dreth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">dod o hyd i rif UTR coll (yn agor mewn tab newydd)</a>
-cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd ar ffurflenni treth partneriaeth a llythyrau eraill am eich partneriaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">dod o hyd i rif UTR coll (yn agor mewn tab newydd)</a>
+cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd hwn ar Ffurflenni Treth a llythyrau eraill am Dreth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
+cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd hwn i’w weld ar Ffurflenni Treth partneriaeth a llythyrau eraill ynghylch eich partneriaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
 cds.matching.eori.hint = Mae gan eich rhif EORI rhwng 14 - 17 o gymeriadau.
 cds.matching.back = Yn ôl
 subscription.start-page.heading = Cael mynediad at y Gwasanaeth Datganiadau Tollau (CDS)
@@ -409,7 +409,7 @@ cds.subscription.family-name.error.too-long = Rhaid i’r enw teuluol fod yn 35 
 countries-in-the-eu.title = Gwledydd yn yr UE
 subscription-journey.how-confirm-identity = Pa wybodaeth y gallwn ei defnyddio i gadarnhau pwy ydych chi?
 subscription-journey.utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
-subscription-journey.utr.hint = cds.matching.row-sole-trader-individual.utr.hint = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">ddod o hyd i UTR sydd ar goll (yn agor tab newydd)</a>.
+subscription-journey.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd hwn i’w weld ar Ffurflenni Treth partneriaeth a llythyrau eraill ynghylch eich partneriaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
 cds.matching.id.page-error.nino = Nodwch eich rhif Yswiriant Gwladol
 cds.matching.id.page-error.utr = Nodwch eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
 cds.matching.id.page-error.ninoOrUtrRadio = Rhowch wybod sut y gallwn eich adnabod
@@ -571,11 +571,13 @@ cds.matching.organisation.name.label = Enw’r sefydliad
 cds.matching.organisation.name.heading = Beth yw enw’ch sefydliad cofrestredig?
 cds.matching.organisation-name.error.name = Nodwch enw’ch sefydliad cofrestredig
 cds.matching.organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth?
-cds.matching.organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
+cds.matching.organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+cds.matching.you-can.text = Gallwch
+cds.matching.utr.lost-utr-description=dod o hyd i UTR sydd ar goll
 cds.matching.organisation-utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.utr = Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.have-utr = Rhowch wybod i ni a oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
-cds.matching.row-sole-trader-individual.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
+cds.matching.row-sole-trader-individual.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.sole-trader-individual-utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
 cds.matching.sole-trader-individual-utr.error.utr = Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
 cds.matching.sole-trader-individual-utr.error.have-utr = Rhowch wybod i ni a oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad

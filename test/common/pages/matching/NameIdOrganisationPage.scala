@@ -26,7 +26,7 @@ object NameIdOrganisationPage extends WebPage {
   val labelForNameXpath                    = "//div[@class='govuk-form-group']//label[@for='name']"
   val labelForUtrXpath                     = "//div[@class='govuk-form-group']//label[@for='utr']"
   val hintForUtrHintTextXpath              = "//*[@id='utr-hint']"
-  val linkInUtrHintTextXpath               = "//*[@id='utr-hint']/a"
+  val linkInUtrHintTextXpath               = "//a[@id='utrLink']"
 
   override val title = "What are your business details?"
 }
