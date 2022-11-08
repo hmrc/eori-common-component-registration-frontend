@@ -105,17 +105,19 @@ class Sub02Controller @Inject() (
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        sub02Outcome <- sessionCache.sub02Outcome
-        _            <- sessionCache.remove
-        _            <- sessionCache.saveSub02Outcome(sub02Outcome)
+        name          <- sessionCache.subscriptionDetails.map(_.name)
+        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
+        sub02Outcome  <- sessionCache.sub02Outcome
+        _             <- sessionCache.remove
+        _             <- sessionCache.saveSub02Outcome(sub02Outcome)
       } yield
         if (service.code.equalsIgnoreCase("eori-only"))
           Ok(
             standaloneOutcomeView(
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
-              sub02Outcome.fullName,
-              sub02Outcome.processedDate
+              name,
+              processedDate
             )
           ).withSession(newUserSession)
         else
@@ -124,8 +126,8 @@ class Sub02Controller @Inject() (
               service,
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
-              sub02Outcome.fullName,
-              sub02Outcome.processedDate
+              name,
+              processedDate
             )
           ).withSession(newUserSession)
   }
@@ -133,39 +135,37 @@ class Sub02Controller @Inject() (
   def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        sub02Outcome <- sessionCache.sub02Outcome
-        _            <- sessionCache.remove
-      } yield Ok(sub01OutcomeRejected(Some(sub02Outcome.fullName), sub02Outcome.processedDate, service)).withSession(
-        newUserSession
-      )
+        name          <- sessionCache.subscriptionDetails.map(_.name)
+        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
+        _             <- sessionCache.remove
+      } yield Ok(sub01OutcomeRejected(Some(name), processedDate, service)).withSession(newUserSession)
   }
 
   def eoriAlreadyExists(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        sub02Outcome <- sessionCache.sub02Outcome
-        _            <- sessionCache.remove
-      } yield Ok(sub02EoriAlreadyExists(sub02Outcome.fullName, sub02Outcome.processedDate)).withSession(newUserSession)
+        name          <- sessionCache.subscriptionDetails.map(_.name)
+        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
+        _             <- sessionCache.remove
+      } yield Ok(sub02EoriAlreadyExists(name, processedDate)).withSession(newUserSession)
     }
 
   def eoriAlreadyAssociated(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        sub02Outcome <- sessionCache.sub02Outcome
-        _            <- sessionCache.remove
-      } yield Ok(sub02EoriAlreadyAssociatedView(sub02Outcome.fullName, sub02Outcome.processedDate)).withSession(
-        newUserSession
-      )
+        name          <- sessionCache.subscriptionDetails.map(_.name)
+        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
+        _             <- sessionCache.remove
+      } yield Ok(sub02EoriAlreadyAssociatedView(name, processedDate)).withSession(newUserSession)
     }
 
   def subscriptionInProgress(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        sub02Outcome <- sessionCache.sub02Outcome
-        _            <- sessionCache.remove
-      } yield Ok(sub02SubscriptionInProgressView(sub02Outcome.fullName, sub02Outcome.processedDate)).withSession(
-        newUserSession
-      )
+        name          <- sessionCache.subscriptionDetails.map(_.name)
+        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
+        _             <- sessionCache.remove
+      } yield Ok(sub02SubscriptionInProgressView(name, processedDate)).withSession(newUserSession)
     }
 
   def requestNotProcessed(service: Service): Action[AnyContent] =
@@ -178,9 +178,10 @@ class Sub02Controller @Inject() (
   def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        sub02Outcome <- sessionCache.sub02Outcome
-        _            <- sessionCache.remove
-      } yield Ok(sub01OutcomeView(Some(sub02Outcome.fullName), sub02Outcome.processedDate)).withSession(newUserSession)
+        name          <- sessionCache.subscriptionDetails.map(_.name)
+        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
+        _             <- sessionCache.remove
+      } yield Ok(sub01OutcomeView(Some(name), processedDate)).withSession(newUserSession)
   }
 
 }

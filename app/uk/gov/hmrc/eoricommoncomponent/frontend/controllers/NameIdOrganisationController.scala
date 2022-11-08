@@ -35,6 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_name_id_organisation
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,7 +44,8 @@ class NameIdOrganisationController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
   matchNameIdOrganisationView: match_name_id_organisation,
-  matchingService: MatchingService
+  matchingService: MatchingService,
+  subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val RegisteredCompanyDM = "registered-company"
@@ -116,13 +118,22 @@ class NameIdOrganisationController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(organisationType, conf, formWithErrors, service))),
         formData =>
-          matchBusiness(conf.createCustomsId(formData.id), formData.name, None, conf.matchingServiceType, groupId).map {
+          matchBusiness(
+            conf.createCustomsId(formData.id),
+            formData.name,
+            None,
+            conf.matchingServiceType,
+            groupId
+          ) flatMap {
             case true =>
-              Redirect(
-                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-                  .form(service, isInReviewMode = false)
-              )
-            case false => matchNotFoundBadRequest(organisationType, conf, formData, service)
+              subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map {
+                _ =>
+                  Redirect(
+                    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
+                      .form(service, isInReviewMode = false)
+                  )
+              }
+            case false => Future.successful(matchNotFoundBadRequest(organisationType, conf, formData, service))
           }
       )
 

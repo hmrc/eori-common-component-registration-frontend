@@ -17,8 +17,8 @@
 package unit.controllers
 
 import java.util.UUID
-
 import common.pages.matching.NameIdOrganisationPage._
+
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
@@ -30,9 +30,9 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Utr
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameOrganisationMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.InvalidUrlValueException
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_name_id_organisation
 import uk.gov.hmrc.http.HeaderCarrier
@@ -47,14 +47,21 @@ import scala.concurrent.Future
 class NameUtrOrganisationControllerSpec
     extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector   = mock[AuthConnector]
-  private val mockAuthAction      = authAction(mockAuthConnector)
-  private val mockMatchingService = mock[MatchingService]
+  private val mockAuthConnector             = mock[AuthConnector]
+  private val mockAuthAction                = authAction(mockAuthConnector)
+  private val mockMatchingService           = mock[MatchingService]
+  private val mockSubscriptionDetailService = mock[SubscriptionDetailsService]
 
   private val matchNameIdOrganisationView = instanceOf[match_name_id_organisation]
 
   private val controller =
-    new NameIdOrganisationController(mockAuthAction, mcc, matchNameIdOrganisationView, mockMatchingService)
+    new NameIdOrganisationController(
+      mockAuthAction,
+      mcc,
+      matchNameIdOrganisationView,
+      mockMatchingService,
+      mockSubscriptionDetailService
+    )
 
   private val organisationTypeOrganisations =
     Table(
@@ -269,6 +276,9 @@ class NameUtrOrganisationControllerSpec
             any[HeaderCarrier]
           )
         ).thenReturn(Future.successful(true))
+        when(
+          mockSubscriptionDetailService.cacheNameDetails(any[NameOrganisationMatchModel])(any[Request[AnyContent]])
+        ).thenReturn(Future.successful())
         submitForm(ValidNameUtrRequest, organisationType) { result =>
           await(result)
           verify(mockMatchingService).matchBusiness(meq(ValidUtr), meq(organisation), meq(None), any())(

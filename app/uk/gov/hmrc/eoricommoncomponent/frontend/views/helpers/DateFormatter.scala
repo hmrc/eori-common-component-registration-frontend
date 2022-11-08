@@ -25,7 +25,8 @@ import uk.gov.hmrc.play.language.LanguageUtils
 
 class DateFormatter @Inject() (languageUtils: LanguageUtils) {
 
-  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+  val dateFormatter: DateTimeFormatter     = DateTimeFormatter.ofPattern("d MMM yyyy")
+  val longDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
 
   def format(dateString: String)(implicit messages: Messages): String = {
 
@@ -37,5 +38,8 @@ class DateFormatter @Inject() (languageUtils: LanguageUtils) {
 
     tryConvert.getOrElse(dateString)
   }
+
+  def formatLocalDate(date: LocalDate)(implicit messages: Messages): String =
+    try Some(date.format(longDateFormatter)).getOrElse(throw new Exception("Cannot convert date"))
 
 }
