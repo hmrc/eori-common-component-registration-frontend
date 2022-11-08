@@ -104,9 +104,6 @@ class AppConfig @Inject() (
   val handleSubscriptionServiceContext: String =
     config.get[String]("microservice.services.handle-subscription.context")
 
-  //pdf generation
-  val pdfGeneratorBaseUrl: String = servicesConfig.baseUrl("pdf-generator")
-
   val enrolmentStoreProxyBaseUrl: String = servicesConfig.baseUrl("enrolment-store-proxy")
 
   val enrolmentStoreProxyServiceContext: String =
