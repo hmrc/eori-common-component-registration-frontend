@@ -30,11 +30,11 @@ class AddressInvalidIndividualSpec extends ViewSpec {
   "Address invalid Individual page" should {
 
     "display correct title" in {
-      indDoc.title must startWith("Please contact HMRC")
+      indDoc.title must startWith("Contact HMRC")
     }
 
     "display correct heading" in {
-      indDoc.body.getElementsByTag("h1").text mustBe "Please contact HMRC"
+      indDoc.body.getElementsByTag("h1").text mustBe "Contact HMRC"
     }
 
     "display correct info" in {

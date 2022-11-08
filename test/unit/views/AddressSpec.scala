@@ -44,10 +44,10 @@ class AddressSpec extends ViewSpec {
 
   "Address Page" should {
     "display correct title" in {
-      doc.title() must startWith("EORI application contact address")
+      doc.title() must startWith("EORI number application contact address")
     }
     "have the correct h1 text" in {
-      doc.body().getElementsByTag("h1").text() mustBe "EORI application contact address"
+      doc.body().getElementsByTag("h1").text() mustBe "EORI number application contact address"
     }
 
     "have an input of type 'text' for street" in {

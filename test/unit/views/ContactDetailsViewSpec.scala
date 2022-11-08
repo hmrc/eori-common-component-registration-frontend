@@ -36,13 +36,13 @@ class ContactDetailsViewSpec extends ViewSpec {
 
   "Contact Details" should {
     "display correct title" in {
-      doc.title() must startWith("EORI application contact details")
+      doc.title() must startWith("EORI number application contact details")
     }
     "have the correct h1 text" in {
       doc
         .body()
         .getElementsByTag("h1")
-        .text() mustBe "EORI application contact details"
+        .text() mustBe "EORI number application contact details"
     }
     "have the correct class on the h1" in {
       doc.body().getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
@@ -52,7 +52,7 @@ class ContactDetailsViewSpec extends ViewSpec {
       doc
         .body()
         .getElementsByTag("legend")
-        .text() mustBe "EORI application contact details"
+        .text() mustBe "EORI number application contact details"
     }
 
     "have the email" in {

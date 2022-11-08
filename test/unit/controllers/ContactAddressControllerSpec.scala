@@ -118,11 +118,11 @@ class ContactAddressControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
-    "display title as 'Do you want us to use this address to send you any information about your application?'" in {
+    "display title as 'Do you want us to use this address to send you information about your EORI number application?'" in {
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title() should startWith(
-          "Do you want us to use this address to send you any information about your application?"
+          "Do you want us to use this address to send you information about your EORI number application?"
         )
       }
     }

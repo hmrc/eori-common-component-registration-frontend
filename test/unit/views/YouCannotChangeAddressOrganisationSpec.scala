@@ -30,17 +30,17 @@ class YouCannotChangeAddressOrganisationSpec extends ViewSpec {
   "You cannot change address for Organisation page" should {
 
     "display correct title" in {
-      orgDoc.title must startWith("Please contact Companies House")
+      orgDoc.title must startWith("Contact Companies House")
     }
 
     "display correct heading" in {
-      orgDoc.body.getElementsByTag("h1").text mustBe "Please contact Companies House"
+      orgDoc.body.getElementsByTag("h1").text mustBe "Contact Companies House"
     }
 
     "display correct info" in {
       orgDoc.body
         .getElementById("contact-info")
-        .text mustBe "Your company's registered address is held at Companies House (opens in new tab) . You will need to update your details there and return to complete your EORI application."
+        .text mustBe "Your registered address is held at Companies House (opens in new tab) . You will need to update your details there and return to complete your EORI number application."
     }
 
   }
