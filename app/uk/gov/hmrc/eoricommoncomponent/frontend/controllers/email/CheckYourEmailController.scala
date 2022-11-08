@@ -169,21 +169,23 @@ class CheckYourEmailController @Inject() (
               "[CheckYourEmailController][sendVerification] - " +
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
-            if (service.enrolmentKey == Service.cds.enrolmentKey)
-              for {
-                maybeEori <- cdsFrontendDataCache.eori
-                verifiedEmailStatus <- Future.successful(
-                  updateVerifiedEmailService.updateVerifiedEmail(None, email, maybeEori.get)
+            for {
+              maybeEori <- cdsFrontendDataCache.eori
+              _ <- if (service.enrolmentKey == Service.cds.enrolmentKey)
+                updateVerifiedEmailService.updateVerifiedEmail(
+                  None,
+                  email,
+                  maybeEori.getOrElse(
+                    throw new IllegalStateException(
+                      "[CheckYourEmailController][submitNewDetails] - cdsFrontendDataCache eori cache none"
+                    )
+                  )
                 )
-              } yield verifiedEmailStatus
-
-            save4LaterService
-              .saveEmail(groupId, emailStatus.copy(isVerified = true))
-              .flatMap { _ =>
-                cdsFrontendDataCache.saveEmail(email).map { _ =>
-                  Redirect(EmailController.form(service))
-                }
-              }
+              else
+                Future.successful(false)
+              _ <- save4LaterService.saveEmail(groupId, emailStatus.copy(isVerified = true))
+              _ <- cdsFrontendDataCache.saveEmail(email)
+            } yield Redirect(EmailController.form(service))
           case _ =>
             throw new IllegalStateException("CreateEmailVerificationRequest Failed")
         }
