@@ -129,6 +129,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
     }
 
     "redirect to Are You based in UK for Already verified email" in {
+      when(mockSessionCache.eori(any[Request[_]])).thenReturn(Future.successful(Some("GB777777777771")))
       when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
         .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = true))))
       when(
