@@ -59,11 +59,9 @@ class SubscriptionDetailsSpec extends UnitSpec {
       sd.name shouldBe "John Doe"
     }
 
-    "throw exception when no name is present" in {
+    "return no name is present" in {
       val sd = SubscriptionDetails()
-      the[IllegalArgumentException] thrownBy {
-        sd.name
-      } should have message "Name is missing"
+      sd.name shouldBe "Your Organisation"
     }
   }
 
