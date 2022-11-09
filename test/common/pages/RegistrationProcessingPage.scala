@@ -19,7 +19,7 @@ package common.pages
 object RegistrationProcessingPage extends WebPage {
   val processedDateXpath = "//*[@id='processed-date']"
   override val title     = "The ATaR application is being processed"
-  val heading            = "The ATaR application for orgName is being processed"
-  val individualHeading  = "The ATaR application for Name is being processed"
+  val heading            = "Your ATaR application for being processed"
+  val individualHeading  = "Your ATaR application for being processed"
   val pageHeadingXpath   = "//*[@id='page-heading']"
 }
