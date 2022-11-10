@@ -52,7 +52,7 @@ case class SubscriptionDetails(
     nameIdOrganisationDetails.map(_.name) orElse nameOrganisationDetails.map(_.name) orElse nameDobDetails.map(
       _.name
     ) orElse nameDetails
-      .map(_.name) getOrElse ("Your Organisation")
+      .map(_.name) getOrElse (throw new IllegalArgumentException("Name is missing"))
 
 }
 
