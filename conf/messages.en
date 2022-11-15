@@ -1555,8 +1555,8 @@ confirm-business-details.row.title-and-heading=Is this your registered organisat
 confirm-business-details.partnership.title-and-heading=Is this your registered address?
 confirm-business-details.individual.title-and-heading=Is this your address?
 confirm-business-details.yes=Yes
-confirm-business-details.yes-wrong-address=No, I want to change the address
-confirm-business-details.partnership.yes-wrong-address=No, I want to change the address
+confirm-business-details.yes-wrong-address=No, I want to change this address
+confirm-business-details.partnership.yes-wrong-address=No, I want to change this address
 confirm-business-details.individual.yes-wrong-address=No, I want to change my address
 yes-no-wrong-address.error=Select yes if this is your address
 
