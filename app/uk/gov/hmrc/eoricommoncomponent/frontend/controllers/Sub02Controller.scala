@@ -107,7 +107,6 @@ class Sub02Controller @Inject() (
       for {
         name         <- sessionCache.subscriptionDetails.map(_.name)
         sub02Outcome <- sessionCache.sub02Outcome
-        sub02Outcome <- sessionCache.sub02Outcome
         _            <- sessionCache.remove
         _            <- sessionCache.saveSub02Outcome(sub02Outcome)
         processedDate <- sessionCache.sub01Outcome.map(
