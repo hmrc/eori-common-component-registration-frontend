@@ -110,6 +110,8 @@ class Sub02Controller @Inject() (
         processedDate <- sessionCache.sub01Outcome.map(
           sub01 => if (sub01.processedDate.nonEmpty) sub01.processedDate else sub02Outcome.processedDate
         )
+        _ <- sessionCache.remove
+        _ <- sessionCache.saveSub02Outcome(sub02Outcome)
       } yield
         if (service.code.equalsIgnoreCase("eori-only"))
           Ok(
