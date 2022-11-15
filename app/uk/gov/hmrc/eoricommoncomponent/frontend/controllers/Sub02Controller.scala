@@ -105,11 +105,13 @@ class Sub02Controller @Inject() (
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        name          <- sessionCache.subscriptionDetails.map(_.name)
-        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
-        sub02Outcome  <- sessionCache.sub02Outcome
-        _             <- sessionCache.remove
-        _             <- sessionCache.saveSub02Outcome(sub02Outcome)
+        name         <- sessionCache.subscriptionDetails.map(_.name)
+        sub02Outcome <- sessionCache.sub02Outcome
+        _            <- sessionCache.remove
+        _            <- sessionCache.saveSub02Outcome(sub02Outcome)
+        processedDate <- sessionCache.sub01Outcome.map(
+          sub01 => if (sub01.processedDate.nonEmpty) sub01.processedDate else sub02Outcome.processedDate
+        )
       } yield
         if (service.code.equalsIgnoreCase("eori-only"))
           Ok(
