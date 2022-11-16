@@ -33,8 +33,8 @@ cds.subscription.sic.individual.sic.label = Cod SIC
 cds.date-established.label = Dyddiad sefydlu
 cds.date-of-birth.label = Dyddiad geni
 cds.date-incorporated.label = Dyddiad ymgorffori
-cds.date-established.hint = Er enghraifft, 31 03 1980.
-cds.date-of-birth.hint = Er enghraifft, 31 03 1980.
+cds.date-established.hint = Er enghraifft, 31 03 1980
+cds.date-of-birth.hint = Er enghraifft, 31 03 1980
 cds.consent.label = Caniatâd
 cds.consent.legend = A yw’n iawn i ni ddatgelu’ch EORI ar Borth yr UE?
 cds.eori-checker-consent.individual-or-sole-trader.yes = Iawn – rwyf am i’m henw a’m cyfeiriad fod ar y gwiriwr rhif EORI
@@ -817,13 +817,12 @@ cds.subscription.date-of-birth.error.required.date-of-birth = Nodwch eich dyddia
 cds.subscription.date-of-birth.error.invalid.date-of-birth = Nodwch ddyddiad geni dilys, er enghraifft “31 3 1980”
 cds.subscription.date-of-birth.error.in-future.date-of-birth = Ni allwch nodi dyddiad geni sydd yn y dyfodol
 cds.subscription.date-of-establishment.steps = eich manylion
-cds.subscription.date-of-establishment.title-and-heading = Dyddiad y sefydlwyd y sefydliad
-cds.subscription.partnership.date-of-establishment.title-and-heading = Dyddiad y sefydlwyd y bartneriaeth
+cds.subscription.date-of-establishment.title-and-heading = Dyddiad y sefydlwyd eich sefydliad
+cds.subscription.partnership.date-of-establishment.title-and-heading = Dyddiad y sefydlwyd eich partneriaeth
 cds.subscription.date-of-establishment.date-of-establishment.label = Dyddiad sefydlu
 cds.subscription.date-of-establishment.page-error.date-of-establishment = Nodwch eich dyddiad sefydlu
-cds.subscription.business.date-established.subheading = Pryd y cafodd y {0} ei sefydlu?
-cds.subscription.business.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r sefydliad. Gallwch ddod o hyd i ddyddiad sefydlu’ch sefydliad ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
-cds.subscription.llp.date-established.charity-label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r sefydliad, neu’r dystysgrif cofrestru.
+cds.subscription.business.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich cwmni. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich cwmni ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
+cds.subscription.llp.date-established.charity-label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich sefydliad. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich sefydliad ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
 cds.subscription.llp.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r bartneriaeth. Gallwch ddod o hyd i ddyddiad sefydlu’ch busnes ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
 cds.subscription.row.date-established.label = Nodwch ddyddiad sefydlu’ch sefydliad
 cds.subscription.date-of-establishment.error.required.date-of-establishment = Nodwch eich dyddiad sefydlu
@@ -833,7 +832,7 @@ cds.subscription.date-of-establishment.cannot-find = Ddim yn gallu dod o hyd i�
 cds.subscription.sic.organisation.page.title = Beth yw eich Cod Dosbarthiad Diwydiannol Safonol (SIC)
 cds.subscription.sic.organisation.heading= Beth yw eich Cod Dosbarthiad Diwydiannol Safonol (SIC)
 cds.subscription.date-of-establishment.find-it = Gallwch ddod o hyd i’r dyddiad ymgorffori ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau</a>
-cds.subscription.partnership.date-of-establishment.hint = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r sefydliad. Gallwch ddod o hyd i ddyddiad sefydlu’ch sefydliad ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
+cds.subscription.partnership.date-of-establishment.hint = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich partneriaeth. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich partneriaeth ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
 cds.subscription.sic.page.title = Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich sefydliad?
 cds.subscription.sic.heading = Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich sefydliad?
 cds.subscription.sic.nonuk.soleTrader.heading = Nodwch god Dosbarthiad Diwydiannol Safonol (SIC) sy’n disgrifio’r hyn y mae’ch busnes yn ei wneud
@@ -1299,7 +1298,7 @@ cds.matching.name-id-organisation.company.utr = Cyfeirnod Unigryw y Trethdalwr (
 cds.matching.name-id-organisation.registered-company.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.partnership.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad y Bartneriaeth
 cds.matching.name-id-organisation.organisation.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad y Sefydliad
-cds.subscription.date-of-establishment.company.title-and-heading = Dyddiad y sefydlwyd y cwmni
+cds.subscription.date-of-establishment.company.title-and-heading = Dyddiad y sefydlwyd eich cwmni
 cds.subscription.address-details.postcode.row.label = Cod post
 cds.matching.row-organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth a gyhoeddwyd yn y DU?
 cds.matching.row-organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Dreth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
