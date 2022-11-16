@@ -110,7 +110,7 @@ class ConfirmContactDetailsViewSpec extends ViewSpec {
       CorporateBodyDoc
         .body()
         .getElementsByAttributeValue("for", "yes-no-wrong-address-wrong-address")
-        .text() mustBe "No, I want to change the address"
+        .text() mustBe "No, I want to change this address"
       SoleTraderOrIndividualWithNinoDoc
         .body()
         .getElementsByAttributeValue("for", "yes-no-wrong-address-wrong-address")
@@ -118,7 +118,7 @@ class ConfirmContactDetailsViewSpec extends ViewSpec {
       PartnershipBodyDoc
         .body()
         .getElementsByAttributeValue("for", "yes-no-wrong-address-wrong-address")
-        .text() mustBe "No, I want to change the address"
+        .text() mustBe "No, I want to change this address"
     }
   }
 
