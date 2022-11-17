@@ -17,19 +17,21 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
 import java.time.{LocalDateTime, ZoneId, ZoneOffset}
-
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.CommonHeader
+
+import java.time.format.DateTimeFormatter
 
 case class SubscriptionStatusQueryParams(receiptDate: LocalDateTime, regime: String, idType: String, id: String) {
 
   def queryParams: Seq[(String, String)] = {
     val receiptDateAsString =
-      receiptDate.atZone(ZoneId.of("Europe/London")).withZoneSameInstant(ZoneOffset.UTC).withNano(0).toString
+      receiptDate.atZone(ZoneId.of("Europe/London")).withZoneSameInstant(ZoneOffset.UTC).withNano(0).format(
+        DateTimeFormatter.ISO_DATE_TIME
+      )
 
     Seq("receiptDate" -> receiptDateAsString, "regime" -> regime, idType -> id)
   }
-
 }
 
 case class SubscriptionStatusResponseCommon(status: String, processingDate: LocalDateTime)
