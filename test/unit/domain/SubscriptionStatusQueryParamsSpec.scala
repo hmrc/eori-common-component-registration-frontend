@@ -22,16 +22,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{SubscriptionStatusQueryP
 
 class SubscriptionStatusQueryParamsSpec extends UnitSpec {
 
-  val receiptDate = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 114)
-  val taxPayerId  = TaxPayerId("1234567890").mdgTaxPayerId
+  private val taxPayerId = TaxPayerId("1234567890").mdgTaxPayerId
+
   "SubscriptionStatusQueryParamsSpec" should {
+
     "create a valid URL query string" in {
-      val query: SubscriptionStatusQueryParams = SubscriptionStatusQueryParams(
-        receiptDate = receiptDate,
-        regime = "CDS",
-        "taxPayerID",
-        TaxPayerId("1234567890").mdgTaxPayerId
-      )
+      val query: SubscriptionStatusQueryParams =
+        SubscriptionStatusQueryParams(LocalDateTime.of(2016, 3, 17, 9, 30, 47, 0), "CDS", "taxPayerID", taxPayerId)
 
       query.queryParams shouldBe Seq(
         "receiptDate" -> "2016-03-17T09:30:47Z",
@@ -39,6 +36,20 @@ class SubscriptionStatusQueryParamsSpec extends UnitSpec {
         "taxPayerID"  -> taxPayerId
       )
     }
-  }
 
+    "correctly format the receiptDate to include seconds" in {
+      val query: SubscriptionStatusQueryParams = SubscriptionStatusQueryParams(
+        LocalDateTime.of(2016, 3, 17, 9, 30, 0, 0),
+        regime = "CDS",
+        "taxPayerID",
+        taxPayerId
+      )
+
+      query.queryParams shouldBe Seq(
+        "receiptDate" -> "2016-03-17T09:30:00Z",
+        "regime"      -> "CDS",
+        "taxPayerID"  -> taxPayerId
+      )
+    }
+  }
 }
