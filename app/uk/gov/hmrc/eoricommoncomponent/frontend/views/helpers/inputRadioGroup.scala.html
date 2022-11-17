@@ -65,7 +65,7 @@
     } else {
         hintHtml.map(hintText => Hint(content = HtmlContent(hintText), classes = "govuk-body-s", id = Some(hintHtmlId)))
     },
-    errorMessage = field.error.map{e => ErrorMessage(content = Text(messages(e.message, e.args:_*)))},
+    errorMessage = field.error.map{e => ErrorMessage(content = Text(messages(e.message, e.args:_*)), visuallyHiddenText = Some(messages("cds.error.field.hint")))},
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = Text(legend),

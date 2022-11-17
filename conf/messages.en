@@ -1457,7 +1457,7 @@ subscription.check-your-email.no=No, I need to change this email address
 
 cds.form.contact-details=Your address
 
-cds.error.field.hint=Error:
+cds.error.field.hint=Error
 
 date.day.error=Enter a day between 1 and 31
 date.month.error=Enter a month between 1 and 12
