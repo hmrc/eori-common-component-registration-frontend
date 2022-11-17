@@ -121,6 +121,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
 
     "redirect to eu vat page for no answer" in {
       val url = "register/vat-registered-eu"
+      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
 
       subscriptionFlowUrl(url)
 
@@ -137,6 +138,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     }
 
     "redirect to check answers page for no answer and is in review mode" in {
+      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(

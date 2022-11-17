@@ -102,10 +102,10 @@ class VatRegisteredUkController @Inject() (
                 if (isInReviewMode)
                   if (yesNoAnswer.isYes)
                     Future.successful(Redirect(VatDetailsController.reviewForm(service).url))
-                  else {
-                    subscriptionDetailsService.clearCachedUkVatDetails
-                    Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
-                  }
+                  else
+                    subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
+                      Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
+                    }
                 else if (yesNoAnswer.isYes)
                   Future.successful(
                     Redirect(
@@ -113,11 +113,13 @@ class VatRegisteredUkController @Inject() (
                     )
                   )
                 else
-                  Future.successful(
-                    Redirect(
-                      subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
+                  subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
+                    Future.successful(
+                      Redirect(
+                        subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
+                      )
                     )
-                  )
+                  }
             }
         )
     }
