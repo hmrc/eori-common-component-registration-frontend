@@ -32,6 +32,7 @@ case class SubscriptionStatusQueryParams(receiptDate: LocalDateTime, regime: Str
 
     Seq("receiptDate" -> receiptDateAsString, "regime" -> regime, idType -> id)
   }
+
 }
 
 case class SubscriptionStatusResponseCommon(status: String, processingDate: LocalDateTime)
