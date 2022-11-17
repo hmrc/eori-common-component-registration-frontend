@@ -642,7 +642,7 @@ class CheckYourDetailsRegisterControllerSpec
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
         "Registered company details included on the EORI checker"
-      ) shouldBe "Yes I want my organisation name and address on the EORI checker"
+      ) shouldBe "Yes I want my name and address on the EORI number checker"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
         "Registered company details included on the EORI checker",
