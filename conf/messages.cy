@@ -544,6 +544,8 @@ cds.matching.name-id-organisation.partnership.name = Enw’r bartneriaeth gofres
 cds.matching.name-id-organisation.partnership.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
 cds.matching.name-id-organisation.organisation.name = Enw’r sefydliad
 cds.matching.name-id-organisation.organisation.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.organisation.no-utr=Nid oes gennyf Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
+cds.matching.name-id-organisation.organisation.no-utr.text=Os ydych yn gorff cyhoeddus ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr, bydd angen i chi ddefnyddio gwasanaeth arall i gwblhau’ch cais am rif EORI.
 cds.matching.name-id-organisation.not-registered = Os nad ydych wedi’ch cofrestru ar gyfer Hunanasesiad, neu os yw’ch cofrestriad ar y gweill ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) eto, gallwch <a href="{0}" class="govuk-link">gofrestru gan ddefnyddio’ch enw a chyfeiriad</a> yn lle hynny.
 cds.matching.name-id-organisation.eu-organisation.name = Enw’r sefydliad cofrestredig
 cds.matching.name-id-organisation.eu-organisation.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
