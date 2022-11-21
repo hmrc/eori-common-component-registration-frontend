@@ -40,7 +40,6 @@
     ))
 
     <div id='additional-information' class="govuk-form-group">
-        <p class="govuk-body">@messages("cds.subscription.outcomes.success.optional-paragraph")</p>
         <ul class="govuk-list">
             <li>
                 <a id="download-subscription-text" href="@{s"/customs-registration-services/${service.code}/register/download/text"}" class="govuk-link">@messages("cds.subscription.outcomes.success.download-eori-textfile")</a>
@@ -48,10 +47,20 @@
         </ul>
     </div>
 
+    <p class="govuk-body">@messages("cds.subscription.outcomes.success.application-info")</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("cds.subscription.outcomes.success.application-info.bullet1", service.friendlyName)</li>
+        <li>@messages("cds.subscription.outcomes.success.application-info.bullet2")</li>
+    </ul>
+
+    <div id="when-you-can">
+        <h2 class="govuk-heading-m">@messages("cds.subscription.outcomes.success.extra.information.when-you-can")</h2>
+        <p class="govuk-body">@messages("cds.subscription.outcomes.success.extra.information.when-you-can.information")</p>
+    </div>
+
     <div id="what-happens-next">
         <h2 class="govuk-heading-m">@messages("cds.subscription.outcomes.success.extra.information.next")</h2>
-        <p class="govuk-body">@messages("cds.subscription.outcomes.success.extra.information")</p>
-        <p class="govuk-body">@Html(messages("cds.subscription.outcomes.success.extra.information1", checkEORILink))</p>
+        <p class="govuk-body">@messages("cds.standalone.subscription.outcomes.success.extra.information1")</p>
     </div>
 
     <div id="xi-eori">
@@ -62,8 +71,15 @@
             <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet2")</li>
             <li>@messages("ecc.subscription.outcomes.success.xi.info.bullet3")</li>
         </ul>
-        <p class="govuk-body"><a href="/customs-registration-services/register/xi-eori-guidance" class="govuk-link" target="_blank" rel="noopener noreferrer">@messages("ecc.subscription.outcomes.success.xi.info.href")</a></p>
-        <p class="govuk-body">@messages("ecc.subscription.outcomes.success.xi.info2")</p>
+         <p class="govuk-body">@messages("ecc.subscription.outcomes.success.xi.info2")</p>
+    </div>
+
+    <div id="eori-xi">
+        <h2 class="govuk-heading-m">@messages("ecc.subscription.status.eori-xi.h1")</h2>
+        <p class="govuk-body">@messages("ecc.subscription.status.eori-xi.p1", longName)</p>
+        <p class="govuk-body">@messages("ecc.subscription.status.eori-xi.p2")</p>
+        <p class="govuk-body"><a href="https://www.gov.uk/eori/eori-northern-ireland" class="govuk-link" target="_blank" rel="noopener noreferrer">@messages("ecc.subscription.outcomes.success.xi.info.href")</a></p>
+
     </div>
 
     <div id="eori-gg">
@@ -73,8 +89,6 @@
     </div>
 
     @helpers.feedbackBackContinue(service, JourneyStatus.Processing)
-
-    @help_di()
 
     @feedback_di()
 

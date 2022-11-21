@@ -72,9 +72,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
       whatsNextParagraph.getElementsByTag("h2").get(0).text() mustBe "What happens next"
       whatsNextParagraph.getElementsByTag(
         "p"
-      ).text() mustBe "Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the check an EORI service (opens in new tab) . Your new GB EORI has no expiry date."
-      whatsNextParagraph.getElementsByTag("a").attr("href") must endWith("/check-eori-number")
-    }
+      )}
 
     "display XI EORI paragraph" in {
 
