@@ -40,7 +40,7 @@ class DownloadTextController @Inject() (
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
         Some(eori) <- cdsFrontendDataCache.sub02Outcome.map(_.eori)
-        name       <- cdsFrontendDataCache.sub02Outcome.map(_.fullName.trim)
+        name       <- cdsFrontendDataCache.sub02Outcome.map(_.fullName.replaceAll("\\s+", " "))
         processedDate <- cdsFrontendDataCache.sub02Outcome
           .map(_.processedDate)
       } yield
