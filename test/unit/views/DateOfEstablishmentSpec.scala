@@ -38,10 +38,10 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
 
   "On a UK journey the 'When was the organisation established?' page" should {
     "display correct title" in {
-      doc.title() must startWith("Date when the company was established")
+      doc.title() must startWith("Date when your company was established")
     }
     "have the correct h1 text" in {
-      doc.body.getElementsByTag("h1").text() mustBe "Date when the company was established"
+      doc.body.getElementsByTag("h1").text() mustBe "Date when your company was established"
     }
     "have the correct h2 text" in {
       doc.body.getElementsByTag("h2").text() startsWith "When was the company established?"
@@ -51,22 +51,22 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     }
     "have the correct text in the hint" in {
       doc.body.getElementById("date-of-establishment-hint").text() must include(
-        "Enter the date shown on the organisation’s certificate of incorporation."
+        "Enter the date shown on your company’s certificate of incorporation."
       )
     }
     "have the correct text in the intro paragraph" in {
       doc.body
         .getElementById("date-of-establishment-label")
-        .text() mustBe "Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the Companies House register (opens in new tab)"
+        .text() mustBe "Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the Companies House register (opens in new tab)"
     }
   }
 
   "On a RoW journey the 'When was the organisation established?' page" should {
     "display correct title" in {
-      docRestOfWorld.title must startWith("Date when the organisation was established")
+      docRestOfWorld.title must startWith("Date when your organisation was established")
     }
     "have the correct h1 text" in {
-      docRestOfWorld.body.getElementsByTag("legend").text() mustBe "Date when the organisation was established"
+      docRestOfWorld.body.getElementsByTag("legend").text() mustBe "Date when your organisation was established"
     }
     "have the correct class on the legend" in {
       docRestOfWorld.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
@@ -74,16 +74,16 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     "have the correct text in the description" in {
       docRestOfWorld.body
         .getElementById("date-of-establishment-hint")
-        .text() mustBe "Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the Companies House register (opens in new tab) When was the organisation established? For example, 31 03 1980."
+        .text() mustBe "Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the Companies House register (opens in new tab) For example, 31 03 1980"
     }
   }
 
   "On an LLP org type journey Date Established page" should {
     "display correct title" in {
-      docLlp.title must startWith("Date when the partnership was established")
+      docLlp.title must startWith("Date when your partnership was established")
     }
     "have the correct legend text" in {
-      docLlp.body.getElementsByTag("legend").text() mustBe "Date when the partnership was established"
+      docLlp.body.getElementsByTag("legend").text() mustBe "Date when your partnership was established"
     }
     "have the correct class on the legend" in {
       docLlp.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
@@ -91,7 +91,7 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     "have the correct text in the description" in {
       docLlp.body
         .getElementById("date-of-establishment-hint")
-        .text() mustBe "Enter the date shown on the organisation’s certificate of incorporation. You can find the date your organisation was established on the Companies House register (opens in new tab) When was the partnership established? For example, 31 03 1980."
+        .text() mustBe "Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the Companies House register (opens in new tab) For example, 31 03 1980"
     }
   }
 
