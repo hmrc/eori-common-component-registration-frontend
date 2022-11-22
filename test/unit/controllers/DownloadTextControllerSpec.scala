@@ -115,7 +115,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
           |
           |issued by HMRC on 23 June 2018
           |
-          |Your new EORI number starting with GB is: ZZ123456789000""".stripMargin
+          |Your new EORI number is: ZZ123456789000""".stripMargin
     }
 
     "have Windows-friendly line terminators in the subscription text file" in {

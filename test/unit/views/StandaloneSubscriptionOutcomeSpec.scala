@@ -38,7 +38,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
 
     "display correct heading" in {
       doc.body.getElementsByTag("h1").text() must startWith(
-        s"Your new EORI number starting with GB for $orgName is $eori"
+        s"Your new EORI number for $orgName is $eori"
       )
     }
     "have the correct class on the h1" in {
@@ -67,47 +67,10 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
     }
 
     "display whats happens next paragraph" in {
-
       val whatsNextParagraph = doc.body().getElementById("what-happens-next")
       whatsNextParagraph.getElementsByTag("h2").get(0).text() mustBe "What happens next"
       whatsNextParagraph.getElementsByTag(
         "p"
       )}
-
-    "display XI EORI paragraph" in {
-
-      val xiParagraph = doc.body().getElementById("xi-eori")
-
-      xiParagraph.getElementsByTag("h2").get(0).text() mustBe "If you move goods to or from Northern Ireland"
-      xiParagraph.getElementsByTag("p").get(0).text() mustBe "You will need an EORI number starting with XI if you:"
-
-      val xiBulletList = xiParagraph.getElementsByTag("ul").get(0)
-
-      xiBulletList.getElementsByTag("li").get(
-        0
-      ).text() mustBe "move goods between Northern Ireland and non-EU countries"
-      xiBulletList.getElementsByTag("li").get(1).text() mustBe "make a declaration in Northern Ireland"
-      xiBulletList.getElementsByTag("li").get(2).text() mustBe "get a customs decision in Northern Ireland"
-
-      xiParagraph.getElementsByTag("p").get(
-        1
-      ).text() mustBe "Apply for an EORI number that starts with XI (opens in new tab)."
-      xiParagraph.getElementsByTag("p").get(
-        2
-      ).text() mustBe "If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI."
-    }
-
-    "display GG paragraph" in {
-
-      val ggParagraph = doc.body().getElementById("eori-gg")
-
-      ggParagraph.getElementsByTag("h2").get(0).text() mustBe "Your EORI number and Government Gateway"
-      ggParagraph.getElementsByTag("p").get(
-        0
-      ).text() mustBe "Your EORI number is linked to the Government Gateway account you have used for this application."
-      ggParagraph.getElementsByTag("p").get(
-        1
-      ).text() mustBe "You cannot apply for another EORI number using this Government Gateway."
-    }
   }
 }

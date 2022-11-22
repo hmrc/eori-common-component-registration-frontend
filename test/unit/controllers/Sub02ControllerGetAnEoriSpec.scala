@@ -362,7 +362,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           ) shouldBe s"Subscription request received for orgName"
           page.getElementsText(
             RegistrationCompletePage.eoriXpath
-          ) shouldBe s"Your new EORI number starting with GB is: $EORI"
+          ) shouldBe s"Your new EORI number is: $EORI"
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
@@ -389,10 +389,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
-          page.title should startWith("Application complete")
-          page.getElementsText(
-            RegistrationCompletePage.panelHeadingXpath
-          ) shouldBe s"Your new EORI number starting with GB for orgName is $EORI"
+          page.title should startWith("Your new EORI number for orgName is")
           page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe EORI
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
