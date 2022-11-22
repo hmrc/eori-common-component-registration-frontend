@@ -360,9 +360,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           page.getElementsText(
             RegistrationCompletePage.panelHeadingXpath
           ) shouldBe s"Subscription request received for orgName"
-          page.getElementsText(
-            RegistrationCompletePage.eoriXpath
-          ) shouldBe s"Your new EORI number is: $EORI"
+          page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe s"Your new EORI number is: $EORI"
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true

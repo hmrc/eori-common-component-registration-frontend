@@ -37,9 +37,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
   "'Standalone Subscription Outcome' Page with name" should {
 
     "display correct heading" in {
-      doc.body.getElementsByTag("h1").text() must startWith(
-        s"Your new EORI number for $orgName is $eori"
-      )
+      doc.body.getElementsByTag("h1").text() must startWith(s"Your new EORI number for $orgName is $eori")
     }
     "have the correct class on the h1" in {
       doc.body.getElementsByTag("h1").hasClass("govuk-panel__title") mustBe true
@@ -69,8 +67,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
     "display whats happens next paragraph" in {
       val whatsNextParagraph = doc.body().getElementById("what-happens-next")
       whatsNextParagraph.getElementsByTag("h2").get(0).text() mustBe "What happens next"
-      whatsNextParagraph.getElementsByTag(
-        "p"
-      )}
+      whatsNextParagraph.getElementsByTag("p")
+    }
   }
 }
