@@ -388,7 +388,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
           page.title should startWith("Your new EORI number for orgName is")
-          page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe EORI
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
