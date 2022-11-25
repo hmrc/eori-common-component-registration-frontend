@@ -31,48 +31,10 @@ class Sub01OutcomeProcessingSpec extends ViewSpec {
   val orgName       = "Test Organisation Name"
   val processedDate = "01 Jan 2019"
 
-  "Sub01 outcome pending Page with name" should {
+  "Sub01 outcome pending Page" should {
 
     "display correct heading" in {
-      docWithName.body.getElementsByTag("h1").text() must startWith(
-        s"The EORI application for $orgName is being processed"
-      )
-    }
-    "have the correct class on the h1" in {
-      docWithName.body.getElementsByTag("h1").hasClass("govuk-heading-xl") mustBe true
-    }
-    "have the correct class on the message" in {
-      docWithName.body.getElementById("processed-date").hasClass("govuk-heading-m") mustBe true
-    }
-    "have the correct processing date and text" in {
-      docWithName.body.getElementById("processed-date").text mustBe s"Application received by HMRC on 1 January 2019"
-    }
-    "have the correct 'what happens next' text" in {
-      docWithName.body
-        .getElementById("what-happens-next")
-        .text mustBe "What happens next We are processing your ATaR application. This can take up to 5 working days. You will need to sign back in to see the result of your registration."
-    }
-
-  }
-
-  "Sub01 outcome pending Page without name" should {
-
-    "display correct heading" in {
-      docWithoutName.body.getElementsByTag("h1").text() must startWith("The EORI application is being processed")
-    }
-    "have the correct class on the h1" in {
-      docWithoutName.body.getElementsByTag("h1").hasClass("govuk-heading-xl") mustBe true
-    }
-    "have the correct class on the message" in {
-      docWithoutName.body.getElementById("processed-date").hasClass("govuk-heading-m") mustBe true
-    }
-    "have the correct processing date and text" in {
-      docWithoutName.body.getElementById("processed-date").text mustBe s"Application received by HMRC on 1 January 2019"
-    }
-    "have the correct 'what happens next' text" in {
-      docWithoutName.body
-        .getElementById("what-happens-next")
-        .text mustBe "What happens next We are processing your ATaR application. This can take up to 5 working days. You will need to sign back in to see the result of your registration."
+      docWithName.body.getElementsByTag("h1").text() must startWith(s"Your EORI application is being processed")
     }
   }
 

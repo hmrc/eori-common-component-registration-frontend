@@ -214,7 +214,6 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
     |    "transactionName": "ecc-registration-display"
     |  },
     |  "detail": {
-    |      "safeId": "XE111123456789",
     |      "safeId": "XY0000100086619",
     |      "status": "OK",
     |      "processingDate": "2016-09-02T09:30:47Z",

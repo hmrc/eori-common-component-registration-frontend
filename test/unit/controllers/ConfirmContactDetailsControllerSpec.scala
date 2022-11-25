@@ -484,10 +484,6 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
         page.title should startWith(RegistrationProcessingPage.title)
-        page.getElementsText(RegistrationProcessingPage.pageHeadingXpath) shouldBe RegistrationProcessingPage.heading
-        page.getElementsText(
-          RegistrationProcessingPage.processedDateXpath
-        ) shouldBe "Application received by HMRC on 22 May 2016"
       }
     }
     "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a Organisation" in {

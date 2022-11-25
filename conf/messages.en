@@ -1381,10 +1381,10 @@ cds.subscription.outcomes.inprocessing.we-are-processing=We are processing your 
 
 cds.enrolment.already.exists.for-group.para1=Your organisation is already subscribed to {0}. Ask a team member for access.
 
-cds.sub01.outcome.processing.heading=The {0} application for {1} is being processed
-cds.sub01.outcome.processing.heading-noname=The {0} application is being processed
+cds.sub01.outcome.processing.heading-noname=Your {0} application is being processed
 cds.sub01.outcome.processing.title=The {0} application is being processed
-cds.sub01.outcome.processing.we-are-processing=We are processing your {0} application. This can take up to 5 working days. You will need to sign back in to see the result of your registration.
+cds.sub01.outcome.processing.we-are-processing.para1=We will email you with the outcome of your application.
+cds.sub01.outcome.processing.we-are-processing.para2=This can take up to 5 working days from the date we received your application.
 
 cds.subscription.verify-email.title=Confirm your email address
 
