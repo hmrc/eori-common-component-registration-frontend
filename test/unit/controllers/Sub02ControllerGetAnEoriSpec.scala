@@ -401,7 +401,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
           verify(mockSessionCache).remove(any[Request[_]])
-          verify(mockSubscribe01Outcome, times(2)).processedDate
+          verify(mockSubscribe01Outcome, times(4)).processedDate
           verify(mockSubscribeOutcome, never()).processedDate
           page.title should startWith("Your new EORI number for orgName is")
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
