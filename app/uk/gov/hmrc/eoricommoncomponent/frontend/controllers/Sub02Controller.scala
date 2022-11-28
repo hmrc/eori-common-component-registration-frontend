@@ -105,19 +105,21 @@ class Sub02Controller @Inject() (
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        name         <- sessionCache.subscriptionDetails.map(_.name)
+        subDetails   <- sessionCache.subscriptionDetails
         sub02Outcome <- sessionCache.sub02Outcome
-        processedDate <- sessionCache.sub01Outcome.map(
-          sub01 => if (sub01.processedDate.nonEmpty) sub01.processedDate else sub02Outcome.processedDate
-        )
+        sub01Outcome <- sessionCache.sub01Outcome
+        _            <- sessionCache.remove
+        _            <- sessionCache.saveSub01Outcome(sub01Outcome)
+        _            <- sessionCache.saveSub02Outcome(sub02Outcome)
+        _            <- sessionCache.saveSubscriptionDetails(subDetails)
       } yield
         if (service.code.equalsIgnoreCase("eori-only"))
           Ok(
             standaloneOutcomeView(
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
-              name,
-              processedDate
+              subDetails.name,
+              if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate
             )
           ).withSession(newUserSession)
         else
@@ -126,8 +128,8 @@ class Sub02Controller @Inject() (
               service,
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
-              name,
-              processedDate
+              subDetails.name,
+              if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate
             )
           ).withSession(newUserSession)
   }

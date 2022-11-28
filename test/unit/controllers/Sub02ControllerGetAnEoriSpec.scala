@@ -352,10 +352,18 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           Future.successful(mockSubscriptionDetails)
         )
         when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
+        when(mockSessionCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
+        when(mockSessionCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]])).thenReturn(
+          Future.successful(true)
+        )
+        when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
 
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
+          verify(mockSessionCache).remove(any[Request[_]])
+          verify(mockSubscribe01Outcome, times(2)).processedDate
+          verify(mockSubscribeOutcome, never()).processedDate
           page.title should startWith("Subscription request received for orgName")
           page.getElementsText(
             RegistrationCompletePage.panelHeadingXpath
@@ -383,10 +391,18 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           Future.successful(mockSubscriptionDetails)
         )
         when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
+        when(mockSessionCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
+        when(mockSessionCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]])).thenReturn(
+          Future.successful(true)
+        )
+        when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
 
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
+          verify(mockSessionCache).remove(any[Request[_]])
+          verify(mockSubscribe01Outcome, times(2)).processedDate
+          verify(mockSubscribeOutcome, never()).processedDate
           page.title should startWith("Your new EORI number for orgName is")
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
@@ -506,6 +522,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private def mockSessionCacheForOutcomePage = {
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(Future.successful(mockRegDetails))
     when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
+    when(mockSessionCache.saveSub01Outcome(any[Sub01Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
     when(mockRegDetails.name).thenReturn("orgName")
     when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
     when(mockSessionCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
