@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -39,23 +39,21 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
     save4Later.fetchCacheIds(groupId)
       .flatMap {
         case Some(cacheIds) =>
-          val sameUser    = cacheIds.internalId == internalId
           val sameService = cacheIds.serviceCode.contains(service.code)
 
           subscriptionStatusService
             .getStatus(idType, cacheIds.safeId.id)(hc, service, request)
-            .flatMap { status =>
-              if (status != SubscriptionProcessing)
+            .flatMap {
+              case NewSubscription | SubscriptionRejected | SubscriptionExists =>
                 if (sameService)
                   save4Later.deleteCachedGroupId(groupId).flatMap(_ => continue)
                 else
                   save4Later.deleteCacheIds(groupId).flatMap(_ => continue)
-              else
-                (sameUser, sameService) match {
-                  case (true, true)  => continue
-                  case (true, false) => userIsInProcess
-                  case (false, _)    => otherUserWithinGroupIsInProcess
-                }
+              case SubscriptionProcessing => //Processing is defined as 01, 11 or 14 subscriptionStatus code
+                if (cacheIds.internalId == internalId)
+                  userIsInProcess
+                else
+                  otherUserWithinGroupIsInProcess
             }
         case _ =>
           continue

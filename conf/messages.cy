@@ -1314,14 +1314,20 @@ cds.if.you.need.help.telephone1 = Ffôn: 0300 200 3705
 cds.if.you.need.help.telephone2 = Dydd Llun i Ddydd Gwener, 08:30 i 17:00 (heblaw am wyliau banc)
 cds.if.you.need.help.telephone.link = Gwybodaeth am gostau galwadau
 cds.subscription.contact-details.intro = Byddwn yn defnyddio’r manylion hyn i gysylltu â chi ynglŷn â’ch cais am rif EORI.
-cds.enrolment.pending.title = Mae problem wedi codi
-cds.enrolment.pending.otherService = gwasanaeth arall
-cds.enrolment.pending.user.paragraph1 = Rydym wrthi’n prosesu’ch cais am danysgrifiad i’r gwasanaeth {0}.
-cds.enrolment.pending.user.paragraph2 = Mae’n rhaid i’r broses hon gael ei chwblhau cyn i chi allu gwneud cais am wasanaeth arall.
-cds.enrolment.pending.user.paragraph3 = Allgofnodwch ac arhoswch tan i chi gael hysbysiad drwy e-bost ynghylch {0} cyn gwneud cais i’r gwasanaeth {1}.
-cds.enrolment.pending.group.otherService.paragraph1 = Rydym wrthi’n prosesu cais am danysgrifiad i’r gwasanaeth {0} gan rywun yn eich sefydliad.
-cds.enrolment.pending.group.otherService.paragraph2 = Mae’n rhaid i’r broses hon gael ei chwblhau cyn i chi allu gwneud cais am wasanaeth arall.
-cds.enrolment.pending.group.sameService.paragraph1 = Yn ôl ein cofnodion, mae rhywun yn eich sefydliad eisoes wedi gwneud cais am y gwasanaeth hwn.
+
+cds.enrolment.pending.user.title=Rydych eisoes wedi gwneud cais
+cds.enrolment.pending.group.title=Mae rhywun yn eich sefydliad eisoes wedi gwneud cais
+
+cds.enrolment.pending.user.paragraph1=Byddwn yn anfon e-bost atoch pan fyddwn wedi gorffen prosesu’ch cais.
+cds.enrolment.pending.user.paragraph2=Byddwch yn cael yr e-bost hwn o fewn naill ai:
+
+cds.enrolment.pending.group.paragraph1=Dim ond un person o’ch sefydliad a all wneud cais.
+cds.enrolment.pending.group.paragraph2=Byddwn yn anfon e-bost atynt pan fyddwn wedi gorffen prosesu eu cais.
+cds.enrolment.pending.group.paragraph3=Byddant yn cael yr e-bost hwn o fewn naill ai:
+
+cds.enrolment.pending.bullet1=2 awr
+cds.enrolment.pending.bullet2=5 diwrnod gwaith, os bydd angen i ni wneud rhagor o wiriadau
+
 cds.languageSelect.current.label = Cymraeg
 cds.languageSelect.select.label = English
 cds.languageSelect.select.hint = Newid yr iaith i’r Gymraeg

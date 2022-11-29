@@ -31,26 +31,18 @@ class EnrolmentPendingAgainstGroupIdViewSpec extends ViewSpec {
 
   "Enrolment Pending against group id page" should {
     "display correct title" in {
-      gyeDoc.title() must startWith("There is a problem")
+      gyeDoc.title() must startWith("Someone in your organisation has already applied")
     }
 
     "display correct heading" in {
-      gyeDoc.body().getElementsByTag("h1").text() mustBe "There is a problem"
+      gyeDoc.body().getElementsByTag("h1").text() mustBe "Someone in your organisation has already applied"
     }
 
     "have the correct class on the h1" in {
       gyeDoc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
-
-    "display the correct text for Gye" in {
-      gyeDoc
-        .body()
-        .getElementById("info")
-        .text mustBe "The Government Gateway ID you used to sign in is part of a team that has already applied for an EORI number. This application is being processed."
-    }
   }
 
-  private lazy val gyeDoc: Document =
-    Jsoup.parse(contentAsString(view(atarService, Some(otherService))))
+  private lazy val gyeDoc: Document = Jsoup.parse(contentAsString(view()))
 
 }
