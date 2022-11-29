@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameIdOrganisationMatch
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import views.html.helper._
@@ -23,7 +24,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, appConfig: AppConfig)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, appConfig: AppConfig, govukDetails: GovukDetails)
 
 @(businessDetailsForm: Form[_ <: NameIdOrganisationMatch], organisationType: String, displayMode: String, isNameAddressRegistrationAvailable: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -42,6 +43,18 @@
 @utrHintText = @{
     if(List("partnership", "limited-liability-partnership").contains(organisationType)) messages("cds.matching.partnership.utr.hint")
     else messages("cds.matching.utr.hint")
+}
+
+@getEoriLink = {
+    <a class="govuk-link" href="@uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouNeedADifferentServiceIomController.form(service)">
+        @messages("cds.matching.name-id-organisation.organisation.no-utr.link")
+    </a>
+}
+
+@detailsContent = {
+    <p class="govuk-body">
+        @Html(messages("cds.matching.name-id-organisation.organisation.no-utr.text", getEoriLink))
+    </p>
 }
 
 @utrHintAndLinkText = {
@@ -90,6 +103,11 @@
                         uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SixLineAddressController.showForm(false, organisationType, service)))
                     </p>
                 }
+
+                @govukDetails(Details(
+                    summary = Text(messages("cds.matching.name-id-organisation.organisation.no-utr")),
+                    content = HtmlContent(detailsContent)
+                ))
 
                 @govukButton(Button(
                     content = Text(messages("cds.navigation.continue"))
