@@ -46,43 +46,4 @@ class SubscriptionCompleteSpec extends ViewSpec {
       doc.body.getElementById("issued-date").text mustBe s"issued by HMRC on 1 January 2019"
     }
   }
-
-  "Subscription outcome page" should {
-
-    "display XI EORI paragraph" in {
-
-      val xiParagraph = doc.body().getElementById("xi-eori")
-
-      xiParagraph.getElementsByTag("h2").get(0).text() mustBe "If you move goods to or from Northern Ireland"
-      xiParagraph.getElementsByTag("p").get(0).text() mustBe "You will need an EORI number starting with XI if you:"
-
-      val xiBulletList = xiParagraph.getElementsByTag("ul").get(0)
-
-      xiBulletList.getElementsByTag("li").get(
-        0
-      ).text() mustBe "move goods between Northern Ireland and non-EU countries"
-      xiBulletList.getElementsByTag("li").get(1).text() mustBe "make a declaration in Northern Ireland"
-      xiBulletList.getElementsByTag("li").get(2).text() mustBe "get a customs decision in Northern Ireland"
-
-      xiParagraph.getElementsByTag("p").get(
-        1
-      ).text() mustBe "Apply for an EORI number that starts with XI (opens in new tab)."
-      xiParagraph.getElementsByTag("p").get(
-        2
-      ).text() mustBe "If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI."
-    }
-
-    "display GG paragraph" in {
-
-      val ggParagraph = doc.body().getElementById("eori-gg")
-
-      ggParagraph.getElementsByTag("h2").get(0).text() mustBe "Your EORI number and Government Gateway"
-      ggParagraph.getElementsByTag("p").get(
-        0
-      ).text() mustBe "Your EORI number is linked to the Government Gateway account you have used for this application."
-      ggParagraph.getElementsByTag("p").get(
-        1
-      ).text() mustBe "You cannot apply for another EORI number using this Government Gateway."
-    }
-  }
 }

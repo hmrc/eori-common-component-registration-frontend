@@ -352,29 +352,25 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           Future.successful(mockSubscriptionDetails)
         )
         when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
+        when(mockSessionCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
+        when(mockSessionCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]])).thenReturn(
+          Future.successful(true)
+        )
+        when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
 
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
           verify(mockSessionCache).remove(any[Request[_]])
+          verify(mockSubscribe01Outcome, times(2)).processedDate
+          verify(mockSubscribeOutcome, never()).processedDate
           page.title should startWith("Subscription request received for orgName")
           page.getElementsText(
             RegistrationCompletePage.panelHeadingXpath
           ) shouldBe s"Subscription request received for orgName"
-          page.getElementsText(
-            RegistrationCompletePage.eoriXpath
-          ) shouldBe s"Your new EORI number starting with GB is: $EORI"
+          page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe s"Your new EORI number is: $EORI"
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
-          page.getElementsText(RegistrationCompletePage.additionalInformationXpath) should include(
-            messages("cds.subscription.outcomes.success.optional-paragraph")
-          )
-          page.getElementsText(RegistrationCompletePage.whatHappensNextXpath) shouldBe
-            strim("""
-                |What happens next We will send a second email to confirm when your subscription to get a goods movement reference is active. This can take up to 2 hours.
-                |Your new GB EORI number will be ready to use within 48 hours.
-                |Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the check an EORI service (opens in new tab) . Your new GB EORI has no expiry date.
-                | """)
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
           page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include(
             "What did you think of this service?"
@@ -395,26 +391,21 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           Future.successful(mockSubscriptionDetails)
         )
         when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
+        when(mockSessionCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
+        when(mockSessionCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]])).thenReturn(
+          Future.successful(true)
+        )
+        when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
 
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
           verify(mockSessionCache).remove(any[Request[_]])
-          page.title should startWith("Application complete")
-          page.getElementsText(
-            RegistrationCompletePage.panelHeadingXpath
-          ) shouldBe s"Your new EORI number starting with GB for orgName is $EORI"
-          page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe EORI
+          verify(mockSubscribe01Outcome, times(4)).processedDate
+          verify(mockSubscribeOutcome, never()).processedDate
+          page.title should startWith("Your new EORI number for orgName is")
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
-          page.getElementsText(RegistrationCompletePage.additionalInformationXpath) should include(
-            messages("cds.standalone.subscription.outcomes.success.email")
-          )
-          page.getElementsText(RegistrationCompletePage.whatHappensNextXpath) shouldBe
-            strim("""
-                |What happens next Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete.
-                |If you would like to check the status of your GB EORI you can use the check an EORI service (opens in new tab) . Your new GB EORI has no expiry date.
-                | """)
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
           page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include(
             "What did you think of this service?"
@@ -531,6 +522,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private def mockSessionCacheForOutcomePage = {
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(Future.successful(mockRegDetails))
     when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
+    when(mockSessionCache.saveSub01Outcome(any[Sub01Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
     when(mockRegDetails.name).thenReturn("orgName")
     when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
     when(mockSessionCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
