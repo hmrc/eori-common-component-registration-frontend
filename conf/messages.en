@@ -434,7 +434,7 @@ countries-in-the-eu.title=Countries in the EU
 #How can we identify you?
 subscription-journey.how-confirm-identity=What information can we use to confirm your identity?
 subscription-journey.utr.label=Self assessment UTR number
-subscription-journey.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called ''reference'', ''UTR'' or '''official use''.
+subscription-journey.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or '''official use''.
 cds.matching.id.page-error.nino=Enter your National Insurance number
 cds.matching.id.page-error.utr=Enter your Self Assessment UTR number
 cds.matching.id.page-error.ninoOrUtrRadio=Tell us how we can identify you
@@ -1446,7 +1446,7 @@ ecc.subscription.information.para2.list.second=Standard Industrial Classificatio
 
 ecc.subscription.information.section.organisation.subheading=Company or other organisation details
 ecc.subscription.information.section.organisation.list.heading=If you are a limited company, partnership or charity, you will need:
-ecc.subscription.information.section.organisation.list.first=Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
+ecc.subscription.information.section.organisation.list.first=Corporation Tax Unique Tax Reference (UTR) if you pay corporation Tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
 ecc.subscription.information.section.organisation.list.second=Registered company name
 ecc.subscription.information.section.organisation.list.third=Registered company address
 ecc.subscription.information.section.organisation.list.fourth=Date of establishment
@@ -1518,7 +1518,7 @@ cds.registration.user-location.location.third-country-inc-eu.label=Rest of the w
 cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.organisation.utr=Organisation Self Assessment Unique Taxpayer Reference (UTR)
+cds.matching.name-id-organisation.organisation.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 
 cds.subscription.date-of-establishment.company.title-and-heading=Date when your company was established
 
@@ -1738,7 +1738,7 @@ ecc.start-page.gbeori.para3.title = We also ask for:
 ecc.start-page.gbeori.para3.bullet = Standard Industrial Classification (SIC) code. <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a>.
 ecc.start-page.company.title = Company or other organisation details
 ecc.start-page.company = If you are a limited company, partnership or charity, we will also ask for:
-ecc.start-page.company.bullet1 = Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
+ecc.start-page.company.bullet1 = Corporation Tax Unique Tax Reference (UTR) if you pay corporation Tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
 ecc.start-page.company.bullet2 = Registered company name
 ecc.start-page.company.bullet3 = Registered company address
 ecc.start-page.company.bullet4 = Date of establishment

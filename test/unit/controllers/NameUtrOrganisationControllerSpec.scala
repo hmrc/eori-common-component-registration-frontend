@@ -136,7 +136,7 @@ class NameUtrOrganisationControllerSpec
             case "limited-liability-partnership" =>
               "Partnership Self Assessment Unique Taxpayer Reference (UTR)"
             case "charity-public-body-not-for-profit" =>
-              "Organisation Self Assessment Unique Taxpayer Reference (UTR)"
+              "Corporation Tax Unique Taxpayer Reference (UTR)"
             case _ => "Corporation Tax Unique Taxpayer Reference (UTR)"
           }
 

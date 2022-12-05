@@ -69,7 +69,7 @@ class StartViewSpec extends ViewSpec {
       ).text() mustBe "If you are a limited company, partnership or charity, we will also ask for:"
       doc.getElementById(
         "company-para-bullet1"
-      ).text() mustBe "Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can find a UTR number (opens in new tab)."
+      ).text() mustBe "Corporation Tax Unique Tax Reference (UTR) if you pay corporation Tax in the UK. You can find a UTR number (opens in new tab)."
       doc.getElementById("company-para-bullet2").text() mustBe "Registered company name"
       doc.getElementById("company-para-bullet3").text() mustBe "Registered company address"
       doc.getElementById("company-para-bullet4").text() mustBe "Date of establishment"
