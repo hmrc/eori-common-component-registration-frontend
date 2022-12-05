@@ -56,7 +56,7 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
 
       status(result) shouldBe OK
       CdsPage(contentAsString(result)).title should startWith(
-        "To access Advance Tariff Rulings, you need a GB EORI number."
+        "Get a subscription to get a goods movement reference and an EORI number starting with GB"
       )
     }
   }

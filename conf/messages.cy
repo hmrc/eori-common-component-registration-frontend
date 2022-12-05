@@ -1482,30 +1482,43 @@ ecc.subscription.outcomes.guidance.xi.eori.href = <a href="https://www.tax.servi
 ecc.subscription.organisation-disclose-personal-details-consent.title = A allwn ychwanegu’ch enw a’ch cyfeiriad at y gwiriwr rhif EORI?
 ecc.subscription.organisation-disclose-personal-details-consent.hint = Bydd CThEM yn ychwanegu’ch rhif EORI newydd at y <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">gwasanaeth Gwiriwch rif EORI (yn agor tab newydd)</a>. Mae hwn yn wiriwr sydd ar gael i’r cyhoedd ac sy’n rhestru’r holl rifau EORI sy’n dechrau gyda GB. Sylwch na ellir defnyddio’r gwiriwr gan unrhyw un i ddarganfod eich rhif EORI.
 ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Mae gadael i ni ychwanegu’ch enw a’ch cyfeiriad wrth ymyl eich rhif EORI yn helpu asiantau tollau ac asiantau cludo nwyddau i gadarnhau pwy ydych, a fydd yn lleihau gwallau a lleihau oedi. Byddwn yn defnyddio’r enw a’r cyfeiriad rydych newydd eu cadarnhau.
-ecc.start-page.title = I gael mynediad at y gwasanaeth {0}, mae’n rhaid i chi gael rhif EORI GB.
-ecc.start-page.para1 = Byddwn yn gofyn i chi nodi rhai manylion ac, os cewch eich cymeradwyo ar sail y manylion hynny, byddwn yn rhoi rhif EORI GB i chi a thanysgrifiad i’r gwasanaeth {0}.
-ecc.start-page.para2 = Os cewch eich cymeradwyo, bydd eich tanysgrifiad yn barod i’w ddefnyddio cyn pen 2 awr. Os bydd angen i ni wneud rhagor o wiriadau, gall gymryd hyd at 5 diwrnod gwaith.
-ecc.start-page.para3 = Dim ond unwaith y bydd angen i chi wneud hyn.
-ecc.start-page.gbeori.title = Yr hyn y bydd ei angen arnoch i danysgrifio a chael rhif EORI GB
+
+ecc.start-page.title = Tanysgrifiwch i gael cyfeirnod symud nwyddau a rhif EORI sy’n dechrau gyda GB
+
+ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
+ecc.start-page.para1.bullet1 = rhif EORI
+ecc.start-page.para1.bullet2 = tanysgrifiad i gael cyfeirnod symud nwyddau
+ecc.start-page.para2 = Dim ond unwaith y bydd angen i chi wneud hyn.
+
+ecc.start-page.when.title = Pryd fyddwch yn gallu defnyddio’ch rhif EORI a’ch tanysgrifiad
+ecc.start-page.when.para1 = Os yw hynny’n cael ei gymeradwyo, byddwn yn anfon e-bost atoch pan fyddant yn barod i’w defnyddio. Byddant yn barod i’w defnyddio cyn pen naill ai:
+ecc.start-page.when.para1.bullet1 = 2 awr
+ecc.start-page.when.para1.bullet2 = 5 diwrnod gwaith, os bydd angen i ni wneud rhagor o wiriadau
+
+ecc.start-page.gbeori.title = Yr hyn y bydd ei angen arnoch i gael rhif EORI a thanysgrifiad
 ecc.start-page.gbeori.para1.title = Os ydych wedi cofrestru ar gyfer TAW yn y DU, byddwn yn gofyn i chi am y canlynol:
-ecc.start-page.gbeori.para1.bullet1 = rhif TAW
+ecc.start-page.gbeori.para1.bullet1 = eich rhif TAW
 ecc.start-page.gbeori.para1.bullet2 = cod post y cyfeiriad a gofrestrwyd ar gyfer TAW
 ecc.start-page.gbeori.para1.bullet3 = dyddiad y daw TAW i rym
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/gwasanaethau-cthem-mewngofnodi-neu-gofrestru" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i’ch manylion TAW (yn agor tab newydd)</a>
-ecc.start-page.gbeori.para3.title = Gofynnwn hefyd am y canlynol:
-ecc.start-page.gbeori.para3.bullet = Cod Dosbarthiad Diwydiannol Safonol (SIC). <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i’ch cod SIC (yn agor tab newydd)</a>.
-ecc.start-page.company.title = Manylion y cwmni neu sefydliad arall
-ecc.start-page.company = Os ydych yn gwmni cyfyngedig, yn bartneriaeth neu’n elusen, byddwn hefyd yn gofyn am y canlynol:
-ecc.start-page.company.bullet1 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth os ydych yn talu Treth Gorfforaeth yn y DU. Gallwch <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">ddod o hyd i Gyfeirnod Unigryw y Trethdalwr (yn agor tab newydd)</a>.
-ecc.start-page.company.bullet2 = Enw’r cwmni cofrestredig
-ecc.start-page.company.bullet3 = Cyfeiriad y cwmni cofrestredig
-ecc.start-page.company.bullet4 = Dyddiad sefydlu
+ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i’ch manylion TAW (yn agor ffenestr neu dab newydd)</a>
+
+ecc.start-page.gbeori.para3.title = Byddwn yn gofyn am eich Cod Dosbarthiad Diwydiannol Safonol (SIC), os byddwch yn gwneud cais fel:
+ecc.start-page.gbeori.para3.bullet1 = cwmni neu sefydliad arall
+ecc.start-page.gbeori.para3.bullet2 = unig fasnachwr
+ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i’ch cod SIC (yn agor ffenestr neu dab newydd)</a>.
+
+ecc.start-page.company.title = Manylion y cwmni neu’r sefydliad arall
+ecc.start-page.company = Os byddwch yn gwneud cais fel cwmni cyfyngedig, partneriaeth neu sefydliad arall, byddwn hefyd yn gofyn am y canlynol:
+ecc.start-page.company.bullet1 = enw cofrestredig y cwmni
+ecc.start-page.company.bullet2 = dyddiad ei sefydlu
+ecc.start-page.company.para2 = Os ydych yn talu Treth Gorfforaeth yn y DU, byddwn yn gofyn am eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth.
+ecc.start-page.company.link = <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
+
 ecc.start-page.sole-trader.title = Manylion yr unig fasnachwr neu’r unigolyn
 ecc.start-page.sole-trader = Os ydych wedi gweithio yn y DU neu wedi cofrestru ar gyfer Hunanasesiad, byddwn yn gofyn am un o’r canlynol:
 ecc.start-page.sole-trader.bullet1 = Rhif Yswiriant Gwladol
-ecc.start-page.sole-trader.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad. Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">ddod o hyd i UTR sydd ar goll (yn agor tab newydd)</a>.
-ecc.start-page.start-now = Dechrau nawr
-ecc.start-page.help.eori.contact = Cysylltu â’r tîm EORI ar-lein.
+ecc.start-page.sole-trader.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
+
 date.fields.day = Diwrnod
 date.fields.month = Mis
 date.fields.year = Blwyddyn
