@@ -56,9 +56,16 @@
     }
 }
 
+@utrLinkText = {
+    <br>
+    <p class="govuk-body">
+        @Html(messages("cds.matching.you-can.text")) <a class="govuk-link" id="utrLink" href=@appConfig.findLostUtr() target="_blank" rel="noopener noreferrer">@messages("cds.matching.utr.lost-utr-description")</a>
+    </p>
+}
+
 @hint = @{
     organisationType match {
-        case CdsOrganisationType.ThirdCountryOrganisationId => messages("cds.matching.row-organisation.utr.paragraph", utrlink)
+        case CdsOrganisationType.ThirdCountryOrganisationId => utrLinkText + messages("cds.matching.utr.hint")
         case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
             messages("ecc.matching.row-sole-trader-individual.utr.paragraph", utrlink)
         case CdsOrganisationType.IndividualId | CdsOrganisationType.SoleTraderId =>
