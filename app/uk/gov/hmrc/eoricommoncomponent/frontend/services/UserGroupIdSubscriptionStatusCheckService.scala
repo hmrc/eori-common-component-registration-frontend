@@ -39,6 +39,7 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
     save4Later.fetchCacheIds(groupId)
       .flatMap {
         case Some(cacheIds) =>
+          val sameUser    = cacheIds.internalId == internalId
           val sameService = cacheIds.serviceCode.contains(service.code)
 
           subscriptionStatusService
@@ -50,7 +51,7 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
                 else
                   save4Later.deleteCacheIds(groupId).flatMap(_ => continue)
               case SubscriptionProcessing => //Processing is defined as 01, 11 or 14 subscriptionStatus code
-                if (cacheIds.internalId == internalId)
+                if (sameUser)
                   userIsInProcess
                 else
                   otherUserWithinGroupIsInProcess
