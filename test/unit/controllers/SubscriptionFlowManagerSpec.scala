@@ -209,7 +209,13 @@ class SubscriptionFlowManagerSpec
         3,
         ReviewDetailsPageGetYourEORI
       ),
-      (ThirdCountryIndividualSubscriptionFlow, EoriConsentSubscriptionFlowPage, 1, 3, ContactDetailsSubscriptionFlowPageGetEori),
+      (
+        ThirdCountryIndividualSubscriptionFlow,
+        EoriConsentSubscriptionFlowPage,
+        1,
+        3,
+        ContactDetailsSubscriptionFlowPageGetEori
+      ),
       (ThirdCountrySoleTraderSubscriptionFlow, SicCodeSubscriptionFlowPage, 1, 6, EoriConsentSubscriptionFlowPage),
       (
         ThirdCountrySoleTraderSubscriptionFlow,
