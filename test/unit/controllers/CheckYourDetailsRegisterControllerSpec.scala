@@ -390,36 +390,6 @@ class CheckYourDetailsRegisterControllerSpec
       }
     }
 
-    forAll(shortenedNameOrganisationTypes) { organisationType =>
-      s"display shortened name label and value for ${organisationType.id}" in {
-        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]]))
-          .thenReturn(SubscriptionFlow("Organisation"))
-        when(mockSubscriptionDetailsHolder.businessShortName).thenReturn(Some(BusinessShortName(shortName)))
-        mockRegistrationDetailsBasedOnOrganisationType(organisationType)
-
-        showForm(userSelectedOrgType = organisationType) { result =>
-          val page = CdsPage(contentAsString(result))
-          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
-          page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe shortName
-        }
-      }
-    }
-
-    forAll(shortenedNameOrganisationTypes) { organisationType =>
-      s"display shortened name and 'Not entered' for ${organisationType.id} if alternative name wasn't defined" in {
-        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]]))
-          .thenReturn(SubscriptionFlow("Organisation"))
-        when(mockSubscriptionDetailsHolder.businessShortName).thenReturn(Some(BusinessShortName(false, None)))
-        mockRegistrationDetailsBasedOnOrganisationType(organisationType)
-
-        showForm(userSelectedOrgType = organisationType) { result =>
-          val page = CdsPage(contentAsString(result))
-          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
-          page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe "Not entered"
-        }
-      }
-    }
-
     "display all fields when all are provided for an individual" in {
       when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
       val holder = detailsHolderWithAllFields.copy(
@@ -545,21 +515,6 @@ class CheckYourDetailsRegisterControllerSpec
         "Contact address",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/contact-address/review"
-
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe "Short Name"
-      page.getSummaryListLink(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "Shortened name",
-        "Change"
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Shortened name")
-      page.getSummaryListHref(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "Shortened name",
-        "Change"
-      ) shouldBe "/customs-registration-services/atar/register/company-short-name-yes-no/review"
-
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
         "Standard Industrial Classification (SIC) code"
@@ -744,21 +699,6 @@ class CheckYourDetailsRegisterControllerSpec
         "Contact address",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/contact-address/review"
-
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe "Short Name"
-      page.getSummaryListLink(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "Shortened name",
-        "Change"
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Shortened name")
-      page.getSummaryListHref(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "Shortened name",
-        "Change"
-      ) shouldBe "/customs-registration-services/atar/register/company-short-name-yes-no/review"
-
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
         "Standard Industrial Classification (SIC) code"

@@ -39,6 +39,4 @@ trait ReviewPageOrganisationTypeTables {
 
   val contactDetailsOrganisationTypes = individualsOnlyOrganisationTypes ++ soleTradersOnlyOrganisationTypes
 
-  val shortenedNameOrganisationTypes = organisationTypes ++ soleTradersOnlyOrganisationTypes
-
 }
