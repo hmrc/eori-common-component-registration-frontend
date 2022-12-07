@@ -684,7 +684,7 @@ cds.matching.nino.nino=National Insurance number
 cds.matching.nino.page-error.first-name=Enter your first name
 cds.matching.nino.page-error.last-name=Enter your last name
 cds.matching.nino.page-error.nino=Enter a National Insurance number
-cds.matching.nino.invalid=Enter a correct National Insurance number
+cds.matching.nino.invalid=Enter a National Insurance number in the correct format
 
 #Matching NINO Non-UK
 cds.matching.nino.row.error=Enter your National Insurance number
