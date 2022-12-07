@@ -1724,11 +1724,11 @@ ecc.subscription.organisation-disclose-personal-details-consent.hint =HMRC will 
 ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.
 ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker kept by the European Commission (opens in new tab)</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
 
-ecc.start-page.title = Get a subscription to get a goods movement reference and an EORI number starting with GB
+ecc.start-page.title = Get a subscription to {0} and an EORI number starting with GB
 
 ecc.start-page.para1 = If we approve your application we will give you:
 ecc.start-page.para1.bullet1 = an EORI number
-ecc.start-page.para1.bullet2 = a subscription to get a goods movement reference
+ecc.start-page.para1.bullet2 = a subscription to {0}
 ecc.start-page.para2 = You only need to apply once.
 
 ecc.start-page.when.title = When you will be able to use your subscription and EORI number

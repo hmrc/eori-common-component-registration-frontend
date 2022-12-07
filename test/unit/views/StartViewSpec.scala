@@ -31,9 +31,7 @@ class StartViewSpec extends ViewSpec {
   "Start page" should {
 
     "have correct title" in {
-      doc.title must startWith(
-        "Get a subscription to get a goods movement reference and an EORI number starting with GB"
-      )
+      doc.title must startWith("Get a subscription to Advance Tariff Rulings and an EORI number starting with GB")
     }
   }
 }

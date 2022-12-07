@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.longName
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
@@ -33,14 +34,14 @@
     <a href="@url" class="govuk-link" target="@target" rel="noopener noreferrer">@messages(text)</a>
 }
 
-@layout_di(messages("ecc.start-page.title"), suppressTelephoneNumberDetection = false, displayBackLink = false) {
+@layout_di(messages("ecc.start-page.title", longName), suppressTelephoneNumberDetection = false, displayBackLink = false) {
 
     <div>
-        <h1 class="govuk-heading-l" id="start-heading">@messages("ecc.start-page.title")</h1>
+        <h1 class="govuk-heading-l" id="start-heading">@messages("ecc.start-page.title", longName)</h1>
         <p class="govuk-body" id="para1">@messages("ecc.start-page.para1")</p>
         <ul class="govuk-list govuk-list--bullet">
             <li id="start-page-para1-bullet1">@messages("ecc.start-page.para1.bullet1")</li>
-            <li id="start-page-para1-bullet2">@messages("ecc.start-page.para1.bullet2")</li>
+            <li id="start-page-para1-bullet2">@messages("ecc.start-page.para1.bullet2", longName)</li>
         </ul>
         <p class="govuk-body" id="para2">@messages("ecc.start-page.para2")</p>
 

@@ -56,7 +56,7 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
 
       status(result) shouldBe OK
       CdsPage(contentAsString(result)).title should startWith(
-        "Get a subscription to get a goods movement reference and an EORI number starting with GB"
+        "Get a subscription to Advance Tariff Rulings and an EORI number starting with GB"
       )
     }
   }

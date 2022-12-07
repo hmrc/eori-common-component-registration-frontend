@@ -1483,11 +1483,11 @@ ecc.subscription.organisation-disclose-personal-details-consent.title = A allwn 
 ecc.subscription.organisation-disclose-personal-details-consent.hint = Bydd CThEM yn ychwanegu’ch rhif EORI newydd at y <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">gwasanaeth Gwiriwch rif EORI (yn agor tab newydd)</a>. Mae hwn yn wiriwr sydd ar gael i’r cyhoedd ac sy’n rhestru’r holl rifau EORI sy’n dechrau gyda GB. Sylwch na ellir defnyddio’r gwiriwr gan unrhyw un i ddarganfod eich rhif EORI.
 ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Mae gadael i ni ychwanegu’ch enw a’ch cyfeiriad wrth ymyl eich rhif EORI yn helpu asiantau tollau ac asiantau cludo nwyddau i gadarnhau pwy ydych, a fydd yn lleihau gwallau a lleihau oedi. Byddwn yn defnyddio’r enw a’r cyfeiriad rydych newydd eu cadarnhau.
 
-ecc.start-page.title = Tanysgrifiwch i gael cyfeirnod symud nwyddau a rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title = Tanysgrifiwch i {0} a rhif EORI sy’n dechrau gyda GB
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
 ecc.start-page.para1.bullet1 = rhif EORI
-ecc.start-page.para1.bullet2 = tanysgrifiad i gael cyfeirnod symud nwyddau
+ecc.start-page.para1.bullet2 = tanysgrifiad i {0}
 ecc.start-page.para2 = Dim ond unwaith y bydd angen i chi wneud hyn.
 
 ecc.start-page.when.title = Pryd fyddwch yn gallu defnyddio’ch rhif EORI a’ch tanysgrifiad
