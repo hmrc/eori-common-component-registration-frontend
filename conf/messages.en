@@ -1023,7 +1023,6 @@ cds.subscription.outcomes.rejected.vat-registered1=Your EORI number will be in t
 cds.subscription.outcomes.rejected.vat-registered2=GB XXXXXXXXX 000
 cds.subscription.outcomes.rejected.vat-registered3=Where XXXXXXXXX is your VAT number.
 cds.standalone.subscription.outcomes.success.heading=Your new EORI number starting with GB for {0} is
-cds.standalone.subscription.outcomes.success.email=We will send you an email to confirm your GB EORI application request has been received.
 cds.standalone.subscription.outcomes.success.extra.information.heading=What happens next
 cds.standalone.subscription.outcomes.success.extra.information1=We will send you an email to confirm when your subscription and EORI number are ready to use.
 cds.standalone.subscription.outcomes.success.extra.information1.standalone=We will send you an email to confirm when your EORI number and subscription are ready to use.

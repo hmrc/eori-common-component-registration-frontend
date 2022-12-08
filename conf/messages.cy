@@ -907,7 +907,6 @@ cds.subscription.outcomes.rejected.vat-registered1 = Bydd eich rhif EORI yn y ff
 cds.subscription.outcomes.rejected.vat-registered2 = GB XXXXXXXXX 000
 cds.subscription.outcomes.rejected.vat-registered3 = Lle mai XXXXXXXXX yw eich rhif TAW.
 cds.standalone.subscription.outcomes.success.heading = Eich rhif EORI newydd sy’n dechrau gyda GB ar gyfer {0} yw
-cds.standalone.subscription.outcomes.success.email = Byddwn yn anfon e-bost atoch i gadarnhau bod eich cais am EORI GB wedi dod i law.
 cds.standalone.subscription.outcomes.success.extra.information.heading = Yr hyn sy’n digwydd nesaf
 cds.standalone.subscription.outcomes.success.extra.information1=Byddwn yn anfon e-bost atoch i gadarnhau pan fydd eich tanysgrifiad a’ch rhif EORI yn barod i’w defnyddio.
 cds.standalone.subscription.outcomes.success.issued = cyhoeddwyd gan CThEM ar
