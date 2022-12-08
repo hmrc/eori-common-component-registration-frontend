@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, help_di: partials.if_you_need_help, appConfig: AppConfig, govukButton : GovukButton)
+@this(layout_di: layout, help_di: partials.if_you_need_help, appConfig: AppConfig, govukButton: GovukButton)
 
 @(service: Service)(implicit messages: Messages, request: Request[_])
 
@@ -38,9 +38,19 @@
 
     <div>
         <h1 class="govuk-heading-l" id="start-heading">@messages("ecc.start-page.title", longName)</h1>
-        <p class="govuk-body" id="para1">@messages("ecc.start-page.para1", longName)</p>
+        <p class="govuk-body" id="para1">@messages("ecc.start-page.para1")</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li id="start-page-para1-bullet1">@messages("ecc.start-page.para1.bullet1")</li>
+            <li id="start-page-para1-bullet2">@messages("ecc.start-page.para1.bullet2", longName)</li>
+        </ul>
         <p class="govuk-body" id="para2">@messages("ecc.start-page.para2")</p>
-        <p class="govuk-body" id="para3">@messages("ecc.start-page.para3")</p>
+
+        <h2 class="govuk-heading-m" id="when-heading">@messages("ecc.start-page.when.title")</h2>
+        <p class="govuk-body" id="gb-eori-when-para2">@messages("ecc.start-page.when.para1")</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li id="start-page-when-bullet1">@messages("ecc.start-page.when.para1.bullet1")</li>
+            <li id="start-page-when-bullet2">@messages("ecc.start-page.when.para1.bullet2")</li>
+        </ul>
 
         <h2 class="govuk-heading-m" id="gb-eori-heading">@messages("ecc.start-page.gbeori.title")</h2>
         <p class="govuk-body" id="gb-eori-para1-heading">@messages("ecc.start-page.gbeori.para1.title")</p>
@@ -50,40 +60,39 @@
             <li id="gb-eori-para1-bullet3">@messages("ecc.start-page.gbeori.para1.bullet3")</li>
         </ul>
         <p class="govuk-body" id="gb-eori-para2">@Html(messages("ecc.start-page.gbeori.para2"))</p>
+
         <p class="govuk-body" id="gb-eori-para3-heading">@messages("ecc.start-page.gbeori.para3.title")</p>
         <ul class="govuk-list govuk-list--bullet">
-            <li id="gb-eori-para3-bullet1">@Html(messages("ecc.start-page.gbeori.para3.bullet"))</li>
+            <li id="gb-eori-para3-bullet1">@messages("ecc.start-page.gbeori.para3.bullet1")</li>
+            <li id="gb-eori-para3-bullet2">@messages("ecc.start-page.gbeori.para3.bullet2")</li>
         </ul>
+        <p class="govuk-body" id="gb-eori-para3">@Html(messages("ecc.start-page.gbeori.link"))</p>
 
-        <h2 class="govuk-heading-m" id="company-heading">@messages("ecc.start-page.company.title")</h2>
+        <h3 class="govuk-heading-m" id="company-heading">@messages("ecc.start-page.company.title")</h3>
         <p class="govuk-body" id="company-para-heading">@messages("ecc.start-page.company")</p>
         <ul class="govuk-list govuk-list--bullet">
-            <li id="company-para-bullet1">@Html(messages("ecc.start-page.company.bullet1"))</li>
+            <li id="company-para-bullet1">@messages("ecc.start-page.company.bullet1")</li>
             <li id="company-para-bullet2">@messages("ecc.start-page.company.bullet2")</li>
-            <li id="company-para-bullet3">@messages("ecc.start-page.company.bullet3")</li>
-            <li id="company-para-bullet4">@messages("ecc.start-page.company.bullet4")</li>
         </ul>
+        <p class="govuk-body" id="company-para2">@messages("ecc.start-page.company.para2")</p>
+        <p class="govuk-body" id="company-para3">@Html(messages("ecc.start-page.company.link"))</p>
 
-        <h2 class="govuk-heading-m" id="sole-trader-heading">@messages("ecc.start-page.sole-trader.title")</h2>
+        <h3 class="govuk-heading-m" id="sole-trader-heading">@messages("ecc.start-page.sole-trader.title")</h3>
         <p class="govuk-body" id="sole-trader-para-heading">@messages("ecc.start-page.sole-trader")</p>
         <ul class="govuk-list govuk-list--bullet govuk-body">
             <li id="sole-trader-para-bullet1">@messages("ecc.start-page.sole-trader.bullet1")</li>
-            <li id="sole-trader-para-bullet2">@Html(messages("ecc.start-page.sole-trader.bullet2"))</li>
+            <li id="sole-trader-para-bullet2">@messages("ecc.start-page.sole-trader.bullet2")</li>
         </ul>
 
-        <p class="govuk-!-margin-top-2">
-        @help_di(Some(link(messages("ecc.start-page.help.eori.contact"), appConfig.contactEORITeam, "_self")))
-        </p>
+        <br>
 
         <p>
-            @govukButton(Button(
-                href = Some(startLink.url),
-                isStartButton = true,
-                content = Text(messages("ecc.start-page.start-now"))
-            ))
+        @govukButton(Button(
+            href = Some(startLink.url),
+            isStartButton = true,
+            content = Text(messages("cds.navigation.continue"))
+        ))
         </p>
-
-
 
         @helpers.helpAndSupport()
     </div>
