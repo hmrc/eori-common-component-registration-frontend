@@ -140,19 +140,11 @@ class NameUtrOrganisationControllerSpec
             case _ => "Corporation Tax Unique Taxpayer Reference (UTR)"
           }
 
-          val UtrHintText = organisationType match {
-            case "partnership" | "limited-liability-partnership" =>
-              "You can find a lost UTR This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called 'reference', 'UTR' or 'official use'."
-            case _ =>
-              "You can find a lost UTR This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called 'reference', 'UTR' or 'official use'."
-          }
-
           val UtrHintTextLink = "https://www.gov.uk/find-lost-utr-number"
 
           page.getElementsText(labelForNameXpath) shouldBe labelForName
           page.getElementsText(fieldLevelErrorName) shouldBe errorForName
           page.getElementsText(labelForUtrXpath) shouldBe labelForUtr
-          page.getElementsText(hintForUtrHintTextXpath) shouldBe UtrHintText
           page.getElementsHref(linkInUtrHintTextXpath) shouldBe UtrHintTextLink
         }
       }
