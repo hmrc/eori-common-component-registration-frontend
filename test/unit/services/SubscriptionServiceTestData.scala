@@ -612,7 +612,6 @@ trait SubscriptionServiceTestData extends TestData {
          |         },
          | ${vatIdsJson(vatIds)}
          | "consentToDisclosureOfPersonalData": "0",
-         | "shortName": "$shortName",
          | "dateOfEstablishment": "$expectedDateEstablishedString",
          | $typeOfPersonJson
          | "principalEconomicActivity": "$principalEconomicActivity",
