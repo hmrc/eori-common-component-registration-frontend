@@ -24,7 +24,7 @@
 
 @this(layout_di: layout, help_di: partials.if_you_need_help, appConfig: AppConfig, govukButton: GovukButton)
 
-@(service: Service)(implicit messages: Messages, request: Request[_])
+@(service: Service, headingAndTitleText: String, bullet2: String)(implicit messages: Messages, request: Request[_])
 
 @startLink = @{
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatGroupController.createForm(service)
@@ -34,14 +34,14 @@
     <a href="@url" class="govuk-link" target="@target" rel="noopener noreferrer">@messages(text)</a>
 }
 
-@layout_di(messages("ecc.start-page.title", longName), suppressTelephoneNumberDetection = false, displayBackLink = false) {
+@layout_di(messages(headingAndTitleText), suppressTelephoneNumberDetection = false, displayBackLink = false) {
 
     <div>
-        <h1 class="govuk-heading-l" id="start-heading">@messages("ecc.start-page.title", longName)</h1>
+        <h1 class="govuk-heading-l" id="start-heading">@messages(headingAndTitleText)</h1>
         <p class="govuk-body" id="para1">@messages("ecc.start-page.para1")</p>
         <ul class="govuk-list govuk-list--bullet">
             <li id="start-page-para1-bullet1">@messages("ecc.start-page.para1.bullet1")</li>
-            <li id="start-page-para1-bullet2">@messages("ecc.start-page.para1.bullet2", longName)</li>
+            <li id="start-page-para1-bullet2">@messages(bullet2)</li>
         </ul>
         <p class="govuk-body" id="para2">@messages("ecc.start-page.para2")</p>
 

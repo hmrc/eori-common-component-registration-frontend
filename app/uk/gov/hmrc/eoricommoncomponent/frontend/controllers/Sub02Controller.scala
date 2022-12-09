@@ -122,16 +122,26 @@ class Sub02Controller @Inject() (
               if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate
             )
           ).withSession(newUserSession)
-        else
+        else {
+          val subscriptionTo = service.code match {
+            case "gagmr" => "ecc.start-page.para1.bullet2.gagmr"
+            case "atar"  => "ecc.start-page.para1.bullet2.atar"
+            case "cts"   => "ecc.start-page.para1.bullet2.cts"
+            case "ss"    => "ecc.start-page.para1.bullet2.ss"
+            case "ncts"  => "ecc.start-page.para1.bullet2.ncts"
+            case _       => "ecc.start-page.para1.bullet2.cds"
+          }
           Ok(
             subscriptionOutcomeView(
               service,
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
               subDetails.name,
-              if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate
+              if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate,
+              subscriptionTo
             )
           ).withSession(newUserSession)
+        }
   }
 
   def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {

@@ -1441,7 +1441,6 @@ ecc.subscription.outcomes.success.xi.info.bullet3 = cael penderfyniad tollau yng
 ecc.subscription.outcomes.success.xi.info.href=Dysgwch ragor am rifau EORI sy’n dechrau gydag XI
 ecc.subscription.outcomes.success.xi.info2=Os oes gennych rif EORI a gyhoeddwyd gan wlad yn yr UE, nid oes angen i chi gael rhif EORI sy’n dechrau gydag XI.
 cds.subscription.outcomes.success.application-info= Mae’ch cais yn rhoi’r canlynol i chi:
-cds.subscription.outcomes.success.application-info.bullet1=tanysgrifiad i’r canlynol: {0}
 cds.subscription.outcomes.success.application-info.bullet2=rhif EORI
 ecc.standalone.subscription.outcomes.success.xi = Os ydych yn symud nwyddau i Ogledd Iwerddon neu oddi yno
 ecc.standalone.subscription.outcomes.success.xi.date.info = Bydd angen rhif EORI sy’n dechrau gydag XI arnoch os ydych yn:
@@ -1482,12 +1481,23 @@ ecc.subscription.organisation-disclose-personal-details-consent.title = A allwn 
 ecc.subscription.organisation-disclose-personal-details-consent.hint = Bydd CThEM yn ychwanegu’ch rhif EORI newydd at y <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">gwasanaeth Gwiriwch rif EORI (yn agor tab newydd)</a>. Mae hwn yn wiriwr sydd ar gael i’r cyhoedd ac sy’n rhestru’r holl rifau EORI sy’n dechrau gyda GB. Sylwch na ellir defnyddio’r gwiriwr gan unrhyw un i ddarganfod eich rhif EORI.
 ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Mae gadael i ni ychwanegu’ch enw a’ch cyfeiriad wrth ymyl eich rhif EORI yn helpu asiantau tollau ac asiantau cludo nwyddau i gadarnhau pwy ydych, a fydd yn lleihau gwallau a lleihau oedi. Byddwn yn defnyddio’r enw a’r cyfeiriad rydych newydd eu cadarnhau.
 
-ecc.start-page.title = Tanysgrifiwch i {0} a rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.gagmr = Tanysgrifiwch i’r Gwasanaeth Symud Cerbydau Nwyddau a chael rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.atar = Tanysgrifiwch i Ddyfarniadau Tariffau Uwch a chael rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.cts = Tanysgrifiwch i Wasanaethau Masnachwyr Tollau a chael rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.ss = Tanysgrifiwch i’r Gwasanaeth Diogelwch (yn y DU) a chael rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.ncts = Tanysgrifiwch i’r System Gludo Gyfrifiadurol Newydd (NCTS) a chael rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.cds = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
 ecc.start-page.para1.bullet1 = rhif EORI
-ecc.start-page.para1.bullet2 = tanysgrifiad i {0}
 ecc.start-page.para2 = Dim ond unwaith y bydd angen i chi wneud hyn.
+
+ecc.start-page.para1.bullet2.gagmr = tanysgrifiad i’r Gwasanaeth Symud Cerbydau Nwyddau
+ecc.start-page.para1.bullet2.atar = tanysgrifiad i Ddyfarniadau Tariffau Uwch
+ecc.start-page.para1.bullet2.cts = tanysgrifiad i Wasanaethau Masnachwyr Tollau
+ecc.start-page.para1.bullet2.ss = tanysgrifiad i’r Gwasanaeth Diogelwch (yn y DU)
+ecc.start-page.para1.bullet2.ncts = tanysgrifiad i’r System Gludo Gyfrifiadurol Newydd (NCTS)
+ecc.start-page.para1.bullet2.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 
 ecc.start-page.when.title = Pryd fyddwch yn gallu defnyddio’ch rhif EORI a’ch tanysgrifiad
 ecc.start-page.when.para1 = Os yw hynny’n cael ei gymeradwyo, byddwn yn anfon e-bost atoch pan fyddant yn barod i’w defnyddio. Byddant yn barod i’w defnyddio cyn pen naill ai:

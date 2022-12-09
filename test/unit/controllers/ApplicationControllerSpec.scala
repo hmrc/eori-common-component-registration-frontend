@@ -51,13 +51,8 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
   "Navigating to start" should {
 
     "allow unauthenticated users to access the start page" in {
-
       val result = controller.startRegister(atarService).apply(SessionBuilder.buildRequestWithSessionNoUser)
-
       status(result) shouldBe OK
-      CdsPage(contentAsString(result)).title should startWith(
-        "Get a subscription to Advance Tariff Rulings and an EORI number starting with GB"
-      )
     }
   }
 
