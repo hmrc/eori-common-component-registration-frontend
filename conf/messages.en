@@ -1517,7 +1517,7 @@ cds.registration.user-location.location.third-country-inc-eu.label=Rest of the w
 cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.organisation.utr=Organisation Self Assessment Unique Taxpayer Reference (UTR)
+cds.matching.name-id-organisation.organisation.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 
 cds.subscription.date-of-establishment.company.title-and-heading=Date when your company was established
 
@@ -1748,6 +1748,7 @@ ecc.start-page.gbeori.para3.bullet2 = a sole trader
 ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a>.
 
 ecc.start-page.company.title = Company or other organisation details
+
 ecc.start-page.company = If you apply as a limited company, partnership or other organisation, we will ask for your:
 ecc.start-page.company.bullet1 = registered company name
 ecc.start-page.company.bullet2 = date of establishment
