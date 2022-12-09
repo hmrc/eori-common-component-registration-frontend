@@ -65,8 +65,6 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       form() { result =>
         status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Enter your Unique Tax Reference number")
       }
     }
   }

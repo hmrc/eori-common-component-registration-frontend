@@ -200,17 +200,6 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     }
   }
 
-  "display the form for ROW organisation" should {
-
-    "when ThirdCountryOrganisationId is passed" in {
-      showForm(CdsOrganisationType.ThirdCountryOrganisationId) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("Enter your Unique Tax Reference number")
-        page.h1 shouldBe "Enter your Unique Tax Reference number"
-      }
-    }
-  }
-
   "submitting the form for ROW organisation" should {
     "redirect to Confirm Details page when UTR entered" in {
       when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
@@ -230,23 +219,6 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      }
-    }
-  }
-
-  "display the form for ROW" should {
-    "contain a proper content for sole traders" in {
-      showForm(CdsOrganisationType.ThirdCountrySoleTraderId, defaultUserId) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("Enter your Unique Tax Reference number")
-        page.h1 shouldBe "Enter your Unique Tax Reference number"
-      }
-    }
-    "contain a proper content for individuals" in {
-      showForm(CdsOrganisationType.ThirdCountryIndividualId, defaultUserId) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("Enter your Unique Tax Reference number")
-        page.h1 shouldBe "Enter your Unique Tax Reference number"
       }
     }
   }

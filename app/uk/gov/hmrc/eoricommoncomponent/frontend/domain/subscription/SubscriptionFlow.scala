@@ -72,9 +72,9 @@ object SubscriptionFlows {
   private val thirdCountryIndividualFlowConfig =
     createFlowConfig(
       List(
+        EoriConsentSubscriptionFlowPage,
         ContactDetailsSubscriptionFlowPageGetEori,
-        ContactAddressSubscriptionFlowPageGetEori,
-        EoriConsentSubscriptionFlowPage
+        ContactAddressSubscriptionFlowPageGetEori
       )
     )
 

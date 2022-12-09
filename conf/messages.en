@@ -337,7 +337,7 @@ cds.matching.header.company=What are your company details?
 cds.matching.intro=This will link your business, Government Gateway ID and EORI number together which helps you move and declare goods.
 cds.matching.individual.header=Enter your details
 cds.matching-lede=We will attempt to match your details against information we currently hold.
-cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called ''reference'', ''UTR'' or ''official use''.
+cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.utr.lost-utr-description=find a lost UTR
 cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
@@ -434,7 +434,7 @@ countries-in-the-eu.title=Countries in the EU
 #How can we identify you?
 subscription-journey.how-confirm-identity=What information can we use to confirm your identity?
 subscription-journey.utr.label=Self assessment UTR number
-subscription-journey.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called ''reference'', ''UTR'' or '''official use''.
+subscription-journey.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or '''official use''.
 cds.matching.id.page-error.nino=Enter your National Insurance number
 cds.matching.id.page-error.utr=Enter your Self Assessment UTR number
 cds.matching.id.page-error.ninoOrUtrRadio=Tell us how we can identify you
@@ -656,7 +656,7 @@ cds.matching.organisation-utr.error.have-utr=Tell us if you have a Corporation T
 cds.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
 
 #Matching UTR Sole Trader
-cds.matching.sole-trader-individual-utr.label=Self Assessment UTR number
+cds.matching.sole-trader-individual-utr.label=Self Assessment Unique Taxpayer Reference (UTR)
 cds.matching.sole-trader-individual-utr.error.utr=Enter the Self Assessment UTR number
 cds.matching.sole-trader-individual-utr.error.have-utr=Tell us if you have a Self Assessment UTR number
 
@@ -1023,7 +1023,6 @@ cds.subscription.outcomes.rejected.vat-registered1=Your EORI number will be in t
 cds.subscription.outcomes.rejected.vat-registered2=GB XXXXXXXXX 000
 cds.subscription.outcomes.rejected.vat-registered3=Where XXXXXXXXX is your VAT number.
 cds.standalone.subscription.outcomes.success.heading=Your new EORI number starting with GB for {0} is
-cds.standalone.subscription.outcomes.success.email=We will send you an email to confirm your GB EORI application request has been received.
 cds.standalone.subscription.outcomes.success.extra.information.heading=What happens next
 cds.standalone.subscription.outcomes.success.extra.information1=We will send you an email to confirm when your subscription and EORI number are ready to use.
 cds.standalone.subscription.outcomes.success.extra.information1.standalone=We will send you an email to confirm when your EORI number and subscription are ready to use.
@@ -1446,7 +1445,7 @@ ecc.subscription.information.para2.list.second=Standard Industrial Classificatio
 
 ecc.subscription.information.section.organisation.subheading=Company or other organisation details
 ecc.subscription.information.section.organisation.list.heading=If you are a limited company, partnership or charity, you will need:
-ecc.subscription.information.section.organisation.list.first=Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
+ecc.subscription.information.section.organisation.list.first=Corporation Tax Unique Tax Reference (UTR) if you pay corporation Tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
 ecc.subscription.information.section.organisation.list.second=Registered company name
 ecc.subscription.information.section.organisation.list.third=Registered company address
 ecc.subscription.information.section.organisation.list.fourth=Date of establishment
@@ -1518,7 +1517,7 @@ cds.registration.user-location.location.third-country-inc-eu.label=Rest of the w
 cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.organisation.utr=Organisation Self Assessment Unique Taxpayer Reference (UTR)
+cds.matching.name-id-organisation.organisation.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 
 cds.subscription.date-of-establishment.company.title-and-heading=Date when your company was established
 
@@ -1592,7 +1591,7 @@ cds.subscription.organisation-disclose-personal-details-consent.no=Select no to 
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
-subscription-journey.how-confirm-identity.utr.heading=Enter your Unique Tax Reference number
+subscription-journey.how-confirm-identity.utr.heading=Enter your Self Assessment Unique Taxpayer Reference (UTR)
 subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K.
 
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
@@ -1724,30 +1723,42 @@ ecc.subscription.organisation-disclose-personal-details-consent.hint =HMRC will 
 ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.
 ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker kept by the European Commission (opens in new tab)</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
 
-ecc.start-page.title = To access {0}, you need a GB EORI number.
-ecc.start-page.para1 = We will ask you to enter some details and, if approved, we''ll give you a GB EORI number and subscription to {0}.
-ecc.start-page.para2 = If approved, your subscription will be ready to use to within 2 hours. If we need to make more checks it may take up to 5 working days.
-ecc.start-page.para3 = You only need to do this once.
-ecc.start-page.gbeori.title = What you will need to subscribe and get a GB EORI number
-ecc.start-page.gbeori.para1.title = If you are UK VAT registered we will ask you for:
+ecc.start-page.title = Get a subscription to {0} and an EORI number starting with GB
+
+ecc.start-page.para1 = If we approve your application we will give you:
+ecc.start-page.para1.bullet1 = an EORI number
+ecc.start-page.para1.bullet2 = a subscription to {0}
+ecc.start-page.para2 = You only need to apply once.
+
+ecc.start-page.when.title = When you will be able to use your subscription and EORI number
+ecc.start-page.when.para1 = If approved, we will send you an email when they are ready to use. They will be ready to use within either:
+ecc.start-page.when.para1.bullet1 = 2 hours
+ecc.start-page.when.para1.bullet2 = 5 working days, if we need to make more checks
+
+ecc.start-page.gbeori.title = What you will need to get a subscription and EORI number
+ecc.start-page.gbeori.para1.title = If you are UK VAT registered we will ask for your:
 ecc.start-page.gbeori.para1.bullet1 = VAT number
 ecc.start-page.gbeori.para1.bullet2 = VAT registered address postcode
 ecc.start-page.gbeori.para1.bullet3 = VAT effective date
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your VAT details (opens in new tab)</a>
-ecc.start-page.gbeori.para3.title = We also ask for:
-ecc.start-page.gbeori.para3.bullet = Standard Industrial Classification (SIC) code. <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a>.
+ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/log-in-register-hmrc-online-services" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your VAT details (opens in new window or tab)</a>
+
+ecc.start-page.gbeori.para3.title = We will ask for your Standard Industrial Classification Code (SIC code) if you apply as:
+ecc.start-page.gbeori.para3.bullet1 = a company or other organisation
+ecc.start-page.gbeori.para3.bullet2 = a sole trader
+ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a>.
+
 ecc.start-page.company.title = Company or other organisation details
-ecc.start-page.company = If you are a limited company, partnership or charity, we will also ask for:
-ecc.start-page.company.bullet1 = Corporation Tax Unique Tax Reference (UTR) if you pay corporation tax in the UK. You can <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">find a UTR number (opens in new tab)</a>.
-ecc.start-page.company.bullet2 = Registered company name
-ecc.start-page.company.bullet3 = Registered company address
-ecc.start-page.company.bullet4 = Date of establishment
+
+ecc.start-page.company = If you apply as a limited company, partnership or other organisation, we will ask for your:
+ecc.start-page.company.bullet1 = registered company name
+ecc.start-page.company.bullet2 = date of establishment
+ecc.start-page.company.para2 = If you pay Corporation Tax in the UK we will ask for your Corporation Tax Unique Taxpayer Reference (UTR).
+ecc.start-page.company.link = <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new window or tab)</a>.
+
 ecc.start-page.sole-trader.title = Sole trader or individual details
-ecc.start-page.sole-trader = If you have worked in the UK or registered for self-assessment, we will ask for one of the following:
+ecc.start-page.sole-trader = If you have worked in the UK or registered for Self Assessment, we will ask for one of the following:
 ecc.start-page.sole-trader.bullet1 = National Insurance number
-ecc.start-page.sole-trader.bullet2 = Self Assessment Unique Taxpayer Reference (UTR). You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR number (opens in new tab)</a>.
-ecc.start-page.start-now = Start now
-ecc.start-page.help.eori.contact = Contact the EORI team online.
+ecc.start-page.sole-trader.bullet2 = Self Assessment Unique Taxpayer Reference (UTR)
 
 date.fields.day = Day
 date.fields.month = Month
