@@ -337,9 +337,9 @@ cds.matching.header.company=What are your company details?
 cds.matching.intro=This will link your business, Government Gateway ID and EORI number together which helps you move and declare goods.
 cds.matching.individual.header=Enter your details
 cds.matching-lede=We will attempt to match your details against information we currently hold.
-cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called ''reference'', ''UTR'' or ''official use''.
+cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.utr.lost-utr-description=find a lost UTR
-cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called ''reference'', ''UTR'' or ''official use''.
+cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 
@@ -656,7 +656,7 @@ cds.matching.organisation-utr.error.have-utr=Tell us if you have a Corporation T
 cds.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
 
 #Matching UTR Sole Trader
-cds.matching.sole-trader-individual-utr.label=Self Assessment UTR number
+cds.matching.sole-trader-individual-utr.label=Self Assessment Unique Taxpayer Reference (UTR)
 cds.matching.sole-trader-individual-utr.error.utr=Enter the Self Assessment UTR number
 cds.matching.sole-trader-individual-utr.error.have-utr=Tell us if you have a Self Assessment UTR number
 
@@ -1591,7 +1591,7 @@ cds.subscription.organisation-disclose-personal-details-consent.no=Select no to 
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
-subscription-journey.how-confirm-identity.utr.heading=Enter your Unique Tax Reference number
+subscription-journey.how-confirm-identity.utr.heading=Enter your Self Assessment Unique Taxpayer Reference (UTR)
 subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K.
 
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
