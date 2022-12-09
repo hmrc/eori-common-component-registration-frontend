@@ -108,56 +108,6 @@ class NameUtrOrganisationControllerSpec
       }
     }
 
-    forAll(organisationTypeOrganisations) { (organisationType, _) =>
-      s"ensure the labels are correct for $organisationType" in {
-        submitForm(form = ValidNameUtrRequest + ("name" -> ""), organisationType) { result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          val labelForName = organisationType match {
-            case "partnership" => "Registered partnership name"
-            case "limited-liability-partnership" =>
-              "Registered partnership name"
-            case "charity-public-body-not-for-profit" =>
-              "Organisation name"
-            case _ =>
-              "Registered company name"
-          }
-          val errorForName = organisationType match {
-            case "partnership" => "Error: Enter your registered partnership name"
-            case "limited-liability-partnership" =>
-              "Error: Enter your registered partnership name"
-            case "charity-public-body-not-for-profit" =>
-              "Error: Enter your registered organisation name"
-            case _ =>
-              "Error: Enter your registered organisation name"
-          }
-          val labelForUtr = organisationType match {
-            case "partnership" => "Partnership Self Assessment Unique Taxpayer Reference (UTR)"
-            case "limited-liability-partnership" =>
-              "Partnership Self Assessment Unique Taxpayer Reference (UTR)"
-            case "charity-public-body-not-for-profit" =>
-              "Organisation Self Assessment Unique Taxpayer Reference (UTR)"
-            case _ => "Corporation Tax Unique Taxpayer Reference (UTR)"
-          }
-
-          val UtrHintText = organisationType match {
-            case "partnership" | "limited-liability-partnership" =>
-              "You can find a lost UTR This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called 'reference', 'UTR' or 'official use'."
-            case _ =>
-              "You can find a lost UTR This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation tax. It may be called 'reference', 'UTR' or 'official use'."
-          }
-
-          val UtrHintTextLink = "https://www.gov.uk/find-lost-utr-number"
-
-          page.getElementsText(labelForNameXpath) shouldBe labelForName
-          page.getElementsText(fieldLevelErrorName) shouldBe errorForName
-          page.getElementsText(labelForUtrXpath) shouldBe labelForUtr
-          page.getElementsText(hintForUtrHintTextXpath) shouldBe UtrHintText
-          page.getElementsHref(linkInUtrHintTextXpath) shouldBe UtrHintTextLink
-        }
-      }
-    }
-
     "ensure a valid Organisation Type has been passed" in {
       val invalidOrganisationType = UUID.randomUUID.toString
       val thrown = intercept[InvalidUrlValueException] {
