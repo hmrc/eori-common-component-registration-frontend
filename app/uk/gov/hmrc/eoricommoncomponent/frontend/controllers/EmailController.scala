@@ -64,20 +64,6 @@ class EmailController @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  private def userIsInProcess(
-    service: Service
-  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
-    save4LaterService
-      .fetchProcessingService(GroupId(user.groupId))
-      .map(processingService => Ok(enrolmentPendingForUser(service, processingService)))
-
-  private def otherUserWithinGroupIsInProcess(
-    service: Service
-  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
-    save4LaterService
-      .fetchProcessingService(GroupId(user.groupId))
-      .map(processingService => Ok(enrolmentPendingAgainstGroupId(service, processingService)))
-
   private def continue(
     service: Service
   )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
@@ -138,8 +124,8 @@ class EmailController @Inject() (
             case None =>
               userGroupIdSubscriptionStatusCheckService
                 .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(continue(service))(
-                  userIsInProcess(service)
-                )(otherUserWithinGroupIsInProcess(service))
+                  Future.successful(Ok(enrolmentPendingForUser()))
+                )(Future.successful(Ok(enrolmentPendingAgainstGroupId())))
           }
     }
 

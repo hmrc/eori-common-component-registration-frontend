@@ -157,10 +157,7 @@ class EmailControllerSpec
       showFormRegister() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("There is a problem")
-        page.getElementText(infoXpath) should include(
-          "The Government Gateway ID you used to sign in is part of a team that has already applied for an EORI number"
-        )
+        page.title should startWith("Someone in your organisation has already applied")
       }
     }
 

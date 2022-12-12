@@ -119,7 +119,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
       result.header.headers(LOCATION) shouldBe "/blocked/otherUserWithinGroupIsInProcess"
     }
 
-    "allow the user for the groupID is cache for same service and subscription status is SubscriptionProcessing" in {
+    "block the same user with the same groupID for same service and subscription status is SubscriptionProcessing" in {
 
       when(
         mockSave4LaterService
@@ -139,7 +139,7 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
           otherUserWithinGroupIsInProcess
         ).futureValue
 
-      result.header.headers(LOCATION) shouldBe "/continue"
+      result.header.headers(LOCATION) shouldBe "/blocked/userIsInProcess"
     }
 
     "Allow the user for the groupID is cached and subscription status is SubscriptionRejected" in {
