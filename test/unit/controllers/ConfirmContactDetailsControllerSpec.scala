@@ -585,7 +585,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   }
 
   "Selecting wrong address" should {
-    "clear data and display contact companies house  for organisation " in {
+    "clear data and display contact companies house for organisation " in {
+      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(CorporateBody)
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
@@ -610,6 +611,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     }
 
     "clear data and display contact HMRC  for individual " in {
+      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(UnincorporatedBody)
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
@@ -632,6 +634,35 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         result.header.headers(
           LOCATION
         ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+          .page(atarService)
+          .url
+      }
+    }
+
+    "clear data and display contact HMRC for partnership " in {
+      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Partnership)
+      when(mockSessionCache.subscriptionDetails(any[Request[_]]))
+        .thenReturn(Future.successful(subscriptionDetailsHolder))
+      when(
+        mockRegistrationConfirmService
+          .clearRegistrationData()(any[Request[_]])
+      ).thenReturn(Future.successful(()))
+      when(mockSessionCache.registrationDetails(any[Request[_]]))
+        .thenReturn(Future.successful(individualRegistrationDetails))
+      when(
+        mockSessionCache
+          .saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]])
+      ).thenReturn(Future.successful(true))
+      when(
+        mockRequestSessionData
+          .isIndividualOrSoleTrader(any[Request[AnyContent]])
+      ).thenReturn(true)
+
+      invokeConfirmContactDetailsWithSelectedOption(selectedOption = "wrong-address") { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(
+          LOCATION
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
           .page(atarService)
           .url
       }

@@ -217,12 +217,24 @@ class ConfirmContactDetailsController @Inject() (
               )
           )
       case WrongAddress =>
-        Future.successful(
-          Redirect(
-            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
-              .page(service)
-          )
+        orgTypeLookup.etmpOrgType.flatMap(
+          orgType =>
+            if (Partnership == orgType)
+              Future.successful(
+                Redirect(
+                  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+                    .page(service)
+                )
+              )
+            else
+              Future.successful(
+                Redirect(
+                  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+                    .page(service)
+                )
+              )
         )
+
       case _ =>
         throw new IllegalStateException(
           "YesNoWrongAddressForm field somehow had a value that wasn't yes, no, wrong address, or empty"
