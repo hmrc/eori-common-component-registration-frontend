@@ -433,8 +433,9 @@ countries-in-the-eu.title=Countries in the EU
 
 #How can we identify you?
 subscription-journey.how-confirm-identity=What information can we use to confirm your identity?
-subscription-journey.utr.label=Self assessment UTR number
+subscription-journey.utr.label=Self Assessment Unique Taxpayer Reference (UTR)
 subscription-journey.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or '''official use''.
+
 cds.matching.id.page-error.nino=Enter your National Insurance number
 cds.matching.id.page-error.utr=Enter your Self Assessment UTR number
 cds.matching.id.page-error.ninoOrUtrRadio=Tell us how we can identify you
