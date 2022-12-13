@@ -45,11 +45,15 @@
     organisationType == None
 }
 
+@isCharityPublicBodyNotForProfit = @{
+    organisationType == Some(UnincorporatedBody)
+}
 
 @pageTitleAndHeading = @{
     if(isPartnership) messages("confirm-business-details.partnership.title-and-heading")
     else if(isIndividual) messages("confirm-business-details.individual.title-and-heading")
     else if(!isUk) messages("confirm-business-details.row.title-and-heading")
+    else if(isCharityPublicBodyNotForProfit) messages("confirm-business-details.row.title-and-heading")
     else  messages("confirm-business-details.title-and-heading")
 }
 

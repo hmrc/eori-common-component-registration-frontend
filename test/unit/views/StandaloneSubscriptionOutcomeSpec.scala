@@ -53,10 +53,6 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
 
       val additionalInfoParagraph = doc.body().getElementById("additional-information")
 
-      additionalInfoParagraph.getElementsByTag(
-        "p"
-      ).text() mustBe "We will send you an email to confirm your GB EORI application request has been received."
-
       val listItems = additionalInfoParagraph.getElementsByTag("li")
       listItems.get(0).text() mustBe "Download an accessible text file of your EORI number(12kb)"
       listItems.get(0).getElementsByTag("a").attr(
