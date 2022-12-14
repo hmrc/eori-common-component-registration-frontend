@@ -1377,7 +1377,7 @@ cds.sub01.outcome.rejected.subscribe.heading=The {0} subscription request for {1
 cds.sub01.outcome.rejected.subscribe.heading-noname=The {0} subscription request has been unsuccessful
 cds.sub01.outcome.rejected.subscribe.title=The {0} subscription request has been unsuccessful
 
-cds.sub01.outcome.rejected.register.heading=The {0} registration request for {1} has been unsuccessful
+cds.sub01.outcome.rejected.register.heading=Your EORI number application has been unsuccessful
 cds.sub01.outcome.rejected.register.heading-noname=The {0} registration request has been unsuccessful
 cds.sub01.outcome.rejected.register.title=The {0} registration request has been unsuccessful
 

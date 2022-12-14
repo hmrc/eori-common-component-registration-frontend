@@ -34,14 +34,6 @@ class Sub01OutcomeRejectedSpec extends ViewSpec {
 
   "'Sub01 Outcome Rejected' Page with name" should {
 
-    "display correct title" in {
-      docWithName().title() must startWith("The Advance Tariff Rulings registration request has been unsuccessful")
-    }
-    "display correct heading" in {
-      docWithName().body.getElementsByTag("h1").text() must startWith(
-        s"The Advance Tariff Rulings registration request for $orgName has been unsuccessful"
-      )
-    }
     "have the correct class on the h1" in {
       docWithName().body.getElementsByTag("h1").hasClass("govuk-heading-xl") mustBe true
     }
