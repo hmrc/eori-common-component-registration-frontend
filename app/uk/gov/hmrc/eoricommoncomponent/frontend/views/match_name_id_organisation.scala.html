@@ -104,10 +104,12 @@
                     </p>
                 }
 
-                @govukDetails(Details(
-                    summary = Text(messages("cds.matching.name-id-organisation.organisation.no-utr")),
-                    content = HtmlContent(detailsContent)
-                ))
+                @if(organisationType=="charity-public-body-not-for-profit"){
+                    @govukDetails(Details(
+                        summary = Text(messages("cds.matching.name-id-organisation.organisation.no-utr")),
+                        content = HtmlContent(detailsContent)
+                    ))
+                }
 
                 @govukButton(Button(
                     content = Text(messages("cds.navigation.continue"))
