@@ -28,13 +28,11 @@
 @(userType: Option[AffinityGroup])(implicit messages: Messages, request: Request[_])
 
 @para1 = @{userType match {
-    case Some(Agent) => messages("cds.you-cant-use-service-agent.para1")
-    case _ => messages("cds.you-cant-use-service-standard-organisation.para1", longName)
+    case _ => messages("cds.you-cant-use-service-standard-organisation.para1")
     }
 }
 
 @para2 = @{userType match {
-    case Some(Agent) => messages("cds.you-cant-use-service-agent.para2", longName)
     case _ => messages("cds.you-cant-use-service-standard-organisation.para2")
     }
 }
