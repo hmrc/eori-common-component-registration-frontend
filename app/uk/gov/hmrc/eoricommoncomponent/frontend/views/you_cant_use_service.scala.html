@@ -27,22 +27,14 @@
 
 @(userType: Option[AffinityGroup])(implicit messages: Messages, request: Request[_])
 
-@para1 = @{userType match {
-    case _ => messages("cds.you-cant-use-service-standard-organisation.para1")
-    }
-}
 
-@para2 = @{userType match {
-    case _ => messages("cds.you-cant-use-service-standard-organisation.para2")
-    }
-}
 
 @layout_di(messages("cds.you-cant-use-service.heading")) {
 
 <div>
     <h1 class="govuk-heading-l">@messages("cds.you-cant-use-service.heading")</h1>
-    <p class="govuk-body" id="para-1">@para1</p>
-    <p class="govuk-body" id="para-2">@para2</p>
+    <p class="govuk-body" id="para-1">@messages("cds.you-cant-use-service-standard-organisation.para1")</p>
+    <p class="govuk-body" id="para-2">@messages("cds.you-cant-use-service-standard-organisation.para2")</p>
 
     @govukButton(Button(
         content = Text(messages("cds.sign.out")),
