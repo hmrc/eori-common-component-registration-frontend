@@ -111,7 +111,9 @@ class NameUtrOrganisationControllerSpec
       showForm(organisationType = "charity-public-body-not-for-profit") { result =>
         status(result) shouldBe OK
         val page: CdsPage = CdsPage(contentAsString(result))
-        page.getElementsText("//*[@id=\"matchNameUtrOrganisationForm\"]/details/summary/span") shouldBe "I do not have a Corporation Tax UTR"
+        page.getElementsText(
+          "//*[@id=\"matchNameUtrOrganisationForm\"]/details/summary/span"
+        ) shouldBe "I do not have a Corporation Tax UTR"
       }
     }
 

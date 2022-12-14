@@ -51,6 +51,8 @@ POST        /customs-registration-services/:service/register/are-you-vat-registe
 
 GET         /customs-registration-services/:service/register/you-need-different-service-iom              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouNeedADifferentServiceIomController.form(service: Service)
 
+GET         /customs-registration-services/:service/register/use-a-different-service                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UseADifferentServiceController.form(service: Service)
+
 GET         /customs-registration-services/:service/register/review-details                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.reviewDetails(service: Service)
 POST        /customs-registration-services/:service/register/subscribe                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.submitDetails(service: Service)
 
