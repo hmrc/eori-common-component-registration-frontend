@@ -61,7 +61,7 @@ class Sub01OutcomeRejectedSpec extends ViewSpec {
 
     "display correct heading" in {
       docWithoutName().body.getElementsByTag("h1").text() must startWith(
-        "The Advance Tariff Rulings registration request has been unsuccessful"
+        "EORI number application has been unsuccessful"
       )
     }
     "have the correct class on the h1" in {
