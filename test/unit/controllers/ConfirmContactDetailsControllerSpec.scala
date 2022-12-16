@@ -662,7 +662,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe SEE_OTHER
         result.header.headers(
           LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
           .page(atarService)
           .url
       }

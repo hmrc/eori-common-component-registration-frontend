@@ -217,22 +217,11 @@ class ConfirmContactDetailsController @Inject() (
               )
           )
       case WrongAddress =>
-        orgTypeLookup.etmpOrgType.flatMap(
-          orgType =>
-            if (Partnership == orgType)
-              Future.successful(
-                Redirect(
-                  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
-                    .page(service)
-                )
-              )
-            else
-              Future.successful(
-                Redirect(
-                  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
-                    .page(service)
-                )
-              )
+        Future.successful(
+          Redirect(
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
+              .page(service)
+          )
         )
 
       case _ =>
