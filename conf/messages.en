@@ -1731,8 +1731,8 @@ ecc.subscription.organisation-disclose-personal-details-consent.individual.hint 
 ecc.start-page.title = Get a subscription to {0} and an EORI number starting with GB
 
 ecc.start-page.para1 = If we approve your application we will give you:
-ecc.start-page.para1.bullet1 = an EORI number
-ecc.start-page.para1.bullet2 = a subscription to {0}
+ecc.start-page.para1.bullet1 = a subscription to {0}
+ecc.start-page.para1.bullet2 = an EORI number
 ecc.start-page.para2 = You only need to apply once.
 
 ecc.start-page.when.title = When you will be able to use your subscription and EORI number
@@ -1758,7 +1758,7 @@ ecc.start-page.company = If you apply as a limited company, partnership or other
 ecc.start-page.company.bullet1 = registered company name
 ecc.start-page.company.bullet2 = date of establishment
 ecc.start-page.company.para2 = If you pay Corporation Tax in the UK we will ask for your Corporation Tax Unique Taxpayer Reference (UTR).
-ecc.start-page.company.link = <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new window or tab)</a>.
+ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new window or tab)</a>.
 
 ecc.start-page.sole-trader.title = Sole trader or individual details
 ecc.start-page.sole-trader = If you have worked in the UK or registered for Self Assessment, we will ask for one of the following:
