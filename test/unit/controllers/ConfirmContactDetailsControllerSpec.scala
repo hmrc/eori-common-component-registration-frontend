@@ -40,7 +40,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   confirm_contact_details,
   sub01_outcome_processing,
-  sub01_outcome_rejected,
   you_cannot_change_address_individual,
   you_cannot_change_address_organisation
 }
@@ -68,9 +67,9 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private val mockOrgTypeLookup             = mock[OrgTypeLookup]
   private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
 
-  private val confirmContactDetailsView         = instanceOf[confirm_contact_details]
-  private val sub01OutcomeProcessingView        = instanceOf[sub01_outcome_processing]
-  private val sub01OutcomeRejected              = instanceOf[sub01_outcome_rejected]
+  private val confirmContactDetailsView  = instanceOf[confirm_contact_details]
+  private val sub01OutcomeProcessingView = instanceOf[sub01_outcome_processing]
+
   private val youCannotChangeAddressOrganistion = instanceOf[you_cannot_change_address_organisation]
   private val youCannotChangeAddressIndividual  = instanceOf[you_cannot_change_address_individual]
 
@@ -84,7 +83,6 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     mcc,
     confirmContactDetailsView,
     sub01OutcomeProcessingView,
-    sub01OutcomeRejected,
     youCannotChangeAddressOrganistion,
     youCannotChangeAddressIndividual
   )
@@ -467,18 +465,6 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       }
     }
 
-    "allow authenticated users to access the rejected page" in {
-      invokeRejectedPageWithAuthenticatedUser() { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith(RegistrationRejectedPage.title)
-        page.getElementsText(RegistrationRejectedPage.pageHeadingXpath) shouldBe RegistrationRejectedPage.heading
-        page.getElementsText(
-          RegistrationRejectedPage.processedDateXpath
-        ) shouldBe "Application received by HMRC on 22 May 2016"
-      }
-    }
-
     "allow authenticated users to access the processing page" in {
       invokeProcessingPageWithAuthenticatedUser() { result =>
         status(result) shouldBe OK
@@ -785,14 +771,6 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     when(mockSessionCache.sub01Outcome(any[Request[_]]))
       .thenReturn(Future.successful(mockSub01Outcome))
     when(mockSub01Outcome.processedDate).thenReturn("22 May 2016")
-  }
-
-  def invokeRejectedPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
-    withAuthorisedUser(userId, mockAuthConnector)
-    setupMocksForRejectedAndProcessingPages
-    test(
-      controller.rejected(atarService).apply(SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId))
-    )
   }
 
   def invokeProcessingPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {

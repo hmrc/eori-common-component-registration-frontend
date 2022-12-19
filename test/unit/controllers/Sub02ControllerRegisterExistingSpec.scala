@@ -46,10 +46,10 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
   private val sub02SubscriptionInProgressView = instanceOf[sub02_subscription_in_progress]
   private val sub02EoriAlreadyAssociatedView  = instanceOf[sub02_eori_already_associated]
   private val sub02EoriAlreadyExists          = instanceOf[sub02_eori_already_exists]
-  private val sub01OutcomeRejected            = instanceOf[sub01_outcome_rejected]
-  private val standaloneOutcomeView           = instanceOf[standalone_subscription_outcome]
-  private val subscriptionOutcomeView         = instanceOf[subscription_outcome]
-  private val xiEoriGuidanceView              = mock[xi_eori_guidance]
+
+  private val standaloneOutcomeView   = instanceOf[standalone_subscription_outcome]
+  private val subscriptionOutcomeView = instanceOf[subscription_outcome]
+  private val xiEoriGuidanceView      = mock[xi_eori_guidance]
 
   private val subscriptionController = new Sub02Controller(
     mockAuthAction,
@@ -62,7 +62,6 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
     sub02SubscriptionInProgressView,
     sub02EoriAlreadyAssociatedView,
     sub02EoriAlreadyExists,
-    sub01OutcomeRejected,
     standaloneOutcomeView,
     subscriptionOutcomeView,
     xiEoriGuidanceView,

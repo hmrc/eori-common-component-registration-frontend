@@ -46,12 +46,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  error_template,
-  sub01_outcome_processing,
-  sub01_outcome_rejected,
-  user_location
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -75,8 +70,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
   private val sub01OutcomeProcessing = instanceOf[sub01_outcome_processing]
 
-  private val sub01OutcomeRejected = instanceOf[sub01_outcome_rejected]
-
   private val errorTemplate = instanceOf[error_template]
 
   private val controller = new UserLocationController(
@@ -89,7 +82,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     mcc,
     userLocationView,
     sub01OutcomeProcessing,
-    sub01OutcomeRejected,
     errorTemplate
   )
 
@@ -205,7 +197,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       mcc,
       userLocationView,
       sub01OutcomeProcessing,
-      sub01OutcomeRejected,
       errorTemplate
     ) {}
     implicit val fakeRequest = FakeRequest()
@@ -375,7 +366,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          sub01OutcomeRejected,
           errorTemplate
         ) {}
 
@@ -417,7 +407,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          sub01OutcomeRejected,
           errorTemplate
         ) {}
 

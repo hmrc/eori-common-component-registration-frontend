@@ -62,11 +62,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val sub02SubscriptionInProgressView = instanceOf[sub02_subscription_in_progress]
   private val sub02EoriAlreadyAssociatedView  = instanceOf[sub02_eori_already_associated]
   private val sub02EoriAlreadyExists          = instanceOf[sub02_eori_already_exists]
-  private val sub01OutcomeRejected            = instanceOf[sub01_outcome_rejected]
-  private val standAloneOutcomeView           = instanceOf[standalone_subscription_outcome]
-  private val subscriptionOutcomeView         = instanceOf[subscription_outcome]
-  private val xiEoriGuidanceView              = instanceOf[xi_eori_guidance]
-  private val EORI                            = "ZZZ1ZZZZ23ZZZZZZZ"
+
+  private val standAloneOutcomeView   = instanceOf[standalone_subscription_outcome]
+  private val subscriptionOutcomeView = instanceOf[subscription_outcome]
+  private val xiEoriGuidanceView      = instanceOf[xi_eori_guidance]
+  private val EORI                    = "ZZZ1ZZZZ23ZZZZZZZ"
 
   private val subscriptionController = new Sub02Controller(
     mockAuthAction,
@@ -79,7 +79,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     sub02SubscriptionInProgressView,
     sub02EoriAlreadyAssociatedView,
     sub02EoriAlreadyExists,
-    sub01OutcomeRejected,
     standAloneOutcomeView,
     subscriptionOutcomeView,
     xiEoriGuidanceView,
@@ -124,10 +123,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       "Access the end page",
       subscriptionController.end(atarService)
     )
-  }
-
-  "Rejected" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, subscriptionController.rejected(atarService))
   }
 
   "clicking on the register button" should {
@@ -232,23 +227,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) shouldBe routes.Sub02Controller.pending(atarService).url
-      }
-    }
-
-    "redirect to 'Registration rejected' page when subscription returns failed status" in {
-      when(
-        mockCdsSubscriber.subscribeWithCachedDetails(any[Option[CdsOrganisationType]], any[Service])(
-          any[HeaderCarrier],
-          any[Messages],
-          any[Request[_]]
-        )
-      ).thenReturn(Future.successful(SubscriptionFailed("Subscription application has been rejected", processingDate)))
-
-      subscribeForGetYourEORI() { result =>
-        assertCleanedSession(result)
-
-        status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.rejected(atarService).url
       }
     }
 
@@ -416,26 +394,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       }
     }
 
-    "allow authenticated users to access the rejected page" in {
-      invokeRejectedPageWithAuthenticatedUser() {
-        mockSessionCacheForOutcomePage
-        when(mockSubscriptionDetails.name).thenReturn("orgName")
-        when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
-        when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
-          Future.successful(mockSubscriptionDetails)
-        )
-        when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
-
-        result =>
-          status(result) shouldBe OK
-          val page = CdsPage(contentAsString(result))
-          page.title should startWith(RegistrationRejectedPage.title)
-          page.getElementsText(RegistrationRejectedPage.pageHeadingXpath) shouldBe RegistrationRejectedPage.heading
-          page.getElementsText(
-            RegistrationRejectedPage.processedDateXpath
-          ) shouldBe "Application received by HMRC on 22 May 2016"
-      }
-    }
   }
 
   "calling eoriAlreadyExists on Sub02Controller" should {
@@ -546,16 +504,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     mockSessionCacheForOutcomePage
     test(
       subscriptionController.end(atarService).apply(
-        SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)
-      )
-    )
-  }
-
-  def invokeRejectedPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
-    withAuthorisedUser(userId, mockAuthConnector)
-    mockSessionCacheForOutcomePage
-    test(
-      subscriptionController.rejected(atarService).apply(
         SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)
       )
     )
