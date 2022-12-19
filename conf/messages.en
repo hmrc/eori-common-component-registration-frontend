@@ -1370,8 +1370,8 @@ countries-in-the-eu.list=Austria, Belgium, Bulgaria, Croatia, Republic of Cyprus
 
 cds.you-cant-use-service-agent.para1=You signed in to Government Gateway with an agent services account.
 cds.you-cant-use-service-agent.para2=You need to sign in with the Government Gateway for the organisation or individual that is applying for access to {0}.
-cds.you-cant-use-service-standard-organisation.para1=You signed in to Government Gateway as a standard user. To apply for access to {0} you must be an administrator user.
-cds.you-cant-use-service-standard-organisation.para2=Please log in as an administrator or contact the person who set up your Government Gateway.
+cds.you-cant-use-service-standard-organisation.para1=You signed in to Government Gateway as a standard user. You must sign in as an administrator to use this service.
+cds.you-cant-use-service-standard-organisation.para2=Log in as an administrator or contact the person who set up your Government Gateway.
 
 cds.sub01.outcome.rejected.subscribe.heading=The {0} subscription request for {1} has been unsuccessful
 cds.sub01.outcome.rejected.subscribe.heading-noname=The {0} subscription request has been unsuccessful
