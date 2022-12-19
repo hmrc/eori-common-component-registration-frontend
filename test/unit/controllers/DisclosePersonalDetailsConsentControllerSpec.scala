@@ -372,7 +372,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)
-    when(mockRequestSessionData.isPartnership(any())).thenReturn(isPartnership)
+    when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
@@ -393,7 +393,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       .thenReturn(previouslyAnswered)
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)
-    when(mockRequestSessionData.isPartnership(any())).thenReturn(isPartnership)
+    when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)

@@ -52,7 +52,7 @@ class CheckYourDetailsRegisterController @Inject() (
           Ok(
             checkYourDetailsRegisterView(
               requestSessionData.userSelectedOrganisationType,
-              requestSessionData.isPartnership,
+              requestSessionData.isPartnershipOrLLP,
               registration,
               subscription,
               consent,

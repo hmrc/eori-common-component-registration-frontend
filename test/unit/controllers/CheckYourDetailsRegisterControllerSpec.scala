@@ -103,7 +103,7 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(Some(true))
     when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
     when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetailsHolder)
-    when(mockRequestSession.isPartnership(any[Request[AnyContent]])).thenReturn(false)
+    when(mockRequestSession.isPartnershipOrLLP(any[Request[AnyContent]])).thenReturn(false)
   }
 
   "Reviewing the details" should {
@@ -1011,7 +1011,7 @@ class CheckYourDetailsRegisterControllerSpec
     if (
       userSelectedOrgType.id == CdsOrganisationType.PartnershipId || userSelectedOrgType.id == CdsOrganisationType.LimitedLiabilityPartnershipId
     )
-      when(mockRequestSession.isPartnership(any[Request[AnyContent]])).thenReturn(true)
+      when(mockRequestSession.isPartnershipOrLLP(any[Request[AnyContent]])).thenReturn(true)
 
     when(mockSubscriptionFlow.isIndividualFlow).thenReturn(isIndividualSubscriptionFlow)
 

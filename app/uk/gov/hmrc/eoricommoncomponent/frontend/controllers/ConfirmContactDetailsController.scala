@@ -223,6 +223,7 @@ class ConfirmContactDetailsController @Inject() (
               .page(service)
           )
         )
+
       case _ =>
         throw new IllegalStateException(
           "YesNoWrongAddressForm field somehow had a value that wasn't yes, no, wrong address, or empty"
