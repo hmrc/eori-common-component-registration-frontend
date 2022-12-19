@@ -1491,8 +1491,8 @@ ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Mae gada
 ecc.start-page.title = Tanysgrifiwch i {0} a rhif EORI sy’n dechrau gyda GB
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
-ecc.start-page.para1.bullet1 = rhif EORI
-ecc.start-page.para1.bullet2 = tanysgrifiad i {0}
+ecc.start-page.para1.bullet1 = tanysgrifiad i {0}
+ecc.start-page.para1.bullet2 = rhif EORI
 ecc.start-page.para2 = Dim ond unwaith y bydd angen i chi wneud hyn.
 
 ecc.start-page.when.title = Pryd fyddwch yn gallu defnyddio’ch rhif EORI a’ch tanysgrifiad
@@ -1517,7 +1517,7 @@ ecc.start-page.company = Os byddwch yn gwneud cais fel cwmni cyfyngedig, partner
 ecc.start-page.company.bullet1 = enw cofrestredig y cwmni
 ecc.start-page.company.bullet2 = dyddiad ei sefydlu
 ecc.start-page.company.para2 = Os ydych yn talu Treth Gorfforaeth yn y DU, byddwn yn gofyn am eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth.
-ecc.start-page.company.link = <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
 
 ecc.start-page.sole-trader.title = Manylion yr unig fasnachwr neu’r unigolyn
 ecc.start-page.sole-trader = Os ydych wedi gweithio yn y DU neu wedi cofrestru ar gyfer Hunanasesiad, byddwn yn gofyn am un o’r canlynol:
