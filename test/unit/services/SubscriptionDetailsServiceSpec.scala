@@ -226,26 +226,6 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   }
 
-  "cacheCompanyShortName" should {
-    val businessShortName = BusinessShortName("short")
-    "save subscription details with company short name" in {
-      await(subscriptionDetailsHolderService.cacheCompanyShortName(businessShortName))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.businessShortName shouldBe Some(businessShortName)
-    }
-  }
-
-  "cachedCompanyShortName" should {
-    val businessShortName   = BusinessShortName("short")
-    val subscriptionDetails = SubscriptionDetails(businessShortName = Some(businessShortName))
-    "return the business short name of subscription details" in {
-      when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
-      await(subscriptionDetailsHolderService.cachedCompanyShortName) shouldBe Some(businessShortName)
-    }
-  }
-
   "cacheContactDetails" should {
     val contactDetails = ContactDetailsModel(
       fullName = "Name",

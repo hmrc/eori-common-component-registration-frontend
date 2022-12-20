@@ -62,7 +62,8 @@ object SubscriptionSubmitted {
       contactInformation = requestDetail.contactInformation,
       vatIDs = requestDetail.vatIDs,
       consentToDisclosureOfPersonalData = requestDetail.consentToDisclosureOfPersonalData,
-      shortName = requestDetail.shortName,
+      shortName =
+        None, //sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
       dateOfEstablishment = requestDetail.dateOfEstablishment.map(_.toString),
       typeOfPerson = requestDetail.typeOfPerson,
       principalEconomicActivity = requestDetail.principalEconomicActivity,
