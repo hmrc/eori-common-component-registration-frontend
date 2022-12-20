@@ -509,6 +509,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
       when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
       when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
+      when(mockSessionCache.saveSub01Outcome(any[Sub01Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
+      when(mockSessionCache.saveSubscriptionDetails(any())(any[Request[_]])).thenReturn(Future.successful(true))
 
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokePending { result =>

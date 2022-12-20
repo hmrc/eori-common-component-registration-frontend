@@ -180,10 +180,15 @@ class Sub02Controller @Inject() (
   def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        name          <- sessionCache.subscriptionDetails.map(_.name)
-        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
-        _             <- sessionCache.remove
-      } yield Ok(sub01OutcomeView(Some(name), processedDate)).withSession(newUserSession)
+        subscriptionDetails <- sessionCache.subscriptionDetails
+        sub01Outcome        <- sessionCache.sub01Outcome
+        _                   <- sessionCache.remove
+        _                   <- sessionCache.saveSub01Outcome(sub01Outcome)
+        _                   <- sessionCache.saveSubscriptionDetails(subscriptionDetails)
+
+      } yield Ok(sub01OutcomeView(Some(subscriptionDetails.name), sub01Outcome.processedDate)).withSession(
+        newUserSession
+      )
   }
 
 }
