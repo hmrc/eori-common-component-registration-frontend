@@ -241,7 +241,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       )
       requestDetails.vatIDs shouldBe Some(Seq(VatId(Some("GB"), Some("123456"))))
       requestDetails.consentToDisclosureOfPersonalData shouldBe None
-      requestDetails.shortName shouldBe Some("short name")
+      requestDetails.shortName shouldBe None
       requestDetails.dateOfEstablishment shouldBe Some(dateOfBirthOrEstablishment)
       requestDetails.typeOfPerson shouldBe Some("1")
       requestDetails.principalEconomicActivity shouldBe Some("principal economic activity")
@@ -292,7 +292,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       )
       requestDetails.vatIDs shouldBe Some(Seq(VatId(Some("GB"), Some("123456"))))
       requestDetails.consentToDisclosureOfPersonalData shouldBe Some("1")
-      requestDetails.shortName shouldBe Some("short name")
+      requestDetails.shortName shouldBe None
       requestDetails.dateOfEstablishment shouldBe Some(dateOfBirthOrEstablishment)
       requestDetails.typeOfPerson shouldBe Some("2")
       requestDetails.principalEconomicActivity shouldBe Some("1234")

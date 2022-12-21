@@ -115,26 +115,6 @@ class DoYouHaveAUtrNumberControllerSpec
     }
   }
 
-  "display the form for ROW organisation" should {
-
-    "when ThirdCountryOrganisationId is passed" in {
-
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
-
-      showForm(CdsOrganisationType.ThirdCountryOrganisationId) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith(
-          "Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) issued in the UK?"
-        )
-        page.h1 shouldBe "Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) issued in the UK?"
-
-        page.getElementsText(
-          "//*[@id='have-utr-hint']"
-        ) shouldBe "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called reference, UTR or official use. You can find a lost UTR number ."
-      }
-    }
-  }
-
   "submitting the form for ROW organisation" should {
 
     "redirect to Get UTR page based on YES answer" in {

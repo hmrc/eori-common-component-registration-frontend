@@ -158,7 +158,8 @@ object SubscriptionCreateRequest {
         vatIDs =
           data.VATIDs.map(_.map(vs => VatId(countryCode = Some(vs.countryCode), vatID = Some(vs.vatNumber))).toList),
         consentToDisclosureOfPersonalData = None,
-        shortName = Some(data.trader.shortName),
+        shortName =
+          None, //sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
         dateOfEstablishment = handleEmptyDate(data.dateOfEstablishmentBirth),
         typeOfPerson = data.personType.map(_.toString),
         principalEconomicActivity = data.principalEconomicActivity,
@@ -192,7 +193,8 @@ object SubscriptionCreateRequest {
           contactInformation = sub.contactDetails.map(c => createContactInformation(c.contactDetails)),
           vatIDs = createVatIds(ukVatId),
           consentToDisclosureOfPersonalData = sub.personalDataDisclosureConsent.map(bool => if (bool) "1" else "0"),
-          shortName = sub.businessShortName flatMap (_.shortName),
+          shortName =
+            None, //sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
           dateOfEstablishment = Some(dateEstablished),
           typeOfPerson = org.map(_.typeOfPerson),
           principalEconomicActivity = sub.sicCode.map(_.take(principalEconomicActivityLength)),

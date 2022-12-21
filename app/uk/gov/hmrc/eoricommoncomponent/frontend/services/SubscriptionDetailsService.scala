@@ -56,12 +56,6 @@ class SubscriptionDetailsService @Inject() (
 
   }
 
-  def cacheCompanyShortName(shortName: BusinessShortName)(implicit request: Request[_]): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(businessShortName = Some(shortName)))
-
-  def cachedCompanyShortName(implicit request: Request[_]): Future[Option[BusinessShortName]] =
-    sessionCache.subscriptionDetails.map(_.businessShortName)
-
   def cacheContactDetails(contactDetailsModel: ContactDetailsModel, isInReviewMode: Boolean = false)(implicit
     request: Request[_]
   ): Future[Unit] =

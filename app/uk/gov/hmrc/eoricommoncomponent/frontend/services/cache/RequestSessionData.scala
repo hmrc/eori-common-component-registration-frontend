@@ -83,9 +83,13 @@ class RequestSessionData {
   def existingSessionWithUserLocationAdded(existingSession: Session, userLocation: String): Session =
     existingSession + (RequestSessionDataKeys.selectedUserLocation -> userLocation)
 
-  def isPartnership(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
+  def isPartnershipOrLLP(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
     oType =>
       oType == CdsOrganisationType.Partnership || oType == CdsOrganisationType.LimitedLiabilityPartnership
+  }
+
+  def isPartnership(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
+    oType => oType == CdsOrganisationType.Partnership
   }
 
   def isCharity(implicit request: Request[AnyContent]): Boolean =

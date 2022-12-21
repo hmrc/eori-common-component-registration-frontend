@@ -337,17 +337,6 @@
     }
 }
 
-@shortName = @{
-    Seq(subscription.businessShortName.map { n =>
-            summaryListRow(
-                key = messages("cds.form.shortened-name"),
-                value = Some(Html(n.shortName.getOrElse(messages("cds.not-entered.label")))),
-                call = Some(BusinessShortNameYesNoController.reviewPage(service))
-            )
-        }
-    ).flatten
-}
-
 @dateOfEstablishment = @{
     Seq(subscription.dateEstablished.map { de =>
             summaryListRow(
@@ -449,8 +438,7 @@
             registeredAddress ++
             dateOfEstablishment ++
             sicCodeDisplay ++
-            summary ++
-            shortName
+            summary
             ))
         </div>
         @if(!isIndividual){

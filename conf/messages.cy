@@ -1199,8 +1199,8 @@ eds.existing-eori.enrolment.confirmation.para1 = Rydych nawr wedi’ch ymrestru 
 countries-in-the-eu.list = Yr Almaen, Awstria, Bwlgaria, Croatia, Denmarc, yr Eidal, Estonia, y Ffindir, Ffrainc, Gweriniaeth Cyprus, Gwlad Belg, Gwlad Groeg, Gwlad Pwyl, Hwngari, yr Iseldiroedd, Iwerddon, Latfia, Lithwania, Lwcsembwrg, Malta, Portiwgal, Rwmania, Sbaen, Slofacia, Slofenia, Sweden a’r Weriniaeth Tsiec.
 cds.you-cant-use-service-agent.para1 = Gwnaethoch fewngofnodi i Borth y Llywodraeth gyda chyfrif gwasanaethau asiant.
 cds.you-cant-use-service-agent.para2 = Mae angen i chi fewngofnodi gyda’r cyfrif Porth y Llywodraeth ar gyfer y sefydliad neu’r unigolyn sy’n gwneud cais am fynediad at {0}.
-cds.you-cant-use-service-standard-organisation.para1 = Gwnaethoch fewngofnodi i Borth y Llywodraeth fel defnyddiwr safonol. I wneud cais am fynediad at {0}, mae’n rhaid i chi fod yn ddefnyddiwr gweinyddwr.
-cds.you-cant-use-service-standard-organisation.para2 = Mewngofnodwch fel gweinyddwr neu cysylltwch â’r person a sefydlodd eich cyfrif Porth y Llywodraeth.
+cds.you-cant-use-service-standard-organisation.para1 = Gwnaethoch fewngofnodi i Borth y Llywodraeth fel defnyddiwr safonol. Mae’n rhaid i chi fewngofnodi fel gweinyddwr i ddefnyddio’r gwasanaeth hwn.
+cds.you-cant-use-service-standard-organisation.para2 = Mewngofnodwch fel gweinyddwr, neu cysylltwch â’r person a sefydlodd eich cyfrif Porth y Llywodraeth.
 cds.sub01.outcome.rejected.subscribe.heading = Mae’r cais am danysgrifiad i {0} ar gyfer {1} wedi bod yn aflwyddiannus
 cds.sub01.outcome.rejected.subscribe.heading-noname = Mae’r cais am danysgrifiad i {0} wedi bod yn aflwyddiannus
 cds.sub01.outcome.rejected.subscribe.title = Mae’r cais am danysgrifiad i {0} wedi bod yn aflwyddiannus
@@ -1497,8 +1497,8 @@ ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Mae gada
 ecc.start-page.title = Tanysgrifiwch i {0} a rhif EORI sy’n dechrau gyda GB
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
-ecc.start-page.para1.bullet1 = rhif EORI
-ecc.start-page.para1.bullet2 = tanysgrifiad i {0}
+ecc.start-page.para1.bullet1 = tanysgrifiad i {0}
+ecc.start-page.para1.bullet2 = rhif EORI
 ecc.start-page.para2 = Dim ond unwaith y bydd angen i chi wneud hyn.
 
 ecc.start-page.when.title = Pryd fyddwch yn gallu defnyddio’ch rhif EORI a’ch tanysgrifiad
@@ -1523,7 +1523,7 @@ ecc.start-page.company = Os byddwch yn gwneud cais fel cwmni cyfyngedig, partner
 ecc.start-page.company.bullet1 = enw cofrestredig y cwmni
 ecc.start-page.company.bullet2 = dyddiad ei sefydlu
 ecc.start-page.company.para2 = Os ydych yn talu Treth Gorfforaeth yn y DU, byddwn yn gofyn am eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth.
-ecc.start-page.company.link = <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
 
 ecc.start-page.sole-trader.title = Manylion yr unig fasnachwr neu’r unigolyn
 ecc.start-page.sole-trader = Os ydych wedi gweithio yn y DU neu wedi cofrestru ar gyfer Hunanasesiad, byddwn yn gofyn am un o’r canlynol:
