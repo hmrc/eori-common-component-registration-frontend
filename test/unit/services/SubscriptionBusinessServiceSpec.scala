@@ -62,7 +62,7 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
   private val eoriId              = "GB" + Random.nextString(eoriNumericLength)
   private val eori                = Eori(eoriId)
   val maybeEoriId                 = Some(eoriId)
-  val mayBeCachedAddressViewModel = Some(AddressViewModel("Address Line 1", "city", Some("postcode"), "GB"))
+  val mayBeCachedAddressViewModel = Some(AddressViewModel("Address Line 1", "city", "SE28 1AA", "GB"))
   val nameIdOrganisationDetails   = Some(NameIdOrganisationMatchModel("OrgName", "ID"))
   val customsIDUTR                = Some(Utr("ID"))
 

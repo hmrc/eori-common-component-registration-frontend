@@ -73,7 +73,7 @@ object SubscriptionContactDetailsFormBuilder {
     fax = Some(Fax),
     street = Street,
     city = City,
-    postcode = Some(Postcode),
+    postcode = Postcode,
     countryCode = CountryCode
   )
 
@@ -84,7 +84,7 @@ object SubscriptionContactDetailsFormBuilder {
     fax = Some(Fax),
     street = Some(Street),
     city = Some(City),
-    postcode = Some(Postcode),
+    postcode = Postcode,
     countryCode = Some(RevisedCountryCode),
     useAddressFromRegistrationDetails = false
   )
@@ -96,7 +96,7 @@ object SubscriptionContactDetailsFormBuilder {
     fax = Some(Fax),
     street = Some(Street),
     city = Some(City),
-    postcode = Some(Postcode),
+    postcode = Postcode,
     countryCode = Some(CountryCode),
     useAddressFromRegistrationDetails = false
   )
@@ -133,7 +133,7 @@ object SubscriptionContactDetailsFormBuilder {
     fax = Some(Fax),
     street = Some(Street),
     city = Some(City),
-    postcode = Some(Postcode),
+    postcode = Postcode,
     countryCode = Some(CountryCode),
     useAddressFromRegistrationDetails = false
   )
@@ -153,7 +153,7 @@ object SubscriptionContactDetailsFormBuilder {
     fax = Some(Fax),
     street = None,
     city = None,
-    postcode = None,
+    postcode = "",
     countryCode = None,
     useAddressFromRegistrationDetails = true
   )

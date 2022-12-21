@@ -211,7 +211,7 @@ object SubscriptionCreateRequest {
 
     val address = subscription.addressDetails match {
       case Some(a) =>
-        EstablishmentAddress(streetAndNumber = a.street, city = a.city, a.postcode.filter(_.nonEmpty), a.countryCode)
+        EstablishmentAddress(streetAndNumber = a.street, city = a.city, a.postcode, a.countryCode)
       case _ => createEstablishmentAddress(registration.address)
     }
 

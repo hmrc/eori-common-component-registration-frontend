@@ -42,7 +42,7 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
       addressLine2 <- Gen.alphaStr.asOption
       addressLine3 <- Gen.alphaStr
       addressLine4 <- Gen.alphaStr.asOption
-      postcode     <- Gen.alphaStr.asOption
+      postcode     <- Gen.alphaStr
       country      <- Gen.alphaStr
     } yield SixLineAddressMatchModel(
       lineOne = addressLine1,
@@ -86,7 +86,7 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
       addressLine2 <- Gen.alphaStr.asOption
       addressLine3 <- Gen.alphaStr
       addressLine4 <- Gen.alphaStr.asOption
-      postcode     <- Gen.alphaStr.asOption
+      postcode     <- Gen.alphaStr
       country      <- Gen.alphaStr
     } yield SixLineAddressMatchModel(
       lineOne = addressLine1,
@@ -115,7 +115,7 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
       addressLine1 <- Gen.alphaStr
       addressLine2 <- Gen.alphaStr.asOption
       addressLine3 <- Gen.alphaStr
-      postcode     <- Gen.alphaStr.asOption
+      postcode     <- Gen.alphaStr
       country      <- Gen.alphaStr
     } yield AddressViewModel(
       street = addressLine1 + " " + addressLine2,
@@ -157,7 +157,7 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
       addressLine2 <- Gen.alphaStr.asOption
       addressLine3 <- Gen.alphaStr
       addressLine4 <- Gen.alphaStr.asOption
-      postcode     <- Gen.alphaStr.asOption
+      postcode     <- Gen.alphaStr
       country      <- Gen.alphaStr
     } yield SixLineAddressMatchModel(
       lineOne = addressLine1,

@@ -27,7 +27,7 @@ object SubscriptionContactDetailsModelBuilder {
     fax = None,
     street = Some("Line 1"),
     city = Some("city name"),
-    postcode = None,
+    postcode = "",
     countryCode = Some("GB")
   )
 
@@ -38,7 +38,7 @@ object SubscriptionContactDetailsModelBuilder {
     fax = Some("01632961234"),
     street = Some("Line 1"),
     city = Some("city name"),
-    postcode = Some("SE28 1AA"),
+    postcode = "SE28 1AA",
     countryCode = Some("FR")
   )
 

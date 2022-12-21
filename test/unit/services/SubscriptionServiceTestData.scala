@@ -71,7 +71,7 @@ trait SubscriptionServiceTestData extends TestData {
     useAddressFromRegistrationDetails = false,
     Some(contactStreet),
     Some(contactCity),
-    Some(contactPostalCode),
+    contactPostalCode,
     Some(contactCountryCode)
   )
 
@@ -83,7 +83,7 @@ trait SubscriptionServiceTestData extends TestData {
     useAddressFromRegistrationDetails = false,
     Some(contactStreet),
     Some(contactCity),
-    Some(contactPostalCode),
+    contactPostalCode,
     Some(contactCountryCode)
   )
 
@@ -114,7 +114,7 @@ trait SubscriptionServiceTestData extends TestData {
     EtmpOrganisationType("Unincorporated Body") -> OrganisationTypeConfiguration.EtmpUnincorporatedBody
   )
 
-  val address: Address = Address("Line 1", Some("line 2"), Some("city name"), Some(""), Some("SE28 1AA"), "GB")
+  val address: Address = Address("Line 1", Some("line 2"), Some("city name"), Some(""), "SE28 1AA", "GB")
 
   val organisationRegistrationDetails: RegistrationDetailsOrganisation = RegistrationDetails.organisation(
     customsId = None,
@@ -141,7 +141,7 @@ trait SubscriptionServiceTestData extends TestData {
     sicCode = Some(principalEconomicActivity),
     email = Some(capturedEmail),
     eoriNumber = Some("GB123456789000"),
-    addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
+    addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", "SE28 1AA", "GB"))
   )
 
   val fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone: SubscriptionDetails = SubscriptionDetails(
@@ -194,7 +194,7 @@ trait SubscriptionServiceTestData extends TestData {
       EstablishmentAddress(
         streetAndNumber = "Line 1 line 2",
         city = "city name",
-        postalCode = Some("SE28 1AA"),
+        postalCode = "SE28 1AA",
         countryCode = "GB"
       )
     val responseData = ResponseData(
@@ -218,7 +218,7 @@ trait SubscriptionServiceTestData extends TestData {
 
   def stubRegisterWithPartialResponseWithNoDoe(outcomeType: String = "PASS"): RegisterWithEoriAndIdResponse = {
     val establishmentAddress =
-      EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = Some("NE1 1BG"), countryCode = "GB")
+      EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = "NE1 1BG", countryCode = "GB")
     val responseData = ResponseData(
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
@@ -241,14 +241,14 @@ trait SubscriptionServiceTestData extends TestData {
   def stubRegisterWithCompleteResponse(outcomeType: String = "PASS"): RegisterWithEoriAndIdResponse = {
     val processingDate = LocalDateTime.now(ZoneId.of("Europe/London"))
     val contactDetailAddress =
-      EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = Some("NE1 1BG"), countryCode = "GB")
+      EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = "NE1 1BG", countryCode = "GB")
     val responseData = ResponseData(
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
       establishmentAddress = EstablishmentAddress(
         streetAndNumber = "Line 1 line 2",
         city = "city name",
-        postalCode = Some("SE28 1AA"),
+        postalCode = "SE28 1AA",
         countryCode = "GB"
       ),
       hasInternetPublication = true,

@@ -70,7 +70,7 @@ class RegistrationDisplayResponseHolderSpec extends UnitSpec {
 
   val individualResponse = IndividualResponse("fname", None, "lname", Some("1989-01-01"))
 
-  val address = Address("Line1", Some("Line2"), None, None, Some("postcode"), "GB")
+  val address = Address("Line1", Some("Line2"), None, None, "postcode", "GB")
 
   val contactDetails = ContactResponse(Some("01234567890"), None, None, Some("test@example.com"))
 

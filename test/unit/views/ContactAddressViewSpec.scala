@@ -34,7 +34,7 @@ class ContactAddressViewSpec extends ViewSpec {
   private val view              = instanceOf[contact_address]
 
   private val addressViewModel =
-    AddressViewModel(street = "Line 1", city = "city name", postcode = Some("SE28 1AA"), countryCode = "ZZ")
+    AddressViewModel(street = "Line 1", city = "city name", postcode = "SE28 1AA", countryCode = "ZZ")
 
   "Confirm Contact Details" should {
     "display correct title" in {

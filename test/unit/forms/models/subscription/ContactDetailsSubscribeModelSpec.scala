@@ -28,6 +28,7 @@ class ContactDetailsSubscribeModelSpec extends UnitSpec {
       val email     = "john.doe@example.com"
       val fullName  = "Full name"
       val telephone = "01234123123"
+      val postCode  = "SE28 1AA"
 
       val contactDetailsSubscribeModel = ContactDetailsSubscribeModel(fullName, telephone)
 
@@ -39,7 +40,7 @@ class ContactDetailsSubscribeModelSpec extends UnitSpec {
         false,
         None,
         None,
-        None,
+        postcode = postCode,
         None
       )
 
@@ -59,7 +60,7 @@ class ContactDetailsSubscribeModelSpec extends UnitSpec {
         false,
         Some("street"),
         Some("city"),
-        Some("postcode"),
+        "postcode",
         Some("country")
       )
 

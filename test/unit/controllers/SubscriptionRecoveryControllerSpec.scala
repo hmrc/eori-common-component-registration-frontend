@@ -84,8 +84,9 @@ class SubscriptionRecoveryControllerSpec
   )(global)
 
   def registerWithEoriAndIdResponseDetail: Option[RegisterWithEoriAndIdResponseDetail] = {
-    val trader               = Trader(fullName = "New trading", shortName = "nt")
-    val establishmentAddress = EstablishmentAddress(streetAndNumber = "new street", city = "leeds", countryCode = "GB")
+    val trader = Trader(fullName = "New trading", shortName = "nt")
+    val establishmentAddress =
+      EstablishmentAddress(streetAndNumber = "new street", city = "leeds", countryCode = "GB", postalCode = "SE28 1AA")
     val responseData: ResponseData = ResponseData(
       SAFEID = "SomeSafeId",
       trader = trader,

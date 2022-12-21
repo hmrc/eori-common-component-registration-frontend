@@ -76,18 +76,19 @@ class RegisterWithoutIdServiceSpec
   private val orgName = "orgName"
 
   private val organisationAddress =
-    SixLineAddressMatchModel("add1", Some("add2"), "add3", Some("add4"), Some("postcode"), "COUNTRY")
+    SixLineAddressMatchModel("add1", Some("add2"), "add3", Some("add4"), "postcode", "COUNTRY")
 
   private val organisationAddressWithEmptyPostcode =
-    SixLineAddressMatchModel("add1", Some("add2"), "add3", Some("add4"), None, "COUNTRY")
+    SixLineAddressMatchModel("add1", Some("add2"), "add3", Some("add4"), "postcode", "COUNTRY")
 
-  private val address = Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "country")
+  private val address = Address("add1", Some("add2"), Some("add3"), Some("add4"), "postcode", "country")
 
   private val contactDetails = Some(
-    ContactDetailsModel("John Doe", "john@example.com", "441234987654", None, true, None, None, None, None)
+    ContactDetailsModel("John Doe", "john@example.com", "441234987654", None, true, None, None, "SE28 1AA", None)
   )
 
-  private val addressWithEmptyPostcode = Address("add1", Some("add2"), Some("add3"), Some("add4"), Some(""), "country")
+  private val addressWithEmptyPostcode =
+    Address("add1", Some("add2"), Some("add3"), Some("add4"), "SE28 1AA", "country")
 
   private val SAFEID    = java.util.UUID.randomUUID.toString
   private val sapNumber = "sapNumber-123"
@@ -209,7 +210,7 @@ class RegisterWithoutIdServiceSpec
         Some("add2"),
         Some("add3"),
         Some("add4"),
-        Some("postcode"),
+        "postcode",
         "country"
       )
       registrationRequest.requestDetail.contactDetails shouldBe RegisterWithoutIdContactDetails(
@@ -292,7 +293,7 @@ class RegisterWithoutIdServiceSpec
         Some("add2"),
         Some("add3"),
         Some("add4"),
-        Some("postcode"),
+        "postcode",
         "country"
       )
       registrationRequest.requestDetail.contactDetails shouldBe RegisterWithoutIdContactDetails(

@@ -83,7 +83,7 @@ class CheckYourDetailsRegisterControllerSpec
   private val organisationRegistrationDetailsWithEmptySafeId = organisationRegistrationDetails.copy(safeId = SafeId(""))
 
   private val addressDetails =
-    AddressViewModel(street = "street", city = "city", postcode = Some("SE28 1AA"), countryCode = "GB")
+    AddressViewModel(street = "street", city = "city", postcode = "SE28 1AA", countryCode = "GB")
 
   private val shortName = "Company Details Short name"
 
@@ -235,7 +235,7 @@ class CheckYourDetailsRegisterControllerSpec
     "display the business name and four line address from the cache when user was registered, and translate EU country to full country name" in {
       when(mockSubscriptionDetailsHolder.name).thenReturn("orgName")
       when(mockSubscriptionDetailsHolder.addressDetails)
-        .thenReturn(Some(AddressViewModel("street", "city", Some("322811"), "PL")))
+        .thenReturn(Some(AddressViewModel("street", "city", "322811", "PL")))
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
         val page = CdsPage(contentAsString(result))
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation name") shouldBe "orgName"
@@ -256,7 +256,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     "not translate country code if it is third country" in {
       when(mockSubscriptionDetailsHolder.addressDetails)
-        .thenReturn(Some(AddressViewModel("street", "city", None, "IN")))
+        .thenReturn(Some(AddressViewModel("street", "city", "SE28 1AA", "IN")))
 
       showForm() { result =>
         val page = CdsPage(contentAsString(result))
@@ -412,7 +412,7 @@ class CheckYourDetailsRegisterControllerSpec
           strim(s"""             
                  |${contactDetailsModelWithAllValues.street.get}
                  |${contactDetailsModelWithAllValues.city.get}
-                 |${contactDetailsModelWithAllValues.postcode.get} France
+                 |${contactDetailsModelWithAllValues.postcode} France
               """)
 
         page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Shortened name") shouldBe false
@@ -904,7 +904,7 @@ class CheckYourDetailsRegisterControllerSpec
       strim(s"""
            |${contactDetailsModelWithAllValues.street.get}
            |${contactDetailsModelWithAllValues.city.get}
-           |${contactDetailsModelWithAllValues.postcode.get} $countryString
+           |${contactDetailsModelWithAllValues.postcode} $countryString
               """)
   }
 

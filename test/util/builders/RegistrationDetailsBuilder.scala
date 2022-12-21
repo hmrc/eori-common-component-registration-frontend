@@ -24,9 +24,9 @@ object RegistrationDetailsBuilder {
 
   val defaultCountryName = "United Kingdom"
   val defaultEmail       = "john.doe@example.com"
-  val defaultAddress     = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
+  val defaultAddress     = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), "SE28 1AA", "GB")
 
-  val defaultAddressWithMandatoryValuesOnly = Address("Line 1", None, None, None, None, "GB")
+  val defaultAddressWithMandatoryValuesOnly = Address("Line 1", None, None, None, "SE28 1AA", "GB")
 
   private val DefaultOrganisationRegistrationDetails =
     RegistrationDetails.organisation(

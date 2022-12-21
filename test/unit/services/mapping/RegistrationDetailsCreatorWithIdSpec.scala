@@ -33,7 +33,7 @@ class RegistrationDetailsCreatorWithIdSpec extends RegistrationDetailsCreatorTes
     addressLine2 <- Gen.alphaStr.asOption
     addressLine3 <- Gen.alphaStr.asOption
     addressLine4 <- Gen.alphaStr.asOption
-    postcode     <- Gen.alphaStr.asOption
+    postcode     <- Gen.alphaStr
     country      <- Gen.alphaStr
   } yield Address(addressLine1, addressLine2, addressLine3, addressLine4, postcode, country)
 

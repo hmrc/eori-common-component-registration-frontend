@@ -91,7 +91,7 @@
   <div id="address" class="govuk-body govuk-inset-text govuk-!-margin-top-5 govuk-!-padding-bottom-5">
       @helpers.noMarginParagraph(address.street)
       @helpers.noMarginParagraph(address.city)
-      @address.postcode.map(code => helpers.noMarginParagraph(code))
+      @helpers.noMarginParagraph(address.postcode)
       @helpers.noMarginParagraph(countryCodeToLabel(address.countryCode))
   </div>
 }

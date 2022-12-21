@@ -286,10 +286,10 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
               ResponseData(
                 "someSafeId",
                 Trader("John Doe", "Mr D"),
-                EstablishmentAddress("Line 1", "City Name", Some("SE28 1AA"), "GB"),
+                EstablishmentAddress("Line 1", "City Name", "SE28 1AA", "GB"),
                 Some(
                   ContactDetail(
-                    EstablishmentAddress("Line 1", "City Name", Some("SE28 1AA"), "GB"),
+                    EstablishmentAddress("Line 1", "City Name", "SE28 1AA", "GB"),
                     "John Contact Doe",
                     Some("1234567"),
                     Some("89067"),

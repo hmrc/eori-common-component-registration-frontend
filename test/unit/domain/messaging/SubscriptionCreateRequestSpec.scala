@@ -35,10 +35,10 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
   private val email   = "john.doe@example.com"
   private val service = Service.withName("atar")
 
-  private val cachedStreet: String           = "Cached street"
-  private val cachedCity: String             = "Cached city"
-  private val cachedPostCode: Option[String] = Some("Cached post code")
-  private val cachedCountry: String          = "FR"
+  private val cachedStreet: String   = "Cached street"
+  private val cachedCity: String     = "Cached city"
+  private val cachedPostCode: String = "Cached post code"
+  private val cachedCountry: String  = "FR"
 
   private val subscriptionDetails = SubscriptionDetails(addressDetails =
     Some(AddressViewModel(cachedStreet, cachedCity, cachedPostCode, cachedCountry))
@@ -47,7 +47,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
   private val reg06Street: String = "Reg06 street"
   private val reg06City: String   = "Reg06 city"
 
-  private def responseData(postCode: Option[String], countryCode: String): ResponseData =
+  private def responseData(postCode: String, countryCode: String): ResponseData =
     ResponseData(
       "safeId",
       Trader("full name", "short name"),
@@ -61,8 +61,8 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
   private val taxPayerId                 = TaxPayerId("taxPayerId")
   private val safeId                     = SafeId("safeId")
   private val fullName                   = "Full name"
-  private val address                    = Address("addressLine1", None, Some("city"), None, Some("postcode"), "GB")
-  private val establishmentAddress       = EstablishmentAddress("addressLine1", "city", Some("postcode"), "GB")
+  private val address                    = Address("addressLine1", None, Some("city"), None, "postcode", "GB")
+  private val establishmentAddress       = EstablishmentAddress("addressLine1", "city", "postcode", "GB")
   private val addressViewModel           = AddressViewModel(address)
   private val dateOfBirthOrEstablishment = LocalDate.now()
 
@@ -75,7 +75,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
     fax = None,
     street = None,
     city = None,
-    postcode = None,
+    postcode = "",
     countryCode = None
   )
 
@@ -92,7 +92,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
     Some(false),
     None,
     None,
-    None,
+    "SE28 1AA",
     None,
     Some("01234123123"),
     None,
@@ -105,7 +105,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
     Some(true),
     Some("addressLine1"),
     Some("city"),
-    Some("postcode"),
+    "postcode",
     Some("GB"),
     Some("01234123123"),
     None,
@@ -118,7 +118,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
     Some(true),
     Some(""),
     Some("-"),
-    None,
+    "SE28 1AA",
     Some(""),
     Some("01234123123"),
     None,
@@ -304,7 +304,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       "REG06 establishment address contains correct country code" in {
 
         val reg06Country                 = "GB"
-        val reg06PostCode                = Some("AA11 1AA")
+        val reg06PostCode                = "AA11 1AA"
         val reg06ResponseData            = responseData(postCode = reg06PostCode, countryCode = reg06Country)
         val sub02Request                 = SubscriptionCreateRequest(reg06ResponseData, subscriptionDetails, email, service)
         val expectedEstablishmentAddress = EstablishmentAddress(reg06Street, reg06City, reg06PostCode, reg06Country)
@@ -318,7 +318,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       "REG06 contains incorrect country" in {
 
         val reg06Country                 = "incorrect"
-        val reg06PostCode                = Some("AA11 1AA")
+        val reg06PostCode                = "AA11 1AA"
         val reg06ResponseData            = responseData(postCode = reg06PostCode, countryCode = reg06Country)
         val sub02Request                 = SubscriptionCreateRequest(reg06ResponseData, subscriptionDetails, email, service)
         val expectedEstablishmentAddress = EstablishmentAddress(reg06Street, reg06City, reg06PostCode, cachedCountry)

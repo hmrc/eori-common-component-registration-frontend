@@ -35,12 +35,12 @@ case class Address(
   addressLine2: Option[String],
   addressLine3: Option[String],
   addressLine4: Option[String],
-  postalCode: Option[String],
+  postalCode: String,
   countryCode: String
 ) {
 
   private def isValidCountry: Boolean     = Countries.all.exists(_.countryCode == countryCode)
-  private def hasValidPostcode: Boolean   = this.postalCode.exists(_.matches(postcodeRegex.regex))
+  private def hasValidPostcode: Boolean   = this.postalCode.matches(postcodeRegex.regex)
   private def isPostcodeRequired: Boolean = postCodeMandatoryCountryCodes.contains(countryCode)
 
   def isValidAddress(): Boolean =
@@ -58,17 +58,10 @@ object Address {
     addressLine2: Option[String],
     addressLine3: Option[String],
     addressLine4: Option[String],
-    postalCode: Option[String],
+    postalCode: String,
     countryCode: String
   ): Address =
-    new Address(
-      addressLine1,
-      addressLine2,
-      addressLine3,
-      addressLine4,
-      postalCode.filter(_.nonEmpty),
-      countryCode.toUpperCase()
-    ) {}
+    new Address(addressLine1, addressLine2, addressLine3, addressLine4, postalCode, countryCode.toUpperCase()) {}
 
   def apply(address: AddressViewModel): Address =
     new Address(address.street, None, Some(address.city), None, address.postcode, address.countryCode) {}

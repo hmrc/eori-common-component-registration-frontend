@@ -29,12 +29,7 @@ object GovGatewayCredentials {
   implicit val format = Json.format[GovGatewayCredentials]
 }
 
-case class EstablishmentAddress(
-  streetAndNumber: String,
-  city: String,
-  postalCode: Option[String] = None,
-  countryCode: String
-) {
+case class EstablishmentAddress(streetAndNumber: String, city: String, postalCode: String, countryCode: String) {
 
   def updateCountryFromAddress(address: AddressViewModel): EstablishmentAddress =
     this.copy(countryCode = address.countryCode)
@@ -49,7 +44,7 @@ object EstablishmentAddress {
     new EstablishmentAddress(
       fourLineAddress.street,
       fourLineAddress.city,
-      address.postalCode.filterNot(p => p.isEmpty),
+      address.postalCode,
       fourLineAddress.countryCode
     )
   }

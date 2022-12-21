@@ -44,13 +44,13 @@ class RegistrationDetailsCreatorRegistrationInfoSpec extends UnitSpec with Mocki
     when(individualRegInfo.taxPayerId).thenReturn(TaxPayerId(sapNumber))
     when(orgRegInfo.taxPayerId).thenReturn(TaxPayerId(sapNumber))
     when(orgRegInfo.organisationType).thenReturn(Some(orgType))
-    when(orgRegInfo.postcode).thenReturn(Some(postcode))
+    when(orgRegInfo.postcode).thenReturn(postcode)
     when(orgRegInfo.country).thenReturn(countryCode)
     when(individualRegInfo.firstName).thenReturn(firstName)
     when(individualRegInfo.middleName).thenReturn(Some(middleName))
     when(individualRegInfo.lastName).thenReturn(lastName)
     when(individualRegInfo.dateOfBirth).thenReturn(Some(dob))
-    when(individualRegInfo.postcode).thenReturn(Some(postcode))
+    when(individualRegInfo.postcode).thenReturn(postcode)
     when(individualRegInfo.country).thenReturn(countryCode)
   }
 

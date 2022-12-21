@@ -192,7 +192,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "calling cacheContactAddressDetails" should {
-    val addressViewModel = AddressViewModel("Address Line 1", "city", Some("postcode"), "GB")
+    val addressViewModel = AddressViewModel("Address Line 1", "city", "SE28 1AA", "GB")
     val contactDetailsModel = ContactDetailsModel(
       fullName = "John Doe",
       emailAddress = "john.doe@example.com",
@@ -201,7 +201,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       false,
       Some("streetName"),
       Some("cityName"),
-      Some("SE281AA"),
+      "SE281AA",
       Some("GB")
     )
     val updatedContactDetailsModel = ContactDetailsModel(
@@ -212,7 +212,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       false,
       Some("Address Line 1"),
       Some("city"),
-      Some("postcode"),
+      "SE28 1AA",
       Some("GB")
     )
 
@@ -234,7 +234,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       fax = None,
       street = None,
       city = None,
-      postcode = None,
+      postcode = "",
       countryCode = None
     )
 

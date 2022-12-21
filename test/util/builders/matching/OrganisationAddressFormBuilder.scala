@@ -30,7 +30,7 @@ trait OrganisationAddressFormBuilder {
   val CountryCode: String
 
   def asOrganisationAddress: SixLineAddressMatchModel =
-    SixLineAddressMatchModel(LineOne, Some(LineTwo), LineThree, Some(LineFour), Some(Postcode), CountryCode)
+    SixLineAddressMatchModel(LineOne, Some(LineTwo), LineThree, Some(LineFour), Postcode, CountryCode)
 
   def asForm(addressForm: Form[SixLineAddressMatchModel]): Map[String, String] =
     addressForm.mapping.unbind(asOrganisationAddress)

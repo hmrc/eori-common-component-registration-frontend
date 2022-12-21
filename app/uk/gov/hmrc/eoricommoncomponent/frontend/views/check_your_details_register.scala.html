@@ -205,7 +205,7 @@
 @addressViewModelHtml(ad: AddressViewModel) = {
     @helpers.noMarginParagraph(ad.street)
     @helpers.noMarginParagraph(ad.city)
-    @ad.postcode.map(helpers.noMarginParagraph(_))
+    @helpers.noMarginParagraph(ad.postcode))
     @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(helpers.noMarginParagraph(_))
 }
 @addressHtml(ad: Address) = {
@@ -213,13 +213,13 @@
     @ad.addressLine2.map(helpers.noMarginParagraph(_))
     @ad.addressLine3.map(helpers.noMarginParagraph(_))
     @ad.addressLine4.map(helpers.noMarginParagraph(_))
-    @ad.postalCode.map(helpers.noMarginParagraph(_))
+    @helpers.noMarginParagraph(ad.postalCode))
     @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(helpers.noMarginParagraph(_))
 }
 @contactDetailsHtml(details: ContactDetailsModel) = {
     @details.street.map(helpers.noMarginParagraph(_))
     @details.city.map(helpers.noMarginParagraph(_))
-    @details.postcode.map(helpers.noMarginParagraph(_))
+    @helpers.noMarginParagraph(details.postcode))
     @transformCountryCodeToOptionalLabel(details.countryCode).map(helpers.noMarginParagraph(_))
 }
 

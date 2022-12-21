@@ -38,7 +38,7 @@ class ContactDetailsModelSpec extends UnitSpec {
           false,
           Some("street"),
           Some(""),
-          Some(""),
+          "SE28 1AA",
           Some("")
         )
 
@@ -70,7 +70,7 @@ class ContactDetailsModelSpec extends UnitSpec {
           false,
           Some("street"),
           Some("city"),
-          Some("postcode"),
+          "postcode",
           Some("countryCode")
         )
       contactDetails.toContactInfoDetailsModel(Some(contactDetailsModel)) shouldBe ContactDetailsModel(
@@ -81,7 +81,7 @@ class ContactDetailsModelSpec extends UnitSpec {
         false,
         Some("street"),
         Some("city"),
-        Some("postcode"),
+        "postcode",
         Some("countryCode")
       )
 
@@ -93,7 +93,7 @@ class ContactDetailsModelSpec extends UnitSpec {
         false,
         None,
         None,
-        None,
+        "SE28 1AA",
         None
       )
     }

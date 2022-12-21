@@ -112,7 +112,7 @@ object RegistrationDetails {
     )
 
   def rdSafeId(safeId: SafeId): RegistrationDetailsSafeId =
-    RegistrationDetailsSafeId(safeId, Address("", Some(""), Some(""), Some(""), Some(""), ""), TaxPayerId(""), None, "")
+    RegistrationDetailsSafeId(safeId, Address("", Some(""), Some(""), Some(""), "", ""), TaxPayerId(""), None, "")
 
   private val orgFormat                = Json.format[RegistrationDetailsOrganisation]
   private val individualFormat         = Json.format[RegistrationDetailsIndividual]
@@ -146,7 +146,7 @@ object RegistrationDetailsIndividual {
       TaxPayerId(""),
       SafeId(""),
       fullName,
-      Address("", None, None, None, None, ""),
+      Address("", None, None, None, "", ""),
       dateOfBirth
     )
 
@@ -156,7 +156,7 @@ object RegistrationDetailsIndividual {
       TaxPayerId(""),
       SafeId(""),
       "",
-      Address("", None, None, None, None, ""),
+      Address("", None, None, None, "", ""),
       LocalDate.now
     )
 
@@ -170,7 +170,7 @@ object RegistrationDetailsOrganisation {
       TaxPayerId(""),
       SafeId(""),
       "",
-      Address("", None, None, None, None, ""),
+      Address("", None, None, None, "", ""),
       None,
       None
     )

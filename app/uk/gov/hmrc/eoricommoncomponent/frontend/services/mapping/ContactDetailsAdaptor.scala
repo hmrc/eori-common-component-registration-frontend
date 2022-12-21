@@ -35,7 +35,7 @@ class ContactDetailsAdaptor {
       fax = view.fax,
       street = Some(fourLineAddress.street),
       city = Some(fourLineAddress.city),
-      postcode = registrationAddress.postalCode.filterNot(p => p.isEmpty),
+      postcode = registrationAddress.postalCode,
       countryCode = Some(registrationAddress.countryCode),
       useAddressFromRegistrationDetails = view.useAddressFromRegistrationDetails
     )

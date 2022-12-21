@@ -202,13 +202,10 @@ case class SixLineAddressMatchModel(
   lineTwo: Option[String],
   lineThree: String,
   lineFour: Option[String],
-  postcode: Option[String],
+  postcode: String,
   country: String
 ) {
-  require(
-    if (postCodeMandatoryForCountryCode) postcode.fold(false)(_.trim.nonEmpty) else true,
-    s"Postcode required for country code: $country"
-  )
+  require(if (postCodeMandatoryForCountryCode) true else false, s"Postcode required for country code: $country")
 
   private def postCodeMandatoryForCountryCode = List("GG", "JE").contains(country)
 }
@@ -220,14 +217,14 @@ object SixLineAddressMatchModel {
     lineTwo: Option[String],
     lineThree: String,
     lineFour: Option[String],
-    postcode: Option[String],
+    postcode: String,
     country: String
   ): SixLineAddressMatchModel = new SixLineAddressMatchModel(
     lineOne.trim,
     lineTwo.map(_.trim),
     lineThree.trim,
     lineFour.map(_.trim),
-    postcode.map(_.trim),
+    postcode.trim,
     country
   )
 

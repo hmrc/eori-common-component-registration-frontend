@@ -30,9 +30,9 @@ class AddressViewModelSpec extends UnitSpec {
   val countryCode  = "EN"
 
   val actualAddress =
-    Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), Some(postCode), countryCode)
+    Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), postCode, countryCode)
 
-  val expectedAddress = AddressViewModel(addressLine1 + " " + addressLine2, addressLine3, Some(postCode), countryCode)
+  val expectedAddress = AddressViewModel(addressLine1 + " " + addressLine2, addressLine3, postCode, countryCode)
 
   "AddressViewModel" should {
 
@@ -47,7 +47,7 @@ class AddressViewModelSpec extends UnitSpec {
         Some(pad(addressLine2)),
         Some(pad(addressLine3)),
         Some(pad(addressLine4)),
-        Some(pad(postCode)),
+        pad(postCode),
         countryCode
       )
       AddressViewModel(address) shouldEqual expectedAddress
@@ -59,7 +59,7 @@ class AddressViewModelSpec extends UnitSpec {
         Some(addressLine2),
         Some("Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"),
         Some(addressLine4),
-        Some(postCode),
+        postCode,
         countryCode
       )
       AddressViewModel(longAddress).city shouldEqual "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch".take(

@@ -454,7 +454,7 @@ class SubscriptionServiceSpec
     "replace empty city with a dash" in {
       val service = constructService(_ => None)
       val holder = fullyPopulatedSubscriptionDetails.copy(addressDetails =
-        Some(AddressViewModel("some street", "", Some("AB99 3DW"), "GB"))
+        Some(AddressViewModel("some street", "", "AB99 3DW", "GB"))
       )
       val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
@@ -464,7 +464,7 @@ class SubscriptionServiceSpec
     "replace empty postcode with a None" in {
       val service = constructService(_ => None)
       val holder = fullyPopulatedSubscriptionDetails.copy(addressDetails =
-        Some(AddressViewModel("some street", "", Some(""), "GB"))
+        Some(AddressViewModel("some street", "", "", "GB"))
       )
       val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 

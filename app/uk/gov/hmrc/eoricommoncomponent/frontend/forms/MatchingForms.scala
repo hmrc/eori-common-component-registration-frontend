@@ -320,7 +320,7 @@ object MatchingForms extends Mappings {
         "line-2"   -> optional(text.verifying(validLine2)),
         "line-3"   -> text.verifying(validLine3),
         "line-4"   -> optional(text.verifying(validLine4)),
-        "postcode" -> postcodeMapping,
+        "postcode" -> text.verifying(validPostcode),
         "countryCode" -> mandatoryString("cds.matching-error.country.invalid")(s => s.length == Length2)
           .verifying(countryConstraints: _*)
       )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
@@ -365,6 +365,12 @@ object MatchingForms extends Mappings {
       value.postalCode,
       value.countryCode
     )
+
+  private def validPostcode: Constraint[String] =
+    Constraint({
+      case s if s.matches(postcodeRegex.regex) => Valid
+      case _                                   => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
+    })
 
   val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] =
     Form(

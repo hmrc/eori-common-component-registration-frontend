@@ -63,7 +63,7 @@
 @addressHtml = {
     @address.street.appendBr
     @address.city.appendBr
-    @address.postcode.map(_.appendBr)
+    @address.postcode.appendBr
     @countryCodeToLabel(address.countryCode)
 }
 

@@ -31,7 +31,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
     TaxPayerId("sapNumber"),
     safeId = SafeId("safe-id"),
     "name",
-    Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "GB"),
+    Address("add1", Some("add2"), Some("add3"), Some("add4"), "postcode", "GB"),
     dateOfEstablishment = None,
     etmpOrganisationType = Some(CorporateBody)
   )
@@ -63,7 +63,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
     TaxPayerId("sapNumber"),
     safeId = SafeId("safe-id"),
     "name",
-    Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "GB"),
+    Address("add1", Some("add2"), Some("add3"), Some("add4"), "postcode", "GB"),
     dateOfEstablishment = Some(LocalDate.parse("1961-04-12")),
     etmpOrganisationType = Some(CorporateBody)
   )
@@ -100,7 +100,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
     TaxPayerId("sapNumber"),
     safeId = SafeId("safe-id"),
     "name",
-    Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "GB"),
+    Address("add1", Some("add2"), Some("add3"), Some("add4"), "postcode", "GB"),
     dateOfBirth
   )
 

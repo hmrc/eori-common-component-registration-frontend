@@ -30,7 +30,7 @@ object SubscriptionInfoBuilder {
   val CDSOrgName     = "orgName"
   val orgStreetName  = "Line 1"
   val orgCity        = "line 2"
-  val orgPostalCode  = Some("SE28 1AA")
+  val orgPostalCode  = "SE28 1AA"
   val orgCountryCode = "ZZ"
 
   val contactName                  = "John Doe"
@@ -72,7 +72,7 @@ object SubscriptionInfoBuilder {
     sepCorrAddrIndicator = Some(true),
     streetAndNumber = Some(contactStreet),
     city = Some(contactCity),
-    postalCode = Some(contactPostalCode),
+    postalCode = contactPostalCode,
     countryCode = Some(contactCountry),
     telephoneNumber = Some(telephoneNumber),
     faxNumber = Some(faxNumber),
@@ -84,7 +84,7 @@ object SubscriptionInfoBuilder {
     sepCorrAddrIndicator = None,
     streetAndNumber = None,
     city = None,
-    postalCode = None,
+    postalCode = "",
     countryCode = None,
     telephoneNumber = None,
     faxNumber = None,
@@ -96,7 +96,7 @@ object SubscriptionInfoBuilder {
     sepCorrAddrIndicator = None,
     streetAndNumber = Some(contactStreet),
     city = None,
-    postalCode = Some(contactPostalCode),
+    postalCode = contactPostalCode,
     countryCode = Some(contactCountry),
     telephoneNumber = None,
     faxNumber = None,
@@ -220,7 +220,7 @@ object SubscriptionInfoBuilder {
       Some(faxNumber),
       contactStreet,
       contactCity,
-      Some(contactPostalCode),
+      contactPostalCode,
       orgCountryCode
     )
 

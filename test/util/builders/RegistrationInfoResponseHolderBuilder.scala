@@ -30,7 +30,7 @@ object RegistrationInfoResponseHolderBuilder {
     addressLine2 = Some("line 2"),
     addressLine3 = Some("line 3"),
     addressLine4 = Some("line 4"),
-    postalCode = Some("SE28 1AA"),
+    postalCode = "SE28 1AA",
     countryCode = "ZZ"
   )
 

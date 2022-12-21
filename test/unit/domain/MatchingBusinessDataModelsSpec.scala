@@ -277,27 +277,27 @@ class MatchingBusinessDataModelsSpec extends UnitSpec {
   "matchingModels OrganisationAddress" should {
     "throw an exception if a postcode is missing and the country code is Jersey" in {
       the[IllegalArgumentException] thrownBy {
-        SixLineAddressMatchModel("AddL1", None, "AddLine3", None, None, "JE")
+        SixLineAddressMatchModel("AddL1", None, "AddLine3", None, "SE28 1AA", "JE")
       } should have message "requirement failed: Postcode required for country code: JE"
     }
 
     "throw an exception if a postcode is missing and the country code is Guernsey" in {
       the[IllegalArgumentException] thrownBy {
-        SixLineAddressMatchModel("AddL1", None, "AddLine3", None, Some(""), "GG")
+        SixLineAddressMatchModel("AddL1", None, "AddLine3", None, "SE28 1AA", "GG")
       } should have message "requirement failed: Postcode required for country code: GG"
     }
 
     "not throw an exception if a postcode is provided for Jersey" in {
-      noException should be thrownBy SixLineAddressMatchModel("AddL1", None, "AddLine3", None, Some("POSTCODE"), "JE")
+      noException should be thrownBy SixLineAddressMatchModel("AddL1", None, "AddLine3", None, "POSTCODE", "JE")
     }
 
     "not throw an exception if a postcode is provided for Guernsey" in {
-      noException should be thrownBy SixLineAddressMatchModel("AddL1", None, "AddLine3", None, Some("POSTCODE"), "GG")
+      noException should be thrownBy SixLineAddressMatchModel("AddL1", None, "AddLine3", None, "POSTCODE", "GG")
     }
 
     "not throw an exception if a postcode is not provided for any other ROW country code" in {
       countryCodesChannelIslands.foreach { cc =>
-        noException should be thrownBy SixLineAddressMatchModel("AddL1", None, "AddLine3", None, Some("POSTCODE"), cc)
+        noException should be thrownBy SixLineAddressMatchModel("AddL1", None, "AddLine3", None, "POSTCODE", cc)
       }
     }
 

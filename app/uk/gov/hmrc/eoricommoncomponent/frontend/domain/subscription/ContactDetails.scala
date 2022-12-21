@@ -25,7 +25,7 @@ case class ContactDetails(
   fax: Option[String],
   street: String,
   city: String,
-  postcode: Option[String],
+  postcode: String,
   countryCode: String
 )
 

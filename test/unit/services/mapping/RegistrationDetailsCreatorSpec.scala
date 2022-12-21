@@ -48,7 +48,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         true,
         Some(individual),
         None,
-        Address("Line1", None, None, None, None, "GB"),
+        Address("Line1", None, None, None, "SE28 1AA", "GB"),
         ContactResponse()
       )
       val responseCommon = ResponseCommon("status", None, "date", None, Some("taxPayerId"))
@@ -58,7 +58,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         TaxPayerId("taxPayerId"),
         SafeId("SAFEID"),
         "fname mname lname",
-        Address("Line1", None, None, None, None, "GB"),
+        Address("Line1", None, None, None, "SE28 1AA", "GB"),
         LocalDate.of(2019, 1, 1)
       )
 
@@ -76,7 +76,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         false,
         None,
         Some(organisation),
-        Address("Line1", None, None, None, None, "GB"),
+        Address("Line1", None, None, None, "SE28 1AA", "GB"),
         ContactResponse()
       )
       val responseCommon = ResponseCommon("status", None, "date", None, Some("taxPayerId"))
@@ -86,7 +86,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         TaxPayerId("taxPayerId"),
         SafeId("SAFEID"),
         "orgname",
-        Address("Line1", None, None, None, None, "GB"),
+        Address("Line1", None, None, None, "SE28 1AA", "GB"),
         None,
         Some(LLP)
       )

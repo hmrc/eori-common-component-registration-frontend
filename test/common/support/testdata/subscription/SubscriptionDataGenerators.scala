@@ -34,7 +34,7 @@ trait SubscriptionDataGenerators {
     addressLine2 <- Gen.option(stringWithoutEmptyString)
     addressLine3 <- Gen.option(stringWithoutEmptyString)
     addressLine4 <- Gen.option(stringWithoutEmptyString)
-    postcode     <- Gen.option(stringWithoutEmptyString)
+    postcode     <- stringWithoutEmptyString
     country      <- stringWithoutEmptyString
   } yield Address(addressLine1, addressLine2, addressLine3, addressLine4, postcode, country)
 
@@ -44,11 +44,10 @@ trait SubscriptionDataGenerators {
     addressLine3 <- Gen.option(stringWithoutEmptyString)
     addressLine4 <- Gen.option(stringWithoutEmptyString)
     country      <- stringWithoutEmptyString
-  } yield Address(addressLine1, addressLine2, addressLine3, addressLine4, Some(""), country)
+  } yield Address(addressLine1, addressLine2, addressLine3, addressLine4, "", country)
 
   val subscriptionContactDetailsGenerator: Gen[ContactDetails] = for {
-    faxOption        <- Gen.option("01632961234")
-    postalCodeOption <- Gen.option("SE28 1AA")
+    faxOption <- Gen.option("01632961234")
   } yield ContactDetails(
     "John Doe",
     "john.doe@example.com",
@@ -56,7 +55,7 @@ trait SubscriptionDataGenerators {
     faxOption,
     "Line 1",
     "city name",
-    postalCodeOption,
+    "SE28 1AA",
     "ZZ"
   )
 
@@ -69,7 +68,7 @@ trait SubscriptionDataGenerators {
     faxOption,
     "Line 1",
     "city name",
-    Some(""),
+    "SE28 1AA",
     "ZZ"
   )
 
@@ -78,7 +77,7 @@ trait SubscriptionDataGenerators {
     sepCorrAddrIndicatorGen <- Gen.option(trueFalseGenerator)
     streetAndNumberGen      <- Gen.option(stringWithoutEmptyString)
     cityGen                 <- Gen.option(stringWithoutEmptyString)
-    postalCodeGen           <- Gen.option(stringWithoutEmptyString)
+    postalCodeGen           <- stringWithoutEmptyString
     countryCodeGen          <- Gen.option(stringWithoutEmptyString)
     telephoneNumberGen      <- Gen.option(stringWithoutEmptyString)
     faxNumberGen            <- Gen.option(stringWithoutEmptyString)
@@ -109,7 +108,7 @@ trait SubscriptionDataGenerators {
     sepCorrAddrIndicator = sepCorrAddrIndicatorGen,
     streetAndNumber = streetAndNumberGen,
     city = cityGen,
-    postalCode = Some(""),
+    postalCode = "SE28 1AA",
     countryCode = countryCodeGen,
     telephoneNumber = telephoneNumberGen,
     faxNumber = faxNumberGen,
@@ -124,7 +123,7 @@ trait SubscriptionDataGenerators {
     useRegisteredAddress <- trueFalseGenerator
     street               <- stringWithoutEmptyString.map(Some(_))
     city                 <- stringWithoutEmptyString.map(Some(_))
-    postcode             <- Gen.option(stringWithoutEmptyString)
+    postcode             <- stringWithoutEmptyString
     countryCode          <- stringWithoutEmptyString.map(Some(_))
   } yield ContactDetailsModel(
     fullName = fullName,
@@ -155,7 +154,7 @@ trait SubscriptionDataGenerators {
     useAddressFromRegistrationDetails = useRegisteredAddress,
     street = street,
     city = city,
-    postcode = Some(""),
+    postcode = "SE28 1AA",
     countryCode = countryCode
   )
 
@@ -167,7 +166,7 @@ trait SubscriptionDataGenerators {
     useRegisteredAddress <- trueFalseGenerator
     street               <- Gen.option(stringWithoutEmptyString)
     city                 <- Gen.option(stringWithoutEmptyString)
-    postcode             <- Gen.option(stringWithoutEmptyString)
+    postcode             <- stringWithoutEmptyString
     countryCode          <- if (street.isDefined && city.isDefined) Gen.const(None) else Gen.option(stringWithoutEmptyString)
   } yield ContactDetailsModel(
     fullName = fullName,

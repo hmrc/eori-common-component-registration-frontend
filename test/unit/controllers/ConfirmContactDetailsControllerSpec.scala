@@ -193,7 +193,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
           addressLine2 = None,
           addressLine3 = None,
           addressLine4 = None,
-          postalCode = None,
+          postalCode = "SE28 1AA",
           countryCode = "123"
         ),
         sapNumber = TaxPayerId("123"),
@@ -328,7 +328,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
           addressLine2 = None,
           addressLine3 = None,
           addressLine4 = None,
-          postalCode = None,
+          postalCode = "SE28 1AA",
           countryCode = "123"
         ),
         sapNumber = TaxPayerId("123"),
@@ -487,7 +487,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       }
     }
     "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a Organisation" in {
-      val address: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("AAA 123"), "GB")
+      val address: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), "AAA 123", "GB")
       mockCacheWithRegistrationDetails(organisationRegistrationDetails.copy(address = address))
 
       when(
@@ -511,7 +511,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     }
 
     "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a SoleTrader/Individual" in {
-      val address: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), None, "GB")
+      val address: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), "SE28 1AA", "GB")
       mockCacheWithRegistrationDetails(individualRegistrationDetails.copy(address = address))
 
       when(

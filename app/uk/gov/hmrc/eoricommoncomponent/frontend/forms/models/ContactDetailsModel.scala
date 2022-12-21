@@ -30,7 +30,7 @@ case class ContactDetailsModel(
   useAddressFromRegistrationDetails: Boolean = true,
   street: Option[String],
   city: Option[String],
-  postcode: Option[String],
+  postcode: String,
   countryCode: Option[String]
 ) {
 
@@ -41,7 +41,7 @@ case class ContactDetailsModel(
     fax,
     trim(street).getOrElse(""),
     trim(city).getOrElse(""),
-    trim(postcode),
+    postcode,
     countryCode.getOrElse("")
   )
 
@@ -49,16 +49,14 @@ case class ContactDetailsModel(
     ContactDetailsViewModel(fullName, Some(emailAddress), telephone)
 
   def toAddressViewModel: Option[AddressViewModel] =
-    Some(
-      AddressViewModel(trim(street).getOrElse(""), trim(city).getOrElse(""), trim(postcode), countryCode.getOrElse(""))
-    )
+    Some(AddressViewModel(trim(street).getOrElse(""), trim(city).getOrElse(""), postcode, countryCode.getOrElse("")))
 
   def toRowContactInformation(): ContactInformation = ContactInformation(
     personOfContact = Some(fullName),
     sepCorrAddrIndicator = Some(false),
     streetAndNumber = None,
     city = None,
-    postalCode = None,
+    postalCode = postcode,
     countryCode = None,
     telephoneNumber = Some(telephone),
     faxNumber = None,
@@ -99,7 +97,7 @@ case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String
           useAddressFromRegistrationDetails = false,
           street = None,
           city = None,
-          postcode = None,
+          postcode = "",
           countryCode = None
         )
     }

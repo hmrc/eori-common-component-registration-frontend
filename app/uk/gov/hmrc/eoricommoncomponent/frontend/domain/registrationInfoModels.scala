@@ -26,7 +26,7 @@ sealed trait RegistrationInfo {
   val lineTwo: Option[String]
   val lineThree: Option[String]
   val lineFour: Option[String]
-  val postcode: Option[String]
+  val postcode: String
   val country: String
   val email: Option[String]
   val phoneNumber: Option[String]
@@ -44,7 +44,7 @@ case class IndividualRegistrationInfo(
   override val lineTwo: Option[String],
   override val lineThree: Option[String],
   override val lineFour: Option[String],
-  override val postcode: Option[String],
+  override val postcode: String,
   override val country: String,
   override val email: Option[String],
   override val phoneNumber: Option[String],
@@ -61,7 +61,7 @@ case class OrgRegistrationInfo(
   override val lineTwo: Option[String],
   override val lineThree: Option[String],
   override val lineFour: Option[String],
-  override val postcode: Option[String],
+  override val postcode: String,
   override val country: String,
   override val email: Option[String],
   override val phoneNumber: Option[String],

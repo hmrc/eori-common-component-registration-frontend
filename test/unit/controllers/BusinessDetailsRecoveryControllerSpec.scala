@@ -66,7 +66,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
     TaxPayerId("sapNumber"),
     safeId = SafeId("safe-id"),
     "name",
-    Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "GB"),
+    Address("add1", Some("add2"), Some("add3"), Some("add4"), "postcode", "GB"),
     dateOfEstablishment = None,
     etmpOrganisationType = Some(CorporateBody)
   )
@@ -76,7 +76,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
     TaxPayerId("sapNumber"),
     safeId = SafeId("safe-id"),
     "name",
-    Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "GB"),
+    Address("add1", Some("add2"), Some("add3"), Some("add4"), "postcode", "GB"),
     LocalDate.parse("2011-11-11")
   )
 

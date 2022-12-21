@@ -28,7 +28,7 @@ case class ContactDetailsSubscribeModel(fullName: String, telephone: String) {
     useAddressFromRegistrationDetails = false,
     street = None,
     city = None,
-    postcode = None,
+    postcode = "",
     countryCode = None
   )
 

@@ -90,7 +90,7 @@ class ContactAddressControllerSpec
     false,
     Some("streetName"),
     Some("cityName"),
-    Some("SE281AA"),
+    "SE281AA",
     Some("GB")
   )
 

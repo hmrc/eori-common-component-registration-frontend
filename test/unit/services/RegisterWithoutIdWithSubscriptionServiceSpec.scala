@@ -69,7 +69,17 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
   )
 
   private val contactDetails =
-    ContactDetailsModel("John Doe", "john@example.com", "441234987654private ", None, true, None, None, None, None)
+    ContactDetailsModel(
+      "John Doe",
+      "john@example.com",
+      "441234987654private ",
+      None,
+      true,
+      None,
+      None,
+      "SE28 1AA",
+      None
+    )
 
   private val service = new RegisterWithoutIdWithSubscriptionService(
     mockRegisterWithoutIdService,
@@ -164,7 +174,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       .thenReturn(Future.successful(mockRegistrationDetails))
     when(mockRegistrationDetails.name).thenReturn("orgName")
     when(mockRegistrationDetails.address)
-      .thenReturn(Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "country"))
+      .thenReturn(Address("add1", Some("add2"), Some("add3"), Some("add4"), "postcode", "country"))
   }
 
   private def mockSessionCacheSubscriptionDetails() =

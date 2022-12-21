@@ -47,8 +47,8 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   private val startingOrgName      = "BEFORE Blank"
   private val startingSafeId       = SafeId("SAFEID")
-  private val startingBlankAddress = Address("BLANK", None, None, None, None, "BLANK")
-  private val updatedAddress       = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
+  private val startingBlankAddress = Address("BLANK", None, None, None, "SE28 1AA", "BLANK")
+  private val updatedAddress       = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), "SE28 1AA", "GB")
 
   private val startingBlankFullName = "BEFORE Blank full name"
 
@@ -57,7 +57,7 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     TaxPayerId(""),
     SafeId(""),
     "",
-    Address("", None, None, None, None, ""),
+    Address("", None, None, None, "SE28 1AA", ""),
     startingDate
   )
 
@@ -66,7 +66,7 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     TaxPayerId(""),
     SafeId(""),
     "",
-    Address("", None, None, None, None, ""),
+    Address("", None, None, None, "SE28 1AA", ""),
     None,
     None
   )

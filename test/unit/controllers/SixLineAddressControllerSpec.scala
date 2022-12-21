@@ -85,7 +85,7 @@ class SixLineAddressControllerSpec
   private val LineThree   = "Town or city"
   private val LineFour    = "Region or state (optional)"
   private val Postcode    = "Postcode"
-  private val testAddress = Address(LineOne, Some(LineTwo), Some(LineThree), Some(LineFour), Some(Postcode), "FR")
+  private val testAddress = Address(LineOne, Some(LineTwo), Some(LineThree), Some(LineFour), Postcode, "FR")
 
   val organisationTypesData = Table(
     ("Organisation Type", "Form Builder", "Form", "reviewMode", "expectedRedirectURL"),

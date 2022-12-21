@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 import play.api.data.Form
 import play.api.data.Forms.{mapping, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postcodeMapping, validCity}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postcodeMapping, postcodeRegex, validCity}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 object AddressDetailsForm {
@@ -30,7 +30,7 @@ object AddressDetailsForm {
       mapping(
         "street"      -> text.verifying(validStreet),
         "city"        -> text.verifying(validCity),
-        "postcode"    -> postcodeMapping,
+        "postcode"    -> text.verifying(validPostcode),
         "countryCode" -> text.verifying(validCountry)
       )(AddressViewModel.apply)(AddressViewModel.unapply)
     )
@@ -47,6 +47,12 @@ object AddressDetailsForm {
       case s if s.trim.isEmpty           => Invalid(ValidationError("cds.matching-error.country.invalid"))
       case s if s.trim.length != Length2 => Invalid(ValidationError("cds.matching-error.country.invalid"))
       case _                             => Valid
+    })
+
+  private def validPostcode: Constraint[String] =
+    Constraint({
+      case s if s.matches(postcodeRegex.regex) => Valid
+      case _                                   => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
     })
 
 }

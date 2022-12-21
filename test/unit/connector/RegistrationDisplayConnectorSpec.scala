@@ -51,7 +51,7 @@ class RegistrationDisplayConnectorSpec extends UnitSpec with MockitoSugar {
 
   val individualResponse = IndividualResponse("John", None, "Doe", Some("1989-01-01"))
 
-  val address = Address("Line1", Some("Line2"), None, None, Some("postcode"), "GB")
+  val address = Address("Line1", Some("Line2"), None, None, "postcode", "GB")
 
   val contactDetails = ContactResponse(Some("01234567890"), None, None, Some("test@example.com"))
 

@@ -38,7 +38,7 @@ object SubscriptionFormBuilder {
     fax = None,
     street = Some("Line 1"),
     city = Some("line 2"),
-    postcode = Some("SE28 1AA"),
+    postcode = "SE28 1AA",
     countryCode = Some("ZZ")
   )
 

@@ -66,7 +66,7 @@ class SubscriptionDetailsService @Inject() (
   def cacheContactAddressDetails(address: AddressViewModel, contactDetails: ContactDetailsModel)(implicit
     request: Request[_]
   ): Future[Unit] = {
-    val updatedAddress = address.copy(postcode = address.postcode.filter(_.nonEmpty))
+    val updatedAddress = address.copy(postcode = address.postcode)
     saveSubscriptionDetails(
       sd =>
         sd.copy(contactDetails =

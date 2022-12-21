@@ -64,7 +64,7 @@
 @fourLineBusinessAddress = @{
     List(contactAddress.street,
         contactAddress.city,
-        contactAddress.postcode.getOrElse(""),
+        contactAddress.postcode,
         countryCodeToLabel(contactAddress.countryCode)
     ).filter(_.nonEmpty)
 }
