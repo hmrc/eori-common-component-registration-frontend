@@ -477,7 +477,7 @@ cds.registration.you-need-a-different-service-iom.vat-registered = wedi cofrestr
 cds.registration.you-need-a-different-service-iom.not-vat-registered = heb gofrestru ar gyfer TAW
 
 cds.registration.use-a-different-service.title=Rhaid i chi ddefnyddio gwasanaeth ar-lein gwahanol
-cds.registration.use-a-different-service.info=WELSH
+cds.registration.use-a-different-service.info=I wneud cais am rif EORI fel corff cyhoeddus ac nid er elw a hynny heb Gyfeirnod Unigryw y Trethdalwr (UTR), mae angen i chi ddefnyddio ffurflen ar-lein, yn dibynnu a ydych chi:
 cds.registration.use-a-different-service.vat-registered=wedi cofrestru ar gyfer TAW
 cds.registration.use-a-different-service.not-vat-registered=heb gofrestru ar gyfer TAW
 
