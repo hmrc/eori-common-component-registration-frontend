@@ -28,7 +28,7 @@ import scala.util.matching.Regex
 
 object FormValidation {
 
-  val postCodeMandatoryCountryCodes = Seq("GB", "GG", "JE", "IM", "GB", "")
+  val postCodeMandatoryCountryCodes = Seq("GB", "GG", "JE", "IM", "")
 
   val postcodeRegex: Regex =
     "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
