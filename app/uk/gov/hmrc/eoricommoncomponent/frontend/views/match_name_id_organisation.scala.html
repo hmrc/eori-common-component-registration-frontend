@@ -29,9 +29,9 @@
 @(businessDetailsForm: Form[_ <: NameIdOrganisationMatch], organisationType: String, displayMode: String, isNameAddressRegistrationAvailable: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @headerAndTitle = @{
-    if(organisationType=="partnership") messages("cds.matching.header.partnership")
-    else if (organisationType=="company" ||
-            organisationType=="limited-liability-partnership") messages("cds.matching.header.company")
+    if(organisationType=="partnership" ||
+            organisationType=="limited-liability-partnership") messages("cds.matching.header.partnership")
+    else if (organisationType=="company") messages("cds.matching.header.company")
     else messages("cds.matching.header")
 }
 
@@ -73,6 +73,11 @@
 @messages(utrHintText)
 }
 
+@utrLabel = @{
+    if(organisationType=="limited-liability-partnership") messages("cds.matching.name-id-organisation.company.utr")
+    else messages(s"cds.matching.name-id-organisation.$displayMode.utr")
+}
+
     @layout_di(headerAndTitle, form = Some(businessDetailsForm)) {
     <div>
         @errorSummary(businessDetailsForm.errors)
@@ -98,7 +103,7 @@
                     form = businessDetailsForm,
                     id = "utr",
                     name = "utr",
-                    label = s"cds.matching.name-id-organisation.$displayMode.utr",
+                    label = utrLabel,
                     hint = Some(utrHintAndLinkText.body),
                     isPageHeading = false,
                     classes = Some("govuk-!-width-one-half"),
