@@ -339,7 +339,7 @@ cds.matching.individual.header=Enter your details
 cds.matching-lede=We will attempt to match your details against information we currently hold.
 cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.utr.lost-utr-description=find a lost UTR
-cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
+cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 
@@ -433,8 +433,9 @@ countries-in-the-eu.title=Countries in the EU
 
 #How can we identify you?
 subscription-journey.how-confirm-identity=What information can we use to confirm your identity?
-subscription-journey.utr.label=Self assessment UTR number
+subscription-journey.utr.label=Self Assessment Unique Taxpayer Reference (UTR)
 subscription-journey.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or '''official use''.
+
 cds.matching.id.page-error.nino=Enter your National Insurance number
 cds.matching.id.page-error.utr=Enter your Self Assessment UTR number
 cds.matching.id.page-error.ninoOrUtrRadio=Tell us how we can identify you
@@ -656,7 +657,7 @@ cds.matching.organisation-utr.error.have-utr=Tell us if you have a Corporation T
 cds.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
 
 #Matching UTR Sole Trader
-cds.matching.sole-trader-individual-utr.label=Self Assessment UTR number
+cds.matching.sole-trader-individual-utr.label=Self Assessment Unique Taxpayer Reference (UTR)
 cds.matching.sole-trader-individual-utr.error.utr=Enter the Self Assessment UTR number
 cds.matching.sole-trader-individual-utr.error.have-utr=Tell us if you have a Self Assessment UTR number
 
@@ -1368,8 +1369,8 @@ countries-in-the-eu.list=Austria, Belgium, Bulgaria, Croatia, Republic of Cyprus
 
 cds.you-cant-use-service-agent.para1=You signed in to Government Gateway with an agent services account.
 cds.you-cant-use-service-agent.para2=You need to sign in with the Government Gateway for the organisation or individual that is applying for access to {0}.
-cds.you-cant-use-service-standard-organisation.para1=You signed in to Government Gateway as a standard user. To apply for access to {0} you must be an administrator user.
-cds.you-cant-use-service-standard-organisation.para2=Please log in as an administrator or contact the person who set up your Government Gateway.
+cds.you-cant-use-service-standard-organisation.para1=You signed in to Government Gateway as a standard user. You must sign in as an administrator to use this service.
+cds.you-cant-use-service-standard-organisation.para2=Log in as an administrator or contact the person who set up your Government Gateway.
 
 cds.sub01.outcome.rejected.subscribe.heading=The {0} subscription request for {1} has been unsuccessful
 cds.sub01.outcome.rejected.subscribe.heading-noname=The {0} subscription request has been unsuccessful
@@ -1516,14 +1517,13 @@ cds.registration.user-location.location.third-country-inc-eu.label=Rest of the w
 cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.organisation.utr=Organisation Self Assessment Unique Taxpayer Reference (UTR)
+cds.matching.name-id-organisation.organisation.utr=Corporation Tax Unique Taxpayer Reference (UTR)
 
 cds.subscription.date-of-establishment.company.title-and-heading=Date when your company was established
 
 cds.subscription.address-details.postcode.row.label=Postal code
 
 cds.matching.row-organisation.utr.title-and-heading=Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) issued in the UK?
-cds.matching.row-organisation.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called reference, UTR or official use. You can {0}.
 cds.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?
 ecc.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?
 ecc.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
@@ -1544,14 +1544,18 @@ cds.subscription.contact-details.intro=We will use these details to contact you 
 
 #Get An EORI Journey
 
-cds.enrolment.pending.title=There is a problem
-cds.enrolment.pending.otherService=another service
-cds.enrolment.pending.user.paragraph1=We are currently processing your subscription request to {0}.
-cds.enrolment.pending.user.paragraph2=This process must be completed before you can apply for another service.
-cds.enrolment.pending.user.paragraph3=Sign out and wait until you receive an email notification about {0} before applying to {1}.
-cds.enrolment.pending.group.otherService.paragraph1=We are currently processing a subscription request to {0} from someone in your organisation.
-cds.enrolment.pending.group.otherService.paragraph2=This process must be completed before you can apply for another service.
-cds.enrolment.pending.group.sameService.paragraph1=Our records show that someone in your organisation has already applied for this service.
+cds.enrolment.pending.user.title=You have already applied
+cds.enrolment.pending.group.title=Someone in your organisation has already applied
+
+cds.enrolment.pending.user.paragraph1=We will send you an email when we have finished processing your application.
+cds.enrolment.pending.user.paragraph2=You will get this email within either:
+
+cds.enrolment.pending.group.paragraph1=Only one person from your organisation can apply.
+cds.enrolment.pending.group.paragraph2=We will send them an email when we have finished processing their application.
+cds.enrolment.pending.group.paragraph3=They will get this email within either:
+
+cds.enrolment.pending.bullet1=2 hours
+cds.enrolment.pending.bullet2=5 working days, if we need to make more checks
 
 cds.languageSelect.current.label=English
 cds.languageSelect.select.label=Cymraeg
@@ -1590,7 +1594,7 @@ cds.subscription.organisation-disclose-personal-details-consent.no=Select no to 
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
-subscription-journey.how-confirm-identity.utr.heading=Enter your Unique Tax Reference number
+subscription-journey.how-confirm-identity.utr.heading=Enter your Self Assessment Unique Taxpayer Reference (UTR)
 subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K.
 
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
@@ -1759,11 +1763,12 @@ ecc.start-page.gbeori.para3.bullet2 = a sole trader
 ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a>.
 
 ecc.start-page.company.title = Company or other organisation details
+
 ecc.start-page.company = If you apply as a limited company, partnership or other organisation, we will ask for your:
 ecc.start-page.company.bullet1 = registered company name
 ecc.start-page.company.bullet2 = date of establishment
 ecc.start-page.company.para2 = If you pay Corporation Tax in the UK we will ask for your Corporation Tax Unique Taxpayer Reference (UTR).
-ecc.start-page.company.link = <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new window or tab)</a>.
+ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new window or tab)</a>.
 
 ecc.start-page.sole-trader.title = Sole trader or individual details
 ecc.start-page.sole-trader = If you have worked in the UK or registered for Self Assessment, we will ask for one of the following:

@@ -138,16 +138,6 @@ GET         /customs-registration-services/:service/register/match              
 GET         /customs-registration-services/:service/register/confirm-individual-type                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmIndividualTypeController.form(service: Service)
 POST        /customs-registration-services/:service/register/confirm-individual-type                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmIndividualTypeController.submit(service: Service)
 
-GET         /customs-registration-services/:service/register/company-short-name-yes-no                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameYesNoController.displayPage(service: Service)
-POST        /customs-registration-services/:service/register/company-short-name-yes-no                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameYesNoController.submit(service: Service, isInReviewMode: Boolean = false)
-GET         /customs-registration-services/:service/register/company-short-name-yes-no/review            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameYesNoController.reviewPage(service: Service)
-POST        /customs-registration-services/:service/register/company-short-name-yes-no/review            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameYesNoController.submit(service: Service, isInReviewMode: Boolean = true)
-
-GET         /customs-registration-services/:service/register/company-short-name                          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameController.displayPage(service: Service)
-POST        /customs-registration-services/:service/register/company-short-name                          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameController.submit(service: Service, isInReviewMode: Boolean = false)
-GET         /customs-registration-services/:service/register/company-short-name/review                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameController.reviewPage(service: Service)
-POST        /customs-registration-services/:service/register/company-short-name/review                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessShortNameController.submit(service: Service, isInReviewMode: Boolean = true)
-
 GET         /customs-registration-services/:service/register/sic-code                                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SicCodeController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/sic-code                                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SicCodeController.submit(isInReviewMode: Boolean = false, service: Service)
 GET         /customs-registration-services/:service/register/sic-code/review                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SicCodeController.reviewForm(service: Service)

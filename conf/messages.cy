@@ -327,7 +327,7 @@ cds.matching.intro = Bydd hyn yn cysylltu’ch busnes, eich Dynodydd Defnyddiwr 
 cds.matching.individual.header = Nodwch eich manylion
 cds.matching-lede = Byddwn yn ceisio paru’ch manylion â’r wybodaeth sydd gennym ar hyn o bryd.
 cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd hwn ar Ffurflenni Treth a llythyrau eraill am Dreth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
-cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd hwn i’w weld ar Ffurflenni Treth partneriaeth a llythyrau eraill ynghylch eich partneriaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
+cds.matching.partnership.utr.hint = Mae hwn yn cynnwys 10 rhif, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.eori.hint = Mae gan eich rhif EORI rhwng 14 - 17 o gymeriadau.
 cds.matching.back = Yn ôl
 subscription.start-page.heading = Cael mynediad at y Gwasanaeth Datganiadau Tollau (CDS)
@@ -1193,8 +1193,8 @@ eds.existing-eori.enrolment.confirmation.para1 = Rydych nawr wedi’ch ymrestru 
 countries-in-the-eu.list = Yr Almaen, Awstria, Bwlgaria, Croatia, Denmarc, yr Eidal, Estonia, y Ffindir, Ffrainc, Gweriniaeth Cyprus, Gwlad Belg, Gwlad Groeg, Gwlad Pwyl, Hwngari, yr Iseldiroedd, Iwerddon, Latfia, Lithwania, Lwcsembwrg, Malta, Portiwgal, Rwmania, Sbaen, Slofacia, Slofenia, Sweden a’r Weriniaeth Tsiec.
 cds.you-cant-use-service-agent.para1 = Gwnaethoch fewngofnodi i Borth y Llywodraeth gyda chyfrif gwasanaethau asiant.
 cds.you-cant-use-service-agent.para2 = Mae angen i chi fewngofnodi gyda’r cyfrif Porth y Llywodraeth ar gyfer y sefydliad neu’r unigolyn sy’n gwneud cais am fynediad at {0}.
-cds.you-cant-use-service-standard-organisation.para1 = Gwnaethoch fewngofnodi i Borth y Llywodraeth fel defnyddiwr safonol. I wneud cais am fynediad at {0}, mae’n rhaid i chi fod yn ddefnyddiwr gweinyddwr.
-cds.you-cant-use-service-standard-organisation.para2 = Mewngofnodwch fel gweinyddwr neu cysylltwch â’r person a sefydlodd eich cyfrif Porth y Llywodraeth.
+cds.you-cant-use-service-standard-organisation.para1 = Gwnaethoch fewngofnodi i Borth y Llywodraeth fel defnyddiwr safonol. Mae’n rhaid i chi fewngofnodi fel gweinyddwr i ddefnyddio’r gwasanaeth hwn.
+cds.you-cant-use-service-standard-organisation.para2 = Mewngofnodwch fel gweinyddwr, neu cysylltwch â’r person a sefydlodd eich cyfrif Porth y Llywodraeth.
 cds.sub01.outcome.rejected.subscribe.heading = Mae’r cais am danysgrifiad i {0} ar gyfer {1} wedi bod yn aflwyddiannus
 cds.sub01.outcome.rejected.subscribe.heading-noname = Mae’r cais am danysgrifiad i {0} wedi bod yn aflwyddiannus
 cds.sub01.outcome.rejected.subscribe.title = Mae’r cais am danysgrifiad i {0} wedi bod yn aflwyddiannus
@@ -1299,7 +1299,7 @@ cds.registration.user-location.location.third-country-inc-eu.label = Gweddill y 
 cds.matching.name-id-organisation.company.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.registered-company.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.partnership.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad y Bartneriaeth
-cds.matching.name-id-organisation.organisation.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad y Sefydliad
+cds.matching.name-id-organisation.organisation.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.subscription.date-of-establishment.company.title-and-heading = Dyddiad y sefydlwyd eich cwmni
 cds.subscription.address-details.postcode.row.label = Cod post
 cds.matching.row-organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth a gyhoeddwyd yn y DU?
@@ -1316,14 +1316,20 @@ cds.if.you.need.help.telephone1 = Ffôn: 0300 200 3705
 cds.if.you.need.help.telephone2 = Dydd Llun i Ddydd Gwener, 08:30 i 17:00 (heblaw am wyliau banc)
 cds.if.you.need.help.telephone.link = Gwybodaeth am gostau galwadau
 cds.subscription.contact-details.intro = Byddwn yn defnyddio’r manylion hyn i gysylltu â chi ynglŷn â’ch cais am rif EORI.
-cds.enrolment.pending.title = Mae problem wedi codi
-cds.enrolment.pending.otherService = gwasanaeth arall
-cds.enrolment.pending.user.paragraph1 = Rydym wrthi’n prosesu’ch cais am danysgrifiad i’r gwasanaeth {0}.
-cds.enrolment.pending.user.paragraph2 = Mae’n rhaid i’r broses hon gael ei chwblhau cyn i chi allu gwneud cais am wasanaeth arall.
-cds.enrolment.pending.user.paragraph3 = Allgofnodwch ac arhoswch tan i chi gael hysbysiad drwy e-bost ynghylch {0} cyn gwneud cais i’r gwasanaeth {1}.
-cds.enrolment.pending.group.otherService.paragraph1 = Rydym wrthi’n prosesu cais am danysgrifiad i’r gwasanaeth {0} gan rywun yn eich sefydliad.
-cds.enrolment.pending.group.otherService.paragraph2 = Mae’n rhaid i’r broses hon gael ei chwblhau cyn i chi allu gwneud cais am wasanaeth arall.
-cds.enrolment.pending.group.sameService.paragraph1 = Yn ôl ein cofnodion, mae rhywun yn eich sefydliad eisoes wedi gwneud cais am y gwasanaeth hwn.
+
+cds.enrolment.pending.user.title=Rydych eisoes wedi gwneud cais
+cds.enrolment.pending.group.title=Mae rhywun yn eich sefydliad eisoes wedi gwneud cais
+
+cds.enrolment.pending.user.paragraph1=Byddwn yn anfon e-bost atoch pan fyddwn wedi gorffen prosesu’ch cais.
+cds.enrolment.pending.user.paragraph2=Byddwch yn cael yr e-bost hwn o fewn naill ai:
+
+cds.enrolment.pending.group.paragraph1=Dim ond un person o’ch sefydliad a all wneud cais.
+cds.enrolment.pending.group.paragraph2=Byddwn yn anfon e-bost atynt pan fyddwn wedi gorffen prosesu eu cais.
+cds.enrolment.pending.group.paragraph3=Byddant yn cael yr e-bost hwn o fewn naill ai:
+
+cds.enrolment.pending.bullet1=2 awr
+cds.enrolment.pending.bullet2=5 diwrnod gwaith, os bydd angen i ni wneud rhagor o wiriadau
+
 cds.languageSelect.current.label = Cymraeg
 cds.languageSelect.select.label = English
 cds.languageSelect.select.hint = Newid yr iaith i’r Gymraeg
@@ -1352,7 +1358,7 @@ cds.subscription.organisation-disclose-personal-details-consent.yes = Dewiswch �
 cds.subscription.organisation-disclose-personal-details-consent.no = Dewiswch ‘Na’ i ddangos eich rhif EORI yn unig
 subscription-journey.how-confirm-identity.nino.heading = Nodwch eich rhif Yswiriant Gwladol
 subscription-journey.how-confirm-identity.nino.hint = Mae hwn ar eich cerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, “QQ123456C”
-subscription-journey.how-confirm-identity.utr.heading = Nodwch eich Cyfeirnod Unigryw y Trethdalwr
+subscription-journey.how-confirm-identity.utr.heading = Nodwch eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
 subscription-journey.how-confirm-identity.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K.
 ecc.reg06.outcome.why-heading = Pam nad oedd y cais yn llwyddiannus
 ecc.reg06.outcome.eori = Rhif EORI {0}
@@ -1521,7 +1527,7 @@ ecc.start-page.company = Os byddwch yn gwneud cais fel cwmni cyfyngedig, partner
 ecc.start-page.company.bullet1 = enw cofrestredig y cwmni
 ecc.start-page.company.bullet2 = dyddiad ei sefydlu
 ecc.start-page.company.para2 = Os ydych yn talu Treth Gorfforaeth yn y DU, byddwn yn gofyn am eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth.
-ecc.start-page.company.link = <a href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
 
 ecc.start-page.sole-trader.title = Manylion yr unig fasnachwr neu’r unigolyn
 ecc.start-page.sole-trader = Os ydych wedi gweithio yn y DU neu wedi cofrestru ar gyfer Hunanasesiad, byddwn yn gofyn am un o’r canlynol:

@@ -31,25 +31,18 @@ class EnrolmentPendingForUserViewSpec extends ViewSpec {
 
   "Enrolment Pending against group id page" should {
     "display correct title" in {
-      doc.title() must startWith("There is a problem")
+      doc.title() must startWith("You have already applied")
     }
 
     "display correct heading" in {
-      doc.body().getElementsByTag("h1").text() mustBe "There is a problem"
+      doc.body().getElementsByTag("h1").text() mustBe "You have already applied"
     }
 
     "have the correct class on the h1" in {
       doc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
-
-    "display the correct text for Subscribe to different service" in {
-      doc
-        .body()
-        .getElementById("info")
-        .text mustBe "We are currently processing your subscription request to Other Service."
-    }
   }
 
-  private lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService, Some(otherService))))
+  private lazy val doc: Document = Jsoup.parse(contentAsString(view()))
 
 }

@@ -37,7 +37,7 @@
         matchOrgIdForm(field),
         options,
         Map.empty,
-        Some(Html(hint)),
+        Some(hint),
         None,
         '_divClass -> "govuk-form-group inline",
         '_legend -> headerAndTitle,
@@ -56,14 +56,22 @@
     }
 }
 
+@utrLinkText = {
+    <br>
+    <p class="govuk-body">
+        @Html(messages("cds.matching.you-can.text")) <a class="govuk-link" id="utrLink" href=@appConfig.findLostUtr() target="_blank" rel="noopener noreferrer">@messages("cds.matching.utr.lost-utr-description")</a>
+    </p>
+    @Html(messages("cds.matching.utr.hint"))
+}
+
 @hint = @{
     organisationType match {
-        case CdsOrganisationType.ThirdCountryOrganisationId => messages("cds.matching.row-organisation.utr.paragraph", utrlink)
+        case CdsOrganisationType.ThirdCountryOrganisationId => utrLinkText
         case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
-            messages("ecc.matching.row-sole-trader-individual.utr.paragraph", utrlink)
+            Html(messages("ecc.matching.row-sole-trader-individual.utr.paragraph", utrlink))
         case CdsOrganisationType.IndividualId | CdsOrganisationType.SoleTraderId =>
-            messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrlink)
-        case _ => messages("cds.matching.organisation.utr.paragraph", utrlink)
+            Html(messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrlink))
+        case _ => Html(messages("cds.matching.organisation.utr.paragraph", utrlink))
     }
 }
 
