@@ -29,9 +29,9 @@
 @(businessDetailsForm: Form[_ <: NameIdOrganisationMatch], organisationType: String, displayMode: String, isNameAddressRegistrationAvailable: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @headerAndTitle = @{
-    if(organisationType=="partnership" ||
-       organisationType=="limited-liability-partnership") messages("cds.matching.header.partnership")
-    else if (organisationType=="company") messages("cds.matching.header.company")
+    if(organisationType=="partnership") messages("cds.matching.header.partnership")
+    else if (organisationType=="company" ||
+            organisationType=="limited-liability-partnership") messages("cds.matching.header.company")
     else messages("cds.matching.header")
 }
 
@@ -41,7 +41,8 @@
 }
 
 @utrHintText = @{
-    if(List("partnership", "limited-liability-partnership").contains(organisationType)) messages("cds.matching.partnership.utr.hint")
+    if(organisationType=="partnership") messages("cds.matching.partnership.utr.hint")
+    else if(organisationType=="limited-liability-partnership") messages("cds.matching.utr.hint")
     else messages("cds.matching.utr.hint")
 }
 
@@ -58,11 +59,18 @@
 }
 
 @utrHintAndLinkText = {
-        <br>
+    @if(organisationType=="limited-liability-partnership") {
+            <br>
+            <p class="govuk-body">
+            @Html(messages("cds.matching.you-can.text")) <a class="govuk-link" id="utrLink" href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" target="_blank" rel="noopener noreferrer">@messages("cds.matching.utr.lost-utr-description-llp")</a>
+            </p>
+    } else {
+            <br>
         <p class="govuk-body">
             @Html(messages("cds.matching.you-can.text")) <a class="govuk-link" id="utrLink" href=@appConfig.findLostUtr() target="_blank" rel="noopener noreferrer">@messages("cds.matching.utr.lost-utr-description")</a>
         </p>
-    @messages(utrHintText)
+    }
+@messages(utrHintText)
 }
 
     @layout_di(headerAndTitle, form = Some(businessDetailsForm)) {

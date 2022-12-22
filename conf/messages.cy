@@ -583,6 +583,7 @@ cds.matching.organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfei
 cds.matching.organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.you-can.text = Gallwch
 cds.matching.utr.lost-utr-description=dod o hyd i UTR sydd ar goll
+cds.matching.utr.lost-utr-description-llp=Gofynnwch am gopi o’ch UTR ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.utr = Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.have-utr = Rhowch wybod i ni a oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
