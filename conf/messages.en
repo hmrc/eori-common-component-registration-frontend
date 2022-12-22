@@ -518,9 +518,13 @@ cds.registration.you-need-a-different-service-iom.info=To apply for an EORI numb
 cds.registration.you-need-a-different-service-iom.vat-registered=VAT-registered
 cds.registration.you-need-a-different-service-iom.not-vat-registered=not VAT-registered
 
+cds.registration.use-a-different-service.title=You need to use a different online service
+cds.registration.use-a-different-service.info=To apply for an EORI number as a public body and not for profit without a UTR you need to use an online form, depending on whether you''re:
+cds.registration.use-a-different-service.vat-registered=VAT-registered
+cds.registration.use-a-different-service.not-vat-registered=not VAT-registered
+
 cds.registration.part-of-vat-group.title=Are you applying for a business that is part of a VAT group?
 cds.registration.part-of-vat-group.page-error.yes-no-answer=Tell us if you are applying for a business that is part of a VAT group
-
 
 # Organisation type
 cds.matching.organisation-type.user.header=What do you want to apply as?

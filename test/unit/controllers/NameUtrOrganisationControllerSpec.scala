@@ -104,7 +104,16 @@ class NameUtrOrganisationControllerSpec
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe empty
         page.getElementsText(fieldLevelErrorUtr) shouldBe empty
         page.getElementsText(fieldLevelErrorName) shouldBe empty
+      }
+    }
 
+    "display the form with 'no UTR' link for charity-public-body-not-for-profit" in {
+      showForm(organisationType = "charity-public-body-not-for-profit") { result =>
+        status(result) shouldBe OK
+        val page: CdsPage = CdsPage(contentAsString(result))
+        page.getElementsText(
+          "//*[@id=\"matchNameUtrOrganisationForm\"]/details/summary/span"
+        ) shouldBe "I do not have a Corporation Tax UTR"
       }
     }
 

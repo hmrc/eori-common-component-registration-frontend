@@ -46,7 +46,7 @@
 }
 
 @getEoriLink = {
-    <a class="govuk-link" href="@uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouNeedADifferentServiceIomController.form(service)">
+    <a class="govuk-link" href="@uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UseADifferentServiceController.form(service)">
         @messages("cds.matching.name-id-organisation.organisation.no-utr.link")
     </a>
 }
@@ -104,10 +104,12 @@
                     </p>
                 }
 
-                @govukDetails(Details(
-                    summary = Text(messages("cds.matching.name-id-organisation.organisation.no-utr")),
-                    content = HtmlContent(detailsContent)
-                ))
+                @if(organisationType=="charity-public-body-not-for-profit"){
+                    @govukDetails(Details(
+                        summary = Text(messages("cds.matching.name-id-organisation.organisation.no-utr")),
+                        content = HtmlContent(detailsContent)
+                    ))
+                }
 
                 @govukButton(Button(
                     content = Text(messages("cds.navigation.continue"))
