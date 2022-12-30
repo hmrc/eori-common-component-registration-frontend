@@ -165,6 +165,9 @@ class NameUtrOrganisationControllerSpec
           if (organisationType == "partnership" || organisationType == "limited-liability-partnership") {
             page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your registered partnership name"
             page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered partnership name"
+          } else if (organisationType == "company") {
+            page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your registered company name"
+            page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered company name"
           } else {
             page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your registered organisation name"
             page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered organisation name"
@@ -195,6 +198,13 @@ class NameUtrOrganisationControllerSpec
               page.getElementsText(
                 fieldLevelErrorName
               ) shouldBe "Error: The partnership name must be 105 characters or less"
+            } else if (organisationType == "company") {
+              page.getElementsText(
+                pageLevelErrorSummaryListXPath
+              ) shouldBe "The company name must be 105 characters or less"
+              page.getElementsText(
+                fieldLevelErrorName
+              ) shouldBe s"Error: The company name must be 105 characters or less"
             } else {
               page.getElementsText(
                 pageLevelErrorSummaryListXPath
