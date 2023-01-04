@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,23 +38,10 @@ class ApplicationController @Inject() (
     extends CdsController(mcc) {
 
   def startRegister(service: Service): Action[AnyContent] = Action { implicit request =>
-    val headingAndTitleText = service.code match {
-      case "gagmr" => "ecc.start-page.title.gagmr"
-      case "atar"  => "ecc.start-page.title.atar"
-      case "cts"   => "ecc.start-page.title.cts"
-      case "ss"    => "ecc.start-page.title.ss"
-      case "ncts"  => "ecc.start-page.title.ncts"
-      case _       => "ecc.start-page.title.cds"
-    }
+    val headingAndTitleText = s"ecc.start-page.title.${service.code}"
+    val bullet2 = s"ecc.start-page.para1.bullet2.${service.code}"
 
-    val bullet2 = service.code match {
-      case "gagmr" => "ecc.start-page.para1.bullet2.gagmr"
-      case "atar"  => "ecc.start-page.para1.bullet2.atar"
-      case "cts"   => "ecc.start-page.para1.bullet2.cts"
-      case "ss"    => "ecc.start-page.para1.bullet2.ss"
-      case "ncts"  => "ecc.start-page.para1.bullet2.ncts"
-      case _       => "ecc.start-page.para1.bullet2.cds"
-    }
+
     Ok(viewStartRegister(service, headingAndTitleText, bullet2))
   }
 

@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
+package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.mvc.Request
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.use_a_different_service
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ClearCacheAndRegistrationIdentificationService @Inject() (sessionCache: SessionCache)(implicit
-  ec: ExecutionContext
-) {
+class UseADifferentServiceController @Inject() (
+  useADifferentServiceView: use_a_different_service,
+  mcc: MessagesControllerComponents
+) extends CdsController(mcc) {
 
-  def clear()(implicit request: Request[_]): Future[Unit] =
-    for {
-      email <- sessionCache.email
-      _     <- sessionCache.remove
-      _     <- sessionCache.saveEmail(email)
-    } yield ()
+  def form(service: Service): Action[AnyContent] = Action { implicit request =>
+    Ok(useADifferentServiceView())
+  }
 
 }

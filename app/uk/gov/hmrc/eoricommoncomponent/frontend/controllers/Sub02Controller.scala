@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,14 +123,7 @@ class Sub02Controller @Inject() (
             )
           ).withSession(newUserSession)
         else {
-          val subscriptionTo = service.code match {
-            case "gagmr" => "ecc.start-page.para1.bullet2.gagmr"
-            case "atar"  => "ecc.start-page.para1.bullet2.atar"
-            case "cts"   => "ecc.start-page.para1.bullet2.cts"
-            case "ss"    => "ecc.start-page.para1.bullet2.ss"
-            case "ncts"  => "ecc.start-page.para1.bullet2.ncts"
-            case _       => "ecc.start-page.para1.bullet2.cds"
-          }
+          val subscriptionTo = s"ecc.start-page.para1.bullet2.${service.code}"
           Ok(
             subscriptionOutcomeView(
               service,
