@@ -475,6 +475,12 @@ cds.registration.you-need-a-different-service-iom.title = Rhaid i chi ddefnyddio
 cds.registration.you-need-a-different-service-iom.info = I wneud cais am rif EORI fel masnachwr o Ynys Manaw, mae angen i chi ddefnyddio ffurflen ar-lein, yn dibynnu a ydych chi:
 cds.registration.you-need-a-different-service-iom.vat-registered = wedi cofrestru ar gyfer TAW
 cds.registration.you-need-a-different-service-iom.not-vat-registered = heb gofrestru ar gyfer TAW
+
+cds.registration.use-a-different-service.title=Rhaid i chi ddefnyddio gwasanaeth ar-lein gwahanol
+cds.registration.use-a-different-service.info=I wneud cais am rif EORI fel corff cyhoeddus ac nid er elw a hynny heb Gyfeirnod Unigryw y Trethdalwr (UTR), mae angen i chi ddefnyddio ffurflen ar-lein, yn dibynnu a ydych chi:
+cds.registration.use-a-different-service.vat-registered=wedi cofrestru ar gyfer TAW
+cds.registration.use-a-different-service.not-vat-registered=heb gofrestru ar gyfer TAW
+
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
 cds.matching.organisation-type.user.header = Fel beth rydych am wneud cais?
@@ -577,6 +583,7 @@ cds.matching.organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfei
 cds.matching.organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.you-can.text = Gallwch
 cds.matching.utr.lost-utr-description=dod o hyd i UTR sydd ar goll
+cds.matching.utr.lost-utr-description-llp=Gofynnwch am gopi o’ch UTR ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.utr = Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.have-utr = Rhowch wybod i ni a oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth

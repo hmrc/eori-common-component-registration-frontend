@@ -72,7 +72,7 @@ class NameIdOrganisationController @Inject() (
 
     val form: Form[NameIdOrganisationMatchModel] = matchingServiceType match {
       case mST if mST == "Partnership" || mST == "LLP" => nameUtrPartnershipForm
-      case mST if mST == "Company"                     => nameUtrCompanyForm
+      case mST if mST == "Corporate Body"              => nameUtrCompanyForm
       case _                                           => nameUtrOrganisationForm
     }
 
