@@ -104,7 +104,16 @@ class NameUtrOrganisationControllerSpec
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe empty
         page.getElementsText(fieldLevelErrorUtr) shouldBe empty
         page.getElementsText(fieldLevelErrorName) shouldBe empty
+      }
+    }
 
+    "display the form with 'no UTR' link for charity-public-body-not-for-profit" in {
+      showForm(organisationType = "charity-public-body-not-for-profit") { result =>
+        status(result) shouldBe OK
+        val page: CdsPage = CdsPage(contentAsString(result))
+        page.getElementsText(
+          "//*[@id=\"matchNameUtrOrganisationForm\"]/details/summary/span"
+        ) shouldBe "I do not have a Corporation Tax UTR"
       }
     }
 
@@ -156,6 +165,9 @@ class NameUtrOrganisationControllerSpec
           if (organisationType == "partnership" || organisationType == "limited-liability-partnership") {
             page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your registered partnership name"
             page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered partnership name"
+          } else if (organisationType == "company") {
+            page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your registered company name"
+            page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered company name"
           } else {
             page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your registered organisation name"
             page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered organisation name"
@@ -186,6 +198,13 @@ class NameUtrOrganisationControllerSpec
               page.getElementsText(
                 fieldLevelErrorName
               ) shouldBe "Error: The partnership name must be 105 characters or less"
+            } else if (organisationType == "company") {
+              page.getElementsText(
+                pageLevelErrorSummaryListXPath
+              ) shouldBe "The company name must be 105 characters or less"
+              page.getElementsText(
+                fieldLevelErrorName
+              ) shouldBe s"Error: The company name must be 105 characters or less"
             } else {
               page.getElementsText(
                 pageLevelErrorSummaryListXPath

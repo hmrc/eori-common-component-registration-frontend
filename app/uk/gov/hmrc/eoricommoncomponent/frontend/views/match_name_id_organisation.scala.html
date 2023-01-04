@@ -30,7 +30,7 @@
 
 @headerAndTitle = @{
     if(organisationType=="partnership" ||
-       organisationType=="limited-liability-partnership") messages("cds.matching.header.partnership")
+            organisationType=="limited-liability-partnership") messages("cds.matching.header.partnership")
     else if (organisationType=="company") messages("cds.matching.header.company")
     else messages("cds.matching.header")
 }
@@ -41,12 +41,13 @@
 }
 
 @utrHintText = @{
-    if(List("partnership", "limited-liability-partnership").contains(organisationType)) messages("cds.matching.partnership.utr.hint")
+    if(organisationType=="partnership") messages("cds.matching.partnership.utr.hint")
+    else if(organisationType=="limited-liability-partnership") messages("cds.matching.utr.hint")
     else messages("cds.matching.utr.hint")
 }
 
 @getEoriLink = {
-    <a class="govuk-link" href="@uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouNeedADifferentServiceIomController.form(service)">
+    <a class="govuk-link" href="@uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UseADifferentServiceController.form(service)">
         @messages("cds.matching.name-id-organisation.organisation.no-utr.link")
     </a>
 }
@@ -58,11 +59,23 @@
 }
 
 @utrHintAndLinkText = {
-        <br>
+    @if(organisationType=="limited-liability-partnership" || organisationType=="company") {
+            <br>
+            <p class="govuk-body">
+            @Html(messages("cds.matching.you-can.text")) <a class="govuk-link" id="utrLink" href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" target="_blank" rel="noopener noreferrer">@messages("cds.matching.utr.lost-utr-description-llp")</a>
+            </p>
+    } else {
+            <br>
         <p class="govuk-body">
             @Html(messages("cds.matching.you-can.text")) <a class="govuk-link" id="utrLink" href=@appConfig.findLostUtr() target="_blank" rel="noopener noreferrer">@messages("cds.matching.utr.lost-utr-description")</a>
         </p>
-    @messages(utrHintText)
+    }
+@messages(utrHintText)
+}
+
+@utrLabel = @{
+    if(organisationType=="limited-liability-partnership") messages("cds.matching.name-id-organisation.company.utr")
+    else messages(s"cds.matching.name-id-organisation.$displayMode.utr")
 }
 
     @layout_di(headerAndTitle, form = Some(businessDetailsForm)) {
@@ -90,7 +103,7 @@
                     form = businessDetailsForm,
                     id = "utr",
                     name = "utr",
-                    label = s"cds.matching.name-id-organisation.$displayMode.utr",
+                    label = utrLabel,
                     hint = Some(utrHintAndLinkText.body),
                     isPageHeading = false,
                     classes = Some("govuk-!-width-one-half"),
@@ -104,10 +117,12 @@
                     </p>
                 }
 
-                @govukDetails(Details(
-                    summary = Text(messages("cds.matching.name-id-organisation.organisation.no-utr")),
-                    content = HtmlContent(detailsContent)
-                ))
+                @if(organisationType=="charity-public-body-not-for-profit"){
+                    @govukDetails(Details(
+                        summary = Text(messages("cds.matching.name-id-organisation.organisation.no-utr")),
+                        content = HtmlContent(detailsContent)
+                    ))
+                }
 
                 @govukButton(Button(
                     content = Text(messages("cds.navigation.continue"))
