@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,16 +122,19 @@ class Sub02Controller @Inject() (
               if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate
             )
           ).withSession(newUserSession)
-        else
+        else {
+          val subscriptionTo = s"ecc.start-page.para1.bullet2.${service.code}"
           Ok(
             subscriptionOutcomeView(
               service,
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
               subDetails.name,
-              if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate
+              if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate,
+              subscriptionTo
             )
           ).withSession(newUserSession)
+        }
   }
 
   def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {

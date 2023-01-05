@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,10 @@ class ApplicationController @Inject() (
     extends CdsController(mcc) {
 
   def startRegister(service: Service): Action[AnyContent] = Action { implicit request =>
-    Ok(viewStartRegister(service))
+    val headingAndTitleText = s"ecc.start-page.title.${service.code}"
+    val bullet2             = s"ecc.start-page.para1.bullet2.${service.code}"
+
+    Ok(viewStartRegister(service, headingAndTitleText, bullet2))
   }
 
   def logout(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction {
