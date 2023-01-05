@@ -1497,9 +1497,10 @@ ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Mae gada
 ecc.start-page.title.gagmr = Tanysgrifiwch i’r Gwasanaeth Symud Cerbydau Nwyddau a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.atar = Tanysgrifiwch i Ddyfarniadau Tariffau Uwch a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.cts = Tanysgrifiwch i Wasanaethau Masnachwyr Tollau a chael rhif EORI sy’n dechrau gyda GB
-ecc.start-page.title.ss = Tanysgrifiwch i’r Gwasanaeth Diogelwch (yn y DU) a chael rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.gbss = Tanysgrifiwch i’r Gwasanaeth Diogelwch (yn y DU) a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.ncts = Tanysgrifiwch i’r System Gludo Gyfrifiadurol Newydd (NCTS) a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.cds = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.eori-only = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
 ecc.start-page.para1.bullet1 = rhif EORI
@@ -1508,9 +1509,10 @@ ecc.start-page.para2 = Dim ond unwaith y bydd angen i chi wneud hyn.
 ecc.start-page.para1.bullet2.gagmr = tanysgrifiad i’r Gwasanaeth Symud Cerbydau Nwyddau
 ecc.start-page.para1.bullet2.atar = tanysgrifiad i Ddyfarniadau Tariffau Uwch
 ecc.start-page.para1.bullet2.cts = tanysgrifiad i Wasanaethau Masnachwyr Tollau
-ecc.start-page.para1.bullet2.ss = tanysgrifiad i’r Gwasanaeth Diogelwch (yn y DU)
+ecc.start-page.para1.bullet2.gbss = tanysgrifiad i’r Gwasanaeth Diogelwch (yn y DU)
 ecc.start-page.para1.bullet2.ncts = tanysgrifiad i’r System Gludo Gyfrifiadurol Newydd (NCTS)
 ecc.start-page.para1.bullet2.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
+ecc.start-page.para1.bullet2.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 
 ecc.start-page.when.title = Pryd fyddwch yn gallu defnyddio’ch rhif EORI a’ch tanysgrifiad
 ecc.start-page.when.para1 = Os yw hynny’n cael ei gymeradwyo, byddwn yn anfon e-bost atoch pan fyddant yn barod i’w defnyddio. Byddant yn barod i’w defnyddio cyn pen naill ai:
