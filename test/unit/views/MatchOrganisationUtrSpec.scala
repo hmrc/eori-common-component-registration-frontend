@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,7 +119,7 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     }
     "display the correct problem message at the top of the page" in {
       docWithNoSelectionErrorAsSoleTrader.body
-        .getElementById("error-summary-title")
+        .getElementsByClass("govuk-error-summary__title")
         .text mustBe "There is a problem"
       docWithNoSelectionErrorAsSoleTrader.body
         .getElementsByClass("govuk-list govuk-error-summary__list")
