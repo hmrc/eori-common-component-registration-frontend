@@ -59,7 +59,7 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
     global
   )
 
-  protected val previousPageUrl = "javascript:history.back()"
+  protected val previousPageUrl = "#"
 
   val env: Environment = Environment.simple()
 
