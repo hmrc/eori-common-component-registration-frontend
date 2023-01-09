@@ -51,8 +51,8 @@ object AddressViewModel {
     AddressViewModel(
       StringEscapeUtils.escapeXml11(line1),
       StringEscapeUtils.escapeXml11(townCity),
-      postCode,
-      countryCode
+      postCode.map(StringEscapeUtils.escapeXml11(_)),
+      StringEscapeUtils.escapeXml11(countryCode)
     )
   }
 
