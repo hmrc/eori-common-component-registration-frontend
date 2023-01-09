@@ -1735,8 +1735,11 @@ ecc.subscription.organisation-disclose-personal-details-consent.individual.hint 
 ecc.start-page.title.gagmr = Get a subscription to the Goods Vehicle Movement Service and an EORI number starting with GB
 ecc.start-page.title.atar = Get a subscription to Advance Tariff Rulings and an EORI number starting with GB
 ecc.start-page.title.cts = Get a subscription to Customs Trader Services and an EORI number starting with GB
+ecc.start-page.title.route1 = Get a subscription to Customs Trader Services and an EORI number starting with GB
+ecc.start-page.title.ivd = Get a subscription to Customs Trader Services and an EORI number starting with GB
+ecc.start-page.title.ndrc = Get a subscription to Customs Trader Services and an EORI number starting with GB
 ecc.start-page.title.gbss = Get a subscription to the Safety and Security GB service and an EORI number starting with GB
-ecc.start-page.title.ncts = Get a subscription to the New Computerised Transit System (NCTS) and an EORI number starting with GB
+ecc.start-page.title.ctc = Get a subscription to the New Computerised Transit System (NCTS) and an EORI number starting with GB
 ecc.start-page.title.cds = Get a subscription to the Customs Declaration Service and an EORI number starting with GB
 ecc.start-page.title.eori-only = Get a subscription to the Customs Declaration Service and an EORI number starting with GB
 
@@ -1747,8 +1750,11 @@ ecc.start-page.para2 = You only need to apply once.
 ecc.start-page.para1.bullet2.gagmr = a subscription to the Goods Vehicle Movement Service
 ecc.start-page.para1.bullet2.atar = a subscription to Advance Tariff Rulings
 ecc.start-page.para1.bullet2.cts = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.route1 = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.ivd = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.ndrc = a subscription to Customs Trader Services
 ecc.start-page.para1.bullet2.gbss = a subscription to the Safety and Security GB service
-ecc.start-page.para1.bullet2.ncts = a subscription to the New Computerised Transit System (NCTS)
+ecc.start-page.para1.bullet2.ctc = a subscription to the New Computerised Transit System (NCTS)
 ecc.start-page.para1.bullet2.cds = a subscription to the Customs Declaration Service
 ecc.start-page.para1.bullet2.eori-only = a subscription to the Customs Declaration Service
 
