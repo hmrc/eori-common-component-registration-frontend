@@ -340,7 +340,7 @@ cds.matching-lede=We will attempt to match your details against information we c
 cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.utr.lost-utr-description=find a lost UTR
 cds.matching.utr.lost-utr-description-llp=ask for a copy of your UTR
-cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''‘reference’', ‘UTR’ or ‘official use’.
+cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 
