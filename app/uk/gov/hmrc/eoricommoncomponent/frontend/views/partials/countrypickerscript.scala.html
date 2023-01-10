@@ -16,7 +16,8 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 
-@(countriesInCountryPicker: CountriesInCountryPicker)
+@import views.html.helper.CSPNonce
+@(countriesInCountryPicker: CountriesInCountryPicker)(implicit request: Request[_])
 
 @countryFilter = @{
   countriesInCountryPicker match {
@@ -30,11 +31,11 @@
 }
 
 @if(countriesInCountryPicker != NoCountriesInCountryPicker){
-  <script>
+  <script @{CSPNonce.attr}>
     function countryFilter(country) {
       return @countryFilter;
     }
   </script>
-  <script src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
+  <script @{CSPNonce.attr} src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
 
 }

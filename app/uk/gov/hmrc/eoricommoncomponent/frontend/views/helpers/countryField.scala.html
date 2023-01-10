@@ -17,10 +17,11 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
+@import views.html.helper.CSPNonce
 
 @this(inputSelect: helpers.inputSelect)
 
-@(form: Form[_], field: String, label: String, countries: List[Country], labelClasses: Option[String], args: (Symbol, Any)*)(implicit messages: Messages)
+@(form: Form[_], field: String, label: String, countries: List[Country], labelClasses: Option[String], args: (Symbol, Any)*)(implicit messages: Messages, request: Request[_])
 
 <div class ="govuk-!-width-one-half">
 @inputSelect(
@@ -39,8 +40,8 @@
 )
 </div>
 <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/location-autocomplete.min.css")" type="text/css">
-<script type="text/javascript" src="@routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")"></script>
-<script>
+<script @{CSPNonce.attr} type="text/javascript" src="@routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")"></script>
+<script @{CSPNonce.attr}>
 accessibleAutocomplete.enhanceSelectElement({
 defaultValue: '',
 selectElement: document.querySelector('#countryCode'),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
     global
   )
 
-  protected val previousPageUrl = "javascript:history.back()"
+  protected val previousPageUrl = "#"
 
   val env: Environment = Environment.simple()
 
