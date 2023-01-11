@@ -34,8 +34,8 @@
 @validOptions = @{
     Seq(
         ("nino", messages("subscription-journey.what-is-your-nino.label"), Some(messages("subscription-journey.what-is-your-nino.hint"))),
-        ("utr", messages("subscription-journey.utr.label"), Some(messages("subscription-journey.utr.hint")))
-//        ("utr", messages("subscription-journey.utr.label"), Some("AAAAAAhhhhhggggg"))
+        ("utr", messages("subscription-journey.utr.label"),  Some(messages("cds.matching.partnership.utr.hint")))
+
     )
 }
 @displayInputRadioGroup(field: String, options: Seq[(String, String, Option[String])]) = {
