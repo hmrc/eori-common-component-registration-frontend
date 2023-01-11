@@ -28,12 +28,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{CustomsDataStoreU
 import uk.gov.hmrc.http.{HttpClient, _}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable) {
+class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
+  ec: ExecutionContext
+) {
 
   val LoggerComponentId = "UpdateCustomsDataStoreConnector"
   private val logger    = Logger(this.getClass)
