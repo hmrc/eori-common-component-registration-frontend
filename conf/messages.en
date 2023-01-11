@@ -647,11 +647,11 @@ cds.matching-error.business-details.utr.isEmpty=Enter your UTR number
 
 cds.matching-error.business-details.partnership-name.isEmpty=Enter your registered partnership name
 cds.matching-error.business-details.partnership-name.too-long=The partnership name must be 105 characters or less
-cds.matching-error.business-details.partnership-name.invalid-chars=The partnership name cannot contain ''<'' or ''>''
+cds.matching-error.business-details.partnership-name.invalid-chars=Partnership name cannot contain ''<'' or ''>''
 
 cds.matching-error.business-details.company-name.isEmpty=Enter your registered company name
 cds.matching-error.business-details.company-name.too-long=The company name must be 105 characters or less
-cds.matching-error.business-details.company-name.invalid-chars=The company name cannot contain ''<'' or ''>''
+cds.matching-error.business-details.company-name.invalid-chars=Company name cannot contain ''<'' or ''>''
 
 cds.matching.organisation.name.title=What is your registered organisation name?
 cds.matching.organisation.name.label=Organisation name
