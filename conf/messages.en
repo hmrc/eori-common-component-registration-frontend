@@ -956,7 +956,7 @@ cds.subscription.sic.heading=What is the Standard Industrial Classification (SIC
 cds.subscription.sic.organisation.page.title=What is your Standard Industrial Classification (SIC) code?
 cds.subscription.sic.organisation.heading=What is your Standard Industrial Classification (SIC) code?
 cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House for your SIC code (opens in new tab).</a>
-cds.subscription.sic.nonuk.soleTrader.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
+cds.subscription.sic.nonuk.soleTrader.description=You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.organisation.description=<a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab)</a>
 cds.subscription.sic.organisation.hint=A SIC code is a 5-digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number.
 cds.subscription.sic.uk.soleTrader.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
@@ -966,7 +966,13 @@ cds.subscription.sic.partnership.heading=What is the Standard Industrial Classif
 cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that helps HMRC identify what your partnership does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.individual.page.title=Enter a Standard Industrial Classification (SIC) code that describes what your business does
 cds.subscription.sic.individual.heading=Enter a Standard Industrial Classification (SIC) code that describes what your business does
-cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
+cds.subscription.sic.soleTrader.page.title=What is your Standard Industrial Classification (SIC) code?
+cds.subscription.sic.soleTrader.heading=What is your Standard Industrial Classification (SIC) code?
+
+cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
+cds.subscription.sic.soleTrader.hint=A SIC code is a 5-digit number that helps HMRC identify what your organisation does. In some countries it is also known as a trade number.
+
+
 cds.subscription.sic.label=SIC code
 cds.subscription.sic.error.empty=Enter a SIC code
 cds.subscription.sic.error.too-long=The SIC code must be 5 digits or less

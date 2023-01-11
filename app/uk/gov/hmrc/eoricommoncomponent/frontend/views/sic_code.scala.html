@@ -64,9 +64,8 @@
         case (true, true, false, false) => "sic.organisation"
         case (false, true, false, false) => "sic.organisation"
         case (false, false, false, true) => "sic.organisation"
-        case (true, false, true, false) => "sic.individual"
         case _ =>
-            if (isSoleTrader || isPartnership) "sic.organisation"
+            if (isSoleTrader) "sic.soleTrader"
             else if(isIndividual) "sic.individual"
             else "sic.organisation"
     }
@@ -76,9 +75,8 @@
     (isNonUk, isRowOrganisation, isSoleTrader) match {
         case (true, true, false) => "cds.subscription.sic.organisation.description"
         case (false, true, false) => "cds.subscription.sic.organisation.description"
-        case (true, false, true) => "cds.subscription.sic.nonuk.soleTrader.description"
         case _ =>
-            if (isSoleTrader || isPartnership) "cds.subscription.sic.organisation.description"
+            if (isSoleTrader) "cds.subscription.sic.nonuk.soleTrader.description"
             else if (isCompany) "cds.subscription.sic.organisation.description"
             else if(isIndividual) { "cds.subscription.sic.individual.description"}
                 else "cds.subscription.sic.organisation.description"
@@ -90,6 +88,8 @@
         case (true, true, false, false) => "cds.subscription.sic.organisation.hint"
         case (false, true, false, false) => "cds.subscription.sic.organisation.hint"
         case (false, false, false, true) => "cds.subscription.sic.organisation.hint"
+        case (true, false, true, false) => "cds.subscription.sic.soleTrader.hint"
+        case (false, false, true, false) => "cds.subscription.sic.soleTrader.hint"
         case _ =>
             if (!isNonUk && !isIndividual) "cds.subscription.sic.organisation.hint"
             else ""
