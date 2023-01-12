@@ -856,6 +856,10 @@ cds.subscription.sic.partnership.page.title = Beth yw’r cod Dosbarthiad Diwydi
 cds.subscription.sic.partnership.heading = Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich partneriaeth?
 cds.subscription.sic.partnership.description = Mae cod SIC yn rhif 5 digid sy’n helpu CThEM i nodi’r hyn y mae’ch partneriaeth yn ei wneud. Os nad oes gennych un
 cds.subscription.sic.individual.page.title = Nodwch god Dosbarthiad Diwydiannol Safonol (SIC) sy’n disgrifio’r hyn y mae’ch busnes yn ei wneud
+cds.subscription.sic.soleTrader.heading = Beth yw eich Cod Dosbarthiad Diwydiannol Safonol (SIC)
+cds.subscription.sic.soleTrader.page.title = Beth yw eich Cod Dosbarthiad Diwydiannol Safonol (SIC)
+cds.subscription.sic.soleTrader.hint = Mae cod SIC yn rhif 5 digid sy’n helpu CThEF i nodi’r hyn y mae’ch sefydliad yn ei wneud. Mewn rhai gwledydd fe’i hadweinir hefyd fel rhif masnach.
+cds.subscription.sic.nonuk.soleTrader.description = Gallwch chwilio am god SIC perthnasol ar wefan <a href="https://resources.companieshouse.gov.uk/welsh/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Tŷ’r Cwmnïau (yn agor tab newydd). </a>
 cds.subscription.sic.individual.heading = Nodwch god Dosbarthiad Diwydiannol Safonol (SIC) sy’n disgrifio’r hyn y mae’ch busnes yn ei wneud
 cds.subscription.sic.individual.description = Mae cod SIC yn rhif 5 digid sy’n helpu CThEM i nodi’r hyn y mae’ch sefydliad yn ei wneud. Os nad oes gennych un
 cds.subscription.sic.label = Cod SIC

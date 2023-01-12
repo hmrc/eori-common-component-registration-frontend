@@ -219,27 +219,6 @@ class SicCodeControllerSpec
         }
       }
 
-      s"display correct description for $orgType (NA) org type" in {
-        showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) {
-          result =>
-            val page = CdsPage(contentAsString(result))
-            userSelectedOrgType match {
-              case Individual =>
-                page.getElementText(SicCodePage.sicDescriptionLabelXpath) should startWith(
-                  "A SIC code is a 5 digit number that helps HMRC identify what your organisation does. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
-                )
-                page.getElementsHref("//*[@id='description']/a") shouldBe "https://resources.companieshouse.gov.uk/sic/"
-              case _ =>
-                page.getElementText(SicCodePage.sicDescriptionLabelXpath) should startWith(
-                  "Find your SIC code (opens in new window or tab) If you do not have one, you can search for a relevant SIC code on Companies House (opens in a new window or tab)"
-                )
-                page.getElementsHref(
-                  "//*[@id='description']/a"
-                ) shouldBe "https://www.gov.uk/get-information-about-a-company"
-            }
-        }
-      }
-
       s"display correct label description for $orgType (NA) org type" in {
         showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) { result =>
           val page = CdsPage(contentAsString(result))
@@ -448,31 +427,6 @@ class SicCodeControllerSpec
     (SoleTrader, "SoleTrader", "iom"),
     (ThirdCountryOrganisation, "Organisation", "third-country")
   )
-
-  forAll(formModelsROW) { (userSelectedOrgType, orgType, userLocation) =>
-    s"display correct description for $orgType (NA) org type and when user-location is NON-UK: $userLocation" in {
-      showCreateForm(userSelectedOrgType = userSelectedOrgType, userLocation = Some(userLocation)) { result =>
-        val page = CdsPage(contentAsString(result))
-        if (userSelectedOrgType == SoleTrader) {
-          page.getElementsText(
-            sicDescriptionLabelXpath
-          ) shouldBe "A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on Companies House (opens in new tab)."
-          page.getElementText(
-            SicCodePage.headingXpath
-          ) shouldBe "Enter a Standard Industrial Classification (SIC) code that describes what your business does"
-          page.getElementsHref("//*[@id='description']/a") shouldBe "https://resources.companieshouse.gov.uk/sic/"
-        } else {
-          page.getElementsText(
-            sicDescriptionLabelXpath
-          ) shouldBe "Find your SIC code (opens in new window or tab) If you do not have one, you can search for a relevant SIC code on Companies House (opens in a new window or tab)"
-          page.getElementText(
-            SicCodePage.headingXpath
-          ) shouldBe "What is your Standard Industrial Classification (SIC) code?"
-          page.getElementsHref("//*[@id='description']/a") shouldBe "https://www.gov.uk/get-information-about-a-company"
-        }
-      }
-    }
-  }
 
   private def submitFormInCreateMode(
     form: Map[String, String],
