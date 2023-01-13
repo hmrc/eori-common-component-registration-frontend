@@ -154,6 +154,7 @@
 @individualName = @{
     subscription.nameDobDetails match {
         case Some(nameDobDetails) => nameDobDetails.name
+        case _ if registration.name == null  => ""
         case _ =>  registration.name
     }
 }
@@ -161,7 +162,8 @@
 @orgName = @{
     subscription.nameOrganisationDetails match {
         case Some(nameOrgDetails) => nameOrgDetails.name
-        case _ =>  subscription.name
+        case _ if subscription.name == null  => ""
+        case _ => subscription.name
     }
 }
 
