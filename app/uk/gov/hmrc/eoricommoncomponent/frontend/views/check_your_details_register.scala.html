@@ -271,7 +271,7 @@
     if(!isIndividual && !isSoleTrader) {
         Seq(summaryListRow(
             key = orgNameLabel,
-            value = Some(Html(StringEscapeUtils.escapeXml11(orgName))),
+            value = Some(Text(orgName).asHtml),
             call = if(!isUserIdentifiedByRegService) Some(WhatIsYourOrgNameController.showForm(isInReviewMode = true, organisationType = orgType, service)) else None
         ))
     } else Seq.empty[SummaryListRow]
@@ -352,7 +352,7 @@
     Seq(subscription.contactDetails.map { cd =>
         summaryListRow(
             key = messages("cds.form.check-answers.contact-name"),
-            value = Some(Html(StringEscapeUtils.escapeXml11(cd.fullName))),
+            value = Some(Text(cd.fullName).asHtml),
             call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
             )
         }
