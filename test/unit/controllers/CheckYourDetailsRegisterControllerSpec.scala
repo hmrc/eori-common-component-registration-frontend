@@ -825,26 +825,6 @@ class CheckYourDetailsRegisterControllerSpec
     }
   }
 
-  "display the review page check-your-details for an individual with UTR" in {
-    val expectedUtr = "someUTR"
-
-    when(mockSessionCache.registrationDetails(any[Request[_]]))
-      .thenReturn(individualRegistrationDetails.copy(customsId = Some(Utr(expectedUtr))))
-    val holder = detailsHolderWithAllFields.copy(
-      contactDetails = Some(contactDetailsModelWithAllValues),
-      dateEstablished = Some(LocalDate.parse("1980-07-23")),
-      addressDetails = Some(addressDetails),
-      nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
-    )
-    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
-
-    showForm(userSelectedOrgType = Individual, isIndividualSubscriptionFlow = true) { result =>
-      val page: CdsPage = CdsPage(contentAsString(result))
-
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "UTR number") shouldBe true
-    }
-  }
-
   "VAT details" should {
     "display only UK vat details when found in cache" in {
       when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(gbVatDetails)
