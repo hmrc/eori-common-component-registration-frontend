@@ -28,12 +28,14 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateCustomsDataStoreConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
-import util.externalservices.{AuditService, CustomsDataStoreStubService}
 import util.externalservices.ExternalServicesConfig.{Host, Port}
+import util.externalservices.{AuditService, CustomsDataStoreStubService}
+
+import scala.concurrent.ExecutionContext
 
 class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
-
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val ex: ExecutionContext = ExecutionContext.Implicits.global
+  implicit val hc: HeaderCarrier    = HeaderCarrier()
 
   private val email = "a@example.com"
 

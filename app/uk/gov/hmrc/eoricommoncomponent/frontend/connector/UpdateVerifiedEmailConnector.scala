@@ -23,11 +23,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
 import uk.gov.hmrc.http.{ForbiddenException, HttpClient, _}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpClient) {
+class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpClient)(implicit ec: ExecutionContext) {
 
   private val url: String = appConfig.getServiceUrl("update-verified-email")
   private val logger      = Logger(this.getClass)
