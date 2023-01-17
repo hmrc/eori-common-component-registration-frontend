@@ -33,6 +33,8 @@ object FormValidation {
   val postcodeRegex: Regex =
     "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
 
+  private val noTagsRegex = "^[^<>]+$"
+
   def postcodeMapping: Mapping[Option[String]] =
     ConditionalMapping(
       condition = isAnyOf("countryCode", postCodeMandatoryCountryCodes),
@@ -57,6 +59,8 @@ object FormValidation {
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.subscription.address-details.page-error.city"))
       case s if s.trim.length > 35 =>
         Invalid(ValidationError("cds.subscription.address-details.page-error.city.too-long"))
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.subscription.address-details.city.error.invalid-chars"))
       case _ => Valid
     })
 

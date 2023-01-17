@@ -1161,9 +1161,12 @@ cds.subscription.address-details.countryCode-auto-complete.label=Country
 cds.subscription.address-details.country.label=Country
 cds.subscription.address-details.street.empty.error=Enter the first line of your address
 cds.subscription.address-details.street.too-long.error=The first line of the address must be 70 characters or less
+cds.subscription.address-details.street.error.invalid-chars=Address cannot contain ''<'' or ''>''
 cds.subscription.address-details.city.error.label=Enter your town or city
+cds.subscription.address-details.city.error.invalid-chars=Town or city cannot contain ''<'' or ''>''
 cds.subscription.address-details.postcode.error.label=Enter a valid postcode
 cds.subscription.address-details.page-error.street=Enter the first line of your address
+
 cds.subscription.address-details.page-error.city=Enter your town or city
 cds.subscription.address-details.page-error.city.too-long=The town or city must be 35 characters or less
 
@@ -1225,6 +1228,7 @@ cds.subscription.contact-details.address.we-will-use=We will use this address to
 cds.subscription.contact-details.address-text=Is this the right contact address?
 cds.subscription.contact-details.change-address.label=Enter your contact address
 cds.subscription.contact-details.form-error.full-name=Enter your contact name
+cds.subscription.contact-details.form-error.full-name.wrong-format=Enter your contact name without invalid characters
 cds.subscription.contact-details.form-error.email=Enter your email address
 cds.subscription.contact-details.form-error.email.too-long=The email address must be 50 characters or less
 cds.subscription.contact-details.form-error.telephone=Enter your contact telephone number
