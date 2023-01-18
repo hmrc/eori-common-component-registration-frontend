@@ -394,7 +394,7 @@ cds.organisation.name.label=Organisation name
 cds.company.name.label=Company name
 cds.partnership.name.label=Registered partnership name
 cds.nino.label=National Insurance number
-cds.utr.label=UTR number
+cds.utr.label=Self Assessment Unique Taxpayer Reference (UTR)
 cds.company.utr.label=Corporation Tax UTR
 cds.partnership-utr.label=Partnership Self Assessment UTR number
 
