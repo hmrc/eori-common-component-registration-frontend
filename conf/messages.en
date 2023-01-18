@@ -1607,7 +1607,7 @@ cds.subscription.organisation-disclose-personal-details-consent.no=Select no to 
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
-subscription-journey.how-confirm-identity.utr.heading=What is your Corporation Tax Unique Taxpayer Reference (UTR)?
+subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Tax Unique Taxpayer Reference (UTR)?
 subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
