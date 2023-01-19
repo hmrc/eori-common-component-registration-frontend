@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
+@import play.twirl.api.utils.StringEscapeUtils
 
 
 @this(layout_di: layout, feedback_di: helpers.feedback, dateFormatter: DateFormatter)
@@ -25,7 +26,7 @@
 @layout_di(messages("cds.sub02.outcome.eori-already-exists.title")) {
     <div>
         <div>
-            <h1 id="page-heading" class="govuk-heading-xl">@messages("cds.sub02.outcome.eori-already-exists.heading", name)</h1>
+            <h1 id="page-heading" class="govuk-heading-xl">@messages("cds.sub02.outcome.eori-already-exists.heading", StringEscapeUtils.escapeXml11(name))</h1>
             <p class="govuk-heading-m" id="processed-date">@messages("cds.sub02.outcome.eori-already-exists.received", dateFormatter.format(processedDate))</p>
         </div>
 

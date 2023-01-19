@@ -27,7 +27,6 @@ case class Service(
   enrolmentKey: String,
   shortName: String,
   callBack: Option[String],
-  accessibilityUrl: String,
   friendlyName: String,
   friendlyNameWelsh: String,
   feedbackUrl: Option[String]
@@ -35,7 +34,7 @@ case class Service(
 
 object Service {
 
-  val cds: Service = Service("cds", "HMRC-CUS-ORG", "", None, "", "", "", None)
+  val cds: Service = Service("cds", "HMRC-CUS-ORG", "", None, "", "", None)
 
   private val supportedServicesMap: Map[String, Service] = new ServiceConfig(
     Configuration(ConfigFactory.load())

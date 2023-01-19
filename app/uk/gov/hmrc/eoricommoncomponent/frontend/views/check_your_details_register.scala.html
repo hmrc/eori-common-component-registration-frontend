@@ -27,7 +27,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukSummaryList}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, SummaryListRow, SummaryList, Key, Value, HtmlContent, Actions, ActionItem}
-
+@import play.twirl.api.utils.StringEscapeUtils
 
 @this(layout_di: layout, dateFormatter: DateFormatter, govukButton: GovukButton, govukSummaryList : GovukSummaryList)
 
@@ -154,6 +154,7 @@
 @individualName = @{
     subscription.nameDobDetails match {
         case Some(nameDobDetails) => nameDobDetails.name
+        case _ if registration.name == null  => ""
         case _ =>  registration.name
     }
 }
@@ -161,7 +162,8 @@
 @orgName = @{
     subscription.nameOrganisationDetails match {
         case Some(nameOrgDetails) => nameOrgDetails.name
-        case _ =>  subscription.name
+        case _ if subscription.name == null  => ""
+        case _ => subscription.name
     }
 }
 
@@ -203,24 +205,24 @@
 }
 
 @addressViewModelHtml(ad: AddressViewModel) = {
-    @helpers.noMarginParagraph(ad.street)
-    @helpers.noMarginParagraph(ad.city)
-    @ad.postcode.map(helpers.noMarginParagraph(_))
-    @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(helpers.noMarginParagraph(_))
+    @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.street))
+    @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.city))
+    @ad.postcode.map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
 }
 @addressHtml(ad: Address) = {
-    @helpers.noMarginParagraph(ad.addressLine1)
-    @ad.addressLine2.map(helpers.noMarginParagraph(_))
-    @ad.addressLine3.map(helpers.noMarginParagraph(_))
-    @ad.addressLine4.map(helpers.noMarginParagraph(_))
-    @ad.postalCode.map(helpers.noMarginParagraph(_))
-    @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(helpers.noMarginParagraph(_))
+    @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.addressLine1))
+    @ad.addressLine2.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    @ad.addressLine3.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    @ad.addressLine4.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    @ad.postalCode.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
 }
 @contactDetailsHtml(details: ContactDetailsModel) = {
-    @details.street.map(helpers.noMarginParagraph(_))
-    @details.city.map(helpers.noMarginParagraph(_))
-    @details.postcode.map(helpers.noMarginParagraph(_))
-    @transformCountryCodeToOptionalLabel(details.countryCode).map(helpers.noMarginParagraph(_))
+    @details.street.map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    @details.city.map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    @details.postcode.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    @transformCountryCodeToOptionalLabel(details.countryCode).map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
 }
 
 @summaryListRow(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "") = @{
@@ -256,7 +258,7 @@
     if(isIndividual || isSoleTrader) {
         Seq(summaryListRow(
             key = messages("subscription.check-your-details.full-name.label"),
-            value = Some(Html(individualName)),
+            value = Some(Html(StringEscapeUtils.escapeXml11(individualName))),
             call = if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None
         ),
             summaryListRow(
@@ -271,7 +273,7 @@
     if(!isIndividual && !isSoleTrader) {
         Seq(summaryListRow(
             key = orgNameLabel,
-            value = Some(Html(orgName)),
+            value = Some(Text(orgName).asHtml),
             call = if(!isUserIdentifiedByRegService) Some(WhatIsYourOrgNameController.showForm(isInReviewMode = true, organisationType = orgType, service)) else None
         ))
     } else Seq.empty[SummaryListRow]
@@ -352,7 +354,7 @@
     Seq(subscription.contactDetails.map { cd =>
         summaryListRow(
             key = messages("cds.form.check-answers.contact-name"),
-            value = Some(Html(cd.fullName)),
+            value = Some(Text(cd.fullName).asHtml),
             call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
             )
         }

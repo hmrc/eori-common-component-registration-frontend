@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.JourneyStatus
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
+@import play.twirl.api.utils.StringEscapeUtils
 
 
 @this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter)
@@ -27,7 +28,7 @@
 @layout_di(messages("cds.subscription.outcomes.rejected.title", shortName), suppressTelephoneNumberDetection = false) {
 <div>
     <div>
-        <h1 id="page-heading" class="govuk-heading-xl">@messages("cds.subscription.outcomes.rejected.heading", shortName, name) </h1>
+        <h1 id="page-heading" class="govuk-heading-xl">@messages("cds.subscription.outcomes.rejected.heading", shortName, StringEscapeUtils.escapeXml11(name)) </h1>
         <div class="govuk-heading-m" id="active-from">@messages("cds.subscription.outcomes.rejected.received", dateFormatter.format(processedDate))</div>
     </div>
 

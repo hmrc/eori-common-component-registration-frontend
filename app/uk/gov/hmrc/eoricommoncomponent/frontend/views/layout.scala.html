@@ -123,7 +123,7 @@
     additionalHeadBlock = Some(theHead),
     nonce = CSPNonce.get,
     serviceName = Some(messages(banner)),
-    accessibilityStatementUrl = Some(service.accessibilityUrl),
+    accessibilityStatementUrl = Some(appConfig.accessibilityStatement),
     beforeContentBlock = Some(beforeContent),
     additionalScriptsBlock = Some(scripts)
 )(mainContentWithGetHelp)
