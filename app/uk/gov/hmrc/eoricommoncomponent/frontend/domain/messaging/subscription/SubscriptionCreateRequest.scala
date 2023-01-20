@@ -230,7 +230,9 @@ object SubscriptionCreateRequest {
   private def handleEmptyDate(date: Option[String]): Option[LocalDate] = date match {
     case Some(d) => Some(LocalDate.parse(d, DateTimeFormatter.ofPattern("yyyy-MM-dd")))
     case None =>
+      // $COVERAGE-OFF$Loggers
       logger.warn("No establishment date returned from REG06")
+      // $COVERAGE-ON
       None
   }
 

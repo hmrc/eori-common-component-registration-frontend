@@ -55,7 +55,9 @@ class RegistrationDisplayConnector @Inject() (http: HttpClient, appConfig: AppCo
       Right(response.registrationDisplayResponse)
     } recover {
       case NonFatal(e) =>
+        // $COVERAGE-OFF$Loggers
         logger.warn(s"registration-display failed. url: $url, error: $e")
+        // $COVERAGE-ON
         Left(ServiceUnavailableResponse)
     }
   }

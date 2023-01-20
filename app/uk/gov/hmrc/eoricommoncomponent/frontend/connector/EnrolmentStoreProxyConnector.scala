@@ -67,12 +67,13 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
         throw e
     }
   }
-
+  // $COVERAGE-OFF$Loggers
   private def logResponse(response: HttpResponse): Unit =
     if (HttpStatusCheck.is2xx(response.status))
       logger.debug("GetEnrolmentByGroupId request is successful")
     else
       logger.warn(s"GetEnrolmentByGroupId request is failed with response $response")
+  // $COVERAGE-ON
 
   private def auditCall(url: String, groupId: String, response: EnrolmentStoreProxyResponse)(implicit
     hc: HeaderCarrier

@@ -101,11 +101,15 @@ class ConfirmContactDetailsController @Inject() (
                   )
                 )
               case None =>
+                // $COVERAGE-OFF$Loggers
                 logger.warn("[ConfirmContactDetailsController.form] organisation type None")
+                // $COVERAGE-ON
                 sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
             }
         case _ =>
+          // $COVERAGE-OFF$Loggers
           logger.warn("[ConfirmContactDetailsController.form] registrationDetails not found")
+          // $COVERAGE-ON
           sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
       }
     }
@@ -149,11 +153,15 @@ class ConfirmContactDetailsController @Inject() (
                       )
                     )
                   case None =>
+                    // $COVERAGE-OFF$Loggers
                     logger.warn("[ConfirmContactDetailsController.submit] organisation type None")
+                    // $COVERAGE-ON
                     sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
                 }
               case _ =>
+                // $COVERAGE-OFF$Loggers
                 logger.warn("[ConfirmContactDetailsController.submit] registrationDetails not found")
+                // $COVERAGE-ON
                 sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
             },
           areDetailsCorrectAnswer => checkAddressDetails(service, isInReviewMode, areDetailsCorrectAnswer)

@@ -85,7 +85,9 @@ class Sub02Controller @Inject() (
           }
         } recoverWith {
         case e: Exception =>
+          // $COVERAGE-OFF$Loggers
           logger.error("Subscription Error. ", e)
+          // $COVERAGE-ON
           Future.failed(new RuntimeException("Subscription Error. ", e))
       }
     }

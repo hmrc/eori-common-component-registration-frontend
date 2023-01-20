@@ -38,43 +38,57 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
   private val emailKey   = "email"
 
   def saveSafeId(groupId: GroupId, safeId: SafeId)(implicit hc: HeaderCarrier): Future[Unit] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"saving SafeId $safeId for groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector.put[SafeId](groupId.id, safeIdKey, safeId)
   }
 
   def saveOrgType(groupId: GroupId, mayBeOrgType: Option[CdsOrganisationType])(implicit
     hc: HeaderCarrier
   ): Future[Unit] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"saving OrganisationType $mayBeOrgType for groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector
       .put[CdsOrganisationType](groupId.id, orgTypeKey, mayBeOrgType)
   }
 
   def saveEmail(groupId: GroupId, emailStatus: EmailStatus)(implicit hc: HeaderCarrier): Future[Unit] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"saving email address $emailStatus for groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector.put[EmailStatus](groupId.id, emailKey, Json.toJson(emailStatus))
   }
 
   def fetchOrgType(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[CdsOrganisationType]] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"fetching OrganisationType for groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector
       .get[CdsOrganisationType](groupId.id, orgTypeKey)
   }
 
   def fetchSafeId(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[SafeId]] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"fetching SafeId for groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector
       .get[SafeId](groupId.id, safeIdKey)
   }
 
   def fetchEmail(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[EmailStatus]] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"fetching EmailStatus groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector
       .get[EmailStatus](groupId.id, emailKey)
   }
 
   def fetchCacheIds(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[CacheIds]] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"fetching CacheIds groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector.get[CacheIds](groupId.id, CachedData.groupIdKey)
   }
 
@@ -82,14 +96,18 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
     save4LaterConnector.deleteKey[CacheIds](groupId.id, CachedData.groupIdKey)
 
   def deleteCacheIds(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Unit] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"deleting CachIds for groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector.delete[CacheIds](groupId.id)
   }
 
   def fetchProcessingService(
     groupId: GroupId
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Service]] = {
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"fetching Processing service for groupId $groupId")
+    // $COVERAGE-ON
     save4LaterConnector
       .get[CacheIds](groupId.id, CachedData.groupIdKey)
       .map {

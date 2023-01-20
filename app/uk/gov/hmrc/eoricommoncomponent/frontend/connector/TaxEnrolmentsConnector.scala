@@ -49,8 +49,9 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
     */
   def enrol(request: TaxEnrolmentsRequest, formBundleId: String)(implicit hc: HeaderCarrier): Future[Int] = {
     val url = s"$baseUrl/$serviceContext/subscriptions/$formBundleId/issuer"
-
+    // $COVERAGE-OFF$Loggers
     logger.debug(s"[Enrol: $url, body: $request and hc: $hc")
+    // $COVERAGE-ON
     http.PUT[TaxEnrolmentsRequest, HttpResponse](url, request) map { response: HttpResponse =>
       logResponse("Enrol", response)
       auditCall(url, request, response)
@@ -71,11 +72,11 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
       eventType = "IssuerCall"
     )
   }
-
+  // $COVERAGE-OFF$Loggers
   private def logResponse(service: String, response: HttpResponse): Unit =
     if (HttpStatusCheck.is2xx(response.status))
       logger.debug(s"$service request is successful")
     else
       logger.warn(s"$service request is failed with response $response")
-
+  // $COVERAGE-ON
 }

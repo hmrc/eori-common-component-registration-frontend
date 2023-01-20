@@ -88,8 +88,9 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
     val maybePreviousPageUrl = previousPage.map(page => page.url(service))
     cdsFrontendDataCache.registrationDetails map { registrationDetails =>
       val flow = selectFlow(registrationDetails, orgType)
-
+      // $COVERAGE-OFF$Loggers
       logger.info(s"select Subscription flow: ${flow.name}")
+      // $COVERAGE-ON
       (
         SubscriptionFlows(flow).pagesInOrder.head,
         requestSessionData.storeUserSubscriptionFlow(

@@ -63,9 +63,11 @@ class MatchingServiceConnector @Inject() (http: HttpClient, appConfig: AppConfig
       handleResponse(resp)
     } recover {
       case e: Throwable =>
+        // $COVERAGE-OFF$Loggers
         logger.warn(
           s"REG01 Lookup failed for acknowledgement ref: ${req.registerWithIDRequest.requestCommon.acknowledgementReference}. Reason: $e"
         )
+        // $COVERAGE-ON
         throw e
     }
 
