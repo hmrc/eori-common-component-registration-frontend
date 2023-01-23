@@ -34,17 +34,9 @@ class RowIndividualNameDateOfBirthController @Inject() (
   authAction: AuthAction,
   subscriptionDetailsService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
-  rowIndividualNameDob: row_individual_name_dob
+  individualNameDob: match_namedob
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
-
-  def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
-      assertOrganisationTypeIsValid(organisationType)
-      Future.successful(
-        Ok(rowIndividualNameDob(thirdCountryIndividualNameDateOfBirthForm, organisationType, service, false))
-      )
-    }
 
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
@@ -52,9 +44,9 @@ class RowIndividualNameDateOfBirthController @Inject() (
       subscriptionDetailsService.cachedNameDobDetails flatMap {
         case Some(NameDobMatchModel(firstName, middleName, lastName, dateOfBirth)) =>
           val form = thirdCountryIndividualNameDateOfBirthForm.fill(
-            IndividualNameAndDateOfBirth(firstName, middleName, lastName, dateOfBirth)
+            NameDobMatchModel(firstName, middleName, lastName, dateOfBirth)
           )
-          Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, true)))
+          Future.successful(Ok(individualNameDob(form, organisationType, service)))
         case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service)))
       }
     }
@@ -63,10 +55,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       thirdCountryIndividualNameDateOfBirthForm.bindFromRequest.fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, isInReviewMode))
-          ),
+        formWithErrors => Future.successful(BadRequest(individualNameDob(formWithErrors, organisationType, service))),
         form => submitDetails(isInReviewMode, form, organisationType, service)
       )
     }
@@ -82,7 +71,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
 
   private def submitDetails(
     isInReviewMode: Boolean,
-    formData: IndividualNameAndDateOfBirth,
+    formData: NameDobMatchModel,
     organisationType: String,
     service: Service
   )(implicit request: Request[_]): Future[Result] = {

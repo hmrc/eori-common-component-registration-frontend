@@ -366,14 +366,14 @@ object MatchingForms extends Mappings {
       value.countryCode
     )
 
-  val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] =
+  val thirdCountryIndividualNameDateOfBirthForm: Form[NameDobMatchModel] =
     Form(
       mapping(
         "given-name"  -> text.verifying(validGivenName),
         "middle-name" -> optional(text.verifying(validMiddleName)),
         "family-name" -> text.verifying(validFamilyName),
         validateDateOfBirth
-      )(IndividualNameAndDateOfBirth.apply)(IndividualNameAndDateOfBirth.unapply)
+      )(NameDobMatchModel.apply)(NameDobMatchModel.unapply)
     )
 
   val organisationNameForm: Form[NameMatchModel] = Form(

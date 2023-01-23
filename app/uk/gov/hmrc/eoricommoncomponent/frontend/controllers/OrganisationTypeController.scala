@@ -50,9 +50,6 @@ class OrganisationTypeController @Inject() (
   private def individualMatching(orgType: String, service: Service): Call =
     NameDobController.form(orgType, service)
 
-  private def thirdCountryIndividualMatching(orgType: String, service: Service): Call =
-    RowIndividualNameDateOfBirthController.form(orgType, service)
-
   private def organisationWhatIsYourOrgName(orgType: String, service: Service): Call =
     WhatIsYourOrgNameController.showForm(false, orgType, service)
 
@@ -65,8 +62,8 @@ class OrganisationTypeController @Inject() (
       LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service),
       CharityPublicBodyNotForProfit -> nameIdOrganisationMatching(CharityPublicBodyNotForProfitId, service),
       ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
-      ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
-      ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service)
+      ThirdCountrySoleTrader        -> individualMatching(ThirdCountrySoleTraderId, service),
+      ThirdCountryIndividual        -> individualMatching(ThirdCountryIndividualId, service)
     )
 
   def form(service: Service): Action[AnyContent] =
