@@ -114,6 +114,8 @@ class AppConfig @Inject() (
   def eoriCommonComponentFrontend(serviceName: String) =
     eoriCommonComponentFrontendBaseUrl + serviceName + "/subscribe"
 
+  val accessibilityStatement: String = config.get[String]("accessibility-statement.service-path")
+
   val taxEnrolmentsBaseUrl: String = servicesConfig.baseUrl("tax-enrolments")
 
   val taxEnrolmentsServiceContext: String = config.get[String]("microservice.services.tax-enrolments.context")
