@@ -57,9 +57,11 @@ class SubscriptionServiceConnector @Inject() (http: HttpClient, appConfig: AppCo
       response
     } recoverWith {
       case e: Throwable =>
+        // $COVERAGE-OFF$Loggers
         logger.warn(
           s"Subscribe SUB02 request failed for acknowledgementReference : ${request.subscriptionCreateRequest.requestCommon.acknowledgementReference}. Reason: $e"
         )
+        // $COVERAGE-ON
         Future.failed(e)
     }
   }

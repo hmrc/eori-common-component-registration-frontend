@@ -55,9 +55,11 @@ class RegisterWithoutIdConnector @Inject() (http: HttpClient, appConfig: AppConf
       response.registerWithoutIDResponse
     } recover {
       case e: Throwable =>
+        // $COVERAGE-OFF$Loggers
         logger.warn(
           s"Failure. postUrl: $url, acknowledgement ref: ${request.requestCommon.acknowledgementReference}, error: $e"
         )
+        // $COVERAGE-ON
         throw e
     }
   }

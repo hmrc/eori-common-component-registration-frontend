@@ -41,13 +41,17 @@ class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: Ap
 
   def updateCustomsDataStore(request: CustomsDataStoreRequest)(implicit hc: HeaderCarrier): Future[Unit] = {
     val url = s"${appConfig.handleSubscriptionBaseUrl}/customs/update/datastore"
+    // $COVERAGE-OFF$Loggers
     logger.info(s"[$LoggerComponentId][call] postUrl: $url")
+    // $COVERAGE-ON
     val headers = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON)
     http.POST[CustomsDataStoreRequest, HttpResponse](url, request, headers) map { response =>
       auditCall(url, request, response)
       response.status match {
         case OK | NO_CONTENT =>
+          // $COVERAGE-OFF$Loggers
           logger.info(s"[$LoggerComponentId][call] complete for call to $url with status:${response.status}")
+          // $COVERAGE-ON
           ()
         case _ => throw new BadRequestException(s"Status:${response.status}")
       }

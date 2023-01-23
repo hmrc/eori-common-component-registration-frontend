@@ -47,8 +47,9 @@ class CdsErrorHandler @Inject() (
   ): Html = throw new IllegalStateException("This method must not be used any more.")
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = {
-
+    // $COVERAGE-OFF$Loggers
     logger.error(s"Error with status code: $statusCode and message: $message")
+    // $COVERAGE-ON
     implicit val req: Request[_] = Request(request, "")
 
     statusCode match {
@@ -64,13 +65,19 @@ class CdsErrorHandler @Inject() (
 
     exception match {
       case sessionTimeOut: SessionTimeOutException =>
+        // $COVERAGE-OFF$Loggers
         logger.info("Session time out: " + sessionTimeOut.errorMessage, exception)
+        // $COVERAGE-ON
         Future.successful(Redirect(SecuritySignOutController.displayPage(service)).withNewSession)
       case invalidRequirement: InvalidUrlValueException =>
+        // $COVERAGE-OFF$Loggers
         logger.warn(invalidRequirement.message)
+        // $COVERAGE-ON
         Future.successful(Results.NotFound(notFoundView()))
       case _ =>
+        // $COVERAGE-OFF$Loggers
         logger.error("Internal server error: " + exception.getMessage, exception)
+        // $COVERAGE-ON
         Future.successful(Results.InternalServerError(errorTemplateView()))
     }
   }
