@@ -40,7 +40,7 @@ class VatControlListConnector @Inject() (http: HttpClient, appConfig: AppConfig)
       logger.debug(s"vat-known-facts-control-list successful. url: $url")
       // $COVERAGE-ON
       response.status match {
-        case OK => Right(response.json.as[VatControlListResponse])
+        case OK        => Right(response.json.as[VatControlListResponse])
         case NOT_FOUND =>
           // $COVERAGE-OFF$Loggers
           logger.warn(

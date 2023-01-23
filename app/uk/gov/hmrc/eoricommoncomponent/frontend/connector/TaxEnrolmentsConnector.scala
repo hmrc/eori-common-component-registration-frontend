@@ -72,11 +72,13 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
       eventType = "IssuerCall"
     )
   }
+
   // $COVERAGE-OFF$Loggers
   private def logResponse(service: String, response: HttpResponse): Unit =
     if (HttpStatusCheck.is2xx(response.status))
       logger.debug(s"$service request is successful")
     else
       logger.warn(s"$service request is failed with response $response")
+
   // $COVERAGE-ON
 }
