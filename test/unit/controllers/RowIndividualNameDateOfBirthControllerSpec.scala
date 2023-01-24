@@ -33,10 +33,10 @@ import play.api.data.Form
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.RowIndividualNameDateOfBirthController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameDobMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
 import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.scalacheck.TestDataGenerators
@@ -49,11 +49,11 @@ class RowIndividualNameDateOfBirthControllerSpec
     extends ControllerSpec with TestDataGenerators with Checkers with BeforeAndAfterEach with ScalaFutures
     with AuthActionMock {
 
-  class ControllerFixture(organisationType: String, form: Form[IndividualNameAndDateOfBirth])
+  class ControllerFixture(organisationType: String, form: Form[NameDobMatchModel])
       extends AbstractControllerFixture[RowIndividualNameDateOfBirthController] {
     val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
-    private val rowIndividualNameDob = instanceOf[row_individual_name_dob]
+    private val rowIndividualNameDob = instanceOf[match_namedob]
     private val mockAuthAction       = authAction(mockAuthConnector)
 
     override val controller = new RowIndividualNameDateOfBirthController(
@@ -79,7 +79,7 @@ class RowIndividualNameDateOfBirthControllerSpec
     protected def submit(c: RowIndividualNameDateOfBirthController): Action[AnyContent] =
       c.submit(false, organisationType, atarService)
 
-    def formData(thirdCountryIndividual: IndividualNameAndDateOfBirth): Map[String, String] =
+    def formData(thirdCountryIndividual: NameDobMatchModel): Map[String, String] =
       form.mapping.unbind(thirdCountryIndividual)
 
   }
@@ -88,7 +88,7 @@ class RowIndividualNameDateOfBirthControllerSpec
 
   abstract class IndividualNameAndDateOfBirthBehaviour(
     webPage: IndividualNameAndDateOfBirthPage,
-    form: Form[IndividualNameAndDateOfBirth],
+    form: Form[NameDobMatchModel],
     val validFormModelGens: IndividualGens[LocalDate]
   ) {
 
@@ -371,7 +371,7 @@ class RowIndividualNameDateOfBirthControllerSpec
 
     protected def testControllerWithModel(
       formModelGens: IndividualGens[LocalDate]
-    )(test: (ControllerFixture, IndividualNameAndDateOfBirth) => Unit): Unit =
+    )(test: (ControllerFixture, NameDobMatchModel) => Unit): Unit =
       check(Prop.forAllNoShrink(individualNameAndDateOfBirthGenerator(formModelGens)) { individualNameAndDateOfBirth =>
         withControllerFixture { controllerFixture =>
           test.apply(controllerFixture, individualNameAndDateOfBirth)
@@ -384,7 +384,7 @@ class RowIndividualNameDateOfBirthControllerSpec
   abstract class ThirdCountryIndividualBehaviour(webPage: IndividualNameAndDateOfBirthPage)
       extends IndividualNameAndDateOfBirthBehaviour(
         webPage,
-        form = MatchingForms.thirdCountryIndividualNameDateOfBirthForm,
+        form = MatchingForms.enterNameDobForm,
         validFormModelGens = individualNameAndDateOfBirthGens()
       ) {}
 

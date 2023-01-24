@@ -21,7 +21,7 @@ import play.api.mvc.{Action, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.{enterNameDobForm, thirdCountryIndividualNameDateOfBirthForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
@@ -37,6 +37,12 @@ class RowIndividualNameDateOfBirthController @Inject() (
   individualNameDob: match_namedob
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  def form(organisationType: String, service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request =>
+      _: LoggedInUserWithEnrolments =>
+        Future.successful(Ok(individualNameDob(enterNameDobForm, organisationType, service)))
+    }
 
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>

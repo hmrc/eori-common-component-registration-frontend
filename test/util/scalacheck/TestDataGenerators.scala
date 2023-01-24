@@ -96,11 +96,11 @@ trait TestDataGenerators {
 
   def individualNameAndDateOfBirthGens(): IndividualGens[LocalDate] = IndividualGens(extraBitGen = dateOfBirthGenerator)
 
-  val individualNameAndDateOfBirthGenerator: AbstractIndividualGenerator[LocalDate, IndividualNameAndDateOfBirth] =
-    new AbstractIndividualGenerator[LocalDate, IndividualNameAndDateOfBirth] {
+  val individualNameAndDateOfBirthGenerator: AbstractIndividualGenerator[LocalDate, NameDobMatchModel] =
+    new AbstractIndividualGenerator[LocalDate, NameDobMatchModel] {
 
-      def apply(data: DataItems): IndividualNameAndDateOfBirth =
-        IndividualNameAndDateOfBirth(data.firstName, data.middleName, data.lastName, dateOfBirth = data.extraBit)
+      def apply(data: DataItems): NameDobMatchModel =
+        NameDobMatchModel(data.firstName, data.middleName, data.lastName, dateOfBirth = data.extraBit)
 
     }
 

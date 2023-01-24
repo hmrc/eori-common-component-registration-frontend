@@ -22,7 +22,7 @@ import base.UnitSpec
 import java.time.LocalDate
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameDobMatchModel, NinoMatch}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{SicCodeViewModel, VatDetailsForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
 
@@ -37,8 +37,8 @@ class FormValidationSpec extends UnitSpec {
   lazy val nameDobForm: Form[NameDobMatchModel] = MatchingForms.enterNameDobForm
   lazy val ninoForm: Form[NinoMatch]            = MatchingForms.ninoForm
 
-  lazy val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] =
-    MatchingForms.thirdCountryIndividualNameDateOfBirthForm
+  lazy val thirdCountryIndividualNameDateOfBirthForm: Form[NameDobMatchModel] =
+    MatchingForms.enterNameDobForm
 
   lazy val vatDetailsForm = VatDetailsForm.vatDetailsForm
 
