@@ -152,8 +152,8 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         (CdsOrganisationType.SoleTrader, "name-date-of-birth/sole-trader"),
         (CdsOrganisationType.Individual, "name-date-of-birth/individual"),
         (CdsOrganisationType.ThirdCountryOrganisation, "name/third-country-organisation"),
-        (CdsOrganisationType.ThirdCountrySoleTrader, "row-name-date-of-birth/third-country-sole-trader"),
-        (CdsOrganisationType.ThirdCountryIndividual, "row-name-date-of-birth/third-country-individual")
+        (CdsOrganisationType.ThirdCountrySoleTrader, "name-date-of-birth/third-country-sole-trader"),
+        (CdsOrganisationType.ThirdCountryIndividual, "name-date-of-birth/third-country-individual")
       )
 
     val subscriptionPage: Map[CdsOrganisationType, SubscriptionPage] = Map(

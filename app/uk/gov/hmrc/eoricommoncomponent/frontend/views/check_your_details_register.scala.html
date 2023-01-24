@@ -259,12 +259,12 @@
         Seq(summaryListRow(
             key = messages("subscription.check-your-details.full-name.label"),
             value = Some(Html(StringEscapeUtils.escapeXml11(individualName))),
-            call = if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None
+            call = if(!isUserIdentifiedByRegService) Some(NameDobController.form(orgType, service)) else None
         ),
             summaryListRow(
                 key = messages("subscription.check-your-details.date-of-birth.label"),
                 value = formattedIndividualDateOfBirth.map(dob => Html(dob)),
-                call = if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None
+                call = if(!isUserIdentifiedByRegService) Some(NameDobController.form(orgType, service)) else None
             ))
     } else Seq.empty[SummaryListRow]
 }

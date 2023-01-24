@@ -162,7 +162,7 @@ class CheckYourDetailsRegisterControllerSpec
           RegistrationReviewPage.SummaryListRowXPath,
           "Full name",
           "Change"
-        ) shouldBe "/customs-registration-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
+        ) shouldBe "/customs-registration-services/atar/register/matching/name-date-of-birth/sole-trader"
 
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Date of birth") shouldBe
           strim("""
@@ -179,7 +179,7 @@ class CheckYourDetailsRegisterControllerSpec
           RegistrationReviewPage.SummaryListRowXPath,
           "Date of birth",
           "Change"
-        ) shouldBe "/customs-registration-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
+        ) shouldBe "/customs-registration-services/atar/register/matching/name-date-of-birth/sole-trader"
 
         page.elementIsPresent(RegistrationReviewPage.DateOfEstablishmentLabelXPath) shouldBe false
         page.elementIsPresent(RegistrationReviewPage.DateOfEstablishmentXPath) shouldBe false

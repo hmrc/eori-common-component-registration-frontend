@@ -208,68 +208,6 @@ class FormValidationSpec extends UnitSpec {
     }
   }
 
-  "RowIndividualForm" should {
-
-    "only accept valid form" in {
-      val data = formDataRow
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq.empty
-    }
-    "accept Given name with ' apostrophe" in {
-      val data = formDataRow.updated("given-name", "apos'trophe")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq.empty
-    }
-    "accept Family name with ' apostrophe" in {
-      val data = formDataRow.updated("family-name", "apos'trophe")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq.empty
-    }
-    "accept middle name with ' apostrophe" in {
-      val data = formDataRow.updated("middle-name", "apos'trophe")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq.empty
-    }
-    "fail when a Given Name is invalid" in {
-      val data = formDataRow.updated("given-name", "")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors should not be empty
-    }
-    "fail when a Family Name is invalid" in {
-      val data = formDataRow.updated("family-name", "")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors should not be empty
-    }
-    "fail when a date of birth is missing" in {
-      val data = formDataRow.updated("date-of-birth.day", "").updated("date-of-birth.month", "")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq(
-        FormError("date-of-birth.day", Seq("dob.error.empty-date")),
-        FormError("date-of-birth.month", "")
-      )
-    }
-    "fail when a date of birth in future" in {
-      val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data =
-        formDataRow.updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)).updated(
-          "date-of-birth.month",
-          DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
-        ).updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
-      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), Array("1900")))
-    }
-    "fail when a date of birth year invalid" in {
-      val data = formDataRow.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), Array("1900")))
-    }
-    "fail when a date of birth too early" in {
-      val data = formDataRow.updated("date-of-birth.year", "1800")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), Array("1900")))
-    }
-  }
-
   "VAT details form" should {
     "only accept valid form" in {
       val data = formDataVAT
