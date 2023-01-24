@@ -23,7 +23,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postcodeMa
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 object AddressDetailsForm {
-  private val Length2 = 2
+  private val Length2     = 2
+  private val noTagsRegex = "^[^<>]+$"
 
   def addressDetailsCreateForm(): Form[AddressViewModel] =
     Form(
@@ -39,14 +40,18 @@ object AddressDetailsForm {
     Constraint({
       case s if s.trim.isEmpty     => Invalid(ValidationError("cds.subscription.address-details.street.empty.error"))
       case s if s.trim.length > 70 => Invalid(ValidationError("cds.subscription.address-details.street.too-long.error"))
-      case _                       => Valid
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.subscription.address-details.street.error.invalid-chars"))
+      case _ => Valid
     })
 
   private def validCountry: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty           => Invalid(ValidationError("cds.matching-error.country.invalid"))
       case s if s.trim.length != Length2 => Invalid(ValidationError("cds.matching-error.country.invalid"))
-      case _                             => Valid
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
+      case _ => Valid
     })
 
 }
