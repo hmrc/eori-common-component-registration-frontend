@@ -44,13 +44,13 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val telephoneFieldXPath           = "//*[@id='telephone']"
   val telephoneFieldLevelErrorXPath = "//p[@id='telephone-error' and @class='govuk-error-message']"
   val telephoneFieldLabel           = "Telephone"
-  val telephoneHintText             = "Only enter numbers, for example 01632 960 001"
+  val telephoneHintText             = "For international numbers include the country code."
   val telephoneFieldId              = "telephone"
 
   val faxFieldXPath           = "//*[@id='fax']"
   val faxFieldLevelErrorXPath = "//p[@id='fax-error' and @class='govuk-error-message']"
   val faxFieldLabel           = "Fax (optional)"
-  val faxHintText             = "Only enter numbers, for example 01632 960 001"
+  val faxHintText             = "For international numbers include the country code."
   val faxFieldId              = "fax"
 
   val useRegisteredAddressLabel = "Enter address"

@@ -33,10 +33,11 @@ import java.time.LocalDate
 
 object MatchingForms extends Mappings {
 
-  val Length35          = 35
-  val Length34          = 34
-  private val Length2   = 2
-  private val nameRegex = "[a-zA-Z0-9-' ]*"
+  val Length35            = 35
+  val Length34            = 34
+  private val Length2     = 2
+  private val nameRegex   = "[a-zA-Z0-9-' ]*"
+  private val noTagsRegex = "^[^<>]+$"
 
   private def validUtrFormat(utr: Option[String]): Boolean = {
 
@@ -141,7 +142,9 @@ object MatchingForms extends Mappings {
     Constraint({
       case s if s.isEmpty      => Invalid(ValidationError("cds.matching-error.business-details.business-name.isEmpty"))
       case s if s.length > 105 => Invalid(ValidationError("cds.matching-error.business-details.business-name.too-long"))
-      case _                   => Valid
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching-error.business-details.business-name.invalid-chars"))
+      case _ => Valid
     })
 
   private def validPartnershipName: Constraint[String] =
@@ -149,6 +152,8 @@ object MatchingForms extends Mappings {
       case s if s.isEmpty => Invalid(ValidationError("cds.matching-error.business-details.partnership-name.isEmpty"))
       case s if s.length > 105 =>
         Invalid(ValidationError("cds.matching-error.business-details.partnership-name.too-long"))
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching-error.business-details.partnership-name.invalid-chars"))
       case _ => Valid
     })
 
@@ -156,14 +161,18 @@ object MatchingForms extends Mappings {
     Constraint({
       case s if s.isEmpty      => Invalid(ValidationError("cds.matching-error.business-details.company-name.isEmpty"))
       case s if s.length > 105 => Invalid(ValidationError("cds.matching-error.business-details.company-name.too-long"))
-      case _                   => Valid
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching-error.business-details.company-name.invalid-chars"))
+      case _ => Valid
     })
 
   private def validOrganisationName: Constraint[String] =
     Constraint({
       case s if s.isEmpty      => Invalid(ValidationError("cds.matching.organisation-name.error.name"))
       case s if s.length > 105 => Invalid(ValidationError("cds.matching-error.business-details.business-name.too-long"))
-      case _                   => Valid
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching-error.business-details.business-name.invalid-chars"))
+      case _ => Valid
     })
 
   private def validUtr: Constraint[String] = {
@@ -331,6 +340,8 @@ object MatchingForms extends Mappings {
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.organisation-address.line-1.error.empty"))
       case s if s.trim.length > 35 =>
         Invalid(ValidationError("cds.matching.organisation-address.line-1.error.too-long"))
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
       case _ => Valid
     })
 
@@ -338,6 +349,8 @@ object MatchingForms extends Mappings {
     Constraint({
       case s if s.trim.length > 34 =>
         Invalid(ValidationError("cds.matching.organisation-address.line-2.error.too-long"))
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
       case _ => Valid
     })
 
@@ -346,6 +359,8 @@ object MatchingForms extends Mappings {
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.organisation-address.line-3.error.empty"))
       case s if s.trim.length > 34 =>
         Invalid(ValidationError("cds.matching.organisation-address.line-3.error.too-long"))
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
       case _ => Valid
     })
 
@@ -353,6 +368,8 @@ object MatchingForms extends Mappings {
     Constraint({
       case s if s.trim.length > 35 =>
         Invalid(ValidationError("cds.matching.organisation-address.line-4.error.too-long"))
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
       case _ => Valid
     })
 

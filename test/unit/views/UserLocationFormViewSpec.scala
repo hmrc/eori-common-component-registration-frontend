@@ -31,12 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   Save4LaterService,
   SubscriptionStatusService
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  error_template,
-  sub01_outcome_processing,
-  sub01_outcome_rejected,
-  user_location
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
 import unit.controllers.CdsPage
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -62,8 +57,6 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
 
   private val errorTemplate = instanceOf[error_template]
 
-  private val sub01OutcomeRejected = instanceOf[sub01_outcome_rejected]
-
   private val controller = new UserLocationController(
     mockAuthAction,
     mockRequestSessionData,
@@ -74,7 +67,6 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
     mcc,
     userLocationView,
     sub01OutcomeProcessing,
-    sub01OutcomeRejected,
     errorTemplate
   )
 

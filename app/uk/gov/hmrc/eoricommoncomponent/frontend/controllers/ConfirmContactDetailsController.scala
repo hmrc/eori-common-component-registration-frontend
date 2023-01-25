@@ -42,7 +42,6 @@ class ConfirmContactDetailsController @Inject() (
   mcc: MessagesControllerComponents,
   confirmContactDetailsView: confirm_contact_details,
   sub01OutcomeProcessingView: sub01_outcome_processing,
-  sub01OutcomeRejected: sub01_outcome_rejected,
   youCannotChangeAddressOrganisation: you_cannot_change_address_organisation,
   youCannotChangeAddressIndividual: you_cannot_change_address_individual
 )(implicit ec: ExecutionContext)
@@ -101,11 +100,15 @@ class ConfirmContactDetailsController @Inject() (
                   )
                 )
               case None =>
+                // $COVERAGE-OFF$Loggers
                 logger.warn("[ConfirmContactDetailsController.form] organisation type None")
+                // $COVERAGE-ON
                 sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
             }
         case _ =>
+          // $COVERAGE-OFF$Loggers
           logger.warn("[ConfirmContactDetailsController.form] registrationDetails not found")
+          // $COVERAGE-ON
           sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
       }
     }
@@ -149,11 +152,15 @@ class ConfirmContactDetailsController @Inject() (
                       )
                     )
                   case None =>
+                    // $COVERAGE-OFF$Loggers
                     logger.warn("[ConfirmContactDetailsController.submit] organisation type None")
+                    // $COVERAGE-ON
                     sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
                 }
               case _ =>
+                // $COVERAGE-OFF$Loggers
                 logger.warn("[ConfirmContactDetailsController.submit] registrationDetails not found")
+                // $COVERAGE-ON
                 sessionCache.remove.map(_ => Redirect(OrganisationTypeController.form(service)))
             },
           areDetailsCorrectAnswer => checkAddressDetails(service, isInReviewMode, areDetailsCorrectAnswer)
@@ -181,14 +188,6 @@ class ConfirmContactDetailsController @Inject() (
         name          <- sessionCache.registrationDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
       } yield Ok(sub01OutcomeProcessingView(Some(name), processedDate))
-  }
-
-  def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      for {
-        name          <- sessionCache.registrationDetails.map(_.name)
-        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
-      } yield Ok(sub01OutcomeRejected(Some(name), processedDate, service))
   }
 
   private def determineRoute(detailsCorrect: YesNoWrong, service: Service, isInReviewMode: Boolean)(implicit

@@ -602,6 +602,8 @@ cds.matching.organisation-address.postcode=Postcode
 cds.matching.organisation-address.countryCode=Country
 cds.matching.organisation-address.line-1.error.empty=Enter the first line of your address
 cds.matching.organisation-address.line-1.error.too-long=The first line of the address must be 35 characters or less
+cds.matching.organisation-address.line.error.invalid-chars=Address line cannot contain ''<'' or ''>''
+
 cds.matching.organisation-address.line-2.error.too-long=The second line of the address must be 34 characters or less
 cds.matching.organisation-address.line-4.error.too-long=The Region or state must be 35 characters or less
 cds.matching.organisation-address.postcode.error.empty=Enter a valid postcode
@@ -639,13 +641,17 @@ cds.matching.name-id-organisation.error.organisation.utr=Enter the Corporation T
 
 cds.matching-error.business-details.business-name.isEmpty=Enter your registered organisation name
 cds.matching-error.business-details.business-name.too-long=The organisation name must be 105 characters or less
+cds.matching-error.business-details.business-name.invalid-chars=Organisation name cannot contain ''<'' or ''>''
+
 cds.matching-error.business-details.utr.isEmpty=Enter your UTR number
 
 cds.matching-error.business-details.partnership-name.isEmpty=Enter your registered partnership name
 cds.matching-error.business-details.partnership-name.too-long=The partnership name must be 105 characters or less
+cds.matching-error.business-details.partnership-name.invalid-chars=Partnership name cannot contain ''<'' or ''>''
 
 cds.matching-error.business-details.company-name.isEmpty=Enter your registered company name
 cds.matching-error.business-details.company-name.too-long=The company name must be 105 characters or less
+cds.matching-error.business-details.company-name.invalid-chars=Company name cannot contain ''<'' or ''>''
 
 cds.matching.organisation.name.title=What is your registered organisation name?
 cds.matching.organisation.name.label=Organisation name
@@ -1155,9 +1161,12 @@ cds.subscription.address-details.countryCode-auto-complete.label=Country
 cds.subscription.address-details.country.label=Country
 cds.subscription.address-details.street.empty.error=Enter the first line of your address
 cds.subscription.address-details.street.too-long.error=The first line of the address must be 70 characters or less
+cds.subscription.address-details.street.error.invalid-chars=Address cannot contain ''<'' or ''>''
 cds.subscription.address-details.city.error.label=Enter your town or city
+cds.subscription.address-details.city.error.invalid-chars=Town or city cannot contain ''<'' or ''>''
 cds.subscription.address-details.postcode.error.label=Enter a valid postcode
 cds.subscription.address-details.page-error.street=Enter the first line of your address
+
 cds.subscription.address-details.page-error.city=Enter your town or city
 cds.subscription.address-details.page-error.city.too-long=The town or city must be 35 characters or less
 
@@ -1206,9 +1215,9 @@ cds.subscription.contact-details.heading=EORI number application contact details
 cds.subscription.contact-details.full-name.label=Full name
 cds.subscription.contact-details.email.label=Email address
 cds.subscription.contact-details.telephone.label=Telephone
-cds.subscription.contact-details.telephone.hint=Only enter numbers, for example 01632 960 001
+cds.subscription.contact-details.telephone.hint=For international numbers include the country code.
 cds.subscription.contact-details.fax.label=Fax (optional)
-cds.subscription.contact-details.fax.hint=Only enter numbers, for example 01632 960 001
+cds.subscription.contact-details.fax.hint=For international numbers include the country code.
 cds.subscription.contact-details.street.label=Address line 1
 cds.subscription.contact-details.city.label=Town or city
 cds.subscription.contact-details.postcode.label=Postcode
@@ -1219,6 +1228,7 @@ cds.subscription.contact-details.address.we-will-use=We will use this address to
 cds.subscription.contact-details.address-text=Is this the right contact address?
 cds.subscription.contact-details.change-address.label=Enter your contact address
 cds.subscription.contact-details.form-error.full-name=Enter your contact name
+cds.subscription.contact-details.form-error.full-name.wrong-format=Enter your contact name without invalid characters
 cds.subscription.contact-details.form-error.email=Enter your email address
 cds.subscription.contact-details.form-error.email.too-long=The email address must be 50 characters or less
 cds.subscription.contact-details.form-error.telephone=Enter your contact telephone number
@@ -1608,6 +1618,7 @@ cds.subscription.organisation-disclose-personal-details-consent.no=Select no to 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
 subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Tax Unique Taxpayer Reference (UTR)?
+subscription-journey.how-confirm-identity.utr.row.org.heading=What is your Corporation Tax Unique Taxpayer Reference (UTR)?
 subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful

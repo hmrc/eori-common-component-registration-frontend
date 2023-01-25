@@ -36,7 +36,9 @@ object DateConverter {
   def toLocalDate(dateStr: String): Option[LocalDate] =
     Try(LocalDate.parse(dateStr)).recoverWith {
       case NonFatal(e) =>
+        // $COVERAGE-OFF$Loggers
         logger.warn(s"Could not parse the LocalDate '$dateStr': ${e.getMessage}", e)
+        // $COVERAGE-ON
         Failure(e)
     }.toOption
 

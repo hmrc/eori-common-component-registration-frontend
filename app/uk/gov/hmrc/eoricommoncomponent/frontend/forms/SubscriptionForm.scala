@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 import java.time.LocalDate
 
 object SubscriptionForm extends Mappings {
+  private val nameRegex = "[a-zA-Z0-9-' ]*"
 
   private val validConfirmIndividualTypes = Set(CdsOrganisationType.SoleTraderId, CdsOrganisationType.IndividualId)
 
@@ -105,8 +106,10 @@ object SubscriptionForm extends Mappings {
   def validFullName: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.subscription.contact-details.form-error.full-name"))
-      case s if s.length > 70  => Invalid(ValidationError("cds.subscription.full-name.error.too-long"))
-      case _                   => Valid
+      case s if !s.matches(nameRegex) =>
+        Invalid(ValidationError("cds.subscription.contact-details.form-error.full-name.wrong-format"))
+      case s if s.length > 70 => Invalid(ValidationError("cds.subscription.full-name.error.too-long"))
+      case _                  => Valid
     })
 
 }

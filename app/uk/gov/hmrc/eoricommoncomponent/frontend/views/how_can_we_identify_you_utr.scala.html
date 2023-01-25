@@ -25,9 +25,9 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
-@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call)(implicit request: Request[_], messages: Messages)
+@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, heading: String = "subscription-journey.how-confirm-identity.utr.heading")(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages("subscription-journey.how-confirm-identity.utr.heading"), form = Some(utrForm)) {
+@layout_di(messages(heading), form = Some(utrForm)) {
     <div>
         @errorSummary(utrForm.errors)
 
@@ -38,7 +38,7 @@
                 form = utrForm,
                 id = "utr",
                 name = "utr",
-                label = "subscription-journey.how-confirm-identity.utr.heading",
+                label = heading,
                 isPageHeading = true,
                 hint = Some(messages("subscription-journey.how-confirm-identity.utr.hint")),
                 classes = Some("govuk-!-width-one-half"),

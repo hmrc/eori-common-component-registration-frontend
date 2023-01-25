@@ -64,7 +64,9 @@ class CheckYourEmailController @Inject() (
       implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
         save4LaterService.fetchEmail(GroupId(userWithEnrolments.groupId)) flatMap {
           _.fold {
+            // $COVERAGE-OFF$Loggers
             logger.warn("[CheckYourEmailController][createForm] -   emailStatus cache none")
+            // $COVERAGE-ON
             populateView(None, isInReviewMode = false, service)
           } { emailStatus =>
             populateView(emailStatus.email, isInReviewMode = false, service)
@@ -83,7 +85,9 @@ class CheckYourEmailController @Inject() (
                 .fetchEmail(GroupId(userWithEnrolments.groupId))
                 .flatMap {
                   _.fold {
+                    // $COVERAGE-OFF$Loggers
                     logger.warn("[CheckYourEmailController][submit] -   emailStatus cache none")
+                    // $COVERAGE-ON
                     Future(
                       BadRequest(
                         checkYourEmailView(None, formWithErrors, isInReviewMode = isInReviewMode, service = service)
@@ -111,7 +115,9 @@ class CheckYourEmailController @Inject() (
       implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
         save4LaterService.fetchEmail(GroupId(userWithEnrolments.groupId)) flatMap { emailStatus =>
           emailStatus.fold {
+            // $COVERAGE-OFF$Loggers
             logger.warn("[CheckYourEmailController][verifyEmailView] -  emailStatus cache none")
+            // $COVERAGE-ON
             populateEmailVerificationView(None, service)
           } { email =>
             populateEmailVerificationView(email.email, service)
@@ -124,7 +130,9 @@ class CheckYourEmailController @Inject() (
       implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
         save4LaterService.fetchEmail(GroupId(userWithEnrolments.groupId)) flatMap { emailStatus =>
           emailStatus.fold {
+            // $COVERAGE-OFF$Loggers
             logger.warn("[CheckYourEmailController][emailConfirmed] -  emailStatus cache none")
+            // $COVERAGE-ON
             Future.successful(Redirect(SecuritySignOutController.signOut(service)))
           } { email =>
             if (email.isConfirmed.getOrElse(false))
@@ -150,7 +158,9 @@ class CheckYourEmailController @Inject() (
   ): Future[Result] =
     save4LaterService.fetchEmail(groupId) flatMap {
       _.fold {
+        // $COVERAGE-OFF$Loggers
         logger.warn("[CheckYourEmailController][submitNewDetails] -  emailStatus cache none")
+        // $COVERAGE-ON
         throw new IllegalStateException("[CheckYourEmailController][submitNewDetails] - emailStatus cache none")
       } { emailStatus =>
         val email: String = emailStatus.email.getOrElse(
@@ -160,10 +170,12 @@ class CheckYourEmailController @Inject() (
           case Some(true) =>
             Future.successful(Redirect(CheckYourEmailController.verifyEmailView(service)))
           case Some(false) =>
+            // $COVERAGE-OFF$Loggers
             logger.warn(
               "[CheckYourEmailController][sendVerification] - " +
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
+            // $COVERAGE-ON
             save4LaterService
               .saveEmail(groupId, emailStatus.copy(isVerified = true))
               .flatMap { _ =>

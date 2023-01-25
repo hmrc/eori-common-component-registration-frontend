@@ -45,17 +45,21 @@ class HandleSubscriptionConnector @Inject() (http: HttpClient, appConfig: AppCon
     http.POST[HandleSubscriptionRequest, HttpResponse](url, request, headers) map { response =>
       response.status match {
         case OK | NO_CONTENT =>
+          // $COVERAGE-OFF$Loggers
           logger.debug(s"Call complete for call to $url and  hc: $hc. Status:${response.status}")
+          // $COVERAGE-ON
           ()
         case _ => throw new BadRequestException(s"Status:${response.status}")
       }
     } recoverWith {
+      // $COVERAGE-OFF$Loggers
       case e: BadRequestException =>
         logger.warn(s"Call failed with BAD_REQUEST status for call to $url and  hc: $hc: ${e.getMessage}", e)
         Future.failed(e)
       case NonFatal(e) =>
         logger.warn(s"Call failed for call to $url: ${e.getMessage}", e)
         Future.failed(e)
+      // $COVERAGE-ON
     }
   }
 

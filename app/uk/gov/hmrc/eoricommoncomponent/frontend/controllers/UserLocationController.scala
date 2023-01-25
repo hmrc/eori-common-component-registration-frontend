@@ -39,7 +39,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{sub01_outcome_processing, sub01_outcome_rejected}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub01_outcome_processing
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -55,7 +55,6 @@ class UserLocationController @Inject() (
   mcc: MessagesControllerComponents,
   userLocationView: user_location,
   sub01OutcomeProcessing: sub01_outcome_processing,
-  sub01OutcomeRejected: sub01_outcome_rejected,
   errorTemplate: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
@@ -184,13 +183,6 @@ class UserLocationController @Inject() (
       sessionCache.sub01Outcome
         .map(_.processedDate)
         .map(processedDate => Ok(sub01OutcomeProcessing(None, processedDate)))
-  }
-
-  def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      sessionCache.sub01Outcome
-        .map(_.processedDate)
-        .map(processedDate => Ok(sub01OutcomeRejected(None, processedDate, service)))
   }
 
 }

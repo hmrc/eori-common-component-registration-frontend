@@ -59,7 +59,9 @@ class SubscriptionStatusConnector @Inject() (http: HttpClient, appConfig: AppCon
       resp.subscriptionStatusResponse
     } recover {
       case e: Throwable =>
+        // $COVERAGE-OFF$Loggers
         logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
+        // $COVERAGE-ON
         throw e
     }
   }

@@ -106,7 +106,9 @@ class SubscriptionRecoveryController @Inject() (
               service
             )(Redirect(Sub02Controller.end(service)))
           }.getOrElse {
+            // $COVERAGE-OFF$Loggers
             logger.info("Email Missing")
+            // $COVERAGE-ON
             Future.successful(Redirect(SubscriptionRecoveryController.eoriExist(service)))
           }
         }

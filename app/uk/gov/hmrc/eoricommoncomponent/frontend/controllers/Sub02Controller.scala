@@ -42,7 +42,6 @@ class Sub02Controller @Inject() (
   sub02SubscriptionInProgressView: sub02_subscription_in_progress,
   sub02EoriAlreadyAssociatedView: sub02_eori_already_associated,
   sub02EoriAlreadyExists: sub02_eori_already_exists,
-  sub01OutcomeRejected: sub01_outcome_rejected,
   standaloneOutcomeView: standalone_subscription_outcome,
   subscriptionOutcomeView: subscription_outcome,
   xiEoriGuidancePage: xi_eori_guidance,
@@ -78,14 +77,14 @@ class Sub02Controller @Inject() (
               Future.successful(Redirect(Sub02Controller.subscriptionInProgress(service)))
             case SubscriptionFailed(RequestNotProcessed, _) =>
               Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-            case _: SubscriptionFailed =>
-              Future.successful(Redirect(Sub02Controller.rejected(service)))
             case _ =>
               throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
           }
         } recoverWith {
         case e: Exception =>
+          // $COVERAGE-OFF$Loggers
           logger.error("Subscription Error. ", e)
+          // $COVERAGE-ON
           Future.failed(new RuntimeException("Subscription Error. ", e))
       }
     }
@@ -128,15 +127,6 @@ class Sub02Controller @Inject() (
             )
           ).withSession(newUserSession)
         }
-  }
-
-  def rejected(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      for {
-        name          <- sessionCache.subscriptionDetails.map(_.name)
-        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
-        _             <- sessionCache.remove
-      } yield Ok(sub01OutcomeRejected(Some(name), processedDate, service)).withSession(newUserSession)
   }
 
   def eoriAlreadyExists(service: Service): Action[AnyContent] =

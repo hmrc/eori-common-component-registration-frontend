@@ -40,17 +40,23 @@ class VatControlListConnector @Inject() (http: HttpClient, appConfig: AppConfig)
       logger.debug(s"vat-known-facts-control-list successful. url: $url")
       // $COVERAGE-ON
       response.status match {
-        case OK => Right(response.json.as[VatControlListResponse])
+        case OK        => Right(response.json.as[VatControlListResponse])
         case NOT_FOUND =>
+          // $COVERAGE-OFF$Loggers
           logger.warn(
             s"VatControlList failed. url: $url. Reason: The back end has indicated that vat known facts cannot be returned."
           )
+          // $COVERAGE-ON
           Left(NotFoundResponse)
         case BAD_REQUEST =>
+          // $COVERAGE-OFF$Loggers
           logger.warn(s"VatControlList failed. url: $url. Reason: Request has not passed validation. Invalid vrn.")
+          // $COVERAGE-ON
           Left(InvalidResponse)
         case SERVICE_UNAVAILABLE =>
+          // $COVERAGE-OFF$Loggers
           logger.warn(s"VatControlList failed. url: $url. Reason: Dependent systems are currently not responding")
+          // $COVERAGE-ON
           Left(ServiceUnavailableResponse)
         case _ => throw new Exception("Incorrect VAT Known facts response")
       }

@@ -89,7 +89,10 @@ class GetUtrNumberController @Inject() (
     matchOrganisationUtrView(
       form,
       isInReviewMode,
-      routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode)
+      routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode),
+      if (organisationType == "third-country-organisation")
+        "subscription-journey.how-confirm-identity.utr.row.org.heading"
+      else "subscription-journey.how-confirm-identity.utr.heading"
     )
 
   private def matchBusinessOrIndividual(

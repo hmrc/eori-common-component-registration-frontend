@@ -55,7 +55,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   private val mockRegistrationDetails = mock[RegistrationDetails](RETURNS_DEEP_STUBS)
   private val mockSubscriptionDetails = mock[SubscriptionDetails](RETURNS_DEEP_STUBS)
 
-  private val hintTextTelAndFax = "Only enter numbers, for example 01632 960 001"
+  private val hintTextTelAndFax = "For international numbers include the country code."
 
   private val mockCdsFrontendDataCache = mock[SessionCache]
   private val mockOrgTypeLookup        = mock[OrgTypeLookup]

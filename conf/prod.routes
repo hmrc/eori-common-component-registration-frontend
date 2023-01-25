@@ -60,8 +60,7 @@ GET         /customs-registration-services/:service/register/download/text      
 
 
 GET         /customs-registration-services/:service/register/processing                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController.processing(service: Service)
-GET         /customs-registration-services/:service/register/status-rejected                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController.rejected(service: Service)
-GET         /customs-registration-services/:service/register/rejected                                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.rejected(service: Service)
+
 GET         /customs-registration-services/:service/register/user-already-has-eori                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.eoriAlreadyExists(service: Service)
 GET         /customs-registration-services/:service/register/user-already-has-eori-associated            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.eoriAlreadyAssociated(service: Service)
 GET         /customs-registration-services/:service/register/subscription-in-progress                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.subscriptionInProgress(service: Service)
@@ -74,8 +73,6 @@ GET         /customs-registration-services/:service/register/business-details-re
 
 # Return
 GET         /customs-registration-services/:service/register/return-processing                           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController.processing(service: Service)
-GET         /customs-registration-services/:service/register/return-rejected                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController.rejected(service: Service)
-
 GET         /customs-registration-services/:service/register/matching/user-location                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController.form(service: Service)
 POST        /customs-registration-services/:service/register/matching/user-location                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController.submit(service: Service)
 GET         /customs-registration-services/:service/register/matching/organisation-type                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.OrganisationTypeController.form(service: Service)
