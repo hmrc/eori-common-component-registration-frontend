@@ -343,8 +343,8 @@ class CheckYourDetailsRegisterControllerSpec
       }
 
       val UtrLabelText = organisationType match {
-        case LimitedLiabilityPartnership | Partnership =>
-          "Partnership Self Assessment UTR number"
+        case LimitedLiabilityPartnership => "Corporation Tax Unique Taxpayer Reference (UTR)"
+        case Partnership                 => "Partnership Self Assessment UTR"
         case _ =>
           "Corporation Tax UTR"
       }
@@ -642,11 +642,11 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership Self Assessment UTR number"
+        "Corporation Tax Unique Taxpayer Reference (UTR)"
       ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership Self Assessment UTR number"
+        "Corporation Tax Unique Taxpayer Reference (UTR)"
       ) shouldBe "7280616009"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Partnership address") shouldBe true
