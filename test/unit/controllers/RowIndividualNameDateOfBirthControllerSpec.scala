@@ -113,7 +113,6 @@ class RowIndividualNameDateOfBirthControllerSpec
             val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
 
             assertPresentOnPage(webPage.givenNameElement)
-            assertPresentOnPage(webPage.middleNameElement)
             assertPresentOnPage(webPage.familyNameElement)
             assertPresentOnPage(webPage.dateOfBirthElement)
             page.getElementAttributeAction(
@@ -172,7 +171,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> ""), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
-            "Enter your given name"
+            "Enter your first name"
           )
       }
 
@@ -182,7 +181,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
-            "Enter your given name"
+            "Enter your first name"
           )
       }
 
@@ -192,7 +191,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> "!!!!!!''''!!!"), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
-            "Enter a given name without invalid characters"
+            "Enter a first name without invalid characters"
           )
       }
 
@@ -203,35 +202,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
           GivenName,
           fieldLevelErrorGivenName,
-          "The given name must be 35 characters or less"
-        )
-      }
-    }
-
-    "middle name" should {
-      import webPage.{fieldLevelErrorMiddleName, middleNameField, MiddleName}
-
-      passOptionalFieldCheck()(emptyFieldModelGens = validFormModelGens.copy(middleNameGen = emptyString.asOption))
-
-      "not allow invalid characters" in testControllerWithModel(
-        validFormModelGens.copy(middleNameGen = emptyString.asOption)
-      ) { (controllerFixture, individualNameAndDateOfBirth) =>
-        import controllerFixture._
-        assertInvalidField(formData(individualNameAndDateOfBirth) + (middleNameField -> "!!!!!!''''!!!"), webPage)(
-          middleNameField,
-          fieldLevelErrorMiddleName,
-          "Enter a middle name without invalid characters"
-        )
-      }
-
-      "be restricted to 35 characters" in testControllerWithModel(
-        validFormModelGens.copy(middleNameGen = oversizedNameGenerator().asMandatoryOption)
-      ) { (controllerFixture, individualNameAndDateOfBirth) =>
-        import controllerFixture._
-        assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
-          MiddleName,
-          fieldLevelErrorMiddleName,
-          "The middle name must be 35 characters or less"
+          "The first name must be 35 characters or less"
         )
       }
     }
@@ -245,7 +216,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> ""), webPage)(
             familyNameField,
             fieldLevelErrorFamilyName,
-            "Enter your family name"
+            "Enter your last name"
           )
       }
 
@@ -255,19 +226,18 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
             familyNameField,
             fieldLevelErrorFamilyName,
-            "Enter your family name"
+            "Enter your last name"
           )
       }
 
-      "not allow invalid characters" in testControllerWithModel(
-        validFormModelGens.copy(middleNameGen = emptyString.asOption)
-      ) { (controllerFixture, individualNameAndDateOfBirth) =>
-        import controllerFixture._
-        assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> "!!!!!!''''!!!"), webPage)(
-          familyNameField,
-          fieldLevelErrorFamilyName,
-          "Enter a family name without invalid characters"
-        )
+      "not allow invalid characters" in testControllerWithModel(validFormModelGens) {
+        (controllerFixture, individualNameAndDateOfBirth) =>
+          import controllerFixture._
+          assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> "!!!!!!''''!!!"), webPage)(
+            familyNameField,
+            fieldLevelErrorFamilyName,
+            "Enter a last name without invalid characters"
+          )
       }
 
       "be restricted to 35 characters" in testControllerWithModel(
@@ -277,7 +247,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
           FamilyName,
           fieldLevelErrorFamilyName,
-          "The family name must be 35 characters or less"
+          "The last name must be 35 characters or less"
         )
       }
     }

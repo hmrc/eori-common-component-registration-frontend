@@ -33,7 +33,6 @@ class RegistrationDetailsCreatorRegistrationInfoSpec extends UnitSpec with Mocki
   private val orgType                    = "Partnership"
   private val sapNumber                  = "7656565646"
   private val firstName                  = "Jon"
-  private val middleName                 = "middle"
   private val lastName                   = "Doe"
   private val dob                        = LocalDate.now()
   private val postcode                   = "SE28 1AA"
@@ -47,7 +46,6 @@ class RegistrationDetailsCreatorRegistrationInfoSpec extends UnitSpec with Mocki
     when(orgRegInfo.postcode).thenReturn(Some(postcode))
     when(orgRegInfo.country).thenReturn(countryCode)
     when(individualRegInfo.firstName).thenReturn(firstName)
-    when(individualRegInfo.middleName).thenReturn(Some(middleName))
     when(individualRegInfo.lastName).thenReturn(lastName)
     when(individualRegInfo.dateOfBirth).thenReturn(Some(dob))
     when(individualRegInfo.postcode).thenReturn(Some(postcode))
@@ -74,49 +72,6 @@ class RegistrationDetailsCreatorRegistrationInfoSpec extends UnitSpec with Mocki
         ),
         dateOfEstablishment = None,
         etmpOrganisationType = Some(EtmpOrganisationType.apply(orgType))
-      )
-    }
-
-    "create individual registration details with missing middle name" in {
-      when(individualRegInfo.middleName).thenReturn(None)
-
-      val actual = registrationDetailsCreator.registrationDetails()(individualRegInfo)
-
-      actual shouldBe RegistrationDetailsIndividual(
-        customsId = None,
-        sapNumber = individualRegInfo.taxPayerId,
-        safeId = SafeId(""),
-        name = firstName + " " + lastName,
-        address = Address(
-          individualRegInfo.lineOne,
-          individualRegInfo.lineTwo,
-          individualRegInfo.lineThree,
-          individualRegInfo.lineFour,
-          individualRegInfo.postcode,
-          individualRegInfo.country
-        ),
-        dateOfBirth = dob
-      )
-
-    }
-
-    "create individual registration details with middle name" in {
-      when(individualRegInfo.middleName).thenReturn(Some(middleName))
-
-      registrationDetailsCreator.registrationDetails()(individualRegInfo) shouldBe RegistrationDetailsIndividual(
-        customsId = None,
-        sapNumber = individualRegInfo.taxPayerId,
-        safeId = SafeId(""),
-        name = firstName + " " + middleName + " " + lastName,
-        address = Address(
-          individualRegInfo.lineOne,
-          individualRegInfo.lineTwo,
-          individualRegInfo.lineThree,
-          individualRegInfo.lineFour,
-          individualRegInfo.postcode,
-          individualRegInfo.country
-        ),
-        dateOfBirth = dob
       )
     }
 

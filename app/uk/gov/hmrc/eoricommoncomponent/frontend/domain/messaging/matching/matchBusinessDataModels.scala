@@ -50,12 +50,7 @@ object MatchingRequestHolder {
   implicit val formats = Json.format[MatchingRequestHolder]
 }
 
-case class IndividualResponse(
-  firstName: String,
-  middleName: Option[String],
-  lastName: String,
-  dateOfBirth: Option[String]
-) extends IndividualName
+case class IndividualResponse(firstName: String, lastName: String, dateOfBirth: Option[String]) extends IndividualName
 
 object IndividualResponse {
   implicit val formats = Json.format[IndividualResponse]

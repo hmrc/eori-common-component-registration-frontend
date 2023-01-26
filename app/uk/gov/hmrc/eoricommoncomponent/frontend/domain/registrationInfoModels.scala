@@ -36,7 +36,6 @@ sealed trait RegistrationInfo {
 
 case class IndividualRegistrationInfo(
   firstName: String,
-  middleName: Option[String],
   lastName: String,
   dateOfBirth: Option[LocalDate],
   override val taxPayerId: TaxPayerId,

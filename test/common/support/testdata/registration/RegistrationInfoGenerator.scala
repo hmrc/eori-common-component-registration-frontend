@@ -24,7 +24,6 @@ object RegistrationInfoGenerator {
 
   val individualRegistrationInfoWithAllOptionalValues = IndividualRegistrationInfo(
     firstName = "John",
-    middleName = Some("Mark"),
     lastName = "Doe",
     dateOfBirth = Some(LocalDate.of(1981, 2, 28)),
     taxPayerId = TaxPayerId("someTaxPayerId"),
@@ -42,7 +41,6 @@ object RegistrationInfoGenerator {
 
   val individualRegistrationInfoWithOnlyMandatoryValues = IndividualRegistrationInfo(
     firstName = "John",
-    middleName = None,
     lastName = "Doe",
     dateOfBirth = None,
     taxPayerId = TaxPayerId("someTaxPayerId"),

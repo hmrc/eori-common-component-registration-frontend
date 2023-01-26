@@ -94,15 +94,9 @@ class RegistrationDetailsCreatorWithIdSpec extends RegistrationDetailsCreatorTes
   private val individualWithIdTestCases: Gen[(FromMatchingWithIdArguments, RegistrationDetailsIndividual)] = {
     def individualResponseGen(dateOfBirth: Option[String]) =
       for {
-        firstName  <- Gen.alphaStr
-        middleName <- Gen.alphaStr.asOption
-        lastName   <- Gen.alphaStr
-      } yield IndividualResponse(
-        firstName = firstName,
-        middleName = middleName,
-        lastName = lastName,
-        dateOfBirth = dateOfBirth
-      )
+        firstName <- Gen.alphaStr
+        lastName  <- Gen.alphaStr
+      } yield IndividualResponse(firstName = firstName, lastName = lastName, dateOfBirth = dateOfBirth)
 
     def individualResponseDetailGen(individualResponse: IndividualResponse, address: Address) =
       for {

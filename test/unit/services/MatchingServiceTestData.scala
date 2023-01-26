@@ -31,14 +31,13 @@ trait MatchingServiceTestData {
   val Partnership                           = "Partnership"
   val UnincorporatedBody                    = "Unincorporated Body"
   val individualFirstName                   = "John"
-  val individualMiddleName                  = "Middle"
   val individualLastName                    = "Doe"
   val individualDateOfBirth                 = "1999-12-20"
   val individualLocalDateOfBirth: LocalDate = LocalDate.parse(individualDateOfBirth)
   val individual: Individual                = Individual.noMiddle(individualFirstName, individualLastName, individualDateOfBirth)
 
   val individualWithMiddleName =
-    Individual(individualFirstName, Some(individualMiddleName), individualLastName, individualDateOfBirth)
+    Individual(individualFirstName, individualLastName, individualDateOfBirth)
 
   val utrId                 = "2108834503"
   val utr                   = Utr(utrId)
@@ -152,7 +151,6 @@ trait MatchingServiceTestData {
          |      "isAnAgent": false,
          |      "individual": {
          |        "firstName": "$individualFirstName",
-         |        "middleName": "$individualMiddleName",
          |        "lastName": "$individualLastName",
          |        "dateOfBirth": "$individualDateOfBirth"
          |      }
@@ -372,7 +370,6 @@ trait MatchingServiceTestData {
          |      "isAnIndividual": true,
          |      "individual":       {
          |        "firstName": "$individualFirstName",
-         |        "middleName": "$individualMiddleName",
          |        "lastName": "$individualLastName",
          |        "dateOfBirth": "$individualDateOfBirth"
          |      },

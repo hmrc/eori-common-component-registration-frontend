@@ -78,31 +78,20 @@ object Address {
 trait IndividualName {
   def firstName: String
 
-  def middleName: Option[String]
-
   def lastName: String
 
-  final def fullName: String = s"$firstName ${middleName.getOrElse("")} $lastName"
+  final def fullName: String = s"$firstName $lastName"
 }
 
-case class Individual(firstName: String, middleName: Option[String], lastName: String, dateOfBirth: String)
-    extends IndividualName
+case class Individual(firstName: String, lastName: String, dateOfBirth: String) extends IndividualName
 
 object Individual {
 
   def noMiddle(firstName: String, lastName: String, dateOfBirth: String): Individual =
-    Individual(firstName, middleName = None, lastName, dateOfBirth)
+    Individual(firstName, lastName, dateOfBirth)
 
   def withLocalDate(firstName: String, lastName: String, dateOfBirth: LocalDate): Individual =
-    withLocalDate(firstName, middleName = None, lastName, dateOfBirth)
-
-  def withLocalDate(
-    firstName: String,
-    middleName: Option[String],
-    lastName: String,
-    dateOfBirth: LocalDate
-  ): Individual =
-    Individual(firstName, middleName, lastName, dateOfBirth.toString)
+    Individual(firstName, lastName, dateOfBirth.toString)
 
   implicit val formats = Json.format[Individual]
 }
