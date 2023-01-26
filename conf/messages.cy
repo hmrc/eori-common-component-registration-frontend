@@ -848,8 +848,6 @@ cds.subscription.sic.organisation.page.title = Beth yw eich Cod Dosbarthiad Diwy
 cds.subscription.sic.organisation.heading= Beth yw eich Cod Dosbarthiad Diwydiannol Safonol (SIC)
 cds.subscription.date-of-establishment.find-it = Gallwch ddod o hyd i’r dyddiad ymgorffori ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau</a>
 cds.subscription.partnership.date-of-establishment.hint = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich partneriaeth. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich partneriaeth ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
-cds.subscription.sic.page.title = Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich sefydliad?
-cds.subscription.sic.heading = Beth yw’r cod Dosbarthiad Diwydiannol Safonol (SIC) ar gyfer eich sefydliad?
 cds.subscription.sic.nonuk.soleTrader.heading = Nodwch god Dosbarthiad Diwydiannol Safonol (SIC) sy’n disgrifio’r hyn y mae’ch busnes yn ei wneud
 cds.subscription.sic.description = Mae cod SIC yn rhif 5 digid sy’n helpu CThEM i nodi’r hyn y mae’ch sefydliad yn ei wneud. Gallwch chwilio’r gofrestr ar wefan <a href="https://resources.companieshouse.gov.uk/welsh/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Tŷ’r Cwmnïau am eich cod SIC (yn agor tab newydd).</a>
 cds.subscription.sic.nonuk.organisation.description = Mae cod SIC yn rhif 5 digid sy’n helpu CThEM i nodi’r hyn y mae’ch sefydliad yn ei wneud. Mewn rhai gwledydd fe’i hadweinir hefyd fel rhif masnach. Os nad oes gennych un
@@ -873,6 +871,23 @@ cds.subscription.sic.error.empty = Nodwch god SIC
 cds.subscription.sic.error.too-long = Rhaid i’r cod SIC fod yn 5 digid neu lai
 cds.subscription.sic.error.too-short = Rhaid i’r cod SIC fod yn fwy na 3 digid
 cds.subscription.sic.error.wrong-format = Nodwch god SIC yn y fformat cywir
+
+cds.subscription.sic.page.title = Beth mae’ch sefydliad yn ei wneud?
+cds.subscription.sic.page.heading = Beth mae’ch sefydliad yn ei wneud?
+cds.subscription.sic.description.para1 = Rydym yn defnyddio codau Dosbarthiad Diwydiannol Safonol (SIC) i nodi’r hyn y mae sefydliadau’n ei wneud.
+cds.subscription.sic.description.para2 = Nodwch god SIC 5 digid o hyd ar gyfer eich sefydliad
+cds.subscription.sic.hint = Er enghraifft, 15200 yw’r cod SIC ar gyfer ‘cynhyrchu esgidiau. Os oes gennych fwy nag un cod SIC, dim ond un sydd angen i chi ei nodi.
+cds.subscription.sic.details = Nid wyf yn gwybod fy nghod SIC
+
+cds.subscription.sic.page.help.heading = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU
+cds.subscription.sic.page.help.para1 = Mae’r cod i’w gweld ar eich tystysgrif TAW. Fe’i gelwir yn ‘dosbarthiad masnachu (cod SIC)’.
+cds.subscription.sic.page.help.para2 = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Mewngofnodi i’ch cyfrif TAW ar-lein (yn agor tab newydd)</a> er mwyn bwrw golwg dros eich tystysgrif TAW.
+
+cds.subscription.sic.page.help.heading2 = Os nad ydych wedi’ch cofrestru ar gyfer TAW yn y DU, neu os na allwch ddod o hyd i’r cod
+cds.subscription.sic.page.help.para3 = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor mewn ffenestr neu dab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau.
+cds.subscription.sic.page.help.para4 = Nodwch air yn y cyfleuster chwilio sy’n disgrifio orau beth mae’ch sefydliad yn ei wneud. Er enghraifft, ‘dillad’, ‘offer’.
+cds.subscription.sic.page.help.para5 = Bydd hyn yn dychwelyd un neu fwy o godau SIC y gallwch ddewis ohonynt.
+
 cds.sic.label = Cod SIC
 cds.subscription.sic.sic.label = Cod SIC
 cds.sic.hint = Defnyddiwch <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">y rhestr hon</a> i ddod o hyd i’r cod perthnasol (yn agor tab newydd)
