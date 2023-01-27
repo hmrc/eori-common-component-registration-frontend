@@ -1237,6 +1237,7 @@ cds.subscription.outcomes.in-processing.title = Rydym yn prosesu’r cais am dan
 cds.subscription.outcomes.in-processing.heading = Rydym wrthi’n prosesu’r cais am danysgrifiad ar gyfer {0}
 enter-email-body-text = Byddwn yn defnyddio hyn i anfon atoch ganlyniad eich cais.
 cds.subscription.verify-email.para2 = Er mwyn eich diogelwch, bydd y cysylltiad yn yr e-bost yn dod i ben ar ôl 72 awr.
+cds.subscription.verify-email.para1=Rydym wedi anfon e-bost i {0}. Cliciwch ar y cysylltiad yn yr e-bost i ddilysu’ch cyfeiriad e-bost.
 cds.email-confirmed.para.get-access = Gallwch fynd yn eich blaen â’ch cais.
 cds.subscription.outcomes.success.will-send-email = Byddwn yn anfon e-bost atoch i gadarnhau pan fydd gennych fynediad at {0}. Gall hyn gymryd hyd at ddwy awr.
 cds.registration.you-already-have-eori.title = Mae gennych EORI eisoes
