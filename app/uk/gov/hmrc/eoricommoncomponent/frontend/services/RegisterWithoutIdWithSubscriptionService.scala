@@ -107,7 +107,7 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
       details =>
         registerWithoutIdService
           .registerIndividual(
-            IndividualNameAndDateOfBirth(details.firstName, details.middleName, details.lastName, details.dateOfBirth),
+            IndividualNameAndDateOfBirth(details.firstName, details.lastName, details.dateOfBirth),
             registrationDetails.address,
             subscriptionDetails.contactDetails,
             loggedInUser,

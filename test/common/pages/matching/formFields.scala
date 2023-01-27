@@ -21,9 +21,6 @@ trait IndividualNameDateFields {
   val GivenName      = "Given name"
   val givenNameField = "given-name"
 
-  val MiddleName      = "Middle name"
-  val middleNameField = "middle-name"
-
   val FamilyName      = "Family name"
   val familyNameField = "family-name"
 

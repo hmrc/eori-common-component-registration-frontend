@@ -50,9 +50,9 @@ class RowIndividualNameDateOfBirthController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       subscriptionDetailsService.cachedNameDobDetails flatMap {
-        case Some(NameDobMatchModel(firstName, middleName, lastName, dateOfBirth)) =>
+        case Some(NameDobMatchModel(firstName, lastName, dateOfBirth)) =>
           val form = thirdCountryIndividualNameDateOfBirthForm.fill(
-            IndividualNameAndDateOfBirth(firstName, middleName, lastName, dateOfBirth)
+            IndividualNameAndDateOfBirth(firstName, lastName, dateOfBirth)
           )
           Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, true)))
         case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service)))
@@ -87,7 +87,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     service: Service
   )(implicit request: Request[_]): Future[Result] = {
     val nameDobMatchModel =
-      NameDobMatchModel(formData.firstName, formData.middleName, formData.lastName, formData.dateOfBirth)
+      NameDobMatchModel(formData.firstName, formData.lastName, formData.dateOfBirth)
 
     subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) map { _ =>
       if (isInReviewMode)

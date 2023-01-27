@@ -77,7 +77,7 @@ class GetUtrNumberController @Inject() (
       case Some(details) =>
         matchingService.matchIndividualWithId(
           id,
-          Individual.withLocalDate(details.firstName, details.middleName, details.lastName, details.dateOfBirth),
+          Individual.withLocalDate(details.firstName, details.lastName, details.dateOfBirth),
           groupId
         )
       case None => Future.successful(false)

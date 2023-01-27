@@ -73,24 +73,22 @@ trait TestDataGenerators {
 
   case class IndividualGens[E](
     firstNameGen: Gen[String] = nameGenerator,
-    middleNameGen: Gen[Option[String]] = Gen.option(nameGenerator),
     lastNameGen: Gen[String] = nameGenerator,
     extraBitGen: Gen[E]
   )
 
   sealed trait AbstractIndividualGenerator[E, Result] {
 
-    protected case class DataItems(firstName: String, middleName: Option[String], lastName: String, extraBit: E)
+    protected case class DataItems(firstName: String, lastName: String, extraBit: E)
 
     def apply(result: DataItems): Result
 
     def apply(gens: IndividualGens[E]): Gen[Result] =
       for {
-        firstName  <- gens.firstNameGen
-        middleName <- gens.middleNameGen
-        lastName   <- gens.lastNameGen
-        extraBit   <- gens.extraBitGen
-      } yield apply(DataItems(firstName, middleName, lastName, extraBit))
+        firstName <- gens.firstNameGen
+        lastName  <- gens.lastNameGen
+        extraBit  <- gens.extraBitGen
+      } yield apply(DataItems(firstName, lastName, extraBit))
 
   }
 
@@ -100,7 +98,7 @@ trait TestDataGenerators {
     new AbstractIndividualGenerator[LocalDate, IndividualNameAndDateOfBirth] {
 
       def apply(data: DataItems): IndividualNameAndDateOfBirth =
-        IndividualNameAndDateOfBirth(data.firstName, data.middleName, data.lastName, dateOfBirth = data.extraBit)
+        IndividualNameAndDateOfBirth(data.firstName, data.lastName, dateOfBirth = data.extraBit)
 
     }
 

@@ -218,9 +218,8 @@ object MatchingForms extends Mappings {
   val enterNameDobForm: Form[NameDobMatchModel] =
     Form(
       mapping(
-        "first-name"  -> text.verifying(validFirstName),
-        "middle-name" -> optional(text.verifying(validMiddleName)),
-        "last-name"   -> text.verifying(validLastName),
+        "first-name" -> text.verifying(validFirstName),
+        "last-name"  -> text.verifying(validLastName),
         validateDateOfBirth
       )(NameDobMatchModel.apply)(NameDobMatchModel.unapply)
     )
@@ -245,38 +244,12 @@ object MatchingForms extends Mappings {
       case _                  => Valid
     })
 
-  private def validGivenName: Constraint[String] =
-    Constraint("constraints.first-name")({
-      case s if s.isEmpty => Invalid(ValidationError("cds.subscription.given-name.error.empty"))
-      case s if !s.matches(nameRegex) =>
-        Invalid(ValidationError("cds.subscription.given-name.error.wrong-format"))
-      case s if s.length > 35 => Invalid(ValidationError("cds.subscription.given-name.error.too-long"))
-      case _                  => Valid
-    })
-
-  private def validMiddleName: Constraint[String] =
-    Constraint("constraints.first-name")({
-      case s if !s.matches(nameRegex) =>
-        Invalid(ValidationError("cds.subscription.middle-name.error.wrong-format"))
-      case s if s.length > 35 => Invalid(ValidationError("cds.subscription.middle-name.error.too-long"))
-      case _                  => Valid
-    })
-
   private def validLastName: Constraint[String] =
     Constraint("constraints.last-name")({
       case s if s.isEmpty => Invalid(ValidationError("cds.subscription.last-name.error.empty"))
       case s if !s.matches(nameRegex) =>
         Invalid(ValidationError("cds.subscription.last-name.error.wrong-format"))
       case s if s.length > 35 => Invalid(ValidationError("cds.subscription.last-name.error.too-long"))
-      case _                  => Valid
-    })
-
-  private def validFamilyName: Constraint[String] =
-    Constraint("constraints.last-name")({
-      case s if s.isEmpty => Invalid(ValidationError("cds.subscription.family-name.error.empty"))
-      case s if !s.matches(nameRegex) =>
-        Invalid(ValidationError("cds.subscription.family-name.error.wrong-format"))
-      case s if s.length > 35 => Invalid(ValidationError("cds.subscription.family-name.error.too-long"))
       case _                  => Valid
     })
 
@@ -386,9 +359,8 @@ object MatchingForms extends Mappings {
   val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] =
     Form(
       mapping(
-        "given-name"  -> text.verifying(validGivenName),
-        "middle-name" -> optional(text.verifying(validMiddleName)),
-        "family-name" -> text.verifying(validFamilyName),
+        "given-name"  -> text.verifying(validFirstName),
+        "family-name" -> text.verifying(validLastName),
         validateDateOfBirth
       )(IndividualNameAndDateOfBirth.apply)(IndividualNameAndDateOfBirth.unapply)
     )

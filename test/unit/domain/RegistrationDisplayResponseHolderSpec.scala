@@ -68,7 +68,7 @@ class RegistrationDisplayResponseHolderSpec extends UnitSpec {
 
   val responseCommon = ResponseCommon("OK", None, "2016-09-02T09:30:47Z", None, Some("0100086619"))
 
-  val individualResponse = IndividualResponse("fname", None, "lname", Some("1989-01-01"))
+  val individualResponse = IndividualResponse("fname", "lname", Some("1989-01-01"))
 
   val address = Address("Line1", Some("Line2"), None, None, Some("postcode"), "GB")
 

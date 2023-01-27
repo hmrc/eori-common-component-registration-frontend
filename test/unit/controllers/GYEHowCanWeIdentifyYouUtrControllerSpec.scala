@@ -77,9 +77,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
       val utr = "2108834503"
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
-        )
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
       when(
         mockMatchingService
@@ -99,9 +97,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     "give a page level error when a UTR is not matched" in {
       val utr = "2108834503"
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
-        )
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
       when(
         mockMatchingService
@@ -124,9 +120,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     "display error when no input" in {
 
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
-        )
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
       submitForm(Map("utr" -> "")) {
         result =>

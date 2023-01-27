@@ -69,7 +69,7 @@ class GetNinoController @Inject() (
         matchingService
           .matchIndividualWithId(
             id,
-            Individual.withLocalDate(details.firstName, details.middleName, details.lastName, details.dateOfBirth),
+            Individual.withLocalDate(details.firstName, details.lastName, details.dateOfBirth),
             groupId
           )
           .map { matched =>
