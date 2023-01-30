@@ -45,6 +45,10 @@
     displayBackLink: Boolean = true
 )(contentBlock: Html)(implicit messages: Messages, request: Request[_])
 
+@isLoggedIn = @{
+    !request.session.isEmpty && request.session.get("authToken").isDefined
+}
+
 @titleWithEnding = @{
     title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
 }
@@ -86,6 +90,8 @@
         <meta name="format-detection" content="telephone=no" />
     }
 <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/js-depend.css")" type="text/css">
+
+@if(isLoggedIn) {
     @hmrcTimeoutDialogHelper(
         title = Some(messages("cds.timeout.message")),
         timeout = Some(1200),
@@ -96,6 +102,8 @@
         keepAliveButtonText = Some(messages("cds.timeout.keep-alive-button")),
         signOutButtonText = Some(messages("cds.timeout.sign-out-button"))
     )
+}
+
 }
 
 @beforeContent = {
