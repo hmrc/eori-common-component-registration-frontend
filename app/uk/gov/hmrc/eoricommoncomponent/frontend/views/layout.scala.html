@@ -63,6 +63,10 @@
     }
 }
 
+@logOutUrl = @{
+    s"/customs-registration-services/${service.code}/register/logout"
+}
+
 @signOutUrl = @{
     s"/customs-registration-services/${service.code}/register/sign-out"
 }
@@ -87,7 +91,8 @@
         timeout = Some(1200),
         countdown = Some(300),
         keepAliveUrl = Some(keepAliveUrl),
-        signOutUrl = signOutUrl,
+        signOutUrl = logOutUrl,
+        timeoutUrl = Some(signOutUrl),
         keepAliveButtonText = Some(messages("cds.timeout.keep-alive-button")),
         signOutButtonText = Some(messages("cds.timeout.sign-out-button"))
     )
@@ -118,7 +123,7 @@
     pageTitle = Some(titleErr),
     isWelshTranslationAvailable = true, /* or false if your service has not been translated */
     serviceUrl = None,
-    signOutUrl = Some(signOutUrl),
+    signOutUrl = Some(logOutUrl),
     phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedBackRegister(service))),
     additionalHeadBlock = Some(theHead),
     nonce = CSPNonce.get,
