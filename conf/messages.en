@@ -1269,7 +1269,7 @@ cds.business-name.label=Registered company name
 cds.organisation-name.label=Organisation name
 cds.partner-name.label=Registered partnership name
 cds.check-your-details.utrnumber=Corporation Tax UTR number
-cds.check-your-details.utrnumber.partnership=Partnership Self Assessment UTR number
+cds.check-your-details.utrnumber.partnership=Partnership Self Assessment UTR
 #Error page
 cds.error.title=Sorry, there is a problem with the service
 cds.error.message.part1=Please try again later.
