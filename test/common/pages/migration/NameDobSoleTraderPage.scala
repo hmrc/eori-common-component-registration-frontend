@@ -40,8 +40,6 @@ trait NameDobSoleTraderPage extends WebPage {
   val lastNameFieldId              = "last-name"
   val lastNameFieldName            = "last-name"
 
-  val middleNameFieldName = "middle-name"
-
   val dobFieldLevelErrorXPath    = "//*[@id='date-of-birth']//span[@class='error-message']"
   val dateOfBirthDayFieldXPath   = "//*[@id='date-of-birth.day']"
   val dateOfBirthMonthFieldXPath = "//*[@id='date-of-birth.month']"
@@ -56,7 +54,6 @@ trait NameDobSoleTraderPage extends WebPage {
 
   val filledValues = NameDobMatchModel(
     firstName = "Test First Name",
-    middleName = Some("Test Middle Name"),
     lastName = "Test Last Name",
     dateOfBirth = LocalDate.of(1983, 9, 3)
   )

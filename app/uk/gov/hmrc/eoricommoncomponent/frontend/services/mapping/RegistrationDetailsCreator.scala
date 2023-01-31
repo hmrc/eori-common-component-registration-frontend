@@ -205,11 +205,7 @@ class RegistrationDetailsCreator {
     address: Address,
     customsId: Option[CustomsId]
   ): RegistrationDetailsIndividual = {
-    val name = List(
-      Some(individualResponse.firstName),
-      individualResponse.middleName,
-      Some(individualResponse.lastName)
-    ).flatten mkString " "
+    val name = List(Some(individualResponse.firstName), Some(individualResponse.lastName)).flatten mkString " "
     individualResponse.dateOfBirth.fold(ifEmpty =
       throw new IllegalArgumentException("Date of Birth is not provided in registration info response")
     )(

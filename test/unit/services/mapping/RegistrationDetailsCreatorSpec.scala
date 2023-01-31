@@ -38,7 +38,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
 
   "RegistrationDetailsCreator" should {
     "return registration details individual for RegistrationDisplayResponse" in {
-      val individual = IndividualResponse("fname", Some("mname"), "lname", Some("2019-01-01"))
+      val individual = IndividualResponse("fname", "lname", Some("2019-01-01"))
       val responseDetail = ResponseDetail(
         "SAFEID",
         None,
@@ -57,7 +57,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         None,
         TaxPayerId("taxPayerId"),
         SafeId("SAFEID"),
-        "fname mname lname",
+        "fname lname",
         Address("Line1", None, None, None, None, "GB"),
         LocalDate.of(2019, 1, 1)
       )

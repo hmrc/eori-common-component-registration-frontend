@@ -170,16 +170,13 @@ object NinoMatch {
 trait NameDobMatch {
   def firstName: String
 
-  def middleName: Option[String]
-
   def lastName: String
 
   def dateOfBirth: LocalDate
 }
 
-case class NameDobMatchModel(firstName: String, middleName: Option[String], lastName: String, dateOfBirth: LocalDate)
-    extends NameDobMatch {
-  def name: String = s"$firstName ${middleName.getOrElse("")} $lastName"
+case class NameDobMatchModel(firstName: String, lastName: String, dateOfBirth: LocalDate) extends NameDobMatch {
+  def name: String = s"$firstName $lastName"
 }
 
 object NameDobMatchModel {
@@ -233,12 +230,8 @@ object SixLineAddressMatchModel {
 
 }
 
-case class IndividualNameAndDateOfBirth(
-  firstName: String,
-  middleName: Option[String],
-  lastName: String,
-  dateOfBirth: LocalDate
-) extends IndividualName
+case class IndividualNameAndDateOfBirth(firstName: String, lastName: String, dateOfBirth: LocalDate)
+    extends IndividualName
 
 case class EoriAndIdNameAndAddress(fullName: String, address: EstablishmentAddress)
 

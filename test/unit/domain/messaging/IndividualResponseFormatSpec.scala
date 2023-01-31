@@ -24,15 +24,12 @@ class IndividualResponseFormatSpec extends UnitSpec {
 
   import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.IndividualResponse.formats
 
-  val individualResponseFull          = IndividualResponse("John", Some("Middle"), "Doe", Some("1999-12-20"))
-  val individualResponseNoMiddle      = individualResponseFull.copy(middleName = None)
-  val individualResponseNoDate        = individualResponseFull.copy(dateOfBirth = None)
-  val individualResponseOnlyMandatory = individualResponseFull.copy(middleName = None, dateOfBirth = None)
+  val individualResponseFull   = IndividualResponse("John", "Doe", Some("1999-12-20"))
+  val individualResponseNoDate = individualResponseFull.copy(dateOfBirth = None)
 
   val individualResponseJsonFull = Json.parse("""
       |      {
       |        "firstName": "John",
-      |        "middleName": "Middle",
       |        "lastName": "Doe",
       |        "dateOfBirth": "1999-12-20"
       |      }
@@ -49,7 +46,6 @@ class IndividualResponseFormatSpec extends UnitSpec {
   val individualResponseJsonNoDate = Json.parse("""
       |      {
       |        "firstName": "John",
-      |        "middleName": "Middle",
       |        "lastName": "Doe"
       |      }
     """.stripMargin)
@@ -72,11 +68,11 @@ class IndividualResponseFormatSpec extends UnitSpec {
     }
 
     s"marshall individual response without middle name" in {
-      Json.prettyPrint(marshall(individualResponseNoMiddle)) shouldBe Json.prettyPrint(individualResponseJsonNoMiddle)
+      Json.prettyPrint(marshall(individualResponseFull)) shouldBe Json.prettyPrint(individualResponseJsonNoMiddle)
     }
 
     s"unmarshall individual response without middle name" in {
-      unmarshall(individualResponseJsonNoMiddle) shouldBe JsSuccess(individualResponseNoMiddle)
+      unmarshall(individualResponseJsonNoMiddle) shouldBe JsSuccess(individualResponseFull)
     }
 
     s"marshall individual response without date of birth" in {
@@ -88,13 +84,13 @@ class IndividualResponseFormatSpec extends UnitSpec {
     }
 
     s"marshall individual response with mandatory fields only" in {
-      Json.prettyPrint(marshall(individualResponseOnlyMandatory)) shouldBe Json.prettyPrint(
+      Json.prettyPrint(marshall(individualResponseNoDate)) shouldBe Json.prettyPrint(
         individualResponseJsonOnlyMandatory
       )
     }
 
     s"unmarshall individual response with mandatory fields only" in {
-      unmarshall(individualResponseJsonOnlyMandatory) shouldBe JsSuccess(individualResponseOnlyMandatory)
+      unmarshall(individualResponseJsonOnlyMandatory) shouldBe JsSuccess(individualResponseNoDate)
     }
   }
 

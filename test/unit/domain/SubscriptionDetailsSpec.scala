@@ -49,9 +49,9 @@ class SubscriptionDetailsSpec extends UnitSpec {
     "use name from nameDobDetails when nameOrganisationDetails not present" in {
       val sd = SubscriptionDetails(
         nameOrganisationDetails = None,
-        nameDobDetails = Some(NameDobMatchModel("John", Some("Middle"), "Doe", LocalDate.now))
+        nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.now))
       )
-      sd.name shouldBe "John Middle Doe"
+      sd.name shouldBe "John Doe"
     }
 
     "use name from nameDetails when nameDobDetails not present" in {

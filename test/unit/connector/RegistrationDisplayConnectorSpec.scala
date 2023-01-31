@@ -49,7 +49,7 @@ class RegistrationDisplayConnectorSpec extends UnitSpec with MockitoSugar {
 
   val responseCommon = ResponseCommon("OK", None, "2016-09-02T09:30:47Z", taxPayerID = Some("0100086619"))
 
-  val individualResponse = IndividualResponse("John", None, "Doe", Some("1989-01-01"))
+  val individualResponse = IndividualResponse("John", "Doe", Some("1989-01-01"))
 
   val address = Address("Line1", Some("Line2"), None, None, Some("postcode"), "GB")
 

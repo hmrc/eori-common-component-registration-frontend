@@ -142,15 +142,9 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
   ] = {
     val individualNameAndDateOfBirthGen = for {
       firstName   <- Gen.alphaStr
-      middleName  <- Gen.alphaStr.asOption
       lastName    <- Gen.alphaStr
       dateOfBirth <- dateOfBirthGenerator
-    } yield IndividualNameAndDateOfBirth(
-      firstName = firstName,
-      middleName = middleName,
-      lastName = lastName,
-      dateOfBirth = dateOfBirth
-    )
+    } yield IndividualNameAndDateOfBirth(firstName = firstName, lastName = lastName, dateOfBirth = dateOfBirth)
 
     val individualSoleTraderAddressGen = for {
       addressLine1 <- Gen.alphaStr

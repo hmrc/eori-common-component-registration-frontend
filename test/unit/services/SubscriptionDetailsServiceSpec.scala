@@ -184,7 +184,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   "Calling cached nameDobDetails" should {
     "return nameDobDetails from frontend cache" in {
-      val nameDobDetails = NameDobMatchModel("fname", Some("mname"), "lname", LocalDate.of(2019, 1, 1))
+      val nameDobDetails = NameDobMatchModel("fname", "lname", LocalDate.of(2019, 1, 1))
       when(mockSessionCache.subscriptionDetails)
         .thenReturn(Future.successful(SubscriptionDetails(nameDobDetails = Some(nameDobDetails))))
       await(subscriptionDetailsHolderService.cachedNameDobDetails) shouldBe Some(nameDobDetails)
@@ -288,7 +288,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   "cacheNameDobDetails" should {
     val nameDobDetails =
-      NameDobMatchModel(firstName = "Name", middleName = None, lastName = "Lastname", dateOfBirth = LocalDate.now())
+      NameDobMatchModel(firstName = "Name", lastName = "Lastname", dateOfBirth = LocalDate.now())
     "save subscription details with date established" in {
       await(subscriptionDetailsHolderService.cacheNameDobDetails(nameDobDetails))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])

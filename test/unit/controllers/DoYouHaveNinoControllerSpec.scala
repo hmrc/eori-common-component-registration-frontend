@@ -123,7 +123,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
     "redirect to 'Get Nino' page when Y is selected" in {
 
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(
-        Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
+        Future.successful(Some(NameDobMatchModel("First name", "Last name", LocalDate.of(2015, 10, 15))))
       )
       when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
 

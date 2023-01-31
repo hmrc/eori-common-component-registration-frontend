@@ -46,7 +46,7 @@
                 form = individualNameAndDateOfBirthForm,
                 id = "given-name",
                 name = "given-name",
-                label = "cds.matching.individual.given-name",
+                label = "cds.matching.individual.first-name",
                 isPageHeading = false,
                 autocomplete = Some("given-name"),
                 spellcheck =  Some(false),
@@ -55,20 +55,9 @@
             )
             @inputText(
                 form = individualNameAndDateOfBirthForm,
-                id = "middle-name",
-                name = "middle-name",
-                label = "cds.matching.individual.middle-name.optional",
-                isPageHeading = false,
-                autocomplete = Some("additional-name"),
-                spellcheck =  Some(false),
-                classes = Some("govuk-!-width-one-half"),
-                labelClasses = Some("middle-name")
-            )
-            @inputText(
-                form = individualNameAndDateOfBirthForm,
                 id = "family-name",
                 name = "family-name",
-                label = "cds.matching.individual.family-name",
+                label = "cds.matching.individual.last-name",
                 isPageHeading = false,
                 autocomplete = Some("family-name"),
                 spellcheck =  Some(false),

@@ -96,11 +96,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
         controllerFixture =>
           import controllerFixture._
           when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
-            .thenReturn(
-              Future.successful(
-                Some(NameDobMatchModel("firstName", Some("middleName"), "lastName", LocalDate.of(1980, 3, 31)))
-              )
-            )
+            .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
 
           controllerFixture.showForm { result =>
             status(result) shouldBe OK
@@ -110,7 +106,6 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
             val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
 
             assertPresentOnPage(webPage.givenNameElement)
-            assertPresentOnPage(webPage.middleNameElement)
             assertPresentOnPage(webPage.familyNameElement)
             assertPresentOnPage(webPage.dateOfBirthElement)
             page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthController
@@ -118,7 +113,6 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
               .url
 
             page.getElementValue(webPage.givenNameElement) shouldBe "firstName"
-            page.getElementValue(webPage.middleNameElement) shouldBe "middleName"
             page.getElementValue(webPage.familyNameElement) shouldBe "lastName"
             page.getElementValue(webPage.dobDayElement) shouldBe "31"
             page.getElementValue(webPage.dobMonthElement) shouldBe "3"

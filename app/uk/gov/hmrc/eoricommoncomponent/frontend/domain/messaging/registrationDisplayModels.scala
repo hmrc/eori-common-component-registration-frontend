@@ -50,12 +50,8 @@ object RegistrationInfoResponseCommon extends CommonHeader {
   implicit val jsonFormat = Json.format[RegistrationInfoResponseCommon]
 }
 
-case class RegistrationInfoIndividual(
-  firstName: String,
-  middleName: Option[String],
-  lastName: String,
-  dateOfBirth: Option[String]
-) extends IndividualName
+case class RegistrationInfoIndividual(firstName: String, lastName: String, dateOfBirth: Option[String])
+    extends IndividualName
 
 object RegistrationInfoIndividual {
   implicit val jsonFormat = Json.format[RegistrationInfoIndividual]

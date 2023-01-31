@@ -79,9 +79,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
       val nino = "AB123456C"
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
-        )
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
       when(
         mockMatchingService
@@ -101,9 +99,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     "give a page level error when a nino is not matched" in {
       val nino = "AB123456C"
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
-        )
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
       when(
         mockMatchingService
@@ -127,9 +123,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
       val nino = "AB123456C"
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(
-          SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", None, "user", LocalDate.now)))
-        )
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
       when(
         mockMatchingService
