@@ -110,10 +110,10 @@ class SicCodeControllerSpec
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
-    "display title as 'What is your Standard Industrial Classification (SIC) code?' for non-partnership org type" in {
+    "display title as 'What does your organisation do?'" in {
       showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("What is your Standard Industrial Classification (SIC) code?")
+        page.title should startWith("What does your organisation do?")
       }
     }
 
@@ -122,107 +122,7 @@ class SicCodeControllerSpec
         val page = CdsPage(contentAsString(result))
         page.getElementText(
           sicDescriptionLabelXpath
-        ) shouldBe "Find your SIC code (opens in new window or tab) If you do not have one, you can search for a relevant SIC code on Companies House (opens in a new window or tab)"
-      }
-    }
-
-    "display heading as 'What is the Standard Industrial Classification (SIC) code for your organisation?' for non-partnership org type" in {
-      showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementText(
-          SicCodePage.headingXpath
-        ) shouldBe "What is your Standard Industrial Classification (SIC) code?"
-      }
-    }
-
-    "display title as 'What is your Standard Industrial Classification (SIC) code?' for Partnership org type" in {
-      showCreateForm(orgType = Partnership, userSelectedOrgType = CdsPartnership) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("What is your Standard Industrial Classification (SIC) code?")
-      }
-    }
-
-    "display heading as 'What is the Standard Industrial Classification (SIC) code?' for Partnership org type" in {
-      showCreateForm(orgType = Partnership, userSelectedOrgType = CdsPartnership) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementText(
-          SicCodePage.headingXpath
-        ) shouldBe "What is your Standard Industrial Classification (SIC) code?"
-      }
-    }
-
-    "display title as 'What is the Standard Industrial Classification (SIC) code?' for LLP org type" in {
-      showCreateForm(orgType = LLP, userSelectedOrgType = CdsPartnership) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title should startWith("What is your Standard Industrial Classification (SIC) code?")
-      }
-    }
-
-    "display heading as 'What is the Standard Industrial Classification (SIC) code?' for LLP org type" in {
-      showCreateForm(orgType = LLP, userSelectedOrgType = CdsPartnership) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementText(
-          SicCodePage.headingXpath
-        ) shouldBe "What is your Standard Industrial Classification (SIC) code?"
-      }
-    }
-
-    "display correct description for non-partnership org type" in {
-      showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company) { result =>
-        val page = CdsPage(contentAsString(result))
-      }
-    }
-
-    "display correct description for Partnership org type" in {
-      showCreateForm(orgType = Partnership, userSelectedOrgType = CdsPartnership) { result =>
-        val page = CdsPage(contentAsString(result))
-      }
-    }
-
-    "display correct description for LLP org type" in {
-      showCreateForm(orgType = LLP, userSelectedOrgType = CdsPartnership) { result =>
-        val page = CdsPage(contentAsString(result))
-      }
-    }
-
-    val formModes = Table(("userSelectedOrgType", "orgType"), (SoleTrader, "SoleTrader"), (Individual, "Individual"))
-
-    forAll(formModes) { (userSelectedOrgType, orgType) =>
-      s"display title as 'What is your Standard Industrial Classification (SIC) code?' for $orgType (NA) org type" in {
-        showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) { result =>
-          val page = CdsPage(contentAsString(result))
-          userSelectedOrgType match {
-
-            case Individual =>
-              page.title should startWith(
-                "Enter a Standard Industrial Classification (SIC) code that describes what your business does"
-              )
-            case _ =>
-              page.title should startWith("What is your Standard Industrial Classification (SIC) code?")
-          }
-        }
-      }
-
-      s"display heading as 'What is your Standard Industrial Classification (SIC) code?' for $orgType (NA) org type" in {
-        showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) { result =>
-          val page = CdsPage(contentAsString(result))
-          userSelectedOrgType match {
-            case Individual =>
-              page.getElementText(SicCodePage.headingXpath) should startWith(
-                "Enter a Standard Industrial Classification (SIC) code that describes what your business does"
-              )
-            case _ =>
-              page.getElementText(SicCodePage.headingXpath) should startWith(
-                "What is your Standard Industrial Classification (SIC) code"
-              )
-          }
-        }
-      }
-
-      s"display correct label description for $orgType (NA) org type" in {
-        showCreateForm(orgType = NA, userSelectedOrgType = userSelectedOrgType) { result =>
-          val page = CdsPage(contentAsString(result))
-        }
+        ) shouldBe "We use Standard Industrial Classification (SIC) codes to identify what organisations do."
       }
     }
 
