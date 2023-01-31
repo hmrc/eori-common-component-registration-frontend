@@ -37,7 +37,6 @@ class CheckYourDetailsRegisterController @Inject() (
   registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
-
   def reviewDetails(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
