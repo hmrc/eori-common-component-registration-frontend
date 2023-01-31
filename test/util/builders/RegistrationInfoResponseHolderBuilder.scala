@@ -42,12 +42,7 @@ object RegistrationInfoResponseHolderBuilder {
   )
 
   val AnIndividual = Some(
-    RegistrationInfoIndividual(
-      firstName = "John",
-      middleName = None,
-      lastName = "Doe",
-      dateOfBirth = Some("1989-09-21")
-    )
+    RegistrationInfoIndividual(firstName = "John", lastName = "Doe", dateOfBirth = Some("1989-09-21"))
   )
 
   val AnOrganisation = Some(

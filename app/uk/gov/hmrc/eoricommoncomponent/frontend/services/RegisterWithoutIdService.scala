@@ -71,7 +71,7 @@ class RegisterWithoutIdService @Inject() (
   )(implicit request: Request[_], hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {
     import individualNameAndDateOfBirth._
     val individual =
-      Individual.withLocalDate(firstName, middleName, lastName, dateOfBirth)
+      Individual.withLocalDate(firstName, lastName, dateOfBirth)
     val reqDetails = RegisterWithoutIdReqDetails.individual(
       address = address,
       individual = individual,

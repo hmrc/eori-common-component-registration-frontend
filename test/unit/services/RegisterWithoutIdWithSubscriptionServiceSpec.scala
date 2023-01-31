@@ -172,7 +172,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       Future.successful(
         SubscriptionDetails(
           nameDobDetails =
-            Some(NameDobMatchModel("firstName", Some("middleName"), "lastName", LocalDate.of(1980, 3, 31))),
+            Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31))),
           contactDetails = Some(contactDetails)
         )
       )

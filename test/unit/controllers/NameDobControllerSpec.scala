@@ -97,15 +97,6 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
   }
 
-  "middle name" should {
-    "not be shown" in {
-      showForm("sole-trader") { result =>
-        val page = CdsPage(contentAsString(result))
-        page.elementIsPresent(middleName) shouldBe false
-      }
-    }
-  }
-
   "last name" should {
 
     "be mandatory" in {

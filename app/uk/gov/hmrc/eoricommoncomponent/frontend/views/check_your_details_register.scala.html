@@ -87,6 +87,10 @@
     cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 }
 
+@isLlp = @{
+    cdsOrgType.contains(CdsOrganisationType.LimitedLiabilityPartnership)
+}
+
 @isCharity = @{
     cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
 }
@@ -130,7 +134,10 @@
         case Some(Utr(_)) => {
             if(isIndividual || isSoleTrader) {
                 messages("cds.utr.label")
-            } else if(isPartnership) {
+            } else  if(isLlp) {
+                messages("cds.matching.name-id-organisation.company.utr")
+            }
+            else if(isPartnership) {
                 messages("cds.check-your-details.utrnumber.partnership")
             } else {
                 messages("cds.company.utr.label")

@@ -85,7 +85,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   "Submitting the form" should {
     "redirect to 'These are the details we have about you' page when Y is selected and given NINO is matched" in {
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(
-        Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
+        Future.successful(Some(NameDobMatchModel("First name", "Last name", LocalDate.of(2015, 10, 15))))
       )
       when(
         mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
@@ -99,7 +99,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         await(result)
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("register/matching/confirm")
-        val expectedIndividual = Individual.withLocalDate("First name", None, "Last name", LocalDate.of(2015, 10, 15))
+        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
           any[HeaderCarrier],
           any[Request[_]]
@@ -109,7 +109,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "keep the user on the same page with proper message when NINO was not recognized" in {
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(
-        Future.successful(Some(NameDobMatchModel("First name", None, "Last name", LocalDate.of(2015, 10, 15))))
+        Future.successful(Some(NameDobMatchModel("First name", "Last name", LocalDate.of(2015, 10, 15))))
       )
       when(
         mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
@@ -123,7 +123,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         await(result)
         val page = CdsPage(contentAsString(result))
         status(result) shouldBe BAD_REQUEST
-        val expectedIndividual = Individual.withLocalDate("First name", None, "Last name", LocalDate.of(2015, 10, 15))
+        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
           any[HeaderCarrier],
           any[Request[_]]

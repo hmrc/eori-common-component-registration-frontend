@@ -71,7 +71,7 @@ class RegisterWithoutIdServiceSpec
   }
 
   private val individualNameAndDateOfBirth =
-    IndividualNameAndDateOfBirth("indName", Some("indMidName"), "indLastName", dateOfBirth)
+    IndividualNameAndDateOfBirth("indName", "indLastName", dateOfBirth)
 
   private val orgName = "orgName"
 
@@ -285,7 +285,7 @@ class RegisterWithoutIdServiceSpec
 
       registrationRequest.requestCommon shouldBe mockRequestCommon
       registrationRequest.requestDetail.individual shouldBe Some(
-        Individual("indName", Some("indMidName"), "indLastName", dateOfBirth.toString)
+        Individual("indName", "indLastName", dateOfBirth.toString)
       )
       registrationRequest.requestDetail.address shouldBe Address(
         "add1",

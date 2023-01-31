@@ -117,7 +117,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     "display the sole trader name and dob from the cache when user has been identified by REG01" in {
       when(mockSubscriptionDetailsHolder.nameDobDetails)
-        .thenReturn(Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23"))))
+        .thenReturn(Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23"))))
       when(mockSubscriptionDetailsHolder.name).thenReturn("John Doe")
 
       showForm(userSelectedOrgType = SoleTrader) { result =>
@@ -299,7 +299,7 @@ class CheckYourDetailsRegisterControllerSpec
         detailsHolderWithAllFields.copy(
           contactDetails = Some(contactDetailsModelWithAllValues),
           addressDetails = Some(addressDetails),
-          nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
+          nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23")))
         )
       )
 
@@ -343,8 +343,8 @@ class CheckYourDetailsRegisterControllerSpec
       }
 
       val UtrLabelText = organisationType match {
-        case LimitedLiabilityPartnership | Partnership =>
-          "Partnership Self Assessment UTR number"
+        case LimitedLiabilityPartnership => "Corporation Tax Unique Taxpayer Reference (UTR)"
+        case Partnership                 => "Partnership Self Assessment UTR"
         case _ =>
           "Corporation Tax UTR"
       }
@@ -397,7 +397,7 @@ class CheckYourDetailsRegisterControllerSpec
         dateEstablished = None,
         businessShortName = None,
         addressDetails = Some(addressDetails),
-        nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
+        nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23")))
       )
       when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
 
@@ -642,11 +642,11 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership Self Assessment UTR number"
+        "Corporation Tax Unique Taxpayer Reference (UTR)"
       ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership Self Assessment UTR number"
+        "Corporation Tax Unique Taxpayer Reference (UTR)"
       ) shouldBe "7280616009"
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Partnership address") shouldBe true
@@ -780,7 +780,7 @@ class CheckYourDetailsRegisterControllerSpec
       contactDetails = Some(contactDetailsModelWithAllValues),
       dateEstablished = Some(LocalDate.parse("1980-07-23")),
       addressDetails = Some(addressDetails),
-      nameDobDetails = Some(NameDobMatchModel("John", None, "Doe", LocalDate.parse("1980-07-23")))
+      nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23")))
     )
     when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
 

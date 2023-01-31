@@ -26,8 +26,6 @@ abstract class NameDateOfBirthPage extends WebPage {
 
   val lastName = "//*[@id='last-name']"
 
-  val middleName = "//*[@id='middle-name']"
-
   val fieldLevelErrorFirstName = "//p[@id='first-name-error' and @class='govuk-error-message']"
 
   val fieldLevelErrorLastName = "//p[@id='last-name-error' and @class='govuk-error-message']"

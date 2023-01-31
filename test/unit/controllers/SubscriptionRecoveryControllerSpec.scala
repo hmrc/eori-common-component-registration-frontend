@@ -149,7 +149,7 @@ class SubscriptionRecoveryControllerSpec
         )(any[HeaderCarrier])
       ).thenReturn(Future.successful(result = ()))
       when(mockSubscriptionDetailsHolder.nameDobDetails)
-        .thenReturn(Some(NameDobMatchModel("fname", Some("mName"), "lname", LocalDate.parse("2019-01-01"))))
+        .thenReturn(Some(NameDobMatchModel("fname", "lname", LocalDate.parse("2019-01-01"))))
     }
 
     "call Enrolment Complete with successful SUB09 call for Get Your EORI journey" in {
@@ -393,7 +393,7 @@ class SubscriptionRecoveryControllerSpec
     when(mockSub01Outcome.processedDate).thenReturn("01 May 2016")
 
     when(mockSubscriptionDetailsHolder.nameDobDetails)
-      .thenReturn(Some(NameDobMatchModel("fname", Some("mName"), "lname", LocalDate.parse("2019-01-01"))))
+      .thenReturn(Some(NameDobMatchModel("fname", "lname", LocalDate.parse("2019-01-01"))))
     when(mockSessionCache.registrationDetails(any[Request[_]]))
       .thenReturn(Future.successful(mockOrgRegistrationDetails))
     when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testSapNumber"))

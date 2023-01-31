@@ -111,7 +111,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     RequestCommon("CDS", requestDate, "abcdefg1234567890hijklmnop0987654"),
     RegisterWithoutIdReqDetails.individual(
       address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "ZZ"),
-      individual = Individual("John", Some("Middle"), "Doe", "1999-12-20"),
+      individual = Individual("John", "Doe", "1999-12-20"),
       contactDetail = contactDetails
     )
   )
@@ -140,7 +140,6 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         |      },
         |      "individual": {
         |        "firstName": "John",
-        |        "middleName": "Middle",
         |        "lastName": "Doe",
         |        "dateOfBirth": "1999-12-20"
         |      }

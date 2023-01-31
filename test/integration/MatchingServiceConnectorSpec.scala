@@ -81,7 +81,6 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       """
         |     "individual": {
         |        "firstName": "John",
-        |        "middleName": "Middle",
         |        "lastName": "Doe",
         |        "dateOfBirth": "1980-01-01"
         |      },

@@ -194,7 +194,7 @@ class DoYouHaveAUtrNumberControllerSpec
     "redirect to Get UTR page based on YES answer and organisation type sole trader" in {
 
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
-        .thenReturn(Future.successful(Some(NameDobMatchModel("", None, "", LocalDate.now()))))
+        .thenReturn(Future.successful(Some(NameDobMatchModel("", "", LocalDate.now()))))
       when(mockMatchingConnector.lookup(mockMatchingRequestHolder))
         .thenReturn(Future.successful(Option(mockMatchingResponse)))
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))

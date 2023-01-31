@@ -115,7 +115,6 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     ).map { nameDobDetails =>
       Individual.withLocalDate(
         firstName = nameDobDetails.firstName,
-        middleName = None,
         lastName = nameDobDetails.lastName,
         dateOfBirth = nameDobDetails.dateOfBirth
       )
