@@ -171,7 +171,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> ""), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
-            "Enter your first name"
+            "Enter your given name"
           )
       }
 
@@ -181,7 +181,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
-            "Enter your first name"
+            "Enter your given name"
           )
       }
 
@@ -191,7 +191,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> "!!!!!!''''!!!"), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
-            "Enter a first name without invalid characters"
+            "Enter a given name without invalid characters"
           )
       }
 
@@ -202,7 +202,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
           GivenName,
           fieldLevelErrorGivenName,
-          "The first name must be 35 characters or less"
+          "The given name must be 35 characters or less"
         )
       }
     }
@@ -216,7 +216,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> ""), webPage)(
             familyNameField,
             fieldLevelErrorFamilyName,
-            "Enter your last name"
+            "Enter your family name"
           )
       }
 
@@ -226,7 +226,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
             familyNameField,
             fieldLevelErrorFamilyName,
-            "Enter your last name"
+            "Enter your family name"
           )
       }
 
@@ -236,7 +236,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> "!!!!!!''''!!!"), webPage)(
             familyNameField,
             fieldLevelErrorFamilyName,
-            "Enter a last name without invalid characters"
+            "Enter a family name without invalid characters"
           )
       }
 
@@ -247,7 +247,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
           FamilyName,
           fieldLevelErrorFamilyName,
-          "The last name must be 35 characters or less"
+          "The family name must be 35 characters or less"
         )
       }
     }
