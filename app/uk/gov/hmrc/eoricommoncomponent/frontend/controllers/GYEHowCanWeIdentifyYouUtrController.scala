@@ -61,25 +61,28 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      for {
-        orgType <- orgTypeLookup.etmpOrgType
-      } yield subscriptionUtrForm.bindFromRequest.fold(
-        formWithErrors =>
-          BadRequest(
-            howCanWeIdentifyYouView(
-              formWithErrors,
-              isInReviewMode = false,
-              routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-              orgType
-            )
-          ),
-        formData =>
-          matchOnId(formData, GroupId(loggedInUser.groupId)).map {
-            case true =>
-              Future.successful(Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false)))
-            case false =>
-              Future.successful(matchNotFoundBadRequest(formData, service))
-          }
+      orgTypeLookup.etmpOrgType.flatMap(
+        orgType =>
+          subscriptionUtrForm.bindFromRequest.fold(
+            formWithErrors =>
+              Future.successful(
+                BadRequest(
+                  howCanWeIdentifyYouView(
+                    formWithErrors,
+                    isInReviewMode = false,
+                    routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+                    orgType
+                  )
+                )
+              ),
+            formData =>
+              matchOnId(formData, GroupId(loggedInUser.groupId)).map {
+                case true =>
+                  Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+                case false =>
+                  matchNotFoundBadRequest(formData, service, orgType)
+              }
+          )
       )
     }
 
@@ -89,9 +92,11 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   ): Future[Boolean] =
     retrieveNameDobFromCache().flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
 
-  private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service)(implicit
-    request: Request[AnyContent]
-  ): Result = {
+  private def matchNotFoundBadRequest(
+    individualFormData: IdMatchModel,
+    service: Service,
+    etmpOrganisationType: EtmpOrganisationType
+  )(implicit request: Request[AnyContent]): Result = {
     val errorForm = subscriptionUtrForm
       .withGlobalError(Messages("cds.matching-error.individual-not-found"))
       .fill(individualFormData)
@@ -99,7 +104,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
       howCanWeIdentifyYouView(
         errorForm,
         isInReviewMode = false,
-        routes.GYEHowCanWeIdentifyYouUtrController.submit(service)
+        routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+        etmpOrganisationType
       )
     )
   }

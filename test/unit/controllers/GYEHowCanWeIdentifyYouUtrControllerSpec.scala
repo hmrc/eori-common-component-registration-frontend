@@ -23,15 +23,16 @@ import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfter
-import play.api.mvc.{Request, Result}
+import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouUtrController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameDobMatchModel, Utr}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, NameDobMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -47,6 +48,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
   private val mockAuthAction        = authAction(mockAuthConnector)
   private val mockMatchingService   = mock[MatchingService]
   private val mockFrontendDataCache = mock[SessionCache]
+  private val mockOrgTypeLookup     = mock[OrgTypeLookup]
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_utr]
 
@@ -55,6 +57,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     mockMatchingService,
     mcc,
     howCanWeIdentifyYouView,
+    mockOrgTypeLookup,
     mockFrontendDataCache
   )
 
@@ -62,6 +65,9 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
 
     "display howCanWeIdentifyYouView for logged in user" in {
+
+      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(CorporateBody)
+
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       form() { result =>
         status(result) shouldBe OK

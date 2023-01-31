@@ -27,7 +27,7 @@
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
-@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, orgType: EtmpOrganisationType)(implicit request: Request[_], messages: Messages)
+@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, orgType: EtmpOrganisationType, heading: String = "subscription-journey.how-confirm-identity.utr.heading")(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages(heading), form = Some(utrForm)) {
     <div>
