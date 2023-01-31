@@ -48,16 +48,14 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         orgType <- orgTypeLookup.etmpOrgType
-      } yield
-
-        Ok(
-          howCanWeIdentifyYouView(
-            subscriptionUtrForm,
-            isInReviewMode = false,
-            routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-            orgType
-          )
+      } yield Ok(
+        howCanWeIdentifyYouView(
+          subscriptionUtrForm,
+          isInReviewMode = false,
+          routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+          orgType
         )
+      )
 
     }
 
@@ -65,19 +63,16 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       for {
         orgType <- orgTypeLookup.etmpOrgType
-      } yield
-      subscriptionUtrForm.bindFromRequest.fold(
+      } yield subscriptionUtrForm.bindFromRequest.fold(
         formWithErrors =>
-
-           BadRequest(
-              howCanWeIdentifyYouView(
-                formWithErrors,
-                isInReviewMode = false,
-                routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-                orgType
-              )
+          BadRequest(
+            howCanWeIdentifyYouView(
+              formWithErrors,
+              isInReviewMode = false,
+              routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+              orgType
             )
-          ,
+          ),
         formData =>
           matchOnId(formData, GroupId(loggedInUser.groupId)).map {
             case true =>
