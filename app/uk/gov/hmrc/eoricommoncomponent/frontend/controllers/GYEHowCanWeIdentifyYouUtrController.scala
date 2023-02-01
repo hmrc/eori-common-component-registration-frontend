@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -38,43 +39,50 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   matchingService: MatchingService,
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you_utr,
+  orgTypeLookup: OrgTypeLookup,
   cdsFrontendDataCache: SessionCache
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Ok(
-          howCanWeIdentifyYouView(
-            subscriptionUtrForm,
-            isInReviewMode = false,
-            routes.GYEHowCanWeIdentifyYouUtrController.submit(service)
-          )
+      for {
+        orgType <- orgTypeLookup.etmpOrgType
+      } yield Ok(
+        howCanWeIdentifyYouView(
+          subscriptionUtrForm,
+          isInReviewMode = false,
+          routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+          orgType
         )
       )
+
     }
 
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      subscriptionUtrForm.bindFromRequest.fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(
-              howCanWeIdentifyYouView(
-                formWithErrors,
-                isInReviewMode = false,
-                routes.GYEHowCanWeIdentifyYouUtrController.submit(service)
-              )
-            )
-          ),
-        formData =>
-          matchOnId(formData, GroupId(loggedInUser.groupId)).map {
-            case true =>
-              Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-            case false =>
-              matchNotFoundBadRequest(formData, service)
-          }
+      orgTypeLookup.etmpOrgType.flatMap(
+        orgType =>
+          subscriptionUtrForm.bindFromRequest.fold(
+            formWithErrors =>
+              Future.successful(
+                BadRequest(
+                  howCanWeIdentifyYouView(
+                    formWithErrors,
+                    isInReviewMode = false,
+                    routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+                    orgType
+                  )
+                )
+              ),
+            formData =>
+              matchOnId(formData, GroupId(loggedInUser.groupId)).map {
+                case true =>
+                  Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+                case false =>
+                  matchNotFoundBadRequest(formData, service, orgType)
+              }
+          )
       )
     }
 
@@ -84,9 +92,11 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   ): Future[Boolean] =
     retrieveNameDobFromCache().flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
 
-  private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service)(implicit
-    request: Request[AnyContent]
-  ): Result = {
+  private def matchNotFoundBadRequest(
+    individualFormData: IdMatchModel,
+    service: Service,
+    etmpOrganisationType: EtmpOrganisationType
+  )(implicit request: Request[AnyContent]): Result = {
     val errorForm = subscriptionUtrForm
       .withGlobalError(Messages("cds.matching-error.individual-not-found"))
       .fill(individualFormData)
@@ -94,7 +104,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
       howCanWeIdentifyYouView(
         errorForm,
         isInReviewMode = false,
-        routes.GYEHowCanWeIdentifyYouUtrController.submit(service)
+        routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+        etmpOrganisationType
       )
     )
   }
