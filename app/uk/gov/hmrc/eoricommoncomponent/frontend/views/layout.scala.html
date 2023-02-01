@@ -45,6 +45,10 @@
     displayBackLink: Boolean = true
 )(contentBlock: Html)(implicit messages: Messages, request: Request[_])
 
+@isLoggedIn = @{
+    !request.session.isEmpty && request.session.get("authToken").isDefined
+}
+
 @titleWithEnding = @{
     title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
 }
@@ -61,6 +65,10 @@
         case Some(f) if f.errors.nonEmpty => s"%s: %s".format(messages("cds.error.page-title"), titleWithEnding)
         case _ => titleWithEnding
     }
+}
+
+@logOutUrl = @{
+    s"/customs-registration-services/${service.code}/register/logout"
 }
 
 @signOutUrl = @{
@@ -82,15 +90,20 @@
         <meta name="format-detection" content="telephone=no" />
     }
 <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/js-depend.css")" type="text/css">
+
+@if(isLoggedIn) {
     @hmrcTimeoutDialogHelper(
         title = Some(messages("cds.timeout.message")),
         timeout = Some(1200),
         countdown = Some(300),
         keepAliveUrl = Some(keepAliveUrl),
-        signOutUrl = signOutUrl,
+        signOutUrl = logOutUrl,
+        timeoutUrl = Some(signOutUrl),
         keepAliveButtonText = Some(messages("cds.timeout.keep-alive-button")),
         signOutButtonText = Some(messages("cds.timeout.sign-out-button"))
     )
+}
+
 }
 
 @beforeContent = {
@@ -118,7 +131,7 @@
     pageTitle = Some(titleErr),
     isWelshTranslationAvailable = true, /* or false if your service has not been translated */
     serviceUrl = None,
-    signOutUrl = Some(signOutUrl),
+    signOutUrl = Some(logOutUrl),
     phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedBackRegister(service))),
     additionalHeadBlock = Some(theHead),
     nonce = CSPNonce.get,
