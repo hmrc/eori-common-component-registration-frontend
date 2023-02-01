@@ -244,7 +244,6 @@ class SubscriptionRecoveryController @Inject() (
       subscriptionInformation.dateOfEstablishment,
       service
     )
-
   private def getDateOfBirthOrDateOfEstablishment(
     response: SubscriptionDisplayResponse,
     dateOfEstablishmentCaptured: Option[LocalDate],
