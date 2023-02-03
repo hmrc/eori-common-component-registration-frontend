@@ -37,6 +37,7 @@
 
         <h1 class="govuk-heading-l">@Html(messages("cds.subscription.verify-email.title"))</h1>
 
+        <p class="govuk-body" id="p1">  @email.map(e => messages("cds.subscription.verify-email.para1", e)) </p>
         <p class="govuk-body" id="p2">  @messages("cds.subscription.verify-email.para2") </p>
 
         <div class="govuk-form-group">

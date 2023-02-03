@@ -1429,6 +1429,7 @@ cds.subscription.outcomes.in-processing.heading=We are processing the subscripti
 
 enter-email-body-text=We will use this to send you the result of your application.
 cds.subscription.verify-email.para2=For your security the link in the email will expire after 72 hours.
+cds.subscription.verify-email.para1=We have sent an email to {0}. Click on the link in the email to verify your email address.
 cds.subscription.enter-email.list-heading=The email address you give us here will be the only one we’ll use to:
 cds.subscription.enter-email.list-bullet-1=update you about changes to the Customs Declaration Service (CDS)
 cds.subscription.enter-email.list-bullet-2=notify you of urgent updates about goods in customs, if you submit import or export declarations
