@@ -20,22 +20,40 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group, authAction: AuthAction, subscriptionDetailsService: SubscriptionDetailsService)(implicit ec: ExecutionContext)
+class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group, authAction: AuthAction, subscriptionDetailsService: SubscriptionDetailsService, subscriptionBusinessService: SubscriptionBusinessService)(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
         implicit request => _: LoggedInUserWithEnrolments =>
           Future.successful(Ok(vatGroupView(vatGroupYesNoAnswerForm(), service)))
   }
+
+  def reviewForm(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserWithEnrolmentsAction {
+      implicit request =>
+        _: LoggedInUserWithEnrolments =>
+          for {
+            isVatGroup <- subscriptionBusinessService.getCachedVatGroup
+            yesNo: YesNo = YesNo(isVatGroup)
+          } yield Ok(
+            vatGroupView(
+              isInReviewMode = true,
+              vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
+              isIndividualFlow,
+              requestSessionData.isPartnershipOrLLP,
+              service
+            )
+          )
+    }
 
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request =>
