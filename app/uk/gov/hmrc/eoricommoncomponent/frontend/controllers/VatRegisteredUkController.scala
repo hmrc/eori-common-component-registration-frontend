@@ -21,10 +21,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  VatDetailsSubscriptionFlowPage,
-  VatRegisteredUkSubscriptionFlowPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{VatDetailsSubscriptionFlowPage, VatGroupFlowPage, VatRegisteredUkSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -109,7 +106,7 @@ class VatRegisteredUkController @Inject() (
                 else if (yesNoAnswer.isYes)
                   Future.successful(
                     Redirect(
-                      subscriptionFlowManager.stepInformation(VatRegisteredUkSubscriptionFlowPage).nextPage.url(service)
+                      subscriptionFlowManager.stepInformation(VatGroupFlowPage).nextPage.url(service)
                     )
                   )
                 else

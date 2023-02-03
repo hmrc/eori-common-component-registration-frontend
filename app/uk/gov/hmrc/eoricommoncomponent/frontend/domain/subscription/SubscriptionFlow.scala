@@ -47,8 +47,9 @@ object SubscriptionFlows {
       DateOfEstablishmentSubscriptionFlowPage,
       SicCodeSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage,
+
       VatRegisteredUkSubscriptionFlowPage,
-      //VatGroupFlowPage,
+      VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori
@@ -194,6 +195,15 @@ case object VatDetailsSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
+      .createForm(service)
+      .url
+
+}
+
+case object VatGroupFlowPage extends SubscriptionPage {
+
+  override def url(service: Service): String =
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatGroupController
       .createForm(service)
       .url
 
