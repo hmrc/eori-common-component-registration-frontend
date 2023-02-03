@@ -106,7 +106,7 @@ class VatRegisteredUkController @Inject() (
                 else if (yesNoAnswer.isYes)
                   Future.successful(
                     Redirect(
-                      subscriptionFlowManager.stepInformation(VatGroupFlowPage).nextPage.url(service)
+                      subscriptionFlowManager.stepInformation(VatRegisteredUkSubscriptionFlowPage).nextPage.url(service)
                     )
                   )
                 else
