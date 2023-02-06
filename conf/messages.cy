@@ -1542,7 +1542,7 @@ ecc.start-page.when.para1.bullet3 = y cod post lle rydych wedi cofrestru ar gyfe
 ecc.start-page.gbeori.para1.link = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Mewngofnodwch i’ch cyfrif TAW ar-lein (yn agor tab newydd)</a>
 ecc.start-page.gbeori.para1.link2 = i gael y manylion hyn.
 
-ecc.start-page.gbeori.title = Yr hyn y bydd ei angen arnoch i gael rhif EORI a thanysgrifiad
+ecc.start-page.gbeori.title = Os byddwch yn gwneud cais fel cwmni, partneriaeth neu sefydliad arall
 ecc.start-page.gbeori.para1.title = I gadarnhau pwy ydych, bydd angen i chi ddarparu’r manylion canlynol am eich sefydliad:
 ecc.start-page.gbeori.para1.bullet1 = enw a chyfeiriad cofrestredig
 ecc.start-page.gbeori.para1.bullet2 = dyddiad sefydlu
@@ -1557,8 +1557,8 @@ ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a
 
 ecc.start-page.company.title = Cod Dosbarthiad Diwydiannol Safonol (cod SIC)
 ecc.start-page.company = Mae cod SIC yn dangos yr hyn y mae sefydliadau’n eu gwneud. Byddwn yn gofyn i chi nodi’r cyfeirnod hwn os byddwch y gwneud cais fel un o’r canlynol:
-ecc.start-page.company.bullet1 = enw cofrestredig y cwmni
-ecc.start-page.company.bullet2 = dyddiad ei sefydlu
+ecc.start-page.company.bullet1 = cwmni neu sefydliad arall
+ecc.start-page.company.bullet2 = unig fasnachwr
 
 ecc.start-page.sic.title = Dod o hyd i’ch cod SIC
 ecc.start-page.sic.para1 = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU mae’r cod i’w weld ar eich tystysgrif TAW. ‘Dosbarthiad masnachu (cod SIC)’ yw’r enw ar hwn.
