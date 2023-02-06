@@ -1535,7 +1535,7 @@ ecc.start-page.para1.bullet2.eori-only = tanysgrifiad i’r Gwasanaeth Datganiad
 
 ecc.start-page.when.title = Yr hyn y bydd ei angen arnoch
 ecc.start-page.when.title2 = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU
-ecc.start-page.when.para1 = Os yw hynny’n cael ei gymeradwyo, byddwn yn anfon e-bost atoch pan fyddant yn barod i’w defnyddio. Byddant yn barod i’w defnyddio cyn pen naill ai:
+ecc.start-page.when.para1 = I gadarnhau pwy ydych byddwn yn gofyn i chi nodi’r canlynol:
 ecc.start-page.when.para1.bullet1 = cyfanswm y Ffurflen TAW diweddaraf neu ddyddiad cofrestru TAW
 ecc.start-page.when.para1.bullet2 = Rhif cofrestru TAW
 ecc.start-page.when.para1.bullet3 = y cod post lle rydych wedi cofrestru ar gyfer TAW
