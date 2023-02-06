@@ -24,7 +24,7 @@
 
 @this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
-@(vatGroupYesNoAnswerForm: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
+@(isInReviewMode: Boolean, vatGroupYesNoAnswerForm: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
 
 @formAction = @{
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatGroupController.submit(service)
