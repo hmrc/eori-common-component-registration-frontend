@@ -75,7 +75,11 @@ class EtmpOrganisationTypeSpec extends UnitSpec {
 
   "Checking equality for code" should {
     EtmpOrganisationType.values.foreach {
-      code => code.matchOrganisationType(code) shouldBe true
+      code =>
+        s"Making sure ${code.value} is equal" in {
+          code.matchOrganisationType(code) shouldBe true
+        }
+
     }
   }
 
