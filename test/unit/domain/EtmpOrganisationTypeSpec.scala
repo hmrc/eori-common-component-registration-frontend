@@ -70,5 +70,13 @@ class EtmpOrganisationTypeSpec extends UnitSpec {
       UnincorporatedBody.etmpOrgTypeCode shouldBe "0004"
       NA.etmpOrgTypeCode shouldBe "N/A"
     }
+
   }
+
+  "Checking equality for code" should {
+    EtmpOrganisationType.values.foreach {
+      code => code.matchOrganisationType(code) shouldBe true
+    }
+  }
+
 }
