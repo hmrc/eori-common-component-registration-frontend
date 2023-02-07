@@ -84,19 +84,20 @@ class SubscriptionFlowManagerSpec
   "Flow already started" should {
     val values = Table(
       ("flow", "currentPage", "expectedStepNumber", "expectedTotalSteps", "expectedNextPage"),
-      (OrganisationSubscriptionFlow, DateOfEstablishmentSubscriptionFlowPage, 1, 7, SicCodeSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, SicCodeSubscriptionFlowPage, 2, 7, EoriConsentSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, EoriConsentSubscriptionFlowPage, 3, 7, VatRegisteredUkSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 4, 7, VatDetailsSubscriptionFlowPage),
-      (OrganisationSubscriptionFlow, VatDetailsSubscriptionFlowPage, 5, 7, ContactDetailsSubscriptionFlowPageGetEori),
+      (OrganisationSubscriptionFlow, DateOfEstablishmentSubscriptionFlowPage, 1, 8, SicCodeSubscriptionFlowPage),
+      (OrganisationSubscriptionFlow, SicCodeSubscriptionFlowPage, 2, 8, EoriConsentSubscriptionFlowPage),
+      (OrganisationSubscriptionFlow, EoriConsentSubscriptionFlowPage, 3, 8, VatRegisteredUkSubscriptionFlowPage),
+      (OrganisationSubscriptionFlow, VatRegisteredUkSubscriptionFlowPage, 4, 8, VatGroupFlowPage),
+      (OrganisationSubscriptionFlow, VatGroupFlowPage, 5, 8, VatDetailsSubscriptionFlowPage),
+      (OrganisationSubscriptionFlow, VatDetailsSubscriptionFlowPage, 6, 8, ContactDetailsSubscriptionFlowPageGetEori),
       (
         OrganisationSubscriptionFlow,
         ContactDetailsSubscriptionFlowPageGetEori,
-        6,
         7,
+        8,
         ContactAddressSubscriptionFlowPageGetEori
       ),
-      (OrganisationSubscriptionFlow, ContactAddressSubscriptionFlowPageGetEori, 7, 7, ReviewDetailsPageGetYourEORI),
+      (OrganisationSubscriptionFlow, ContactAddressSubscriptionFlowPageGetEori, 8, 8, ReviewDetailsPageGetYourEORI),
       (PartnershipSubscriptionFlow, DateOfEstablishmentSubscriptionFlowPage, 1, 7, SicCodeSubscriptionFlowPage),
       (PartnershipSubscriptionFlow, SicCodeSubscriptionFlowPage, 2, 7, EoriConsentSubscriptionFlowPage),
       (PartnershipSubscriptionFlow, EoriConsentSubscriptionFlowPage, 3, 7, VatRegisteredUkSubscriptionFlowPage),
