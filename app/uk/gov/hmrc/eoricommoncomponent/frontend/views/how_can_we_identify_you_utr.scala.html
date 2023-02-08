@@ -33,7 +33,7 @@
 @(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, orgType: EtmpOrganisationType, heading: String = "subscription-journey.how-confirm-identity.utr.heading")(implicit request: Request[_], messages: Messages)
 
 @forHintMessage = @{
-    if(orgType.matchOrganisationType(CorporateBody)) messages("subscription-journey.how-confirm-identity.utr.hint")
+    if(orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.hint")
     else messages("cds.matching.partnership.utr.hint")
 }
 

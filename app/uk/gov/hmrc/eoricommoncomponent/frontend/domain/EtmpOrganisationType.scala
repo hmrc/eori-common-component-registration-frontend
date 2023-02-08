@@ -22,9 +22,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 sealed trait EtmpOrganisationType {
   def etmpOrgTypeCode: String
 
-  def matchOrganisationType(other: EtmpOrganisationType): Boolean =
-    this.etmpOrgTypeCode == other.etmpOrgTypeCode
-
 }
 
 case object Partnership extends EtmpOrganisationType {
