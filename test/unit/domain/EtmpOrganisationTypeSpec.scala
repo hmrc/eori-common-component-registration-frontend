@@ -70,5 +70,7 @@ class EtmpOrganisationTypeSpec extends UnitSpec {
       UnincorporatedBody.etmpOrgTypeCode shouldBe "0004"
       NA.etmpOrgTypeCode shouldBe "N/A"
     }
+
   }
+
 }

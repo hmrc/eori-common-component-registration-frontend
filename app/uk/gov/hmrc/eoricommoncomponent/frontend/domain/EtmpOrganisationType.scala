@@ -21,6 +21,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 
 sealed trait EtmpOrganisationType {
   def etmpOrgTypeCode: String
+
 }
 
 case object Partnership extends EtmpOrganisationType {
@@ -63,6 +64,8 @@ object EtmpOrganisationType {
     EUOrganisationId                -> CorporateBody,
     ThirdCountryOrganisationId      -> CorporateBody
   )
+
+  val values = Seq(Partnership, CorporateBody, LLP, UnincorporatedBody, NA)
 
   def apply(cdsOrgType: CdsOrganisationType): EtmpOrganisationType = cdsToEtmpOrgType.getOrElse(cdsOrgType.id, NA)
 
