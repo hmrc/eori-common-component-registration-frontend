@@ -62,9 +62,8 @@ object EtmpOrganisationType {
     LimitedLiabilityPartnershipId   -> LLP,
     CharityPublicBodyNotForProfitId -> UnincorporatedBody,
     EUOrganisationId                -> CorporateBody,
-    ThirdCountryOrganisationId      -> CorporateBody,
-    ThirdCountrySoleTraderId        -> UnincorporatedBody,
-    ThirdCountryIndividualId        -> UnincorporatedBody
+    ThirdCountryOrganisationId      -> CorporateBody
+
   )
 
   val values = Seq(Partnership, CorporateBody, LLP, UnincorporatedBody, NA)
