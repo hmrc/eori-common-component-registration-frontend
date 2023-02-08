@@ -905,7 +905,23 @@ cds.subscription.outcomes.success.eori = Eich rhif EORI newydd sy’n dechrau g
 cds.subscription.outcomes.success.optional-paragraph = Rydym wedi anfon e-bost atoch i gadarnhau’ch cais am danysgrifiad i gael cyfeirnod symud nwyddau.
 cds.subscription.outcomes.success.extra.information.when-you-can=Pryd byddwch yn gallu dechrau defnyddio’ch tanysgrifiad a’ch rhif EORI
 cds.subscription.outcomes.success.extra.information.when-you-can.information=Gall gymryd hyd at ddwy awr i’ch tanysgrifiad a’ch rhif EORI fod yn barod i’w defnyddio.
+
+
 cds.subscription.outcomes.success.extra.information.next = Yr hyn sy’n digwydd nesaf
+cds.subscription.outcomes.success.extra.information.para1 = Byddwn yn prosesu’ch cais. Gall hyn gymryd hyd at 2 awr.
+cds.subscription.outcomes.success.extra.information.para2 = Yna, byddwn yn anfon e-bost atoch i gadarnhau bod y tanysgrifiad a’r rhif EORI yn barod i’w defnyddio. Ar yr adeg hon, gallwch wneud y canlynol:
+cds.subscription.outcomes.success.extra.information.next.atar =<li>Gwneud cais am Ddyfarniad Tariffau Uwch</li>
+cds.subscription.outcomes.success.extra.information.next.gagmr =<li>Cael cyfeirnod symud nwyddau</li>
+cds.subscription.outcomes.success.extra.information.next.cts =<li>gwneud cais am ad-daliad o dollau mewnforio a TAW (CHIEF)</li><li>anfon dogfennau i’w gwirio gan y tollau ar gyfer datganiadau a wneir drwy'r system CHIEF</li><li>rhoi gwybod i CThEF am dandaliad o ran Toll Dramor neu TAW mewnforio</li>
+cds.subscription.outcomes.success.extra.information.next.route1 =<li>gwneud cais am ad-daliad o dollau mewnforio a TAW (CHIEF)</li><li>anfon dogfennau i’w gwirio gan y tollau ar gyfer datganiadau a wneir drwy'r system CHIEF</li><li>rhoi gwybod i CThEF am dandaliad o ran Toll Dramor neu TAW mewnforio</li>
+cds.subscription.outcomes.success.extra.information.next.ss =<li>gwneud datganiad cryno wrth gyrraedd</li>
+cds.subscription.outcomes.success.extra.information.next.gbss =<li>gwneud datganiad cryno wrth gyrraedd</li>
+cds.subscription.outcomes.success.extra.information.next.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
+cds.subscription.outcomes.success.extra.information.next.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
+
+cds.subscription.outcomes.success.extra.information.bullet1 = tanysgrifio i ragor o wasanaethau tollau
+cds.subscription.outcomes.success.extra.information.bullet2 = cael rhif EORI yn dechrau gydag XI
+
 cds.subscription.outcomes.success.extra.information1 = Bydd eich rhif EORI GB newydd yn barod i’w ddefnyddio cyn pen 48 awr. Unwaith y bydd eich rhif EORI GB yn weithredol, byddwn yn anfon e-bost atoch yn rhoi gwybod bod eich cais wedi’i gwblhau. Os hoffech wirio statws eich rhif EORI GB, gallwch ddefnyddio’r {0}. Nid oes gan eich rhif EORI GB newydd ddyddiad dod i ben.
 cds.subscription.outcomes.success.extra.information2 = gwasanaeth gwirio rhif EORI (yn agor tab newydd)
 cds.subscription.outcomes.success.download-eori-textfile = Lawrlwytho ffeil destun hygyrch o’ch rhif EORI (12kb)

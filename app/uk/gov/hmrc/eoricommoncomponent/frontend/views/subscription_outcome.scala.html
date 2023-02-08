@@ -27,7 +27,7 @@
 
 @this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter, govukPanel: GovukPanel, appConfig: AppConfig)
 
-@(service: Service, eori: String, name: String, processedDate: String, subscriptionTo: String)(implicit messages: Messages, request: Request[_])
+@(service: Service, eori: String, name: String, processedDate: String, subscriptionTo: String, subscriptionNextSteps: String)(implicit messages: Messages, request: Request[_])
 
 @checkEORILink = {
 <a class="govuk-link" href=@appConfig.checkEORINumber target="_blank" rel="noopener noreferrer">@messages("cds.subscription.outcomes.success.extra.information2")</a>
@@ -54,14 +54,18 @@
         <li>@messages("cds.subscription.outcomes.success.application-info.bullet2")</li>
     </ul>
 
-    <div id="when-you-can">
-        <h2 class="govuk-heading-m">@messages("cds.subscription.outcomes.success.extra.information.when-you-can")</h2>
-        <p class="govuk-body">@messages("cds.subscription.outcomes.success.extra.information.when-you-can.information")</p>
-    </div>
 
     <div id="what-happens-next">
         <h2 class="govuk-heading-m">@messages("cds.subscription.outcomes.success.extra.information.next")</h2>
-        <p class="govuk-body">@messages("cds.standalone.subscription.outcomes.success.extra.information1")</p>
+        <p class="govuk-body">@messages("cds.subscription.outcomes.success.extra.information.para1")</p>
+        <p class="govuk-body">@messages("cds.subscription.outcomes.success.extra.information.para2")</p>
+        <ul class="govuk-list govuk-list--bullet">
+             @Html(messages(subscriptionNextSteps))
+            <li>@messages("cds.subscription.outcomes.success.extra.information.bullet1")</li>
+            <li>@messages("cds.subscription.outcomes.success.extra.information.bullet2")</li>
+        </ul>
+        
+        
     </div>
 
     <div id="xi-eori">
