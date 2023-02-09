@@ -167,7 +167,9 @@ GET         /customs-registration-services/:service/register/vat-registered-uk/r
 POST        /customs-registration-services/:service/register/vat-registered-uk/review                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkController.submit(isInReviewMode: Boolean = true, service: Service)
 
 GET         /customs-registration-services/:service/register/vat-group                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.createForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-group                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.submit(service: Service)
+GET         /customs-registration-services/:service/register/vat-group/review                            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.reviewForm(service: Service)
+POST        /customs-registration-services/:service/register/vat-group                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.submit(service: Service, isInReviewMode: Boolean = false)
+POST        /customs-registration-services/:service/register/vat-group/review                            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.submit(service: Service, isInReviewMode: Boolean = true)
 
 GET         /customs-registration-services/:service/register/you-cannot-register-using-this-service      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupsCannotRegisterUsingThisServiceController.form(service: Service)
 

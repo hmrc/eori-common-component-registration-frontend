@@ -62,6 +62,11 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
       )
     }
 
+  def getCachedVatGroup(implicit request: Request[_]): Future[Boolean] =
+    cdsFrontendDataCache.subscriptionDetails map {
+      _.vatGroup.getOrElse(false)
+    }
+
   def getCachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.customsId

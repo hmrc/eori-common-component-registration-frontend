@@ -19,8 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   VatDetailsSubscriptionFlowPage,
   VatRegisteredUkSubscriptionFlowPage
@@ -101,10 +100,12 @@ class VatRegisteredUkController @Inject() (
               _ =>
                 if (isInReviewMode)
                   if (yesNoAnswer.isYes)
-                    Future.successful(Redirect(VatDetailsController.reviewForm(service).url))
+                    Future.successful(Redirect(VatGroupController.reviewForm(service).url))
                   else
                     subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
-                      Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
+                      subscriptionDetailsService.clearCachedVatGroupDetails flatMap { _ =>
+                        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
+                      }
                     }
                 else if (yesNoAnswer.isYes)
                   Future.successful(
