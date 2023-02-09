@@ -68,6 +68,7 @@ class HowCanWeIdentifyYouController @Inject() (
               Redirect(GYEHowCanWeIdentifyYouNinoController.form(service))
             case Some("utr") =>
               Redirect(GYEHowCanWeIdentifyYouUtrController.form(service))
+            case _ => throw new IllegalArgumentException("Required formData to include nino or utr selection")
           }
       )
 
