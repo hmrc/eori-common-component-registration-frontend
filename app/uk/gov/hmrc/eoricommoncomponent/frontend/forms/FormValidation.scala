@@ -31,7 +31,7 @@ object FormValidation {
   val postCodeMandatoryCountryCodes = Seq("GB", "GG", "JE", "IM", "")
 
   val postcodeRegex: Regex =
-    "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) {0,2}[0-9][A-Z]{2})$".r
+    "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
 
   private val noTagsRegex = "^[^<>]+$"
 
