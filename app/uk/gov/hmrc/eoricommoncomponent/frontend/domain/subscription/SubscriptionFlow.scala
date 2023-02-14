@@ -36,6 +36,7 @@ object SubscriptionFlows {
       SicCodeSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
+      VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori
@@ -61,6 +62,7 @@ object SubscriptionFlows {
       SicCodeSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
+      VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori
@@ -81,6 +83,7 @@ object SubscriptionFlows {
       SicCodeSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
+      VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori
@@ -93,10 +96,10 @@ object SubscriptionFlows {
       SicCodeSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
+      VatGroupFlowPage,
       VatDetailsSubscriptionFlowPage,
       ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori
-      //VatGroupFlowPage
     )
   )
 
