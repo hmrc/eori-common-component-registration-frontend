@@ -44,7 +44,7 @@ case class Address(
   private def hasValidPostcode: Boolean =
     this.postalCode match {
       case Some(pCode) if pCode.nonEmpty => pCode.replaceAll("\\s+", " ").matches(postcodeRegex.regex)
-      case _ => false
+      case _                             => false
     }
 
   private def isPostcodeRequired: Boolean = postCodeMandatoryCountryCodes.contains(countryCode)
