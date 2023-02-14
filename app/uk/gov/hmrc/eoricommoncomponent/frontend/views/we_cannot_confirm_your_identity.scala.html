@@ -26,7 +26,7 @@
 @(isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @tryAgainURL = @{
-    if (isInReviewMode) VatDetailsController.reviewForm(service) else VatDetailsController.createForm(service)
+    if (isInReviewMode) VatDetailsControllerOld.reviewForm(service) else VatDetailsControllerOld.createForm(service)
 }
 
 @layout_di(messages("cds.subscription.vat-details.cannot-identify-you.heading")) {

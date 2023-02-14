@@ -19,7 +19,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
-@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
@@ -28,14 +28,14 @@
 
 @this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, appConfig:AppConfig)
 
-@(vatForm: Form[VatDetails], isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
+@(vatForm: Form[VatDetailsOld], isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @vatUKLink = {
     <a class="govuk-link" href="@{appConfig.vatUKDetails}" target="_blank" rel="noopener noreferrer">@messages("cds.subscription.vat-details.intro-text.link-old")</a>
 }
 
 @formAction = @{
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController.submit(isInReviewMode, service)
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsControllerOld.submit(isInReviewMode, service)
 }
 
 @updateFormErrors =@{

@@ -394,17 +394,17 @@
         Seq(
             summaryListRow(
                 key = messages("cds.form.gb-vat-number"),
-                value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
+                value = Some(Html(subscription.ukVatDetailsOld.map(_.number).getOrElse(messages("cds.not-entered.label")))),
                 call = Some(VATNumberPage.reviewForm(service))
             ),
             summaryListRow(
                 key = messages("cds.form.gb-vat-postcode"),
-                value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
+                value = Some(Html(subscription.ukVatDetailsOld.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
                 call = Some(VATNumberPage.reviewForm(service))
             ),
             summaryListRow(
                 key = messages("cds.form.gb-vat-date"),
-                value = Some(Html(subscription.ukVatDetails.map(vat => formatDate(vat.effectiveDate)).getOrElse(messages("cds.not-entered.label")))),
+                value = Some(Html(subscription.ukVatDetailsOld.map(vat => formatDate(vat.effectiveDate)).getOrElse(messages("cds.not-entered.label")))),
                 call = Some(VATNumberPage.reviewForm(service))
             ),
         )

@@ -25,13 +25,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
-case class VatDetails(postcode: String, number: String)
+case class VatDetailsOld(postcode: String, number: String, effectiveDate: LocalDate)
 
-object VatDetails {
-  implicit val format: Format[VatDetails] = Json.format[VatDetails]
+object VatDetailsOld {
+  implicit val format: Format[VatDetailsOld] = Json.format[VatDetailsOld]
 }
 
-object VatDetailsForm extends Mappings {
+object VatDetailsFormOld extends Mappings {
 
   def validPostcode: Constraint[String] =
     Constraint({
@@ -46,13 +46,21 @@ object VatDetailsForm extends Mappings {
       case _                               => Valid
     })
 
-  val vatDetailsForm = {
+  val vatDetailsFormOld = {
+
+    val minimumDate = LocalDate.of(DateConverter.earliestYearEffectiveVatDate, 1, 1)
+    val today       = LocalDate.now()
 
     Form(
       mapping(
         "postcode"   -> text.verifying(validPostcode),
         "vat-number" -> text.verifying(validVatNumber),
-      )(VatDetails.apply)(VatDetails.unapply)
+        "vat-effective-date" -> localDate(
+          emptyKey = "vat.error.empty-date",
+          invalidKey = "vat.error.invalid-date"
+        ).verifying(minDate(minimumDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+          .verifying(maxDate(today, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+      )(VatDetailsOld.apply)(VatDetailsOld.unapply)
     )
   }
 

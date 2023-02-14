@@ -30,10 +30,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   ServiceUnavailableResponse,
   VatControlListConnector
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsControllerOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponseOld}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   error_template,
   vat_details,
@@ -46,7 +46,7 @@ import util.builders.SessionBuilder
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class VatDetailsControllerSpec
+class VatDetailsControllerOldSpec
     extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
@@ -68,7 +68,7 @@ class VatDetailsControllerSpec
   private val errorTemplate               = instanceOf[error_template]
   private val weCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
 
-  private val controller = new VatDetailsController(
+  private val controller = new VatDetailsControllerOld(
     mockAuthAction,
     mockSubscriptionFlowManager,
     mockVatControlListConnector,
@@ -88,7 +88,7 @@ class VatDetailsControllerSpec
     "vat-effective-date.year"  -> "2009"
   )
 
-  private val defaultVatControlResponse = VatControlListResponse(Some("Z9 1AA"), Some("2009-11-24"))
+  private val defaultVatControlResponse = VatControlListResponseOld(Some("Z9 1AA"), Some("2009-11-24"))
 
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager, mockVatControlListConnector)
@@ -109,8 +109,8 @@ class VatDetailsControllerSpec
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "display the form with cached details" in {
-      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(
-        Some(VatDetails("123", "123", LocalDate.now()))
+      when(mockSubscriptionBusinessService.getCachedUkVatDetailsOld(any())) thenReturn Future.successful(
+        Some(VatDetailsOld("123", "123", LocalDate.now()))
       )
       reviewForm() { result =>
         status(result) shouldBe OK
@@ -120,7 +120,7 @@ class VatDetailsControllerSpec
     }
 
     "display the form with no cached details" in {
-      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(None)
+      when(mockSubscriptionBusinessService.getCachedUkVatDetailsOld(any())) thenReturn Future.successful(None)
       reviewForm() { result =>
         status(result) shouldBe OK
         verifyFormActionInCreateMode
@@ -283,7 +283,7 @@ class VatDetailsControllerSpec
     }
 
     "redirect to cannot confirm your identity when postcode is None" in {
-      val vatControlResponse = VatControlListResponse(None, Some("2009-11-24"))
+      val vatControlResponse = VatControlListResponseOld(None, Some("2009-11-24"))
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
@@ -306,7 +306,7 @@ class VatDetailsControllerSpec
     }
 
     "redirect to cannot confirm your identity when effective date is None" in {
-      val vatControlResponse = VatControlListResponse(Some("Z9 1AA"), None)
+      val vatControlResponse = VatControlListResponseOld(Some("Z9 1AA"), None)
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
@@ -380,7 +380,7 @@ class VatDetailsControllerSpec
     form: Map[String, String]
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[Request[_]]))
+    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetailsOld])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller
@@ -393,13 +393,13 @@ class VatDetailsControllerSpec
     form: Map[String, String],
     isInReviewMode: Boolean,
     userId: String = defaultUserId,
-    vatControllerResponse: VatControlListResponse = defaultVatControlResponse
+    vatControllerResponse: VatControlListResponseOld = defaultVatControlResponse
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(vatControllerResponse)))
-    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetails])(any[Request[_]]))
+    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetailsOld])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller

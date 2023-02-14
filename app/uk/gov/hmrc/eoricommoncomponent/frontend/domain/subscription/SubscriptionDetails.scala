@@ -19,34 +19,30 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 import java.time.LocalDate
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  CompanyRegisteredCountry,
-  ContactDetailsModel
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, CompanyRegisteredCountry, ContactDetailsModel, VatDetails, VatDetailsOld}
 
 case class SubscriptionDetails(
-  businessShortName: Option[BusinessShortName] = None,
-  dateEstablished: Option[LocalDate] = None,
-  vatRegisteredUk: Option[Boolean] = None,
-  vatGroup: Option[Boolean] = None,
-  ukVatDetails: Option[VatDetails] = None,
-  personalDataDisclosureConsent: Option[Boolean] = None,
-  contactDetails: Option[ContactDetailsModel] = None,
-  sicCode: Option[String] = None,
-  eoriNumber: Option[String] = None,
-  existingEoriNumber: Option[ExistingEori] = None,
-  email: Option[String] = None,
-  addressDetails: Option[AddressViewModel] = None,
-  nameIdOrganisationDetails: Option[NameIdOrganisationMatchModel] = None,
-  nameOrganisationDetails: Option[NameOrganisationMatchModel] = None,
-  nameDobDetails: Option[NameDobMatchModel] = None,
-  nameDetails: Option[NameMatchModel] = None,
-  idDetails: Option[IdMatchModel] = None,
-  customsId: Option[CustomsId] = None,
-  formData: FormData = FormData(),
-  registeredCompany: Option[CompanyRegisteredCountry] = None
+                                businessShortName: Option[BusinessShortName] = None,
+                                dateEstablished: Option[LocalDate] = None,
+                                vatRegisteredUk: Option[Boolean] = None,
+                                vatGroup: Option[Boolean] = None,
+                                ukVatDetails: Option[VatDetails] = None,
+                                ukVatDetailsOld: Option[VatDetailsOld] = None,
+                                personalDataDisclosureConsent: Option[Boolean] = None,
+                                contactDetails: Option[ContactDetailsModel] = None,
+                                sicCode: Option[String] = None,
+                                eoriNumber: Option[String] = None,
+                                existingEoriNumber: Option[ExistingEori] = None,
+                                email: Option[String] = None,
+                                addressDetails: Option[AddressViewModel] = None,
+                                nameIdOrganisationDetails: Option[NameIdOrganisationMatchModel] = None,
+                                nameOrganisationDetails: Option[NameOrganisationMatchModel] = None,
+                                nameDobDetails: Option[NameDobMatchModel] = None,
+                                nameDetails: Option[NameMatchModel] = None,
+                                idDetails: Option[IdMatchModel] = None,
+                                customsId: Option[CustomsId] = None,
+                                formData: FormData = FormData(),
+                                registeredCompany: Option[CompanyRegisteredCountry] = None
 ) {
 
   def name: String =

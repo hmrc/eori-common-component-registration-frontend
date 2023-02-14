@@ -26,7 +26,7 @@ import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, FormData, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetailsOld}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
@@ -332,7 +332,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheUkVatDetails" should {
-    val ukVatDetails = VatDetails(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
+    val ukVatDetails = VatDetailsOld(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
     "save subscription details with vat details" in {
       await(subscriptionDetailsHolderService.cacheUkVatDetails(ukVatDetails))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -343,7 +343,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "clearCachedUkVatDetails" should {
-    val ukVatDetails = VatDetails(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
+    val ukVatDetails = VatDetailsOld(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
 
     val subscriptionDetails = SubscriptionDetails(ukVatDetails = Some(ukVatDetails))
     "save subscription details with vat details set to none" in {

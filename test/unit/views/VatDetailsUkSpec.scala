@@ -22,7 +22,7 @@ import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
@@ -33,7 +33,7 @@ class VatDetailsUkSpec extends ViewSpec {
 
   private val view = instanceOf[vat_details]
 
-  val form: Form[VatDetails] = vatDetailsForm
+  val form: Form[VatDetailsOld] = vatDetailsForm
 
   "Vat Details UK Page" should {
 

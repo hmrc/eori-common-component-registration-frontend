@@ -35,7 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   SubscriptionResponse
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetailsOld}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpTypeOfPerson
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   SubscriptionFailed,
@@ -139,7 +139,7 @@ class SubscriptionServiceSpec
 
     "call connector with correct person type when user is an individual and organisation type has not been manually selected" in {
       val vatIdsGenerator                = Gen.oneOf(List(VatIdentification(Some("GB"), Some("123456789"))))
-      val vatDetails: Option[VatDetails] = ukVatDetails
+      val vatDetails: Option[VatDetailsOld] = ukVatDetails
 
       check(Prop.forAllNoShrink(vatIdsGenerator) { vatIds =>
         val expectedRequest = requestJsonIndividual(
@@ -583,11 +583,11 @@ class SubscriptionServiceSpec
   }
 
   private def assertIndividualSubscriptionRequest(
-    expectedRequest: JsValue,
-    expectedServiceCallResult: SubscriptionSuccessful,
-    ukVatDetails: Option[VatDetails],
-    subscriptionContactDetails: ContactDetailsModel = subscriptionContactDetailsModel,
-    personalDataDisclosureConsent: Boolean = false
+                                                   expectedRequest: JsValue,
+                                                   expectedServiceCallResult: SubscriptionSuccessful,
+                                                   ukVatDetails: Option[VatDetailsOld],
+                                                   subscriptionContactDetails: ContactDetailsModel = subscriptionContactDetailsModel,
+                                                   personalDataDisclosureConsent: Boolean = false
   ): Unit = {
 
     val subscriptionDetailsHolder = SubscriptionDetails(

@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetailsOld}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import java.time.{LocalDate, LocalDateTime}
@@ -260,7 +260,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
         etmpOrganisationType = Some(CorporateBody)
       )
       val subscriptionDetails = SubscriptionDetails(
-        ukVatDetails = Some(VatDetails("AA11 1AA", "123456", LocalDate.now())),
+        ukVatDetails = Some(VatDetailsOld("AA11 1AA", "123456", LocalDate.now())),
         addressDetails = Some(addressViewModel),
         contactDetails = Some(contactDetails),
         personalDataDisclosureConsent = Some(true),

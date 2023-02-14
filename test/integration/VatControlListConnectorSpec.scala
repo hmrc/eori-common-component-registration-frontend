@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   ServiceUnavailableResponse,
   VatControlListConnector
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponseOld}
 import uk.gov.hmrc.http._
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.VatControlListMessagingService
@@ -86,7 +86,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
     "return successful response with OK status when VatControlList service returns 200" in {
 
       VatControlListMessagingService.returnTheVatControlListResponseOK()
-      await(vatControlListConnector.vatControlList(request)) must be(Right(responseWithOk.as[VatControlListResponse]))
+      await(vatControlListConnector.vatControlList(request)) must be(Right(responseWithOk.as[VatControlListResponseOld]))
     }
 
     "return Not Found status when VatControlList service returns 404" in {

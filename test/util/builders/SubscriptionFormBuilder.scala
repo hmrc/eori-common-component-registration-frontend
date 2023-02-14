@@ -17,14 +17,14 @@
 package util.builders
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetailsOld}
 
 import java.time.LocalDate
 
 object SubscriptionFormBuilder {
 
-  val gbVatDetails: Option[VatDetails] =
-    Some(VatDetails("SE28 1AA", "123456789", LocalDate.parse("2017-01-01")))
+  val gbVatDetails: Option[VatDetailsOld] =
+    Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01")))
 
   val LegalStatus     = "corporate-body-uk"
   val ShortName       = "Short Name"
