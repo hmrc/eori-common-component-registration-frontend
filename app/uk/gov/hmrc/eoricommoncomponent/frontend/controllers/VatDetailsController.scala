@@ -19,71 +19,64 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDate
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  InvalidResponse,
-  NotFoundResponse,
-  ServiceUnavailableResponse,
-  VatControlListConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{InvalidResponse, NotFoundResponse, ServiceUnavailableResponse, VatControlListConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  LoggedInUserWithEnrolments,
-  VatControlListRequest,
-  VatControlListResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{vat_details, we_cannot_confirm_your_identity}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.we_cannot_confirm_your_identity
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VatDetailsController @Inject() (
-  authAction: AuthAction,
-  subscriptionFlowManager: SubscriptionFlowManager,
-  vatControlListConnector: VatControlListConnector,
-  subscriptionBusinessService: SubscriptionBusinessService,
-  mcc: MessagesControllerComponents,
-  vatDetailsView: vat_details,
-  errorTemplate: error_template,
-  weCannotConfirmYourIdentity: we_cannot_confirm_your_identity,
-  subscriptionDetailsService: SubscriptionDetailsService
+                                       authAction: AuthAction,
+                                       subscriptionFlowManager: SubscriptionFlowManager,
+                                       vatControlListConnector: VatControlListConnector,
+                                       subscriptionBusinessService: SubscriptionBusinessService,
+                                       mcc: MessagesControllerComponents,
+                                       vatDetailsViewOld: vat_details_old,
+                                       vatDetailsView: vat_details,
+                                       errorTemplate: error_template,
+                                       weCannotConfirmYourIdentity: we_cannot_confirm_your_identity,
+                                       subscriptionDetailsService: SubscriptionDetailsService,
+                                       featureFlags: FeatureFlags
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service)))
+        if(featureFlags.useNewVATJourney) Future.successful(Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service))) else Future.successful(Ok(vatDetailsViewOld(vatDetailsForm, isInReviewMode = false, service)))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedUkVatDetails.map {
-          case Some(vatDetails) =>
-            Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, service))
-          case None => Ok(vatDetailsView(vatDetailsForm, isInReviewMode = true, service))
+          case Some(vatDetails)  =>
+            if(featureFlags.useNewVATJourney) Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = false, service)) else Ok(vatDetailsViewOld(vatDetailsForm.fill(vatDetails), isInReviewMode = true, service))
+          case None => if(featureFlags.useNewVATJourney) Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service)) else Ok(vatDetailsViewOld(vatDetailsForm, isInReviewMode = false, service))
         }
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       vatDetailsForm.bindFromRequest.fold(
-        formWithErrors => Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service))),
-        formData => lookupVatDetails(formData, isInReviewMode, service)
+          formWithErrors => if(featureFlags.useNewVATJourney) Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service))) else Future.successful(BadRequest(vatDetailsViewOld(formWithErrors, isInReviewMode, service))),
+          formData => lookupVatDetails(formData, isInReviewMode, service)
       )
     }
 
   private def lookupVatDetails(vatForm: VatDetails, isInReviewMode: Boolean, service: Service)(implicit
-    hc: HeaderCarrier,
-    request: Request[AnyContent]
+                                                                                                  hc: HeaderCarrier,
+                                                                                                  request: Request[AnyContent]
   ): Future[Result] = {
 
     def isEffectiveDateAssociatedWithVrn(effectiveDate: Option[String]) =
@@ -94,8 +87,11 @@ class VatDetailsController @Inject() (
     def isPostcodeAssociatedWithVrn(postcode: Option[String]) =
       postcode.fold(false)(stripSpaces(_) equalsIgnoreCase stripSpaces(vatForm.postcode))
 
-    def confirmKnownFacts(knownFacts: VatControlListResponse) =
-      isEffectiveDateAssociatedWithVrn(knownFacts.dateOfReg) && isPostcodeAssociatedWithVrn(knownFacts.postcode)
+    def confirmKnownFacts(knownFacts: VatControlListResponse) = {
+      if(featureFlags.useNewVATJourney) isPostcodeAssociatedWithVrn(knownFacts.postcode)
+      else isEffectiveDateAssociatedWithVrn(knownFacts.dateOfReg) &&  isPostcodeAssociatedWithVrn(knownFacts.postcode)
+    }
+
 
     vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {
       case Right(knownFacts) =>

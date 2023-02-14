@@ -14,9 +14,11 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.helpers.inputDate
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
@@ -24,51 +26,62 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, appConfig:AppConfig)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, appConfig:AppConfig)
 
 @(vatForm: Form[VatDetails], isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @vatUKLink = {
-    <p class="govuk-body">
-<a id="vat-link" class="govuk-link" href="@{appConfig.vatUKDetails}" target="_blank" rel="noopener noreferrer">
-    @messages("cds.subscription.vat-details.intro-text.link")</a>
-    @messages("cds.subscription.vat-details.intro-text.link.text")</p>
+    <a class="govuk-link" href="@{appConfig.vatUKDetails}" target="_blank" rel="noopener noreferrer">@messages("cds.subscription.vat-details.intro-text.link-old")</a>
 }
 
 @formAction = @{
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController.submit(isInReviewMode, service)
 }
+
+@updateFormErrors =@{
+    vatForm.copy(errors = DateConverter.updateEffectiveVatDateErrors(vatForm.errors))
+}
+
 @layout_di(messages("cds.subscription.vat-details.heading"), form = Some(vatForm)) {
     <div>
+        @errorSummary(updateFormErrors.errors,
+            focusOverrides = Map("vat-effective-date" -> "vat-effective-date.day"))
 
         @helpers.form(formAction, "vat-details-form") {
 
             @CSRF.formField
             <h1 class="govuk-heading-l">@messages("cds.subscription.vat-details.heading")</h1>
-            <p id="intro-text" class="govuk-body">@messages("cds.subscription.vat-details.intro-text")</p>
+            <p id="intro-text" class="govuk-body">@messages("cds.subscription.vat-details.intro-text-old")</p>
             <p id="intro-link" class="govuk-body">@vatUKLink</p>
-
-
-            @inputText(
-                form = vatForm,
-                id = "vat-number",
-                name = "vat-number",
-                label = "cds.subscription.vat-details.vat-number",
-                hint = Some(messages("cds.subscription.vat-details.vat-number.hint-text")),
-                labelClasses = Some("govuk-!-font-weight-bold"),
-                classes = Some("govuk-!-width-one-half"),
-                isPageHeading = false
-            )
 
             @inputText(
                 form = vatForm,
                 id = "postcode",
                 name = "postcode",
-                label = "cds.subscription.vat-details.postcode",
+                label = "cds.subscription.vat-details.postcode-old",
                 labelClasses = Some("govuk-!-font-weight-bold"),
                 classes = Some("govuk-!-width-one-half"),
                 isPageHeading = false
             )
+            @inputText(
+                form = vatForm,
+                id = "vat-number",
+                name = "vat-number",
+                label = "cds.subscription.vat-details.vat-number-old",
+                labelClasses = Some("govuk-!-font-weight-bold"),
+                classes = Some("govuk-!-width-one-half"),
+                isPageHeading = false
+            )
+            <div class="govuk-form-group">
+            @inputDate_di(
+                form = updateFormErrors,
+                id = "vat-effective-date",
+                legendAsPageHeading = false,
+                legendContent = messages("cds.subscription.vat-details.vat-effective-date"),
+                hintText = Some(Html(messages("cds.subscription.vat-details.vat-effective-date.hint"))),
+                legendClasses = Some("govuk-!-font-weight-bold")
+            )
+            </div>
 
             @govukButton(Button(
                 content = Text(ViewHelper.continueButtonText(isInReviewMode))

@@ -744,12 +744,20 @@ cds.subscription-details.amend.legal-entity.user.header = Golygu’r endid cyfre
 cds.subscription-details.amend.legal-entity.submitButton = Cadw a mynd i’r dangosfwrdd
 cds.multi.input.add-another = Ychwanegu un arall
 cds.subscription.vat-details.heading = Eich manylion TAW yn y DU
-cds.subscription.vat-details.intro-text = Mae’ch manylion TAW i’w gweld ar eich tystysgrif cofrestru ar gyfer TAW. I weld hyn, mewngofnodwch i’ch cyfrif treth a dewis “Rhagor o fanylion TAW”. Dewiswch y cysylltiad “Bwrw golwg dros y dystysgrif TAW” o dan y pennawd “Cymorth gyda threth”.
-cds.subscription.vat-details.intro-text.link = Dewch o hyd i’ch manylion TAW (yn agor tab newydd).
+cds.subscription.vat-details.intro-text-old = Mae’ch manylion TAW i’w gweld ar eich tystysgrif cofrestru ar gyfer TAW. I weld hyn, mewngofnodwch i’ch cyfrif treth a dewis “Rhagor o fanylion TAW”. Dewiswch y cysylltiad “Bwrw golwg dros y dystysgrif TAW” o dan y pennawd “Cymorth gyda threth”.
+cds.subscription.vat-details.intro-text.link-old = Dewch o hyd i’ch manylion TAW (yn agor tab newydd).
+
+cds.subscription.vat-details.intro-text = Mae’r rhain i’w gweld ar eich tystysgrif TAW.
+cds.subscription.vat-details.intro-text.link = Mewngofnodwch i’ch cyfrif TAW ar-lein (yn agor tab newydd)
+cds.subscription.vat-details.intro-text.link.text = i fwrw golwg ar eich tystysgrif TAW.
+cds.subscription.vat-details.postcode-old = Beth yw’r cod post yn y DU ble mae’ch sefydliad wedi’i gofrestru ar gyfer TAW?
+cds.subscription.vat-details.vat-number.hint-text = Dyma’r rhif 9 digid ar eich tystysgrif TAW. Er enghraifft, 123456789
+
+cds.subscription.vat-details.vat-number= Beth yw’ch rhif cofrestru TAW?
 cds.subscription.vat-details.postcode = Cod post y cyfeiriad cofrestru TAW
 cds.subscription.vat-details.postcode.required.error = Nodwch god post dilys eich cyfeiriad cofrestru TAW
 cds.subscription.vat-details.postcode.length.error = Rhaid i’r cod post fod yn 8 cymeriad ar y mwyaf
-cds.subscription.vat-details.vat-number = Rhif TAW
+cds.subscription.vat-details.vat-number-old = Rhif TAW
 cds.subscription.vat-details.vat-effective-date = Dyddiad y daw TAW i rym
 cds.subscription.vat-details.vat-effective-date.hint = Er enghraifft, 01 11 2007
 cds.subscription.vat-details.vat-effective-date.required.error = Nodwch eich dyddiad dod i rym ar gyfer TAW, er enghraifft “31 3 1980”
