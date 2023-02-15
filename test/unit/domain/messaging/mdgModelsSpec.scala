@@ -17,11 +17,14 @@
 package unit.domain.messaging
 
 import base.UnitSpec
+import jdk.nashorn.internal.objects.NativeArray.forEach
+import org.scalacheck.Gen
+import org.scalatest.OptionValues
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.postcodeRegex
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.{Countries, Country}
 
-class mdgModelsSpec extends UnitSpec {
+class mdgModelsSpec extends UnitSpec with OptionValues {
 
   "isValidAddress" when {
 
@@ -50,6 +53,16 @@ class mdgModelsSpec extends UnitSpec {
       val invalidCountryCodeAddress =
         Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), Some("PC55 5AA"), "EN")
       invalidCountryCodeAddress.isValidAddress shouldBe false
+    }
+
+    "supplied with a valid countryCode no postCode required should be true" in {
+      val countryGen = Gen.oneOf(Countries.thirdIncEu)
+      val validCountryCodeAddress =
+        Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), None, "AA")
+
+      forAll(countryGen) { country =>
+        validCountryCodeAddress.copy(countryCode = country.countryCode).isValidAddress shouldBe true
+      }
     }
   }
 }
