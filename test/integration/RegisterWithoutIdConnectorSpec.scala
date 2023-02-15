@@ -72,7 +72,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     RequestCommon("CDS", requestDate, "abcdefg1234567890hijklmnop0987654"),
     RegisterWithoutIdReqDetails.organisation(
       OrganisationName("orgName"),
-      Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "ZZ"),
+      Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("L3  6LR"), "ZZ"),
       contactDetails
     )
   )
@@ -96,7 +96,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         |        "addressLine2": "line 2",
         |        "addressLine3": "line 3",
         |        "addressLine4": "line 4",
-        |        "postalCode": "SE28 1AA",
+        |        "postalCode": "L3  6LR",
         |        "countryCode": "ZZ"
         |      },
         |      "organisation": {
