@@ -545,19 +545,19 @@ cds.matching.organisation-address.line-4.error.too-long = Rhaid i’r Rhanbarth 
 cds.matching.organisation-address.postcode.error.empty = Nodwch god post dilys
 cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
-cds.matching.name-id-organisation.company.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-company.name = Enw’r cwmni cofrestredig
-cds.matching.name-id-organisation.registered-company.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.registered-company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.<br><br><p class="govuk-body">Gallwch hefyd gael yr enw hwn o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.partnership.name = Enw’r bartneriaeth gofrestredig
-cds.matching.name-id-organisation.partnership.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.partnership.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.<br><br><p class="govuk-body">Gallwch hefyd gael yr enw hwn o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.organisation.name = Enw’r sefydliad
-cds.matching.name-id-organisation.organisation.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.organisation.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad. Byddwn yn defnyddio hwn i gadarnhau pwy ydych. <br><br><p class="govuk-body">Gallwch hefyd gael yr enw hwn o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.organisation.no-utr=Nid oes gennyf Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.organisation.no-utr.text=Os ydych yn sefydliad nid er elw neu’n gorff cyhoeddus, ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr, bydd angen i chi {0} i gwblhau’ch cais am rif EORI.
 cds.matching.name-id-organisation.organisation.no-utr.link=ddefnyddio gwasanaeth arall
 cds.matching.name-id-organisation.not-registered = Os nad ydych wedi’ch cofrestru ar gyfer Hunanasesiad, neu os yw’ch cofrestriad ar y gweill ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) eto, gallwch <a href="{0}" class="govuk-link">gofrestru gan ddefnyddio’ch enw a chyfeiriad</a> yn lle hynny.
 cds.matching.name-id-organisation.eu-organisation.name = Enw’r sefydliad cofrestredig
-cds.matching.name-id-organisation.eu-organisation.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.eu-organisation.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.eu-organisation.eori = Rhif EORI
 cds.matching.name-id-organisation.eu-organisation.name-and-address = Os nad oes gennych EORI, gallwch <a href="{0}" class="govuk-link">gofrestru gan ddefnyddio’ch enw a chyfeiriad</a> yn lle hynny.
 cds.matching.name-id-organisation.eu-organisation.date-established = Dyddiad sefydlu
