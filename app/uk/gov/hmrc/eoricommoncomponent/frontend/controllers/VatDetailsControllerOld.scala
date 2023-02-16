@@ -31,7 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSu
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   LoggedInUserWithEnrolments,
   VatControlListRequest,
-  VatControlListResponseOld
+  VatControlListResponse
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsFormOld.vatDetailsFormOld
@@ -94,7 +94,7 @@ class VatDetailsControllerOld @Inject()(
     def isPostcodeAssociatedWithVrn(postcode: Option[String]) =
       postcode.fold(false)(stripSpaces(_) equalsIgnoreCase stripSpaces(vatForm.postcode))
 
-    def confirmKnownFacts(knownFacts: VatControlListResponseOld) =
+    def confirmKnownFacts(knownFacts: VatControlListResponse) =
       isEffectiveDateAssociatedWithVrn(knownFacts.dateOfReg) && isPostcodeAssociatedWithVrn(knownFacts.postcode)
 
     vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {

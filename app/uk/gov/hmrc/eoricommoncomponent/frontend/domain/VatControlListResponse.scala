@@ -21,7 +21,8 @@ import play.api.libs.json.Json
 case class VatControlListResponse(
                                    postcode: Option[String] = None,
                                    dateOfReg: Option[String] = None,
-                                   lastNetDue: Option[Double]= None
+                                   lastNetDue: Option[Double]= None,
+                                   lastReturnMonthPeriod: Option[String] =None
                                  )
 
 object VatControlListResponse {

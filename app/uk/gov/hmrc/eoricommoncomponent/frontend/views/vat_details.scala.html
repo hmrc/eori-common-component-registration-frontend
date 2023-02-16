@@ -41,7 +41,7 @@
 }
 @layout_di(messages("cds.subscription.vat-details.heading"), form = Some(vatForm)) {
     <div>
-
+        @errorSummary(vatForm.errors)
         @helpers.form(formAction, "vat-details-form") {
 
             @CSRF.formField

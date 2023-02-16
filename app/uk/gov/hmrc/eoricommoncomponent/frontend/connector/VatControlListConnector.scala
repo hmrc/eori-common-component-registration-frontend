@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK, SERVICE_UNAVAILABLE}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponseOld}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.http.HttpClient
 
@@ -34,13 +34,13 @@ class VatControlListConnector @Inject() (http: HttpClient, appConfig: AppConfig)
 
   def vatControlList(
     request: VatControlListRequest
-  )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, VatControlListResponseOld]] =
+  )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, VatControlListResponse]] =
     http.GET[HttpResponse](url, request.queryParams) map { response =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"vat-known-facts-control-list successful. url: $url")
       // $COVERAGE-ON
       response.status match {
-        case OK        => Right(response.json.as[VatControlListResponseOld])
+        case OK        => Right(response.json.as[VatControlListResponse])
         case NOT_FOUND =>
           // $COVERAGE-OFF$Loggers
           logger.warn(
