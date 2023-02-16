@@ -611,11 +611,11 @@ cds.matching.organisation-address.country.error.empty=Enter your country
 
 # Name and Utr for an Organisation Match
 cds.matching.name-id-organisation.company.name=Company name
-cds.matching.name-id-organisation.company.name.hint=Enter the exact name that's on your company’s certificate of incorporation. We will use this to verify your identity.
+cds.matching.name-id-organisation.company.name.hint=Enter the exact name that'''s on your company'’'s certificate of incorporation. We will use this to verify your identity.
 cds.matching.name-id-organisation.registered-company.name=Registered company name
-cds.matching.name-id-organisation.registered-company.name.hint=Enter the exact name that's on your company’s certificate of incorporation. We will use this to verify your identity.<br><br><p class="govuk-body">You can also get this name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.registered-company.name.hint=Enter the exact name that'''s on your company'’'s certificate of incorporation. We will use this to verify your identity.<br><br><p class="govuk-body">You can also get this name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
 cds.matching.name-id-organisation.partnership.name=Registered partnership name
-cds.matching.name-id-organisation.partnership.name.hint=Enter the exact name that's on the partnership’s certificate of incorporation. We will use this to verify your identity.<br><br><p class="govuk-body">You can also get this name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.partnership.name.hint=Enter the exact name that'''s on the partnership'’'s certificate of incorporation. We will use this to verify your identity.<br><br><p class="govuk-body">You can also get this name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
 cds.matching.name-id-organisation.organisation.name=Organisation name
 cds.matching.name-id-organisation.organisation.name.hint=Enter the exact name that'''s on your organisation'’'s certificate of incorporation. We will use this to verify your identity. <br><br><p class="govuk-body">You can also get this name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
 cds.matching.name-id-organisation.organisation.no-utr=I do not have a Corporation Tax UTR
