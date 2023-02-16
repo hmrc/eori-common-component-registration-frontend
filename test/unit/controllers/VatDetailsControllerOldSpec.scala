@@ -36,7 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, V
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   error_template,
-  vat_details,
+  vat_details_old,
   we_cannot_confirm_your_identity
 }
 import uk.gov.hmrc.http.HeaderCarrier
@@ -53,18 +53,17 @@ class VatDetailsControllerOldSpec
   protected override val formId: String = "vat-details-form"
 
   protected override val submitInCreateModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsControllerOld
       .submit(isInReviewMode = false, atarService)
       .url
 
   protected override val submitInReviewModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsControllerOld
       .submit(isInReviewMode = true, atarService)
       .url
 
   private val mockVatControlListConnector = mock[VatControlListConnector]
-
-  private val vatDetailsView              = instanceOf[vat_details]
+  private val vatDetailsView              = instanceOf[vat_details_old]
   private val errorTemplate               = instanceOf[error_template]
   private val weCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
 
@@ -88,7 +87,7 @@ class VatDetailsControllerOldSpec
     "vat-effective-date.year"  -> "2009"
   )
 
-  private val defaultVatControlResponse = VatControlListResponse(Some("Z9 1AA"), Some("2009-11-24"))
+  private val defaultVatControlResponse = VatControlListResponse(Some("Z9 1AA"), Some("2009-11-24"), None, None)
 
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager, mockVatControlListConnector)
@@ -380,7 +379,7 @@ class VatDetailsControllerOldSpec
     form: Map[String, String]
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetailsOld])(any[Request[_]]))
+    when(mockSubscriptionDetailsHolderService.cacheUkVatDetailsOld(any[VatDetailsOld])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller
@@ -399,7 +398,7 @@ class VatDetailsControllerOldSpec
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(vatControllerResponse)))
-    when(mockSubscriptionDetailsHolderService.cacheUkVatDetails(any[VatDetailsOld])(any[Request[_]]))
+    when(mockSubscriptionDetailsHolderService.cacheUkVatDetailsOld(any[VatDetailsOld])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller

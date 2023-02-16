@@ -26,9 +26,9 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   ApplicationController,
   EmailController,
-  VatDetailsController
+  VatDetailsControllerOld
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, VatGroupController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, FeatureFlags, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ControllerSpec
@@ -46,9 +46,10 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
   private val answerYes                       = true.toString
   private val answerNo                        = false.toString
   private val expectedYesRedirectUrl          = routes.VatGroupsCannotRegisterUsingThisServiceController.form(atarService).url
-  private val expectedNoRedirectUrl           = VatDetailsController.createForm(atarService).url
+  private val expectedNoRedirectUrl           = VatDetailsControllerOld.createForm(atarService).url
   private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
+  private val mockFeatureFlags                = mock[FeatureFlags]
   private val mockAuthConnector               = mock[AuthConnector]
   private val mockAuthAction                  = authAction(mockAuthConnector)
 
@@ -60,7 +61,8 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
       vatGroupView,
       mockAuthAction,
       mockSubscriptionDetailsService,
-      mockSubscriptionBusinessService
+      mockSubscriptionBusinessService,
+      mockFeatureFlags
     )(global)
 
   "Accessing the page" should {

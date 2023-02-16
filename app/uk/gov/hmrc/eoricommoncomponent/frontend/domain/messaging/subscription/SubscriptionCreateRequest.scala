@@ -178,7 +178,7 @@ object SubscriptionCreateRequest {
   ): SubscriptionRequest = {
     val org = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
     val ukVatId: Option[List[VatIdentification]] =
-      sub.ukVatDetails.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
+      sub.ukVatDetailsOld.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
 
     SubscriptionRequest(
       SubscriptionCreateRequest(

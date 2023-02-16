@@ -16,12 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
 
-import java.time.LocalDate
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
@@ -46,14 +44,11 @@ object VatDetailsForm extends Mappings {
       case _                               => Valid
     })
 
-  val vatDetailsForm = {
-
+  val vatDetailsForm =
     Form(
-      mapping(
-        "postcode"   -> text.verifying(validPostcode),
-        "vat-number" -> text.verifying(validVatNumber),
-      )(VatDetails.apply)(VatDetails.unapply)
+      mapping("postcode" -> text.verifying(validPostcode), "vat-number" -> text.verifying(validVatNumber))(
+        VatDetails.apply
+      )(VatDetails.unapply)
     )
-  }
 
 }

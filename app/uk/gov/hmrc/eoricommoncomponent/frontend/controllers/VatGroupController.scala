@@ -68,17 +68,16 @@ class VatGroupController @Inject() (
         )
     }
 
-  private def redirectCannotUseThisService(service: Service) = Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
+  private def redirectCannotUseThisService(service: Service) =
+    Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
 
-  private def vatDetailsRoutes(service: Service, isInReviewMode: Boolean, yesNoAnswer: YesNo) = {
-    if (featureFlags.useNewVATJourney) {
+  private def vatDetailsRoutes(service: Service, isInReviewMode: Boolean, yesNoAnswer: YesNo) =
+    if (featureFlags.useNewVATJourney)
       if (isInReviewMode && yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.reviewForm(service)))
       else if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.createForm(service)))
       else redirectCannotUseThisService(service) //TODO: Go to new YES page
-    }
-    else
-      if (isInReviewMode && yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsControllerOld.reviewForm(service)))
-      else if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsControllerOld.createForm(service)))
-      else redirectCannotUseThisService(service) //TODO: Remove this when VAT journey is live
-  }
+    else if (isInReviewMode && yesNoAnswer.isNo)
+      Future.successful(Redirect(VatDetailsControllerOld.reviewForm(service)))
+    else if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsControllerOld.createForm(service)))
+    else redirectCannotUseThisService(service) //TODO: Remove this when VAT journey is live
 }

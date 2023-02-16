@@ -44,7 +44,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsControllerOld @Inject()(
+class VatDetailsControllerOld @Inject() (
   authAction: AuthAction,
   subscriptionFlowManager: SubscriptionFlowManager,
   vatControlListConnector: VatControlListConnector,
@@ -82,8 +82,8 @@ class VatDetailsControllerOld @Inject()(
     }
 
   private def lookupVatDetails(vatForm: VatDetailsOld, isInReviewMode: Boolean, service: Service)(implicit
-                                                                                                  hc: HeaderCarrier,
-                                                                                                  request: Request[AnyContent]
+    hc: HeaderCarrier,
+    request: Request[AnyContent]
   ): Future[Result] = {
 
     def isEffectiveDateAssociatedWithVrn(effectiveDate: Option[String]) =

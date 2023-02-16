@@ -334,18 +334,18 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   "cacheUkVatDetails" should {
     val ukVatDetails = VatDetailsOld(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
     "save subscription details with vat details" in {
-      await(subscriptionDetailsHolderService.cacheUkVatDetails(ukVatDetails))
+      await(subscriptionDetailsHolderService.cacheUkVatDetailsOld(ukVatDetails))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
       verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.ukVatDetails shouldBe Some(ukVatDetails)
+      val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
+      subscriptionDetails.ukVatDetailsOld shouldBe Some(ukVatDetails)
     }
   }
 
   "clearCachedUkVatDetails" should {
     val ukVatDetails = VatDetailsOld(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
 
-    val subscriptionDetails = SubscriptionDetails(ukVatDetails = Some(ukVatDetails))
+    val subscriptionDetails = SubscriptionDetails(ukVatDetailsOld = Some(ukVatDetails))
     "save subscription details with vat details set to none" in {
       when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
       await(subscriptionDetailsHolderService.clearCachedUkVatDetails(request))

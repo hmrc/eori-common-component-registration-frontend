@@ -23,17 +23,17 @@ import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsFormOld.vatDetailsFormOld
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details_old
 import util.ViewSpec
 
 class VatDetailsUkSpec extends ViewSpec {
 
   implicit val request = withFakeCSRF(FakeRequest())
 
-  private val view = instanceOf[vat_details]
+  private val view = instanceOf[vat_details_old]
 
-  val form: Form[VatDetailsOld] = vatDetailsForm
+  val form: Form[VatDetailsOld] = vatDetailsFormOld
 
   "Vat Details UK Page" should {
 

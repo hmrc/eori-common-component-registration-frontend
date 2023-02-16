@@ -17,22 +17,32 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{InvalidResponse, NotFoundResponse, ServiceUnavailableResponse, VatControlListConnector}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
+  InvalidResponse,
+  NotFoundResponse,
+  ServiceUnavailableResponse,
+  VatControlListConnector
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest, VatControlListResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{VatDetailsSubscriptionFlowPage, VatGroupFlowPage}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
+  LoggedInUserWithEnrolments,
+  VatControlListRequest,
+  VatControlListResponse
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsController @Inject()(
+class VatDetailsController @Inject() (
   authAction: AuthAction,
   subscriptionFlowManager: SubscriptionFlowManager,
   vatControlListConnector: VatControlListConnector,
@@ -70,8 +80,8 @@ class VatDetailsController @Inject()(
     }
 
   private def lookupVatDetails(vatForm: VatDetails, isInReviewMode: Boolean, service: Service)(implicit
-                                                                                                  hc: HeaderCarrier,
-                                                                                                  request: Request[AnyContent]
+    hc: HeaderCarrier,
+    request: Request[AnyContent]
   ): Future[Result] = {
 
     def stripSpaces: String => String = s => s.filterNot(_.isSpaceChar)
@@ -79,11 +89,18 @@ class VatDetailsController @Inject()(
     def isPostcodeAssociatedWithVrn(postcode: Option[String]) =
       postcode.fold(false)(stripSpaces(_) equalsIgnoreCase stripSpaces(vatForm.postcode))
 
-    def confirmKnownFacts(knownFacts: VatControlListResponse) = isPostcodeAssociatedWithVrn(knownFacts.postcode)
+    def checkLastReturnMonthPeriod(vatControlListResponse: VatControlListResponse) =
+      vatControlListResponse.lastReturnMonthPeriod.fold(false)(_ != "N/A")
+
+    def isLatestVATReturnDataAvailable(vatControlListResponse: VatControlListResponse) =
+      vatControlListResponse match {
+        case v if checkLastReturnMonthPeriod(vatControlListResponse) && v.lastNetDue.nonEmpty => true
+        case _                                                                                => false
+      }
 
     vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {
-      case Right(knownFacts) =>
-        if (confirmKnownFacts(knownFacts))
+      case Right(vatControlListResponse) =>
+        if (isPostcodeAssociatedWithVrn(vatControlListResponse.postcode))
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
             .map(
@@ -93,10 +110,14 @@ class VatDetailsController @Inject()(
                     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
                       .determineRoute(service)
                   )
-                else
+                else if (isLatestVATReturnDataAvailable(vatControlListResponse))
+                  //TODO: New page YES return is available
                   Redirect(
                     subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
                   )
+                else
+                  //TODO: New page NO return is NOT available
+                  Redirect(subscriptionFlowManager.stepInformation(VatGroupFlowPage).nextPage.url(service))
             )
         else
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))

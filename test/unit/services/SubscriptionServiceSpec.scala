@@ -138,7 +138,7 @@ class SubscriptionServiceSpec
     }
 
     "call connector with correct person type when user is an individual and organisation type has not been manually selected" in {
-      val vatIdsGenerator                = Gen.oneOf(List(VatIdentification(Some("GB"), Some("123456789"))))
+      val vatIdsGenerator                   = Gen.oneOf(List(VatIdentification(Some("GB"), Some("123456789"))))
       val vatDetails: Option[VatDetailsOld] = ukVatDetails
 
       check(Prop.forAllNoShrink(vatIdsGenerator) { vatIds =>
@@ -542,7 +542,6 @@ class SubscriptionServiceSpec
       req.subscriptionCreateRequest.requestDetail.contactInformation.flatMap(_.telephoneNumber) shouldBe Some(
         "+01632961234"
       )
-
     }
   }
 
@@ -565,7 +564,7 @@ class SubscriptionServiceSpec
       businessShortName = None,
       dateEstablished = Some(dateOfEstablishment),
       sicCode = Some(principalEconomicActivity),
-      ukVatDetails = ukVatDetails
+      ukVatDetailsOld = ukVatDetails
     )
 
     val result = makeSubscriptionRequest(
@@ -583,17 +582,17 @@ class SubscriptionServiceSpec
   }
 
   private def assertIndividualSubscriptionRequest(
-                                                   expectedRequest: JsValue,
-                                                   expectedServiceCallResult: SubscriptionSuccessful,
-                                                   ukVatDetails: Option[VatDetailsOld],
-                                                   subscriptionContactDetails: ContactDetailsModel = subscriptionContactDetailsModel,
-                                                   personalDataDisclosureConsent: Boolean = false
+    expectedRequest: JsValue,
+    expectedServiceCallResult: SubscriptionSuccessful,
+    ukVatDetails: Option[VatDetailsOld],
+    subscriptionContactDetails: ContactDetailsModel = subscriptionContactDetailsModel,
+    personalDataDisclosureConsent: Boolean = false
   ): Unit = {
 
     val subscriptionDetailsHolder = SubscriptionDetails(
       contactDetails = Some(subscriptionContactDetails),
       personalDataDisclosureConsent = Some(personalDataDisclosureConsent),
-      ukVatDetails = ukVatDetails
+      ukVatDetailsOld = ukVatDetails
     )
 
     val result = makeSubscriptionRequest(

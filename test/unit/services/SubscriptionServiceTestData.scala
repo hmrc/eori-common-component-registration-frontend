@@ -134,7 +134,7 @@ trait SubscriptionServiceTestData extends TestData {
   )
 
   val fullyPopulatedSubscriptionDetails = SubscriptionDetails(
-    ukVatDetails = Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01"))),
+    ukVatDetailsOld = Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01"))),
     personalDataDisclosureConsent = Some(true),
     contactDetails = Some(subscriptionContactDetailsModel),
     dateEstablished = Some(dateOfEstablishment),
@@ -145,7 +145,7 @@ trait SubscriptionServiceTestData extends TestData {
   )
 
   val fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone: SubscriptionDetails = SubscriptionDetails(
-    ukVatDetails = Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01"))),
+    ukVatDetailsOld = Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01"))),
     personalDataDisclosureConsent = Some(true),
     contactDetails = Some(subscriptionContactDetailsModel.copy(telephone = "+01632961234")),
     dateEstablished = Some(dateOfEstablishment),
@@ -154,7 +154,7 @@ trait SubscriptionServiceTestData extends TestData {
   )
 
   val fullyPopulatedSubscriptionDetailsWithPlusSignInFaxNumber: SubscriptionDetails = SubscriptionDetails(
-    ukVatDetails = Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01"))),
+    ukVatDetailsOld = Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01"))),
     personalDataDisclosureConsent = Some(true),
     contactDetails = Some(subscriptionContactDetailsModel.copy(fax = Some("+01632961234"))),
     dateEstablished = Some(dateOfEstablishment),
@@ -163,7 +163,7 @@ trait SubscriptionServiceTestData extends TestData {
   )
 
   val fullyPopulatedSubscriptionDetailsWithPlusSignInTelAndFaxNumber: SubscriptionDetails = SubscriptionDetails(
-    ukVatDetails = Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01"))),
+    ukVatDetailsOld = Some(VatDetailsOld("SE28 1AA", "123456789", LocalDate.parse("2017-01-01"))),
     personalDataDisclosureConsent = Some(true),
     contactDetails = Some(subscriptionContactDetailsWithPlusSignInTelAndFaxModel),
     dateEstablished = Some(dateOfEstablishment),

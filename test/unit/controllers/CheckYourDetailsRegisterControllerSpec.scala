@@ -27,15 +27,11 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CheckYourDetailsRegisterController, FeatureFlags}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Partnership, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  BusinessShortName,
-  SubscriptionDetails,
-  SubscriptionFlow
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlow}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -65,7 +61,7 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockAuthConnector                     = mock[AuthConnector]
   private val mockAuthAction                        = authAction(mockAuthConnector)
   private val mockSessionCache                      = mock[SessionCache]
-  private val mockSubscriptionDetailsHolder         = mock[SubscriptionDetails]
+  private val mockSubscriptionDetails               = mock[SubscriptionDetails]
   private val mockRegisterWithoutIdWithSubscription = mock[RegisterWithoutIdWithSubscriptionService]
   private val mockSubscriptionFlow                  = mock[SubscriptionFlow]
   private val mockRequestSession                    = mock[RequestSessionData]
@@ -90,19 +86,19 @@ class CheckYourDetailsRegisterControllerSpec
   private val NotEntered: String = "Not entered"
 
   override def beforeEach: Unit = {
-    reset(mockSessionCache, mockSubscriptionDetailsHolder, mockSubscriptionFlow)
+    reset(mockSessionCache, mockSubscriptionDetails, mockSubscriptionFlow)
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(mockSubscriptionFlow)
-    when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(None)
-    when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(None)
-    when(mockSubscriptionDetailsHolder.businessShortName).thenReturn(None)
-    when(mockSubscriptionDetailsHolder.dateEstablished).thenReturn(None)
-    when(mockSubscriptionDetailsHolder.sicCode).thenReturn(None)
-    when(mockSubscriptionDetailsHolder.nameDobDetails).thenReturn(None)
-    when(mockSubscriptionDetailsHolder.addressDetails).thenReturn(Some(addressDetails))
-    when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(Some(true))
-    when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
-    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetailsHolder)
+    when(mockSubscriptionDetails.ukVatDetailsOld).thenReturn(None)
+    when(mockSubscriptionDetails.ukVatDetails).thenReturn(None)
+    when(mockSubscriptionDetails.businessShortName).thenReturn(None)
+    when(mockSubscriptionDetails.dateEstablished).thenReturn(None)
+    when(mockSubscriptionDetails.sicCode).thenReturn(None)
+    when(mockSubscriptionDetails.nameDobDetails).thenReturn(None)
+    when(mockSubscriptionDetails.addressDetails).thenReturn(Some(addressDetails))
+    when(mockSubscriptionDetails.personalDataDisclosureConsent).thenReturn(Some(true))
+    when(mockSubscriptionDetails.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetails)
     when(mockRequestSession.isPartnershipOrLLP(any[Request[AnyContent]])).thenReturn(false)
   }
 
@@ -116,9 +112,9 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display the sole trader name and dob from the cache when user has been identified by REG01" in {
-      when(mockSubscriptionDetailsHolder.nameDobDetails)
+      when(mockSubscriptionDetails.nameDobDetails)
         .thenReturn(Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23"))))
-      when(mockSubscriptionDetailsHolder.name).thenReturn("John Doe")
+      when(mockSubscriptionDetails.name).thenReturn("John Doe")
 
       showForm(userSelectedOrgType = SoleTrader) { result =>
         val page = CdsPage(contentAsString(result))
@@ -141,7 +137,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display the sole trader name and dob from the cache when user has NOT been identified" in {
-      when(mockSubscriptionDetailsHolder.name).thenReturn("John Doe")
+      when(mockSubscriptionDetails.name).thenReturn("John Doe")
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(individualRegistrationDetailsNotIdentifiedByReg01)
 
@@ -201,7 +197,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display the business name and six line address from the cache when user wasnt registered" in {
-      when(mockSubscriptionDetailsHolder.name).thenReturn("orgName")
+      when(mockSubscriptionDetails.name).thenReturn("orgName")
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(organisationRegistrationDetailsWithEmptySafeId)
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
@@ -233,8 +229,8 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display the business name and four line address from the cache when user was registered, and translate EU country to full country name" in {
-      when(mockSubscriptionDetailsHolder.name).thenReturn("orgName")
-      when(mockSubscriptionDetailsHolder.addressDetails)
+      when(mockSubscriptionDetails.name).thenReturn("orgName")
+      when(mockSubscriptionDetails.addressDetails)
         .thenReturn(Some(AddressViewModel("street", "city", Some("322811"), "PL")))
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
         val page = CdsPage(contentAsString(result))
@@ -255,7 +251,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "not translate country code if it is third country" in {
-      when(mockSubscriptionDetailsHolder.addressDetails)
+      when(mockSubscriptionDetails.addressDetails)
         .thenReturn(Some(AddressViewModel("street", "city", None, "IN")))
 
       showForm() { result =>
@@ -827,7 +823,7 @@ class CheckYourDetailsRegisterControllerSpec
 
   "VAT details" should {
     "display only UK vat details when found in cache" in {
-      when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(gbVatDetails)
+      when(mockSubscriptionDetails.ukVatDetailsOld).thenReturn(gbVatDetails)
       mockRegistrationDetailsBasedOnOrganisationType(Individual)
 
       showForm() { result =>
@@ -840,7 +836,7 @@ class CheckYourDetailsRegisterControllerSpec
   "failure" should {
 
     "throw an expected exception when cache does not contain consent to disclose personal data" in {
-      when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(None)
+      when(mockSubscriptionDetails.personalDataDisclosureConsent).thenReturn(None)
       mockRegistrationDetailsBasedOnOrganisationType(Individual)
 
       val caught = intercept[IllegalStateException] {

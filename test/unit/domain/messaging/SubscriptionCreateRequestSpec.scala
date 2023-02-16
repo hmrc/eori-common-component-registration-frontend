@@ -260,7 +260,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
         etmpOrganisationType = Some(CorporateBody)
       )
       val subscriptionDetails = SubscriptionDetails(
-        ukVatDetails = Some(VatDetailsOld("AA11 1AA", "123456", LocalDate.now())),
+        ukVatDetailsOld = Some(VatDetailsOld("AA11 1AA", "123456", LocalDate.now())),
         addressDetails = Some(addressViewModel),
         contactDetails = Some(contactDetails),
         personalDataDisclosureConsent = Some(true),

@@ -20,7 +20,12 @@ import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails, VatDetailsOld}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
+  AddressViewModel,
+  ContactDetailsModel,
+  VatDetails,
+  VatDetailsOld
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.ContactDetailsAdaptor

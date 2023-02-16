@@ -82,7 +82,7 @@ object SubscriptionFormBuilder {
     businessShortName = Some(BusinessShortName(ShortName)),
     dateEstablished = Some(DateEstablished),
     sicCode = Some(sic),
-    ukVatDetails = gbVatDetails
+    ukVatDetailsOld = gbVatDetails
   )
 
 }

@@ -19,11 +19,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 import play.api.libs.json.Json
 
 case class VatControlListResponse(
-                                   postcode: Option[String] = None,
-                                   dateOfReg: Option[String] = None,
-                                   lastNetDue: Option[Double]= None,
-                                   lastReturnMonthPeriod: Option[String] =None
-                                 )
+  postcode: Option[String] = None,
+  dateOfReg: Option[String] = None,
+  lastNetDue: Option[Double] = None,
+  lastReturnMonthPeriod: Option[String] = None
+)
 
 object VatControlListResponse {
   implicit val jsonFormat = Json.format[VatControlListResponse]
