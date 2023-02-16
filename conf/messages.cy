@@ -549,7 +549,7 @@ cds.matching.name-id-organisation.company.name.hint = Mae hyn ar eich tystysgrif
 cds.matching.name-id-organisation.registered-company.name = Enw’r cwmni cofrestredig
 cds.matching.name-id-organisation.registered-company.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
 
-cds.matching.name-id-organisation.registered-partnership.name.hint=Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych. <br><br> Gallwch ddod o hyd i’r enw hwn ar ddogfennau gan CThEF. Er enghraifft, cadarnhad o gofrestriad eich partneriaeth
+cds.matching.name-id-organisation.registered-partnership.name.hint=Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych. <br><br> Gallwch ddod o hyd i'’'r enw hwn ar ddogfennau gan CThEF. Er enghraifft, cadarnhad o gofrestriad eich partneriaeth
 
 cds.matching.name-id-organisation.partnership.name = Enw’r bartneriaeth gofrestredig
 cds.matching.name-id-organisation.partnership.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
