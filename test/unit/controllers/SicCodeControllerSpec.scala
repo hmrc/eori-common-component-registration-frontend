@@ -29,10 +29,8 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SicCodeController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   Company,
-  Individual,
   SoleTrader,
-  ThirdCountryOrganisation,
-  Partnership => CdsPartnership
+  ThirdCountryOrganisation
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
@@ -70,7 +68,7 @@ class SicCodeControllerSpec
     mockAuthAction,
     mockSubscriptionBusinessService,
     mockSubscriptionFlowManager,
-    mockSubscriptionDetailsHolderService,
+    mockSubscriptionDetailsService,
     mockOrgTypeLookup,
     mcc,
     sicCodeView,
@@ -92,7 +90,7 @@ class SicCodeControllerSpec
       mockSubscriptionBusinessService,
       mockSubscriptionFlowManager,
       mockOrgTypeLookup,
-      mockSubscriptionDetailsHolderService,
+      mockSubscriptionDetailsService,
       mockRequestSessionData
     )
 
@@ -365,12 +363,12 @@ class SicCodeControllerSpec
   }
 
   private def registerSaveDetailsMockSuccess() {
-    when(mockSubscriptionDetailsHolderService.cacheSicCode(anyString())(any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheSicCode(anyString())(any[Request[_]]))
       .thenReturn(Future.successful(()))
   }
 
   private def registerSaveDetailsMockFailure(exception: Throwable) {
-    when(mockSubscriptionDetailsHolderService.cacheSicCode(anyString)(any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheSicCode(anyString)(any[Request[_]]))
       .thenReturn(Future.failed(exception))
   }
 

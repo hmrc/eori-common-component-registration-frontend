@@ -70,7 +70,7 @@ class DateOfEstablishmentControllerSpec
     mockAuthAction,
     mockSubscriptionFlowManager,
     mockSubscriptionBusinessService,
-    mockSubscriptionDetailsHolderService,
+    mockSubscriptionDetailsService,
     mockRequestSessionData,
     mcc,
     dateOfEstablishmentView,
@@ -96,7 +96,7 @@ class DateOfEstablishmentControllerSpec
   private val DateOfEstablishmentInFutureErrorField   = "Error: Date of establishment must be between 1000 and today"
 
   override protected def beforeEach(): Unit = {
-    reset(mockSubscriptionFlowManager, mockSubscriptionBusinessService, mockSubscriptionDetailsHolderService)
+    reset(mockSubscriptionFlowManager, mockSubscriptionBusinessService, mockSubscriptionDetailsService)
     setupMockSubscriptionFlowManager(DateOfEstablishmentSubscriptionFlowPage)
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(CorporateBody)
   }
@@ -304,7 +304,7 @@ class DateOfEstablishmentControllerSpec
       "capture date of birth entered by user" in {
         submitFormInCreateMode(ValidRequest) { result =>
           await(result)
-          verify(mockSubscriptionDetailsHolderService).cacheDateEstablished(meq(DateOfEstablishment))(any[Request[_]])
+          verify(mockSubscriptionDetailsService).cacheDateEstablished(meq(DateOfEstablishment))(any[Request[_]])
         }
       }
     }
@@ -374,7 +374,7 @@ class DateOfEstablishmentControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionDetailsHolderService.cacheDateEstablished(any[LocalDate])(any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheDateEstablished(any[LocalDate])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     val result = controller
       .submit(isInReviewMode, atarService)

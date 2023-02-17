@@ -89,13 +89,10 @@ class VatDetailsController @Inject() (
     def isPostcodeAssociatedWithVrn(postcode: Option[String]) =
       postcode.fold(false)(stripSpaces(_) equalsIgnoreCase stripSpaces(vatForm.postcode))
 
-    def checkLastReturnMonthPeriod(vatControlListResponse: VatControlListResponse) =
-      vatControlListResponse.lastReturnMonthPeriod.fold(false)(_ != "N/A")
-
-    def isLatestVATReturnDataAvailable(vatControlListResponse: VatControlListResponse) =
+    def latestVATReturnDataExists(vatControlListResponse: VatControlListResponse) =
       vatControlListResponse match {
-        case v if checkLastReturnMonthPeriod(vatControlListResponse) && v.lastNetDue.nonEmpty => true
-        case _                                                                                => false
+        case v if vatControlListResponse.lastReturnMonthPeriod.fold(false)(_ != "N/A") && v.lastNetDue.nonEmpty => true
+        case _                                                                                                  => false
       }
 
     vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {
@@ -110,14 +107,14 @@ class VatDetailsController @Inject() (
                     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
                       .determineRoute(service)
                   )
-                else if (isLatestVATReturnDataAvailable(vatControlListResponse))
+                else if (latestVATReturnDataExists(vatControlListResponse))
                   //TODO: New page YES return is available
                   Redirect(
                     subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
                   )
                 else
                   //TODO: New page NO return is NOT available
-                  Redirect(subscriptionFlowManager.stepInformation(VatGroupFlowPage).nextPage.url(service))
+                  Ok(weCannotConfirmYourIdentity(isInReviewMode, service))
             )
         else
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))

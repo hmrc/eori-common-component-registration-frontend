@@ -26,7 +26,6 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{AddressController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
@@ -47,12 +46,11 @@ class AddressControllerSpec
     extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache       = mock[SessionCache]
-  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockSubscriptionFlow           = mock[SubscriptionFlowManager]
-  private val mockSubscriptionFlowInfo       = mock[SubscriptionFlowInfo]
-  private val mockSubscriptionPage           = mock[SubscriptionPage]
+  private val mockRequestSessionData   = mock[RequestSessionData]
+  private val mockCdsFrontendDataCache = mock[SessionCache]
+  private val mockSubscriptionFlow     = mock[SubscriptionFlowManager]
+  private val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
+  private val mockSubscriptionPage     = mock[SubscriptionPage]
 
   private val viewAddress       = instanceOf[address]
   private val viewErrorTemplate = instanceOf[error_template]

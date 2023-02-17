@@ -46,12 +46,11 @@ class ContactAddressControllerSpec
     extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache       = mock[SessionCache]
-  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockSubscriptionFlow           = mock[SubscriptionFlowManager]
-  private val mockSubscriptionFlowInfo       = mock[SubscriptionFlowInfo]
-  private val mockSubscriptionPage           = mock[SubscriptionPage]
+  private val mockRequestSessionData   = mock[RequestSessionData]
+  private val mockCdsFrontendDataCache = mock[SessionCache]
+  private val mockSubscriptionFlow     = mock[SubscriptionFlowManager]
+  private val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
+  private val mockSubscriptionPage     = mock[SubscriptionPage]
 
   private val viewContactAddress = instanceOf[contact_address]
 

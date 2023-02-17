@@ -35,11 +35,11 @@ trait SubscriptionFlowTestSupport extends ControllerSpec with AuthActionMock {
   protected val nextPage                 = mock[SubscriptionPage]
   protected val subscriptionFlowStepInfo = SubscriptionFlowInfo(stepNumber = 7, totalSteps = 10, nextPage = nextPage)
 
-  protected val mockSubscriptionFlowManager          = mock[SubscriptionFlowManager]
-  protected val mockAuthConnector                    = mock[AuthConnector]
-  protected val mockAuthAction                       = authAction(mockAuthConnector)
-  protected val mockSubscriptionBusinessService      = mock[SubscriptionBusinessService]
-  protected val mockSubscriptionDetailsHolderService = mock[SubscriptionDetailsService]
+  protected val mockSubscriptionFlowManager     = mock[SubscriptionFlowManager]
+  protected val mockAuthConnector               = mock[AuthConnector]
+  protected val mockAuthAction                  = authAction(mockAuthConnector)
+  protected val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
+  protected val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
 
   def setupMockSubscriptionFlowManager(currentPage: SubscriptionPage): Unit = {
     when(nextPage.url(any[Service])).thenReturn(nextPageUrl)
