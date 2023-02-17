@@ -26,7 +26,12 @@ import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetailsOld}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
+  AddressViewModel,
+  ContactDetailsModel,
+  VatDetails,
+  VatDetailsOld
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
@@ -331,7 +336,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
   }
 
-  "cacheUkVatDetails" should {
+  "cacheUkVatDetailsOld" should {
     val ukVatDetails = VatDetailsOld(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
     "save subscription details with vat details" in {
       await(subscriptionDetailsHolderService.cacheUkVatDetailsOld(ukVatDetails))
@@ -353,6 +358,17 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
       val holder: SubscriptionDetails = requestCaptor.getValue
       holder.ukVatDetails shouldBe None
+    }
+  }
+
+  "cacheUkVatDetails" should {
+    val ukVatDetails = VatDetails(postcode = "12345", number = "12345")
+    "save subscription details with vat details" in {
+      await(subscriptionDetailsHolderService.cacheUkVatDetails(ukVatDetails))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+      val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
+      subscriptionDetails.ukVatDetails shouldBe Some(ukVatDetails)
     }
   }
 

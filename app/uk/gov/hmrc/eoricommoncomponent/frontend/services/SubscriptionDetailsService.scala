@@ -139,7 +139,7 @@ class SubscriptionDetailsService @Inject() (
     saveSubscriptionDetails(sd => sd.copy(ukVatDetails = Some(ukVatDetails)))
 
   def clearCachedUkVatDetails(implicit request: Request[_]): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(ukVatDetails = None))
+    saveSubscriptionDetails(sd => sd.copy(ukVatDetailsOld = None))
 
   def clearCachedVatGroupDetails(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatGroup = None))
