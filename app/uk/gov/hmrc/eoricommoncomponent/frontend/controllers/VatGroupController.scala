@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsControllerOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
@@ -63,21 +63,24 @@ class VatGroupController @Inject() (
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatGroup(yesNoAnswer).flatMap {
               _ =>
-                vatDetailsRoutes(service, isInReviewMode, yesNoAnswer)
+                if (featureFlags.useNewVATJourney)
+                  getVatRoute(VatDetailsController.reviewForm(service), VatDetailsController.createForm(service), service, isInReviewMode, yesNoAnswer)
+                else
+                  getVatRoute(VatDetailsControllerOld.reviewForm(service), VatDetailsControllerOld.createForm(service), service, isInReviewMode, yesNoAnswer)
             }
+
         )
     }
 
   private def redirectCannotUseThisService(service: Service) =
     Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
 
-  private def vatDetailsRoutes(service: Service, isInReviewMode: Boolean, yesNoAnswer: YesNo) =
-    if (featureFlags.useNewVATJourney)
-      if (isInReviewMode && yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.reviewForm(service)))
-      else if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.createForm(service)))
-      else redirectCannotUseThisService(service) //TODO: Go to new YES page
-    else if (isInReviewMode && yesNoAnswer.isNo)
-      Future.successful(Redirect(VatDetailsControllerOld.reviewForm(service)))
-    else if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsControllerOld.createForm(service)))
-    else redirectCannotUseThisService(service) //TODO: Remove this when VAT journey is live
+  private def getVatRoute(reviewForm: Call, createForm: Call, service: Service, isInReviewMode: Boolean, yesNoAnswer: YesNo) =
+    (isInReviewMode, yesNoAnswer.isNo) match {
+      case (true, true) => Future.successful(Redirect(reviewForm))
+      case (false, true) => Future.successful(Redirect(createForm))
+      case (_, _) => redirectCannotUseThisService(service) //TODO: Go to new YES page
+    }
+
+
 }

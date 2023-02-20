@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{VatDetailsS
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   LoggedInUserWithEnrolments,
   VatControlListRequest,
-  VatControlListResponse
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
@@ -83,21 +82,10 @@ class VatDetailsController @Inject() (
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] = {
-
-    def stripSpaces: String => String = s => s.filterNot(_.isSpaceChar)
-
-    def isPostcodeAssociatedWithVrn(postcode: Option[String]) =
-      postcode.fold(false)(stripSpaces(_) equalsIgnoreCase stripSpaces(vatForm.postcode))
-
-    def latestVATReturnDataExists(vatControlListResponse: VatControlListResponse) =
-      vatControlListResponse match {
-        case v if vatControlListResponse.lastReturnMonthPeriod.fold(false)(_ != "N/A") && v.lastNetDue.nonEmpty => true
-        case _                                                                                                  => false
-      }
-
+    
     vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {
       case Right(vatControlListResponse) =>
-        if (isPostcodeAssociatedWithVrn(vatControlListResponse.postcode))
+        if (vatControlListResponse.isPostcodeAssociatedWithVrn(vatForm))
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
             .map(
@@ -107,7 +95,7 @@ class VatDetailsController @Inject() (
                     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
                       .determineRoute(service)
                   )
-                else if (latestVATReturnDataExists(vatControlListResponse))
+                else if (vatControlListResponse.isLastReturnMonthPeriodEmpty)
                   //TODO: New page YES return is available
                   Redirect(
                     subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)

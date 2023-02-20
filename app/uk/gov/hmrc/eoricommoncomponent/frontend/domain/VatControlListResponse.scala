@@ -17,13 +17,24 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 
 case class VatControlListResponse(
   postcode: Option[String] = None,
   dateOfReg: Option[String] = None,
   lastNetDue: Option[Double] = None,
   lastReturnMonthPeriod: Option[String] = None
-)
+) {
+  def isLastReturnMonthPeriodEmpty: Boolean = lastReturnMonthPeriod.fold(false) {
+    case period if period.equalsIgnoreCase("N/A") => false
+    case _ => true
+  }
+
+  private def stripSpaces: String => String = s => s.filterNot(_.isSpaceChar)
+
+  def isPostcodeAssociatedWithVrn(vatDetails: VatDetails) =
+    postcode.fold(false)(stripSpaces(_) equalsIgnoreCase stripSpaces(vatDetails.postcode))
+}
 
 object VatControlListResponse {
   implicit val jsonFormat = Json.format[VatControlListResponse]
