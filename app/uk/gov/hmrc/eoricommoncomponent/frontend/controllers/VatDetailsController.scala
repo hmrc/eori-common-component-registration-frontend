@@ -91,7 +91,7 @@ class VatDetailsController @Inject() (
                     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
                       .determineRoute(service)
                   )
-                else if (vatControlListResponse.isLastReturnMonthPeriodEmpty)
+                else if (vatControlListResponse.isLastReturnMonthPeriodNonEmpty)
                   //TODO: New page YES return is available
                   Redirect(
                     subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)

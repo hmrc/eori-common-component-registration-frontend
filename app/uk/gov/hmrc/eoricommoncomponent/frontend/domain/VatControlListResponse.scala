@@ -26,7 +26,7 @@ case class VatControlListResponse(
   lastReturnMonthPeriod: Option[String] = None
 ) {
 
-  def isLastReturnMonthPeriodEmpty: Boolean = lastReturnMonthPeriod.fold(false) {
+  def isLastReturnMonthPeriodNonEmpty: Boolean = lastReturnMonthPeriod.fold(false) {
     case period if period.equalsIgnoreCase("N/A") => false
     case _                                        => true
   }
