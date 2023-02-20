@@ -26,10 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{VatDetailsSubscriptionFlowPage, VatGroupFlowPage}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  LoggedInUserWithEnrolments,
-  VatControlListRequest,
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -81,8 +78,7 @@ class VatDetailsController @Inject() (
   private def lookupVatDetails(vatForm: VatDetails, isInReviewMode: Boolean, service: Service)(implicit
     hc: HeaderCarrier,
     request: Request[AnyContent]
-  ): Future[Result] = {
-    
+  ): Future[Result] =
     vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {
       case Right(vatControlListResponse) =>
         if (vatControlListResponse.isPostcodeAssociatedWithVrn(vatForm))
@@ -115,7 +111,6 @@ class VatDetailsController @Inject() (
           case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate()))
         }
     }
-  }
 
   def vatDetailsNotMatched(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>

@@ -64,23 +64,39 @@ class VatGroupController @Inject() (
             subscriptionDetailsService.cacheVatGroup(yesNoAnswer).flatMap {
               _ =>
                 if (featureFlags.useNewVATJourney)
-                  getVatRoute(VatDetailsController.reviewForm(service), VatDetailsController.createForm(service), service, isInReviewMode, yesNoAnswer)
+                  getVatRoute(
+                    VatDetailsController.reviewForm(service),
+                    VatDetailsController.createForm(service),
+                    service,
+                    isInReviewMode,
+                    yesNoAnswer
+                  )
                 else
-                  getVatRoute(VatDetailsControllerOld.reviewForm(service), VatDetailsControllerOld.createForm(service), service, isInReviewMode, yesNoAnswer)
+                  getVatRoute(
+                    VatDetailsControllerOld.reviewForm(service),
+                    VatDetailsControllerOld.createForm(service),
+                    service,
+                    isInReviewMode,
+                    yesNoAnswer
+                  )
             }
-
         )
     }
 
   private def redirectCannotUseThisService(service: Service) =
     Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
 
-  private def getVatRoute(reviewForm: Call, createForm: Call, service: Service, isInReviewMode: Boolean, yesNoAnswer: YesNo) =
+  private def getVatRoute(
+    reviewForm: Call,
+    createForm: Call,
+    service: Service,
+    isInReviewMode: Boolean,
+    yesNoAnswer: YesNo
+  ) =
     (isInReviewMode, yesNoAnswer.isNo) match {
-      case (true, true) => Future.successful(Redirect(reviewForm))
+      case (true, true)  => Future.successful(Redirect(reviewForm))
       case (false, true) => Future.successful(Redirect(createForm))
-      case (_, _) => redirectCannotUseThisService(service) //TODO: Go to new YES page
+      case (_, _)        => redirectCannotUseThisService(service) //TODO: Go to new YES page
     }
-
 
 }
