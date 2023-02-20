@@ -35,15 +35,12 @@
 
 @introText = @{
     if (orgType == LLP) "cds.subscription.llp.date-established.label"
-    if (orgType == UnincorporatedBody) "cds.subscription.llp.date-established.charity-label"
+    else if (orgType == UnincorporatedBody) "cds.subscription.llp.date-established.charity-label"
+    else if(orgType == Partnership) "cds.subscription.business.date-established.label.partnership"
     else "cds.subscription.business.date-established.label"
 }
 
-@orgTypeText = @{
-    if (orgType == Partnership || orgType == LLP) "partnership"
-    else if(orgType == CorporateBody && !isRestOfWorldJourney) "company"
-    else "organisation"
-}
+
 
 @introAndHintHtml = {
 <p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
@@ -54,6 +51,7 @@
 @headerAndTitle = @{
     if (orgType == Partnership || orgType == LLP) "cds.subscription.partnership.date-of-establishment.title-and-heading"
     else if(orgType == CorporateBody && !isRestOfWorldJourney) "cds.subscription.date-of-establishment.company.title-and-heading"
+
     else "cds.subscription.date-of-establishment.title-and-heading"
 }
 

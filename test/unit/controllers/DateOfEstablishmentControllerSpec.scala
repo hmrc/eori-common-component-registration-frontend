@@ -157,10 +157,10 @@ class DateOfEstablishmentControllerSpec
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Partnership)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("Date when your partnership was established")
+        page.title should startWith("When was the partnership established?")
         page.getElementsText(
           SubscriptionPartnershipDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "Date when your partnership was established"
+        ) shouldBe "When was the partnership established?"
       }
     }
 
@@ -168,10 +168,10 @@ class DateOfEstablishmentControllerSpec
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(LLP)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("Date when your partnership was established")
+        page.title should startWith("When was the partnership established?")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "Date when your partnership was established"
+        ) shouldBe "When was the partnership established?"
       }
     }
 
