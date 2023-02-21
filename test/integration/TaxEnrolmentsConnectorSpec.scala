@@ -23,7 +23,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.TaxEnrolmentsConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.TaxEnrolmentsRequest
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{TaxEnrolmentsRequest, TaxEnrolmentsResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.TaxEnrolmentsService._
@@ -58,6 +58,16 @@ class TaxEnrolmentsConnectorSpec extends IntegrationTestsSpec with ScalaFutures 
     stopMockServer()
 
   "TaxEnrolmentConnector" should {
+
+    "return success with list of enrolments" in {
+      val safeId = "testId"
+      returnTheTaxEnrolmentsResponseOK(safeId)
+
+      taxEnrolmentsConnector.getEnrolments(safeId).futureValue mustBe List(
+        TaxEnrolmentsResponse("516b9976-00fd-4da6-b59c-4d09054912bb")
+      )
+    }
+
     "call tax enrolment service with correct url and payload" in {
       scala.concurrent.Await.ready(taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId), defaultTimeout)
       WireMock.verify(

@@ -23,10 +23,11 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.TaxEnrolmentsConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, SafeId, TaxEnrolmentsRequest}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, SafeId, TaxEnrolmentsRequest, TaxEnrolmentsResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.TaxEnrolmentsService
 import uk.gov.hmrc.http.HeaderCarrier
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -49,6 +50,18 @@ class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   val date         = LocalDate.parse("2010-04-28")
 
   "TaxEnrolmentsService" should {
+
+    "make doesEnrolmentExist call" in {
+      when(
+        mockTaxEnrolmentsConnector
+          .getEnrolments(any[String])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(List(TaxEnrolmentsResponse(testService.enrolmentKey))))
+
+      await(service.doesEnrolmentExist(safeId, testService)) shouldBe true
+
+      verify(mockTaxEnrolmentsConnector)
+        .getEnrolments(any[String])(any[HeaderCarrier])
+    }
 
     "make issuer call" in {
       when(

@@ -21,7 +21,7 @@ import common.pages.matching.ConfirmPage
 import common.pages.{RegistrationProcessingPage, RegistrationRejectedPage}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach}
+import org.scalatest.BeforeAndAfterEach
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -50,7 +50,7 @@ import util.builders.RegistrationDetailsBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 
 class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
@@ -70,8 +70,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private val confirmContactDetailsView  = instanceOf[confirm_contact_details]
   private val sub01OutcomeProcessingView = instanceOf[sub01_outcome_processing]
 
-  private val youCannotChangeAddressOrganistion = instanceOf[you_cannot_change_address_organisation]
-  private val youCannotChangeAddressIndividual  = instanceOf[you_cannot_change_address_individual]
+  private val mockTaxEnrolmentsService = mock[TaxEnrolmentsService]
 
   private val controller = new ConfirmContactDetailsController(
     mockAuthAction,
@@ -83,8 +82,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     mcc,
     confirmContactDetailsView,
     sub01OutcomeProcessingView,
-    youCannotChangeAddressOrganistion,
-    youCannotChangeAddressIndividual
+    mockTaxEnrolmentsService
   )
 
   private val mockSubscriptionPage         = mock[SubscriptionPage]
@@ -95,6 +93,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   private val mockSub01Outcome = mock[Sub01Outcome]
   private val mockRegDetails   = mock[RegistrationDetails]
+  private implicit val mockHC  = mock[HeaderCarrier]
 
   private val testSessionData = Map[String, String]("some_session_key" -> "some_session_value")
 
@@ -111,7 +110,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       mockSessionCache,
       mockSubscriptionFlowManager,
       mockOrgTypeLookup,
-      mockHandleSubscriptionService
+      mockHandleSubscriptionService,
+      mockTaxEnrolmentsService
     )
 
     super.afterEach()
@@ -283,7 +283,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       }
     }
 
-    "redirect to SubscriptionRecoveryController when service returns SubscriptionExists for organisation" in {
+    "redirect to SubscriptionRecoveryController when service returns SubscriptionExists and no existing enrolments for organisation" in {
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
         .thenReturn(Future.successful(subscriptionDetailsHolder))
       when(
@@ -296,10 +296,46 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockRegistrationConfirmService
           .currentSubscriptionStatus(any[HeaderCarrier], any[Service], any[Request[_]])
       ).thenReturn(Future.successful(SubscriptionExists))
+
+      when(
+        mockTaxEnrolmentsService.doesEnrolmentExist(any[SafeId], any[Service])(
+          any[HeaderCarrier],
+          any[ExecutionContext]
+        )
+      ).thenReturn(Future.successful(false))
+
       mockSubscriptionFlowStart()
       invokeConfirmContactDetailsWithSelectedOption() { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) shouldBe SubscriptionRecoveryController.complete(atarService).url
+      }
+    }
+
+    "redirect to SignInWithDifferentDetailsController when service returns SubscriptionExists and previous enrolment exists for organisation" in {
+      when(mockSessionCache.subscriptionDetails(any[Request[_]]))
+        .thenReturn(Future.successful(subscriptionDetailsHolder))
+      when(
+        mockSessionCache
+          .saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]])
+      ).thenReturn(Future.successful(true))
+
+      mockCacheWithRegistrationDetails(organisationRegistrationDetails)
+      when(
+        mockRegistrationConfirmService
+          .currentSubscriptionStatus(any[HeaderCarrier], any[Service], any[Request[_]])
+      ).thenReturn(Future.successful(SubscriptionExists))
+
+      when(
+        mockTaxEnrolmentsService.doesEnrolmentExist(any[SafeId], any[Service])(
+          any[HeaderCarrier],
+          any[ExecutionContext]
+        )
+      ).thenReturn(Future.successful(true))
+
+      mockSubscriptionFlowStart()
+      invokeConfirmContactDetailsWithSelectedOption() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) shouldBe SignInWithDifferentDetailsController.form(atarService).url
       }
     }
 
