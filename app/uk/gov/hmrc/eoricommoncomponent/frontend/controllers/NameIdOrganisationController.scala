@@ -22,6 +22,13 @@ import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc.{Action, _}
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationModel.{
+  CompanyDM,
+  OrganisationModeDM,
+  PartnershipDM,
+  PartnershipLLpDM,
+  RegisteredCompanyDM
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
@@ -48,9 +55,6 @@ class NameIdOrganisationController @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
-  private val RegisteredCompanyDM = "registered-company"
-  private val PartnershipDM       = "partnership"
-  private val OrganisationModeDM  = "organisation"
 
   trait Configuration[M <: NameIdOrganisationMatch] {
     def matchingServiceType: String
@@ -80,9 +84,10 @@ class NameIdOrganisationController @Inject() (
   }
 
   private val OrganisationTypeConfigurations: Map[String, Configuration[_ <: NameIdOrganisationMatch]] = Map(
+    CdsOrganisationType.CompanyId                     -> UtrConfiguration("Company", displayMode = CompanyDM),
     CdsOrganisationType.CompanyId                     -> UtrConfiguration("Corporate Body", displayMode = RegisteredCompanyDM),
     CdsOrganisationType.PartnershipId                 -> UtrConfiguration("Partnership", displayMode = PartnershipDM),
-    CdsOrganisationType.LimitedLiabilityPartnershipId -> UtrConfiguration("LLP", displayMode = PartnershipDM),
+    CdsOrganisationType.LimitedLiabilityPartnershipId -> UtrConfiguration("LLP", displayMode = PartnershipLLpDM),
     CdsOrganisationType.CharityPublicBodyNotForProfitId -> UtrConfiguration(
       "Unincorporated Body",
       displayMode = OrganisationModeDM
@@ -184,4 +189,12 @@ class NameIdOrganisationController @Inject() (
       service
     )
 
+}
+
+object NameIdOrganisationModel {
+  val CompanyDM           = "company"
+  val RegisteredCompanyDM = "registered-company"
+  val PartnershipDM       = "partnership"
+  val OrganisationModeDM  = "organisation"
+  val PartnershipLLpDM    = "limited-liability-partnership"
 }
