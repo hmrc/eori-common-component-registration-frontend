@@ -136,9 +136,6 @@ class SubscriptionDetailsService @Inject() (
   def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(vatRegisteredUk = Some(yesNoAnswer.isYes)))
 
-  def cacheVatGroup(yesNoAnswer: YesNo)(implicit request: Request[_]) =
-    saveSubscriptionDetails(sd => sd.copy(vatGroup = Some(yesNoAnswer.isYes)))
-
   def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(personalDataDisclosureConsent = Some(yesNoAnswer.isYes)))
 

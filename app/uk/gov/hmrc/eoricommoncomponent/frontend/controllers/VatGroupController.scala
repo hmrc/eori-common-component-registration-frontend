@@ -18,38 +18,30 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 
-import scala.concurrent.{ExecutionContext, Future}
-
 @Singleton
-class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group, authAction: AuthAction, subscriptionDetailsService: SubscriptionDetailsService)(implicit ec: ExecutionContext)
+class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group)
     extends CdsController(mcc) {
 
-  def createForm(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-        implicit request => _: LoggedInUserWithEnrolments =>
-          Future.successful(Ok(vatGroupView(vatGroupYesNoAnswerForm(), service)))
+  def createForm(service: Service): Action[AnyContent] = Action { implicit request =>
+    Ok(vatGroupView(vatGroupYesNoAnswerForm(), service))
   }
 
-  def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request =>
-      _: LoggedInUserWithEnrolments =>
+  def submit(service: Service): Action[AnyContent] = Action { implicit request =>
     vatGroupYesNoAnswerForm()
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(vatGroupView(formWithErrors, service))),
+        formWithErrors => BadRequest(vatGroupView(formWithErrors, service)),
         yesNoAnswer =>
-          subscriptionDetailsService.cacheVatGroup(yesNoAnswer).flatMap {
-            _ =>
-              if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.createForm(service)))
-              else Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
-          }
+          if (yesNoAnswer.isNo)
+            // TODO - need service url param here
+            Redirect(EmailController.form(service))
+          else
+            Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service))
       )
   }
 
