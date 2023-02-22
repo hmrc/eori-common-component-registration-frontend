@@ -61,12 +61,7 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
         throw new IllegalStateException("Whether the business is VAT registered in the UK has not been Cached")
       )
     }
-  def getCachedVatGroup(implicit request: Request[_]): Future[Boolean] =
-    cdsFrontendDataCache.subscriptionDetails map {
-      _.vatRegisteredUk.getOrElse(
-        throw new IllegalStateException("Whether the business is part of a VAT group has not been Cached")
-      )
-    }
+
   def getCachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.customsId
