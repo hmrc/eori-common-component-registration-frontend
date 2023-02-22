@@ -19,16 +19,8 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  DetermineReviewPageController,
-  VatDetailsController,
-  VatGroupController
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  VatDetailsSubscriptionFlowPage,
-  VatGroupFlowPage,
-  VatRegisteredUkSubscriptionFlowPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, VatDetailsController, VatGroupController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{VatDetailsSubscriptionFlowPage, VatGroupFlowPage, VatRegisteredUkSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -108,9 +100,7 @@ class VatRegisteredUkController @Inject() (
                     Future.successful(Redirect(VatGroupController.reviewForm(service).url))
                   else
                     subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
-                      subscriptionDetailsService.clearCachedVatGroupDetails flatMap { _ =>
-                        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
-                      }
+                      Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
                     }
                 else if (yesNoAnswer.isYes)
                   Future.successful(

@@ -29,47 +29,46 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatGroupController @Inject() (
-  mcc: MessagesControllerComponents,
-  vatGroupView: vat_group,
-  authAction: AuthAction,
-  subscriptionDetailsService: SubscriptionDetailsService,
-  subscriptionBusinessService: SubscriptionBusinessService
-)(implicit ec: ExecutionContext)
+class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group, authAction: AuthAction, subscriptionDetailsService: SubscriptionDetailsService, subscriptionBusinessService: SubscriptionBusinessService)(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(vatGroupView(isInReviewMode = false, vatGroupYesNoAnswerForm(), service)))
+        implicit request => _: LoggedInUserWithEnrolments =>
+          Future.successful(Ok(vatGroupView(vatGroupYesNoAnswerForm(), service)))
   }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        for {
-          isVatGroup <- subscriptionBusinessService.getCachedVatGroup
-          yesNo: YesNo = YesNo(isVatGroup)
-        } yield Ok(vatGroupView(isInReviewMode = true, vatGroupYesNoAnswerForm().fill(yesNo), service))
+      implicit request =>
+        _: LoggedInUserWithEnrolments =>
+          for {
+            isVatGroup <- subscriptionBusinessService.getCachedVatGroup
+            yesNo: YesNo = YesNo(isVatGroup)
+          } yield Ok(
+            vatGroupView(
+              isInReviewMode = true,
+              vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
+              isIndividualFlow,
+              requestSessionData.isPartnershipOrLLP,
+              service
+            )
+          )
     }
 
-  def submit(service: Service, isInReviewMode: Boolean): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      vatGroupYesNoAnswerForm()
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(vatGroupView(isInReviewMode, formWithErrors, service))),
-          yesNoAnswer =>
-            subscriptionDetailsService.cacheVatGroup(yesNoAnswer).flatMap {
-              _ =>
-                if (isInReviewMode && yesNoAnswer.isNo)
-                  Future.successful(Redirect(VatDetailsController.reviewForm(service)))
-                else if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.createForm(service)))
-                else
-                  Future.successful(
-                    Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service))
-                  ) // TODO: Continue new VAT journey
-            }
-        )
-    }
+  def submit(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request =>
+      _: LoggedInUserWithEnrolments =>
+    vatGroupYesNoAnswerForm()
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(vatGroupView(formWithErrors, service))),
+        yesNoAnswer =>
+          subscriptionDetailsService.cacheVatGroup(yesNoAnswer).flatMap {
+            _ =>
+              if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.createForm(service)))
+              else Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
+          }
+      )
+  }
 
 }
