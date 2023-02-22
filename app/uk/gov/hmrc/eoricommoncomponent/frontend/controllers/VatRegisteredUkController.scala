@@ -19,9 +19,14 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, VatGroupController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  DetermineReviewPageController,
+  VatDetailsController,
+  VatGroupController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   VatDetailsSubscriptionFlowPage,
+  VatGroupFlowPage,
   VatRegisteredUkSubscriptionFlowPage
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
