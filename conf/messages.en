@@ -1021,7 +1021,7 @@ cds.subscription.outcomes.success.extra.information.next.ctc =<li>submit union t
 cds.subscription.outcomes.success.extra.information.next.cds =<li>use the Customs Declaration Service</li>
 
 cds.subscription.outcomes.success.extra.information.bullet1 = subscribe to more customs services
-cds.subscription.outcomes.success.extra.information.bullet2 = get an EORI number starting with XI
+cds.subscription.outcomes.success.extra.information.bullet2 = get an EORI number starting with XI, if you move goods to or from Northern Ireland
 
 
 cds.subscription.outcomes.success.extra.information.when-you-can=When you can start using your subscription and EORI number

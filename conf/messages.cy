@@ -920,7 +920,7 @@ cds.subscription.outcomes.success.extra.information.next.ctc =<li>cyflwyno datga
 cds.subscription.outcomes.success.extra.information.next.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
 
 cds.subscription.outcomes.success.extra.information.bullet1 = tanysgrifio i ragor o wasanaethau tollau
-cds.subscription.outcomes.success.extra.information.bullet2 = cael rhif EORI yn dechrau gydag XI
+cds.subscription.outcomes.success.extra.information.bullet2 = cael rhif EORI yn dechrau gydag XI, os ydych yn symud nwyddau i Ogledd Iwerddon neu oddi yno
 
 cds.subscription.outcomes.success.extra.information1 = Bydd eich rhif EORI GB newydd yn barod i’w ddefnyddio cyn pen 48 awr. Unwaith y bydd eich rhif EORI GB yn weithredol, byddwn yn anfon e-bost atoch yn rhoi gwybod bod eich cais wedi’i gwblhau. Os hoffech wirio statws eich rhif EORI GB, gallwch ddefnyddio’r {0}. Nid oes gan eich rhif EORI GB newydd ddyddiad dod i ben.
 cds.subscription.outcomes.success.extra.information2 = gwasanaeth gwirio rhif EORI (yn agor tab newydd)
