@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 class AddressViewModelSpec extends UnitSpec {
 
-  var addressLine1 = "some building"
+  val addressLine1 = "some building"
   val addressLine2 = "some street"
   val addressLine3 = "some area"
   val addressLine4 = "some town"
