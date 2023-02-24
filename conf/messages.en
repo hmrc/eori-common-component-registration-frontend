@@ -1817,7 +1817,7 @@ ecc.start-page.gbeori.para3.title = We will verify your identity by asking for o
 ecc.start-page.gbeori.para3.bullet1 = National Insurance number, if you have worked in the UK
 ecc.start-page.gbeori.para3.bullet2 = Self Assessment Unique Taxpayer Reference (UTR), if you registered for Self Assessment
 ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a>.
-
+ecc.start-page.gbeori.link.text = from the list on Companies House
 ecc.start-page.company.title = Standard Industrial Classification Code (SIC code)
 
 ecc.start-page.company = A SIC code identifies what organisations do. We will ask you to enter one if you apply as:
