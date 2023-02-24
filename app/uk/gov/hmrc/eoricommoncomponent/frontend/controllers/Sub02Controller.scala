@@ -94,6 +94,9 @@ class Sub02Controller @Inject() (
       Future.successful(Ok(xiEoriGuidancePage()))
   }
 
+  def subscriptionNextSteps(service: Service): String =
+    s"cds.subscription.outcomes.success.extra.information.next.${service.code}"
+
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
@@ -123,7 +126,8 @@ class Sub02Controller @Inject() (
                 .getOrElse("EORI not populated from Sub02 response."),
               subDetails.name,
               if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate,
-              subscriptionTo
+              subscriptionTo,
+              subscriptionNextSteps(service)
             )
           ).withSession(newUserSession)
         }

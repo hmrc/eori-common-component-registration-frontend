@@ -39,11 +39,17 @@ case class Address(
   countryCode: String
 ) {
 
-  private def isValidCountry: Boolean     = Countries.all.exists(_.countryCode == countryCode)
-  private def hasValidPostcode: Boolean   = this.postalCode.exists(_.matches(postcodeRegex.regex))
+  private def isValidCountry: Boolean = Countries.all.exists(_.countryCode == countryCode)
+
+  private def hasValidPostcode: Boolean =
+    this.postalCode match {
+      case Some(pCode) if pCode.nonEmpty => pCode.replaceAll("\\s+", " ").matches(postcodeRegex.regex)
+      case _                             => false
+    }
+
   private def isPostcodeRequired: Boolean = postCodeMandatoryCountryCodes.contains(countryCode)
 
-  def isValidAddress(): Boolean =
+  def isValidAddress: Boolean =
     if (isValidCountry)
       if (isPostcodeRequired) hasValidPostcode else true
     else false

@@ -17,85 +17,43 @@
 package unit.controllers
 
 import common.pages.registration.VatGroupPage
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.{AnyContent, Request, Result}
+import play.api.mvc.Result
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{VatDetailsController, VatDetailsControllerOld}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, FeatureFlags, VatGroupController}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ControllerSpec
-import util.builders.AuthBuilder.{withAuthorisedUser, withNotLoggedInUser}
 import util.builders.YesNoFormBuilder.{invalidRequest, ValidRequest}
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import java.util.UUID
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.global
 
 class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val yesNoInputName                  = "yes-no-answer"
-  private val answerYes                       = true.toString
-  private val answerNo                        = false.toString
-  private val expectedYesRedirectUrl          = routes.VatGroupsCannotRegisterUsingThisServiceController.form(atarService).url
-  private val expectedNoRedirectUrlOld        = VatDetailsControllerOld.createForm(atarService).url
-  private val expectedNoRedirectUrl           = VatDetailsController.createForm(atarService).url
-  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
-  private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  private val mockFeatureFlags                = mock[FeatureFlags]
-  private val mockAuthConnector               = mock[AuthConnector]
-  private val mockAuthAction                  = authAction(mockAuthConnector)
+  private val yesNoInputName         = "yes-no-answer"
+  private val answerYes              = true.toString
+  private val answerNo               = false.toString
+  private val expectedYesRedirectUrl = routes.VatGroupsCannotRegisterUsingThisServiceController.form(atarService).url
+  private val expectedNoRedirectUrl  = EmailController.form(atarService).url
 
   private val vatGroupView = instanceOf[vat_group]
 
   private val controller =
-    new VatGroupController(
-      mcc,
-      vatGroupView,
-      mockAuthAction,
-      mockSubscriptionDetailsService,
-      mockSubscriptionBusinessService,
-      mockFeatureFlags
-    )(global)
+    new VatGroupController(mcc, vatGroupView)
 
   "Accessing the page" should {
 
-    "reject unauthenticated users access the yes no answer form" in {
-      withNotLoggedInUser(mockAuthConnector)
-      val result = controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSessionNoUser)
-      status(result) shouldBe SEE_OTHER
-    }
-
-    "allow authenticated users access the yes no answer form" in {
-      withAuthorisedUser(defaultUserId, mockAuthConnector)
-      val result = controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
-      status(result) shouldBe OK
-    }
-  }
-
-  "Reviewing the page" should {
-
-    "reject unauthenticated users access the yes no answer form" in {
-      withNotLoggedInUser(mockAuthConnector)
-      val result = controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSessionNoUser)
-      status(result) shouldBe SEE_OTHER
-    }
-
-    "allow authenticated users access the yes no answer form" in {
-      withAuthorisedUser(defaultUserId, mockAuthConnector)
-      when(mockSubscriptionBusinessService.getCachedVatGroup(any[Request[AnyContent]])).thenReturn(false)
-      val result = controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
-      status(result) shouldBe OK
+    "allow unauthenticated users to access the yes no answer form" in {
+      showForm() { result =>
+        status(result) shouldBe OK
+        CdsPage(contentAsString(result)).title should startWith(VatGroupPage.title)
+      }
     }
   }
 
   "submitting the form" should {
-
-    when(mockSubscriptionDetailsService.cacheVatGroup(any())(any())).thenReturn(Future.successful())
 
     "ensure an option has been selected" in {
       submitForm(invalidRequest) { result =>
@@ -125,24 +83,13 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
     }
 
     "redirect to Cannot Register Using This Service when 'yes' is selected" in {
-      withAuthorisedUser(defaultUserId, mockAuthConnector)
       submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(expectedYesRedirectUrl)
       }
     }
 
-    "redirect to old Vat Details form when 'no' is selected and feature flag is false" in {
-      withAuthorisedUser(defaultUserId, mockAuthConnector)
-      submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe expectedNoRedirectUrlOld
-      }
-    }
-
-    "redirect to Vat Details form when 'no' is selected and feature flag is true" in {
-      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
-      withAuthorisedUser(defaultUserId, mockAuthConnector)
+    "redirect to EmailController.form when 'no' is selected" in {
       submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) shouldBe expectedNoRedirectUrl
@@ -154,12 +101,8 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
     test(controller.createForm(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken))
   }
 
-  def reviewForm()(test: Future[Result] => Any) {
-    test(controller.reviewForm(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken))
-  }
-
   def submitForm(form: Map[String, String])(test: Future[Result] => Any) {
-    test(controller.submit(atarService, false).apply(SessionBuilder.buildRequestWithFormValues(form)))
+    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
   }
 
 }

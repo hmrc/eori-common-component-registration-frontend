@@ -53,7 +53,7 @@ class ConfirmContactDetailsController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.registrationDetails.flatMap {
         case individual: RegistrationDetailsIndividual =>
-          if (!individual.address.isValidAddress())
+          if (!individual.address.isValidAddress)
             Future.successful(
               Redirect(
                 uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
@@ -75,7 +75,7 @@ class ConfirmContactDetailsController @Inject() (
               )
             )
         case org: RegistrationDetailsOrganisation =>
-          if (!org.address.isValidAddress())
+          if (!org.address.isValidAddress)
             Future.successful(
               Redirect(
                 uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController

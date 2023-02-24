@@ -31,7 +31,6 @@ case class SubscriptionDetails(
   businessShortName: Option[BusinessShortName] = None,
   dateEstablished: Option[LocalDate] = None,
   vatRegisteredUk: Option[Boolean] = None,
-  vatGroup: Option[Boolean] = None,
   ukVatDetails: Option[VatDetails] = None,
   ukVatDetailsOld: Option[VatDetailsOld] = None,
   personalDataDisclosureConsent: Option[Boolean] = None,

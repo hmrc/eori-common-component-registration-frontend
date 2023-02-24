@@ -1018,7 +1018,23 @@ cds.subscription.outcomes.success.eori=Your new EORI number is:
 cds.subscription.outcomes.success.optional-paragraph=We have sent you an email to confirm your subscription request to get a goods movement reference.
 cds.subscription.outcomes.success.application-info=Your application gives you:
 cds.subscription.outcomes.success.application-info.bullet2=an EORI number
+
 cds.subscription.outcomes.success.extra.information.next=What happens next
+cds.subscription.outcomes.success.extra.information.para1=We will process your application. This can take up to 2 hours.
+cds.subscription.outcomes.success.extra.information.para2 = We will then email you to let you know that the subscription and EORI number are ready to use. At this point you can:
+cds.subscription.outcomes.success.extra.information.next.atar = <li>apply for an Advance Tariff Ruling</li>
+cds.subscription.outcomes.success.extra.information.next.gagmr =<li>get a goods movement reference (GMR)</li>
+cds.subscription.outcomes.success.extra.information.next.cts =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
+cds.subscription.outcomes.success.extra.information.next.route1 =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
+cds.subscription.outcomes.success.extra.information.next.ss =<li>make entry summary declarations</li>
+cds.subscription.outcomes.success.extra.information.next.gbss =<li>make entry summary declarations</li>
+cds.subscription.outcomes.success.extra.information.next.ctc =<li>submit union transit declarations through NCTS</li>
+cds.subscription.outcomes.success.extra.information.next.cds =<li>use the Customs Declaration Service</li>
+
+cds.subscription.outcomes.success.extra.information.bullet1 = subscribe to more customs services
+cds.subscription.outcomes.success.extra.information.bullet2 = get an EORI number starting with XI
+
+
 cds.subscription.outcomes.success.extra.information.when-you-can=When you can start using your subscription and EORI number
 cds.subscription.outcomes.success.extra.information.when-you-can.standalone=When you can start using your EORI number and subscription
 cds.subscription.outcomes.success.extra.information.when-you-can.information=It can take up to 2 hours for your subscription and EORI number to be ready to use.

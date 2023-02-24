@@ -77,7 +77,7 @@ class VatGroupSpec extends ViewSpec {
     }
   }
 
-  lazy val doc: Document           = Jsoup.parse(contentAsString(view(false, form, atarService)))
-  lazy val docWithErrors: Document = Jsoup.parse(contentAsString(view(false, formWithError, atarService)))
+  lazy val doc: Document           = Jsoup.parse(contentAsString(view(form, atarService)))
+  lazy val docWithErrors: Document = Jsoup.parse(contentAsString(view(formWithError, atarService)))
 
 }
