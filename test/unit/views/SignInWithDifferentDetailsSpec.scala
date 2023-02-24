@@ -30,64 +30,23 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
 
   val orgName = "Test Organisation Name"
 
-  "'You need to sign in with different details' Page with name" should {
-
-    "display correct heading" in {
-      docWithName.body.getElementsByTag("h1").text() must startWith("You need to sign in with different details")
-    }
-
-    "include the heading in the title" in {
-      docWithName.title must startWith(docWithName.body().getElementsByTag("h1").text())
-    }
-
-    "have the correct class on the h1" in {
-      docWithName.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
-    }
-
-    "have the correct explanation text" in {
-      docWithName.body
-        .getElementById("para1")
-        .text mustBe s"$orgName has already registered for Advance Tariff Rulings with a different Government Gateway."
-      docWithName.body
-        .getElementById("para2")
-        .text mustBe "You need to sign in with the Government Gateway you used to register."
-    }
-
-    "have a sign out button" in {
-      docWithName.body.getElementsByClass("govuk-button").text mustBe "Sign out"
-      docWithName.body.getElementsByClass("govuk-button").attr("href") must endWith("/register/logout")
-    }
-  }
-
   "'You need to sign in with different details' Page without name" should {
 
     "display correct heading" in {
-      docWithoutName.body.getElementsByTag("h1").text() must startWith("You need to sign in with different details")
+      doc.body.getElementsByTag("h1").text() must startWith(
+        "Someone in your organisation has already applied for an EORI number"
+      )
     }
 
     "include the heading in the title" in {
-      docWithoutName.title must startWith(docWithName.body().getElementsByTag("h1").text())
+      doc.title must startWith(doc.body().getElementsByTag("h1").text())
     }
 
     "have the correct class on the h1" in {
-      docWithoutName.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
+      doc.body.getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
 
-    "have the correct explanation text" in {
-      docWithoutName.body
-        .getElementById("para1")
-        .text mustBe s"You have already registered for Advance Tariff Rulings with a different Government Gateway."
-      docWithoutName.body
-        .getElementById("para2")
-        .text mustBe "You need to sign in with the Government Gateway you used to register."
-    }
-
-    "have a sign out button" in {
-      docWithoutName.body.getElementsByClass("govuk-button").text mustBe "Sign out"
-      docWithoutName.body.getElementsByClass("govuk-button").attr("href") must endWith("/register/logout")
-    }
   }
 
-  lazy val docWithName: Document    = Jsoup.parse(contentAsString(view(Some(orgName))))
-  lazy val docWithoutName: Document = Jsoup.parse(contentAsString(view(None)))
+  lazy val doc: Document = Jsoup.parse(contentAsString(view()))
 }

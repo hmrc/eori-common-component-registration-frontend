@@ -40,31 +40,20 @@ class SignInWithDifferentDetailsControllerSpec
   protected override val submitInReviewModeUrl: String = ""
 
   private val mockCdsFrontendDataCache       = mock[SessionCache]
-  private val mockRegistrationDetails        = mock[RegistrationDetails](RETURNS_DEEP_STUBS)
   private val signInWithDifferentDetailsView = instanceOf[sign_in_with_different_details]
-  when(mockRegistrationDetails.name).thenReturn("Test Org Name")
 
-  private val controller = new SignInWithDifferentDetailsController(
-    mockAuthAction,
-    mockCdsFrontendDataCache,
-    signInWithDifferentDetailsView,
-    mcc
-  )
+  private val controller = new SignInWithDifferentDetailsController(mockAuthAction, signInWithDifferentDetailsView, mcc)
 
-  override def beforeEach: Unit = {
+  override def beforeEach: Unit =
     reset(mockCdsFrontendDataCache)
-    mockFunctionWithRegistrationDetails(mockRegistrationDetails)
-  }
 
   "Displaying the form in create mode" should {
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
 
-    "display para1 as 'Test Org Name has already registered for Advance Tariff Rulings with a different Government Gateway.'" in {
+    "display para1 as 'You don’t need to apply again.'" in {
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          "//*[@id='para1']"
-        ) shouldBe "Test Org Name has already registered for Advance Tariff Rulings with a different Government Gateway."
+        page.getElementsText("//*[@id='para1']") shouldBe "You don’t need to apply again."
       }
     }
   }

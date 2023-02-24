@@ -1527,7 +1527,7 @@ vat.error.minMax=Effective VAT date must be between {0} and today
 
 cds.feedback.continue=More about {0}
 
-cds.subscription.sign-in-with-different-details.para1=You don`t need to apply again.
+cds.subscription.sign-in-with-different-details.para1=You don’t need to apply again.
 
 cds.matching.row-organisation.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called 'reference', 'UTR' or 'official use'. You can {0}.
 cds.matching.row-sole-trader-individual.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’. You can {0}.

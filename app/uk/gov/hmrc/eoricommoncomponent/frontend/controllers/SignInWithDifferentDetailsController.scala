@@ -35,7 +35,7 @@ class SignInWithDifferentDetailsController @Inject() (
 
   def form(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(signInWithDifferentDetailsView()))
+      Future.successful(Ok(signInWithDifferentDetailsView()))
   }
 
 }
