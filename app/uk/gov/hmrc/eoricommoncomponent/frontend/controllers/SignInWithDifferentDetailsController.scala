@@ -16,20 +16,18 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sign_in_with_different_details
 
-import scala.concurrent.ExecutionContext
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class SignInWithDifferentDetailsController @Inject() (
   authAction: AuthAction,
-  cdsFrontendDataCache: SessionCache,
   signInWithDifferentDetailsView: sign_in_with_different_details,
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
@@ -37,11 +35,7 @@ class SignInWithDifferentDetailsController @Inject() (
 
   def form(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
-      cdsFrontendDataCache.registrationDetails.map(_.name).map { n =>
-        val optionalName = if (n.isEmpty) None else Some(n) // TODO Why name can be empty? Is this logic necessary?
-
-        Ok(signInWithDifferentDetailsView(optionalName))
-      }
+        Future.successful(Ok(signInWithDifferentDetailsView()))
   }
 
 }

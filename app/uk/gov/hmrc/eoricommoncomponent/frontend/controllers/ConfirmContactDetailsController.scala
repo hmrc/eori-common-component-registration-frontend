@@ -234,7 +234,7 @@ class ConfirmContactDetailsController @Inject() (
   )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
     for {
       regDetails      <- sessionCache.registrationDetails
-      enrolmentExists <- taxEnrolmentsService.doesEnrolmentExist(regDetails.safeId, service)
+      enrolmentExists <- taxEnrolmentsService.doesPreviousEnrolmentExists(regDetails.safeId)
     } yield
       if (enrolmentExists)
         Redirect(SignInWithDifferentDetailsController.form(service))

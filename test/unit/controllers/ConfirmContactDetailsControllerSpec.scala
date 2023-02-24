@@ -298,10 +298,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       ).thenReturn(Future.successful(SubscriptionExists))
 
       when(
-        mockTaxEnrolmentsService.doesEnrolmentExist(any[SafeId], any[Service])(
-          any[HeaderCarrier],
-          any[ExecutionContext]
-        )
+        mockTaxEnrolmentsService.doesPreviousEnrolmentExists(any[SafeId])(any[HeaderCarrier], any[ExecutionContext])
       ).thenReturn(Future.successful(false))
 
       mockSubscriptionFlowStart()
@@ -326,10 +323,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       ).thenReturn(Future.successful(SubscriptionExists))
 
       when(
-        mockTaxEnrolmentsService.doesEnrolmentExist(any[SafeId], any[Service])(
-          any[HeaderCarrier],
-          any[ExecutionContext]
-        )
+        mockTaxEnrolmentsService.doesPreviousEnrolmentExists(any[SafeId])(any[HeaderCarrier], any[ExecutionContext])
       ).thenReturn(Future.successful(true))
 
       mockSubscriptionFlowStart()

@@ -29,12 +29,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class TaxEnrolmentsService @Inject() (taxEnrolmentsConnector: TaxEnrolmentsConnector) {
 
-  def doesEnrolmentExist(safeId: SafeId, service: Service)(implicit
-    hc: HeaderCarrier,
-    ec: ExecutionContext
-  ): Future[Boolean] =
+  def doesPreviousEnrolmentExists(safeId: SafeId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
     taxEnrolmentsConnector.getEnrolments(safeId.id).map { enrolments =>
-      enrolments.exists(_.serviceName == service.enrolmentKey)
+      val supportedEnrolments = Service.supportedServices.map(_.enrolmentKey)
+      enrolments.exists(enrolmentResp => supportedEnrolments.contains(enrolmentResp.serviceName))
     }
 
   def issuerCall(formBundleId: String, eori: Eori, dateOfEstablishment: Option[LocalDate], service: Service)(implicit

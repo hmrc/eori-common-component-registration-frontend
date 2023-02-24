@@ -43,21 +43,46 @@ class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     reset(mockTaxEnrolmentsConnector)
   }
 
-  val testService  = Service.cds
-  val safeId       = SafeId("safeid")
-  val eori         = Eori("GB99999999")
-  val formBundleId = "formBundleId"
-  val date         = LocalDate.parse("2010-04-28")
+  val testService           = Service.cds
+  val nonExistingServiceKey = "Test-Service-Don't-Exist"
+  val safeId                = SafeId("safeid")
+  val eori                  = Eori("GB99999999")
+  val formBundleId          = "formBundleId"
+  val date                  = LocalDate.parse("2010-04-28")
 
   "TaxEnrolmentsService" should {
 
-    "make doesEnrolmentExist call" in {
+    "return true when at least one returned enrolment exists in service config" in {
       when(
         mockTaxEnrolmentsConnector
           .getEnrolments(any[String])(any[HeaderCarrier])
       ).thenReturn(Future.successful(List(TaxEnrolmentsResponse(testService.enrolmentKey))))
 
-      await(service.doesEnrolmentExist(safeId, testService)) shouldBe true
+      await(service.doesPreviousEnrolmentExists(safeId)) shouldBe true
+
+      verify(mockTaxEnrolmentsConnector)
+        .getEnrolments(any[String])(any[HeaderCarrier])
+    }
+
+    "return false when no enrolments returned exists in service config" in {
+      when(
+        mockTaxEnrolmentsConnector
+          .getEnrolments(any[String])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(List(TaxEnrolmentsResponse(nonExistingServiceKey))))
+
+      await(service.doesPreviousEnrolmentExists(safeId)) shouldBe false
+
+      verify(mockTaxEnrolmentsConnector)
+        .getEnrolments(any[String])(any[HeaderCarrier])
+    }
+
+    "return false when no enrolments returned" in {
+      when(
+        mockTaxEnrolmentsConnector
+          .getEnrolments(any[String])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(List.empty[TaxEnrolmentsResponse]))
+
+      await(service.doesPreviousEnrolmentExists(safeId)) shouldBe false
 
       verify(mockTaxEnrolmentsConnector)
         .getEnrolments(any[String])(any[HeaderCarrier])
