@@ -23,7 +23,6 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatRegisteredUkController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
@@ -134,16 +133,17 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     "redirect to vat groups review page for yes answer and is in review mode" in {
       submitForm(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/vat-group/review")
+        result.header.headers(LOCATION) should endWith("register/what-are-your-uk-vat-details/review")
       }
     }
 
-    "redirect to VAT Details page for no answer and is in review mode" in {
+    "redirect to check answers page for no answer and is in review mode" in {
       when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
-      when(mockSubscriptionDetailsService.clearCachedVatGroupDetails(any[Request[_]])).thenReturn(Future.successful())
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/matching/review-determine")
+        result.header.headers(LOCATION) should endWith(
+          "customs-registration-services/atar/register/matching/review-determine"
+        )
       }
     }
   }
