@@ -547,7 +547,7 @@ cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
 cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-company.name = Enw’r cwmni cofrestredig
-cds.matching.name-id-organisation.registered-company.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o<a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p> Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni.
+cds.matching.name-id-organisation.registered-company.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p> Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni.
 cds.matching.name-id-organisation.partnership.name = Enw’r bartneriaeth gofrestredig
 cds.matching.name-id-organisation.partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.organisation.name = Enw’r sefydliad
