@@ -20,13 +20,19 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 
-@this(layout_di: layout, govukButton: GovukButton)
+@this(layout_di: layout, govukButton: GovukButton, featureFlags: FeatureFlags)
 
 @(isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @tryAgainURL = @{
-    if (isInReviewMode) VatDetailsControllerOld.reviewForm(service) else VatDetailsControllerOld.createForm(service)
+    (featureFlags.useNewVATJourney, isInReviewMode) match {
+        case (true, true) => VatDetailsController.reviewForm(service)
+        case (true, false) => VatDetailsController.createForm(service)
+        case (false, true) => VatDetailsControllerOld.reviewForm(service)
+        case (false, false) => VatDetailsControllerOld.createForm(service)
+    }
 }
 
 @layout_di(messages("cds.subscription.vat-details.cannot-identify-you.heading")) {

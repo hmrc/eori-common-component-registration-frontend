@@ -23,16 +23,12 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatRegisteredUkController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, SubscriptionFlowManager, VatRegisteredUkController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  SubscriptionFlow,
-  SubscriptionFlowInfo,
-  SubscriptionPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlow, SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{vat_registered_uk}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.YesNoFormBuilder._
@@ -51,6 +47,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
   private val mockSubscriptionFlow            = mock[SubscriptionFlow]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
+  private val mockFeatureFlags                    = mock[FeatureFlags]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -79,7 +76,8 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     mockSubscriptionDetailsService,
     mockRequestSession,
     mcc,
-    vatRegisteredUkView
+    vatRegisteredUkView,
+    mockFeatureFlags
   )
 
   "Vat registered Uk Controller" should {
@@ -115,7 +113,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
 
       submitForm(ValidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/vat-group")
+        result.header.headers(LOCATION) should endWith("register/what-are-your-uk-vat-details")
       }
     }
 
@@ -138,6 +136,8 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     }
 
     "redirect to check answers page for no answer and is in review mode" in {
+
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
       when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER

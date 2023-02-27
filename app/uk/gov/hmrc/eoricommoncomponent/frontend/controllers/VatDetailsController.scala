@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{VatDetailsSubscriptionFlowPage, VatGroupFlowPage}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{VatDetailsSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
