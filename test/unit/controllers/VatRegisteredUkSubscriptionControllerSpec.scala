@@ -23,9 +23,17 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, SubscriptionFlowManager, VatRegisteredUkController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
+  FeatureFlags,
+  SubscriptionFlowManager,
+  VatRegisteredUkController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlow, SubscriptionFlowInfo, SubscriptionPage}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
+  SubscriptionFlow,
+  SubscriptionFlowInfo,
+  SubscriptionPage
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{vat_registered_uk}
@@ -47,7 +55,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
   private val mockSubscriptionFlow            = mock[SubscriptionFlow]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
-  private val mockFeatureFlags                    = mock[FeatureFlags]
+  private val mockFeatureFlags                = mock[FeatureFlags]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
