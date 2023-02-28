@@ -168,6 +168,8 @@ POST        /customs-registration-services/:service/register/your-uk-vat-details
 GET         /customs-registration-services/:service/register/cannot-confirm-vat-details             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController.vatDetailsNotMatched(isInReviewMode: Boolean = false, service: Service)
 GET         /customs-registration-services/:service/register/cannot-confirm-vat-details/review      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController.vatDetailsNotMatched(isInReviewMode: Boolean = true, service: Service)
 
+GET         /customs-registration-services/:service/register/your-uk-vat-details-return                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatReturnController.createForm(service: Service)
+POST        /customs-registration-services/:service/register/your-uk-vat-details-return                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatReturnController.submit(service: Service)
 
 GET         /customs-registration-services/:service/register/disclose-personal-details-consent           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DisclosePersonalDetailsConsentController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/disclose-personal-details-consent           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DisclosePersonalDetailsConsentController.submit(isInReviewMode: Boolean = false, service: Service)
