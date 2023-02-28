@@ -83,7 +83,8 @@ class VatDetailsController @Inject() (
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
             .map(
-              _ =>
+              _ => {
+                subscriptionDetailsService.cacheVatControlListResponse(vatControlListResponse)
                 if (isInReviewMode)
                   Redirect(
                     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
@@ -92,8 +93,9 @@ class VatDetailsController @Inject() (
                 else if (vatControlListResponse.isLastReturnMonthPeriodNonEmpty)
                   Redirect(VatVerificationOptionController.createForm(service))
                 else
-                  //TODO: New page NO return is NOT available
+                //TODO: New page NO return is NOT available
                   Ok(weCannotConfirmYourIdentity(isInReviewMode, service))
+              }
             )
         else
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))

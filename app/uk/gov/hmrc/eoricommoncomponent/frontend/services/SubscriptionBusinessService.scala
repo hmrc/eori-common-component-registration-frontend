@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails, VatDetailsOld}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails, VatDetailsOld, VatReturnTotal}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 
 import java.time.LocalDate
@@ -80,6 +80,11 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
   def getCachedUkVatDetails(implicit request: Request[_]): Future[Option[VatDetails]] =
     cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.ukVatDetails
+    }
+
+  def getCachedVatControlListResponse(implicit request: Request[_]): Future[Option[VatControlListResponse]] =
+    cdsFrontendDataCache.subscriptionDetails map {
+      subscriptionDetails => subscriptionDetails.vatControlListResponse
     }
 
   def retrieveSubscriptionDetailsHolder(implicit request: Request[_]): Future[SubscriptionDetails] =
