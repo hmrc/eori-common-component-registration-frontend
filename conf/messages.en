@@ -1171,6 +1171,8 @@ cds.subscription.vat-group.page-error.yes-no-answer=Tell us if your organisation
 cds.subscription.vat-group.partnership.page-error.yes-no-answer=Tell us if your partnership is part of a VAT group in the UK
 cds.subscription.vat-registration.form-error.vat-group=Tell us if your organisation is part of a VAT group in the UK
 cds.subscription.vat-registration.form-error.vat-verification-option=Tell us if your organisation is part of a VAT group in the UK
+cds.subscription.vat-registration.vat-return.title =
+
 
 cds.subscription.based-in-uk.form-error.yes-no-answer=Confirm whether you are registering for a business (or individual) that is in the UK
 cds.subscription.step-of-steps=Step {0} of {1} - {2}

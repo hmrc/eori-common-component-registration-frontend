@@ -69,7 +69,7 @@ class VatVerificationOptionController @Inject() (
                 if (isInReviewMode && yesNoAnswer.isYes)
                   // TODO: The date you became VAT registered
                   Future.successful(Redirect(VatDetailsController.reviewForm(service)))
-                else if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.createForm(service)))
+                else if (yesNoAnswer.isNo) Future.successful(Redirect(VatReturnController.createForm(service)))
                 else
                   // TODO: Your latest VAT Return total
                   Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))

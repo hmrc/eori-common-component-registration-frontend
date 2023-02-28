@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.VatControlListConnector
@@ -25,7 +26,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,14 +33,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatReturnController @Inject() (
   authAction: AuthAction,
-  subscriptionFlowManager: SubscriptionFlowManager,
-  vatControlListConnector: VatControlListConnector,
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   vatReturnTotalView: vat_return_total,
-  errorTemplate: error_template,
-  weCannotConfirmYourIdentity: we_cannot_confirm_your_identity,
-  subscriptionDetailsService: SubscriptionDetailsService
+  weCannotConfirmYourIdentity: we_cannot_confirm_your_identity
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -50,22 +46,22 @@ class VatReturnController @Inject() (
         Future.successful(Ok(vatReturnTotalView(vatReturnTotalForm, service)))
     }
 
-
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       vatReturnTotalForm.bindFromRequest.fold(
         formWithErrors => Future.successful(BadRequest(vatReturnTotalView(formWithErrors, service))),
         formData => lookupVatReturn(formData, service)
       )
-
     }
 
-  def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit request: Request[AnyContent]): Future[Result] = {
+  def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] =
     subscriptionBusinessService.getCachedVatControlListResponse.map {
-      case Some(response) if response.lastNetDue.getOrElse("no amount found") == vatReturnTotal.returnAmountInput.toDouble => Ok(ContactDetailsController.createForm(service).url)
+      case Some(response)
+          if response.lastNetDue.getOrElse("no amount found") == vatReturnTotal.returnAmountInput.toDouble =>
+        Redirect(ContactDetailsController.createForm(service))
       case _ => Ok(weCannotConfirmYourIdentity(isInReviewMode = false, service))
     }
-    }
-
 
 }

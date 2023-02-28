@@ -1046,6 +1046,9 @@ cds.subscription.vat-group.page-error.yes-no-answer = Rhowch wybod i ni a yw’c
 cds.subscription.vat-group.partnership.page-error.yes-no-answer = Rhowch wybod i ni a yw’ch partneriaeth yn rhan o grŵp TAW yn y DU
 cds.subscription.vat-registration.form-error.vat-group = Rhowch wybod i ni a yw’ch sefydliad yn rhan o grŵp TAW yn y DU
 cds.subscription.based-in-uk.form-error.yes-no-answer = Cadarnhewch a ydych yn cofrestru ar gyfer busnes (neu unigolyn) sydd yn y DU
+
+
+
 cds.subscription.step-of-steps = Cam {0} o {1} – {2}
 cds.subscription.name-id-details.page-error.name = Nodwch enw eich busnes
 cds.subscription.name-id-details.name.label = Enw

@@ -19,8 +19,9 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotal
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotalForm
-@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatReturnController
+@import org.checkerframework.checker.units.qual.Prefix
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.button.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import views.html.helper.CSRF
 
 
@@ -29,6 +30,7 @@
 
 @(vatReturnForm: Form[VatReturnTotal], service: Service)(implicit request: Request[_], messages: Messages)
 
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.PrefixOrSuffix
 @vatFormAction = @{
  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatReturnController.submit(service)
 }
@@ -38,22 +40,26 @@
    @errorSummary(vatReturnForm.errors)
    @helpers.form(vatFormAction,  "vat-return-form") {
 
-    <h1>Jake don't  know and did not help Rob</h1>
-    <p>shocking news </p>
-    <p>VJ smokes G.... </p>
+    <h1 class="govuk-heading-l">What is your latest VAT Return total?</h1>
+    <p class="govuk-body">You can find this amount in box number 5 on your latest VAT Return submitted to HMRC.</p>
+    <p class="govuk-body">The format of this number needs to be two decimal places, for example £123.00</p>
      @CSRF.formField
-
 
     @inputText(
      form = vatReturnForm,
      id = "vat-return-total",
      name = "vat-return-total",
-     label = "checking if working",
+     label = "required label",
      hint=Some(messages(" ")),
-     labelClasses = Some("govuk-!-font-weight-bold"),
+     labelClasses = Some("govuk-visually-hidden"),
+     prefix = Some(PrefixOrSuffix(content = Text("£"))),
      classes = Some("govuk-!-width-one-half"),
      isPageHeading = false
     )
+
+    @govukButton(Button(
+     content = Text(messages("cds.navigation.continue"))
+    ))
    }
   </div>
 }
