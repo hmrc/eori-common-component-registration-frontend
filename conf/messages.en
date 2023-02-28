@@ -1816,7 +1816,7 @@ ecc.start-page.solo.title = If you apply as a sole trader or individual
 ecc.start-page.gbeori.para3.title = We will verify your identity by asking for one of the following:
 ecc.start-page.gbeori.para3.bullet1 = National Insurance number, if you have worked in the UK
 ecc.start-page.gbeori.para3.bullet2 = Self Assessment Unique Taxpayer Reference (UTR), if you registered for Self Assessment
-ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a>.
+ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a>
 ecc.start-page.gbeori.link.text = from the list on Companies House
 ecc.start-page.company.title = Standard Industrial Classification Code (SIC code)
 
