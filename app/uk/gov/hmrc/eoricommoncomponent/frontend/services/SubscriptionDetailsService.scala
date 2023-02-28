@@ -19,12 +19,16 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails}
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   AddressViewModel,
   ContactDetailsModel,
   VatDetails,
+
   VatDetailsOld
+
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, SessionCache}
@@ -137,7 +141,9 @@ class SubscriptionDetailsService @Inject() (
   def clearCachedUkVatDetails(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(ukVatDetails = None))
 
-  def cacheVatControlListResponse(vatControlListResponse: VatControlListResponse)(implicit request: Request[_]): Future[Unit] =
+  def cacheVatControlListResponse(
+    vatControlListResponse: VatControlListResponse
+  )(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatControlListResponse = Some(vatControlListResponse)))
 
   def cacheUkVatDetailsOld(ukVatDetails: VatDetailsOld)(implicit request: Request[_]): Future[Unit] =

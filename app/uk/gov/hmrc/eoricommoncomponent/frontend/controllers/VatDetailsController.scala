@@ -82,8 +82,8 @@ class VatDetailsController @Inject() (
         if (vatControlListResponse.isPostcodeAssociatedWithVrn(vatForm))
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
-            .map(
-              _ => {
+            .map {
+              _ =>
                 subscriptionDetailsService.cacheVatControlListResponse(vatControlListResponse)
                 if (isInReviewMode)
                   Redirect(
@@ -93,10 +93,9 @@ class VatDetailsController @Inject() (
                 else if (vatControlListResponse.isLastReturnMonthPeriodNonEmpty)
                   Redirect(VatVerificationOptionController.createForm(service))
                 else
-                //TODO: New page NO return is NOT available
+                  //TODO: New page NO return is NOT available
                   Ok(weCannotConfirmYourIdentity(isInReviewMode, service))
-              }
-            )
+            }
         else
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
       case Left(errorResponse) =>

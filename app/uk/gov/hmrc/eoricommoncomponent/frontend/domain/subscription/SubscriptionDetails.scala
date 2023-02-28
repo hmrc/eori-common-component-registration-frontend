@@ -19,7 +19,14 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 import java.time.LocalDate
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, CompanyRegisteredCountry, ContactDetailsModel, VatDetails, VatDetailsOld, VatReturnTotal}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
+  AddressViewModel,
+  CompanyRegisteredCountry,
+  ContactDetailsModel,
+  VatDetails,
+  VatDetailsOld,
+  VatReturnTotal
+}
 
 case class SubscriptionDetails(
   businessShortName: Option[BusinessShortName] = None,

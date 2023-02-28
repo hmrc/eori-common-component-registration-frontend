@@ -34,14 +34,10 @@ object VatReturnTotalForm extends Mappings {
   def validReturnAmount: Constraint[String] =
     Constraint({
       case amount if amount.matches(amountRegex.regex) => Valid
-      case _                                           => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
+      case _                                           => Invalid(ValidationError("Enter the amount of your latest tax return. Numbers only"))
     })
 
   val vatReturnTotalForm =
-    Form(
-      mapping("return-amount" -> text.verifying(validReturnAmount))
-    (VatReturnTotal.apply)
-    (VatReturnTotal.unapply)
-    )
+    Form(mapping("vat-return-total" -> text.verifying(validReturnAmount))(VatReturnTotal.apply)(VatReturnTotal.unapply))
 
 }
