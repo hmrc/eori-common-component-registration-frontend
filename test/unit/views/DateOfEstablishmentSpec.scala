@@ -80,19 +80,15 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
 
   "On an LLP org type journey Date Established page" should {
     "display correct title" in {
-      docLlp.title must startWith("Date when your partnership was established")
+      docLlp.title must startWith("When was the partnership established?")
     }
     "have the correct legend text" in {
-      docLlp.body.getElementsByTag("legend").text() mustBe "Date when your partnership was established"
+      docLlp.body.getElementsByTag("legend").text() mustBe "When was the partnership established?"
     }
     "have the correct class on the legend" in {
       docLlp.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
-    "have the correct text in the description" in {
-      docLlp.body
-        .getElementById("date-of-establishment-hint")
-        .text() mustBe "Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the Companies House register (opens in new tab) For example, 31 03 1980"
-    }
+
   }
 
   lazy val doc: Document = {
