@@ -481,6 +481,9 @@ cds.registration.use-a-different-service.info=I wneud cais am rif EORI fel corff
 cds.registration.use-a-different-service.vat-registered=wedi cofrestru ar gyfer TAW
 cds.registration.use-a-different-service.not-vat-registered=heb gofrestru ar gyfer TAW
 
+cds.subscription.vat-verification-option.yes=Y dyddiad y gwnaethoch gofrestru ar gyfer TAW
+cds.subscription.vat-verification-option.no=Cyfanswm eich Ffurflen TAW ddiweddaraf
+cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddefnyddio i gadarnhau pwy ydych?
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
 cds.matching.organisation-type.user.header = Fel beth rydych am wneud cais?

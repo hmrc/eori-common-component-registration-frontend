@@ -148,6 +148,9 @@ object MatchingForms extends Mappings {
   def vatGroupYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm("cds.subscription.vat-group.page-error.yes-no-answer")
 
+  def vatVerificationOptionYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
+    createYesNoAnswerForm("cds.error.option.invalid")
+
   private def createYesNoAnswerForm(invalidErrorMsgKey: String)(implicit messages: Messages): Form[YesNo] = Form(
     mapping(
       "yes-no-answer" -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))

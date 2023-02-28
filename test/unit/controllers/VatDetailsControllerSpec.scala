@@ -68,7 +68,6 @@ class VatDetailsControllerSpec
 
   private val controller = new VatDetailsController(
     mockAuthAction,
-    mockSubscriptionFlowManager,
     mockVatControlListConnector,
     mockSubscriptionBusinessService,
     mcc,

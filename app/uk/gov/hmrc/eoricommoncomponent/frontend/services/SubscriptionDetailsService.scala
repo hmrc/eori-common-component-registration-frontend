@@ -58,7 +58,6 @@ class SubscriptionDetailsService @Inject() (
   )(implicit request: Request[_]): Future[Unit] = sessionCache.subscriptionDetails flatMap {
     subDetails =>
       sessionCache.saveSubscriptionDetails(insertNewDetails(subDetails)).map(_ => ())
-
   }
 
   def cacheContactDetails(contactDetailsModel: ContactDetailsModel, isInReviewMode: Boolean = false)(implicit
@@ -149,6 +148,9 @@ class SubscriptionDetailsService @Inject() (
 
   def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(personalDataDisclosureConsent = Some(yesNoAnswer.isYes)))
+
+  def cacheVatVerificationOption(yesNoAnswer: YesNo)(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(vatVerificationOption = Some(yesNoAnswer.isYes)))
 
   private def contactDetails(view: ContactDetailsModel, isInReviewMode: Boolean)(implicit
     request: Request[_]

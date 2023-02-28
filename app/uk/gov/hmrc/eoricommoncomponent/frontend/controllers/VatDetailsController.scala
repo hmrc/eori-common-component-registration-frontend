@@ -25,7 +25,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{VatDetailsSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
@@ -40,7 +39,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsController @Inject() (
   authAction: AuthAction,
-  subscriptionFlowManager: SubscriptionFlowManager,
   vatControlListConnector: VatControlListConnector,
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
@@ -92,10 +90,7 @@ class VatDetailsController @Inject() (
                       .determineRoute(service)
                   )
                 else if (vatControlListResponse.isLastReturnMonthPeriodNonEmpty)
-                  //TODO: New page YES return is available
-                  Redirect(
-                    subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
-                  )
+                  Redirect(VatVerificationOptionController.createForm(service))
                 else
                   //TODO: New page NO return is NOT available
                   Ok(weCannotConfirmYourIdentity(isInReviewMode, service))
@@ -116,5 +111,4 @@ class VatDetailsController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(weCannotConfirmYourIdentity(isInReviewMode, service)))
     }
-
 }
