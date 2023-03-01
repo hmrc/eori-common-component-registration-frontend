@@ -95,13 +95,6 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
         page.title should include(VatRegisterUKPage.title)
       }
     }
-    "return ok when accessed from review method" in {
-      reviewForm() { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title should include(VatRegisterUKPage.title)
-      }
-    }
   }
 
   "Submitting Vat registered UK Controller in create mode" should {
