@@ -53,7 +53,9 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
       }
 
       "display sub heading for CDS" in {
-        adminDoc.body().getElementsByTag("h2").text() must startWith("Customs Declaration Service")
+        adminDoc.body().getElementsByTag("h2").text() must startWith(
+          "Help improve HMRC services Customs Declaration Service Support links"
+        )
       }
 
       "display tell user about CDS access and link for accessing CDS services" in {
@@ -93,7 +95,9 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
       }
 
       "display sub heading for CDS" in {
-        standardDoc.body().getElementsByTag("h2").text() must startWith("Customs Declaration Service")
+        standardDoc.body().getElementsByTag("h2").text() must startWith(
+          "Help improve HMRC services Customs Declaration Service Support links"
+        )
       }
 
       "display tell user about CDS access and link for accessing CDS services" in {

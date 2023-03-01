@@ -54,7 +54,7 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
       "display sub heading for CDS" in {
         adminDoc.body().getElementsByTag("h2").text() must startWith(
-          "Start using the Customs Declaration Service (CDS)"
+          "Help improve HMRC services Start using the Customs Declaration Service (CDS) Support links"
         )
       }
 
@@ -91,7 +91,7 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
       "display sub heading for CDS" in {
         standardDoc.body().getElementsByTag("h2").text() must startWith(
-          "Start using the Customs Declaration Service (CDS)"
+          "Help improve HMRC services Start using the Customs Declaration Service (CDS) Support links"
         )
       }
 
