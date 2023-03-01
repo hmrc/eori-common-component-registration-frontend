@@ -33,15 +33,11 @@ import scala.concurrent.Future
 
 class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val vatVerificationOptionView       = instanceOf[vat_verification_option]
-  private val mockAuthConnector               = mock[AuthConnector]
-  private val mockAuthAction                  = authAction(mockAuthConnector)
+  private val vatVerificationOptionView = instanceOf[vat_verification_option]
+  private val mockAuthConnector         = mock[AuthConnector]
+  private val mockAuthAction            = authAction(mockAuthConnector)
 
-  private val controller = new VatVerificationOptionController(
-    mockAuthAction,
-    mcc,
-    vatVerificationOptionView
-  )
+  private val controller = new VatVerificationOptionController(mockAuthAction, mcc, vatVerificationOptionView)
 
   "VAT Verification Option Controller" should {
     "return OK when accessing page through createForm method" in {
