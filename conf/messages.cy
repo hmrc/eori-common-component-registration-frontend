@@ -487,6 +487,12 @@ cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddef
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
 cds.matching.organisation-type.user.header = Fel beth rydych am wneud cais?
+
+cds.subscription.vat-registration.vat-return.title = Beth yw cyfanswm eich Ffurflen TAW ddiweddaraf?
+cds.subscription.vat-registration.vat-return.para1 = Mae'’'r swm hwn i'’'w weld ym mlwch 5 yn y Ffurflen TAW ddiweddaraf i chi ei chyflwyno i CThEF.
+cds.subscription.vat-registration.vat-return.para2 = Mae angen nodi'’'r rhif hwn gan ddefnyddio dau le degol, er enghraifft £123.00
+
+
 cds.matching.organisation-type.organisation-type = Math o fusnes
 cds.matching.organisation-type.radio.company.label = Cwmni
 cds.matching.organisation-type.radio.organisation.label = Sefydliad
