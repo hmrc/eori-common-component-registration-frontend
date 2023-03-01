@@ -14,26 +14,27 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatVerificationOption
 
 @this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
-@(vatVerificationOptionYesNoAnswerForm: Form[YesNo], isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
+
+@(vatVerificationOptionAnswerForm: Form[VatVerificationOption], service: Service)(implicit request: Request[_], messages: Messages)
 
 @formAction = @{
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatVerificationOptionController.submit(isInReviewMode, service)
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatVerificationOptionController.submit(service)
 }
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
 
 @inputRadioGroup(
-vatVerificationOptionYesNoAnswerForm("yes-no-answer"),
+    vatVerificationOptionAnswerForm("vat-verification-option"),
     options,
     Map.empty,
     None,
@@ -43,16 +44,16 @@ vatVerificationOptionYesNoAnswerForm("yes-no-answer"),
     '_isLegendH1 -> true)
 }
 
-@layout_di(messages("cds.subscription.vat-verification-option.title-and-heading"), form = Some(vatVerificationOptionYesNoAnswerForm)) {
+@layout_di(messages("cds.subscription.vat-verification-option.title-and-heading"), form = Some(vatVerificationOptionAnswerForm)) {
     <div>
-        @errorSummary(vatVerificationOptionYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+        @errorSummary(vatVerificationOptionAnswerForm.errors, focusOverrides = Map("vat-verification-option" -> "date-amount-option-true"))
 
         @helpers.form(formAction, "vat-verification-option-createForm") {
 
             @CSRF.formField
 
         @inputRadioGroup(
-        vatVerificationOptionYesNoAnswerForm("yes-no-answer"),
+            vatVerificationOptionAnswerForm("vat-verification-option"),
         Seq(
         "true" -> messages("cds.subscription.vat-verification-option.yes"),
         "false" -> messages("cds.subscription.vat-verification-option.no")

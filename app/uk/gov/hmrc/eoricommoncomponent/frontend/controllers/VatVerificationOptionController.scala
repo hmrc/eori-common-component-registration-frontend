@@ -19,11 +19,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatVerificationOption}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{vat_verification_option}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_verification_option
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,7 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatVerificationOptionController @Inject() (
   authAction: AuthAction,
-  subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   vatVerificationView: vat_verification_option,
   subscriptionDetailsService: SubscriptionDetailsService
@@ -42,36 +41,22 @@ class VatVerificationOptionController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(
-          Ok(vatVerificationView(vatVerificationOptionYesNoAnswerForm(), isInReviewMode = false, service))
+          Ok(vatVerificationView(vatVerificationOptionAnswerForm(), service))
         )
     }
 
-  def reviewForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        for {
-          useVatRegisteredDate <- subscriptionBusinessService.getCachedVatVerificationOption
-          yesNo: YesNo = YesNo(useVatRegisteredDate)
-        } yield Ok(
-          vatVerificationView(vatVerificationOptionYesNoAnswerForm().fill(yesNo), isInReviewMode = true, service)
-        )
-    }
-
-  def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
+  def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      vatVerificationOptionYesNoAnswerForm()
+      vatVerificationOptionAnswerForm()
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(vatVerificationView(formWithErrors, isInReviewMode, service))),
-          yesNoAnswer =>
-            subscriptionDetailsService.cacheVatVerificationOption(yesNoAnswer).flatMap {
+          formWithErrors => Future.successful(BadRequest(vatVerificationView(formWithErrors, service))),
+          VatVerificationOption =>
+            subscriptionDetailsService.cacheVatVerificationOption(VatVerificationOption).flatMap {
               _ =>
-                if (isInReviewMode && yesNoAnswer.isYes)
-                  // TODO: The date you became VAT registered
-                  Future.successful(Redirect(VatDetailsController.reviewForm(service)))
-                else if (yesNoAnswer.isNo) Future.successful(Redirect(VatDetailsController.createForm(service)))
+                if (VatVerificationOption.isDateOption)
+                  Future.successful(Redirect(VatDetailsController.createForm(service)))
                 else
-                  // TODO: Your latest VAT Return total
                   Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
             }
         )

@@ -156,9 +156,8 @@ GET         /customs-registration-services/:service/register/cannot-confirm-your
 GET         /customs-registration-services/:service/register/cannot-confirm-your-vat-details/review      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsControllerOld.vatDetailsNotMatched(isInReviewMode: Boolean = true, service: Service)
 
 GET         /customs-registration-services/:service/register/vat-verification-option                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController.createForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-verification-option                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController.submit(isInReviewMode: Boolean = false, service: Service)
-GET         /customs-registration-services/:service/register/vat-verification-option/review         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController.reviewForm(service: Service)
-POST        /customs-registration-services/:service/register/vat-verification-option/review         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController.submit(isInReviewMode: Boolean = true, service: Service)
+POST        /customs-registration-services/:service/register/vat-verification-option                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController.submit(service: Service)
+POST        /customs-registration-services/:service/register/vat-verification-option/review         @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController.submit(service: Service)
 
 
 GET         /customs-registration-services/:service/register/your-uk-vat-details                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController.createForm(service: Service)

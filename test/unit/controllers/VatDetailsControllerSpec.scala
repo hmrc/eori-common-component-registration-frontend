@@ -140,14 +140,14 @@ class VatDetailsControllerSpec
     "should match without space in the postcode" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "Z91AA")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("next-page-url")
+        result.header.headers("Location") should endWith("vat-verification-option")
       }
     }
 
     "should match when the postcode is entered in lowercase" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "z91aa")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("next-page-url")
+        result.header.headers("Location") should endWith("vat-verification-option")
       }
     }
 
@@ -204,7 +204,7 @@ class VatDetailsControllerSpec
     "redirect to next page when valid vat number and effective date is supplied" in {
       submitFormInCreateMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("next-page-url")
+        result.header.headers("Location") should endWith("vat-verification-option")
       }
     }
 

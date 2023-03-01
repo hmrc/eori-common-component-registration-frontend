@@ -34,7 +34,6 @@ import java.time.LocalDate
 object MatchingForms extends Mappings {
 
   val Length35            = 35
-  val Length34            = 34
   private val Length2     = 2
   private val nameRegex   = "[a-zA-Z0-9-' ]*"
   private val noTagsRegex = "^[^<>]+$"
@@ -148,8 +147,16 @@ object MatchingForms extends Mappings {
   def vatGroupYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
     createYesNoAnswerForm("cds.subscription.vat-group.page-error.yes-no-answer")
 
-  def vatVerificationOptionYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] =
-    createYesNoAnswerForm("cds.error.option.invalid")
+  def vatVerificationOptionAnswerForm()(implicit messages: Messages): Form[VatVerificationOption] =
+    createVatVerificationOptionAnswerForm("cds.subscription.vat-verification-option.error")
+
+  private def createVatVerificationOptionAnswerForm(invalidErrorMsgKey: String)(implicit messages: Messages): Form[VatVerificationOption] = Form(
+    mapping(
+      "vat-verification-option" -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))
+        .verifying(messages(invalidErrorMsgKey), _.isDefined)
+        .transform[Boolean](str => str.get.toBoolean, bool => Option(String.valueOf(bool)))
+    )(VatVerificationOption.apply)(VatVerificationOption.unapply)
+  )
 
   private def createYesNoAnswerForm(invalidErrorMsgKey: String)(implicit messages: Messages): Form[YesNo] = Form(
     mapping(

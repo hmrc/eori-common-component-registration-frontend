@@ -16,23 +16,18 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsControllerOld
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  VatDetailsSubscriptionFlowPage,
-  VatRegisteredUkSubscriptionFlowPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, VatDetailsController, VatDetailsControllerOld}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

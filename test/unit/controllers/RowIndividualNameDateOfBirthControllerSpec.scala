@@ -40,7 +40,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_d
 import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.scalacheck.TestDataGenerators
-import util.scalacheck.TestDataGenerators.Implicits._
+
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

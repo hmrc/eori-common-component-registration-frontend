@@ -18,8 +18,11 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.we_cannot_confirm_your_identity
 import util.ViewSpec
 
@@ -28,6 +31,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
   implicit val request = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[we_cannot_confirm_your_identity]
+
 
   "The 'We cannot confirm your identity' Page" should {
 
@@ -55,6 +59,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
 
     "have the VAT Details link for the try again button" in {
+
       doc
         .body()
         .getElementsByClass("govuk-button")

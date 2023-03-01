@@ -16,7 +16,7 @@ cds.error.option.invalid = Dewiswch un o’r opsiynau
 cds.contact.name.label = Enw person cyswllt
 cds.contact.telephone.label = Rhif ffôn
 cds.contact.fax.label = Rhif ffacs (dewisol)
-cds.contact.email.label = E-bost
+cds.contact.email.label = vE-bost
 cds.address.street-1.label = Stryd a Rhif 1
 cds.address.street-2.label = Stryd a Rhif 2
 cds.address.city.label = Dinas
@@ -482,8 +482,10 @@ cds.registration.use-a-different-service.vat-registered=wedi cofrestru ar gyfer 
 cds.registration.use-a-different-service.not-vat-registered=heb gofrestru ar gyfer TAW
 
 cds.subscription.vat-verification-option.yes=Y dyddiad y gwnaethoch gofrestru ar gyfer TAW
+
 cds.subscription.vat-verification-option.no=Cyfanswm eich Ffurflen TAW ddiweddaraf
 cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddefnyddio i gadarnhau pwy ydych?
+cds.subscription.vat-verification-option.error=TRANSLATE Select if you want to use VAT registration date or latest VAT Return total
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
 cds.matching.organisation-type.user.header = Fel beth rydych am wneud cais?

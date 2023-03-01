@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   AddressViewModel,
   ContactDetailsModel,
@@ -149,8 +149,8 @@ class SubscriptionDetailsService @Inject() (
   def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(personalDataDisclosureConsent = Some(yesNoAnswer.isYes)))
 
-  def cacheVatVerificationOption(yesNoAnswer: YesNo)(implicit request: Request[_]): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(vatVerificationOption = Some(yesNoAnswer.isYes)))
+  def cacheVatVerificationOption(vatVerificationOption: VatVerificationOption)(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(vatVerificationOption = Some(vatVerificationOption.isDateOption)))
 
   private def contactDetails(view: ContactDetailsModel, isInReviewMode: Boolean)(implicit
     request: Request[_]
