@@ -48,14 +48,6 @@ class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)
   def cachedSicCode(implicit request: Request[_]): Future[Option[String]] =
     cdsFrontendDataCache.subscriptionDetails map (_.sicCode)
 
-  def cacheVatVerificationOption(implicit request: Request[_]): Future[Option[Boolean]] =
-    cdsFrontendDataCache.subscriptionDetails map (_.vatVerificationOption)
-
-  def getCachedVatVerificationOption(implicit request: Request[_]): Future[Boolean] =
-    cdsFrontendDataCache.subscriptionDetails map {
-      _.vatVerificationOption.getOrElse(throw new IllegalStateException("No VAT Verification option Cached"))
-    }
-
   def getCachedPersonalDataDisclosureConsent(implicit request: Request[_]): Future[Boolean] =
     cdsFrontendDataCache.subscriptionDetails map {
       _.personalDataDisclosureConsent.getOrElse(

@@ -19,10 +19,9 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatVerificationOption}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_verification_option
 
 import javax.inject.{Inject, Singleton}
@@ -32,8 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatVerificationOptionController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
-  vatVerificationView: vat_verification_option,
-  subscriptionDetailsService: SubscriptionDetailsService
+  vatVerificationView: vat_verification_option
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -50,13 +48,10 @@ class VatVerificationOptionController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(vatVerificationView(formWithErrors, service))),
           VatVerificationOption =>
-            subscriptionDetailsService.cacheVatVerificationOption(VatVerificationOption).flatMap {
-              _ =>
-                if (VatVerificationOption.isDateOption)
-                  Future.successful(Redirect(VatDetailsController.createForm(service)))
-                else
-                  Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
-            }
+            if (VatVerificationOption.isDateOption)
+              Future.successful(Redirect(VatDetailsController.createForm(service)))
+            else
+              Future.successful(Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)))
         )
     }
 

@@ -381,33 +381,44 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       val holder: SubscriptionDetails = requestCaptor.getValue
       holder.vatRegisteredUk shouldBe Some(yesNoAnswer.isYes)
     }
-  }
 
-  "cacheConsentToDisclosePersonalDetails" should {
-    val yesNoAnswer = YesNo(true)
-    "save subscription details with consent to disclose personal details" in {
-      await(subscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(yesNoAnswer))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.personalDataDisclosureConsent shouldBe Some(yesNoAnswer.isYes)
+    "cacheVatRegisteredUk" should {
+      val yesNoAnswer = YesNo(true)
+      "save subscription details with vat registered uk" in {
+        await(subscriptionDetailsHolderService.cacheVatRegisteredUk(yesNoAnswer))
+        val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+        val holder: SubscriptionDetails = requestCaptor.getValue
+        holder.vatRegisteredUk shouldBe Some(yesNoAnswer.isYes)
+      }
     }
-  }
 
-  "updateSubscriptionDetails" should {
-    val subscriptionDetails = SubscriptionDetails()
-    "save subscription details with details updated from cache" in {
-      when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
-      when(mockSessionCache.saveRegistrationDetails(any())(any())) thenReturn Future.successful(true)
-      when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
-      when(mockSessionCache.saveSubscriptionDetails(any())(any())) thenReturn Future.successful(true)
-      await(subscriptionDetailsHolderService.updateSubscriptionDetails(request))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-      val holder: SubscriptionDetails = requestCaptor.getValue
-      holder.nameDobDetails shouldBe subscriptionDetails.nameDobDetails
-      holder.nameOrganisationDetails shouldBe subscriptionDetails.nameOrganisationDetails
-      holder.formData shouldBe subscriptionDetails.formData
+    "cacheConsentToDisclosePersonalDetails" should {
+      val yesNoAnswer = YesNo(true)
+      "save subscription details with consent to disclose personal details" in {
+        await(subscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(yesNoAnswer))
+        val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+        val holder: SubscriptionDetails = requestCaptor.getValue
+        holder.personalDataDisclosureConsent shouldBe Some(yesNoAnswer.isYes)
+      }
+    }
+
+    "updateSubscriptionDetails" should {
+      val subscriptionDetails = SubscriptionDetails()
+      "save subscription details with details updated from cache" in {
+        when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
+        when(mockSessionCache.saveRegistrationDetails(any())(any())) thenReturn Future.successful(true)
+        when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
+        when(mockSessionCache.saveSubscriptionDetails(any())(any())) thenReturn Future.successful(true)
+        await(subscriptionDetailsHolderService.updateSubscriptionDetails(request))
+        val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+        val holder: SubscriptionDetails = requestCaptor.getValue
+        holder.nameDobDetails shouldBe subscriptionDetails.nameDobDetails
+        holder.nameOrganisationDetails shouldBe subscriptionDetails.nameOrganisationDetails
+        holder.formData shouldBe subscriptionDetails.formData
+      }
     }
   }
 }

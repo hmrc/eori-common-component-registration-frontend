@@ -36,7 +36,6 @@ case class SubscriptionDetails(
   personalDataDisclosureConsent: Option[Boolean] = None,
   contactDetails: Option[ContactDetailsModel] = None,
   sicCode: Option[String] = None,
-  vatVerificationOption: Option[Boolean] = None,
   eoriNumber: Option[String] = None,
   existingEoriNumber: Option[ExistingEori] = None,
   email: Option[String] = None,

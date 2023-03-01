@@ -21,16 +21,11 @@ import play.api.http.Status.OK
 import uk.gov.hmrc.auth.core.AuthConnector
 import play.api.mvc.Result
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import util.ControllerSpec
 import util.builders.{AuthActionMock, SessionBuilder}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import util.builders.AuthBuilder.withAuthorisedUser
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito._
-import play.api.mvc.Request
 import play.api.test.Helpers.{LOCATION, _}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatVerificationOption
 import unit.controllers.VatVerificationOptionBuilder._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,15 +36,11 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
   private val vatVerificationOptionView       = instanceOf[vat_verification_option]
   private val mockAuthConnector               = mock[AuthConnector]
   private val mockAuthAction                  = authAction(mockAuthConnector)
-  private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
 
   private val controller = new VatVerificationOptionController(
     mockAuthAction,
-    mockSubscriptionBusinessService,
     mcc,
-    vatVerificationOptionView,
-    mockSubscriptionDetailsService
+    vatVerificationOptionView
   )
 
   "VAT Verification Option Controller" should {
@@ -68,9 +59,6 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
     }
 
     "redirect to VAT details page for 'date' option" in {
-      when(
-        mockSubscriptionDetailsService.cacheVatVerificationOption(any[VatVerificationOption])(any[Request[_]])
-      ).thenReturn(Future.successful())
       submitForm(validRequestDate) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("/your-uk-vat-details")
@@ -78,9 +66,6 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
     }
 
     "redirect to cannot verify details page for 'amount' option" in {
-      when(
-        mockSubscriptionDetailsService.cacheVatVerificationOption(any[VatVerificationOption])(any[Request[_]])
-      ).thenReturn(Future.successful())
       submitForm(validRequestAmount) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("/you-cannot-register-using-this-service")
