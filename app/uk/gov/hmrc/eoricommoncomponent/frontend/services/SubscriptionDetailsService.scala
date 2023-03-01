@@ -149,7 +149,9 @@ class SubscriptionDetailsService @Inject() (
   def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(personalDataDisclosureConsent = Some(yesNoAnswer.isYes)))
 
-  def cacheVatVerificationOption(vatVerificationOption: VatVerificationOption)(implicit request: Request[_]): Future[Unit] =
+  def cacheVatVerificationOption(
+    vatVerificationOption: VatVerificationOption
+  )(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatVerificationOption = Some(vatVerificationOption.isDateOption)))
 
   private def contactDetails(view: ContactDetailsModel, isInReviewMode: Boolean)(implicit

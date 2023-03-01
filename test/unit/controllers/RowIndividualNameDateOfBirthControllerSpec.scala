@@ -41,7 +41,6 @@ import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.scalacheck.TestDataGenerators
 
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

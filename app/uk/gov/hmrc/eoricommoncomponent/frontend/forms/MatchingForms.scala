@@ -150,9 +150,13 @@ object MatchingForms extends Mappings {
   def vatVerificationOptionAnswerForm()(implicit messages: Messages): Form[VatVerificationOption] =
     createVatVerificationOptionAnswerForm("cds.subscription.vat-verification-option.error")
 
-  private def createVatVerificationOptionAnswerForm(invalidErrorMsgKey: String)(implicit messages: Messages): Form[VatVerificationOption] = Form(
+  private def createVatVerificationOptionAnswerForm(
+    invalidErrorMsgKey: String
+  )(implicit messages: Messages): Form[VatVerificationOption] = Form(
     mapping(
-      "vat-verification-option" -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))
+      "vat-verification-option" -> optional(
+        text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions))
+      )
         .verifying(messages(invalidErrorMsgKey), _.isDefined)
         .transform[Boolean](str => str.get.toBoolean, bool => Option(String.valueOf(bool)))
     )(VatVerificationOption.apply)(VatVerificationOption.unapply)

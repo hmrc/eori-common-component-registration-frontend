@@ -44,7 +44,6 @@ class OrganisationTypeController @Inject() (
   private def nameIdOrganisationMatching(orgType: String, service: Service): Call =
     NameIdOrganisationController.form(orgType, service)
 
-
   private def individualMatching(orgType: String, service: Service): Call =
     NameDobController.form(orgType, service)
 

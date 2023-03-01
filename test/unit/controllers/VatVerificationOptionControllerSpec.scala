@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-
 import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status.OK
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -39,11 +38,11 @@ import scala.concurrent.Future
 
 class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val vatVerificationOptionView = instanceOf[vat_verification_option]
-  private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction = authAction(mockAuthConnector)
+  private val vatVerificationOptionView       = instanceOf[vat_verification_option]
+  private val mockAuthConnector               = mock[AuthConnector]
+  private val mockAuthAction                  = authAction(mockAuthConnector)
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
 
   private val controller = new VatVerificationOptionController(
     mockAuthAction,
@@ -69,7 +68,9 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
     }
 
     "redirect to VAT details page for 'date' option" in {
-      when(mockSubscriptionDetailsService.cacheVatVerificationOption(any[VatVerificationOption])(any[Request[_]])).thenReturn(Future.successful())
+      when(
+        mockSubscriptionDetailsService.cacheVatVerificationOption(any[VatVerificationOption])(any[Request[_]])
+      ).thenReturn(Future.successful())
       submitForm(validRequestDate) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("/your-uk-vat-details")
@@ -77,7 +78,9 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
     }
 
     "redirect to cannot verify details page for 'amount' option" in {
-      when(mockSubscriptionDetailsService.cacheVatVerificationOption(any[VatVerificationOption])(any[Request[_]])).thenReturn(Future.successful())
+      when(
+        mockSubscriptionDetailsService.cacheVatVerificationOption(any[VatVerificationOption])(any[Request[_]])
+      ).thenReturn(Future.successful())
       submitForm(validRequestAmount) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("/you-cannot-register-using-this-service")
@@ -90,21 +93,20 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
-  private def submitForm(form: Map[String, String])(
-    test: Future[Result] => Any
-  ): Unit = {
+  private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
   }
+
 }
 
 object VatVerificationOptionBuilder {
   private val dateOrAmountInput = "vat-verification-option"
-  private val answerDate = true.toString
-  private val answerAmount = false.toString
-  private val invalidOption = ""
+  private val answerDate        = true.toString
+  private val answerAmount      = false.toString
+  private val invalidOption     = ""
 
-  val validRequestDate: Map[String, String] = Map(dateOrAmountInput -> answerDate)
+  val validRequestDate: Map[String, String]   = Map(dateOrAmountInput -> answerDate)
   val validRequestAmount: Map[String, String] = Map(dateOrAmountInput -> answerAmount)
-  val invalidRequest: Map[String, String] = Map(dateOrAmountInput -> invalidOption)
+  val invalidRequest: Map[String, String]     = Map(dateOrAmountInput -> invalidOption)
 }

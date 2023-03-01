@@ -111,4 +111,5 @@ class VatDetailsController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(weCannotConfirmYourIdentity(isInReviewMode, service)))
     }
+
 }

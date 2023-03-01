@@ -32,7 +32,6 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
 
   private val view = instanceOf[we_cannot_confirm_your_identity]
 
-
   "The 'We cannot confirm your identity' Page" should {
 
     "display correct title" in {
