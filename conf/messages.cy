@@ -482,10 +482,12 @@ cds.registration.use-a-different-service.vat-registered=wedi cofrestru ar gyfer 
 cds.registration.use-a-different-service.not-vat-registered=heb gofrestru ar gyfer TAW
 
 cds.subscription.vat-verification-option.yes=Y dyddiad y gwnaethoch gofrestru ar gyfer TAW
-
 cds.subscription.vat-verification-option.no=Cyfanswm eich Ffurflen TAW ddiweddaraf
 cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddefnyddio i gadarnhau pwy ydych?
 cds.subscription.vat-verification-option.error=TRANSLATE Select if you want to use VAT registration date or latest VAT Return total
+cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych. <br><br> Gallwch ddod o hyd i'’'r enw hwn ar ddogfennau gan CThEF. Er enghraifft, cadarnhad o gofrestriad eich partneriaeth
+cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
+cds.matching.name-id-organisation.limited-liability-partnership.name = Enw’r bartneriaeth gofrestredig
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
 cds.matching.organisation-type.user.header = Fel beth rydych am wneud cais?
@@ -550,19 +552,19 @@ cds.matching.organisation-address.line-4.error.too-long = Rhaid i’r Rhanbarth 
 cds.matching.organisation-address.postcode.error.empty = Nodwch god post dilys
 cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
-cds.matching.name-id-organisation.company.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-company.name = Enw’r cwmni cofrestredig
-cds.matching.name-id-organisation.registered-company.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.registered-company.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p> Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni.
 cds.matching.name-id-organisation.partnership.name = Enw’r bartneriaeth gofrestredig
-cds.matching.name-id-organisation.partnership.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.organisation.name = Enw’r sefydliad
-cds.matching.name-id-organisation.organisation.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.organisation.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
 cds.matching.name-id-organisation.organisation.no-utr=Nid oes gennyf Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.organisation.no-utr.text=Os ydych yn sefydliad nid er elw neu’n gorff cyhoeddus, ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr, bydd angen i chi {0} i gwblhau’ch cais am rif EORI.
 cds.matching.name-id-organisation.organisation.no-utr.link=ddefnyddio gwasanaeth arall
 cds.matching.name-id-organisation.not-registered = Os nad ydych wedi’ch cofrestru ar gyfer Hunanasesiad, neu os yw’ch cofrestriad ar y gweill ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) eto, gallwch <a href="{0}" class="govuk-link">gofrestru gan ddefnyddio’ch enw a chyfeiriad</a> yn lle hynny.
 cds.matching.name-id-organisation.eu-organisation.name = Enw’r sefydliad cofrestredig
-cds.matching.name-id-organisation.eu-organisation.name.hint = Mae hyn ar eich tystysgrif ymgorffori oddi wrth Dŷ’r Cwmnïau.
+cds.matching.name-id-organisation.eu-organisation.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.eu-organisation.eori = Rhif EORI
 cds.matching.name-id-organisation.eu-organisation.name-and-address = Os nad oes gennych EORI, gallwch <a href="{0}" class="govuk-link">gofrestru gan ddefnyddio’ch enw a chyfeiriad</a> yn lle hynny.
 cds.matching.name-id-organisation.eu-organisation.date-established = Dyddiad sefydlu
@@ -846,10 +848,11 @@ cds.subscription.date-of-birth.error.invalid.date-of-birth = Nodwch ddyddiad gen
 cds.subscription.date-of-birth.error.in-future.date-of-birth = Ni allwch nodi dyddiad geni sydd yn y dyfodol
 cds.subscription.date-of-establishment.steps = eich manylion
 cds.subscription.date-of-establishment.title-and-heading = Dyddiad y sefydlwyd eich sefydliad
-cds.subscription.partnership.date-of-establishment.title-and-heading = Dyddiad y sefydlwyd eich partneriaeth
+cds.subscription.partnership.date-of-establishment.title-and-heading = Pryd y cafodd y bartneriaeth ei sefydlu?
 cds.subscription.date-of-establishment.date-of-establishment.label = Dyddiad sefydlu
 cds.subscription.date-of-establishment.page-error.date-of-establishment = Nodwch eich dyddiad sefydlu
 cds.subscription.business.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich cwmni. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich cwmni ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
+cds.subscription.business.date-established.label.partnership = Nodwch y dyddiad y gwnaethoch gofrestru’ch partneriaeth gyda CThEF.
 cds.subscription.llp.date-established.charity-label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich sefydliad. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich sefydliad ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
 cds.subscription.llp.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r bartneriaeth. Gallwch ddod o hyd i ddyddiad sefydlu’ch busnes ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
 cds.subscription.row.date-established.label = Nodwch ddyddiad sefydlu’ch sefydliad
@@ -933,7 +936,7 @@ cds.subscription.outcomes.success.extra.information.next.ctc =<li>cyflwyno datga
 cds.subscription.outcomes.success.extra.information.next.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
 
 cds.subscription.outcomes.success.extra.information.bullet1 = tanysgrifio i ragor o wasanaethau tollau
-cds.subscription.outcomes.success.extra.information.bullet2 = cael rhif EORI yn dechrau gydag XI
+cds.subscription.outcomes.success.extra.information.bullet2 = cael rhif EORI yn dechrau gydag XI, os ydych yn symud nwyddau i Ogledd Iwerddon neu oddi yno
 
 cds.subscription.outcomes.success.extra.information1 = Bydd eich rhif EORI GB newydd yn barod i’w ddefnyddio cyn pen 48 awr. Unwaith y bydd eich rhif EORI GB yn weithredol, byddwn yn anfon e-bost atoch yn rhoi gwybod bod eich cais wedi’i gwblhau. Os hoffech wirio statws eich rhif EORI GB, gallwch ddefnyddio’r {0}. Nid oes gan eich rhif EORI GB newydd ddyddiad dod i ben.
 cds.subscription.outcomes.success.extra.information2 = gwasanaeth gwirio rhif EORI (yn agor tab newydd)
@@ -1598,8 +1601,8 @@ ecc.start-page.solo.title = Os byddwch yn gwneud cais fel unig fasnachwr neu fel
 ecc.start-page.gbeori.para3.title = Byddwn yn gofyn am un o’r canlynol er mwyn cadarnhau pwy ydych:
 ecc.start-page.gbeori.para3.bullet1 = rhif Yswiriant Gwladol, os ydych wedi gweithio yn y DU
 ecc.start-page.gbeori.para3.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad, os ydych wedi cofrestru ar gyfer Hunanasesiad
-ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewis cod SIC (yn agor ffenestr neu dab newydd)</a>.
-
+ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor mewn ffenestr neu dab newydd)</a>
+ecc.start-page.gbeori.link.text =  o'’'r rhestr ar wefan Dŷ'’'r Cwmnïau.
 ecc.start-page.company.title = Cod Dosbarthiad Diwydiannol Safonol (cod SIC)
 ecc.start-page.company = Mae cod SIC yn dangos yr hyn y mae sefydliadau’n eu gwneud. Byddwn yn gofyn i chi nodi’r cyfeirnod hwn os byddwch y gwneud cais fel un o’r canlynol:
 ecc.start-page.company.bullet1 = cwmni neu sefydliad arall

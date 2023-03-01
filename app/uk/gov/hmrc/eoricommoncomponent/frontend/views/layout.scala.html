@@ -28,6 +28,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcTimeoutDialogHelper, HmrcLanguageSelectHelper}
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.ReportTechnicalIssue
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.userresearchbanner.UserResearchBanner
 
 @this(hmrcLayout: HmrcLayout,
         standardBetaBanner: StandardBetaBanner,
@@ -38,11 +39,13 @@
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
         hmrcLanguageSelectHelper: HmrcLanguageSelectHelper)
 
+
 @(  title: String,
     countriesInCountryPicker: CountriesInCountryPicker = NoCountriesInCountryPicker,
     form: Option[Form[_]] = None,
     suppressTelephoneNumberDetection: Boolean = true,
-    displayBackLink: Boolean = true
+    displayBackLink: Boolean = true,
+    userResearchBanner:Boolean = true,
 )(contentBlock: Html)(implicit messages: Messages, request: Request[_])
 
 @isLoggedIn = @{
@@ -128,6 +131,7 @@
 
 
 @hmrcLayout(
+    userResearchBannerUrl = if(userResearchBanner) Some(appConfig.userResearchBannerUrl) else None,
     pageTitle = Some(titleErr),
     isWelshTranslationAvailable = true, /* or false if your service has not been translated */
     serviceUrl = None,

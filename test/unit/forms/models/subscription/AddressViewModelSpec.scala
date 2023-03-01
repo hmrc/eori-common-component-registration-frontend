@@ -53,6 +53,25 @@ class AddressViewModelSpec extends UnitSpec {
       AddressViewModel(address) shouldEqual expectedAddress
     }
 
+    "special characters not escaped in address" in {
+
+      val addressLine1WithSpecial = addressLine1 + " & co"
+
+      val address = Address(
+        addressLine1WithSpecial,
+        Some(addressLine2),
+        Some(addressLine3),
+        Some(addressLine4),
+        Some(postCode),
+        countryCode
+      )
+
+      val expectedAddressWithSpecial =
+        AddressViewModel(addressLine1WithSpecial + " " + addressLine2, addressLine3, Some(postCode), countryCode)
+
+      AddressViewModel(address) shouldEqual expectedAddressWithSpecial
+    }
+
     "limit line 2 field to 35 chars" in {
       val longAddress = Address(
         addressLine1,

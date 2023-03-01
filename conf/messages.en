@@ -611,13 +611,13 @@ cds.matching.organisation-address.country.error.empty=Enter your country
 
 # Name and Utr for an Organisation Match
 cds.matching.name-id-organisation.company.name=Company name
-cds.matching.name-id-organisation.company.name.hint=This is on your certificate of incorporation from Companies House.
+cds.matching.name-id-organisation.company.name.hint=Enter the exact name that’s on your company'’'s certificate of incorporation. We will use this to verify your identity.
 cds.matching.name-id-organisation.registered-company.name=Registered company name
-cds.matching.name-id-organisation.registered-company.name.hint=This is on your certificate of incorporation from Companies House.
+cds.matching.name-id-organisation.registered-company.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p> Enter the exact name that'''s on your company’s certificate of incorporation.
 cds.matching.name-id-organisation.partnership.name=Registered partnership name
-cds.matching.name-id-organisation.partnership.name.hint=This is on your certificate of incorporation from Companies House.
+cds.matching.name-id-organisation.partnership.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get this name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
 cds.matching.name-id-organisation.organisation.name=Organisation name
-cds.matching.name-id-organisation.organisation.name.hint=This is on your certificate of incorporation from Companies House.
+cds.matching.name-id-organisation.organisation.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your organisation’s certificate of incorporation.
 cds.matching.name-id-organisation.organisation.no-utr=I do not have a Corporation Tax UTR
 cds.matching.name-id-organisation.organisation.no-utr.text=If you are a not for profit organisation or public body and do not have a UTR you need to {0} to complete your EORI number application.
 cds.matching.name-id-organisation.organisation.no-utr.link=use another service
@@ -955,10 +955,11 @@ cds.subscription.date-of-birth.error.in-future.date-of-birth=You cannot enter a 
 
 cds.subscription.date-of-establishment.steps=your details
 cds.subscription.date-of-establishment.title-and-heading=Date when your organisation was established
-cds.subscription.partnership.date-of-establishment.title-and-heading=Date when your partnership was established
+cds.subscription.partnership.date-of-establishment.title-and-heading=When was the partnership established?
 cds.subscription.date-of-establishment.date-of-establishment.label=Date of establishment
 cds.subscription.date-of-establishment.page-error.date-of-establishment=Enter your date of establishment
 cds.subscription.business.date-established.label=Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
+cds.subscription.business.date-established.label.partnership =Enter the date that you registered your partnership with HMRC.
 cds.subscription.llp.date-established.charity-label=Enter the date shown on your organisation’s certificate of incorporation. You can find the date your organisation was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 cds.subscription.llp.date-established.label=Enter the date shown on the partnership’s certificate of incorporation. You can find the date your business was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 cds.subscription.row.date-established.label=Enter the date your organisation was established
@@ -1032,7 +1033,7 @@ cds.subscription.outcomes.success.extra.information.next.ctc =<li>submit union t
 cds.subscription.outcomes.success.extra.information.next.cds =<li>use the Customs Declaration Service</li>
 
 cds.subscription.outcomes.success.extra.information.bullet1 = subscribe to more customs services
-cds.subscription.outcomes.success.extra.information.bullet2 = get an EORI number starting with XI
+cds.subscription.outcomes.success.extra.information.bullet2 = get an EORI number starting with XI, if you move goods to or from Northern Ireland
 
 
 cds.subscription.outcomes.success.extra.information.when-you-can=When you can start using your subscription and EORI number
@@ -1207,6 +1208,12 @@ cds.subscription.address-details.page-error.postcode=Enter a valid postcode
 cds.subscription.address-details.page-error.countryCode=Enter your country
 cds.subscription.address-details.countryCode.error.label=Enter your country
 cds.subscription.address-details.country.emptyValueText=Pick a country
+cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
+cds.matching.name-id-organisation.registered-partnership.name.hint = Enter the exact name that you registered with HMRC. We will use this to verify your identity. <br><br> You can find this name on documents from HMRC. For example, a confirmation of your partnership registration.
+
+cds.matching.name-id-organisation.limited-liability-partnership.name = Registered partnership name
+cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
+
 
 #address check limited companies
 confirm-business-details.heading2=Are these the organisation details you want to use to get an EORI number?
@@ -1831,8 +1838,8 @@ ecc.start-page.solo.title = If you apply as a sole trader or individual
 ecc.start-page.gbeori.para3.title = We will verify your identity by asking for one of the following:
 ecc.start-page.gbeori.para3.bullet1 = National Insurance number, if you have worked in the UK
 ecc.start-page.gbeori.para3.bullet2 = Self Assessment Unique Taxpayer Reference (UTR), if you registered for Self Assessment
-ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a>.
-
+ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a>
+ecc.start-page.gbeori.link.text = from the list on Companies House
 ecc.start-page.company.title = Standard Industrial Classification Code (SIC code)
 
 ecc.start-page.company = A SIC code identifies what organisations do. We will ask you to enter one if you apply as:

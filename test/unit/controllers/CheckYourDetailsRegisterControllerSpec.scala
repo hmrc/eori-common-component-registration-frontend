@@ -435,7 +435,9 @@ class CheckYourDetailsRegisterControllerSpec
       val page: CdsPage = CdsPage(contentAsString(result))
       page.title should startWith("Check your answers")
 
-      page.h2() should startWith("Company details VAT details Contact details Declaration")
+      page.h2() should startWith(
+        "Help improve HMRC services Company details VAT details Contact details Declaration Support links"
+      )
 
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -620,7 +622,9 @@ class CheckYourDetailsRegisterControllerSpec
       val page: CdsPage = CdsPage(contentAsString(result))
       page.title should startWith("Check your answers")
 
-      page.h2() should startWith("Partnership details VAT details Contact details Declaration")
+      page.h2() should startWith(
+        "Help improve HMRC services Partnership details VAT details Contact details Declaration Support links"
+      )
 
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -783,7 +787,7 @@ class CheckYourDetailsRegisterControllerSpec
     showForm(userSelectedOrgType = Individual, isIndividualSubscriptionFlow = true) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
 
-      page.h2() should startWith("Your details Contact details Declaration")
+      page.h2() should startWith("Help improve HMRC services Your details Contact details Declaration Support links")
 
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,

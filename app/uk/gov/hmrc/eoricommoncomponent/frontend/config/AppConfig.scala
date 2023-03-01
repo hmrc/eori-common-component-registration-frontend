@@ -122,6 +122,8 @@ class AppConfig @Inject() (
 
   val standaloneServiceCode: String = config.get[String]("application.standalone.service.code")
 
+  val userResearchBannerUrl: String = config.get[String]("external-url.user-research-bannerUrl")
+
   def getServiceUrl(proxyServiceName: String): String = {
     val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
     val serviceContext =
