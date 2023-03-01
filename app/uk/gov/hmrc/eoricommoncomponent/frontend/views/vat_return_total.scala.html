@@ -35,14 +35,14 @@
  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatReturnController.submit(service)
 }
 
-@layout_di(messages("Working on this page"), form = Some(vatReturnForm)) {
+@layout_di(messages("cds.subscription.vat-registration.vat-return.title"), form = Some(vatReturnForm)) {
   <div>
    @errorSummary(vatReturnForm.errors)
    @helpers.form(vatFormAction,  "vat-return-form") {
 
-    <h1 class="govuk-heading-l">What is your latest VAT Return total?</h1>
-    <p class="govuk-body">You can find this amount in box number 5 on your latest VAT Return submitted to HMRC.</p>
-    <p class="govuk-body">The format of this number needs to be two decimal places, for example £123.00</p>
+    <h1 class="govuk-heading-l">@messages("cds.subscription.vat-registration.vat-return.title")</h1>
+    <p class="govuk-body">@messages("cds.subscription.vat-registration.vat-return.para1")</p>
+    <p class="govuk-body">@messages("cds.subscription.vat-registration.vat-return.para2")</p>
      @CSRF.formField
 
     @inputText(
