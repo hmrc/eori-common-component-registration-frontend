@@ -1182,7 +1182,7 @@ cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on 
 cds.matching.name-id-organisation.registered-partnership.name.hint = Enter the exact name that you registered with HMRC. We will use this to verify your identity. <br><br> You can find this name on documents from HMRC. For example, a confirmation of your partnership registration.
 
 cds.matching.name-id-organisation.limited-liability-partnership.name = Registered partnership name
-cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">We will use this to verify your identity. You can get this name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
+cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
 
 
 #address check limited companies
