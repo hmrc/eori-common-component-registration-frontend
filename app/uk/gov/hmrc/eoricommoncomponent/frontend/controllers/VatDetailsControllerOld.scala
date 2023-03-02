@@ -129,7 +129,11 @@ class VatDetailsControllerOld @Inject() (
 
   def vatDetailsNotMatched(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(weCannotConfirmYourIdentity(isInReviewMode, service)))
+      val tryAgainUrl = isInReviewMode match {
+        case true  => VatDetailsControllerOld.reviewForm(service).url
+        case false => VatDetailsControllerOld.createForm(service).url
+      }
+      Future.successful(Ok(weCannotConfirmYourIdentity(isInReviewMode, tryAgainUrl, service)))
     }
 
 }

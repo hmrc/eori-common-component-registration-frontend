@@ -100,26 +100,25 @@ class VatRegisteredUkController @Inject() (
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatRegisteredUk(yesNoAnswer).flatMap {
               _ =>
-                (isInReviewMode, yesNoAnswer.isYes, featureFlags.useNewVATJourney) match {
-                  case (false, true, false) =>
-                    Future.successful(Redirect(VatDetailsControllerOld.createForm(service).url))
-                  case (true, true, false) =>
-                    Future.successful(Redirect(VatDetailsControllerOld.reviewForm(service).url))
-                  case (false, true, true) => Future.successful(Redirect(VatDetailsController.createForm(service).url))
-                  case (true, true, true)  => Future.successful(Redirect(VatDetailsController.reviewForm(service).url))
-                  case (false, false, _) =>
-                    subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
-                      Future.successful(
-                        Redirect(
-                          subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
-                        )
-                      )
+                val result = (isInReviewMode, yesNoAnswer.isYes, featureFlags.useNewVATJourney) match {
+                  case (false, true, false) => Future.successful(VatDetailsControllerOld.createForm(service).url)
+                  case (true, true, false)  => Future.successful(VatDetailsControllerOld.reviewForm(service).url)
+                  case (false, true, true)  => Future.successful(VatDetailsController.createForm(service).url)
+                  case (true, true, true)   => Future.successful(VatDetailsController.reviewForm(service).url)
+                  case (false, false, true) =>
+                    subscriptionDetailsService.clearCachedUkVatDetails map { _ =>
+                      subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
+                    }
+                  case (false, false, false) =>
+                    subscriptionDetailsService.clearCachedUkVatDetailsOld map { _ =>
+                      subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
                     }
                   case (true, false, _) =>
                     subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
-                      Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
+                      Future.successful(DetermineReviewPageController.determineRoute(service).url)
                     }
                 }
+                result.map(t => Redirect(t))
             }
         )
     }

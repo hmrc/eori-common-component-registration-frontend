@@ -93,7 +93,7 @@ class VatDetailsController @Inject() (
                   Redirect(VatVerificationOptionController.createForm(service))
                 else
                   //TODO: New page NO return is NOT available
-                  Ok(weCannotConfirmYourIdentity(isInReviewMode, service))
+                  Ok(weCannotConfirmYourIdentity(isInReviewMode, VatDetailsController.createForm(service).url, service))
             )
         else
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
@@ -109,7 +109,11 @@ class VatDetailsController @Inject() (
 
   def vatDetailsNotMatched(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(weCannotConfirmYourIdentity(isInReviewMode, service)))
+      val tryAgainUrl = isInReviewMode match {
+        case true  => VatDetailsController.reviewForm(service).url
+        case false => VatDetailsController.createForm(service).url
+      }
+      Future.successful(Ok(weCannotConfirmYourIdentity(isInReviewMode, tryAgainUrl, service)))
     }
 
 }
