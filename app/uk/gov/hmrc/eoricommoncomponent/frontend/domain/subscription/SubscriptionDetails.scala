@@ -34,6 +34,7 @@ case class SubscriptionDetails(
   vatRegisteredUk: Option[Boolean] = None,
   ukVatDetails: Option[VatDetails] = None,
   vatControlListResponse: Option[VatControlListResponse] = None,
+  vatAmountUserInput: Option[String] = None,
   ukVatDetailsOld: Option[VatDetailsOld] = None,
   personalDataDisclosureConsent: Option[Boolean] = None,
   contactDetails: Option[ContactDetailsModel] = None,

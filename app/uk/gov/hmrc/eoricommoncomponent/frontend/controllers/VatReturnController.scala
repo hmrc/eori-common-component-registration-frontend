@@ -34,6 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatReturnController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
+  subscriptionDetailsService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
   vatReturnTotalView: vat_return_total,
   weCannotConfirmYourIdentity: we_cannot_confirm_your_identity
@@ -54,12 +55,13 @@ class VatReturnController @Inject() (
       )
     }
 
-  def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit
+  private def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)
           if response.lastNetDue.getOrElse("no amount found") == vatReturnTotal.returnAmountInput.toDouble =>
+        subscriptionDetailsService.cacheUserVatAmountInput(vatReturnTotal.returnAmountInput)
         Redirect(ContactDetailsController.createForm(service))
       case _ => Ok(weCannotConfirmYourIdentity(isInReviewMode = false, service))
     }

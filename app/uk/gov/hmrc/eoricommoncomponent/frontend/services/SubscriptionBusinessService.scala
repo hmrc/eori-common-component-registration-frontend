@@ -32,67 +32,72 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionBusinessService @Inject() (cdsFrontendDataCache: SessionCache)(implicit ec: ExecutionContext) {
+class SubscriptionBusinessService @Inject()(sessionCache: SessionCache)(implicit ec: ExecutionContext) {
 
   def cachedContactDetailsModel(implicit request: Request[_]): Future[Option[ContactDetailsModel]] =
-    cdsFrontendDataCache.subscriptionDetails map (_.contactDetails)
+    sessionCache.subscriptionDetails map (_.contactDetails)
 
   def getCachedDateEstablished(implicit request: Request[_]): Future[LocalDate] =
-    cdsFrontendDataCache.subscriptionDetails map {
+    sessionCache.subscriptionDetails map {
       _.dateEstablished.getOrElse(throw new IllegalStateException("No Date Of Establishment Cached"))
     }
 
   def maybeCachedDateEstablished(implicit request: Request[_]): Future[Option[LocalDate]] =
-    cdsFrontendDataCache.subscriptionDetails map (_.dateEstablished)
+    sessionCache.subscriptionDetails map (_.dateEstablished)
 
   def getCachedSicCode(implicit request: Request[_]): Future[String] =
-    cdsFrontendDataCache.subscriptionDetails map {
+    sessionCache.subscriptionDetails map {
       _.sicCode.getOrElse(throw new IllegalStateException("No SIC Code Cached"))
     }
 
   def cachedSicCode(implicit request: Request[_]): Future[Option[String]] =
-    cdsFrontendDataCache.subscriptionDetails map (_.sicCode)
+    sessionCache.subscriptionDetails map (_.sicCode)
 
   def getCachedPersonalDataDisclosureConsent(implicit request: Request[_]): Future[Boolean] =
-    cdsFrontendDataCache.subscriptionDetails map {
+    sessionCache.subscriptionDetails map {
       _.personalDataDisclosureConsent.getOrElse(
         throw new IllegalStateException("No Personal Data Disclosure Consent Cached")
       )
     }
 
   def getCachedVatRegisteredUk(implicit request: Request[_]): Future[Boolean] =
-    cdsFrontendDataCache.subscriptionDetails map {
+    sessionCache.subscriptionDetails map {
       _.vatRegisteredUk.getOrElse(
         throw new IllegalStateException("Whether the business is VAT registered in the UK has not been Cached")
       )
     }
 
   def getCachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
+    sessionCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.customsId
     }
 
   def getCachedNinoOrUtrChoice(implicit request: Request[_]): Future[Option[String]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
+    sessionCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.formData.ninoOrUtrChoice
     }
 
   def getCachedUkVatDetailsOld(implicit request: Request[_]): Future[Option[VatDetailsOld]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
+    sessionCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.ukVatDetailsOld
     }
 
   def getCachedUkVatDetails(implicit request: Request[_]): Future[Option[VatDetails]] =
-    cdsFrontendDataCache.subscriptionDetails map { subscriptionDetails =>
+    sessionCache.subscriptionDetails map { subscriptionDetails =>
       subscriptionDetails.ukVatDetails
     }
 
   def getCachedVatControlListResponse(implicit request: Request[_]): Future[Option[VatControlListResponse]] =
-    cdsFrontendDataCache.subscriptionDetails map {
+    sessionCache.subscriptionDetails map {
       subscriptionDetails => subscriptionDetails.vatControlListResponse
     }
 
+  def getCachedVatUserInputAmount(implicit request: Request[_]): Future[Option[String]] =
+    sessionCache.subscriptionDetails map {
+      subscriptionDetails => subscriptionDetails.vatAmountUserInput
+    }
+
   def retrieveSubscriptionDetailsHolder(implicit request: Request[_]): Future[SubscriptionDetails] =
-    cdsFrontendDataCache.subscriptionDetails
+    sessionCache.subscriptionDetails
 
 }

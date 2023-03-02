@@ -1017,7 +1017,7 @@ cds.subscription.outcomes.success.heading=The EORI number for {0} is
 cds.subscription.outcomes.success.issued=issued by HMRC on
 cds.subscription.outcomes.success.eori=Your new EORI number is:
 cds.subscription.outcomes.success.optional-paragraph=We have sent you an email to confirm your subscription request to get a goods movement reference.
-cds.subscription.outcomes.success.application-info=Your application gives you
+cds.subscription.outcomes.success.application-info=Your application gives you:
 cds.subscription.outcomes.success.application-info.bullet2=an EORI number
 
 cds.subscription.outcomes.success.extra.information.next=What happens next
@@ -1173,7 +1173,6 @@ cds.subscription.vat-group.page-error.yes-no-answer=Tell us if your organisation
 cds.subscription.vat-group.partnership.page-error.yes-no-answer=Tell us if your partnership is part of a VAT group in the UK
 cds.subscription.vat-registration.form-error.vat-group=Tell us if your organisation is part of a VAT group in the UK
 
-cds.subscription.vat-registration.form-error.vat-verification-option=Tell us if your organisation is part of a VAT group in the UK
 cds.subscription.vat-registration.vat-return.title = What is your latest VAT Return total?
 cds.subscription.vat-registration.vat-return.para1 = You can find this amount in box number 5 on your latest VAT Return submitted to HMRC.
 cds.subscription.vat-registration.vat-return.para2 = The format of this number needs to be two decimal places, for example £123.00

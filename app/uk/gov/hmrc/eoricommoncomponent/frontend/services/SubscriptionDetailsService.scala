@@ -115,6 +115,8 @@ class SubscriptionDetailsService @Inject() (
   def cacheSicCode(sicCode: String)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(sicCode = Some(sicCode)))
 
+  def cacheUserVatAmountInput(vatInput: String)(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(vatAmountUserInput = Some(vatInput)))
   def cacheDateEstablished(date: LocalDate)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(dateEstablished = Some(date)))
 

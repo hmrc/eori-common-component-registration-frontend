@@ -52,7 +52,7 @@ class VatVerificationOptionController @Inject() (
               if (VatVerificationOption.isDateOption)
                 Future.successful(Redirect(VatDetailsController.createForm(service)))
               else
-                Future.successful(Redirect(Vat.createForm(service)))
+                Future.successful(Redirect(VatReturnController.createForm(service)))
           )
     }
 

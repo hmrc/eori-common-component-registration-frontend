@@ -64,7 +64,7 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
     "redirect to cannot verify details page for 'amount' option" in {
       submitForm(validRequestAmount) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/you-cannot-register-using-this-service")
+        result.header.headers(LOCATION) should endWith("/your-uk-vat-details-return")
       }
     }
   }
