@@ -1173,6 +1173,7 @@ cds.subscription.vat-group.page-error.yes-no-answer=Tell us if your organisation
 cds.subscription.vat-group.partnership.page-error.yes-no-answer=Tell us if your partnership is part of a VAT group in the UK
 cds.subscription.vat-registration.form-error.vat-group=Tell us if your organisation is part of a VAT group in the UK
 
+
 cds.subscription.vat-registration.vat-return.title = What is your latest VAT Return total?
 cds.subscription.vat-registration.vat-return.para1 = You can find this amount in box number 5 on your latest VAT Return submitted to HMRC.
 cds.subscription.vat-registration.vat-return.para2 = The format of this number needs to be two decimal places, for example £123.00

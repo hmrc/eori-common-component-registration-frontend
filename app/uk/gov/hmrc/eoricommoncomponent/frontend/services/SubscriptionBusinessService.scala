@@ -88,6 +88,7 @@ class SubscriptionBusinessService @Inject()(sessionCache: SessionCache)(implicit
     }
 
   def getCachedVatControlListResponse(implicit request: Request[_]): Future[Option[VatControlListResponse]] =
+
     sessionCache.subscriptionDetails map {
       subscriptionDetails => subscriptionDetails.vatControlListResponse
     }
@@ -96,6 +97,7 @@ class SubscriptionBusinessService @Inject()(sessionCache: SessionCache)(implicit
     sessionCache.subscriptionDetails map {
       subscriptionDetails => subscriptionDetails.vatAmountUserInput
     }
+
 
   def retrieveSubscriptionDetailsHolder(implicit request: Request[_]): Future[SubscriptionDetails] =
     sessionCache.subscriptionDetails

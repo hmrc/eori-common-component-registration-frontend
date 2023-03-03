@@ -26,7 +26,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   AddressViewModel,
   ContactDetailsModel,
   VatDetails,
-
   VatDetailsOld
 
 }

@@ -55,8 +55,8 @@ class VatReturnController @Inject() (
       )
     }
 
-  private def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit
-    request: Request[AnyContent]
+
+private def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit request: Request[AnyContent]
   ): Future[Result] =
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)

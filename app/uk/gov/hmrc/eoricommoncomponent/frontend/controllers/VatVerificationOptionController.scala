@@ -41,6 +41,7 @@ class VatVerificationOptionController @Inject() (
         Future.successful(Ok(vatVerificationView(vatVerificationOptionAnswerForm(), service)))
     }
 
+
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request =>
       _: LoggedInUserWithEnrolments =>
@@ -54,6 +55,7 @@ class VatVerificationOptionController @Inject() (
               else
                 Future.successful(Redirect(VatReturnController.createForm(service)))
           )
+
     }
 
 }
