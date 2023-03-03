@@ -41,20 +41,18 @@ class VatVerificationOptionController @Inject() (
         Future.successful(Ok(vatVerificationView(vatVerificationOptionAnswerForm(), service)))
     }
 
-
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request =>
-      _: LoggedInUserWithEnrolments =>
-        vatVerificationOptionAnswerForm()
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(vatVerificationView(formWithErrors, service))),
-            VatVerificationOption =>
-              if (VatVerificationOption.isDateOption)
-                Future.successful(Redirect(VatDetailsController.createForm(service)))
-              else
-                Future.successful(Redirect(VatReturnController.createForm(service)))
-          )
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+      vatVerificationOptionAnswerForm()
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(vatVerificationView(formWithErrors, service))),
+          VatVerificationOption =>
+            if (VatVerificationOption.isDateOption)
+              Future.successful(Redirect(VatDetailsController.createForm(service)))
+            else
+              Future.successful(Redirect(VatReturnController.createForm(service)))
+        )
 
     }
 

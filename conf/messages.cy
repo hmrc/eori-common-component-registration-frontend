@@ -1662,3 +1662,6 @@ ecc.eori-exists-group.admin.cds.para2 = Bydd angen iddo fewngofnodi a dilyn cama
 ecc.eori-exists-group.cds.para1 = Os ydych am gael mynediad at CDS, mae angen i chi fynd i ‘Rheoli cyfrif’, a dilyn camau 6, 7, 8 a 9 er mwyn {0}.
 ecc.eori-exists-group.cds.admin.link = rhoi’r gallu i aelod o’r tîm gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
 ecc.eori-exists-group.cds.link = rhoi’r gallu i chi’ch hun gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
+
+ecc.eor-vat-return-error.incorrect.input =  Nodwch werth hyd at 2 le degol. Er enghraifft, £100.00
+ecc.eor-vat-return-error.incorrect.no-input = Nodwch gyfanswm eich Ffurflen TAW ddiweddaraf neu swm Blwch 5

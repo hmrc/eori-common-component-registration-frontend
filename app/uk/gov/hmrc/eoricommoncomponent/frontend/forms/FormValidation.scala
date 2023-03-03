@@ -35,9 +35,7 @@ object FormValidation {
 
   private val noTagsRegex = "^[^<>]+$"
 
-
   val amountRegex: Regex = "^([0-9]+\\.[0-9]{2})$".r
-
 
   def postcodeMapping: Mapping[Option[String]] =
     ConditionalMapping(

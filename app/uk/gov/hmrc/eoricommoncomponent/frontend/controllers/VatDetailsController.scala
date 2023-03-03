@@ -95,7 +95,7 @@ class VatDetailsController @Inject() (
                 else
                   //TODO: New page NO return is NOT available
                   Ok(weCannotConfirmYourIdentity(isInReviewMode, VatDetailsController.createForm(service).url, service))
-            )
+            }
         else
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
       case Left(errorResponse) =>

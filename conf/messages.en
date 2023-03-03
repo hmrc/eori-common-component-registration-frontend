@@ -1905,3 +1905,7 @@ ecc.eori-exists-group.admin.cds.para2 = They will need to sign in and follow ste
 ecc.eori-exists-group.cds.para1 = If you want access to CDS, you need to go to manage account, and follow steps 6, 7, 8 and 9 to {0}.
 ecc.eori-exists-group.cds.admin.link = give a team member access to a tax duty or scheme (opens in new tab)
 ecc.eori-exists-group.cds.link = give yourself access to a tax, duty or scheme (opens in new tab)
+
+
+ecc.eor-vat-return-error.incorrect.input = Enter a value to 2 decimal places. For example, £100.00
+ecc.eor-vat-return-error.incorrect.no-input = Enter your latest VAT Return total or Box 5 amount

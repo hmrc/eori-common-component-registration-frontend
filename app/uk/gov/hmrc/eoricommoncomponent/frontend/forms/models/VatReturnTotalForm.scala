@@ -33,8 +33,11 @@ object VatReturnTotalForm extends Mappings {
 
   def validReturnAmount: Constraint[String] =
     Constraint({
+
+      case amount if amount.isEmpty => Invalid(ValidationError("ecc.eor-vat-return-error.incorrect.no-input"))
+      case amount if !amount.matches(amountRegex.regex) =>
+        Invalid(ValidationError("ecc.eor-vat-return-error.incorrect.input"))
       case amount if amount.matches(amountRegex.regex) => Valid
-      case _                                           => Invalid(ValidationError("Enter the amount of your latest tax return. Numbers only"))
     })
 
   val vatReturnTotalForm =

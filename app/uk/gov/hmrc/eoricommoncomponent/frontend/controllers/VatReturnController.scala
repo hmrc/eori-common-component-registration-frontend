@@ -18,14 +18,13 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.VatControlListConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotal
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotalForm.vatReturnTotalForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ContactDetailsController, VatDetailsController}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -55,15 +54,22 @@ class VatReturnController @Inject() (
       )
     }
 
-
-private def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit request: Request[AnyContent]
+  private def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit
+    request: Request[AnyContent]
   ): Future[Result] =
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)
-          if response.lastNetDue.getOrElse("no amount found") == vatReturnTotal.returnAmountInput.toDouble =>
+          //TODO: redirect to date page as response is empty
+          if response.lastNetDue.getOrElse(
+            redirectToCannotConfirmIdentity(service)
+          ) == vatReturnTotal.returnAmountInput.toDouble =>
         subscriptionDetailsService.cacheUserVatAmountInput(vatReturnTotal.returnAmountInput)
         Redirect(ContactDetailsController.createForm(service))
-      case _ => Ok(weCannotConfirmYourIdentity(isInReviewMode = false, service))
+      case _ => redirectToCannotConfirmIdentity(service)
     }
+
+  private def redirectToCannotConfirmIdentity(service: Service)(implicit request: Request[AnyContent]): Result = Ok(
+    weCannotConfirmYourIdentity(isInReviewMode = false, VatDetailsController.createForm(service).url, service)
+  )
 
 }

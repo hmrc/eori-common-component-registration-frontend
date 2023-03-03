@@ -27,7 +27,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   ContactDetailsModel,
   VatDetails,
   VatDetailsOld
-
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, SessionCache}
@@ -116,6 +115,7 @@ class SubscriptionDetailsService @Inject() (
 
   def cacheUserVatAmountInput(vatInput: String)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatAmountUserInput = Some(vatInput)))
+
   def cacheDateEstablished(date: LocalDate)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(dateEstablished = Some(date)))
 

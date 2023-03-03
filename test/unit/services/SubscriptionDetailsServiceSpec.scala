@@ -30,7 +30,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   AddressViewModel,
   ContactDetailsModel,
   VatDetails,
-  VatDetailsOld
+  VatDetailsOld,
+  VatReturnTotal
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -344,6 +345,29 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
       val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
       subscriptionDetails.ukVatDetailsOld shouldBe Some(ukVatDetails)
+    }
+  }
+
+  "cacheUserVatAmountInput" should {
+    val vatReturnTotal = VatReturnTotal("500.11")
+    "save subscription details with vat return total" in {
+      await(subscriptionDetailsHolderService.cacheUserVatAmountInput(vatReturnTotal.returnAmountInput))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+      val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
+      subscriptionDetails.vatAmountUserInput shouldBe Some(vatReturnTotal.returnAmountInput)
+    }
+  }
+
+  "cacheVatControlListResponse" should {
+    val vatControlListResponse =
+      VatControlListResponse(Some("SE28 1AA"), Some("1989-01-01"), Some(10000.02), Some("MAR"))
+    "save subscription details with vat return total" in {
+      await(subscriptionDetailsHolderService.cacheVatControlListResponse(vatControlListResponse))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+      val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
+      subscriptionDetails.vatControlListResponse shouldBe Some(vatControlListResponse)
     }
   }
 
