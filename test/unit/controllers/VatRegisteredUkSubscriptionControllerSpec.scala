@@ -120,6 +120,19 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
 
     "redirect to eu vat page for no answer" in {
       val url = "register/vat-registered-eu"
+      when(mockSubscriptionDetailsService.clearCachedUkVatDetailsOld(any[Request[_]])).thenReturn(Future.successful())
+
+      subscriptionFlowUrl(url)
+
+      submitForm(validRequestNo) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("register/vat-registered-eu")
+      }
+    }
+
+    "redirect to eu vat page for no answer using new vat details controller" in {
+      val url = "register/vat-registered-eu"
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
 
       subscriptionFlowUrl(url)
@@ -129,7 +142,9 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
         result.header.headers(LOCATION) should endWith("register/vat-registered-eu")
       }
     }
+
     "redirect to vat groups review page for yes answer and is in review mode" in {
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
       submitForm(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("register/what-are-your-uk-vat-details/review")

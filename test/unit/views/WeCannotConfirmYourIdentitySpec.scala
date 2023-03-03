@@ -18,11 +18,8 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.we_cannot_confirm_your_identity
 import util.ViewSpec
 
@@ -66,7 +63,11 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
 
     "have the VAT Details link for the try again button in review mode" in {
-      val doc = Jsoup.parse(contentAsString(view(true, atarService)))
+      val doc = Jsoup.parse(
+        contentAsString(
+          view(true, "/customs-registration-services/atar/register/what-are-your-uk-vat-details/review", atarService)
+        )
+      )
       doc
         .body()
         .getElementsByClass("govuk-button")
@@ -74,5 +75,10 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
   }
 
-  lazy val doc: Document = Jsoup.parse(contentAsString(view(false, atarService)))
+  lazy val doc: Document = Jsoup.parse(
+    contentAsString(
+      view(false, "/customs-registration-services/atar/register/what-are-your-uk-vat-details", atarService)
+    )
+  )
+
 }

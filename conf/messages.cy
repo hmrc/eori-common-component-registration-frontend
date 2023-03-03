@@ -484,7 +484,7 @@ cds.registration.use-a-different-service.not-vat-registered=heb gofrestru ar gyf
 cds.subscription.vat-verification-option.yes=Y dyddiad y gwnaethoch gofrestru ar gyfer TAW
 cds.subscription.vat-verification-option.no=Cyfanswm eich Ffurflen TAW ddiweddaraf
 cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddefnyddio i gadarnhau pwy ydych?
-cds.subscription.vat-verification-option.error=TRANSLATE Select if you want to use VAT registration date or latest VAT Return total
+cds.subscription.vat-verification-option.error=Dewiswch os ydych am ddefnyddio dyddiad Cofrestru TAW neu gyfanswm y Ffurflen TAW diweddaraf
 cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych. <br><br> Gallwch ddod o hyd i'’'r enw hwn ar ddogfennau gan CThEF. Er enghraifft, cadarnhad o gofrestriad eich partneriaeth
 cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.limited-liability-partnership.name = Enw’r bartneriaeth gofrestredig

@@ -24,16 +24,7 @@
 
 @this(layout_di: layout, govukButton: GovukButton, featureFlags: FeatureFlags)
 
-@(isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
-
-@tryAgainURL = @{
-    (featureFlags.useNewVATJourney, isInReviewMode) match {
-        case (true, true) => VatDetailsController.reviewForm(service)
-        case (true, false) => VatDetailsController.createForm(service)
-        case (false, true) => VatDetailsControllerOld.reviewForm(service)
-        case (false, false) => VatDetailsControllerOld.createForm(service)
-    }
-}
+@(isInReviewMode: Boolean, tryAgainUrl: String, service: Service)(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages("cds.subscription.vat-details.cannot-identify-you.heading")) {
     <div>
@@ -43,7 +34,7 @@
 
         @govukButton(Button(
             content = Text(messages("cds.subscription.vat-details.cannot-identify-you.button")),
-            href = Some(tryAgainURL.url)
+            href = Some(tryAgainUrl)
         ))
 
         @helpers.helpAndSupport()
