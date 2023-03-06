@@ -1665,3 +1665,11 @@ ecc.eori-exists-group.cds.link = rhoi’r gallu i chi’ch hun gael mynediad at 
 
 ecc.eor-vat-return-error.incorrect.input =  Nodwch werth hyd at 2 le degol. Er enghraifft, £100.00
 ecc.eor-vat-return-error.incorrect.no-input = Nodwch gyfanswm eich Ffurflen TAW ddiweddaraf neu swm Blwch 5
+
+ecc.eor-vat-registration-date.heading = Pryd y gwnaethoch gofrestru ar gyfer TAW?
+ecc.eor-vat-registration-date.para1 = Mae’r dyddiad cofrestru i’w weld ar eich tystysgrif TAW.
+ecc.eor-vat-registration-date.link = Mewngofnodwch i’ch cyfrif TAW ar-lein (yn agor tab newydd)
+ecc.eor-vat-registration-date.para2 =  i fwrw golwg ar eich tystysgrif TAW.
+ecc.eor-vat-registration-date.hint = Er enghraifft, 01 11 2007
+
+

@@ -16,16 +16,19 @@
 
 package unit.controllers
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status.OK
 import uk.gov.hmrc.auth.core.AuthConnector
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController
 import util.ControllerSpec
 import util.builders.{AuthActionMock, SessionBuilder}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import util.builders.AuthBuilder.withAuthorisedUser
 import play.api.test.Helpers.{LOCATION, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import unit.controllers.VatVerificationOptionBuilder._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -36,8 +39,9 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
   private val vatVerificationOptionView = instanceOf[vat_verification_option]
   private val mockAuthConnector         = mock[AuthConnector]
   private val mockAuthAction            = authAction(mockAuthConnector)
+  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
 
-  private val controller = new VatVerificationOptionController(mockAuthAction, mcc, vatVerificationOptionView)
+  private val controller = new VatVerificationOptionController(mockAuthAction, mcc, mockSubscriptionDetailsService,vatVerificationOptionView)
 
   "VAT Verification Option Controller" should {
     "return OK when accessing page through createForm method" in {
@@ -48,6 +52,7 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
   }
 
   "Submitting VAT verification option" should {
+    when(mockSubscriptionDetailsService.cacheVatVerificationOption(any())(any[Request[_]])).thenReturn(Future.successful())
     "return to the same location with bad request when submitting invalid request" in {
       submitForm(invalidRequest) { result =>
         status(result) shouldBe BAD_REQUEST
@@ -57,7 +62,7 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
     "redirect to VAT details page for 'date' option" in {
       submitForm(validRequestDate) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/your-uk-vat-details")
+        result.header.headers(LOCATION) should endWith("/your-uk-vat-details-date")
       }
     }
 

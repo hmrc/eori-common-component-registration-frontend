@@ -348,16 +348,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
   }
 
-  "cacheUserVatAmountInput" should {
-    val vatReturnTotal = VatReturnTotal("500.11")
-    "save subscription details with vat return total" in {
-      await(subscriptionDetailsHolderService.cacheUserVatAmountInput(vatReturnTotal.returnAmountInput))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-      val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
-      subscriptionDetails.vatAmountUserInput shouldBe Some(vatReturnTotal.returnAmountInput)
-    }
-  }
+
 
   "cacheVatControlListResponse" should {
     val vatControlListResponse =

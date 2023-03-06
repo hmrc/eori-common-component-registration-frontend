@@ -65,9 +65,7 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any[Request[_]])).thenReturn(
       Some(vatControlListResponse)
     )
-    when(mockSubscriptionDetailsService.cacheUserVatAmountInput(anyString())(any[Request[_]])).thenReturn(
-      Future.successful()
-    )
+
   }
 
   "VAT Return amount input Controller" should {
@@ -115,15 +113,7 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     }
   }
 
-  // DONE
-  // test redirection  both roots  amount correct and wrong
-  // make sure all numerical cases
-  // no string alowed
-  // lookup function to be tested
 
-  // TODO
-
-  // test form and validation - new spec to create
 
   private def createForm()(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)

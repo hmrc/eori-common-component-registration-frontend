@@ -63,7 +63,6 @@ class VatReturnController @Inject() (
           if response.lastNetDue.getOrElse(
             redirectToCannotConfirmIdentity(service)
           ) == vatReturnTotal.returnAmountInput.toDouble =>
-        subscriptionDetailsService.cacheUserVatAmountInput(vatReturnTotal.returnAmountInput)
         Redirect(ContactDetailsController.createForm(service))
       case _ => redirectToCannotConfirmIdentity(service)
     }

@@ -1909,3 +1909,9 @@ ecc.eori-exists-group.cds.link = give yourself access to a tax, duty or scheme (
 
 ecc.eor-vat-return-error.incorrect.input = Enter a value to 2 decimal places. For example, £100.00
 ecc.eor-vat-return-error.incorrect.no-input = Enter your latest VAT Return total or Box 5 amount
+ecc.eor-vat-registration-date.heading = When did you become VAT registered?
+ecc.eor-vat-registration-date.para1 = You can find the registration date on your VAT certificate.
+ecc.eor-vat-registration-date.link = Sign in to your VAT online account (opens in new tab)
+ecc.eor-vat-registration-date.para2 = to view your VAT certificate.
+ecc.eor-vat-registration-date.hint = For example, 01 11 2007
+

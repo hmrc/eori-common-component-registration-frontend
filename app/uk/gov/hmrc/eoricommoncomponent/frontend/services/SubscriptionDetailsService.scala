@@ -113,9 +113,6 @@ class SubscriptionDetailsService @Inject() (
   def cacheSicCode(sicCode: String)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(sicCode = Some(sicCode)))
 
-  def cacheUserVatAmountInput(vatInput: String)(implicit request: Request[_]): Future[Unit] =
-    saveSubscriptionDetails(sd => sd.copy(vatAmountUserInput = Some(vatInput)))
-
   def cacheDateEstablished(date: LocalDate)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(dateEstablished = Some(date)))
 
@@ -128,9 +125,6 @@ class SubscriptionDetailsService @Inject() (
   def cacheVatVerificationOption(verificationOption: VatVerificationOption)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatVerificationOption = Some(verificationOption.isDateOption)))
 
-
-  // def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]) =
-  //    saveSubscriptionDetails(sd => sd.copy(vatRegisteredUk = Some(yesNoAnswer.isYes)))
   def cacheNinoOrUtrChoice(ninoOrUtrChoice: NinoOrUtrChoice)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(
       sd => sd.copy(formData = sd.formData.copy(ninoOrUtrChoice = ninoOrUtrChoice.ninoOrUtrRadio))

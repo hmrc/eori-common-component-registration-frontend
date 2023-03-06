@@ -51,10 +51,10 @@ class VatVerificationOptionController @Inject() (
           formWithErrors => Future.successful(BadRequest(vatVerificationView(formWithErrors, service))),
           vatVerificationOption =>
             subscriptionDetailsService.cacheVatVerificationOption(vatVerificationOption).flatMap { _ =>
-              if (vatVerificationOption.isDateOption) {
-                Future.successful(Redirect(DateOfVatRegistrationController.createForm(service)))
-              } else
-                Future.successful(Redirect(VatReturnController.createForm(service)))
+              vatVerificationOption.isDateOption match {
+                case true => Future.successful(Redirect(DateOfVatRegistrationController.createForm(service)))
+                case false => Future.successful(Redirect(VatReturnController.createForm(service)))
+              }
             })
     }
 }

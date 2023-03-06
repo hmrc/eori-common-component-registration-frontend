@@ -42,21 +42,21 @@
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfVatRegistrationController.submit(service)) {
 
             @CSRF.formField
-
-            <p class="govuk-body">Some text </p>
-            <p class="govuk-body">SOme text </p>
+            <h2 class="govuk-heading-l">@messages("ecc.eor-vat-registration-date.heading") </h2>
+            <p class="govuk-body">@messages("ecc.eor-vat-registration-date.para1")</p>
+            <p class="govuk-body"> <a href="https://www.gov.uk/send-vat-return">@messages("ecc.eor-vat-registration-date.link")</a> @messages("ecc.eor-vat-registration-date.para2")</p>
 
             @inputDate_di(
                 form = dateForm,
                 legendContent = "",
                 legendClasses = Some("govuk-fieldset__legend--l"),
-                hintText = None,
+                hintText = Some(Html(messages("ecc.eor-vat-registration-date.hint"))),
                 legendAsPageHeading = false,
                 id = "vat-registration-date"
             )
 
             @govukButton(Button(
-                content = Text("Press me NOW!!!")
+                content = Text(messages("cds.navigation.continue"))
             ))
 
         }
