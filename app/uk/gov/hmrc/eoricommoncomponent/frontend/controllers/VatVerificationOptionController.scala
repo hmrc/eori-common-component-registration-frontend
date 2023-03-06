@@ -22,6 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_verification_option
 
 import javax.inject.{Inject, Singleton}
@@ -31,6 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatVerificationOptionController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
+  subscriptionDetailsService: SubscriptionDetailsService,
   vatVerificationView: vat_verification_option
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
@@ -47,13 +49,12 @@ class VatVerificationOptionController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(vatVerificationView(formWithErrors, service))),
-          VatVerificationOption =>
-            if (VatVerificationOption.isDateOption)
-              Future.successful(Redirect(VatDetailsController.createForm(service)))
-            else
-              Future.successful(Redirect(VatReturnController.createForm(service)))
-        )
-
+          vatVerificationOption =>
+            subscriptionDetailsService.cacheVatVerificationOption(vatVerificationOption).flatMap { _ =>
+              if (vatVerificationOption.isDateOption) {
+                Future.successful(Redirect(DateOfVatRegistrationController.createForm(service)))
+              } else
+                Future.successful(Redirect(VatReturnController.createForm(service)))
+            })
     }
-
 }
