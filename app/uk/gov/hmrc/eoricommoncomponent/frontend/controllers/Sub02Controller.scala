@@ -45,7 +45,8 @@ class Sub02Controller @Inject() (
   standaloneOutcomeView: standalone_subscription_outcome,
   subscriptionOutcomeView: subscription_outcome,
   xiEoriGuidancePage: xi_eori_guidance,
-  cdsSubscriber: CdsSubscriber
+  cdsSubscriber: CdsSubscriber,
+  featureFlag: FeatureFlags
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
@@ -95,7 +96,8 @@ class Sub02Controller @Inject() (
   }
 
   def subscriptionNextSteps(service: Service): String =
-    s"cds.subscription.outcomes.success.extra.information.next.${service.code}"
+    if (featureFlag.arsNewJourney) s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
+    else s"cds.subscription.outcomes.success.extra.information.next.${service.code}"
 
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>

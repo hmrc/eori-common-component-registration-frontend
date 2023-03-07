@@ -27,7 +27,7 @@ import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, FeatureFlags, Sub02Controller}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
@@ -56,6 +56,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val mockSubscribe01Outcome         = mock[Sub01Outcome]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockSubscriptionDetails        = mock[SubscriptionDetails]
+  private val mockFeatureFlag                = mock[FeatureFlags]
 
   private val sub01OutcomeView                = instanceOf[sub01_outcome_processing]
   private val sub02RequestNotProcessed        = instanceOf[sub02_request_not_processed]
@@ -82,7 +83,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     standAloneOutcomeView,
     subscriptionOutcomeView,
     xiEoriGuidanceView,
-    mockCdsSubscriber
+    mockCdsSubscriber,
+    mockFeatureFlag
   )(global)
 
   val eoriNumberResponse: String                = "EORI-Number"

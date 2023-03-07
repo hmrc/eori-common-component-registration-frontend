@@ -1642,3 +1642,13 @@ ecc.eori-exists-group.admin.cds.para2 = Bydd angen iddo fewngofnodi a dilyn cama
 ecc.eori-exists-group.cds.para1 = Os ydych am gael mynediad at CDS, mae angen i chi fynd i ‘Rheoli cyfrif’, a dilyn camau 6, 7, 8 a 9 er mwyn {0}.
 ecc.eori-exists-group.cds.admin.link = rhoi’r gallu i aelod o’r tîm gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
 ecc.eori-exists-group.cds.link = rhoi’r gallu i chi’ch hun gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
+
+cds.subscription.outcomes.success.extra.information.next.new.ars = <li>Gwneud cais am Ddyfarniad Tariffau Uwch</li><li>Gwneud cais am Ddyfarniad Prisio Uwch</li>
+cds.subscription.outcomes.success.extra.information.next.new.atar =<li>Gwneud cais am Ddyfarniad Tariffau Uwch</li><li>Gwneud cais am Ddyfarniad Prisio Uwch</li>
+cds.subscription.outcomes.success.extra.information.next.new.gagmr =<li>Cael cyfeirnod symud nwyddau</li>
+cds.subscription.outcomes.success.extra.information.next.new.cts =<li>gwneud cais am ad-daliad o dollau mewnforio a TAW (CHIEF)</li><li>anfon dogfennau i'’'w gwirio gan y tollau ar gyfer datganiadau a wneir drwy'''r system CHIEF</li><li>rhoi gwybod i CThEF am dandaliad o ran Toll Dramor neu TAW mewnforio</li>
+cds.subscription.outcomes.success.extra.information.next.new.route1 =<li>gwneud cais am ad-daliad o dollau mewnforio a TAW (CHIEF)</li><li>anfon dogfennau i'’'w gwirio gan y tollau ar gyfer datganiadau a wneir drwy'''r system CHIEF</li><li>rhoi gwybod i CThEF am dandaliad o ran Toll Dramor neu TAW mewnforio</li>
+cds.subscription.outcomes.success.extra.information.next.new.ss =<li>gwneud datganiad cryno wrth gyrraedd</li>
+cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>gwneud datganiad cryno wrth gyrraedd</li>
+cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
+cds.subscription.outcomes.success.extra.information.next.new.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>

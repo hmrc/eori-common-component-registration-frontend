@@ -1885,3 +1885,13 @@ ecc.eori-exists-group.admin.cds.para2 = They will need to sign in and follow ste
 ecc.eori-exists-group.cds.para1 = If you want access to CDS, you need to go to manage account, and follow steps 6, 7, 8 and 9 to {0}.
 ecc.eori-exists-group.cds.admin.link = give a team member access to a tax duty or scheme (opens in new tab)
 ecc.eori-exists-group.cds.link = give yourself access to a tax, duty or scheme (opens in new tab)
+
+cds.subscription.outcomes.success.extra.information.next.new.ars = <li>apply for an Advance Tariff Ruling</li><li>apply for an Advance Valuation Ruling</li>
+cds.subscription.outcomes.success.extra.information.next.new.atar =<li>apply for an Advance Tariff Ruling</li><li>apply for an Advance Valuation Ruling </li>
+cds.subscription.outcomes.success.extra.information.next.new.gagmr =<li>get a goods movement reference (GMR)</li>
+cds.subscription.outcomes.success.extra.information.next.new.cts =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
+cds.subscription.outcomes.success.extra.information.next.new.route1 =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
+cds.subscription.outcomes.success.extra.information.next.new.ss =<li>make entry summary declarations</li>
+cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>make entry summary declarations</li>
+cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>submit union transit declarations through NCTS</li>
+cds.subscription.outcomes.success.extra.information.next.new.cds =<li>use the Customs Declaration Service</li>
