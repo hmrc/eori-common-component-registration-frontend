@@ -22,10 +22,10 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatReturnController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfVatRegistrationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{vat_return_total, we_cannot_confirm_your_identity}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, we_cannot_confirm_your_identity}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -33,22 +33,20 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
+class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
 
-  private val mockVatReturnTotalView          = instanceOf[vat_return_total]
+  private val mockDateOfVatRegistrationView   = instanceOf[date_of_vat_registration]
   private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
 
-  val mockAuthConnector = mock[AuthConnector]
-  val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction    = authAction(mockAuthConnector)
 
-  private val controller = new VatReturnController(
+  private val controller = new DateOfVatRegistrationController(
     mockAuthAction,
     mockSubscriptionBusinessService,
-    mockSubscriptionDetailsService,
     mcc,
-    mockVatReturnTotalView,
+    mockDateOfVatRegistrationView,
     mockWeCannotConfirmYourIdentity
   )
 
@@ -65,10 +63,9 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any[Request[_]])).thenReturn(
       Some(vatControlListResponse)
     )
-
   }
 
-  "VAT Return amount input Controller" should {
+  "Date of VAT registration Controller" should {
     "return OK when accessing page though createForm method" in {
       createForm() { result =>
         status(result) shouldBe OK
@@ -76,40 +73,48 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     }
   }
 
-  "Submitting Vat amount" should {
+  "Submitting Vat date" should {
 
-    "be successful when submitted with valid input of 2dp and data matches API response" in {
-      val validReturnTotal: Map[String, String] = Map("vat-return-total" -> "10000.02")
+    "be successful when submitted with valid and data matches API response" in {
+      val validReturnTotal: Map[String, String] = Map(
+        "vat-registration-date.day"   -> "01",
+        "vat-registration-date.month" -> "01",
+        "vat-registration-date.year"  -> "2017"
+      )
       submitForm(validReturnTotal) { result =>
         status(result) shouldBe SEE_OTHER
       }
     }
 
     "redirect to cannot verify your details when valid input supplied but not matching API response" in {
-      val validReturnTotal: Map[String, String] = Map("vat-return-total" -> "100.02")
+      val validReturnTotal: Map[String, String] = Map(
+        "vat-registration-date.day"   -> "17",
+        "vat-registration-date.month" -> "11",
+        "vat-registration-date.year"  -> "2000"
+      )
       submitForm(validReturnTotal) { result =>
         status(result) shouldBe OK
       }
     }
 
     "return to the same location with bad request when submitting invalid request" in {
-      val invalidVatAmountInputSequence: Seq[Map[String, String]] =
-        Seq(
-          Map("vat-return-total" -> "100"),
-          Map("vat-return-total" -> "100.0"),
-          Map("vat-return-total" -> "hundred"),
-          Map("vat-return-total" -> "hello 20.100"),
-          Map("vat-return-total" -> "20.100 hello"),
-          Map("vat-return-total" -> ".25"),
-          Map("vat-return-total" -> "2.10000"),
-          Map("vat-return-total" -> "23.23.23")
-        )
-
-      invalidVatAmountInputSequence.foreach { invalidVatInput =>
-        submitForm(invalidVatInput) { result =>
-          status(result) shouldBe BAD_REQUEST
-        }
+      val invalidVatAmountInput: Map[String, String] = Map(
+        "vat-registration-date.day"   -> "This",
+        "vat-registration-date.month" -> "is",
+        "vat-registration-date.year"  -> "wrong"
+      )
+      submitForm(invalidVatAmountInput) { result =>
+        status(result) shouldBe BAD_REQUEST
       }
+    }
+  }
+
+  "return to the same location with bad request when submitting empty request" in {
+    val invalidVatAmountInput: Map[String, String] =
+      Map("vat-registration-date.day" -> "", "vat-registration-date.month" -> "", "vat-registration-date.year" -> "")
+    submitForm(invalidVatAmountInput) { result =>
+      status(result) shouldBe BAD_REQUEST
+
     }
   }
 

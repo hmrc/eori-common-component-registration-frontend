@@ -65,6 +65,7 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockRegisterWithoutIdWithSubscription = mock[RegisterWithoutIdWithSubscriptionService]
   private val mockSubscriptionFlow                  = mock[SubscriptionFlow]
   private val mockRequestSession                    = mock[RequestSessionData]
+  private val mockFeatureFlags                      = mock[FeatureFlags]
   private val checkYourDetailsRegisterView          = instanceOf[check_your_details_register]
 
   val controller = new CheckYourDetailsRegisterController(
@@ -73,15 +74,14 @@ class CheckYourDetailsRegisterControllerSpec
     mockRequestSession,
     mcc,
     checkYourDetailsRegisterView,
-    mockRegisterWithoutIdWithSubscription
+    mockRegisterWithoutIdWithSubscription,
+    mockFeatureFlags
   )
 
   private val organisationRegistrationDetailsWithEmptySafeId = organisationRegistrationDetails.copy(safeId = SafeId(""))
 
   private val addressDetails =
     AddressViewModel(street = "street", city = "city", postcode = Some("SE28 1AA"), countryCode = "GB")
-
-  private val shortName = "Company Details Short name"
 
   private val NotEntered: String = "Not entered"
 
@@ -100,6 +100,7 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSubscriptionDetails.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
     when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetails)
     when(mockRequestSession.isPartnershipOrLLP(any[Request[AnyContent]])).thenReturn(false)
+    when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
   }
 
   "Reviewing the details" should {
@@ -550,40 +551,6 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "1 January 2017"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
-        "VAT number",
-        "Change"
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("VAT number")
-      page.getSummaryListHref(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "VAT number",
-        "Change"
-      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
-      page.getSummaryListLink(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "Postcode of your VAT registration address",
-        "Change"
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Postcode of your VAT registration address")
-      page.getSummaryListHref(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "Postcode of your VAT registration address",
-        "Change"
-      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
-      page.getSummaryListLink(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "VAT effective date",
-        "Change"
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("VAT effective date")
-      page.getSummaryListHref(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "VAT effective date",
-        "Change"
-      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
-
-      page.getSummaryListLink(
-        RegistrationReviewPage.SummaryListRowXPath,
         "Registered company details included on the EORI checker",
         "Change"
       ) shouldBe SubscriptionExistingDetailsReviewPage
@@ -736,18 +703,6 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "1 January 2017"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
-        "VAT number",
-        "Change"
-      ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("VAT number")
-      page.getSummaryListHref(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "VAT number",
-        "Change"
-      ) shouldBe "/customs-registration-services/atar/register/vat-registered-uk/review"
-
-      page.getSummaryListLink(
-        RegistrationReviewPage.SummaryListRowXPath,
         "Partnership details included on the EORI checker",
         "Change"
       ) shouldBe SubscriptionExistingDetailsReviewPage
@@ -896,18 +851,6 @@ class CheckYourDetailsRegisterControllerSpec
       "Postcode of your VAT registration address"
     ) shouldBe "SE28 1AA"
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "VAT effective date") shouldBe "1 January 2017"
-    page.getSummaryListLink(
-      RegistrationReviewPage.SummaryListRowXPath,
-      "VAT number",
-      "Change"
-    ) shouldBe RegistrationReviewPage.changeAnswerText("VAT number")
-    page.getSummaryListHref(
-      RegistrationReviewPage.SummaryListRowXPath,
-      "VAT number",
-      "Change"
-    ) shouldBe VatRegisteredUkController
-      .reviewForm(atarService)
-      .url
   }
 
   def showForm(
@@ -921,7 +864,8 @@ class CheckYourDetailsRegisterControllerSpec
       mockRequestSession,
       mcc,
       checkYourDetailsRegisterView,
-      mockRegisterWithoutIdWithSubscription
+      mockRegisterWithoutIdWithSubscription,
+      mockFeatureFlags
     )
 
     withAuthorisedUser(userId, mockAuthConnector)

@@ -34,7 +34,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateOfVatRegistrationController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
-  subscriptionDetailsService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
   dateOfVatRegistrationView: date_of_vat_registration,
   weCannotConfirmYourIdentity: we_cannot_confirm_your_identity

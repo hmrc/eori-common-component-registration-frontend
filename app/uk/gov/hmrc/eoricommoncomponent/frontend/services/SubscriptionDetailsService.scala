@@ -122,7 +122,9 @@ class SubscriptionDetailsService @Inject() (
   def cachedNameDobDetails(implicit request: Request[_]): Future[Option[NameDobMatchModel]] =
     sessionCache.subscriptionDetails.map(_.nameDobDetails)
 
-  def cacheVatVerificationOption(verificationOption: VatVerificationOption)(implicit request: Request[_]): Future[Unit] =
+  def cacheVatVerificationOption(
+    verificationOption: VatVerificationOption
+  )(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatVerificationOption = Some(verificationOption.isDateOption)))
 
   def cacheNinoOrUtrChoice(ninoOrUtrChoice: NinoOrUtrChoice)(implicit request: Request[_]): Future[Unit] =

@@ -36,12 +36,13 @@ import scala.concurrent.Future
 
 class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val vatVerificationOptionView = instanceOf[vat_verification_option]
-  private val mockAuthConnector         = mock[AuthConnector]
-  private val mockAuthAction            = authAction(mockAuthConnector)
-  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
+  private val vatVerificationOptionView      = instanceOf[vat_verification_option]
+  private val mockAuthConnector              = mock[AuthConnector]
+  private val mockAuthAction                 = authAction(mockAuthConnector)
+  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
-  private val controller = new VatVerificationOptionController(mockAuthAction, mcc, mockSubscriptionDetailsService,vatVerificationOptionView)
+  private val controller =
+    new VatVerificationOptionController(mockAuthAction, mcc, mockSubscriptionDetailsService, vatVerificationOptionView)
 
   "VAT Verification Option Controller" should {
     "return OK when accessing page through createForm method" in {
@@ -52,7 +53,9 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
   }
 
   "Submitting VAT verification option" should {
-    when(mockSubscriptionDetailsService.cacheVatVerificationOption(any())(any[Request[_]])).thenReturn(Future.successful())
+    when(mockSubscriptionDetailsService.cacheVatVerificationOption(any())(any[Request[_]])).thenReturn(
+      Future.successful()
+    )
     "return to the same location with bad request when submitting invalid request" in {
       submitForm(invalidRequest) { result =>
         status(result) shouldBe BAD_REQUEST

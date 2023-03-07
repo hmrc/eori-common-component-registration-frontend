@@ -348,8 +348,6 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
   }
 
-
-
   "cacheVatControlListResponse" should {
     val vatControlListResponse =
       VatControlListResponse(Some("SE28 1AA"), Some("1989-01-01"), Some(10000.02), Some("MAR"))
