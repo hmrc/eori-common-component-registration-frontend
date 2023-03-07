@@ -481,6 +481,7 @@ cds.registration.use-a-different-service.info=I wneud cais am rif EORI fel corff
 cds.registration.use-a-different-service.vat-registered=wedi cofrestru ar gyfer TAW
 cds.registration.use-a-different-service.not-vat-registered=heb gofrestru ar gyfer TAW
 
+cds.form.gb-vat-amount=Cyfanswm eich Ffurflen TAW neu’ch swm o Flwch 5
 cds.subscription.vat-verification-option.yes=Y dyddiad y gwnaethoch gofrestru ar gyfer TAW
 cds.subscription.vat-verification-option.no=Cyfanswm eich Ffurflen TAW ddiweddaraf
 cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddefnyddio i gadarnhau pwy ydych?
