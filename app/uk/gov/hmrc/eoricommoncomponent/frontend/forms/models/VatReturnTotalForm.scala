@@ -23,32 +23,24 @@ import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
-case class VatDetails(postcode: String, number: String)
+case class VatReturnTotal(returnAmountInput: String)
 
-object VatDetails {
-  implicit val format: Format[VatDetails] = Json.format[VatDetails]
+object VatReturnTotal {
+  implicit val format: Format[VatReturnTotal] = Json.format[VatReturnTotal]
 }
 
-object VatDetailsForm extends Mappings {
+object VatReturnTotalForm extends Mappings {
 
-  def validPostcode: Constraint[String] =
+  def validReturnAmount: Constraint[String] =
     Constraint({
-      case s if s.matches(postcodeRegex.regex) => Valid
-      case _                                   => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
+
+      case amount if amount.isEmpty => Invalid(ValidationError("ecc.eor-vat-return-error.incorrect.no-input"))
+      case amount if !amount.matches(amountRegex.regex) =>
+        Invalid(ValidationError("ecc.eor-vat-return-error.incorrect.input"))
+      case amount if amount.matches(amountRegex.regex) => Valid
     })
 
-  def validVatNumber: Constraint[String] =
-    Constraint({
-      case s if s.trim.isEmpty             => Invalid(ValidationError("cds.subscription.vat-uk.required.error"))
-      case s if !s.matches("^([0-9]{9})$") => Invalid(ValidationError("cds.subscription.vat-uk.length.error"))
-      case _                               => Valid
-    })
-
-  val vatDetailsForm =
-    Form(
-      mapping("postcode" -> text.verifying(validPostcode), "vat-number" -> text.verifying(validVatNumber))(
-        VatDetails.apply
-      )(VatDetails.unapply)
-    )
+  val vatReturnTotalForm =
+    Form(mapping("vat-return-total" -> text.verifying(validReturnAmount))(VatReturnTotal.apply)(VatReturnTotal.unapply))
 
 }

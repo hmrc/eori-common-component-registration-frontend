@@ -97,7 +97,7 @@ lazy val scoverageSettings = {
       "logger.*\\(.*\\)",
       ".*(AuthService|BuildInfo|Routes|TestOnly).*"
     ).mkString(";"),
-    ScoverageKeys.coverageMinimumStmtTotal := 88,
+    ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     Test / parallelExecution := false

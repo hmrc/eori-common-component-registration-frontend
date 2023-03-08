@@ -23,7 +23,11 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatRegisteredUkController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
+  FeatureFlags,
+  SubscriptionFlowManager,
+  VatRegisteredUkController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlow,
@@ -32,7 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{vat_registered_uk}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.YesNoFormBuilder._
@@ -41,7 +45,7 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
+class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector               = mock[AuthConnector]
   private val mockAuthAction                  = authAction(mockAuthConnector)
@@ -51,6 +55,7 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
   private val mockSubscriptionFlow            = mock[SubscriptionFlow]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
+  private val mockFeatureFlags                = mock[FeatureFlags]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -79,7 +84,8 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     mockSubscriptionDetailsService,
     mockRequestSession,
     mcc,
-    vatRegisteredUkView
+    vatRegisteredUkView,
+    mockFeatureFlags
   )
 
   "Vat registered Uk Controller" should {
@@ -90,6 +96,21 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     }
     "land on a correct location" in {
       createForm() { result =>
+        val page = CdsPage(contentAsString(result))
+        page.title should include(VatRegisterUKPage.title)
+      }
+    }
+  }
+
+  "Vat registered Uk Controller in review mode" should {
+    when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(Future.successful(true))
+    "return OK when accessing page through createForm method" in {
+      reviewForm() { result =>
+        status(result) shouldBe OK
+      }
+    }
+    "land on a correct location" in {
+      reviewForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title should include(VatRegisterUKPage.title)
       }
@@ -108,12 +129,25 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
 
       submitForm(ValidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/vat-group")
+        result.header.headers(LOCATION) should endWith("register/what-are-your-uk-vat-details")
       }
     }
 
     "redirect to eu vat page for no answer" in {
       val url = "register/vat-registered-eu"
+      when(mockSubscriptionDetailsService.clearCachedUkVatDetailsOld(any[Request[_]])).thenReturn(Future.successful())
+
+      subscriptionFlowUrl(url)
+
+      submitForm(validRequestNo) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("register/vat-registered-eu")
+      }
+    }
+
+    "redirect to eu vat page for no answer using new vat details controller" in {
+      val url = "register/vat-registered-eu"
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
 
       subscriptionFlowUrl(url)
@@ -123,14 +157,36 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
         result.header.headers(LOCATION) should endWith("register/vat-registered-eu")
       }
     }
-    "redirect to vat groups review page for yes answer and is in review mode" in {
+
+    "redirect to vat groups review old page for yes answer and is in review mode" in {
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
       submitForm(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("register/what-are-your-uk-vat-details/review")
       }
     }
+    "redirect to vat groups review page for yes answer and is in review mode" in {
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
+      submitForm(ValidRequest, isInReviewMode = true) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("register/your-uk-vat-details/review")
+      }
+    }
 
     "redirect to check answers page for no answer and is in review mode" in {
+
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
+      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
+      submitForm(validRequestNo, isInReviewMode = true) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith(
+          "customs-registration-services/atar/register/matching/review-determine"
+        )
+      }
+    }
+    "redirect to check answers page for no answer and is in review mode featureFlag is true" in {
+
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER

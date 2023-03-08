@@ -64,7 +64,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   private val controller = new DisclosePersonalDetailsConsentController(
     mockAuthAction,
-    mockSubscriptionDetailsHolderService,
+    mockSubscriptionDetailsService,
     mockSubscriptionBusinessService,
     mockRequestSessionData,
     mcc,
@@ -145,13 +145,13 @@ class DisclosePersonalDetailsConsentControllerSpec
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(any[YesNo])(any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheConsentToDisclosePersonalDetails(any[YesNo])(any[Request[_]]))
       .thenReturn(Future.successful {})
     setupMockSubscriptionFlowManager(EoriConsentSubscriptionFlowPage)
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockSubscriptionDetailsHolderService, mockSubscriptionFlowManager, mockAuthConnector, mockRequestSessionData)
+    reset(mockSubscriptionDetailsService, mockSubscriptionFlowManager, mockAuthConnector, mockRequestSessionData)
 
     super.afterEach()
   }

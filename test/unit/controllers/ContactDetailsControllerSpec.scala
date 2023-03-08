@@ -66,7 +66,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     mockSubscriptionBusinessService,
     mockCdsFrontendDataCache,
     mockSubscriptionFlowManager,
-    mockSubscriptionDetailsHolderService,
+    mockSubscriptionDetailsService,
     mcc,
     contactDetailsView
   )
@@ -76,7 +76,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       mockSubscriptionBusinessService,
       mockCdsFrontendDataCache,
       mockSubscriptionFlowManager,
-      mockSubscriptionDetailsHolderService
+      mockSubscriptionDetailsService
     )
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(None)
     when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetails)
@@ -468,14 +468,14 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
 
   private def registerSaveContactDetailsMockSuccess() {
     when(
-      mockSubscriptionDetailsHolderService
+      mockSubscriptionDetailsService
         .cacheContactDetails(any[ContactDetailsModel], any[Boolean])(any[Request[_]])
     ).thenReturn(Future.successful(()))
   }
 
   private def registerSaveContactDetailsMockFailure(exception: Throwable) {
     when(
-      mockSubscriptionDetailsHolderService
+      mockSubscriptionDetailsService
         .cacheContactDetails(any[ContactDetailsModel], any[Boolean])(any[Request[_]])
     ).thenReturn(Future.failed(exception))
   }

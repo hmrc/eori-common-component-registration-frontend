@@ -17,6 +17,8 @@
 package unit.controllers
 
 import common.pages.subscription.SubscriptionVatDetailsPage._
+
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -28,46 +30,46 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   ServiceUnavailableResponse,
   VatControlListConnector
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsControllerOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   error_template,
-  vat_details,
+  vat_details_old,
   we_cannot_confirm_your_identity
 }
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 
-import java.time.LocalDate
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class VatDetailsControllerSpec
+class VatDetailsControllerOldSpec
     extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
   protected override val formId: String = "vat-details-form"
 
   protected override val submitInCreateModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsControllerOld
       .submit(isInReviewMode = false, atarService)
       .url
 
   protected override val submitInReviewModeUrl: String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsControllerOld
       .submit(isInReviewMode = true, atarService)
       .url
 
   private val mockVatControlListConnector = mock[VatControlListConnector]
-  private val vatDetailsView              = instanceOf[vat_details]
+  private val vatDetailsView              = instanceOf[vat_details_old]
   private val errorTemplate               = instanceOf[error_template]
   private val weCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
 
-  private val controller = new VatDetailsController(
+  private val controller = new VatDetailsControllerOld(
     mockAuthAction,
+    mockSubscriptionFlowManager,
     mockVatControlListConnector,
     mockSubscriptionBusinessService,
     mcc,
@@ -77,10 +79,15 @@ class VatDetailsControllerSpec
     mockSubscriptionDetailsService
   )
 
-  private val validRequest = Map("postcode" -> "Z9 1AA", "vat-number" -> "028836662")
+  private val validRequest = Map(
+    "postcode"                 -> "Z9 1AA",
+    "vat-number"               -> "028836662",
+    "vat-effective-date.day"   -> "24",
+    "vat-effective-date.month" -> "11",
+    "vat-effective-date.year"  -> "2009"
+  )
 
-  private val defaultVatControlResponse =
-    VatControlListResponse(Some("Z9 1AA"), Some("2009-11-24"), Some(213.22), Some("MAR"))
+  private val defaultVatControlResponse = VatControlListResponse(Some("Z9 1AA"), Some("2009-11-24"), None, None)
 
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager, mockVatControlListConnector)
@@ -101,8 +108,8 @@ class VatDetailsControllerSpec
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "display the form with cached details" in {
-      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(
-        Some(VatDetails("123", "123"))
+      when(mockSubscriptionBusinessService.getCachedUkVatDetailsOld(any())) thenReturn Future.successful(
+        Some(VatDetailsOld("123", "123", LocalDate.now()))
       )
       reviewForm() { result =>
         status(result) shouldBe OK
@@ -112,7 +119,7 @@ class VatDetailsControllerSpec
     }
 
     "display the form with no cached details" in {
-      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(None)
+      when(mockSubscriptionBusinessService.getCachedUkVatDetailsOld(any())) thenReturn Future.successful(None)
       reviewForm() { result =>
         status(result) shouldBe OK
         verifyFormActionInCreateMode
@@ -140,14 +147,14 @@ class VatDetailsControllerSpec
     "should match without space in the postcode" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "Z91AA")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("vat-verification-option")
+        result.header.headers("Location") should endWith("next-page-url")
       }
     }
 
     "should match when the postcode is entered in lowercase" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "z91aa")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("vat-verification-option")
+        result.header.headers("Location") should endWith("next-page-url")
       }
     }
 
@@ -201,38 +208,64 @@ class VatDetailsControllerSpec
       }
     }
 
+    "show error when no effective date is supplied" in {
+      submitFormInCreateMode(
+        validRequest +
+          ("vat-effective-date.day"  -> "",
+          "vat-effective-date.month" -> "",
+          "vat-effective-date.year"  -> "")
+      ) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your effective VAT date"
+        page.getElementsText(vatEffectiveDateFieldLevelError) shouldBe "Error: Enter your effective VAT date"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "show error when an invalid effective date is supplied" in {
+      submitFormInCreateMode(
+        validRequest +
+          ("vat-effective-date.day"  -> "31",
+          "vat-effective-date.month" -> "04",
+          "vat-effective-date.year"  -> "2002")
+      ) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Effective VAT date must be a real date"
+        page.getElementsText(vatEffectiveDateFieldLevelError) shouldBe "Error: Effective VAT date must be a real date"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "show error when a future effective date is supplied" in {
+      val tomorrow = LocalDate.now().plusDays(1)
+      submitFormInCreateMode(
+        validRequest +
+          ("vat-effective-date.day"  -> tomorrow.getDayOfMonth.toString,
+          "vat-effective-date.month" -> tomorrow.getMonthValue.toString,
+          "vat-effective-date.year"  -> tomorrow.getYear.toString)
+      ) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          pageLevelErrorSummaryListXPath
+        ) shouldBe "Effective VAT date must be between 1970 and today"
+        page.getElementsText(
+          vatEffectiveDateFieldLevelError
+        ) shouldBe "Error: Effective VAT date must be between 1970 and today"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
     "redirect to next page when valid vat number and effective date is supplied" in {
       submitFormInCreateMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("vat-verification-option")
+        result.header.headers("Location") should endWith("next-page-url")
       }
     }
 
-    "redirect to next page when valid vat number and effective date is supplied but lastNetDue is missing" in {
-      val vatControlResponse = VatControlListResponse(lastNetDue = None)
-      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
-      }
-    }
-
-    "redirect to next page when valid vat number and effective date is supplied but lastReturnMonthPeriod is missing" in {
-      val vatControlResponse = VatControlListResponse(lastReturnMonthPeriod = None)
-      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
-      }
-    }
-
-    "redirect to next page when valid vat number is supplied but lastReturnMonthPeriod is N/A" in {
-      val vatControlResponse = VatControlListResponse(lastReturnMonthPeriod = Some("N/A"))
-      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
-      }
-    }
-
-    "redirect to next page when valid vat number is supplied and is in review mode" in {
+    "redirect to next page when valid vat number and effective date is supplied and is in review mode" in {
       submitFormInReviewMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith(
@@ -244,7 +277,7 @@ class VatDetailsControllerSpec
     "redirect to cannot confirm your identity when postcode does not match" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "NA1 7NO")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
       }
     }
 
@@ -252,14 +285,30 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(None, Some("2009-11-24"))
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
       }
     }
 
     "redirect to cannot confirm your identity when postcode does not match and it is in review mode" in {
       submitFormInReviewMode(validRequest + ("postcode" -> "NA1 7NO")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details/review")
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details/review")
+      }
+    }
+
+    "redirect to cannot confirm your identity url when effective is not associated with the vrn" in {
+      val updatedRequest = validRequest + ("vat-effective-date.day" -> "25")
+      submitFormInCreateMode(updatedRequest) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
+      }
+    }
+
+    "redirect to cannot confirm your identity when effective date is None" in {
+      val vatControlResponse = VatControlListResponse(Some("Z9 1AA"), None)
+      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
       }
     }
 
@@ -268,7 +317,7 @@ class VatDetailsControllerSpec
         .thenReturn(Future.successful(Left(NotFoundResponse)))
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
       }
     }
 
@@ -277,7 +326,7 @@ class VatDetailsControllerSpec
         .thenReturn(Future.successful(Left(InvalidResponse)))
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/cannot-confirm-your-vat-details")
       }
     }
 
@@ -297,21 +346,6 @@ class VatDetailsControllerSpec
     )
 
     "display weCannotConfirmYourIdentity" in {
-      vatDetailsNotMatched() {
-        result =>
-          status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
-      }
-    }
-  }
-
-  "vatDetailsNotMatched in review mode" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.vatDetailsNotMatched(true, atarService)
-    )
-
-    "display weCannotConfirmYourIdentity isInReviewMode true" in {
       vatDetailsNotMatched() {
         result =>
           status(result) shouldBe OK
@@ -345,7 +379,7 @@ class VatDetailsControllerSpec
     form: Map[String, String]
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    when(mockSubscriptionDetailsService.cacheUkVatDetails(any[VatDetails])(any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheUkVatDetailsOld(any[VatDetailsOld])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller
@@ -364,7 +398,7 @@ class VatDetailsControllerSpec
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(vatControllerResponse)))
-    when(mockSubscriptionDetailsService.cacheUkVatDetails(any[VatDetails])(any[Request[_]]))
+    when(mockSubscriptionDetailsService.cacheUkVatDetailsOld(any[VatDetailsOld])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
       controller

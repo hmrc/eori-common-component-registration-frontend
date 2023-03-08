@@ -158,6 +158,10 @@ case class YesNo(isYes: Boolean) {
   def isNo: Boolean = !isYes
 }
 
+case class VatVerificationOption(isDateOption: Boolean) {
+  def isAmountOption: Boolean = !isDateOption
+}
+
 case class NinoMatch(firstName: String, lastName: String, dateOfBirth: LocalDate, nino: String)
 
 object NinoMatch {
