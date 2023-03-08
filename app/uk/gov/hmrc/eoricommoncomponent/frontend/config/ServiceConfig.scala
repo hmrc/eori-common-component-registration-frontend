@@ -23,6 +23,8 @@ class ServiceConfig(configuration: Configuration) {
 
   val supportedServicesMap: Map[String, Service] = serviceList.map(service => service.code -> service).toMap
 
+  val supportedServicesList: Set[Service] = serviceList
+
   private def serviceList: Set[Service] =
     serviceKeys.map { service =>
       val englishFriendlyName = configuration.get[String](s"services-config.$service.friendlyName").replace("_", " ")
