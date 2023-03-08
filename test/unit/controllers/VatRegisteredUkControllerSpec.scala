@@ -45,7 +45,7 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
+class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector               = mock[AuthConnector]
   private val mockAuthAction                  = authAction(mockAuthConnector)
@@ -96,6 +96,21 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     }
     "land on a correct location" in {
       createForm() { result =>
+        val page = CdsPage(contentAsString(result))
+        page.title should include(VatRegisterUKPage.title)
+      }
+    }
+  }
+
+  "Vat registered Uk Controller in review mode" should {
+    when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(Future.successful(true))
+    "return OK when accessing page through createForm method" in {
+      reviewForm() { result =>
+        status(result) shouldBe OK
+      }
+    }
+    "land on a correct location" in {
+      reviewForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title should include(VatRegisterUKPage.title)
       }
@@ -161,6 +176,17 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
     "redirect to check answers page for no answer and is in review mode" in {
 
       when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
+      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
+      submitForm(validRequestNo, isInReviewMode = true) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith(
+          "customs-registration-services/atar/register/matching/review-determine"
+        )
+      }
+    }
+    "redirect to check answers page for no answer and is in review mode featureFlag is true" in {
+
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER

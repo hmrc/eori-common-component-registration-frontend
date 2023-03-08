@@ -311,7 +311,7 @@ class VatDetailsControllerSpec
       controller.vatDetailsNotMatched(true, atarService)
     )
 
-    "display weCannotConfirmYourIdentity" in {
+    "display weCannotConfirmYourIdentity isInReviewMode true" in {
       vatDetailsNotMatched() {
         result =>
           status(result) shouldBe OK
