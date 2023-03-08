@@ -40,6 +40,8 @@ object Service {
     Configuration(ConfigFactory.load())
   ).supportedServicesMap
 
+  val supportedServices: Set[Service] = new ServiceConfig(Configuration(ConfigFactory.load())).supportedServicesList
+
   def withName(str: String): Option[Service] =
     supportedServicesMap.get(str)
 

@@ -19,19 +19,12 @@ package common.pages.subscription
 import common.pages.WebPage
 
 trait VatRegisterUKPage extends WebPage {
-
-  override val title = "Is your organisation VAT registered in the UK?"
-
   val fieldLevelErrorYesNoAnswerForUKVat = "//*[@id='yes-no-answer-field']/*[@class='error-message']"
-
-  val ukVatNoXpath  = "//*[@id='yes-no-answer-false']"
-  val ukVatYesXpath = "//*[@id='yes-no-answer-true']"
-
+  val ukVatNoXpath                       = "//*[@id='yes-no-answer-false']"
+  val ukVatYesXpath                      = "//*[@id='yes-no-answer-true']"
 }
 
-object VatRegisterUKPage extends VatRegisterUKPage
-
-object VatRegisterUKPageReviewPage extends VatRegisterUKPage {
+object VatRegisterUKPage extends VatRegisterUKPage {
   override val title = "Is your organisation VAT registered in the UK?"
 }
 

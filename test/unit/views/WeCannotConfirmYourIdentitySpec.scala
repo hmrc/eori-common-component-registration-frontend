@@ -55,6 +55,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
 
     "have the VAT Details link for the try again button" in {
+
       doc
         .body()
         .getElementsByClass("govuk-button")
@@ -62,7 +63,11 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
 
     "have the VAT Details link for the try again button in review mode" in {
-      val doc = Jsoup.parse(contentAsString(view(true, atarService)))
+      val doc = Jsoup.parse(
+        contentAsString(
+          view(true, "/customs-registration-services/atar/register/what-are-your-uk-vat-details/review", atarService)
+        )
+      )
       doc
         .body()
         .getElementsByClass("govuk-button")
@@ -70,5 +75,10 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
   }
 
-  lazy val doc: Document = Jsoup.parse(contentAsString(view(false, atarService)))
+  lazy val doc: Document = Jsoup.parse(
+    contentAsString(
+      view(false, "/customs-registration-services/atar/register/what-are-your-uk-vat-details", atarService)
+    )
+  )
+
 }

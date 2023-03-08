@@ -16,22 +16,22 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  VatDetailsSubscriptionFlowPage,
-  VatRegisteredUkSubscriptionFlowPage
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  DetermineReviewPageController,
+  VatDetailsController,
+  VatDetailsControllerOld
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -42,7 +42,8 @@ class VatRegisteredUkController @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService,
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
-  vatRegisteredUkView: vat_registered_uk
+  vatRegisteredUkView: vat_registered_uk,
+  featureFlags: FeatureFlags
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -99,27 +100,25 @@ class VatRegisteredUkController @Inject() (
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatRegisteredUk(yesNoAnswer).flatMap {
               _ =>
-                if (isInReviewMode)
-                  if (yesNoAnswer.isYes)
-                    Future.successful(Redirect(VatDetailsController.reviewForm(service).url))
-                  else
-                    subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
-                      Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
+                val result = (isInReviewMode, yesNoAnswer.isYes, featureFlags.useNewVATJourney) match {
+                  case (false, true, false) => Future.successful(VatDetailsControllerOld.createForm(service).url)
+                  case (true, true, false)  => Future.successful(VatDetailsControllerOld.reviewForm(service).url)
+                  case (false, true, true)  => Future.successful(VatDetailsController.createForm(service).url)
+                  case (true, true, true)   => Future.successful(VatDetailsController.reviewForm(service).url)
+                  case (false, false, true) =>
+                    subscriptionDetailsService.clearCachedUkVatDetails map { _ =>
+                      subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
                     }
-                else if (yesNoAnswer.isYes)
-                  Future.successful(
-                    Redirect(
-                      subscriptionFlowManager.stepInformation(VatRegisteredUkSubscriptionFlowPage).nextPage.url(service)
-                    )
-                  )
-                else
-                  subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
-                    Future.successful(
-                      Redirect(
-                        subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
-                      )
-                    )
-                  }
+                  case (false, false, false) =>
+                    subscriptionDetailsService.clearCachedUkVatDetailsOld map { _ =>
+                      subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
+                    }
+                  case (true, false, _) =>
+                    subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
+                      Future.successful(DetermineReviewPageController.determineRoute(service).url)
+                    }
+                }
+                result.map(t => Redirect(t))
             }
         )
     }

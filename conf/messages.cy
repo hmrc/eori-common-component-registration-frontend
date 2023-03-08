@@ -481,13 +481,23 @@ cds.registration.use-a-different-service.info=I wneud cais am rif EORI fel corff
 cds.registration.use-a-different-service.vat-registered=wedi cofrestru ar gyfer TAW
 cds.registration.use-a-different-service.not-vat-registered=heb gofrestru ar gyfer TAW
 
+cds.form.gb-vat-amount=Cyfanswm eich Ffurflen TAW neu’ch swm o Flwch 5
+cds.subscription.vat-verification-option.yes=Y dyddiad y gwnaethoch gofrestru ar gyfer TAW
+cds.subscription.vat-verification-option.no=Cyfanswm eich Ffurflen TAW ddiweddaraf
+cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddefnyddio i gadarnhau pwy ydych?
+cds.subscription.vat-verification-option.error=Dewiswch os ydych am ddefnyddio dyddiad Cofrestru TAW neu gyfanswm y Ffurflen TAW diweddaraf
 cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych. <br><br> Gallwch ddod o hyd i'’'r enw hwn ar ddogfennau gan CThEF. Er enghraifft, cadarnhad o gofrestriad eich partneriaeth
 cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.limited-liability-partnership.name = Enw’r bartneriaeth gofrestredig
-
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
 cds.matching.organisation-type.user.header = Fel beth rydych am wneud cais?
+
+cds.subscription.vat-registration.vat-return.title = Beth yw cyfanswm eich Ffurflen TAW ddiweddaraf?
+cds.subscription.vat-registration.vat-return.para1 = Mae'’'r swm hwn i'’'w weld ym mlwch 5 yn y Ffurflen TAW ddiweddaraf i chi ei chyflwyno i CThEF.
+cds.subscription.vat-registration.vat-return.para2 = Mae angen nodi'’'r rhif hwn gan ddefnyddio dau le degol, er enghraifft £123.00
+
+
 cds.matching.organisation-type.organisation-type = Math o fusnes
 cds.matching.organisation-type.radio.company.label = Cwmni
 cds.matching.organisation-type.radio.organisation.label = Sefydliad
@@ -748,12 +758,20 @@ cds.subscription-details.amend.legal-entity.user.header = Golygu’r endid cyfre
 cds.subscription-details.amend.legal-entity.submitButton = Cadw a mynd i’r dangosfwrdd
 cds.multi.input.add-another = Ychwanegu un arall
 cds.subscription.vat-details.heading = Eich manylion TAW yn y DU
-cds.subscription.vat-details.intro-text = Mae’ch manylion TAW i’w gweld ar eich tystysgrif cofrestru ar gyfer TAW. I weld hyn, mewngofnodwch i’ch cyfrif treth a dewis “Rhagor o fanylion TAW”. Dewiswch y cysylltiad “Bwrw golwg dros y dystysgrif TAW” o dan y pennawd “Cymorth gyda threth”.
-cds.subscription.vat-details.intro-text.link = Dewch o hyd i’ch manylion TAW (yn agor tab newydd).
+cds.subscription.vat-details.intro-text-old = Mae’ch manylion TAW i’w gweld ar eich tystysgrif cofrestru ar gyfer TAW. I weld hyn, mewngofnodwch i’ch cyfrif treth a dewis “Rhagor o fanylion TAW”. Dewiswch y cysylltiad “Bwrw golwg dros y dystysgrif TAW” o dan y pennawd “Cymorth gyda threth”.
+cds.subscription.vat-details.intro-text.link-old = Dewch o hyd i’ch manylion TAW (yn agor tab newydd).
+
+cds.subscription.vat-details.intro-text = Mae’r rhain i’w gweld ar eich tystysgrif TAW.
+cds.subscription.vat-details.intro-text.link = Mewngofnodwch i’ch cyfrif TAW ar-lein (yn agor tab newydd)
+cds.subscription.vat-details.intro-text.link.text = i fwrw golwg ar eich tystysgrif TAW.
+cds.subscription.vat-details.postcode-old = Beth yw’r cod post yn y DU ble mae’ch sefydliad wedi’i gofrestru ar gyfer TAW?
+cds.subscription.vat-details.vat-number.hint-text = Dyma’r rhif 9 digid ar eich tystysgrif TAW. Er enghraifft, 123456789
+
+cds.subscription.vat-details.vat-number= Beth yw’ch rhif cofrestru TAW?
 cds.subscription.vat-details.postcode = Cod post y cyfeiriad cofrestru TAW
 cds.subscription.vat-details.postcode.required.error = Nodwch god post dilys eich cyfeiriad cofrestru TAW
 cds.subscription.vat-details.postcode.length.error = Rhaid i’r cod post fod yn 8 cymeriad ar y mwyaf
-cds.subscription.vat-details.vat-number = Rhif TAW
+cds.subscription.vat-details.vat-number-old = Rhif TAW
 cds.subscription.vat-details.vat-effective-date = Dyddiad y daw TAW i rym
 cds.subscription.vat-details.vat-effective-date.hint = Er enghraifft, 01 11 2007
 cds.subscription.vat-details.vat-effective-date.required.error = Nodwch eich dyddiad dod i rym ar gyfer TAW, er enghraifft “31 3 1980”
@@ -776,9 +794,7 @@ cds.subscription.vat-details.page-error.vat-effective-date = Nodwch y dyddiad do
 cds.subscription.vat-details.cannot-identify-you.heading = Ni allwn gadarnhau’ch manylion TAW
 cds.subscription.vat-details.cannot-identify-you.explanation = Nid yw’r manylion TAW yn y DU yr ydych wedi’u rhoi’n cyd-fynd â’r hyn sydd gennym yn ein cofnodion.
 cds.subscription.vat-details.cannot-identify-you.button = Rhowch gynnig arall arni
-cds.subscription.sign-in-with-different-details.heading = Mae’n rhaid i chi fewngofnodi gyda manylion gwahanol
-cds.subscription.sign-in-with-different-details.para2 = Mae’n rhaid i chi fewngofnodi gyda’r cyfrif Porth y Llywodraeth a ddefnyddiwyd gennych i gofrestru.
-cds.subscription.sign-in-with-different-details.button = Allgofnodi
+cds.subscription.sign-in-with-different-details.heading = Mae rhywun yn eich sefydliad eisoes wedi gwneud cais am rif EORI
 cds.security-sign-in = Mewngofnodi
 cds.subscription.vat-registration.steps = Manylion TAW
 cds.subscription.vat.number = Rhif TAW
@@ -1040,6 +1056,9 @@ cds.subscription.vat-group.page-error.yes-no-answer = Rhowch wybod i ni a yw’c
 cds.subscription.vat-group.partnership.page-error.yes-no-answer = Rhowch wybod i ni a yw’ch partneriaeth yn rhan o grŵp TAW yn y DU
 cds.subscription.vat-registration.form-error.vat-group = Rhowch wybod i ni a yw’ch sefydliad yn rhan o grŵp TAW yn y DU
 cds.subscription.based-in-uk.form-error.yes-no-answer = Cadarnhewch a ydych yn cofrestru ar gyfer busnes (neu unigolyn) sydd yn y DU
+
+
+
 cds.subscription.step-of-steps = Cam {0} o {1} – {2}
 cds.subscription.name-id-details.page-error.name = Nodwch enw eich busnes
 cds.subscription.name-id-details.name.label = Enw
@@ -1330,8 +1349,7 @@ vat.error.future-date = Mae’n rhaid i’r dyddiad y daw TAW i rym fod yn y gor
 vat.error.invalid-date = Mae’n rhaid i’r dyddiad y daw TAW i rym fod yn ddyddiad go iawn
 vat.error.minMax=Mae’n rhaid i’r dyddiad y daw TAW i rym fod rhwng {0} a heddiw
 cds.feedback.continue = Rhagor am {0}
-cds.subscription.sign-in-with-different-details.para1 = Mae {0} eisoes wedi cofrestru ar gyfer {1} gyda chyfrif Porth y Llywodraeth gwahanol.
-cds.subscription.sign-in-with-different-details.para1-noname = Rydych eisoes wedi cofrestru ar gyfer {0} gyda chyfrif Porth y Llywodraeth gwahanol.
+cds.subscription.sign-in-with-different-details.para1 = Does dim angen i chi wneud cais eto.
 cds.matching.row-organisation.utr.hint = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Dreth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
 cds.matching.row-sole-trader-individual.utr.hint = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
 cds.matching.row-lost-urt.hint.link = ddod o hyd i UTR sydd ar goll
@@ -1643,6 +1661,7 @@ ecc.eori-exists-group.cds.para1 = Os ydych am gael mynediad at CDS, mae angen i 
 ecc.eori-exists-group.cds.admin.link = rhoi’r gallu i aelod o’r tîm gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
 ecc.eori-exists-group.cds.link = rhoi’r gallu i chi’ch hun gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
 
+
 cds.subscription.outcomes.success.extra.information.next.new.ars = <li>Gwneud cais am Ddyfarniad Tariffau Uwch</li><li>Gwneud cais am Ddyfarniad Prisio Uwch</li>
 cds.subscription.outcomes.success.extra.information.next.new.atar =<li>Gwneud cais am Ddyfarniad Tariffau Uwch</li><li>Gwneud cais am Ddyfarniad Prisio Uwch</li>
 cds.subscription.outcomes.success.extra.information.next.new.gagmr =<li>Cael cyfeirnod symud nwyddau</li>
@@ -1652,3 +1671,15 @@ cds.subscription.outcomes.success.extra.information.next.new.ss =<li>gwneud datg
 cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>gwneud datganiad cryno wrth gyrraedd</li>
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
+
+ecc.eor-vat-return-error.incorrect.input =  Nodwch werth hyd at 2 le degol. Er enghraifft, £100.00
+ecc.eor-vat-return-error.incorrect.no-input = Nodwch gyfanswm eich Ffurflen TAW ddiweddaraf neu swm Blwch 5
+
+ecc.eor-vat-registration-date.heading = Pryd y gwnaethoch gofrestru ar gyfer TAW?
+ecc.eor-vat-registration-date.para1 = Mae’r dyddiad cofrestru i’w weld ar eich tystysgrif TAW.
+ecc.eor-vat-registration-date.link = Mewngofnodwch i’ch cyfrif TAW ar-lein (yn agor tab newydd)
+ecc.eor-vat-registration-date.para2 =  i fwrw golwg ar eich tystysgrif TAW.
+ecc.eor-vat-registration-date.hint = Er enghraifft, 01 11 2007
+
+
+

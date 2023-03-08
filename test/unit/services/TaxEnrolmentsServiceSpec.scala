@@ -23,10 +23,11 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.TaxEnrolmentsConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, SafeId, TaxEnrolmentsRequest}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, SafeId, TaxEnrolmentsRequest, TaxEnrolmentsResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.TaxEnrolmentsService
 import uk.gov.hmrc.http.HeaderCarrier
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -42,13 +43,50 @@ class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     reset(mockTaxEnrolmentsConnector)
   }
 
-  val testService  = Service.cds
-  val safeId       = SafeId("safeid")
-  val eori         = Eori("GB99999999")
-  val formBundleId = "formBundleId"
-  val date         = LocalDate.parse("2010-04-28")
+  val testService           = Service.cds
+  val nonExistingServiceKey = "Test-Service-Don't-Exist"
+  val safeId                = SafeId("safeid")
+  val eori                  = Eori("GB99999999")
+  val formBundleId          = "formBundleId"
+  val date                  = LocalDate.parse("2010-04-28")
 
   "TaxEnrolmentsService" should {
+
+    "return true when at least one returned enrolment exists in service config" in {
+      when(
+        mockTaxEnrolmentsConnector
+          .getEnrolments(any[String])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(List(TaxEnrolmentsResponse(testService.enrolmentKey))))
+
+      await(service.doesPreviousEnrolmentExists(safeId)) shouldBe true
+
+      verify(mockTaxEnrolmentsConnector)
+        .getEnrolments(any[String])(any[HeaderCarrier])
+    }
+
+    "return false when no enrolments returned exists in service config" in {
+      when(
+        mockTaxEnrolmentsConnector
+          .getEnrolments(any[String])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(List(TaxEnrolmentsResponse(nonExistingServiceKey))))
+
+      await(service.doesPreviousEnrolmentExists(safeId)) shouldBe false
+
+      verify(mockTaxEnrolmentsConnector)
+        .getEnrolments(any[String])(any[HeaderCarrier])
+    }
+
+    "return false when no enrolments returned" in {
+      when(
+        mockTaxEnrolmentsConnector
+          .getEnrolments(any[String])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(List.empty[TaxEnrolmentsResponse]))
+
+      await(service.doesPreviousEnrolmentExists(safeId)) shouldBe false
+
+      verify(mockTaxEnrolmentsConnector)
+        .getEnrolments(any[String])(any[HeaderCarrier])
+    }
 
     "make issuer call" in {
       when(

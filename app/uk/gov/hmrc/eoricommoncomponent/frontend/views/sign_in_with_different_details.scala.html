@@ -14,38 +14,17 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController.logout
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, govukButton: GovukButton)
+@this(layout_di: layout)
 
-@(orgName: Option[String])(implicit request: Request[_], messages: Messages)
-
-@para1 = {
-    @orgName match {
-        case Some(n) => {@messages("cds.subscription.sign-in-with-different-details.para1", n, ServiceName.longName)}
-        case None => {@messages("cds.subscription.sign-in-with-different-details.para1-noname", ServiceName.longName)}
-    }
-}
+@()(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages("cds.subscription.sign-in-with-different-details.heading")) {
 <div>
-
     <h1 class="govuk-heading-l">@messages("cds.subscription.sign-in-with-different-details.heading")</h1>
 
-    <p class="govuk-body" id="para1">@para1</p>
-
-    <p class="govuk-body" id="para2">@messages("cds.subscription.sign-in-with-different-details.para2")</p>
-
-    @govukButton(Button(
-        content = Text(messages("cds.subscription.sign-in-with-different-details.button")),
-        href = Some(logout(service).url)
-    ))
+    <p class="govuk-body" id="para1">@messages("cds.subscription.sign-in-with-different-details.para1")</p>
 
     @helpers.helpAndSupport()
 </div>

@@ -12,7 +12,7 @@ cds.error.page-title=Error
 cds.error.mandatory.field=This field is required
 cds.error.invalid.date.format=Please enter a valid date, for example ''31 3 1980''
 cds.error.future-date=You must specify a date that is not in the future
-cds.error.option.invalid=Please select one of the options
+cds.error.option.invalid=Select one of the options
 cds.contact.name.label=Contact person name
 cds.contact.telephone.label=Telephone number
 cds.contact.fax.label=Fax number (optional)
@@ -844,12 +844,23 @@ cds.subscription-details.amend.legal-entity.submitButton=Save and go to dashboar
 cds.multi.input.add-another=Add another
 #Subscription VAT details
 cds.subscription.vat-details.heading=Your UK VAT details
-cds.subscription.vat-details.intro-text=You can find your VAT details on your VAT registration certificate. To view this login to your tax account and select ''More VAT details''. Select the ''View VAT certificate'' link under the heading ''Help with tax''.
-cds.subscription.vat-details.intro-text.link=Find your VAT details (opens in new tab).
-cds.subscription.vat-details.postcode=VAT registration address postcode
+cds.subscription.vat-details.intro-text-old=You can find your VAT details on your VAT registration certificate. To view this login to your tax account and select ''More VAT details''. Select the ''View VAT certificate'' link under the heading ''Help with tax''.
+cds.subscription.vat-details.intro-text.link-old=Find your VAT details (opens in new tab).
+
+cds.subscription.vat-details.intro-text=You can find these on your VAT certificate.
+cds.subscription.vat-details.intro-text.link=Sign in to your VAT online account (opens in new tab)
+cds.subscription.vat-details.intro-text.link.text = to view your VAT certificate.
+cds.subscription.vat-details.postcode=What is the UK postcode where your organisation is registered for VAT?
+cds.subscription.vat-details.vat-number=What is your VAT registration number?
+cds.subscription.vat-details.vat-number.hint-text = This is the 9-digit number on your VAT certificate. For example, 123456789
+
+
+
+
+cds.subscription.vat-details.postcode-old=VAT registration address postcode
 cds.subscription.vat-details.postcode.required.error=Enter a valid postcode of your VAT registration address
 cds.subscription.vat-details.postcode.length.error=The postcode must be a maximum of 8 characters
-cds.subscription.vat-details.vat-number=VAT number
+cds.subscription.vat-details.vat-number-old=VAT number
 cds.subscription.vat-details.vat-effective-date=Effective VAT date
 cds.subscription.vat-details.vat-effective-date.hint=For example, 01 11 2007
 cds.subscription.vat-details.vat-effective-date.required.error=Enter your effective VAT date, for example ''31 3 1980''
@@ -875,9 +886,7 @@ cds.subscription.vat-details.cannot-identify-you.heading=We cannot verify your V
 cds.subscription.vat-details.cannot-identify-you.explanation=The UK VAT details you have provided do not match what we hold.
 cds.subscription.vat-details.cannot-identify-you.button=Try again
 
-cds.subscription.sign-in-with-different-details.heading=You need to sign in with different details
-cds.subscription.sign-in-with-different-details.para2=You need to sign in with the Government Gateway you used to register.
-cds.subscription.sign-in-with-different-details.button=Sign out
+cds.subscription.sign-in-with-different-details.heading=Someone in your organisation has already applied for an EORI number
 cds.security-sign-in=Sign in
 cds.subscription.vat-registration.steps=VAT details
 cds.subscription.vat.number=VAT Number
@@ -1112,6 +1121,7 @@ cds.form.sic-code=Standard Industrial Classification (SIC) code
 cds.form.gb-vat-number=VAT number
 cds.form.gb-vat-postcode=Postcode of your VAT registration address
 cds.form.gb-vat-date=VAT effective date
+cds.form.gb-vat-amount=Your VAT return total or Box 5 amount
 cds.form.eu-vat-numbers=EU VAT numbers
 cds.form.customs-contact=Contact
 cds.form.partnership.contact-details=Partnership address
@@ -1154,11 +1164,18 @@ cds.subscription.vat-registered-uk.title-and-heading=Is your organisation VAT re
 cds.subscription.vat-registered-uk.partnership.title-and-heading=Is your partnership VAT registered in the UK?
 cds.subscription.vat-registered-uk.page-error.yes-no-answer=Confirm whether the organisation is VAT registered in the UK
 cds.subscription.vat-group.title-and-heading=Is your organisation part of a VAT group in the UK?
+cds.subscription.vat-verification-option.title-and-heading=What do you want to use to verify your identity?
+cds.subscription.vat-verification-option.error=Select if you want to use VAT registration date or latest VAT Return total
 cds.subscription.vat-group.partnership.title-and-heading=Is your partnership part of a VAT group in the UK?
 cds.subscription.vat-group.intro-text=VAT groups are when two or more companies or limited liability partnerships register as one taxable ''person'' for VAT purposes in the UK.
 cds.subscription.vat-group.page-error.yes-no-answer=Tell us if your organisation is part of a VAT group in the UK
 cds.subscription.vat-group.partnership.page-error.yes-no-answer=Tell us if your partnership is part of a VAT group in the UK
 cds.subscription.vat-registration.form-error.vat-group=Tell us if your organisation is part of a VAT group in the UK
+
+
+cds.subscription.vat-registration.vat-return.title = What is your latest VAT Return total?
+cds.subscription.vat-registration.vat-return.para1 = You can find this amount in box number 5 on your latest VAT Return submitted to HMRC.
+cds.subscription.vat-registration.vat-return.para2 = The format of this number needs to be two decimal places, for example £123.00
 
 cds.subscription.based-in-uk.form-error.yes-no-answer=Confirm whether you are registering for a business (or individual) that is in the UK
 cds.subscription.step-of-steps=Step {0} of {1} - {2}
@@ -1536,8 +1553,7 @@ vat.error.minMax=Effective VAT date must be between {0} and today
 
 cds.feedback.continue=More about {0}
 
-cds.subscription.sign-in-with-different-details.para1={0} has already registered for {1} with a different Government Gateway.
-cds.subscription.sign-in-with-different-details.para1-noname=You have already registered for {0} with a different Government Gateway.
+cds.subscription.sign-in-with-different-details.para1=You don’t need to apply again.
 
 cds.matching.row-organisation.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called 'reference', 'UTR' or 'official use'. You can {0}.
 cds.matching.row-sole-trader-individual.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’. You can {0}.
@@ -1640,6 +1656,8 @@ cds.subscription.organisation-disclose-personal-details-consent.declaration=HMRC
 cds.subscription.organisation-disclose-personal-details-consent.declaration.link=public checker
 cds.subscription.organisation-disclose-personal-details-consent.yes=Select yes to show your name and address on the Check an EORI number service
 cds.subscription.organisation-disclose-personal-details-consent.no=Select no to just show your EORI number
+cds.subscription.vat-verification-option.yes=The date you became VAT registered
+cds.subscription.vat-verification-option.no=Your latest VAT Return total
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
@@ -1895,3 +1913,14 @@ cds.subscription.outcomes.success.extra.information.next.new.ss =<li>make entry 
 cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>make entry summary declarations</li>
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>submit union transit declarations through NCTS</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>use the Customs Declaration Service</li>
+
+ecc.eor-vat-return-error.incorrect.input = Enter a value to 2 decimal places. For example, £100.00
+ecc.eor-vat-return-error.incorrect.no-input = Enter your latest VAT Return total or Box 5 amount
+
+ecc.eor-vat-registration-date.heading = When did you become VAT registered?
+ecc.eor-vat-registration-date.para1 = You can find the registration date on your VAT certificate.
+ecc.eor-vat-registration-date.link = Sign in to your VAT online account (opens in new tab)
+ecc.eor-vat-registration-date.para2 = to view your VAT certificate.
+ecc.eor-vat-registration-date.hint = For example, 01 11 2007
+
+

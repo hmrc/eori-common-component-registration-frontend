@@ -19,8 +19,15 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
+
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails}
+
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
+  AddressViewModel,
+  ContactDetailsModel,
+  VatDetails,
+  VatDetailsOld
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.ContactDetailsAdaptor
@@ -53,7 +60,6 @@ class SubscriptionDetailsService @Inject() (
   )(implicit request: Request[_]): Future[Unit] = sessionCache.subscriptionDetails flatMap {
     subDetails =>
       sessionCache.saveSubscriptionDetails(insertNewDetails(subDetails)).map(_ => ())
-
   }
 
   def cacheContactDetails(contactDetailsModel: ContactDetailsModel, isInReviewMode: Boolean = false)(implicit
@@ -116,6 +122,11 @@ class SubscriptionDetailsService @Inject() (
   def cachedNameDobDetails(implicit request: Request[_]): Future[Option[NameDobMatchModel]] =
     sessionCache.subscriptionDetails.map(_.nameDobDetails)
 
+  def cacheVatVerificationOption(
+    verificationOption: VatVerificationOption
+  )(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(vatVerificationOption = Some(verificationOption.isDateOption)))
+
   def cacheNinoOrUtrChoice(ninoOrUtrChoice: NinoOrUtrChoice)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(
       sd => sd.copy(formData = sd.formData.copy(ninoOrUtrChoice = ninoOrUtrChoice.ninoOrUtrRadio))
@@ -132,6 +143,17 @@ class SubscriptionDetailsService @Inject() (
 
   def clearCachedUkVatDetails(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(ukVatDetails = None))
+
+  def cacheVatControlListResponse(
+    vatControlListResponse: VatControlListResponse
+  )(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(vatControlListResponse = Some(vatControlListResponse)))
+
+  def cacheUkVatDetailsOld(ukVatDetails: VatDetailsOld)(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(ukVatDetailsOld = Some(ukVatDetails)))
+
+  def clearCachedUkVatDetailsOld(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(ukVatDetailsOld = None))
 
   def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(vatRegisteredUk = Some(yesNoAnswer.isYes)))

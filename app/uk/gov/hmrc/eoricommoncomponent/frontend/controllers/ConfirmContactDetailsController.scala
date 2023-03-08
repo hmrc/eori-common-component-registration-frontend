@@ -22,11 +22,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,8 +43,7 @@ class ConfirmContactDetailsController @Inject() (
   mcc: MessagesControllerComponents,
   confirmContactDetailsView: confirm_contact_details,
   sub01OutcomeProcessingView: sub01_outcome_processing,
-  youCannotChangeAddressOrganisation: you_cannot_change_address_organisation,
-  youCannotChangeAddressIndividual: you_cannot_change_address_individual
+  taxEnrolmentsService: TaxEnrolmentsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -201,7 +201,7 @@ class ConfirmContactDetailsController @Inject() (
           case SubscriptionProcessing =>
             Future.successful(Redirect(ConfirmContactDetailsController.processing(service)))
           case SubscriptionExists =>
-            Future.successful(Redirect(SubscriptionRecoveryController.complete(service)))
+            onExistingSubscription(service)
           case status =>
             throw new IllegalStateException(s"Invalid subscription status : $status")
         }
@@ -228,6 +228,18 @@ class ConfirmContactDetailsController @Inject() (
           "YesNoWrongAddressForm field somehow had a value that wasn't yes, no, wrong address, or empty"
         )
     }
+
+  private def onExistingSubscription(
+    service: Service
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
+    for {
+      regDetails      <- sessionCache.registrationDetails
+      enrolmentExists <- taxEnrolmentsService.doesPreviousEnrolmentExists(regDetails.safeId)
+    } yield
+      if (enrolmentExists)
+        Redirect(SignInWithDifferentDetailsController.form(service))
+      else
+        Redirect(SubscriptionRecoveryController.complete(service))
 
   private def onNewSubscription(service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent]

@@ -1,0 +1,135 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package unit.controllers
+
+import org.mockito.ArgumentMatchers._
+import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.{Request, Result}
+import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfVatRegistrationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, we_cannot_confirm_your_identity}
+import util.ControllerSpec
+import util.builders.AuthBuilder.withAuthorisedUser
+import util.builders.{AuthActionMock, SessionBuilder}
+
+import java.time.LocalDate
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
+
+  private val mockDateOfVatRegistrationView   = instanceOf[date_of_vat_registration]
+  private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
+  private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
+
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction    = authAction(mockAuthConnector)
+
+  private val controller = new DateOfVatRegistrationController(
+    mockAuthAction,
+    mockSubscriptionBusinessService,
+    mcc,
+    mockDateOfVatRegistrationView,
+    mockWeCannotConfirmYourIdentity
+  )
+
+  private val vatControlListResponse = VatControlListResponse(
+    postcode = Some("SE28 1AA"),
+    dateOfReg = Some("2017-01-01"),
+    lastNetDue = Some(10000.02d),
+    lastReturnMonthPeriod = Option("MAR")
+  )
+
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
+    when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any[Request[_]])).thenReturn(
+      Some(vatControlListResponse)
+    )
+  }
+
+  "Date of VAT registration Controller" should {
+    "return OK when accessing page though createForm method" in {
+      createForm() { result =>
+        status(result) shouldBe OK
+      }
+    }
+  }
+
+  "Submitting Vat date" should {
+
+    "be successful when submitted with valid and data matches API response" in {
+      val validReturnTotal: Map[String, String] = Map(
+        "vat-registration-date.day"   -> "01",
+        "vat-registration-date.month" -> "01",
+        "vat-registration-date.year"  -> "2017"
+      )
+
+      val vatRegistrationDate = VatRegistrationDate(LocalDate.of(2017, 1, 1))
+      submitForm(validReturnTotal) { result =>
+        status(result) shouldBe SEE_OTHER
+      }
+    }
+
+    "redirect to cannot verify your details when valid input supplied but not matching API response" in {
+      val validReturnTotal: Map[String, String] = Map(
+        "vat-registration-date.day"   -> "17",
+        "vat-registration-date.month" -> "11",
+        "vat-registration-date.year"  -> "2000"
+      )
+      submitForm(validReturnTotal) { result =>
+        status(result) shouldBe OK
+      }
+    }
+
+    "return to the same location with bad request when submitting invalid request" in {
+      val invalidVatAmountInput: Map[String, String] = Map(
+        "vat-registration-date.day"   -> "This",
+        "vat-registration-date.month" -> "is",
+        "vat-registration-date.year"  -> "wrong"
+      )
+      submitForm(invalidVatAmountInput) { result =>
+        status(result) shouldBe BAD_REQUEST
+      }
+    }
+  }
+
+  "return to the same location with bad request when submitting empty request" in {
+    val invalidVatAmountInput: Map[String, String] =
+      Map("vat-registration-date.day" -> "", "vat-registration-date.month" -> "", "vat-registration-date.year" -> "")
+    submitForm(invalidVatAmountInput) { result =>
+      status(result) shouldBe BAD_REQUEST
+
+    }
+  }
+
+  private def createForm()(test: Future[Result] => Any) = {
+    withAuthorisedUser(defaultUserId, mockAuthConnector)
+    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+  }
+
+  private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit = {
+    withAuthorisedUser(defaultUserId, mockAuthConnector)
+    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
+  }
+
+}

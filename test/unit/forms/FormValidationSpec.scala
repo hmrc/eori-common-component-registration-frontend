@@ -23,11 +23,10 @@ import java.time.LocalDate
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{SicCodeViewModel, VatDetailsForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{SicCodeViewModel, VatDetailsFormOld}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
 
 import java.time.format.DateTimeFormatter
-import scala.collection.mutable
 import scala.util.Random
 
 class FormValidationSpec extends UnitSpec {
@@ -40,7 +39,7 @@ class FormValidationSpec extends UnitSpec {
   lazy val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] =
     MatchingForms.thirdCountryIndividualNameDateOfBirthForm
 
-  lazy val vatDetailsForm = VatDetailsForm.vatDetailsForm
+  lazy val vatDetailsForm = VatDetailsFormOld.vatDetailsFormOld
 
   lazy val dateOfEstablishmentForm: Form[LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
 
