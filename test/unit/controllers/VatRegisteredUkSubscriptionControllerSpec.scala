@@ -143,11 +143,18 @@ class VatRegisteredUkSubscriptionControllerSpec extends ControllerSpec with Befo
       }
     }
 
-    "redirect to vat groups review page for yes answer and is in review mode" in {
+    "redirect to vat groups review old page for yes answer and is in review mode" in {
       when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
       submitForm(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("register/what-are-your-uk-vat-details/review")
+      }
+    }
+    "redirect to vat groups review page for yes answer and is in review mode" in {
+      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
+      submitForm(ValidRequest, isInReviewMode = true) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("register/your-uk-vat-details/review")
       }
     }
 

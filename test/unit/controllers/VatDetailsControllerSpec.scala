@@ -305,6 +305,21 @@ class VatDetailsControllerSpec
     }
   }
 
+  "vatDetailsNotMatched in review mode" should {
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
+      mockAuthConnector,
+      controller.vatDetailsNotMatched(true, atarService)
+    )
+
+    "display weCannotConfirmYourIdentity" in {
+      vatDetailsNotMatched() {
+        result =>
+          status(result) shouldBe OK
+          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+      }
+    }
+  }
+
   private def showCreateForm(userId: String = defaultUserId, cachedDate: Option[LocalDate] = None)(
     test: Future[Result] => Any
   ) {
