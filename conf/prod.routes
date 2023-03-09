@@ -10,7 +10,7 @@ GET         /customs-registration-services/language/:lang                       
 
 # enrolment-already-exists
 GET         /customs-registration-services/:service/register/enrolment-already-exists                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service: Service)
-GET         /customs-registratiovn-services/:service/register/enrolment-already-exists-for-group          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service: Service)
+GET         /customs-registration-services/:service/register/enrolment-already-exists-for-group          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service: Service)
 GET         /customs-registration-services/:service/register/cds-enrolment-exists                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service: Service)
 GET         /customs-registration-services/:service/register/cds-enrolment-exists-for-group              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service: Service)
 
