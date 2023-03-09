@@ -1018,6 +1018,7 @@ cds.subscription.outcomes.success.optional-paragraph=We have sent you an email t
 cds.subscription.outcomes.success.application-info=Your application gives you:
 cds.subscription.outcomes.success.application-info.bullet2=an EORI number
 
+cds.subscription.outcomes.success.extra.information.next.ars = <li>apply for an advance rulings</li>
 cds.subscription.outcomes.success.extra.information.next=What happens next
 cds.subscription.outcomes.success.extra.information.para1=We will process your application. This can take up to 2 hours.
 cds.subscription.outcomes.success.extra.information.para2 = We will then email you to let you know that the subscription and EORI number are ready to use. At this point you can:
@@ -1810,6 +1811,7 @@ ecc.start-page.para1 = If we approve your application we will give you:
 ecc.start-page.para1.bullet1 = an EORI number
 ecc.start-page.para2 = You only need to apply once.
 
+ecc.start-page.para1.bullet2.ars = a subscription to advance rulings
 ecc.start-page.para1.bullet2.gagmr = a subscription to the Goods Vehicle Movement Service
 ecc.start-page.para1.bullet2.atar = a subscription to Advance Tariff Rulings
 ecc.start-page.para1.bullet2.cts = a subscription to Customs Trader Services
@@ -1904,12 +1906,32 @@ ecc.eori-exists-group.cds.para1 = If you want access to CDS, you need to go to m
 ecc.eori-exists-group.cds.admin.link = give a team member access to a tax duty or scheme (opens in new tab)
 ecc.eori-exists-group.cds.link = give yourself access to a tax, duty or scheme (opens in new tab)
 
+cds.subscription.outcomes.success.extra.information.next.new.ars = <li>apply for an Advance Tariff Ruling</li><li>apply for an Advance Valuation Ruling</li>
+cds.subscription.outcomes.success.extra.information.next.new.atar =<li>apply for an Advance Tariff Ruling</li><li>apply for an Advance Valuation Ruling </li>
+cds.subscription.outcomes.success.extra.information.next.new.gagmr =<li>get a goods movement reference (GMR)</li>
+cds.subscription.outcomes.success.extra.information.next.new.cts =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
+cds.subscription.outcomes.success.extra.information.next.new.route1 =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
+cds.subscription.outcomes.success.extra.information.next.new.ss =<li>make entry summary declarations</li>
+cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>make entry summary declarations</li>
+cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>submit union transit declarations through NCTS</li>
+cds.subscription.outcomes.success.extra.information.next.new.cds =<li>use the Customs Declaration Service</li>
 
 ecc.eor-vat-return-error.incorrect.input = Enter a value to 2 decimal places. For example, £100.00
 ecc.eor-vat-return-error.incorrect.no-input = Enter your latest VAT Return total or Box 5 amount
+
 ecc.eor-vat-registration-date.heading = When did you become VAT registered?
 ecc.eor-vat-registration-date.para1 = You can find the registration date on your VAT certificate.
 ecc.eor-vat-registration-date.link = Sign in to your VAT online account (opens in new tab)
 ecc.eor-vat-registration-date.para2 = to view your VAT certificate.
 ecc.eor-vat-registration-date.hint = For example, 01 11 2007
 
+ecc.start-page.para1.bullet2.new.ars = a subscription to advance rulings
+ecc.start-page.para1.bullet2.new.gagmr = a subscription to the Goods Vehicle Movement Service
+ecc.start-page.para1.bullet2.new.atar = a subscription to advance rulings
+ecc.start-page.para1.bullet2.new.cts = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.new.route1 = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.new.ivd = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.new.ndrc = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.new.gbss = a subscription to the Safety and Security GB service
+ecc.start-page.para1.bullet2.new.ctc = a subscription to the New Computerised Transit System (NCTS)
+ecc.start-page.para1.bullet2.new.cds = a subscription to the Customs Declaration Service

@@ -26,6 +26,7 @@ class FeatureFlagsSpec extends ControllerSpec {
   private val configuration: Config = ConfigFactory.parseString("""
       |features.matchingEnabled=true
       |features.sub02UseServiceName=true
+      |features.arsNewJourney=false
       |features.useNewVATJourney=true
       """.stripMargin)
 
@@ -36,6 +37,7 @@ class FeatureFlagsSpec extends ControllerSpec {
 
       featureFlags.matchingEnabled shouldBe false // hard-coded
       featureFlags.sub02UseServiceName shouldBe true
+      featureFlags.arsNewJourney shouldBe false
       featureFlags.useNewVATJourney shouldBe true
     }
   }

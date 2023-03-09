@@ -927,7 +927,7 @@ cds.subscription.outcomes.success.optional-paragraph = Rydym wedi anfon e-bost a
 cds.subscription.outcomes.success.extra.information.when-you-can=Pryd byddwch yn gallu dechrau defnyddio’ch tanysgrifiad a’ch rhif EORI
 cds.subscription.outcomes.success.extra.information.when-you-can.information=Gall gymryd hyd at ddwy awr i’ch tanysgrifiad a’ch rhif EORI fod yn barod i’w defnyddio.
 
-
+cds.subscription.outcomes.success.extra.information.next.ars= <li>tanysgrifiad i Ddyfarniadau Uwch</li>
 cds.subscription.outcomes.success.extra.information.next = Yr hyn sy’n digwydd nesaf
 cds.subscription.outcomes.success.extra.information.para1 = Byddwn yn prosesu’ch cais. Gall hyn gymryd hyd at 2 awr.
 cds.subscription.outcomes.success.extra.information.para2 = Yna, byddwn yn anfon e-bost atoch i gadarnhau bod y tanysgrifiad a’r rhif EORI yn barod i’w defnyddio. Ar yr adeg hon, gallwch wneud y canlynol:
@@ -1577,6 +1577,7 @@ ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r can
 ecc.start-page.para1.bullet1 = rhif EORI
 ecc.start-page.para2 = Dim ond unwaith y bydd angen i chi wneud hyn.
 
+ecc.start-page.para1.bullet2.ars = tanysgrifiad i Ddyfarniadau Uwch
 ecc.start-page.para1.bullet2.gagmr = tanysgrifiad i’r Gwasanaeth Symud Cerbydau Nwyddau
 ecc.start-page.para1.bullet2.atar = tanysgrifiad i Ddyfarniadau Tariffau Uwch
 ecc.start-page.para1.bullet2.cts = tanysgrifiad i Wasanaethau Masnachwyr Tollau
@@ -1661,6 +1662,17 @@ ecc.eori-exists-group.cds.para1 = Os ydych am gael mynediad at CDS, mae angen i 
 ecc.eori-exists-group.cds.admin.link = rhoi’r gallu i aelod o’r tîm gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
 ecc.eori-exists-group.cds.link = rhoi’r gallu i chi’ch hun gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
 
+
+cds.subscription.outcomes.success.extra.information.next.new.ars = <li>Gwneud cais am Ddyfarniad Tariffau Uwch</li><li>Gwneud cais am Ddyfarniad Prisio Uwch</li>
+cds.subscription.outcomes.success.extra.information.next.new.atar =<li>Gwneud cais am Ddyfarniad Tariffau Uwch</li><li>Gwneud cais am Ddyfarniad Prisio Uwch</li>
+cds.subscription.outcomes.success.extra.information.next.new.gagmr =<li>Cael cyfeirnod symud nwyddau</li>
+cds.subscription.outcomes.success.extra.information.next.new.cts =<li>gwneud cais am ad-daliad o dollau mewnforio a TAW (CHIEF)</li><li>anfon dogfennau i'’'w gwirio gan y tollau ar gyfer datganiadau a wneir drwy'''r system CHIEF</li><li>rhoi gwybod i CThEF am dandaliad o ran Toll Dramor neu TAW mewnforio</li>
+cds.subscription.outcomes.success.extra.information.next.new.route1 =<li>gwneud cais am ad-daliad o dollau mewnforio a TAW (CHIEF)</li><li>anfon dogfennau i'’'w gwirio gan y tollau ar gyfer datganiadau a wneir drwy'''r system CHIEF</li><li>rhoi gwybod i CThEF am dandaliad o ran Toll Dramor neu TAW mewnforio</li>
+cds.subscription.outcomes.success.extra.information.next.new.ss =<li>gwneud datganiad cryno wrth gyrraedd</li>
+cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>gwneud datganiad cryno wrth gyrraedd</li>
+cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
+cds.subscription.outcomes.success.extra.information.next.new.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
+
 ecc.eor-vat-return-error.incorrect.input =  Nodwch werth hyd at 2 le degol. Er enghraifft, £100.00
 ecc.eor-vat-return-error.incorrect.no-input = Nodwch gyfanswm eich Ffurflen TAW ddiweddaraf neu swm Blwch 5
 
@@ -1670,4 +1682,15 @@ ecc.eor-vat-registration-date.link = Mewngofnodwch i’ch cyfrif TAW ar-lein (yn
 ecc.eor-vat-registration-date.para2 =  i fwrw golwg ar eich tystysgrif TAW.
 ecc.eor-vat-registration-date.hint = Er enghraifft, 01 11 2007
 
+ecc.start-page.para1.bullet2.new.ars = tanysgrifiad i Ddyfarniadau Uwch
+ecc.start-page.para1.bullet2.new.gagmr = tanysgrifiad i’r Gwasanaeth Symud Cerbydau Nwyddau
+ecc.start-page.para1.bullet2.new.atar = tanysgrifiad i Ddyfarniadau Uwch
+ecc.start-page.para1.bullet2.new.cts = tanysgrifiad i Wasanaethau Masnachwyr Tollau
+ecc.start-page.para1.bullet2.new.route1 = tanysgrifiad i Wasanaethau Masnachwyr Tollau
+ecc.start-page.para1.bullet2.new.ivd = tanysgrifiad i Wasanaethau Masnachwyr Tollau
+ecc.start-page.para1.bullet2.new.ndrc = tanysgrifiad i Wasanaethau Masnachwyr Tollau
+ecc.start-page.para1.bullet2.new.gbss = tanysgrifiad i’r Gwasanaeth Diogelwch (yn y DU)
+ecc.start-page.para1.bullet2.new.ctc = tanysgrifiad i’r System Gludo Gyfrifiadurol Newydd (NCTS)
+ecc.start-page.para1.bullet2.new.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
+ecc.start-page.para1.bullet2.new.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 

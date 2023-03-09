@@ -27,6 +27,6 @@ class FeatureFlags @Inject() (config: Configuration) {
   val matchingEnabled: Boolean = false //loadConfig(path = "features.matchingEnabled")
 
   val sub02UseServiceName: Boolean = loadConfig("features.sub02UseServiceName")
-
-  val useNewVATJourney: Boolean = loadConfig("features.useNewVATJourney")
+  val arsNewJourney: Boolean       = loadConfig("features.arsNewJourney")
+  val useNewVATJourney: Boolean    = loadConfig("features.useNewVATJourney")
 }
