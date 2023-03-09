@@ -93,8 +93,7 @@ class VatDetailsController @Inject() (
                 else if (vatControlListResponse.isLastReturnMonthPeriodNonEmpty)
                   Redirect(VatVerificationOptionController.createForm(service))
                 else
-                  //TODO: New page NO return is NOT available
-                  Ok(weCannotConfirmYourIdentity(isInReviewMode, VatDetailsController.createForm(service).url, service))
+                  Redirect(DateOfVatRegistrationController.createForm(service))
             }
         else
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
