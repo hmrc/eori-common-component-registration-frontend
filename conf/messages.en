@@ -1040,7 +1040,7 @@ cds.subscription.outcomes.success.extra.information.when-you-can.information=It 
 cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone=It can take up to 2 hours for your EORI number and subscription to be ready to use.
 cds.subscription.outcomes.success.extra.information1=Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the {0}. Your new GB EORI has no expiry date.
 cds.subscription.outcomes.success.extra.information2=check an EORI service (opens in new tab)
-cds.subscription.outcomes.success.download-eori-textfile=Download an accessible text file of your EORI number(12kb)
+cds.subscription.outcomes.success.download-eori-textfile=Download a text file of your EORI number (12kb)
 cds.subscription.outcomes.invalid.sub-title=There is a problem with the EORI you have supplied, please contact us for more information
 cds.subscription.outcomes.processing.title=CDS Registration Pending
 cds.subscription.outcomes.processing.heading=Registration processing
@@ -1075,7 +1075,7 @@ cds.standalone.subscription.outcomes.success.extra.information1=We will send you
 cds.standalone.subscription.outcomes.success.extra.information1.standalone=We will send you an email to confirm when your EORI number and subscription are ready to use.
 cds.standalone.subscription.outcomes.success.issued=issued by HMRC on
 cds.standalone.subscription.outcomes.success.title=Application complete
-cds.standalone.subscription.outcomes.success.download-eori-textfile=Download an accessible text file of your EORI number(12kb)
+cds.standalone.subscription.outcomes.success.download-eori-textfile=Download a text file of your EORI number (12kb)
 
 # Reg Existing Complete
 cds.reg.existing.outcomes.success.title=EORI Registration Complete

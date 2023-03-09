@@ -945,7 +945,7 @@ cds.subscription.outcomes.success.extra.information.bullet2 = cael rhif EORI yn 
 
 cds.subscription.outcomes.success.extra.information1 = Bydd eich rhif EORI GB newydd yn barod i’w ddefnyddio cyn pen 48 awr. Unwaith y bydd eich rhif EORI GB yn weithredol, byddwn yn anfon e-bost atoch yn rhoi gwybod bod eich cais wedi’i gwblhau. Os hoffech wirio statws eich rhif EORI GB, gallwch ddefnyddio’r {0}. Nid oes gan eich rhif EORI GB newydd ddyddiad dod i ben.
 cds.subscription.outcomes.success.extra.information2 = gwasanaeth gwirio rhif EORI (yn agor tab newydd)
-cds.subscription.outcomes.success.download-eori-textfile = Lawrlwytho ffeil destun hygyrch o’ch rhif EORI (12kb)
+cds.subscription.outcomes.success.download-eori-textfile = Lawrlwytho ffeil destun o’ch rhif EORI (12kb)
 cds.subscription.outcomes.invalid.sub-title = Mae problem gyda’r EORI rydych wedi’i roi - cysylltwch â ni am ragor o wybodaeth
 cds.subscription.outcomes.processing.title = Cofrestriad y Gwasanaeth Datganiadau Tollau (CDS) ar y gweill
 cds.subscription.outcomes.processing.heading = Cofrestriad wrthi’n cael ei brosesu
@@ -979,7 +979,7 @@ cds.standalone.subscription.outcomes.success.extra.information.heading = Yr hyn 
 cds.standalone.subscription.outcomes.success.extra.information1=Byddwn yn anfon e-bost atoch i gadarnhau pan fydd eich tanysgrifiad a’ch rhif EORI yn barod i’w defnyddio.
 cds.standalone.subscription.outcomes.success.issued = cyhoeddwyd gan CThEM ar
 cds.standalone.subscription.outcomes.success.title = Cais wedi’i gwblhau
-cds.standalone.subscription.outcomes.success.download-eori-textfile = Lawrlwytho ffeil destun hygyrch o’ch rhif EORI (12kb)
+cds.standalone.subscription.outcomes.success.download-eori-textfile = Lawrlwytho ffeil destun o’ch rhif EORI (12kb)
 cds.reg.existing.outcomes.success.title = Cofrestriad EORI wedi’i gwblhau
 cds.reg.existing.outcomes.success.heading.part2 = y Gwasanaeth Datganiadau Tollau
 cds.reg.existing.outcomes.success.eori.number = Rhif EORI:

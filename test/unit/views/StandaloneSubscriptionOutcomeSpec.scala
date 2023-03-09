@@ -54,7 +54,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
       val additionalInfoParagraph = doc.body().getElementById("additional-information")
 
       val listItems = additionalInfoParagraph.getElementsByTag("li")
-      listItems.get(0).text() mustBe "Download an accessible text file of your EORI number(12kb)"
+      listItems.get(0).text() mustBe "Download a text file of your EORI number (12kb)"
       listItems.get(0).getElementsByTag("a").attr(
         "href"
       ) mustBe "/customs-registration-services/atar/register/download/text"
