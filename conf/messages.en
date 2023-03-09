@@ -1018,6 +1018,7 @@ cds.subscription.outcomes.success.optional-paragraph=We have sent you an email t
 cds.subscription.outcomes.success.application-info=Your application gives you:
 cds.subscription.outcomes.success.application-info.bullet2=an EORI number
 
+cds.subscription.outcomes.success.extra.information.next.ars = <li>apply for an advance rulings</li>
 cds.subscription.outcomes.success.extra.information.next=What happens next
 cds.subscription.outcomes.success.extra.information.para1=We will process your application. This can take up to 2 hours.
 cds.subscription.outcomes.success.extra.information.para2 = We will then email you to let you know that the subscription and EORI number are ready to use. At this point you can:
@@ -1810,6 +1811,7 @@ ecc.start-page.para1 = If we approve your application we will give you:
 ecc.start-page.para1.bullet1 = an EORI number
 ecc.start-page.para2 = You only need to apply once.
 
+ecc.start-page.para1.bullet2.ars = a subscription to advance rulings
 ecc.start-page.para1.bullet2.gagmr = a subscription to the Goods Vehicle Movement Service
 ecc.start-page.para1.bullet2.atar = a subscription to Advance Tariff Rulings
 ecc.start-page.para1.bullet2.cts = a subscription to Customs Trader Services
@@ -1923,4 +1925,13 @@ ecc.eor-vat-registration-date.link = Sign in to your VAT online account (opens i
 ecc.eor-vat-registration-date.para2 = to view your VAT certificate.
 ecc.eor-vat-registration-date.hint = For example, 01 11 2007
 
-
+ecc.start-page.para1.bullet2.new.ars = a subscription to advance rulings
+ecc.start-page.para1.bullet2.new.gagmr = a subscription to the Goods Vehicle Movement Service
+ecc.start-page.para1.bullet2.new.atar = a subscription to advance rulings
+ecc.start-page.para1.bullet2.new.cts = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.new.route1 = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.new.ivd = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.new.ndrc = a subscription to Customs Trader Services
+ecc.start-page.para1.bullet2.new.gbss = a subscription to the Safety and Security GB service
+ecc.start-page.para1.bullet2.new.ctc = a subscription to the New Computerised Transit System (NCTS)
+ecc.start-page.para1.bullet2.new.cds = a subscription to the Customs Declaration Service

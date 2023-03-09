@@ -120,7 +120,9 @@ class Sub02Controller @Inject() (
             )
           ).withSession(newUserSession)
         else {
-          val subscriptionTo = s"ecc.start-page.para1.bullet2.${service.code}"
+          val subscriptionTo =
+            if (featureFlag.arsNewJourney) s"ecc.start-page.para1.bullet2.new.${service.code}"
+            else s"ecc.start-page.para1.bullet2.${service.code}"
           Ok(
             subscriptionOutcomeView(
               service,
