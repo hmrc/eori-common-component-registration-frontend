@@ -1795,7 +1795,7 @@ ecc.subscription.organisation-disclose-personal-details-consent.hint =HMRC will 
 ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.
 ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker kept by the European Commission (opens in new tab)</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
 
-
+ecc.start-page.title.ars = Get a subscription to advance rulings and an EORI number starting with GB
 ecc.start-page.title.gagmr = Get a subscription to the Goods Vehicle Movement Service and an EORI number starting with GB
 ecc.start-page.title.atar = Get a subscription to Advance Tariff Rulings and an EORI number starting with GB
 ecc.start-page.title.cts = Get a subscription to Customs Trader Services and an EORI number starting with GB
