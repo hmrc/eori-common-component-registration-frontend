@@ -424,7 +424,7 @@ summaryListRowNoChangeOption(
             ),
         )
     }
-else if(!isIndividual && useNewVATJourney && subscription.vatVerificationOption.get == true) {
+else if(!isIndividual && useNewVATJourney && subscription.vatVerificationOption.getOrElse(true) == true) {
     Seq(
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),
@@ -442,7 +442,7 @@ else if(!isIndividual && useNewVATJourney && subscription.vatVerificationOption.
             call = Some(VATNumberPage.reviewForm(service))
         ),
     )}
-else if(!isIndividual && useNewVATJourney && subscription.vatVerificationOption.get == false) {
+else if(!isIndividual && useNewVATJourney && subscription.vatVerificationOption.getOrElse(false) == false) {
     Seq(
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),
