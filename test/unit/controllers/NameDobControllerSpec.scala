@@ -34,7 +34,6 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 import util.builders.matching.IndividualIdFormBuilder._
 
-import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -76,7 +75,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
   "first name" should {
     "be mandatory" in {
-      submitForm(form = ValidRequest + ("first-name" -> ""), "individual") { result =>
+      submitForm(form = ValidRequest ++ Map("first-name" -> ""), "individual") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your first name"
@@ -87,7 +86,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     s"be restricted to 35 characters" in {
       val firstNameMaxLength = 35
-      submitForm(ValidRequest + ("first-name" -> oversizedString(firstNameMaxLength)), "individual") { result =>
+      submitForm(ValidRequest ++ Map("first-name" -> oversizedString(firstNameMaxLength)), "individual") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(firstNameMaxLength, "first")
@@ -100,7 +99,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   "last name" should {
 
     "be mandatory" in {
-      submitForm(ValidRequest + ("last-name" -> ""), "individual") { result =>
+      submitForm(ValidRequest ++ Map("last-name" -> ""), "individual") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your last name"
@@ -111,7 +110,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "be restricted to 35 characters" in {
       val lastNameMaxLength = 35
-      submitForm(ValidRequest + ("last-name" -> oversizedString(lastNameMaxLength)), "sole-trader") { result =>
+      submitForm(ValidRequest ++ Map("last-name" -> oversizedString(lastNameMaxLength)), "sole-trader") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(lastNameMaxLength, "last")
@@ -124,15 +123,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   "date of birth" should {
 
     "be mandatory" in {
-      val invalidRequest = Map(
-        "first-name" -> ValidFirstName,
-        "last-name" -> ValidLastName,
-        "date-of-birth.day" -> "",
-        "date-of-birth.month" -> "",
-        "date-of-birth.year" -> ""
-      )
       submitForm(
-      invalidRequest,
+        ValidRequest ++ Map("date-of-birth.day" -> "", "date-of-birth.month" -> "", "date-of-birth.year" -> ""),
         "individual"
       ) { result =>
         status(result) shouldBe BAD_REQUEST
@@ -144,14 +136,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     "be a valid date" in {
-      val invalidRequest = Map(
-        "first-name" -> ValidFirstName,
-        "last-name" -> ValidLastName,
-        "date-of-birth.day" -> "32",
-        "date-of-birth.month" -> ValidDateOfBirthMonth,
-        "date-of-birth.year" -> ValidDateOfBirthYear
-      )
-      submitForm(invalidRequest, "individual") { result =>
+      submitForm(ValidRequest ++ Map("date-of-birth.day" -> "32"), "individual") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Date of birth must be a real date"
@@ -163,15 +148,11 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     "not be in the future" in {
       val tomorrow        = LocalDate.now().plusDays(1)
       val futureDateError = "Date of birth must be between 1900 and today"
-      val ValidRequest = Map(
-        "first-name" -> ValidFirstName,
-        "last-name" -> ValidLastName,
-        "date-of-birth.day" -> tomorrow.getDayOfMonth.toString,
-        "date-of-birth.month" -> tomorrow.getMonthValue.toString,
-        "date-of-birth.year" -> tomorrow.getYear.toString
-      )
       submitForm(
-        ValidRequest, "sole-trader"
+        ValidRequest ++ Map("date-of-birth.day" -> tomorrow.getDayOfMonth.toString,
+        "date-of-birth.month"               -> tomorrow.getMonthValue.toString,
+        "date-of-birth.year"                -> tomorrow.getYear.toString),
+        "sole-trader"
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -182,15 +163,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     "display an appropriate message when letters are entered instead of numbers" in {
-      val invalidRequest = Map(
-        "first-name" -> ValidFirstName,
-        "last-name" -> ValidLastName,
-        "date-of-birth.day" -> "a",
-        "date-of-birth.month" -> "b",
-        "date-of-birth.year" -> "c"
-      )
       submitForm(
-        invalidRequest,
+        ValidRequest ++ Map("date-of-birth.day" -> "a", "date-of-birth.month" -> "b", "date-of-birth.year" -> "c"),
         "individual"
       ) { result =>
         status(result) shouldBe BAD_REQUEST
