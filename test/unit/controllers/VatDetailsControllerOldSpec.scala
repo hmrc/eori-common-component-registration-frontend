@@ -209,11 +209,15 @@ class VatDetailsControllerOldSpec
     }
 
     "show error when no effective date is supplied" in {
+     val invalidRequest = Map(
+        "postcode" -> "Z9 1AA",
+        "vat-number" -> "028836662",
+        "vat-effective-date.day" -> "",
+        "vat-effective-date.month" -> "",
+        "vat-effective-date.year" -> ""
+      )
       submitFormInCreateMode(
-        validRequest +
-          ("vat-effective-date.day"  -> "",
-          "vat-effective-date.month" -> "",
-          "vat-effective-date.year"  -> "")
+        invalidRequest
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
