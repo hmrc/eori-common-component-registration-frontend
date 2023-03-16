@@ -183,8 +183,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "display an appropriate message when letters are entered instead of numbers" in {
       val invalidRequest = Map(
-        "postcode" -> "Z9 1AA",
-        "vat-number" -> "028836662",
+        "first-name" -> ValidFirstName,
+        "last-name" -> ValidLastName,
         "date-of-birth.day" -> "a",
         "date-of-birth.month" -> "b",
         "date-of-birth.year" -> "c"

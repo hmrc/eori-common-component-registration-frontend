@@ -290,7 +290,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           val FutureDate = "Date of birth must be between 1900 and today"
           import controllerFixture._
           assertInvalidField(
-            formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> tomorrow.getDayOfMonth.toString,
+            formData(individualNameAndDateOfBirth) ++ Map(dateOfBirthDayField -> tomorrow.getDayOfMonth.toString,
             dateOfBirthMonthField                                         -> tomorrow.getMonthValue.toString,
             dateOfBirthYearField                                          -> tomorrow.getYear.toString),
             webPage

@@ -136,7 +136,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
     "be mandatory" in {
       submitForm(
-        NinoFormBuilder.asForm + ("date-of-birth.day" -> "", "date-of-birth.month" -> "",
+        NinoFormBuilder.asForm ++ Map("date-of-birth.day" -> "", "date-of-birth.month" -> "",
         "date-of-birth.year"                          -> "")
       ) { result =>
         status(result) shouldBe BAD_REQUEST
@@ -160,7 +160,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     "not be in the future " in {
       val tomorrow = LocalDate.now().plusDays(1)
       submitForm(
-        NinoFormBuilder.asForm + ("date-of-birth.day" -> tomorrow.getDayOfMonth.toString,
+        NinoFormBuilder.asForm ++ Map("date-of-birth.day" -> tomorrow.getDayOfMonth.toString,
         "date-of-birth.month"                         -> tomorrow.getMonthValue.toString,
         "date-of-birth.year"                          -> tomorrow.getYear.toString)
       ) { result =>
