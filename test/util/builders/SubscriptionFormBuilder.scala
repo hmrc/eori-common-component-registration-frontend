@@ -71,10 +71,10 @@ object SubscriptionFormBuilder {
   )
 
   val vatSubscriptionMandatoryRequestMap: Map[String, Seq[String]] =
-    vatSubscriptionMandatorySeq.groupBy(_._1).mapValues(tuples => tuples.map(_._2))
+    vatSubscriptionMandatorySeq.groupMap(_._1)(_._2)
 
   val vatSubscriptionOptionalInvalidMap: Map[String, Seq[String]] =
-    vatSubscriptionInvalidSeq.groupBy(_._1).mapValues(tuples => tuples.map(_._2))
+    vatSubscriptionInvalidSeq.groupMap(_._1)(_._2)
 
   val detailsHolderWithAllFields = SubscriptionDetails(
     personalDataDisclosureConsent = Some(true),

@@ -258,7 +258,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
           assertInvalidField(
-            formData(individualNameAndDateOfBirth).filterKeys(!webPage.dateOfBirthFields.contains(_)),
+            formData(individualNameAndDateOfBirth).view.filterKeys(!webPage.dateOfBirthFields.contains(_)).toMap,
             webPage
           )(DateOfBirth, fieldLevelErrorDateOfBirth, "Enter your date of birth")
       }

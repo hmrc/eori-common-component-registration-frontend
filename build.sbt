@@ -16,7 +16,7 @@ name := "eori-common-component-registration-frontend"
 
 targetJvm := "jvm-1.8"
 
-scalaVersion := "2.12.12"
+scalaVersion := "2.13.10"
 
 majorVersion := 0
 
@@ -107,26 +107,26 @@ lazy val scoverageSettings = {
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
 val compileDependencies = Seq(
-  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"    % "7.12.0",
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"    % "7.14.0",
   "uk.gov.hmrc"       %% "play-conditional-form-mapping" % "1.12.0-play-28",
   "uk.gov.hmrc"       %% "domain"                        % "8.1.0-play-28",
-  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"            % "0.71.0",
-  "uk.gov.hmrc"       %% "emailaddress"                  % "3.5.0",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"            % "5.5.0-play-28"
+  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"            % "1.1.0",
+  "uk.gov.hmrc"       %% "emailaddress"                  % "3.7.0",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"            % "6.8.0-play-28"
 )
 
 val testDependencies = Seq(
-  "org.scalatest"          %% "scalatest"           % "3.2.12"            % "test,it",
+  "org.scalatest"          %% "scalatest"           % "3.2.15"            % "test,it",
   "com.typesafe.play"      %% "play-test"           % PlayVersion.current % "test,it",
   "org.scalatestplus.play" %% "scalatestplus-play"  % "5.1.0"             % "test,it",
-  "com.github.tomakehurst"  % "wiremock-standalone" % "2.23.2"            % "test, it"
+  "com.github.tomakehurst"  % "wiremock-standalone" % "2.27.2"            % "test, it"
     exclude ("org.apache.httpcomponents", "httpclient") exclude ("org.apache.httpcomponents", "httpcore"),
-  "org.scalacheck"      %% "scalacheck"              % "1.16.0"   % "test,it",
+  "org.scalacheck"      %% "scalacheck"              % "1.17.0"   % "test,it",
   "org.scalatestplus"   %% "scalacheck-1-15"         % "3.2.11.0" % "test,it",
-  "org.jsoup"            % "jsoup"                   % "1.15.3"   % "test,it",
-  "us.codecraft"         % "xsoup"                   % "0.3.5"    % "test,it",
+  "org.jsoup"            % "jsoup"                   % "1.15.4"   % "test,it",
+  "us.codecraft"         % "xsoup"                   % "0.3.6"    % "test,it",
   "org.mockito"          % "mockito-core"            % "4.7.0"    % "test,it",
-  "org.scalatestplus"   %% "mockito-4-6"             % "3.2.13.0" % "test, it",
+  "org.scalatestplus"   %% "mockito-4-6"             % "3.2.15.0" % "test, it",
   "org.pegdown"          % "pegdown"                 % "1.6.0",
   "uk.gov.hmrc.mongo"   %% "hmrc-mongo-test-play-28" % "0.71.0"   % "test, it",
   "com.vladsch.flexmark" % "flexmark-all"            % "0.62.0"   % "test,it"
@@ -135,7 +135,7 @@ val testDependencies = Seq(
 libraryDependencies ++= compileDependencies ++ testDependencies
 
 lazy val silencerSettings: Seq[Setting[_]] = {
-  val silencerVersion = "1.7.0"
+  val silencerVersion = "1.7.12"
   Seq(
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full)

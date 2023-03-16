@@ -21,6 +21,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import util.TestData
+import scala.language.postfixOps
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.{Duration, DurationInt, FiniteDuration}

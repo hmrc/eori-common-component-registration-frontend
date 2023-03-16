@@ -44,5 +44,4 @@ object AddressViewModel {
     val countryCode = sixLineAddress.countryCode
     AddressViewModel(line1, townCity, postCode, countryCode)
   }
-
 }
