@@ -266,7 +266,7 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth too early" in {
       val data = formDataRow.updated("date-of-birth.year", "1800")
       val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900") ))
+      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
   }
 

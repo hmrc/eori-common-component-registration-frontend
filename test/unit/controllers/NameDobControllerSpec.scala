@@ -149,9 +149,11 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       val tomorrow        = LocalDate.now().plusDays(1)
       val futureDateError = "Date of birth must be between 1900 and today"
       submitForm(
-        ValidRequest ++ Map("date-of-birth.day" -> tomorrow.getDayOfMonth.toString,
-        "date-of-birth.month"               -> tomorrow.getMonthValue.toString,
-        "date-of-birth.year"                -> tomorrow.getYear.toString),
+        ValidRequest ++ Map(
+          "date-of-birth.day"   -> tomorrow.getDayOfMonth.toString,
+          "date-of-birth.month" -> tomorrow.getMonthValue.toString,
+          "date-of-birth.year"  -> tomorrow.getYear.toString
+        ),
         "sole-trader"
       ) { result =>
         status(result) shouldBe BAD_REQUEST

@@ -38,8 +38,7 @@ object Countries {
       Json.parse(getClass.getResourceAsStream("/location-autocomplete-canonical-list.json")) match {
         case JsArray(cs) =>
           cs.toList.collect {
-            case JsArray(ArrayBuffer(c: JsString, cc: JsString))
-            => Country(c.value, countryCode(cc.value))
+            case JsArray(ArrayBuffer(c: JsString, cc: JsString)) => Country(c.value, countryCode(cc.value))
           }
         case _ =>
           throw new IllegalArgumentException(
