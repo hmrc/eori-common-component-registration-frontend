@@ -52,7 +52,7 @@ class DateOfVatRegistrationController @Inject() (
       case Some(response)
           if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
         Redirect(ContactDetailsController.createForm(service))
-      case _ => redirectToCannotConfirmIdentity(service)
+      case _ => Redirect(DateOfVatRegistrationController.redirectToCannotConfirmIdentity(service))
     }
 
   def submit(service: Service): Action[AnyContent] =
@@ -63,8 +63,11 @@ class DateOfVatRegistrationController @Inject() (
       )
     }
 
-  private def redirectToCannotConfirmIdentity(service: Service)(implicit request: Request[AnyContent]): Result = Ok(
-    weCannotConfirmYourIdentity(isInReviewMode = false, VatDetailsController.createForm(service).url, service)
-  )
+  def redirectToCannotConfirmIdentity(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(
+        Ok(weCannotConfirmYourIdentity(isInReviewMode = false, VatDetailsController.createForm(service).url, service))
+      )
+    }
 
 }

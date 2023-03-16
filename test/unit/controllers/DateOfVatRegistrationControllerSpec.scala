@@ -97,7 +97,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
         "vat-registration-date.year"  -> "2000"
       )
       submitForm(validReturnTotal) { result =>
-        status(result) shouldBe OK
+        status(result) shouldBe SEE_OTHER
       }
     }
 
@@ -122,6 +122,21 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     }
   }
 
+  "redirectToCannotConfirmIdentity" should {
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
+      mockAuthConnector,
+      controller.redirectToCannotConfirmIdentity(atarService)
+    )
+
+    "display redirectToCannotConfirmIdentity" in {
+      redirectToCannotConfirmIdentity() {
+        result =>
+          status(result) shouldBe OK
+          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+      }
+    }
+  }
+
   private def createForm()(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
@@ -131,5 +146,11 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
   }
+
+  private def redirectToCannotConfirmIdentity(userId: String = defaultUserId)(test: Future[Result] => Any) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(controller.redirectToCannotConfirmIdentity(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+  }
+
 
 }

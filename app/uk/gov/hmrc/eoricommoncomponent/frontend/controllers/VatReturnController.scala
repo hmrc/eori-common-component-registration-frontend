@@ -24,7 +24,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotalForm.
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ContactDetailsController, VatDetailsController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  ContactDetailsController,
+  VatDetailsController,
+  VatReturnController
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -59,16 +63,18 @@ class VatReturnController @Inject() (
   ): Future[Result] =
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)
-          //TODO: redirect to date page as response is empty
           if response.lastNetDue.getOrElse(
-            redirectToCannotConfirmIdentity(service)
+            Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
           ) == vatReturnTotal.returnAmountInput.toDouble =>
         Redirect(ContactDetailsController.createForm(service))
-      case _ => redirectToCannotConfirmIdentity(service)
+      case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }
 
-  private def redirectToCannotConfirmIdentity(service: Service)(implicit request: Request[AnyContent]): Result = Ok(
-    weCannotConfirmYourIdentity(isInReviewMode = false, VatDetailsController.createForm(service).url, service)
-  )
+  def redirectToCannotConfirmIdentity(service: Service): Action[AnyContent] =
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(
+        Ok(weCannotConfirmYourIdentity(isInReviewMode = false, VatDetailsController.createForm(service).url, service))
+      )
+    }
 
 }
