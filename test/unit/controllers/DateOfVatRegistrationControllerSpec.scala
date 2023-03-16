@@ -152,5 +152,4 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     test(controller.redirectToCannotConfirmIdentity(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-
 }

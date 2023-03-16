@@ -22,12 +22,22 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{InvalidResponse, NotFoundResponse, ServiceUnavailableResponse, VatControlListConnector}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
+  InvalidResponse,
+  NotFoundResponse,
+  ServiceUnavailableResponse,
+  VatControlListConnector
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details, we_cannot_confirm_your_identity}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  date_of_vat_registration,
+  error_template,
+  vat_details,
+  we_cannot_confirm_your_identity
+}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
@@ -282,10 +292,7 @@ class VatDetailsControllerSpec
   }
 
   "vatDetailsNotMatched" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.vatDetailsNotMatched(atarService)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.vatDetailsNotMatched(atarService))
 
     "display weCannotConfirmYourIdentity" in {
       vatDetailsNotMatched() {
@@ -297,10 +304,7 @@ class VatDetailsControllerSpec
   }
 
   "vatDetailsNotMatched in review mode" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.vatDetailsNotMatched(atarService)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.vatDetailsNotMatched(atarService))
 
     "display weCannotConfirmYourIdentity isInReviewMode true" in {
       vatDetailsNotMatched() {
