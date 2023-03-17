@@ -24,6 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{Subscriptio
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Constants.ONE
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -56,10 +57,12 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
 
   private val logger = Logger(this.getClass)
 
-  def currentSubscriptionFlow(implicit request: Request[AnyContent]): SubscriptionFlow =
+  def currentSubscriptionFlow(implicit request: Request[AnyContent], hc: HeaderCarrier): SubscriptionFlow =
     requestSessionData.userSubscriptionFlow
 
-  def stepInformation(currentPage: SubscriptionPage)(implicit request: Request[AnyContent]): SubscriptionFlowInfo =
+  def stepInformation(
+    currentPage: SubscriptionPage
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier): SubscriptionFlowInfo =
     SubscriptionFlows(currentSubscriptionFlow)
       .stepInformation(currentPage)
 

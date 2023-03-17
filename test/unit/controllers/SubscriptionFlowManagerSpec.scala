@@ -32,6 +32,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   RegistrationDetailsOrganisation
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 
 import scala.concurrent.ExecutionContext.global
@@ -40,8 +41,9 @@ import scala.concurrent.Future
 class SubscriptionFlowManagerSpec
     extends UnitSpec with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach with ControllerSpec {
 
-  private val mockRequestSessionData   = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache = mock[SessionCache]
+  private val mockRequestSessionData     = mock[RequestSessionData]
+  private val mockCdsFrontendDataCache   = mock[SessionCache]
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val controller =
     new SubscriptionFlowManager(mockRequestSessionData, mockCdsFrontendDataCache)(global)
@@ -66,17 +68,19 @@ class SubscriptionFlowManagerSpec
 
   "Getting current subscription flow" should {
     "return value from session when stored there before" in {
-      when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(mockSubscriptionFlow)
+      when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        mockSubscriptionFlow
+      )
 
-      controller.currentSubscriptionFlow(mockRequest) shouldBe mockSubscriptionFlow
+      controller.currentSubscriptionFlow(mockRequest, hc) shouldBe mockSubscriptionFlow
     }
 
     "fail when there was no flow stored in session before" in {
-      when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]]))
+      when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
         .thenThrow(noSubscriptionFlowInSessionException)
 
       intercept[IllegalStateException](
-        controller.currentSubscriptionFlow(mockRequest)
+        controller.currentSubscriptionFlow(mockRequest, hc)
       ) shouldBe noSubscriptionFlowInSessionException
     }
   }
@@ -241,8 +245,8 @@ class SubscriptionFlowManagerSpec
         expectedTotalSteps: Int,
         expectedNextPage: SubscriptionPage
       ) =>
-        when(mockRequestSessionData.userSubscriptionFlow(mockRequest)).thenReturn(flow)
-        val actual = controller.stepInformation(currentPage)(mockRequest)
+        when(mockRequestSessionData.userSubscriptionFlow(mockRequest, hc)).thenReturn(flow)
+        val actual = controller.stepInformation(currentPage)(mockRequest, hc)
 
         s"${flow.name} flow: current step is $expectedStepNumber when currentPage is $currentPage" in {
           actual.stepNumber shouldBe expectedStepNumber

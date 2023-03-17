@@ -35,6 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsServ
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
+import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder._
 import util.builders.SessionBuilder
@@ -99,7 +100,7 @@ class ContactAddressControllerSpec
     super.beforeEach()
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
-    when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]]))
+    when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
       .thenReturn(mockSubscriptionFlowInfo)
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
     when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(subscriptionDetailsHolder)

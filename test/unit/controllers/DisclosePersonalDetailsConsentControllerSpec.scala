@@ -17,7 +17,6 @@
 package unit.controllers
 
 import java.util.UUID
-
 import common.pages.subscription.DisclosePersonalDetailsConsentPage
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -32,6 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
+import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
@@ -369,7 +369,9 @@ class DisclosePersonalDetailsConsentControllerSpec
   )(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
+    when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+      subscriptionFlow
+    )
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)
     when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
@@ -396,7 +398,9 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
-    when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
+    when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+      subscriptionFlow
+    )
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
@@ -411,7 +415,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     test: Future[Result] => Any
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
-    when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]]))
+    when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
       .thenReturn(OrganisationSubscriptionFlow)
     test(
       controller

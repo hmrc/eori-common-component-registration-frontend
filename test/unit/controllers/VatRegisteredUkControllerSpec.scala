@@ -36,7 +36,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{vat_registered_uk}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
+import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.YesNoFormBuilder._
@@ -223,14 +224,16 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   }
 
   private def mockIsIndividual(isIndividual: Boolean = false) = {
-    when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]])).thenReturn(mockSubscriptionFlow)
+    when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+      mockSubscriptionFlow
+    )
     when(mockSubscriptionFlow.isIndividualFlow).thenReturn(isIndividual)
   }
 
   private def subscriptionFlowUrl(url: String) = {
     val mockSubscriptionPage     = mock[SubscriptionPage]
     val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
-    when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]]))
+    when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
       .thenReturn(mockSubscriptionFlowInfo)
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
     when(mockSubscriptionPage.url(any())).thenReturn(url)

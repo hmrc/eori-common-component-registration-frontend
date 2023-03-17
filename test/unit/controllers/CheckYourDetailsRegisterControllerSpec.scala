@@ -88,7 +88,9 @@ class CheckYourDetailsRegisterControllerSpec
   override def beforeEach: Unit = {
     reset(mockSessionCache, mockSubscriptionDetails, mockSubscriptionFlow)
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
-    when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(mockSubscriptionFlow)
+    when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+      mockSubscriptionFlow
+    )
     when(mockSubscriptionDetails.ukVatDetailsOld).thenReturn(None)
     when(mockSubscriptionDetails.ukVatDetails).thenReturn(None)
     when(mockSubscriptionDetails.businessShortName).thenReturn(None)
@@ -330,7 +332,7 @@ class CheckYourDetailsRegisterControllerSpec
 
       s"display $labelText label for ${organisationType.id}" in {
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
-        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]]))
+        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
           .thenReturn(SubscriptionFlow("Organisation"))
 
         showForm(userSelectedOrgType = organisationType) { result =>
@@ -346,7 +348,7 @@ class CheckYourDetailsRegisterControllerSpec
           "Corporation Tax UTR"
       }
       s"display $UtrLabelText label for ${organisationType.id}" in {
-        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]]))
+        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
           .thenReturn(SubscriptionFlow("Organisation"))
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
 
@@ -363,7 +365,9 @@ class CheckYourDetailsRegisterControllerSpec
           case SoleTrader => SubscriptionFlow("Organisation")
           case _          => SubscriptionFlow("Individual")
         }
-        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
+        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+          subscriptionFlow
+        )
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
 
         showForm(userSelectedOrgType = organisationType) { result =>
@@ -376,7 +380,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     forAll(individualsOnlyOrganisationTypes) { organisationType =>
       s"should not display shortened name for ${organisationType.id}" in {
-        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]]))
+        when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
           .thenReturn(SubscriptionFlow("Individual"))
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
 
