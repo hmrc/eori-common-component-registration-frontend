@@ -16,7 +16,7 @@ name := "eori-common-component-registration-frontend"
 
 targetJvm := "jvm-1.8"
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.8"
 
 majorVersion := 0
 

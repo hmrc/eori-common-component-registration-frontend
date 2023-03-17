@@ -10,7 +10,7 @@ addSbtPlugin("uk.gov.hmrc" % "sbt-distributables" % "2.2.0")
 
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.18")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.0.6")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.9.3")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.4")
 
