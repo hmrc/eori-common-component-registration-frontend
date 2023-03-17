@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
+import play.api.Logger
+
 import javax.inject.Singleton
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
@@ -29,6 +31,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 @Singleton
 class RequestSessionData {
 
+  private val logger = Logger(this.getClass)
+
   def storeUserSubscriptionFlow(subscriptionFlow: SubscriptionFlow, uriBeforeSubscriptionFlow: String)(implicit
     request: Request[AnyContent]
   ): Session =
@@ -38,7 +42,14 @@ class RequestSessionData {
   def userSubscriptionFlow(implicit request: Request[AnyContent]): SubscriptionFlow =
     request.session.data.get(RequestSessionDataKeys.subscriptionFlow) match {
       case Some(flowName) => SubscriptionFlow(flowName)
-      case None           => throw new IllegalStateException("Subscription flow is not cached")
+      case None =>
+        def filterSession(session: Session) = session.data.filter {
+          case (k, _) => !k.equalsIgnoreCase("authToken") || !k.equalsIgnoreCase("csrfToken")
+        }
+        logger.warn(
+          s"Subscription flow not found in HTTP Session, session contents: [${filterSession(request.session)}]"
+        )
+        throw new IllegalStateException("Subscription flow is not cached")
     }
 
   def userSelectedOrganisationType(implicit request: Request[AnyContent]): Option[CdsOrganisationType] =
