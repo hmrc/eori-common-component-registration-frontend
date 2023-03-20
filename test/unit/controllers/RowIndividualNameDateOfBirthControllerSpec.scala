@@ -258,7 +258,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
           assertInvalidField(
-            formData(individualNameAndDateOfBirth).filterKeys(!webPage.dateOfBirthFields.contains(_)),
+            formData(individualNameAndDateOfBirth).view.filterKeys(!webPage.dateOfBirthFields.contains(_)).toMap,
             webPage
           )(DateOfBirth, fieldLevelErrorDateOfBirth, "Enter your date of birth")
       }
@@ -290,9 +290,11 @@ class RowIndividualNameDateOfBirthControllerSpec
           val FutureDate = "Date of birth must be between 1900 and today"
           import controllerFixture._
           assertInvalidField(
-            formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> tomorrow.getDayOfMonth.toString,
-            dateOfBirthMonthField                                         -> tomorrow.getMonthValue.toString,
-            dateOfBirthYearField                                          -> tomorrow.getYear.toString),
+            formData(individualNameAndDateOfBirth) ++ Map(
+              dateOfBirthDayField   -> tomorrow.getDayOfMonth.toString,
+              dateOfBirthMonthField -> tomorrow.getMonthValue.toString,
+              dateOfBirthYearField  -> tomorrow.getYear.toString
+            ),
             webPage
           )(DateOfBirth, fieldLevelErrorDateOfBirth, FutureDate)
       }

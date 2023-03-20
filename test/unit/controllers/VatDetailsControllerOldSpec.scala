@@ -210,10 +210,11 @@ class VatDetailsControllerOldSpec
 
     "show error when no effective date is supplied" in {
       submitFormInCreateMode(
-        validRequest +
-          ("vat-effective-date.day"  -> "",
+        validRequest ++ Map(
+          "vat-effective-date.day"   -> "",
           "vat-effective-date.month" -> "",
-          "vat-effective-date.year"  -> "")
+          "vat-effective-date.year"  -> ""
+        )
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -225,10 +226,8 @@ class VatDetailsControllerOldSpec
 
     "show error when an invalid effective date is supplied" in {
       submitFormInCreateMode(
-        validRequest +
-          ("vat-effective-date.day"  -> "31",
-          "vat-effective-date.month" -> "04",
-          "vat-effective-date.year"  -> "2002")
+        validRequest ++
+          Map("vat-effective-date.day" -> "31", "vat-effective-date.month" -> "04", "vat-effective-date.year" -> "2002")
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -241,10 +240,12 @@ class VatDetailsControllerOldSpec
     "show error when a future effective date is supplied" in {
       val tomorrow = LocalDate.now().plusDays(1)
       submitFormInCreateMode(
-        validRequest +
-          ("vat-effective-date.day"  -> tomorrow.getDayOfMonth.toString,
-          "vat-effective-date.month" -> tomorrow.getMonthValue.toString,
-          "vat-effective-date.year"  -> tomorrow.getYear.toString)
+        validRequest ++
+          Map(
+            "vat-effective-date.day"   -> tomorrow.getDayOfMonth.toString,
+            "vat-effective-date.month" -> tomorrow.getMonthValue.toString,
+            "vat-effective-date.year"  -> tomorrow.getYear.toString
+          )
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))

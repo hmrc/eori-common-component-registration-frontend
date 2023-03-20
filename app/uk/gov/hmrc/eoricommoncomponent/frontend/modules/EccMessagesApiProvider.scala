@@ -21,8 +21,6 @@ import play.api.http.HttpConfiguration
 import play.api.i18n.{DefaultMessagesApiProvider, Langs}
 import play.api.{Configuration, Environment}
 
-import scala.collection.breakOut
-
 @Singleton
 class EccMessagesApiProvider @Inject() (
   environment: Environment,
@@ -36,7 +34,7 @@ class EccMessagesApiProvider @Inject() (
       .map(_.code)
       .map { code =>
         (code, loadMessageFiles(s".$code"))
-      }(breakOut): Map[String, Map[String, String]])
+      }.to(Map): Map[String, Map[String, String]])
       .+("default" -> loadMessageFiles("")) + ("default.play" -> loadMessageFiles(".default"))
 
   private def loadMessageFiles(suffix: String): Map[String, String] =
