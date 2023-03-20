@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
+import uk.gov.hmrc.http.HeaderCarrier
 import unit.controllers.{
   CdsPage,
   SubscriptionFlowCreateModeTestSupport,
@@ -115,7 +116,7 @@ class AddressControllerSpec
     super.beforeEach()
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
-    when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]]))
+    when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
       .thenReturn(mockSubscriptionFlowInfo)
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
   }

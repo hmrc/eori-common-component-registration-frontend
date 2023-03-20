@@ -16,8 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
-import javax.inject.Singleton
+import play.api.Logger
+import play.api.libs.json.Json
+
+import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Session}
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   IndividualSubscriptionFlow,
@@ -25,9 +29,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   PartnershipSubscriptionFlow,
   SubscriptionFlow
 }
+import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
-class RequestSessionData {
+class RequestSessionData @Inject() (audit: Auditable) {
 
   def storeUserSubscriptionFlow(subscriptionFlow: SubscriptionFlow, uriBeforeSubscriptionFlow: String)(implicit
     request: Request[AnyContent]
@@ -35,11 +40,21 @@ class RequestSessionData {
     request.session + (RequestSessionDataKeys.subscriptionFlow -> subscriptionFlow.name) +
       (RequestSessionDataKeys.uriBeforeSubscriptionFlow        -> uriBeforeSubscriptionFlow)
 
-  def userSubscriptionFlow(implicit request: Request[AnyContent]): SubscriptionFlow =
+  def userSubscriptionFlow(implicit request: Request[AnyContent], hc: HeaderCarrier): SubscriptionFlow =
     request.session.data.get(RequestSessionDataKeys.subscriptionFlow) match {
       case Some(flowName) => SubscriptionFlow(flowName)
-      case None           => throw new IllegalStateException("Subscription flow is not cached")
+      case None =>
+        auditSessionFailure(request.session)
+        throw new IllegalStateException("Subscription flow is not cached")
     }
+
+  private def auditSessionFailure(session: Session)(implicit hc: HeaderCarrier): Unit =
+    audit.sendExtendedDataEvent(
+      transactionName = "ecc-registration-subscription-flow-session-failure",
+      path = "",
+      details = Json.toJson(session.data),
+      eventType = "SubscriptionFlowSessionFailure"
+    )
 
   def userSelectedOrganisationType(implicit request: Request[AnyContent]): Option[CdsOrganisationType] =
     request.session.data.get(RequestSessionDataKeys.selectedOrganisationType).map(CdsOrganisationType.forId)

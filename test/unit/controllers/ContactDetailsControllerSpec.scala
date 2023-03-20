@@ -33,6 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_details
+import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 import util.builders.SubscriptionContactDetailsFormBuilder._
@@ -448,7 +449,9 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     withAuthorisedUser(defaultUserId, mockAuthConnector)
 
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
-    when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
+    when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+      subscriptionFlow
+    )
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
@@ -459,7 +462,9 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   )(test: Future[Result] => Any) {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
 
-    when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]])).thenReturn(subscriptionFlow)
+    when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+      subscriptionFlow
+    )
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))
 
