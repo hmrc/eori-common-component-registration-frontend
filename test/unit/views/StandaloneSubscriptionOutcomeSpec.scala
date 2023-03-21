@@ -61,9 +61,9 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
     }
 
     "display whats happens next paragraph" in {
-      val whatsNextParagraph = doc.body().getElementById("what-happens-next")
+      val whatsNextParagraph = doc.body().getElementById("when-you-can")
       whatsNextParagraph.getElementsByTag("h2").get(0).text() mustBe "What happens next"
-      whatsNextParagraph.getElementsByTag("p")
+      whatsNextParagraph.getElementsByTag("p").get(0).text() mustBe "We will process your application. This can take up to 2 hours."
     }
   }
 }
