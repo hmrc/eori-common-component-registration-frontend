@@ -88,7 +88,7 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     "redirect to cannot verify your details when valid input supplied but not matching API response" in {
       val validReturnTotal: Map[String, String] = Map("vat-return-total" -> "100.02")
       submitForm(validReturnTotal) { result =>
-        status(result) shouldBe OK
+        status(result) shouldBe SEE_OTHER
       }
     }
 
@@ -112,6 +112,20 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
       }
     }
   }
+  "redirectToCannotConfirmIdentity" should {
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
+      mockAuthConnector,
+      controller.redirectToCannotConfirmIdentity(atarService)
+    )
+
+    "display redirectToCannotConfirmIdentity" in {
+      redirectToCannotConfirmIdentity() {
+        result =>
+          status(result) shouldBe OK
+          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+      }
+    }
+  }
 
   private def createForm()(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
@@ -121,6 +135,11 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
   private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
+  }
+
+  private def redirectToCannotConfirmIdentity(userId: String = defaultUserId)(test: Future[Result] => Any) {
+    withAuthorisedUser(userId, mockAuthConnector)
+    test(controller.redirectToCannotConfirmIdentity(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
 }

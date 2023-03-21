@@ -26,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -44,7 +45,7 @@ class VatDetailsController @Inject() (
   mcc: MessagesControllerComponents,
   vatDetailsView: vat_details,
   errorTemplate: error_template,
-  weCannotConfirmYourIdentity: we_cannot_confirm_your_identity,
+  weCannotConfirmYourIdentity: date_of_vat_registration,
   subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
@@ -96,24 +97,21 @@ class VatDetailsController @Inject() (
                   Redirect(DateOfVatRegistrationController.createForm(service))
             }
         else
-          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
+          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
       case Left(errorResponse) =>
         errorResponse match {
           case NotFoundResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
+            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
           case InvalidResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(isInReviewMode, service)))
+            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
           case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate()))
         }
     }
 
-  def vatDetailsNotMatched(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
+  def vatDetailsNotMatched(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      val tryAgainUrl = isInReviewMode match {
-        case true  => VatDetailsController.reviewForm(service).url
-        case false => VatDetailsController.createForm(service).url
-      }
-      Future.successful(Ok(weCannotConfirmYourIdentity(isInReviewMode, tryAgainUrl, service)))
+      val dateForm = VatRegistrationDateForm.vatRegistrationDateForm
+      Future.successful(Ok(weCannotConfirmYourIdentity(dateForm, service)))
     }
 
 }

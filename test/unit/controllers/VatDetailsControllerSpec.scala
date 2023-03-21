@@ -33,6 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSu
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  date_of_vat_registration,
   error_template,
   vat_details,
   we_cannot_confirm_your_identity
@@ -64,7 +65,7 @@ class VatDetailsControllerSpec
   private val mockVatControlListConnector = mock[VatControlListConnector]
   private val vatDetailsView              = instanceOf[vat_details]
   private val errorTemplate               = instanceOf[error_template]
-  private val weCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
+  private val weCannotConfirmYourIdentity = instanceOf[date_of_vat_registration]
 
   private val controller = new VatDetailsController(
     mockAuthAction,
@@ -212,7 +213,7 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(lastNetDue = None)
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -220,7 +221,7 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(lastReturnMonthPeriod = None)
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -228,7 +229,7 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(lastReturnMonthPeriod = Some("N/A"))
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -244,7 +245,7 @@ class VatDetailsControllerSpec
     "redirect to cannot confirm your identity when postcode does not match" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "NA1 7NO")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -252,14 +253,14 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(None, Some("2009-11-24"))
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
       }
     }
 
     "redirect to cannot confirm your identity when postcode does not match and it is in review mode" in {
       submitFormInReviewMode(validRequest + ("postcode" -> "NA1 7NO")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details/review")
+        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -268,7 +269,7 @@ class VatDetailsControllerSpec
         .thenReturn(Future.successful(Left(NotFoundResponse)))
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -277,7 +278,7 @@ class VatDetailsControllerSpec
         .thenReturn(Future.successful(Left(InvalidResponse)))
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/cannot-confirm-vat-details")
+        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -291,31 +292,25 @@ class VatDetailsControllerSpec
   }
 
   "vatDetailsNotMatched" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.vatDetailsNotMatched(false, atarService)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.vatDetailsNotMatched(atarService))
 
     "display weCannotConfirmYourIdentity" in {
       vatDetailsNotMatched() {
         result =>
           status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+          CdsPage(contentAsString(result)).title should startWith("When did you become VAT registered")
       }
     }
   }
 
   "vatDetailsNotMatched in review mode" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.vatDetailsNotMatched(true, atarService)
-    )
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.vatDetailsNotMatched(atarService))
 
     "display weCannotConfirmYourIdentity isInReviewMode true" in {
       vatDetailsNotMatched() {
         result =>
           status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+          CdsPage(contentAsString(result)).title should startWith("When did you become VAT registered")
       }
     }
   }
@@ -375,7 +370,7 @@ class VatDetailsControllerSpec
 
   private def vatDetailsNotMatched(userId: String = defaultUserId)(test: Future[Result] => Any) {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(controller.vatDetailsNotMatched(false, atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(controller.vatDetailsNotMatched(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
 }
