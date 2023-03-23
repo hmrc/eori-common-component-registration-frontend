@@ -34,7 +34,10 @@ object VatRegistrationDateForm extends Mappings {
   val vatRegistrationDateForm =
     Form(
       mapping(
-        "vat-registration-date" -> localDate(emptyKey = "vat.error.empty-date", invalidKey = "vat.error.invalid-date")
+        "vat-registration-date" -> localDate(
+          emptyKey = "vat.error.empty-date-new",
+          invalidKey = "vat.error.invalid-date-new"
+        )
       )(VatRegistrationDate.apply)(VatRegistrationDate.unapply)
     )
 
