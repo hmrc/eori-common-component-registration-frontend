@@ -768,7 +768,7 @@ cds.subscription.vat-details.postcode-old = Beth yw’r cod post yn y DU ble mae
 cds.subscription.vat-details.vat-number.hint-text = Dyma’r rhif 9 digid ar eich tystysgrif TAW. Er enghraifft, 123456789
 
 cds.subscription.vat-details.vat-number= Beth yw’ch rhif cofrestru TAW?
-cds.subscription.vat-details.postcode = Cod post y cyfeiriad cofrestru TAW
+cds.subscription.vat-details.postcode = Beth yw’r cod post yn y DU ble mae’ch sefydliad wedi’i gofrestru ar gyfer TAW?
 cds.subscription.vat-details.postcode.required.error = Nodwch god post dilys eich cyfeiriad cofrestru TAW
 cds.subscription.vat-details.postcode.length.error = Rhaid i’r cod post fod yn 8 cymeriad ar y mwyaf
 cds.subscription.vat-details.vat-number-old = Rhif TAW
