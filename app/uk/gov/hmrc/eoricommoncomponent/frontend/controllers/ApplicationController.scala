@@ -40,6 +40,7 @@ class ApplicationController @Inject() (
     extends CdsController(mcc) {
 
   private val logger = Logger(this.getClass)
+
   def startRegister(service: Service): Action[AnyContent] = Action { implicit request =>
     val headingAndTitleText = s"ecc.start-page.title.${service.code}"
     val bullet2             = s"ecc.start-page.para1.bullet2.${service.code}"
