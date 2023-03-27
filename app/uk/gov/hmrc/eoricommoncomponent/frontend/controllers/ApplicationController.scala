@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.Logger
+
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
@@ -37,9 +39,15 @@ class ApplicationController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
+  private val logger = Logger(this.getClass)
   def startRegister(service: Service): Action[AnyContent] = Action { implicit request =>
     val headingAndTitleText = s"ecc.start-page.title.${service.code}"
     val bullet2             = s"ecc.start-page.para1.bullet2.${service.code}"
+
+    val pageReferrer = request.headers.get("referer")
+    // $COVERAGE-OFF$Loggers
+    logger.warn(s"User came from - ${pageReferrer.getOrElse("Unknown referral")}")
+    // $COVERAGE-ON
 
     Ok(viewStartRegister(service, headingAndTitleText, bullet2))
   }
