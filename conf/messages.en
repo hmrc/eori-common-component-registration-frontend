@@ -338,9 +338,9 @@ cds.matching.intro=This will link your business, Government Gateway ID and EORI 
 cds.matching.individual.header=Enter your details
 cds.matching-lede=We will attempt to match your details against information we currently hold.
 cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
-cds.matching.utr.lost-utr-description=find a lost UTR
+cds.matching.utr.lost-utr-description=find a lost UTR (opens in new tab).
 
-cds.matching.utr.lost-utr-description-llp=find a lost UTR
+cds.matching.utr.lost-utr-description-llp=find a lost UTR (opens in new tab).
 cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
 
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
@@ -1065,7 +1065,7 @@ cds.subscription.outcomes.review.heading=Registration in review
 cds.subscription.outcomes.review.sub-title=Your application needs checking by HMRC
 cds.subscription.outcomes.review.next-steps.1=You will be contacted by HMRC once your application has been reviewed.
 cds.subscription.outcomes.review.why-steps.1=Your registration needs to be reviewed by a member of staff.
-cds.subscription.outcomes.feedback=What did you think of this service? (opens in new tab)
+cds.subscription.outcomes.feedback=What did you think of this service?
 cds.subscription.outcomes.rejected.vat-registered-heading=If you are VAT registered
 cds.subscription.outcomes.rejected.vat-registered1=Your EORI number will be in the following format:
 cds.subscription.outcomes.rejected.vat-registered2=GB XXXXXXXXX 000
@@ -1561,7 +1561,7 @@ cds.subscription.sign-in-with-different-details.para1=You don’t need to apply 
 
 cds.matching.row-organisation.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called 'reference', 'UTR' or 'official use'. You can {0}.
 cds.matching.row-sole-trader-individual.utr.hint=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’. You can {0}.
-cds.matching.row-lost-urt.hint.link=find a lost UTR number
+cds.matching.row-lost-urt.hint.link=find a lost UTR number (opens in new tab)
 
 cds.subscribe.use-this-eori.heading=Your GB Economic Operator Registration and Identification (EORI) number
 cds.subscribe.use-this-eori.paragraph1=This EORI is linked to the Government Gateway account you are using.
