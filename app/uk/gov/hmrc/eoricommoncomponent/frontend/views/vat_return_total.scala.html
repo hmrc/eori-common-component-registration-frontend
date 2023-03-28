@@ -43,16 +43,14 @@
 
     <h1 class="govuk-heading-l">@messages("cds.subscription.vat-registration.vat-return.title")</h1>
     <p class="govuk-body">@messages("cds.subscription.vat-registration.vat-return.para1")</p>
-    <p class="govuk-body">@messages("cds.subscription.vat-registration.vat-return.para2")</p>
-     @CSRF.formField
-
+    @CSRF.formField
     @inputText(
      form = vatReturnForm,
      id = "vat-return-total",
      name = "vat-return-total",
-     label = "required label",
+     label = messages("cds.subscription.vat-registration.vat-return.para2"),
      hint=Some(messages(" ")),
-     labelClasses = Some("govuk-visually-hidden"),
+     labelClasses = Some("govuk-body"),
      prefix = Some(PrefixOrSuffix(content = Text("£"))),
      classes = Some("govuk-!-width-one-half"),
      isPageHeading = false
