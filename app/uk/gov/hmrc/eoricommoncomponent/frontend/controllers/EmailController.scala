@@ -71,8 +71,6 @@ class EmailController @Inject() (
       _.fold {
         // $COVERAGE-OFF$Loggers
         logger.info(s"emailStatus cache none ${user.internalId}")
-        val pageReferrer = request.headers.get("referer")
-        logger.warn(s"User came from - ${pageReferrer.getOrElse("Unknown referral")}")
         // $COVERAGE-ON
         Future.successful(Redirect(WhatIsYourEmailController.createForm(service)))
       } { cachedEmailStatus =>
@@ -90,6 +88,10 @@ class EmailController @Inject() (
 
   def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>
+      val pageReferrer = request.headers.get("referer")
+      // $COVERAGE-OFF$Loggers
+      logger.info(s"User came from - ${pageReferrer.getOrElse("Unknown referral")}")
+      // $COVERAGE-ON
       startRegisterJourney(service)
     }
 

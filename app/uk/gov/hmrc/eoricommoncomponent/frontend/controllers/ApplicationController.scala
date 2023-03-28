@@ -47,7 +47,7 @@ class ApplicationController @Inject() (
 
     val pageReferrer = request.headers.get("referer")
     // $COVERAGE-OFF$Loggers
-    logger.warn(s"User came from - ${pageReferrer.getOrElse("Unknown referral")}")
+    logger.info(s"User came from - ${pageReferrer.getOrElse("Unknown referral")}")
     // $COVERAGE-ON
 
     Ok(viewStartRegister(service, headingAndTitleText, bullet2))
