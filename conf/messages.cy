@@ -1044,8 +1044,8 @@ cds.subscription.organisation-disclose-personal-details-consent.individual.headi
 cds.subscription.organisation-disclose-personal-details-consent.individual.declaration = Bydd CThEM yn ychwanegu eich rhif EORI at wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd. Gallwch hefyd gytuno i gynnwys eich enw a’ch cyfeiriad. Gall hyn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu’ch llwythi.
 cds.subscription.organisation-disclose-personal-details-consent.individual.yes = Iawn – Rwyf am i’m henw a chyfeiriad fod ar y gwiriwr EORI
 cds.subscription.organisation-disclose-personal-details-consent.individual.no = Na – Dangoswch fy rhif EORI yn unig ar y gwiriwr EORI
-cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer = Rhowch wybod i ni a ydych am gynnwys eich enw a chyfeiriad ar y gwiriwr EORI
-cds.subscription.organisation-disclose-personal-details-consent.form-error.yes-no-answer = Rhowch wybod i ni a ydych am gynnwys eich enw a chyfeiriad ar y gwiriwr EORI
+cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer = Dewiswch ‘Iawn’ i ddangos eich enw a’ch cyfeiriad yn y gwasanaeth Gwirio rhif EORI.
+cds.subscription.organisation-disclose-personal-details-consent.form-error.yes-no-answer = Dewiswch ‘Iawn’ i ddangos eich enw a’ch cyfeiriad yn y gwasanaeth Gwirio rhif EORI.
 cds.subscription.vat-registered-uk.title-and-heading = A yw’ch sefydliad wedi’i gofrestru ar gyfer TAW yn y DU?
 cds.subscription.vat-registered-uk.partnership.title-and-heading = A yw’ch partneriaeth wedi’i chofrestru ar gyfer TAW yn y DU?
 cds.subscription.vat-registered-uk.page-error.yes-no-answer = Cadarnhewch a yw’r sefydliad wedi’i gofrestru ar gyfer TAW yn y DU

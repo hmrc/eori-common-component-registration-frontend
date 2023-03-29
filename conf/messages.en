@@ -1158,8 +1158,8 @@ cds.subscription.organisation-disclose-personal-details-consent.individual.decla
 cds.subscription.organisation-disclose-personal-details-consent.individual.yes=Yes - I want my name and address on the EORI checker
 cds.subscription.organisation-disclose-personal-details-consent.individual.no=No - Just show my EORI number on the EORI checker
 
-cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer=Tell us if you want to include your name and address on the EORI checker
-cds.subscription.organisation-disclose-personal-details-consent.form-error.yes-no-answer=Tell us if you want to include your name and address on the EORI checker
+cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer=Select yes to show your name and address on the Check an EORI number service.
+cds.subscription.organisation-disclose-personal-details-consent.form-error.yes-no-answer=Select yes to show your name and address on the Check an EORI number service.
 
 cds.subscription.vat-registered-uk.title-and-heading=Is your organisation VAT registered in the UK?
 cds.subscription.vat-registered-uk.partnership.title-and-heading=Is your partnership VAT registered in the UK?
