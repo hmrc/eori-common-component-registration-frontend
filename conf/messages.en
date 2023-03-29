@@ -1036,9 +1036,14 @@ cds.subscription.outcomes.success.extra.information.bullet2 = get an EORI number
 
 
 cds.subscription.outcomes.success.extra.information.when-you-can=When you can start using your subscription and EORI number
-cds.subscription.outcomes.success.extra.information.when-you-can.standalone=When you can start using your EORI number and subscription
+cds.subscription.outcomes.success.extra.information.when-you-can.standalone=What happens next
 cds.subscription.outcomes.success.extra.information.when-you-can.information=It can take up to 2 hours for your subscription and EORI number to be ready to use.
-cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone=It can take up to 2 hours for your EORI number and subscription to be ready to use.
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone=We will process your application. This can take up to 2 hours.
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2=We’ll then email to tell you the EORI number is ready to use. At this point, you can:
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2.li1 = move goods to or from Great Britain
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2.li2 = subscribe to customs services
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2.li3 = use the Customs Declaration Service
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2.li4 = get an EORI number starting with XI, if you move goods to or from Northern Ireland
 cds.subscription.outcomes.success.extra.information1=Your new GB EORI number will be ready to use within 48 hours. Once your GB EORI is active we will send you an email notifying you that your application is complete. If you would like to check the status of your GB EORI you can use the {0}. Your new GB EORI has no expiry date.
 cds.subscription.outcomes.success.extra.information2=check an EORI service (opens in new tab)
 cds.subscription.outcomes.success.download-eori-textfile=Download a text file of your EORI number (12kb)
@@ -1760,6 +1765,7 @@ ecc.subscription.outcomes.success.xi.info.bullet1=move goods between Northern Ir
 ecc.subscription.outcomes.success.xi.info.bullet2=make a declaration in Northern Ireland
 ecc.subscription.outcomes.success.xi.info.bullet3=get a customs decision in Northern Ireland
 ecc.subscription.outcomes.success.xi.info.href=Find out about EORI numbers starting with XI
+ecc.subscription.outcomes.success.xi.info.href.cds.link = Find out about the Customs Declaration Service
 ecc.subscription.outcomes.success.xi.info2=If you have an EORI number issued by any EU country, you do not need to get an EORI number starting with XI.
 ecc.standalone.subscription.outcomes.success.cds=About the {0}
 ecc.standalone.subscription.outcomes.success.cds.info=When your subscription is ready to use you will be able to do things like:
