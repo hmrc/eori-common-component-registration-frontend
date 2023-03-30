@@ -90,7 +90,7 @@ class EmailController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>
       val pageReferrer = request.headers.get("referer")
       // $COVERAGE-OFF$Loggers
-      logger.info(s"User came from - ${pageReferrer.getOrElse("Unknown referral")}")
+      logger.warn(s"User came from - ${pageReferrer.getOrElse("Unknown referral")}")
       // $COVERAGE-ON
       startRegisterJourney(service)
     }
