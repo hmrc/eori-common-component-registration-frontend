@@ -32,17 +32,23 @@ object VatDetails {
 object VatDetailsForm extends Mappings {
 
   def validPostcode: Constraint[String] =
-    Constraint({
-      case s if s.matches(postcodeRegex.regex) => Valid
-      case _                                   => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
-    })
+    Constraint("constraints.postcode") { pcode =>
+      pcode.filterNot(_.isWhitespace) match {
+        case s if s.matches(postcodeRegex.regex) => Valid
+        case _                                   => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
+      }
+
+    }
 
   def validVatNumber: Constraint[String] =
-    Constraint({
-      case s if s.trim.isEmpty             => Invalid(ValidationError("cds.subscription.vat-uk.required.error"))
-      case s if !s.matches("^([0-9]{9})$") => Invalid(ValidationError("cds.subscription.vat-uk.length.error"))
-      case _                               => Valid
-    })
+    Constraint("constraints.vat-number") { vat =>
+      vat.filterNot(_.isWhitespace) match {
+        case s if s.trim.isEmpty             => Invalid(ValidationError("cds.subscription.vat-uk.required.error"))
+        case s if !s.matches("^([0-9]{9})$") => Invalid(ValidationError("cds.subscription.vat-uk.length.error"))
+        case _                               => Valid
+      }
+
+    }
 
   val vatDetailsForm =
     Form(
