@@ -66,14 +66,14 @@ class VatGroupSpec extends ViewSpec {
       docWithErrors
         .body()
         .getElementsByClass("govuk-error-summary__list")
-        .text mustBe "Tell us if your organisation is part of a VAT group in the UK"
+        .text mustBe "Select yes if your organisation is part of a VAT group in the UK"
     }
 
     "have a field level error when no radio buttons are selected" in {
       docWithErrors
         .body()
         .getElementsByClass("govuk-error-message")
-        .text mustBe "Error: Tell us if your organisation is part of a VAT group in the UK"
+        .text mustBe "Error: Select yes if your organisation is part of a VAT group in the UK"
     }
   }
 

@@ -1052,9 +1052,9 @@ cds.subscription.vat-registered-uk.page-error.yes-no-answer = Cadarnhewch a yw�
 cds.subscription.vat-group.title-and-heading = A yw’ch sefydliad yn rhan o grŵp TAW yn y DU?
 cds.subscription.vat-group.partnership.title-and-heading = A yw’ch partneriaeth yn rhan o grŵp TAW yn y DU?
 cds.subscription.vat-group.intro-text = Mae grwpiau TAW yn cael eu creu pan fo dau neu fwy o gwmnïau neu bartneriaethau atebolrwydd cyfyngedig yn cofrestru fel un “person” trethadwy at ddibenion TAW yn y DU.
-cds.subscription.vat-group.page-error.yes-no-answer = Rhowch wybod i ni a yw’ch sefydliad yn rhan o grŵp TAW yn y DU
+cds.subscription.vat-group.page-error.yes-no-answer = Dewiswch ‘Iawn’ os yw’ch sefydliad yn rhan o grŵp TAW yn y DU
 cds.subscription.vat-group.partnership.page-error.yes-no-answer = Rhowch wybod i ni a yw’ch partneriaeth yn rhan o grŵp TAW yn y DU
-cds.subscription.vat-registration.form-error.vat-group = Rhowch wybod i ni a yw’ch sefydliad yn rhan o grŵp TAW yn y DU
+cds.subscription.vat-registration.form-error.vat-group = Dewiswch ‘Iawn’ os yw’ch sefydliad yn rhan o grŵp TAW yn y DU
 cds.subscription.based-in-uk.form-error.yes-no-answer = Cadarnhewch a ydych yn cofrestru ar gyfer busnes (neu unigolyn) sydd yn y DU
 
 

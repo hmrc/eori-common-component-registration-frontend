@@ -1174,9 +1174,9 @@ cds.subscription.vat-verification-option.title-and-heading=What do you want to u
 cds.subscription.vat-verification-option.error=Select if you want to use VAT registration date or latest VAT Return total
 cds.subscription.vat-group.partnership.title-and-heading=Is your partnership part of a VAT group in the UK?
 cds.subscription.vat-group.intro-text=VAT groups are when two or more companies or limited liability partnerships register as one taxable ''person'' for VAT purposes in the UK.
-cds.subscription.vat-group.page-error.yes-no-answer=Tell us if your organisation is part of a VAT group in the UK
+cds.subscription.vat-group.page-error.yes-no-answer=Select yes if your organisation is part of a VAT group in the UK
 cds.subscription.vat-group.partnership.page-error.yes-no-answer=Tell us if your partnership is part of a VAT group in the UK
-cds.subscription.vat-registration.form-error.vat-group=Tell us if your organisation is part of a VAT group in the UK
+cds.subscription.vat-registration.form-error.vat-group=Select yes if your organisation is part of a VAT group in the UK
 
 
 cds.subscription.vat-registration.vat-return.title = What is your latest VAT Return total?
