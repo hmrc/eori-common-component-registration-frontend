@@ -24,7 +24,7 @@ import play.api.mvc._
 import play.mvc.Http.Status._
 import play.twirl.api.Html
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionTimeOutException
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{client_error_template, error_template, notFound}
@@ -74,6 +74,11 @@ class CdsErrorHandler @Inject() (
         logger.warn(invalidRequirement.message)
         // $COVERAGE-ON
         Future.successful(Results.NotFound(notFoundView()))
+      case dataUnavailableException: DataUnavailableException =>
+        // $COVERAGE-OFF$Loggers
+        logger.warn("DataUnavailableException - " + dataUnavailableException.message)
+        // $COVERAGE-ON
+        Future.successful(Redirect(ApplicationController.startRegister(service)))
       case _ =>
         // $COVERAGE-OFF$Loggers
         logger.error("Internal server error: " + exception.getMessage, exception)
