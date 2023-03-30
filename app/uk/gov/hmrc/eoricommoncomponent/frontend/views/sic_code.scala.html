@@ -48,6 +48,10 @@
         @CSRF.formField
 
         <p class="govuk-body" id="description">@Html(messages("cds.subscription.sic.description.para1"))</p>
+        @govukDetails(Details(
+            summary = Text(messages("cds.subscription.sic.details")),
+            content = HtmlContent(detailsContent)
+        ))
 
         @inputText(
             form = sicCodeForm,
@@ -64,9 +68,6 @@
             content = Text(ViewHelper.continueButtonText(isInReviewMode))
         ))
 
-        @govukDetails(Details(
-            summary = Text(messages("cds.subscription.sic.details")),
-            content = HtmlContent(detailsContent)
-        ))
+        
     }
 }
