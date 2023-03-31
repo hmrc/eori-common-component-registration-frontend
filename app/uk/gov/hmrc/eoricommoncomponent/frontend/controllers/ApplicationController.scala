@@ -33,7 +33,8 @@ class ApplicationController @Inject() (
   mcc: MessagesControllerComponents,
   viewStartRegister: start,
   cache: SessionCache,
-  appConfig: AppConfig
+  appConfig: AppConfig,
+  featureFlags: FeatureFlags
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -41,7 +42,7 @@ class ApplicationController @Inject() (
     val headingAndTitleText = s"ecc.start-page.title.${service.code}"
     val bullet2             = s"ecc.start-page.para1.bullet2.${service.code}"
 
-    Ok(viewStartRegister(service, headingAndTitleText, bullet2))
+    Ok(viewStartRegister(service, headingAndTitleText, bullet2, featureFlags))
   }
 
   def logout(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction {

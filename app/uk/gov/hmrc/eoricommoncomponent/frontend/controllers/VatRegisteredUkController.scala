@@ -21,7 +21,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   DetermineReviewPageController,
   VatDetailsController,
-  VatDetailsControllerOld
+  VatDetailsControllerOld,
+  VatGroupController
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
@@ -100,23 +101,30 @@ class VatRegisteredUkController @Inject() (
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatRegisteredUk(yesNoAnswer).flatMap {
               _ =>
-                val result = (isInReviewMode, yesNoAnswer.isYes, featureFlags.useNewVATJourney) match {
-                  case (false, true, false) => Future.successful(VatDetailsControllerOld.createForm(service).url)
-                  case (true, true, false)  => Future.successful(VatDetailsControllerOld.reviewForm(service).url)
-                  case (false, true, true)  => Future.successful(VatDetailsController.createForm(service).url)
-                  case (true, true, true)   => Future.successful(VatDetailsController.reviewForm(service).url)
-                  case (false, false, true) =>
+                val result = (
+                  isInReviewMode,
+                  yesNoAnswer.isYes,
+                  featureFlags.useNewVATJourney,
+                  featureFlags.edgeCaseJourney
+                ) match {
+                  case (_, true, _, true)      => Future.successful(VatGroupController.createForm(service).url)
+                  case (false, true, false, _) => Future.successful(VatDetailsControllerOld.createForm(service).url)
+                  case (true, true, false, _)  => Future.successful(VatDetailsControllerOld.reviewForm(service).url)
+                  case (false, true, true, _)  => Future.successful(VatDetailsController.createForm(service).url)
+                  case (true, true, true, _)   => Future.successful(VatDetailsController.reviewForm(service).url)
+                  case (false, false, true, _) =>
                     subscriptionDetailsService.clearCachedUkVatDetails map { _ =>
                       subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
                     }
-                  case (false, false, false) =>
+                  case (false, false, false, _) =>
                     subscriptionDetailsService.clearCachedUkVatDetailsOld map { _ =>
                       subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
                     }
-                  case (true, false, _) =>
+                  case (true, false, _, _) =>
                     subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
                       Future.successful(DetermineReviewPageController.determineRoute(service).url)
                     }
+
                 }
                 result.map(t => Redirect(t))
             }
