@@ -487,7 +487,7 @@ cds.subscription.vat-verification-option.no=Cyfanswm eich Ffurflen TAW ddiweddar
 cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddefnyddio i gadarnhau pwy ydych?
 cds.subscription.vat-verification-option.error=Dewiswch os ydych am ddefnyddio dyddiad Cofrestru TAW neu gyfanswm y Ffurflen TAW diweddaraf
 cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych. <br><br> Gallwch ddod o hyd i'’'r enw hwn ar ddogfennau gan CThEF. Er enghraifft, cadarnhad o gofrestriad eich partneriaeth
-cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
+cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.limited-liability-partnership.name = Enw’r bartneriaeth gofrestredig
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
@@ -561,11 +561,11 @@ cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
 cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-company.name = Enw’r cwmni cofrestredig
-cds.matching.name-id-organisation.registered-company.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p> Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni.
+cds.matching.name-id-organisation.registered-company.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p> Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni.
 cds.matching.name-id-organisation.partnership.name = Enw’r bartneriaeth gofrestredig
-cds.matching.name-id-organisation.partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
+cds.matching.name-id-organisation.partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.organisation.name = Enw’r sefydliad
-cds.matching.name-id-organisation.organisation.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
+cds.matching.name-id-organisation.organisation.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
 cds.matching.name-id-organisation.organisation.no-utr=Nid oes gennyf Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.organisation.no-utr.text=Os ydych yn sefydliad nid er elw neu’n gorff cyhoeddus, ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr, bydd angen i chi {0} i gwblhau’ch cais am rif EORI.
 cds.matching.name-id-organisation.organisation.no-utr.link=ddefnyddio gwasanaeth arall
