@@ -34,6 +34,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlowInfo,
   SubscriptionPage
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.{FlowError, SessionError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
@@ -54,6 +55,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
   private val mockSubscriptionFlow            = mock[SubscriptionFlow]
+  private val mockSubscrptionFlowLeft         = mock[SessionError]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
   private val mockFeatureFlags                = mock[FeatureFlags]
@@ -149,6 +151,45 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       submitForm(ValidRequest) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("/register/your-uk-vat-details")
+      }
+    }
+
+    "redirect to start new journey for no data left case - submit form" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Left(mockSubscrptionFlowLeft)
+      )
+      val url = "register/vat-group"
+      subscriptionFlowUrl(url)
+
+      submitForm(invalidRequest) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("atar/register")
+      }
+    }
+
+    "redirect to start new journey for no data left case - review form" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Left(mockSubscrptionFlowLeft)
+      )
+      val url = "register/vat-group"
+      subscriptionFlowUrl(url)
+
+      reviewForm() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("atar/register")
+      }
+    }
+
+    "redirect to start new journey for no data left case - create form" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Left(mockSubscrptionFlowLeft)
+      )
+      val url = "register/vat-group"
+      subscriptionFlowUrl(url)
+
+      createForm() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("atar/register")
       }
     }
 
