@@ -23,7 +23,12 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{IndividualSubscriptionFlow, OrganisationSubscriptionFlow, PartnershipSubscriptionFlow, SubscriptionFlow}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
+  IndividualSubscriptionFlow,
+  OrganisationSubscriptionFlow,
+  PartnershipSubscriptionFlow,
+  SubscriptionFlow
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,10 +44,14 @@ class RequestSessionData @Inject() (audit: Auditable) {
     request.session + (RequestSessionDataKeys.subscriptionFlow -> subscriptionFlow.name) +
       (RequestSessionDataKeys.uriBeforeSubscriptionFlow        -> uriBeforeSubscriptionFlow)
 
-  def userSubscriptionFlow(implicit request: Request[AnyContent], hc: HeaderCarrier): Either[SessionError, SubscriptionFlow] =
+  def userSubscriptionFlow(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Either[SessionError, SubscriptionFlow] =
     request.session.data.get(RequestSessionDataKeys.subscriptionFlow) match {
       case Some(flowName) => Right(SubscriptionFlow(flowName))
-      case None => auditSessionFailure(request.session)
+      case None =>
+        auditSessionFailure(request.session)
         Left(DataNotFound(RequestSessionDataKeys.subscriptionFlow))
 
     }

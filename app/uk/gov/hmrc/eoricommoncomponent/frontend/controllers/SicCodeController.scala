@@ -51,6 +51,7 @@ class SicCodeController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
+
   private def populateView(sicCode: Option[String], isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] = {
@@ -124,4 +125,5 @@ class SicCodeController @Inject() (
               Redirect(ApplicationController.startRegister(service))
           }
       )
+
 }

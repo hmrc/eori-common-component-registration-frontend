@@ -84,11 +84,13 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     mockSubscriptionDetailsService,
     mockRequestSession,
     mcc,
-    vatRegisteredUkView,
+    vatRegisteredUkView
   )
 
   "Vat registered Uk Controller" should {
-    when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(Right(mockSubscriptionFlow))
+    when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+      Right(mockSubscriptionFlow)
+    )
     "return OK when accessing page through createForm method" in {
 
       createForm() { result =>
@@ -96,7 +98,9 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       }
     }
     "land on a correct location" in {
-      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(Right(mockSubscriptionFlow))
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       createForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title should include(VatRegisterUKPage.title)
@@ -108,13 +112,17 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(Future.successful(true))
 
     "return OK when accessing page through createForm method" in {
-      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(Right(mockSubscriptionFlow))
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       reviewForm() { result =>
         status(result) shouldBe OK
       }
     }
     "land on a correct location" in {
-      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(Right(mockSubscriptionFlow))
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       reviewForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title should include(VatRegisterUKPage.title)
@@ -124,13 +132,17 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
   "Submitting Vat registered UK Controller in create mode" should {
     "return to the same location with bad request" in {
-      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(Right(mockSubscriptionFlow))
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       submitForm(invalidRequest) { result =>
         status(result) shouldBe BAD_REQUEST
       }
     }
     "redirect to add vat group page for yes answer" in {
-      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(Right(mockSubscriptionFlow).withLeft)
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow).withLeft
+      )
       val url = "register/vat-group"
       subscriptionFlowUrl(url)
 
@@ -139,7 +151,6 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
         result.header.headers(LOCATION) should endWith("/register/your-uk-vat-details")
       }
     }
-
 
     "redirect to eu vat page for no answer using new vat details controller" in {
       val url = "register/vat-registered-eu"
@@ -153,7 +164,6 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
         result.header.headers(LOCATION) should endWith("register/contact-details")
       }
     }
-
 
     "redirect to vat groups review page for yes answer and is in review mode" in {
       when(mockFeatureFlags.useNewVATJourney).thenReturn(true)

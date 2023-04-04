@@ -60,12 +60,8 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
 
     "return correct flow cached" in {
       when(mockRequest.session).thenReturn(Session(Map("subscription-flow" -> OrganisationSubscriptionFlow.name)))
-      requestSessionData.userSubscriptionFlow.map( flow =>
-        flow shouldBe OrganisationSubscriptionFlow
-      )
+      requestSessionData.userSubscriptionFlow.map(flow => flow shouldBe OrganisationSubscriptionFlow)
     }
-
-
 
     "add organisation type to request cache" in {
       val newSession = requestSessionData.sessionWithOrganisationTypeAdded(mockOrganisationType)

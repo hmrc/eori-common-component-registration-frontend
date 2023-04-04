@@ -45,6 +45,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
+
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
@@ -93,13 +94,13 @@ class DisclosePersonalDetailsConsentController @Inject() (
               else
                 subscriptionFlowManager.stepInformation(EoriConsentSubscriptionFlowPage) match {
                   case Right(sbuFlowManager) =>
-                    Future.successful(
-                      Redirect(sbuFlowManager.nextPage.url(service))
-                    )
+                    Future.successful(Redirect(sbuFlowManager.nextPage.url(service)))
                   case Left(_) =>
                     logger.warn(s"Unable to identify subscription flow: key not found in cache")
                     Future.successful(Redirect(ApplicationController.startRegister(service)))
                 }
-        })
+            }
+        )
     }
+
 }

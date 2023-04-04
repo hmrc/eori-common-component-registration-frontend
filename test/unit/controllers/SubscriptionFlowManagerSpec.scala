@@ -248,14 +248,12 @@ class SubscriptionFlowManagerSpec
         when(mockRequestSessionData.userSubscriptionFlow(mockRequest, hc)).thenReturn(Right(flow).withLeft)
         val actual = controller.stepInformation(currentPage)(mockRequest, hc)
 
-        s"${flow.name} flow: current step is $expectedStepNumber when currentPage is $currentPage" in { actual.map(
-          subFlowInfo => subFlowInfo.stepNumber shouldBe expectedStepNumber
-        )}
+        s"${flow.name} flow: current step is $expectedStepNumber when currentPage is $currentPage" in {
+          actual.map(subFlowInfo => subFlowInfo.stepNumber shouldBe expectedStepNumber)
+        }
 
         s"${flow.name} flow: total Number of steps are $expectedTotalSteps when currentPage is $currentPage" in {
-          actual.map(
-            subFlowInfo => subFlowInfo.totalSteps shouldBe expectedTotalSteps
-          )
+          actual.map(subFlowInfo => subFlowInfo.totalSteps shouldBe expectedTotalSteps)
         }
 
         s"${flow.name} flow: next page is $expectedNextPage when currentPage is $currentPage" in {

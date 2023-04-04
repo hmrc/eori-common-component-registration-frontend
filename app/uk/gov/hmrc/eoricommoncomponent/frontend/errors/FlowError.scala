@@ -21,5 +21,3 @@ sealed trait FlowError
 object FlowError {
   case class FlowNotFound() extends FlowError
 }
-
-

@@ -19,7 +19,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, VatDetailsController, ContactDetailsController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  ApplicationController,
+  ContactDetailsController,
+  VatDetailsController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -38,7 +42,7 @@ class VatRegisteredUkController @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService,
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
-  vatRegisteredUkView: vat_registered_uk,
+  vatRegisteredUkView: vat_registered_uk
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -48,21 +52,21 @@ class VatRegisteredUkController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         isIndividualFlow match {
-          case Right(isIndividual) => Future.successful(
-            Ok(
-              vatRegisteredUkView(
-                isInReviewMode = false,
-                vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP),
-                isIndividual,
-                requestSessionData.isPartnershipOrLLP,
-                service
+          case Right(isIndividual) =>
+            Future.successful(
+              Ok(
+                vatRegisteredUkView(
+                  isInReviewMode = false,
+                  vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP),
+                  isIndividual,
+                  requestSessionData.isPartnershipOrLLP,
+                  service
+                )
               )
             )
-          )
-          case Left(_) => {
+          case Left(_) =>
             logger.warn(s"Unable to identify subscription flow: key not found in cache")
             Future.successful(Redirect(ApplicationController.startRegister(service)))
-          }
         }
 
     }
@@ -73,9 +77,9 @@ class VatRegisteredUkController @Inject() (
         for {
           isVatRegisteredUk <- subscriptionBusinessService.getCachedVatRegisteredUk
           yesNo: YesNo = YesNo(isVatRegisteredUk)
-        } yield {
-          isIndividualFlow match {
-            case Right(individual) => Ok(
+        } yield isIndividualFlow match {
+          case Right(individual) =>
+            Ok(
               vatRegisteredUkView(
                 isInReviewMode = true,
                 vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
@@ -84,10 +88,9 @@ class VatRegisteredUkController @Inject() (
                 service
               )
             )
-            case Left(_) =>
-              logger.warn(s"Unable to identify subscription flow: key not found in cache in review mode")
-              Redirect(ApplicationController.startRegister(service))
-          }
+          case Left(_) =>
+            logger.warn(s"Unable to identify subscription flow: key not found in cache in review mode")
+            Redirect(ApplicationController.startRegister(service))
         }
     }
 
@@ -96,10 +99,11 @@ class VatRegisteredUkController @Inject() (
       vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP)
         .bindFromRequest()
         .fold(
-          formWithErrors => {
+          formWithErrors =>
             isIndividualFlow match {
               case Right(individual) =>
-                  Future.successful(BadRequest(
+                Future.successful(
+                  BadRequest(
                     vatRegisteredUkView(
                       isInReviewMode,
                       formWithErrors,
@@ -107,32 +111,35 @@ class VatRegisteredUkController @Inject() (
                       requestSessionData.isPartnershipOrLLP,
                       service
                     )
-                  ))
+                  )
+                )
               case Left(_) =>
                 logger.warn(s"Unable to identify subscription flow: key not found in cache in review mode")
                 Future.successful(Redirect(ApplicationController.startRegister(service)))
-            }
-          },
+            },
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatRegisteredUk(yesNoAnswer).flatMap {
               _ =>
                 val result = (isInReviewMode, yesNoAnswer.isYes) match {
-                  case (false, true)  => Future.successful(VatDetailsController.createForm(service).url)
-                  case (true, true)   => Future.successful(VatDetailsController.reviewForm(service).url)
-                  case (true, false)   =>
-                    subscriptionDetailsService.clearCachedUkVatDetails.map(_ =>
-                      ContactDetailsController.reviewForm(service).url)
-                  case (false, false)   => subscriptionDetailsService.clearCachedUkVatDetails.map(_ =>
-                    ContactDetailsController.createForm(service).url)
+                  case (false, true) => Future.successful(VatDetailsController.createForm(service).url)
+                  case (true, true)  => Future.successful(VatDetailsController.reviewForm(service).url)
+                  case (true, false) =>
+                    subscriptionDetailsService.clearCachedUkVatDetails.map(
+                      _ => ContactDetailsController.reviewForm(service).url
+                    )
+                  case (false, false) =>
+                    subscriptionDetailsService.clearCachedUkVatDetails.map(
+                      _ => ContactDetailsController.createForm(service).url
+                    )
                 }
                 result.map(t => Redirect(t))
             }
         )
     }
 
-  private def isIndividualFlow(implicit rq: Request[AnyContent]):Either[SessionError, Boolean] =
+  private def isIndividualFlow(implicit rq: Request[AnyContent]): Either[SessionError, Boolean] =
     requestSessionData.userSubscriptionFlow map {
-    flow => flow.isIndividualFlow
+      flow => flow.isIndividualFlow
     }
 
 }

@@ -21,11 +21,20 @@ import play.api.Logger
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDate
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{InvalidResponse, NotFoundResponse, ServiceUnavailableResponse, VatControlListConnector}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
+  InvalidResponse,
+  NotFoundResponse,
+  ServiceUnavailableResponse,
+  VatControlListConnector
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest, VatControlListResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
+  LoggedInUserWithEnrolments,
+  VatControlListRequest,
+  VatControlListResponse
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsFormOld.vatDetailsFormOld
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -50,6 +59,7 @@ class VatDetailsControllerOld @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
+
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
@@ -105,14 +115,11 @@ class VatDetailsControllerOld @Inject() (
                           .determineRoute(service)
                       )
                     else
-                      Redirect(
-                        subFlowManager.nextPage.url(service)
-                      )
+                      Redirect(subFlowManager.nextPage.url(service))
                   case Left(_) =>
                     logger.warn(s"Unable to identify subscription flow: key not found in cache")
                     Redirect(ApplicationController.startRegister(service))
                 }
-
             )
         else
           Future.successful(Redirect(VatDetailsControllerOld.vatDetailsNotMatched(isInReviewMode, service)))

@@ -59,23 +59,22 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
 
   private val logger = Logger(this.getClass)
 
-  def currentSubscriptionFlow(implicit request: Request[AnyContent], hc: HeaderCarrier): Either[FlowError, SubscriptionFlow] = {
+  def currentSubscriptionFlow(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Either[FlowError, SubscriptionFlow] =
     //TODO if we add new sessionErrors we need to reassess this
     requestSessionData.userSubscriptionFlow match {
-      case Left(_) => Left(FlowNotFound())
+      case Left(_)     => Left(FlowNotFound())
       case Right(flow) => Right(flow)
     }
-  }
 
   def stepInformation(
     currentPage: SubscriptionPage
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Either[FlowError, SubscriptionFlowInfo] = {
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Either[FlowError, SubscriptionFlowInfo] =
     currentSubscriptionFlow map {
       flow => SubscriptionFlows(flow).stepInformation(currentPage)
     }
-
-  }
-
 
   def startSubscriptionFlow(
     service: Service

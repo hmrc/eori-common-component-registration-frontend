@@ -49,6 +49,7 @@ class DateOfEstablishmentController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
+
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
@@ -97,13 +98,13 @@ class DateOfEstablishmentController @Inject() (
           saveDateEstablished(date).map { _ =>
             if (isInReviewMode)
               Redirect(DetermineReviewPageController.determineRoute(service))
-            else {
+            else
               subscriptionFlowManager.stepInformation(DateOfEstablishmentSubscriptionFlowPage) match {
                 case Right(subFlowManager) => Redirect(subFlowManager.nextPage.url(service))
-                case Left(_) => logger.warn(s"Unable to identify subscription flow: key not found in cache")
+                case Left(_) =>
+                  logger.warn(s"Unable to identify subscription flow: key not found in cache")
                   Redirect(ApplicationController.startRegister(service))
               }
-            }
           }
       )
     }

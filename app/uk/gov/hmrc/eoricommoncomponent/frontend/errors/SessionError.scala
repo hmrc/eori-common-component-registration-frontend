@@ -19,7 +19,5 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.errors
 sealed trait SessionError
 
 object SessionError {
-  case class DataNotFound(key: String) extends SessionError {
-
-  }
+  case class DataNotFound(key: String) extends SessionError {}
 }

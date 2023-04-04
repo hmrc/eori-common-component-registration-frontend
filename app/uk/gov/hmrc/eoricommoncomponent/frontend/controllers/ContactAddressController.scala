@@ -45,6 +45,7 @@ class ContactAddressController @Inject() (
     extends CdsController(mcc) {
 
   private val logger = Logger(this.getClass)
+
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       populateFormGYE(service)(false)
@@ -113,17 +114,13 @@ class ContactAddressController @Inject() (
     case theAnswer if theAnswer.isYes =>
       if (isInReviewMode)
         Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
-      else {
+      else
         subscriptionFlowManager.stepInformation(ContactAddressSubscriptionFlowPageGetEori) match {
-          case Right(subFlowManager) => Future.successful(
-            Redirect(
-              subFlowManager.nextPage.url(service)
-            )
-          )
-          case Left(_) => logger.warn(s"Unable to identify subscription flow: key not found in cache")
+          case Right(subFlowManager) => Future.successful(Redirect(subFlowManager.nextPage.url(service)))
+          case Left(_) =>
+            logger.warn(s"Unable to identify subscription flow: key not found in cache")
             Future.successful(Redirect(ApplicationController.startRegister(service)))
         }
-      }
     case _ =>
       Future(Redirect(AddressController.createForm(service)))
 

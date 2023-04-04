@@ -58,7 +58,6 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
       }
     }
 
-
     "redirect to registration security sign out" in {
       val mockRegisterRequest = FakeRequest(method = "GET", path = "/atar/register")
 
