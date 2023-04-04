@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.Logger
+
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDate
 import play.api.mvc._
@@ -25,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EtmpOrganisationType, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -45,7 +48,7 @@ class DateOfEstablishmentController @Inject() (
   orgTypeLookup: OrgTypeLookup
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
-
+  private val logger = Logger(this.getClass)
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
@@ -95,13 +98,11 @@ class DateOfEstablishmentController @Inject() (
             if (isInReviewMode)
               Redirect(DetermineReviewPageController.determineRoute(service))
             else {
-              val page = subscriptionFlowManager
-                .stepInformation(DateOfEstablishmentSubscriptionFlowPage)
-                .nextPage
-              Redirect(
-                page
-                  .url(service)
-              )
+              subscriptionFlowManager.stepInformation(DateOfEstablishmentSubscriptionFlowPage) match {
+                case Right(subFlowManager) => Redirect(subFlowManager.nextPage.url(service))
+                case Left(_) => logger.warn(s"Unable to identify subscription flow: key not found in cache")
+                  Redirect(ApplicationController.startRegister(service))
+              }
             }
           }
       )

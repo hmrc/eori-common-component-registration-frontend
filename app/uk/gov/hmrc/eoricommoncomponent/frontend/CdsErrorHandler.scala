@@ -69,11 +69,7 @@ class CdsErrorHandler @Inject() (
         logger.info("Session time out: " + sessionTimeOut.errorMessage, exception)
         // $COVERAGE-ON
         Future.successful(Redirect(SecuritySignOutController.displayPage(service)).withNewSession)
-      case illegalStateException: IllegalStateException =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn("If IllegalStateException is thrown : " + illegalStateException.getMessage)
-        // $COVERAGE-ON
-        Future.successful(Redirect(ApplicationController.startRegister(service)))
+
       case invalidRequirement: InvalidUrlValueException =>
         // $COVERAGE-OFF$Loggers
         logger.warn(invalidRequirement.message)

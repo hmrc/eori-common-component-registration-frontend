@@ -450,7 +450,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
 
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
     when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-      subscriptionFlow
+      Right(subscriptionFlow).withLeft
     )
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
@@ -463,7 +463,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     withAuthorisedUser(defaultUserId, mockAuthConnector)
 
     when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-      subscriptionFlow
+      Right(subscriptionFlow)
     )
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
       .thenReturn(Some(contactDetailsModel))

@@ -370,7 +370,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-      subscriptionFlow
+      Right(subscriptionFlow)
     )
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)
@@ -399,7 +399,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-      subscriptionFlow
+      Right(subscriptionFlow)
     )
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
@@ -416,7 +416,7 @@ class DisclosePersonalDetailsConsentControllerSpec
   ) {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
-      .thenReturn(OrganisationSubscriptionFlow)
+      .thenReturn(Right(OrganisationSubscriptionFlow))
     test(
       controller
         .submit(isInReviewMode, atarService)

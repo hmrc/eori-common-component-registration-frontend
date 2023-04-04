@@ -89,7 +89,7 @@ class CheckYourDetailsRegisterControllerSpec
     reset(mockSessionCache, mockSubscriptionDetails, mockSubscriptionFlow)
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-      mockSubscriptionFlow
+      Right(mockSubscriptionFlow).withLeft
     )
     when(mockSubscriptionDetails.ukVatDetailsOld).thenReturn(None)
     when(mockSubscriptionDetails.ukVatDetails).thenReturn(None)
@@ -333,7 +333,7 @@ class CheckYourDetailsRegisterControllerSpec
       s"display $labelText label for ${organisationType.id}" in {
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
         when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
-          .thenReturn(SubscriptionFlow("Organisation"))
+          .thenReturn(Right(SubscriptionFlow("Organisation")))
 
         showForm(userSelectedOrgType = organisationType) { result =>
           val page = CdsPage(contentAsString(result))
@@ -349,7 +349,7 @@ class CheckYourDetailsRegisterControllerSpec
       }
       s"display $UtrLabelText label for ${organisationType.id}" in {
         when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
-          .thenReturn(SubscriptionFlow("Organisation"))
+          .thenReturn(Right(SubscriptionFlow("Organisation")))
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
 
         showForm(userSelectedOrgType = organisationType) { result =>
@@ -366,7 +366,7 @@ class CheckYourDetailsRegisterControllerSpec
           case _          => SubscriptionFlow("Individual")
         }
         when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-          subscriptionFlow
+          Right(subscriptionFlow).withLeft
         )
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
 
@@ -381,7 +381,7 @@ class CheckYourDetailsRegisterControllerSpec
     forAll(individualsOnlyOrganisationTypes) { organisationType =>
       s"should not display shortened name for ${organisationType.id}" in {
         when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
-          .thenReturn(SubscriptionFlow("Individual"))
+          .thenReturn(Right(SubscriptionFlow("Individual")))
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
 
         showForm(userSelectedOrgType = organisationType) { result =>

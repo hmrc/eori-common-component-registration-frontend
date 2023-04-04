@@ -69,10 +69,10 @@ class SubscriptionFlowManagerSpec
   "Getting current subscription flow" should {
     "return value from session when stored there before" in {
       when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        mockSubscriptionFlow
+        Right(mockSubscriptionFlow)
       )
 
-      controller.currentSubscriptionFlow(mockRequest, hc) shouldBe mockSubscriptionFlow
+      controller.currentSubscriptionFlow(mockRequest, hc) shouldBe Right(mockSubscriptionFlow)
     }
 
     "fail when there was no flow stored in session before" in {
@@ -245,19 +245,21 @@ class SubscriptionFlowManagerSpec
         expectedTotalSteps: Int,
         expectedNextPage: SubscriptionPage
       ) =>
-        when(mockRequestSessionData.userSubscriptionFlow(mockRequest, hc)).thenReturn(flow)
+        when(mockRequestSessionData.userSubscriptionFlow(mockRequest, hc)).thenReturn(Right(flow).withLeft)
         val actual = controller.stepInformation(currentPage)(mockRequest, hc)
 
-        s"${flow.name} flow: current step is $expectedStepNumber when currentPage is $currentPage" in {
-          actual.stepNumber shouldBe expectedStepNumber
-        }
+        s"${flow.name} flow: current step is $expectedStepNumber when currentPage is $currentPage" in { actual.map(
+          subFlowInfo => subFlowInfo.stepNumber shouldBe expectedStepNumber
+        )}
 
         s"${flow.name} flow: total Number of steps are $expectedTotalSteps when currentPage is $currentPage" in {
-          actual.totalSteps shouldBe expectedTotalSteps
+          actual.map(
+            subFlowInfo => subFlowInfo.totalSteps shouldBe expectedTotalSteps
+          )
         }
 
         s"${flow.name} flow: next page is $expectedNextPage when currentPage is $currentPage" in {
-          actual.nextPage shouldBe expectedNextPage
+          actual.map(subFlowInfo => subFlowInfo.nextPage shouldBe expectedNextPage)
         }
     }
   }

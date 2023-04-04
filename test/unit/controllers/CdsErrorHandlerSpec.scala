@@ -57,12 +57,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         page.title should startWith("Page not found")
       }
     }
-    "redirect to start page If when IllegalStateException thrown  " in {
-      whenReady(cdsErrorHandler.onServerError(mockRequest, new IllegalStateException)) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-      }
-    }
+
 
     "redirect to registration security sign out" in {
       val mockRegisterRequest = FakeRequest(method = "GET", path = "/atar/register")
