@@ -92,7 +92,7 @@ class VatDetailsController @Inject() (
                       .determineRoute(service)
                   )
                 else if (vatControlListResponse.isLastReturnMonthPeriodNonEmpty)
-                  Redirect(VatVerificationOptionController.createForm(service))
+                  Redirect(DateOfVatRegistrationController.createForm(service))
                 else
                   Redirect(DateOfVatRegistrationController.createForm(service))
             }

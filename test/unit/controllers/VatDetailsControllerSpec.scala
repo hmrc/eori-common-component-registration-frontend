@@ -141,14 +141,14 @@ class VatDetailsControllerSpec
     "should match without space in the postcode" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "Z91AA")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("vat-verification-option")
+        result.header.headers("Location") should endWith("your-uk-vat-details-date")
       }
     }
 
     "should match when the postcode is entered in lowercase" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "z91aa")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("vat-verification-option")
+        result.header.headers("Location") should endWith("your-uk-vat-details-date")
       }
     }
 
