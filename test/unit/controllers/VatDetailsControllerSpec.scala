@@ -205,7 +205,7 @@ class VatDetailsControllerSpec
     "redirect to next page when valid vat number and effective date is supplied" in {
       submitFormInCreateMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("vat-verification-option")
+        result.header.headers("Location") should endWith("your-uk-vat-details-date")
       }
     }
 
