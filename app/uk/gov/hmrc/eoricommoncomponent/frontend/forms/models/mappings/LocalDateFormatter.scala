@@ -40,10 +40,10 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
     val int = intFormatter(requiredKey = invalidKey, wholeNumberKey = invalidKey, nonNumericKey = invalidKey, args)
 
     for {
-      day   <- int.bind(s"$key.day", data).right
-      month <- int.bind(s"$key.month", data).right
-      year  <- int.bind(s"$key.year", data).right
-      date  <- toDate(key, day, month, year).right
+      day   <- int.bind(s"$key.day", data.map(d => d._1 -> d._2.trim))
+      month <- int.bind(s"$key.month", data.map(m => m._1 -> m._2.trim))
+      year  <- int.bind(s"$key.year", data.map(y => y._1 -> y._2.trim))
+      date  <- toDate(key, day, month, year)
     } yield date
   }
 
