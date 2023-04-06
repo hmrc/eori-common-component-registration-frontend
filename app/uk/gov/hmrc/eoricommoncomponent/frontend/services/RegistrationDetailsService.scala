@@ -48,7 +48,7 @@ class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit
       )
 
       organisationType match {
-        case SoleTrader | Individual | ThirdCountryIndividual | ThirdCountrySoleTrader =>
+        case SoleTrader | Individual | ThirdCountryIndividual | ThirdCountrySoleTrader | IsleOfManSoleTrader | IsleOfManIndividual =>
           sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
         case _ => sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
       }

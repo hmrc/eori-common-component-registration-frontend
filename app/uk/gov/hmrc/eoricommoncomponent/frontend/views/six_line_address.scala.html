@@ -37,7 +37,7 @@
 }
 
 @headerLabel = @{cdsOrgType match {
-        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId => "cds.matching.individual-address.header"
+        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId | CdsOrganisationType.IsleOfManSoleTraderId | CdsOrganisationType.IsleOfManIndividualId => "cds.matching.individual-address.header"
         case _ => "cds.matching.organisation-address.header"
     }
 }
