@@ -44,6 +44,7 @@ object UserLocation {
   def isRow(location: String): Boolean = rowLocations.contains(location)
 
   def isIom(location: String): Boolean =
-    if(location == Iom) true
+    if (location == Iom) true
     else false
+
 }
