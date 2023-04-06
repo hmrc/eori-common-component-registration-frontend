@@ -97,7 +97,7 @@ class UserLocationController @Inject() (
           (details.location, loggedInUser.groupId, featureFlags.edgeCaseJourney) match {
             case (Some(UserLocation.Iom), Some(_), false) =>
               Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
-            case (Some(location), Some(id), _) if UserLocation.isRow(location) || UserLocation.isIom(location) =>
+            case (Some(location), Some(id), _) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
             case _ =>
               Future.successful(
