@@ -86,7 +86,8 @@
 @isIndividual = @{
     cdsOrgType.contains(CdsOrganisationType.Individual) ||
     cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+    cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual) ||
+    cdsOrgType.contains(CdsOrganisationType.IsleOfManIndividual)
 }
 
 @isLlp = @{
@@ -99,15 +100,16 @@
 
 @isSoleTrader = @{
     cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
+    cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
+    cdsOrgType.contains(CdsOrganisationType.IsleOfManSoleTrader)
 }
 
 @isRowOrganisation = @{
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
+    cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation) || cdsOrgType.contains(CdsOrganisationType.IsleOfManOrganisation)
 }
 
 @isRowSoleTraderIndividual = @{
-  cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+  cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual) || cdsOrgType.contains(CdsOrganisationType.IsleOfManSoleTrader) || cdsOrgType.contains(CdsOrganisationType.IsleOfManIndividual)
 }
 
 @getDateOfEstablishmentLabel = @{

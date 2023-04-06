@@ -47,8 +47,8 @@
 
 @headerAndTitle = @{
     organisationType match {
-        case CdsOrganisationType.ThirdCountryOrganisationId => messages("cds.matching.row-organisation.utr.title-and-heading")
-        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
+        case CdsOrganisationType.ThirdCountryOrganisationId | CdsOrganisationType.IsleOfManOrganisationId => messages("cds.matching.row-organisation.utr.title-and-heading")
+        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId  | CdsOrganisationType.IsleOfManSoleTraderId | CdsOrganisationType.IsleOfManIndividualId =>
             messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")
         case CdsOrganisationType.IndividualId | CdsOrganisationType.SoleTraderId =>
             messages("cds.matching.row-sole-trader-individual.utr.title-and-heading")
@@ -66,8 +66,8 @@
 
 @hint = @{
     organisationType match {
-        case CdsOrganisationType.ThirdCountryOrganisationId => utrLinkText
-        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
+        case CdsOrganisationType.ThirdCountryOrganisationId | CdsOrganisationType.IsleOfManOrganisationId => utrLinkText
+        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId | CdsOrganisationType.IsleOfManSoleTraderId | CdsOrganisationType.IsleOfManIndividualId =>
             Html(messages("ecc.matching.row-sole-trader-individual.utr.paragraph", utrlink))
         case CdsOrganisationType.IndividualId | CdsOrganisationType.SoleTraderId =>
             Html(messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrlink))
@@ -81,7 +81,7 @@
 
 @isNotSoleTrader = @{
     organisationType match {
-        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.SoleTraderId | CdsOrganisationType.ThirdCountryIndividualId | CdsOrganisationType.IndividualId
+        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.SoleTraderId | CdsOrganisationType.ThirdCountryIndividualId | CdsOrganisationType.IndividualId | CdsOrganisationType.IsleOfManSoleTraderId | CdsOrganisationType.IsleOfManIndividualId
                 => false
         case _ => true
     }

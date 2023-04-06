@@ -112,11 +112,11 @@ object SubscriptionFlows {
 
   private val islaOfManSoleTraderFlowConfig = createFlowConfig(
     List(
-      ContactDetailsSubscriptionFlowPageGetEori,
       SicCodeSubscriptionFlowPage,
       EoriConsentSubscriptionFlowPage,
       VatRegisteredUkSubscriptionFlowPage,
       VatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
       ContactAddressSubscriptionFlowPageGetEori
     )
   )

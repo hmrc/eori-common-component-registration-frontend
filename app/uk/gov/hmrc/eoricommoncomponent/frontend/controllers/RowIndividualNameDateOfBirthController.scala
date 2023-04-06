@@ -97,8 +97,8 @@ class RowIndividualNameDateOfBirthController @Inject() (
     subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) map { _ =>
       (isInReviewMode, organisationType) match {
         case (true, _)                                          => Redirect(DetermineReviewPageController.determineRoute(service))
-        case (false, CdsOrganisationType.IsleOfManSoleTraderId) => Redirect(AddressController.createForm(service))
-        case (false, CdsOrganisationType.IsleOfManIndividualId) => Redirect(AddressController.createForm(service))
+        case (false, CdsOrganisationType.IsleOfManSoleTraderId) => Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
+        case (false, CdsOrganisationType.IsleOfManIndividualId) => Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
         case (_, _)                                             => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
       }
 
