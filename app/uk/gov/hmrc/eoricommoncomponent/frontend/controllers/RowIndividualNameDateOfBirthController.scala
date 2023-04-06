@@ -78,7 +78,12 @@ class RowIndividualNameDateOfBirthController @Inject() (
     )
 
   private lazy val formsByOrganisationTypes =
-    Seq(CdsOrganisationType.ThirdCountryIndividualId, CdsOrganisationType.ThirdCountrySoleTraderId, CdsOrganisationType.IsleOfManSoleTraderId, CdsOrganisationType.IsleOfManIndividualId)
+    Seq(
+      CdsOrganisationType.ThirdCountryIndividualId,
+      CdsOrganisationType.ThirdCountrySoleTraderId,
+      CdsOrganisationType.IsleOfManSoleTraderId,
+      CdsOrganisationType.IsleOfManIndividualId
+    )
 
   private def submitDetails(
     isInReviewMode: Boolean,
@@ -90,12 +95,12 @@ class RowIndividualNameDateOfBirthController @Inject() (
       NameDobMatchModel(formData.firstName, formData.lastName, formData.dateOfBirth)
 
     subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) map { _ =>
-       (isInReviewMode, organisationType) match {
-         case (true, _) => Redirect(DetermineReviewPageController.determineRoute(service))
-         case (false, CdsOrganisationType.IsleOfManSoleTraderId) => Redirect(AddressController.createForm(service))
-         case (false, CdsOrganisationType.IsleOfManIndividualId) => Redirect(AddressController.createForm(service))
-         case (_, _) => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
-       }
+      (isInReviewMode, organisationType) match {
+        case (true, _)                                          => Redirect(DetermineReviewPageController.determineRoute(service))
+        case (false, CdsOrganisationType.IsleOfManSoleTraderId) => Redirect(AddressController.createForm(service))
+        case (false, CdsOrganisationType.IsleOfManIndividualId) => Redirect(AddressController.createForm(service))
+        case (_, _)                                             => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
+      }
 
     }
   }

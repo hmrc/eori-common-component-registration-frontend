@@ -120,7 +120,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
   private def assertAndTestBasedOnTheLocationForIndividual(selectedLocation: String): Unit =
     s"redirect to contactDetailsPage when orgType is found in cache for Individual and location is selected to $selectedLocation" in {
       val location: String = getSelectedLocation(selectedLocation)
-      val mockSession = mock[Session]
+      val mockSession      = mock[Session]
       val mockFlowStart =
         (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 
@@ -145,8 +145,8 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
   private def assertAndTestBasedOnTheLocationForOrganisation(selectedLocation: String): Unit =
     s"redirect to dateOfEstablishment when orgType is found in cache for Organisation and location is selected to $selectedLocation" in {
       val location: String = getSelectedLocation(selectedLocation)
-      val mockSession   = mock[Session]
-      val mockFlowStart = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
+      val mockSession      = mock[Session]
+      val mockFlowStart    = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
 
       when(
         mockSubscriptionFlowManager.startSubscriptionFlow(
@@ -169,13 +169,12 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
     }
 
   private def getSelectedLocation(selectedLocation: String) =
-     selectedLocation match {
-      case UserLocation.Eu => "eu"
+    selectedLocation match {
+      case UserLocation.Eu           => "eu"
       case UserLocation.ThirdCountry => "third-country"
-      case UserLocation.Iom => "isle-of-man"
-      case UserLocation.Islands => "islands"
+      case UserLocation.Iom          => "isle-of-man"
+      case UserLocation.Islands      => "islands"
     }
-
 
   private def mockCacheWithRegistrationDetails(details: RegistrationDetails): Unit =
     when(mockSessionCache.registrationDetails(any[Request[_]]))

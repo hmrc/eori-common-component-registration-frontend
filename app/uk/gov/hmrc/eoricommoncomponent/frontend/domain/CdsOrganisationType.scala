@@ -39,8 +39,8 @@ object CdsOrganisationType {
   val ThirdCountryIndividualId   = "third-country-individual"
 
   val IsleOfManOrganisationId = "iom-organisation"
-  val IsleOfManSoleTraderId = "iom-sole-trader"
-  val IsleOfManIndividualId = "iom-individual"
+  val IsleOfManSoleTraderId   = "iom-sole-trader"
+  val IsleOfManIndividualId   = "iom-individual"
 
   val Company: CdsOrganisationType                       = CdsOrganisationType(CompanyId)
   val SoleTrader: CdsOrganisationType                    = CdsOrganisationType(SoleTraderId)
@@ -57,8 +57,8 @@ object CdsOrganisationType {
   val ThirdCountryIndividual: CdsOrganisationType   = CdsOrganisationType(ThirdCountryIndividualId)
 
   val IsleOfManOrganisation: CdsOrganisationType = CdsOrganisationType(IsleOfManOrganisationId)
-  val IsleOfManSoleTrader:CdsOrganisationType = CdsOrganisationType(IsleOfManSoleTraderId)
-  val IsleOfManIndividual: CdsOrganisationType = CdsOrganisationType(IsleOfManIndividualId)
+  val IsleOfManSoleTrader: CdsOrganisationType   = CdsOrganisationType(IsleOfManSoleTraderId)
+  val IsleOfManIndividual: CdsOrganisationType   = CdsOrganisationType(IsleOfManIndividualId)
 
   val validOrganisationTypes: Map[String, CdsOrganisationType] = Map(
     CompanyId                       -> Company,
@@ -74,7 +74,7 @@ object CdsOrganisationType {
     ThirdCountryIndividualId        -> ThirdCountryIndividual,
     IsleOfManOrganisationId         -> IsleOfManOrganisation,
     IsleOfManSoleTraderId           -> IsleOfManSoleTrader,
-    IsleOfManIndividualId           -> IsleOfManIndividual,
+    IsleOfManIndividualId           -> IsleOfManIndividual
   )
 
   def forId(organisationTypeId: String): CdsOrganisationType = validOrganisationTypes(organisationTypeId)
