@@ -98,6 +98,38 @@ object SubscriptionFlows {
     )
   )
 
+  private val islaOfManCorporateFlowConfig = createFlowConfig(
+    List(
+      DateOfEstablishmentSubscriptionFlowPage,
+      SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
+      VatRegisteredUkSubscriptionFlowPage,
+      VatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+  private val islaOfManSoleTraderFlowConfig = createFlowConfig(
+    List(
+        ContactDetailsSubscriptionFlowPageGetEori,
+        SicCodeSubscriptionFlowPage,
+        EoriConsentSubscriptionFlowPage,
+        VatRegisteredUkSubscriptionFlowPage,
+        VatDetailsSubscriptionFlowPage,
+        ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
+  private val islaOfManIndividualSubscriptionFlowConfig = createFlowConfig(
+    List(
+
+      EoriConsentSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+
+    )
+  )
+
   val flows: Map[SubscriptionFlow, SubscriptionFlowConfig] = Map(
     OrganisationSubscriptionFlow             -> corporateFlowConfig,
     PartnershipSubscriptionFlow              -> partnershipFlowConfig,
@@ -105,7 +137,11 @@ object SubscriptionFlows {
     IndividualSubscriptionFlow               -> individualFlowConfig,
     ThirdCountryOrganisationSubscriptionFlow -> thirdCountryCorporateFlowConfig,
     ThirdCountrySoleTraderSubscriptionFlow   -> thirdCountrySoleTraderFlowConfig,
-    ThirdCountryIndividualSubscriptionFlow   -> thirdCountryIndividualFlowConfig
+    ThirdCountryIndividualSubscriptionFlow   -> thirdCountryIndividualFlowConfig,
+    IsleOfManOrganisationSubscriptionFlow    -> islaOfManCorporateFlowConfig,
+    IsleOfManSoleTraderSubscriptionFlow      -> islaOfManSoleTraderFlowConfig,
+    IsleOfManIndividualSubscriptionFlow      -> islaOfManIndividualSubscriptionFlowConfig
+
   )
 
   private def createFlowConfig(flowStepList: List[SubscriptionPage]): SubscriptionFlowConfig =
@@ -136,6 +172,12 @@ case object ThirdCountrySoleTraderSubscriptionFlow
 
 case object ThirdCountryIndividualSubscriptionFlow
     extends SubscriptionFlow(ThirdCountryIndividual.id, isIndividualFlow = true)
+
+case object IsleOfManOrganisationSubscriptionFlow extends SubscriptionFlow(IsleOfManOrganisation.id, isIndividualFlow = false)
+
+case object IsleOfManSoleTraderSubscriptionFlow extends SubscriptionFlow(IsleOfManSoleTrader.id, isIndividualFlow = true)
+
+case object IsleOfManIndividualSubscriptionFlow extends SubscriptionFlow(IsleOfManIndividual.id, isIndividualFlow = true)
 
 case object SoleTraderSubscriptionFlow extends SubscriptionFlow(SoleTrader.id, isIndividualFlow = true)
 
