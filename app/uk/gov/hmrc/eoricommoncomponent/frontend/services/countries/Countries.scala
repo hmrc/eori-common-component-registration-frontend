@@ -75,7 +75,7 @@ object Countries {
     case Some(UserLocation.ThirdCountryIncEU) =>
       (thirdIncEu, ThirdCountriesIncEuInCountryPicker)
     case Some(UserLocation.Islands) => (islands, IslandsInCountryPicker)
-    case Some(UserLocation.Iom) => (List(Country.apply("Isle of Man", "IM")), IsleOfManCountryPicker)
+    case Some(UserLocation.Iom)     => (List(Country.apply("Isle of Man", "IM")), IsleOfManCountryPicker)
     case _                          => (allExceptIom, AllCountriesExceptIomInCountryPicker)
   }
 

@@ -41,19 +41,19 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
   private def maybe(service: Service): Option[Service] = if (featureFlags.sub02UseServiceName) Some(service) else None
 
   def subscribe(
-                 registration: RegistrationDetails,
-                 subscription: SubscriptionDetails,
-                 cdsOrganisationType: Option[CdsOrganisationType],
-                 service: Service
-               )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
+    registration: RegistrationDetails,
+    subscription: SubscriptionDetails,
+    cdsOrganisationType: Option[CdsOrganisationType],
+    service: Service
+  )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
     subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service))
 
   def createRequest(
-                     reg: RegistrationDetails,
-                     subscription: SubscriptionDetails,
-                     cdsOrgType: Option[CdsOrganisationType],
-                     service: Service
-                   ): SubscriptionRequest =
+    reg: RegistrationDetails,
+    subscription: SubscriptionDetails,
+    cdsOrgType: Option[CdsOrganisationType],
+    service: Service
+  ): SubscriptionRequest =
     reg match {
       case individual: RegistrationDetailsIndividual =>
         SubscriptionCreateRequest(individual, subscription, cdsOrgType, individual.dateOfBirth, maybe(service))
@@ -68,7 +68,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
             throw new IllegalStateException("Date Established must be present for an organisation subscription")
           ),
           maybe(service)
-        ) ensuring(subscription.sicCode.isDefined, "SicCode/Principal Economic Activity must be present for an organisation subscription")
+        ) ensuring (subscription.sicCode.isDefined, "SicCode/Principal Economic Activity must be present for an organisation subscription")
       case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
     }
 
