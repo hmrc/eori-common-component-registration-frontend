@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDat
 object UserLocation {
 
   val Uk                = "uk"
-  val Iom               = "iom"
+  val Iom               = "isle-of-man"
   val Eu                = "eu" // TODO Remove EU location
   val ThirdCountry      = "third-country"
   val ThirdCountryIncEU = "third-country-inc-eu"
@@ -42,4 +42,8 @@ object UserLocation {
     }
 
   def isRow(location: String): Boolean = rowLocations.contains(location)
+
+  def isIom(location: String): Boolean =
+    if(location == Iom) true
+    else false
 }

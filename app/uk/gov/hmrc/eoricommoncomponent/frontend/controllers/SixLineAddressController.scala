@@ -133,7 +133,7 @@ class SixLineAddressController @Inject() (
       case _               => thirdCountrySixLineAddressForm
     }
 
-    Map("third-country-organisation" -> form, "third-country-individual" -> form, "third-country-sole-trader" -> form)
+    Map("third-country-organisation" -> form, "third-country-individual" -> form, "third-country-sole-trader" -> form,
+      "iom-organisation" -> form, "iom-sole-trader" -> form, "iom-individual" -> form)
   }
-
 }

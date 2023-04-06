@@ -41,7 +41,7 @@ class RequestSessionData @Inject() (audit: Auditable) {
       (RequestSessionDataKeys.uriBeforeSubscriptionFlow        -> uriBeforeSubscriptionFlow)
 
   def userSubscriptionFlow(implicit request: Request[AnyContent], hc: HeaderCarrier): SubscriptionFlow =
-    request.session.data.get(RequestSessionDataKeys.subscriptionFlow) match {
+     request.session.data.get(RequestSessionDataKeys.subscriptionFlow) match {
       case Some(flowName) => SubscriptionFlow(flowName)
       case None =>
         auditSessionFailure(request.session)
@@ -85,6 +85,7 @@ class RequestSessionData @Inject() (audit: Auditable) {
     userLocation match {
       case Some("islands") => Some("third-country")
       case Some("eu")      => Some("third-country")
+      case Some("isle-of-man")     => Some("isle-of-man")
       case _               => userLocation
     }
   }
@@ -119,7 +120,7 @@ class RequestSessionData @Inject() (audit: Auditable) {
       oType == CdsOrganisationType.Individual ||
       oType == CdsOrganisationType.SoleTrader ||
       oType == CdsOrganisationType.ThirdCountryIndividual ||
-      oType == CdsOrganisationType.ThirdCountrySoleTrader
+      oType == CdsOrganisationType.ThirdCountrySoleTrader || oType == CdsOrganisationType.IsleOfManSoleTrader || oType == CdsOrganisationType.IsleOfManIndividual
     }
 
   private val registrationUkSubscriptionFlows =
