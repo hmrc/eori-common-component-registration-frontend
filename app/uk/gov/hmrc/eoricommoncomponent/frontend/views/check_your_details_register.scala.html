@@ -47,7 +47,7 @@
 @orgNameLabel = @{
     if(isPartnership) {
         messages("cds.partner-name.label")
-    } else if(isCharity || isRowOrganisation) {
+    } else if(isCharity || isRowOrganisation || isIomOrganisation) {
         messages("cds.organisation-name.label")
     } else {
         messages("cds.business-name.label")
@@ -86,8 +86,7 @@
 @isIndividual = @{
     cdsOrgType.contains(CdsOrganisationType.Individual) ||
     cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual) ||
-    cdsOrgType.contains(CdsOrganisationType.IsleOfManIndividual)
+    cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 }
 
 @isLlp = @{
@@ -98,22 +97,33 @@
     cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
 }
 
-@isSoleTrader = @{
-    cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
+@isIomOrganisation = @{
+    cdsOrgType.contains(CdsOrganisationType.IsleOfManOrganisation)
+}
+
+@isIomSoleTrader = @{
     cdsOrgType.contains(CdsOrganisationType.IsleOfManSoleTrader)
 }
 
+@isIomIndividual = @{
+    cdsOrgType.contains(CdsOrganisationType.IsleOfManIndividual)
+}
+
+@isSoleTrader = @{
+    cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
+    cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
+}
+
 @isRowOrganisation = @{
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation) || cdsOrgType.contains(CdsOrganisationType.IsleOfManOrganisation)
+    cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
 }
 
 @isRowSoleTraderIndividual = @{
-  cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual) || cdsOrgType.contains(CdsOrganisationType.IsleOfManSoleTrader) || cdsOrgType.contains(CdsOrganisationType.IsleOfManIndividual)
+  cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 }
 
 @getDateOfEstablishmentLabel = @{
-    if(isSoleTrader) {
+    if(isSoleTrader || isIomSoleTrader) {
         messages("cds.date-of-birth.label")
     } else {
         messages("cds.date-established.label")
@@ -123,10 +133,10 @@
 @businessDetailsLabel = @{
     if(isPartnership)
         messages("cds.form.partnership.contact-details")
-    else if(isIndividual || isSoleTrader) {
+    else if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
         messages("cds.form.contact-details")
     }
-    else if(isCharity || isRowOrganisation) {
+    else if(isCharity || isRowOrganisation || isIomOrganisation) {
         messages("cds.form.organisation-address")
     } else {
         messages("cds.form.business-details")
@@ -138,7 +148,8 @@
         case Some(Utr(_)) => {
             if(isIndividual || isSoleTrader) {
                 messages("cds.utr.label")
-            } else  if(isLlp) {
+            }
+            else if(isLlp) {
                 messages("cds.matching.name-id-organisation.company.utr")
             }
             else if(isPartnership) {
@@ -183,9 +194,9 @@
 @headerTitle = @{
     if(isPartnership){
         messages("cds.form.check-answers-partnership-details")
-    } else if(isIndividual || isSoleTrader) {
+    } else if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
         messages("cds.form.check-answers-your-details")
-    } else if(isCharity || isRowOrganisation) {
+    } else if(isCharity || isRowOrganisation || isIomOrganisation) {
         messages("cds.form.check-answers-organisation-details")
     }
     else {
@@ -196,9 +207,9 @@
 @disclosureLabel = @{
     if (isPartnership) {
         messages("cds.form.disclosure.partnership")
-    } else if(isIndividual || isSoleTrader) {
+    } else if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
         messages("cds.form.disclosure.individual")
-    } else if(isCharity || isRowOrganisation) {
+    } else if(isCharity || isRowOrganisation || isIomOrganisation) {
         messages("cds.form.disclosure.organisation")
     } else {
         messages("cds.form.disclosure")
@@ -208,7 +219,7 @@
 @eoriCheckerConsentYes = @{
     if (isPartnership) {
         messages("cds.eori-checker-consent.partnership.yes")
-    } else if(isIndividual || isSoleTrader) {
+    } else if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
         messages("cds.eori-checker-consent.individual-or-sole-trader.yes")
     } else {
         messages("cds.eori-checker-consent.yes")
@@ -279,7 +290,7 @@ classes = classes
 }
 
 @individualNameDob = @{
-    if(isIndividual || isSoleTrader) {
+    if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
         Seq(summaryListRow(
             key = messages("subscription.check-your-details.full-name.label"),
             value = Some(Html(StringEscapeUtils.escapeXml11(individualName))),
@@ -294,7 +305,7 @@ classes = classes
 }
 
 @organisationName = @{
-    if(!isIndividual && !isSoleTrader) {
+    if(!isIndividual && !isSoleTrader && !isIomIndividual && !isIomSoleTrader) {
         Seq(summaryListRow(
             key = orgNameLabel,
             value = Some(Text(orgName).asHtml),
@@ -314,7 +325,7 @@ classes = classes
 }
 
 @customsId = @{
-    if(registration.customsId.isDefined) {
+    if(registration.customsId.isDefined && (!isIomIndividual || !isIomOrganisation || !isIomSoleTrader)) {
         Seq(summaryListRow(
             key = ninoOrUtrLabel,
             value = Some(Html(registration.customsId.get.id))
@@ -407,7 +418,7 @@ classes = classes
 }
 
 @vatDetails = @{
-    if(!isIndividual && !useNewVATJourney) {
+    if(!isIndividual && !useNewVATJourney && !isIomIndividual) {
         Seq(
 summaryListRowNoChangeOption(
                 key = messages("cds.form.gb-vat-number"),
@@ -426,7 +437,7 @@ summaryListRowNoChangeOption(
             ),
         )
     }
-else if(!isIndividual && useNewVATJourney && subscription.vatVerificationOption.getOrElse(true) == true) {
+else if(!isIndividual && !isIomIndividual && useNewVATJourney && subscription.vatVerificationOption.getOrElse(true) == true) {
     Seq(
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),
@@ -444,7 +455,7 @@ else if(!isIndividual && useNewVATJourney && subscription.vatVerificationOption.
             call = Some(VATNumberPage.reviewForm(service))
         ),
     )}
-else if(!isIndividual && useNewVATJourney && subscription.vatVerificationOption.getOrElse(false) == false) {
+else if(!isIndividual && !isIomIndividual && useNewVATJourney && subscription.vatVerificationOption.getOrElse(false) == false) {
     Seq(
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),
@@ -504,7 +515,7 @@ else Seq.empty[SummaryListRow]
             summary
             ))
         </div>
-        @if(!isIndividual){
+        @if(!isIndividual && !isIomIndividual){
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-vat-details")</h2>
 

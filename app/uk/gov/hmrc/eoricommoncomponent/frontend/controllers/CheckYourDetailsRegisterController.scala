@@ -46,9 +46,6 @@ class CheckYourDetailsRegisterController @Inject() (
           registration <- sessionCache.registrationDetails
           subscription <- sessionCache.subscriptionDetails
         } yield {
-          val consent = subscription.personalDataDisclosureConsent.getOrElse(
-            throw new IllegalStateException("Consent to disclose personal data is missing")
-          )
           val isUserIdentifiedByRegService = registration.safeId.id.nonEmpty
           Ok(
             checkYourDetailsRegisterView(
@@ -57,7 +54,7 @@ class CheckYourDetailsRegisterController @Inject() (
               requestSessionData.isPartnershipOrLLP,
               registration,
               subscription,
-              consent,
+              subscription.personalDataDisclosureConsent.getOrElse(false),
               service,
               isUserIdentifiedByRegService
             )

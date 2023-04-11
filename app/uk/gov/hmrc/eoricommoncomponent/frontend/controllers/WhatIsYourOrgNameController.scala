@@ -68,12 +68,18 @@ class WhatIsYourOrgNameController @Inject() (
     organisationType: String,
     service: Service
   )(implicit request: Request[_]): Future[Result] =
-    subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map { _ =>
-      (organisationType, isInReviewMode) match {
-        case (CdsOrganisationType.IsleOfManOrganisationId, false) => Redirect(AddressController.createForm(service))
-        case (_, true)                                            => Redirect(DetermineReviewPageController.determineRoute(service))
-        case (_, _)                                               => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, false))
-      }
+    subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) flatMap { _ =>
+      if (!isInReviewMode)
+        subscriptionDetailsService.updateSubscriptionDetails.map(
+          _ =>
+            organisationType match {
+              case CdsOrganisationType.IsleOfManOrganisationId =>
+                Redirect(SixLineAddressController.showForm(isInReviewMode, organisationType, service))
+              case _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, false))
+            }
+        )
+      else
+        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
     }
 
 }

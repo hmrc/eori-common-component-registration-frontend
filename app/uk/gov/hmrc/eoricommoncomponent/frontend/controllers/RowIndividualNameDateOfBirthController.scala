@@ -24,6 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
@@ -94,16 +95,20 @@ class RowIndividualNameDateOfBirthController @Inject() (
     val nameDobMatchModel =
       NameDobMatchModel(formData.firstName, formData.lastName, formData.dateOfBirth)
 
-    subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) map { _ =>
-      (isInReviewMode, organisationType) match {
-        case (true, _) => Redirect(DetermineReviewPageController.determineRoute(service))
-        case (false, CdsOrganisationType.IsleOfManSoleTraderId) =>
-          Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
-        case (false, CdsOrganisationType.IsleOfManIndividualId) =>
-          Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
-        case (_, _) => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
-      }
-
+    subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) flatMap { _ =>
+      if (!isInReviewMode)
+        subscriptionDetailsService.updateSubscriptionDetails.map(
+          _ =>
+            organisationType match {
+              case CdsOrganisationType.IsleOfManSoleTraderId =>
+                Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
+              case CdsOrganisationType.IsleOfManIndividualId =>
+                Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
+              case _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
+            }
+        )
+      else
+        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
     }
   }
 
