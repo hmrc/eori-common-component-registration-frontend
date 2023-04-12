@@ -20,7 +20,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import play.api.mvc.Request
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ApplicationController, FeatureFlags}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.start
 import util.ControllerSpec
@@ -36,8 +36,10 @@ class ApplicationControllerWithAllowlistVerificationSpec extends ControllerSpec 
   private val mockAuthAction    = authAction(mockAuthConnector)
   private val mockSessionCache  = mock[SessionCache]
   private val startRegisterView = instanceOf[start]
+  private val featureFlags      = mock[FeatureFlags]
 
-  val controller = new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig)
+  val controller =
+    new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig, featureFlags)
 
   // TODO This test doesn't test what described, please check if logout method is not coevered in ApplicationControllerSpec
   "Navigating to logout" should {

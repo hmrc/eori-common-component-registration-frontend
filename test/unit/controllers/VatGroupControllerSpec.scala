@@ -21,7 +21,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, VatGroupController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, FeatureFlags, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ControllerSpec
 import util.builders.YesNoFormBuilder.{invalidRequest, ValidRequest}
@@ -39,9 +39,10 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
   private val expectedNoRedirectUrl  = EmailController.form(atarService).url
 
   private val vatGroupView = instanceOf[vat_group]
+  private val featureFlags = mock[FeatureFlags]
 
   private val controller =
-    new VatGroupController(mcc, vatGroupView)
+    new VatGroupController(mcc, vatGroupView, featureFlags)
 
   "Accessing the page" should {
 
