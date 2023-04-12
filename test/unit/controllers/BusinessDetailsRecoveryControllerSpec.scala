@@ -115,6 +115,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       assertAndTestBasedOnTheLocationForIndividual(location)
       assertAndTestBasedOnTheLocationForOrganisation(location)
     }
+    assertAndTestThrowsExceptionForInvalidLocationOrganisation
   }
 
   private def assertAndTestBasedOnTheLocationForIndividual(selectedLocation: String): Unit =
@@ -168,12 +169,41 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       }
     }
 
+  private def assertAndTestThrowsExceptionForInvalidLocationOrganisation: Unit =
+    "throw IllegalStateException when passing invalid location" in {
+      val location: String = "invalid-location"
+      val mockSession      = mock[Session]
+      val mockFlowStart    = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
+
+      when(
+        mockSubscriptionFlowManager.startSubscriptionFlow(
+          meq(Some(BusinessDetailsRecoveryPage)),
+          meq(CdsOrganisationType.ThirdCountryOrganisation),
+          meq(atarService)
+        )(any[Request[AnyContent]])
+      ).thenReturn(Future.successful(mockFlowStart))
+      mockCacheWithRegistrationDetails(organisationDetails)
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(s"$location"))
+      when(mockSave4LaterService.fetchOrgType(any[GroupId])(any[HeaderCarrier])).thenReturn(
+        Future
+          .successful(Some(CdsOrganisationType("third-country-organisation")))
+      )
+
+      invokeContinue() { result =>
+        val thrown = intercept[IllegalStateException] {
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+        }
+        thrown.getMessage shouldBe s"User Location not set"
+      }
+    }
+
   private def getSelectedLocation(selectedLocation: String) =
     selectedLocation match {
-      case UserLocation.Eu           => "eu"
-      case UserLocation.ThirdCountry => "third-country"
-      case UserLocation.Iom          => "isle-of-man"
-      case UserLocation.Islands      => "islands"
+      case UserLocation.Eu                => "eu"
+      case UserLocation.ThirdCountry      => "third-country"
+      case UserLocation.Iom               => "isle-of-man"
+      case UserLocation.Islands           => "islands"
+      case UserLocation.ThirdCountryIncEU => "third-country-inc-eu"
     }
 
   private def mockCacheWithRegistrationDetails(details: RegistrationDetails): Unit =
