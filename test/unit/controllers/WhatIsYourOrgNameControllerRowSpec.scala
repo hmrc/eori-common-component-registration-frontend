@@ -57,7 +57,9 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
       "and isInReviewMode is false"
     )
     "redirect to the 'Do you have a UTR? page when isInReviewMode is false" in {
-
+      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[Request[_]]))
         .thenReturn(Future.successful(()))
 

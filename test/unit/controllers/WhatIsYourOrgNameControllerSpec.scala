@@ -175,6 +175,9 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         }
 
         s"redirect to the next page when successful when organisation type is $organisationType and reviewMode is $reviewMode" in {
+          when(mockSubscriptionDetailsService.updateSubscriptionDetails(any[Request[_]])).thenReturn(
+            Future.successful(true)
+          )
           submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
             status(result) shouldBe SEE_OTHER
             result.header.headers("Location") should endWith(submitLocation)

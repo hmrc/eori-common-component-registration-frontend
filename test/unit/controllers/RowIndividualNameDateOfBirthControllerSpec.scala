@@ -136,6 +136,9 @@ class RowIndividualNameDateOfBirthControllerSpec
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
           saveRegistrationDetailsMockSuccess()
+          when(mockSubscriptionDetailsService.updateSubscriptionDetails(any[Request[_]])).thenReturn(
+            Future.successful(true)
+          )
 
           submitForm(formData(individualNameAndDateOfBirth)) { result =>
             CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
