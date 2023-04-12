@@ -45,7 +45,7 @@
 @introAndHintHtml = {
 <p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
 
-<span id="date-of-establishment-hint-text" class="govuk-hint">@Html(messages("cds.date-established.hint"))</span>
+<label id="date-of-establishment-hint-text" class="govuk-hint">@Html(messages("cds.date-established.hint"))</label>
 }
 
 @headerAndTitle = @{
@@ -68,6 +68,7 @@
 
             @CSRF.formField
 
+        <div aria-describedby="date-of-establishment-hint-text">
             @inputDate_di(
                 form = updateFormErrors,
                 legendContent = headerAndTitle,
@@ -76,6 +77,7 @@
                 legendAsPageHeading = true,
                 id = "date-of-establishment"
             )
+        </div>
 
             @govukButton(Button(
                 content = Text(ViewHelper.continueButtonText(isInReviewMode))

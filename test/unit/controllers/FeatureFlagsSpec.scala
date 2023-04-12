@@ -28,6 +28,7 @@ class FeatureFlagsSpec extends ControllerSpec {
       |features.sub02UseServiceName=true
       |features.arsNewJourney=false
       |features.useNewVATJourney=true
+      |features.edgeCaseJourney=true
       """.stripMargin)
 
   private val featureFlags = new FeatureFlags(Configuration(configuration))

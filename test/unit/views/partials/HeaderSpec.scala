@@ -24,7 +24,7 @@ import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ApplicationController, FeatureFlags}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.start
 import unit.controllers.CdsPage
@@ -39,11 +39,11 @@ class HeaderSpec extends ControllerSpec with AuthActionMock with CSRFTest {
   private val mockAuthConnector    = mock[AuthConnector]
   private val mockAuthAction       = authAction(mockAuthConnector)
   private val mockCdsFrontendCache = mock[SessionCache]
-
-  private val viewStartRegister = instanceOf[start]
+  private val featureFlags         = mock[FeatureFlags]
+  private val viewStartRegister    = instanceOf[start]
 
   private val controller =
-    new ApplicationController(mockAuthAction, mcc, viewStartRegister, mockCdsFrontendCache, appConfig)
+    new ApplicationController(mockAuthAction, mcc, viewStartRegister, mockCdsFrontendCache, appConfig, featureFlags)
 
   "Header Sign in link" should {
 
@@ -104,7 +104,7 @@ class HeaderSpec extends ControllerSpec with AuthActionMock with CSRFTest {
     "have a correct href defined" in {
       implicit val request = withFakeCSRF(fakeAtarRegisterRequest)
 
-      val doc = Jsoup.parse(contentAsString(viewStartRegister(atarService, "test", "test")))
+      val doc = Jsoup.parse(contentAsString(viewStartRegister(atarService, "test", "test", featureFlags)))
       doc.body().getElementsByClass("govuk-link hmrc-sign-out-nav__link").attr(
         "href"
       ) shouldBe "/customs-registration-services/atar/register/logout"

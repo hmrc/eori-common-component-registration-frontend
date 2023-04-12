@@ -20,9 +20,11 @@ import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+
   ApplicationController,
   ContactDetailsController,
   VatDetailsController
+
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
@@ -120,6 +122,7 @@ class VatRegisteredUkController @Inject() (
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatRegisteredUk(yesNoAnswer).flatMap {
               _ =>
+
                 val result = (isInReviewMode, yesNoAnswer.isYes) match {
                   case (false, true) => Future.successful(VatDetailsController.createForm(service).url)
                   case (true, true)  => Future.successful(VatDetailsController.reviewForm(service).url)
@@ -131,6 +134,7 @@ class VatRegisteredUkController @Inject() (
                     subscriptionDetailsService.clearCachedUkVatDetails.map(
                       _ => ContactDetailsController.createForm(service).url
                     )
+
                 }
                 result.map(t => Redirect(t))
             }

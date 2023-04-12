@@ -57,8 +57,10 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   private val disclosePersonalDetailsConsentView = instanceOf[disclose_personal_details_consent]
 
-  private val problemWithSelectionError = "Tell us if you want to include your name and address on the EORI checker"
-  private val yesNoInputName            = "yes-no-answer"
+  private val problemWithSelectionError =
+    "Select yes to show your name and address on the Check an EORI number service."
+
+  private val yesNoInputName = "yes-no-answer"
 
   private val mockRequestSessionData = mock[RequestSessionData]
 

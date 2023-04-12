@@ -487,7 +487,7 @@ cds.subscription.vat-verification-option.no=Cyfanswm eich Ffurflen TAW ddiweddar
 cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddefnyddio i gadarnhau pwy ydych?
 cds.subscription.vat-verification-option.error=Dewiswch os ydych am ddefnyddio dyddiad Cofrestru TAW neu gyfanswm y Ffurflen TAW diweddaraf
 cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych. <br><br> Gallwch ddod o hyd i'’'r enw hwn ar ddogfennau gan CThEF. Er enghraifft, cadarnhad o gofrestriad eich partneriaeth
-cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
+cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.limited-liability-partnership.name = Enw’r bartneriaeth gofrestredig
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
@@ -561,11 +561,11 @@ cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
 cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-company.name = Enw’r cwmni cofrestredig
-cds.matching.name-id-organisation.registered-company.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p> Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni.
+cds.matching.name-id-organisation.registered-company.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p> Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni.
 cds.matching.name-id-organisation.partnership.name = Enw’r bartneriaeth gofrestredig
-cds.matching.name-id-organisation.partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
+cds.matching.name-id-organisation.partnership.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.organisation.name = Enw’r sefydliad
-cds.matching.name-id-organisation.organisation.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
+cds.matching.name-id-organisation.organisation.name.hint = <p class="govuk-body">Byddwn yn defnyddio hwn i gadarnhau pwy ydych. Gallwch gael yr enw o <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
 cds.matching.name-id-organisation.organisation.no-utr=Nid oes gennyf Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.organisation.no-utr.text=Os ydych yn sefydliad nid er elw neu’n gorff cyhoeddus, ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr, bydd angen i chi {0} i gwblhau’ch cais am rif EORI.
 cds.matching.name-id-organisation.organisation.no-utr.link=ddefnyddio gwasanaeth arall
@@ -601,8 +601,8 @@ cds.matching.organisation-name.error.name = Nodwch enw’ch sefydliad cofrestred
 cds.matching.organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth?
 cds.matching.organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.you-can.text = Gallwch
-cds.matching.utr.lost-utr-description=dod o hyd i UTR sydd ar goll
-cds.matching.utr.lost-utr-description-llp=dod o hyd i UTR sydd ar goll
+cds.matching.utr.lost-utr-description=dod o hyd i UTR sydd ar goll (yn agor tab newydd)
+cds.matching.utr.lost-utr-description-llp=dod o hyd i UTR sydd ar goll (yn agor tab newydd)
 cds.matching.organisation-utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.utr = Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.have-utr = Rhowch wybod i ni a oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
@@ -627,7 +627,7 @@ cds.matching.nino.nino = Rhif Yswiriant Gwladol
 cds.matching.nino.page-error.first-name = Nodwch eich enw cyntaf
 cds.matching.nino.page-error.last-name = Nodwch eich enw olaf
 cds.matching.nino.page-error.nino = Nodwch rif Yswiriant Gwladol
-cds.matching.nino.invalid = Nodwch rif Yswiriant Gwladol yn y fformat cywir
+cds.matching.nino.invalid = Nid yw hwn yn rhif Yswiriant Gwladol go iawn. Nodwch rif Yswiriant Gwladol go iawn.
 cds.matching.nino.row.error = Nodwch eich rhif Yswiriant Gwladol
 cds.matching.nino.row.title = A oes gennych rif Yswiriant Gwladol?
 cds.matching.nino.row.header = A oes gennych rif Yswiriant Gwladol a gyhoeddwyd yn y DU?
@@ -969,7 +969,7 @@ cds.subscription.outcomes.review.heading = Cofrestriad wrthi’n cael ei adolygu
 cds.subscription.outcomes.review.sub-title = Mae’n rhaid i’ch cais gael ei wirio gan CThEM
 cds.subscription.outcomes.review.next-steps.1 = Bydd CThEM yn cysylltu â chi unwaith y bydd eich cais wedi’i adolygu.
 cds.subscription.outcomes.review.why-steps.1 = Mae’n rhaid i’ch cofrestriad gael ei adolygu gan aelod o staff.
-cds.subscription.outcomes.feedback = Beth oedd eich barn am y gwasanaeth hwn? (yn agor tab newydd)
+cds.subscription.outcomes.feedback = Beth oedd eich barn am y gwasanaeth hwn?
 cds.subscription.outcomes.rejected.vat-registered-heading = Os ydych wedi’ch cofrestru ar gyfer TAW
 cds.subscription.outcomes.rejected.vat-registered1 = Bydd eich rhif EORI yn y fformat canlynol:
 cds.subscription.outcomes.rejected.vat-registered2 = GB XXXXXXXXX 000
@@ -1044,17 +1044,17 @@ cds.subscription.organisation-disclose-personal-details-consent.individual.headi
 cds.subscription.organisation-disclose-personal-details-consent.individual.declaration = Bydd CThEM yn ychwanegu eich rhif EORI at wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd. Gallwch hefyd gytuno i gynnwys eich enw a’ch cyfeiriad. Gall hyn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu’ch llwythi.
 cds.subscription.organisation-disclose-personal-details-consent.individual.yes = Iawn – Rwyf am i’m henw a chyfeiriad fod ar y gwiriwr EORI
 cds.subscription.organisation-disclose-personal-details-consent.individual.no = Na – Dangoswch fy rhif EORI yn unig ar y gwiriwr EORI
-cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer = Rhowch wybod i ni a ydych am gynnwys eich enw a chyfeiriad ar y gwiriwr EORI
-cds.subscription.organisation-disclose-personal-details-consent.form-error.yes-no-answer = Rhowch wybod i ni a ydych am gynnwys eich enw a chyfeiriad ar y gwiriwr EORI
+cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer = Dewiswch ‘Iawn’ i ddangos eich enw a’ch cyfeiriad yn y gwasanaeth Gwirio rhif EORI.
+cds.subscription.organisation-disclose-personal-details-consent.form-error.yes-no-answer = Dewiswch ‘Iawn’ i ddangos eich enw a’ch cyfeiriad yn y gwasanaeth Gwirio rhif EORI.
 cds.subscription.vat-registered-uk.title-and-heading = A yw’ch sefydliad wedi’i gofrestru ar gyfer TAW yn y DU?
 cds.subscription.vat-registered-uk.partnership.title-and-heading = A yw’ch partneriaeth wedi’i chofrestru ar gyfer TAW yn y DU?
 cds.subscription.vat-registered-uk.page-error.yes-no-answer = Cadarnhewch a yw’r sefydliad wedi’i gofrestru ar gyfer TAW yn y DU
 cds.subscription.vat-group.title-and-heading = A yw’ch sefydliad yn rhan o grŵp TAW yn y DU?
 cds.subscription.vat-group.partnership.title-and-heading = A yw’ch partneriaeth yn rhan o grŵp TAW yn y DU?
 cds.subscription.vat-group.intro-text = Mae grwpiau TAW yn cael eu creu pan fo dau neu fwy o gwmnïau neu bartneriaethau atebolrwydd cyfyngedig yn cofrestru fel un “person” trethadwy at ddibenion TAW yn y DU.
-cds.subscription.vat-group.page-error.yes-no-answer = Rhowch wybod i ni a yw’ch sefydliad yn rhan o grŵp TAW yn y DU
+cds.subscription.vat-group.page-error.yes-no-answer = Dewiswch ‘Iawn’ os yw’ch sefydliad yn rhan o grŵp TAW yn y DU
 cds.subscription.vat-group.partnership.page-error.yes-no-answer = Rhowch wybod i ni a yw’ch partneriaeth yn rhan o grŵp TAW yn y DU
-cds.subscription.vat-registration.form-error.vat-group = Rhowch wybod i ni a yw’ch sefydliad yn rhan o grŵp TAW yn y DU
+cds.subscription.vat-registration.form-error.vat-group = Dewiswch ‘Iawn’ os yw’ch sefydliad yn rhan o grŵp TAW yn y DU
 cds.subscription.based-in-uk.form-error.yes-no-answer = Cadarnhewch a ydych yn cofrestru ar gyfer busnes (neu unigolyn) sydd yn y DU
 
 
@@ -1354,7 +1354,7 @@ cds.feedback.continue = Rhagor am {0}
 cds.subscription.sign-in-with-different-details.para1 = Does dim angen i chi wneud cais eto.
 cds.matching.row-organisation.utr.hint = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Dreth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
 cds.matching.row-sole-trader-individual.utr.hint = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
-cds.matching.row-lost-urt.hint.link = ddod o hyd i UTR sydd ar goll
+cds.matching.row-lost-urt.hint.link = ddod o hyd i UTR sydd ar goll (yn agor tab newydd)
 cds.subscribe.use-this-eori.heading = Eich Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) GB
 cds.subscribe.use-this-eori.paragraph1 = Mae’r EORI hwn yn gysylltiedig â’r cyfrif Porth y Llywodraeth rydych yn ei ddefnyddio.
 cds.subscribe.use-this-eori.paragraph2 = I ddefnyddio EORI gwahanol, mae’n rhaid i chi {0} a dechrau eto gyda Dynodydd Defnyddiwr (ID) a chyfrinair gwahanol ar gyfer Porth y Llywodraeth.
@@ -1522,6 +1522,7 @@ ecc.subscription.outcomes.success.xi.info.bullet1 = symud nwyddau rhwng Gogledd 
 ecc.subscription.outcomes.success.xi.info.bullet2 = gwneud datganiad yng Ngogledd Iwerddon
 ecc.subscription.outcomes.success.xi.info.bullet3 = cael penderfyniad tollau yng Ngogledd Iwerddon
 ecc.subscription.outcomes.success.xi.info.href=Dysgwch ragor am rifau EORI sy’n dechrau gydag XI
+ecc.subscription.outcomes.success.xi.info.href.cds.link= Dysgwch ragor am y Gwasanaeth Datganiadau Tollau
 ecc.subscription.outcomes.success.xi.info2=Os oes gennych rif EORI a gyhoeddwyd gan wlad yn yr UE, nid oes angen i chi gael rhif EORI sy’n dechrau gydag XI.
 cds.subscription.outcomes.success.application-info= Mae’ch cais yn rhoi’r canlynol i chi:
 cds.subscription.outcomes.success.application-info.bullet2=rhif EORI
@@ -1537,8 +1538,13 @@ ecc.standalone.subscription.outcomes.success.cds.info=Pan fydd eich tanysgrifiad
 cds.standalone.subscription.outcomes.success.extra.information1.standalone=Byddwn yn anfon e-bost atoch i gadarnhau pan fydd eich tanysgrifiad a’ch rhif EORI yn barod i’w defnyddio.
 cds.subscription.outcomes.success.extra.information.when-you-can=Pryd byddwch yn gallu dechrau defnyddio’ch tanysgrifiad a’ch rhif EORI
 cds.subscription.outcomes.success.extra.information.when-you-can.information=Gall gymryd hyd at ddwy awr i’ch tanysgrifiad a’ch rhif EORI fod yn barod i’w defnyddio.
-cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone=Gall gymryd hyd at ddwy awr i’ch tanysgrifiad a’ch rhif EORI fod yn barod i’w defnyddio.
-cds.subscription.outcomes.success.extra.information.when-you-can.standalone=Pryd byddwch yn gallu dechrau defnyddio’ch tanysgrifiad a’ch rhif EORI
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone= Byddwn yn prosesu’ch cais. Gall hyn gymryd hyd at 2 awr.
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2 = Yna, byddwn yn anfon e-bost atoch i roi gwybod i chi bod y rhif EORI yn barod i’w ddefnyddio. Ar yr adeg hon, gallwch wneud y canlynol:
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2.li1=symud nwyddau i Brydain Fawr neu oddi yno
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2.li2=tanysgrifio i wasanaethau tollau
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2.li3=defnyddio’r Gwasanaeth Datganiadau Tollau
+cds.subscription.outcomes.success.extra.information.when-you-can.information.standalone.para2.li4=cael rhif EORI yn dechrau gydag XI, os byddwch yn symud nwyddau i Ogledd Iwerddon neu oddi yno
+cds.subscription.outcomes.success.extra.information.when-you-can.standalone=Yr hyn sy’n digwydd nesaf
 ecc.standalone.subscription.outcomes.success.cds.info.bullet1=cael eich datganiadau ar gyfer TAW mewnforio ohiriedig 
 ecc.standalone.subscription.outcomes.success.cds.info.bullet2=talu Toll Dramor a TAW mewnforio
 cds.reg.existing.outcomes.success.heading.part1.standalone=Eich rhif EORI newydd ar gyfer {0} yn {1}

@@ -21,8 +21,10 @@ import play.api.Configuration
 import play.api.test.FakeRequest
 import play.api.test.Helpers.LOCATION
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionTimeOutException
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{client_error_template, error_template, notFound}
 import util.ControllerSpec
@@ -46,6 +48,12 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
         page.title should startWith("Sorry, there is a problem with the service")
+      }
+    }
+    "redirect to start page If when DataUnavailableException thrown  " in {
+      whenReady(cdsErrorHandler.onServerError(mockRequest, DataUnavailableException("DataUnavailableException"))) {
+        result =>
+          status(result) shouldBe SEE_OTHER
       }
     }
 
