@@ -40,11 +40,13 @@ class VatGroupController @Inject() (
       .fold(
         formWithErrors => BadRequest(vatGroupView(formWithErrors, service)),
         yesNoAnswer =>
-          (yesNoAnswer.isNo, featureFlags.edgeCaseJourney) match {
-            case (true, true)   => Redirect(VatDetailsController.createForm(service))
-            case (false, true)  => Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service))
-            case (true, false)  => Redirect(EmailController.form(service))
-            case (false, false) => Redirect(routes.VatGroupsCannotRegisterUsingThisServiceController.form(service))
+          (yesNoAnswer.isYes, featureFlags.edgeCaseJourney) match {
+            case (false, true)  => Redirect(VatDetailsController.createForm(service))
+            case (false, false) => Redirect(EmailController.form(service))
+            case (true, _) =>
+              Redirect(
+                routes.VatGroupsCannotRegisterUsingThisServiceController.form(service)
+              ) //TODO add new edge case routing when developed
           }
       )
   }
