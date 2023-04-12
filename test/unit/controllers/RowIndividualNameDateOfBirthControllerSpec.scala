@@ -18,6 +18,8 @@ package unit.controllers
 
 import common.pages.matching.{
   IndividualNameAndDateOfBirthPage,
+  IsleOfManIndividualNameAndDateOfBirthPage,
+  IsleOfManSoleTraderNameAndDateOfBirthPage,
   ThirdCountryIndividualNameAndDateOfBirthPage,
   ThirdCountrySoleTraderNameAndDateOfBirthPage
 }
@@ -123,7 +125,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       }
     }
 
-    "submitting a valid form when review mode is false" should {
+    "redirect for Isle of man case " should {
 
       withControllerFixture { controllerFixture =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
@@ -132,20 +134,30 @@ class RowIndividualNameDateOfBirthControllerSpec
         )
       }
 
-      "redirect to 'do you have a utr number' page" in testControllerWithModel(validFormModelGens) {
+      "redirect to correct page for orgType" in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
           saveRegistrationDetailsMockSuccess()
           when(mockSubscriptionDetailsService.updateSubscriptionDetails(any[Request[_]])).thenReturn(
             Future.successful(true)
           )
-
-          submitForm(formData(individualNameAndDateOfBirth)) { result =>
-            CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
-            status(result) shouldBe SEE_OTHER
-            result.futureValue.header.headers(
-              LOCATION
-            ) shouldBe s"/customs-registration-services/atar/register/matching/utr/$organisationType"
+          if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual") {
+            submitForm(formData(individualNameAndDateOfBirth)) { result =>
+              CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+              status(result) shouldBe SEE_OTHER
+              result.futureValue.header.headers(
+                LOCATION
+              ) shouldBe s"/customs-registration-services/atar/register/matching/utr/$organisationType"
+            }
+            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
+          } else {
+            submitForm(formData(individualNameAndDateOfBirth)) { result =>
+              CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+              status(result) shouldBe SEE_OTHER
+              result.futureValue.header.headers(
+                LOCATION
+              ) shouldBe s"/customs-registration-services/atar/register/matching/address/$organisationType"
+            }
             verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
           }
       }
@@ -368,7 +380,17 @@ class RowIndividualNameDateOfBirthControllerSpec
   case object ThirdCountryIndividualBehavior
       extends ThirdCountryIndividualBehaviour(ThirdCountryIndividualNameAndDateOfBirthPage)
 
+  case object IsleOfManSoleTraderBehavior
+      extends ThirdCountryIndividualBehaviour(IsleOfManSoleTraderNameAndDateOfBirthPage)
+
+  case object IsleOfManIndividualBehavior
+      extends ThirdCountryIndividualBehaviour(IsleOfManIndividualNameAndDateOfBirthPage)
+
   "The third country sole trader case" when (behave like ThirdCountrySoleTraderBehavior)
 
   "The third country individual case" when (behave like ThirdCountryIndividualBehavior)
+
+  "The isle-of-man  sole trader case" when (behave like IsleOfManSoleTraderBehavior)
+
+  "The isle-of-man individual case" when (behave like IsleOfManIndividualBehavior)
 }

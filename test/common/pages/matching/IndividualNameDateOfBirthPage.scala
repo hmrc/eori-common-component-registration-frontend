@@ -27,3 +27,11 @@ object ThirdCountrySoleTraderNameAndDateOfBirthPage
     extends IndividualNameAndDateOfBirthPage("third-country-sole-trader") {
   override val formElement = "//*[@id='third-country-sole-trader-form']"
 }
+
+object IsleOfManSoleTraderNameAndDateOfBirthPage extends IndividualNameAndDateOfBirthPage("iom-sole-trader") {
+  override val formElement = "//*[@id='iom-sole-trader-form']"
+}
+
+object IsleOfManIndividualNameAndDateOfBirthPage extends IndividualNameAndDateOfBirthPage("iom-individual") {
+  override val formElement = "//*[@id='iom-individual-form']"
+}

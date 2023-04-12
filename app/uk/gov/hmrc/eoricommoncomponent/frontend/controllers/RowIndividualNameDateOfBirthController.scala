@@ -100,9 +100,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
         subscriptionDetailsService.updateSubscriptionDetails.map(
           _ =>
             organisationType match {
-              case CdsOrganisationType.IsleOfManSoleTraderId =>
-                Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
-              case CdsOrganisationType.IsleOfManIndividualId =>
+              case CdsOrganisationType.IsleOfManSoleTraderId | CdsOrganisationType.IsleOfManIndividualId =>
                 Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
               case _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
             }
