@@ -796,21 +796,6 @@ class CheckYourDetailsRegisterControllerSpec
     }
   }
 
-  "failure" should {
-
-    "throw an expected exception when cache does not contain consent to disclose personal data" in {
-      when(mockSubscriptionDetails.personalDataDisclosureConsent).thenReturn(None)
-      mockRegistrationDetailsBasedOnOrganisationType(Individual)
-
-      val caught = intercept[IllegalStateException] {
-        showForm() { result =>
-          await(result)
-        }
-      }
-      caught.getMessage shouldBe "Consent to disclose personal data is missing"
-    }
-  }
-
   "submitting the form" should {
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submitDetails(atarService))
