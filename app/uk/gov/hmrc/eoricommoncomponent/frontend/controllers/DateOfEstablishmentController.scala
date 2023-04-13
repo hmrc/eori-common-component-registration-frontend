@@ -100,7 +100,7 @@ class DateOfEstablishmentController @Inject() (
               Redirect(DetermineReviewPageController.determineRoute(service))
             else
               subscriptionFlowManager.stepInformation(DateOfEstablishmentSubscriptionFlowPage) match {
-                case Right(subFlowManager) => Redirect(subFlowManager.nextPage.url(service))
+                case Right(flowInfo) => Redirect(flowInfo.nextPage.url(service))
                 case Left(_) =>
                   logger.warn(s"Unable to identify subscription flow: key not found in cache")
                   Redirect(ApplicationController.startRegister(service))

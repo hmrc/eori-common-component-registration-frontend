@@ -111,9 +111,9 @@ class ContactDetailsController @Inject() (
               if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
               else
                 subscriptionFlowManager.stepInformation(ContactDetailsSubscriptionFlowPageGetEori) match {
-                  case Right(subFlowManager) =>
+                  case Right(flowInfo) =>
                     Redirect(
-                      subFlowManager.nextPage
+                      flowInfo.nextPage
                         .url(service)
                     )
                   case Left(_) =>

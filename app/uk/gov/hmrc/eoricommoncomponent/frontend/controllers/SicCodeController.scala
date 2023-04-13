@@ -111,7 +111,7 @@ class SicCodeController @Inject() (
       .map(
         _ =>
           subscriptionFlowManager.stepInformation(SicCodeSubscriptionFlowPage) match {
-            case Right(subFlowManager) =>
+            case Right(flowInfo) =>
               if (isInReviewMode)
                 Redirect(
                   uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
@@ -119,7 +119,7 @@ class SicCodeController @Inject() (
                   )
                 )
               else
-                Redirect(subFlowManager.nextPage.url(service))
+                Redirect(flowInfo.nextPage.url(service))
             case Left(_) =>
               logger.warn(s"Unable to identify subscription flow: key not found in cache")
               Redirect(ApplicationController.startRegister(service))

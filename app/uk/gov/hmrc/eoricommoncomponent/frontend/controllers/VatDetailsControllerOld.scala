@@ -108,14 +108,11 @@ class VatDetailsControllerOld @Inject() (
             .map(
               _ =>
                 subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage) match {
-                  case Right(subFlowManager) =>
+                  case Right(flowInfo) =>
                     if (isInReviewMode)
-                      Redirect(
-                        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
-                          .determineRoute(service)
-                      )
+                      Redirect(DetermineReviewPageController.determineRoute(service))
                     else
-                      Redirect(subFlowManager.nextPage.url(service))
+                      Redirect(flowInfo.nextPage.url(service))
                   case Left(_) =>
                     logger.warn(s"Unable to identify subscription flow: key not found in cache")
                     Redirect(ApplicationController.startRegister(service))

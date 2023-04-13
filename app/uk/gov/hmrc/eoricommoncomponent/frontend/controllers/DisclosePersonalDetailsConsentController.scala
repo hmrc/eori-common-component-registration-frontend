@@ -93,8 +93,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
                 Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
               else
                 subscriptionFlowManager.stepInformation(EoriConsentSubscriptionFlowPage) match {
-                  case Right(sbuFlowManager) =>
-                    Future.successful(Redirect(sbuFlowManager.nextPage.url(service)))
+                  case Right(flowInfo) =>
+                    Future.successful(Redirect(flowInfo.nextPage.url(service)))
                   case Left(_) =>
                     logger.warn(s"Unable to identify subscription flow: key not found in cache")
                     Future.successful(Redirect(ApplicationController.startRegister(service)))

@@ -25,6 +25,8 @@ import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.OrganisationSubscriptionFlow
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -61,6 +63,13 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
     "return correct flow cached" in {
       when(mockRequest.session).thenReturn(Session(Map("subscription-flow" -> OrganisationSubscriptionFlow.name)))
       requestSessionData.userSubscriptionFlow.map(flow => flow shouldBe OrganisationSubscriptionFlow)
+    }
+
+    "throw exception when flow is not cached" in {
+      when(mockRequest.session).thenReturn(Session())
+      val result = requestSessionData.userSubscriptionFlow
+      result shouldBe a[Left[DataNotFound, _]]
+
     }
 
     "add organisation type to request cache" in {

@@ -71,7 +71,7 @@ class AddressController @Inject() (
             saveAddress(address).flatMap(
               _ =>
                 subscriptionFlowManager.stepInformation(ContactDetailsSubscriptionFlowPageGetEori) match {
-                  case Right(subFlowManager) => Future.successful(Redirect(subFlowManager.nextPage.url(service)))
+                  case Right(flowInfo) => Future.successful(Redirect(flowInfo.nextPage.url(service)))
                   case Left(_) =>
                     logger.warn(s"Unable to identify subscription flow: key not found in cache")
                     Future.successful(Redirect(ApplicationController.startRegister(service)))

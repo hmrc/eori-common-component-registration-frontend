@@ -119,7 +119,7 @@ class AddressControllerSpec
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
-      .thenReturn(Right(mockSubscriptionFlowInfo).withLeft)
+      .thenReturn(Right(mockSubscriptionFlowInfo))
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
   }
 

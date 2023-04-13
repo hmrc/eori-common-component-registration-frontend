@@ -89,7 +89,7 @@ class CheckYourDetailsRegisterControllerSpec
     reset(mockSessionCache, mockSubscriptionDetails, mockSubscriptionFlow)
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-      Right(mockSubscriptionFlow).withLeft
+      Right(mockSubscriptionFlow)
     )
     when(mockSubscriptionDetails.ukVatDetailsOld).thenReturn(None)
     when(mockSubscriptionDetails.ukVatDetails).thenReturn(None)
@@ -366,7 +366,7 @@ class CheckYourDetailsRegisterControllerSpec
           case _          => SubscriptionFlow("Individual")
         }
         when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-          Right(subscriptionFlow).withLeft
+          Right(subscriptionFlow)
         )
         mockRegistrationDetailsBasedOnOrganisationType(organisationType)
 

@@ -55,7 +55,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
   private val mockSubscriptionFlow            = mock[SubscriptionFlow]
-  private val mockSubscrptionFlowLeft         = mock[SessionError]
+  private val mockSessionError                = mock[SessionError]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
   private val mockFeatureFlags                = mock[FeatureFlags]
@@ -143,7 +143,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     }
     "redirect to add vat group page for yes answer" in {
       when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Right(mockSubscriptionFlow).withLeft
+        Right(mockSubscriptionFlow)
       )
       val url = "register/vat-group"
       subscriptionFlowUrl(url)
@@ -156,7 +156,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
     "redirect to start new journey for no data left case - submit form" in {
       when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Left(mockSubscrptionFlowLeft)
+        Left(mockSessionError)
       )
       val url = "register/vat-group"
       subscriptionFlowUrl(url)
@@ -169,7 +169,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
     "redirect to start new journey for no data left case - review form" in {
       when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Left(mockSubscrptionFlowLeft)
+        Left(mockSessionError)
       )
       val url = "register/vat-group"
       subscriptionFlowUrl(url)
@@ -182,7 +182,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
     "redirect to start new journey for no data left case - create form" in {
       when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-        Left(mockSubscrptionFlowLeft)
+        Left(mockSessionError)
       )
       val url = "register/vat-group"
       subscriptionFlowUrl(url)
@@ -274,7 +274,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     val mockSubscriptionPage     = mock[SubscriptionPage]
     val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
     when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
-      .thenReturn(Right(mockSubscriptionFlowInfo).withLeft)
+      .thenReturn(Right(mockSubscriptionFlowInfo))
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
     when(mockSubscriptionPage.url(any())).thenReturn(url)
   }
