@@ -57,13 +57,13 @@ class VatRegisteredUkKanaSpec extends ViewSpec {
     "have a page level error when no radio buttons are selected" in {
       docWithErrors.body
         .getElementsByClass("govuk-error-summary__list")
-        .text mustBe "Tell us if your organisation is VAT registered in the UK"
+        .text mustBe "Select yes if your organisation is VAT registered in the UK"
     }
 
     "have a field level error when no radio buttons are selected" in {
       docWithErrors.body
         .getElementsByClass("govuk-error-message")
-        .text mustBe "Error: Tell us if your organisation is VAT registered in the UK"
+        .text mustBe "Error: Select yes if your organisation is VAT registered in the UK"
     }
   }
 }
