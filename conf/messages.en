@@ -513,7 +513,7 @@ cds.registration.based-in-uk.title=Are you or your organisation based in the UK?
 cds.registration.based-in-uk.page-error.yes-no-answer=Tell us if you or your organisation are based in the UK
 
 cds.registration.vat-registered-uk.title=Is your organisation VAT registered in the UK?
-cds.registration.vat-registered-uk.error.yes-no-answer=Tell us if your organisation is VAT registered in the UK
+cds.registration.vat-registered-uk.error.yes-no-answer=Select yes if your organisation is VAT registered in the UK
 cds.registration.vat-registered-uk.partnership.error.yes-no-answer=Tell us if your partnership is VAT registered in the UK
 
 cds.registration.you-need-a-different-service-iom.title=You need to use a different online service

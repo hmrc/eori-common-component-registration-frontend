@@ -24,7 +24,7 @@ trait VatRegisteredUkPage extends WebPage {
     "//p[contains(@id, 'yes-no-answer-error') and contains(@class, 'govuk-error-message']"
 
   override val title            = "Is your organisation VAT registered in the UK?"
-  val problemWithSelectionError = "Tell us if your organisation is VAT registered in the UK"
+  val problemWithSelectionError = "Select yes if your organisation is VAT registered in the UK"
 }
 
 object VatRegisteredUkPage extends VatRegisteredUkPage
