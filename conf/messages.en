@@ -448,7 +448,7 @@ cds.matching.you-can.text = You can
 #What is your Nino
 subscription-journey.what-is-your-nino=What is your National Insurance number?
 subscription-journey.what-is-your-nino.label=National Insurance number
-subscription-journey.what-is-your-nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, QQ123456C
+subscription-journey.what-is-your-nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, QQ 12 34 56 C
 cds.subscription.nino-details.page-error.nino=National Insurance number
 cds.subscription.nino.error.empty=Enter your National Insurance number
 cds.subscription.nino.error.wrong-length=The National Insurance number must be 9 characters
@@ -707,7 +707,7 @@ cds.matching.nino.row.header=Do you have a National Insurance number issued in t
 cds.matching.nino.row.description=You will have a National Insurance number if you have worked in the UK.
 cds.matching.nino.row.error.have-nino=Tell us if you have a National Insurance number
 
-cds.matching.nino.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60.<br>For example, ''QQ123456C''
+cds.matching.nino.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60.<br>For example, ''QQ 12 34 56 C''
 cds.matching.nino.date-of-birth=Date of birth
 
 #Nino Or UTR
@@ -1669,7 +1669,7 @@ cds.subscription.vat-verification-option.yes=The date you became VAT registered
 cds.subscription.vat-verification-option.no=Your latest VAT Return total
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
-subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ123456C''
+subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Tax Unique Taxpayer Reference (UTR)?
 subscription-journey.how-confirm-identity.utr.row.org.heading=What is your Corporation Tax Unique Taxpayer Reference (UTR)?
 subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
