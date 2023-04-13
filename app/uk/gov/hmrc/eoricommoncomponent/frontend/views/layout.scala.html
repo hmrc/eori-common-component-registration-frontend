@@ -53,7 +53,10 @@
 }
 
 @titleWithEnding = @{
-    title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
+    if(service.code.equalsIgnoreCase(appConfig.standaloneServiceCode)) {
+        title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
+    }
+    else title + " - " + messages("cds.banner.subscription", longName) + " - " + messages("cds.end-of-title")
 }
 
 @banner = @{
