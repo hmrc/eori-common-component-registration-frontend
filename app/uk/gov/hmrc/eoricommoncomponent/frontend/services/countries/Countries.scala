@@ -68,7 +68,7 @@ object Countries {
   val islands: List[Country] =
     countries filter (c => mdgCountryCodes("/mdg-country-codes-islands.csv") contains c.countryCode)
 
-  private val iomCountry = (List(Country.apply("Isle of Man", "IM")), IsleOfManCountryPicker)
+  val iomCountry = (List(Country.apply("Isle of Man", "IM")), IsleOfManCountryPicker)
 
   def getCountryParameters(location: Option[String]): (List[Country], CountriesInCountryPicker) = location match {
     case Some(UserLocation.Eu) => (eu, EUCountriesInCountryPicker)

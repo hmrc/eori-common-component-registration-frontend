@@ -19,12 +19,8 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  DetermineReviewPageController,
-  DoYouHaveAUtrNumberController,
-  SecuritySignOutController,
-  SixLineAddressController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, DoYouHaveAUtrNumberController, SecuritySignOutController, SixLineAddressController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{IsleOfManIndividualId, IsleOfManSoleTraderId, iomOnlySoleAndIndividualIds}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -96,7 +92,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
         subscriptionDetailsService.updateSubscriptionDetails.map(
           _ =>
             organisationType match {
-              case CdsOrganisationType.IsleOfManSoleTraderId | CdsOrganisationType.IsleOfManIndividualId =>
+              case orgType if iomOnlySoleAndIndividualIds.contains(orgType) =>
                 Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
               case _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
             }

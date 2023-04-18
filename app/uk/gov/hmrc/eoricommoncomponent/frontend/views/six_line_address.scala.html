@@ -24,10 +24,14 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.rowAndIomIndividualOrganisationIds
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, countryField: helpers.countryField)
 
+
+
 @(isInReviewMode: Boolean, addressForm: Form[SixLineAddressMatchModel], countries: List[Country], countriesInCountryPicker: CountriesInCountryPicker, cdsOrgType: String, service: Service)(implicit request: Request[AnyContent], messages: Messages)
+
 
 @postCodeLabel = @{
     countriesInCountryPicker match {
@@ -37,7 +41,7 @@
 }
 
 @headerLabel = @{cdsOrgType match {
-        case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId | CdsOrganisationType.IsleOfManSoleTraderId | CdsOrganisationType.IsleOfManIndividualId => "cds.matching.individual-address.header"
+        case orgType if rowAndIomIndividualOrganisationIds.contains(cdsOrgType) => "cds.matching.individual-address.header"
         case _ => "cds.matching.organisation-address.header"
     }
 }

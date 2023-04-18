@@ -99,6 +99,9 @@ object CdsOrganisationType {
   lazy val rowAndIomIndividualOrganisationIds: Seq[String] =
     Seq(ThirdCountryIndividualId, ThirdCountrySoleTraderId, IsleOfManSoleTraderId, IsleOfManIndividualId)
 
+  lazy val iomOnlySoleAndIndividualIds: Seq[String] = Seq(IsleOfManSoleTraderId, IsleOfManIndividualId)
+
+
   def forId(organisationTypeId: String): CdsOrganisationType = validOrganisationTypes(organisationTypeId)
 
 }
