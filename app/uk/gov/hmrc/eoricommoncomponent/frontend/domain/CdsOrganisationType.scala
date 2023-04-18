@@ -101,7 +101,6 @@ object CdsOrganisationType {
 
   lazy val iomOnlySoleAndIndividualIds: Seq[String] = Seq(IsleOfManSoleTraderId, IsleOfManIndividualId)
 
-
   def forId(organisationTypeId: String): CdsOrganisationType = validOrganisationTypes(organisationTypeId)
 
 }
