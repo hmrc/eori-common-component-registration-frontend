@@ -110,5 +110,4 @@ class RowIndividualNameDateOfBirthController @Inject() (
         Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
     }
   }
-
 }
