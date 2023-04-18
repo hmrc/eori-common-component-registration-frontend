@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUser, SixLineAddressMatchModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUser, SixLineAddressMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -129,18 +130,18 @@ class SixLineAddressController @Inject() (
 
   private def formsByOrganisationTypes(implicit request: Request[AnyContent]) = {
     val form = requestSessionData.selectedUserLocationWithIslands(request) match {
-      case Some("islands")     => islandsSixLineAddressForm
-      case Some("isle-of-man") => iomSixLineAddressForm
-      case _                   => thirdCountrySixLineAddressForm
+      case Some(UserLocation.Islands) => islandsSixLineAddressForm
+      case Some(UserLocation.Iom)     => iomSixLineAddressForm
+      case _                          => thirdCountrySixLineAddressForm
     }
 
     Map(
-      "third-country-organisation" -> form,
-      "third-country-individual"   -> form,
-      "third-country-sole-trader"  -> form,
-      "iom-organisation"           -> form,
-      "iom-sole-trader"            -> form,
-      "iom-individual"             -> form
+      CdsOrganisationType.ThirdCountryOrganisationId -> form,
+      CdsOrganisationType.ThirdCountryIndividualId   -> form,
+      CdsOrganisationType.ThirdCountrySoleTraderId   -> form,
+      CdsOrganisationType.IsleOfManOrganisationId    -> form,
+      CdsOrganisationType.IsleOfManIndividualId      -> form,
+      CdsOrganisationType.IsleOfManSoleTraderId      -> form
     )
   }
 
