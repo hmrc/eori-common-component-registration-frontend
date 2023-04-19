@@ -16,9 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.mvc.Results.Redirect
+
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Result}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, Sub02Controller}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
@@ -28,6 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,7 +40,8 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   sessionCache: SessionCache,
   requestSessionData: RequestSessionData,
   orgTypeLookup: OrgTypeLookup,
-  sub02Controller: Sub02Controller
+  sub02Controller: Sub02Controller,
+  featureFlags: FeatureFlags
 )(implicit ec: ExecutionContext) {
 
   def rowRegisterWithoutIdWithSubscription(loggedInUser: LoggedInUserWithEnrolments, service: Service)(implicit
@@ -49,10 +53,19 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
 
     def applicableForRegistration(rd: RegistrationDetails): Boolean = rd.safeId.id.isEmpty && isRow
 
-    sessionCache.registrationDetails flatMap {
-      case rd if applicableForRegistration(rd) =>
-        rowServiceCall(loggedInUser, service)
-      case _ => createSubscription(service)(request)
+    val (maybeOrgType, isNewCharityJourney) =
+      (requestSessionData.userSelectedOrganisationType, featureFlags.useNewCharityEdgeCaseJourney)
+
+    (maybeOrgType, isNewCharityJourney) match {
+      case (Some(CdsOrganisationType.CharityPublicBodyNotForProfit), true) =>
+        //This is temporary safeguard until ECC-1672 and ECC-1565 are completed. We don't know at this point what is the registration process for the new CharityPublicBodyNotForProfit journey
+        Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+      case _ =>
+        sessionCache.registrationDetails flatMap {
+          case rd if applicableForRegistration(rd) =>
+            rowServiceCall(loggedInUser, service)
+          case _ => createSubscription(service)(request)
+        }
     }
   }
 
