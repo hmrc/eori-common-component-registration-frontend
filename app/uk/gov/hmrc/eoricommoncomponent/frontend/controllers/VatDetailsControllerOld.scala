@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
-
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDate
 import play.api.mvc._
@@ -58,7 +56,6 @@ class VatDetailsControllerOld @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
-  private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -107,16 +104,15 @@ class VatDetailsControllerOld @Inject() (
             .cacheUkVatDetailsOld(vatForm)
             .map(
               _ =>
-                subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage) match {
-                  case Right(flowInfo) =>
-                    if (isInReviewMode)
-                      Redirect(DetermineReviewPageController.determineRoute(service))
-                    else
-                      Redirect(flowInfo.nextPage.url(service))
-                  case Left(_) =>
-                    logger.warn(s"Unable to identify subscription flow: key not found in cache")
-                    Redirect(ApplicationController.startRegister(service))
-                }
+                if (isInReviewMode)
+                  Redirect(
+                    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
+                      .determineRoute(service)
+                  )
+                else
+                  Redirect(
+                    subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
+                  )
             )
         else
           Future.successful(Redirect(VatDetailsControllerOld.vatDetailsNotMatched(isInReviewMode, service)))
