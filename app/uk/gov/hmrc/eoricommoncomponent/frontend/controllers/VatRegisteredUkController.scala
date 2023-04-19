@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  DetermineReviewPageController,
-  VatDetailsController,
-  VatDetailsControllerOld,
-  VatGroupController
+  ApplicationController,
+  ContactDetailsController,
+  VatDetailsController
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -39,29 +39,36 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatRegisteredUkController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
-  subscriptionFlowManager: SubscriptionFlowManager,
   subscriptionDetailsService: SubscriptionDetailsService,
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
-  vatRegisteredUkView: vat_registered_uk,
-  featureFlags: FeatureFlags
+  vatRegisteredUkView: vat_registered_uk
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(
-          Ok(
-            vatRegisteredUkView(
-              isInReviewMode = false,
-              vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP),
-              isIndividualFlow,
-              requestSessionData.isPartnershipOrLLP,
-              service
+        isIndividualFlow match {
+          case Right(isIndividual) =>
+            Future.successful(
+              Ok(
+                vatRegisteredUkView(
+                  isInReviewMode = false,
+                  vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP),
+                  isIndividual,
+                  requestSessionData.isPartnershipOrLLP,
+                  service
+                )
+              )
             )
-          )
-        )
+          case Left(_) =>
+            logger.warn(s"Unable to identify subscription flow: key not found in cache")
+            Future.successful(Redirect(ApplicationController.startRegister(service)))
+        }
+
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
@@ -70,15 +77,21 @@ class VatRegisteredUkController @Inject() (
         for {
           isVatRegisteredUk <- subscriptionBusinessService.getCachedVatRegisteredUk
           yesNo: YesNo = YesNo(isVatRegisteredUk)
-        } yield Ok(
-          vatRegisteredUkView(
-            isInReviewMode = true,
-            vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
-            isIndividualFlow,
-            requestSessionData.isPartnershipOrLLP,
-            service
-          )
-        )
+        } yield isIndividualFlow match {
+          case Right(individual) =>
+            Ok(
+              vatRegisteredUkView(
+                isInReviewMode = true,
+                vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
+                individual,
+                requestSessionData.isPartnershipOrLLP,
+                service
+              )
+            )
+          case Left(_) =>
+            logger.warn(s"Unable to identify subscription flow: key not found in cache in review mode")
+            Redirect(ApplicationController.startRegister(service))
+        }
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
@@ -87,43 +100,37 @@ class VatRegisteredUkController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors =>
-            Future.successful(
-              BadRequest(
-                vatRegisteredUkView(
-                  isInReviewMode,
-                  formWithErrors,
-                  isIndividualFlow,
-                  requestSessionData.isPartnershipOrLLP,
-                  service
+            isIndividualFlow match {
+              case Right(individual) =>
+                Future.successful(
+                  BadRequest(
+                    vatRegisteredUkView(
+                      isInReviewMode,
+                      formWithErrors,
+                      individual,
+                      requestSessionData.isPartnershipOrLLP,
+                      service
+                    )
+                  )
                 )
-              )
-            ),
+              case Left(_) =>
+                logger.warn(s"Unable to identify subscription flow: key not found in cache in review mode")
+                Future.successful(Redirect(ApplicationController.startRegister(service)))
+            },
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatRegisteredUk(yesNoAnswer).flatMap {
               _ =>
-                val result = (
-                  isInReviewMode,
-                  yesNoAnswer.isYes,
-                  featureFlags.useNewVATJourney,
-                  featureFlags.edgeCaseJourney
-                ) match {
-                  case (_, true, _, true)      => Future.successful(VatGroupController.createForm(service).url)
-                  case (false, true, false, _) => Future.successful(VatDetailsControllerOld.createForm(service).url)
-                  case (true, true, false, _)  => Future.successful(VatDetailsControllerOld.reviewForm(service).url)
-                  case (false, true, true, _)  => Future.successful(VatDetailsController.createForm(service).url)
-                  case (true, true, true, _)   => Future.successful(VatDetailsController.reviewForm(service).url)
-                  case (false, false, true, _) =>
-                    subscriptionDetailsService.clearCachedUkVatDetails map { _ =>
-                      subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
-                    }
-                  case (false, false, false, _) =>
-                    subscriptionDetailsService.clearCachedUkVatDetailsOld map { _ =>
-                      subscriptionFlowManager.stepInformation(VatDetailsSubscriptionFlowPage).nextPage.url(service)
-                    }
-                  case (true, false, _, _) =>
-                    subscriptionDetailsService.clearCachedUkVatDetails flatMap { _ =>
-                      Future.successful(DetermineReviewPageController.determineRoute(service).url)
-                    }
+                val result = (isInReviewMode, yesNoAnswer.isYes) match {
+                  case (false, true) => Future.successful(VatDetailsController.createForm(service).url)
+                  case (true, true)  => Future.successful(VatDetailsController.reviewForm(service).url)
+                  case (true, false) =>
+                    subscriptionDetailsService.clearCachedUkVatDetails.map(
+                      _ => ContactDetailsController.reviewForm(service).url
+                    )
+                  case (false, false) =>
+                    subscriptionDetailsService.clearCachedUkVatDetails.map(
+                      _ => ContactDetailsController.createForm(service).url
+                    )
 
                 }
                 result.map(t => Redirect(t))
@@ -131,7 +138,9 @@ class VatRegisteredUkController @Inject() (
         )
     }
 
-  private def isIndividualFlow(implicit rq: Request[AnyContent]) =
-    subscriptionFlowManager.currentSubscriptionFlow.isIndividualFlow
+  private def isIndividualFlow(implicit rq: Request[AnyContent]): Either[SessionError, Boolean] =
+    requestSessionData.userSubscriptionFlow map {
+      flow => flow.isIndividualFlow
+    }
 
 }

@@ -21,6 +21,8 @@ import play.api.Logger
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlow, SubscriptionPage, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.{FlowError, SessionError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Constants.ONE
@@ -57,14 +59,22 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
 
   private val logger = Logger(this.getClass)
 
-  def currentSubscriptionFlow(implicit request: Request[AnyContent], hc: HeaderCarrier): SubscriptionFlow =
-    requestSessionData.userSubscriptionFlow
+  def currentSubscriptionFlow(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Either[FlowError, SubscriptionFlow] =
+    //TODO if we add new sessionErrors we need to reassess this
+    requestSessionData.userSubscriptionFlow match {
+      case Left(_)     => Left(FlowNotFound())
+      case Right(flow) => Right(flow)
+    }
 
   def stepInformation(
     currentPage: SubscriptionPage
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): SubscriptionFlowInfo =
-    SubscriptionFlows(currentSubscriptionFlow)
-      .stepInformation(currentPage)
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Either[FlowError, SubscriptionFlowInfo] =
+    currentSubscriptionFlow map {
+      flow => SubscriptionFlows(flow).stepInformation(currentPage)
+    }
 
   def startSubscriptionFlow(
     service: Service
