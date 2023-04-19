@@ -47,11 +47,11 @@ class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit
         subDetails.copy(formData = subDetails.formData.copy(organisationType = Some(organisationType)))
       )
 
-      organisationType match {
-        case SoleTrader | Individual | ThirdCountryIndividual | ThirdCountrySoleTrader =>
-          sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
-        case _ => sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
-      }
+      saveRegistrationDetails(organisationType)
     }
+
+  private def saveRegistrationDetails(orgType: CdsOrganisationType)(implicit request: Request[_]) =
+    if (IndividualOrganisations.contains(orgType)) sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
+    else sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
 
 }

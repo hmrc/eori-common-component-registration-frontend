@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
 import play.api.libs.json._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 
 sealed trait EtmpOrganisationType {
@@ -62,7 +63,8 @@ object EtmpOrganisationType {
     LimitedLiabilityPartnershipId   -> LLP,
     CharityPublicBodyNotForProfitId -> UnincorporatedBody,
     EUOrganisationId                -> CorporateBody,
-    ThirdCountryOrganisationId      -> CorporateBody
+    ThirdCountryOrganisationId      -> CorporateBody,
+    IsleOfManOrganisationId         -> CorporateBody
   )
 
   val values = Seq(Partnership, CorporateBody, LLP, UnincorporatedBody, NA)

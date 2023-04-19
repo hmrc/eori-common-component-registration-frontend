@@ -325,6 +325,8 @@ object MatchingForms extends Mappings {
 
   val thirdCountrySixLineAddressForm: Form[SixLineAddressMatchModel] = sixLineAddressFormFactory(rejectGB)
 
+  val iomSixLineAddressForm: Form[SixLineAddressMatchModel] = sixLineAddressFormFactory()
+
   val islandsSixLineAddressForm: Form[SixLineAddressMatchModel] = sixLineAddressFormFactory(acceptOnlyIslands)
 
   private def sixLineAddressFormFactory(countryConstraints: Constraint[String]*): Form[SixLineAddressMatchModel] =

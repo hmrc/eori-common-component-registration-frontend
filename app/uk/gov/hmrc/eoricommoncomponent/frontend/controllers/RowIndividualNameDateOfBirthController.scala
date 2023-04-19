@@ -17,15 +17,25 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.{Action, _}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  DetermineReviewPageController,
+  DoYouHaveAUtrNumberController,
+  SecuritySignOutController,
+  SixLineAddressController
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
+  iomOnlySoleAndIndividualIds,
+  IsleOfManIndividualId,
+  IsleOfManSoleTraderId
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -73,12 +83,9 @@ class RowIndividualNameDateOfBirthController @Inject() (
 
   private def assertOrganisationTypeIsValid(cdsOrganisationType: String): Unit =
     requireThatUrlValue(
-      formsByOrganisationTypes contains cdsOrganisationType,
+      CdsOrganisationType.rowAndIomIndividualOrganisationIds contains cdsOrganisationType,
       message = s"Invalid organisation type '$cdsOrganisationType'."
     )
-
-  private lazy val formsByOrganisationTypes =
-    Seq(CdsOrganisationType.ThirdCountryIndividualId, CdsOrganisationType.ThirdCountrySoleTraderId)
 
   private def submitDetails(
     isInReviewMode: Boolean,
@@ -89,11 +96,18 @@ class RowIndividualNameDateOfBirthController @Inject() (
     val nameDobMatchModel =
       NameDobMatchModel(formData.firstName, formData.lastName, formData.dateOfBirth)
 
-    subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) map { _ =>
-      if (isInReviewMode)
-        Redirect(DetermineReviewPageController.determineRoute(service))
+    subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) flatMap { _ =>
+      if (!isInReviewMode)
+        subscriptionDetailsService.updateSubscriptionDetails.map(
+          _ =>
+            organisationType match {
+              case orgType if iomOnlySoleAndIndividualIds.contains(orgType) =>
+                Redirect(SixLineAddressController.showForm(isInReviewMode = false, organisationType, service))
+              case _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
+            }
+        )
       else
-        Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, false))
+        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
     }
   }
 

@@ -79,6 +79,24 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         ""
       ),
       (
+        "iom-organisation",
+        ThirdCountryOrg,
+        "organisation",
+        "/customs-registration-services/atar/register/matching/address/iom-organisation",
+        UserLocation.Iom,
+        false,
+        ""
+      ),
+      (
+        "iom-organisation",
+        ThirdCountryOrg,
+        "organisation",
+        "/customs-registration-services/atar/register/matching/review-determine",
+        UserLocation.Iom,
+        true,
+        "Test Org Name"
+      ),
+      (
         "third-country-organisation",
         ThirdCountryOrg,
         "organisation",
@@ -175,6 +193,9 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         }
 
         s"redirect to the next page when successful when organisation type is $organisationType and reviewMode is $reviewMode" in {
+          when(mockSubscriptionDetailsService.updateSubscriptionDetails(any[Request[_]])).thenReturn(
+            Future.successful(true)
+          )
           submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
             status(result) shouldBe SEE_OTHER
             result.header.headers("Location") should endWith(submitLocation)

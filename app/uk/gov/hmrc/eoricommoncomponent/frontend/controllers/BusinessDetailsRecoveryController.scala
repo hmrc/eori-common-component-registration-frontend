@@ -104,7 +104,7 @@ class BusinessDetailsRecoveryController @Inject() (
       case Some(UserLocation.ThirdCountry)      => "third-country"
       case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"
       case Some(UserLocation.Eu)                => "eu"
-      case Some(UserLocation.Iom)               => "iom"
+      case Some(UserLocation.Iom)               => "isle-of-man"
       case Some(UserLocation.Islands)           => "islands"
       case _                                    => throw new IllegalStateException("User Location not set")
     }

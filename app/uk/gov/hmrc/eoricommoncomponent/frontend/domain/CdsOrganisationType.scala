@@ -38,6 +38,10 @@ object CdsOrganisationType {
   val ThirdCountrySoleTraderId   = "third-country-sole-trader"
   val ThirdCountryIndividualId   = "third-country-individual"
 
+  val IsleOfManOrganisationId = "iom-organisation"
+  val IsleOfManSoleTraderId   = "iom-sole-trader"
+  val IsleOfManIndividualId   = "iom-individual"
+
   val Company: CdsOrganisationType                       = CdsOrganisationType(CompanyId)
   val SoleTrader: CdsOrganisationType                    = CdsOrganisationType(SoleTraderId)
   val Individual: CdsOrganisationType                    = CdsOrganisationType(IndividualId)
@@ -52,6 +56,10 @@ object CdsOrganisationType {
   val ThirdCountrySoleTrader: CdsOrganisationType   = CdsOrganisationType(ThirdCountrySoleTraderId)
   val ThirdCountryIndividual: CdsOrganisationType   = CdsOrganisationType(ThirdCountryIndividualId)
 
+  val IsleOfManOrganisation: CdsOrganisationType = CdsOrganisationType(IsleOfManOrganisationId)
+  val IsleOfManSoleTrader: CdsOrganisationType   = CdsOrganisationType(IsleOfManSoleTraderId)
+  val IsleOfManIndividual: CdsOrganisationType   = CdsOrganisationType(IsleOfManIndividualId)
+
   val validOrganisationTypes: Map[String, CdsOrganisationType] = Map(
     CompanyId                       -> Company,
     SoleTraderId                    -> SoleTrader,
@@ -63,8 +71,35 @@ object CdsOrganisationType {
     EUIndividualId                  -> EUIndividual,
     ThirdCountryOrganisationId      -> ThirdCountryOrganisation,
     ThirdCountrySoleTraderId        -> ThirdCountrySoleTrader,
-    ThirdCountryIndividualId        -> ThirdCountryIndividual
+    ThirdCountryIndividualId        -> ThirdCountryIndividual,
+    IsleOfManOrganisationId         -> IsleOfManOrganisation,
+    IsleOfManSoleTraderId           -> IsleOfManSoleTrader,
+    IsleOfManIndividualId           -> IsleOfManIndividual
   )
+
+  val IndividualOrganisations: Seq[CdsOrganisationType] = Seq(
+    SoleTrader,
+    Individual,
+    ThirdCountryIndividual,
+    ThirdCountrySoleTrader,
+    IsleOfManSoleTrader,
+    IsleOfManIndividual
+  )
+
+  lazy val individualOrganisationIds: Seq[String] =
+    Seq(
+      SoleTraderId,
+      IndividualId,
+      ThirdCountryIndividualId,
+      ThirdCountrySoleTraderId,
+      IsleOfManSoleTraderId,
+      IsleOfManIndividualId
+    )
+
+  lazy val rowAndIomIndividualOrganisationIds: Seq[String] =
+    Seq(ThirdCountryIndividualId, ThirdCountrySoleTraderId, IsleOfManSoleTraderId, IsleOfManIndividualId)
+
+  lazy val iomOnlySoleAndIndividualIds: Seq[String] = Seq(IsleOfManSoleTraderId, IsleOfManIndividualId)
 
   def forId(organisationTypeId: String): CdsOrganisationType = validOrganisationTypes(organisationTypeId)
 

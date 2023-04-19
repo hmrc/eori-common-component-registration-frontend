@@ -49,6 +49,10 @@ class EtmpOrganisationTypeSpec extends UnitSpec {
       EtmpOrganisationType(ThirdCountryOrganisation) shouldBe CorporateBody
     }
 
+    "convert from CDS Organisation Type: IsleOfManOrganisation to CorporateBody" in {
+      EtmpOrganisationType(IsleOfManOrganisation) shouldBe CorporateBody
+    }
+
     "throw an exception when invalid id is applied to EtmpOrganisationType" in {
       intercept[IllegalArgumentException](
         EtmpOrganisationType("invalidId")

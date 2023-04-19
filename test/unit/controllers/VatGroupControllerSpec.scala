@@ -17,10 +17,11 @@
 package unit.controllers
 
 import common.pages.registration.VatGroupPage
+import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EmailController, VatDetailsController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, FeatureFlags, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ControllerSpec
@@ -83,17 +84,35 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
       }
     }
 
-    "redirect to Cannot Register Using This Service when 'yes' is selected" in {
+    "redirect to Cannot Register Using This Service when 'yes' is selected and edge case flag disabled" in {
+      when(featureFlags.edgeCaseJourney).thenReturn(false)
       submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(expectedYesRedirectUrl)
       }
     }
 
-    "redirect to EmailController.form when 'no' is selected" in {
+    "redirect to Cannot Register Using This Service when 'yes' is selected and edge case flag enabled" in {
+      when(featureFlags.edgeCaseJourney).thenReturn(true)
+      submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith(expectedYesRedirectUrl)
+      }
+    }
+
+    "redirect to EmailController.form when 'no' is selected and edge case flag disabled" in {
+      when(featureFlags.edgeCaseJourney).thenReturn(false)
       submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) shouldBe expectedNoRedirectUrl
+      }
+    }
+
+    "redirect to VatDetailsController when 'no' is selected and edge case flag enabled" in {
+      when(featureFlags.edgeCaseJourney).thenReturn(true)
+      submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) shouldBe VatDetailsController.createForm(atarService).url
       }
     }
   }

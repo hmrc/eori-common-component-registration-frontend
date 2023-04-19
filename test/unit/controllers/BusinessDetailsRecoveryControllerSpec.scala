@@ -115,17 +115,13 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       assertAndTestBasedOnTheLocationForIndividual(location)
       assertAndTestBasedOnTheLocationForOrganisation(location)
     }
+    assertAndTestThrowsExceptionForInvalidLocationOrganisation
   }
 
   private def assertAndTestBasedOnTheLocationForIndividual(selectedLocation: String): Unit =
     s"redirect to contactDetailsPage when orgType is found in cache for Individual and location is selected to $selectedLocation" in {
-      val location = selectedLocation match {
-        case UserLocation.Eu           => "eu"
-        case UserLocation.ThirdCountry => "third-country"
-        case UserLocation.Iom          => "iom"
-        case UserLocation.Islands      => "islands"
-      }
-      val mockSession = mock[Session]
+      val location: String = getSelectedLocation(selectedLocation)
+      val mockSession      = mock[Session]
       val mockFlowStart =
         (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 
@@ -149,14 +145,9 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def assertAndTestBasedOnTheLocationForOrganisation(selectedLocation: String): Unit =
     s"redirect to dateOfEstablishment when orgType is found in cache for Organisation and location is selected to $selectedLocation" in {
-      val location = selectedLocation match {
-        case UserLocation.Eu           => "eu"
-        case UserLocation.ThirdCountry => "third-country"
-        case UserLocation.Iom          => "iom"
-        case UserLocation.Islands      => "islands"
-      }
-      val mockSession   = mock[Session]
-      val mockFlowStart = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
+      val location: String = getSelectedLocation(selectedLocation)
+      val mockSession      = mock[Session]
+      val mockFlowStart    = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
 
       when(
         mockSubscriptionFlowManager.startSubscriptionFlow(
@@ -176,6 +167,43 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(DateOfEstablishmentController.createForm(atarService).url)
       }
+    }
+
+  private def assertAndTestThrowsExceptionForInvalidLocationOrganisation: Unit =
+    "throw IllegalStateException when passing invalid location" in {
+      val location: String = "invalid-location"
+      val mockSession      = mock[Session]
+      val mockFlowStart    = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
+
+      when(
+        mockSubscriptionFlowManager.startSubscriptionFlow(
+          meq(Some(BusinessDetailsRecoveryPage)),
+          meq(CdsOrganisationType.ThirdCountryOrganisation),
+          meq(atarService)
+        )(any[Request[AnyContent]])
+      ).thenReturn(Future.successful(mockFlowStart))
+      mockCacheWithRegistrationDetails(organisationDetails)
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(s"$location"))
+      when(mockSave4LaterService.fetchOrgType(any[GroupId])(any[HeaderCarrier])).thenReturn(
+        Future
+          .successful(Some(CdsOrganisationType("third-country-organisation")))
+      )
+
+      invokeContinue() { result =>
+        val thrown = intercept[IllegalStateException] {
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+        }
+        thrown.getMessage shouldBe s"User Location not set"
+      }
+    }
+
+  private def getSelectedLocation(selectedLocation: String) =
+    selectedLocation match {
+      case UserLocation.Eu                => "eu"
+      case UserLocation.ThirdCountry      => "third-country"
+      case UserLocation.Iom               => "isle-of-man"
+      case UserLocation.Islands           => "islands"
+      case UserLocation.ThirdCountryIncEU => "third-country-inc-eu"
     }
 
   private def mockCacheWithRegistrationDetails(details: RegistrationDetails): Unit =

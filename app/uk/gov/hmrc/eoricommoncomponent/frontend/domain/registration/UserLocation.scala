@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDat
 object UserLocation {
 
   val Uk                = "uk"
-  val Iom               = "iom"
+  val Iom               = "isle-of-man"
   val Eu                = "eu" // TODO Remove EU location
   val ThirdCountry      = "third-country"
   val ThirdCountryIncEU = "third-country-inc-eu"
@@ -31,7 +31,7 @@ object UserLocation {
 
   val validLocations: Set[String] = Set(Uk, Iom, Eu, ThirdCountry, ThirdCountryIncEU, Islands)
 
-  private val rowLocations = Set(Eu, ThirdCountry, ThirdCountryIncEU, Islands)
+  private val rowLocations = Set(Eu, ThirdCountry, ThirdCountryIncEU, Islands, Iom)
 
   def forId(locationId: String): Boolean = validLocations(locationId)
 

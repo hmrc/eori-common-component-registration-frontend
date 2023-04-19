@@ -23,6 +23,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.IndividualOrganisations
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   IndividualSubscriptionFlow,
   OrganisationSubscriptionFlow,
@@ -83,9 +84,10 @@ class RequestSessionData @Inject() (audit: Auditable) {
     val userLocation = request.session.data.get(RequestSessionDataKeys.selectedUserLocation)
 
     userLocation match {
-      case Some("islands") => Some("third-country")
-      case Some("eu")      => Some("third-country")
-      case _               => userLocation
+      case Some("islands")     => Some("third-country")
+      case Some("eu")          => Some("third-country")
+      case Some("isle-of-man") => Some("isle-of-man")
+      case _                   => userLocation
     }
   }
 
@@ -99,27 +101,24 @@ class RequestSessionData @Inject() (audit: Auditable) {
     existingSession + (RequestSessionDataKeys.selectedUserLocation -> userLocation)
 
   def isPartnershipOrLLP(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
-    oType =>
-      oType == CdsOrganisationType.Partnership || oType == CdsOrganisationType.LimitedLiabilityPartnership
+    orgType =>
+      orgType == CdsOrganisationType.Partnership || orgType == CdsOrganisationType.LimitedLiabilityPartnership
   }
 
   def isPartnership(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
-    oType => oType == CdsOrganisationType.Partnership
+    orgType => orgType == CdsOrganisationType.Partnership
   }
 
   def isCharity(implicit request: Request[AnyContent]): Boolean =
-    userSelectedOrganisationType.fold(false)(oType => oType == CdsOrganisationType.CharityPublicBodyNotForProfit)
+    userSelectedOrganisationType.fold(false)(orgType => orgType == CdsOrganisationType.CharityPublicBodyNotForProfit)
 
-  def isCompany(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) { oType =>
-    oType == CdsOrganisationType.Company
+  def isCompany(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) { orgType =>
+    orgType == CdsOrganisationType.Company
   }
 
   def isIndividualOrSoleTrader(implicit request: Request[AnyContent]): Boolean =
-    userSelectedOrganisationType.fold(false) { oType =>
-      oType == CdsOrganisationType.Individual ||
-      oType == CdsOrganisationType.SoleTrader ||
-      oType == CdsOrganisationType.ThirdCountryIndividual ||
-      oType == CdsOrganisationType.ThirdCountrySoleTrader
+    userSelectedOrganisationType.fold(false) { orgType =>
+      IndividualOrganisations.contains(orgType)
     }
 
   private val registrationUkSubscriptionFlows =

@@ -63,7 +63,10 @@ class OrganisationTypeController @Inject() (
       CharityPublicBodyNotForProfit -> nameIdOrganisationMatching(CharityPublicBodyNotForProfitId, service),
       ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
       ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
-      ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service)
+      ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),
+      IsleOfManOrganisation         -> organisationWhatIsYourOrgName(IsleOfManOrganisationId, service),
+      IsleOfManSoleTrader           -> thirdCountryIndividualMatching(IsleOfManSoleTraderId, service),
+      IsleOfManIndividual           -> thirdCountryIndividualMatching(IsleOfManIndividualId, service)
     )
 
   def form(service: Service): Action[AnyContent] =

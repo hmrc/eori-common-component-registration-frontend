@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.countries
 
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
@@ -67,6 +68,8 @@ object Countries {
   val islands: List[Country] =
     countries filter (c => mdgCountryCodes("/mdg-country-codes-islands.csv") contains c.countryCode)
 
+  val iomCountry = (List(Country.apply("Isle of Man", "IM")), IsleOfManCountryPicker)
+
   def getCountryParameters(location: Option[String]): (List[Country], CountriesInCountryPicker) = location match {
     case Some(UserLocation.Eu) => (eu, EUCountriesInCountryPicker)
     case Some(UserLocation.ThirdCountry) =>
@@ -74,11 +77,9 @@ object Countries {
     case Some(UserLocation.ThirdCountryIncEU) =>
       (thirdIncEu, ThirdCountriesIncEuInCountryPicker)
     case Some(UserLocation.Islands) => (islands, IslandsInCountryPicker)
+    case Some(UserLocation.Iom)     => iomCountry
     case _                          => (allExceptIom, AllCountriesExceptIomInCountryPicker)
   }
-
-  def getCountryParametersForAllCountries(): (List[Country], CountriesInCountryPicker) =
-    (all, AllCountriesInCountryPicker)
 
 }
 
@@ -91,3 +92,4 @@ case object ThirdCountriesInCountryPicker        extends CountriesInCountryPicke
 case object ThirdCountriesIncEuInCountryPicker   extends CountriesInCountryPicker
 case object IslandsInCountryPicker               extends CountriesInCountryPicker
 case object NoCountriesInCountryPicker           extends CountriesInCountryPicker
+case object IsleOfManCountryPicker               extends CountriesInCountryPicker

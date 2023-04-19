@@ -55,7 +55,8 @@ class UserLocationController @Inject() (
   mcc: MessagesControllerComponents,
   userLocationView: user_location,
   sub01OutcomeProcessing: sub01_outcome_processing,
-  errorTemplate: error_template
+  errorTemplate: error_template,
+  featureFlags: FeatureFlags
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -93,10 +94,10 @@ class UserLocationController @Inject() (
             BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup)))
           ),
         details =>
-          (details.location, loggedInUser.groupId) match {
-            case (Some(UserLocation.Iom), Some(_)) =>
+          (details.location, loggedInUser.groupId, featureFlags.edgeCaseJourney) match {
+            case (Some(UserLocation.Iom), Some(_), false) =>
               Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
-            case (Some(location), Some(id)) if UserLocation.isRow(location) =>
+            case (Some(location), Some(id), _) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
             case _ =>
               Future.successful(
@@ -115,7 +116,7 @@ class UserLocationController @Inject() (
       case Some(UserLocation.ThirdCountry)      => "third-country"
       case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"
       case Some(UserLocation.Eu)                => "eu"
-      case Some(UserLocation.Iom)               => "iom"
+      case Some(UserLocation.Iom)               => "isle-of-man"
       case Some(UserLocation.Islands)           => "islands"
       case Some(UserLocation.Uk)                => "uk"
       case _                                    => throw new IllegalStateException("User Location not set")
