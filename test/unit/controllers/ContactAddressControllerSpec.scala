@@ -101,7 +101,7 @@ class ContactAddressControllerSpec
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
-      .thenReturn(mockSubscriptionFlowInfo)
+      .thenReturn(Right(mockSubscriptionFlowInfo))
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
     when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(subscriptionDetailsHolder)
   }
