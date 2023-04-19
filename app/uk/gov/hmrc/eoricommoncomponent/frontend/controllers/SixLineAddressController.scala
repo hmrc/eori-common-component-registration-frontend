@@ -137,12 +137,12 @@ class SixLineAddressController @Inject() (
     }
 
     Map(
-      CdsOrganisationType.ThirdCountryOrganisationId -> form,
-      CdsOrganisationType.ThirdCountryIndividualId   -> form,
-      CdsOrganisationType.ThirdCountrySoleTraderId   -> form,
-      CdsOrganisationType.IsleOfManOrganisationId    -> form,
-      CdsOrganisationType.IsleOfManIndividualId      -> form,
-      CdsOrganisationType.IsleOfManSoleTraderId      -> form,
+      CdsOrganisationType.ThirdCountryOrganisationId      -> form,
+      CdsOrganisationType.ThirdCountryIndividualId        -> form,
+      CdsOrganisationType.ThirdCountrySoleTraderId        -> form,
+      CdsOrganisationType.IsleOfManOrganisationId         -> form,
+      CdsOrganisationType.IsleOfManIndividualId           -> form,
+      CdsOrganisationType.IsleOfManSoleTraderId           -> form,
       CdsOrganisationType.CharityPublicBodyNotForProfitId -> form
     )
   }

@@ -56,21 +56,21 @@ class OrganisationTypeController @Inject() (
 
   private def matchingDestinations(service: Service): Map[CdsOrganisationType, Call] =
     Map[CdsOrganisationType, Call](
-      Company                       -> nameIdOrganisationMatching(CompanyId, service),
-      SoleTrader                    -> individualMatching(SoleTraderId, service),
-      Individual                    -> individualMatching(IndividualId, service),
-      Partnership                   -> nameIdOrganisationMatching(PartnershipId, service),
-      LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service),
+      Company                     -> nameIdOrganisationMatching(CompanyId, service),
+      SoleTrader                  -> individualMatching(SoleTraderId, service),
+      Individual                  -> individualMatching(IndividualId, service),
+      Partnership                 -> nameIdOrganisationMatching(PartnershipId, service),
+      LimitedLiabilityPartnership -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service),
       CharityPublicBodyNotForProfit -> {
         if (flags.useNewCharityEdgeCaseJourney) organisationWhatIsYourOrgName(CharityPublicBodyNotForProfitId, service)
         else nameIdOrganisationMatching(CharityPublicBodyNotForProfitId, service)
       },
-      ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
-      ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
-      ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),
-      IsleOfManOrganisation         -> organisationWhatIsYourOrgName(IsleOfManOrganisationId, service),
-      IsleOfManSoleTrader           -> thirdCountryIndividualMatching(IsleOfManSoleTraderId, service),
-      IsleOfManIndividual           -> thirdCountryIndividualMatching(IsleOfManIndividualId, service)
+      ThirdCountryOrganisation -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
+      ThirdCountrySoleTrader   -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
+      ThirdCountryIndividual   -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),
+      IsleOfManOrganisation    -> organisationWhatIsYourOrgName(IsleOfManOrganisationId, service),
+      IsleOfManSoleTrader      -> thirdCountryIndividualMatching(IsleOfManSoleTraderId, service),
+      IsleOfManIndividual      -> thirdCountryIndividualMatching(IsleOfManIndividualId, service)
     )
 
   def form(service: Service): Action[AnyContent] =

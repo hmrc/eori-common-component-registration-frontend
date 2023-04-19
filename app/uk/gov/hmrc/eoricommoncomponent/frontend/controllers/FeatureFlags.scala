@@ -26,9 +26,9 @@ class FeatureFlags @Inject() (config: Configuration) {
   // hard-code flag in case the feature ever needs to be re-introduced
   val matchingEnabled: Boolean = false //loadConfig(path = "features.matchingEnabled")
 
-  val sub02UseServiceName: Boolean = loadConfig("features.sub02UseServiceName")
-  val arsNewJourney: Boolean       = loadConfig("features.arsNewJourney")
-  val useNewVATJourney: Boolean    = loadConfig("features.useNewVATJourney")
-  val edgeCaseJourney: Boolean     = loadConfig("features.edgeCaseJourney")
+  val sub02UseServiceName: Boolean          = loadConfig("features.sub02UseServiceName")
+  val arsNewJourney: Boolean                = loadConfig("features.arsNewJourney")
+  val useNewVATJourney: Boolean             = loadConfig("features.useNewVATJourney")
+  val edgeCaseJourney: Boolean              = loadConfig("features.edgeCaseJourney")
   val useNewCharityEdgeCaseJourney: Boolean = loadConfig("features.useNewCharityEdgeCaseJourney")
 }
