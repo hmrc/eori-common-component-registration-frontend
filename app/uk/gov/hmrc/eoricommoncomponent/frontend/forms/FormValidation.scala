@@ -37,6 +37,9 @@ object FormValidation {
 
   val amountRegex: Regex = "^([0-9]+\\.[0-9]{2})$".r
 
+  def mandatoryPostCodeMapping: Mapping[Option[String]] =
+    MandatoryOptionalMapping(text.verifying(validPostcode)).verifying(lift(postcodeMax(9)))
+
   def postcodeMapping: Mapping[Option[String]] =
     ConditionalMapping(
       condition = isAnyOf("countryCode", postCodeMandatoryCountryCodes),

@@ -98,6 +98,13 @@ class SixLineAddressControllerSpec
       thirdCountrySixLineAddressForm,
       true,
       "/customs-registration-services/atar/register/matching/review-determine"
+    ),
+    (
+      "charity-public-body-not-for-profit",
+      RowFormBuilder,
+      ukSixLineAddressForm,
+      true,
+      "/customs-registration-services/atar/register/matching/review-determine"
     )
   )
 
@@ -125,7 +132,7 @@ class SixLineAddressControllerSpec
     val formValues = formBuilder.asForm(form)
 
     organisationType match {
-      case "third-country-organisation" =>
+      case "third-country-organisation" | "charity-public-body-not-for-profit" =>
         when(mockSessionCache.registrationDetails(any[Request[_]]))
           .thenReturn(Future.successful(mockRegistrationDetailsOrganisation))
         when(mockRegistrationDetailsOrganisation.address).thenReturn(testAddress)

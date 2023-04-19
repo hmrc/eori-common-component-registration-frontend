@@ -329,6 +329,18 @@ object MatchingForms extends Mappings {
 
   val islandsSixLineAddressForm: Form[SixLineAddressMatchModel] = sixLineAddressFormFactory(acceptOnlyIslands)
 
+  val ukSixLineAddressForm: Form[SixLineAddressMatchModel] =
+    Form(
+      mapping(
+        "line-1"      -> text.verifying(validLine1),
+        "line-2"      -> optional(text.verifying(validLine2)),
+        "line-3"      -> text.verifying(validLine3),
+        "line-4"      -> optional(text.verifying(validLine4)),
+        "postcode"    -> mandatoryPostCodeMapping,
+        "countryCode" -> default(text, countryCodeGB)
+      )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
+    )
+
   private def sixLineAddressFormFactory(countryConstraints: Constraint[String]*): Form[SixLineAddressMatchModel] =
     Form(
       mapping(

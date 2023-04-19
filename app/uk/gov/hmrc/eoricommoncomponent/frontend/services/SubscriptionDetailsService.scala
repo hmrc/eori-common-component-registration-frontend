@@ -175,17 +175,16 @@ class SubscriptionDetailsService @Inject() (
 
   def updateSubscriptionDetails(implicit request: Request[_]) =
     // TODO: to be refactored by redesigning the cache
-    sessionCache.subscriptionDetails flatMap { subDetails =>
-      sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
-      sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
-      sessionCache.saveSub01Outcome(Sub01Outcome(""))
-      sessionCache.saveSubscriptionDetails(
+    for {
+      subDetails <- sessionCache.subscriptionDetails
+      _          <- sessionCache.saveSub01Outcome(Sub01Outcome(""))
+      _ <- sessionCache.saveSubscriptionDetails(
         SubscriptionDetails(
           nameOrganisationDetails = subDetails.nameOrganisationDetails,
           nameDobDetails = subDetails.nameDobDetails,
           formData = subDetails.formData
         )
       )
-    }
+    } yield ()
 
 }

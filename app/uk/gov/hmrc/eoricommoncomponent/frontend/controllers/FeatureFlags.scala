@@ -30,4 +30,5 @@ class FeatureFlags @Inject() (config: Configuration) {
   val arsNewJourney: Boolean       = loadConfig("features.arsNewJourney")
   val useNewVATJourney: Boolean    = loadConfig("features.useNewVATJourney")
   val edgeCaseJourney: Boolean     = loadConfig("features.edgeCaseJourney")
+  val useNewCharityEdgeCaseJourney: Boolean = loadConfig("features.useNewCharityEdgeCaseJourney")
 }

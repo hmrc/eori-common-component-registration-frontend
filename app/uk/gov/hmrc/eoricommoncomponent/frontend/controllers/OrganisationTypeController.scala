@@ -37,7 +37,8 @@ class OrganisationTypeController @Inject() (
   mcc: MessagesControllerComponents,
   organisationTypeView: organisation_type,
   registrationDetailsService: RegistrationDetailsService,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  flags: FeatureFlags
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -60,7 +61,10 @@ class OrganisationTypeController @Inject() (
       Individual                    -> individualMatching(IndividualId, service),
       Partnership                   -> nameIdOrganisationMatching(PartnershipId, service),
       LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service),
-      CharityPublicBodyNotForProfit -> nameIdOrganisationMatching(CharityPublicBodyNotForProfitId, service),
+      CharityPublicBodyNotForProfit -> {
+        if (flags.useNewCharityEdgeCaseJourney) organisationWhatIsYourOrgName(CharityPublicBodyNotForProfitId, service)
+        else nameIdOrganisationMatching(CharityPublicBodyNotForProfitId, service)
+      },
       ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
       ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
       ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),

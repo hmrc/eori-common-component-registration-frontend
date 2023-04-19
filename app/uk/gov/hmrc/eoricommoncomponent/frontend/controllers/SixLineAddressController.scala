@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.{Action, _}
+import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUser, SixLineAddressMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -29,8 +29,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -132,6 +132,7 @@ class SixLineAddressController @Inject() (
     val form = requestSessionData.selectedUserLocationWithIslands(request) match {
       case Some(UserLocation.Islands) => islandsSixLineAddressForm
       case Some(UserLocation.Iom)     => iomSixLineAddressForm
+      case Some(UserLocation.Uk)      => ukSixLineAddressForm
       case _                          => thirdCountrySixLineAddressForm
     }
 
@@ -141,7 +142,8 @@ class SixLineAddressController @Inject() (
       CdsOrganisationType.ThirdCountrySoleTraderId   -> form,
       CdsOrganisationType.IsleOfManOrganisationId    -> form,
       CdsOrganisationType.IsleOfManIndividualId      -> form,
-      CdsOrganisationType.IsleOfManSoleTraderId      -> form
+      CdsOrganisationType.IsleOfManSoleTraderId      -> form,
+      CdsOrganisationType.CharityPublicBodyNotForProfitId -> form
     )
   }
 

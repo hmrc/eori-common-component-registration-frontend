@@ -29,6 +29,7 @@ class FeatureFlagsSpec extends ControllerSpec {
       |features.arsNewJourney=false
       |features.useNewVATJourney=true
       |features.edgeCaseJourney=true
+      |features.useNewCharityEdgeCaseJourney=true
       """.stripMargin)
 
   private val featureFlags = new FeatureFlags(Configuration(configuration))
@@ -40,6 +41,7 @@ class FeatureFlagsSpec extends ControllerSpec {
       featureFlags.sub02UseServiceName shouldBe true
       featureFlags.arsNewJourney shouldBe false
       featureFlags.useNewVATJourney shouldBe true
+      featureFlags.useNewCharityEdgeCaseJourney shouldBe true
     }
   }
 }
