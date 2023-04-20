@@ -16,11 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.Logger
+
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm.sicCodeform
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -29,6 +34,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDat
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
 
+import java.lang.ProcessBuilder
+import scala.concurrent
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -43,6 +50,7 @@ class SicCodeController @Inject() (
   requestSessionData: RequestSessionData
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+  private val logger = Logger(this.getClass)
 
   private def populateView(sicCode: Option[String], isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
@@ -95,9 +103,6 @@ class SicCodeController @Inject() (
       )
     }
 
-  private def stepInformation()(implicit request: Request[AnyContent]): SubscriptionFlowInfo =
-    subscriptionFlowManager.stepInformation(SicCodeSubscriptionFlowPage)
-
   private def submitNewDetails(formData: SicCodeViewModel, isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
@@ -105,14 +110,20 @@ class SicCodeController @Inject() (
       .cacheSicCode(formData.sicCode.filterNot(_.isWhitespace))
       .map(
         _ =>
-          if (isInReviewMode)
-            Redirect(
-              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
-                service
-              )
-            )
-          else
-            Redirect(stepInformation().nextPage.url(service))
+          subscriptionFlowManager.stepInformation(SicCodeSubscriptionFlowPage) match {
+            case Right(flowInfo) =>
+              if (isInReviewMode)
+                Redirect(
+                  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
+                    service
+                  )
+                )
+              else
+                Redirect(flowInfo.nextPage.url(service))
+            case Left(_) =>
+              logger.warn(s"Unable to identify subscription flow: key not found in cache")
+              Redirect(ApplicationController.startRegister(service))
+          }
       )
 
 }
