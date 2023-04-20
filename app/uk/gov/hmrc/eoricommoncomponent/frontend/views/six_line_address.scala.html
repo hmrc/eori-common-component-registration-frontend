@@ -35,7 +35,7 @@
 
 @postCodeLabel = @{
     countriesInCountryPicker match {
-        case IslandsInCountryPicker => "cds.matching.organisation-address.postcode"
+        case IslandsInCountryPicker | IsleOfManCountryPicker => "cds.matching.organisation-address.postcode"
         case _ => "cds.matching.organisation-address.postcode-optional"
     }
 }
