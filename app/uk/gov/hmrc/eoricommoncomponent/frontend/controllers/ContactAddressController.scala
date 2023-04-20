@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
@@ -43,8 +42,6 @@ class ContactAddressController @Inject() (
   contactAddressView: contact_address
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
-
-  private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
@@ -115,12 +112,14 @@ class ContactAddressController @Inject() (
       if (isInReviewMode)
         Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
       else
-        subscriptionFlowManager.stepInformation(ContactAddressSubscriptionFlowPageGetEori) match {
-          case Right(flowInfo) => Future.successful(Redirect(flowInfo.nextPage.url(service)))
-          case Left(_) =>
-            logger.warn(s"Unable to identify subscription flow: key not found in cache")
-            Future.successful(Redirect(ApplicationController.startRegister(service)))
-        }
+        Future.successful(
+          Redirect(
+            subscriptionFlowManager
+              .stepInformation(ContactAddressSubscriptionFlowPageGetEori)
+              .nextPage
+              .url(service)
+          )
+        )
     case _ =>
       Future(Redirect(AddressController.createForm(service)))
 

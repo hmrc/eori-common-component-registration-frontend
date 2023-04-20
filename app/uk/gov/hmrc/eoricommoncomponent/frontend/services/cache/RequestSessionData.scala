@@ -30,11 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   PartnershipSubscriptionFlow,
   SubscriptionFlow
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
-import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.util
 
 @Singleton
 class RequestSessionData @Inject() (audit: Auditable) {
@@ -45,16 +41,12 @@ class RequestSessionData @Inject() (audit: Auditable) {
     request.session + (RequestSessionDataKeys.subscriptionFlow -> subscriptionFlow.name) +
       (RequestSessionDataKeys.uriBeforeSubscriptionFlow        -> uriBeforeSubscriptionFlow)
 
-  def userSubscriptionFlow(implicit
-    request: Request[AnyContent],
-    hc: HeaderCarrier
-  ): Either[SessionError, SubscriptionFlow] =
+  def userSubscriptionFlow(implicit request: Request[AnyContent], hc: HeaderCarrier): SubscriptionFlow =
     request.session.data.get(RequestSessionDataKeys.subscriptionFlow) match {
-      case Some(flowName) => Right(SubscriptionFlow(flowName))
+      case Some(flowName) => SubscriptionFlow(flowName)
       case None =>
         auditSessionFailure(request.session)
-        Left(DataNotFound(RequestSessionDataKeys.subscriptionFlow))
-
+        throw new IllegalStateException("Subscription flow is not cached")
     }
 
   private def auditSessionFailure(session: Session)(implicit hc: HeaderCarrier): Unit =
