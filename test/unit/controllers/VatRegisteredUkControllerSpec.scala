@@ -74,6 +74,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       mockSubscriptionBusinessService,
       mockSubscriptionDetailsService,
       mockSubscriptionFlow,
+      mockFeatureFlags,
       mockRequestSession
     )
 
@@ -85,6 +86,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     mockSubscriptionBusinessService,
     mockSubscriptionDetailsService,
     mockRequestSession,
+    mockFeatureFlags,
     mcc,
     vatRegisteredUkView
   )

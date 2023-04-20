@@ -19,11 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ApplicationController,
-  ContactDetailsController,
-  VatDetailsController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, ContactDetailsController, VatDetailsController, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -41,6 +37,7 @@ class VatRegisteredUkController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   subscriptionDetailsService: SubscriptionDetailsService,
   requestSessionData: RequestSessionData,
+  featureFlags: FeatureFlags,
   mcc: MessagesControllerComponents,
   vatRegisteredUkView: vat_registered_uk
 )(implicit ec: ExecutionContext)
@@ -120,14 +117,15 @@ class VatRegisteredUkController @Inject() (
           yesNoAnswer =>
             subscriptionDetailsService.cacheVatRegisteredUk(yesNoAnswer).flatMap {
               _ =>
-                val result = (isInReviewMode, yesNoAnswer.isYes) match {
-                  case (false, true) => Future.successful(VatDetailsController.createForm(service).url)
-                  case (true, true)  => Future.successful(VatDetailsController.reviewForm(service).url)
-                  case (true, false) =>
+                val result = (isInReviewMode, yesNoAnswer.isYes, featureFlags.edgeCaseJourney) match {
+                  case (_, true, true)      => Future.successful(VatGroupController.createForm(service).url)
+                  case (false, true, _) => Future.successful(VatDetailsController.createForm(service).url)
+                  case (true, true, _) => Future.successful(VatDetailsController.reviewForm(service).url)
+                  case (true, false, _) =>
                     subscriptionDetailsService.clearCachedUkVatDetails.map(
                       _ => ContactDetailsController.reviewForm(service).url
                     )
-                  case (false, false) =>
+                  case (false, false, _) =>
                     subscriptionDetailsService.clearCachedUkVatDetails.map(
                       _ => ContactDetailsController.createForm(service).url
                     )
