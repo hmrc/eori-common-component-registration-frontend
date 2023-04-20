@@ -14,7 +14,7 @@ Universal / mappings ++= directory(baseDirectory.value / "public")
 
 name := "eori-common-component-registration-frontend"
 
-targetJvm := "jvm-1.8"
+targetJvm := "jvm-11"
 
 scalaVersion := "2.13.8"
 
@@ -107,11 +107,11 @@ lazy val scoverageSettings = {
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
 val compileDependencies = Seq(
-  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"    % "7.14.0",
-  "uk.gov.hmrc"       %% "play-conditional-form-mapping" % "1.12.0-play-28",
-  "uk.gov.hmrc"       %% "domain"                        % "8.1.0-play-28",
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"    % "7.15.0",
+  "uk.gov.hmrc"       %% "play-conditional-form-mapping" % "1.13.0-play-28",
+  "uk.gov.hmrc"       %% "domain"                        % "8.2.0-play-28",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"            % "1.1.0",
-  "uk.gov.hmrc"       %% "emailaddress"                  % "3.7.0",
+  "uk.gov.hmrc"       %% "emailaddress"                  % "3.8.0",
   "uk.gov.hmrc"       %% "play-frontend-hmrc"            % "6.8.0-play-28"
 )
 
@@ -128,7 +128,7 @@ val testDependencies = Seq(
   "org.mockito"          % "mockito-core"            % "4.7.0"    % "test,it",
   "org.scalatestplus"   %% "mockito-4-6"             % "3.2.15.0" % "test, it",
   "org.pegdown"          % "pegdown"                 % "1.6.0",
-  "uk.gov.hmrc.mongo"   %% "hmrc-mongo-test-play-28" % "0.71.0"   % "test, it",
+  "uk.gov.hmrc.mongo"   %% "hmrc-mongo-test-play-28" % "1.1.0"   % "test, it",
   "com.vladsch.flexmark" % "flexmark-all"            % "0.62.0"   % "test,it"
 )
 
