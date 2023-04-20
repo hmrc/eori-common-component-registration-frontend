@@ -21,12 +21,14 @@ import play.api.mvc.Request
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   CdsOrganisationType,
   RegistrationDetailsIndividual,
   RegistrationDetailsOrganisation
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -42,13 +44,9 @@ class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit
   def initialiseCacheWithRegistrationDetails(
     organisationType: CdsOrganisationType
   )(implicit request: Request[_]): Future[Boolean] =
-    sessionCache.subscriptionDetails flatMap { subDetails =>
-      sessionCache.saveSubscriptionDetails(
-        subDetails.copy(formData = subDetails.formData.copy(organisationType = Some(organisationType)))
-      )
-
-      saveRegistrationDetails(organisationType)
-    }
+    sessionCache.saveSubscriptionDetails(
+      SubscriptionDetails(formData = FormData(organisationType = Some(organisationType)))
+    ).flatMap(_ => saveRegistrationDetails(organisationType))
 
   private def saveRegistrationDetails(orgType: CdsOrganisationType)(implicit request: Request[_]) =
     if (IndividualOrganisations.contains(orgType)) sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
