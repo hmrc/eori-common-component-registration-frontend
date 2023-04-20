@@ -146,9 +146,6 @@ class SessionCache @Inject() (
   def keepAlive(implicit request: Request[_]): Future[Boolean] =
     putData(keepAliveKey, Json.toJson(LocalDateTime.now().toString)) map (_ => true)
 
-  def saveGroupEnrolment(groupEnrolment: EnrolmentResponse)(implicit request: Request[_]): Future[Boolean] =
-    putData(groupEnrolmentKey, Json.toJson(groupEnrolment)) map (_ => true)
-
   def subscriptionDetails(implicit request: Request[_]): Future[SubscriptionDetails] =
     getData[SubscriptionDetails](subDetailsKey).map(_.getOrElse(SubscriptionDetails()))
 
