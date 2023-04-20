@@ -34,6 +34,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlowInfo,
   SubscriptionPage
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.{FlowError, SessionError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
@@ -54,6 +55,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
   private val mockSubscriptionFlow            = mock[SubscriptionFlow]
+  private val mockSessionError                = mock[SessionError]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
   private val mockFeatureFlags                = mock[FeatureFlags]
@@ -72,6 +74,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       mockSubscriptionBusinessService,
       mockSubscriptionDetailsService,
       mockSubscriptionFlow,
+      mockFeatureFlags,
       mockRequestSession
     )
 
@@ -81,21 +84,27 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val controller = new VatRegisteredUkController(
     mockAuthAction,
     mockSubscriptionBusinessService,
-    mockSubscriptionFlowManager,
     mockSubscriptionDetailsService,
     mockRequestSession,
+    mockFeatureFlags,
     mcc,
-    vatRegisteredUkView,
-    mockFeatureFlags
+    vatRegisteredUkView
   )
 
   "Vat registered Uk Controller" should {
+    when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+      Right(mockSubscriptionFlow)
+    )
     "return OK when accessing page through createForm method" in {
+
       createForm() { result =>
         status(result) shouldBe OK
       }
     }
     "land on a correct location" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       createForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title should include(VatRegisterUKPage.title)
@@ -105,12 +114,19 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
   "Vat registered Uk Controller in review mode" should {
     when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(Future.successful(true))
+
     "return OK when accessing page through createForm method" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       reviewForm() { result =>
         status(result) shouldBe OK
       }
     }
     "land on a correct location" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       reviewForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.title should include(VatRegisterUKPage.title)
@@ -120,29 +136,62 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
   "Submitting Vat registered UK Controller in create mode" should {
     "return to the same location with bad request" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       submitForm(invalidRequest) { result =>
         status(result) shouldBe BAD_REQUEST
       }
     }
     "redirect to add vat group page for yes answer" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
       val url = "register/vat-group"
       subscriptionFlowUrl(url)
 
       submitForm(ValidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/what-are-your-uk-vat-details")
+        result.header.headers(LOCATION) should endWith("/register/your-uk-vat-details")
       }
     }
 
-    "redirect to eu vat page for no answer" in {
-      val url = "register/vat-registered-eu"
-      when(mockSubscriptionDetailsService.clearCachedUkVatDetailsOld(any[Request[_]])).thenReturn(Future.successful())
-
+    "redirect to start new journey for no data left case - submit form" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Left(mockSessionError)
+      )
+      val url = "register/vat-group"
       subscriptionFlowUrl(url)
 
-      submitForm(validRequestNo) { result =>
+      submitForm(invalidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/vat-registered-eu")
+        result.header.headers(LOCATION) should endWith("atar/register")
+      }
+    }
+
+    "redirect to start new journey for no data left case - review form" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Left(mockSessionError)
+      )
+      val url = "register/vat-group"
+      subscriptionFlowUrl(url)
+
+      reviewForm() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("atar/register")
+      }
+    }
+
+    "redirect to start new journey for no data left case - create form" in {
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Left(mockSessionError)
+      )
+      val url = "register/vat-group"
+      subscriptionFlowUrl(url)
+
+      createForm() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith("atar/register")
       }
     }
 
@@ -155,17 +204,10 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       submitForm(validRequestNo) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/vat-registered-eu")
+        result.header.headers(LOCATION) should endWith("register/contact-details")
       }
     }
 
-    "redirect to vat groups review old page for yes answer and is in review mode" in {
-      when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
-      submitForm(ValidRequest, isInReviewMode = true) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/what-are-your-uk-vat-details/review")
-      }
-    }
     "redirect to vat groups review page for yes answer and is in review mode" in {
       when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
       submitForm(ValidRequest, isInReviewMode = true) { result =>
@@ -181,7 +223,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
-          "customs-registration-services/atar/register/matching/review-determine"
+          "customs-registration-services/atar/register/contact-details/review"
         )
       }
     }
@@ -192,7 +234,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
-          "customs-registration-services/atar/register/matching/review-determine"
+          "customs-registration-services/atar/register/contact-details/review"
         )
       }
     }
@@ -225,7 +267,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
   private def mockIsIndividual(isIndividual: Boolean = false) = {
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
-      mockSubscriptionFlow
+      Right(mockSubscriptionFlow)
     )
     when(mockSubscriptionFlow.isIndividualFlow).thenReturn(isIndividual)
   }
@@ -234,7 +276,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     val mockSubscriptionPage     = mock[SubscriptionPage]
     val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
     when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
-      .thenReturn(mockSubscriptionFlowInfo)
+      .thenReturn(Right(mockSubscriptionFlowInfo))
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
     when(mockSubscriptionPage.url(any())).thenReturn(url)
   }

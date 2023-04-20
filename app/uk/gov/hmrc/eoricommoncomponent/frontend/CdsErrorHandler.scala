@@ -69,6 +69,7 @@ class CdsErrorHandler @Inject() (
         logger.info("Session time out: " + sessionTimeOut.errorMessage, exception)
         // $COVERAGE-ON
         Future.successful(Redirect(SecuritySignOutController.displayPage(service)).withNewSession)
+
       case invalidRequirement: InvalidUrlValueException =>
         // $COVERAGE-OFF$Loggers
         logger.warn(invalidRequirement.message)

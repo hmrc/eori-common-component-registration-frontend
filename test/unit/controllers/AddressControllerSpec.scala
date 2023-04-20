@@ -25,6 +25,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{AddressController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
@@ -47,11 +48,12 @@ class AddressControllerSpec
     extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  private val mockRequestSessionData   = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache = mock[SessionCache]
-  private val mockSubscriptionFlow     = mock[SubscriptionFlowManager]
-  private val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
-  private val mockSubscriptionPage     = mock[SubscriptionPage]
+  private val mockRequestSessionData    = mock[RequestSessionData]
+  private val mockCdsFrontendDataCache  = mock[SessionCache]
+  private val mockSubscriptionFlow      = mock[SubscriptionFlowManager]
+  private val mockSubscriptionFlowInfo  = mock[SubscriptionFlowInfo]
+  private val mockSubscriptionPage      = mock[SubscriptionPage]
+  private val mockSubscriptionFlowError = mock[FlowError]
 
   private val viewAddress       = instanceOf[address]
   private val viewErrorTemplate = instanceOf[error_template]
@@ -117,7 +119,7 @@ class AddressControllerSpec
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
-      .thenReturn(mockSubscriptionFlowInfo)
+      .thenReturn(Right(mockSubscriptionFlowInfo))
     when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
   }
 

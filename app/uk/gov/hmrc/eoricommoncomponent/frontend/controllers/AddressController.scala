@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.Logger
 import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
@@ -24,6 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetai
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -42,6 +44,8 @@ class AddressController @Inject() (
   errorTemplate: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
@@ -66,13 +70,12 @@ class AddressController @Inject() (
           address =>
             saveAddress(address).flatMap(
               _ =>
-                Future.successful(
-                  Redirect(
-                    subscriptionFlowManager
-                      .stepInformation(ContactDetailsSubscriptionFlowPageGetEori)
-                      .nextPage.url(service)
-                  )
-                )
+                subscriptionFlowManager.stepInformation(ContactDetailsSubscriptionFlowPageGetEori) match {
+                  case Right(flowInfo) => Future.successful(Redirect(flowInfo.nextPage.url(service)))
+                  case Left(_) =>
+                    logger.warn(s"Unable to identify subscription flow: key not found in cache")
+                    Future.successful(Redirect(ApplicationController.startRegister(service)))
+                }
             )
         )
     }

@@ -75,34 +75,6 @@ object SubscriptionForm extends Mappings {
       }
     }
 
-  def validEoriWithOrWithoutGB: Constraint[String] =
-    Constraint({
-      case e if formatInput(e).isEmpty =>
-        Invalid(ValidationError("ecc.matching-error.eori.isEmpty"))
-      case e if formatInput(e).forall(_.isDigit) && formatInput(e).length < 12 =>
-        Invalid(ValidationError("ecc.matching-error.eori.wrong-length.too-short"))
-      case e if formatInput(e).startsWith("GB") && formatInput(e).length < 14 =>
-        Invalid(ValidationError("ecc.matching-error.gbeori.wrong-length.too-short"))
-      case e if formatInput(e).forall(_.isDigit) && formatInput(e).length > 15 =>
-        Invalid(ValidationError("ecc.matching-error.eori.wrong-length.too-long"))
-      case e if formatInput(e).startsWith("GB") && formatInput(e).length > 17 =>
-        Invalid(ValidationError("ecc.matching-error.gbeori.wrong-length.too-long"))
-      case e if formatInput(e).take(2).forall(_.isLetter) && !formatInput(e).startsWith("GB") =>
-        Invalid(ValidationError("ecc.matching-error.eori.not-gb"))
-      case e if !formatInput(e).matches("^GB[0-9]{12,15}$") && !formatInput(e).matches("[0-9]{12,15}") =>
-        Invalid(ValidationError("ecc.matching-error.eori"))
-      case _ => Valid
-    })
-
-  def validEmail: Constraint[String] =
-    Constraint({
-      case e if e.trim.isEmpty => Invalid(ValidationError("cds.subscription.contact-details.form-error.email"))
-      case e if e.length > 50  => Invalid(ValidationError("cds.subscription.contact-details.form-error.email.too-long"))
-      case e if !EmailAddress.isValid(e) =>
-        Invalid(ValidationError("cds.subscription.contact-details.form-error.email.wrong-format"))
-      case _ => Valid
-    })
-
   def validFullName: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.subscription.contact-details.form-error.full-name"))

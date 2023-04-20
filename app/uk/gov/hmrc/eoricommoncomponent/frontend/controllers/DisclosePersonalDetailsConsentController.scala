@@ -16,11 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.Logger
+
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -41,6 +44,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
   subscriptionFlowManager: SubscriptionFlowManager
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+  private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -88,11 +92,13 @@ class DisclosePersonalDetailsConsentController @Inject() (
               if (isInReviewMode)
                 Future.successful(Redirect(DetermineReviewPageController.determineRoute(service).url))
               else
-                Future.successful(
-                  Redirect(
-                    subscriptionFlowManager.stepInformation(EoriConsentSubscriptionFlowPage).nextPage.url(service)
-                  )
-                )
+                subscriptionFlowManager.stepInformation(EoriConsentSubscriptionFlowPage) match {
+                  case Right(flowInfo) =>
+                    Future.successful(Redirect(flowInfo.nextPage.url(service)))
+                  case Left(_) =>
+                    logger.warn(s"Unable to identify subscription flow: key not found in cache")
+                    Future.successful(Redirect(ApplicationController.startRegister(service)))
+                }
             }
         )
     }
