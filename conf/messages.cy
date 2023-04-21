@@ -1632,7 +1632,8 @@ ecc.start-page.company.para2 = Os ydych yn talu Treth Gorfforaeth yn y DU, byddw
 ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
 
 ecc.start-page.sole-trader.title = Faint o amser y mae’n ei gymryd
-ecc.start-page.sole-trader = Ar ôl i chi anfon eich cais byddwn yn prosesu’ch manylion. Bydd eich tanysgrifiad a’ch rhif EORI yn barod i’w defnyddio cyn pen naill ai:
+ecc.start-page.sole-trader = Mae ceisiadau’n cymryd 7 i 8 munud ar gyfartaledd i’w cwblhau.
+ecc.start-page.sole-trader.para2 = Bydd y tanysgrifiad a’r rhif EORI yn barod i’w defnyddio cyn pen naill ai:
 ecc.start-page.sole-trader.bullet1 = 2 awr
 ecc.start-page.sole-trader.bullet2 = 5 diwrnod gwaith, os bydd angen i ni wneud rhagor o wiriadau
 
