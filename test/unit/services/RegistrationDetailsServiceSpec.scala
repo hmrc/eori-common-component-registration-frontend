@@ -44,7 +44,6 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   private def startingDate = LocalDate.now
 
   private val mockSessionCache = mock[SessionCache]
-  private val mockFormData     = mock[FormData]
 
   private val startingOrgName      = "BEFORE Blank"
   private val startingSafeId       = SafeId("SAFEID")
