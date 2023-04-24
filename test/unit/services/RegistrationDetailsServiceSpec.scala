@@ -30,7 +30,7 @@ import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
@@ -51,6 +51,12 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val updatedAddress       = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
 
   private val startingBlankFullName = "BEFORE Blank full name"
+
+  private val emptySubDetailsIndividual =
+    SubscriptionDetails(formData = FormData(organisationType = Some(CdsOrganisationType("third-country-individual"))))
+
+  private val emptySubDetailsOrganisation =
+    SubscriptionDetails(formData = FormData(organisationType = Some(CdsOrganisationType("third-country-organisation"))))
 
   private val emptyRegDetailsIndividual = RegistrationDetailsIndividual(
     None,
@@ -90,6 +96,18 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     startingDate
   )
 
+  private val startingSubDetailsOrganisation =
+    SubscriptionDetails(
+      nameDetails = Some(NameMatchModel("Jimbob")),
+      formData = FormData(organisationType = Some(CdsOrganisationType("third-country-individual")))
+    )
+
+  private val startingSubDetailsIndividual =
+    SubscriptionDetails(
+      nameOrganisationDetails = Some(NameOrganisationMatchModel("pre-populated orgName")),
+      formData = FormData(organisationType = Some(CdsOrganisationType("third-country-organisation")))
+    )
+
   private val registrationDetailsService = new RegistrationDetailsService(mockSessionCache)(global)
 
   val individualOrganisationTypes =
@@ -108,6 +126,9 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   override def beforeEach {
     reset(mockSessionCache)
+    when(mockSessionCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]])).thenReturn(
+      Future.successful(true)
+    )
     when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]]))
       .thenReturn(Future.successful(true))
     when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(SubscriptionDetails()))
@@ -155,12 +176,13 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
         await(registrationDetailsService.initialiseCacheWithRegistrationDetails(organisationType))
 
-        val requestCaptor = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+        val requestCaptorReg = ArgumentCaptor.forClass(classOf[RegistrationDetails])
 
-        verify(mockSessionCache).saveRegistrationDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-        val holder: RegistrationDetails = requestCaptor.getValue
+        verify(mockSessionCache).saveRegistrationDetails(requestCaptorReg.capture())(ArgumentMatchers.eq(request))
 
-        holder shouldBe emptyRegDetailsIndividual
+        val actualRegistrationDetails: RegistrationDetails = requestCaptorReg.getValue
+
+        actualRegistrationDetails shouldBe emptyRegDetailsIndividual
       }
     }
 
@@ -169,13 +191,56 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
         await(registrationDetailsService.initialiseCacheWithRegistrationDetails(organisationType))
 
-        val requestCaptor = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+        val requestCaptorReg = ArgumentCaptor.forClass(classOf[RegistrationDetails])
 
-        verify(mockSessionCache).saveRegistrationDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-        val holder: RegistrationDetails = requestCaptor.getValue
+        verify(mockSessionCache).saveRegistrationDetails(requestCaptorReg.capture())(ArgumentMatchers.eq(request))
 
-        holder shouldBe emptyRegDetailsOrganisation
+        val actualRegistrationDetails: RegistrationDetails = requestCaptorReg.getValue
+
+        actualRegistrationDetails shouldBe emptyRegDetailsOrganisation
       }
     }
+  }
+
+  "initialise session cache with emptySubDetailsIndividual for organisation type third-country-individual" in {
+
+    when(mockSessionCache.subscriptionDetails).thenReturn(startingSubDetailsOrganisation)
+
+    await(registrationDetailsService.initialiseCacheWithRegistrationDetails(CdsOrganisationType.ThirdCountryIndividual))
+
+    val requestCaptorReg = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+    val requestCaptorSub = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+
+    verify(mockSessionCache).saveRegistrationDetails(requestCaptorReg.capture())(ArgumentMatchers.eq(request))
+    val actualRegistrationDetails: RegistrationDetails = requestCaptorReg.getValue
+
+    verify(mockSessionCache).saveSubscriptionDetails(requestCaptorSub.capture())(ArgumentMatchers.eq(request))
+    val actualSubscriptionDetails: SubscriptionDetails = requestCaptorSub.getValue
+
+    actualRegistrationDetails shouldBe emptyRegDetailsIndividual
+    actualSubscriptionDetails shouldBe emptySubDetailsIndividual
+    mockSessionCache.subscriptionDetails.name shouldBe startingSubDetailsOrganisation.name
+  }
+
+  "initialise session cache with RegistrationDetailsOrganisation for remaining organisation types as third-country-organisation" in {
+
+    when(mockSessionCache.subscriptionDetails).thenReturn(startingSubDetailsIndividual)
+
+    await(
+      registrationDetailsService.initialiseCacheWithRegistrationDetails(CdsOrganisationType.ThirdCountryOrganisation)
+    )
+
+    val requestCaptorReg = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+    val requestCaptorSub = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+
+    verify(mockSessionCache).saveRegistrationDetails(requestCaptorReg.capture())(ArgumentMatchers.eq(request))
+    val actualRegistrationDetails: RegistrationDetails = requestCaptorReg.getValue
+
+    verify(mockSessionCache).saveSubscriptionDetails(requestCaptorSub.capture())(ArgumentMatchers.eq(request))
+    val actualSubscriptionDetails: SubscriptionDetails = requestCaptorSub.getValue
+
+    actualRegistrationDetails shouldBe emptyRegDetailsOrganisation
+    actualSubscriptionDetails shouldBe emptySubDetailsOrganisation
+    mockSessionCache.subscriptionDetails.name shouldBe startingSubDetailsIndividual.name
   }
 }
