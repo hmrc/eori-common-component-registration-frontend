@@ -96,6 +96,18 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     startingDate
   )
 
+  private val startingSubDetailsOrganisation =
+    SubscriptionDetails(
+      nameDetails = Some(NameMatchModel("Jimbob")),
+      formData = FormData(organisationType = Some(CdsOrganisationType("third-country-individual")))
+    )
+
+  private val startingSubDetailsIndividual =
+    SubscriptionDetails(
+      nameOrganisationDetails = Some(NameOrganisationMatchModel("pre-populated orgName")),
+      formData = FormData(organisationType = Some(CdsOrganisationType("third-country-organisation")))
+    )
+
   private val registrationDetailsService = new RegistrationDetailsService(mockSessionCache)(global)
 
   val individualOrganisationTypes =
@@ -192,6 +204,8 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   "initialise session cache with emptySubDetailsIndividual for organisation type third-country-individual" in {
 
+    when(mockSessionCache.subscriptionDetails).thenReturn(startingSubDetailsOrganisation)
+
     await(registrationDetailsService.initialiseCacheWithRegistrationDetails(CdsOrganisationType.ThirdCountryIndividual))
 
     val requestCaptorReg = ArgumentCaptor.forClass(classOf[RegistrationDetails])
@@ -205,9 +219,12 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
     actualRegistrationDetails shouldBe emptyRegDetailsIndividual
     actualSubscriptionDetails shouldBe emptySubDetailsIndividual
+    mockSessionCache.subscriptionDetails.name shouldBe startingSubDetailsOrganisation.name
   }
 
   "initialise session cache with RegistrationDetailsOrganisation for remaining organisation types as third-country-organisation" in {
+
+    when(mockSessionCache.subscriptionDetails).thenReturn(startingSubDetailsIndividual)
 
     await(
       registrationDetailsService.initialiseCacheWithRegistrationDetails(CdsOrganisationType.ThirdCountryOrganisation)
@@ -224,5 +241,6 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
     actualRegistrationDetails shouldBe emptyRegDetailsOrganisation
     actualSubscriptionDetails shouldBe emptySubDetailsOrganisation
+    mockSessionCache.subscriptionDetails.name shouldBe startingSubDetailsIndividual.name
   }
 }
