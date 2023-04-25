@@ -1868,7 +1868,8 @@ ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" 
 
 
 ecc.start-page.sole-trader.title = How long it takes
-ecc.start-page.sole-trader = After you send your application we will process your details. Your subscription and EORI number will be ready to use within either:
+ecc.start-page.sole-trader = Applications take an average of 7 to 8 minutes to complete.
+ecc.start-page.sole-trader.para2 = The subscription and EORI number will be ready to use within either:
 ecc.start-page.sole-trader.bullet1 = 2 hours
 ecc.start-page.sole-trader.bullet2 = 5 working days, if we need to make more checks
 
