@@ -165,9 +165,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
       showForm(CdsOrganisationType.ThirdCountrySoleTraderId, defaultUserId) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith(
-          "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
-        )
+        page.title should startWith("Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?")
         page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
         page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
       }
@@ -178,9 +176,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
       showForm(CdsOrganisationType.ThirdCountryIndividualId, defaultUserId) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith(
-          "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
-        )
+        page.title should startWith("Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?")
         page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
         page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
       }
