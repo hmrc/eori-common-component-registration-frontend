@@ -173,7 +173,7 @@ class SubscriptionDetailsService @Inject() (
   def cachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =
     sessionCache.subscriptionDetails map (_.customsId)
 
-  def updateSubscriptionDetails(implicit request: Request[_]) =
+  private def updateSubscriptionDetails(implicit request: Request[_]) =
     // TODO: to be refactored by redesigning the cache
     for {
       subDetails <- sessionCache.subscriptionDetails
@@ -185,6 +185,18 @@ class SubscriptionDetailsService @Inject() (
           formData = subDetails.formData
         )
       )
+    } yield ()
+
+  def updateSubscriptionDetailsOrganisation(implicit request: Request[_]): Future[Unit] =
+    for {
+      _ <- sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
+      _ <- updateSubscriptionDetails
+    } yield ()
+
+  def updateSubscriptionDetailsIndividual(implicit request: Request[_]): Future[Unit] =
+    for {
+      _ <- sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
+      _ <- updateSubscriptionDetails
     } yield ()
 
 }

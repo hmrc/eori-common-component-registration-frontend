@@ -63,7 +63,7 @@ class DoYouHaveNinoController @Inject() (
                 case Some(false) if cachedNinoOpt.exists(_.haveNino.exists(_ == false)) =>
                   Future.successful(noNinoRedirect(service))
                 case Some(false) =>
-                  subscriptionDetailsService.updateSubscriptionDetails.flatMap { _ =>
+                  subscriptionDetailsService.updateSubscriptionDetailsIndividual.flatMap { _ =>
                     subscriptionDetailsService.cacheNinoMatch(Some(formData)).map { _ =>
                       noNinoRedirect(service)
                     }

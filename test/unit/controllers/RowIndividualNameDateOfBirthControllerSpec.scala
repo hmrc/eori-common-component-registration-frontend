@@ -138,7 +138,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
           saveRegistrationDetailsMockSuccess()
-          when(mockSubscriptionDetailsService.updateSubscriptionDetails(any[Request[_]])).thenReturn(
+          when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any[Request[_]])).thenReturn(
             Future.successful(true)
           )
           if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual") {

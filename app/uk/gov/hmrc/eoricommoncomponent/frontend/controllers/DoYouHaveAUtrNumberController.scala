@@ -76,7 +76,7 @@ class DoYouHaveAUtrNumberController @Inject() (
         case Some(false) if cachedUtrOpt.exists(_.haveUtr.exists(_ == false)) =>
           Future.successful(noUtrDestination(organisationType, service, isInReviewMode))
         case Some(false) =>
-          subscriptionDetailsService.updateSubscriptionDetails.flatMap { _ =>
+          subscriptionDetailsService.updateSubscriptionDetailsOrganisation.flatMap { _ =>
             subscriptionDetailsService.cacheUtrMatch(Some(formData)).map { _ =>
               noUtrDestination(organisationType, service, isInReviewMode)
             }

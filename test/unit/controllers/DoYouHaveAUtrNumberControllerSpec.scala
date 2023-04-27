@@ -111,7 +111,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "display 'use different service' when org type is not valid page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
@@ -139,7 +141,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Confirm Details page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
@@ -153,7 +157,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Review page while on review mode" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
@@ -183,7 +189,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Address page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
       when(mockFlags.useNewCharityEdgeCaseJourney).thenReturn(true)
@@ -198,7 +206,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Review page while on review mode" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
       when(mockFlags.useNewCharityEdgeCaseJourney).thenReturn(true)
@@ -261,7 +271,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Nino page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
