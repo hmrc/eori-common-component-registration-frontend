@@ -166,11 +166,10 @@ class DoYouHaveAUtrNumberControllerSpec
       showForm(CdsOrganisationType.ThirdCountrySoleTraderId, defaultUserId) { result =>
         val page = CdsPage(contentAsString(result))
         page.title should startWith(
-          "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
+          "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
         )
-        page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
-        page.getElementsText("//*[@id='have-utr-hint']") shouldBe
-          "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can find a lost UTR number (opens in new tab) ."
+        page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
+        page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
       }
     }
     "contain a proper content for individuals" in {
@@ -180,11 +179,10 @@ class DoYouHaveAUtrNumberControllerSpec
       showForm(CdsOrganisationType.ThirdCountryIndividualId, defaultUserId) { result =>
         val page = CdsPage(contentAsString(result))
         page.title should startWith(
-          "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
+          "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
         )
-        page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?"
-        page.getElementsText("//*[@id='have-utr-hint']") shouldBe
-          "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can find a lost UTR number (opens in new tab) ."
+        page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
+        page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
       }
     }
   }
