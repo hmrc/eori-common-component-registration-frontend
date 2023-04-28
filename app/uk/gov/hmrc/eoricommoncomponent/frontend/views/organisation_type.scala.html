@@ -97,7 +97,8 @@
             @displayInputRadioGroup("organisation-type", validOptions, hintTextOptions)
 
             @govukButton(Button(
-                content = Text(messages("cds.navigation.continue"))
+                content = Text(messages("cds.navigation.continue")),
+                id = Some("continue-button")
             ))
 
             }

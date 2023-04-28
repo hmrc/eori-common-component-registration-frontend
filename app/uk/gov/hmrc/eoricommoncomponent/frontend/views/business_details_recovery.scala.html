@@ -97,7 +97,8 @@
 
     @govukButton(Button(
         href = Some(BusinessDetailsRecoveryController.continue(service).url),
-        content = Text(messages("cds.navigation.continue"))
+        content = Text(messages("cds.navigation.continue")),
+        id = Some("continue-button")
     ))
 
     @helpers.helpAndSupport()CheckYourDetailsRegisterControllerSpec

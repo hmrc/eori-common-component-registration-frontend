@@ -541,7 +541,8 @@ else Seq.empty[SummaryListRow]
                 @CSRF.formField
 
                 @govukButton(Button(
-                    content = Text(messages("cds.form.send"))
+                    content = Text(messages("cds.form.send")),
+                    id = Some("continue-button")
                 ))
             }
             @helpers.helpAndSupport()

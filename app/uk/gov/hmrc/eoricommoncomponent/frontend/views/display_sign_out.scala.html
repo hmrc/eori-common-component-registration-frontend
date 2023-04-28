@@ -33,7 +33,8 @@
 
     @govukButton(Button(
         content = Text(messages("cds.security-sign-in")),
-        href = Some(ApplicationController.startRegister(service).url)
+        href = Some(ApplicationController.startRegister(service).url),
+        id = Some("continue-button")
     ))
 
     @helpers.helpAndSupport()

@@ -36,7 +36,8 @@
 
         @govukButton(Button(
             content = Text(messages("cds.navigation.continue")),
-            href=Some(appConfig.eoriCommonComponentFrontend(service.code))
+            href=Some(appConfig.eoriCommonComponentFrontend(service.code)),
+            id = Some("continue-button")
         ))
         @helpers.helpAndSupport()
 

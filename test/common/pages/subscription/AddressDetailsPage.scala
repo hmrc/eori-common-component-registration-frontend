@@ -25,7 +25,7 @@ sealed trait AddressDetailsPage extends WebPage {
 
   val formId: String = "addressDetailsForm"
 
-  val continueButtonXpath = "//*[@class='govuk-button']"
+  val continueButtonXpath = "//*[@id='continue-button']"
 
   val streetFieldXPath           = "//*[@id='street']"
   val streetFieldLevelErrorXPath = "//p[@id='street-error' and @class='govuk-error-message']"

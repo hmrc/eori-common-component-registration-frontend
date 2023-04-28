@@ -103,7 +103,7 @@ class SixLineAddressSpec extends ViewSpec {
   "Rest of World (ROW) Enter your organisation address Page in review mode" should {
 
     "have the continue button say 'Save and review'" in {
-      docWithErrors.body().getElementsByClass("govuk-button").first().text mustBe "Save and review"
+      docWithErrors.body().getElementById("continue-button").text mustBe "Save and review"
     }
   }
 

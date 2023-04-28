@@ -54,7 +54,7 @@ class StandaloneEoriAlreadyExistsViewSpec extends ViewSpec {
 
       "display sub heading for CDS" in {
         orgDoc.body().getElementsByTag("h2").text() must startWith(
-          "Help improve HMRC services Start using the Customs Declaration Service (CDS) Support links"
+          "Help make GOV.UK better Start using the Customs Declaration Service (CDS) Support links"
         )
       }
 
