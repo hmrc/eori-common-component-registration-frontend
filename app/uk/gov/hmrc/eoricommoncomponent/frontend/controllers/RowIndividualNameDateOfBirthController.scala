@@ -98,7 +98,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
 
     subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) flatMap { _ =>
       if (!isInReviewMode)
-        subscriptionDetailsService.updateSubscriptionDetails.map(
+        subscriptionDetailsService.updateSubscriptionDetailsIndividual.map(
           _ =>
             organisationType match {
               case orgType if iomOnlySoleAndIndividualIds.contains(orgType) =>

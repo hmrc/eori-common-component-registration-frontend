@@ -173,19 +173,30 @@ class SubscriptionDetailsService @Inject() (
   def cachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =
     sessionCache.subscriptionDetails map (_.customsId)
 
-  def updateSubscriptionDetails(implicit request: Request[_]) =
+  private def updateSubscriptionDetails(implicit request: Request[_]) =
     // TODO: to be refactored by redesigning the cache
-    sessionCache.subscriptionDetails flatMap { subDetails =>
-      sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
-      sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
-      sessionCache.saveSub01Outcome(Sub01Outcome(""))
-      sessionCache.saveSubscriptionDetails(
+    for {
+      subDetails <- sessionCache.subscriptionDetails
+      _          <- sessionCache.saveSub01Outcome(Sub01Outcome(""))
+      _ <- sessionCache.saveSubscriptionDetails(
         SubscriptionDetails(
           nameOrganisationDetails = subDetails.nameOrganisationDetails,
           nameDobDetails = subDetails.nameDobDetails,
           formData = subDetails.formData
         )
       )
-    }
+    } yield ()
+
+  def updateSubscriptionDetailsOrganisation(implicit request: Request[_]): Future[Unit] =
+    for {
+      _ <- sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
+      _ <- updateSubscriptionDetails
+    } yield ()
+
+  def updateSubscriptionDetailsIndividual(implicit request: Request[_]): Future[Unit] =
+    for {
+      _ <- sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
+      _ <- updateSubscriptionDetails
+    } yield ()
 
 }

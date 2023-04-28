@@ -66,7 +66,7 @@
 
 @hint = @{
     organisationType match {
-        case ThirdCountryOrganisationId | IsleOfManOrganisationId => utrLinkText
+        case ThirdCountryOrganisationId | IsleOfManOrganisationId | CharityPublicBodyNotForProfitId => utrLinkText
         case orgType if rowAndIomIndividualOrganisationIds.contains(orgType) =>
             Html(messages("ecc.matching.row-sole-trader-individual.utr.paragraph", utrlink))
         case IndividualId | SoleTraderId =>

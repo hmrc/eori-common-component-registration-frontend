@@ -17,14 +17,14 @@
 package unit.services
 
 import base.UnitSpec
-import java.time.{LocalDate, LocalDateTime, ZoneId}
 
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Action, AnyContent, Request, Results}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, Sub02Controller}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
@@ -50,6 +50,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
   private val mockSub02Controller          = mock[Sub02Controller]
   private val mockOrgTypeLookup            = mock[OrgTypeLookup]
   private val mockRegistrationDetails      = mock[RegistrationDetails]
+  private val mockFeatureFlags             = mock[FeatureFlags]
 
   private implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
   private implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
@@ -76,7 +77,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     mockSessionCache,
     mockRequestSessionData,
     mockOrgTypeLookup,
-    mockSub02Controller
+    mockSub02Controller,
+    mockFeatureFlags
   )(global)
 
   override protected def beforeEach(): Unit = {
@@ -179,6 +181,24 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     )
 
   "RegisterWithoutIdWithSubscriptionService" should {
+
+    "when UK CharityPublicBodyNotForProfit and useNewCharityEdgeCaseJourney is set to true do not call any endpoints" in {
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(
+        Some(CdsOrganisationType.CharityPublicBodyNotForProfit)
+      )
+      when(mockOrgTypeLookup.etmpOrgTypeOpt(any[Request[AnyContent]])).thenReturn(Some(CorporateBody))
+      when(mockFeatureFlags.useNewCharityEdgeCaseJourney).thenReturn(true)
+
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
+
+      verify(mockSub02Controller, never).subscribe(any())
+      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
+        any(),
+        any()
+      )
+      verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
+    }
 
     "when UK, call SUB02, do not call registerOrganisation or registerIndividual" in {
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(UserLocation.Uk))

@@ -25,7 +25,7 @@ import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DoYouHaveAUtrNumberController, FeatureFlags}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
@@ -49,12 +49,19 @@ class DoYouHaveAUtrNumberControllerSpec
   private val mockMatchingRequestHolder      = mock[MatchingRequestHolder]
   private val mockMatchingResponse           = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockFlags                      = mock[FeatureFlags]
   private val matchOrganisationUtrView       = instanceOf[match_organisation_utr]
 
   implicit val hc = mock[HeaderCarrier]
 
   private val controller =
-    new DoYouHaveAUtrNumberController(mockAuthAction, mcc, matchOrganisationUtrView, mockSubscriptionDetailsService)
+    new DoYouHaveAUtrNumberController(
+      mockAuthAction,
+      mcc,
+      matchOrganisationUtrView,
+      mockSubscriptionDetailsService,
+      mockFlags
+    )
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -104,7 +111,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "display 'use different service' when org type is not valid page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
@@ -132,7 +141,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Confirm Details page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
@@ -146,13 +157,66 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Review page while on review mode" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId, isInReviewMode = true) { result =>
         status(await(result)) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("register/matching/review-determine")
+      }
+    }
+  }
+
+  "submitting the form for UK Charity organisation" should {
+
+    "redirect to Get UTR page based on YES answer" in {
+
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
+        .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
+
+      submitForm(form = ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        await(result)
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith(
+          s"register/matching/get-utr/${CdsOrganisationType.CharityPublicBodyNotForProfitId}"
+        )
+      }
+    }
+
+    "redirect to Address page based on NO answer" in {
+
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
+      when(mockFlags.useNewCharityEdgeCaseJourney).thenReturn(true)
+
+      submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith(
+          s"register/matching/address/${CdsOrganisationType.CharityPublicBodyNotForProfitId}"
+        )
+      }
+    }
+
+    "redirect to Review page while on review mode" in {
+
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
+      when(mockFlags.useNewCharityEdgeCaseJourney).thenReturn(true)
+
+      submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId, isInReviewMode = true) {
+        result =>
+          status(await(result)) shouldBe SEE_OTHER
+          result.header.headers("Location") should endWith("register/matching/review-determine")
       }
     }
   }
@@ -207,7 +271,9 @@ class DoYouHaveAUtrNumberControllerSpec
 
     "redirect to Nino page based on NO answer" in {
 
-      when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful(true)
+      )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
