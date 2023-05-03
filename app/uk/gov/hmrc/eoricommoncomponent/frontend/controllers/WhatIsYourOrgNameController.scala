@@ -70,7 +70,7 @@ class WhatIsYourOrgNameController @Inject() (
   )(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) flatMap { _ =>
       if (!isInReviewMode)
-        subscriptionDetailsService.updateSubscriptionDetails.map(
+        subscriptionDetailsService.updateSubscriptionDetailsOrganisation.map(
           _ =>
             organisationType match {
               case CdsOrganisationType.IsleOfManOrganisationId =>

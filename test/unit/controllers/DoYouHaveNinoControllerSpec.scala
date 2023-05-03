@@ -59,7 +59,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
-    when(mockSubscriptionDetailsService.updateSubscriptionDetails(any())).thenReturn(Future.successful(true))
+    when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any())).thenReturn(Future.successful(true))
   }
 
   override protected def afterEach(): Unit = {

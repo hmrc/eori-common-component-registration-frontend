@@ -25,10 +25,10 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.rowAndIomIndividualOrganisationIds
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, countryField: helpers.countryField)
-
-
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, countryField: helpers.countryField, govukInput: GovukInput)
 
 @(isInReviewMode: Boolean, addressForm: Form[SixLineAddressMatchModel], countries: List[Country], countriesInCountryPicker: CountriesInCountryPicker, cdsOrgType: String, service: Service)(implicit request: Request[AnyContent], messages: Messages)
 
@@ -36,6 +36,7 @@
 @postCodeLabel = @{
     countriesInCountryPicker match {
         case IslandsInCountryPicker | IsleOfManCountryPicker => "cds.matching.organisation-address.postcode"
+        case _ if cdsOrgType == CdsOrganisationType.CharityPublicBodyNotForProfitId => "cds.matching.organisation-address.postcode"
         case _ => "cds.matching.organisation-address.postcode-optional"
     }
 }
@@ -45,7 +46,6 @@
         case _ => "cds.matching.organisation-address.header"
     }
 }
-
 
 @layout_di(messages(headerLabel), countriesInCountryPicker, form = Some(addressForm)) {
     <div>
@@ -83,15 +83,17 @@
                 autocomplete = Some("address-level2"),
                 classes = Some("govuk-!-width-one-half")
             )
-            @inputText(
-                form = addressForm,
-                id = "line-4",
-                name = "line-4",
-                label = "cds.matching.organisation-address.line-4",
-                isPageHeading = false,
-                autocomplete = Some("address-level1"),
-                classes = Some("govuk-!-width-one-half")
-            )
+            @if(cdsOrgType != CdsOrganisationType.CharityPublicBodyNotForProfitId){
+                @inputText(
+                    form = addressForm,
+                    id = "line-4",
+                    name = "line-4",
+                    label = "cds.matching.organisation-address.line-4",
+                    isPageHeading = false,
+                    autocomplete = Some("address-level1"),
+                    classes = Some("govuk-!-width-one-half")
+                )
+            }
             @inputText(
                 form = addressForm,
                 id = "postcode",
@@ -101,16 +103,30 @@
                 autocomplete = Some("postal-code"),
                 classes = Some("govuk-!-width-one-half")
             )
-            @countryField(
-                form = addressForm,
-                field = "countryCode",
-                label = "cds.subscription.address-details.country.label",
-                countries = countries,
-                labelClasses = None
-            )
+            @if(cdsOrgType != CdsOrganisationType.CharityPublicBodyNotForProfitId){
+                @countryField(
+                    form = addressForm,
+                    field = "countryCode",
+                    label = "cds.subscription.address-details.country.label",
+                    countries = countries,
+                    labelClasses = None
+                )
+            } else {
+                @govukInput(Input(
+                    id = "countryCode",
+                    name = "countryCode",
+                    classes = "govuk-!-width-one-half",
+                    label = Label(
+                        content = Text(messages("cds.subscription.address-details.country.label")),
+                    ),
+                    value = Some(messages("cds.country.GB")),
+                    attributes = Map("disabled" -> "disabled")
+                ))
+            }
 
             @govukButton(Button(
-                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+                content = Text(ViewHelper.continueButtonText(isInReviewMode)),
+                id = Some("continue-button")
             ))
 
             @helpers.helpAndSupport()

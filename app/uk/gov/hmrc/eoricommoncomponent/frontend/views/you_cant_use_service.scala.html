@@ -38,7 +38,8 @@
 
     @govukButton(Button(
         content = Text(messages("cds.sign.out")),
-        href = Some(logout(service).url)
+        href = Some(logout(service).url),
+        id = Some("continue-button")
     ))
 
     @helpers.helpAndSupport()

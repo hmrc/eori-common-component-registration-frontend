@@ -55,11 +55,6 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     "have an input of type 'radio' for No I don't have a UTR" in {
       doc.body.getElementById("have-utr-false").attr("type") mustBe "radio"
     }
-    "display correct intro paragraph" in {
-      doc.body
-        .getElementById("have-utr-hint")
-        .text() mustBe "This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Corporation Tax. It may be called reference, UTR or official use. You can find a lost UTR number (opens in new tab) ."
-    }
     "have aria-described-by on the fieldset" in {
       doc.body
         .getElementsByClass("govuk-fieldset")

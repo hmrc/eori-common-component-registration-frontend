@@ -36,7 +36,8 @@ class DoYouHaveAUtrNumberController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
   matchOrganisationUtrView: match_organisation_utr,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  flags: FeatureFlags
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -75,7 +76,7 @@ class DoYouHaveAUtrNumberController @Inject() (
         case Some(false) if cachedUtrOpt.exists(_.haveUtr.exists(_ == false)) =>
           Future.successful(noUtrDestination(organisationType, service, isInReviewMode))
         case Some(false) =>
-          subscriptionDetailsService.updateSubscriptionDetails.flatMap { _ =>
+          subscriptionDetailsService.updateSubscriptionDetailsOrganisation.flatMap { _ =>
             subscriptionDetailsService.cacheUtrMatch(Some(formData)).map { _ =>
               noUtrDestination(organisationType, service, isInReviewMode)
             }
@@ -87,21 +88,19 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   private def noUtrDestination(organisationType: String, service: Service, isInReviewMode: Boolean): Result =
     organisationType match {
+      case CdsOrganisationType.CharityPublicBodyNotForProfitId if flags.useNewCharityEdgeCaseJourney =>
+        noUtrOrganisationRedirect(isInReviewMode, organisationType, service)
       case CdsOrganisationType.CharityPublicBodyNotForProfitId =>
         Redirect(VatRegisteredUkKanaController.form(service))
       case CdsOrganisationType.ThirdCountryOrganisationId =>
-        noUtrThirdCountryOrganisationRedirect(isInReviewMode, organisationType, service)
+        noUtrOrganisationRedirect(isInReviewMode, organisationType, service)
       case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
         noUtrThirdCountryIndividualsRedirect(service)
       case _ =>
         Redirect(YouNeedADifferentServiceController.form())
     }
 
-  private def noUtrThirdCountryOrganisationRedirect(
-    isInReviewMode: Boolean,
-    organisationType: String,
-    service: Service
-  ): Result =
+  private def noUtrOrganisationRedirect(isInReviewMode: Boolean, organisationType: String, service: Service): Result =
     if (isInReviewMode)
       Redirect(DetermineReviewPageController.determineRoute(service))
     else

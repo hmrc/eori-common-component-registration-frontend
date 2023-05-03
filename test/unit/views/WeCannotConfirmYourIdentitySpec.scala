@@ -51,7 +51,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     }
 
     "have the option to try again" in {
-      doc.body().getElementsByClass("govuk-button").text mustBe "Try again"
+      doc.body().getElementById("continue-button").text mustBe "Try again"
     }
 
     "have the VAT Details link for the try again button" in {

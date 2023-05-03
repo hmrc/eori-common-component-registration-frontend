@@ -85,16 +85,23 @@ class GetUtrNumberController @Inject() (
 
   private def view(form: Form[IdMatchModel], organisationType: String, isInReviewMode: Boolean, service: Service)(
     implicit request: Request[AnyContent]
-  ): HtmlFormat.Appendable =
+  ): HtmlFormat.Appendable = {
+    val heading = organisationType match {
+      case CdsOrganisationType.ThirdCountryOrganisationId | CdsOrganisationType.CharityPublicBodyNotForProfitId =>
+        "subscription-journey.how-confirm-identity.utr.row.org.heading"
+      case _ => "subscription-journey.how-confirm-identity.utr.heading"
+    }
+
     matchOrganisationUtrView(
       form,
       isInReviewMode,
       routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode),
       EtmpOrganisationType(CdsOrganisationType(organisationType)),
-      if (organisationType == CdsOrganisationType.ThirdCountryOrganisationId)
-        "subscription-journey.how-confirm-identity.utr.row.org.heading"
-      else "subscription-journey.how-confirm-identity.utr.heading"
+
+      heading
+
     )
+  }
 
   private def matchBusinessOrIndividual(
     formData: IdMatchModel,

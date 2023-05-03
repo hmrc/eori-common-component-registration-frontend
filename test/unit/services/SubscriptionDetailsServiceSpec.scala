@@ -419,18 +419,45 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
     "updateSubscriptionDetails" should {
       val subscriptionDetails = SubscriptionDetails()
-      "save subscription details with details updated from cache" in {
+
+      "save subscription details with details updated from cache (Individual)" in {
         when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
-        when(mockSessionCache.saveRegistrationDetails(any())(any())) thenReturn Future.successful(true)
         when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
-        when(mockSessionCache.saveSubscriptionDetails(any())(any())) thenReturn Future.successful(true)
-        await(subscriptionDetailsHolderService.updateSubscriptionDetails(request))
-        val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        await(subscriptionDetailsHolderService.updateSubscriptionDetailsIndividual(request))
+
+        val requestCaptor  = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        val requestCaptorR = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+
         verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-        val holder: SubscriptionDetails = requestCaptor.getValue
+        verify(mockSessionCache).saveRegistrationDetails(requestCaptorR.capture())(ArgumentMatchers.eq(request))
+
+        val holder: SubscriptionDetails  = requestCaptor.getValue
+        val holderR: RegistrationDetails = requestCaptorR.getValue
+
         holder.nameDobDetails shouldBe subscriptionDetails.nameDobDetails
         holder.nameOrganisationDetails shouldBe subscriptionDetails.nameOrganisationDetails
         holder.formData shouldBe subscriptionDetails.formData
+        holderR shouldBe a[RegistrationDetailsIndividual]
+      }
+
+      "save subscription details with details updated from cache (Organisation)" in {
+        when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
+        when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
+        await(subscriptionDetailsHolderService.updateSubscriptionDetailsOrganisation(request))
+
+        val requestCaptor  = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        val requestCaptorR = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+
+        verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+        verify(mockSessionCache).saveRegistrationDetails(requestCaptorR.capture())(ArgumentMatchers.eq(request))
+
+        val holder: SubscriptionDetails  = requestCaptor.getValue
+        val holderR: RegistrationDetails = requestCaptorR.getValue
+
+        holder.nameDobDetails shouldBe subscriptionDetails.nameDobDetails
+        holder.nameOrganisationDetails shouldBe subscriptionDetails.nameOrganisationDetails
+        holder.formData shouldBe subscriptionDetails.formData
+        holderR shouldBe a[RegistrationDetailsOrganisation]
       }
     }
   }
