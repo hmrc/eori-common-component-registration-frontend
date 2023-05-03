@@ -68,7 +68,7 @@
     organisationType match {
         case ThirdCountryOrganisationId | IsleOfManOrganisationId | CharityPublicBodyNotForProfitId => utrLinkText
         case orgType if rowAndIomIndividualOrganisationIds.contains(orgType) =>
-            Html(messages("ecc.matching.row-sole-trader-individual.utr.paragraph", utrlink))
+            Html(messages(""))
         case IndividualId | SoleTraderId =>
             Html(messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrlink))
         case _ => Html(messages("cds.matching.organisation.utr.paragraph", utrlink))
