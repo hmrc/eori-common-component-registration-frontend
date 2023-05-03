@@ -91,7 +91,7 @@ class GetUtrNumberController @Inject() (
       isInReviewMode,
       routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode),
       EtmpOrganisationType(CdsOrganisationType(organisationType)),
-      if (organisationType == "third-country-organisation")
+      if (organisationType == CdsOrganisationType.ThirdCountryOrganisationId)
         "subscription-journey.how-confirm-identity.utr.row.org.heading"
       else "subscription-journey.how-confirm-identity.utr.heading"
     )

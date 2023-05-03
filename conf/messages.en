@@ -342,7 +342,7 @@ cds.matching.utr.lost-utr-description=find a lost UTR (opens in new tab).
 
 cds.matching.utr.lost-utr-description-llp=find a lost UTR (opens in new tab).
 cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
-
+cds.matching.partnership.utr.hint-with.link = <p class="govuk-body">You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a></p> This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 

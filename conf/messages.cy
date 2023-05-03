@@ -328,6 +328,7 @@ cds.matching.individual.header = Nodwch eich manylion
 cds.matching-lede = Byddwn yn ceisio paru’ch manylion â’r wybodaeth sydd gennym ar hyn o bryd.
 cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
 cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+cds.matching.partnership.utr.hint-with.link = <p class="govuk-body">Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">dod o hyd i UTR sydd ar goll (yn agor tab newydd)</a></p> Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.eori.hint = Mae gan eich rhif EORI rhwng 14 - 17 o gymeriadau.
 cds.matching.back = Yn ôl
 subscription.start-page.heading = Cael mynediad at y Gwasanaeth Datganiadau Tollau (CDS)
