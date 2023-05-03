@@ -97,9 +97,7 @@ class GetUtrNumberController @Inject() (
       isInReviewMode,
       routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode),
       EtmpOrganisationType(CdsOrganisationType(organisationType)),
-
       heading
-
     )
   }
 
