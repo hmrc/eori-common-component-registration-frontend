@@ -27,7 +27,7 @@ trait ContactAddressPage extends WebPage {
   val addressXpath        = "//*[@id='yes-no-answer-hint']"
   val addressNoXpath      = "//*[@id='yes-no-answer-false']"
   val addressYesXpath     = "//*[@id='yes-no-answer-true']"
-  val continueButtonXpath = "//*[@class='govuk-button']"
+  val continueButtonXpath = "//*[@id='continue-button']"
 }
 
 object ContactAddressPage extends ContactAddressPage

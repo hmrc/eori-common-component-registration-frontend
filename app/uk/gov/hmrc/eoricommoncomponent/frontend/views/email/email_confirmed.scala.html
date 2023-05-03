@@ -30,7 +30,8 @@
 
         @govukButton(Button(
             content = Text(messages("cds.navigation.continue")),
-            href=Some("email-confirmed-continue")
+            href=Some("email-confirmed-continue"),
+            id = Some("continue-button")
         ))
 
         @helpers.helpAndSupport()
