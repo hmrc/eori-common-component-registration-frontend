@@ -19,9 +19,9 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 import java.util.UUID
 import java.time.{Clock, LocalDate, LocalDateTime, ZoneId}
 import java.time.format.DateTimeFormatter
-
 import play.api.Logger
 import play.api.libs.json.Json
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress.createEstablishmentAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.ContactInformation.createContactInformation
@@ -174,11 +174,14 @@ object SubscriptionCreateRequest {
     sub: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
     dateEstablished: LocalDate,
-    service: Option[Service]
+    service: Option[Service],
+    featureFlags: FeatureFlags
   ): SubscriptionRequest = {
     val org = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
     val ukVatId: Option[List[VatIdentification]] =
-      sub.ukVatDetailsOld.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
+      if (featureFlags.useNewVATJourney)
+        sub.ukVatDetails.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
+      else sub.ukVatDetailsOld.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
 
     SubscriptionRequest(
       SubscriptionCreateRequest(
