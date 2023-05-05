@@ -184,7 +184,6 @@ object SubscriptionCreateRequest {
         sub.ukVatDetails.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
       else sub.ukVatDetailsOld.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
 
-
     SubscriptionRequest(
       SubscriptionCreateRequest(
         generateWithOriginatingSystem(),
