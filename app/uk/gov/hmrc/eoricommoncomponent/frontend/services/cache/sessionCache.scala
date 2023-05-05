@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 import play.api.libs.json.{Json, Reads, Writes}
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationKeys
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
@@ -53,12 +54,12 @@ object CachedData {
   val sub01OutcomeKey                  = "sub01Outcome"
   val sub02OutcomeKey                  = "sub02Outcome"
   val registerWithEoriAndIdResponseKey = "registerWithEoriAndIdResponse"
-  val emailKey                         = "email"
+  val emailKey                         = EmailVerificationKeys.EmailKey
   val keepAliveKey                     = "keepAlive"
-  val safeIdKey                        = "safeId"
+  val safeIdKey                        = CustomsId.safeId
   val groupIdKey                       = "cachedGroupId"
   val groupEnrolmentKey                = "groupEnrolment"
-  val eoriKey                          = "eori"
+  val eoriKey                          = CustomsId.eori
   implicit val format                  = Json.format[CachedData]
 }
 

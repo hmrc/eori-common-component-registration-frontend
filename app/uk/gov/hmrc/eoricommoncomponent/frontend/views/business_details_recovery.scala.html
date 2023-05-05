@@ -20,9 +20,11 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 
 
 @this(layout_di: layout, govukButton: GovukButton,govukSummaryList : GovukSummaryList)
+
 
 @(
     name: String,
@@ -45,7 +47,7 @@
 
 @countryCodeToLabel(code: String) = @{
     code match {
-        case "GB" => messages("cds.country.GB")
+        case MatchingForms.countryCodeGB => messages("cds.country.GB")
         case c if isEUCountryCode(c) => labelForEUCountry(c)
         case nonEuCode => nonEuCode
     }

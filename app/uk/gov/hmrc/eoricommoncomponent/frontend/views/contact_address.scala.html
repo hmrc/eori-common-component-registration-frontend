@@ -17,15 +17,13 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, YesNoWrongAddress}
 @import views.html.helper._
-@import views._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset, GovukRadios, GovukInsetText, GovukHint}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{Radios, RadioItem}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 
 @this(
     layout_di: layout,
@@ -55,7 +53,7 @@
 
 @countryCodeToLabel(code: String) = @{
     code match {
-        case "GB" => messages("cds.country.GB")
+        case MatchingForms.countryCodeGB => messages("cds.country.GB")
         case c if isEUCountryCode(c) => messages(messageKeyForEUCountryCode(c))
         case nonEuCode => nonEuCode
 }
@@ -90,13 +88,13 @@
 
 
 <div>
-    @errorSummary(contactAddressDetailsYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+    @errorSummary(contactAddressDetailsYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.submit(isInReviewMode, service), "contactAddressDetailsYesNoAnswerForm") {
 
         @CSRF.formField
 
-        @displayInputRadioGroup("yes-no-answer",
+        @displayInputRadioGroup(YesNo.yesAndNoAnswer,
             Seq("true" -> messages("confirm-contact-address-details.yes"),
                 "false" -> messages("confirm-contact-address-details.no")
         ))

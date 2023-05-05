@@ -35,6 +35,7 @@ case class Service(
 object Service {
 
   val cds: Service = Service("cds", "HMRC-CUS-ORG", "", None, "", "", None)
+  val regimeCDS    = "CDS"
 
   private val supportedServicesMap: Map[String, Service] = new ServiceConfig(
     Configuration(ConfigFactory.load())
@@ -49,8 +50,8 @@ object Service {
 
     override def bind(key: String, value: String): Either[String, Service] =
       for {
-        name    <- stringBinder.bind(key, value).right
-        service <- Service.withName(name).toRight(Constants.INVALID_PATH_PARAM).right
+        name    <- stringBinder.bind(key, value)
+        service <- Service.withName(name).toRight(Constants.INVALID_PATH_PARAM)
       } yield service
 
     override def unbind(key: String, value: Service): String = stringBinder.unbind(key, value.code)
@@ -61,6 +62,10 @@ object Service {
     val serviceKey = supportedServicesMap.keys.find(serviceKey => path.contains(s"/$serviceKey"))
 
     serviceKey.map(supportedServicesMap(_))
+  }
+
+  object ServiceCodes {
+    val eoriOnly = "eori-only"
   }
 
 }

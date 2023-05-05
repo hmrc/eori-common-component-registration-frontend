@@ -58,12 +58,12 @@
 
 @layout_di(titleAndHeading, form = Some(vatRegisteredUkYesNoAnswerForm)) {
     <div>
-        @errorSummary(vatRegisteredUkYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
+        @errorSummary(vatRegisteredUkYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
         @helpers.form(formAction, "vat-registered-uk-createForm") {
             @CSRF.formField
 
-            @displayInputRadioGroup("yes-no-answer",
+            @displayInputRadioGroup(YesNo.yesAndNoAnswer,
                 Seq("true" -> messages("cds.yes"),
                     "false" -> messages("cds.no")))
 

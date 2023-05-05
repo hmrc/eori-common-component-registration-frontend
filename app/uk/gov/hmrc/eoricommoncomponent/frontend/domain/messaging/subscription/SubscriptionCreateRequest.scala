@@ -19,7 +19,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 import java.util.UUID
 import java.time.{Clock, LocalDate, LocalDateTime, ZoneId}
 import java.time.format.DateTimeFormatter
-
 import play.api.Logger
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -28,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Co
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionRequest.principalEconomicActivityLength
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RequestCommon, RequestParameter}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
@@ -178,7 +178,7 @@ object SubscriptionCreateRequest {
   ): SubscriptionRequest = {
     val org = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
     val ukVatId: Option[List[VatIdentification]] =
-      sub.ukVatDetailsOld.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
+      sub.ukVatDetailsOld.map(vd => List(VatIdentification(Some(MatchingForms.countryCodeGB), Some(vd.number))))
 
     SubscriptionRequest(
       SubscriptionCreateRequest(
@@ -220,7 +220,7 @@ object SubscriptionCreateRequest {
 
   private def generateWithOriginatingSystem(requestParameters: Option[Seq[RequestParameter]] = None): RequestCommon =
     RequestCommon(
-      regime = "CDS",
+      regime = Service.regimeCDS,
       receiptDate = LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London")),
       acknowledgementReference = UUID.randomUUID().toString.replace("-", ""),
       originatingSystem = Some("MDTP"),

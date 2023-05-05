@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatIdentification
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 
 case class SubscriptionVatUKDetailsFormModel(hasGbVats: Boolean, gbVats: Option[List[VatIdentification]]) {
 
@@ -30,7 +31,7 @@ case class SubscriptionVatUKDetailsFormModel(hasGbVats: Boolean, gbVats: Option[
 object SubscriptionVatUKDetailsFormModel {
 
   def convertRequestForGbVatsToModel(gbVatsRequest: Option[List[String]]): Option[List[VatIdentification]] =
-    gbVatsRequest.map(l => l.map(id => VatIdentification.apply(Some("GB"), Some(id))))
+    gbVatsRequest.map(l => l.map(id => VatIdentification.apply(Some(MatchingForms.countryCodeGB), Some(id))))
 
   def convertModelForGbVatsToRequest(gbVatsModel: Option[List[VatIdentification]]): Option[List[String]] =
     gbVatsModel.map(list => list.map(id => id.number.getOrElse("")))
