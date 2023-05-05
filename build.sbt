@@ -68,7 +68,7 @@ lazy val integrationTestSettings =
       addTestReportOption(IntegrationTest, "int-test-reports")
     )
 
-lazy val commonSettings: Seq[Setting[_]] = publishingSettings ++ defaultSettings()
+lazy val commonSettings: Seq[Setting[_]] = defaultSettings()
 
 lazy val playSettings: Seq[Setting[_]] = Seq(
   routesImport ++= Seq("uk.gov.hmrc.eoricommoncomponent.frontend.domain._"),
@@ -112,10 +112,12 @@ val compileDependencies = Seq(
   "uk.gov.hmrc"       %% "domain"                        % "8.2.0-play-28",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"            % "1.1.0",
   "uk.gov.hmrc"       %% "emailaddress"                  % "3.8.0",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"            % "6.8.0-play-28"
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"            % "7.5.0-play-28"
 )
 
 val testDependencies = Seq(
+
+"uk.gov.hmrc"       %% "bootstrap-test-play-28"    % "7.15.0" % "test",
   "org.scalatest"          %% "scalatest"           % "3.2.15"            % "test,it",
   "com.typesafe.play"      %% "play-test"           % PlayVersion.current % "test,it",
   "org.scalatestplus.play" %% "scalatestplus-play"  % "5.1.0"             % "test,it",
@@ -125,11 +127,11 @@ val testDependencies = Seq(
   "org.scalatestplus"   %% "scalacheck-1-15"         % "3.2.11.0" % "test,it",
   "org.jsoup"            % "jsoup"                   % "1.15.4"   % "test,it",
   "us.codecraft"         % "xsoup"                   % "0.3.6"    % "test,it",
-  "org.mockito"          % "mockito-core"            % "4.7.0"    % "test,it",
+  "org.mockito"          % "mockito-core"            % "5.2.0"    % "test,it",
   "org.scalatestplus"   %% "mockito-4-6"             % "3.2.15.0" % "test, it",
   "org.pegdown"          % "pegdown"                 % "1.6.0",
   "uk.gov.hmrc.mongo"   %% "hmrc-mongo-test-play-28" % "1.1.0"   % "test, it",
-  "com.vladsch.flexmark" % "flexmark-all"            % "0.62.0"   % "test,it"
+  "com.vladsch.flexmark" % "flexmark-all"            % "0.64.0"   % "test,it"
 )
 
 libraryDependencies ++= compileDependencies ++ testDependencies

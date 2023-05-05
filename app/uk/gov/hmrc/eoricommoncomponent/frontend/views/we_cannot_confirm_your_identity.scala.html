@@ -34,7 +34,8 @@
 
         @govukButton(Button(
             content = Text(messages("cds.subscription.vat-details.cannot-identify-you.button")),
-            href = Some(tryAgainUrl)
+            href = Some(tryAgainUrl),
+            id = Some("continue-button")
         ))
 
         @helpers.helpAndSupport()

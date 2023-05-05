@@ -81,7 +81,7 @@ trait SubscriptionContactDetailsPage extends WebPage {
   val useRegisteredAddressYesRadioButtonXPath = "//*[@id='use-registered-address-yes']"
   val useRegisteredAddressNoRadioButtonXPath  = "//*[@id='use-registered-address-no']"
 
-  val continueButtonXpath = "//*[@class='govuk-button']"
+  val continueButtonXpath = "//*[@id='continue-button']"
 
   val hintTextTelephonXpath = "//*[@id='telephone-hint']"
   val hintTextFaxXpath      = "//*[@id='fax-hint']"

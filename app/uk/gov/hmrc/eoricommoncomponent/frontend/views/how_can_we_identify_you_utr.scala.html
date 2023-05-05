@@ -36,7 +36,7 @@
 @forHintMessage = @{
     if(orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.hint")
     else if(orgType == UnincorporatedBody) messages("cds.matching.partnership.utr.hint")
-    else messages("cds.matching.partnership.utr.hint")
+    else messages("cds.matching.partnership.utr.hint-with.link")
 }
 
 
@@ -59,7 +59,8 @@
             )
 
             @govukButton(Button(
-                content = Text(ViewHelper.continueButtonText(isInReviewMode))
+                content = Text(ViewHelper.continueButtonText(isInReviewMode)),
+                id = Some("continue-button")
             ))
 
         }

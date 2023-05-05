@@ -78,9 +78,9 @@
         Map.empty,
         Some(hintHtml),
         None,
-        '_divClass -> "createForm-group govuk-form-group",
-        '_legend -> messages("ecc.subscription.contact-address.heading"),
-        '_isLegendH1 -> true
+        Symbol("_divClass") -> "createForm-group govuk-form-group",
+        Symbol("_legend") -> messages("ecc.subscription.contact-address.heading"),
+        Symbol("_isLegendH1") -> true
     )
 }
 
@@ -100,7 +100,8 @@
         ))
 
         @govukButton(Button(
-            content = Text(ViewHelper.continueButtonText(isInReviewMode))
+            content = Text(ViewHelper.continueButtonText(isInReviewMode)),
+            id = Some("continue-button")
         ))
 
     }

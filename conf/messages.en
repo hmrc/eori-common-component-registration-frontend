@@ -342,7 +342,7 @@ cds.matching.utr.lost-utr-description=find a lost UTR (opens in new tab).
 
 cds.matching.utr.lost-utr-description-llp=find a lost UTR (opens in new tab).
 cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
-
+cds.matching.partnership.utr.hint-with.link = <p class="govuk-body">You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a></p> This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 
@@ -1599,7 +1599,7 @@ cds.subscription.address-details.postcode.row.label=Postal code
 
 cds.matching.row-organisation.utr.title-and-heading=Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) issued in the UK?
 cds.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?
-ecc.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) number issued in the UK?
+ecc.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?
 ecc.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
 
 cds.form.declaration=Declaration
@@ -1670,9 +1670,9 @@ cds.subscription.vat-verification-option.no=Your latest VAT Return total
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ 12 34 56 C''
-subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Tax Unique Taxpayer Reference (UTR)?
+subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Unique Taxpayer Reference (UTR)?
 subscription-journey.how-confirm-identity.utr.row.org.heading=What is your Corporation Tax Unique Taxpayer Reference (UTR)?
-subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
+subscription-journey.how-confirm-identity.utr.hint=<p class="govuk-body">You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a></p>  This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
 ecc.reg06.outcome.eori = EORI number {0}

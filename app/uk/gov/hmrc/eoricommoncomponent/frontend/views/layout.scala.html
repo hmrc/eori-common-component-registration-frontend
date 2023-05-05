@@ -136,13 +136,11 @@
 @hmrcLayout(
     userResearchBannerUrl = if(userResearchBanner) Some(appConfig.userResearchBannerUrl) else None,
     pageTitle = Some(titleErr),
-    nonce = CSPNonce.get,
     isWelshTranslationAvailable = true, /* or false if your service has not been translated */
     serviceUrl = None,
     signOutUrl = Some(logOutUrl),
     phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedBackRegister(service))),
     additionalHeadBlock = Some(theHead),
-
     serviceName = Some(messages(banner)),
     accessibilityStatementUrl = Some(appConfig.accessibilityStatement),
     beforeContentBlock = Some(beforeContent),

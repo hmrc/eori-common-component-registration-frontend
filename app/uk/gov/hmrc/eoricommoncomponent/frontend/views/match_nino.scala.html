@@ -72,7 +72,8 @@
                 isPageHeading = false
             )
             @govukButton(Button(
-                content = Text(messages("cds.navigation.continue"))
+                content = Text(messages("cds.navigation.continue")),
+                id = Some("continue-button")
             ))
 
             @helpers.helpAndSupport()

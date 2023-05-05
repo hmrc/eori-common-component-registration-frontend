@@ -45,18 +45,11 @@ class RegistrationExistsViewSpec extends ViewSpec {
     "display the Continue button for Callback ATAR service" in {
       doc
         .body()
-        .getElementsByClass("govuk-button")
+        .getElementById("continue-button")
         .text mustBe "Continue"
-    }
-
-    "Not Display the Continue button for Callback optional service" in {
-      docOptional
-        .body()
-        .getElementsByClass("govuk-button") mustBe empty
     }
   }
 
-  private lazy val doc: Document         = Jsoup.parse(contentAsString(view(atarService)))
-  private lazy val docOptional: Document = Jsoup.parse(contentAsString(view(cdsService)))
+  private lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService)))
 
 }

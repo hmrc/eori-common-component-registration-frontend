@@ -46,17 +46,25 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
     cdsOrganisationType: Option[CdsOrganisationType],
     service: Service
   )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
-    subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service))
+    subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service, featureFlags))
 
   def createRequest(
     reg: RegistrationDetails,
     subscription: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
-    service: Service
+    service: Service,
+    featureFlags: FeatureFlags
   ): SubscriptionRequest =
     reg match {
       case individual: RegistrationDetailsIndividual =>
-        SubscriptionCreateRequest(individual, subscription, cdsOrgType, individual.dateOfBirth, maybe(service))
+        SubscriptionCreateRequest(
+          individual,
+          subscription,
+          cdsOrgType,
+          individual.dateOfBirth,
+          maybe(service),
+          featureFlags
+        )
 
       case org: RegistrationDetailsOrganisation =>
         val doe = subscription.dateEstablished
@@ -67,7 +75,8 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
           doe.getOrElse(
             throw new IllegalStateException("Date Established must be present for an organisation subscription")
           ),
-          maybe(service)
+          maybe(service),
+          featureFlags
         ) ensuring (subscription.sicCode.isDefined, "SicCode/Principal Economic Activity must be present for an organisation subscription")
       case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
     }
