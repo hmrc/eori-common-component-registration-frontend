@@ -195,9 +195,8 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       }
     }
 
-    "redirect to eu vat page for no answer using new vat details controller" in {
+    "redirect to eu vat page for no answer using vat details controller" in {
       val url = "register/vat-registered-eu"
-      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
 
       subscriptionFlowUrl(url)
@@ -209,7 +208,6 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     }
 
     "redirect to vat groups review page for yes answer and is in review mode" in {
-      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
       submitForm(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith("register/your-uk-vat-details/review")
@@ -217,19 +215,6 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     }
 
     "redirect to check answers page for no answer and is in review mode" in {
-
-      when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
-      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
-      submitForm(validRequestNo, isInReviewMode = true) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(
-          "customs-registration-services/atar/register/contact-details/review"
-        )
-      }
-    }
-    "redirect to check answers page for no answer and is in review mode featureFlag is true" in {
-
-      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER

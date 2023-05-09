@@ -22,18 +22,18 @@ import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsOld
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsFormOld.vatDetailsFormOld
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details_old
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
 
 class VatDetailsUkSpec extends ViewSpec {
 
   implicit val request = withFakeCSRF(FakeRequest())
 
-  private val view = instanceOf[vat_details_old]
+  private val view = instanceOf[vat_details]
 
-  val form: Form[VatDetailsOld] = vatDetailsFormOld
+  val form: Form[VatDetails] = vatDetailsForm
 
   "Vat Details UK Page" should {
 
@@ -44,18 +44,6 @@ class VatDetailsUkSpec extends ViewSpec {
     "have the correct class on the h1" in {
       doc.body.getElementsByTag("h1").attr("class") mustBe "govuk-heading-l"
     }
-
-    "should display correct text" in {
-      doc.body.getElementById("intro-text").text() must include(
-        "You can find your VAT details on your VAT registration certificate. To view this login to your tax account and select 'More VAT details'. Select the 'View VAT certificate' link under the heading 'Help with tax'."
-      )
-
-      doc.body.getElementById("intro-link").text() must include("Find your VAT details (opens in new tab).")
-
-      doc.body.getElementsByTag("label").text() must include("VAT registration address postcode")
-
-    }
-
   }
 
   private lazy val doc: Document =

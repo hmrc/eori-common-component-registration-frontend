@@ -23,9 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   AddressViewModel,
   CompanyRegisteredCountry,
   ContactDetailsModel,
-  VatDetails,
-  VatDetailsOld,
-  VatReturnTotal
+  VatDetails
 }
 
 case class SubscriptionDetails(
@@ -35,7 +33,6 @@ case class SubscriptionDetails(
   ukVatDetails: Option[VatDetails] = None,
   vatControlListResponse: Option[VatControlListResponse] = None,
   vatVerificationOption: Option[Boolean] = None,
-  ukVatDetailsOld: Option[VatDetailsOld] = None,
   personalDataDisclosureConsent: Option[Boolean] = None,
   contactDetails: Option[ContactDetailsModel] = None,
   sicCode: Option[String] = None,

@@ -23,8 +23,13 @@ import java.time.LocalDate
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{SicCodeViewModel, VatDetailsFormOld}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{
+  MatchingForms,
+  SubscriptionForm,
+  VatRegistrationDate,
+  VatRegistrationDateForm
+}
 
 import java.time.format.DateTimeFormatter
 import scala.collection.immutable.ArraySeq
@@ -40,7 +45,7 @@ class FormValidationSpec extends UnitSpec {
   lazy val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] =
     MatchingForms.thirdCountryIndividualNameDateOfBirthForm
 
-  lazy val vatDetailsForm = VatDetailsFormOld.vatDetailsFormOld
+  lazy val vatRegistrationDateForm: Form[VatRegistrationDate] = VatRegistrationDateForm.vatRegistrationDateForm
 
   lazy val dateOfEstablishmentForm: Form[LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
 
@@ -74,11 +79,9 @@ class FormValidationSpec extends UnitSpec {
   )
 
   val formDataVAT = Map(
-    "postcode"                 -> "AB12CD",
-    "vat-number"               -> "123456789",
-    "vat-effective-date.day"   -> "1",
-    "vat-effective-date.month" -> "1",
-    "vat-effective-date.year"  -> "2019"
+    "vat-registration-date.day"   -> "1",
+    "vat-registration-date.month" -> "1",
+    "vat-registration-date.year"  -> "2019"
   )
 
   val formDataDoE = Map(
@@ -270,41 +273,24 @@ class FormValidationSpec extends UnitSpec {
     }
   }
 
-  "VAT details form" should {
+  "VAT registration date form" should {
     "only accept valid form" in {
       val data = formDataVAT
-      val res  = vatDetailsForm.bind(data)
+      val res  = vatRegistrationDateForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "fail when effective date is missing" in {
-      val data = formDataVAT.updated("vat-effective-date.day", "").updated("vat-effective-date.month", "")
-      val res  = vatDetailsForm.bind(data)
+      val data = formDataVAT.updated("vat-registration-date.day", "").updated("vat-registration-date.month", "")
+      val res  = vatRegistrationDateForm.bind(data)
       res.errors shouldBe Seq(
-        FormError("vat-effective-date.day", Seq("vat.error.empty-date")),
-        FormError("vat-effective-date.month", "")
+        FormError("vat-registration-date.day", Seq("vat.error.empty-date-new")),
+        FormError("vat-registration-date.month", "")
       )
     }
-    "fail when effective date in future" in {
-      val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data = formDataVAT.updated(
-        "vat-effective-date.day",
-        DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
-      ).updated("vat-effective-date.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)).updated(
-        "vat-effective-date.year",
-        DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
-      )
-      val res = vatDetailsForm.bind(data)
-      res.errors shouldBe Seq(FormError("vat-effective-date", Seq("vat.error.minMax"), ArraySeq("1970")))
-    }
-    "fail when effective date year invalid" in {
-      val data = formDataVAT.updated("vat-effective-date.year", Year.now.plusYears(1).getValue.toString)
-      val res  = vatDetailsForm.bind(data)
-      res.errors shouldBe Seq(FormError("vat-effective-date", Seq("vat.error.minMax"), ArraySeq("1970")))
-    }
-    "fail when effective date too early" in {
-      val data = formDataVAT.updated("vat-effective-date.year", "1000")
-      val res  = vatDetailsForm.bind(data)
-      res.errors shouldBe Seq(FormError("vat-effective-date", Seq("vat.error.minMax"), ArraySeq("1970")))
+    "fail when effective date month invalid" in {
+      val data = formDataVAT.updated("vat-registration-date.month", "13")
+      val res  = vatRegistrationDateForm.bind(data)
+      res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.invalid-date-new")))
     }
   }
 

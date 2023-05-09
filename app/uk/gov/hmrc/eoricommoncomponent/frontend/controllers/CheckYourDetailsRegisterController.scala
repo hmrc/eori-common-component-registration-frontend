@@ -34,8 +34,7 @@ class CheckYourDetailsRegisterController @Inject() (
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   checkYourDetailsRegisterView: check_your_details_register,
-  registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService,
-  featureFlags: FeatureFlags
+  registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -49,7 +48,6 @@ class CheckYourDetailsRegisterController @Inject() (
           val isUserIdentifiedByRegService = registration.safeId.id.nonEmpty
           Ok(
             checkYourDetailsRegisterView(
-              featureFlags.useNewVATJourney,
               requestSessionData.userSelectedOrganisationType,
               requestSessionData.isPartnershipOrLLP,
               registration,

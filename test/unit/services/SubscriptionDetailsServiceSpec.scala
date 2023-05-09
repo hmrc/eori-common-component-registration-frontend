@@ -26,13 +26,7 @@ import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  ContactDetailsModel,
-  VatDetails,
-  VatDetailsOld,
-  VatReturnTotal
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
@@ -337,17 +331,6 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
   }
 
-  "cacheUkVatDetailsOld" should {
-    val ukVatDetails = VatDetailsOld(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
-    "save subscription details with vat details" in {
-      await(subscriptionDetailsHolderService.cacheUkVatDetailsOld(ukVatDetails))
-      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
-      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
-      val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
-      subscriptionDetails.ukVatDetailsOld shouldBe Some(ukVatDetails)
-    }
-  }
-
   "cacheVatControlListResponse" should {
     val vatControlListResponse =
       VatControlListResponse(Some("SE28 1AA"), Some("1989-01-01"), Some(10000.02), Some("MAR"))
@@ -361,9 +344,9 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "clearCachedUkVatDetails" should {
-    val ukVatDetails = VatDetailsOld(postcode = "12345", number = "12345", effectiveDate = LocalDate.now())
+    val ukVatDetails = VatDetails(postcode = "12345", number = "12345")
 
-    val subscriptionDetails = SubscriptionDetails(ukVatDetailsOld = Some(ukVatDetails))
+    val subscriptionDetails = SubscriptionDetails(ukVatDetails = Some(ukVatDetails))
     "save subscription details with vat details set to none" in {
       when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
       await(subscriptionDetailsHolderService.clearCachedUkVatDetails(request))

@@ -40,7 +40,6 @@ class FeatureFlagsSpec extends ControllerSpec {
       featureFlags.matchingEnabled shouldBe false // hard-coded
       featureFlags.sub02UseServiceName shouldBe true
       featureFlags.arsNewJourney shouldBe false
-      featureFlags.useNewVATJourney shouldBe true
       featureFlags.useNewCharityEdgeCaseJourney shouldBe true
     }
   }
