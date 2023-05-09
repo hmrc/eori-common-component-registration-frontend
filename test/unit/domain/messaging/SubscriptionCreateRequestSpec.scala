@@ -28,12 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  ContactDetailsModel,
-  VatDetails,
-  VatDetailsOld
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import java.time.{LocalDate, LocalDateTime}
@@ -256,8 +251,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       requestDetails.serviceName shouldBe Some(atarService.enrolmentKey)
     }
 
-    "correctly build request during registration journey when useNewVATJourney is set to true " in {
-      when(mockFeatureFlags.useNewVATJourney).thenReturn(true)
+    "correctly build request during registration journey" in {
       val registrationDetails = RegistrationDetailsOrganisation(
         customsId = None,
         sapNumber = taxPayerId,
@@ -268,60 +262,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
         etmpOrganisationType = Some(CorporateBody)
       )
       val subscriptionDetails = SubscriptionDetails(
-//
         ukVatDetails = Some(VatDetails("AA11 1AA", "123456")),
-        addressDetails = Some(addressViewModel),
-        contactDetails = Some(contactDetails),
-        personalDataDisclosureConsent = Some(true),
-        businessShortName = Some(BusinessShortName("short name")),
-        sicCode = Some("12345")
-      )
-      val cdsOrgType = CdsOrganisationType.Company
-
-      val request = SubscriptionCreateRequest(
-        registrationDetails,
-        subscriptionDetails,
-        Some(cdsOrgType),
-        dateOfBirthOrEstablishment,
-        Some(atarService),
-        mockFeatureFlags
-      )
-
-      val requestCommon  = request.subscriptionCreateRequest.requestCommon
-      val requestDetails = request.subscriptionCreateRequest.requestDetail
-
-      requestCommon.regime shouldBe "CDS"
-      requestDetails.SAFE shouldBe safeId.id
-      requestDetails.EORINo shouldBe None
-      requestDetails.CDSFullName shouldBe fullName
-      requestDetails.CDSEstablishmentAddress shouldBe establishmentAddress
-      requestDetails.establishmentInTheCustomsTerritoryOfTheUnion shouldBe None
-      requestDetails.typeOfLegalEntity shouldBe Some("Corporate Body")
-      requestDetails.contactInformation shouldBe Some(
-        registrationExpectedContactInformation(requestDetails.contactInformation.get.emailVerificationTimestamp.get)
-      )
-      requestDetails.vatIDs shouldBe Some(Seq(VatId(Some("GB"), Some("123456"))))
-      requestDetails.consentToDisclosureOfPersonalData shouldBe Some("1")
-      requestDetails.shortName shouldBe None
-      requestDetails.dateOfEstablishment shouldBe Some(dateOfBirthOrEstablishment)
-      requestDetails.typeOfPerson shouldBe Some("2")
-      requestDetails.principalEconomicActivity shouldBe Some("1234")
-      requestDetails.serviceName shouldBe Some(atarService.enrolmentKey)
-    }
-
-    "correctly build request during registration journey when useNewVATJourney is set to false " in {
-      when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
-      val registrationDetails = RegistrationDetailsOrganisation(
-        customsId = None,
-        sapNumber = taxPayerId,
-        safeId = safeId,
-        name = fullName,
-        address = address,
-        dateOfEstablishment = Some(dateOfBirthOrEstablishment),
-        etmpOrganisationType = Some(CorporateBody)
-      )
-      val subscriptionDetails = SubscriptionDetails(
-        ukVatDetailsOld = Some(VatDetailsOld("AA11 1AA", "123456", LocalDate.now())),
         addressDetails = Some(addressViewModel),
         contactDetails = Some(contactDetails),
         personalDataDisclosureConsent = Some(true),

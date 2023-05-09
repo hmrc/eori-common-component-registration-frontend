@@ -34,7 +34,6 @@
 
 
 @(
-    useNewVATJourney: Boolean,
     cdsOrgType: Option[CdsOrganisationType],
     isPartnership: Boolean,
     registration: RegistrationDetails,
@@ -418,26 +417,7 @@ classes = classes
 }
 
 @vatDetails = @{
-    if(!isIndividual && !useNewVATJourney && !isIomIndividual) {
-        Seq(
-summaryListRowNoChangeOption(
-                key = messages("cds.form.gb-vat-number"),
-                value = Some(Html(subscription.ukVatDetailsOld.map(_.number).getOrElse(messages("cds.not-entered.label")))),
-                call = Some(VATNumberPage.reviewForm(service))
-            ),
-summaryListRowNoChangeOption(
-                key = messages("cds.form.gb-vat-postcode"),
-                value = Some(Html(subscription.ukVatDetailsOld.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
-                call = Some(VATNumberPage.reviewForm(service))
-            ),
-summaryListRowNoChangeOption(
-                key = messages("cds.form.gb-vat-date"),
-                value = Some(Html(subscription.ukVatDetailsOld.map(vat => formatDate(vat.effectiveDate)).getOrElse(messages("cds.not-entered.label")))),
-                call = Some(VATNumberPage.reviewForm(service))
-            ),
-        )
-    }
-else if(!isIndividual && !isIomIndividual && useNewVATJourney && subscription.vatVerificationOption.getOrElse(true) == true) {
+if(!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOrElse(true) == true) {
     Seq(
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),
@@ -451,11 +431,11 @@ else if(!isIndividual && !isIomIndividual && useNewVATJourney && subscription.va
         ),
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-date"),
-            value = Some(Html(subscription.vatControlListResponse.map(vat => formatDate(DateConverter.toLocalDate(vat.dateOfReg.get).get)).getOrElse(messages("cds.not-entered.label")))),
+            value = Some(Html(subscription.vatControlListResponse.map(vat => formatDate(LocalDate.parse(vat.dateOfReg.get))).getOrElse(messages("cds.not-entered.label")))),
             call = Some(VATNumberPage.reviewForm(service))
         ),
     )}
-else if(!isIndividual && !isIomIndividual && useNewVATJourney && subscription.vatVerificationOption.getOrElse(false) == false) {
+else if(!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOrElse(false) == false) {
     Seq(
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),

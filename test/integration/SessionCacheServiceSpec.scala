@@ -131,13 +131,12 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
     }
 
     "throw exception when registration Details requested and not available in cache" in {
-      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
-      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
-
+      val sessionId = "sessionId-" + UUID.randomUUID()
       val caught = intercept[DataUnavailableException] {
+        when(request.session).thenReturn(Session(Map(("sessionId", sessionId))))
         await(sessionCache.registrationDetails(request))
       }
-      caught.getMessage mustBe s"regDetails is not cached in data for the sessionId: sessionId-123"
+      caught.getMessage mustBe s"regDetails is not cached in data for the sessionId: $sessionId"
     }
 
     "store, fetch and update Registration Info correctly" in {
@@ -213,15 +212,6 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
         await(sessionCache.groupEnrolment(request))
       }
       caught.getMessage startsWith s"${CachedData.groupEnrolmentKey} is not cached in data for the sessionId: sessionId-123"
-    }
-
-    "throw DataUnavailableException when registrationDetails is not present in cache" in {
-      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-123"))))
-      await(sessionCache.putSession(DataKey("sub01Outcome"), data = Json.toJson(sub01Outcome)))
-      val caught = intercept[DataUnavailableException] {
-        await(sessionCache.registrationDetails(request))
-      }
-      caught.getMessage startsWith s"${CachedData.regDetailsKey} is not cached in data for the sessionId: sessionId-123"
     }
 
     "throw IllegalStateException when registerWithEoriAndIdResponse is not present in cache" in {
