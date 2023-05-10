@@ -1554,11 +1554,7 @@ doe.error.minMax=Date of establishment must be between {0} and today
 
 
 vat.error.empty-date-new=Enter your VAT registration date
-vat.error.empty-date=Enter your effective VAT date
-vat.error.future-date=Effective VAT date must be in the past
-vat.error.invalid-date=Effective VAT date must be a real date
 vat.error.invalid-date-new=Enter a real date
-vat.error.minMax=Effective VAT date must be between {0} and today
 
 cds.feedback.continue=More about {0}
 
