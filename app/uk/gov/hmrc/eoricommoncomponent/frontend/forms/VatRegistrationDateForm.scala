@@ -33,16 +33,17 @@ object VatRegistrationDate {
 object VatRegistrationDateForm extends Mappings {
 
   private val minimumDate = LocalDate.of(DateConverter.earliestYearEffectiveVatDate, 1, 1)
-  private val today = LocalDate.now()
+  private val today       = LocalDate.now()
 
   val vatRegistrationDateForm =
     Form(
       mapping(
         "vat-registration-date" -> localDate(
           emptyKey = "vat.error.empty-date-new",
-          invalidKey = "vat.error.invalid-date-new")
+          invalidKey = "vat.error.invalid-date-new"
+        )
           .verifying(minDate(minimumDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
-            .verifying(maxDate(today, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+          .verifying(maxDate(today, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
       )(VatRegistrationDate.apply)(VatRegistrationDate.unapply)
     )
 
