@@ -1611,7 +1611,7 @@ ecc.start-page.gbeori.para1.link2 = i gael y manylion hyn.
 ecc.start-page.gbeori.title = Os byddwch yn gwneud cais fel cwmni, partneriaeth neu sefydliad arall
 ecc.start-page.gbeori.para1.title = I gadarnhau pwy ydych, bydd angen i chi ddarparu’r manylion canlynol am eich sefydliad:
 ecc.start-page.gbeori.para1.bullet1 = enw a chyfeiriad cofrestredig
-ecc.start-page.gbeori.para1.bullet2 = dyddiad sefydlu
+
 ecc.start-page.gbeori.para1.bullet3 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth os ydych yn talu Treth Gorfforaeth yn y DU
 ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dod o hyd i UTR (yn agor tab newydd)</a>
 
