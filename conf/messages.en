@@ -910,6 +910,7 @@ cds.subscription.eu-vats.vat-eu-number_.label=EU VAT number
 cds.subscription.eu-vats.vat-eu-country_.label=EU VAT registration country
 cds.subscription.vat-registration-number=VAT number
 cds.subscription.vat-registration-number-hint=9 digits, for example, 123456789
+vat.error.minMax=Effective VAT date must be between {0} and today
 cds.subscription.vat-eu-registration-number-hint=Enter the VAT number and relevant country for each European Union member state the business is registered
 cds.subscription.vat-registration-number-entry.uk=Enter the UK VAT registration number
 cds.subscription.vat-registration-number-entry.hint=You can find this on the VAT registration certificate

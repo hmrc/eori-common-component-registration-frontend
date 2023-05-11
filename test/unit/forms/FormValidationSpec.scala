@@ -24,12 +24,7 @@ import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{
-  MatchingForms,
-  SubscriptionForm,
-  VatRegistrationDate,
-  VatRegistrationDateForm
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm, VatRegistrationDate, VatRegistrationDateForm}
 
 import java.time.format.DateTimeFormatter
 import scala.collection.immutable.ArraySeq
@@ -292,6 +287,30 @@ class FormValidationSpec extends UnitSpec {
       val res  = vatRegistrationDateForm.bind(data)
       res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.invalid-date-new")))
     }
+
+    "fail when effective date in future" in {
+      val todayPlusOneDay = LocalDate.now().plusDays(1)
+      val data = formDataVAT.updated(
+        "vat-registration-date.day",
+        DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
+      ).updated("vat-registration-date.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)).updated(
+        "vat-registration-date.year",
+        DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
+      )
+      val res = vatRegistrationDateForm.bind(data)
+      res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.minMax"), ArraySeq("1970")))
+    }
+    "fail when effective date year invalid" in {
+      val data = formDataVAT.updated("vat-registration-date.year", Year.now.plusYears(1).getValue.toString)
+      val res = vatRegistrationDateForm.bind(data)
+      res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.minMax"), ArraySeq("1970")))
+    }
+    "fail when effective date too early" in {
+      val data = formDataVAT.updated("vat-registration-date.year", "1000")
+      val res = vatRegistrationDateForm.bind(data)
+      res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.minMax"), ArraySeq("1970")))
+    }
+
   }
 
   "Date of establishment form" should {
