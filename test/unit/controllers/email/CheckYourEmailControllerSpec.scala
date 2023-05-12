@@ -247,12 +247,12 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
       }
     }
 
-    "redirect to MatchingIdController when email is confirmed" in {
+    "redirect to UserLocationController when email is confirmed" in {
       when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
         .thenReturn(Future.successful(Some(EmailStatus(Some(email), isConfirmed = Some(true)))))
       emailConfirmed(defaultUserId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
+        result.header.headers("Location") should endWith(routes.UserLocationController.form(atarService).url)
       }
     }
 
@@ -268,10 +268,10 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
   }
 
   "Email Confirmed Continue" should {
-    "redirect to MatchingIdController" in {
+    "redirect to UserLocationController" in {
       emailConfirmedContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
+        result.header.headers("Location") should endWith(routes.UserLocationController.form(atarService).url)
       }
     }
   }

@@ -136,7 +136,7 @@ class CheckYourEmailController @Inject() (
             Future.successful(Redirect(SecuritySignOutController.signOut(service)))
           } { email =>
             if (email.isConfirmed.getOrElse(false))
-              Future.successful(Redirect(MatchingIdController.matchWithIdOnly(service)))
+              Future.successful(Redirect(UserLocationController.form(service)))
             else
               save4LaterService
                 .saveEmail(GroupId(userWithEnrolments.groupId), email.copy(isConfirmed = Some(true)))
@@ -150,7 +150,7 @@ class CheckYourEmailController @Inject() (
     }
 
   def emailConfirmedContinue(service: Service): Action[AnyContent] =
-    Action(_ => Redirect(MatchingIdController.matchWithIdOnly(service)))
+    Action(_ => Redirect(UserLocationController.form(service)))
 
   private def submitNewDetails(groupId: GroupId, service: Service)(implicit
     hc: HeaderCarrier,

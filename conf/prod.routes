@@ -132,7 +132,7 @@ POST        /customs-registration-services/:service/register/matching/row/get-ni
 GET         /customs-registration-services/:service/register/complete-enrolment                          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController.complete(service: Service)
 GET         /customs-registration-services/:service/register/eori-exist                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController.eoriExist(service: Service)
 
-GET         /customs-registration-services/:service/register/match                                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.MatchingIdController.matchWithIdOnly(service: Service)
+
 
 GET         /customs-registration-services/:service/register/confirm-individual-type                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmIndividualTypeController.form(service: Service)
 POST        /customs-registration-services/:service/register/confirm-individual-type                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmIndividualTypeController.submit(service: Service)
