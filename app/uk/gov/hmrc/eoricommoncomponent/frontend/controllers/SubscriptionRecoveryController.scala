@@ -80,7 +80,7 @@ class SubscriptionRecoveryController @Inject() (
     val result = for {
       registrationDetails <- sessionCache.registrationDetails
       safeId          = registrationDetails.safeId.id
-      queryParameters = (CustomsId.taxPayerId -> safeId) :: buildQueryParams
+      queryParameters = ("taxPayerID" -> safeId) :: buildQueryParams
       sub09Result  <- SUB09Connector.subscriptionDisplay(queryParameters)
       sub01Outcome <- sessionCache.sub01Outcome
     } yield sub09Result match {
@@ -119,7 +119,7 @@ class SubscriptionRecoveryController @Inject() (
   }
 
   private def buildQueryParams: List[(String, String)] =
-    List("regime" -> Service.regimeCDS, "acknowledgementReference" -> uuidGenerator.generateUUIDAsString)
+    List("regime" -> "CDS", "acknowledgementReference" -> uuidGenerator.generateUUIDAsString)
 
   private case class SubscriptionInformation(
     processedDate: String,

@@ -46,13 +46,13 @@
 
 @layout_di(messages("cds.subscription.vat-group.title-and-heading"), form = Some(vatGroupYesNoAnswerForm)) {
     <div>
-        @errorSummary(vatGroupYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
+        @errorSummary(vatGroupYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
         @helpers.form(formAction, "vat-group-createForm") {
 
             @CSRF.formField
 
-            @displayInputRadioGroup(YesNo.yesAndNoAnswer,
+            @displayInputRadioGroup("yes-no-answer",
                 Seq("true" -> messages("cds.yes"),
                     "false" -> messages("cds.no")))
 

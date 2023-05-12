@@ -21,7 +21,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_number_text_download, subscription_text_download}
 
@@ -37,9 +36,6 @@ class DownloadTextController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  private val plainText          = "plain/text"
-  private val attachmentTextFile = "attachment; filename=EORI-number.txt"
-
   def download(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
@@ -48,14 +44,14 @@ class DownloadTextController @Inject() (
         processedDate <- cdsFrontendDataCache.sub02Outcome
           .map(_.processedDate)
       } yield
-        if (service.code.equalsIgnoreCase(Service.eoriOnly.code))
+        if (service.code.equalsIgnoreCase("eori-only"))
           Ok(eoriNumberTextDownloadView(eori, name, processedDate))
-            .as(plainText)
-            .withHeaders(CONTENT_DISPOSITION -> attachmentTextFile)
+            .as("plain/text")
+            .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=EORI-number.txt")
         else
           Ok(subscriptionTextDownloadView(eori, name, processedDate))
-            .as(plainText)
-            .withHeaders(CONTENT_DISPOSITION -> attachmentTextFile)
+            .as("plain/text")
+            .withHeaders(CONTENT_DISPOSITION -> "attachment; filename=EORI-number.txt")
   }
 
 }

@@ -49,7 +49,7 @@ class AuthAction @Inject() (
   /**
     * Allows Gov Gateway user with correct user type, affinity group and no enrolment to service
     */
-  def ggAuthorisedUserWithEnrolmentsAction(requestProcessor: RequestProcessorSimple): Action[AnyContent] =
+  def ggAuthorisedUserWithEnrolmentsAction(requestProcessor: RequestProcessorSimple) =
     action.async { implicit request =>
       authorise(requestProcessor)
     }
@@ -57,7 +57,7 @@ class AuthAction @Inject() (
   /**
     * Allows Gov Gateway user with correct user type and affinity group but no check for enrolment to service
     */
-  def ggAuthorisedUserWithServiceAction(requestProcessor: RequestProcessorSimple): Action[AnyContent] =
+  def ggAuthorisedUserWithServiceAction(requestProcessor: RequestProcessorSimple) =
     action.async { implicit request =>
       authorise(requestProcessor, checkServiceEnrolment = false)
     }
@@ -65,7 +65,7 @@ class AuthAction @Inject() (
   /**
     * Allows Gov Gateway user without checks for user type, affinity group or enrolment to service
     */
-  def ggAuthorisedUserAction(requestProcessor: RequestProcessorSimple): Action[AnyContent] =
+  def ggAuthorisedUserAction(requestProcessor: RequestProcessorSimple) =
     action.async { implicit request =>
       authorise(requestProcessor, checkPermittedAccess = false)
     }

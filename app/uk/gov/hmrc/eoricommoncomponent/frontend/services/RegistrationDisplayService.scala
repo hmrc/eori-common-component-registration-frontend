@@ -21,10 +21,9 @@ import play.api.mvc.Request
 import java.time.{Clock, LocalDateTime, ZoneId}
 import javax.inject.Inject
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EoriHttpResponse, RegistrationDisplayConnector}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RegistrationInfoRequest, RequestParameter}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestParameter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetails, SafeId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.http.HeaderCarrier
@@ -48,8 +47,8 @@ class RegistrationDisplayService @Inject() (
         RequestCommon(
           LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London")),
           Seq(
-            RequestParameter("REGIME", Service.regimeCDS),
-            RequestParameter("ID_Type", RegistrationInfoRequest.SAFE),
+            RequestParameter("REGIME", "CDS"),
+            RequestParameter("ID_Type", "SAFE"),
             RequestParameter("ID_Value", safeId.id)
           )
         )
