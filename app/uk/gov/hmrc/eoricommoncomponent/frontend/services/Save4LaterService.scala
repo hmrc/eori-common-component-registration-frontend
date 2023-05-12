@@ -34,12 +34,14 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
   private val logger = Logger(this.getClass)
 
   private val orgTypeKey = "orgType"
+  private val emailKey   = "email"
+  private val safeIdKey  = "safeId"
 
   def saveSafeId(groupId: GroupId, safeId: SafeId)(implicit hc: HeaderCarrier): Future[Unit] = {
     // $COVERAGE-OFF$Loggers
     logger.debug(s"saving SafeId $safeId for groupId $groupId")
     // $COVERAGE-ON
-    save4LaterConnector.put[SafeId](groupId.id, CustomsId.safeId, safeId)
+    save4LaterConnector.put[SafeId](groupId.id, safeIdKey, safeId)
   }
 
   def saveOrgType(groupId: GroupId, mayBeOrgType: Option[CdsOrganisationType])(implicit
@@ -56,7 +58,7 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
     // $COVERAGE-OFF$Loggers
     logger.debug(s"saving email address $emailStatus for groupId $groupId")
     // $COVERAGE-ON
-    save4LaterConnector.put[EmailStatus](groupId.id, EmailVerificationKeys.EmailKey, Json.toJson(emailStatus))
+    save4LaterConnector.put[EmailStatus](groupId.id, emailKey, Json.toJson(emailStatus))
   }
 
   def fetchOrgType(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[CdsOrganisationType]] = {
@@ -72,7 +74,7 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
     logger.debug(s"fetching SafeId for groupId $groupId")
     // $COVERAGE-ON
     save4LaterConnector
-      .get[SafeId](groupId.id, CustomsId.safeId)
+      .get[SafeId](groupId.id, safeIdKey)
   }
 
   def fetchEmail(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[EmailStatus]] = {
@@ -80,7 +82,7 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
     logger.debug(s"fetching EmailStatus groupId $groupId")
     // $COVERAGE-ON
     save4LaterConnector
-      .get[EmailStatus](groupId.id, EmailVerificationKeys.EmailKey)
+      .get[EmailStatus](groupId.id, emailKey)
   }
 
   def fetchCacheIds(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[CacheIds]] = {

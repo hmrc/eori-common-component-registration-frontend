@@ -54,12 +54,12 @@ object CachedData {
   val sub01OutcomeKey                  = "sub01Outcome"
   val sub02OutcomeKey                  = "sub02Outcome"
   val registerWithEoriAndIdResponseKey = "registerWithEoriAndIdResponse"
-  val emailKey                         = EmailVerificationKeys.EmailKey
+  val emailKey                         = "email"
   val keepAliveKey                     = "keepAlive"
-  val safeIdKey                        = CustomsId.safeId
+  val safeIdKey                        = "safeId"
   val groupIdKey                       = "cachedGroupId"
   val groupEnrolmentKey                = "groupEnrolment"
-  val eoriKey                          = CustomsId.eori
+  val eoriKey                          = "eori"
   implicit val format                  = Json.format[CachedData]
 }
 

@@ -23,7 +23,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service.ServiceCodes
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -111,7 +110,7 @@ class Sub02Controller @Inject() (
         _            <- sessionCache.saveSub02Outcome(sub02Outcome)
         _            <- sessionCache.saveSubscriptionDetails(subDetails)
       } yield
-        if (service.code.equalsIgnoreCase(ServiceCodes.eoriOnly))
+        if (service.code.equalsIgnoreCase(Service.eoriOnly.code))
           Ok(
             standaloneOutcomeView(
               sub02Outcome.eori

@@ -25,12 +25,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm._
 
 object ContactDetailsForm {
 
+  val userFullName  = "full-name"
+  val userTelephone = "telephone"
+
   def contactDetailsCreateForm(): Form[ContactDetailsViewModel] =
     Form(
       mapping(
-        "full-name"                    -> text.verifying(validFullName),
+        userFullName                   -> text.verifying(validFullName),
         EmailVerificationKeys.EmailKey -> optional(text),
-        "telephone"                    -> text.verifying(validPhone)
+        userTelephone                  -> text.verifying(validPhone)
       )(ContactDetailsViewModel.apply)(ContactDetailsViewModel.unapply)
     )
 

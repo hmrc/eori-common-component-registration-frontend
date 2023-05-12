@@ -47,9 +47,7 @@ class CheckYourEmailController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  private val logger                   = Logger(this.getClass)
-  private val checkYourEmailController = "[CheckYourEmailController]"
-  private val emailNoneCached          = "emailStatus cache none"
+  private val logger = Logger(this.getClass)
 
   private def populateView(email: Option[String], isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
@@ -67,7 +65,7 @@ class CheckYourEmailController @Inject() (
         save4LaterService.fetchEmail(GroupId(userWithEnrolments.groupId)) flatMap {
           _.fold {
             // $COVERAGE-OFF$Loggers
-            logger.warn(s"$checkYourEmailController[createForm] -   $emailNoneCached")
+            logger.warn(s"[CheckYourEmailController][createForm] -   emailStatus cache none")
             // $COVERAGE-ON
             populateView(None, isInReviewMode = false, service)
           } { emailStatus =>
@@ -88,7 +86,7 @@ class CheckYourEmailController @Inject() (
                 .flatMap {
                   _.fold {
                     // $COVERAGE-OFF$Loggers
-                    logger.warn(s"$checkYourEmailController[submit] -   $emailNoneCached")
+                    logger.warn(s"[CheckYourEmailController][submit] -   emailStatus cache none")
                     // $COVERAGE-ON
                     Future(
                       BadRequest(
@@ -118,7 +116,7 @@ class CheckYourEmailController @Inject() (
         save4LaterService.fetchEmail(GroupId(userWithEnrolments.groupId)) flatMap { emailStatus =>
           emailStatus.fold {
             // $COVERAGE-OFF$Loggers
-            logger.warn(s"$checkYourEmailController[verifyEmailView] -  $emailNoneCached")
+            logger.warn(s"[CheckYourEmailController][verifyEmailView] -  emailStatus cache none")
             // $COVERAGE-ON
             populateEmailVerificationView(None, service)
           } { email =>
@@ -133,7 +131,7 @@ class CheckYourEmailController @Inject() (
         save4LaterService.fetchEmail(GroupId(userWithEnrolments.groupId)) flatMap { emailStatus =>
           emailStatus.fold {
             // $COVERAGE-OFF$Loggers
-            logger.warn(s"$checkYourEmailController[emailConfirmed] -  $emailNoneCached")
+            logger.warn(s"[CheckYourEmailController][emailConfirmed] -  emailStatus cache none")
             // $COVERAGE-ON
             Future.successful(Redirect(SecuritySignOutController.signOut(service)))
           } { email =>
@@ -161,12 +159,12 @@ class CheckYourEmailController @Inject() (
     save4LaterService.fetchEmail(groupId) flatMap {
       _.fold {
         // $COVERAGE-OFF$Loggers
-        logger.warn(s"$checkYourEmailController[submitNewDetails] -  $emailNoneCached")
+        logger.warn(s"[CheckYourEmailController][submitNewDetails] -  emailStatus cache none")
         // $COVERAGE-ON
-        throw new IllegalStateException(s"$checkYourEmailController[submitNewDetails] - $emailNoneCached")
+        throw new IllegalStateException(s"[CheckYourEmailController][submitNewDetails] - emailStatus cache none")
       } { emailStatus =>
         val email: String = emailStatus.email.getOrElse(
-          throw new IllegalStateException(s"$checkYourEmailController[submitNewDetails] - emailStatus.email none")
+          throw new IllegalStateException(s"[CheckYourEmailController][submitNewDetails] - emailStatus.email none")
         )
         emailVerificationService.createEmailVerificationRequest(email, EmailController.form(service).url) flatMap {
           case Some(true) =>
@@ -174,7 +172,7 @@ class CheckYourEmailController @Inject() (
           case Some(false) =>
             // $COVERAGE-OFF$Loggers
             logger.warn(
-              s"$checkYourEmailController[sendVerification] - " +
+              s"[CheckYourEmailController][sendVerification] - " +
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
             // $COVERAGE-ON
