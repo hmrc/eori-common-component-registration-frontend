@@ -129,14 +129,14 @@ trait CommonHeader {
 
   }
 
-  implicit val dateTimeReads  = dateTimeReadsIso
-  implicit val dateTimeWrites = dateTimeWritesIsoUtc
+  implicit val dateTimeReads: Reads[LocalDateTime]   = dateTimeReadsIso
+  implicit val dateTimeWrites: Writes[LocalDateTime] = dateTimeWritesIsoUtc
 }
 
 case class MessagingServiceParam(paramName: String, paramValue: String)
 
 object MessagingServiceParam {
-  implicit val formats = Json.format[MessagingServiceParam]
+  implicit val formats: OFormat[MessagingServiceParam] = Json.format[MessagingServiceParam]
 
   val positionParamName = "POSITION"
   val Generate          = "GENERATE"

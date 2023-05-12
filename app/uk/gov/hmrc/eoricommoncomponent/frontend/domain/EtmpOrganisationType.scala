@@ -17,7 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
 import play.api.libs.json._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 
 sealed trait EtmpOrganisationType {

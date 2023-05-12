@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.mvc.{Request, Result}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RegistrationInfoRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, InternalId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,7 +30,7 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
   subscriptionStatusService: SubscriptionStatusService,
   save4Later: Save4LaterService
 )(implicit ec: ExecutionContext) {
-  private val idType = "SAFE"
+  private val idType = RegistrationInfoRequest.SAFE
 
   def checksToProceed(groupId: GroupId, internalId: InternalId, service: Service)(
     continue: => Future[Result]
