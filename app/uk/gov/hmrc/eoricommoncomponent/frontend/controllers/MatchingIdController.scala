@@ -28,38 +28,12 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class MatchingIdController @Inject() (
-  authAction: AuthAction,
-  featureFlags: FeatureFlags,
-  matchingService: MatchingService,
-  mcc: MessagesControllerComponents
-)(implicit ec: ExecutionContext)
+class MatchingIdController @Inject() (authAction: AuthAction, mcc: MessagesControllerComponents)
     extends CdsController(mcc) with EnrolmentExtractor {
 
   def matchWithIdOnly(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      matchLoggedInUserAndRedirect(loggedInUser) {
-        Redirect(UserLocationController.form(service))
-      } {
-        Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-      }
+    implicit request => _ =>
+      Future.successful(Redirect(UserLocationController.form(service)))
   }
-
-  private def matchLoggedInUserAndRedirect(loggedInUser: LoggedInUserWithEnrolments)(
-    redirectOrganisationTypePage: => Result
-  )(redirectToConfirmationPage: => Result)(implicit hc: HeaderCarrier, request: Request[_]) =
-    if (featureFlags.matchingEnabled) {
-      lazy val ctUtr = enrolledCtUtr(loggedInUser)
-      lazy val saUtr = enrolledSaUtr(loggedInUser)
-      lazy val nino  = enrolledNino(loggedInUser)
-
-      (ctUtr orElse saUtr orElse nino).fold(ifEmpty = Future.successful(redirectOrganisationTypePage)) { utrOrNino =>
-        matchingService.matchBusinessWithIdOnly(utrOrNino, loggedInUser) map {
-          case true  => redirectToConfirmationPage
-          case false => redirectOrganisationTypePage
-        }
-      }
-    } else
-      Future.successful(redirectOrganisationTypePage)
 
 }

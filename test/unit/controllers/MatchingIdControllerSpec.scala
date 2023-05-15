@@ -40,22 +40,17 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
 
   private val mockAuthConnector   = mock[AuthConnector]
   private val mockAuthAction      = authAction(mockAuthConnector)
-  private val mockFeatureFlags    = mock[FeatureFlags]
   private val mockMatchingService = mock[MatchingService]
 
-  private val userId: String     = "someUserId"
-  private val ctUtrId: String    = "ct-utr-Id"
-  private val saUtrId: String    = "sa-utr-Id"
-  private val payeNinoId: String = "AB123456C"
+  private val userId: String = "someUserId"
+
+  private val saUtrId: String = "sa-utr-Id"
 
   private val controller =
-    new MatchingIdController(mockAuthAction, mockFeatureFlags, mockMatchingService, mcc)(global)
+    new MatchingIdController(mockAuthAction, mcc)
 
-  override protected def beforeEach(): Unit = {
+  override protected def beforeEach(): Unit =
     super.beforeEach()
-
-    when(mockFeatureFlags.matchingEnabled).thenReturn(true)
-  }
 
   override protected def afterEach(): Unit = {
     reset(mockMatchingService)
@@ -71,34 +66,13 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
       withAuthorisedUser(userId, mockAuthConnector)
 
       val controller =
-        new MatchingIdController(mockAuthAction, mockFeatureFlags, mockMatchingService, mcc)(global)
+        new MatchingIdController(mockAuthAction, mcc)
       val result: Result =
         await(controller.matchWithIdOnly(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
 
       status(result) shouldBe SEE_OTHER
       assertRedirectToUserLocationPage(result, atarService)
       verifyNoInteractions(mockMatchingService)
-    }
-
-    "for Journey GetAnEori redirect to Confirm page when a match found with CT UTR only" in {
-      withAuthorisedUser(userId, mockAuthConnector, ctUtrId = Some(ctUtrId))
-
-      when(
-        mockMatchingService.matchBusinessWithIdOnly(meq(Utr(ctUtrId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier],
-          any[Request[_]]
-        )
-      )
-        .thenReturn(Future.successful(true))
-
-      val result = controller.matchWithIdOnly(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
-
-      status(result) shouldBe SEE_OTHER
-      result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-          .form(atarService, false)
-          .url
-      )
     }
 
     "for Journey GetAnEori redirect to Select user location page when no match found for SA UTR" in {
@@ -113,75 +87,13 @@ class MatchingIdControllerSpec extends ControllerSpec with BeforeAndAfterEach wi
         .thenReturn(Future.successful(false))
 
       val controller =
-        new MatchingIdController(mockAuthAction, mockFeatureFlags, mockMatchingService, mcc)(global)
+        new MatchingIdController(mockAuthAction, mcc)
       val result = await(controller.matchWithIdOnly(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
 
       status(result) shouldBe SEE_OTHER
       assertRedirectToUserLocationPage(result, atarService)
     }
 
-    "for Journey GetAnEori redirect to Confirm page when a match found with SA UTR only" in {
-      withAuthorisedUser(userId, mockAuthConnector, saUtrId = Some(saUtrId))
-
-      when(
-        mockMatchingService.matchBusinessWithIdOnly(meq(Utr(saUtrId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier],
-          any[Request[_]]
-        )
-      )
-        .thenReturn(Future.successful(true))
-
-      val result = controller.matchWithIdOnly(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
-
-      status(result) shouldBe SEE_OTHER
-      result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-          .form(atarService, false)
-          .url
-      )
-    }
-
-    "for Journey GetAnEori redirect to Confirm page when a match found with a valid PAYE Nino" in {
-      withAuthorisedUser(userId, mockAuthConnector, payeNinoId = Some(payeNinoId))
-
-      when(
-        mockMatchingService.matchBusinessWithIdOnly(meq(Nino(payeNinoId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier],
-          any[Request[_]]
-        )
-      )
-        .thenReturn(Future.successful(true))
-
-      val result = controller.matchWithIdOnly(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
-
-      status(result) shouldBe SEE_OTHER
-      result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-          .form(atarService, false)
-          .url
-      )
-    }
-
-    "for Journey GetAnEori use CT UTR when user is registered for CT and SA" in {
-      withAuthorisedUser(userId, mockAuthConnector, ctUtrId = Some(ctUtrId), saUtrId = Some(saUtrId))
-
-      when(
-        mockMatchingService.matchBusinessWithIdOnly(meq(Utr(ctUtrId)), any[LoggedInUserWithEnrolments])(
-          any[HeaderCarrier],
-          any[Request[_]]
-        )
-      )
-        .thenReturn(Future.successful(true))
-
-      val result = controller.matchWithIdOnly(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
-
-      status(result) shouldBe SEE_OTHER
-      result.header.headers("Location") should be(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-          .form(atarService, false)
-          .url
-      )
-    }
   }
 
   private def assertRedirectToUserLocationPage(result: Result, service: Service): Unit =
