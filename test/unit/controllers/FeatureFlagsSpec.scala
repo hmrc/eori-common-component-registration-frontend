@@ -24,7 +24,6 @@ import util.ControllerSpec
 class FeatureFlagsSpec extends ControllerSpec {
 
   private val configuration: Config = ConfigFactory.parseString("""
-      |features.matchingEnabled=true
       |features.sub02UseServiceName=true
       |features.arsNewJourney=false
       |features.useNewVATJourney=true
@@ -37,7 +36,7 @@ class FeatureFlagsSpec extends ControllerSpec {
   "FeatureFlags" should {
     "retrieve values for feature flags from application conf" in {
 
-      featureFlags.matchingEnabled shouldBe false // hard-coded
+
       featureFlags.sub02UseServiceName shouldBe true
       featureFlags.arsNewJourney shouldBe false
       featureFlags.useNewCharityEdgeCaseJourney shouldBe true
