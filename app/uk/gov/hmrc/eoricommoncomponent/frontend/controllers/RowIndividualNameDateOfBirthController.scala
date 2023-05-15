@@ -25,11 +25,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   SecuritySignOutController,
   SixLineAddressController
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  iomOnlySoleAndIndividualIds,
-  IsleOfManIndividualId,
-  IsleOfManSoleTraderId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.iomOnlySoleAndIndividualIds
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service

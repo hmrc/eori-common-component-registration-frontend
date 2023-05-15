@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
-import play.api.data.Forms.{localDate, of, text}
+import play.api.data.Forms.text
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import play.api.data.{FieldMapping, Form, Forms}
-import uk.gov.hmrc.emailaddress.EmailAddress
+import play.api.data.{Form, Forms}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._

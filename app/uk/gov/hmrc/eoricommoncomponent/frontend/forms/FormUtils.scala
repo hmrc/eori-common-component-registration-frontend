@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
-import java.time.LocalDate
 import play.api.data.Forms.{optional, text}
 import play.api.data.Mapping
 import play.api.data.validation._

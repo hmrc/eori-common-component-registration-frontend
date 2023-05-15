@@ -24,8 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   CompanyRegisteredCountry,
   ContactDetailsModel,
   VatDetails,
-  VatDetailsOld,
-  VatReturnTotal
+  VatDetailsOld
 }
 
 case class SubscriptionDetails(
