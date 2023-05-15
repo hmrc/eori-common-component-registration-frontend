@@ -36,7 +36,6 @@ class FeatureFlagsSpec extends ControllerSpec {
   "FeatureFlags" should {
     "retrieve values for feature flags from application conf" in {
 
-
       featureFlags.sub02UseServiceName shouldBe true
       featureFlags.arsNewJourney shouldBe false
       featureFlags.useNewVATJourney shouldBe true
