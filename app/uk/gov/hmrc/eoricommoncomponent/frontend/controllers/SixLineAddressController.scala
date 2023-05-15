@@ -59,6 +59,7 @@ class SixLineAddressController @Inject() (
     Future.successful(
       Ok(
         sixLineAddressView(
+          UserLocation.isIOM(requestSessionData.selectedUserLocation.getOrElse("")),
           isInReviewMode,
           form,
           countriesToInclude,
@@ -88,6 +89,7 @@ class SixLineAddressController @Inject() (
           Future.successful(
             BadRequest(
               sixLineAddressView(
+                UserLocation.isIOM(requestSessionData.selectedUserLocation.getOrElse("")),
                 isInReviewMode,
                 invalidForm,
                 countriesToInclude,

@@ -109,12 +109,21 @@ class SixLineAddressSpec extends ViewSpec {
 
   private lazy val doc: Document = {
     val result =
-      view(isInReviewMode, form, aFewCountries, ThirdCountriesInCountryPicker, ThirdCountryOrganisationId, atarService)
+      view(
+        false,
+        isInReviewMode,
+        form,
+        aFewCountries,
+        ThirdCountriesInCountryPicker,
+        ThirdCountryOrganisationId,
+        atarService
+      )
     Jsoup.parse(contentAsString(result))
   }
 
   private lazy val docWithErrors = {
     val result = view(
+      false,
       isInReviewMode = true,
       form,
       aFewCountries,

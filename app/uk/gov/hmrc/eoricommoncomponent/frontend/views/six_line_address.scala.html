@@ -30,7 +30,7 @@
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, countryField: helpers.countryField, govukInput: GovukInput)
 
-@(isInReviewMode: Boolean, addressForm: Form[SixLineAddressMatchModel], countries: List[Country], countriesInCountryPicker: CountriesInCountryPicker, cdsOrgType: String, service: Service)(implicit request: Request[AnyContent], messages: Messages)
+@(isIOM: Boolean, isInReviewMode: Boolean, addressForm: Form[SixLineAddressMatchModel], countries: List[Country], countriesInCountryPicker: CountriesInCountryPicker, cdsOrgType: String, service: Service)(implicit request: Request[AnyContent], messages: Messages)
 
 
 @postCodeLabel = @{
@@ -103,7 +103,18 @@
                 autocomplete = Some("postal-code"),
                 classes = Some("govuk-!-width-one-half")
             )
-            @if(cdsOrgType != CdsOrganisationType.CharityPublicBodyNotForProfitId){
+            @if(isIOM) {
+                @govukInput(Input(
+                    id = "countryCode",
+                    name = "countryCode",
+                    classes = "govuk-!-width-one-half",
+                    label = Label(
+                    content = Text(messages("cds.subscription.address-details.country.label")),
+                ),
+                value = Some(messages("cds.country.IM")),
+                attributes = Map("disabled" -> "disabled")
+                ))
+            } else if(cdsOrgType != CdsOrganisationType.CharityPublicBodyNotForProfitId){
                 @countryField(
                     form = addressForm,
                     field = "countryCode",
