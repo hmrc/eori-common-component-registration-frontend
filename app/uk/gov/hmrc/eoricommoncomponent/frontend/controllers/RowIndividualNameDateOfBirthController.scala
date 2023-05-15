@@ -26,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   SixLineAddressController
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.iomOnlySoleAndIndividualIds
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -68,7 +69,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
   def submit(isInReviewMode: Boolean, organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
-      thirdCountryIndividualNameDateOfBirthForm.bindFromRequest().fold(
+      thirdCountryIndividualNameDateOfBirthForm.bindFromRequest.fold(
         formWithErrors =>
           Future.successful(
             BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, isInReviewMode))

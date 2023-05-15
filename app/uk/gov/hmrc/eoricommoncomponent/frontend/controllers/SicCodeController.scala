@@ -31,6 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessSe
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -80,7 +81,7 @@ class SicCodeController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      sicCodeform.bindFromRequest().fold(
+      sicCodeform.bindFromRequest.fold(
         formWithErrors =>
           // TODO Check if this etmpOrgType call is necessary
           orgTypeLookup.etmpOrgType map { _ =>
