@@ -19,21 +19,17 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationKeys
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm._
 
 object ContactDetailsForm {
 
-  val userFullName  = "full-name"
-  val userTelephone = "telephone"
-
   def contactDetailsCreateForm(): Form[ContactDetailsViewModel] =
     Form(
       mapping(
-        userFullName                   -> text.verifying(validFullName),
-        EmailVerificationKeys.EmailKey -> optional(text),
-        userTelephone                  -> text.verifying(validPhone)
+        "full-name" -> text.verifying(validFullName),
+        "email"     -> optional(text),
+        "telephone" -> text.verifying(validPhone)
       )(ContactDetailsViewModel.apply)(ContactDetailsViewModel.unapply)
     )
 

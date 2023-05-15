@@ -19,18 +19,16 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging
 import java.time.ZonedDateTime
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-case class RegistrationInfoRequest(regime: String = Service.regimeCDS, idType: String, idValue: String)
+case class RegistrationInfoRequest(regime: String = "CDS", idType: String, idValue: String)
 
 object RegistrationInfoRequest {
   implicit val jsonFormat = Json.format[RegistrationInfoRequest]
 
-  val UTR    = "UTR"
-  val EORI   = "EORI"
-  val NINO   = "NINO"
-  val SAFE   = "SAFE"
-  val SAFEID = "SAFEID"
+  val UTR  = "UTR"
+  val EORI = "EORI"
+  val NINO = "NINO"
+  val SAFE = "SAFE"
 
   def forCustomsId(customsId: CustomsId): RegistrationInfoRequest = {
     val idType = customsId match {

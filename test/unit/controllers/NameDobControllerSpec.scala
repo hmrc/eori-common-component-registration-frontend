@@ -40,13 +40,13 @@ import scala.concurrent.Future
 class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with SubscriptionFlowTestSupport {
   protected override val formId: String      = NameDateOfBirthPage.formId
   val mockCdsFrontendDataCache: SessionCache = mock[SessionCache]
-  private val matchNameDobView               = instanceOf[match_namedob]
+
+  private val matchNameDobView = instanceOf[match_namedob]
 
   private def nameDobController =
     new NameDobController(mockAuthAction, mcc, matchNameDobView, mockCdsFrontendDataCache)
 
   val defaultOrganisationType = "individual"
-  val soleTraderType          = "sole-trader"
 
   def maxLengthError(maxLength: Int, field: String): String =
     s"The $field name must be $maxLength characters or less"
@@ -63,7 +63,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     )
 
     "display the form" in {
-      showForm(soleTraderType) { result =>
+      showForm("sole-trader") { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
         page.getElementsHtml(pageLevelErrorSummaryListXPath) shouldBe empty
@@ -75,7 +75,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
   "first name" should {
     "be mandatory" in {
-      submitForm(form = ValidRequest ++ Map("first-name" -> ""), defaultOrganisationType) { result =>
+      submitForm(form = ValidRequest ++ Map("first-name" -> ""), "individual") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your first name"
@@ -86,13 +86,12 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     s"be restricted to 35 characters" in {
       val firstNameMaxLength = 35
-      submitForm(ValidRequest ++ Map("first-name" -> oversizedString(firstNameMaxLength)), defaultOrganisationType) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(firstNameMaxLength, "first")
-          page.getElementsText(fieldLevelErrorFirstName) shouldBe s"Error: ${maxLengthError(firstNameMaxLength, "first")}"
-          page.getElementsText("title") should startWith("Error: ")
+      submitForm(ValidRequest ++ Map("first-name" -> oversizedString(firstNameMaxLength)), "individual") { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(firstNameMaxLength, "first")
+        page.getElementsText(fieldLevelErrorFirstName) shouldBe s"Error: ${maxLengthError(firstNameMaxLength, "first")}"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
   }
@@ -100,7 +99,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   "last name" should {
 
     "be mandatory" in {
-      submitForm(ValidRequest ++ Map("last-name" -> ""), defaultOrganisationType) { result =>
+      submitForm(ValidRequest ++ Map("last-name" -> ""), "individual") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your last name"
@@ -111,7 +110,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "be restricted to 35 characters" in {
       val lastNameMaxLength = 35
-      submitForm(ValidRequest ++ Map("last-name" -> oversizedString(lastNameMaxLength)), soleTraderType) { result =>
+      submitForm(ValidRequest ++ Map("last-name" -> oversizedString(lastNameMaxLength)), "sole-trader") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(lastNameMaxLength, "last")
@@ -126,7 +125,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     "be mandatory" in {
       submitForm(
         ValidRequest ++ Map("date-of-birth.day" -> "", "date-of-birth.month" -> "", "date-of-birth.year" -> ""),
-        defaultOrganisationType
+        "individual"
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -137,7 +136,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     "be a valid date" in {
-      submitForm(ValidRequest ++ Map("date-of-birth.day" -> "32"), defaultOrganisationType) { result =>
+      submitForm(ValidRequest ++ Map("date-of-birth.day" -> "32"), "individual") { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Date of birth must be a real date"
@@ -155,7 +154,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           "date-of-birth.month" -> tomorrow.getMonthValue.toString,
           "date-of-birth.year"  -> tomorrow.getYear.toString
         ),
-        soleTraderType
+        "sole-trader"
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -168,7 +167,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     "display an appropriate message when letters are entered instead of numbers" in {
       submitForm(
         ValidRequest ++ Map("date-of-birth.day" -> "a", "date-of-birth.month" -> "b", "date-of-birth.year" -> "c"),
-        defaultOrganisationType
+        "individual"
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -188,13 +187,13 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     )
 
     "be successful when all mandatory fields filled" in {
-      submitForm(ValidRequest, defaultOrganisationType) { result =>
+      submitForm(ValidRequest, "individual") { result =>
         status(result) shouldBe SEE_OTHER
       }
     }
 
     "redirect to the confirm page when successful" in {
-      submitForm(ValidRequest, defaultOrganisationType) { result =>
+      submitForm(ValidRequest, "individual") { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith(
           "/customs-registration-services/atar/register/matching/chooseid"
@@ -207,7 +206,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result =
-      nameDobController.form(defaultOrganisationType, atarService).apply(SessionBuilder.buildRequestWithSession(userId))
+      nameDobController.form("individual", atarService).apply(SessionBuilder.buildRequestWithSession(userId))
     test(result)
   }
 

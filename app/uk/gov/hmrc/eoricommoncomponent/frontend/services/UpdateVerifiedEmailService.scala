@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   UpdateVerifiedEmailConnector
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -44,7 +44,7 @@ class UpdateVerifiedEmailService @Inject() (
   ): Future[Boolean] = {
 
     val requestDetail = RequestDetail(
-      IDType = RegistrationInfoRequest.EORI,
+      IDType = "EORI",
       IDNumber = eori,
       emailAddress = newEmail,
       emailVerificationTimestamp = DateTimeUtil.dateTime

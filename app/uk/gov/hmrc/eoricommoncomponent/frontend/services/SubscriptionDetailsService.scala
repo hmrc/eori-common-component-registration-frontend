@@ -155,10 +155,10 @@ class SubscriptionDetailsService @Inject() (
   def clearCachedUkVatDetailsOld(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(ukVatDetailsOld = None))
 
-  def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]): Future[Unit] =
+  def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(vatRegisteredUk = Some(yesNoAnswer.isYes)))
 
-  def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]): Future[Unit] =
+  def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]) =
     saveSubscriptionDetails(sd => sd.copy(personalDataDisclosureConsent = Some(yesNoAnswer.isYes)))
 
   private def contactDetails(view: ContactDetailsModel, isInReviewMode: Boolean)(implicit

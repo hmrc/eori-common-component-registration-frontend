@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationKeys, Save4LaterConnector}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -33,9 +33,9 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
 
   private val logger = Logger(this.getClass)
 
+  private val safeIdKey  = "safeId"
   private val orgTypeKey = "orgType"
   private val emailKey   = "email"
-  private val safeIdKey  = "safeId"
 
   def saveSafeId(groupId: GroupId, safeId: SafeId)(implicit hc: HeaderCarrier): Future[Unit] = {
     // $COVERAGE-OFF$Loggers
@@ -92,7 +92,7 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
     save4LaterConnector.get[CacheIds](groupId.id, CachedData.groupIdKey)
   }
 
-  def deleteCachedGroupId(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Unit] =
+  def deleteCachedGroupId(groupId: GroupId)(implicit hc: HeaderCarrier) =
     save4LaterConnector.deleteKey[CacheIds](groupId.id, CachedData.groupIdKey)
 
   def deleteCacheIds(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Unit] = {
