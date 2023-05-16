@@ -90,6 +90,7 @@ object CustomsId {
   val nino       = "nino"
   val safeId     = "safeId"
   val taxPayerId = "taxPayerId"
+  val taxPayerID = "taxPayerID"
 
   private val idTypeMapping = Map[String, String => CustomsId](
     utr        -> Utr,
