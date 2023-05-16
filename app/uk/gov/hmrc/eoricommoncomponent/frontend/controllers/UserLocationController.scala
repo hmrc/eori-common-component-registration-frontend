@@ -22,6 +22,7 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RegistrationInfoRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.RegistrationDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -113,12 +114,12 @@ class UserLocationController @Inject() (
 
   private def sessionInfoBasedOnJourney(location: Option[String]): String =
     location match {
-      case Some(UserLocation.ThirdCountry)      => "third-country"
-      case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"
-      case Some(UserLocation.Eu)                => "eu"
-      case Some(UserLocation.Iom)               => "isle-of-man"
-      case Some(UserLocation.Islands)           => "islands"
-      case Some(UserLocation.Uk)                => "uk"
+      case Some(UserLocation.ThirdCountry)      => UserLocation.ThirdCountry
+      case Some(UserLocation.ThirdCountryIncEU) => UserLocation.ThirdCountryIncEU
+      case Some(UserLocation.Eu)                => UserLocation.Eu
+      case Some(UserLocation.Iom)               => UserLocation.Iom
+      case Some(UserLocation.Islands)           => UserLocation.Islands
+      case Some(UserLocation.Uk)                => UserLocation.Uk
       case _                                    => throw new IllegalStateException("User Location not set")
     }
 
@@ -129,7 +130,7 @@ class UserLocationController @Inject() (
       mayBeSafeId <- save4LaterService.fetchSafeId(groupId)
       preSubscriptionStatus <- mayBeSafeId match {
         case Some(safeId) =>
-          subscriptionStatusService.getStatus("SAFE", safeId.id)
+          subscriptionStatusService.getStatus(RegistrationInfoRequest.SAFE, safeId.id)
         case None => Future.successful(NewSubscription)
       }
     } yield (preSubscriptionStatus, mayBeSafeId)
