@@ -30,6 +30,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukSummaryList}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, SummaryListRow, SummaryList, Key, Value, HtmlContent, Actions, ActionItem}
 @import play.twirl.api.utils.StringEscapeUtils
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 
 @this(layout_di: layout, dateFormatter: DateFormatter, govukButton: GovukButton, govukSummaryList : GovukSummaryList)
 
@@ -68,7 +69,7 @@
 
 @transformCountryCodeToOptionalLabel(code: Option[String]) = @{
     code match {
-        case Some("GB") => Some(messages("cds.country.GB"))
+        case Some(MatchingForms.countryCodeGB) => Some(messages("cds.country.GB"))
         case Some(c) if isEUCountryCode(c) => Some(euCountry(c))
         case Some(nonEuCode) => Some(nonEuCode)
         case _ => None

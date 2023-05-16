@@ -24,6 +24,7 @@ import play.api.mvc.{Action, _}
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.individualOrganisationIds
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
@@ -137,8 +138,7 @@ class GetUtrNumberController @Inject() (
     service: Service
   )(implicit request: Request[AnyContent]): Result = {
     val errorMsg = organisationType match {
-      case CdsOrganisationType.SoleTraderId | CdsOrganisationType.IndividualId |
-          CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
+      case orgType if individualOrganisationIds.contains(orgType) =>
         Messages("cds.matching-error.individual-not-found")
       case _ => Messages("cds.matching-error-organisation.not-found")
     }

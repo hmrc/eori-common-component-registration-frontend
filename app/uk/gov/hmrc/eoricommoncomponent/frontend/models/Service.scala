@@ -34,7 +34,9 @@ case class Service(
 
 object Service {
 
-  val cds: Service = Service("cds", "HMRC-CUS-ORG", "", None, "", "", None)
+  val cds: Service      = Service("cds", "HMRC-CUS-ORG", "", None, "", "", None)
+  val regimeCDS         = "CDS"
+  val eoriOnly: Service = Service("eori-only", "HMRC-CUS-ORG", "", None, "", "", None)
 
   private val supportedServicesMap: Map[String, Service] = new ServiceConfig(
     Configuration(ConfigFactory.load())
