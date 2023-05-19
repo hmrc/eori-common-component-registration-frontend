@@ -18,16 +18,16 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import java.time.{Clock, LocalDateTime, ZoneId}
 import java.util.UUID
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RequestCommon, RequestParameter}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 @Singleton
 class RequestCommonGenerator @Inject() (uuidGenerator: RandomUUIDGenerator, clock: UtcClock) {
 
   def generate(requestParameters: Option[Seq[RequestParameter]] = None): RequestCommon =
     RequestCommon(
-      regime = Service.regimeCDS,
+      regime = "CDS",
       receiptDate = receiptDate,
       acknowledgementReference = uuidGenerator.generateUUIDAsString,
       requestParameters = requestParameters

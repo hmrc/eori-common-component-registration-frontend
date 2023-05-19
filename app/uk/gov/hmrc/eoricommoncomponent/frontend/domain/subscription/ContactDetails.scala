@@ -31,5 +31,4 @@ case class ContactDetails(
 
 object ContactDetails {
   implicit val jsonFormat = Json.format[ContactDetails]
-
 }

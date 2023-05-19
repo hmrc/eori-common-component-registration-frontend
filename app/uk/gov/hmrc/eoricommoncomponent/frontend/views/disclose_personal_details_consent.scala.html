@@ -42,14 +42,14 @@
 
 @layout_di(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
     <div>
-        @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
+        @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map("yes-no-answer" -> "yes-no-answer-true"))
 
         @helpers.form(DisclosePersonalDetailsConsentController.submit(isInReviewMode, service), "disclose-personal-details-createForm") {
 
             @CSRF.formField
 
             @inputRadioGroup(
-                disclosePersonalDetailsYesNoAnswerForm(YesNo.yesAndNoAnswer),
+                disclosePersonalDetailsYesNoAnswerForm("yes-no-answer"),
                 Seq(
                     "true" -> messages("cds.subscription.organisation-disclose-personal-details-consent.yes"),
                     "false" -> messages("cds.subscription.organisation-disclose-personal-details-consent.no")

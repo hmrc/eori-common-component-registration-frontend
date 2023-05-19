@@ -110,7 +110,7 @@ class Sub02Controller @Inject() (
         _            <- sessionCache.saveSub02Outcome(sub02Outcome)
         _            <- sessionCache.saveSubscriptionDetails(subDetails)
       } yield
-        if (service.code.equalsIgnoreCase(Service.eoriOnly.code))
+        if (service.code.equalsIgnoreCase("eori-only"))
           Ok(
             standaloneOutcomeView(
               sub02Outcome.eori

@@ -45,7 +45,7 @@ class SubscriptionStatusService @Inject() (
   ): Future[PreSubscriptionStatus] = {
 
     def createRequest =
-      SubscriptionStatusQueryParams(requestCommonGenerator.receiptDate, Service.regimeCDS, idType, id)
+      SubscriptionStatusQueryParams(requestCommonGenerator.receiptDate, "CDS", idType, id)
 
     def saveToCache(processingDate: LocalDateTime) =
       cache.saveSub01Outcome(Sub01Outcome(dateFormat.format(processingDate)))

@@ -30,7 +30,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameOrganisationMatchModel, Utr}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameOrganisationMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.InvalidUrlValueException
@@ -51,12 +51,8 @@ class NameUtrOrganisationControllerSpec
   private val mockAuthAction                = authAction(mockAuthConnector)
   private val mockMatchingService           = mock[MatchingService]
   private val mockSubscriptionDetailService = mock[SubscriptionDetailsService]
-  private val matchNameIdOrganisationView   = instanceOf[match_name_id_organisation]
 
-  private val partnershipId                   = CdsOrganisationType.PartnershipId
-  private val companyId                       = CdsOrganisationType.CompanyId
-  private val limitedLiabilityPartnershipId   = CdsOrganisationType.LimitedLiabilityPartnershipId
-  private val charityPublicBodyNotForProfitId = CdsOrganisationType.CharityPublicBodyNotForProfitId
+  private val matchNameIdOrganisationView = instanceOf[match_name_id_organisation]
 
   private val controller =
     new NameIdOrganisationController(
@@ -70,10 +66,10 @@ class NameUtrOrganisationControllerSpec
   private val organisationTypeOrganisations =
     Table(
       ("organisationType", "organisation"),
-      (companyId, CompanyOrganisation),
-      (partnershipId, PartnershipOrganisation),
-      (limitedLiabilityPartnershipId, LimitedLiabilityPartnershipOrganisation),
-      (charityPublicBodyNotForProfitId, CharityPublicBodyNotForProfitOrganisation)
+      ("company", CompanyOrganisation),
+      ("partnership", PartnershipOrganisation),
+      ("limited-liability-partnership", LimitedLiabilityPartnershipOrganisation),
+      ("charity-public-body-not-for-profit", CharityPublicBodyNotForProfitOrganisation)
     )
 
   private val NameMaxLength = 105
@@ -166,10 +162,10 @@ class NameUtrOrganisationControllerSpec
         submitForm(form = ValidNameUtrRequest + ("name" -> ""), organisationType) { result =>
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
-          if (organisationType == partnershipId || organisationType == limitedLiabilityPartnershipId) {
+          if (organisationType == "partnership" || organisationType == "limited-liability-partnership") {
             page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your registered partnership name"
             page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered partnership name"
-          } else if (organisationType == companyId) {
+          } else if (organisationType == "company") {
             page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your registered company name"
             page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered company name"
           } else {
@@ -195,14 +191,14 @@ class NameUtrOrganisationControllerSpec
           result =>
             status(result) shouldBe BAD_REQUEST
             val page = CdsPage(contentAsString(result))
-            if (organisationType == partnershipId || organisationType == limitedLiabilityPartnershipId) {
+            if (organisationType == "partnership" || organisationType == "limited-liability-partnership") {
               page.getElementsText(
                 pageLevelErrorSummaryListXPath
               ) shouldBe "The partnership name must be 105 characters or less"
               page.getElementsText(
                 fieldLevelErrorName
               ) shouldBe "Error: The partnership name must be 105 characters or less"
-            } else if (organisationType == companyId) {
+            } else if (organisationType == "company") {
               page.getElementsText(
                 pageLevelErrorSummaryListXPath
               ) shouldBe "The company name must be 105 characters or less"

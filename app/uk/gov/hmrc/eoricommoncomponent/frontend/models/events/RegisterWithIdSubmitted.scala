@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, RegistrationInfoRequest}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, Organisation}
 
 case class RegisterWithIdSubmitted(
@@ -42,9 +42,9 @@ object RegisterWithIdSubmitted {
     val requestDetail = request.registerWithIDRequest.requestDetail
 
     RegisterWithIdSubmitted(
-      eori = if (requestDetail.IDType == RegistrationInfoRequest.EORI) Some(requestDetail.IDNumber) else None,
-      utr = if (requestDetail.IDType == RegistrationInfoRequest.UTR) Some(requestDetail.IDNumber) else None,
-      nino = if (requestDetail.IDType == RegistrationInfoRequest.NINO) Some(requestDetail.IDNumber) else None,
+      eori = if (requestDetail.IDType == "EORI") Some(requestDetail.IDNumber) else None,
+      utr = if (requestDetail.IDType == "UTR") Some(requestDetail.IDNumber) else None,
+      nino = if (requestDetail.IDType == "NINO") Some(requestDetail.IDNumber) else None,
       isAnAgent = requestDetail.isAnAgent,
       requiresNameMatch = requestDetail.requiresNameMatch,
       individual = requestDetail.individual,

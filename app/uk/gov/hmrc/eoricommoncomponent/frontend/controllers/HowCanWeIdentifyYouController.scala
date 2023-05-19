@@ -64,9 +64,9 @@ class HowCanWeIdentifyYouController @Inject() (
       .map(
         _ =>
           formData.ninoOrUtrRadio match {
-            case Some(CustomsId.nino) =>
+            case Some("nino") =>
               Redirect(GYEHowCanWeIdentifyYouNinoController.form(service))
-            case Some(CustomsId.utr) =>
+            case Some("utr") =>
               Redirect(GYEHowCanWeIdentifyYouUtrController.form(service))
             case _ => throw new IllegalArgumentException("Required formData to include nino or utr selection")
           }

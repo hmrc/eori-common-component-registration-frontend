@@ -101,11 +101,11 @@ class BusinessDetailsRecoveryController @Inject() (
 
   private def sessionInfo(location: Option[String]): String =
     location match {
-      case Some(UserLocation.ThirdCountry)      => UserLocation.ThirdCountry
-      case Some(UserLocation.ThirdCountryIncEU) => UserLocation.ThirdCountryIncEU
-      case Some(UserLocation.Eu)                => UserLocation.Eu
-      case Some(UserLocation.Iom)               => UserLocation.Iom
-      case Some(UserLocation.Islands)           => UserLocation.Islands
+      case Some(UserLocation.ThirdCountry)      => "third-country"
+      case Some(UserLocation.ThirdCountryIncEU) => "third-country-inc-eu"
+      case Some(UserLocation.Eu)                => "eu"
+      case Some(UserLocation.Iom)               => "isle-of-man"
+      case Some(UserLocation.Islands)           => "islands"
       case _                                    => throw new IllegalStateException("User Location not set")
     }
 
