@@ -312,6 +312,7 @@ object MatchingForms extends Mappings {
   private val countryCodeGB = "GB"
   private val countryCodeGG = "GG"
   private val countryCodeJE = "JE"
+  private val countryCodeIM = "IM"
 
   private val rejectGB: Constraint[String] = Constraint {
     case `countryCodeGB` => Invalid("cds.matching-error.country.unacceptable")
