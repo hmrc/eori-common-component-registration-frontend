@@ -164,7 +164,7 @@ object MatchingForms extends Mappings {
 
   private def createYesNoAnswerForm(invalidErrorMsgKey: String)(implicit messages: Messages): Form[YesNo] = Form(
     mapping(
-      YesNo.yesAndNoAnswer -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))
+      "yes-no-answer" -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))
         .verifying(messages(invalidErrorMsgKey), _.isDefined)
         .transform[Boolean](str => str.get.toBoolean, bool => Option(String.valueOf(bool)))
     )(YesNo.apply)(YesNo.unapply)
@@ -309,10 +309,10 @@ object MatchingForms extends Mappings {
     )(NinoOrUtrChoice.apply)(NinoOrUtrChoice.unapply)
   )
 
-  val countryCodeGB = "GB"
-  val countryCodeGG = "GG"
-  val countryCodeJE = "JE"
-  val countryCodeIM = "IM"
+  private val countryCodeGB = "GB"
+  private val countryCodeGG = "GG"
+  private val countryCodeJE = "JE"
+  private val countryCodeIM = "IM"
 
   private val rejectGB: Constraint[String] = Constraint {
     case `countryCodeGB` => Invalid("cds.matching-error.country.unacceptable")
