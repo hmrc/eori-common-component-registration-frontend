@@ -84,7 +84,7 @@
         CdsOrganisationType.IsleOfManSoleTraderId -> messages("cds.matching.organisation-type.radio.sole-trader.hint-text"),
         CdsOrganisationType.IsleOfManIndividualId -> messages("cds.matching.organisation-type.radio.individual.hint-text"))
 
-    if (selectedUserLocation == Some(UserLocation.Uk)) Seq.empty else nonUkOptionHints
+    if (selectedUserLocation.contains(UserLocation.Uk)) Seq.empty else nonUkOptionHints
 }
 
 @layout_di(messages("cds.matching.organisation-type.user.header"), form = Some(OrganisationTypeForm)) {
