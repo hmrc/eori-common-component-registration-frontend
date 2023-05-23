@@ -28,6 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Co
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionRequest.principalEconomicActivityLength
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RequestCommon, RequestParameter}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
@@ -223,7 +224,7 @@ object SubscriptionCreateRequest {
 
   private def generateWithOriginatingSystem(requestParameters: Option[Seq[RequestParameter]] = None): RequestCommon =
     RequestCommon(
-      regime = "CDS",
+      regime = Service.regimeCDS,
       receiptDate = LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London")),
       acknowledgementReference = UUID.randomUUID().toString.replace("-", ""),
       originatingSystem = Some("MDTP"),

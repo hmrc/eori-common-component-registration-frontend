@@ -47,7 +47,7 @@ class EmailVerificationConnector @Inject() (http: HttpClient, appConfig: AppConf
     emailAddress: String
   )(implicit hc: HeaderCarrier): Future[EmailVerificationStateResponse] = {
 
-    val body = Json.obj("email" -> emailAddress)
+    val body = Json.obj(EmailVerificationKeys.EmailKey -> emailAddress)
 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"GetEmailVerificationState: $checkVerifiedEmailUrl, body: $body and hc: $hc")

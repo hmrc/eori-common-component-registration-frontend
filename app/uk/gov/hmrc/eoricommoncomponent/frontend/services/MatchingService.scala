@@ -22,7 +22,7 @@ import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
@@ -39,12 +39,12 @@ class MatchingService @Inject() (
   requestSessionData: RequestSessionData
 )(implicit ec: ExecutionContext) {
 
-  private val UTR  = "UTR"
-  private val EORI = "EORI"
-  private val NINO = "NINO"
-
   private val CustomsIdsMap: Map[Class[_ <: CustomsId], String] =
-    Map(classOf[Utr] -> UTR, classOf[Eori] -> EORI, classOf[Nino] -> NINO)
+    Map(
+      classOf[Utr]  -> RegistrationInfoRequest.UTR,
+      classOf[Eori] -> RegistrationInfoRequest.EORI,
+      classOf[Nino] -> RegistrationInfoRequest.NINO
+    )
 
   private def convert(customsId: CustomsId, capturedDate: Option[LocalDate])(
     response: MatchingResponse
@@ -158,7 +158,13 @@ class MatchingService @Inject() (
     MatchingRequestHolder(
       MatchingRequest(
         requestCommonGenerator.generate(),
-        RequestDetail(NINO, nino, requiresNameMatch = true, isAnAgent = false, individual = Some(individual))
+        RequestDetail(
+          RegistrationInfoRequest.NINO,
+          nino,
+          requiresNameMatch = true,
+          isAnAgent = false,
+          individual = Some(individual)
+        )
       )
     )
 

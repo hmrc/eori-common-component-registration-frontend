@@ -21,6 +21,8 @@ import play.api.data.validation._
 import play.api.data.{Form, Forms}
 import play.api.i18n.Messages
 import uk.gov.hmrc.emailaddress.EmailAddress
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationKeys
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 
 object EmailForm {
 
@@ -38,16 +40,14 @@ object EmailForm {
     })
 
   val emailForm = Form(
-    Forms.mapping("email" -> text.verifying(validEmail))(EmailViewModel.apply)(EmailViewModel.unapply)
+    Forms.mapping(EmailVerificationKeys.EmailKey -> text.verifying(validEmail))(EmailViewModel.apply)(
+      EmailViewModel.unapply
+    )
   )
-
-  case class YesNo(isYes: Boolean) {
-    def isNo: Boolean = !isYes
-  }
 
   def confirmEmailYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] = Form(
     mapping(
-      "yes-no-answer" -> optional(
+      YesNo.yesAndNoAnswer -> optional(
         text.verifying(
           messages("cds.subscription.check-your-email.page-error.yes-no-answer"),
           oneOf(validYesNoAnswerOptions)

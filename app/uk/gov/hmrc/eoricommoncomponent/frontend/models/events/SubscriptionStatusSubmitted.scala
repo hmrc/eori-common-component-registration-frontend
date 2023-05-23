@@ -17,7 +17,8 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SubscriptionStatusQueryParams
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RegistrationInfoRequest
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CustomsId, SubscriptionStatusQueryParams}
 
 case class SubscriptionStatusSubmitted(
   taxPayerId: Option[String],
@@ -32,8 +33,8 @@ object SubscriptionStatusSubmitted {
 
   def apply(request: SubscriptionStatusQueryParams, originatingService: String): SubscriptionStatusSubmitted =
     SubscriptionStatusSubmitted(
-      taxPayerId = if (request.idType == "taxPayerId") Some(request.id) else None,
-      safeId = if (request.idType == "SAFE") Some(request.id) else None,
+      taxPayerId = if (request.idType == CustomsId.taxPayerId) Some(request.id) else None,
+      safeId = if (request.idType == RegistrationInfoRequest.SAFE) Some(request.id) else None,
       receiptDate = request.receiptDate.toString,
       regime = request.regime,
       originatingService = originatingService
