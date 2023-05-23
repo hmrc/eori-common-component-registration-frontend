@@ -41,5 +41,7 @@ object UserLocation {
       case _              => false
     }
 
+  def isIOM(location: String): Boolean = location == UserLocation.Iom
+
   def isRow(location: String): Boolean = rowLocations.contains(location)
 }

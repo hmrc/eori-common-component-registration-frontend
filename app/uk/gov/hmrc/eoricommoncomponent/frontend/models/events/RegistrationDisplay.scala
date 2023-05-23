@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{JsPath, Json, Writes}
+import play.api.libs.json.{JsPath, Writes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
   RegistrationDisplayRequestHolder,
   RegistrationDisplayResponseHolder

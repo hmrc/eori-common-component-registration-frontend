@@ -21,9 +21,7 @@ import play.api.Configuration
 import play.api.test.FakeRequest
 import play.api.test.Helpers.LOCATION
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{client_error_template, error_template, notFound}

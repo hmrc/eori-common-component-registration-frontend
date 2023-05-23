@@ -18,7 +18,7 @@ package unit.controllers
 
 import java.util.UUID
 import common.pages.matching.ConfirmPage
-import common.pages.{RegistrationProcessingPage, RegistrationRejectedPage}
+import common.pages.RegistrationProcessingPage
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -37,12 +37,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  confirm_contact_details,
-  sub01_outcome_processing,
-  you_cannot_change_address_individual,
-  you_cannot_change_address_organisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{confirm_contact_details, sub01_outcome_processing}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser

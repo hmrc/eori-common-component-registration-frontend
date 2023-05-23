@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
-import play.api.Logger
 import play.api.libs.json.Json
 
 import javax.inject.{Inject, Singleton}
@@ -33,8 +32,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.util
 
 @Singleton
 class RequestSessionData @Inject() (audit: Auditable) {
