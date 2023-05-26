@@ -20,8 +20,10 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes.WhatIsYourEmailController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service.eoriOnly
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.start
 
@@ -41,8 +43,8 @@ class ApplicationController @Inject() (
   def startRegister(service: Service): Action[AnyContent] = Action { implicit request =>
     val headingAndTitleText = s"ecc.start-page.title.${service.code}"
     val bullet2             = s"ecc.start-page.para1.bullet2.${service.code}"
-
-    Ok(viewStartRegister(service, headingAndTitleText, bullet2, featureFlags))
+    if (service.code == eoriOnly.code) Redirect(WhatIsYourEmailController.createForm(service))
+    else Ok(viewStartRegister(service, headingAndTitleText, bullet2, featureFlags))
   }
 
   def logout(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction {
