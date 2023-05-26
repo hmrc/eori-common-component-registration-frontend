@@ -57,7 +57,15 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
       status(result) shouldBe OK
     }
   }
-
+  "Navigating to What is your email page" should {
+    "if eori-only do not show Start page" in {
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
+      val result =
+        controller.startRegister(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+      status(result) shouldBe SEE_OTHER
+    }
+  }
   "Navigating to logout" should {
     "logout an authenticated user for register" in {
       withAuthorisedUser(defaultUserId, mockAuthConnector)
