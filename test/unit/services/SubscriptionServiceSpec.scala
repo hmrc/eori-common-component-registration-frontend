@@ -35,7 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   SubscriptionResponse
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetailsOld}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpTypeOfPerson
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   SubscriptionFailed,
@@ -139,8 +139,8 @@ class SubscriptionServiceSpec
     }
 
     "call connector with correct person type when user is an individual and organisation type has not been manually selected" in {
-      val vatIdsGenerator                   = Gen.oneOf(List(VatIdentification(Some("GB"), Some("123456789"))))
-      val vatDetails: Option[VatDetailsOld] = ukVatDetails
+      val vatIdsGenerator                = Gen.oneOf(List(VatIdentification(Some("GB"), Some("123456789"))))
+      val vatDetails: Option[VatDetails] = ukVatDetails
 
       check(Prop.forAllNoShrink(vatIdsGenerator) { vatIds =>
         val expectedRequest = requestJsonIndividual(
@@ -575,7 +575,7 @@ class SubscriptionServiceSpec
       businessShortName = None,
       dateEstablished = Some(dateOfEstablishment),
       sicCode = Some(principalEconomicActivity),
-      ukVatDetailsOld = ukVatDetails
+      ukVatDetails = ukVatDetails
     )
 
     val result = makeSubscriptionRequest(
@@ -595,7 +595,7 @@ class SubscriptionServiceSpec
   private def assertIndividualSubscriptionRequest(
     expectedRequest: JsValue,
     expectedServiceCallResult: SubscriptionSuccessful,
-    ukVatDetails: Option[VatDetailsOld],
+    ukVatDetails: Option[VatDetails],
     subscriptionContactDetails: ContactDetailsModel = subscriptionContactDetailsModel,
     personalDataDisclosureConsent: Boolean = false
   ): Unit = {
@@ -603,7 +603,7 @@ class SubscriptionServiceSpec
     val subscriptionDetailsHolder = SubscriptionDetails(
       contactDetails = Some(subscriptionContactDetails),
       personalDataDisclosureConsent = Some(personalDataDisclosureConsent),
-      ukVatDetailsOld = ukVatDetails
+      ukVatDetails = ukVatDetails
     )
 
     val result = makeSubscriptionRequest(

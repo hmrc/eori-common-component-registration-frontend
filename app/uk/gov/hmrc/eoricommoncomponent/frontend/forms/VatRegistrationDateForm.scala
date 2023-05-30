@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.json.{Format, Json}
+import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
 import java.time.LocalDate
@@ -31,6 +32,8 @@ object VatRegistrationDate {
 
 object VatRegistrationDateForm extends Mappings {
 
+  private val minimumDate = LocalDate.of(DateConverter.earliestYearEffectiveVatDate, 1, 1)
+
   val vatRegistrationDateForm =
     Form(
       mapping(
@@ -38,6 +41,8 @@ object VatRegistrationDateForm extends Mappings {
           emptyKey = "vat.error.empty-date-new",
           invalidKey = "vat.error.invalid-date-new"
         )
+          .verifying(minDate(minimumDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+          .verifying(maxDate(LocalDate.now(), "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
       )(VatRegistrationDate.apply)(VatRegistrationDate.unapply)
     )
 

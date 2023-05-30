@@ -27,7 +27,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CheckYourDetailsRegisterController, FeatureFlags}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Partnership, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlow}
@@ -63,8 +63,8 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockSubscriptionDetails               = mock[SubscriptionDetails]
   private val mockRegisterWithoutIdWithSubscription = mock[RegisterWithoutIdWithSubscriptionService]
   private val mockSubscriptionFlow                  = mock[SubscriptionFlow]
+  private val mockVatControlListDetails             = mock[VatControlListResponse]
   private val mockRequestSession                    = mock[RequestSessionData]
-  private val mockFeatureFlags                      = mock[FeatureFlags]
   private val checkYourDetailsRegisterView          = instanceOf[check_your_details_register]
 
   val controller = new CheckYourDetailsRegisterController(
@@ -73,8 +73,7 @@ class CheckYourDetailsRegisterControllerSpec
     mockRequestSession,
     mcc,
     checkYourDetailsRegisterView,
-    mockRegisterWithoutIdWithSubscription,
-    mockFeatureFlags
+    mockRegisterWithoutIdWithSubscription
   )
 
   private val organisationRegistrationDetailsWithEmptySafeId = organisationRegistrationDetails.copy(safeId = SafeId(""))
@@ -90,7 +89,6 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
       Right(mockSubscriptionFlow)
     )
-    when(mockSubscriptionDetails.ukVatDetailsOld).thenReturn(None)
     when(mockSubscriptionDetails.ukVatDetails).thenReturn(None)
     when(mockSubscriptionDetails.businessShortName).thenReturn(None)
     when(mockSubscriptionDetails.dateEstablished).thenReturn(None)
@@ -101,7 +99,9 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSubscriptionDetails.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
     when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetails)
     when(mockRequestSession.isPartnershipOrLLP(any[Request[AnyContent]])).thenReturn(false)
-    when(mockFeatureFlags.useNewVATJourney).thenReturn(false)
+    when(mockSubscriptionDetails.vatVerificationOption).thenReturn(Some(true))
+    when(mockSubscriptionDetails.vatControlListResponse).thenReturn(vatControlListResponseDetails)
+    when(mockVatControlListDetails.dateOfReg).thenReturn(Some("2017-01-01"))
   }
 
   "Reviewing the details" should {
@@ -284,7 +284,7 @@ class CheckYourDetailsRegisterControllerSpec
         ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.emailAddress
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "VAT number") shouldBe NotEntered
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
-          strim(s"""                 
+          strim(s"""
                  |${contactUkDetailsModelWithMandatoryValuesOnly.street.get}
                  |${contactUkDetailsModelWithMandatoryValuesOnly.city.get}
                  |United Kingdom
@@ -409,7 +409,7 @@ class CheckYourDetailsRegisterControllerSpec
           "Email address"
         ) shouldBe contactDetailsModelWithAllValues.emailAddress
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
-          strim(s"""             
+          strim(s"""
                  |${contactDetailsModelWithAllValues.street.get}
                  |${contactDetailsModelWithAllValues.city.get}
                  |${contactDetailsModelWithAllValues.postcode.get} France
@@ -463,10 +463,10 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered company address") shouldBe
         strim("""
-            |street
-            |city
-            |SE28 1AA
-            |United Kingdom
+              |street
+              |city
+              |SE28 1AA
+              |United Kingdom
           """)
       page.summaryListHrefPresent(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -501,10 +501,10 @@ class CheckYourDetailsRegisterControllerSpec
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
         strim("""
-            |Line 1
-            |city name
-            |SE28 1AA
-            |France
+              |Line 1
+              |city name
+              |SE28 1AA
+              |France
           """)
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -622,10 +622,10 @@ class CheckYourDetailsRegisterControllerSpec
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Partnership address") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Partnership address") shouldBe
         strim("""
-            |street
-            |city
-            |SE28 1AA
-            |United Kingdom
+              |street
+              |city
+              |SE28 1AA
+              |United Kingdom
           """)
       page.summaryListHrefPresent(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -652,11 +652,11 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe true
       page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
-        strim("""           
-            |Line 1
-            |city name
-            |SE28 1AA
-            |France
+        strim("""
+              |Line 1
+              |city name
+              |SE28 1AA
+              |France
           """)
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -785,7 +785,7 @@ class CheckYourDetailsRegisterControllerSpec
 
   "VAT details" should {
     "display only UK vat details when found in cache" in {
-      when(mockSubscriptionDetails.ukVatDetailsOld).thenReturn(gbVatDetails)
+      when(mockSubscriptionDetails.ukVatDetails).thenReturn(gbVatDetails)
       mockRegistrationDetailsBasedOnOrganisationType(Individual)
 
       showForm() { result =>
@@ -825,9 +825,9 @@ class CheckYourDetailsRegisterControllerSpec
 
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Contact address") shouldBe
       strim(s"""
-           |${contactDetailsModelWithAllValues.street.get}
-           |${contactDetailsModelWithAllValues.city.get}
-           |${contactDetailsModelWithAllValues.postcode.get} $countryString
+             |${contactDetailsModelWithAllValues.street.get}
+             |${contactDetailsModelWithAllValues.city.get}
+             |${contactDetailsModelWithAllValues.postcode.get} $countryString
               """)
   }
 
@@ -852,8 +852,7 @@ class CheckYourDetailsRegisterControllerSpec
       mockRequestSession,
       mcc,
       checkYourDetailsRegisterView,
-      mockRegisterWithoutIdWithSubscription,
-      mockFeatureFlags
+      mockRegisterWithoutIdWithSubscription
     )
 
     withAuthorisedUser(userId, mockAuthConnector)

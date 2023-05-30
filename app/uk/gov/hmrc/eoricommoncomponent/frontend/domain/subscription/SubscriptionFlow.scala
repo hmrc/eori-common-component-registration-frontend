@@ -234,7 +234,7 @@ case object VatRegisteredUkSubscriptionFlowPage extends SubscriptionPage {
 case object VatDetailsSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsControllerOld
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
       .createForm(service)
       .url
 
