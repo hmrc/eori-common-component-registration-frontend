@@ -64,6 +64,8 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
       val result =
         controller.startRegister(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
       status(result) shouldBe SEE_OTHER
+      result.header.headers("Location") should endWith("/customs-registration-services/eori-only/register/check-user")
+
     }
   }
   "Navigating to logout" should {
