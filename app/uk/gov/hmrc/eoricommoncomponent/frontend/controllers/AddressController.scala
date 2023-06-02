@@ -16,94 +16,34 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
-import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetailsSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class AddressController @Inject() (
-  authorise: AuthAction,
-  subscriptionBusinessService: SubscriptionBusinessService,
-  subscriptionDetailsService: SubscriptionDetailsService,
-  subscriptionFlowManager: SubscriptionFlowManager,
-  mcc: MessagesControllerComponents,
-  addressView: address,
-  errorTemplate: error_template
-)(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
-
-  private val logger = Logger(this.getClass)
+class AddressController @Inject() (authorise: AuthAction, addressService: AddressService)(implicit
+  ec: ExecutionContext
+) {
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      populateOkView(None, isInReviewMode = false, service)
+      addressService.populateOkView(None, isInReviewMode = false, service)
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionBusinessService.cachedContactDetailsModel.flatMap {
-        case Some(cdm) =>
-          populateOkView(cdm.toAddressViewModel, isInReviewMode = true, service)
-        case _ =>
-          Future.successful(InternalServerError(errorTemplate()))
-      }
+      addressService.populateViewIfContactDetailsCached(service)
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      addressDetailsCreateForm().bindFromRequest
-        .fold(
-          formWithErrors => populateCountriesToInclude(isInReviewMode, service, formWithErrors, BadRequest),
-          address =>
-            saveAddress(address).flatMap(
-              _ =>
-                subscriptionFlowManager.stepInformation(ContactDetailsSubscriptionFlowPageGetEori) match {
-                  case Right(flowInfo) => Future.successful(Redirect(flowInfo.nextPage.url(service)))
-                  case Left(_) =>
-                    logger.warn(s"Unable to identify subscription flow: key not found in cache")
-                    Future.successful(Redirect(ApplicationController.startRegister(service)))
-                }
-            )
-        )
-    }
-
-  private def saveAddress(ad: AddressViewModel)(implicit request: Request[AnyContent]) =
-    for {
-      contactDetails <- subscriptionBusinessService.cachedContactDetailsModel
-    } yield subscriptionDetailsService.cacheContactAddressDetails(
-      ad,
-      contactDetails.getOrElse(throw new IllegalStateException("Address not found in cache"))
-    )
-
-  private def populateCountriesToInclude(
-    isInReviewMode: Boolean,
-    service: Service,
-    form: Form[AddressViewModel],
-    status: Status
-  )(implicit request: Request[AnyContent]) =
-    Future.successful(status(addressView(form, Countries.all, isInReviewMode, service)))
-
-  private def populateOkView(address: Option[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
-    request: Request[AnyContent]
-  ): Future[Result] =
-    if (!isInReviewMode)
-      populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm, Ok)
-    else {
-      lazy val form = address.fold(addressDetailsCreateForm())(addressDetailsCreateForm().fill(_))
-      populateCountriesToInclude(isInReviewMode, service, form, Ok)
+      addressService.handleFormDataAndRedirect(addressDetailsCreateForm(), isInReviewMode, service)
     }
 
 }

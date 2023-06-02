@@ -16,240 +16,35 @@
 
 package unit.controllers.address
 
-import common.pages.subscription.AddressPage
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalacheck.Gen
-import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.Results.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{AddressController, SubscriptionFlowManager}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
-import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
 import unit.controllers.{
-  CdsPage,
   SubscriptionFlowCreateModeTestSupport,
   SubscriptionFlowReviewModeTestSupport,
   SubscriptionFlowTestSupport
 }
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.RegistrationDetailsBuilder._
 import util.builders.SessionBuilder
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AddressControllerSpec
-    extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
+    extends SubscriptionFlowTestSupport with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  private val mockRequestSessionData    = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache  = mock[SessionCache]
-  private val mockSubscriptionFlow      = mock[SubscriptionFlowManager]
-  private val mockSubscriptionFlowInfo  = mock[SubscriptionFlowInfo]
-  private val mockSubscriptionPage      = mock[SubscriptionPage]
-  private val mockSubscriptionFlowError = mock[FlowError]
+  private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
-  private val viewAddress       = instanceOf[address]
-  private val viewErrorTemplate = instanceOf[error_template]
+  private val mockAddressService = mock[AddressService]
 
-  private val controller = new AddressController(
-    mockAuthAction,
-    mockSubscriptionBusinessService,
-    mockSubscriptionDetailsService,
-    mockSubscriptionFlow,
-    mcc,
-    viewAddress,
-    viewErrorTemplate
-  )
-
-  def stringOfLengthXGen(minLength: Int): Gen[String] =
-    for {
-      single: Char       <- Gen.alphaNumChar
-      baseString: String <- Gen.listOfN(minLength, Gen.alphaNumChar).map(c => c.mkString)
-      additionalEnding   <- Gen.alphaStr
-    } yield single + baseString + additionalEnding
-
-  val mandatoryFields      = Map("city" -> "city", "street" -> "street", "postcode" -> "SE28 1AA", "countryCode" -> "GB")
-  val mandatoryFieldsEmpty = Map("city" -> "", "street" -> "", "postcode" -> "", "countryCode" -> "")
-
-  val invalidStreetField =
-    Map(
-      "street"      -> "",
-      "city"        -> "address line 1 address line 2 street town city name postcode United Kingdom",
-      "street"      -> "",
-      "postcode"    -> "",
-      "countryCode" -> ""
-    )
-
-  val invalidCityField =
-    Map("city" -> "address line 1 city postcode United Kingdom", "street" -> "", "postcode" -> "", "countryCode" -> "")
-
-  val aFewCountries = List(
-    Country("France", "country:FR"),
-    Country("Germany", "country:DE"),
-    Country("Italy", "country:IT"),
-    Country("Japan", "country:JP")
-  )
-
-  val contactDetailsModel = ContactDetailsModel(
-    fullName = "John Doe",
-    emailAddress = "john.doe@example.com",
-    telephone = "234234",
-    None,
-    false,
-    Some("streetName"),
-    Some("cityName"),
-    Some("SE281AA"),
-    Some("GB")
-  )
-
-  private val validRequest =
-    Map("street" -> "streetName", "city" -> "cityName", "postcode" -> "SE281AA", "countryCode" -> "GB")
-
-  private val inValidRequest = Map("city" -> "", "postcode" -> "SE281AA", "countryCode" -> "GB")
-
-  override def beforeEach: Unit = {
-    super.beforeEach()
-
-    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
-    when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
-      .thenReturn(Right(mockSubscriptionFlowInfo))
-    when(mockSubscriptionFlowInfo.nextPage).thenReturn(mockSubscriptionPage)
-  }
-
-  private val problemWithSelectionError = "Error: This field is required"
-
-  override protected def afterEach(): Unit = {
-    reset(mockSubscriptionBusinessService, mockRequestSessionData, mockSubscriptionDetailsService)
-
-    super.afterEach()
-  }
-
-  "Subscription Address Controller form in create mode" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
-
-    "display title as 'EORI number application contact address'" in {
-      showCreateForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("EORI number application contact address")
-      }
-    }
-
-  }
-  "Subscription Address Controller form in  review mode" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.reviewForm(atarService))
-
-    "populate form if address is in the cache" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-        .thenReturn(Some(contactDetailsModel))
-      showReviewForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("EORI number application contact address")
-        page.getElementValue(AddressPage.streetFieldXPath) shouldBe "streetName"
-        page.getElementValue(AddressPage.cityFieldXPath) shouldBe "cityName"
-        page.getElementValue(AddressPage.postcodeFieldXPath) shouldBe "SE281AA"
-      }
-    }
-
-    "display the correct text for the continue button" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-        .thenReturn(Some(contactDetailsModel))
-      showReviewForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementText(AddressPage.continueButtonXpath) shouldBe ContinueButtonTextInReviewMode
-      }
-    }
-
-    "throw internal server error if contactDetailsModel is None" in {
-      withAuthorisedUser(defaultUserId, mockAuthConnector)
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-        .thenReturn(None)
-      val result =
-        await(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
-      status(result) shouldBe INTERNAL_SERVER_ERROR
-    }
-  }
-  "Submitting the form in review mode" should {
-    "redirect to review page when details are valid" in {
-      when(mockSubscriptionPage.url(any())).thenReturn(
-        "/customs-registration-services/atar/register/matching/review-determine"
-      )
-      submitFormInReviewMode(validRequest)(verifyRedirectToReviewPage())
-    }
-  }
-  "Submitting the form in create mode" should {
-
-    "display a relevant error if street is not chosen" in {
-      submitFormInCreateMode(inValidRequest) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(AddressPage.streetFieldLevelErrorXPath) shouldBe problemWithSelectionError
-      }
-    }
-
-    "display a relevant error if city exceed 35 chars" in {
-      submitFormInCreateMode(invalidCityField) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          AddressPage.cityFieldLevelErrorXPath
-        ) shouldBe "Error: The town or city must be 35 characters or less"
-      }
-    }
-
-    "display a relevant error if line exceed 70 chars" in {
-      submitFormInCreateMode(invalidStreetField) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          AddressPage.streetFieldLevelErrorXPath
-        ) shouldBe "Error: Enter the first line of your address"
-      }
-    }
-
-  }
-
-  private def submitFormInReviewMode(form: Map[String, String], userId: String = defaultUserId)(
-    test: Future[Result] => Any
-  ) {
-    withAuthorisedUser(userId, mockAuthConnector)
-
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-      .thenReturn(Some(contactDetailsModel))
-    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[Request[_]]))
-      .thenReturn(Future.successful(()))
-
-    test(
-      controller.submit(isInReviewMode = true, atarService)(
-        SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-      )
-    )
-  }
-
-  private def submitFormInCreateMode(form: Map[String, String], userId: String = defaultUserId)(
-    test: Future[Result] => Any
-  ) {
-    withAuthorisedUser(userId, mockAuthConnector)
-
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-      .thenReturn(Some(contactDetailsModel))
-    when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[Request[_]]))
-      .thenReturn(Future.successful(()))
-
-    test(
-      controller.submit(isInReviewMode = false, atarService)(
-        SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-      )
-    )
-  }
+  private val controller = new AddressController(mockAuthAction, mockAddressService)
 
   protected override val formId: String = "addressDetailsForm"
 
@@ -263,21 +58,54 @@ class AddressControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
-    withAuthorisedUser(userId, mockAuthConnector)
-
-    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
-
-    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+  "createForm" should {
+    "Display successfully" in servicesToTest.foreach { service =>
+      when(mockAddressService.populateOkView(any(), any(), any())(any[Request[AnyContent]])).thenReturn(
+        Future.successful(Status(OK))
+      )
+      createForm(service) { result =>
+        status(result) shouldBe OK
+      }
+    }
   }
 
-  private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
-    withAuthorisedUser(userId, mockAuthConnector)
+  "reviewForm" should {
+    "Display successfully" in servicesToTest.foreach { service =>
+      when(mockAddressService.populateViewIfContactDetailsCached(any())(any[Request[AnyContent]])).thenReturn(
+        Future.successful(Status(SEE_OTHER))
+      )
+      reviewForm(service) { result =>
+        status(result) shouldBe SEE_OTHER
+      }
+    }
+  }
 
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-      .thenReturn(Some(contactDetailsModel))
+  "submitForm" should {
+    "Submit successfully" in servicesToTest.foreach { service =>
+      when(mockAddressService.handleFormDataAndRedirect(any(), any(), any())(any[Request[AnyContent]])).thenReturn(
+        Future.successful(Status(SEE_OTHER))
+      )
+      submitForm(service) { result =>
+        status(result) shouldBe SEE_OTHER
+      }
+    }
+  }
 
-    test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+  private def createForm(service: Service)(test: Future[Result] => Any) = {
+    withAuthorisedUser(defaultUserId, mockAuthConnector)
+    test(controller.createForm(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+  }
+
+  private def reviewForm(service: Service)(test: Future[Result] => Any) = {
+    withAuthorisedUser(defaultUserId, mockAuthConnector)
+    test(controller.reviewForm(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+  }
+
+  private def submitForm(service: Service)(test: Future[Result] => Any) = {
+    withAuthorisedUser(defaultUserId, mockAuthConnector)
+    test(
+      controller.submit(isInReviewMode = false, service).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+    )
   }
 
 }
