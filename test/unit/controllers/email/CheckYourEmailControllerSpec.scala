@@ -252,7 +252,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         .thenReturn(Future.successful(Some(EmailStatus(Some(email), isConfirmed = Some(true)))))
       emailConfirmed(defaultUserId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
+        result.header.headers("Location") should endWith(routes.UserLocationController.form(atarService).url)
       }
     }
 
@@ -271,7 +271,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
     "redirect to MatchingIdController" in {
       emailConfirmedContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
+        result.header.headers("Location") should endWith(routes.UserLocationController.form(atarService).url)
       }
     }
   }
