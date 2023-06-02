@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CdsController, SubscriptionFlowManager}
@@ -39,9 +39,7 @@ class AddressService @Inject() (
   errorTemplate: error_template,
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
-
-  private val logger = Logger(this.getClass)
+    extends CdsController(mcc) with Logging {
 
   private def saveAddress(ad: AddressViewModel)(implicit request: Request[AnyContent]) =
     for {
@@ -88,11 +86,9 @@ class AddressService @Inject() (
   def populateOkView(address: Option[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
-    if (!isInReviewMode)
-      populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm, Ok)
-    else {
+    if (isInReviewMode) {
       lazy val form = address.fold(addressDetailsCreateForm())(addressDetailsCreateForm().fill(_))
       populateCountriesToInclude(isInReviewMode, service, form, Ok)
-    }
+    } else populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm, Ok)
 
 }
