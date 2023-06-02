@@ -41,16 +41,6 @@
     service: Service
 )(implicit request: Request[_], messages: Messages)
 
-@labelForEUCountry(countryCode: String) = @{ messages(messageKeyForEUCountryCode(countryCode)) }
-
-@messageKeyForEUCountryCode(countryCode: String) = @{
-    s"cds.country.$countryCode"
-}
-
-@isEUCountryCode(countryCode: String) = @{
-    messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
-}
-
 @fieldsetHint = {
     @govukHint(Hint(id= Some("fieldset-hint"), content = Text(messages("ecc.manual-address-details.heading.hint")), classes = "govuk-!-margin-bottom-3"))
 }
