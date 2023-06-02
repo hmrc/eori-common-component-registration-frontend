@@ -23,7 +23,6 @@ class FeatureFlags @Inject() (config: Configuration) {
 
   def loadConfig(path: String): Boolean = config.get[Boolean](path)
 
-  // hard-code flag in case the feature ever needs to be re-introduced
 
   val sub02UseServiceName: Boolean          = loadConfig("features.sub02UseServiceName")
   val arsNewJourney: Boolean                = loadConfig("features.arsNewJourney")
