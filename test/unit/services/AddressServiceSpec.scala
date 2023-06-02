@@ -53,7 +53,6 @@ class AddressServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
   private val mockFlowError                    = mock[FlowError]
   private val mockApplicationController        = mock[ApplicationController]
   private val mockAddress                      = mock[address]
-  private val mockAddressViewModel             = mock[AddressViewModel]
   private val mockErrorTemplate                = mock[error_template]
   private val mockMessagesControllerComponents = mock[MessagesControllerComponents]
 
@@ -72,24 +71,6 @@ class AddressServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
     mockErrorTemplate,
     mockMessagesControllerComponents
   )
-
-  "saveAddress" should {
-    "Successfully save address" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(
-        Future.successful(Some(contactDetailsModel))
-      )
-      service.saveAddress(mockAddressViewModel)(SessionBuilder.buildRequestWithSession(defaultUserId))
-      verify(mockSubscriptionDetailsService).cacheContactAddressDetails(any(), any())(any[Request[_]])
-    }
-
-    "Throw exception when data not found in cache" in {
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(None)
-      val caught = intercept[IllegalStateException] {
-        await(service.saveAddress(mockAddressViewModel)(SessionBuilder.buildRequestWithSession(defaultUserId)))
-      }
-      caught.getMessage mustBe "Address not found in cache"
-    }
-  }
 
   "populateViewIfContactDetailsCached" should {
     "Successfully populate view when details are cached" in subscriptionToTest.foreach { subscription =>

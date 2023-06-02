@@ -43,7 +43,7 @@ class AddressService @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def saveAddress(ad: AddressViewModel)(implicit request: Request[AnyContent]) =
+  private def saveAddress(ad: AddressViewModel)(implicit request: Request[AnyContent]) =
     for {
       contactDetails <- subscriptionBusinessService.cachedContactDetailsModel
     } yield subscriptionDetailsService.cacheContactAddressDetails(
