@@ -26,8 +26,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   EmailController,
-  MatchingIdController,
-  SecuritySignOutController
+  SecuritySignOutController,
+  UserLocationController
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
@@ -91,13 +91,14 @@ class CheckYourEmailService @Inject() (
         Future.successful(Redirect(SecuritySignOutController.signOut(service)))
       } { email =>
         if (email.isConfirmed.getOrElse(false))
-          Future.successful(Redirect(MatchingIdController.matchWithIdOnly(service)))
+          Future.successful(Redirect(UserLocationController.form(service)))
         else
           save4LaterService
             .saveEmail(GroupId(userWithEnrolments.groupId), email.copy(isConfirmed = Some(true)))
             .map { _ =>
               Ok(emailConfirmedView())
             }
+
       }
     }
 

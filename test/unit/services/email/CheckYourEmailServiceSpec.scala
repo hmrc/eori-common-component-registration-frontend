@@ -115,7 +115,9 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
 
         val result = await(service.emailConfirmed(loggedInUser, subscription))
         result.header.status mustBe SEE_OTHER
-        result.header.headers("Location") mustBe (s"/customs-registration-services/${subscription.code}/register/match")
+        result.header.headers(
+          "Location"
+        ) mustBe (s"/customs-registration-services/${subscription.code}/register/matching/user-location")
     }
 
     "redirect to SecuritySignOutController when email not in cache" in servicesToTest.foreach { subscription =>
