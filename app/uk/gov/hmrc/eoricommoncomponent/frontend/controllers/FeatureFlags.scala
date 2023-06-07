@@ -23,8 +23,7 @@ class FeatureFlags @Inject() (config: Configuration) {
 
   def loadConfig(path: String): Boolean = config.get[Boolean](path)
 
-  val sub02UseServiceName: Boolean          = loadConfig("features.sub02UseServiceName")
-  val arsNewJourney: Boolean                = loadConfig("features.arsNewJourney")
-  val edgeCaseJourney: Boolean              = loadConfig("features.edgeCaseJourney")
-  val useNewCharityEdgeCaseJourney: Boolean = loadConfig("features.useNewCharityEdgeCaseJourney")
+  val sub02UseServiceName: Boolean = loadConfig("features.sub02UseServiceName")
+  val arsNewJourney: Boolean       = loadConfig("features.arsNewJourney")
+  val edgeCaseJourney: Boolean     = loadConfig("features.edgeCaseJourney")
 }
