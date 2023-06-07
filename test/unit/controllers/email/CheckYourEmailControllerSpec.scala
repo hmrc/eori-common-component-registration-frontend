@@ -16,25 +16,15 @@
 
 package unit.controllers.email
 
-import common.pages.emailvericationprocess.CheckYourEmailPage
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.libs.json.Json
-import play.api.mvc.{Request, Result}
+import play.api.mvc.Results.Status
+import play.api.mvc.{AnyContent, Request}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmailController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.GroupId
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
-import uk.gov.hmrc.http.HeaderCarrier
-import unit.controllers.CdsPage
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.CheckYourEmailService
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.YesNoFormBuilder.ValidRequest
@@ -47,274 +37,107 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
 
   private val yesNoInputName = "yes-no-answer"
   private val answerYes      = true.toString
-  private val answerNo       = false.toString
-
-  private val problemWithSelectionError =
-    "Select yes if this is the correct email address"
 
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
 
-  private val mockEmailVerificationService = mock[EmailVerificationService]
+  private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
-  private val mockSave4LaterService = mock[Save4LaterService]
-  private val mockSessionCache      = mock[SessionCache]
+  private val mockCheckYourEmailService = mock[CheckYourEmailService]
 
-  private val checkYourEmailView = instanceOf[check_your_email]
-  private val emailConfirmedView = instanceOf[email_confirmed]
-  private val verifyYourEmail    = instanceOf[verify_your_email]
+  private val controller = new CheckYourEmailController(mockAuthAction, mockCheckYourEmailService, mcc)
 
-  private val controller = new CheckYourEmailController(
-    mockAuthAction,
-    mockSave4LaterService,
-    mockSessionCache,
-    mcc,
-    checkYourEmailView,
-    emailConfirmedView,
-    verifyYourEmail,
-    mockEmailVerificationService
-  )
+  "createForm" should {
+    "correctly display check_your_email view" in servicesToTest.foreach { subscription =>
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockCheckYourEmailService.fetchEmailAndPopulateView(any(), any(), any())(any[Request[AnyContent]]))
+        .thenReturn(Future.successful(Status(OK)))
 
-  val email       = "test@example.com"
-  val emailStatus = EmailStatus(Some(email))
-
-  val internalId = "InternalID"
-  val jsonValue  = Json.toJson(emailStatus)
-  val data       = Map(internalId -> jsonValue)
-  val unit       = ()
-
-  override def beforeEach: Unit = {
-    when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-      .thenReturn(Future.successful(Some(emailStatus)))
-
-    when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
-      .thenReturn(Future.successful(Some(true)))
-  }
-
-  "Displaying the Check Your Email Page" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
-
-    "display title as 'Check your email address'" in {
-      showForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Is this the email address you want to use?")
-      }
-    }
-
-    "display title as 'Check your email address' when no email saved in session" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(None))
-      showForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Is this the email address you want to use?")
-      }
+      val result =
+        await(controller.createForm(subscription).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+      result.header.status shouldBe OK
     }
   }
 
-  "Submitting the Check Your Email Page" should {
+  "submit" should {
+    "correctly handle valid confirmEmailYesNoAnswerForm" in servicesToTest.foreach { subscription =>
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockCheckYourEmailService.locationByAnswer(any(), any(), any())(any[Request[AnyContent]]))
+        .thenReturn(Future.successful(Status(OK)))
 
-    "redirect to Verify Your Email Address page for unverified email address" in {
-      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(true)))
-      submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") should endWith(
-            "/customs-registration-services/atar/register/matching/verify-your-email"
+      val result = await(
+        controller.submit(isInReviewMode = false, subscription).apply(
+          SessionBuilder.buildRequestWithSessionAndFormValues(
+            defaultUserId,
+            ValidRequest + (yesNoInputName -> answerYes)
           )
-      }
+        )
+      )
+      result.header.status shouldBe OK
     }
 
-    "redirect to Are You based in UK for Already verified email" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = true))))
-      when(
-        mockSave4LaterService
-          .saveEmail(any[GroupId], any[EmailStatus])(any[HeaderCarrier])
-      ).thenReturn(Future.successful(unit))
-      when(mockSessionCache.saveEmail(any[String])(any[Request[_]]))
-        .thenReturn(Future.successful(true))
+    "correctly handle valid confirmEmailYesNoAnswerForm - inReviewMode" in servicesToTest.foreach { subscription =>
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockCheckYourEmailService.locationByAnswer(any(), any(), any())(any[Request[AnyContent]]))
+        .thenReturn(Future.successful(Status(OK)))
 
-      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(false)))
-
-      submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") should endWith("/customs-registration-services/atar/register/check-user")
-      }
-    }
-
-    "throw  IllegalStateException when downstream CreateEmailVerificationRequest Fails" in {
-      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(None))
-
-      the[IllegalStateException] thrownBy {
-        submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
-          result =>
-            status(result) shouldBe SEE_OTHER
-        }
-      } should have message "CreateEmailVerificationRequest Failed"
-    }
-
-    "throw  IllegalStateException when save4LaterService.fetchEmail returns None" in {
-      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(true)))
-      when(mockSave4LaterService.fetchEmail(any())(any())) thenReturn Future.successful(None)
-      the[IllegalStateException] thrownBy {
-        submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
-          result =>
-            status(result) shouldBe SEE_OTHER
-        }
-      } should have message "[CheckYourEmailController][submitNewDetails] - emailStatus cache none"
-    }
-
-    "throw  IllegalStateException when save4LaterService.fetchEmail returns EmailStatus with undefined email" in {
-      when(mockEmailVerificationService.createEmailVerificationRequest(any[String], any[String])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(true)))
-      val emailStatus = EmailStatus(None)
-      when(mockSave4LaterService.fetchEmail(any())(any())) thenReturn Future.successful(Some(emailStatus))
-      the[IllegalStateException] thrownBy {
-        submitForm(ValidRequest + (yesNoInputName -> answerYes), service = atarService) {
-          result =>
-            status(result) shouldBe SEE_OTHER
-        }
-      } should have message "[CheckYourEmailController][submitNewDetails] - emailStatus.email none"
-    }
-
-    "redirect to What is Your Email Address Page on selecting No radio button" in {
-      submitForm(ValidRequest + (yesNoInputName -> answerNo), service = atarService) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") should endWith(
-            "/customs-registration-services/atar/register/matching/what-is-your-email"
+      val result = await(
+        controller.submit(isInReviewMode = true, subscription).apply(
+          SessionBuilder.buildRequestWithSessionAndFormValues(
+            defaultUserId,
+            ValidRequest + (yesNoInputName -> answerYes)
           )
-      }
+        )
+      )
+      result.header.status shouldBe OK
     }
 
-    "display an error message when no option is selected" in {
-      submitForm(ValidRequest - yesNoInputName, service = atarService) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(CheckYourEmailPage.pageLevelErrorSummaryListXPath) shouldBe problemWithSelectionError
-        page.getElementsText(
-          CheckYourEmailPage.fieldLevelErrorYesNoAnswer
-        ) shouldBe s"Error: $problemWithSelectionError"
-      }
-    }
+    "correctly handle invalid confirmEmailYesNoAnswerForm - with errors" in servicesToTest.foreach { subscription =>
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockCheckYourEmailService.handleFormWithErrors(any(), any(), any(), any())(any[Request[AnyContent]]))
+        .thenReturn(Future.successful(Status(BAD_REQUEST)))
 
-    "display an error message when no email in session" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(None))
-      submitForm(ValidRequest - yesNoInputName, service = atarService) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(CheckYourEmailPage.pageLevelErrorSummaryListXPath) shouldBe problemWithSelectionError
-        page.getElementsText(
-          CheckYourEmailPage.fieldLevelErrorYesNoAnswer
-        ) shouldBe s"Error: $problemWithSelectionError"
-      }
+      val result = await(
+        controller.submit(isInReviewMode = true, subscription).apply(
+          SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, ValidRequest + (yesNoInputName -> ""))
+        )
+      )
+      result.header.status shouldBe BAD_REQUEST
     }
   }
 
-  "Redirecting to Verify Your Email Address Page" should {
-    "display title as 'Confirm your email address'" in {
-      verifyEmailViewForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Confirm your email address")
-      }
-    }
+  "verifyEmailView" should {
+    "correctly display verify_your_email view" in servicesToTest.foreach { subscription =>
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockCheckYourEmailService.fetchEmailAndPopulateView(any(), any(), any())(any[Request[AnyContent]]))
+        .thenReturn(Future.successful(Status(OK)))
 
-    "display title as 'Confirm your email address' when no email in session" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(None))
-
-      verifyEmailViewForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Confirm your email address")
-      }
+      val result =
+        await(controller.verifyEmailView(subscription).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+      result.header.status shouldBe OK
     }
   }
 
-  "Email Confirmed" should {
-    "redirect to SecuritySignOutController when no email in session" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(None))
-      emailConfirmed(defaultUserId) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(routes.SecuritySignOutController.signOut(atarService).url)
-      }
-    }
+  "emailConfirmed" should {
+    "correctly display email_confirmed view" in servicesToTest.foreach { subscription =>
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockCheckYourEmailService.emailConfirmed(any(), any())(any[Request[AnyContent]]))
+        .thenReturn(Future.successful(Status(OK)))
 
-    "redirect to MatchingIdController when email is confirmed" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(EmailStatus(Some(email), isConfirmed = Some(true)))))
-      emailConfirmed(defaultUserId) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
-      }
-    }
-
-    "display emailConfirmedView when email is not confirmed" in {
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(EmailStatus(Some(email)))))
-      emailConfirmed(defaultUserId) { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.title() should startWith("You have confirmed your email address")
-      }
+      val result =
+        await(controller.emailConfirmed(subscription).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+      result.header.status shouldBe OK
     }
   }
 
-  "Email Confirmed Continue" should {
-    "redirect to MatchingIdController" in {
-      emailConfirmedContinue() { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(routes.MatchingIdController.matchWithIdOnly(atarService).url)
-      }
+  "emailConfirmedContinue" should {
+    "correctly redirect to MatchingIdController" in servicesToTest.foreach { subscription =>
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      val result = await(
+        controller.emailConfirmedContinue(subscription).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+      )
+      result.header.status shouldBe SEE_OTHER
     }
-  }
-
-  private def submitForm(form: Map[String, String], userId: String = defaultUserId, service: Service)(
-    test: Future[Result] => Any
-  ) {
-    withAuthorisedUser(userId, mockAuthConnector)
-    val result = controller.submit(isInReviewMode = false, service)(
-      SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
-    )
-    test(result)
-  }
-
-  private def showForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
-    withAuthorisedUser(userId, mockAuthConnector)
-    val result = controller
-      .createForm(atarService)
-      .apply(SessionBuilder.buildRequestWithSession(userId))
-    test(result)
-  }
-
-  private def verifyEmailViewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
-    withAuthorisedUser(userId, mockAuthConnector)
-    val result = controller
-      .verifyEmailView(atarService)
-      .apply(SessionBuilder.buildRequestWithSession(userId))
-    test(result)
-  }
-
-  private def emailConfirmed(userId: String)(test: Future[Result] => Any) {
-    withAuthorisedUser(userId, mockAuthConnector)
-    val result = controller
-      .emailConfirmed(atarService)
-      .apply(SessionBuilder.buildRequestWithSession(userId))
-    test(result)
-  }
-
-  private def emailConfirmedContinue()(test: Future[Result] => Any) {
-    val result = controller
-      .emailConfirmedContinue(atarService)
-      .apply(SessionBuilder.buildRequestWithSessionNoUser)
-    test(result)
   }
 
 }
