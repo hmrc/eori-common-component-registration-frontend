@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   EmailController,
-  VatDetailsController,
   VatGroupsCannotRegisterUsingThisServiceController
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -28,11 +27,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 
 @Singleton
-class VatGroupController @Inject() (
-  mcc: MessagesControllerComponents,
-  vatGroupView: vat_group,
-  featureFlags: FeatureFlags
-) extends CdsController(mcc) {
+class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group)
+    extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] = Action { implicit request =>
     Ok(vatGroupView(vatGroupYesNoAnswerForm(), service))
@@ -44,14 +40,10 @@ class VatGroupController @Inject() (
       .fold(
         formWithErrors => BadRequest(vatGroupView(formWithErrors, service)),
         yesNoAnswer =>
-          (yesNoAnswer.isYes, featureFlags.edgeCaseJourney) match {
-            case (false, true)  => Redirect(VatDetailsController.createForm(service))
-            case (false, false) => Redirect(EmailController.form(service))
-            case (true, _) =>
-              Redirect(
-                VatGroupsCannotRegisterUsingThisServiceController.form(service)
-              ) //TODO add new edge case routing when developed
-          }
+          if (yesNoAnswer.isYes)
+            Redirect(VatGroupsCannotRegisterUsingThisServiceController.form(service))
+          else
+            Redirect(EmailController.form(service))
       )
   }
 
