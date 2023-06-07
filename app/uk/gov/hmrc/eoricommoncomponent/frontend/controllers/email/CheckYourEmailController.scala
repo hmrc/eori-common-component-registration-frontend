@@ -69,4 +69,5 @@ class CheckYourEmailController @Inject() (
 
   def emailConfirmedContinue(service: Service): Action[AnyContent] =
     Action(_ => Redirect(UserLocationController.form(service)))
+
 }
