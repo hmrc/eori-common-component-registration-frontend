@@ -68,15 +68,6 @@ object OrganisationTypeConfiguration {
   val ThirdCountryIndividual: OrganisationTypeConfiguration =
     OrganisationTypeConfiguration(EtmpTypeOfPerson.NaturalPerson, EtmpLegalStatus.UnincorporatedBody)
 
-  val IoMOrganisation: OrganisationTypeConfiguration =
-    OrganisationTypeConfiguration(EtmpTypeOfPerson.LegalPerson, EtmpLegalStatus.CorporateBody)
-
-  val IoMSoleTrader: OrganisationTypeConfiguration =
-    OrganisationTypeConfiguration(EtmpTypeOfPerson.NaturalPerson, EtmpLegalStatus.UnincorporatedBody)
-
-  val IoMIndividual: OrganisationTypeConfiguration =
-    OrganisationTypeConfiguration(EtmpTypeOfPerson.NaturalPerson, EtmpLegalStatus.UnincorporatedBody)
-
   val EtmpPartnership: OrganisationTypeConfiguration =
     OrganisationTypeConfiguration(EtmpTypeOfPerson.LegalPerson, EtmpLegalStatus.Partnership)
 
@@ -104,10 +95,7 @@ object CdsToEtmpOrganisationType {
     CdsOrganisationType.EUIndividual                  -> OrganisationTypeConfiguration.EUIndividual,
     CdsOrganisationType.ThirdCountryOrganisation      -> OrganisationTypeConfiguration.ThirdCountryOrganisation,
     CdsOrganisationType.ThirdCountrySoleTrader        -> OrganisationTypeConfiguration.ThirdCountrySoleTrader,
-    CdsOrganisationType.ThirdCountryIndividual        -> OrganisationTypeConfiguration.ThirdCountryIndividual,
-    CdsOrganisationType.IsleOfManOrganisation         -> OrganisationTypeConfiguration.IoMOrganisation,
-    CdsOrganisationType.IsleOfManSoleTrader           -> OrganisationTypeConfiguration.IoMSoleTrader,
-    CdsOrganisationType.IsleOfManIndividual           -> OrganisationTypeConfiguration.IoMIndividual
+    CdsOrganisationType.ThirdCountryIndividual        -> OrganisationTypeConfiguration.ThirdCountryIndividual
   )
 
   private def etmpTypeOfPersonMap(orgType: EtmpOrganisationType) = orgType match {

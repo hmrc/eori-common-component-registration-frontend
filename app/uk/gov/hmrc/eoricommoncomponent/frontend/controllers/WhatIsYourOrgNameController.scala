@@ -71,12 +71,7 @@ class WhatIsYourOrgNameController @Inject() (
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) flatMap { _ =>
       if (!isInReviewMode)
         subscriptionDetailsService.updateSubscriptionDetailsOrganisation.map(
-          _ =>
-            organisationType match {
-              case CdsOrganisationType.IsleOfManOrganisationId =>
-                Redirect(SixLineAddressController.showForm(isInReviewMode, organisationType, service))
-              case _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, false))
-            }
+          _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, false))
         )
       else
         Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))

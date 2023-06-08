@@ -59,17 +59,13 @@
         CdsOrganisationType.ThirdCountrySoleTraderId -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
         CdsOrganisationType.ThirdCountryIndividualId -> messages("cds.matching.organisation-type.radio.individual.label"))
 
-    lazy val isleOfManOptions = Seq(
-        CdsOrganisationType.IsleOfManOrganisationId -> messages("cds.matching.organisation-type.radio.organisation.label"),
-        CdsOrganisationType.IsleOfManSoleTraderId -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
-        CdsOrganisationType.IsleOfManIndividualId -> messages("cds.matching.organisation-type.radio.individual.label"))
+
 
     selectedUserLocation match {
         case Some(UserLocation.Uk) => ukOptionsFirstScreen
         case Some(UserLocation.Eu) => euOptions
         case Some(UserLocation.ThirdCountry) => thirdCountryOptions
         case Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
-        case Some(UserLocation.Iom) => isleOfManOptions
         case _ => ukOptionsFirstScreen
     }
 }
@@ -79,10 +75,8 @@
     lazy val nonUkOptionHints = Seq(
         CdsOrganisationType.ThirdCountryOrganisationId -> messages("cds.matching.organisation-type.radio.organisation.hint-text"),
         CdsOrganisationType.ThirdCountrySoleTraderId -> messages("cds.matching.organisation-type.radio.sole-trader.hint-text"),
-        CdsOrganisationType.ThirdCountryIndividualId -> messages("cds.matching.organisation-type.radio.individual.hint-text"),
-        CdsOrganisationType.IsleOfManOrganisationId -> messages("cds.matching.organisation-type.radio.organisation.hint-text"),
-        CdsOrganisationType.IsleOfManSoleTraderId -> messages("cds.matching.organisation-type.radio.sole-trader.hint-text"),
-        CdsOrganisationType.IsleOfManIndividualId -> messages("cds.matching.organisation-type.radio.individual.hint-text"))
+        CdsOrganisationType.ThirdCountryIndividualId -> messages("cds.matching.organisation-type.radio.individual.hint-text")
+        )
 
     if (selectedUserLocation.contains(UserLocation.Uk)) Seq.empty else nonUkOptionHints
 }
