@@ -26,43 +26,28 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
-
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel.updateFormErrors
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel.headerAndTitle
 @this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
 
 @(dateForm: Form[LocalDate], isInReviewMode: Boolean, orgType: EtmpOrganisationType, isRestOfWorldJourney: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 
-@introText = @{
-    if (orgType == LLP) "cds.subscription.llp.date-established.label"
-    else if (orgType == UnincorporatedBody) "cds.subscription.llp.date-established.charity-label"
-    else if(orgType == Partnership) "cds.subscription.business.date-established.label.partnership"
-    else "cds.subscription.business.date-established.label"
-}
-
-
 
 @introAndHintHtml = {
-<p id="date-of-establishment-label" class="govuk-body">@Html(messages(introText))</p>
-
-<label id="date-of-establishment-hint-text" class="govuk-hint">@Html(messages("cds.date-established.hint"))</label>
+    <p id="date-of-establishment-label" class="govuk-body">@Html(DateOfEstablishmentViewModel.introText(orgType))</p>
+    <label id="date-of-establishment-hint-text" class="govuk-hint">@Html(messages("cds.date-established.hint"))</label>
 }
 
-@headerAndTitle = @{
-    if (orgType == Partnership || orgType == LLP) "cds.subscription.partnership.date-of-establishment.title-and-heading"
-    else if(orgType == CorporateBody && !isRestOfWorldJourney) "cds.subscription.date-of-establishment.company.title-and-heading"
 
-    else "cds.subscription.date-of-establishment.title-and-heading"
-}
 
-@updateFormErrors =@{
-    dateForm.copy(errors = DateConverter.updateDateOfEstablishmentErrors(dateForm.errors))
-}
 
-@layout_di(messages(headerAndTitle), form = Some(dateForm)) {
+
+@layout_di(messages(headerAndTitle(orgType, isRestOfWorldJourney)), form = Some(dateForm)) {
     <div>
-        @errorSummary(updateFormErrors.errors,
-            focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
+        @errorSummary(updateFormErrors(dateForm).errors, focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController.submit(isInReviewMode, service), "date-of-birth-form") {
 
@@ -70,8 +55,8 @@
 
         <div aria-describedby="date-of-establishment-hint-text">
             @inputDate_di(
-                form = updateFormErrors,
-                legendContent = headerAndTitle,
+                form = updateFormErrors(dateForm),
+                legendContent = headerAndTitle(orgType, isRestOfWorldJourney),
                 legendClasses = Some("govuk-fieldset__legend--l"),
                 hintText = Some(introAndHintHtml),
                 legendAsPageHeading = true,
