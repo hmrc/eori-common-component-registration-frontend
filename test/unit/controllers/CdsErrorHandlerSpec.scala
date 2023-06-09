@@ -21,7 +21,9 @@ import play.api.Configuration
 import play.api.test.FakeRequest
 import play.api.test.Helpers.LOCATION
 import play.api.test.Helpers._
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{client_error_template, error_template, notFound}
@@ -45,7 +47,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         val page = CdsPage(contentAsString(result))
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
-        page.title should startWith("Sorry, there is a problem with the service")
+        page.title() should startWith("Sorry, there is a problem with the service")
       }
     }
     "redirect to start page If when DataUnavailableException thrown  " in {
@@ -60,7 +62,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         val page = CdsPage(contentAsString(result))
 
         result.header.status shouldBe NOT_FOUND
-        page.title should startWith("Page not found")
+        page.title() should startWith("Page not found")
       }
     }
 
@@ -78,7 +80,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         val page = CdsPage(contentAsString(result))
 
         result.header.status shouldBe NOT_FOUND
-        page.title should startWith("Page not found")
+        page.title() should startWith("Page not found")
       }
     }
 
@@ -89,7 +91,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         val page = CdsPage(contentAsString(result))
 
         result.header.status shouldBe NOT_FOUND
-        page.title should startWith("Page not found")
+        page.title() should startWith("Page not found")
       }
     }
 
@@ -98,7 +100,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         val page = CdsPage(contentAsString(result))
 
         result.header.status shouldBe INTERNAL_SERVER_ERROR
-        page.title should startWith("Something went wrong. Please try again later.")
+        page.title() should startWith("Something went wrong. Please try again later.")
       }
     }
 
