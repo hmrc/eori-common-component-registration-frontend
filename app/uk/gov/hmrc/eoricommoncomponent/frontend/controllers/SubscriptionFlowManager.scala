@@ -22,7 +22,7 @@ import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlow, SubscriptionPage, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
-import uk.gov.hmrc.eoricommoncomponent.frontend.errors.{FlowError, SessionError}
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Constants.ONE

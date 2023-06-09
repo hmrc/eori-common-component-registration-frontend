@@ -28,16 +28,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   ServiceUnavailableResponse,
   VatControlListConnector
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatDetailsController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  date_of_vat_registration,
-  error_template,
-  vat_details,
-  we_cannot_confirm_your_identity
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
@@ -117,7 +112,7 @@ class VatDetailsControllerSpec
       reviewForm() { result =>
         status(result) shouldBe OK
         verifyFormActionInCreateMode
-        CdsPage(contentAsString(result)).title should startWith("Your UK VAT details")
+        CdsPage(contentAsString(result)).title() should startWith("Your UK VAT details")
       }
     }
   }
@@ -310,14 +305,14 @@ class VatDetailsControllerSpec
       vatDetailsNotMatched() {
         result =>
           status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title should startWith("When did you become VAT registered")
+          CdsPage(contentAsString(result)).title() should startWith("When did you become VAT registered")
       }
     }
   }
 
   private def showCreateForm(userId: String = defaultUserId, cachedDate: Option[LocalDate] = None)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[Request[_]]))
       .thenReturn(Future.successful(cachedDate))
@@ -325,7 +320,7 @@ class VatDetailsControllerSpec
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  private def reviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def reviewForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
@@ -354,7 +349,7 @@ class VatDetailsControllerSpec
     isInReviewMode: Boolean,
     userId: String = defaultUserId,
     vatControllerResponse: VatControlListResponse = defaultVatControlResponse
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
@@ -368,7 +363,7 @@ class VatDetailsControllerSpec
     )
   }
 
-  private def vatDetailsNotMatched(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def vatDetailsNotMatched(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.vatDetailsNotMatched(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }

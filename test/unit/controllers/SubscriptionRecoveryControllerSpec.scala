@@ -437,19 +437,19 @@ class SubscriptionRecoveryControllerSpec
 
   }
 
-  def callEnrolmentComplete(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def callEnrolmentComplete(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
 
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.complete(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  def callEnrolmentCDSComplete(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def callEnrolmentCDSComplete(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
 
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.complete(cdsService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  def callExistingEori(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def callExistingEori(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
 
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.eoriExist(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))

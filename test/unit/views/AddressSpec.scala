@@ -19,6 +19,7 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
@@ -29,9 +30,9 @@ import util.ViewSpec
 
 class AddressSpec extends ViewSpec {
 
-  private val form: Form[AddressViewModel] = addressDetailsCreateForm
-  private val isInReviewMode               = false
-  private implicit val request             = withFakeCSRF(FakeRequest())
+  private val form: Form[AddressViewModel]                      = addressDetailsCreateForm()
+  private val isInReviewMode                                    = false
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val aFewCountries = List(
     Country("France", "country:FR"),

@@ -40,6 +40,7 @@ object Journey extends Enumeration {
       value match {
         case Subscribe => "subscribe"
         case Register  => "register"
+        case _         => throw new IllegalArgumentException("Do not exist")
       }
 
   }

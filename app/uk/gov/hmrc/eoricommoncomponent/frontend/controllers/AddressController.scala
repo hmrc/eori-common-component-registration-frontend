@@ -64,7 +64,7 @@ class AddressController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      addressDetailsCreateForm().bindFromRequest
+      addressDetailsCreateForm().bindFromRequest()
         .fold(
           formWithErrors => populateCountriesToInclude(isInReviewMode, service, formWithErrors, BadRequest),
           address =>
@@ -100,7 +100,7 @@ class AddressController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] =
     if (!isInReviewMode)
-      populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm, Ok)
+      populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm(), Ok)
     else {
       lazy val form = address.fold(addressDetailsCreateForm())(addressDetailsCreateForm().fill(_))
       populateCountriesToInclude(isInReviewMode, service, form, Ok)

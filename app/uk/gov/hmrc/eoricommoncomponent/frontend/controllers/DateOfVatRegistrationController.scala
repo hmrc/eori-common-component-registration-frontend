@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateForm.vatRegistrationDateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, we_cannot_confirm_your_identity}
 
 import java.time.LocalDate
@@ -57,7 +57,7 @@ class DateOfVatRegistrationController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      vatRegistrationDateForm.bindFromRequest.fold(
+      vatRegistrationDateForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
         formData => lookupDateOfVatRegistration(formData, service)
       )

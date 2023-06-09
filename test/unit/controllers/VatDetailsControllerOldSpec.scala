@@ -114,7 +114,7 @@ class VatDetailsControllerOldSpec
       reviewForm() { result =>
         status(result) shouldBe OK
         verifyFormActionInCreateMode
-        CdsPage(contentAsString(result)).title should startWith("Your UK VAT details")
+        CdsPage(contentAsString(result)).title() should startWith("Your UK VAT details")
       }
     }
 
@@ -123,7 +123,7 @@ class VatDetailsControllerOldSpec
       reviewForm() { result =>
         status(result) shouldBe OK
         verifyFormActionInCreateMode
-        CdsPage(contentAsString(result)).title should startWith("Your UK VAT details")
+        CdsPage(contentAsString(result)).title() should startWith("Your UK VAT details")
       }
     }
   }
@@ -350,14 +350,14 @@ class VatDetailsControllerOldSpec
       vatDetailsNotMatched() {
         result =>
           status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+          CdsPage(contentAsString(result)).title() should startWith("We cannot verify your VAT details")
       }
     }
   }
 
   private def showCreateForm(userId: String = defaultUserId, cachedDate: Option[LocalDate] = None)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[Request[_]]))
       .thenReturn(Future.successful(cachedDate))
@@ -365,7 +365,7 @@ class VatDetailsControllerOldSpec
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  private def reviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def reviewForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
@@ -394,7 +394,7 @@ class VatDetailsControllerOldSpec
     isInReviewMode: Boolean,
     userId: String = defaultUserId,
     vatControllerResponse: VatControlListResponse = defaultVatControlResponse
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
@@ -408,7 +408,7 @@ class VatDetailsControllerOldSpec
     )
   }
 
-  private def vatDetailsNotMatched(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def vatDetailsNotMatched(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.vatDetailsNotMatched(false, atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }

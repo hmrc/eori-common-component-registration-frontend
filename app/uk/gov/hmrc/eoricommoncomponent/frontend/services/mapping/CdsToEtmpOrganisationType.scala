@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping
 
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetailsIndividual, _}
 
 object EtmpTypeOfPerson {

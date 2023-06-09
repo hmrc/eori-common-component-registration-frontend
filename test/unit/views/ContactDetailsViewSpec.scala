@@ -19,6 +19,7 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm.contactDetailsCreateForm
@@ -28,11 +29,11 @@ import util.ViewSpec
 
 class ContactDetailsViewSpec extends ViewSpec {
 
-  private val form: Form[ContactDetailsViewModel] = contactDetailsCreateForm
-  private implicit val request                    = withFakeCSRF(FakeRequest())
-  private val view                                = instanceOf[contact_details]
-  private val fullNameLabel                       = "label[for=full-name]"
-  private val telephoneLabel                      = "label[for=telephone]"
+  private val form: Form[ContactDetailsViewModel]               = contactDetailsCreateForm
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
+  private val view                                              = instanceOf[contact_details]
+  private val fullNameLabel                                     = "label[for=full-name]"
+  private val telephoneLabel                                    = "label[for=telephone]"
 
   "Contact Details" should {
     "display correct title" in {

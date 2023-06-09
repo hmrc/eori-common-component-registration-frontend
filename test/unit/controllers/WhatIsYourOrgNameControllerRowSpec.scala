@@ -43,7 +43,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
   private val controller =
     new WhatIsYourOrgNameController(mockAuthAction, mcc, whatIsYourOrgNameView, mockSubscriptionDetailsService)
 
-  override protected def afterEach: Unit = {
+  override protected def afterEach(): Unit = {
     reset(mockSubscriptionDetailsService)
 
     super.afterEach()
@@ -95,7 +95,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
 
   def submitForm(isInReviewMode: Boolean, form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .submit(isInReviewMode, "third-country-organisation", atarService)

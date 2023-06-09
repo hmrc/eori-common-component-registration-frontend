@@ -53,7 +53,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
           Ok(
             disclosePersonalDetailsConsentView(
               isInReviewMode = false,
-              disclosePersonalDetailsYesNoAnswerForm,
+              disclosePersonalDetailsYesNoAnswerForm(),
               requestSessionData,
               service
             )
@@ -68,7 +68,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
           Ok(
             disclosePersonalDetailsConsentView(
               isInReviewMode = true,
-              disclosePersonalDetailsYesNoAnswerForm.fill(YesNo(isConsentDisclosed)),
+              disclosePersonalDetailsYesNoAnswerForm().fill(YesNo(isConsentDisclosed)),
               requestSessionData,
               service
             )
@@ -78,7 +78,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      disclosePersonalDetailsYesNoAnswerForm
+      disclosePersonalDetailsYesNoAnswerForm()
         .bindFromRequest()
         .fold(
           formWithErrors =>

@@ -42,7 +42,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
   private val eoriNumberTextDownloadView   = instanceOf[eori_number_text_download]
   private val subscriptionTextDownloadView = instanceOf[subscription_text_download]
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     val mockSubscribeOutcome = mock[Sub02Outcome]
     when(mockCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
     when(mockSubscribeOutcome.processedDate).thenReturn("23 June 2018")

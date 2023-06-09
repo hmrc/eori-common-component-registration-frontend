@@ -18,7 +18,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.countries
 
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source

@@ -256,7 +256,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     }
   }
 
-  private def showForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(
@@ -266,7 +266,9 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     )
   }
 
-  private def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def submitForm(form: Map[String, String], userId: String = defaultUserId)(
+    test: Future[Result] => Any
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(
@@ -276,7 +278,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     )
   }
 
-  private def processing(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def processing(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(

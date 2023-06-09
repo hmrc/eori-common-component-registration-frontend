@@ -25,7 +25,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{AddressController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
-import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
@@ -48,12 +48,11 @@ class AddressControllerSpec
     extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  private val mockRequestSessionData    = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache  = mock[SessionCache]
-  private val mockSubscriptionFlow      = mock[SubscriptionFlowManager]
-  private val mockSubscriptionFlowInfo  = mock[SubscriptionFlowInfo]
-  private val mockSubscriptionPage      = mock[SubscriptionPage]
-  private val mockSubscriptionFlowError = mock[FlowError]
+  private val mockRequestSessionData   = mock[RequestSessionData]
+  private val mockCdsFrontendDataCache = mock[SessionCache]
+  private val mockSubscriptionFlow     = mock[SubscriptionFlowManager]
+  private val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
+  private val mockSubscriptionPage     = mock[SubscriptionPage]
 
   private val viewAddress       = instanceOf[address]
   private val viewErrorTemplate = instanceOf[error_template]
@@ -73,12 +72,15 @@ class AddressControllerSpec
       single: Char       <- Gen.alphaNumChar
       baseString: String <- Gen.listOfN(minLength, Gen.alphaNumChar).map(c => c.mkString)
       additionalEnding   <- Gen.alphaStr
-    } yield single + baseString + additionalEnding
+    } yield s"$single$baseString$additionalEnding"
 
-  val mandatoryFields      = Map("city" -> "city", "street" -> "street", "postcode" -> "SE28 1AA", "countryCode" -> "GB")
-  val mandatoryFieldsEmpty = Map("city" -> "", "street" -> "", "postcode" -> "", "countryCode" -> "")
+  val mandatoryFields: Map[String, String] =
+    Map("city" -> "city", "street" -> "street", "postcode" -> "SE28 1AA", "countryCode" -> "GB")
 
-  val invalidStreetField =
+  val mandatoryFieldsEmpty: Map[String, String] =
+    Map("city" -> "", "street" -> "", "postcode" -> "", "countryCode" -> "")
+
+  val invalidStreetField: Map[String, String] =
     Map(
       "street"      -> "",
       "city"        -> "address line 1 address line 2 street town city name postcode United Kingdom",
@@ -114,7 +116,7 @@ class AddressControllerSpec
 
   private val inValidRequest = Map("city" -> "", "postcode" -> "SE281AA", "countryCode" -> "GB")
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
@@ -219,7 +221,7 @@ class AddressControllerSpec
 
   private def submitFormInReviewMode(form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
@@ -236,7 +238,7 @@ class AddressControllerSpec
 
   private def submitFormInCreateMode(form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
@@ -263,7 +265,7 @@ class AddressControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
@@ -271,7 +273,7 @@ class AddressControllerSpec
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))

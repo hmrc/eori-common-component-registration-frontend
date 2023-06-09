@@ -209,7 +209,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
     isInReviewMode: Boolean = false,
     organisationType: String = defaultOrganisationType,
     userId: String = defaultUserId
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = controller
@@ -223,7 +223,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
     form: Map[String, String],
     organisationType: String = defaultOrganisationType,
     userId: String = defaultUserId
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .submit(isInReviewMode, organisationType, atarService)

@@ -16,11 +16,11 @@
 
 package unit.controllers
 
-import common.pages.{RegistrationCompletePage, RegistrationRejectedPage}
+import common.pages.RegistrationCompletePage
 import common.support.testdata.TestData
 
 import java.time.LocalDateTime
-import org.mockito.ArgumentMatchers.{any, eq => meq, _}
+import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.i18n.Messages
@@ -93,7 +93,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   val emailVerificationTimestamp: LocalDateTime = TestData.emailVerificationTimestamp
   val emulatedFailure                           = new UnsupportedOperationException("Emulated service call failure.")
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
 
     when(mockSubscriptionDetailsService.saveKeyIdentifiers(any[GroupId], any[InternalId], any[Service])(any(), any()))
@@ -344,7 +344,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           verify(mockSessionCache).remove(any[Request[_]])
           verify(mockSubscribe01Outcome, times(2)).processedDate
           verify(mockSubscribeOutcome, never()).processedDate
-          page.title should startWith("Subscription request received for orgName")
+          page.title() should startWith("Subscription request received for orgName")
           page.getElementsText(
             RegistrationCompletePage.panelHeadingXpath
           ) shouldBe s"Subscription request received for orgName"
@@ -383,7 +383,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           verify(mockSessionCache).remove(any[Request[_]])
           verify(mockSubscribe01Outcome, times(4)).processedDate
           verify(mockSubscribeOutcome, never()).processedDate
-          page.title should startWith("Your new EORI number for orgName is")
+          page.title() should startWith("Your new EORI number for orgName is")
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
@@ -491,7 +491,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     when(mockSubscribeOutcome.processedDate).thenReturn("22 May 2016")
   }
 
-  def invokeEndStandAloneWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def invokeEndStandAloneWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     mockSessionCacheForOutcomePage
     test(
@@ -501,7 +501,9 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     )
   }
 
-  def invokeEndSubscriptionPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def invokeEndSubscriptionPageWithAuthenticatedUser(
+    userId: String = defaultUserId
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     mockSessionCacheForOutcomePage
     test(
@@ -511,7 +513,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     )
   }
 
-  def invokeEndPageWithUnAuthenticatedUser(test: Future[Result] => Any) {
+  def invokeEndPageWithUnAuthenticatedUser(test: Future[Result] => Any): Unit = {
     withNotLoggedInUser(mockAuthConnector)
     test(subscriptionController.end(atarService).apply(SessionBuilder.buildRequestWithSessionNoUser))
   }
@@ -519,7 +521,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private def subscribeForGetYourEORI(
     userId: String = defaultUserId,
     organisationTypeOption: Option[CdsOrganisationType] = None
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(organisationTypeOption)

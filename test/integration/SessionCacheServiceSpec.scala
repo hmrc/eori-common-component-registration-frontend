@@ -54,7 +54,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with MongoSupport {
 
-  lazy val appConfig = app.injector.instanceOf[AppConfig]
+  lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   val mockTimeStampSupport = new CurrentTimestampSupport()
 
@@ -72,10 +72,12 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
       await(sessionCache.saveSubscriptionDetails(holder)(request))
 
-      val expectedJson                   = toJson(CachedData(subDetails = Some(holder)))
-      val cache                          = await(sessionCache.cacheRepo.findById(request))
-      val Some(CacheItem(_, json, _, _)) = cache
-      json mustBe expectedJson
+      val expectedJson = toJson(CachedData(subDetails = Some(holder)))
+      val cache        = await(sessionCache.cacheRepo.findById(request))
+      cache match {
+        case Some(CacheItem(_, json, _, _)) => json mustBe expectedJson
+        case None                           => throw new RuntimeException("Cache not found")
+      }
 
       await(sessionCache.subscriptionDetails(request)) mustBe holder
 
@@ -86,10 +88,13 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
       await(sessionCache.saveSubscriptionDetails(updatedHolder)(request))
 
-      val expectedUpdatedJson                   = toJson(CachedData(subDetails = Some(updatedHolder)))
-      val updatedCache                          = await(sessionCache.cacheRepo.findById(request))
-      val Some(CacheItem(_, updatedJson, _, _)) = updatedCache
-      updatedJson mustBe expectedUpdatedJson
+      val expectedUpdatedJson = toJson(CachedData(subDetails = Some(updatedHolder)))
+      val updatedCache        = await(sessionCache.cacheRepo.findById(request))
+      updatedCache match {
+        case Some(CacheItem(_, updatedJson, _, _)) => updatedJson mustBe expectedUpdatedJson
+        case None                                  => throw new RuntimeException("Cache not found")
+      }
+
     }
 
     "provide default when subscription details holder not in cache" in {
@@ -105,18 +110,24 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
       val cache = await(sessionCache.cacheRepo.findById(request))
 
-      val expectedJson                   = toJson(CachedData(regDetails = Some(organisationRegistrationDetails)))
-      val Some(CacheItem(_, json, _, _)) = cache
-      json mustBe expectedJson
+      val expectedJson = toJson(CachedData(regDetails = Some(organisationRegistrationDetails)))
+      cache match {
+        case Some(CacheItem(_, json, _, _)) => json mustBe expectedJson
+        case None                           => throw new RuntimeException("Cache not found")
+      }
 
       await(sessionCache.registrationDetails(request)) mustBe organisationRegistrationDetails
       await(sessionCache.saveRegistrationDetails(individualRegistrationDetails)(request))
 
       val updatedCache = await(sessionCache.cacheRepo.findById(request))
 
-      val expectedUpdatedJson                   = toJson(CachedData(regDetails = Some(individualRegistrationDetails)))
-      val Some(CacheItem(_, updatedJson, _, _)) = updatedCache
-      updatedJson mustBe expectedUpdatedJson
+      val expectedUpdatedJson = toJson(CachedData(regDetails = Some(individualRegistrationDetails)))
+
+      updatedCache match {
+        case Some(CacheItem(_, updatedJson, _, _)) => updatedJson mustBe expectedUpdatedJson
+        case None                                  => throw new RuntimeException("Cache not found")
+      }
+
     }
 
     "throw exception when registration Details requested and not available in cache" in {
@@ -136,18 +147,21 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
       val cache = await(sessionCache.cacheRepo.findById(request))
 
-      val expectedJson                   = toJson(CachedData(regInfo = Some(organisationRegistrationInfoWithAllOptionalValues)))
-      val Some(CacheItem(_, json, _, _)) = cache
-      json mustBe expectedJson
+      val expectedJson = toJson(CachedData(regInfo = Some(organisationRegistrationInfoWithAllOptionalValues)))
+      cache match {
+        case Some(CacheItem(_, json, _, _)) => json mustBe expectedJson
+        case None                           => throw new RuntimeException("Cache not found")
+      }
 
       await(sessionCache.registrationInfo(request)) mustBe organisationRegistrationInfoWithAllOptionalValues
       await(sessionCache.saveRegistrationInfo(individualRegistrationInfoWithAllOptionalValues)(request))
 
-      val updatedCache = await(sessionCache.cacheRepo.findById(request))
+      val expectedUpdatedJson = toJson(CachedData(regInfo = Some(individualRegistrationInfoWithAllOptionalValues)))
 
-      val expectedUpdatedJson                   = toJson(CachedData(regInfo = Some(individualRegistrationInfoWithAllOptionalValues)))
-      val Some(CacheItem(_, updatedJson, _, _)) = updatedCache
-      updatedJson mustBe expectedUpdatedJson
+      await(sessionCache.cacheRepo.findById(request)) match {
+        case Some(CacheItem(_, json, _, _)) => json mustBe expectedUpdatedJson
+        case None                           => throw new RuntimeException("sessionCache not found")
+      }
     }
 
     "throw exception when registration info requested and not available in cache" in {
@@ -161,7 +175,6 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
     }
 
     "store Registration Details, Info and Subscription Details Holder correctly" in {
-      val sessionId: SessionId = setupSession
 
       await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(request))
       val holder = SubscriptionDetails()
@@ -176,13 +189,15 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
           Some(organisationRegistrationInfoWithAllOptionalValues)
         )
       )
+      cache match {
+        case Some(CacheItem(_, json, _, _)) => json mustBe expectedJson
+        case None                           => throw new RuntimeException("Cache not found")
+      }
 
-      val Some(CacheItem(_, json, _, _)) = cache
-      json mustBe expectedJson
     }
 
     "remove from the cache" in {
-      val sessionId: SessionId = setupSession
+
       await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(request))
 
       await(sessionCache.remove(request))
@@ -327,10 +342,11 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
       val cache = await(sessionCache.cacheRepo.findById(request))
 
       val expectedJson = toJson(CachedData(email = Some(email)))
+      cache match {
+        case Some(CacheItem(_, json, _, _)) => json mustBe expectedJson
+        case None                           => throw new RuntimeException("Cache not found")
+      }
 
-      val Some(CacheItem(_, json, _, _)) = cache
-
-      json mustBe expectedJson
       await(sessionCache.email(request)) mustBe email
 
     }
@@ -347,9 +363,11 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
       val expectedJson = toJson(CachedData(subDetails = Some(subscriptionDetails)))
 
-      val Some(CacheItem(_, json, _, _)) = cache
+      cache match {
+        case Some(CacheItem(_, json, _, _)) => json mustBe expectedJson
+        case None                           => throw new RuntimeException("Cache not found")
+      }
 
-      json mustBe expectedJson
     }
 
     "store and fetch sub01Outcome details correctly" in {

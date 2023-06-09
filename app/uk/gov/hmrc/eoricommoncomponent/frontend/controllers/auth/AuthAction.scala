@@ -106,8 +106,10 @@ class AuthAction @Inject() (
     def enrolments: Set[Enrolment] = if (checkServiceEnrolment) loggedInUser.enrolments.enrolments else Set.empty
 
     def action: Future[Result] =
-      requestProcessor fold (_(request)(loggedInUser.internalId)(loggedInUser), _(request)(loggedInUser))
-
+      requestProcessor.fold(
+        processor => processor(request)(loggedInUser.internalId)(loggedInUser),
+        processor => processor(request)(loggedInUser)
+      )
     if (checkPermittedAccess)
       permitUserOrRedirect(loggedInUser.affinityGroup, loggedInUser.userCredentialRole, enrolments)(action)
     else

@@ -18,7 +18,7 @@ package unit.controllers
 
 import java.util.UUID
 import common.pages.matching.ConfirmPage
-import common.pages.{RegistrationProcessingPage, RegistrationRejectedPage}
+import common.pages.RegistrationProcessingPage
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -37,12 +37,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  confirm_contact_details,
-  sub01_outcome_processing,
-  you_cannot_change_address_individual,
-  you_cannot_change_address_organisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{confirm_contact_details, sub01_outcome_processing}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -93,7 +88,6 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   private val mockSub01Outcome = mock[Sub01Outcome]
   private val mockRegDetails   = mock[RegistrationDetails]
-  private implicit val mockHC  = mock[HeaderCarrier]
 
   private val testSessionData = Map[String, String]("some_session_key" -> "some_session_value")
 
@@ -499,7 +493,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       invokeProcessingPageWithAuthenticatedUser() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith(RegistrationProcessingPage.title)
+        page.title() should startWith(RegistrationProcessingPage.title)
       }
     }
     "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a Organisation" in {
@@ -750,7 +744,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .currentSubscriptionStatus(any[HeaderCarrier], any[Service], any[Request[_]])
     ).thenReturn(Future.successful(NewSubscription))
 
-  private def mockSubscriptionFlowStart() {
+  private def mockSubscriptionFlowStart(): Unit = {
     when(mockSubscriptionPage.url(atarService)).thenReturn(testSubscriptionStartPageUrl)
     when(mockSubscriptionStartSession.data).thenReturn(testSessionData)
     when(
@@ -759,7 +753,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     ).thenReturn(Future.successful(mockFlowStart))
   }
 
-  private def invokeConfirm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def invokeConfirm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
@@ -772,7 +766,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     userId: String = defaultUserId,
     selectedOption: String = "yes",
     isInReviewMode: Boolean = false
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
@@ -785,7 +779,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   private def invokeConfirmContactDetailsWithoutOptionSelected(
     userId: String = defaultUserId
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
@@ -803,7 +797,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     when(mockSub01Outcome.processedDate).thenReturn("22 May 2016")
   }
 
-  def invokeProcessingPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def invokeProcessingPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     setupMocksForRejectedAndProcessingPages
     test(

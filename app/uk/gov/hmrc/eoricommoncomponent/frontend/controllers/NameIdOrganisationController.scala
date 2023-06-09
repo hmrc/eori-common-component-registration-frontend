@@ -119,7 +119,7 @@ class NameIdOrganisationController @Inject() (
     service: Service,
     groupId: GroupId
   )(implicit request: Request[AnyContent]): Future[Result] =
-    conf.form.bindFromRequest
+    conf.form.bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(organisationType, conf, formWithErrors, service))),
         formData =>

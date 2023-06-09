@@ -51,10 +51,10 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
     resetMockServer()
   }
 
-  override def beforeAll: Unit =
+  override def beforeAll(): Unit =
     startMockServer()
 
-  override def afterAll: Unit =
+  override def afterAll(): Unit =
     stopMockServer()
 
   private lazy val vatControlListConnector = app.injector.instanceOf[VatControlListConnector]
@@ -101,7 +101,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       val result = vatControlListConnector.vatControlList(request)
 
       result.futureValue.isLeft mustBe true
-      result.left.get mustBe NotFoundResponse
+      result.swap.getOrElse(NotFoundResponse) mustBe NotFoundResponse
     }
 
     "fail when Bad Request" in {
@@ -110,7 +110,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       val result = vatControlListConnector.vatControlList(request)
 
       result.futureValue.isLeft mustBe true
-      result.left.get mustBe InvalidResponse
+      result.swap.getOrElse(InvalidResponse) mustBe InvalidResponse
     }
 
     "fail when Internal Server Error" in {
@@ -135,7 +135,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       val result = vatControlListConnector.vatControlList(request)
 
       result.futureValue.isLeft mustBe true
-      result.left.get mustBe ServiceUnavailableResponse
+      result.swap.getOrElse(ServiceUnavailableResponse) mustBe ServiceUnavailableResponse
     }
 
     "throw an exception when different status" in {

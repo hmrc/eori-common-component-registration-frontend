@@ -45,7 +45,7 @@ class NinoController @Inject() (
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      ninoForm.bindFromRequest.fold(
+      ninoForm.bindFromRequest().fold(
         invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
         form =>
           matchingService.matchIndividualWithNino(

@@ -71,10 +71,10 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
     resetMockServer()
   }
 
-  override def beforeAll: Unit =
+  override def beforeAll(): Unit =
     startMockServer()
 
-  override def afterAll: Unit =
+  override def afterAll(): Unit =
     stopMockServer()
 
   "SubscriptionDisplay SUB09" should {

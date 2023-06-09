@@ -132,9 +132,9 @@ class DateOfEstablishmentControllerSpec
     "have all the required input fields without data if not cached previously" in {
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementValue(SubscriptionDateOfEstablishmentPage.dayOfDateFieldXpath) shouldBe 'empty
-        page.getElementValue(SubscriptionDateOfEstablishmentPage.monthOfDateFieldXpath) shouldBe 'empty
-        page.getElementValue(SubscriptionDateOfEstablishmentPage.yearOfDateFieldXpath) shouldBe 'empty
+        page.getElementValue(SubscriptionDateOfEstablishmentPage.dayOfDateFieldXpath) shouldBe Symbol("empty")
+        page.getElementValue(SubscriptionDateOfEstablishmentPage.monthOfDateFieldXpath) shouldBe Symbol("empty")
+        page.getElementValue(SubscriptionDateOfEstablishmentPage.yearOfDateFieldXpath) shouldBe Symbol("empty")
       }
     }
 
@@ -157,7 +157,7 @@ class DateOfEstablishmentControllerSpec
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Partnership)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("When was the partnership established?")
+        page.title() should startWith("When was the partnership established?")
         page.getElementsText(
           SubscriptionPartnershipDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
         ) shouldBe "When was the partnership established?"
@@ -168,7 +168,7 @@ class DateOfEstablishmentControllerSpec
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(LLP)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("When was the partnership established?")
+        page.title() should startWith("When was the partnership established?")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
         ) shouldBe "When was the partnership established?"
@@ -180,7 +180,7 @@ class DateOfEstablishmentControllerSpec
         .thenReturn(UnincorporatedBody)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("Date when your organisation was established")
+        page.title() should startWith("Date when your organisation was established")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
         ) shouldBe "Date when your organisation was established"
@@ -194,7 +194,7 @@ class DateOfEstablishmentControllerSpec
         page.getElementText(SubscriptionDateOfEstablishmentPage.dateOfEstablishmentLabelXPath) should startWith(
           "Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the Companies House register (opens in new tab)"
         )
-        page.title should startWith("Date when your company was established")
+        page.title() should startWith("Date when your company was established")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
         ) shouldBe "Date when your company was established"
@@ -253,8 +253,11 @@ class DateOfEstablishmentControllerSpec
 
       "be mandatory" in {
         submitFormFunction(
-          ValidRequest + ("date-of-establishment.day" -> "", "date-of-establishment.month" -> "",
-          "date-of-establishment.year"                -> "")
+          ValidRequest ++ Map(
+            "date-of-establishment.day"   -> "",
+            "date-of-establishment.month" -> "",
+            "date-of-establishment.year"  -> ""
+          )
         ) { result =>
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
@@ -283,9 +286,11 @@ class DateOfEstablishmentControllerSpec
       "not be a future date" in {
         val tomorrow = LocalDate.now().plusDays(1)
         submitFormFunction(
-          ValidRequest + ("date-of-establishment.day" -> tomorrow.getDayOfMonth.toString,
-          "date-of-establishment.month"               -> tomorrow.getMonthValue.toString,
-          "date-of-establishment.year"                -> tomorrow.getYear.toString)
+          ValidRequest ++ Map(
+            "date-of-establishment.day"   -> tomorrow.getDayOfMonth.toString,
+            "date-of-establishment.month" -> tomorrow.getMonthValue.toString,
+            "date-of-establishment.year"  -> tomorrow.getYear.toString
+          )
         ) { result =>
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
@@ -345,7 +350,7 @@ class DateOfEstablishmentControllerSpec
 
   private def showCreateForm(userId: String = defaultUserId, cachedDate: Option[LocalDate] = None)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionBusinessService.maybeCachedDateEstablished(any[Request[_]]))
       .thenReturn(Future.successful(cachedDate))
@@ -354,7 +359,7 @@ class DateOfEstablishmentControllerSpec
     test(result)
   }
 
-  private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.getCachedDateEstablished(any[Request[_]])).thenReturn(DateOfEstablishment)
@@ -371,7 +376,7 @@ class DateOfEstablishmentControllerSpec
 
   private def submitForm(form: Map[String, String], isInReviewMode: Boolean, userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionDetailsService.cacheDateEstablished(any[LocalDate])(any[Request[_]]))

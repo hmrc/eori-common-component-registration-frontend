@@ -78,7 +78,7 @@ class VatDetailsControllerOld @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      vatDetailsFormOld.bindFromRequest.fold(
+      vatDetailsFormOld.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service))),
         formData => lookupVatDetails(formData, isInReviewMode, service)
       )

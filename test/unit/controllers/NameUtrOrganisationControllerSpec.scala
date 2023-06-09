@@ -87,7 +87,7 @@ class NameUtrOrganisationControllerSpec
   private def invalidOrganisationTypeMessage(organisationType: String): String =
     s"Invalid organisation type '$organisationType'."
 
-  override def beforeEach: Unit =
+  override def beforeEach(): Unit =
     reset(mockMatchingService)
 
   "Viewing the Name and Utr Organisation Matching form" should {
@@ -364,7 +364,7 @@ class NameUtrOrganisationControllerSpec
 
   def showForm(organisationType: String = defaultOrganisationType, userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(controller.form(organisationType, atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
@@ -374,7 +374,7 @@ class NameUtrOrganisationControllerSpec
     form: Map[String, String],
     organisationType: String = defaultOrganisationType,
     userId: String = defaultUserId
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(

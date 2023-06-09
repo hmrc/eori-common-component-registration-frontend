@@ -66,7 +66,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     mockRequestSessionData
   )(global)
 
-  override def beforeEach() {
+  override def beforeEach(): Unit = {
     Mockito.reset(mockMatchingServiceConnector, mockDetailsCreator, mockCache, loggedInCtUser)
     when(mockGroupId.id).thenReturn("mockedGroupId")
     when(loggedInCtUser.groupId).thenReturn(Some("mockedGroupId"))

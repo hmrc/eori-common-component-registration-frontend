@@ -51,7 +51,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   def maxLengthError(maxLength: Int, field: String): String =
     s"The $field name must be $maxLength characters or less"
 
-  override def beforeEach: Unit =
+  override def beforeEach(): Unit =
     when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]]))
       .thenReturn(Future.successful(true))
 
@@ -202,7 +202,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
   }
 
-  def showForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def showForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result =
@@ -212,7 +212,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
   def submitForm(form: Map[String, String], organisationType: String, userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = nameDobController

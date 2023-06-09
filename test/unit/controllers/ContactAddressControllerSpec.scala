@@ -31,7 +31,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionPage
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
@@ -70,24 +69,27 @@ class ContactAddressControllerSpec
       single: Char       <- Gen.alphaNumChar
       baseString: String <- Gen.listOfN(minLength, Gen.alphaNumChar).map(c => c.mkString)
       additionalEnding   <- Gen.alphaStr
-    } yield single + baseString + additionalEnding
+    } yield s"$single$baseString$additionalEnding"
 
-  val mandatoryFields      = Map("city" -> "city", "street" -> "street", "postcode" -> "SE28 1AA", "countryCode" -> "GB")
-  val mandatoryFieldsEmpty = Map("city" -> "", "street" -> "", "postcode" -> "", "countryCode" -> "")
+  val mandatoryFields: Map[String, String] =
+    Map("city" -> "city", "street" -> "street", "postcode" -> "SE28 1AA", "countryCode" -> "GB")
 
-  val aFewCountries = List(
+  val mandatoryFieldsEmpty: Map[String, String] =
+    Map("city" -> "", "street" -> "", "postcode" -> "", "countryCode" -> "")
+
+  val aFewCountries: List[Country] = List(
     Country("France", "country:FR"),
     Country("Germany", "country:DE"),
     Country("Italy", "country:IT"),
     Country("Japan", "country:JP")
   )
 
-  val contactDetailsModel = ContactDetailsModel(
+  val contactDetailsModel: ContactDetailsModel = ContactDetailsModel(
     fullName = "John Doe",
     emailAddress = "john.doe@example.com",
     telephone = "234234",
     None,
-    false,
+    useAddressFromRegistrationDetails = false,
     Some("streetName"),
     Some("cityName"),
     Some("SE281AA"),
@@ -96,7 +98,7 @@ class ContactAddressControllerSpec
 
   private val subscriptionDetailsHolder = SubscriptionDetails(contactDetails = Some(contactDetailsModel))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
@@ -215,7 +217,7 @@ class ContactAddressControllerSpec
 
   private def submitFormInReviewMode(form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
@@ -232,7 +234,7 @@ class ContactAddressControllerSpec
 
   private def submitFormInCreateMode(form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
@@ -259,7 +261,7 @@ class ContactAddressControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
@@ -267,7 +269,7 @@ class ContactAddressControllerSpec
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))

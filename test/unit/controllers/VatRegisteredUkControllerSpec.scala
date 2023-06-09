@@ -34,7 +34,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlowInfo,
   SubscriptionPage
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.errors.{FlowError, SessionError}
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
@@ -107,7 +107,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       )
       createForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should include(VatRegisterUKPage.title)
+        page.title() should include(VatRegisterUKPage.title)
       }
     }
   }
@@ -129,7 +129,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       )
       reviewForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should include(VatRegisterUKPage.title)
+        page.title() should include(VatRegisterUKPage.title)
       }
     }
   }
@@ -246,7 +246,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
-  private def reviewForm()(test: Future[Result] => Any) {
+  private def reviewForm()(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
     when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(true)

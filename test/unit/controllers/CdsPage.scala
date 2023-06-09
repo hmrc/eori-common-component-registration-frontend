@@ -61,9 +61,8 @@ case class CdsPage(html: String) {
       .get.getElementsByClass("govuk-summary-list__actions")
       .select("a.govuk-link").find(e => e.text().contains(action)).fold("")(_.attr("href"))
 
-  def summaryListElementPresent(xpath: String, key: String) =
-    selectElements(xpath)
-      .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key).isDefined
+  def summaryListElementPresent(xpath: String, key: String): Boolean =
+    selectElements(xpath).exists(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
 
   def summaryListHrefPresent(xpath: String, key: String, action: String): Boolean =
     selectElements(xpath)

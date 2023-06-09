@@ -83,7 +83,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
   val data       = Map(internalId -> jsonValue)
   val unit       = ()
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Some(emailStatus)))
 
@@ -278,7 +278,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
 
   private def submitForm(form: Map[String, String], userId: String = defaultUserId, service: Service)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller.submit(isInReviewMode = false, service)(
       SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
@@ -286,7 +286,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
     test(result)
   }
 
-  private def showForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .createForm(atarService)
@@ -294,7 +294,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
     test(result)
   }
 
-  private def verifyEmailViewForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def verifyEmailViewForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .verifyEmailView(atarService)
@@ -302,7 +302,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
     test(result)
   }
 
-  private def emailConfirmed(userId: String)(test: Future[Result] => Any) {
+  private def emailConfirmed(userId: String)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .emailConfirmed(atarService)
@@ -310,7 +310,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
     test(result)
   }
 
-  private def emailConfirmedContinue()(test: Future[Result] => Any) {
+  private def emailConfirmedContinue()(test: Future[Result] => Any): Unit = {
     val result = controller
       .emailConfirmedContinue(atarService)
       .apply(SessionBuilder.buildRequestWithSessionNoUser)

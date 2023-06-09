@@ -23,6 +23,7 @@ import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -32,15 +33,17 @@ trait SubscriptionFlowTestSupport extends ControllerSpec with AuthActionMock {
 
   protected def formId: String
 
-  protected val nextPageUrl              = "next-page-url"
-  protected val nextPage                 = mock[SubscriptionPage]
-  protected val subscriptionFlowStepInfo = SubscriptionFlowInfo(stepNumber = 7, totalSteps = 10, nextPage = nextPage)
+  protected val nextPageUrl                = "next-page-url"
+  protected val nextPage: SubscriptionPage = mock[SubscriptionPage]
 
-  protected val mockSubscriptionFlowManager     = mock[SubscriptionFlowManager]
-  protected val mockAuthConnector               = mock[AuthConnector]
-  protected val mockAuthAction                  = authAction(mockAuthConnector)
-  protected val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  protected val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
+  protected val subscriptionFlowStepInfo: SubscriptionFlowInfo =
+    SubscriptionFlowInfo(stepNumber = 7, totalSteps = 10, nextPage = nextPage)
+
+  protected val mockSubscriptionFlowManager: SubscriptionFlowManager         = mock[SubscriptionFlowManager]
+  protected val mockAuthConnector: AuthConnector                             = mock[AuthConnector]
+  protected val mockAuthAction: AuthAction                                   = authAction(mockAuthConnector)
+  protected val mockSubscriptionBusinessService: SubscriptionBusinessService = mock[SubscriptionBusinessService]
+  protected val mockSubscriptionDetailsService: SubscriptionDetailsService   = mock[SubscriptionDetailsService]
 
   def setupMockSubscriptionFlowManager(currentPage: SubscriptionPage): Unit = {
     when(nextPage.url(any[Service])).thenReturn(nextPageUrl)

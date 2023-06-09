@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -68,7 +68,7 @@ class VatDetailsController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      vatDetailsForm.bindFromRequest.fold(
+      vatDetailsForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service))),
         formData => lookupVatDetails(formData, isInReviewMode, service)
       )

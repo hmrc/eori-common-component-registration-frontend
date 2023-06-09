@@ -28,7 +28,6 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CheckYourDetailsRegisterController, FeatureFlags}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Partnership, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlow}
@@ -85,7 +84,7 @@ class CheckYourDetailsRegisterControllerSpec
 
   private val NotEntered: String = "Not entered"
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockSessionCache, mockSubscriptionDetails, mockSubscriptionFlow)
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
@@ -438,7 +437,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     showForm(userSelectedOrgType = Company) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
-      page.title should startWith("Check your answers")
+      page.title() should startWith("Check your answers")
 
       page.h2() should startWith(
         "Help make GOV.UK better Company details VAT details Contact details Declaration Support links"
@@ -591,7 +590,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     showForm(userSelectedOrgType = LimitedLiabilityPartnership) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
-      page.title should startWith("Check your answers")
+      page.title() should startWith("Check your answers")
 
       page.h2() should startWith(
         "Help make GOV.UK better Partnership details VAT details Contact details Declaration Support links"
@@ -832,7 +831,7 @@ class CheckYourDetailsRegisterControllerSpec
               """)
   }
 
-  private def assertUkVatDetailsShowValues(page: CdsPage) {
+  private def assertUkVatDetailsShowValues(page: CdsPage): Unit = {
     //VAT number
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "VAT number") shouldBe "123456789"
     page.getSummaryListValue(
@@ -846,7 +845,7 @@ class CheckYourDetailsRegisterControllerSpec
     userSelectedOrgType: CdsOrganisationType = CdsOrganisationType.Company,
     userId: String = defaultUserId,
     isIndividualSubscriptionFlow: Boolean = false
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     val controller = new CheckYourDetailsRegisterController(
       mockAuthAction,
       mockSessionCache,
@@ -875,7 +874,7 @@ class CheckYourDetailsRegisterControllerSpec
     form: Map[String, String],
     userId: String = defaultUserId,
     userSelectedOrgType: Option[CdsOrganisationType] = None
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockRequestSession.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(userSelectedOrgType)

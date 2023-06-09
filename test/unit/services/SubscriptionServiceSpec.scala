@@ -309,6 +309,27 @@ class SubscriptionServiceSpec
       res shouldBe failResponse
     }
 
+    "return a valid fail response when subscription fails with unexpected case " in {
+      val failResponse = SubscriptionFailed("Unknown error returned for a SUB02: Create Subscription", "18 Aug 2016")
+
+      val service = constructService(
+        connectorMock =>
+          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+            .thenReturn(
+              Future.successful(subscriptionFailedResponseJson("Error case", "UNKNOWN")).as[SubscriptionResponse]
+            )
+      )
+
+      val res = await(
+        service
+          .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
+            mockHeaderCarrier
+          )
+      )
+
+      res shouldBe failResponse
+    }
+
     "return a valid fail response when subscription fails due to request could not be processed - ignoring letter case" in {
       val failResponse = SubscriptionFailed(RequestNotProcessed, "18 Aug 2016")
 

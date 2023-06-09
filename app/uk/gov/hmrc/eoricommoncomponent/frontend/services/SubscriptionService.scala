@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
+
 import java.time.format.DateTimeFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
@@ -77,7 +78,10 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
           ),
           maybe(service),
           featureFlags
-        ) ensuring (subscription.sicCode.isDefined, "SicCode/Principal Economic Activity must be present for an organisation subscription")
+        ).ensuring(
+          subscription.sicCode.isDefined,
+          "SicCode/Principal Economic Activity must be present for an organisation subscription"
+        )
       case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
     }
 
@@ -115,6 +119,11 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
             s"Response status of FAIL returned for a SUB02: Create Subscription.${responseCommon.statusText.map(
               text => s" $text"
             ).getOrElse("")}"
+          logger.error(message)
+          SubscriptionFailed(message, processingDate)
+        case _ =>
+          val message =
+            s"Unknown error returned for a SUB02: Create Subscription"
           logger.error(message)
           SubscriptionFailed(message, processingDate)
       }

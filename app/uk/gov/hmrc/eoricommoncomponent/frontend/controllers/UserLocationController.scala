@@ -88,7 +88,7 @@ class UserLocationController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      userLocationForm.bindFromRequest.fold(
+      userLocationForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(
             BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup)))

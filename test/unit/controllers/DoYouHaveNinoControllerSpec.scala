@@ -197,12 +197,11 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
         .apply(SessionBuilder.buildRequestWithSession(defaultUserId))
     )
 
-  private def submitForm(form: Map[String, String])(test: Future[Result] => Any) {
+  private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit =
     test(
       doYouHaveNinoController
         .submit(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )
-  }
 
 }

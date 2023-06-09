@@ -17,12 +17,10 @@
 package util.builders
 
 import java.util.UUID
-import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys
 import uk.gov.hmrc.http.SessionKeys
-
-import java.time.LocalDate
 
 object SessionBuilder {
 
@@ -44,9 +42,9 @@ object SessionBuilder {
     buildRequestWithSession(userId).withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
 
   def buildRequestWithFormValues(form: Map[String, String]): FakeRequest[AnyContentAsFormUrlEncoded] =
-    buildRequestWithSessionNoUserAndToken.withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
+    buildRequestWithSessionNoUserAndToken().withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
 
-  def buildRequestWithSessionNoUser = {
+  def buildRequestWithSessionNoUser: FakeRequest[AnyContentAsEmpty.type] = {
     val sessionId = s"session-${UUID.randomUUID}"
     FakeRequest("GET", "/atar/register").withSession(SessionKeys.sessionId -> sessionId)
   }

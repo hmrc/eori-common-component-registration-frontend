@@ -52,7 +52,7 @@ class GetUtrNumberController @Inject() (
 
   def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      subscriptionUtrForm.bindFromRequest.fold(
+      subscriptionUtrForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, organisationType, isInReviewMode, service))),
         formData =>

@@ -47,10 +47,10 @@ class Save4LaterConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
     AuditService.stubAuditService()
   }
 
-  override def beforeAll: Unit =
+  override def beforeAll(): Unit =
     startMockServer()
 
-  override def afterAll: Unit =
+  override def afterAll(): Unit =
     stopMockServer()
 
   "Save4LaterConnector" should {

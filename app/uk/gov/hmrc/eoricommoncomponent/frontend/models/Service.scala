@@ -49,8 +49,8 @@ object Service {
 
     override def bind(key: String, value: String): Either[String, Service] =
       for {
-        name    <- stringBinder.bind(key, value).right
-        service <- Service.withName(name).toRight(Constants.INVALID_PATH_PARAM).right
+        name    <- stringBinder.bind(key, value)
+        service <- Service.withName(name).toRight(Constants.INVALID_PATH_PARAM)
       } yield service
 
     override def unbind(key: String, value: Service): String = stringBinder.unbind(key, value.code)

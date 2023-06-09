@@ -26,7 +26,12 @@ class CdsController(mcc: MessagesControllerComponents) extends FrontendControlle
 
     val currentSessionData: Map[String, String] = request.session.data
     val cleanedUpSessionData: Map[String, String] =
-      currentSessionData - ("selected-user-location", "subscription-flow", "selected-organisation-type", "uri-before-subscription-flow")
+      currentSessionData -- Seq(
+        "selected-user-location",
+        "subscription-flow",
+        "selected-organisation-type",
+        "uri-before-subscription-flow"
+      )
 
     request.session.copy(data = cleanedUpSessionData)
   }
