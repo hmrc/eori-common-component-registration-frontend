@@ -17,10 +17,12 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.Logger
+import play.api.i18n.Messages
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -65,12 +67,12 @@ class ConfirmContactDetailsController @Inject() (
               Ok(
                 confirmContactDetailsView(
                   isInReviewMode,
-                  individual.name,
                   concatenateAddress(individual),
-                  individual.customsId,
-                  None,
                   YesNoWrongAddress.createForm(),
-                  service
+                  service,
+                  pageTitleAndHeading(None),
+                  countryCodeToLabel(concatenateAddress(individual).countryCode),
+                  displayInputRadioGroupOptions(None)
                 )
               )
             )
@@ -89,13 +91,12 @@ class ConfirmContactDetailsController @Inject() (
                   Ok(
                     confirmContactDetailsView(
                       isInReviewMode,
-                      org.name,
                       concatenateAddress(org),
-                      org.customsId,
-                      Some(ot),
                       YesNoWrongAddress.createForm(),
                       service,
-                      requestSessionData.selectedUserLocation.getOrElse("uk").equalsIgnoreCase("uk")
+                      pageTitleAndHeading(Some(ot), requestSessionData.selectedUserLocation.getOrElse("uk").equalsIgnoreCase("uk")),
+                      countryCodeToLabel(concatenateAddress(org).countryCode),
+                      displayInputRadioGroupOptions(Some(ot))
                     )
                   )
                 )
@@ -126,12 +127,12 @@ class ConfirmContactDetailsController @Inject() (
                   BadRequest(
                     confirmContactDetailsView(
                       isInReviewMode,
-                      individual.name,
                       concatenateAddress(individual),
-                      individual.customsId,
-                      None,
                       formWithErrors,
-                      service
+                      service,
+                      pageTitleAndHeading(None),
+                      countryCodeToLabel(concatenateAddress(individual).countryCode),
+                      displayInputRadioGroupOptions(None)
                     )
                   )
                 )
@@ -142,12 +143,12 @@ class ConfirmContactDetailsController @Inject() (
                       BadRequest(
                         confirmContactDetailsView(
                           isInReviewMode,
-                          org.name,
                           concatenateAddress(org),
-                          org.customsId,
-                          Some(ot),
                           formWithErrors,
-                          service
+                          service,
+                          pageTitleAndHeading(Some(ot)),
+                          countryCodeToLabel(concatenateAddress(org).countryCode),
+                          displayInputRadioGroupOptions(Some(ot))
                         )
                       )
                     )
@@ -180,6 +181,46 @@ class ConfirmContactDetailsController @Inject() (
             determineRoute(areDetailsCorrectAnswer.areDetailsCorrect, service, isInReviewMode)
           }
       }
+    }
+
+  private def isPartnershipOrLLP(orgType: Option[EtmpOrganisationType]) =
+    orgType.contains(Partnership) || orgType.contains(LLP)
+
+  private def isIndividual(orgType: Option[EtmpOrganisationType]) = orgType.isEmpty
+
+  private def isCharityPublicBodyNotForProfit(orgType: Option[EtmpOrganisationType]) =
+    orgType.contains(UnincorporatedBody)
+
+  private def isEUCountryCode(countryCode: String)(implicit messages: Messages) =
+    messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
+
+  private def messageKeyForEUCountryCode(countryCode: String) = s"cds.country.$countryCode"
+
+  private def pageTitleAndHeading(orgType: Option[EtmpOrganisationType], isUk: Boolean = true)(implicit
+    messages: Messages
+  ) = orgType match {
+    case orgType if isPartnershipOrLLP(orgType) => messages("confirm-business-details.partnership.title-and-heading")
+    case orgType if isIndividual(orgType)       => messages("confirm-business-details.individual.title-and-heading")
+    case _ if !isUk                             => messages("confirm-business-details.row.title-and-heading")
+    case orgType if isCharityPublicBodyNotForProfit(orgType) =>
+      messages("confirm-business-details.row.title-and-heading")
+    case _ => messages("confirm-business-details.title-and-heading")
+  }
+
+  private def countryCodeToLabel(countryCode: String)(implicit messages: Messages) = countryCode match {
+    case MatchingForms.countryCodeGB   => messages("cds.country.GB")
+    case code if isEUCountryCode(code) => messageKeyForEUCountryCode(countryCode)
+    case nonEuCode                     => nonEuCode
+  }
+
+  private def displayInputRadioGroupOptions(orgType: Option[EtmpOrganisationType])(implicit messages: Messages) =
+    Seq("yes" -> messages("confirm-business-details.yes"), "wrong-address" -> radioGroupWrongAddressText(orgType))
+
+  private def radioGroupWrongAddressText(orgType: Option[EtmpOrganisationType])(implicit messages: Messages): String =
+    orgType match {
+      case orgType if isPartnershipOrLLP(orgType) => messages("confirm-business-details.partnership.yes-wrong-address")
+      case orgType if isIndividual(orgType)       => messages("confirm-business-details.individual.yes-wrong-address")
+      case _                                      => messages("confirm-business-details.yes-wrong-address")
     }
 
   def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
