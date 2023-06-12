@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
@@ -108,48 +108,49 @@ case class RegisterWithEoriAndIdResponseDetail(
 )
 
 object RegisterWithEoriAndIdResponseDetail {
-  implicit val format = Json.format[RegisterWithEoriAndIdResponseDetail]
+  implicit val format: OFormat[RegisterWithEoriAndIdResponseDetail] = Json.format[RegisterWithEoriAndIdResponseDetail]
 }
 
 case class AdditionalInformation(id: CustomsId, isIndividual: Boolean)
 
 object AdditionalInformation {
-  implicit val format = Json.format[AdditionalInformation]
+  implicit val format: OFormat[AdditionalInformation] = Json.format[AdditionalInformation]
 }
 
 trait CaseClassAuditHelper {
 
   def toMap(caseClassObject: AnyRef = this, ignoredFields: List[String] = List.empty): Map[String, String] =
-    (Map[String, String]() /: caseClassObject.getClass.getDeclaredFields
-      .filterNot(field => ignoredFields.contains(field.getName))) {
+    caseClassObject.getClass.getDeclaredFields
+      .filterNot(field => ignoredFields.contains(field.getName))
+      .foldLeft(Map[String, String]()) {
+        (acc, f) =>
+          f.setAccessible(true)
+          val value = f.get(caseClassObject)
+          if (value != null)
+            if (isScalaOption(value)) {
+              val option = value.asInstanceOf[Option[Any]]
+              if (option.isDefined)
+                fetchValue(acc, f, option.get)
+              else
+                acc
+            } else
+              fetchValue(acc, f, value)
+          else
+            acc
 
-      def getKeyValue(acc: Map[String, String], value: Any) =
-        value match {
-          case v: CaseClassAuditHelper => v.toMap()
-          case _                       => acc
-        }
+      }
 
-      def fetchValue(acc: Map[String, String], f: Field, value: Any) =
-        if (isLeafNode(value))
-          acc + (f.getName -> value.toString)
-        else
-          getKeyValue(acc, value)
-
-      (acc, f) =>
-        f.setAccessible(true)
-        val value = f.get(caseClassObject)
-        if (value != null)
-          if (isScalaOption(value)) {
-            val option = value.asInstanceOf[Option[Any]]
-            if (option.isDefined)
-              fetchValue(acc, f, option.get)
-            else
-              acc
-          } else
-            fetchValue(acc, f, value)
-        else
-          acc
+  private def getKeyValue(acc: Map[String, String], value: Any) =
+    value match {
+      case v: CaseClassAuditHelper => v.toMap()
+      case _                       => acc
     }
+
+  private def fetchValue(acc: Map[String, String], f: Field, value: Any) =
+    if (isLeafNode(value))
+      acc + (f.getName -> value.toString)
+    else
+      getKeyValue(acc, value)
 
   def prefixMapKey(prefix: String, map: Map[String, String]): Map[String, String] =
     map.map(x => prefix + x._1 -> x._2)

@@ -84,7 +84,7 @@ class SixLineAddressController @Inject() (
       val (countriesToInclude, countriesInCountryPicker) =
         Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
       assertOrganisationTypeIsValid(organisationType)(request)
-      formsByOrganisationTypes(request)(organisationType).bindFromRequest.fold(
+      formsByOrganisationTypes(request)(organisationType).bindFromRequest().fold(
         invalidForm =>
           Future.successful(
             BadRequest(

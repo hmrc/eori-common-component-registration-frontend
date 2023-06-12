@@ -39,7 +39,7 @@ class DateFormatter @Inject() (languageUtils: LanguageUtils) {
     tryConvert.getOrElse(dateString)
   }
 
-  def formatLocalDate(date: LocalDate)(implicit messages: Messages): String =
-    try Some(date.format(longDateFormatter)).getOrElse(throw new Exception("Cannot convert date"))
+  def formatLocalDate(date: LocalDate): String =
+    Some(date.format(longDateFormatter)).getOrElse(throw new Exception("Cannot convert date"))
 
 }

@@ -77,7 +77,10 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
           ),
           maybe(service),
           featureFlags
-        ) ensuring (subscription.sicCode.isDefined, "SicCode/Principal Economic Activity must be present for an organisation subscription")
+        ).ensuring(
+          subscription.sicCode.isDefined,
+          "SicCode/Principal Economic Activity must be present for an organisation subscription"
+        )
       case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
     }
 
@@ -117,6 +120,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
             ).getOrElse("")}"
           logger.error(message)
           SubscriptionFailed(message, processingDate)
+
       }
     }
 

@@ -53,7 +53,7 @@ class WhatIsYourOrgNameController @Inject() (
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      organisationNameForm.bindFromRequest.fold(
+      organisationNameForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(
             BadRequest(whatIsYourOrgNameView(isInReviewMode, formWithErrors, organisationType, service))
