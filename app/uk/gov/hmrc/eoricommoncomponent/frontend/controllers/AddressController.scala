@@ -24,12 +24,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
 
 @Singleton
-class AddressController @Inject() (authorise: AuthAction, addressService: AddressService)(implicit
-  ec: ExecutionContext
-) {
+class AddressController @Inject() (authorise: AuthAction, addressService: AddressService) {
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>

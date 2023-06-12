@@ -21,7 +21,7 @@ import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
 import uk.gov.hmrc.http.{ForbiddenException, HttpClient, _}
-
+import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
