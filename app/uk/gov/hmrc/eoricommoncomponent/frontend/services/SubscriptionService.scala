@@ -120,7 +120,11 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
             ).getOrElse("")}"
           logger.error(message)
           SubscriptionFailed(message, processingDate)
-
+        case _ =>
+          val message =
+            s"Unknown error returned for a SUB02: Create Subscription"
+          logger.error(message)
+          SubscriptionFailed(message, processingDate)
       }
     }
 
