@@ -83,9 +83,8 @@ trait SubscriptionContactDetailsPage extends WebPage {
 
   val continueButtonXpath = "//*[@id='continue-button']"
 
-  val hintTextTelephonXpath = "//*[@id='telephone-hint']"
-  val hintTextFaxXpath      = "//*[@id='fax-hint']"
-  val stepsXpath            = "//*[@id='steps-heading']"
+  val hintTextFaxXpath = "//*[@id='fax-hint']"
+  val stepsXpath       = "//*[@id='steps-heading']"
 
 }
 
