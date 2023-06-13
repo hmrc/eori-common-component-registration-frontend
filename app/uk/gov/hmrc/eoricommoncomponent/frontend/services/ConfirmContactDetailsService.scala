@@ -73,15 +73,12 @@ class ConfirmContactDetailsService @Inject() (
     isInReviewMode: Boolean,
     areDetailsCorrectAnswer: YesNoWrongAddress
   )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
-    sessionCache.subscriptionDetails.flatMap { subDetails =>
-      sessionCache.registrationDetails.flatMap { details =>
-        sessionCache
-          .saveSubscriptionDetails(subDetails.copy(addressDetails = Some(concatenateAddress(details))))
-          .flatMap { _ =>
-            determineRoute(areDetailsCorrectAnswer.areDetailsCorrect, service, isInReviewMode)
-          }
-      }
-    }
+    for {
+      subDetails <- sessionCache.subscriptionDetails
+      regDetails <- sessionCache.registrationDetails
+      _          <- sessionCache.saveSubscriptionDetails(subDetails.copy(addressDetails = Some(concatenateAddress(regDetails))))
+      result     <- determineRoute(areDetailsCorrectAnswer.areDetailsCorrect, service, isInReviewMode)
+    } yield result
 
   private def concatenateAddress(registrationDetails: RegistrationDetails): AddressViewModel =
     AddressViewModel(registrationDetails.address)
