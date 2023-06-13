@@ -1121,7 +1121,7 @@ cds.subscription.contact-details.heading = Cyfeiriad cyswllt ar gyfer y cais am 
 cds.subscription.contact-details.full-name.label = Enw llawn
 cds.subscription.contact-details.email.label = Cyfeiriad e-bost
 cds.subscription.contact-details.telephone.label = Rhif ffôn (dewisol)
-cds.subscription.contact-details.telephone.hint =<p class="govuk-body" id="telephone-para">Byddwn ond yn defnyddio hwn os bydd angen i ni drafod y cais hwn â chi</p> Ar gyfer rhifau rhyngwladol, cofiwch gynnwys cod y wlad
+cds.subscription.contact-details.telephone.hint =<p class="govuk-body" id="telephone-para">Byddwn ond yn defnyddio hwn os bydd angen i ni drafod y cais hwn â chi.</p> Ar gyfer rhifau rhyngwladol, cofiwch gynnwys cod y wlad
 cds.subscription.contact-details.fax.label = Ffacs (dewisol)
 cds.subscription.contact-details.fax.hint = Ar gyfer rhifau rhyngwladol, cofiwch gynnwys cod y wlad
 cds.subscription.contact-details.street.label = Cyfeiriad – llinell 1
