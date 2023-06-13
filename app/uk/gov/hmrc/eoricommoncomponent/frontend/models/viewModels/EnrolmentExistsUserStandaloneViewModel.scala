@@ -18,9 +18,9 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels
 
 import play.api.i18n.Messages
 
-object EnrolmentExistsUserStandaloneViewModel {
+case class EnrolmentExistsUserStandaloneViewModel(isAdminUser: Boolean) {
 
-  def titleAndHeaderLabel(isAdminUser: Boolean)(implicit messages: Messages): String =
+  def titleAndHeaderLabel()(implicit messages: Messages): String =
     if (isAdminUser)
       messages("ecc.eori-exists-user.heading")
     else

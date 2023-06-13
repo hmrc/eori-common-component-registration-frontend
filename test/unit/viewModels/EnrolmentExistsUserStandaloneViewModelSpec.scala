@@ -17,7 +17,6 @@
 package unit.viewModels
 
 import base.UnitSpec
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels.EnrolmentExistsUserStandaloneViewModel
 import util.ControllerSpec
 
@@ -28,13 +27,13 @@ class EnrolmentExistsUserStandaloneViewModelSpec extends UnitSpec with Controlle
   "titleAndHeaderLabel" should {
 
     "display correct message for admin user" in {
-      viewModel.titleAndHeaderLabel(isAdminUser =
+      viewModel(isAdminUser =
         true
-      ) shouldBe "Your business or organisation already has an EORI number"
+      ).titleAndHeaderLabel shouldBe "Your business or organisation already has an EORI number"
     }
 
     "display correct message for standard user" in {
-      viewModel.titleAndHeaderLabel(isAdminUser = false) shouldBe "You already have an EORI number"
+      viewModel(isAdminUser = false).titleAndHeaderLabel shouldBe "You already have an EORI number"
     }
   }
 
