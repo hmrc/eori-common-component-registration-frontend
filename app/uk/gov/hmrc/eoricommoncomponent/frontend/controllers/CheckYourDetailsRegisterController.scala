@@ -24,6 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 
 import scala.concurrent.ExecutionContext
 
@@ -34,7 +35,8 @@ class CheckYourDetailsRegisterController @Inject() (
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   checkYourDetailsRegisterView: check_your_details_register,
-  registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService
+  registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService,
+  viewModelConstructor: CheckYourDetailsRegisterConstructor
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -46,8 +48,7 @@ class CheckYourDetailsRegisterController @Inject() (
           subscription <- sessionCache.subscriptionDetails
         } yield {
           val isUserIdentifiedByRegService = registration.safeId.id.nonEmpty
-          Ok(
-            checkYourDetailsRegisterView(
+          val viewModel = viewModelConstructor.generateViewModel(
               requestSessionData.userSelectedOrganisationType,
               requestSessionData.isPartnershipOrLLP,
               registration,
@@ -55,6 +56,12 @@ class CheckYourDetailsRegisterController @Inject() (
               subscription.personalDataDisclosureConsent.getOrElse(false),
               service,
               isUserIdentifiedByRegService
+              )
+          Ok(
+            checkYourDetailsRegisterView(
+              viewModel,
+              requestSessionData.userSelectedOrganisationType,
+              service
             )
           )
         }

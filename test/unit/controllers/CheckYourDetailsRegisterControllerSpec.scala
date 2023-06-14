@@ -47,6 +47,7 @@ import util.builders.RegistrationDetailsBuilder.{
 }
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -66,6 +67,7 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockVatControlListDetails             = mock[VatControlListResponse]
   private val mockRequestSession                    = mock[RequestSessionData]
   private val checkYourDetailsRegisterView          = instanceOf[check_your_details_register]
+  private val viewModelConstructor                  = instanceOf[CheckYourDetailsRegisterConstructor]
 
   val controller = new CheckYourDetailsRegisterController(
     mockAuthAction,
@@ -73,7 +75,8 @@ class CheckYourDetailsRegisterControllerSpec
     mockRequestSession,
     mcc,
     checkYourDetailsRegisterView,
-    mockRegisterWithoutIdWithSubscription
+    mockRegisterWithoutIdWithSubscription,
+    viewModelConstructor
   )
 
   private val organisationRegistrationDetailsWithEmptySafeId = organisationRegistrationDetails.copy(safeId = SafeId(""))
@@ -852,7 +855,8 @@ class CheckYourDetailsRegisterControllerSpec
       mockRequestSession,
       mcc,
       checkYourDetailsRegisterView,
-      mockRegisterWithoutIdWithSubscription
+      mockRegisterWithoutIdWithSubscription,
+      viewModelConstructor
     )
 
     withAuthorisedUser(userId, mockAuthConnector)

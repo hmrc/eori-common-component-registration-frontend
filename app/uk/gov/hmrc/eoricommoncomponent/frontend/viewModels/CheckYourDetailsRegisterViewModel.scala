@@ -34,102 +34,42 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, 
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.govukfrontend.views.Aliases.{HtmlContent, Key, SummaryListRow, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Value}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.DataUnavailableException
 
 import javax.inject.{Inject, Named, Singleton}
 
+case class CheckYourDetailsRegisterViewModel(
+  headerTitle: String,
+  individualNameDob: Seq[SummaryListRow],
+  organisationName: Seq[SummaryListRow],
+  organisationUtr: Seq[SummaryListRow],
+  customsId: Seq[SummaryListRow],
+  individualUtr: Seq[SummaryListRow],
+  registeredAddress: Seq[SummaryListRow],
+  dateOfEstablishment: Seq[SummaryListRow],
+  sicCodeDisplay: Seq[SummaryListRow],
+  summary: Seq[SummaryListRow],
+  vatDetails: Seq[SummaryListRow],
+  contactName: Seq[SummaryListRow],
+  email: Seq[SummaryListRow],
+  contactTelephone: Seq[SummaryListRow],
+  details: Seq[SummaryListRow]
+)
+
 @Singleton
-class CheckYourDetailsRegisterViewModel  @Inject()(
-                                                    noMarginParagraph: noMarginParagraph,
+class CheckYourDetailsRegisterConstructor @Inject()(
                                                     dateFormatter: DateFormatter
-                                                  )
+                                                  ) {
 
-
-def addressViewModelHtml(ad: AddressViewModel)(implicit messages: Messages) : HtmlContent = {
-  noMarginParagraph(StringEscapeUtils.escapeXml11(ad.street)) +
-    noMarginParagraph(StringEscapeUtils.escapeXml11(ad.city)) +
-    ad.postcode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))) +
-    transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-}
-
-def addressHtml(ad: Address): HtmlContent =
-  noMarginParagraph(StringEscapeUtils.escapeXml11(ad.addressLine1)) +
-    ad.addressLine2.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))) +
-    ad.addressLine3.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))) +
-    ad.addressLine4.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))) +
-    ad.postalCode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))) +
-    transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-}
-
-def contactDetailsHtml(details: ContactDetailsModel): HtmlContent = {
-  details.street.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-  details.city.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-  details.postcode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-  transformCountryCodeToOptionalLabel(details.countryCode).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-}
-
-def summaryListRow(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "")(implicit messages: Messages)  = {
-  SummaryListRow(
-    key = Key(
-      content = Text(messages(key))
-    ),
-    value = Value(
-      content = HtmlContent(value.getOrElse("").toString)
-    ),
-    actions = call.flatMap(c => Some(Actions(
-      items = Seq(
-        ActionItem(
-          href = c.url,
-          content = Text(messages("cds.form.change")),
-          visuallyHiddenText = Some(messages(key))
-        )
-      )
-    ))),
-    classes = classes
-  )
-}
-
-def summaryListRowNoChangeOption(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "")(implicit messages: Messages)  = {
-  SummaryListRow(
-    key = Key(
-      content = Text(messages(key))
-    ),
-    value = Value(
-      content = HtmlContent(value.getOrElse("").toString)
-    ),
-    actions = None,
-    classes = classes
-  )
-}
-
-def euCountry(countryCode: String)(implicit messages: Messages) = messages(messageKeyForEUCountryCode(countryCode))
-
-def messageKeyForEUCountryCode(countryCode: String) = s"cds.country.$countryCode"
-
-def isEUCountryCode(countryCode: String)(implicit messages: Messages) = messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
-
-def transformCountryCodeToOptionalLabel(code: Option[String])(implicit messages: Messages) = code match {
-  case Some(MatchingForms.countryCodeGB) => Some(messages("cds.country.GB"))
-  case Some(c) if isEUCountryCode(c) => Some(euCountry(c))
-  case Some(nonEuCode) => Some(nonEuCode)
-  case _ => None
-}
-
-def optionalFaxNumberWithPrefix(fax: Option[String])(implicit messages: Messages) = fax.map(x => s"${messages("cds.review-page.fax-prefix")} $x")
-
-def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
-
- def generateViewModel(viewModel: CheckYourDetailsRegisterViewModel,
-                          cdsOrgType: Option[CdsOrganisationType],
+  def generateViewModel(cdsOrgType: Option[CdsOrganisationType],
                           isPartnership: Boolean,
                           registration: RegistrationDetails,
                           subscription: SubscriptionDetails,
                           personalDataDisclosureConsent: Boolean,
                           service: Service,
-                          isUserIdentifiedByRegService: Boolean)(implicit messages: Messages) {
+                          isUserIdentifiedByRegService: Boolean)(implicit messages: Messages): CheckYourDetailsRegisterViewModel = {
 
-    val isIndividual = cdsOrgType.contains(CdsOrganisationType.Individual) ||
-        cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
-        cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual
+    val isIndividual: Boolean = cdsOrgType.contains(CdsOrganisationType.Individual) || cdsOrgType.contains(CdsOrganisationType.EUIndividual) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 
     val isLlp = cdsOrgType.contains(CdsOrganisationType.LimitedLiabilityPartnership)
     val isCharity = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
@@ -142,21 +82,20 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
     val isRowSoleTraderIndividual = cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 
     val getDateOfEstablishmentLabel = if (isSoleTrader || isIomSoleTrader) {
-        messages("cds.date-of-birth.label")
-      } else {
-        messages("cds.date-established.label")
-      }
-   val orgNameLabel = if (isPartnership) {
-     messages("cds.partner-name.label")
-   } else if (isCharity || isRowOrganisation || isIomOrganisation) {
-     messages("cds.organisation-name.label")
-   } else {
-     messages("cds.business-name.label")
-   }
+      messages("cds.date-of-birth.label")
+    } else {
+      messages("cds.date-established.label")
+    }
 
+    val orgNameLabel = if (isPartnership) {
+      messages("cds.partner-name.label")
+    } else if (isCharity || isRowOrganisation || isIomOrganisation) {
+      messages("cds.organisation-name.label")
+    } else {
+      messages("cds.business-name.label")
+    }
 
     val businessDetailsLabel =
-    {
       if (isPartnership)
         messages("cds.form.partnership.contact-details")
       else if (isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
@@ -167,32 +106,27 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
       } else {
         messages("cds.form.business-details")
       }
-    }
 
-    val ninoOrUtrLabel =
-    {
-      registration.customsId match {
-        case Some(Utr(_)) => {
-          if (isIndividual || isSoleTrader) {
-            messages("cds.utr.label")
-          }
-          else if (isLlp) {
-            messages("cds.matching.name-id-organisation.company.utr")
-          }
-          else if (isPartnership) {
-            messages("cds.check-your-details.utrnumber.partnership")
-          } else {
-            messages("cds.company.utr.label")
-          }
+    val ninoOrUtrLabel = registration.customsId match {
+      case Some(Utr(_)) => {
+        if (isIndividual || isSoleTrader) {
+          messages("cds.utr.label")
         }
-        case Some(Nino(_)) => messages("cds.nino.label")
-        case Some(Eori(_)) => messages("cds.subscription.enter-eori-number.eori-number.label")
-        case _ => messages("cds.nino.label")
+        else if (isLlp) {
+          messages("cds.matching.name-id-organisation.company.utr")
+        }
+        else if (isPartnership) {
+          messages("cds.check-your-details.utrnumber.partnership")
+        } else {
+          messages("cds.company.utr.label")
+        }
       }
+      case Some(Nino(_)) => messages("cds.nino.label")
+      case Some(Eori(_)) => messages("cds.subscription.enter-eori-number.eori-number.label")
+      case _ => messages("cds.nino.label")
     }
 
-    val formattedIndividualDateOfBirth =
-    {
+    val formattedIndividualDateOfBirth = {
       val dateOfBirth: Option[LocalDate] = (subscription.nameDobDetails, registration) match {
         case (Some(nameDobDetails), _) => Some(nameDobDetails.dateOfBirth)
         case (None, individual: RegistrationDetailsIndividual) => Some(individual.dateOfBirth)
@@ -201,31 +135,21 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
       dateOfBirth.map(formatDate)
     }
 
-    val individualName =
-    {
-      subscription.nameDobDetails match {
+    val individualName = subscription.nameDobDetails match {
         case Some(nameDobDetails) => nameDobDetails.name
         case _ if registration.name == null => ""
         case _ => registration.name
       }
-    }
 
-    val orgName =
-    {
-      subscription.nameOrganisationDetails match {
+    val orgName = subscription.nameOrganisationDetails match {
         case Some(nameOrgDetails) => nameOrgDetails.name
         case _ if subscription.name == null => ""
         case _ => subscription.name
       }
-    }
 
-    val orgType =
-    {
-      cdsOrgType.fold("")(orgType => orgType.id)
-    }
+    val orgType = cdsOrgType.fold("")(orgType => orgType.id)
 
     val headerTitle =
-    {
       if (isPartnership) {
         messages("cds.form.check-answers-partnership-details")
       } else if (isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
@@ -236,10 +160,8 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
       else {
         messages("cds.form.check-answers-company-details")
       }
-    }
 
     val disclosureLabel =
-    {
       if (isPartnership) {
         messages("cds.form.disclosure.partnership")
       } else if (isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
@@ -249,10 +171,8 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
       } else {
         messages("cds.form.disclosure")
       }
-    }
 
     val eoriCheckerConsentYes =
-    {
       if (isPartnership) {
         messages("cds.eori-checker-consent.partnership.yes")
       } else if (isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
@@ -260,125 +180,98 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
       } else {
         messages("cds.eori-checker-consent.yes")
       }
-    }
 
-
-    val email =
-    {
+    val email = Seq(summaryListRow(
+      key = messages("subscription.enter-email.label"),
+      value = subscription.contactDetails.map(cd => Html(cd.emailAddress)),
+      call = None
+    ))
+    
+    val individualNameDob = if (isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
       Seq(summaryListRow(
-        key = messages("subscription.enter-email.label"),
-        value = subscription.contactDetails.map(cd => Html(cd.emailAddress)),
-        call = None
-      ))
-    }
-
-    val individualNameDob =
-    {
-      if (isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
-        Seq(summaryListRow(
-          key = messages("subscription.check-your-details.full-name.label"),
-          value = Some(Html(StringEscapeUtils.escapeXml11(individualName))),
+        key = messages("subscription.check-your-details.full-name.label"),
+        value = Some(Html(StringEscapeUtils.escapeXml11(individualName))),
+        call = if (!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None
+      ),
+        summaryListRow(
+          key = messages("subscription.check-your-details.date-of-birth.label"),
+          value = formattedIndividualDateOfBirth.map(dob => Html(dob)),
           call = if (!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None
-        ),
-          summaryListRow(
-            key = messages("subscription.check-your-details.date-of-birth.label"),
-            value = formattedIndividualDateOfBirth.map(dob => Html(dob)),
-            call = if (!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None
-          ))
-      } else Seq.empty[SummaryListRow]
-    }
-
-    val organisationName =
-    {
-      if (!isIndividual && !isSoleTrader && !isIomIndividual && !isIomSoleTrader) {
-        Seq(summaryListRow(
-          key = orgNameLabel,
-          value = Some(Text(orgName).asHtml),
-          call = if (!isUserIdentifiedByRegService) Some(WhatIsYourOrgNameController.showForm(isInReviewMode = true, organisationType = orgType, service)) else None
         ))
-      } else Seq.empty[SummaryListRow]
-    }
+    } else Seq.empty[SummaryListRow]
 
-    val organisationUtr =
-    {
-      if (isRowOrganisation && !isUserIdentifiedByRegService) {
-        Seq(summaryListRow(
-          key = messages("cds.company.utr.label"),
+    val organisationName = if (!isIndividual && !isSoleTrader && !isIomIndividual && !isIomSoleTrader) {
+      Seq(summaryListRow(
+        key = orgNameLabel,
+        value = Some(Text(orgName).asHtml),
+        call = if (!isUserIdentifiedByRegService) Some(WhatIsYourOrgNameController.showForm(isInReviewMode = true, organisationType = orgType, service)) else None
+      ))
+    } else Seq.empty[SummaryListRow]
+
+    val organisationUtr = if (isRowOrganisation && !isUserIdentifiedByRegService) {
+      Seq(summaryListRow(
+        key = messages("cds.company.utr.label"),
+        value = Some(Html(messages("cds.not-entered.label"))),
+        call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
+      ))
+    } else Seq.empty[SummaryListRow]
+    
+    val customsId = if (registration.customsId.isDefined && (!isIomIndividual || !isIomOrganisation || !isIomSoleTrader)) {
+      Seq(summaryListRow(
+        key = ninoOrUtrLabel,
+        value = Some(Html(registration.customsId.get.id))
+      ))
+    } else Seq.empty[SummaryListRow]
+    
+
+    val individualUtr = if (registration.customsId.isEmpty && isRowSoleTraderIndividual) {
+      Seq(
+        summaryListRow(
+          key = messages("cds.utr.label"),
           value = Some(Html(messages("cds.not-entered.label"))),
           call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
-        ))
-      } else Seq.empty[SummaryListRow]
-    }
-
-    val customsId =
-    {
-      if (registration.customsId.isDefined && (!isIomIndividual || !isIomOrganisation || !isIomSoleTrader)) {
-        Seq(summaryListRow(
-          key = ninoOrUtrLabel,
-          value = Some(Html(registration.customsId.get.id))
-        ))
-      } else Seq.empty[SummaryListRow]
-    }
-
-    val individualUtr =
-    {
-      if (registration.customsId.isEmpty && isRowSoleTraderIndividual) {
-        Seq(
-          summaryListRow(
-            key = messages("cds.utr.label"),
-            value = Some(Html(messages("cds.not-entered.label"))),
-            call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
-          ),
-          summaryListRow(
-            key = messages("cds.nino.label"),
-            value = Some(Html(messages("cds.not-entered.label"))),
-            call = cdsOrgType.map(orgType => DoYouHaveNinoController.displayForm(service))
-          )
+        ),
+        summaryListRow(
+          key = messages("cds.nino.label"),
+          value = Some(Html(messages("cds.not-entered.label"))),
+          call = cdsOrgType.map(orgType => DoYouHaveNinoController.displayForm(service))
         )
-      } else Seq.empty[SummaryListRow]
-    }
+      )
+    } else Seq.empty[SummaryListRow]
 
-    val registeredAddress =
-    {
-      if (isUserIdentifiedByRegService) {
-        subscription.addressDetails.fold {
-          Seq(summaryListRow(
-            key = businessDetailsLabel,
-            value = Some(addressHtml(registration.address)),
-            call = Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service))
-          ))
-        } {
-          address =>
-            Seq(summaryListRow(
-              key = businessDetailsLabel,
-              value = Some(addressViewModelHtml(address)),
-              call = Some(ConfirmContactDetailsController.form(service, isInReviewMode = true))
-            ))
-        }
-      } else {
+    val registeredAddress = if (isUserIdentifiedByRegService) {
+      subscription.addressDetails.fold {
         Seq(summaryListRow(
           key = businessDetailsLabel,
           value = Some(addressHtml(registration.address)),
           call = Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service))
         ))
+      } {
+        address =>
+          Seq(summaryListRow(
+            key = businessDetailsLabel,
+            value = Some(addressViewModelHtml(address)),
+            call = Some(ConfirmContactDetailsController.form(service, isInReviewMode = true))
+          ))
       }
+    } else {
+      Seq(summaryListRow(
+        key = businessDetailsLabel,
+        value = Some(addressHtml(registration.address)),
+        call = Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service))
+      ))
     }
 
-    val dateOfEstablishment =
-    {
-      Seq(subscription.dateEstablished.map { de =>
+    val dateOfEstablishment = Seq(subscription.dateEstablished.map { de =>
         summaryListRow(
           key = getDateOfEstablishmentLabel,
-          value = Some(HtmlContent(formatDate(de))),
+          value = Some(Html(formatDate(de))),
           call = Some(DateOfEstablishmentController.reviewForm(service))
         )
       }
       ).flatten
-    }
 
-    val contactName =
-    {
-      Seq(subscription.contactDetails.map { cd =>
+    val contactName =Seq(subscription.contactDetails.map { cd =>
         summaryListRow(
           key = messages("cds.form.check-answers.contact-name"),
           value = Some(Text(cd.fullName).asHtml),
@@ -386,11 +279,9 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
         )
       }
       ).flatten
-    }
+    
 
-    val contactTelephone =
-    {
-      Seq(subscription.contactDetails.map { cd =>
+    val contactTelephone = Seq(subscription.contactDetails.map { cd =>
         summaryListRow(
           key = messages("cds.form.check-answers.contact-telephone"),
           value = Some(Html(cd.telephone)),
@@ -398,76 +289,65 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
         )
       }
       ).flatten
-    }
+    
 
-    val sicCodeDisplay =
-    {
-      Seq(subscription.sicCode.map { sic =>
+    val sicCodeDisplay = Seq(subscription.sicCode.map { sic =>
         summaryListRow(
           key = messages("cds.form.sic-code"),
           value = Some(Html(sic)),
           call = Some(SicCodeController.submit(isInReviewMode = true, service))
         )
       }).flatten
-    }
 
-    val vatDetails =
-    {
-      if (!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOrElse(true)) {
-        Seq(
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-number"),
-            value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          ),
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-postcode"),
-            value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          ),
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-date"),
-            value = Some(HtmlContent(subscription.vatControlListResponse.map(vat => formatDate(LocalDate.parse(vat.dateOfReg.getOrElse(throw new DataUnavailableException("VAT registration date not found in cache"))))).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          ),
-        )
-      }
-      else if (!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOrElse(false) == false) {
-        Seq(
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-number"),
-            value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          ),
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-postcode"),
-            value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          ),
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-amount"),
-            value = Some(Html(subscription.vatControlListResponse.map(vat => vat.lastNetDue.get.toString).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          ),
-        )
-      }
-      else Seq.empty[SummaryListRow]
-    }
-
-    val summary =
-    {
+    val vatDetails = if (!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOrElse(true)) {
       Seq(
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-number"),
+          value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
+          call = Some(VatRegisteredUkController.reviewForm(service))
+        ),
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-postcode"),
+          value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
+          call = Some(VatRegisteredUkController.reviewForm(service))
+        ),
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-date"),
+          value = Some(Html(subscription.vatControlListResponse.map(vat => formatDate(LocalDate.parse(vat.dateOfReg.getOrElse(throw new DataUnavailableException("VAT registration date not found in cache"))))).getOrElse(messages("cds.not-entered.label")))),
+          call = Some(VatRegisteredUkController.reviewForm(service))
+        ),
+      )
+    }
+    else if (!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOrElse(false) == false) {
+      Seq(
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-number"),
+          value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
+          call = Some(VatRegisteredUkController.reviewForm(service))
+        ),
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-postcode"),
+          value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
+          call = Some(VatRegisteredUkController.reviewForm(service))
+        ),
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-amount"),
+          value = Some(Html(subscription.vatControlListResponse.map(vat => vat.lastNetDue.get.toString).getOrElse(messages("cds.not-entered.label")))),
+          call = Some(VatRegisteredUkController.reviewForm(service))
+        ),
+      )
+    }
+    else Seq.empty[SummaryListRow]
+
+    val summary = Seq(
         summaryListRow(
           key = disclosureLabel,
           value = Some(Html(if (personalDataDisclosureConsent) eoriCheckerConsentYes else messages("cds.eori-checker-consent.no"))),
           call = Some(DisclosePersonalDetailsConsentController.reviewForm(service))
         )
       )
-    }
 
-    val details =
-    {
-      Seq(subscription.contactDetails.map { contactDetails =>
+    val details = Seq(subscription.contactDetails.map { contactDetails =>
         summaryListRow(
           key = messages("cds.form.customs-contact-address"),
           value = Some(contactDetailsHtml(contactDetails)),
@@ -475,7 +355,113 @@ def formatDate(date: LocalDate) = dateFormatter.formatLocalDate(date)
         )
       }
       ).flatten
-    }
+
+    CheckYourDetailsRegisterViewModel(
+      headerTitle,
+      individualNameDob,
+      organisationName,
+      organisationUtr,
+      customsId,
+      individualUtr,
+      registeredAddress,
+      dateOfEstablishment,
+      sicCodeDisplay,
+      summary,
+      vatDetails,
+      contactName,
+      email,
+      contactTelephone,
+      details
+    )
 
   }
+
+  def addressViewModelHtml(ad: AddressViewModel)(implicit messages: Messages) : Html = Html{
+    val lines = Seq(
+      noMarginParagraph(StringEscapeUtils.escapeXml11(ad.street)),
+      noMarginParagraph(StringEscapeUtils.escapeXml11(ad.city))
+    )
+    val optionalLines: Seq[Option[Html]] = Seq(
+      ad.postcode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
+      transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    )
+    (lines ++ optionalLines.flatten).map(_.toString).mkString("")
+  }
+
+  def addressHtml(ad: Address)(implicit messages: Messages): Html = Html{
+    val lines = Seq(
+      noMarginParagraph(StringEscapeUtils.escapeXml11(ad.addressLine1))
+    )
+    
+    val optionalLines: Seq[Option[Html]] = Seq(
+      ad.addressLine2.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
+      ad.addressLine3.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
+      ad.addressLine4.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
+      ad.postalCode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
+      transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    )
+    (lines ++ optionalLines.flatten).map(_.toString).mkString("")
+  }
+
+  def contactDetailsHtml(details: ContactDetailsModel)(implicit messages: Messages): Html = Html{
+    val lines: Seq[Option[Html]] = Seq(
+      details.street.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
+      details.city.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
+      details.postcode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
+      transformCountryCodeToOptionalLabel(details.countryCode).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
+    )
+    lines.flatten.map(_.toString).mkString("")
+  }
+
+  def summaryListRow(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "")(implicit messages: Messages)  = {
+    SummaryListRow(
+      key = Key(
+        content = Text(messages(key))
+      ),
+      value = Value(
+        content = HtmlContent(value.getOrElse("").toString)
+      ),
+      actions = call.flatMap(c => Some(Actions(
+        items = Seq(
+          ActionItem(
+            href = c.url,
+            content = Text(messages("cds.form.change")),
+            visuallyHiddenText = Some(messages(key))
+          )
+        )
+      ))),
+      classes = classes
+    )
+  }
+
+  def summaryListRowNoChangeOption(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "")(implicit messages: Messages)  = {
+    SummaryListRow(
+      key = Key(
+        content = Text(messages(key))
+      ),
+      value = Value(
+        content = HtmlContent(value.getOrElse("").toString)
+      ),
+      actions = None,
+      classes = classes
+    )
+  }
+
+  def euCountry(countryCode: String)(implicit messages: Messages) = messages(messageKeyForEUCountryCode(countryCode))
+
+  def messageKeyForEUCountryCode(countryCode: String) = s"cds.country.$countryCode"
+
+  def isEUCountryCode(countryCode: String)(implicit messages: Messages) = messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
+
+  def transformCountryCodeToOptionalLabel(code: Option[String])(implicit messages: Messages) = code match {
+    case Some(MatchingForms.countryCodeGB) => Some(messages("cds.country.GB"))
+    case Some(c) if isEUCountryCode(c) => Some(euCountry(c))
+    case Some(nonEuCode) => Some(nonEuCode)
+    case _ => None
+  }
+
+  def optionalFaxNumberWithPrefix(fax: Option[String])(implicit messages: Messages) = fax.map(x => s"${messages("cds.review-page.fax-prefix")} $x")
+
+  def formatDate(date: LocalDate)(implicit messages: Messages) = dateFormatter.formatLocalDate(date)
+
 }
