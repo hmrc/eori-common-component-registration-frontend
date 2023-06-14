@@ -16,11 +16,10 @@
 
 @(errorSummary: play.twirl.api.Html,
         pageHeading: String,
-        isInReviewMode: Boolean = false,
-        journey: Journey.Value)(implicit request: Request[_], messages: Messages)
+        isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @errorSummary
 
-@if(pageHeading){
-<h1 class="govuk-heading-l" id="page-heading">@Html(pageHeading)</h1>
+@if(pageHeading) {
+    <h1 class="govuk-heading-l" id="page-heading">@Html(pageHeading)</h1>
 }
