@@ -21,6 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.VatRegisteredUkViewModel._
 
 @this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
@@ -32,17 +33,6 @@
     service: Service
 )(implicit request: Request[_], messages: Messages)
 
-
-@formAction = @{
-    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredUkController.submit(isInReviewMode, service)
-}
-
-@titleAndHeading = @{
-    if(isIndividualSubscriptionFlow) messages("cds.subscription.vat-question-uk.individual")
-    else if(isPartnership) messages("cds.subscription.vat-registered-uk.partnership.title-and-heading")
-    else messages("cds.subscription.vat-registered-uk.title-and-heading")
-}
-
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
     @inputRadioGroup(
         vatRegisteredUkYesNoAnswerForm(field),
@@ -51,16 +41,16 @@
         None,
         None,
         '_divClass -> "createForm-group govuk-form-group",
-        '_legend -> titleAndHeading,
+        '_legend -> titleAndHeadingLabel(isIndividualSubscriptionFlow, isPartnership),
         '_isLegendH1 -> true
     )
 }
 
-@layout_di(titleAndHeading, form = Some(vatRegisteredUkYesNoAnswerForm)) {
+@layout_di(titleAndHeadingLabel(isIndividualSubscriptionFlow, isPartnership), form = Some(vatRegisteredUkYesNoAnswerForm)) {
     <div>
         @errorSummary(vatRegisteredUkYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-        @helpers.form(formAction, "vat-registered-uk-createForm") {
+        @helpers.form(formAction(isInReviewMode, service), "vat-registered-uk-createForm") {
             @CSRF.formField
 
             @displayInputRadioGroup(YesNo.yesAndNoAnswer,
