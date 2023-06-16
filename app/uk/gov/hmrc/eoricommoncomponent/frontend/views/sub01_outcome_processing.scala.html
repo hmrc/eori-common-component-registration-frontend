@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.JourneyExtractor._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.JourneyExtractor
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukPanel
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -28,10 +28,10 @@
 @(orgName: Option[String], processedDate: String)(implicit messages: Messages, request: Request[_])
 
 @serviceOrEori = @{
-  journey match {
-      case Journey.Register => "EORI"
-      case _ => shortName
-  }
+  if(JourneyExtractor.isRegistration)
+      "EORI"
+  else
+      shortName
 }
 
 @layout_di(messages("cds.sub01.outcome.processing.title", serviceOrEori), displayBackLink = false) {

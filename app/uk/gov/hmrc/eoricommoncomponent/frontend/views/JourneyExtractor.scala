@@ -17,10 +17,12 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.views
 
 import play.api.mvc.Request
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 
 object JourneyExtractor {
 
-  def journey(implicit request: Request[_]): Journey.Value = Journey.journeyFromRequest
+  def isRegistration(implicit request: Request[_]): Boolean = {
+    val path = request.path
+    !(path.contains("/subscribe/") || path.endsWith("/subscribe"))
+  }
 
 }
