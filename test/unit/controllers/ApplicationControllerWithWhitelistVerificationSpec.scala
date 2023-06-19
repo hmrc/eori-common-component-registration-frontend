@@ -36,10 +36,9 @@ class ApplicationControllerWithAllowlistVerificationSpec extends ControllerSpec 
   private val mockAuthAction    = authAction(mockAuthConnector)
   private val mockSessionCache  = mock[SessionCache]
   private val startRegisterView = instanceOf[start]
-  private val featureFlags      = mock[FeatureFlags]
 
   val controller =
-    new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig, featureFlags)
+    new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig)
 
   // TODO This test doesn't test what described, please check if logout method is not coevered in ApplicationControllerSpec
   "Navigating to logout" should {

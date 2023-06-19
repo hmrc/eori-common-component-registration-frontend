@@ -59,7 +59,6 @@ class SixLineAddressController @Inject() (
     Future.successful(
       Ok(
         sixLineAddressView(
-          UserLocation.isIOM(requestSessionData.selectedUserLocation.getOrElse("")),
           isInReviewMode,
           form,
           countriesToInclude,
@@ -89,7 +88,6 @@ class SixLineAddressController @Inject() (
           Future.successful(
             BadRequest(
               sixLineAddressView(
-                UserLocation.isIOM(requestSessionData.selectedUserLocation.getOrElse("")),
                 isInReviewMode,
                 invalidForm,
                 countriesToInclude,
@@ -132,19 +130,14 @@ class SixLineAddressController @Inject() (
 
   private def formsByOrganisationTypes(implicit request: Request[AnyContent]) = {
     val form = requestSessionData.selectedUserLocationWithIslands(request) match {
-      case Some(UserLocation.Islands) => islandsSixLineAddressForm
-      case Some(UserLocation.Iom)     => iomSixLineAddressForm
-      case Some(UserLocation.Uk)      => ukSixLineAddressForm
-      case _                          => thirdCountrySixLineAddressForm
+      case Some(UserLocation.Uk) => ukSixLineAddressForm
+      case _                     => thirdCountrySixLineAddressForm
     }
 
     Map(
       CdsOrganisationType.ThirdCountryOrganisationId      -> form,
       CdsOrganisationType.ThirdCountryIndividualId        -> form,
       CdsOrganisationType.ThirdCountrySoleTraderId        -> form,
-      CdsOrganisationType.IsleOfManOrganisationId         -> form,
-      CdsOrganisationType.IsleOfManIndividualId           -> form,
-      CdsOrganisationType.IsleOfManSoleTraderId           -> form,
       CdsOrganisationType.CharityPublicBodyNotForProfitId -> form
     )
   }
