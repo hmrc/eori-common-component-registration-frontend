@@ -248,136 +248,136 @@ class DisclosePersonalDetailsConsentControllerSpec
             html should include(title)
           }
         }
+
+        s"display proper labels for subscription flow $subscriptionFlow" in {
+          showReviewForm(
+            subscriptionFlow = subscriptionFlow,
+            isUkJourney = isUkJourney,
+            isIndividual = isIndividual,
+            isPartnership = isPartnership,
+            isCharity = isCharity
+          ) { result =>
+            val orgType =
+              if (isIndividual) CdsOrganisationType.Individual
+              else if (isPartnership) CdsOrganisationType.Partnership
+              else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+              else CdsOrganisationType.Company
+            when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
+            status(result) shouldBe OK
+            val page = CdsPage(contentAsString(result))
+            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) should include(consentInfo)
+            page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
+            page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
+          }
+        }
     }
 
-    s"display proper labels for subscription flow $subscriptionFlow" in {
-      showReviewForm(
-        subscriptionFlow = subscriptionFlow,
-        isUkJourney = isUkJourney,
-        isIndividual = isIndividual,
-        isPartnership = isPartnership,
-        isCharity = isCharity
-      ) { result =>
-        val orgType =
-          if (isIndividual) CdsOrganisationType.Individual
-          else if (isPartnership) CdsOrganisationType.Partnership
-          else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
-          else CdsOrganisationType.Company
-        when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+    "Loading the page in create mode" should {
 
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) should include(consentInfo)
-        page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
-        page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
+      assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
+
+      "set form action url to submit in create mode" in {
+        showCreateForm()(verifyFormActionInCreateMode)
       }
-    }
-  }
 
-  "Loading the page in create mode" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
-
-    "set form action url to submit in create mode" in {
-      showCreateForm()(verifyFormActionInCreateMode)
-    }
-
-    "display the 'Back' link according the current subscription flow" in {
-      showCreateForm()(verifyBackLinkInCreateModeRegister)
-    }
-  }
-
-  "Loading the page in review mode" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.reviewForm(atarService))
-
-    "set form action url to submit in review mode" in {
-      showReviewForm()(verifyFormSubmitsInReviewMode)
-    }
-
-    "not display the number of steps and display the 'Back' link to review page" in {
-      showReviewForm()(verifyNoStepsAndBackLinkInReviewMode)
-    }
-
-    "display yes when the user's previous answer of yes is in the cache" in {
-      showReviewForm(previouslyAnswered = true) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe false
-        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe true
+      "display the 'Back' link according the current subscription flow" in {
+        showCreateForm()(verifyBackLinkInCreateModeRegister)
       }
     }
 
-    "display no when the user's previous answer of no is in the cache" in {
-      showReviewForm(previouslyAnswered = false) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe true
-        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe false
+    "Loading the page in review mode" should {
+
+      assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.reviewForm(atarService))
+
+      "set form action url to submit in review mode" in {
+        showReviewForm()(verifyFormSubmitsInReviewMode)
+      }
+
+      "not display the number of steps and display the 'Back' link to review page" in {
+        showReviewForm()(verifyNoStepsAndBackLinkInReviewMode)
+      }
+
+      "display yes when the user's previous answer of yes is in the cache" in {
+        showReviewForm(previouslyAnswered = true) { result =>
+          val page = CdsPage(contentAsString(result))
+          page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe false
+          page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe true
+        }
+      }
+
+      "display no when the user's previous answer of no is in the cache" in {
+        showReviewForm(previouslyAnswered = false) { result =>
+          val page = CdsPage(contentAsString(result))
+          page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe true
+          page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe false
+        }
+      }
+
+      "display the correct text for the continue button" in {
+        showReviewForm() { result =>
+          val page = CdsPage(contentAsString(result))
+          page.getElementText(
+            DisclosePersonalDetailsConsentPage.continueButtonXpath
+          ) shouldBe ContinueButtonTextInReviewMode
+        }
       }
     }
 
-    "display the correct text for the continue button" in {
-      showReviewForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementText(
-          DisclosePersonalDetailsConsentPage.continueButtonXpath
-        ) shouldBe ContinueButtonTextInReviewMode
+    "The Yes No Radio Button " should {
+      "display a relevant error if no option is chosen" in {
+        submitForm(ValidRequest - yesNoInputName) { result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            DisclosePersonalDetailsConsentPage.pageLevelErrorSummaryListXPath
+          ) shouldBe problemWithSelectionError
+          page.getElementsText(
+            DisclosePersonalDetailsConsentPage.fieldLevelErrorYesNoAnswer
+          ) shouldBe s"Error: $problemWithSelectionError"
+        }
+      }
+
+      "display a relevant error if an invalid answer option is selected" in {
+        val invalidOption = UUID.randomUUID.toString
+        submitForm(ValidRequest + (yesNoInputName -> invalidOption)) { result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            DisclosePersonalDetailsConsentPage.pageLevelErrorSummaryListXPath
+          ) shouldBe problemWithSelectionError
+          page.getElementsText(
+            DisclosePersonalDetailsConsentPage.fieldLevelErrorYesNoAnswer
+          ) shouldBe s"Error: $problemWithSelectionError"
+        }
       }
     }
-  }
 
-  "The Yes No Radio Button " should {
-    "display a relevant error if no option is chosen" in {
-      submitForm(ValidRequest - yesNoInputName) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          DisclosePersonalDetailsConsentPage.pageLevelErrorSummaryListXPath
-        ) shouldBe problemWithSelectionError
-        page.getElementsText(
-          DisclosePersonalDetailsConsentPage.fieldLevelErrorYesNoAnswer
-        ) shouldBe s"Error: $problemWithSelectionError"
+    "Submitting in Review Mode" should {
+
+      assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
+        mockAuthConnector,
+        controller.submit(isInReviewMode = true, atarService)
+      )
+
+      "allow resubmission in review mode when details are invalid" in {
+        submitFormInReviewMode(ValidRequest - yesNoInputName)(verifyFormSubmitsInReviewMode)
+      }
+
+      "redirect to review page when details are valid" in {
+        submitFormInReviewMode(ValidRequest)(verifyRedirectToReviewPage())
       }
     }
 
-    "display a relevant error if an invalid answer option is selected" in {
-      val invalidOption = UUID.randomUUID.toString
-      submitForm(ValidRequest + (yesNoInputName -> invalidOption)) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          DisclosePersonalDetailsConsentPage.pageLevelErrorSummaryListXPath
-        ) shouldBe problemWithSelectionError
-        page.getElementsText(
-          DisclosePersonalDetailsConsentPage.fieldLevelErrorYesNoAnswer
-        ) shouldBe s"Error: $problemWithSelectionError"
+    "Submitting in Create Mode" should {
+
+      "allow resubmission in create mode when details are invalid" in {
+        submitFormInCreateMode(ValidRequest - yesNoInputName)(verifyFormActionInCreateMode)
       }
-    }
-  }
 
-  "Submitting in Review Mode" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.submit(isInReviewMode = true, atarService)
-    )
-
-    "allow resubmission in review mode when details are invalid" in {
-      submitFormInReviewMode(ValidRequest - yesNoInputName)(verifyFormSubmitsInReviewMode)
-    }
-
-    "redirect to review page when details are valid" in {
-      submitFormInReviewMode(ValidRequest)(verifyRedirectToReviewPage())
-    }
-  }
-
-  "Submitting in Create Mode" should {
-
-    "allow resubmission in create mode when details are invalid" in {
-      submitFormInCreateMode(ValidRequest - yesNoInputName)(verifyFormActionInCreateMode)
-    }
-
-    "redirect to next page when details are valid" in {
-      submitFormInCreateMode(ValidRequest)(verifyRedirectToNextPageInCreateMode)
+      "redirect to next page when details are valid" in {
+        submitFormInCreateMode(ValidRequest)(verifyRedirectToNextPageInCreateMode)
+      }
     }
   }
 
