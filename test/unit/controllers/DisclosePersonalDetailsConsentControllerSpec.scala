@@ -219,9 +219,12 @@ class DisclosePersonalDetailsConsentControllerSpec
             isIndividual,
             isPartnership,
             isCharity
-          ) => {
-
-        val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+          ) =>
+        val orgType =
+          if (isIndividual) CdsOrganisationType.Individual
+          else if (isPartnership) CdsOrganisationType.Partnership
+          else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+          else CdsOrganisationType.Company
         when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
 
         s"display the form for subscription flow $subscriptionFlow" in {
@@ -232,7 +235,11 @@ class DisclosePersonalDetailsConsentControllerSpec
             isPartnership = isPartnership,
             isCharity = isCharity
           ) { result =>
-            val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+            val orgType =
+              if (isIndividual) CdsOrganisationType.Individual
+              else if (isPartnership) CdsOrganisationType.Partnership
+              else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+              else CdsOrganisationType.Company
             when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
             status(result) shouldBe OK
             val html: String = contentAsString(result)
@@ -241,28 +248,29 @@ class DisclosePersonalDetailsConsentControllerSpec
             html should include(title)
           }
         }
+    }
+
+    s"display proper labels for subscription flow $subscriptionFlow" in {
+      showReviewForm(
+        subscriptionFlow = subscriptionFlow,
+        isUkJourney = isUkJourney,
+        isIndividual = isIndividual,
+        isPartnership = isPartnership,
+        isCharity = isCharity
+      ) { result =>
+        val orgType =
+          if (isIndividual) CdsOrganisationType.Individual
+          else if (isPartnership) CdsOrganisationType.Partnership
+          else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+          else CdsOrganisationType.Company
+        when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) should include(consentInfo)
+        page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
+        page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
       }
-
-        s"display proper labels for subscription flow $subscriptionFlow" in {
-          showReviewForm(
-            subscriptionFlow = subscriptionFlow,
-            isUkJourney = isUkJourney,
-            isIndividual = isIndividual,
-            isPartnership = isPartnership,
-            isCharity = isCharity
-          ) { result => {
-
-            val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
-            when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
-
-            status(result) shouldBe OK
-            val page = CdsPage(contentAsString(result))
-            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) should include(consentInfo)
-            page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
-            page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
-          }
-          }
-        }
     }
   }
 
@@ -391,7 +399,11 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
-    val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+    val orgType =
+      if (isIndividual) CdsOrganisationType.Individual
+      else if (isPartnership) CdsOrganisationType.Partnership
+      else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+      else CdsOrganisationType.Company
     when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
 
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
@@ -407,7 +419,11 @@ class DisclosePersonalDetailsConsentControllerSpec
     isCharity: Boolean = false
   )(test: Future[Result] => Any) {
 
-    val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+    val orgType =
+      if (isIndividual) CdsOrganisationType.Individual
+      else if (isPartnership) CdsOrganisationType.Partnership
+      else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+      else CdsOrganisationType.Company
     when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
 
     withAuthorisedUser(userId, mockAuthConnector)
