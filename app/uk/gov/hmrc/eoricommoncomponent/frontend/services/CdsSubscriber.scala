@@ -50,23 +50,16 @@ class CdsSubscriber @Inject() (
     hc: HeaderCarrier,
     messages: Messages,
     request: Request[_]
-  ): Future[SubscriptionResult] = {
-    def convertIomToRowCdsType(cdsOrgType: Option[CdsOrganisationType]) = cdsOrgType match {
-      case Some(CdsOrganisationType.IsleOfManIndividual)   => Some(CdsOrganisationType.ThirdCountryIndividual)
-      case Some(CdsOrganisationType.IsleOfManSoleTrader)   => Some(CdsOrganisationType.ThirdCountrySoleTrader)
-      case Some(CdsOrganisationType.IsleOfManOrganisation) => Some(CdsOrganisationType.ThirdCountryOrganisation)
-      case _                                               => cdsOrgType
-    }
+  ): Future[SubscriptionResult] =
     for {
       registrationDetails <- sessionCache.registrationDetails
       (subscriptionResult, maybeSubscriptionDetails) <- fetchOtherDetailsFromCacheAndSubscribe(
         registrationDetails,
-        convertIomToRowCdsType(cdsOrganisationType),
+        cdsOrganisationType,
         service
       )
       _ <- onSubscriptionResult(subscriptionResult, registrationDetails, maybeSubscriptionDetails, service)
     } yield subscriptionResult
-  }
 
   private def fetchOtherDetailsFromCacheAndSubscribe(
     registrationDetails: RegistrationDetails,
@@ -101,7 +94,6 @@ class CdsSubscriber @Inject() (
 
         completeSubscription(
           service,
-          Journey.Register,
           regDetails.name,
           mayBeEori,
           email,
@@ -123,7 +115,6 @@ class CdsSubscriber @Inject() (
         val mayBeEori   = None
         completeSubscription(
           service,
-          Journey.Register,
           regDetails.name,
           mayBeEori,
           email,
@@ -141,7 +132,6 @@ class CdsSubscriber @Inject() (
 
   private def completeSubscription(
     service: Service,
-    journey: Journey.Value,
     name: String,
     maybeEori: Option[Eori],
     email: String,
@@ -156,7 +146,7 @@ class CdsSubscriber @Inject() (
       Sub02Outcome(processingDate, cdsFullName.getOrElse(name), maybeEori.map(_.id))
     ).flatMap { _ =>
       val recipientDetails =
-        RecipientDetails(service, journey, email, contactName.getOrElse(""), cdsFullName, Some(processingDate))
+        RecipientDetails(service, email, contactName.getOrElse(""), cdsFullName, Some(processingDate))
 
       handleSubscriptionService.handleSubscription(
         formBundleId,

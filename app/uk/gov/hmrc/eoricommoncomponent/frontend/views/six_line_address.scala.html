@@ -24,25 +24,26 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.rowAndIomIndividualOrganisationIds
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.rowIndividualOrganisationIds
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, countryField: helpers.countryField, govukInput: GovukInput)
 
-@(isIOM: Boolean, isInReviewMode: Boolean, addressForm: Form[SixLineAddressMatchModel], countries: List[Country], countriesInCountryPicker: CountriesInCountryPicker, cdsOrgType: String, service: Service)(implicit request: Request[AnyContent], messages: Messages)
+
+@(isInReviewMode: Boolean, addressForm: Form[SixLineAddressMatchModel], countries: List[Country], countriesInCountryPicker: CountriesInCountryPicker, cdsOrgType: String, service: Service)(implicit request: Request[AnyContent], messages: Messages)
 
 
 @postCodeLabel = @{
     countriesInCountryPicker match {
-        case IslandsInCountryPicker | IsleOfManCountryPicker => "cds.matching.organisation-address.postcode"
+        case IslandsInCountryPicker => "cds.matching.organisation-address.postcode"
         case _ if cdsOrgType == CdsOrganisationType.CharityPublicBodyNotForProfitId => "cds.matching.organisation-address.postcode"
         case _ => "cds.matching.organisation-address.postcode-optional"
     }
 }
 
 @headerLabel = @{cdsOrgType match {
-        case orgType if rowAndIomIndividualOrganisationIds.contains(cdsOrgType) => "cds.matching.individual-address.header"
+        case orgType if rowIndividualOrganisationIds.contains(cdsOrgType) => "cds.matching.individual-address.header"
         case _ => "cds.matching.organisation-address.header"
     }
 }
@@ -103,18 +104,7 @@
                 autocomplete = Some("postal-code"),
                 classes = Some("govuk-!-width-one-half")
             )
-            @if(isIOM) {
-                @govukInput(Input(
-                    id = "countryCode",
-                    name = "countryCode",
-                    classes = "govuk-!-width-one-half",
-                    label = Label(
-                    content = Text(messages("cds.subscription.address-details.country.label")),
-                ),
-                value = Some(messages("cds.country.IM")),
-                attributes = Map("disabled" -> "disabled")
-                ))
-            } else if(cdsOrgType != CdsOrganisationType.CharityPublicBodyNotForProfitId){
+            @if(cdsOrgType != CdsOrganisationType.CharityPublicBodyNotForProfitId){
                 @countryField(
                     form = addressForm,
                     field = "countryCode",

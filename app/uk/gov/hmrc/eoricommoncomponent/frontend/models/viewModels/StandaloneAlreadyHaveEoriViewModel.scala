@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(errorSummary: play.twirl.api.Html,
-        pageHeading: String,
-        isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+package uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels
 
-@errorSummary
+import play.api.i18n.Messages
 
-@if(pageHeading) {
-    <h1 class="govuk-heading-l" id="page-heading">@Html(pageHeading)</h1>
+case class StandaloneAlreadyHaveEoriViewModel(isAdminUser: Boolean) {
+
+  def titleAndHeaderLabel()(implicit messages: Messages): String =
+    if (isAdminUser)
+      messages("cds.registration.you-already-have-eori.group.title")
+    else
+      messages("cds.registration.you-already-have-eori.individual.title")
+
 }

@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration
+package uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels
 
-// TODO Remove this object
-object JourneyType {
+import play.api.i18n.Messages
 
-  val Subscribe = "subscribe"
-  val GetAnEori = "register"
+case class EnrolmentExistsUserStandaloneViewModel(isAdminUser: Boolean) {
 
-  val validJourneys: Set[String] = Set(Subscribe, GetAnEori)
+  def titleAndHeaderLabel()(implicit messages: Messages): String =
+    if (isAdminUser)
+      messages("ecc.eori-exists-user.heading")
+    else
+      messages("ecc.eori-exists-standard-user.heading")
+
 }

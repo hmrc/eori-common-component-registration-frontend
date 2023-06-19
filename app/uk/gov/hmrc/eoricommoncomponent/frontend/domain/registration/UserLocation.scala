@@ -31,7 +31,7 @@ object UserLocation {
 
   val validLocations: Set[String] = Set(Uk, Iom, Eu, ThirdCountry, ThirdCountryIncEU, Islands)
 
-  private val rowLocations = Set(Eu, ThirdCountry, ThirdCountryIncEU, Islands, Iom)
+  private val rowLocations = Set(Eu, ThirdCountry, ThirdCountryIncEU, Islands)
 
   def forId(locationId: String): Boolean = validLocations(locationId)
 
@@ -40,8 +40,6 @@ object UserLocation {
       case Some(location) => isRow(location)
       case _              => false
     }
-
-  def isIOM(location: String): Boolean = location == UserLocation.Iom
 
   def isRow(location: String): Boolean = rowLocations.contains(location)
 }

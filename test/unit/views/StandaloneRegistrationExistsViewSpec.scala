@@ -21,6 +21,7 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels.EnrolmentExistsUserStandaloneViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.enrolment_exists_user_standalone
 import util.ViewSpec
 
@@ -112,9 +113,18 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
 
   }
 
-  private lazy val adminDoc: Document          = Jsoup.parse(contentAsString(view(Some("testEORI"), true)))
-  private lazy val standardDoc: Document       = Jsoup.parse(contentAsString(view(Some("testEORI"), false)))
-  private lazy val adminNoEORIDoc: Document    = Jsoup.parse(contentAsString(view(None, true)))
-  private lazy val standardNoEORIDoc: Document = Jsoup.parse(contentAsString(view(None, false)))
+  private lazy val adminDoc: Document = Jsoup.parse(
+    contentAsString(view(Some("testEORI"), isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(true)))
+  )
+
+  private lazy val standardDoc: Document = Jsoup.parse(
+    contentAsString(view(Some("testEORI"), isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(false)))
+  )
+
+  private lazy val adminNoEORIDoc: Document =
+    Jsoup.parse(contentAsString(view(None, isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(true))))
+
+  private lazy val standardNoEORIDoc: Document =
+    Jsoup.parse(contentAsString(view(None, isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(false))))
 
 }

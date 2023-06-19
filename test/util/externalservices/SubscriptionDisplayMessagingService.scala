@@ -25,13 +25,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 
 object SubscriptionDisplayMessagingService {
 
-  private def subscriptionPath(id: String, requestAcknowledgementReference: String, journey: Journey.Value): String =
-    journey match {
-      case Journey.Register =>
-        s"/subscription-display?regime=CDS&taxPayerID=$id&acknowledgementReference=$requestAcknowledgementReference"
-      case Journey.Subscribe =>
-        s"/subscription-display?regime=CDS&EORI=$id&acknowledgementReference=$requestAcknowledgementReference"
-    }
+  private def subscriptionPath(id: String, requestAcknowledgementReference: String): String =
+    s"/subscription-display?regime=CDS&taxPayerID=$id&acknowledgementReference=$requestAcknowledgementReference"
 
   def validResponse(typeOfLegalEntity: String, taxPayerID: String = TestData.TaxPayerID): String =
     s"""{
@@ -99,11 +94,10 @@ object SubscriptionDisplayMessagingService {
   def returnSubscriptionDisplayWhenReceiveRequest(
     id: String,
     requestAcknowledgementReference: String,
-    journey: Journey.Value,
     returnedStatus: Int = OK
   ): Unit =
     stubFor(
-      get(urlEqualTo(subscriptionPath(id, requestAcknowledgementReference, journey)))
+      get(urlEqualTo(subscriptionPath(id, requestAcknowledgementReference)))
         .willReturn(
           aResponse()
             .withStatus(returnedStatus)

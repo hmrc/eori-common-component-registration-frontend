@@ -78,22 +78,12 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
     stopMockServer()
 
   "SubscriptionDisplay SUB09" should {
-    "return successful response with OK status when subscription display service returns 200, for EoriNo and journey is Subscription" in {
-
-      SubscriptionDisplayMessagingService.returnSubscriptionDisplayWhenReceiveRequest(
-        requestEori,
-        requestAcknowledgementReference,
-        Journey.Subscribe
-      )
-      await(connector.subscriptionDisplay(reqEori)) mustBe Right(expectedResponse)
-    }
 
     "return successful response with OK status when subscription display service returns 200, for taxPayerId and journey is Register" in {
 
       SubscriptionDisplayMessagingService.returnSubscriptionDisplayWhenReceiveRequest(
         requestTaxPayerId,
-        requestAcknowledgementReference,
-        Journey.Register
+        requestAcknowledgementReference
       )
       await(connector.subscriptionDisplay(reqTaxPayerId)) mustBe Right(expectedResponse)
     }
@@ -103,7 +93,6 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       SubscriptionDisplayMessagingService.returnSubscriptionDisplayWhenReceiveRequest(
         requestTaxPayerId,
         requestAcknowledgementReference,
-        Journey.Register,
         returnedStatus = SERVICE_UNAVAILABLE
       )
       await(connector.subscriptionDisplay(reqTaxPayerId)) mustBe Left(ServiceUnavailableResponse)

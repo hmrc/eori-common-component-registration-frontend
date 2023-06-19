@@ -49,11 +49,10 @@
 
 @headerAndTitle = @{
     organisationType match {
-        case ThirdCountryOrganisationId | IsleOfManOrganisationId => messages("cds.matching.row-organisation.utr.title-and-heading")
-        case orgType if rowAndIomIndividualOrganisationIds.contains(orgType) =>
+        case ThirdCountryOrganisationId  => messages("cds.matching.row-organisation.utr.title-and-heading")
+        case orgType if rowIndividualOrganisationIds.contains(orgType) =>
             messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")
-        case IndividualId | SoleTraderId =>
-            messages("cds.matching.row-sole-trader-individual.utr.title-and-heading")
+        case IndividualId | SoleTraderId => messages("cds.matching.row-sole-trader-individual.utr.title-and-heading")
         case _ => messages("cds.matching.organisation.utr.title-and-heading")
     }
 }
@@ -68,8 +67,8 @@
 
 @hint = @{
     organisationType match {
-        case ThirdCountryOrganisationId | IsleOfManOrganisationId | CharityPublicBodyNotForProfitId => utrLinkText
-        case orgType if rowAndIomIndividualOrganisationIds.contains(orgType) =>
+        case ThirdCountryOrganisationId | CharityPublicBodyNotForProfitId => utrLinkText
+        case orgType if rowIndividualOrganisationIds.contains(orgType) =>
             Html(messages(""))
         case IndividualId | SoleTraderId =>
             Html(messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrlink))
