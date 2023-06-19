@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.Logger
+import play.api.i18n.Messages
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -24,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
@@ -55,11 +56,39 @@ class DisclosePersonalDetailsConsentController @Inject() (
               isInReviewMode = false,
               disclosePersonalDetailsYesNoAnswerForm,
               requestSessionData,
-              service
+              service,
+              textPara2(requestSessionData.userSelectedOrganisationType),
+              questionLabel(requestSessionData.userSelectedOrganisationType)
             )
           )
         )
     }
+
+private def textPara2(cdsOrganisationType: Option[CdsOrganisationType])(implicit messages: Messages): String = cdsOrganisationType match {
+  case orgType if orgType.contains(CdsOrganisationType.Company) =>
+    messages("ecc.subscription.organisation-disclose-personal-details-consent.org.para2")
+  case _ if cdsOrganisationType.contains(CdsOrganisationType.Partnership) || cdsOrganisationType.contains(CdsOrganisationType.LimitedLiabilityPartnership) =>
+    messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2")
+  case _ if cdsOrganisationType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) || cdsOrganisationType.contains(CdsOrganisationType.ThirdCountryOrganisation)  =>
+    messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.para2")
+  case _ => messages("ecc.subscription.organisation-disclose-personal-details-consent.individual.para2")
+}
+
+  private def questionLabel(cdsOrganisationType: Option[CdsOrganisationType])(implicit messages: Messages): String = cdsOrganisationType match {
+    case orgType if orgType.contains(CdsOrganisationType.Company) =>
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.org.question")
+    case _ if cdsOrganisationType.contains(CdsOrganisationType.Partnership) || cdsOrganisationType.contains(CdsOrganisationType.LimitedLiabilityPartnership) =>
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.question")
+    case _ if cdsOrganisationType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) || cdsOrganisationType.contains(CdsOrganisationType.ThirdCountryOrganisation) =>
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.question")
+    case _ => messages("ecc.subscription.organisation-disclose-personal-details-consent.individual.question")
+  }
+
+
+
+
+
+
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -70,7 +99,9 @@ class DisclosePersonalDetailsConsentController @Inject() (
               isInReviewMode = true,
               disclosePersonalDetailsYesNoAnswerForm.fill(YesNo(isConsentDisclosed)),
               requestSessionData,
-              service
+              service,
+              textPara2(requestSessionData.userSelectedOrganisationType),
+              questionLabel(requestSessionData.userSelectedOrganisationType)
             )
           )
         }
@@ -84,7 +115,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
           formWithErrors =>
             Future.successful(
               BadRequest(
-                disclosePersonalDetailsConsentView(isInReviewMode, formWithErrors, requestSessionData, service)
+                disclosePersonalDetailsConsentView(isInReviewMode, formWithErrors, requestSessionData, service, textPara2(requestSessionData.userSelectedOrganisationType), questionLabel(requestSessionData.userSelectedOrganisationType))
               )
             ),
           yesNoAnswer =>

@@ -27,7 +27,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DisclosePersonalDetailsConsentController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
@@ -89,10 +89,10 @@ class DisclosePersonalDetailsConsentControllerSpec
       ),
       (
         ThirdCountryIndividualSubscriptionFlow,
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        "‘Check an EORI number’ service",
+        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "Yes",
+        "No",
         false,
         true,
         false,
@@ -100,10 +100,10 @@ class DisclosePersonalDetailsConsentControllerSpec
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        "‘Check an EORI number’ service",
+        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "Yes",
+        "No",
         false,
         false,
         false,
@@ -111,10 +111,10 @@ class DisclosePersonalDetailsConsentControllerSpec
       ),
       (
         PartnershipSubscriptionFlow,
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        "‘Check an EORI number’ service",
+        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "Yes",
+        "No",
         true,
         false,
         true,
@@ -122,21 +122,21 @@ class DisclosePersonalDetailsConsentControllerSpec
       ),
       (
         OrganisationSubscriptionFlow,
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        "‘Check an EORI number’ service",
+        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "Yes",
+        "No",
         true,
         false,
         false,
         true
       ),
       (
-        SoleTraderSubscriptionFlow, // Flow cannot be duplicated in this table and we do not have enough flows, using this to progress with tests
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        SoleTraderSubscriptionFlow,
+        "‘Check an EORI number’ service",
+        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "Yes",
+        "No",
         true,
         false,
         false,
@@ -198,7 +198,7 @@ class DisclosePersonalDetailsConsentControllerSpec
           ) { result =>
             status(result) shouldBe OK
             val page = CdsPage(contentAsString(result))
-            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) shouldBe consentInfo
+            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) should include(consentInfo)
             page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
             page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
           }
@@ -219,7 +219,11 @@ class DisclosePersonalDetailsConsentControllerSpec
             isIndividual,
             isPartnership,
             isCharity
-          ) =>
+          ) => {
+
+        val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+        when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
         s"display the form for subscription flow $subscriptionFlow" in {
           showReviewForm(
             subscriptionFlow = subscriptionFlow,
@@ -228,6 +232,8 @@ class DisclosePersonalDetailsConsentControllerSpec
             isPartnership = isPartnership,
             isCharity = isCharity
           ) { result =>
+            val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+            when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
             status(result) shouldBe OK
             val html: String = contentAsString(result)
             html should include("id=\"yes-no-answer-true\"")
@@ -235,6 +241,7 @@ class DisclosePersonalDetailsConsentControllerSpec
             html should include(title)
           }
         }
+      }
 
         s"display proper labels for subscription flow $subscriptionFlow" in {
           showReviewForm(
@@ -243,12 +250,17 @@ class DisclosePersonalDetailsConsentControllerSpec
             isIndividual = isIndividual,
             isPartnership = isPartnership,
             isCharity = isCharity
-          ) { result =>
+          ) { result => {
+
+            val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+            when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
             status(result) shouldBe OK
             val page = CdsPage(contentAsString(result))
-            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) shouldBe consentInfo
+            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) should include(consentInfo)
             page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
             page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
+          }
           }
         }
     }
@@ -379,6 +391,9 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
+    val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+    when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
@@ -391,6 +406,10 @@ class DisclosePersonalDetailsConsentControllerSpec
     isPartnership: Boolean = false,
     isCharity: Boolean = false
   )(test: Future[Result] => Any) {
+
+    val orgType = if (isIndividual) CdsOrganisationType.Individual else if (isPartnership) CdsOrganisationType.Partnership else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit else CdsOrganisationType.Company
+    when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.getCachedPersonalDataDisclosureConsent(any[Request[_]]))
@@ -419,6 +438,9 @@ class DisclosePersonalDetailsConsentControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
       .thenReturn(Right(OrganisationSubscriptionFlow))
+
+    when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(CdsOrganisationType.Company))
+
     test(
       controller
         .submit(isInReviewMode, atarService)

@@ -32,12 +32,17 @@
     isInReviewMode: Boolean,
     disclosePersonalDetailsYesNoAnswerForm: Form[YesNo],
     requestSessionData: RequestSessionData,
-    service: Service
+    service: Service,
+    para2: String,
+    questionLabel: String
 )(implicit request: Request[AnyContent], messages: Messages)
 
-@hint = {
-<p class="govuk-body">@Html(messages("ecc.subscription.organisation-disclose-personal-details-consent.hint"))</p>
-<p class="govuk-hint">@messages("ecc.subscription.organisation-disclose-personal-details-consent.hint2")</p>
+@paragraphs = {
+<br/>
+<p class="govuk-body">@Html(messages("ecc.subscription.organisation-disclose-personal-details-consent.para1"))</p>
+<p class="govuk-body">@para2</p>
+<p class="govuk-body">@Html(messages("ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para"))</p>
+<h2 class="govuk-heading-m" id="question-label">@questionLabel</h2>
 }
 
 @layout_di(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
@@ -51,11 +56,11 @@
             @inputRadioGroup(
                 disclosePersonalDetailsYesNoAnswerForm(YesNo.yesAndNoAnswer),
                 Seq(
-                    "true" -> messages("cds.subscription.organisation-disclose-personal-details-consent.yes"),
-                    "false" -> messages("cds.subscription.organisation-disclose-personal-details-consent.no")
+                    "true" -> messages("cds.yes"),
+                    "false" -> messages("cds.no")
                 ),
                 Map.empty,
-                Some(hint),
+                Some(paragraphs),
                 None,
                 '_divClass -> "createForm-group govuk-form-group",
                 '_legend -> messages("ecc.subscription.organisation-disclose-personal-details-consent.title"),
