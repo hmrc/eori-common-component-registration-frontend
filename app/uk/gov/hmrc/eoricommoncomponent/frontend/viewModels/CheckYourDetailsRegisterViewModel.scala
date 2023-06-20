@@ -120,19 +120,15 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
     }
 
     registration.customsId match {
-      case Some(Utr(_))  => {
-        if (soleAndIndividual) {
+      case Some(Utr(_)) =>
+        if (soleAndIndividual)
           messages("cds.utr.label")
-        }
-        else if (cdsOrgType.contains(CdsOrganisationType.LimitedLiabilityPartnership)) {
+        else if (cdsOrgType.contains(CdsOrganisationType.LimitedLiabilityPartnership))
           messages("cds.matching.name-id-organisation.company.utr")
-        }
-        else if (isPartnership) {
+        else if (isPartnership)
           messages("cds.check-your-details.utrnumber.partnership")
-        } else {
+        else
           messages("cds.company.utr.label")
-        }
-      }
       case Some(Nino(_)) => messages("cds.nino.label")
       case Some(Eori(_)) => messages("cds.subscription.enter-eori-number.eori-number.label")
       case _             => messages("cds.nino.label")
