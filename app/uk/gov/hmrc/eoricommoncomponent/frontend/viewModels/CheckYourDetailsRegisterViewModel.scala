@@ -195,7 +195,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
       else if (isIndividual || isSoleTrader)
         messages("cds.eori-checker-consent.individual-or-sole-trader.yes")
       else
-        messages("cds.eori-checker-consent.yes")
+        messages("cds.yes")
 
     val email = Seq(
       summaryListRow(
@@ -405,7 +405,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
         value = Some(
           Html(
             if (personalDataDisclosureConsent) eoriCheckerConsentYes
-            else messages("cds.eori-checker-consent.no")
+            else messages("cds.no")
           )
         ),
         call = Some(DisclosePersonalDetailsConsentController.reviewForm(service))
