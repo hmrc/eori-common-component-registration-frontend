@@ -31,7 +31,7 @@ trait DisclosePersonalDetailsConsentPage extends WebPage {
 
   val consentOpeningXpath   = "//*[@id='consent-opening']"
   val consentBodyXpath      = "//*[@id='consent-body']"
-  val consentInfoPara2Xpath = "//p[@id='personal-details-consent.para2']"
+  val consentInfoPara2Xpath = "//p[@id='personal-details-consent-para2']"
 
   val yesToDiscloseXpath      = "//label[@for='yes-no-answer-true']"
   val noToDiscloseXpath       = "//label[@for='yes-no-answer-false']"
