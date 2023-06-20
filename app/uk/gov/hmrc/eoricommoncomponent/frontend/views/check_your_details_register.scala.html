@@ -34,9 +34,7 @@
 
 @isIndividual = @{
     cdsOrgType.contains(CdsOrganisationType.Individual) ||
-
-            cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
-            cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+    cdsOrgType.contains(CdsOrganisationType.EUIndividual) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 }
 
 @layout_di(messages("cds.form.check-answers"), displayBackLink = false) {
