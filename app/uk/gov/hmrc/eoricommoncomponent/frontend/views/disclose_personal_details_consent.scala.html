@@ -26,7 +26,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, paragraph: helpers.paragraph)
 
 @(
     isInReviewMode: Boolean,
@@ -37,14 +37,6 @@
     questionLabel: String
 )(implicit request: Request[AnyContent], messages: Messages)
 
-@paragraphs = {
-<br/>
-<p class="govuk-body">@Html(messages("ecc.subscription.organisation-disclose-personal-details-consent.para1"))</p>
-<p class="govuk-body">@para2</p>
-<p class="govuk-body">@Html(messages("ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para"))</p>
-<h2 class="govuk-heading-m" id="question-label">@questionLabel</h2>
-}
-
 @layout_di(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
     <div>
         @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
@@ -53,6 +45,12 @@
 
             @CSRF.formField
 
+            @h1(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"))
+
+            @paragraph(messages("ecc.subscription.organisation-disclose-personal-details-consent.para1"), Some("personal-details-consent.para1"))
+            @paragraph(para2, Some("personal-details-consent.para2"))
+            @paragraph(messages("ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para"), Some("personal-details-consent.para3"))
+
             @inputRadioGroup(
                 disclosePersonalDetailsYesNoAnswerForm(YesNo.yesAndNoAnswer),
                 Seq(
@@ -60,11 +58,11 @@
                     "false" -> messages("cds.no")
                 ),
                 Map.empty,
-                Some(paragraphs),
+                None,
                 None,
                 '_divClass -> "createForm-group govuk-form-group",
-                '_legend -> messages("ecc.subscription.organisation-disclose-personal-details-consent.title"),
-                '_isLegendH1 -> true
+                '_legend -> questionLabel,
+                '_isLegendH1 -> false
             )
 
             @govukButton(Button(

@@ -90,7 +90,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         ThirdCountryIndividualSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "You can consent to show your name and address alongside your EORI number. Doing so can help reduce errors and delays when moving your goods.",
         "Yes",
         "No",
         false,
@@ -101,7 +101,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         ThirdCountryOrganisationSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods.",
         "Yes",
         "No",
         false,
@@ -112,7 +112,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         PartnershipSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "You can consent to show the partnership’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.",
         "Yes",
         "No",
         true,
@@ -123,7 +123,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         OrganisationSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods.",
         "Yes",
         "No",
         true,
@@ -134,11 +134,11 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         SoleTraderSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "Anyone can use this service to check if an EORI number is valid (opens in new tab).",
+        "You can consent to show your name and address alongside your EORI number. Doing so can help reduce errors and delays when moving your goods.",
         "Yes",
         "No",
         true,
-        false,
+        true,
         false,
         false
       )
@@ -198,7 +198,7 @@ class DisclosePersonalDetailsConsentControllerSpec
           ) { result =>
             status(result) shouldBe OK
             val page = CdsPage(contentAsString(result))
-            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) should include(consentInfo)
+            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoPara2Xpath) should include(consentInfo)
             page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
             page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
           }
@@ -224,6 +224,7 @@ class DisclosePersonalDetailsConsentControllerSpec
           if (isIndividual) CdsOrganisationType.Individual
           else if (isPartnership) CdsOrganisationType.Partnership
           else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+          else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
           else CdsOrganisationType.Company
         when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
 
@@ -239,6 +240,7 @@ class DisclosePersonalDetailsConsentControllerSpec
               if (isIndividual) CdsOrganisationType.Individual
               else if (isPartnership) CdsOrganisationType.Partnership
               else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+              else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
               else CdsOrganisationType.Company
             when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
             status(result) shouldBe OK
@@ -261,12 +263,13 @@ class DisclosePersonalDetailsConsentControllerSpec
               if (isIndividual) CdsOrganisationType.Individual
               else if (isPartnership) CdsOrganisationType.Partnership
               else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+              else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
               else CdsOrganisationType.Company
             when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
 
             status(result) shouldBe OK
             val page = CdsPage(contentAsString(result))
-            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) should include(consentInfo)
+            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoPara2Xpath) should include(consentInfo)
             page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
             page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
           }
@@ -403,6 +406,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       if (isIndividual) CdsOrganisationType.Individual
       else if (isPartnership) CdsOrganisationType.Partnership
       else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+      else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
       else CdsOrganisationType.Company
     when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
 
@@ -423,6 +427,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       if (isIndividual) CdsOrganisationType.Individual
       else if (isPartnership) CdsOrganisationType.Partnership
       else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+      else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
       else CdsOrganisationType.Company
     when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
 

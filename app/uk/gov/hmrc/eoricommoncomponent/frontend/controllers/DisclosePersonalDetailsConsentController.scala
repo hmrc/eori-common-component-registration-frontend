@@ -64,39 +64,31 @@ class DisclosePersonalDetailsConsentController @Inject() (
         )
     }
 
-  private def textPara2(cdsOrganisationType: Option[CdsOrganisationType])(implicit messages: Messages): String =
-    cdsOrganisationType match {
-      case orgType if orgType.contains(CdsOrganisationType.Company) =>
+  private def textPara2(cdsOrganisationType: Option[CdsOrganisationType])(implicit messages: Messages): String = {
+    val org = cdsOrganisationType.getOrElse(CdsOrganisationType.Individual)
+    org match {
+      case CdsOrganisationType.Company =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.org.para2")
-      case _
-          if cdsOrganisationType.contains(CdsOrganisationType.Partnership) || cdsOrganisationType.contains(
-            CdsOrganisationType.LimitedLiabilityPartnership
-          ) =>
+      case CdsOrganisationType.Partnership | CdsOrganisationType.LimitedLiabilityPartnership =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2")
-      case _
-          if cdsOrganisationType.contains(
-            CdsOrganisationType.CharityPublicBodyNotForProfit
-          ) || cdsOrganisationType.contains(CdsOrganisationType.ThirdCountryOrganisation) =>
+      case CdsOrganisationType.CharityPublicBodyNotForProfit | CdsOrganisationType.ThirdCountryOrganisation =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.para2")
       case _ => messages("ecc.subscription.organisation-disclose-personal-details-consent.individual.para2")
     }
+  }
 
-  private def questionLabel(cdsOrganisationType: Option[CdsOrganisationType])(implicit messages: Messages): String =
-    cdsOrganisationType match {
-      case orgType if orgType.contains(CdsOrganisationType.Company) =>
+  private def questionLabel(cdsOrganisationType: Option[CdsOrganisationType])(implicit messages: Messages): String = {
+    val org = cdsOrganisationType.getOrElse(CdsOrganisationType.Individual)
+    org match {
+      case CdsOrganisationType.Company =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.org.question")
-      case _
-          if cdsOrganisationType.contains(CdsOrganisationType.Partnership) || cdsOrganisationType.contains(
-            CdsOrganisationType.LimitedLiabilityPartnership
-          ) =>
+      case CdsOrganisationType.Partnership | CdsOrganisationType.LimitedLiabilityPartnership =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.question")
-      case _
-          if cdsOrganisationType.contains(
-            CdsOrganisationType.CharityPublicBodyNotForProfit
-          ) || cdsOrganisationType.contains(CdsOrganisationType.ThirdCountryOrganisation) =>
+      case CdsOrganisationType.CharityPublicBodyNotForProfit | CdsOrganisationType.ThirdCountryOrganisation =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.question")
       case _ => messages("ecc.subscription.organisation-disclose-personal-details-consent.individual.question")
     }
+  }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
