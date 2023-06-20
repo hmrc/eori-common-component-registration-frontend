@@ -18,92 +18,137 @@ package unit.viewModels
 
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CustomsId, Eori, Nino, Utr}
-import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.{CheckYourDetailsRegisterConstructor, CheckYourDetailsRegisterViewModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.{
+  CheckYourDetailsRegisterConstructor,
+  CheckYourDetailsRegisterViewModel
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
-import util.builders.RegistrationDetailsBuilder.{incorporatedRegistrationDetails, individualRegistrationDetails, individualRegistrationDetailsNotIdentifiedByReg01, limitedLiabilityPartnershipRegistrationDetails, organisationRegistrationDetails, partnershipRegistrationDetails}
+import util.builders.RegistrationDetailsBuilder.{
+  incorporatedRegistrationDetails,
+  individualRegistrationDetails,
+  individualRegistrationDetailsNotIdentifiedByReg01,
+  limitedLiabilityPartnershipRegistrationDetails,
+  organisationRegistrationDetails,
+  partnershipRegistrationDetails
+}
 import unit.services.SubscriptionServiceTestData
 import util.ControllerSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-
 class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec with SubscriptionServiceTestData {
 
   val mockDateFormatter: DateFormatter = mock[DateFormatter]
 
-
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
   private val organisationToTest =
-    Seq(Option(CdsOrganisationType.Company), Option(CdsOrganisationType.EUOrganisation), Option(CdsOrganisationType.ThirdCountryOrganisation))
+    Seq(
+      Option(CdsOrganisationType.Company),
+      Option(CdsOrganisationType.EUOrganisation),
+      Option(CdsOrganisationType.ThirdCountryOrganisation)
+    )
+
   private val organisationWithCharityToTest =
-    Seq(Option(CdsOrganisationType.CharityPublicBodyNotForProfit),  Option(CdsOrganisationType.ThirdCountryOrganisation))
-  private val partnershipToTest = Seq(Option(CdsOrganisationType.Partnership), Option(CdsOrganisationType.LimitedLiabilityPartnership))
+    Seq(Option(CdsOrganisationType.CharityPublicBodyNotForProfit), Option(CdsOrganisationType.ThirdCountryOrganisation))
+
+  private val partnershipToTest =
+    Seq(Option(CdsOrganisationType.Partnership), Option(CdsOrganisationType.LimitedLiabilityPartnership))
 
   private val individualToTest =
-    Seq(Option(CdsOrganisationType.Individual), Option(CdsOrganisationType.EUIndividual), Option(CdsOrganisationType.ThirdCountryIndividual))
+    Seq(
+      Option(CdsOrganisationType.Individual),
+      Option(CdsOrganisationType.EUIndividual),
+      Option(CdsOrganisationType.ThirdCountryIndividual)
+    )
 
-  private val soleTraderToTest = Seq(Some(CdsOrganisationType.SoleTrader), Some(CdsOrganisationType.ThirdCountrySoleTrader))
+  private val soleTraderToTest =
+    Seq(Some(CdsOrganisationType.SoleTrader), Some(CdsOrganisationType.ThirdCountrySoleTrader))
+
   private val soleAndIndividualToTest = individualToTest ++ soleTraderToTest
 
   val constructorInstance = new CheckYourDetailsRegisterConstructor(mockDateFormatter)
 
   "getDateOfEstablishmentLabel" should {
-    "return correct messages for SoleTrader is true" in soleTraderToTest.foreach( { test =>
-     val result = constructorInstance.getDateOfEstablishmentLabel(test)
+    "return correct messages for SoleTrader is true" in soleTraderToTest.foreach { test =>
+      val result = constructorInstance.getDateOfEstablishmentLabel(test)
       result shouldBe "Date of birth"
-    })
-    "return correct messages for SoleTrader is false" in organisationToTest.foreach({ test =>
+    }
+    "return correct messages for SoleTrader is false" in organisationToTest.foreach { test =>
       val result = constructorInstance.getDateOfEstablishmentLabel(test)
       result shouldBe "Date of establishment"
-    })
+    }
   }
   "orgNameLabel" should {
-    "return correct messages for partnership" in partnershipToTest.foreach({ test =>
+    "return correct messages for partnership" in partnershipToTest.foreach { test =>
       val result = constructorInstance.orgNameLabel(test, isPartnership = true)
       result shouldBe "Registered partnership name"
-    })
-    "return correct messages for orgType" in organisationWithCharityToTest.foreach({ test =>
+    }
+    "return correct messages for orgType" in organisationWithCharityToTest.foreach { test =>
       val result = constructorInstance.orgNameLabel(test, false)
       result shouldBe "Organisation name"
-    })
-    "return correct messages for any other " in individualToTest.foreach({ test =>
+    }
+    "return correct messages for any other " in individualToTest.foreach { test =>
       val result = constructorInstance.orgNameLabel(test, false)
       result shouldBe "Registered company name"
-    })
+    }
   }
 
   "ninoOrUtrLabel" should {
     "return correct messages for partnership with UTR" in {
-      val result = constructorInstance.ninoOrUtrLabel(limitedLiabilityPartnershipRegistrationDetails, Option(CdsOrganisationType.LimitedLiabilityPartnership), false)
+      val result = constructorInstance.ninoOrUtrLabel(
+        limitedLiabilityPartnershipRegistrationDetails,
+        Option(CdsOrganisationType.LimitedLiabilityPartnership),
+        false
+      )
       result shouldBe "Corporation Tax Unique Taxpayer Reference (UTR)"
     }
 
     "return correct messages for partnership non LLP with UTR" in {
-      val result = constructorInstance.ninoOrUtrLabel(partnershipRegistrationDetails, Option(CdsOrganisationType.Partnership), true)
+      val result = constructorInstance.ninoOrUtrLabel(
+        partnershipRegistrationDetails,
+        Option(CdsOrganisationType.Partnership),
+        true
+      )
       result shouldBe "Partnership Self Assessment UTR"
     }
 
-    "return correct messages for orgType with UTR" in organisationToTest.foreach({ test =>
-      val result = constructorInstance.ninoOrUtrLabel(organisationRegistrationDetails.copy(customsId = Some(Utr("12345679"))),test, isPartnership = false)
+    "return correct messages for orgType with UTR" in organisationToTest.foreach { test =>
+      val result = constructorInstance.ninoOrUtrLabel(
+        organisationRegistrationDetails.copy(customsId = Some(Utr("12345679"))),
+        test,
+        isPartnership = false
+      )
       result shouldBe "Corporation Tax UTR"
-    })
-    "return correct messages for Sole and Individual with UTR " in soleAndIndividualToTest.foreach({ test =>
-      val result = constructorInstance.ninoOrUtrLabel(individualRegistrationDetails.copy(customsId = Some(Utr("12345679"))),test, isPartnership = false)
+    }
+    "return correct messages for Sole and Individual with UTR " in soleAndIndividualToTest.foreach { test =>
+      val result = constructorInstance.ninoOrUtrLabel(
+        individualRegistrationDetails.copy(customsId = Some(Utr("12345679"))),
+        test,
+        isPartnership = false
+      )
       result shouldBe "Self Assessment Unique Taxpayer Reference (UTR)"
-    })
-    "return correct messages for Sole and Individual with NINO " in soleAndIndividualToTest.foreach({ test =>
-      val result = constructorInstance.ninoOrUtrLabel(individualRegistrationDetails.copy(customsId = Some(Nino("12345679"))), test, isPartnership = false)
+    }
+    "return correct messages for Sole and Individual with NINO " in soleAndIndividualToTest.foreach { test =>
+      val result = constructorInstance.ninoOrUtrLabel(
+        individualRegistrationDetails.copy(customsId = Some(Nino("12345679"))),
+        test,
+        isPartnership = false
+      )
       result shouldBe "National Insurance number"
-    })
-    "return correct messages for orgType with Eori " in organisationToTest.foreach({ test =>
-      val result = constructorInstance.ninoOrUtrLabel(organisationRegistrationDetails.copy(customsId = Some(Eori("12345679"))), test, isPartnership = false)
+    }
+    "return correct messages for orgType with Eori " in organisationToTest.foreach { test =>
+      val result = constructorInstance.ninoOrUtrLabel(
+        organisationRegistrationDetails.copy(customsId = Some(Eori("12345679"))),
+        test,
+        isPartnership = false
+      )
       result shouldBe "EORI number"
-    })
-    "return correct messages for wilde case " in soleAndIndividualToTest.foreach({ test =>
+    }
+    "return correct messages for wilde case " in soleAndIndividualToTest.foreach { test =>
       val result = constructorInstance.ninoOrUtrLabel(individualRegistrationDetails, test, isPartnership = false)
       result shouldBe "National Insurance number"
-    })
+    }
   }
 
 }

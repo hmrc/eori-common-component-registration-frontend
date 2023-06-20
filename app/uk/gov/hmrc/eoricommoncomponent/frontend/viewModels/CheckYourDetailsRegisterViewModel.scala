@@ -68,63 +68,72 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
 
   def getDateOfEstablishmentLabel(cdsOrgType: Option[CdsOrganisationType])(implicit messages: Messages) = {
     val isSoleTrader = cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
+      cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
     if (isSoleTrader) messages("cds.date-of-birth.label")
     else messages("cds.date-established.label")
   }
+
   def orgNameLabel(cdsOrgType: Option[CdsOrganisationType], isPartnership: Boolean)(implicit messages: Messages) = {
-    val orgNameLabel = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
+    val orgNameLabel = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) || cdsOrgType.contains(
+      CdsOrganisationType.ThirdCountryOrganisation
+    )
     (orgNameLabel, isPartnership) match {
       case (false, true) => messages("cds.partner-name.label")
       case (true, false) => messages("cds.organisation-name.label")
-      case (_, _) => messages("cds.business-name.label")
+      case (_, _)        => messages("cds.business-name.label")
 
     }
   }
-  def businessDetailsLabel(isPartnership: Boolean, cdsOrgType: Option[CdsOrganisationType])(implicit messages: Messages) = {
+
+  def businessDetailsLabel(isPartnership: Boolean, cdsOrgType: Option[CdsOrganisationType])(implicit
+    messages: Messages
+  ) = {
     val soleAndIndividual =
-        cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
+      cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
         cdsOrgType.contains(CdsOrganisationType.Individual) ||
         cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
     val orgNameLabel =
-        cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) ||
+      cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
 
     (isPartnership, soleAndIndividual, orgNameLabel) match {
       case (true, false, false) => messages("cds.form.partnership.contact-details")
       case (false, true, false) => messages("cds.form.contact-details")
       case (false, false, true) => messages("cds.form.organisation-address")
-      case (_,_,_) => messages("cds.form.business-details")
+      case (_, _, _)            => messages("cds.form.business-details")
     }
   }
 
-  def ninoOrUtrLabel(registration: RegistrationDetails, cdsOrgType: Option[CdsOrganisationType], isPartnership: Boolean)(implicit messages: Messages) = {
+  def ninoOrUtrLabel(
+    registration: RegistrationDetails,
+    cdsOrgType: Option[CdsOrganisationType],
+    isPartnership: Boolean
+  )(implicit messages: Messages) = {
     val soleAndIndividual = {
       cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
-        cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
-        cdsOrgType.contains(CdsOrganisationType.Individual) ||
-        cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
-        cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+      cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
+      cdsOrgType.contains(CdsOrganisationType.Individual) ||
+      cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
+      cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
     }
     def utrLabelChecker() = {
       val lLPOnly = cdsOrgType.contains(CdsOrganisationType.LimitedLiabilityPartnership)
       (soleAndIndividual, lLPOnly, isPartnership) match {
-        case (true, false, false) => messages("cds.utr.label")
-        case (false, true, false) => messages("cds.matching.name-id-organisation.company.utr")
-        case (false, false, true) => messages("cds.check-your-details.utrnumber.partnership")
+        case (true, false, false)  => messages("cds.utr.label")
+        case (false, true, false)  => messages("cds.matching.name-id-organisation.company.utr")
+        case (false, false, true)  => messages("cds.check-your-details.utrnumber.partnership")
         case (false, false, false) => messages("cds.company.utr.label")
       }
     }
     registration.customsId match {
-    case Some(Utr(_)) => utrLabelChecker()
-    case Some(Nino(_)) => messages("cds.nino.label")
-    case Some(Eori(_)) => messages("cds.subscription.enter-eori-number.eori-number.label")
-    case _ => messages("cds.nino.label")
+      case Some(Utr(_))  => utrLabelChecker()
+      case Some(Nino(_)) => messages("cds.nino.label")
+      case Some(Eori(_)) => messages("cds.subscription.enter-eori-number.eori-number.label")
+      case _             => messages("cds.nino.label")
+    }
   }
-  }
-
 
   def generateViewModel(
     cdsOrgType: Option[CdsOrganisationType],
@@ -146,10 +155,6 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
     val isRowSoleTraderIndividual = cdsOrgType.contains(
       CdsOrganisationType.ThirdCountrySoleTrader
     ) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
-
-
-
-
 
     val formattedIndividualDateOfBirth = {
       val dateOfBirth: Option[LocalDate] = (subscription.nameDobDetails, registration) match {
@@ -259,7 +264,12 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
 
     val customsId =
       if (registration.customsId.isDefined)
-        Seq(summaryListRow(key = ninoOrUtrLabel(registration, cdsOrgType, isPartnership), value = Some(Html(registration.customsId.get.id))))
+        Seq(
+          summaryListRow(
+            key = ninoOrUtrLabel(registration, cdsOrgType, isPartnership),
+            value = Some(Html(registration.customsId.get.id))
+          )
+        )
       else Seq.empty[SummaryListRow]
 
     val individualUtr =
