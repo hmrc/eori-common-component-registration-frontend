@@ -189,16 +189,6 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
       else
         messages("cds.form.check-answers-company-details")
 
-    val disclosureLabel =
-      if (isPartnership)
-        messages("cds.form.disclosure.partnership")
-      else if (isIndividual || isSoleTrader)
-        messages("cds.form.disclosure.individual")
-      else if (isCharity || isRowOrganisation)
-        messages("cds.form.disclosure.organisation")
-      else
-        messages("cds.form.disclosure")
-
     val eoriCheckerConsentYes =
       if (isPartnership)
         messages("cds.eori-checker-consent.partnership.yes")
@@ -411,7 +401,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
 
     val summary = Seq(
       summaryListRow(
-        key = disclosureLabel,
+        key = messages("cds.form.disclosure"),
         value = Some(
           Html(
             if (personalDataDisclosureConsent) eoriCheckerConsentYes
