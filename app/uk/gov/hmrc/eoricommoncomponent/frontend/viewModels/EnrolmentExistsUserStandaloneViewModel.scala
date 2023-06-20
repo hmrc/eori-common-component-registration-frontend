@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels
+package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 
 import play.api.i18n.Messages
 
