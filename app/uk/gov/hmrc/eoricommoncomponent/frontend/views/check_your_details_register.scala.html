@@ -34,9 +34,9 @@
 
 @isIndividual = @{
     cdsOrgType.contains(CdsOrganisationType.Individual) ||
+
             cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
             cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
-
 }
 
 @layout_di(messages("cds.form.check-answers"), displayBackLink = false) {
@@ -58,7 +58,7 @@
             ))
         </div>
 
-        @if(!isIndividual && !cdsOrgType.contains(CdsOrganisationType.IsleOfManIndividual)){
+        @if(!isIndividual){
 
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-vat-details")</h2>

@@ -568,7 +568,7 @@ class CheckYourDetailsRegisterControllerSpec
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
         "Show name and address on the 'Check an EORI number' service"
-      ) shouldBe "Yes I want my name and address on the EORI number checker"
+      ) shouldBe "Yes"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
         "Show name and address on the 'Check an EORI number' service",
@@ -720,7 +720,7 @@ class CheckYourDetailsRegisterControllerSpec
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
         "Show name and address on the 'Check an EORI number' service"
-      ) shouldBe "Yes I want my partnership name and address on the EORI checker"
+      ) shouldBe "Yes"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
         "Show name and address on the 'Check an EORI number' service",
