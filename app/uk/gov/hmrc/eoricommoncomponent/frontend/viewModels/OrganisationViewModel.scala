@@ -19,9 +19,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys.selectedUserLocation
-
-import javax.inject.Inject
 
 object OrganisationViewModel {
 
