@@ -118,17 +118,21 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
       cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
       cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
     }
-    def utrLabelChecker() = {
-      val lLPOnly = cdsOrgType.contains(CdsOrganisationType.LimitedLiabilityPartnership)
-      (soleAndIndividual, lLPOnly, isPartnership) match {
-        case (true, false, false)  => messages("cds.utr.label")
-        case (false, true, false)  => messages("cds.matching.name-id-organisation.company.utr")
-        case (false, false, true)  => messages("cds.check-your-details.utrnumber.partnership")
-        case (false, false, false) => messages("cds.company.utr.label")
-      }
-    }
+
     registration.customsId match {
-      case Some(Utr(_))  => utrLabelChecker()
+      case Some(Utr(_))  => {
+        if (soleAndIndividual) {
+          messages("cds.utr.label")
+        }
+        else if (cdsOrgType.contains(CdsOrganisationType.LimitedLiabilityPartnership)) {
+          messages("cds.matching.name-id-organisation.company.utr")
+        }
+        else if (isPartnership) {
+          messages("cds.check-your-details.utrnumber.partnership")
+        } else {
+          messages("cds.company.utr.label")
+        }
+      }
       case Some(Nino(_)) => messages("cds.nino.label")
       case Some(Eori(_)) => messages("cds.subscription.enter-eori-number.eori-number.label")
       case _             => messages("cds.nino.label")
