@@ -18,11 +18,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName
 
 case class RecipientDetails(
-  journey: Journey.Value,
+  journey: String,
   enrolmentKey: String,
   serviceName: String,
   recipientEmailAddress: String,
@@ -37,14 +37,13 @@ object RecipientDetails {
 
   def apply(
     service: Service,
-    journey: Journey.Value,
     recipientEmailAddress: String,
     recipientFullName: String,
     orgName: Option[String],
     completionDate: Option[String]
   )(implicit messages: Messages): RecipientDetails =
     RecipientDetails(
-      journey,
+      RegisterJourney.value,
       service.enrolmentKey,
       ServiceName.longName(service),
       recipientEmailAddress,
@@ -54,11 +53,9 @@ object RecipientDetails {
       Some(messages.lang.code)
     )
 
-  def apply(service: Service, journey: Journey.Value, contactDetails: ContactDetails)(implicit
-    messages: Messages
-  ): RecipientDetails =
+  def apply(service: Service, contactDetails: ContactDetails)(implicit messages: Messages): RecipientDetails =
     RecipientDetails(
-      journey,
+      RegisterJourney.value,
       service.enrolmentKey,
       ServiceName.longName(service),
       contactDetails.emailAddress,

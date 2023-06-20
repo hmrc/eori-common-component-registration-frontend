@@ -28,7 +28,7 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SixLineAddressController, SubscriptionFlowManager}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.IsleOfManOrganisationId
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
@@ -318,26 +318,7 @@ class SixLineAddressControllerSpec
         "Enter a valid postcode"
       )
     }
-    "be mandatory for Isle of Man" in {
-      val formValues = RowFormBuilder.asForm(iomSixLineAddressForm)
-      assertInvalidField(IsleOfManOrganisationId)(formValues + ("postcode" -> "", "countryCode" -> "IM"))(
-        fieldLevelErrorPostcode,
-        "Enter a valid postcode"
-      )
-    }
-  }
 
-  "country field for Isle of man" should {
-    "be disabled" in {
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some("isle-of-man"))
-      showForm(IsleOfManOrganisationId)(Map("countryCode" -> "IM")) { result =>
-        status(result) shouldBe OK
-        val page = CdsPage(contentAsString(result))
-        page.html should include(
-          "<input class=\"govuk-input govuk-!-width-one-half\" \n    id=\"countryCode\" name=\"countryCode\" type=\"text\"   value=\"Isle of Man\" \n  \n     disabled=\"disabled\"\n  >"
-        )
-      }
-    }
   }
 
   "country for third-country-organisation" should {

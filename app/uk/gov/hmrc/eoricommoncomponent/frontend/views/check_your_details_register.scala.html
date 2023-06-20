@@ -31,10 +31,12 @@
     service: Service
 )(implicit request: Request[_], messages: Messages)
 
+
 @isIndividual = @{
     cdsOrgType.contains(CdsOrganisationType.Individual) ||
             cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
             cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+
 }
 
 @layout_di(messages("cds.form.check-answers"), displayBackLink = false) {
@@ -55,7 +57,9 @@
                         viewModel.summary
             ))
         </div>
+
         @if(!isIndividual && !cdsOrgType.contains(CdsOrganisationType.IsleOfManIndividual)){
+
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-vat-details")</h2>
 

@@ -21,7 +21,8 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{standalone_already_have_eori}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels.StandaloneAlreadyHaveEoriViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.standalone_already_have_eori
 import util.ViewSpec
 
 class StandaloneEoriAlreadyExistsViewSpec extends ViewSpec {
@@ -94,12 +95,19 @@ class StandaloneEoriAlreadyExistsViewSpec extends ViewSpec {
   }
 
   private lazy val individualDoc: Document =
-    Jsoup.parse(contentAsString(view(Some("GBXXXXXXXX"), false, eoriOnlyService)))
+    Jsoup.parse(
+      contentAsString(view(Some("GBXXXXXXXX"), false, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(false)))
+    )
 
   private lazy val orgDoc: Document =
-    Jsoup.parse(contentAsString(view(Some("GBXXXXXXXX"), true, eoriOnlyService)))
+    Jsoup.parse(
+      contentAsString(view(Some("GBXXXXXXXX"), true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true)))
+    )
 
-  private lazy val standardDocNoEori: Document = Jsoup.parse(contentAsString(view(None, true, eoriOnlyService)))
-  private lazy val adminDocNoEORI: Document    = Jsoup.parse(contentAsString(view(None, true, eoriOnlyService)))
+  private lazy val standardDocNoEori: Document =
+    Jsoup.parse(contentAsString(view(None, true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true))))
+
+  private lazy val adminDocNoEORI: Document =
+    Jsoup.parse(contentAsString(view(None, true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true))))
 
 }
