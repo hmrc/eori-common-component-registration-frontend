@@ -39,8 +39,7 @@ cds.consent.label=Consent
 cds.consent.legend=Is it ok for us to disclose your EORI on the EU Portal?
 cds.eori-checker-consent.individual-or-sole-trader.yes=Yes I want my name and address on the EORI number checker
 cds.eori-checker-consent.partnership.yes=Yes I want my partnership name and address on the EORI checker
-cds.eori-checker-consent.no=No I just want to show my EORI number
-cds.eori-checker-consent.yes=Yes I want my name and address on the EORI number checker
+
  
 cds.eu-establishment.legend=Establishment in the customs territory of the union (this data element is only used for economic operators with an address  in a third country)?
 cds.eu-establishment.radio.yes.label=Indeed It Is
