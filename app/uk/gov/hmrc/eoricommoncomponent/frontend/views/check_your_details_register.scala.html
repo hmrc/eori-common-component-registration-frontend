@@ -193,16 +193,6 @@
     }
 }
 
-@eoriCheckerConsentYes = @{
-    if (isPartnership) {
-        messages("cds.eori-checker-consent.partnership.yes")
-    } else if(isIndividual || isSoleTrader) {
-        messages("cds.eori-checker-consent.individual-or-sole-trader.yes")
-    } else {
-        messages("cds.eori-checker-consent.yes")
-    }
-}
-
 @addressViewModelHtml(ad: AddressViewModel) = {
     @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.street))
     @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.city))
@@ -438,7 +428,7 @@ else Seq.empty[SummaryListRow]
   Seq(
     summaryListRow(
         key = messages("cds.form.disclosure"),
-        value = Some(Html(if(personalDataDisclosureConsent) eoriCheckerConsentYes else messages("cds.eori-checker-consent.no"))),
+        value = Some(Html(if(personalDataDisclosureConsent) messages("cds.yes") else messages("cds.no"))),
         call = Some(DisclosePersonalDetailsConsentController.reviewForm(service))
     )
   )
