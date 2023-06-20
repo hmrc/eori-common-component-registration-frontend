@@ -1,342 +1,109 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package unit.viewModels
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RegistrationInfoRequest.UTR
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CustomsId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CustomsId, Eori, Nino, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.{CheckYourDetailsRegisterConstructor, CheckYourDetailsRegisterViewModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
+import util.builders.RegistrationDetailsBuilder.{incorporatedRegistrationDetails, individualRegistrationDetails, individualRegistrationDetailsNotIdentifiedByReg01, limitedLiabilityPartnershipRegistrationDetails, organisationRegistrationDetails, partnershipRegistrationDetails}
 import unit.services.SubscriptionServiceTestData
 import util.ControllerSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
-
-
 class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec with SubscriptionServiceTestData {
 
   val mockDateFormatter: DateFormatter = mock[DateFormatter]
 
+
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
-  private val organisationToTest = Seq(
-    CdsOrganisationType.Company,
-    CdsOrganisationType.EUOrganisation,
-    CdsOrganisationType.ThirdCountryOrganisation,
+  private val organisationToTest =
+    Seq(Option(CdsOrganisationType.Company), Option(CdsOrganisationType.EUOrganisation), Option(CdsOrganisationType.ThirdCountryOrganisation))
+  private val organisationWithCharityToTest =
+    Seq(Option(CdsOrganisationType.CharityPublicBodyNotForProfit),  Option(CdsOrganisationType.ThirdCountryOrganisation))
+  private val partnershipToTest = Seq(Option(CdsOrganisationType.Partnership), Option(CdsOrganisationType.LimitedLiabilityPartnership))
 
-  )
+  private val individualToTest =
+    Seq(Option(CdsOrganisationType.Individual), Option(CdsOrganisationType.EUIndividual), Option(CdsOrganisationType.ThirdCountryIndividual))
 
-  private val partnershipToTest = Seq(
-    CdsOrganisationType.Partnership,
-    CdsOrganisationType.LimitedLiabilityPartnership
-  )
+  private val soleTraderToTest = Seq(Some(CdsOrganisationType.SoleTrader), Some(CdsOrganisationType.ThirdCountrySoleTrader))
+  private val soleAndIndividualToTest = individualToTest ++ soleTraderToTest
 
-  private val individualToTest = Seq(
-    CdsOrganisationType.Individual,
-    CdsOrganisationType.EUIndividual,
-    CdsOrganisationType.ThirdCountryIndividual
-  )
+  val constructorInstance = new CheckYourDetailsRegisterConstructor(mockDateFormatter)
 
-  private val soleTraderToTest = Seq(
-    CdsOrganisationType.SoleTrader,
-    CdsOrganisationType.ThirdCountrySoleTrader
-  )
-
-  val constructorInstance = new CheckYourDetailsRegisterConstructor(
-    mockDateFormatter
-  )
-
-
-  "generateViewModel" when {
-
-    "generateViewModel with isUserIdentifiedByRegService true" should {
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for organisation non GB" in servicesToTest.foreach({ service =>
-
-        organisationToTest.foreach(orgType => {
-
-         val result: CheckYourDetailsRegisterViewModel =  constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "DE"))),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        )
-
-          result shouldBe ""
-
-        })
-
-
-
-
-      })
-      "Populate CheckYourDetailsRegisterViewModel correctly for organisation for unknown country code" in servicesToTest.foreach({ service =>
-
-        val result: Unit = organisationToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), ""))),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for individual" in servicesToTest.foreach({ service =>
-
-        val result: Unit = individualToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(customsId = Some(CustomsId(UTR, "1111111111"))),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for individual without DoB" in servicesToTest.foreach({ service =>
-
-        val result: Unit = individualToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(nameDobDetails = None),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for individual DoB and registrationDetails incorrectly set" in servicesToTest.foreach({ service =>
-
-        val result: Unit = individualToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(nameDobDetails = None),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for organisation without org name" in servicesToTest.foreach({ service =>
-
-        val result: Unit = organisationToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(nameOrganisationDetails = None),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for organisation none details" in servicesToTest.foreach({ service =>
-
-        val result: Unit = organisationToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(nameOrganisationDetails = None),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for organisation customId is defined " in servicesToTest.foreach({ service =>
-
-        val result: Unit = organisationToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          organisationRegistrationDetails.copy(customsId = Some(CustomsId(UTR, "1111111111"))),
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(addressDetails = None),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for organisation is not verified " in servicesToTest.foreach({ service =>
-
-        val result: Unit = organisationToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          organisationRegistrationDetails.copy(customsId = Some(CustomsId(UTR, "1111111111"))),
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(vatVerificationOption = Some(false)),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for soleTrader" in servicesToTest.foreach({ service =>
-
-        val result: Unit = soleTraderToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(customsId = Some(CustomsId(UTR, "1111111111"))),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for partnership if PartnershipOrLLP is false " in servicesToTest.foreach({ service =>
-
-        val result: Unit = partnershipToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for partnership if PartnershipOrLLP is true " in servicesToTest.foreach({ service =>
-
-        val result: Unit = partnershipToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = true,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for CharityPublicBodyNotForProfit" in servicesToTest.foreach({ service =>
-
-        val result: Unit = constructorInstance.generateViewModel(
-          Some(CdsOrganisationType.CharityPublicBodyNotForProfit),
-          isPartnership = true,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = true,
-        )
-      })
-    }
-
-    "generateViewModel with isUserIdentifiedByRegService false" should {
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for organisation" in servicesToTest.foreach({ service =>
-
-        val result: Unit = organisationToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for individual" in servicesToTest.foreach({ service =>
-
-        val result: Unit = individualToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for individual without DoB" in servicesToTest.foreach({ service =>
-
-        val result: Unit = individualToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(nameDobDetails = None),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for individual DoB and registrationDetails incorrectly set" in servicesToTest.foreach({ service =>
-
-        val result: Unit = individualToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes.copy(nameDobDetails = None),
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for soleTrader" in servicesToTest.foreach({ service =>
-
-        val result: Unit = soleTraderToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          individualRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for partnership if PartnershipOrLLP is false " in servicesToTest.foreach({ service =>
-
-        val result: Unit = partnershipToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = false,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for partnership if PartnershipOrLLP is true " in servicesToTest.foreach({ service =>
-
-        val result: Unit = partnershipToTest.foreach(orgType => constructorInstance.generateViewModel(
-          Some(orgType),
-          isPartnership = true,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        ))
-      })
-
-      "Populate CheckYourDetailsRegisterViewModel correctly for CharityPublicBodyNotForProfit" in servicesToTest.foreach({ service =>
-
-        val result: Unit = constructorInstance.generateViewModel(
-          Some(CdsOrganisationType.CharityPublicBodyNotForProfit),
-          isPartnership = true,
-          organisationRegistrationDetails,
-          fullyPopulatedSubscriptionDetailsAllOrgTypes,
-          personalDataDisclosureConsent = fullyPopulatedSubscriptionDetailsAllOrgTypes.personalDataDisclosureConsent.getOrElse(false),
-          service,
-          isUserIdentifiedByRegService = false,
-        )
-      })
-
-    }
+  "getDateOfEstablishmentLabel" should {
+    "return correct messages for SoleTrader is true" in soleTraderToTest.foreach( { test =>
+     val result = constructorInstance.getDateOfEstablishmentLabel(test)
+      result shouldBe "Date of birth"
+    })
+    "return correct messages for SoleTrader is false" in organisationToTest.foreach({ test =>
+      val result = constructorInstance.getDateOfEstablishmentLabel(test)
+      result shouldBe "Date of establishment"
+    })
   }
+  "orgNameLabel" should {
+    "return correct messages for partnership" in partnershipToTest.foreach({ test =>
+      val result = constructorInstance.orgNameLabel(test, isPartnership = true)
+      result shouldBe "Registered partnership name"
+    })
+    "return correct messages for orgType" in organisationWithCharityToTest.foreach({ test =>
+      val result = constructorInstance.orgNameLabel(test, false)
+      result shouldBe "Organisation name"
+    })
+    "return correct messages for any other " in individualToTest.foreach({ test =>
+      val result = constructorInstance.orgNameLabel(test, false)
+      result shouldBe "Registered company name"
+    })
+  }
+
+  "ninoOrUtrLabel" should {
+    "return correct messages for partnership with UTR" in {
+      val result = constructorInstance.ninoOrUtrLabel(limitedLiabilityPartnershipRegistrationDetails, Option(CdsOrganisationType.LimitedLiabilityPartnership), false)
+      result shouldBe "Corporation Tax Unique Taxpayer Reference (UTR)"
+    }
+
+    "return correct messages for partnership non LLP with UTR" in {
+      val result = constructorInstance.ninoOrUtrLabel(partnershipRegistrationDetails, Option(CdsOrganisationType.Partnership), true)
+      result shouldBe "Partnership Self Assessment UTR"
+    }
+
+    "return correct messages for orgType with UTR" in organisationToTest.foreach({ test =>
+      val result = constructorInstance.ninoOrUtrLabel(organisationRegistrationDetails.copy(customsId = Some(Utr("12345679"))),test, isPartnership = false)
+      result shouldBe "Corporation Tax UTR"
+    })
+    "return correct messages for Sole and Individual with UTR " in soleAndIndividualToTest.foreach({ test =>
+      val result = constructorInstance.ninoOrUtrLabel(individualRegistrationDetails.copy(customsId = Some(Utr("12345679"))),test, isPartnership = false)
+      result shouldBe "Self Assessment Unique Taxpayer Reference (UTR)"
+    })
+    "return correct messages for Sole and Individual with NINO " in soleAndIndividualToTest.foreach({ test =>
+      val result = constructorInstance.ninoOrUtrLabel(individualRegistrationDetails.copy(customsId = Some(Nino("12345679"))), test, isPartnership = false)
+      result shouldBe "National Insurance number"
+    })
+    "return correct messages for orgType with Eori " in organisationToTest.foreach({ test =>
+      val result = constructorInstance.ninoOrUtrLabel(organisationRegistrationDetails.copy(customsId = Some(Eori("12345679"))), test, isPartnership = false)
+      result shouldBe "EORI number"
+    })
+    "return correct messages for wilde case " in soleAndIndividualToTest.foreach({ test =>
+      val result = constructorInstance.ninoOrUtrLabel(individualRegistrationDetails, test, isPartnership = false)
+      result shouldBe "National Insurance number"
+    })
+  }
+
 }

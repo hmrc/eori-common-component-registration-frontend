@@ -49,21 +49,15 @@ class CheckYourDetailsRegisterController @Inject() (
         } yield {
           val isUserIdentifiedByRegService = registration.safeId.id.nonEmpty
           val viewModel = viewModelConstructor.generateViewModel(
-              requestSessionData.userSelectedOrganisationType,
-              requestSessionData.isPartnershipOrLLP,
-              registration,
-              subscription,
-              subscription.personalDataDisclosureConsent.getOrElse(false),
-              service,
-              isUserIdentifiedByRegService
-              )
-          Ok(
-            checkYourDetailsRegisterView(
-              viewModel,
-              requestSessionData.userSelectedOrganisationType,
-              service
-            )
+            requestSessionData.userSelectedOrganisationType,
+            requestSessionData.isPartnershipOrLLP,
+            registration,
+            subscription,
+            subscription.personalDataDisclosureConsent.getOrElse(false),
+            service,
+            isUserIdentifiedByRegService
           )
+          Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
         }
     }
 
