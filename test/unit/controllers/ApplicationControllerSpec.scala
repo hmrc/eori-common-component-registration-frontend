@@ -45,7 +45,8 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
     new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig, featureFlags)
 
   override protected def afterEach(): Unit = {
-    reset(mockAuthConnector, mockSessionCache)
+    reset(mockAuthConnector)
+    reset(mockSessionCache)
 
     super.afterEach()
   }

@@ -112,7 +112,7 @@ class DoYouHaveAUtrNumberControllerSpec
     "display 'use different service' when org type is not valid page based on NO answer" in {
 
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
-        Future.successful(true)
+        Future.successful((): Unit)
       )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
@@ -142,7 +142,7 @@ class DoYouHaveAUtrNumberControllerSpec
     "redirect to Confirm Details page based on NO answer" in {
 
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
-        Future.successful(true)
+        Future.successful((): Unit)
       )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
@@ -158,7 +158,7 @@ class DoYouHaveAUtrNumberControllerSpec
     "redirect to Review page while on review mode" in {
 
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
-        Future.successful(true)
+        Future.successful((): Unit)
       )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
@@ -190,7 +190,7 @@ class DoYouHaveAUtrNumberControllerSpec
     "redirect to Address page based on NO answer" in {
 
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
-        Future.successful(true)
+        Future.successful((): Unit)
       )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
@@ -207,7 +207,7 @@ class DoYouHaveAUtrNumberControllerSpec
     "redirect to Review page while on review mode" in {
 
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
-        Future.successful(true)
+        Future.successful((): Unit)
       )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
@@ -229,8 +229,8 @@ class DoYouHaveAUtrNumberControllerSpec
 
       showForm(CdsOrganisationType.ThirdCountrySoleTraderId, defaultUserId) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?")
-        page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
+        page.title() should startWith("Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?")
+        page.h1() shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
         page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
       }
     }
@@ -240,8 +240,8 @@ class DoYouHaveAUtrNumberControllerSpec
 
       showForm(CdsOrganisationType.ThirdCountryIndividualId, defaultUserId) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?")
-        page.h1 shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
+        page.title() should startWith("Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?")
+        page.h1() shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
         page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
       }
     }
@@ -266,7 +266,7 @@ class DoYouHaveAUtrNumberControllerSpec
     "redirect to Nino page based on NO answer" in {
 
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
-        Future.successful(true)
+        Future.successful((): Unit)
       )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
@@ -279,7 +279,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
   }
 
-  def showForm(organisationType: String, userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def showForm(organisationType: String, userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result =
       controller.form(organisationType, atarService).apply(SessionBuilder.buildRequestWithSession(userId))
@@ -291,7 +291,7 @@ class DoYouHaveAUtrNumberControllerSpec
     organisationType: String,
     userId: String = defaultUserId,
     isInReviewMode: Boolean = false
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .submit(organisationType, atarService, isInReviewMode)

@@ -59,11 +59,15 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
-    when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any())).thenReturn(Future.successful(true))
+    when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any())).thenReturn(
+      Future.successful((): Unit)
+    )
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockAuthConnector, mockRequestSessionData, mockSubscriptionDetailsService)
+    reset(mockAuthConnector)
+    reset(mockRequestSessionData)
+    reset(mockSubscriptionDetailsService)
 
     super.afterEach()
   }
@@ -197,12 +201,11 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
         .apply(SessionBuilder.buildRequestWithSession(defaultUserId))
     )
 
-  private def submitForm(form: Map[String, String])(test: Future[Result] => Any) {
+  private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit =
     test(
       doYouHaveNinoController
         .submit(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )
-  }
 
 }

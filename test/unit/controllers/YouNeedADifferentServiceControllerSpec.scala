@@ -44,7 +44,8 @@ class YouNeedADifferentServiceControllerSpec extends ControllerSpec with BeforeA
   }
 
   override protected def afterEach(): Unit = {
-    reset(authConnector, youNeedDifferenceServicePage)
+    reset(authConnector)
+    reset(youNeedDifferenceServicePage)
 
     super.afterEach()
   }

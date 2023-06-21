@@ -19,9 +19,8 @@ package unit.controllers
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+import play.twirl.api.TwirlHelperImports.twirlJavaCollectionToScala
 import us.codecraft.xsoup.Xsoup
-
-import scala.collection.convert.ImplicitConversions.`iterable AsScalaIterable`
 
 case class CdsPage(html: String) {
 

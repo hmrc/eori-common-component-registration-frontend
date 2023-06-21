@@ -76,7 +76,7 @@ class SicCodeControllerSpec
 
   private val emulatedFailure = new UnsupportedOperationException("Emulation of service call failure")
 
-  override protected def beforeEach: Unit = {
+  override protected def beforeEach(): Unit = {
     super.beforeEach()
 
     when(mockSubscriptionBusinessService.cachedSicCode(any[Request[_]])).thenReturn(None)
@@ -85,13 +85,11 @@ class SicCodeControllerSpec
   }
 
   override protected def afterEach(): Unit = {
-    reset(
-      mockSubscriptionBusinessService,
-      mockSubscriptionFlowManager,
-      mockOrgTypeLookup,
-      mockSubscriptionDetailsService,
-      mockRequestSessionData
-    )
+    reset(mockSubscriptionBusinessService)
+    reset(mockSubscriptionFlowManager)
+    reset(mockOrgTypeLookup)
+    reset(mockSubscriptionDetailsService)
+    reset(mockRequestSessionData)
 
     super.afterEach()
   }
@@ -110,7 +108,7 @@ class SicCodeControllerSpec
     "display title as 'What does your organisation do?'" in {
       showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("What does your organisation do?")
+        page.title() should startWith("What does your organisation do?")
       }
     }
 
@@ -330,7 +328,7 @@ class SicCodeControllerSpec
     userId: String = defaultUserId,
     orgType: EtmpOrganisationType = CorporateBody,
     userSelectedOrgType: CdsOrganisationType
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
@@ -348,7 +346,7 @@ class SicCodeControllerSpec
     userId: String = defaultUserId,
     orgType: EtmpOrganisationType = CorporateBody,
     userSelectedOrgType: CdsOrganisationType
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
@@ -361,22 +359,20 @@ class SicCodeControllerSpec
     )
   }
 
-  private def registerSaveDetailsMockSuccess() {
+  private def registerSaveDetailsMockSuccess(): Unit =
     when(mockSubscriptionDetailsService.cacheSicCode(anyString())(any[Request[_]]))
       .thenReturn(Future.successful(()))
-  }
 
-  private def registerSaveDetailsMockFailure(exception: Throwable) {
+  private def registerSaveDetailsMockFailure(exception: Throwable): Unit =
     when(mockSubscriptionDetailsService.cacheSicCode(anyString)(any[Request[_]]))
       .thenReturn(Future.failed(exception))
-  }
 
   private def showCreateForm(
     userId: String = defaultUserId,
     orgType: EtmpOrganisationType = CorporateBody,
     userSelectedOrgType: CdsOrganisationType,
     userLocation: Option[String] = Some("uk")
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
@@ -392,7 +388,7 @@ class SicCodeControllerSpec
     userId: String = defaultUserId,
     orgType: EtmpOrganisationType = CorporateBody,
     userSelectedOrgType: CdsOrganisationType
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)

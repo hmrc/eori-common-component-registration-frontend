@@ -88,7 +88,6 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   private val mockSub01Outcome = mock[Sub01Outcome]
   private val mockRegDetails   = mock[RegistrationDetails]
-  private implicit val mockHC  = mock[HeaderCarrier]
 
   private val testSessionData = Map[String, String]("some_session_key" -> "some_session_value")
 
@@ -97,17 +96,15 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private val subscriptionDetailsHolder = SubscriptionDetails()
 
   override def afterEach(): Unit = {
-    reset(
-      mockAuthConnector,
-      mockRegistrationConfirmService,
-      mockRequestSessionData,
-      mockSubscriptionDetailsReviewController,
-      mockSessionCache,
-      mockSubscriptionFlowManager,
-      mockOrgTypeLookup,
-      mockHandleSubscriptionService,
-      mockTaxEnrolmentsService
-    )
+    reset(mockAuthConnector)
+    reset(mockRegistrationConfirmService)
+    reset(mockRequestSessionData)
+    reset(mockSubscriptionDetailsReviewController)
+    reset(mockSessionCache)
+    reset(mockSubscriptionFlowManager)
+    reset(mockOrgTypeLookup)
+    reset(mockHandleSubscriptionService)
+    reset(mockTaxEnrolmentsService)
 
     super.afterEach()
   }
@@ -494,7 +491,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       invokeProcessingPageWithAuthenticatedUser() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith(RegistrationProcessingPage.title)
+        page.title() should startWith(RegistrationProcessingPage.title)
       }
     }
     "redirect to Address Invalid Page when the postcode return from REG01(Register with Id) response is invalid for a Organisation" in {
@@ -745,7 +742,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         .currentSubscriptionStatus(any[HeaderCarrier], any[Service], any[Request[_]])
     ).thenReturn(Future.successful(NewSubscription))
 
-  private def mockSubscriptionFlowStart() {
+  private def mockSubscriptionFlowStart(): Unit = {
     when(mockSubscriptionPage.url(atarService)).thenReturn(testSubscriptionStartPageUrl)
     when(mockSubscriptionStartSession.data).thenReturn(testSessionData)
     when(
@@ -754,7 +751,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     ).thenReturn(Future.successful(mockFlowStart))
   }
 
-  private def invokeConfirm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def invokeConfirm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
@@ -767,7 +764,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     userId: String = defaultUserId,
     selectedOption: String = "yes",
     isInReviewMode: Boolean = false
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
@@ -780,7 +777,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   private def invokeConfirmContactDetailsWithoutOptionSelected(
     userId: String = defaultUserId
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
@@ -798,7 +795,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     when(mockSub01Outcome.processedDate).thenReturn("22 May 2016")
   }
 
-  def invokeProcessingPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def invokeProcessingPageWithAuthenticatedUser(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     setupMocksForRejectedAndProcessingPages
     test(

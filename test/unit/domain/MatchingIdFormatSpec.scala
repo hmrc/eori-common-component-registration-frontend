@@ -55,7 +55,7 @@ class MatchingIdFormatSpec extends UnitSpec {
     passJsonTransformationCheck(TAX_PAYER_ID, taxPayerIdJson)
   }
 
-  private def passJsonTransformationCheck(customsId: CustomsId, expectedJson: JsValue) {
+  private def passJsonTransformationCheck(customsId: CustomsId, expectedJson: JsValue): Unit = {
     "be marshalled" in {
       Json.toJson(customsId) shouldBe expectedJson
     }

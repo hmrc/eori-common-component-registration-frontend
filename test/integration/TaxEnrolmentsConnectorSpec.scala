@@ -51,10 +51,10 @@ class TaxEnrolmentsConnectorSpec extends IntegrationTestsSpec with ScalaFutures 
 
   private val taxEnrolmentsRequest = validTaxEnrolmentsIssuerRequestJson.as[TaxEnrolmentsRequest]
 
-  override def beforeAll: Unit =
+  override def beforeAll(): Unit =
     startMockServer()
 
-  override def afterAll: Unit =
+  override def afterAll(): Unit =
     stopMockServer()
 
   "TaxEnrolmentConnector" should {

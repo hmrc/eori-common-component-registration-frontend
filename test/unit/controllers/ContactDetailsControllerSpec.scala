@@ -72,13 +72,11 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     contactDetailsView
   )
 
-  override def beforeEach: Unit = {
-    reset(
-      mockSubscriptionBusinessService,
-      mockCdsFrontendDataCache,
-      mockSubscriptionFlowManager,
-      mockSubscriptionDetailsService
-    )
+  override def beforeEach(): Unit = {
+    reset(mockSubscriptionBusinessService)
+    reset(mockCdsFrontendDataCache)
+    reset(mockSubscriptionFlowManager)
+    reset(mockSubscriptionDetailsService)
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(None)
     when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetails)
     registerSaveContactDetailsMockSuccess()
@@ -418,13 +416,12 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
 
   }
 
-  private def mockFunctionWithRegistrationDetails(registrationDetails: RegistrationDetails) {
+  private def mockFunctionWithRegistrationDetails(registrationDetails: RegistrationDetails): Unit =
     when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(registrationDetails)
-  }
 
   private def submitFormInCreateMode(form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
@@ -434,7 +431,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
 
   private def submitFormInReviewMode(form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(
       controller
@@ -445,7 +442,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   private def showCreateForm(
     subscriptionFlow: SubscriptionFlow = OrganisationSubscriptionFlow,
     orgType: EtmpOrganisationType = CorporateBody
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
 
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
@@ -459,7 +456,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   private def showReviewForm(
     subscriptionFlow: SubscriptionFlow = OrganisationSubscriptionFlow,
     contactDetailsModel: ContactDetailsModel = contactDetailsModel
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
 
     when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
@@ -471,18 +468,16 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
-  private def registerSaveContactDetailsMockSuccess() {
+  private def registerSaveContactDetailsMockSuccess(): Unit =
     when(
       mockSubscriptionDetailsService
         .cacheContactDetails(any[ContactDetailsModel], any[Boolean])(any[Request[_]])
     ).thenReturn(Future.successful(()))
-  }
 
-  private def registerSaveContactDetailsMockFailure(exception: Throwable) {
+  private def registerSaveContactDetailsMockFailure(exception: Throwable): Unit =
     when(
       mockSubscriptionDetailsService
         .cacheContactDetails(any[ContactDetailsModel], any[Boolean])(any[Request[_]])
     ).thenReturn(Future.failed(exception))
-  }
 
 }

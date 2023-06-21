@@ -17,7 +17,7 @@
 package unit.services.cache
 
 import base.UnitSpec
-import org.mockito.ArgumentMatchers.any
+
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
@@ -25,7 +25,7 @@ import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.OrganisationSubscriptionFlow
-import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.http.HeaderCarrier
@@ -56,7 +56,10 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
     "add correct flow name in request cache" in {
       val newSession = requestSessionData.storeUserSubscriptionFlow(OrganisationSubscriptionFlow, "")
       newSession shouldBe Session(
-        existingSessionValues + ("subscription-flow" -> OrganisationSubscriptionFlow.name, "uri-before-subscription-flow" -> "")
+        existingSessionValues ++ Map(
+          "subscription-flow"            -> OrganisationSubscriptionFlow.name,
+          "uri-before-subscription-flow" -> ""
+        )
       )
     }
 
@@ -99,10 +102,8 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
     }
     "return session without organisation-type, subscription-flow and uri-before-sub-flow" in {
       when(mockRequest.session).thenReturn(Session(existingSessionBeforeStartAgain))
-      requestSessionData.sessionForStartAgain.data should contain noneOf (
-        "selected-organisation-type",
-        "subscription-flow",
-        "uri-before-subscription-flow"
+      requestSessionData.sessionForStartAgain.data should contain(
+        noneOf("selected-organisation-type", "subscription-flow", "uri-before-subscription-flow")
       )
     }
   }

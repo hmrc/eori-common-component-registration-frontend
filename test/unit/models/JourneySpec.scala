@@ -32,7 +32,7 @@ class JourneySpec extends AnyWordSpec with Matchers with EitherValues with Optio
     "bind to `Register` from path" in {
 
       val result =
-        pathBindable.bind("key", "register").right.value
+        pathBindable.bind("key", "register").value
 
       result mustEqual Journey.Register
     }
@@ -40,7 +40,7 @@ class JourneySpec extends AnyWordSpec with Matchers with EitherValues with Optio
     "bind to `Subscription` from path" in {
 
       val result =
-        pathBindable.bind("key", "subscribe").right.value
+        pathBindable.bind("key", "subscribe").value
 
       result mustEqual Journey.Subscribe
     }
@@ -72,7 +72,7 @@ class JourneySpec extends AnyWordSpec with Matchers with EitherValues with Optio
     "bind to `Register` from query" in {
 
       val result =
-        queryBindable.bind("key", Map("key" -> Seq("register"))).value.right.value
+        queryBindable.bind("key", Map("key" -> Seq("register"))).value.value
 
       result mustEqual Journey.Register
     }
@@ -80,7 +80,7 @@ class JourneySpec extends AnyWordSpec with Matchers with EitherValues with Optio
     "bind to `Subscription` from query" in {
 
       val result =
-        queryBindable.bind("key", Map("key" -> Seq("subscribe"))).value.right.value
+        queryBindable.bind("key", Map("key" -> Seq("subscribe"))).value.value
 
       result mustEqual Journey.Subscribe
     }

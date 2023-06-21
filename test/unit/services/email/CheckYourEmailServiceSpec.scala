@@ -137,7 +137,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
           .thenReturn(Future.successful(Some(emailStatus(false))))
 
         when(mockSave4LaterService.saveEmail(any[GroupId], any())(any[HeaderCarrier]))
-          .thenReturn(Future.successful())
+          .thenReturn(Future.successful((): Unit))
 
         val result = await(service.emailConfirmed(loggedInUser, subscription))
         result.header.status mustBe OK
@@ -152,7 +152,12 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
           .thenReturn(Future.successful(Some(emailStatus())))
 
         val result = await(
-          service.handleFormWithErrors(loggedInUser, confirmEmailYesNoAnswerForm, isInReviewMode = false, subscription)
+          service.handleFormWithErrors(
+            loggedInUser,
+            confirmEmailYesNoAnswerForm(),
+            isInReviewMode = false,
+            subscription
+          )
         )
         result.header.status mustBe BAD_REQUEST
     }
@@ -163,7 +168,12 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
           .thenReturn(Future.successful(None))
 
         val result = await(
-          service.handleFormWithErrors(loggedInUser, confirmEmailYesNoAnswerForm, isInReviewMode = false, subscription)
+          service.handleFormWithErrors(
+            loggedInUser,
+            confirmEmailYesNoAnswerForm(),
+            isInReviewMode = false,
+            subscription
+          )
         )
         result.header.status mustBe BAD_REQUEST
     }
@@ -193,7 +203,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
           .thenReturn(Future.successful(Some(emailStatus())))
 
         when(mockSave4LaterService.saveEmail(any[GroupId], any())(any[HeaderCarrier]))
-          .thenReturn(Future.successful())
+          .thenReturn(Future.successful((): Unit))
 
         when(mockSessionCache.saveEmail(any())(any[Request[_]]))
           .thenReturn(Future.successful(true))

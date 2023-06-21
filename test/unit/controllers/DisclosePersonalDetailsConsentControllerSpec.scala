@@ -153,7 +153,10 @@ class DisclosePersonalDetailsConsentControllerSpec
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockSubscriptionDetailsService, mockSubscriptionFlowManager, mockAuthConnector, mockRequestSessionData)
+    reset(mockSubscriptionDetailsService)
+    reset(mockSubscriptionFlowManager)
+    reset(mockAuthConnector)
+    reset(mockRequestSessionData)
 
     super.afterEach()
   }
@@ -368,7 +371,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     isIndividual: Boolean = false,
     isPartnership: Boolean = false,
     isCharity: Boolean = false
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
@@ -390,7 +393,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     isIndividual: Boolean = false,
     isPartnership: Boolean = false,
     isCharity: Boolean = false
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.getCachedPersonalDataDisclosureConsent(any[Request[_]]))
@@ -415,7 +418,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   private def submitForm(form: Map[String, String], isInReviewMode: Boolean = false, userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
       .thenReturn(Right(OrganisationSubscriptionFlow))

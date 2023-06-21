@@ -29,7 +29,7 @@ import util.ViewSpec
 
 class ContactAddressViewSpec extends ViewSpec {
 
-  private val form: Form[YesNo] = MatchingForms.contactAddressDetailsYesNoAnswerForm
+  private val form: Form[YesNo] = MatchingForms.contactAddressDetailsYesNoAnswerForm()
   private implicit val request  = withFakeCSRF(FakeRequest())
   private val view              = instanceOf[contact_address]
 

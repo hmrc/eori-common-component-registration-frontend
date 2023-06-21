@@ -92,14 +92,12 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
   }
 
   override protected def afterEach(): Unit = {
-    reset(
-      mockRegisterWithoutIdService,
-      mockSessionCache,
-      mockRequestSessionData,
-      mockOrgTypeLookup,
-      mockSub02Controller,
-      mockRegistrationDetails
-    )
+    reset(mockRegisterWithoutIdService)
+    reset(mockSessionCache)
+    reset(mockRequestSessionData)
+    reset(mockOrgTypeLookup)
+    reset(mockSub02Controller)
+    reset(mockRegistrationDetails)
 
     super.afterEach()
   }
@@ -309,7 +307,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     }
   }
 
-  private def mockSub02ControllerCall() {
+  private def mockSub02ControllerCall(): Unit = {
     val mockAction = mock[Action[AnyContent]]
     when(mockAction.apply(any[Request[AnyContent]])).thenReturn(Future.successful(Results.Ok))
     when(mockSub02Controller.subscribe(any())).thenReturn(mockAction)

@@ -115,7 +115,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       assertAndTestBasedOnTheLocationForIndividual(location)
       assertAndTestBasedOnTheLocationForOrganisation(location)
     }
-    assertAndTestThrowsExceptionForInvalidLocationOrganisation
+    assertAndTestThrowsExceptionForInvalidLocationOrganisation()
   }
 
   private def assertAndTestBasedOnTheLocationForIndividual(selectedLocation: String): Unit =
@@ -169,7 +169,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       }
     }
 
-  private def assertAndTestThrowsExceptionForInvalidLocationOrganisation: Unit =
+  private def assertAndTestThrowsExceptionForInvalidLocationOrganisation(): Unit =
     "throw IllegalStateException when passing invalid location" in {
       val location: String = "invalid-location"
       val mockSession      = mock[Session]

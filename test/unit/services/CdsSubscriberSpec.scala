@@ -88,15 +88,13 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
   }
 
   override protected def afterEach(): Unit = {
-    reset(
-      mockCdsFrontendDataCache,
-      mockSubscriptionService,
-      mockCdsFrontendDataCache,
-      mockRegistrationConfirmService,
-      mockSubscriptionFlowManager,
-      mockHandleSubscriptionService,
-      mockRegistrationDetails
-    )
+    reset(mockCdsFrontendDataCache)
+    reset(mockSubscriptionService)
+    reset(mockCdsFrontendDataCache)
+    reset(mockRegistrationConfirmService)
+    reset(mockSubscriptionFlowManager)
+    reset(mockHandleSubscriptionService)
+    reset(mockRegistrationDetails)
 
     super.afterEach()
   }

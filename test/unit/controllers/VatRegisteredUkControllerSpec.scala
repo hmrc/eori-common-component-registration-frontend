@@ -34,7 +34,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlowInfo,
   SubscriptionPage
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.errors.{FlowError, SessionError}
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
@@ -68,15 +68,13 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   }
 
   override protected def afterEach(): Unit = {
-    reset(
-      mockAuthConnector,
-      mockSubscriptionFlowManager,
-      mockSubscriptionBusinessService,
-      mockSubscriptionDetailsService,
-      mockSubscriptionFlow,
-      mockFeatureFlags,
-      mockRequestSession
-    )
+    reset(mockAuthConnector)
+    reset(mockSubscriptionFlowManager)
+    reset(mockSubscriptionBusinessService)
+    reset(mockSubscriptionDetailsService)
+    reset(mockSubscriptionFlow)
+    reset(mockFeatureFlags)
+    reset(mockRequestSession)
 
     super.afterEach()
   }
@@ -107,7 +105,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       )
       createForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should include(VatRegisterUKPage.title)
+        page.title() should include(VatRegisterUKPage.title)
       }
     }
   }
@@ -129,7 +127,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       )
       reviewForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.title should include(VatRegisterUKPage.title)
+        page.title() should include(VatRegisterUKPage.title)
       }
     }
   }
@@ -197,7 +195,9 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
     "redirect to eu vat page for no answer using vat details controller" in {
       val url = "register/vat-registered-eu"
-      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
+      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(
+        Future.successful((): Unit)
+      )
 
       subscriptionFlowUrl(url)
 
@@ -215,7 +215,9 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     }
 
     "redirect to check answers page for no answer and is in review mode" in {
-      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(Future.successful())
+      when(mockSubscriptionDetailsService.clearCachedUkVatDetails(any[Request[_]])).thenReturn(
+        Future.successful((): Unit)
+      )
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(
@@ -231,7 +233,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
-  private def reviewForm()(test: Future[Result] => Any) {
+  private def reviewForm()(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
     when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(true)

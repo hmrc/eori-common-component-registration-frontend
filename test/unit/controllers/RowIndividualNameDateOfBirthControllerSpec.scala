@@ -64,15 +64,13 @@ class RowIndividualNameDateOfBirthControllerSpec
       rowIndividualNameDob
     )(global)
 
-    def saveRegistrationDetailsMockSuccess() {
+    def saveRegistrationDetailsMockSuccess(): Unit =
       when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
         .thenReturn(Future.successful(()))
-    }
 
-    def registerIndividualMockFailure(exception: Throwable) {
+    def registerIndividualMockFailure(exception: Throwable): Unit =
       when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
         .thenReturn(Future.failed(exception))
-    }
 
     protected def show(с: RowIndividualNameDateOfBirthController): Action[AnyContent] =
       с.form(organisationType, atarService)
@@ -139,7 +137,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           import controllerFixture._
           saveRegistrationDetailsMockSuccess()
           when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any[Request[_]])).thenReturn(
-            Future.successful(true)
+            Future.successful((): Unit)
           )
           if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual") {
             submitForm(formData(individualNameAndDateOfBirth)) { result =>

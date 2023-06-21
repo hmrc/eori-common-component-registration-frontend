@@ -62,16 +62,14 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val eoriId            = "GB" + Random.nextString(eoriNumericLength)
   private val eori              = Eori(eoriId)
 
-  override def beforeEach {
-    reset(
-      mockSessionCache,
-      mockRegistrationDetailsCreator,
-      registrationInfo,
-      mockRegistrationDetails,
-      mockSubscriptionDetailsHolder,
-      mockContactDetailsAdaptor,
-      mockSave4LaterConnector
-    )
+  override def beforeEach(): Unit = {
+    reset(mockSessionCache)
+    reset(mockRegistrationDetailsCreator)
+    reset(registrationInfo)
+    reset(mockRegistrationDetails)
+    reset(mockSubscriptionDetailsHolder)
+    reset(mockContactDetailsAdaptor)
+    reset(mockSave4LaterConnector)
 
     when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]]))
       .thenReturn(Future.successful(true))
@@ -115,7 +113,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   "Calling cachedCustomsId" should {
     "return Some of customsID when found in subscription Details" in {
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
-        .thenReturn(SubscriptionDetails(customsId = Option(Utr("12345"))))
+        .thenReturn(Future.successful(SubscriptionDetails(customsId = Option(Utr("12345")))))
       await(subscriptionDetailsHolderService.cachedCustomsId(request)) shouldBe Some(Utr("12345"))
     }
 
@@ -128,7 +126,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   "Calling cachedUtrMatch" should {
     "return Some utrMatch when found in subscription Details" in {
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
-        .thenReturn(SubscriptionDetails(formData = FormData(utrMatch = Option(utrMatch))))
+        .thenReturn(Future.successful(SubscriptionDetails(formData = FormData(utrMatch = Option(utrMatch)))))
       await(subscriptionDetailsHolderService.cachedUtrMatch(request)) shouldBe Some(utrMatch)
     }
 
@@ -141,7 +139,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   "Calling cachedNinoMatch" should {
     "return Some ninoMatch when found in subscription Details" in {
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
-        .thenReturn(SubscriptionDetails(formData = FormData(ninoMatch = Option(ninoMatch))))
+        .thenReturn(Future.successful(SubscriptionDetails(formData = FormData(ninoMatch = Option(ninoMatch)))))
       await(subscriptionDetailsHolderService.cachedNinoMatch(request)) shouldBe Some(ninoMatch)
     }
 
@@ -154,7 +152,11 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   "Calling cachedOrganisationType" should {
     "return Some company when found in subscription Details" in {
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
-        .thenReturn(SubscriptionDetails(formData = FormData(organisationType = Option(CdsOrganisationType.Company))))
+        .thenReturn(
+          Future.successful(
+            SubscriptionDetails(formData = FormData(organisationType = Option(CdsOrganisationType.Company)))
+          )
+        )
       await(subscriptionDetailsHolderService.cachedOrganisationType(request)) shouldBe Some(CdsOrganisationType.Company)
     }
 
