@@ -16,6 +16,7 @@
 
 package integration
 
+import akka.util.Helpers.Requiring
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -101,7 +102,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       val result = vatControlListConnector.vatControlList(request)
 
       result.futureValue.isLeft mustBe true
-      result.left mustBe NotFoundResponse
+      result.left.getOrElse() mustBe NotFoundResponse
     }
 
     "fail when Bad Request" in {
@@ -110,7 +111,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       val result = vatControlListConnector.vatControlList(request)
 
       result.futureValue.isLeft mustBe true
-      result.left mustBe InvalidResponse
+      result.left.getOrElse() mustBe InvalidResponse
     }
 
     "fail when Internal Server Error" in {
@@ -135,7 +136,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       val result = vatControlListConnector.vatControlList(request)
 
       result.futureValue.isLeft mustBe true
-      result.left mustBe ServiceUnavailableResponse
+      result.left.getOrElse() mustBe ServiceUnavailableResponse
     }
 
     "throw an exception when different status" in {
