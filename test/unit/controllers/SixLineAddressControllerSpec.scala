@@ -319,8 +319,6 @@ class SixLineAddressControllerSpec
       )
     }
 
-
-
   }
 
   "country for third-country-organisation" should {
