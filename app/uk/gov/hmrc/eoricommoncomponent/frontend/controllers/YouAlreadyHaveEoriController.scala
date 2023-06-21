@@ -22,6 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels.StandaloneAlreadyHaveEoriViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{standalone_already_have_eori, you_already_have_eori}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -48,7 +49,17 @@ class YouAlreadyHaveEoriController @Inject() (
   def displayStandAlone(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithServiceAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        sessionCache.eori.map(eoriNumber => Ok(standAloneEoriExistsView(eoriNumber, loggedInUser.isAdminUser, service)))
+        sessionCache.eori.map(
+          eoriNumber =>
+            Ok(
+              standAloneEoriExistsView(
+                eoriNumber,
+                loggedInUser.isAdminUser,
+                service,
+                StandaloneAlreadyHaveEoriViewModel(loggedInUser.isAdminUser)
+              )
+            )
+        )
     }
 
 }

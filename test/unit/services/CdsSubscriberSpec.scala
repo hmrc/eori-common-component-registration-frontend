@@ -175,7 +175,6 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
       val expectedOrgName = "My Successful Org"
       val expectedRecipient = RecipientDetails(
         atarService,
-        Journey.Register,
         "john.doe@example.com",
         "John Doe",
         Some("My Successful Org"),
@@ -210,14 +209,8 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
 
     "call handle-subscription service when subscription returns pending status" in {
       val expectedOrgName = "My Pending Org"
-      val expectedRecipient = RecipientDetails(
-        atarService,
-        Journey.Register,
-        "john.doe@example.com",
-        "John Doe",
-        Some("My Pending Org"),
-        Some("19 April 2018")
-      )
+      val expectedRecipient =
+        RecipientDetails(atarService, "john.doe@example.com", "John Doe", Some("My Pending Org"), Some("19 April 2018"))
       mockPendingSubscribe(mockRegistrationDetails, expectedOrgName)
       when(mockCdsFrontendDataCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]]))
         .thenReturn(Future.successful(true))

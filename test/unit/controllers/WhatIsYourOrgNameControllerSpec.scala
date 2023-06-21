@@ -79,24 +79,6 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         ""
       ),
       (
-        "iom-organisation",
-        ThirdCountryOrg,
-        "organisation",
-        "/customs-registration-services/atar/register/matching/address/iom-organisation",
-        UserLocation.Iom,
-        false,
-        ""
-      ),
-      (
-        "iom-organisation",
-        ThirdCountryOrg,
-        "organisation",
-        "/customs-registration-services/atar/register/matching/review-determine",
-        UserLocation.Iom,
-        true,
-        "Test Org Name"
-      ),
-      (
         "third-country-organisation",
         ThirdCountryOrg,
         "organisation",

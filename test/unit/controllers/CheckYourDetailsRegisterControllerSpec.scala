@@ -558,21 +558,21 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "1 January 2017"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company details included on the EORI checker",
+        "Show name and address on the 'Check an EORI number' service",
         "Change"
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Registered company details included on the EORI checker")
+        .changeAnswerText("Show name and address on the 'Check an EORI number' service")
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company details included on the EORI checker"
+        "Show name and address on the 'Check an EORI number' service"
       ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company details included on the EORI checker"
-      ) shouldBe "Yes I want my name and address on the EORI number checker"
+        "Show name and address on the 'Check an EORI number' service"
+      ) shouldBe "Yes"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company details included on the EORI checker",
+        "Show name and address on the 'Check an EORI number' service",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(
@@ -710,21 +710,21 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "1 January 2017"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership details included on the EORI checker",
+        "Show name and address on the 'Check an EORI number' service",
         "Change"
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Partnership details included on the EORI checker")
+        .changeAnswerText("Show name and address on the 'Check an EORI number' service")
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership details included on the EORI checker"
+        "Show name and address on the 'Check an EORI number' service"
       ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership details included on the EORI checker"
-      ) shouldBe "Yes I want my partnership name and address on the EORI checker"
+        "Show name and address on the 'Check an EORI number' service"
+      ) shouldBe "Yes"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership details included on the EORI checker",
+        "Show name and address on the 'Check an EORI number' service",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(

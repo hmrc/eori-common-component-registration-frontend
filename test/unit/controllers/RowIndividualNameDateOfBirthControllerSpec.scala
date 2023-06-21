@@ -18,8 +18,6 @@ package unit.controllers
 
 import common.pages.matching.{
   IndividualNameAndDateOfBirthPage,
-  IsleOfManIndividualNameAndDateOfBirthPage,
-  IsleOfManSoleTraderNameAndDateOfBirthPage,
   ThirdCountryIndividualNameAndDateOfBirthPage,
   ThirdCountrySoleTraderNameAndDateOfBirthPage
 }
@@ -378,17 +376,8 @@ class RowIndividualNameDateOfBirthControllerSpec
   case object ThirdCountryIndividualBehavior
       extends ThirdCountryIndividualBehaviour(ThirdCountryIndividualNameAndDateOfBirthPage)
 
-  case object IsleOfManSoleTraderBehavior
-      extends ThirdCountryIndividualBehaviour(IsleOfManSoleTraderNameAndDateOfBirthPage)
-
-  case object IsleOfManIndividualBehavior
-      extends ThirdCountryIndividualBehaviour(IsleOfManIndividualNameAndDateOfBirthPage)
-
   "The third country sole trader case" when (behave like ThirdCountrySoleTraderBehavior)
 
   "The third country individual case" when (behave like ThirdCountryIndividualBehavior)
 
-  "The isle-of-man  sole trader case" when (behave like IsleOfManSoleTraderBehavior)
-
-  "The isle-of-man individual case" when (behave like IsleOfManIndividualBehavior)
 }

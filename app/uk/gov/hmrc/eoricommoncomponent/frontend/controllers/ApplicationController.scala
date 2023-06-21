@@ -35,8 +35,7 @@ class ApplicationController @Inject() (
   mcc: MessagesControllerComponents,
   viewStartRegister: start,
   cache: SessionCache,
-  appConfig: AppConfig,
-  featureFlags: FeatureFlags
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -44,7 +43,7 @@ class ApplicationController @Inject() (
     val headingAndTitleText = s"ecc.start-page.title.${service.code}"
     val bullet2             = s"ecc.start-page.para1.bullet2.${service.code}"
     if (service.code == eoriOnly.code) Redirect(EmailController.form(service))
-    else Ok(viewStartRegister(service, headingAndTitleText, bullet2, featureFlags))
+    else Ok(viewStartRegister(service, headingAndTitleText, bullet2))
   }
 
   def logout(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction {

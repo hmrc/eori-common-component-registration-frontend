@@ -25,7 +25,7 @@ import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DoYouHaveAUtrNumberController, FeatureFlags}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
@@ -49,19 +49,12 @@ class DoYouHaveAUtrNumberControllerSpec
   private val mockMatchingRequestHolder      = mock[MatchingRequestHolder]
   private val mockMatchingResponse           = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockFlags                      = mock[FeatureFlags]
   private val matchOrganisationUtrView       = instanceOf[match_organisation_utr]
 
   implicit val hc = mock[HeaderCarrier]
 
   private val controller =
-    new DoYouHaveAUtrNumberController(
-      mockAuthAction,
-      mcc,
-      matchOrganisationUtrView,
-      mockSubscriptionDetailsService,
-      mockFlags
-    )
+    new DoYouHaveAUtrNumberController(mockAuthAction, mcc, matchOrganisationUtrView, mockSubscriptionDetailsService)
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -194,12 +187,11 @@ class DoYouHaveAUtrNumberControllerSpec
       )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
-      when(mockFlags.useNewCharityEdgeCaseJourney).thenReturn(true)
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith(
-          s"register/matching/address/${CdsOrganisationType.CharityPublicBodyNotForProfitId}"
+          s"/customs-registration-services/atar/register/are-you-vat-registered-in-uk"
         )
       }
     }
@@ -211,12 +203,11 @@ class DoYouHaveAUtrNumberControllerSpec
       )
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
-      when(mockFlags.useNewCharityEdgeCaseJourney).thenReturn(true)
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId, isInReviewMode = true) {
         result =>
           status(await(result)) shouldBe SEE_OTHER
-          result.header.headers("Location") should endWith("register/matching/review-determine")
+          result.header.headers("Location") should endWith("/register/are-you-vat-registered-in-uk")
       }
     }
   }

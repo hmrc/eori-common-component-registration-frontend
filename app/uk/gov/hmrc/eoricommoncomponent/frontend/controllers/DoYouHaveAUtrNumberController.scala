@@ -36,8 +36,7 @@ class DoYouHaveAUtrNumberController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
   matchOrganisationUtrView: match_organisation_utr,
-  subscriptionDetailsService: SubscriptionDetailsService,
-  flags: FeatureFlags
+  subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -88,8 +87,6 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   private def noUtrDestination(organisationType: String, service: Service, isInReviewMode: Boolean): Result =
     organisationType match {
-      case CdsOrganisationType.CharityPublicBodyNotForProfitId if flags.useNewCharityEdgeCaseJourney =>
-        noUtrOrganisationRedirect(isInReviewMode, organisationType, service)
       case CdsOrganisationType.CharityPublicBodyNotForProfitId =>
         Redirect(VatRegisteredUkKanaController.form(service))
       case CdsOrganisationType.ThirdCountryOrganisationId =>

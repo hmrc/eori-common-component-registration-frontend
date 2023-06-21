@@ -25,7 +25,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, OrganisationTypeController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.OrganisationTypeController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -47,7 +47,6 @@ class OrganisationTypeViewSpec
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val organisationTypeView           = instanceOf[organisation_type]
-  private val mockFlags                      = mock[FeatureFlags]
 
   private val organisationTypeController = new OrganisationTypeController(
     mockAuthAction,
@@ -55,8 +54,7 @@ class OrganisationTypeViewSpec
     mcc,
     organisationTypeView,
     mockRegistrationDetailsService,
-    mockSubscriptionDetailsService,
-    mockFlags
+    mockSubscriptionDetailsService
   )
 
   override protected def beforeEach(): Unit = {

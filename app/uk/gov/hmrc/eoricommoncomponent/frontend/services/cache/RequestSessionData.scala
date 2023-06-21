@@ -89,10 +89,9 @@ class RequestSessionData @Inject() (audit: Auditable) {
     val userLocation = request.session.data.get(RequestSessionDataKeys.selectedUserLocation)
 
     userLocation match {
-      case Some("islands")     => Some("third-country")
-      case Some("eu")          => Some("third-country")
-      case Some("isle-of-man") => Some("isle-of-man")
-      case _                   => userLocation
+      case Some("islands") => Some("third-country")
+      case Some("eu")      => Some("third-country")
+      case _               => userLocation
     }
   }
 

@@ -95,10 +95,10 @@ class UserLocationController @Inject() (
             BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup)))
           ),
         details =>
-          (details.location, loggedInUser.groupId, featureFlags.edgeCaseJourney) match {
-            case (Some(UserLocation.Iom), Some(_), false) =>
+          (details.location, loggedInUser.groupId) match {
+            case (Some(UserLocation.Iom), Some(_)) =>
               Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
-            case (Some(location), Some(id), _) if UserLocation.isRow(location) =>
+            case (Some(location), Some(id)) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
             case _ =>
               Future.successful(

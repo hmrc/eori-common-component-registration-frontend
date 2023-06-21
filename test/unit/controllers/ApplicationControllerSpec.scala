@@ -37,12 +37,11 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
   private val mockSessionCache  = mock[SessionCache]
-  private val featureFlags      = mock[FeatureFlags]
 
   private val startRegisterView = instanceOf[start]
 
   val controller =
-    new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig, featureFlags)
+    new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig)
 
   override protected def afterEach(): Unit = {
     reset(mockAuthConnector)

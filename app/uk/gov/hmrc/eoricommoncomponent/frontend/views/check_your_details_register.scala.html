@@ -48,7 +48,7 @@
 @orgNameLabel = @{
     if(isPartnership) {
         messages("cds.partner-name.label")
-    } else if(isCharity || isRowOrganisation || isIomOrganisation) {
+    } else if(isCharity || isRowOrganisation) {
         messages("cds.organisation-name.label")
     } else {
         messages("cds.business-name.label")
@@ -98,18 +98,6 @@
     cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
 }
 
-@isIomOrganisation = @{
-    cdsOrgType.contains(CdsOrganisationType.IsleOfManOrganisation)
-}
-
-@isIomSoleTrader = @{
-    cdsOrgType.contains(CdsOrganisationType.IsleOfManSoleTrader)
-}
-
-@isIomIndividual = @{
-    cdsOrgType.contains(CdsOrganisationType.IsleOfManIndividual)
-}
-
 @isSoleTrader = @{
     cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
     cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
@@ -124,7 +112,7 @@
 }
 
 @getDateOfEstablishmentLabel = @{
-    if(isSoleTrader || isIomSoleTrader) {
+    if(isSoleTrader) {
         messages("cds.date-of-birth.label")
     } else {
         messages("cds.date-established.label")
@@ -134,10 +122,10 @@
 @businessDetailsLabel = @{
     if(isPartnership)
         messages("cds.form.partnership.contact-details")
-    else if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
+    else if(isIndividual || isSoleTrader) {
         messages("cds.form.contact-details")
     }
-    else if(isCharity || isRowOrganisation || isIomOrganisation) {
+    else if(isCharity || isRowOrganisation) {
         messages("cds.form.organisation-address")
     } else {
         messages("cds.form.business-details")
@@ -195,35 +183,13 @@
 @headerTitle = @{
     if(isPartnership){
         messages("cds.form.check-answers-partnership-details")
-    } else if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
+    } else if(isIndividual || isSoleTrader) {
         messages("cds.form.check-answers-your-details")
-    } else if(isCharity || isRowOrganisation || isIomOrganisation) {
+    } else if(isCharity || isRowOrganisation) {
         messages("cds.form.check-answers-organisation-details")
     }
     else {
         messages("cds.form.check-answers-company-details")
-    }
-}
-
-@disclosureLabel = @{
-    if (isPartnership) {
-        messages("cds.form.disclosure.partnership")
-    } else if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
-        messages("cds.form.disclosure.individual")
-    } else if(isCharity || isRowOrganisation || isIomOrganisation) {
-        messages("cds.form.disclosure.organisation")
-    } else {
-        messages("cds.form.disclosure")
-    }
-}
-
-@eoriCheckerConsentYes = @{
-    if (isPartnership) {
-        messages("cds.eori-checker-consent.partnership.yes")
-    } else if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
-        messages("cds.eori-checker-consent.individual-or-sole-trader.yes")
-    } else {
-        messages("cds.eori-checker-consent.yes")
     }
 }
 
@@ -291,7 +257,7 @@ classes = classes
 }
 
 @individualNameDob = @{
-    if(isIndividual || isSoleTrader || isIomIndividual || isIomSoleTrader) {
+    if(isIndividual || isSoleTrader) {
         Seq(summaryListRow(
             key = messages("subscription.check-your-details.full-name.label"),
             value = Some(Html(StringEscapeUtils.escapeXml11(individualName))),
@@ -306,7 +272,7 @@ classes = classes
 }
 
 @organisationName = @{
-    if(!isIndividual && !isSoleTrader && !isIomIndividual && !isIomSoleTrader) {
+    if(!isIndividual && !isSoleTrader) {
         Seq(summaryListRow(
             key = orgNameLabel,
             value = Some(Text(orgName).asHtml),
@@ -326,7 +292,7 @@ classes = classes
 }
 
 @customsId = @{
-    if(registration.customsId.isDefined && (!isIomIndividual || !isIomOrganisation || !isIomSoleTrader)) {
+    if(registration.customsId.isDefined) {
         Seq(summaryListRow(
             key = ninoOrUtrLabel,
             value = Some(Html(registration.customsId.get.id))
@@ -419,7 +385,7 @@ classes = classes
 }
 
 @vatDetails = @{
-if(!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOrElse(true) == true) {
+if(!isIndividual && subscription.vatVerificationOption.getOrElse(true) == true) {
     Seq(
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),
@@ -437,7 +403,7 @@ if(!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOr
             call = Some(VATNumberPage.reviewForm(service))
         ),
     )}
-else if(!isIndividual && !isIomIndividual && subscription.vatVerificationOption.getOrElse(false) == false) {
+else if(!isIndividual && subscription.vatVerificationOption.getOrElse(false) == false) {
     Seq(
         summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),
@@ -461,8 +427,8 @@ else Seq.empty[SummaryListRow]
 @summary = @{
   Seq(
     summaryListRow(
-        key = disclosureLabel,
-        value = Some(Html(if(personalDataDisclosureConsent) eoriCheckerConsentYes else messages("cds.eori-checker-consent.no"))),
+        key = messages("cds.form.disclosure"),
+        value = Some(Html(if(personalDataDisclosureConsent) messages("cds.yes") else messages("cds.no"))),
         call = Some(DisclosePersonalDetailsConsentController.reviewForm(service))
     )
   )
@@ -497,7 +463,7 @@ else Seq.empty[SummaryListRow]
             summary
             ))
         </div>
-        @if(!isIndividual && !isIomIndividual){
+        @if(!isIndividual){
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-vat-details")</h2>
 

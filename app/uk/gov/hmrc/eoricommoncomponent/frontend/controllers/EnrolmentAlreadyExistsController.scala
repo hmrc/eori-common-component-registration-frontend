@@ -23,6 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, En
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.EnrolmentExistsUserStandaloneViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_exists_group_standalone,
   enrolment_exists_user_standalone,
@@ -67,7 +68,15 @@ class EnrolmentAlreadyExistsController @Inject() (
     authAction.ggAuthorisedUserAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
         val eoriNumber = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
-        Future.successful(Ok(enrolmentExistsStandaloneView(eoriNumber, loggedInUser.isAdminUser)))
+        Future.successful(
+          Ok(
+            enrolmentExistsStandaloneView(
+              eoriNumber,
+              loggedInUser.isAdminUser,
+              EnrolmentExistsUserStandaloneViewModel(loggedInUser.isAdminUser)
+            )
+          )
+        )
     }
 
   def enrolmentAlreadyExistsForGroupStandalone(service: Service): Action[AnyContent] =

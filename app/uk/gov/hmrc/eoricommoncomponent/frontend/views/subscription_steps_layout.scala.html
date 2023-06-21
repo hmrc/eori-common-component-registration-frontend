@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 
@@ -22,8 +21,7 @@
 @(pageKey: String, form: Form[_],
         isInReviewMode: Boolean,
         fieldName: Option[String] = None,
-        focusOverrides: Map[String, String] = Map.empty,
-        journey: Journey.Value)(content: Html)(implicit request: Request[_], messages: Messages)
+        focusOverrides: Map[String, String] = Map.empty)(content: Html)(implicit request: Request[_], messages: Messages)
 
 @qualifiedPageKey = @{
     "cds.subscription." + pageKey
@@ -35,10 +33,10 @@
 
         @helpers.subscription.backLink_errorSummary_mayBeSteps_heading(
             errorSummary = errorSummary(errors = form.errors,
-            errorFieldName = fieldName,
-            focusOverrides = focusOverrides),
+                errorFieldName = fieldName,
+                focusOverrides = focusOverrides),
             pageHeading = messages.translate(qualifiedPageKey + ".heading", Seq()).getOrElse(""),
-            isInReviewMode = isInReviewMode, journey = journey
+            isInReviewMode = isInReviewMode
         )
 
         @content

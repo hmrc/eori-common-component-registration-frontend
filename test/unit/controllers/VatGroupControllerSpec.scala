@@ -40,10 +40,9 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
   private val expectedNoRedirectUrl  = EmailController.form(atarService).url
 
   private val vatGroupView = instanceOf[vat_group]
-  private val featureFlags = mock[FeatureFlags]
 
   private val controller =
-    new VatGroupController(mcc, vatGroupView, featureFlags)
+    new VatGroupController(mcc, vatGroupView)
 
   "Accessing the page" should {
 
@@ -84,37 +83,20 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
       }
     }
 
-    "redirect to Cannot Register Using This Service when 'yes' is selected and edge case flag disabled" in {
-      when(featureFlags.edgeCaseJourney).thenReturn(false)
+    "redirect to Cannot Register Using This Service when 'yes' " in {
       submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) should endWith(expectedYesRedirectUrl)
       }
     }
 
-    "redirect to Cannot Register Using This Service when 'yes' is selected and edge case flag enabled" in {
-      when(featureFlags.edgeCaseJourney).thenReturn(true)
-      submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(expectedYesRedirectUrl)
-      }
-    }
-
-    "redirect to EmailController.form when 'no' is selected and edge case flag disabled" in {
-      when(featureFlags.edgeCaseJourney).thenReturn(false)
+    "redirect to EmailController.form when 'no' " in {
       submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers(LOCATION) shouldBe expectedNoRedirectUrl
       }
     }
 
-    "redirect to VatDetailsController when 'no' is selected and edge case flag enabled" in {
-      when(featureFlags.edgeCaseJourney).thenReturn(true)
-      submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe VatDetailsController.createForm(atarService).url
-      }
-    }
   }
 
   def showForm()(test: Future[Result] => Any): Unit =

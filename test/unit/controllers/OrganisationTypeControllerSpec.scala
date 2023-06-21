@@ -64,8 +64,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     mcc,
     organisationTypeView,
     mockRegistrationDetailsService,
-    mockSubscriptionDetailsService,
-    mockFlags
+    mockSubscriptionDetailsService
   )
 
   private val ProblemWithSelectionError     = "Select what you want to apply as"
@@ -161,7 +160,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         (CdsOrganisationType.ThirdCountryOrganisation, "name/third-country-organisation"),
         (CdsOrganisationType.ThirdCountrySoleTrader, "row-name-date-of-birth/third-country-sole-trader"),
         (CdsOrganisationType.ThirdCountryIndividual, "row-name-date-of-birth/third-country-individual"),
-        (CdsOrganisationType.CharityPublicBodyNotForProfit, "name/charity-public-body-not-for-profit")
+        (CdsOrganisationType.CharityPublicBodyNotForProfit, "charity-public-body-not-for-profit")
       )
 
     val subscriptionPage: Map[CdsOrganisationType, SubscriptionPage] = Map(
@@ -236,7 +235,6 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         .thenReturn(Session())
     }
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
-    when(mockFlags.useNewCharityEdgeCaseJourney).thenReturn(true)
 
     test(
       organisationTypeController
