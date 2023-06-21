@@ -17,12 +17,12 @@
 package unit.controllers
 
 import common.pages.registration.VatGroupPage
-import org.mockito.Mockito.when
+
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EmailController, VatDetailsController}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, FeatureFlags, VatGroupController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ControllerSpec
 import util.builders.YesNoFormBuilder.{invalidRequest, ValidRequest}

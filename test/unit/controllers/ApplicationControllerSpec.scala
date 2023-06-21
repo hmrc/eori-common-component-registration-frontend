@@ -22,7 +22,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Request
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ApplicationController, FeatureFlags}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.start
 import util.ControllerSpec

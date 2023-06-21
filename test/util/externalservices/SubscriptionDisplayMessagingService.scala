@@ -21,7 +21,6 @@ import common.support.testdata.TestData
 import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status.OK
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Journey
 
 object SubscriptionDisplayMessagingService {
 

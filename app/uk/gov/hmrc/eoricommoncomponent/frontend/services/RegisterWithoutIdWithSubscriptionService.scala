@@ -16,11 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import play.api.mvc.Results.Redirect
-
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Result}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._

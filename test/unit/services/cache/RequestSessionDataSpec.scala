@@ -102,9 +102,8 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
     }
     "return session without organisation-type, subscription-flow and uri-before-sub-flow" in {
       when(mockRequest.session).thenReturn(Session(existingSessionBeforeStartAgain))
-      requestSessionData.sessionForStartAgain.data should contain(
-        noneOf("selected-organisation-type", "subscription-flow", "uri-before-subscription-flow")
-      )
+      requestSessionData.sessionForStartAgain.data should contain noneOf ("selected-organisation-type", "subscription-flow", "uri-before-subscription-flow")
+
     }
   }
 }

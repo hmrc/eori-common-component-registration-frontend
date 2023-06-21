@@ -56,7 +56,6 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   private val mockSub01Outcome = mock[Sub01Outcome]
   private val mockRegDetails   = mock[RegistrationDetails]
-  private implicit val mockHC  = mock[HeaderCarrier]
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
