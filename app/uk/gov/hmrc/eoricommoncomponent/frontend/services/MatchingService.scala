@@ -51,17 +51,6 @@ class MatchingService @Inject() (
   ): RegistrationDetails =
     detailsCreator.registrationDetails(response.registerWithIDResponse, customsId, capturedDate)
 
-  def matchBusinessWithIdOnly(customsId: CustomsId, loggedInUser: LoggedInUserWithEnrolments)(implicit
-    hc: HeaderCarrier,
-    request: Request[_]
-  ): Future[Boolean] =
-    for {
-      maybeMatchFound <- matchingConnector.lookup(idOnlyMatchRequest(customsId, loggedInUser.isAgent))
-      foundAndStored <- storeInCacheIfFound(convert(customsId, capturedDate = None), GroupId(loggedInUser.groupId))(
-        maybeMatchFound
-      )
-    } yield foundAndStored
-
   def matchBusiness(customsId: CustomsId, org: Organisation, establishmentDate: Option[LocalDate], groupId: GroupId)(
     implicit
     request: Request[AnyContent],
@@ -114,14 +103,6 @@ class MatchingService @Inject() (
     mayBeMatchSuccess.map(convert).fold(Future.successful(false)) { details =>
       cache.saveRegistrationDetails(details, groupId, orgType)
     }
-
-  private def idOnlyMatchRequest(customsId: CustomsId, isAnAgent: Boolean): MatchingRequestHolder =
-    MatchingRequestHolder(
-      MatchingRequest(
-        requestCommonGenerator.generate(),
-        RequestDetail(nameOfCustomsIdType(customsId), customsId.id, requiresNameMatch = false, isAnAgent)
-      )
-    )
 
   private def idAndNameMatchRequest(customsId: CustomsId, org: Organisation): MatchingRequestHolder =
     MatchingRequestHolder(
