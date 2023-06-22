@@ -17,7 +17,7 @@
 package unit.viewModels
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels.StandaloneAlreadyHaveEoriViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.StandaloneAlreadyHaveEoriViewModel
 import util.ControllerSpec
 
 class StandaloneAlreadyHaveEoriViewModelSpec extends UnitSpec with ControllerSpec {

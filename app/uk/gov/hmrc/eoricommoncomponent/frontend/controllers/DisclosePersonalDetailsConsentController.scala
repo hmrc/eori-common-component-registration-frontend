@@ -17,7 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.Logger
-import play.api.i18n.Messages
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DisclosePersonalDetailsConsentViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   disclosePersonalDetailsConsentView: disclose_personal_details_consent,
-  subscriptionFlowManager: SubscriptionFlowManager
+  subscriptionFlowManager: SubscriptionFlowManager,
+  disclosePersonalDetailsConsentViewModel: DisclosePersonalDetailsConsentViewModel
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
@@ -57,38 +58,12 @@ class DisclosePersonalDetailsConsentController @Inject() (
               disclosePersonalDetailsYesNoAnswerForm,
               requestSessionData,
               service,
-              textPara2(requestSessionData.userSelectedOrganisationType),
-              questionLabel(requestSessionData.userSelectedOrganisationType)
+              disclosePersonalDetailsConsentViewModel.textPara2,
+              disclosePersonalDetailsConsentViewModel.questionLabel
             )
           )
         )
     }
-
-  private def textPara2(cdsOrganisationType: Option[CdsOrganisationType])(implicit messages: Messages): String = {
-    val org = cdsOrganisationType.getOrElse(CdsOrganisationType.Individual)
-    org match {
-      case CdsOrganisationType.Company =>
-        messages("ecc.subscription.organisation-disclose-personal-details-consent.org.para2")
-      case CdsOrganisationType.Partnership | CdsOrganisationType.LimitedLiabilityPartnership =>
-        messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2")
-      case CdsOrganisationType.CharityPublicBodyNotForProfit | CdsOrganisationType.ThirdCountryOrganisation =>
-        messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.para2")
-      case _ => messages("ecc.subscription.organisation-disclose-personal-details-consent.individual.para2")
-    }
-  }
-
-  private def questionLabel(cdsOrganisationType: Option[CdsOrganisationType])(implicit messages: Messages): String = {
-    val org = cdsOrganisationType.getOrElse(CdsOrganisationType.Individual)
-    org match {
-      case CdsOrganisationType.Company =>
-        messages("ecc.subscription.organisation-disclose-personal-details-consent.org.question")
-      case CdsOrganisationType.Partnership | CdsOrganisationType.LimitedLiabilityPartnership =>
-        messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.question")
-      case CdsOrganisationType.CharityPublicBodyNotForProfit | CdsOrganisationType.ThirdCountryOrganisation =>
-        messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.question")
-      case _ => messages("ecc.subscription.organisation-disclose-personal-details-consent.individual.question")
-    }
-  }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -100,8 +75,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
               disclosePersonalDetailsYesNoAnswerForm.fill(YesNo(isConsentDisclosed)),
               requestSessionData,
               service,
-              textPara2(requestSessionData.userSelectedOrganisationType),
-              questionLabel(requestSessionData.userSelectedOrganisationType)
+              disclosePersonalDetailsConsentViewModel.textPara2,
+              disclosePersonalDetailsConsentViewModel.questionLabel
             )
           )
         }
@@ -120,8 +95,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
                   formWithErrors,
                   requestSessionData,
                   service,
-                  textPara2(requestSessionData.userSelectedOrganisationType),
-                  questionLabel(requestSessionData.userSelectedOrganisationType)
+                  disclosePersonalDetailsConsentViewModel.textPara2,
+                  disclosePersonalDetailsConsentViewModel.questionLabel
                 )
               )
             ),

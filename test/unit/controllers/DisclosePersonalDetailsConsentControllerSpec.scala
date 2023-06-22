@@ -24,12 +24,14 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DisclosePersonalDetailsConsentController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DisclosePersonalDetailsConsentViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -57,6 +59,8 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   private val disclosePersonalDetailsConsentView = instanceOf[disclose_personal_details_consent]
 
+  private val mockDisclosePersonalDetailsConsentViewModel = mock[DisclosePersonalDetailsConsentViewModel]
+
   private val problemWithSelectionError =
     "Select yes to show your name and address on the Check an EORI number service."
 
@@ -71,7 +75,8 @@ class DisclosePersonalDetailsConsentControllerSpec
     mockRequestSessionData,
     mcc,
     disclosePersonalDetailsConsentView,
-    mockSubscriptionFlowManager
+    mockSubscriptionFlowManager,
+    mockDisclosePersonalDetailsConsentViewModel
   )
 
   private val subscriptionFlows =
@@ -90,7 +95,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         ThirdCountryIndividualSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "You can consent to show your name and address alongside your EORI number. Doing so can help reduce errors and delays when moving your goods.",
+        "mocked paragraph 2",
         "Yes",
         "No",
         false,
@@ -101,7 +106,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         ThirdCountryOrganisationSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods.",
+        "mocked paragraph 2",
         "Yes",
         "No",
         false,
@@ -112,7 +117,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         PartnershipSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "You can consent to show the partnership’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.",
+        "mocked paragraph 2",
         "Yes",
         "No",
         true,
@@ -123,7 +128,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         OrganisationSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods.",
+        "mocked paragraph 2",
         "Yes",
         "No",
         true,
@@ -134,7 +139,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       (
         SoleTraderSubscriptionFlow,
         "‘Check an EORI number’ service",
-        "You can consent to show your name and address alongside your EORI number. Doing so can help reduce errors and delays when moving your goods.",
+        "mocked paragraph 2",
         "Yes",
         "No",
         true,
@@ -150,6 +155,10 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockSubscriptionDetailsService.cacheConsentToDisclosePersonalDetails(any[YesNo])(any[Request[_]]))
       .thenReturn(Future.successful {})
     setupMockSubscriptionFlowManager(EoriConsentSubscriptionFlowPage)
+
+    when(mockDisclosePersonalDetailsConsentViewModel.textPara2()(any[Messages], any[Request[AnyContent]])).thenReturn(
+      "mocked paragraph 2"
+    )
   }
 
   override protected def afterEach(): Unit = {
