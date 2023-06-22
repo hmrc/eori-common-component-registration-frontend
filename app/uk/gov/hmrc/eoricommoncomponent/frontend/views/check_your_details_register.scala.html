@@ -42,18 +42,7 @@
         <h1 class="govuk-heading-l">@messages("cds.form.check-answers")</h1>
         <div>
             <h2 class="govuk-heading-m">@viewModel.headerTitle</h2>
-            @govukSummaryList(SummaryList(
-            rows =
-                viewModel.individualNameDob ++
-                        viewModel.organisationName ++
-                        viewModel.organisationUtr ++
-                        viewModel.customsId ++
-                        viewModel.individualUtr ++
-                        viewModel.registeredAddress ++
-                        viewModel.dateOfEstablishment ++
-                        viewModel.sicCodeDisplay ++
-                        viewModel.summary
-            ))
+            @govukSummaryList(viewModel.providedDetails)
         </div>
 
         @if(!isIndividual){
@@ -68,12 +57,7 @@
         }
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-contact-details")</h2>
-        @govukSummaryList(SummaryList(
-            rows = viewModel.contactName ++
-                    viewModel.email ++
-                    viewModel.contactTelephone ++
-                    viewModel.details
-        ))
+        @govukSummaryList(viewModel.providedContactDetails)
         </div>
         <div>
         <h2 class="govuk-heading-m">@messages("cds.form.check-answers-declaration")</h2>

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 
 import play.api.i18n.Messages
-import play.api.mvc.Call
+import play.api.mvc.{Call, Request}
 import play.twirl.api.Html
 import play.twirl.api.utils.StringEscapeUtils
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
@@ -41,39 +41,30 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, 
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.govukfrontend.views.Aliases.{HtmlContent, Key, SummaryListRow, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Value}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.DataUnavailableException
-
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryList
 import javax.inject.{Inject, Named, Singleton}
 
 case class CheckYourDetailsRegisterViewModel(
   headerTitle: String,
-  individualNameDob: Seq[SummaryListRow],
-  organisationName: Seq[SummaryListRow],
-  organisationUtr: Seq[SummaryListRow],
-  customsId: Seq[SummaryListRow],
-  individualUtr: Seq[SummaryListRow],
-  registeredAddress: Seq[SummaryListRow],
-  dateOfEstablishment: Seq[SummaryListRow],
-  sicCodeDisplay: Seq[SummaryListRow],
-  summary: Seq[SummaryListRow],
+  providedDetails: SummaryList,
   vatDetails: Seq[SummaryListRow],
-  contactName: Seq[SummaryListRow],
-  email: Seq[SummaryListRow],
-  contactTelephone: Seq[SummaryListRow],
-  details: Seq[SummaryListRow]
+  providedContactDetails: SummaryList
 )
 
 @Singleton
 class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatter) {
 
-  def getDateOfEstablishmentLabel(cdsOrgType: Option[CdsOrganisationType])(implicit messages: Messages) = {
+  def getDateOfEstablishmentLabel(cdsOrgType: Option[CdsOrganisationType])(implicit messages: Messages): String = {
     val isSoleTrader = cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
       cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
     if (isSoleTrader) messages("cds.date-of-birth.label")
     else messages("cds.date-established.label")
   }
 
-  def orgNameLabel(cdsOrgType: Option[CdsOrganisationType], isPartnership: Boolean)(implicit messages: Messages) = {
+  def orgNameLabel(cdsOrgType: Option[CdsOrganisationType], isPartnership: Boolean)(implicit
+    messages: Messages
+  ): String = {
     val orgNameLabel = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) || cdsOrgType.contains(
       CdsOrganisationType.ThirdCountryOrganisation
     )
@@ -110,7 +101,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
     registration: RegistrationDetails,
     cdsOrgType: Option[CdsOrganisationType],
     isPartnership: Boolean
-  )(implicit messages: Messages) = {
+  )(implicit messages: Messages): String = {
     val soleAndIndividual = {
       cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
       cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
@@ -143,18 +134,17 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
     personalDataDisclosureConsent: Boolean,
     service: Service,
     isUserIdentifiedByRegService: Boolean
-  )(implicit messages: Messages): CheckYourDetailsRegisterViewModel = {
+  )(implicit messages: Messages, request: Request[_]): CheckYourDetailsRegisterViewModel = {
 
-    val isIndividual: Boolean = cdsOrgType.contains(CdsOrganisationType.Individual) || cdsOrgType.contains(
-      CdsOrganisationType.EUIndividual
-    ) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+    val isIndividual: Boolean = cdsOrgType.contains(CdsOrganisationType.Individual) ||
+      cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
+      cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
     val isCharity = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
     val isSoleTrader = cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
       cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
     val isRowOrganisation = cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
-    val isRowSoleTraderIndividual = cdsOrgType.contains(
-      CdsOrganisationType.ThirdCountrySoleTrader
-    ) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+    val isRowSoleTraderIndividual = cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
+      cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 
     val formattedIndividualDateOfBirth = {
       val dateOfBirth: Option[LocalDate] = (subscription.nameDobDetails, registration) match {
@@ -342,7 +332,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
     }).flatten
 
     val vatDetails =
-      if (!isIndividual && subscription.vatVerificationOption.getOrElse(true) == true)
+      if (!isIndividual)
         Seq(
           summaryListRowNoChangeOption(
             key = messages("cds.form.gb-vat-number"),
@@ -354,52 +344,41 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
             value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
             call = Some(VatRegisteredUkController.reviewForm(service))
           ),
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-date"),
-            value = Some(
-              Html(
-                subscription.vatControlListResponse.map(
-                  vat =>
-                    formatDate(
-                      LocalDate.parse(
-                        vat.dateOfReg.getOrElse(
-                          throw new DataUnavailableException("VAT registration date not found in cache")
+          if (subscription.vatVerificationOption.getOrElse(true) == true)
+            summaryListRowNoChangeOption(
+              key = messages("cds.form.gb-vat-date"),
+              value = Some(
+                Html(
+                  subscription.vatControlListResponse.map(
+                    vat =>
+                      formatDate(
+                        LocalDate.parse(
+                          vat.dateOfReg.getOrElse(
+                            throw new DataUnavailableException("VAT registration date not found in cache")
+                          )
                         )
                       )
-                    )
-                ).getOrElse(messages("cds.not-entered.label"))
-              )
-            ),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          )
-        )
-      else if (!isIndividual && subscription.vatVerificationOption.getOrElse(false) == false)
-        Seq(
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-number"),
-            value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          ),
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-postcode"),
-            value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          ),
-          summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-amount"),
-            value = Some(
-              Html(
-                subscription.vatControlListResponse.map(vat => vat.lastNetDue.get.toString).getOrElse(
-                  messages("cds.not-entered.label")
+                  ).getOrElse(messages("cds.not-entered.label"))
                 )
-              )
-            ),
-            call = Some(VatRegisteredUkController.reviewForm(service))
-          )
+              ),
+              call = Some(VatRegisteredUkController.reviewForm(service))
+            )
+          else
+            summaryListRowNoChangeOption(
+              key = messages("cds.form.gb-vat-amount"),
+              value = Some(
+                Html(
+                  subscription.vatControlListResponse.map(vat => vat.lastNetDue.get.toString).getOrElse(
+                    messages("cds.not-entered.label")
+                  )
+                )
+              ),
+              call = Some(VatRegisteredUkController.reviewForm(service))
+            )
         )
       else Seq.empty[SummaryListRow]
 
-    val summary = Seq(
+    val personalDataDisclosure = Seq(
       summaryListRow(
         key = messages("cds.form.disclosure"),
         value = Some(
@@ -421,23 +400,26 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
       )
     }).flatten
 
-    CheckYourDetailsRegisterViewModel(
-      headerTitle,
-      individualNameDob,
-      organisationName,
-      organisationUtr,
-      customsId,
-      individualUtr,
-      registeredAddress,
-      dateOfEstablishment,
-      sicCodeDisplay,
-      summary,
-      vatDetails,
-      contactName,
-      email,
-      contactTelephone,
-      details
+    val providedDetails = SummaryList(rows =
+      individualNameDob ++
+        organisationName ++
+        organisationUtr ++
+        customsId ++
+        individualUtr ++
+        registeredAddress ++
+        dateOfEstablishment ++
+        sicCodeDisplay ++
+        personalDataDisclosure
     )
+
+    val providedContactDetails = SummaryList(rows =
+      contactName ++
+        email ++
+        contactTelephone ++
+        details
+    )
+
+    CheckYourDetailsRegisterViewModel(headerTitle, providedDetails, vatDetails, providedContactDetails)
 
   }
 
