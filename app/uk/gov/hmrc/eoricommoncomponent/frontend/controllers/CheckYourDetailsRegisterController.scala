@@ -43,22 +43,10 @@ class CheckYourDetailsRegisterController @Inject() (
   def reviewDetails(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        for {
-          registration <- sessionCache.registrationDetails
-          subscription <- sessionCache.subscriptionDetails
-        } yield {
-          val isUserIdentifiedByRegService = registration.safeId.id.nonEmpty
-          val viewModel = viewModelConstructor.generateViewModel(
-            requestSessionData.userSelectedOrganisationType,
-            requestSessionData.isPartnershipOrLLP,
-            registration,
-            subscription,
-            subscription.personalDataDisclosureConsent.getOrElse(false),
-            service,
-            isUserIdentifiedByRegService
-          )
-          Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
-        }
+        viewModelConstructor.generateViewModel(sessionCache, requestSessionData, service).map(
+          viewModel =>
+            Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
+        )
     }
 
   def submitDetails(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
