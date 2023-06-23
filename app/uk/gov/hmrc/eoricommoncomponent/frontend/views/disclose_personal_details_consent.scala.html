@@ -25,6 +25,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DisclosePersonalDetailsConsentViewModel
 
 @this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, paragraph: helpers.paragraph)
 
@@ -32,9 +33,8 @@
     isInReviewMode: Boolean,
     disclosePersonalDetailsYesNoAnswerForm: Form[YesNo],
     requestSessionData: RequestSessionData,
-    service: Service,
-    para2: String,
-    questionLabel: String
+    viewModel: DisclosePersonalDetailsConsentViewModel,
+    service: Service
 )(implicit request: Request[AnyContent], messages: Messages)
 
 @layout_di(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
@@ -48,7 +48,7 @@
             @h1(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"))
 
             @paragraph(messages("ecc.subscription.organisation-disclose-personal-details-consent.para1"), Some("personal-details-consent-para1"))
-            @paragraph(para2, Some("personal-details-consent-para2"))
+            @paragraph(viewModel.textPara2, Some("personal-details-consent-para2"))
             @paragraph(messages("ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para"), Some("personal-details-consent-para3"))
 
             @inputRadioGroup(
@@ -61,7 +61,7 @@
                 None,
                 None,
                 '_divClass -> "createForm-group govuk-form-group",
-                '_legend -> questionLabel,
+                '_legend -> viewModel.questionLabel,
                 '_isLegendH1 -> false
             )
 

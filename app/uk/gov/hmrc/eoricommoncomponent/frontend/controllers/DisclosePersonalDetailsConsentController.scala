@@ -57,9 +57,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
               isInReviewMode = false,
               disclosePersonalDetailsYesNoAnswerForm,
               requestSessionData,
-              service,
-              disclosePersonalDetailsConsentViewModel.textPara2,
-              disclosePersonalDetailsConsentViewModel.questionLabel
+              disclosePersonalDetailsConsentViewModel,
+              service
             )
           )
         )
@@ -74,9 +73,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
               isInReviewMode = true,
               disclosePersonalDetailsYesNoAnswerForm.fill(YesNo(isConsentDisclosed)),
               requestSessionData,
-              service,
-              disclosePersonalDetailsConsentViewModel.textPara2,
-              disclosePersonalDetailsConsentViewModel.questionLabel
+              disclosePersonalDetailsConsentViewModel,
+              service
             )
           )
         }
@@ -94,9 +92,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
                   isInReviewMode,
                   formWithErrors,
                   requestSessionData,
-                  service,
-                  disclosePersonalDetailsConsentViewModel.textPara2,
-                  disclosePersonalDetailsConsentViewModel.questionLabel
+                  disclosePersonalDetailsConsentViewModel,
+                  service
                 )
               )
             ),

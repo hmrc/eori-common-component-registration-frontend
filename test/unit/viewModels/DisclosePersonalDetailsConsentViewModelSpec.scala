@@ -37,33 +37,33 @@ class DisclosePersonalDetailsConsentViewModelSpec extends UnitSpec with Controll
   private val organisationsToTest = Seq[(CdsOrganisationType, String, String)](
     (
       CdsOrganisationType.Company,
-      "Do you consent to show the company’s name and address on the ‘Check an EORI number’ service?",
-      "You can consent to show the company’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods."
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.org.question"),
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.org.para2")
     ),
     (
       CdsOrganisationType.Partnership,
-      "Do you consent to show the partnership’s name and address on the ‘Check an EORI number’ service?",
-      "You can consent to show the partnership’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods."
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.question"),
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2")
     ),
     (
       CdsOrganisationType.LimitedLiabilityPartnership,
-      "Do you consent to show the partnership’s name and address on the ‘Check an EORI number’ service?",
-      "You can consent to show the partnership’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods."
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.question"),
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2")
     ),
     (
       CdsOrganisationType.CharityPublicBodyNotForProfit,
-      "Do you consent to show the organisation’s name and address on the ‘Check an EORI number’ service?",
-      "You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods."
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.question"),
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.para2")
     ),
     (
       CdsOrganisationType.ThirdCountryOrganisation,
-      "Do you consent to show the organisation’s name and address on the ‘Check an EORI number’ service?",
-      "You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods."
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.question"),
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.para2")
     ),
     (
       CdsOrganisationType.Individual,
-      "Do you consent to show your name and address on the ‘Check an EORI number’ service?",
-      "You can consent to show your name and address alongside your EORI number. Doing so can help reduce errors and delays when moving your goods."
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.individual.question"),
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.individual.para2")
     )
   )
 
