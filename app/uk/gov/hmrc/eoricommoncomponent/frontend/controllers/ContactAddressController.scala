@@ -63,7 +63,7 @@ class ContactAddressController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      contactAddressDetailsYesNoAnswerForm
+      contactAddressDetailsYesNoAnswerForm()
         .bindFromRequest()
         .fold(
           formWithErrors =>
@@ -105,7 +105,7 @@ class ContactAddressController @Inject() (
   ): Future[Result] =
     fetchContactDetails() map {
       contactDetails =>
-        Ok(contactAddressView(contactDetails, isInReviewMode, contactAddressDetailsYesNoAnswerForm, service))
+        Ok(contactAddressView(contactDetails, isInReviewMode, contactAddressDetailsYesNoAnswerForm(), service))
     }
 
   private def locationByAnswer(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service)(implicit

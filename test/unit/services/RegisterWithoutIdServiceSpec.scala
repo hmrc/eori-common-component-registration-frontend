@@ -114,14 +114,13 @@ class RegisterWithoutIdServiceSpec
   }
 
   override protected def beforeEach(): Unit = {
-    reset(
-      mockConnector,
-      mockDetailsCreator,
-      mockSessionCache,
-      mockRequestSessionData,
-      mockOrgTypeLookup,
-      mockSub02Controller
-    )
+    reset(mockConnector)
+    reset(mockDetailsCreator)
+    reset(mockSessionCache)
+    reset(mockRequestSessionData)
+    reset(mockOrgTypeLookup)
+    reset(mockSub02Controller)
+
     when(mockDetailsOrganisation.safeId).thenReturn(SafeId(""))
     when(
       mockSessionCache

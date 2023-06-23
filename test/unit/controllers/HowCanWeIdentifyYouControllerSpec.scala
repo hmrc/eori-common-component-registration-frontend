@@ -52,7 +52,7 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
     mockSubscriptionDetailsHolderService
   )
 
-  override def beforeEach() {
+  override def beforeEach(): Unit = {
     super.beforeEach()
 
     Mockito.reset(mockSubscriptionDetailsHolderService)
@@ -107,14 +107,14 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
     }
   }
 
-  def showForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def showForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionBusinessService.getCachedCustomsId(any[Request[_]]))
       .thenReturn(Future.successful(Some(Utr("id"))))
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
-  def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }

@@ -51,7 +51,7 @@ class GetNinoController @Inject() (
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        subscriptionNinoForm.bindFromRequest.fold(
+        subscriptionNinoForm.bindFromRequest().fold(
           formWithErrors =>
             Future.successful(
               BadRequest(matchNinoRowIndividualView(formWithErrors, false, routes.GetNinoController.submit(service)))

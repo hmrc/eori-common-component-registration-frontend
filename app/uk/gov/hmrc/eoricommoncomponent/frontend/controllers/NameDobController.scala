@@ -44,7 +44,7 @@ class NameDobController @Inject() (
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      enterNameDobForm.bindFromRequest.fold(
+      enterNameDobForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),
         formData => submitNewDetails(formData, service)
       )

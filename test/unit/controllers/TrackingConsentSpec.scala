@@ -58,7 +58,7 @@ class TrackingConsentSpec extends ControllerSpec with GuiceOneAppPerSuite with M
     }
   }
 
-  def showForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def showForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionBusinessService.getCachedNinoOrUtrChoice(any[Request[_]]))
       .thenReturn(Future.successful(Some("utr")))

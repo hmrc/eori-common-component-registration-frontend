@@ -22,8 +22,6 @@ import play.api.test.{CSRFTokenHelper, FakeRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys
 import uk.gov.hmrc.http.SessionKeys
 
-import java.time.LocalDate
-
 object SessionBuilder {
 
   def sessionMap(authToken: String): List[(String, String)] = {
@@ -44,7 +42,7 @@ object SessionBuilder {
     buildRequestWithSession(userId).withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
 
   def buildRequestWithFormValues(form: Map[String, String]): FakeRequest[AnyContentAsFormUrlEncoded] =
-    buildRequestWithSessionNoUserAndToken.withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
+    buildRequestWithSessionNoUserAndToken().withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
 
   def buildRequestWithSessionNoUser = {
     val sessionId = s"session-${UUID.randomUUID}"

@@ -75,8 +75,9 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
   private val IndividualNotMatchedError =
     "Your details have not been found. Check that your details are correct and then try again."
 
-  override def beforeEach: Unit = {
-    reset(mockMatchingService, mockSubscriptionDetailsService)
+  override def beforeEach(): Unit = {
+    reset(mockMatchingService)
+    reset(mockSubscriptionDetailsService)
 
     when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
   }
@@ -279,7 +280,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     }
   }
 
-  def showForm(organisationType: String, userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def showForm(organisationType: String, userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result =
       controller.form(organisationType, atarService).apply(SessionBuilder.buildRequestWithSession(userId))
@@ -291,7 +292,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     organisationType: String,
     userId: String = defaultUserId,
     isInReviewMode: Boolean = false
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .submit(organisationType, atarService, isInReviewMode)

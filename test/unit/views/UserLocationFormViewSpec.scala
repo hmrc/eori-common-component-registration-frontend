@@ -129,7 +129,7 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
 
   private def showForm(userId: String = defaultUserId, affinityGroup: AffinityGroup = AffinityGroup.Organisation)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector, userAffinityGroup = affinityGroup)
 
     val result = controller

@@ -39,13 +39,12 @@ class VatGroupsCannotRegisterUsingThisServiceControllerSpec
     "allow unauthenticated users to access the page" in {
       show() { result =>
         status(result) shouldBe OK
-        CdsPage(contentAsString(result)).title should startWith("You need to use a different service")
+        CdsPage(contentAsString(result)).title() should startWith("You need to use a different service")
       }
     }
   }
 
-  def show()(test: Future[Result] => Any) {
-    test(controller.form(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken))
-  }
+  def show()(test: Future[Result] => Any): Unit =
+    test(controller.form(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
 }

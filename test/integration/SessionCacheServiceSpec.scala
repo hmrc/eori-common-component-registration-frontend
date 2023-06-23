@@ -160,7 +160,6 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
     }
 
     "store Registration Details, Info and Subscription Details Holder correctly" in {
-      val sessionId: SessionId = setupSession
 
       await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(request))
       val holder = SubscriptionDetails()
@@ -181,7 +180,7 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
     }
 
     "remove from the cache" in {
-      val sessionId: SessionId = setupSession
+
       await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(request))
 
       await(sessionCache.remove(request))

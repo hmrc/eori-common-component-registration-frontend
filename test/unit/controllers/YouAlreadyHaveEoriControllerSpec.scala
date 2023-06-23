@@ -55,7 +55,7 @@ class YouAlreadyHaveEoriControllerSpec extends ControllerSpec with AuthActionMoc
       display { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith(messages("cds.registration.you-already-have-eori.title"))
+        page.title() should startWith(messages("cds.registration.you-already-have-eori.title"))
       }
     }
 
@@ -66,7 +66,7 @@ class YouAlreadyHaveEoriControllerSpec extends ControllerSpec with AuthActionMoc
       displayStandAlone { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith(messages("cds.registration.you-already-have-eori.group.title"))
+        page.title() should startWith(messages("cds.registration.you-already-have-eori.group.title"))
       }
     }
   }

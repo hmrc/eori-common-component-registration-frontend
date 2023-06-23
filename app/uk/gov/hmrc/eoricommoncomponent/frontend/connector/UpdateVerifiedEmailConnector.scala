@@ -21,7 +21,7 @@ import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
 import uk.gov.hmrc.http.{ForbiddenException, HttpClient, _}
-
+import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
@@ -37,9 +37,9 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpCl
     http.PUT[VerifiedEmailRequest, VerifiedEmailResponse](url, request) map { resp =>
       Right(resp)
     } recover {
-      case _: BadRequestException | Upstream4xxResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)
-      case _: ForbiddenException | Upstream4xxResponse(_, FORBIDDEN, _, _)    => Left(Forbidden)
-      case _: InternalServerException | Upstream5xxResponse(_, _, _, _) =>
+      case _: BadRequestException | UpstreamErrorResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)
+      case _: ForbiddenException | UpstreamErrorResponse(_, FORBIDDEN, _, _)    => Left(Forbidden)
+      case _: InternalServerException | UpstreamErrorResponse(_, _, _, _) =>
         Left(ServiceUnavailable)
       case NonFatal(e) =>
         logger.error(

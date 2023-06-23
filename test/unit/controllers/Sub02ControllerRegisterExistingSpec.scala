@@ -87,7 +87,10 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockAuthConnector, mockCdsSubscriber, mockSessionCache, xiEoriGuidanceView)
+    reset(mockAuthConnector)
+    reset(mockCdsSubscriber)
+    reset(mockSessionCache)
+    reset(xiEoriGuidanceView)
 
     super.afterEach()
   }

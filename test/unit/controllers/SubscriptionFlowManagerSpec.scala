@@ -59,7 +59,9 @@ class SubscriptionFlowManagerSpec
   val noSubscriptionFlowInSessionException = new IllegalStateException("No subscription flow in session.")
 
   override def beforeEach(): Unit = {
-    reset(mockRequestSessionData, mockSession, mockCdsFrontendDataCache)
+    reset(mockRequestSessionData)
+    reset(mockSession)
+    reset(mockCdsFrontendDataCache)
     when(mockRequestSessionData.storeUserSubscriptionFlow(any[SubscriptionFlow], any[String])(any[Request[AnyContent]]))
       .thenReturn(mockSession)
     when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]]))

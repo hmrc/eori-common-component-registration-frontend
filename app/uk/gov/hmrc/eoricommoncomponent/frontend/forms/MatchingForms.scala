@@ -319,11 +319,6 @@ object MatchingForms extends Mappings {
     case _               => Valid
   }
 
-  private val acceptOnlyIslands: Constraint[String] = Constraint {
-    case `countryCodeGG` | `countryCodeJE` => Valid
-    case _                                 => Invalid("cds.matching-error.country.unacceptable")
-  }
-
   val thirdCountrySixLineAddressForm: Form[SixLineAddressMatchModel] = sixLineAddressFormFactory(rejectGB)
 
   val ukSixLineAddressForm: Form[SixLineAddressMatchModel] =

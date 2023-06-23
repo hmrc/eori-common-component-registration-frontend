@@ -82,7 +82,7 @@ class OrganisationTypeController @Inject() (
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        organisationTypeDetailsForm.bindFromRequest.fold(
+        organisationTypeDetailsForm.bindFromRequest().fold(
           formWithErrors => {
             val userLocation = requestSessionData.selectedUserLocation
             Future.successful(BadRequest(organisationTypeView(formWithErrors, userLocation, service)))

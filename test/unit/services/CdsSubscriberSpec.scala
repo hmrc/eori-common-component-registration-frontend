@@ -34,7 +34,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowMana
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.{Journey, Service}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -88,15 +88,13 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
   }
 
   override protected def afterEach(): Unit = {
-    reset(
-      mockCdsFrontendDataCache,
-      mockSubscriptionService,
-      mockCdsFrontendDataCache,
-      mockRegistrationConfirmService,
-      mockSubscriptionFlowManager,
-      mockHandleSubscriptionService,
-      mockRegistrationDetails
-    )
+    reset(mockCdsFrontendDataCache)
+    reset(mockSubscriptionService)
+    reset(mockCdsFrontendDataCache)
+    reset(mockRegistrationConfirmService)
+    reset(mockSubscriptionFlowManager)
+    reset(mockHandleSubscriptionService)
+    reset(mockRegistrationDetails)
 
     super.afterEach()
   }

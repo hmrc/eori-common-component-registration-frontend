@@ -107,8 +107,10 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockRequestSessionData, mockSave4LaterService, mockSubscriptionStatusService, mockRegistrationDisplayService)
-
+    reset(mockRequestSessionData)
+    reset(mockSave4LaterService)
+    reset(mockSubscriptionStatusService)
+    reset(mockRegistrationDisplayService)
     super.afterEach()
   }
 
@@ -256,7 +258,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     }
   }
 
-  private def showForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(
@@ -266,7 +268,9 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     )
   }
 
-  private def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def submitForm(form: Map[String, String], userId: String = defaultUserId)(
+    test: Future[Result] => Any
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(
@@ -276,7 +280,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     )
   }
 
-  private def processing(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def processing(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(
