@@ -157,12 +157,10 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
         dateOfBirth.map(formatDate)
       }
 
-
-
       def individualName = subscription.nameDobDetails match {
-        case Some(nameDobDetails) => nameDobDetails.name
+        case Some(nameDobDetails)           => nameDobDetails.name
         case _ if registration.name == null => ""
-        case _ => registration.name
+        case _                              => registration.name
       }
 
       def orgName = subscription.nameOrganisationDetails match {
@@ -171,7 +169,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
         case _                              => subscription.name
       }
 
-      val name =  if(isIndividual || isSoleTrader) individualName else orgName
+      val name = if (isIndividual || isSoleTrader) individualName else orgName
 
       val orgType = cdsOrgType.fold("")(orgType => orgType.id)
 
