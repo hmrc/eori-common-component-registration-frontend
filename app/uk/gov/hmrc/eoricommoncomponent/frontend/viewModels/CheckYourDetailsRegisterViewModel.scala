@@ -157,17 +157,21 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
         dateOfBirth.map(formatDate)
       }
 
-      val individualName = subscription.nameDobDetails match {
-        case Some(nameDobDetails)           => nameDobDetails.name
+
+
+      def individualName = subscription.nameDobDetails match {
+        case Some(nameDobDetails) => nameDobDetails.name
         case _ if registration.name == null => ""
-        case _                              => registration.name
+        case _ => registration.name
       }
 
-      val orgName = subscription.nameOrganisationDetails match {
+      def orgName = subscription.nameOrganisationDetails match {
         case Some(nameOrgDetails)           => nameOrgDetails.name
         case _ if subscription.name == null => ""
         case _                              => subscription.name
       }
+
+      val name =  if(isIndividual || isSoleTrader) individualName else orgName
 
       val orgType = cdsOrgType.fold("")(orgType => orgType.id)
 
@@ -202,7 +206,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
           Seq(
             summaryListRow(
               key = messages("subscription.check-your-details.full-name.label"),
-              value = Some(Html(StringEscapeUtils.escapeXml11(individualName))),
+              value = Some(Html(StringEscapeUtils.escapeXml11(name))),
               call =
                 if (!isUserIdentifiedByRegService)
                   Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service))
@@ -224,7 +228,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
           Seq(
             summaryListRow(
               key = orgNameLabel(cdsOrgType, isPartnership),
-              value = Some(Text(orgName).asHtml),
+              value = Some(Text(name).asHtml),
               call =
                 if (!isUserIdentifiedByRegService)
                   Some(WhatIsYourOrgNameController.showForm(isInReviewMode = true, organisationType = orgType, service))
