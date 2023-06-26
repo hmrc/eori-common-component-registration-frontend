@@ -306,14 +306,14 @@ class SixLineAddressControllerSpec
   "postcode for third-country-organisation from the Channel Islands" should {
     "be mandatory for Jersey" in {
       val formValues = RowFormBuilder.asForm(thirdCountrySixLineAddressForm)
-      assertInvalidField("third-country-organisation")(formValues + ("postcode" -> "", "countryCode" -> "JE"))(
+      assertInvalidField("third-country-organisation")(formValues ++ Map("postcode" -> "", "countryCode" -> "JE"))(
         fieldLevelErrorPostcode,
         "Enter a valid postcode"
       )
     }
     "be mandatory for Guernsey" in {
       val formValues = RowFormBuilder.asForm(thirdCountrySixLineAddressForm)
-      assertInvalidField("third-country-organisation")(formValues + ("postcode" -> "", "countryCode" -> "GG"))(
+      assertInvalidField("third-country-organisation")(formValues ++ Map("postcode" -> "", "countryCode" -> "GG"))(
         fieldLevelErrorPostcode,
         "Enter a valid postcode"
       )
@@ -360,7 +360,7 @@ class SixLineAddressControllerSpec
   private def submitFormInCreateModeForIndividualRegistration(
     form: Map[String, String],
     userId: String = defaultUserId
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     val individualRegistrationDetails = RegistrationDetails.individual(
       sapNumber = "0123456789",
       safeId = SafeId("safe-id"),

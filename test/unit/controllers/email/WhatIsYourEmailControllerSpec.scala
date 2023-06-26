@@ -54,7 +54,7 @@ class WhatIsYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEa
   val EmailFieldsMap            = Map("email" -> email)
   val unpopulatedEmailFieldsMap = Map("email" -> "")
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Some(emailStatus)))
 
@@ -106,14 +106,14 @@ class WhatIsYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
   private def submitFormInCreateMode(form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result =
       controller.submit(atarService)(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)
   }
 
-  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .createForm(atarService)

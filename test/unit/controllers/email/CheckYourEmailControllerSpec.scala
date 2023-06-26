@@ -30,7 +30,6 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.YesNoFormBuilder.ValidRequest
 import util.builders.{AuthActionMock, SessionBuilder}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {

@@ -81,7 +81,7 @@ class DateOfEstablishmentController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionDateOfEstablishmentForm.bindFromRequest.fold(
+      subscriptionDateOfEstablishmentForm.bindFromRequest().fold(
         formWithErrors =>
           orgTypeLookup.etmpOrgType map { orgType =>
             BadRequest(

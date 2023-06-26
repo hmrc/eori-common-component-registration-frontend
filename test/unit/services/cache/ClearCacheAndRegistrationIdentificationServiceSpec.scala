@@ -40,9 +40,8 @@ class ClearCacheAndRegistrationIdentificationServiceSpec extends UnitSpec with M
   implicit val headerCarrier: HeaderCarrier = mock[HeaderCarrier]
   val mockLoggedInUser: LoggedInUser        = mock[LoggedInUser]
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit =
     when(mockLoggedInUser.userId()).thenReturn(loggedInUserId)
-  }
 
   val service = new ClearCacheAndRegistrationIdentificationService(mockSessionCache)(global)
 

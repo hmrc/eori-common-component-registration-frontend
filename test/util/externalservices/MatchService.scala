@@ -384,7 +384,7 @@ object MatchService {
             .withHeader(CONTENT_TYPE, JSON)
     )
 
-  def stubEoriAlreadyRejected601FailResponse() {
+  def stubEoriAlreadyRejected601FailResponse(): Unit =
     stubFor(
       post(urlEqualTo(registerWithEoriAndId))
         willReturn
@@ -403,7 +403,6 @@ object MatchService {
             """.stripMargin)
             .withHeader(CONTENT_TYPE, JSON)
     )
-  }
 
   def returnReponseForRegisterWithEoriAndId(): StubMapping =
     stubFor(

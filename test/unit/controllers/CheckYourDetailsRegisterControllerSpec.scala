@@ -83,8 +83,10 @@ class CheckYourDetailsRegisterControllerSpec
 
   private val NotEntered: String = "Not entered"
 
-  override def beforeEach: Unit = {
-    reset(mockSessionCache, mockSubscriptionDetails, mockSubscriptionFlow)
+  override def beforeEach(): Unit = {
+    reset(mockSessionCache)
+    reset(mockSubscriptionDetails)
+    reset(mockSubscriptionFlow)
     when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
       Right(mockSubscriptionFlow)
@@ -294,10 +296,12 @@ class CheckYourDetailsRegisterControllerSpec
 
     "display all fields including date of establishment when all are provided" in {
       when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        detailsHolderWithAllFields.copy(
-          contactDetails = Some(contactDetailsModelWithAllValues),
-          addressDetails = Some(addressDetails),
-          nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23")))
+        Future.successful(
+          detailsHolderWithAllFields.copy(
+            contactDetails = Some(contactDetailsModelWithAllValues),
+            addressDetails = Some(addressDetails),
+            nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23")))
+          )
         )
       )
 
@@ -437,7 +441,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     showForm(userSelectedOrgType = Company) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
-      page.title should startWith("Check your answers")
+      page.title() should startWith("Check your answers")
 
       page.h2() should startWith(
         "Help make GOV.UK better Company details VAT details Contact details Declaration Support links"
@@ -554,21 +558,21 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "1 January 2017"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company details included on the EORI checker",
+        "Show name and address on the 'Check an EORI number' service",
         "Change"
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Registered company details included on the EORI checker")
+        .changeAnswerText("Show name and address on the 'Check an EORI number' service")
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company details included on the EORI checker"
+        "Show name and address on the 'Check an EORI number' service"
       ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company details included on the EORI checker"
-      ) shouldBe "Yes I want my name and address on the EORI number checker"
+        "Show name and address on the 'Check an EORI number' service"
+      ) shouldBe "Yes"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company details included on the EORI checker",
+        "Show name and address on the 'Check an EORI number' service",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(
@@ -590,7 +594,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     showForm(userSelectedOrgType = LimitedLiabilityPartnership) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
-      page.title should startWith("Check your answers")
+      page.title() should startWith("Check your answers")
 
       page.h2() should startWith(
         "Help make GOV.UK better Partnership details VAT details Contact details Declaration Support links"
@@ -706,21 +710,21 @@ class CheckYourDetailsRegisterControllerSpec
       ) shouldBe "1 January 2017"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership details included on the EORI checker",
+        "Show name and address on the 'Check an EORI number' service",
         "Change"
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Partnership details included on the EORI checker")
+        .changeAnswerText("Show name and address on the 'Check an EORI number' service")
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership details included on the EORI checker"
+        "Show name and address on the 'Check an EORI number' service"
       ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership details included on the EORI checker"
-      ) shouldBe "Yes I want my partnership name and address on the EORI checker"
+        "Show name and address on the 'Check an EORI number' service"
+      ) shouldBe "Yes"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership details included on the EORI checker",
+        "Show name and address on the 'Check an EORI number' service",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/disclose-personal-details-consent/review"
       page.getElementsText(
@@ -831,7 +835,7 @@ class CheckYourDetailsRegisterControllerSpec
               """)
   }
 
-  private def assertUkVatDetailsShowValues(page: CdsPage) {
+  private def assertUkVatDetailsShowValues(page: CdsPage): Unit = {
     //VAT number
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "VAT number") shouldBe "123456789"
     page.getSummaryListValue(
@@ -845,7 +849,7 @@ class CheckYourDetailsRegisterControllerSpec
     userSelectedOrgType: CdsOrganisationType = CdsOrganisationType.Company,
     userId: String = defaultUserId,
     isIndividualSubscriptionFlow: Boolean = false
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     val controller = new CheckYourDetailsRegisterController(
       mockAuthAction,
       mockSessionCache,
@@ -873,7 +877,7 @@ class CheckYourDetailsRegisterControllerSpec
     form: Map[String, String],
     userId: String = defaultUserId,
     userSelectedOrgType: Option[CdsOrganisationType] = None
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockRequestSession.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(userSelectedOrgType)

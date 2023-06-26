@@ -18,10 +18,9 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.util
 
 object Require {
 
-  @inline final def requireThatUrlValue(requirement: Boolean, message: => Any) {
+  @inline final def requireThatUrlValue(requirement: Boolean, message: => Any): Unit =
     if (!requirement)
       throw InvalidUrlValueException("invalid value: " + message)
-  }
 
 }
 

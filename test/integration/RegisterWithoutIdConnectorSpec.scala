@@ -57,10 +57,10 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     AuditService.stubAuditService()
   }
 
-  override def beforeAll: Unit =
+  override def beforeAll(): Unit =
     startMockServer()
 
-  override def afterAll: Unit =
+  override def afterAll(): Unit =
     stopMockServer()
 
   private val requestDate = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 114)

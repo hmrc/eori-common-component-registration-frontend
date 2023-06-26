@@ -63,7 +63,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
   implicit val priginatingService: Service = Service.cds
   implicit val mockRequest: Request[Any]   = mock[Request[Any]]
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(mockConfig)
     reset(mockConnector)
     reset(mockSessionCache)

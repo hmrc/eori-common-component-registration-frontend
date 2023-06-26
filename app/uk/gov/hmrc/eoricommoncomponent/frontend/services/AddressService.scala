@@ -68,7 +68,7 @@ class AddressService @Inject() (
   def handleFormDataAndRedirect(form: Form[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ) =
-    form.bindFromRequest
+    form.bindFromRequest()
       .fold(
         formWithErrors => populateCountriesToInclude(isInReviewMode, service, formWithErrors, BadRequest),
         address =>
@@ -89,6 +89,6 @@ class AddressService @Inject() (
     if (isInReviewMode) {
       lazy val form = address.fold(addressDetailsCreateForm())(addressDetailsCreateForm().fill(_))
       populateCountriesToInclude(isInReviewMode, service, form, Ok)
-    } else populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm, Ok)
+    } else populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm(), Ok)
 
 }

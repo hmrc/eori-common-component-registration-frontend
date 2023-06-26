@@ -54,7 +54,6 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockFlags                      = mock[FeatureFlags]
 
   private val organisationTypeView = instanceOf[organisation_type]
 
@@ -87,8 +86,9 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockRequestSessionData, mockRegistrationDetailsService, mockSubscriptionDetailsService)
-
+    reset(mockRequestSessionData)
+    reset(mockRegistrationDetailsService)
+    reset(mockSubscriptionDetailsService)
     super.afterEach()
   }
 
@@ -207,7 +207,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   def showFormWithAuthenticatedUser(
     userId: String = defaultUserId,
     userLocation: Option[String] = Some(UserLocation.Uk)
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
@@ -215,7 +215,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     test(organisationTypeController.form(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  def showFormWithUnauthenticatedUser(test: Future[Result] => Any) {
+  def showFormWithUnauthenticatedUser(test: Future[Result] => Any): Unit = {
     withNotLoggedInUser(mockAuthConnector)
 
     test(organisationTypeController.form(atarService).apply(SessionBuilder.buildRequestWithSessionNoUser))
@@ -226,7 +226,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     userId: String = defaultUserId,
     organisationType: Option[CdsOrganisationType] = None,
     userLocation: Option[String] = Some(UserLocation.Uk)
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     organisationType foreach { o =>

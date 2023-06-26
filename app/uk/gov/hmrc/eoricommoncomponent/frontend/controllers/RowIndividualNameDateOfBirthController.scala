@@ -66,7 +66,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
   def submit(isInReviewMode: Boolean, organisationType: String, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
-      thirdCountryIndividualNameDateOfBirthForm.bindFromRequest.fold(
+      thirdCountryIndividualNameDateOfBirthForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(
             BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, isInReviewMode))

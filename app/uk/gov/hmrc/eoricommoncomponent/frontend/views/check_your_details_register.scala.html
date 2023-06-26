@@ -193,28 +193,6 @@
     }
 }
 
-@disclosureLabel = @{
-    if (isPartnership) {
-        messages("cds.form.disclosure.partnership")
-    } else if(isIndividual || isSoleTrader) {
-        messages("cds.form.disclosure.individual")
-    } else if(isCharity || isRowOrganisation) {
-        messages("cds.form.disclosure.organisation")
-    } else {
-        messages("cds.form.disclosure")
-    }
-}
-
-@eoriCheckerConsentYes = @{
-    if (isPartnership) {
-        messages("cds.eori-checker-consent.partnership.yes")
-    } else if(isIndividual || isSoleTrader) {
-        messages("cds.eori-checker-consent.individual-or-sole-trader.yes")
-    } else {
-        messages("cds.eori-checker-consent.yes")
-    }
-}
-
 @addressViewModelHtml(ad: AddressViewModel) = {
     @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.street))
     @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.city))
@@ -449,8 +427,8 @@ else Seq.empty[SummaryListRow]
 @summary = @{
   Seq(
     summaryListRow(
-        key = disclosureLabel,
-        value = Some(Html(if(personalDataDisclosureConsent) eoriCheckerConsentYes else messages("cds.eori-checker-consent.no"))),
+        key = messages("cds.form.disclosure"),
+        value = Some(Html(if(personalDataDisclosureConsent) messages("cds.yes") else messages("cds.no"))),
         call = Some(DisclosePersonalDetailsConsentController.reviewForm(service))
     )
   )

@@ -17,12 +17,12 @@
 package unit.controllers
 
 import common.pages.registration.VatGroupPage
-import org.mockito.Mockito.when
+
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EmailController, VatDetailsController}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, FeatureFlags, VatGroupController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ControllerSpec
 import util.builders.YesNoFormBuilder.{invalidRequest, ValidRequest}
@@ -49,7 +49,7 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
     "allow unauthenticated users to access the yes no answer form" in {
       showForm() { result =>
         status(result) shouldBe OK
-        CdsPage(contentAsString(result)).title should startWith(VatGroupPage.title)
+        CdsPage(contentAsString(result)).title() should startWith(VatGroupPage.title)
       }
     }
   }
@@ -99,12 +99,10 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
 
   }
 
-  def showForm()(test: Future[Result] => Any) {
-    test(controller.createForm(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken))
-  }
+  def showForm()(test: Future[Result] => Any): Unit =
+    test(controller.createForm(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
-  def submitForm(form: Map[String, String])(test: Future[Result] => Any) {
+  def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit =
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
-  }
 
 }

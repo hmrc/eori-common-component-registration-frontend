@@ -109,7 +109,7 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
         when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
           Future.successful(RegistrationDetailsBuilder.individualRegistrationDetails)
         )
-        when(mockRegistrationConfirmService.clearRegistrationData()).thenReturn(Future.successful())
+        when(mockRegistrationConfirmService.clearRegistrationData()).thenReturn(Future.successful((): Unit))
 
         val result = await(
           service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(noAnswered)))

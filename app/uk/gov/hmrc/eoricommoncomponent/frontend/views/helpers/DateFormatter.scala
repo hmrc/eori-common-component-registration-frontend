@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers
 
-import javax.inject.Inject
+import play.api.i18n.Lang.logger
 
+import javax.inject.Inject
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.language.LanguageUtils
+
+import scala.util.{Failure, Success, Try}
 
 class DateFormatter @Inject() (languageUtils: LanguageUtils) {
 
@@ -39,7 +42,12 @@ class DateFormatter @Inject() (languageUtils: LanguageUtils) {
     tryConvert.getOrElse(dateString)
   }
 
-  def formatLocalDate(date: LocalDate)(implicit messages: Messages): String =
-    try Some(date.format(longDateFormatter)).getOrElse(throw new Exception("Cannot convert date"))
+  def formatLocalDate(date: LocalDate): String =
+    Try(date.format(longDateFormatter)) match {
+      case Success(date) => date
+      case Failure(e) =>
+        logger.error("Cannot convert date", e)
+        throw e
+    }
 
 }

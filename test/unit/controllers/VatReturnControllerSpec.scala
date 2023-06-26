@@ -122,7 +122,7 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
       redirectToCannotConfirmIdentity() {
         result =>
           status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+          CdsPage(contentAsString(result)).title() should startWith("We cannot verify your VAT details")
       }
     }
   }
@@ -137,7 +137,7 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
   }
 
-  private def redirectToCannotConfirmIdentity(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def redirectToCannotConfirmIdentity(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.redirectToCannotConfirmIdentity(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }

@@ -56,7 +56,7 @@ class WhatIsYourEmailController @Inject() (
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
-        emailForm.bindFromRequest.fold(
+        emailForm.bindFromRequest().fold(
           formWithErrors => Future.successful(BadRequest(whatIsYourEmailView(emailForm = formWithErrors, service))),
           formData => submitNewDetails(GroupId(userWithEnrolments.groupId), formData, service)
         )

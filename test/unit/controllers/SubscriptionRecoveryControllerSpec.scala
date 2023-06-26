@@ -104,18 +104,19 @@ class SubscriptionRecoveryControllerSpec
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
-    reset(
-      mockSessionCache,
-      mockOrgRegistrationDetails,
-      mockRequestSessionData,
-      mockHandleSubscriptionService,
-      mockTaxEnrolmentService
-    )
+    reset(mockSessionCache)
+    reset(mockOrgRegistrationDetails)
+    reset(mockRequestSessionData)
+    reset(mockHandleSubscriptionService)
+    reset(mockTaxEnrolmentService)
+
     when(mockRandomUUIDGenerator.generateUUIDAsString).thenReturn("MOCKUUID12345")
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockSessionCache, mockOrgRegistrationDetails, mockRequestSessionData)
+    reset(mockSessionCache)
+    reset(mockOrgRegistrationDetails)
+    reset(mockRequestSessionData)
 
     super.afterEach()
   }
@@ -437,19 +438,19 @@ class SubscriptionRecoveryControllerSpec
 
   }
 
-  def callEnrolmentComplete(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def callEnrolmentComplete(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
 
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.complete(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  def callEnrolmentCDSComplete(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def callEnrolmentCDSComplete(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
 
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.complete(cdsService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  def callExistingEori(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  def callExistingEori(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
 
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.eoriExist(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))

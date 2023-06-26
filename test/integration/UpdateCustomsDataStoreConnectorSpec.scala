@@ -75,10 +75,10 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
     AuditService.stubAuditService()
   }
 
-  override def beforeAll: Unit =
+  override def beforeAll(): Unit =
     startMockServer()
 
-  override def afterAll: Unit =
+  override def afterAll(): Unit =
     stopMockServer()
 
   """{

@@ -52,10 +52,10 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
     AuditService.stubAuditService()
   }
 
-  override def beforeAll: Unit =
+  override def beforeAll(): Unit =
     startMockServer()
 
-  override def afterAll: Unit =
+  override def afterAll(): Unit =
     stopMockServer()
 
   private val serviceRequestJson =

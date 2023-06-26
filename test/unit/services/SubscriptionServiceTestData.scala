@@ -746,7 +746,7 @@ trait SubscriptionServiceTestData extends TestData {
       }
       """.stripMargin)
 
-  def subscriptionFailedResponseJson(statusText: String = ""): JsValue =
+  def subscriptionFailedResponseJson(statusText: String = "", paramValue: String = "FAIL"): JsValue =
     Json.parse(s"""
          | {
          | "subscriptionCreateResponse": {
@@ -757,7 +757,7 @@ trait SubscriptionServiceTestData extends TestData {
          | "returnParameters": [
          | {
          | "paramName": "POSITION",
-         | "paramValue": "FAIL"
+         | "paramValue": "$paramValue"
          |}
          |]
          |}

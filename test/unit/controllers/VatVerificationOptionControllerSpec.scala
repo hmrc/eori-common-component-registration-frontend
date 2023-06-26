@@ -54,7 +54,7 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
 
   "Submitting VAT verification option" should {
     when(mockSubscriptionDetailsService.cacheVatVerificationOption(any())(any[Request[_]])).thenReturn(
-      Future.successful()
+      Future.successful((): Unit)
     )
     "return to the same location with bad request when submitting invalid request" in {
       submitForm(invalidRequest) { result =>

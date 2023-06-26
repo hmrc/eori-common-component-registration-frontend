@@ -73,17 +73,17 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     resetMockServer()
   }
 
-  override def beforeAll: Unit =
+  override def beforeAll(): Unit =
     startMockServer()
 
-  override def afterAll: Unit =
+  override def afterAll(): Unit =
     stopMockServer()
 
   "Calling getEmailVerificationState" when {
 
     "the email is verified" should {
       "return an EmailVerified response" in {
-        EmailVerificationStubService.stubEmailVerified
+        EmailVerificationStubService.stubEmailVerified()
 
         val expected                               = Right(EmailVerified)
         val result: EmailVerificationStateResponse = await(connector.getEmailVerificationState(email))
@@ -94,7 +94,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     "the email is not verified" should {
 
       "return an EmailNotVerified response" in {
-        EmailVerificationStubService.stubEmailNotVerified
+        EmailVerificationStubService.stubEmailNotVerified()
 
         val expected = Right(EmailNotVerified)
         val result: EmailVerificationStateResponse =
@@ -107,7 +107,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     "the email service Internal Server Error" should {
 
       "return an Internal Server Error" in {
-        EmailVerificationStubService.stubEmailVerifiedInternalServerError
+        EmailVerificationStubService.stubEmailVerifiedInternalServerError()
         val expected = Left(
           EmailVerificationStateErrorResponse(
             INTERNAL_SERVER_ERROR,
@@ -127,7 +127,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     "the post is successful" should {
       "return an EmailVerificationRequestSent" in {
         val expected = Right(EmailVerificationRequestSent)
-        EmailVerificationStubService.stubVerificationRequestSent
+        EmailVerificationStubService.stubVerificationRequestSent()
         val result: EmailVerificationRequestResponse =
           await(connector.createEmailVerificationRequest(email, expectedContinueUrl))
 
@@ -139,7 +139,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
 
       "return an EmailAlreadyVerified" in {
         val expected = Right(EmailAlreadyVerified)
-        EmailVerificationStubService.stubEmailAlreadyVerified
+        EmailVerificationStubService.stubEmailAlreadyVerified()
 
         val result: EmailVerificationRequestResponse =
           await(connector.createEmailVerificationRequest(email, expectedContinueUrl))
@@ -158,7 +158,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
             EmailVerificationStubService.internalServerErrorJson.toString
           )
         )
-        EmailVerificationStubService.stubVerificationRequestError
+        EmailVerificationStubService.stubVerificationRequestError()
 
         val result: EmailVerificationRequestResponse =
           await(connector.createEmailVerificationRequest("scala@example.com", "/home"))

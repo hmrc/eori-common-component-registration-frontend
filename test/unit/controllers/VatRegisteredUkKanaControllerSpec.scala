@@ -46,7 +46,7 @@ class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMo
     "allow unauthenticated users to access the yes no answer form" in {
       showForm() { result =>
         status(result) shouldBe OK
-        CdsPage(contentAsString(result)).title should startWith("Is your organisation VAT registered in the UK?")
+        CdsPage(contentAsString(result)).title() should startWith("Is your organisation VAT registered in the UK?")
       }
     }
   }
@@ -95,12 +95,10 @@ class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMo
     }
   }
 
-  def showForm()(test: Future[Result] => Any) {
-    test(controller.form(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken))
-  }
+  def showForm()(test: Future[Result] => Any): Unit =
+    test(controller.form(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
-  def submitForm(form: Map[String, String])(test: Future[Result] => Any) {
+  def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit =
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
-  }
 
 }

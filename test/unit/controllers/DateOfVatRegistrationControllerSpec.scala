@@ -24,14 +24,13 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfVatRegistrationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, we_cannot_confirm_your_identity}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
-import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -84,7 +83,6 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
         "vat-registration-date.year"  -> "2017"
       )
 
-      val vatRegistrationDate = VatRegistrationDate(LocalDate.of(2017, 1, 1))
       submitForm(validReturnTotal) { result =>
         status(result) shouldBe SEE_OTHER
       }
@@ -132,7 +130,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
       redirectToCannotConfirmIdentity() {
         result =>
           status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title should startWith("We cannot verify your VAT details")
+          CdsPage(contentAsString(result)).title() should startWith("We cannot verify your VAT details")
       }
     }
   }
@@ -147,7 +145,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
   }
 
-  private def redirectToCannotConfirmIdentity(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def redirectToCannotConfirmIdentity(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.redirectToCannotConfirmIdentity(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }

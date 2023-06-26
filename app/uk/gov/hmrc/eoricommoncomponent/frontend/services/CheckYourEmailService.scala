@@ -68,14 +68,16 @@ class CheckYourEmailService @Inject() (
           // $COVERAGE-OFF$Loggers
           logger.warn(s"[CheckYourEmailService][createForm] -   emailStatus cache none")
           // $COVERAGE-ON
-          Future.successful(Ok(checkYourEmailView(None, confirmEmailYesNoAnswerForm, isInReviewMode = false, service)))
+          Future.successful(
+            Ok(checkYourEmailView(None, confirmEmailYesNoAnswerForm(), isInReviewMode = false, service))
+          )
         }
       } { emailStatus =>
         if (emailVerificationView)
           Future.successful(Ok(verifyYourEmail(emailStatus.email, service)))
         else
           Future.successful(
-            Ok(checkYourEmailView(emailStatus.email, confirmEmailYesNoAnswerForm, isInReviewMode = false, service))
+            Ok(checkYourEmailView(emailStatus.email, confirmEmailYesNoAnswerForm(), isInReviewMode = false, service))
           )
       }
     }
