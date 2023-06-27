@@ -23,9 +23,12 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
+
+
 @this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
-@(matchNinoIdForm: Form[NinoMatchModel], service: Service)(implicit request: Request[_], messages: Messages)
+
+@(matchNinoIdForm: Form[NinoMatchModel]  ,service: Service)(implicit request: Request[_], messages: Messages)
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
     @inputRadioGroup(
@@ -34,15 +37,15 @@
         Map.empty,
         Some(label),
         None,
-        '_divClass -> "govuk-form-group inline",
-        '_legend -> messages("cds.matching.nino.row.header"),
-        '_isLegendH1 -> true
+        Symbol("_divClass") -> "govuk-form-group inline",
+        Symbol("_legend") -> messages("cds.matching.nino.row.header"),
+        Symbol("_isLegendH1") -> true
     )
 }
 
 @label = {
-<p class="govuk-body">@messages("cds.matching.nino.row.description")</p>
-<p class="govuk-body">@Html(messages("cds.matching.nino.nino.hint"))</p>
+    <p class="govuk-body">@messages("cds.matching.nino.row.description")</p>
+
 }
 
 @layout_di(messages("cds.matching.nino.row.title"), form = Some(matchNinoIdForm)) {
