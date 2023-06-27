@@ -1574,6 +1574,7 @@ ecc.start-page.title.gbss = Tanysgrifiwch i’r Gwasanaeth Diogelwch (yn y DU) a
 ecc.start-page.title.ctc = Tanysgrifiwch i’r System Gludo Gyfrifiadurol Newydd (NCTS) a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.cds = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.eori-only = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
+ecc.start-page.title.esc = Tanysgrifiwch ac ewch ati i gael rhif EORI sy’n dechrau gyda GB
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
 ecc.start-page.para1.bullet1 = rhif EORI
@@ -1590,6 +1591,7 @@ ecc.start-page.para1.bullet2.gbss = tanysgrifiad i’r Gwasanaeth Diogelwch (yn 
 ecc.start-page.para1.bullet2.ctc = tanysgrifiad i’r System Gludo Gyfrifiadurol Newydd (NCTS)
 ecc.start-page.para1.bullet2.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
+ecc.start-page.para1.bullet2.esc = rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor
 
 ecc.start-page.when.title = Yr hyn y bydd ei angen arnoch
 ecc.start-page.when.title2 = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU
@@ -1675,6 +1677,7 @@ cds.subscription.outcomes.success.extra.information.next.new.ss =<li>gwneud datg
 cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>gwneud datganiad cryno wrth gyrraedd</li>
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
+cds.subscription.outcomes.success.extra.information.next.new.esc =<li>rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor</li>
 
 ecc.eor-vat-return-error.incorrect.input =  Nodwch werth hyd at 2 le degol. Er enghraifft, £100.00
 ecc.eor-vat-return-error.incorrect.no-input = Nodwch gyfanswm eich Ffurflen TAW ddiweddaraf neu swm Blwch 5
@@ -1696,4 +1699,5 @@ ecc.start-page.para1.bullet2.new.gbss = tanysgrifiad i’r Gwasanaeth Diogelwch 
 ecc.start-page.para1.bullet2.new.ctc = tanysgrifiad i’r System Gludo Gyfrifiadurol Newydd (NCTS)
 ecc.start-page.para1.bullet2.new.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.new.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
+ecc.start-page.para1.bullet2.new.esc = tanysgrifiad ar gyfer Rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor
 
