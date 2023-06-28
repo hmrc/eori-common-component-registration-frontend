@@ -142,7 +142,7 @@ val testDependencies = Seq(
   "us.codecraft"         % "xsoup"                   % "0.3.6"    % "test,it",
   "org.mockito"          % "mockito-core"            % "5.2.0"    % "test,it",
   "org.scalatestplus"   %% "mockito-4-6"             % "3.2.15.0" % "test, it",
-  "org.pegdown"          % "pegdown"                 % "1.6.0",
+  "org.pegdown"          % "pegdown"                 % "1.6.0"    % "test, it",
   "uk.gov.hmrc.mongo"   %% "hmrc-mongo-test-play-28" % mongoDbVersion  % "test, it",
   "com.vladsch.flexmark" % "flexmark-all"            % "0.64.6"   % "test,it"
 )
