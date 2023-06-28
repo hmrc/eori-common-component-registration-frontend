@@ -25,10 +25,10 @@
 
 
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, p: helpers.paragraph)
 
 
-@(matchNinoIdForm: Form[NinoMatchModel]  ,service: Service)(implicit request: Request[_], messages: Messages)
+@(matchNinoIdForm: Form[NinoMatchModel], service: Service)(implicit request: Request[_], messages: Messages)
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
     @inputRadioGroup(
@@ -44,7 +44,7 @@
 }
 
 @label = {
-    <p class="govuk-body">@messages("cds.matching.nino.row.description")</p>
+    @p(Some("hint-text-nino"), messages("cds.matching.nino.row.description"))
 
 }
 
