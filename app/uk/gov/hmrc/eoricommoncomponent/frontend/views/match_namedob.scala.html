@@ -30,12 +30,13 @@
 
 
 @updateFormErrors =@{
-    businessDetailsForm.copy(errors = DateConverter.updateDateOfBirthErrors(businessDetailsForm.errors))
+    val dateOfBirthHasErrors = businessDetailsForm.copy(errors = DateConverter.updateDateOfBirthErrors(businessDetailsForm.errors))
+    if(dateOfBirthHasErrors.hasErrors) businessDetailsForm else dateOfBirthHasErrors
 }
 
 @layout_di(messages("cds.matching.individual.title"), form = Some(businessDetailsForm)) {
     <div>
-        @errorSummary(updateFormErrors.errors,
+        @errorSummary(businessDetailsForm.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
         <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>

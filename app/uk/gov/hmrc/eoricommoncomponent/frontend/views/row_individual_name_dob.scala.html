@@ -30,12 +30,13 @@
 @(individualNameAndDateOfBirthForm: Form[IndividualNameAndDateOfBirth], organisationType: String, service: Service, isInReviewMode: Boolean)(implicit request: Request[_], messages: Messages)
 
 @updateFormErrors =@{
-    individualNameAndDateOfBirthForm.copy(errors = DateConverter.updateDateOfBirthErrors(individualNameAndDateOfBirthForm.errors))
+    val dateOfBirthHasErrors = individualNameAndDateOfBirthForm.copy(errors = DateConverter.updateDateOfBirthErrors(individualNameAndDateOfBirthForm.errors))
+    if(dateOfBirthHasErrors.hasErrors)  individualNameAndDateOfBirthForm else dateOfBirthHasErrors
 }
 
 @layout_di(messages("cds.matching.individual.title"), form = Some(individualNameAndDateOfBirthForm)) {
     <div>
-        @errorSummary(updateFormErrors.errors,
+        @errorSummary(individualNameAndDateOfBirthForm.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
         <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>

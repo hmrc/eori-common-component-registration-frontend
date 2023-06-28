@@ -29,12 +29,13 @@
 @(ninoForm: Form[NinoMatch], organisationType: String, service: Service)(implicit request: Request[_], messages: Messages)
 
 @updateFormErrors =@{
-    ninoForm.copy(errors = DateConverter.updateDateOfBirthErrors(ninoForm.errors))
+    val dateOfBirthHasErrors = ninoForm.copy(errors = DateConverter.updateDateOfBirthErrors(ninoForm.errors))
+    if(dateOfBirthHasErrors.hasErrors) ninoForm else dateOfBirthHasErrors
 }
 
 @layout_di(messages("cds.matching.nino.title"), form = Some(ninoForm)) {
     <div>
-        @errorSummary(updateFormErrors.errors,
+        @errorSummary(ninoForm.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
         <h1>@messages("cds.matching.nino.header")</h1>
