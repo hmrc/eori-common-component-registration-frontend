@@ -1488,8 +1488,8 @@ cds.email-confirmed.para.get-access=You can continue with your application.
 
 cds.subscription.outcomes.success.will-send-email=We will send you an email to confirm when you have access to {0}. This can take up to two hours.
 
-cds.registration.you-already-have-eori.title=You already have an EORI
-cds.registration.you-already-have-eori.para1=We have detected you already have an EORI.  You can continue and subscribe to the the {0} service.
+cds.registration.you-already-have-eori.title=You already have an EORI number
+cds.registration.you-already-have-eori.para1=You can subscribe to this service.
 
 cds.registration.you-already-have-eori.individual.title=You already have an EORI number
 cds.registration.you-already-have-eori.group.title=Your business or organisation already has an EORI number
