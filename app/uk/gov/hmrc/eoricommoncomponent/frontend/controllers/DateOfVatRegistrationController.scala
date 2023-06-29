@@ -57,7 +57,7 @@ class DateOfVatRegistrationController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      vatRegistrationDateForm.bindFromRequest.fold(
+      vatRegistrationDateForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
         formData => lookupDateOfVatRegistration(formData, service)
       )

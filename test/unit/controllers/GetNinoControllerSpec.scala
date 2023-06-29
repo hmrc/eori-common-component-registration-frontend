@@ -60,7 +60,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   private val notMatchedError =
     "Your details have not been found. Check that your details are correct and then try again."
 
-  override def beforeEach: Unit =
+  override def beforeEach(): Unit =
     reset(mockMatchingService)
 
   val validNino                         = Nino(NinoFormBuilder.Nino)
@@ -183,7 +183,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     )
   }
 
-  private def submitForm(form: Map[String, String])(test: Future[Result] => Any) {
+  private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       doYouHaveNinoController

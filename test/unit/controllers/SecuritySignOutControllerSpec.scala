@@ -48,7 +48,7 @@ class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
       displayPage(atarService) { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("For your security, we signed you out")
+        page.title() should startWith("For your security, we signed you out")
       }
     }
 

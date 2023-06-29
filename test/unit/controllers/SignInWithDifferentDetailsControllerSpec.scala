@@ -17,20 +17,19 @@
 package unit.controllers
 
 import common.pages.subscription.ShortNamePage
-import org.mockito.ArgumentMatchers._
+
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.{Request, Result}
+import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SignInWithDifferentDetailsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sign_in_with_different_details
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SignInWithDifferentDetailsControllerSpec
@@ -44,7 +43,7 @@ class SignInWithDifferentDetailsControllerSpec
 
   private val controller = new SignInWithDifferentDetailsController(mockAuthAction, signInWithDifferentDetailsView, mcc)
 
-  override def beforeEach: Unit =
+  override def beforeEach(): Unit =
     reset(mockCdsFrontendDataCache)
 
   "Displaying the form in create mode" should {
@@ -58,13 +57,9 @@ class SignInWithDifferentDetailsControllerSpec
     }
   }
 
-  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any) {
+  private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)))
-  }
-
-  private def mockFunctionWithRegistrationDetails(registrationDetails: RegistrationDetails) {
-    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(registrationDetails)
   }
 
 }

@@ -26,15 +26,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.con
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.CheckYourEmailService
 
-import scala.concurrent.ExecutionContext
-
 @Singleton
 class CheckYourEmailController @Inject() (
   authAction: AuthAction,
   checkYourEmailService: CheckYourEmailService,
   mcc: MessagesControllerComponents
-)(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
+) extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -45,7 +42,7 @@ class CheckYourEmailController @Inject() (
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
-        confirmEmailYesNoAnswerForm
+        confirmEmailYesNoAnswerForm()
           .bindFromRequest()
           .fold(
             formWithErrors =>

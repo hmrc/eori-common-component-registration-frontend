@@ -143,7 +143,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
     }
   }
 
-  private def showForm(test: Future[Result] => Any) {
+  private def showForm(test: Future[Result] => Any): Unit = {
     val aUserId = defaultUserId
     withAuthorisedUser(aUserId, mockAuthConnector)
 
@@ -155,7 +155,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
     test(result)
   }
 
-  private def submitForm(form: Map[String, String])(test: Future[Result] => Any) {
+  private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit = {
     val aUserId = defaultUserId
     withAuthorisedUser(aUserId, mockAuthConnector)
 

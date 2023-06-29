@@ -54,24 +54,22 @@ class YouCannotUseServiceControllerSpec extends ControllerSpec with BeforeAndAft
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       page() { result =>
         status(result) shouldBe UNAUTHORIZED
-        CdsPage(contentAsString(result)).title should startWith("You cannot use this service")
+        CdsPage(contentAsString(result)).title() should startWith("You cannot use this service")
       }
     }
 
     "show unauthorised view" in {
       unauthorisedPage() { result =>
         status(result) shouldBe UNAUTHORIZED
-        CdsPage(contentAsString(result)).title should startWith("Service unavailable")
+        CdsPage(contentAsString(result)).title() should startWith("Service unavailable")
       }
     }
   }
 
-  def page()(test: Future[Result] => Any) {
-    test(controller.page(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken))
-  }
+  def page()(test: Future[Result] => Any): Unit =
+    test(controller.page(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
-  def unauthorisedPage()(test: Future[Result] => Any) {
-    test(controller.unauthorisedPage(atarService).apply(SessionBuilder.buildRequestWithSessionNoUserAndToken))
-  }
+  def unauthorisedPage()(test: Future[Result] => Any): Unit =
+    test(controller.unauthorisedPage(atarService).apply(SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
 }

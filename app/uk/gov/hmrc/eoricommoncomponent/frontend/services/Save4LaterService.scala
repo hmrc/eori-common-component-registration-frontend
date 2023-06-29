@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationKeys, Save4LaterConnector}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service

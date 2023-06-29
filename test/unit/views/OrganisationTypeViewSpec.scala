@@ -65,7 +65,8 @@ class OrganisationTypeViewSpec
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockAuthConnector, mockRequestSessionData)
+    reset(mockAuthConnector)
+    reset(mockRequestSessionData)
 
     super.afterEach()
   }
@@ -123,7 +124,7 @@ class OrganisationTypeViewSpec
     maybeOrgType: Option[CdsOrganisationType] = None,
     userLocation: Option[String] = None,
     userId: String = defaultUserId
-  )(test: Future[Result] => Any) {
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
 

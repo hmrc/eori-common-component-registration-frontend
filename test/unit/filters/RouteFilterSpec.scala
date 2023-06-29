@@ -54,7 +54,8 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
   }
 
   override protected def afterEach(): Unit = {
-    reset(mockErrorHandler, mockConfig)
+    reset(mockErrorHandler)
+    reset(mockConfig)
     super.afterEach()
   }
 

@@ -62,15 +62,14 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   val sapNumber = "1234567890"
 
-  override protected def beforeEach() {
-    reset(
-      mockCdsFrontendDataCache,
-      mockSubscriptionStatusService,
-      mockRequestSessionData,
-      mockClearCacheAndRegistrationIdentificationService,
-      mockRegistrationDetailsFunction,
-      mockRegistrationDetails
-    )
+  override protected def beforeEach(): Unit = {
+    reset(mockCdsFrontendDataCache)
+    reset(mockSubscriptionStatusService)
+    reset(mockRequestSessionData)
+    reset(mockClearCacheAndRegistrationIdentificationService)
+    reset(mockRegistrationDetailsFunction)
+    reset(mockRegistrationDetails)
+
   }
 
   "currentSubscriptionStatus" should {
@@ -192,7 +191,10 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
 
     }
 
-    def mockOrganisationTypeWithRegistration(organisationType: CdsOrganisationType, maybeCustomsId: Option[CustomsId]) {
+    def mockOrganisationTypeWithRegistration(
+      organisationType: CdsOrganisationType,
+      maybeCustomsId: Option[CustomsId]
+    ): Unit = {
       when(mockRequestSessionData.userSelectedOrganisationType(meq(mockRequest))).thenReturn(Some(organisationType))
       when(mockRegistrationDetails.customsId).thenReturn(maybeCustomsId)
     }

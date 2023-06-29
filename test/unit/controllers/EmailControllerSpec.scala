@@ -63,8 +63,6 @@ class EmailControllerSpec
   private val enrolmentPendingAgainstGroupIdView = instanceOf[enrolment_pending_against_group_id]
   private val enrolmentPendingForUserView        = instanceOf[enrolment_pending_for_user]
 
-  private val infoXpath = "//*[@id='info']"
-
   private val userGroupIdSubscriptionStatusCheckService =
     new UserGroupIdSubscriptionStatusCheckService(mockSubscriptionStatusService, mockSave4LaterService)
 
@@ -83,7 +81,7 @@ class EmailControllerSpec
 
   private val emailStatus = EmailStatus(Some("test@example.com"))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Some(emailStatus)))
     when(
@@ -157,7 +155,7 @@ class EmailControllerSpec
       showFormRegister() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title should startWith("Someone in your organisation has already applied")
+        page.title() should startWith("Someone in your organisation has already applied")
       }
     }
 
@@ -219,7 +217,7 @@ class EmailControllerSpec
   private def showFormRegister(userId: String = defaultUserId)(test: Future[Result] => Any): Unit =
     showForm(userId)(test)
 
-  private def showForm(userId: String)(test: Future[Result] => Any) {
+  private def showForm(userId: String)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndPath("/atar", userId)))
   }

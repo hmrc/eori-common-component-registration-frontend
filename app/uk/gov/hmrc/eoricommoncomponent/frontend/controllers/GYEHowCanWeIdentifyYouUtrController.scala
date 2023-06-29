@@ -63,7 +63,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       orgTypeLookup.etmpOrgType.flatMap(
         orgType =>
-          subscriptionUtrForm.bindFromRequest.fold(
+          subscriptionUtrForm.bindFromRequest().fold(
             formWithErrors =>
               Future.successful(
                 BadRequest(

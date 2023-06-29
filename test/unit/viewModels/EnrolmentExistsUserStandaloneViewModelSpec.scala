@@ -17,7 +17,7 @@
 package unit.viewModels
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels.EnrolmentExistsUserStandaloneViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.EnrolmentExistsUserStandaloneViewModel
 import util.ControllerSpec
 
 class EnrolmentExistsUserStandaloneViewModelSpec extends UnitSpec with ControllerSpec {
@@ -29,11 +29,11 @@ class EnrolmentExistsUserStandaloneViewModelSpec extends UnitSpec with Controlle
     "display correct message for admin user" in {
       viewModel(isAdminUser =
         true
-      ).titleAndHeaderLabel shouldBe "Your business or organisation already has an EORI number"
+      ).titleAndHeaderLabel() shouldBe "Your business or organisation already has an EORI number"
     }
 
     "display correct message for standard user" in {
-      viewModel(isAdminUser = false).titleAndHeaderLabel shouldBe "You already have an EORI number"
+      viewModel(isAdminUser = false).titleAndHeaderLabel() shouldBe "You already have an EORI number"
     }
   }
 

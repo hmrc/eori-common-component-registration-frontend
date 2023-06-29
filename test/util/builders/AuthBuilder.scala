@@ -43,7 +43,7 @@ object AuthBuilder {
     userCredentials: Option[Credentials] = Some(Credentials("SomeCredId", "GovernmentGateway")),
     userCredentialRole: Option[CredentialRole] = Some(User),
     groupId: Option[String] = Some("groupId-abcd-1234")
-  ) {
+  ): Unit = {
 
     when(mockAuthConnector.authorise(any(), ArgumentMatchers.eq(EmptyRetrieval))(any(), any()))
       .thenReturn(Future.successful(()))

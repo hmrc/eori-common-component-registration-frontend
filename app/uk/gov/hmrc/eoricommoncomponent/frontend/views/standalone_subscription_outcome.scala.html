@@ -35,7 +35,7 @@
 <div>
     @govukPanel(Panel(
         title = HtmlContent(messages("cds.reg.existing.outcomes.success.heading.part1.standalone", StringEscapeUtils.escapeXml11(name), eori)),
-        content = HtmlContent(s""" <h2 id="issued-date" class="govuk-heading-s govuk-panel--confirmation">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}""")
+        content = HtmlContent(s""" <p id="issued-date" class="govuk-heading-s govuk-panel–-confirmation">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}""")
     ))
 
     <div id='additional-information' class="govuk-form-group">

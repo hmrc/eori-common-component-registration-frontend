@@ -36,8 +36,9 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
   private val mockReqSessionData = mock[RequestSessionData]
   private val req                = mock[Request[AnyContent]]
 
-  override def beforeEach {
-    reset(mockCache, mockReqSessionData)
+  override def beforeEach(): Unit = {
+    reset(mockCache)
+    reset(mockReqSessionData)
   }
 
   val lookup = new OrgTypeLookup(mockReqSessionData, mockCache)(global)

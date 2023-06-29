@@ -37,7 +37,7 @@
 <div>
     @govukPanel(Panel(
         title = HtmlContent(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")} ${StringEscapeUtils.escapeXml11(name)}"""),
-        content = HtmlContent(s""" <h2 id="issued-date" class="govuk-heading-s govuk-panel--confirmation">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</h2><p id="eori-number" class="govuk-heading-m govuk-panel--confirmation govuk-!-font-size-27">${messages("cds.subscription.outcomes.success.eori")} <br>$eori</p>""")
+        content = HtmlContent(s""" <p id="issued-date" class="govuk-heading-s govuk-panel--confirmation">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</p><p id="eori-number" class="govuk-heading-m govuk-panel--confirmation govuk-!-font-size-27">${messages("cds.subscription.outcomes.success.eori")} <br>$eori</p>""")
     ))
 
     <div id='additional-information' class="govuk-form-group">

@@ -43,7 +43,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
   private val controller =
     new WhatIsYourOrgNameController(mockAuthAction, mcc, whatIsYourOrgNameView, mockSubscriptionDetailsService)
 
-  override protected def afterEach: Unit = {
+  override protected def afterEach(): Unit = {
     reset(mockSubscriptionDetailsService)
 
     super.afterEach()
@@ -58,7 +58,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
     )
     "redirect to the 'Do you have a UTR? page when isInReviewMode is false" in {
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any[Request[_]])).thenReturn(
-        Future.successful(true)
+        Future.successful((): Unit)
       )
       when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[Request[_]]))
         .thenReturn(Future.successful(()))
@@ -95,7 +95,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
 
   def submitForm(isInReviewMode: Boolean, form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
-  ) {
+  ): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
     val result = controller
       .submit(isInReviewMode, "third-country-organisation", atarService)

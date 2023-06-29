@@ -23,15 +23,14 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sign_in_with_different_details
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
 class SignInWithDifferentDetailsController @Inject() (
   authAction: AuthAction,
   signInWithDifferentDetailsView: sign_in_with_different_details,
   mcc: MessagesControllerComponents
-)(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
+) extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>

@@ -17,7 +17,7 @@
 package unit.domain.messaging
 
 import base.UnitSpec
-import org.mockito.Mockito.when
+
 import org.scalatestplus.mockito.MockitoSugar.mock
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address

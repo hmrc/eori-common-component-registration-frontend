@@ -51,7 +51,7 @@ class DoYouHaveNinoController @Inject() (
   def submit(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        haveRowIndividualsNinoForm.bindFromRequest.fold(
+        haveRowIndividualsNinoForm.bindFromRequest().fold(
           formWithErrors => Future.successful(BadRequest(matchNinoRowIndividualView(formWithErrors, service))),
           formData =>
             subscriptionDetailsService.cachedNinoMatch.flatMap { cachedNinoOpt =>

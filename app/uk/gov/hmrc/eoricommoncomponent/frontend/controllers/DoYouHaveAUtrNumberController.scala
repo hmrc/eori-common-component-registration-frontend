@@ -53,7 +53,7 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      haveUtrForm.bindFromRequest.fold(
+      haveUtrForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(view(organisationType, formWithErrors, service))),
         formData => destinationsByAnswer(formData, organisationType, service, isInReviewMode)
       )

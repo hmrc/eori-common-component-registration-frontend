@@ -32,9 +32,10 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
   private val mockConfig: Configuration = spy(config)
   private val mockServiceConfig         = mock[ServicesConfig]
 
-  override def beforeEach() {
+  override def beforeEach(): Unit = {
     super.beforeEach()
-    Mockito.reset(mockConfig, mockServiceConfig)
+    Mockito.reset(mockConfig)
+    Mockito.reset(mockServiceConfig)
   }
 
   "AppConfig" should {
