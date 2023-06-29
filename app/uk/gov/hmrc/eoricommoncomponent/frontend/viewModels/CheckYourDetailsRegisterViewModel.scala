@@ -51,7 +51,11 @@ case class CheckYourDetailsRegisterViewModel(
 )
 
 @Singleton
-class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatter) {
+class CheckYourDetailsRegisterConstructor @Inject() (
+  dateFormatter: DateFormatter,
+  sessionCache: SessionCache,
+  requestSessionData: RequestSessionData
+) {
 
   def getDateOfEstablishmentLabel(cdsOrgType: Option[CdsOrganisationType])(implicit messages: Messages): String = {
     val isSoleTrader = cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
@@ -124,7 +128,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (dateFormatter: DateFormatte
     }
   }
 
-  def generateViewModel(sessionCache: SessionCache, requestSessionData: RequestSessionData, service: Service)(implicit
+  def generateViewModel(service: Service)(implicit
     messages: Messages,
     request: Request[AnyContent],
     ec: ExecutionContext

@@ -48,6 +48,7 @@ import util.builders.RegistrationDetailsBuilder.{
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -61,17 +62,19 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockAuthConnector                     = mock[AuthConnector]
   private val mockAuthAction                        = authAction(mockAuthConnector)
   private val mockSessionCache                      = mock[SessionCache]
+  val dateFormatter: DateFormatter                  = instanceOf[DateFormatter]
   private val mockSubscriptionDetails               = mock[SubscriptionDetails]
   private val mockRegisterWithoutIdWithSubscription = mock[RegisterWithoutIdWithSubscriptionService]
   private val mockSubscriptionFlow                  = mock[SubscriptionFlow]
   private val mockVatControlListDetails             = mock[VatControlListResponse]
   private val mockRequestSession                    = mock[RequestSessionData]
   private val checkYourDetailsRegisterView          = instanceOf[check_your_details_register]
-  private val viewModelConstructor                  = instanceOf[CheckYourDetailsRegisterConstructor]
+
+  private val viewModelConstructor =
+    new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession)
 
   val controller = new CheckYourDetailsRegisterController(
     mockAuthAction,
-    mockSessionCache,
     mockRequestSession,
     mcc,
     checkYourDetailsRegisterView,
@@ -851,7 +854,6 @@ class CheckYourDetailsRegisterControllerSpec
   )(test: Future[Result] => Any) {
     val controller = new CheckYourDetailsRegisterController(
       mockAuthAction,
-      mockSessionCache,
       mockRequestSession,
       mcc,
       checkYourDetailsRegisterView,

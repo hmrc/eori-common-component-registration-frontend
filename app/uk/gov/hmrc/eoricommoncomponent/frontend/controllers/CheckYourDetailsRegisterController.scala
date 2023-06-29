@@ -31,7 +31,6 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class CheckYourDetailsRegisterController @Inject() (
   authAction: AuthAction,
-  sessionCache: SessionCache,
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   checkYourDetailsRegisterView: check_your_details_register,
@@ -43,7 +42,7 @@ class CheckYourDetailsRegisterController @Inject() (
   def reviewDetails(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        viewModelConstructor.generateViewModel(sessionCache, requestSessionData, service).map(
+        viewModelConstructor.generateViewModel(service).map(
           viewModel =>
             Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
         )
