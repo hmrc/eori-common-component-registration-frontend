@@ -612,11 +612,19 @@ cds.matching.organisation-address.country.error.empty=Enter your country
 cds.matching.name-id-organisation.company.name=Company name
 cds.matching.name-id-organisation.company.name.hint=Enter the exact name that’s on your company'’'s certificate of incorporation. We will use this to verify your identity.
 cds.matching.name-id-organisation.registered-company.name=Registered company name
-cds.matching.name-id-organisation.registered-company.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p> Enter the exact name that'''s on your company’s certificate of incorporation.
+cds.matching.name-id-organisation.registered-company.name.para=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.registered-company.name.hint=Enter the exact name that'''s on your company’s certificate of incorporation.
 cds.matching.name-id-organisation.partnership.name=Registered partnership name
-cds.matching.name-id-organisation.partnership.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get this name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
+cds.matching.name-id-organisation.partnership.name.para=<p class="govuk-body">We will use this to verify your identity. You can get this name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.partnership.name.hint=Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
 cds.matching.name-id-organisation.organisation.name=Organisation name
-cds.matching.name-id-organisation.organisation.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your organisation’s certificate of incorporation.
+cds.matching.name-id-organisation.organisation.name.para=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.organisation.name.hint=Enter the exact name that'''s on your organisation’s certificate of incorporation.
+cds.matching.name-id-organisation.registered-partnership.name.para = Enter the exact name that you registered with HMRC. We will use this to verify your identity.
+cds.matching.name-id-organisation.registered-partnership.name.hint = You can find this name on documents from HMRC. For example, a confirmation of your partnership registration.
+cds.matching.name-id-organisation.limited-liability-partnership.name = Registered partnership name
+cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.limited-liability-partnership.name.hint = Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
 cds.matching.name-id-organisation.organisation.no-utr=I do not have a Corporation Tax UTR
 cds.matching.name-id-organisation.organisation.no-utr.text=If you are a not for profit organisation or public body and do not have a UTR you need to {0} to complete your EORI number application.
 cds.matching.name-id-organisation.organisation.no-utr.link=use another service
@@ -1216,11 +1224,6 @@ cds.subscription.address-details.page-error.countryCode=Enter your country
 cds.subscription.address-details.countryCode.error.label=Enter your country
 cds.subscription.address-details.country.emptyValueText=Pick a country
 cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
-cds.matching.name-id-organisation.registered-partnership.name.hint = Enter the exact name that you registered with HMRC. We will use this to verify your identity. <br><br> You can find this name on documents from HMRC. For example, a confirmation of your partnership registration.
-
-cds.matching.name-id-organisation.limited-liability-partnership.name = Registered partnership name
-cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
-
 
 #address check limited companies
 confirm-business-details.heading2=Are these the organisation details you want to use to get an EORI number?
@@ -1808,6 +1811,7 @@ ecc.start-page.title.gbss = Get a subscription to the Safety and Security GB ser
 ecc.start-page.title.ctc = Get a subscription to the New Computerised Transit System (NCTS) and an EORI number starting with GB
 ecc.start-page.title.cds = Get a subscription to the Customs Declaration Service and an EORI number starting with GB
 ecc.start-page.title.eori-only = Get a subscription to the Customs Declaration Service and an EORI number starting with GB
+ecc.start-page.title.esc = Get a subscription and an EORI number starting with GB
 
 ecc.start-page.para1 = If we approve your application we will give you:
 ecc.start-page.para1.bullet1 = an EORI number
@@ -1824,6 +1828,7 @@ ecc.start-page.para1.bullet2.gbss = a subscription to the Safety and Security GB
 ecc.start-page.para1.bullet2.ctc = a subscription to the New Computerised Transit System (NCTS)
 ecc.start-page.para1.bullet2.cds = a subscription to the Customs Declaration Service
 ecc.start-page.para1.bullet2.eori-only = a subscription to the Customs Declaration Service
+ecc.start-page.para1.bullet2.esc = a subscription to Report and manage your allowance for Customs Duty Waiver claims
 
 ecc.start-page.when.title = What you will need
 ecc.start-page.when.title2 = If you are UK VAT registered
@@ -1918,6 +1923,7 @@ cds.subscription.outcomes.success.extra.information.next.new.ss =<li>make entry 
 cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>make entry summary declarations</li>
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>submit union transit declarations through NCTS</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>use the Customs Declaration Service</li>
+cds.subscription.outcomes.success.extra.information.next.new.esc =<li>report and manage your allowance for Customs Duty Waiver claims</li>
 
 ecc.eor-vat-return-error.incorrect.input = Enter a value to 2 decimal places. For example, £100.00
 ecc.eor-vat-return-error.incorrect.no-input = Enter your latest VAT Return total or Box 5 amount
@@ -1938,3 +1944,4 @@ ecc.start-page.para1.bullet2.new.ndrc = a subscription to Customs Trader Service
 ecc.start-page.para1.bullet2.new.gbss = a subscription to the Safety and Security GB service
 ecc.start-page.para1.bullet2.new.ctc = a subscription to the New Computerised Transit System (NCTS)
 ecc.start-page.para1.bullet2.new.cds = a subscription to the Customs Declaration Service
+ecc.start-page.para1.bullet2.new.esc = a subscription to Report and manage your allowance for Customs Duty Waiver claims
