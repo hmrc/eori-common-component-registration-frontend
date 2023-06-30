@@ -97,7 +97,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       "create Register",
       (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showCreateForm(flow, orgType = orgType)(_)
     ),
-    ("review Register", (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showReviewForm(flow)(_))
+    ("review Register", (flow: SubscriptionFlow, _: EtmpOrganisationType) => showReviewForm(flow)(_))
   )
 
   "Viewing the create form " should {

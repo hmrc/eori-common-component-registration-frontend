@@ -46,25 +46,17 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
     cdsOrganisationType: Option[CdsOrganisationType],
     service: Service
   )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
-    subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service, featureFlags))
+    subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service))
 
   def createRequest(
     reg: RegistrationDetails,
     subscription: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
-    service: Service,
-    featureFlags: FeatureFlags
+    service: Service
   ): SubscriptionRequest =
     reg match {
       case individual: RegistrationDetailsIndividual =>
-        SubscriptionCreateRequest(
-          individual,
-          subscription,
-          cdsOrgType,
-          individual.dateOfBirth,
-          maybe(service),
-          featureFlags
-        )
+        SubscriptionCreateRequest(individual, subscription, cdsOrgType, individual.dateOfBirth, maybe(service))
 
       case org: RegistrationDetailsOrganisation =>
         val doe = subscription.dateEstablished
@@ -75,8 +67,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
           doe.getOrElse(
             throw new IllegalStateException("Date Established must be present for an organisation subscription")
           ),
-          maybe(service),
-          featureFlags
+          maybe(service)
         ).ensuring(
           subscription.sicCode.isDefined,
           "SicCode/Principal Economic Activity must be present for an organisation subscription"

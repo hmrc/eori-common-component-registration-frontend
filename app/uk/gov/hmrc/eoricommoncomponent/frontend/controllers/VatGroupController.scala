@@ -41,7 +41,7 @@ class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupV
         formWithErrors => BadRequest(vatGroupView(formWithErrors, service)),
         yesNoAnswer =>
           if (yesNoAnswer.isYes)
-            Redirect(VatGroupsCannotRegisterUsingThisServiceController.form(service))
+            Redirect(VatGroupsCannotRegisterUsingThisServiceController.form())
           else
             Redirect(EmailController.form(service))
       )

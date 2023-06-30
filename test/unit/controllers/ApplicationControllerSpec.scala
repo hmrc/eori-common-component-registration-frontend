@@ -88,7 +88,7 @@ class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach w
       when(mockSessionCache.keepAlive(any())).thenReturn(Future.successful(true))
 
       val result =
-        controller.keepAlive(atarService).apply(SessionBuilder.buildRequestWithSessionNoUser)
+        controller.keepAlive().apply(SessionBuilder.buildRequestWithSessionNoUser)
 
       status(result) shouldBe OK
 

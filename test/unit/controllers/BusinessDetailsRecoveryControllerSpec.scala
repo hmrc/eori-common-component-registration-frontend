@@ -204,6 +204,8 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       case UserLocation.Iom               => "isle-of-man"
       case UserLocation.Islands           => "islands"
       case UserLocation.ThirdCountryIncEU => "third-country-inc-eu"
+      case _                              => throw new IllegalArgumentException("Unsupported User Location")
+
     }
 
   private def mockCacheWithRegistrationDetails(details: RegistrationDetails): Unit =

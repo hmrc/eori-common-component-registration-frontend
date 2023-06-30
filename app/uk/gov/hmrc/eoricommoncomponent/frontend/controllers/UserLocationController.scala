@@ -56,8 +56,7 @@ class UserLocationController @Inject() (
   mcc: MessagesControllerComponents,
   userLocationView: user_location,
   sub01OutcomeProcessing: sub01_outcome_processing,
-  errorTemplate: error_template,
-  featureFlags: FeatureFlags
+  errorTemplate: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -97,7 +96,7 @@ class UserLocationController @Inject() (
         details =>
           (details.location, loggedInUser.groupId) match {
             case (Some(UserLocation.Iom), Some(_)) =>
-              Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
+              Future.successful(Redirect(YouNeedADifferentServiceIomController.form()))
             case (Some(location), Some(id)) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
             case _ =>
@@ -156,7 +155,7 @@ class UserLocationController @Inject() (
   )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
     preSubStatus match {
       case SubscriptionProcessing =>
-        Future.successful(Redirect(UserLocationController.processing(service)))
+        Future.successful(Redirect(UserLocationController.processing()))
       case SubscriptionExists => handleExistingSubscription(groupId, service)
       case NewSubscription | SubscriptionRejected =>
         Future.successful(
@@ -180,7 +179,7 @@ class UserLocationController @Inject() (
     case _ => Future.successful(InternalServerError(errorTemplate()))
   }
 
-  def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def processing(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.sub01Outcome
         .map(_.processedDate)

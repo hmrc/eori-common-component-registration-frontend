@@ -101,7 +101,7 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
           )
         )
       status(result) shouldBe SEE_OTHER
-      await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists")
+      await(result).header.headers("Location") should endWith("/register/cds-enrolment-exists")
 
     }
 
@@ -115,7 +115,7 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
 
       val result =
         await(
-          controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
+          controller.enrolmentAlreadyExistsStandalone().apply(
             SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
           )
         )
@@ -142,7 +142,7 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
 
       val result =
         await(
-          controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
+          controller.enrolmentAlreadyExistsStandalone().apply(
             SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
           )
         )
@@ -186,7 +186,7 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
         .thenReturn(Future.successful(Some("testEori")))
       val result =
         await(
-          controller.enrolmentAlreadyExistsForGroupStandalone(eoriOnlyService).apply(
+          controller.enrolmentAlreadyExistsForGroupStandalone().apply(
             SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
           )
         )

@@ -25,18 +25,17 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress.wrongAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub01_outcome_processing
-import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
+import util.builders.YesNoFormBuilder.ValidRequest
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress.wrongAddress
-import util.builders.YesNoFormBuilder.ValidRequest
 
 class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
@@ -110,12 +109,12 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   "processing" should {
 
-    "Correctly redirect to sub01OutcomeProcessingView" in servicesToTest.foreach { testService =>
+    "Correctly redirect to sub01OutcomeProcessingView" in {
       when(mockSessionCache.registrationDetails(any[Request[AnyContent]])).thenReturn(Future.successful(mockRegDetails))
       when(mockSessionCache.sub01Outcome(any[Request[AnyContent]])).thenReturn(Future.successful(mockSub01Outcome))
 
       val result =
-        await(controller.processing(testService)).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+        await(controller.processing()).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       result.header.status shouldBe OK
     }

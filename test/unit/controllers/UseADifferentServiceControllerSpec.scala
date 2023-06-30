@@ -36,7 +36,7 @@ class UseADifferentServiceControllerSpec extends ControllerSpec with BeforeAndAf
       when(useADifferentService.apply()(any(), any())).thenReturn(HtmlFormat.empty)
 
       val controller = new UseADifferentServiceController(useADifferentService, mcc)
-      val result     = controller.form(atarService)(FakeRequest())
+      val result     = controller.form()(FakeRequest())
 
       status(result) shouldBe OK
     }

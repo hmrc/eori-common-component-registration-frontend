@@ -47,7 +47,7 @@ class SignInWithDifferentDetailsControllerSpec
     reset(mockCdsFrontendDataCache)
 
   "Displaying the form in create mode" should {
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form())
 
     "display para1 as 'You don’t need to apply again.'" in {
       showCreateForm() { result =>
@@ -59,7 +59,7 @@ class SignInWithDifferentDetailsControllerSpec
 
   private def showCreateForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)))
+    test(controller.form().apply(SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)))
   }
 
 }

@@ -19,7 +19,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   you_cannot_change_address_individual,
@@ -38,7 +37,7 @@ class YouCannotChangeAddressController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def page(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def page(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       if (requestSessionData.isIndividualOrSoleTrader(request) || requestSessionData.isPartnership(request))
         Future.successful(Ok(youCannotChangeAddressIndividual()))

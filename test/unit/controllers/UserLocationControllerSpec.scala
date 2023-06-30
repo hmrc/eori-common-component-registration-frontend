@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-import java.util.UUID
 import common.pages.registration.UserLocationPageOrganisation._
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
@@ -28,7 +27,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ServiceUnavailableResponse
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, UserLocationController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
@@ -44,14 +43,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -65,7 +65,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockSave4LaterService          = mock[Save4LaterService]
   private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
-  private val mockFeatureFlags               = mock[FeatureFlags]
   private val userLocationView               = instanceOf[user_location]
 
   private val sub01OutcomeProcessing = instanceOf[sub01_outcome_processing]
@@ -82,8 +81,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     mcc,
     userLocationView,
     sub01OutcomeProcessing,
-    errorTemplate,
-    mockFeatureFlags
+    errorTemplate
   )
 
   private val ProblemWithSelectionError = "Select where you are based"
@@ -157,7 +155,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       submitForm(Map(locationFieldName -> UserLocation.Iom)) { result =>
         status(result) shouldBe SEE_OTHER
         val expectedUrl =
-          YouNeedADifferentServiceIomController.form(atarService).url
+          YouNeedADifferentServiceIomController.form().url
         result.header.headers(LOCATION) should endWith(expectedUrl)
       }
     }
@@ -200,8 +198,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       mcc,
       userLocationView,
       sub01OutcomeProcessing,
-      errorTemplate,
-      mockFeatureFlags
+      errorTemplate
     ) {}
     implicit val fakeRequest = FakeRequest()
 
@@ -284,7 +281,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(
-      controller.processing(atarService)
+      controller.processing()
         .apply(SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId))
     )
   }
@@ -306,6 +303,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         case UserLocation.Uk           => "uk"
         case UserLocation.Iom          => "iom"
         case UserLocation.Islands      => "islands"
+        case _                         => throw new IllegalArgumentException("Unsupported User Location")
       }
 
       when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier])).thenReturn(Future.successful(None))
@@ -330,7 +328,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) should endWith(UserLocationController.processing(atarService).url)
+          result.header.headers(LOCATION) should endWith(UserLocationController.processing().url)
         }
       }
 
@@ -372,8 +370,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          errorTemplate,
-          mockFeatureFlags
+          errorTemplate
         ) {}
 
         val result = controller
@@ -414,8 +411,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          errorTemplate,
-          mockFeatureFlags
+          errorTemplate
         ) {}
 
         val result = controller

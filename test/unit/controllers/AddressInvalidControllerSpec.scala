@@ -70,7 +70,7 @@ class AddressInvalidControllerSpec extends ControllerSpec with AuthActionMock {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       controller
-        .page(atarService)
+        .page()
         .apply(SessionBuilder.buildRequestWithSession(defaultUserId))
     )
   }

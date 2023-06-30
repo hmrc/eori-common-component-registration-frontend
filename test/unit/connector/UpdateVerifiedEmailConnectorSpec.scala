@@ -108,7 +108,7 @@ class UpdateVerifiedEmailConnectorSpec
         )
       ).thenReturn(Future.successful(verifiedEmailResponse))
       val result = connector
-        .updateVerifiedEmail(verifiedEmailRequest, Some("old-email-address"))
+        .updateVerifiedEmail(verifiedEmailRequest)
         .futureValue
       result shouldBe Right(verifiedEmailResponse)
     }
@@ -128,7 +128,7 @@ class UpdateVerifiedEmailConnectorSpec
       ).thenReturn(Future.failed(forbiddenException))
 
       val result =
-        connector.updateVerifiedEmail(verifiedEmailRequest, None).futureValue
+        connector.updateVerifiedEmail(verifiedEmailRequest).futureValue
       result shouldBe Left(Forbidden)
     }
 
@@ -147,7 +147,7 @@ class UpdateVerifiedEmailConnectorSpec
       ).thenReturn(Future.failed(forbidden))
 
       val result =
-        connector.updateVerifiedEmail(verifiedEmailRequest, None).futureValue
+        connector.updateVerifiedEmail(verifiedEmailRequest).futureValue
       result shouldBe Left(Forbidden)
     }
 
@@ -166,7 +166,7 @@ class UpdateVerifiedEmailConnectorSpec
       ).thenReturn(Future.failed(badRequestException))
 
       val result =
-        connector.updateVerifiedEmail(verifiedEmailRequest, None).futureValue
+        connector.updateVerifiedEmail(verifiedEmailRequest).futureValue
       result shouldBe Left(BadRequest)
     }
 
@@ -185,7 +185,7 @@ class UpdateVerifiedEmailConnectorSpec
       ).thenReturn(Future.failed(badRequest))
 
       val result =
-        connector.updateVerifiedEmail(verifiedEmailRequest, None).futureValue
+        connector.updateVerifiedEmail(verifiedEmailRequest).futureValue
       result shouldBe Left(BadRequest)
     }
 
@@ -204,7 +204,7 @@ class UpdateVerifiedEmailConnectorSpec
       ).thenReturn(Future.failed(internalServerException))
 
       val result =
-        connector.updateVerifiedEmail(verifiedEmailRequest, None).futureValue
+        connector.updateVerifiedEmail(verifiedEmailRequest).futureValue
       result shouldBe Left(ServiceUnavailable)
     }
 
@@ -223,7 +223,7 @@ class UpdateVerifiedEmailConnectorSpec
       ).thenReturn(Future.failed(internalServerError))
 
       val result =
-        connector.updateVerifiedEmail(verifiedEmailRequest, None).futureValue
+        connector.updateVerifiedEmail(verifiedEmailRequest).futureValue
       result shouldBe Left(ServiceUnavailable)
     }
 
@@ -242,7 +242,7 @@ class UpdateVerifiedEmailConnectorSpec
       ).thenReturn(Future.failed(unhandledException))
 
       val result =
-        await(connector.updateVerifiedEmail(verifiedEmailRequest, None))
+        await(connector.updateVerifiedEmail(verifiedEmailRequest))
       result shouldBe Left(UnhandledException)
     }
   }

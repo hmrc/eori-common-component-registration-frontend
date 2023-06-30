@@ -187,7 +187,7 @@ class EmailControllerSpec
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
       showStandaloneFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
-        await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists-for-group")
+        await(result).header.headers("Location") should endWith("/register/cds-enrolment-exists-for-group")
       }
     }
 
@@ -197,7 +197,7 @@ class EmailControllerSpec
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
       showStandaloneFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
-        await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists-for-group")
+        await(result).header.headers("Location") should endWith("/register/cds-enrolment-exists-for-group")
       }
     }
 

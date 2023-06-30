@@ -69,15 +69,15 @@ class Sub02Controller @Inject() (
             case _: SubscriptionPending =>
               subscriptionDetailsService
                 .saveKeyIdentifiers(groupId, internalId, service)
-                .map(_ => Redirect(Sub02Controller.pending(service)))
+                .map(_ => Redirect(Sub02Controller.pending()))
             case SubscriptionFailed(EoriAlreadyExists, _) =>
-              Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
+              Future.successful(Redirect(Sub02Controller.eoriAlreadyExists()))
             case SubscriptionFailed(EoriAlreadyAssociated, _) =>
-              Future.successful(Redirect(Sub02Controller.eoriAlreadyAssociated(service)))
+              Future.successful(Redirect(Sub02Controller.eoriAlreadyAssociated()))
             case SubscriptionFailed(SubscriptionInProgress, _) =>
-              Future.successful(Redirect(Sub02Controller.subscriptionInProgress(service)))
+              Future.successful(Redirect(Sub02Controller.subscriptionInProgress()))
             case SubscriptionFailed(RequestNotProcessed, _) =>
-              Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+              Future.successful(Redirect(Sub02Controller.requestNotProcessed()))
             case _ =>
               throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
           }
@@ -137,7 +137,7 @@ class Sub02Controller @Inject() (
         }
   }
 
-  def eoriAlreadyExists(service: Service): Action[AnyContent] =
+  def eoriAlreadyExists(): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         name          <- sessionCache.subscriptionDetails.map(_.name)
@@ -146,7 +146,7 @@ class Sub02Controller @Inject() (
       } yield Ok(sub02EoriAlreadyExists(name, processedDate)).withSession(newUserSession)
     }
 
-  def eoriAlreadyAssociated(service: Service): Action[AnyContent] =
+  def eoriAlreadyAssociated(): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         name          <- sessionCache.subscriptionDetails.map(_.name)
@@ -155,7 +155,7 @@ class Sub02Controller @Inject() (
       } yield Ok(sub02EoriAlreadyAssociatedView(name, processedDate)).withSession(newUserSession)
     }
 
-  def subscriptionInProgress(service: Service): Action[AnyContent] =
+  def subscriptionInProgress(): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         name          <- sessionCache.subscriptionDetails.map(_.name)
@@ -164,14 +164,14 @@ class Sub02Controller @Inject() (
       } yield Ok(sub02SubscriptionInProgressView(name, processedDate)).withSession(newUserSession)
     }
 
-  def requestNotProcessed(service: Service): Action[AnyContent] =
+  def requestNotProcessed(): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         _ <- sessionCache.remove
       } yield Ok(sub02RequestNotProcessed()).withSession(newUserSession)
     }
 
-  def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def pending(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
         subscriptionDetails <- sessionCache.subscriptionDetails

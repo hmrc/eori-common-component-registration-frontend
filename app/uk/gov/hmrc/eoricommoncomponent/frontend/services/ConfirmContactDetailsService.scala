@@ -93,7 +93,7 @@ class ConfirmContactDetailsService @Inject() (
           case NewSubscription | SubscriptionRejected =>
             onNewSubscription(service, isInReviewMode)
           case SubscriptionProcessing =>
-            Future.successful(Redirect(ConfirmContactDetailsController.processing(service)))
+            Future.successful(Redirect(ConfirmContactDetailsController.processing()))
           case SubscriptionExists =>
             onExistingSubscription(service)
           case status =>
@@ -113,7 +113,7 @@ class ConfirmContactDetailsService @Inject() (
         Future.successful(
           Redirect(
             uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YouCannotChangeAddressController
-              .page(service)
+              .page()
           )
         )
 
@@ -154,7 +154,7 @@ class ConfirmContactDetailsService @Inject() (
       enrolmentExists <- taxEnrolmentsService.doesPreviousEnrolmentExists(regDetails.safeId)
     } yield
       if (enrolmentExists)
-        Redirect(SignInWithDifferentDetailsController.form(service))
+        Redirect(SignInWithDifferentDetailsController.form())
       else
         Redirect(SubscriptionRecoveryController.complete(service))
 
@@ -209,7 +209,7 @@ class ConfirmContactDetailsService @Inject() (
           Future.successful(
             Redirect(
               uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
-                .page(service)
+                .page()
             )
           )
         else
@@ -231,7 +231,7 @@ class ConfirmContactDetailsService @Inject() (
           Future.successful(
             Redirect(
               uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
-                .page(service)
+                .page()
             )
           )
         else

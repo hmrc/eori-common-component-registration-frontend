@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.vatRegisteredUkYesNoAnswerForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk_kana
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class VatRegisteredUkKanaController @Inject() (
@@ -29,11 +29,11 @@ class VatRegisteredUkKanaController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def form(service: Service): Action[AnyContent] = Action { implicit request =>
+  def form(): Action[AnyContent] = Action { implicit request =>
     Ok(vatRegisteredUkView(vatRegisteredUkYesNoAnswerForm()))
   }
 
-  def submit(service: Service): Action[AnyContent] = Action { implicit request =>
+  def submit(): Action[AnyContent] = Action { implicit request =>
     vatRegisteredUkYesNoAnswerForm()
       .bindFromRequest()
       .fold(

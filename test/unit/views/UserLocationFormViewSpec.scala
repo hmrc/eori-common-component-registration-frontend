@@ -24,7 +24,7 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, UserLocationController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   RegistrationDisplayService,
@@ -50,7 +50,6 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
   private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
   private val mockSave4LaterConnector        = mock[Save4LaterConnector]
-  private val mockFeatureFlags               = mock[FeatureFlags]
   private val userLocationView               = instanceOf[user_location]
 
   private val sub01OutcomeProcessing = instanceOf[sub01_outcome_processing]
@@ -67,8 +66,7 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
     mcc,
     userLocationView,
     sub01OutcomeProcessing,
-    errorTemplate,
-    mockFeatureFlags
+    errorTemplate
   )
 
   override def beforeEach(): Unit = {

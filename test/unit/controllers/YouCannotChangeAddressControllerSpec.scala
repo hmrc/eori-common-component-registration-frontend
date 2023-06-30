@@ -73,7 +73,7 @@ class YouCannotChangeAddressControllerSpec extends ControllerSpec with AuthActio
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       controller
-        .page(atarService)
+        .page()
         .apply(SessionBuilder.buildRequestWithSession(defaultUserId))
     )
   }

@@ -16,25 +16,24 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import java.util.UUID
-import java.time.{Clock, LocalDate, LocalDateTime, ZoneId}
-import java.time.format.DateTimeFormatter
 import play.api.Logger
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress.createEstablishmentAddress
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.ContactInformation.createContactInformation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionRequest.principalEconomicActivityLength
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RequestCommon, RequestParameter}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
   CdsToEtmpOrganisationType,
   OrganisationTypeConfiguration
 }
+
+import java.time.format.DateTimeFormatter
+import java.time.{Clock, LocalDate, LocalDateTime, ZoneId}
+import java.util.UUID
 
 case class SubscriptionCreateRequest(requestCommon: RequestCommon, requestDetail: RequestDetail)
 
@@ -47,7 +46,6 @@ object SubscriptionCreateRequest {
   def apply(
     registration: RegistrationDetails,
     subscription: SubscriptionDetails,
-    email: Option[String],
     service: Option[Service]
   ): SubscriptionCreateRequest =
     registration match {
@@ -175,8 +173,7 @@ object SubscriptionCreateRequest {
     sub: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
     dateEstablished: LocalDate,
-    service: Option[Service],
-    featureFlags: FeatureFlags
+    service: Option[Service]
   ): SubscriptionRequest = {
     val org = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
     val ukVatId: Option[List[VatIdentification]] =

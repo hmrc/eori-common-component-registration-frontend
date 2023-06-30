@@ -45,6 +45,6 @@ class VatGroupsCannotRegisterUsingThisServiceControllerSpec
   }
 
   def show()(test: Future[Result] => Any): Unit =
-    test(controller.form(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
+    test(controller.form().apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
 }

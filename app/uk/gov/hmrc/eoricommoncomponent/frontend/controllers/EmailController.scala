@@ -102,12 +102,10 @@ class EmailController @Inject() (
             existingEoriForUserOrGroup(user, groupEnrolments) match {
               case Some(eori) =>
                 sessionCache.saveEori(Eori(eori.id)).map(
-                  _ => Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
+                  _ => Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone())
                 )
               case None =>
-                Future.successful(
-                  Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
-                )
+                Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone()))
             }
           else
             Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
