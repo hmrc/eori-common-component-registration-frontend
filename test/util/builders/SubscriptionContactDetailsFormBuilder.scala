@@ -69,7 +69,7 @@ object SubscriptionContactDetailsFormBuilder {
   val contactDetails = ContactDetails(
     fullName = FullName,
     emailAddress = Email,
-    telephone = Telephone,
+    telephone = Some(Telephone),
     fax = Some(Fax),
     street = Street,
     city = City,
@@ -80,7 +80,7 @@ object SubscriptionContactDetailsFormBuilder {
   val revisedContactDetailsModel = ContactDetailsModel(
     fullName = FullName,
     emailAddress = Email,
-    telephone = Telephone,
+    telephone = Some(Telephone),
     fax = Some(Fax),
     street = Some(Street),
     city = Some(City),
@@ -92,7 +92,7 @@ object SubscriptionContactDetailsFormBuilder {
   val contactDetailsModel = ContactDetailsModel(
     fullName = FullName,
     emailAddress = Email,
-    telephone = Telephone,
+    telephone = Some(Telephone),
     fax = Some(Fax),
     street = Some(Street),
     city = Some(City),
@@ -129,7 +129,7 @@ object SubscriptionContactDetailsFormBuilder {
   val createContactDetailsViewModelWhenNotUsingRegAddress = ContactDetailsModel(
     fullName = FullName,
     emailAddress = Email,
-    telephone = Telephone,
+    telephone = Some(Telephone),
     fax = Some(Fax),
     street = Some(Street),
     city = Some(City),
@@ -149,7 +149,7 @@ object SubscriptionContactDetailsFormBuilder {
   val createContactDetailsViewModelWhenUseRegAddress = ContactDetailsModel(
     fullName = FullName,
     emailAddress = Email,
-    telephone = Telephone,
+    telephone = Some(Telephone),
     fax = Some(Fax),
     street = None,
     city = None,

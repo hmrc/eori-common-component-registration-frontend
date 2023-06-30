@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionTimeOutExc
 case class ContactDetailsModel(
   fullName: String,
   emailAddress: String,
-  telephone: String,
+  telephone: Option[String],
   fax: Option[String],
   useAddressFromRegistrationDetails: Boolean = true,
   street: Option[String],
@@ -60,7 +60,7 @@ case class ContactDetailsModel(
     city = None,
     postalCode = None,
     countryCode = None,
-    telephoneNumber = Some(telephone),
+    telephoneNumber = telephone,
     faxNumber = None,
     emailAddress = Some(emailAddress)
   )
@@ -74,7 +74,7 @@ object ContactDetailsModel {
 }
 
 //TODO remove email address read from cache and populate the contact details
-case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: String) {
+case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: Option[String]) {
 
   def toContactInfoDetailsModel(contactDetails: Option[ContactDetailsModel]): ContactDetailsModel =
     contactDetails match {

@@ -216,7 +216,7 @@ object SubscriptionInfoBuilder {
     ContactDetails(
       contactName,
       emailAddress,
-      telephoneNumber,
+      Some(telephoneNumber),
       Some(faxNumber),
       contactStreet,
       contactCity,

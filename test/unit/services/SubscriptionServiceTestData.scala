@@ -65,7 +65,7 @@ trait SubscriptionServiceTestData extends TestData {
   val subscriptionContactDetailsModel = ContactDetailsModel(
     contactName,
     contactEmail,
-    contactTelephone,
+    Some(contactTelephone),
     Some(contactFax),
     useAddressFromRegistrationDetails = false,
     Some(contactStreet),
@@ -77,7 +77,7 @@ trait SubscriptionServiceTestData extends TestData {
   val subscriptionContactDetailsWithPlusSignInTelAndFaxModel = ContactDetailsModel(
     contactName,
     contactEmail,
-    "+01632961234",
+    Some("+01632961234"),
     Some("+01632961235"),
     useAddressFromRegistrationDetails = false,
     Some(contactStreet),
@@ -146,7 +146,7 @@ trait SubscriptionServiceTestData extends TestData {
   val fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone: SubscriptionDetails = SubscriptionDetails(
     ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
     personalDataDisclosureConsent = Some(true),
-    contactDetails = Some(subscriptionContactDetailsModel.copy(telephone = "+01632961234")),
+    contactDetails = Some(subscriptionContactDetailsModel.copy(telephone = Some("+01632961234"))),
     dateEstablished = Some(dateOfEstablishment),
     sicCode = Some(principalEconomicActivity),
     email = Some(capturedEmail)

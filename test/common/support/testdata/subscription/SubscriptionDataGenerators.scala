@@ -52,7 +52,7 @@ trait SubscriptionDataGenerators {
   } yield ContactDetails(
     "John Doe",
     "john.doe@example.com",
-    "01632961234",
+    Some("01632961234"),
     faxOption,
     "Line 1",
     "city name",
@@ -65,7 +65,7 @@ trait SubscriptionDataGenerators {
   } yield ContactDetails(
     "John Doe",
     "john.doe@example.com",
-    "01632961234",
+    Some("01632961234"),
     faxOption,
     "Line 1",
     "city name",
@@ -119,7 +119,7 @@ trait SubscriptionDataGenerators {
   val contactDetailsCreateViewModelGenerator: Gen[ContactDetailsModel] = for {
     fullName             <- stringWithoutEmptyString
     emailAddress         <- stringWithoutEmptyString
-    telephone            <- stringWithoutEmptyString
+    telephone            <- stringWithoutEmptyString.map(Some(_))
     fax                  <- Gen.option(stringWithoutEmptyString)
     useRegisteredAddress <- trueFalseGenerator
     street               <- stringWithoutEmptyString.map(Some(_))
@@ -141,7 +141,7 @@ trait SubscriptionDataGenerators {
   val contactDetailsCreateViewModelWithEmptyPostcodeGenerator: Gen[ContactDetailsModel] = for {
     fullName             <- stringWithoutEmptyString
     emailAddress         <- stringWithoutEmptyString
-    telephone            <- stringWithoutEmptyString
+    telephone            <- stringWithoutEmptyString.map(Some(_))
     fax                  <- Gen.option(stringWithoutEmptyString)
     useRegisteredAddress <- trueFalseGenerator
     street               <- stringWithoutEmptyString.map(Some(_))
@@ -162,7 +162,7 @@ trait SubscriptionDataGenerators {
   val contactDetailsCreateViewModelMissingAddressFieldsGenerator: Gen[ContactDetailsModel] = for {
     fullName             <- stringWithoutEmptyString
     emailAddress         <- stringWithoutEmptyString
-    telephone            <- stringWithoutEmptyString
+    telephone            <- stringWithoutEmptyString.map(Some(_))
     fax                  <- Gen.option(stringWithoutEmptyString)
     useRegisteredAddress <- trueFalseGenerator
     street               <- Gen.option(stringWithoutEmptyString)

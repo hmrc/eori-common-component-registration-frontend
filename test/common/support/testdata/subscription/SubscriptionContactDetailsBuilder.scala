@@ -23,7 +23,7 @@ object SubscriptionContactDetailsBuilder {
   val contactDetailsWithMandatoryValuesOnly = ContactDetails(
     fullName = "John Doe",
     emailAddress = "john.doe@example.com",
-    telephone = "01632961234",
+    telephone = Some("01632961234"),
     fax = None,
     street = "Line 1",
     city = "city name",
@@ -34,7 +34,7 @@ object SubscriptionContactDetailsBuilder {
   val contactDetailsWithAllValues = ContactDetails(
     fullName = "John Doe",
     emailAddress = "john.doe@example.com",
-    telephone = "01632961234",
+    telephone = Some("01632961234"),
     fax = Some("01632961234"),
     street = "Line 1",
     city = "city name",
