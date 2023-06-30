@@ -28,6 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.HeaderCarrier
+import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -119,6 +120,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
               text => s" $text"
             ).getOrElse("")}"
           logger.error(message)
+          logger.info(Json.toJson(response).toString)
           SubscriptionFailed(message, processingDate)
         case _ =>
           val message =
