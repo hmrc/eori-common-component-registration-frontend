@@ -1795,10 +1795,18 @@ ecc.subscription.outcomes.guidance.xi.eori.bullet2=Query regarding a current EOR
 ecc.subscription.outcomes.guidance.xi.eori.warning.info=Do not tick the box "Query regarding an EORI number already issued" or "EORI number to register for customs system access".
 ecc.subscription.outcomes.guidance.xi.eori.href=<a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" class="govuk-link" target="_blank" rel="noopener noreferrer">Apply for an XI EORI.</a>
 
-ecc.subscription.organisation-disclose-personal-details-consent.title = Can we add your name and address to the EORI number checker?
-ecc.subscription.organisation-disclose-personal-details-consent.hint =HMRC will add your new EORI number to the <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Check an EORI number service (opens in new tab)</a>. This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number.
-ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.
-ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker kept by the European Commission (opens in new tab)</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
+ecc.subscription.organisation-disclose-personal-details-consent.title = ‘Check an EORI number’ service
+ecc.subscription.organisation-disclose-personal-details-consent.para1 =Anyone can use this service to <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">check if an EORI number is valid (opens in new tab)</a>. Members of the public cannot use it to find out what your EORI number is.
+ecc.subscription.organisation-disclose-personal-details-consent.org.para2 = You can consent to show the company’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.
+ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2 = You can consent to show the partnership’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.
+ecc.subscription.organisation-disclose-personal-details-consent.charity.para2 = You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods.
+ecc.subscription.organisation-disclose-personal-details-consent.individual.para2 = You can consent to show your name and address alongside your EORI number. Doing so can help reduce errors and delays when moving your goods.
+ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para = You can withdraw your consent at any time by filling in a <a href="https://www.gov.uk/eori/get-help-or-report-a-change-of-circumstances" class="govuk-link" id="change-of-circumstances" target="_blank" rel="noopener noreferrer">change of circumstances form (opens in new tab)</a>.
+
+ecc.subscription.organisation-disclose-personal-details-consent.org.question = Do you consent to show the company’s name and address on the ‘Check an EORI number’ service?
+ecc.subscription.organisation-disclose-personal-details-consent.partnership.question = Do you consent to show the partnership’s name and address on the ‘Check an EORI number’ service?
+ecc.subscription.organisation-disclose-personal-details-consent.charity.question = Do you consent to show the organisation’s name and address on the ‘Check an EORI number’ service?
+ecc.subscription.organisation-disclose-personal-details-consent.individual.question = Do you consent to show your name and address on the ‘Check an EORI number’ service?
 
 ecc.start-page.title.ars = Get a subscription to advance rulings and an EORI number starting with GB
 ecc.start-page.title.gagmr = Get a subscription to the Goods Vehicle Movement Service and an EORI number starting with GB

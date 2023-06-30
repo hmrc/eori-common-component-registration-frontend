@@ -25,20 +25,17 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DisclosePersonalDetailsConsentViewModel
 
-@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, paragraph: helpers.paragraph)
 
 @(
     isInReviewMode: Boolean,
     disclosePersonalDetailsYesNoAnswerForm: Form[YesNo],
     requestSessionData: RequestSessionData,
+    viewModel: DisclosePersonalDetailsConsentViewModel,
     service: Service
 )(implicit request: Request[AnyContent], messages: Messages)
-
-@hint = {
-<p class="govuk-body">@Html(messages("ecc.subscription.organisation-disclose-personal-details-consent.hint"))</p>
-<p class="govuk-hint">@messages("ecc.subscription.organisation-disclose-personal-details-consent.hint2")</p>
-}
 
 @layout_di(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
     <div>
@@ -48,18 +45,24 @@
 
             @CSRF.formField
 
+            @h1(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"))
+
+            @paragraph(messages("ecc.subscription.organisation-disclose-personal-details-consent.para1"), Some("personal-details-consent-para1"))
+            @paragraph(viewModel.textPara2, Some("personal-details-consent-para2"))
+            @paragraph(messages("ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para"), Some("personal-details-consent-para3"))
+
             @inputRadioGroup(
                 disclosePersonalDetailsYesNoAnswerForm(YesNo.yesAndNoAnswer),
                 Seq(
-                    "true" -> messages("cds.subscription.organisation-disclose-personal-details-consent.yes"),
-                    "false" -> messages("cds.subscription.organisation-disclose-personal-details-consent.no")
+                    "true" -> messages("cds.yes"),
+                    "false" -> messages("cds.no")
                 ),
                 Map.empty,
-                Some(hint),
+                None,
                 None,
                 '_divClass -> "createForm-group govuk-form-group",
-                '_legend -> messages("ecc.subscription.organisation-disclose-personal-details-consent.title"),
-                '_isLegendH1 -> true
+                '_legend -> viewModel.questionLabel,
+                '_isLegendH1 -> false
             )
 
             @govukButton(Button(

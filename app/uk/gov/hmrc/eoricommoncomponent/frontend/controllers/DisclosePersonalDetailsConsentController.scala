@@ -24,11 +24,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DisclosePersonalDetailsConsentViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,7 +42,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   disclosePersonalDetailsConsentView: disclose_personal_details_consent,
-  subscriptionFlowManager: SubscriptionFlowManager
+  subscriptionFlowManager: SubscriptionFlowManager,
+  disclosePersonalDetailsConsentViewModel: DisclosePersonalDetailsConsentViewModel
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
@@ -55,6 +57,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
               isInReviewMode = false,
               disclosePersonalDetailsYesNoAnswerForm(),
               requestSessionData,
+              disclosePersonalDetailsConsentViewModel,
               service
             )
           )
@@ -70,6 +73,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
               isInReviewMode = true,
               disclosePersonalDetailsYesNoAnswerForm().fill(YesNo(isConsentDisclosed)),
               requestSessionData,
+              disclosePersonalDetailsConsentViewModel,
               service
             )
           )
@@ -84,7 +88,13 @@ class DisclosePersonalDetailsConsentController @Inject() (
           formWithErrors =>
             Future.successful(
               BadRequest(
-                disclosePersonalDetailsConsentView(isInReviewMode, formWithErrors, requestSessionData, service)
+                disclosePersonalDetailsConsentView(
+                  isInReviewMode,
+                  formWithErrors,
+                  requestSessionData,
+                  disclosePersonalDetailsConsentViewModel,
+                  service
+                )
               )
             ),
           yesNoAnswer =>

@@ -1564,9 +1564,18 @@ ecc.subscription.outcomes.guidance.xi.eori.bullet1 = A ydych, neu a fyddwch, yn 
 ecc.subscription.outcomes.guidance.xi.eori.bullet2 = Ymholiad ynghylch cais presennol am rif EORI
 ecc.subscription.outcomes.guidance.xi.eori.warning.info = Peidiwch â thicio’r blwch "Ymholiad ynghylch rhif EORI sydd eisoes wedi’i gyhoeddi" na "Rhif EORI i gofrestru ar gyfer mynediad at y system dollau".
 ecc.subscription.outcomes.guidance.xi.eori.href = <a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" class="govuk-link" target="_blank" rel="noopener noreferrer">Gwnewch gais am rif EORI XI.</a>
-ecc.subscription.organisation-disclose-personal-details-consent.title = A allwn ychwanegu’ch enw a’ch cyfeiriad at y gwiriwr rhif EORI?
-ecc.subscription.organisation-disclose-personal-details-consent.hint = Bydd CThEM yn ychwanegu’ch rhif EORI newydd at y <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">gwasanaeth Gwiriwch rif EORI (yn agor tab newydd)</a>. Mae hwn yn wiriwr sydd ar gael i’r cyhoedd ac sy’n rhestru’r holl rifau EORI sy’n dechrau gyda GB. Sylwch na ellir defnyddio’r gwiriwr gan unrhyw un i ddarganfod eich rhif EORI.
-ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Mae gadael i ni ychwanegu’ch enw a’ch cyfeiriad wrth ymyl eich rhif EORI yn helpu asiantau tollau ac asiantau cludo nwyddau i gadarnhau pwy ydych, a fydd yn lleihau gwallau a lleihau oedi. Byddwn yn defnyddio’r enw a’r cyfeiriad rydych newydd eu cadarnhau.
+ecc.subscription.organisation-disclose-personal-details-consent.title = Gwasanaeth ‘Gwirio rhif EORI’
+ecc.subscription.organisation-disclose-personal-details-consent.para1 = Gall unrhyw un ddefnyddio’r gwasanaeth hwn i <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">wirio a yw rhif EORI yn ddilys (yn agor tab newydd)</a>. Ni all aelodau o’r cyhoedd ddefnyddio’r gwasanaeth i ddarganfod beth yw’ch rhif EORI.
+ecc.subscription.organisation-disclose-personal-details-consent.org.para2 = Gallwch roi caniatâd i ddangos enw a chyfeiriad y cwmni ynghyd â’r rhif EORI. Bydd gwneud hynny’n helpu i leihau gwallau ac oedi wrth symud nwyddau.
+ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2 = Gallwch roi caniatâd i ddangos enw a chyfeiriad y bartneriaeth ynghyd â’r rhif EORI. Bydd gwneud hynny’n helpu i leihau gwallau ac oedi wrth symud nwyddau.
+ecc.subscription.organisation-disclose-personal-details-consent.charity.para2 = Gallwch roi caniatâd i ddangos enw a chyfeiriad y sefydliad ynghyd â’r rhif EORI. Bydd gwneud hynny’n helpu i leihau gwallau ac oedi wrth symud nwyddau.
+ecc.subscription.organisation-disclose-personal-details-consent.individual.para2 = Gallwch roi caniatâd i ddangos eich enw a’ch cyfeiriad ynghyd â’ch rhif EORI. Bydd gwneud hynny’n helpu i leihau gwallau ac oedi wrth symud nwyddau.
+ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para = Gallwch dynnu’ch caniatâd yn ôl ar unrhyw adeg drwy lenwi <a href="https://www.gov.uk/eori/get-help-or-report-a-change-of-circumstances" class="govuk-link" id="change-of-circumstances" target="_blank" rel="noopener noreferrer">ffurflen newid mewn amgylchiadau (yn agor tab newydd)</a>.
+
+ecc.subscription.organisation-disclose-personal-details-consent.org.question = A ydych yn rhoi caniatâd i ddangos enw a chyfeiriad y cwmni ar y gwasanaeth ‘Gwirio rhif EORI’?
+ecc.subscription.organisation-disclose-personal-details-consent.partnership.question = A ydych yn rhoi caniatâd i ddangos enw a chyfeiriad y bartneriaeth ar y gwasanaeth ‘Gwirio rhif EORI’?
+ecc.subscription.organisation-disclose-personal-details-consent.charity.question = A ydych yn rhoi caniatâd i ddangos enw a chyfeiriad y sefydliad ar y gwasanaeth ‘Gwirio rhif EORI’?
+ecc.subscription.organisation-disclose-personal-details-consent.individual.question = A ydych yn rhoi caniatâd i ddangos eich enw a’ch cyfeiriad ar y gwasanaeth ‘Gwirio rhif EORI’?
 
 ecc.start-page.title.ars = Tanysgrifiwch i ddyfarniadau uwch a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.gagmr = Tanysgrifiwch i’r Gwasanaeth Symud Cerbydau Nwyddau a chael rhif EORI sy’n dechrau gyda GB

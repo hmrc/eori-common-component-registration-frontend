@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels.StandaloneAlreadyHaveEoriViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.StandaloneAlreadyHaveEoriViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.standalone_already_have_eori
 import util.ViewSpec
 

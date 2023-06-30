@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.models.viewModels
+@this()
 
-import play.api.i18n.Messages
+@(msg: String, id: Option[String] = None, classes: String = "govuk-heading-l")(implicit messages: Messages)
 
-case class StandaloneAlreadyHaveEoriViewModel(isAdminUser: Boolean) {
-
-  def titleAndHeaderLabel()(implicit messages: Messages): String =
-    if (isAdminUser)
-      messages("cds.registration.you-already-have-eori.group.title")
-    else
-      messages("cds.registration.you-already-have-eori.individual.title")
-
-}
+<h1 @{id.fold("")(id => s"id=$id")} class="@classes">@messages(msg)</h1>
