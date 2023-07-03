@@ -1412,7 +1412,7 @@ business-details-recovery.problem=There was a problem with the service when you 
 
 # messages-ecc file
 
-cds.banner.registration=Get an EORI
+cds.banner.registration=Get an EORI number
 cds.banner.subscription=Subscribe to {0}
 
 ecc.subscription.enter-eori-number.heading=What is your GB Economic Operator Registration and Identification (EORI) number?
