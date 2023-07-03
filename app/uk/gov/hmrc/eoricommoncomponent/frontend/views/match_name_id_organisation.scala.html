@@ -37,7 +37,7 @@
 
 @hintText = @{
     if(organisationType==PartnershipDM) messages(s"cds.matching.name-id-organisation.registered-partnership.name.hint")
-    else messages(s"cds.matching.name-id-organisation.$displayMode.name.hint")
+    else messages(s"cds.matching.name-id-organisation.registered-company.name.hint")
 }
 
 @utrHintText = @{
@@ -71,7 +71,7 @@
 }
 
 @utrLabel = @{
-    if(organisationType==PartnershipLLpDM) messages("cds.matching.name-id-organisation.company.utr")
+    if(organisationType==PartnershipLLpDM) messages("cds.matching.name-id-organisation.registered-company.matching-page.utr")
     else messages(s"cds.matching.name-id-organisation.$displayMode.utr")
 }
 
