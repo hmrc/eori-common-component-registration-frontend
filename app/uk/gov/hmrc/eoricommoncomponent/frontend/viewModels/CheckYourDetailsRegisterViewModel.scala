@@ -314,9 +314,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
           key = messages("cds.form.check-answers.contact-telephone"),
           value = Some(Html(cd.telephone)),
           call =
-            Some(
-              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service)
-            )
+            Some(ContactDetailsController.reviewForm(service))
         )
       }).flatten
 
@@ -342,7 +340,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
                 Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
               call = Some(VatRegisteredUkController.reviewForm(service))
             ),
-            if (subscription.vatVerificationOption.getOrElse(true) == true)
+            if (subscription.vatVerificationOption.getOrElse(true))
               summaryListRowNoChangeOption(
                 key = messages("cds.form.gb-vat-date"),
                 value = Some(
