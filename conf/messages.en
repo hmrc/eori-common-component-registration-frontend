@@ -1642,7 +1642,7 @@ confirm-business-details.individual.yes-wrong-address=No, I want to change my ad
 yes-no-wrong-address.error=Select yes if this is your address
 
 confirm-contact-address-details.yes=Yes
-confirm-contact-address-details.no=I want to enter the contact address manually
+confirm-contact-address-details.no=No, I want to enter the address manually
 
 ecc.contact-address-details.error.yes-no-answer=Select yes if the contact address is right
 

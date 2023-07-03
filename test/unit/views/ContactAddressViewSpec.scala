@@ -76,7 +76,7 @@ class ContactAddressViewSpec extends ViewSpec {
       doc
         .body()
         .getElementsByAttributeValue("for", "yes-no-answer-false")
-        .text() mustBe "I want to enter the contact address manually"
+        .text() mustBe "No, I want to enter the address manually"
     }
   }
 
