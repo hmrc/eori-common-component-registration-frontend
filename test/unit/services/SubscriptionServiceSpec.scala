@@ -18,7 +18,7 @@ package unit.services
 
 import base.UnitSpec
 import org.mockito.Mockito.when
-import org.mockito.{ArgumentCaptor, ArgumentMatchers}
+import org.mockito.{ArgumentCaptor, ArgumentMatchers, Mockito}
 import org.scalacheck.{Gen, Prop}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.prop.TableDrivenPropertyChecks._
@@ -56,6 +56,7 @@ class SubscriptionServiceSpec
 
   override def beforeAll() = {
     super.beforeAll()
+    Mockito.reset(mockHeaderCarrier, mockConfig, mockFeatureFlags)
     when(mockConfig.sub02UseServiceName).thenReturn(true)
   }
 
