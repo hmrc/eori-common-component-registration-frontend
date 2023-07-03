@@ -31,4 +31,3 @@ project/metals.sbt
 .bloop
 .metals/*
 /.metals
-.metals/metals.lock.db
