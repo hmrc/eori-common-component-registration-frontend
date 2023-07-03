@@ -69,7 +69,7 @@ class TaxEnrolmentsConnectorSpec extends IntegrationTestsSpec with ScalaFutures 
     }
 
     "call tax enrolment service with correct url and payload" in {
-      scala.concurrent.Await.ready(taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId), defaultTimeout)
+      await(taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId))(defaultTimeout)
       WireMock.verify(
         putRequestedFor(urlEqualTo(expectedPutUrl)).withRequestBody(
           equalToJson(validTaxEnrolmentsIssuerRequestJson.toString)

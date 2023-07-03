@@ -149,7 +149,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      scala.concurrent.Await.ready(customsDataStoreConnector.updateCustomsDataStore(request), defaultTimeout)
+      await(customsDataStoreConnector.updateCustomsDataStore(request))(defaultTimeout)
       WireMock.verify(
         postRequestedFor(urlEqualTo(expectedPostUrl))
           .withRequestBody(equalToJson(serviceRequestJson.toString))
@@ -164,7 +164,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      scala.concurrent.Await.ready(customsDataStoreConnector.updateCustomsDataStore(request), defaultTimeout)
+      await(customsDataStoreConnector.updateCustomsDataStore(request))(defaultTimeout)
       AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson)
     }
 

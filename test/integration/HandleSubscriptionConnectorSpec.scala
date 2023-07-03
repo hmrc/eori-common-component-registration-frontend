@@ -98,7 +98,7 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      scala.concurrent.Await.ready(handleSubscriptionConnector.call(handleSubscriptionRequest), defaultTimeout)
+      await(handleSubscriptionConnector.call(handleSubscriptionRequest))(defaultTimeout)
       WireMock.verify(
         postRequestedFor(urlEqualTo(expectedPostUrl))
           .withRequestBody(equalToJson(serviceRequestJson.toString))
