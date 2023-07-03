@@ -24,3 +24,11 @@ yarn-debug.log
 yarn-error.log
 .DS_Store
 **/*.DS_Store
+.metals
+.vscode
+.bloop
+.bsp
+.bsp/
+project/metals.*
+.metals/*
+/.metals
