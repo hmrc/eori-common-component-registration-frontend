@@ -84,7 +84,7 @@
     hint = hintText.map(hintHtml => Hint(
         content = HtmlContent(hintHtml)
     )),
-    errorMessage = form.hasErrors match {
+    errorMessage = form(id).hasErrors match {
         case true => Some(ErrorMessage(classes = "govuk-!-margin-bottom-1", content = HtmlContent(formatedErrors), visuallyHiddenText = Some(messages("cds.error.field.hint"))))
         case _ => None
     }).withFormField(form(id)))
