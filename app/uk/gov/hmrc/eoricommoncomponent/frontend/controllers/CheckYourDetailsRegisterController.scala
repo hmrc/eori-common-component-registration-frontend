@@ -24,40 +24,28 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
 class CheckYourDetailsRegisterController @Inject() (
   authAction: AuthAction,
-  sessionCache: SessionCache,
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   checkYourDetailsRegisterView: check_your_details_register,
-  registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService
+  registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService,
+  viewModelConstructor: CheckYourDetailsRegisterConstructor
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def reviewDetails(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        for {
-          registration <- sessionCache.registrationDetails
-          subscription <- sessionCache.subscriptionDetails
-        } yield {
-          val isUserIdentifiedByRegService = registration.safeId.id.nonEmpty
-          Ok(
-            checkYourDetailsRegisterView(
-              requestSessionData.userSelectedOrganisationType,
-              requestSessionData.isPartnershipOrLLP,
-              registration,
-              subscription,
-              subscription.personalDataDisclosureConsent.getOrElse(false),
-              service,
-              isUserIdentifiedByRegService
-            )
-          )
-        }
+        viewModelConstructor.generateViewModel(service).map(
+          viewModel =>
+            Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
+        )
     }
 
   def submitDetails(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
