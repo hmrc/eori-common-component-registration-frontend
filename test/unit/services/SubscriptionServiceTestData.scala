@@ -143,6 +143,19 @@ trait SubscriptionServiceTestData extends TestData {
     addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
   )
 
+  val fullyPopulatedSubscriptionDetailsAllOrgTypes = SubscriptionDetails(
+    ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
+    personalDataDisclosureConsent = Some(true),
+    contactDetails = Some(subscriptionContactDetailsModel),
+    dateEstablished = Some(dateOfEstablishment),
+    sicCode = Some(principalEconomicActivity),
+    email = Some(capturedEmail),
+    eoriNumber = Some("GB123456789000"),
+    nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse(dateOfBirthString))),
+    nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName")),
+    addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
+  )
+
   val fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone: SubscriptionDetails = SubscriptionDetails(
     ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
     personalDataDisclosureConsent = Some(true),
