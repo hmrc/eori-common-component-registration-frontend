@@ -74,7 +74,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
   private val contactDetails = ContactDetailsModel(
     fullName = fullName,
     emailAddress = emailAddress.get,
-    telephone = "01234123123",
+    telephone = Some("01234123123"),
     fax = None,
     street = None,
     city = None,
@@ -85,7 +85,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
   private val contactDetail = ContactDetail(
     address = establishmentAddress,
     contactName = contactDetails.fullName,
-    phone = Some(contactDetails.telephone),
+    phone = contactDetails.telephone,
     fax = None,
     email = emailAddress
   )

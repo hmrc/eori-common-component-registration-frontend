@@ -285,7 +285,7 @@ class CheckYourDetailsRegisterControllerSpec
         page.getSummaryListValue(
           RegistrationReviewPage.SummaryListRowXPath,
           "Contact telephone"
-        ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.telephone
+        ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.telephone.getOrElse("")
         page.getSummaryListValue(
           RegistrationReviewPage.SummaryListRowXPath,
           "Email address"

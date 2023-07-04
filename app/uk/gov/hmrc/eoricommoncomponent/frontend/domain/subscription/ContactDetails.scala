@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 case class ContactDetails(
   fullName: String,
   emailAddress: String,
-  telephone: String,
+  telephone: Option[String],
   fax: Option[String],
   street: String,
   city: String,

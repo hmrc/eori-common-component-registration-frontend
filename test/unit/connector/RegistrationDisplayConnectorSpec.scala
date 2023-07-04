@@ -39,7 +39,7 @@ class RegistrationDisplayConnectorSpec extends UnitSpec with MockitoSugar {
   val mockConfig     = mock[AppConfig]
   val mockAudit      = mock[Auditable]
 
-  val testConnector = new RegistrationDisplayConnector(mockHttpClient, mockConfig, mockAudit) {
+  def testConnector = new RegistrationDisplayConnector(mockHttpClient, mockConfig, mockAudit) {
     override val url: String = "service url"
   }
 
