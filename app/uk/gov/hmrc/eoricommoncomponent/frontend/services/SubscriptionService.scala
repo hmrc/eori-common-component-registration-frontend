@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import java.time.format.DateTimeFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
@@ -32,13 +31,12 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, featureFlags: FeatureFlags)(implicit
+class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(implicit
   ec: ExecutionContext
 ) {
 
   private val logger = Logger(this.getClass)
 
-  private def maybe(service: Service): Option[Service] = if (featureFlags.sub02UseServiceName) Some(service) else None
 
   def subscribe(
     registration: RegistrationDetails,
@@ -46,14 +44,14 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
     cdsOrganisationType: Option[CdsOrganisationType],
     service: Service
   )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
-    subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service, featureFlags))
+    subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service))
 
   def createRequest(
     reg: RegistrationDetails,
     subscription: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
     service: Service,
-    featureFlags: FeatureFlags
+
   ): SubscriptionRequest =
     reg match {
       case individual: RegistrationDetailsIndividual =>
@@ -62,8 +60,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
           subscription,
           cdsOrgType,
           individual.dateOfBirth,
-          maybe(service),
-          featureFlags
+          Some(service),
         )
 
       case org: RegistrationDetailsOrganisation =>
@@ -75,8 +72,8 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
           doe.getOrElse(
             throw new IllegalStateException("Date Established must be present for an organisation subscription")
           ),
-          maybe(service),
-          featureFlags
+          Some(service),
+
         ).ensuring(
           subscription.sicCode.isDefined,
           "SicCode/Principal Economic Activity must be present for an organisation subscription"

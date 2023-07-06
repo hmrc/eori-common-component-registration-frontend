@@ -27,7 +27,6 @@ import org.scalatestplus.scalacheck.Checkers
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
@@ -51,13 +50,12 @@ import scala.concurrent.Future
 class SubscriptionServiceSpec
     extends UnitSpec with MockitoSugar with BeforeAndAfterAll with Checkers with SubscriptionServiceTestData {
   private val mockHeaderCarrier = mock[HeaderCarrier]
-  private val mockConfig        = mock[FeatureFlags]
-  private val mockFeatureFlags  = mock[FeatureFlags]
+
 
   override def beforeAll() = {
     super.beforeAll()
-    Mockito.reset(mockHeaderCarrier, mockConfig, mockFeatureFlags)
-    when(mockConfig.sub02UseServiceName).thenReturn(true)
+    Mockito.reset(mockHeaderCarrier)
+
   }
 
   private def subscriptionSuccessResultIgnoreTimestamp(
@@ -469,7 +467,7 @@ class SubscriptionServiceSpec
     "truncate sic code to 4 numbers by removing the rightmost number" in {
       val service = constructService(_ => None)
       val holder  = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
-      val req     = service.createRequest(organisationRegistrationDetails, holder, None, atarService, mockFeatureFlags)
+      val req     = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.principalEconomicActivity shouldBe Some("1275")
     }
@@ -479,7 +477,7 @@ class SubscriptionServiceSpec
       val holder = fullyPopulatedSubscriptionDetails.copy(addressDetails =
         Some(AddressViewModel("some street", "", Some("AB99 3DW"), "GB"))
       )
-      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService, mockFeatureFlags)
+      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.CDSEstablishmentAddress.city shouldBe "-"
     }
@@ -489,7 +487,7 @@ class SubscriptionServiceSpec
       val holder = fullyPopulatedSubscriptionDetails.copy(addressDetails =
         Some(AddressViewModel("some street", "", Some(""), "GB"))
       )
-      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService, mockFeatureFlags)
+      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.CDSEstablishmentAddress.postalCode shouldBe None
     }
@@ -497,7 +495,7 @@ class SubscriptionServiceSpec
     "have correct person type for Individual Subscription" in {
       val service = constructService(_ => None)
       val holder  = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
-      val req     = service.createRequest(individualRegistrationDetails, holder, None, atarService, mockFeatureFlags)
+      val req     = service.createRequest(individualRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.typeOfPerson shouldBe Some(EtmpTypeOfPerson.NaturalPerson)
     }
@@ -510,8 +508,7 @@ class SubscriptionServiceSpec
           RegistrationDetails.rdSafeId(SafeId("safeid")),
           holder,
           None,
-          atarService,
-          mockFeatureFlags
+          atarService
         )
       }
       thrown.getMessage shouldBe "Incomplete cache cannot complete journey"
@@ -525,9 +522,7 @@ class SubscriptionServiceSpec
           organisationRegistrationDetails,
           holder,
           Some(CdsOrganisationType("third-country-organisation")),
-          atarService,
-          mockFeatureFlags
-        )
+          atarService)
       }
       thrown.getMessage shouldBe "Date Established must be present for an organisation subscription"
     }
@@ -539,8 +534,7 @@ class SubscriptionServiceSpec
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
-        atarService,
-        mockFeatureFlags
+        atarService
       )
       req.subscriptionCreateRequest.requestDetail.contactInformation.flatMap(_.telephoneNumber) shouldBe Some(
         "+01632961234"
@@ -555,8 +549,7 @@ class SubscriptionServiceSpec
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
-        atarService,
-        mockFeatureFlags
+        atarService
       )
       req.subscriptionCreateRequest.requestDetail.contactInformation.flatMap(_.faxNumber) shouldBe Some("+01632961234")
     }
@@ -568,8 +561,7 @@ class SubscriptionServiceSpec
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
-        atarService,
-        mockFeatureFlags
+        atarService
       )
       req.subscriptionCreateRequest.requestDetail.contactInformation.flatMap(_.faxNumber) shouldBe Some("+01632961235")
       req.subscriptionCreateRequest.requestDetail.contactInformation.flatMap(_.telephoneNumber) shouldBe Some(
@@ -673,7 +665,7 @@ class SubscriptionServiceSpec
   private def constructService(setupServiceConnector: SubscriptionServiceConnector => Unit) = {
     val mockSubscriptionServiceConnector = mock[SubscriptionServiceConnector]
     setupServiceConnector(mockSubscriptionServiceConnector)
-    new SubscriptionService(mockSubscriptionServiceConnector, mockConfig)
+    new SubscriptionService(mockSubscriptionServiceConnector)
   }
 
   private def assertSameJson(json: JsValue, expectedJson: JsValue) = {

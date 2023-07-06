@@ -45,9 +45,8 @@ class Sub02Controller @Inject() (
   standaloneOutcomeView: standalone_subscription_outcome,
   subscriptionOutcomeView: subscription_outcome,
   xiEoriGuidancePage: xi_eori_guidance,
-  cdsSubscriber: CdsSubscriber,
-  featureFlag: FeatureFlags
-)(implicit ec: ExecutionContext)
+  cdsSubscriber: CdsSubscriber
+                                )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
   private val logger = Logger(this.getClass)
@@ -95,9 +94,8 @@ class Sub02Controller @Inject() (
       Future.successful(Ok(xiEoriGuidancePage()))
   }
 
-  def subscriptionNextSteps(service: Service): String =
-    if (featureFlag.arsNewJourney) s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
-    else s"cds.subscription.outcomes.success.extra.information.next.${service.code}"
+  def subscriptionNextSteps(service: Service): String = s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
+
 
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
@@ -120,9 +118,7 @@ class Sub02Controller @Inject() (
             )
           ).withSession(newUserSession)
         else {
-          val subscriptionTo =
-            if (featureFlag.arsNewJourney) s"ecc.start-page.para1.bullet2.new.${service.code}"
-            else s"ecc.start-page.para1.bullet2.${service.code}"
+          val subscriptionTo = s"ecc.start-page.para1.bullet2.new.${service.code}"
           Ok(
             subscriptionOutcomeView(
               service,

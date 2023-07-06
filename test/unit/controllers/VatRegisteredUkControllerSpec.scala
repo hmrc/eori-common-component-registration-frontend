@@ -24,7 +24,6 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
-  FeatureFlags,
   SubscriptionFlowManager,
   VatRegisteredUkController
 }
@@ -58,7 +57,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val mockSessionError                = mock[SessionError]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
-  private val mockFeatureFlags                = mock[FeatureFlags]
+
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -73,7 +72,6 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     reset(mockSubscriptionBusinessService)
     reset(mockSubscriptionDetailsService)
     reset(mockSubscriptionFlow)
-    reset(mockFeatureFlags)
     reset(mockRequestSession)
 
     super.afterEach()

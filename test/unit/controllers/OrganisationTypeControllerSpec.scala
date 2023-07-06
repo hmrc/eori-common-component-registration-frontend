@@ -27,7 +27,6 @@ import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
-  FeatureFlags,
   OrganisationTypeController,
   SubscriptionFlowManager
 }
