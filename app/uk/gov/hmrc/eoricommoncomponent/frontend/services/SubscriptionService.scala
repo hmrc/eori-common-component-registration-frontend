@@ -31,12 +31,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(implicit
-  ec: ExecutionContext
-) {
+class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
-
 
   def subscribe(
     registration: RegistrationDetails,
@@ -50,18 +47,11 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(im
     reg: RegistrationDetails,
     subscription: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
-    service: Service,
-
+    service: Service
   ): SubscriptionRequest =
     reg match {
       case individual: RegistrationDetailsIndividual =>
-        SubscriptionCreateRequest(
-          individual,
-          subscription,
-          cdsOrgType,
-          individual.dateOfBirth,
-          Some(service),
-        )
+        SubscriptionCreateRequest(individual, subscription, cdsOrgType, individual.dateOfBirth, Some(service))
 
       case org: RegistrationDetailsOrganisation =>
         val doe = subscription.dateEstablished
@@ -72,8 +62,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(im
           doe.getOrElse(
             throw new IllegalStateException("Date Established must be present for an organisation subscription")
           ),
-          Some(service),
-
+          Some(service)
         ).ensuring(
           subscription.sicCode.isDefined,
           "SicCode/Principal Economic Activity must be present for an organisation subscription"

@@ -46,7 +46,7 @@ class Sub02Controller @Inject() (
   subscriptionOutcomeView: subscription_outcome,
   xiEoriGuidancePage: xi_eori_guidance,
   cdsSubscriber: CdsSubscriber
-                                )(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
   private val logger = Logger(this.getClass)
@@ -94,8 +94,8 @@ class Sub02Controller @Inject() (
       Future.successful(Ok(xiEoriGuidancePage()))
   }
 
-  def subscriptionNextSteps(service: Service): String = s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
-
+  def subscriptionNextSteps(service: Service): String =
+    s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
 
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>

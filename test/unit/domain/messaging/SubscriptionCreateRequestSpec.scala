@@ -18,7 +18,6 @@ package unit.domain.messaging
 
 import base.UnitSpec
 
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   ContactInformation,
@@ -34,8 +33,8 @@ import java.time.{LocalDate, LocalDateTime}
 
 class SubscriptionCreateRequestSpec extends UnitSpec {
 
-  private val email            = "john.doe@example.com"
-  private val service          = Service.withName("atar")
+  private val email   = "john.doe@example.com"
+  private val service = Service.withName("atar")
 
   private val cachedStreet: String           = "Cached street"
   private val cachedCity: String             = "Cached city"

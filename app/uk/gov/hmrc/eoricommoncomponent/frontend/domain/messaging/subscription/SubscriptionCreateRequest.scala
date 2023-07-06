@@ -174,8 +174,7 @@ object SubscriptionCreateRequest {
     sub: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
     dateEstablished: LocalDate,
-    service: Option[Service],
-
+    service: Option[Service]
   ): SubscriptionRequest = {
     val org = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
     val ukVatId: Option[List[VatIdentification]] =

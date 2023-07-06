@@ -51,7 +51,6 @@ class SubscriptionServiceSpec
     extends UnitSpec with MockitoSugar with BeforeAndAfterAll with Checkers with SubscriptionServiceTestData {
   private val mockHeaderCarrier = mock[HeaderCarrier]
 
-
   override def beforeAll() = {
     super.beforeAll()
     Mockito.reset(mockHeaderCarrier)
@@ -504,12 +503,7 @@ class SubscriptionServiceSpec
       val service = constructService(_ => None)
       val holder  = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
       val thrown = intercept[IllegalStateException] {
-        service.createRequest(
-          RegistrationDetails.rdSafeId(SafeId("safeid")),
-          holder,
-          None,
-          atarService
-        )
+        service.createRequest(RegistrationDetails.rdSafeId(SafeId("safeid")), holder, None, atarService)
       }
       thrown.getMessage shouldBe "Incomplete cache cannot complete journey"
     }
@@ -522,7 +516,8 @@ class SubscriptionServiceSpec
           organisationRegistrationDetails,
           holder,
           Some(CdsOrganisationType("third-country-organisation")),
-          atarService)
+          atarService
+        )
       }
       thrown.getMessage shouldBe "Date Established must be present for an organisation subscription"
     }
