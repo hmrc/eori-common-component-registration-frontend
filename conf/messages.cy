@@ -910,7 +910,7 @@ cds.subscription.sic.page.help.para1 = Mae’r cod i’w gweld ar eich tystysgri
 cds.subscription.sic.page.help.para2 = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Mewngofnodi i’ch cyfrif TAW ar-lein (yn agor tab newydd)</a> er mwyn bwrw golwg dros eich tystysgrif TAW.
 
 cds.subscription.sic.page.help.heading2 = Os nad ydych wedi’ch cofrestru ar gyfer TAW yn y DU, neu os na allwch ddod o hyd i’r cod
-cds.subscription.sic.page.help.para3 = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor mewn ffenestr neu dab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau.
+cds.subscription.sic.page.help.para3 = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau.
 cds.subscription.sic.page.help.para4 = Nodwch air yn y cyfleuster chwilio sy’n disgrifio orau beth mae’ch sefydliad yn ei wneud. Er enghraifft, ‘dillad’, ‘offer’.
 cds.subscription.sic.page.help.para5 = Bydd hyn yn dychwelyd un neu fwy o godau SIC y gallwch ddewis ohonynt.
 
@@ -1627,7 +1627,7 @@ ecc.start-page.solo.title = Os byddwch yn gwneud cais fel unig fasnachwr neu fel
 ecc.start-page.gbeori.para3.title = Byddwn yn gofyn am un o’r canlynol er mwyn cadarnhau pwy ydych:
 ecc.start-page.gbeori.para3.bullet1 = rhif Yswiriant Gwladol, os ydych wedi gweithio yn y DU
 ecc.start-page.gbeori.para3.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad, os ydych wedi cofrestru ar gyfer Hunanasesiad
-ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor mewn ffenestr neu dab newydd)</a>
+ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a>
 ecc.start-page.gbeori.link.text =  o'’'r rhestr ar wefan Dŷ'’'r Cwmnïau.
 ecc.start-page.company.title = Cod Dosbarthiad Diwydiannol Safonol (cod SIC)
 ecc.start-page.company = Mae cod SIC yn dangos yr hyn y mae sefydliadau’n eu gwneud. Byddwn yn gofyn i chi nodi’r cyfeirnod hwn os byddwch y gwneud cais fel un o’r canlynol:
@@ -1638,7 +1638,7 @@ ecc.start-page.sic.title = Dod o hyd i’ch cod SIC
 ecc.start-page.sic.para1 = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU mae’r cod i’w weld ar eich tystysgrif TAW. ‘Dosbarthiad masnachu (cod SIC)’ yw’r enw ar hwn.
 ecc.start-page.sic.para2 = Os nad ydych wedi’ch cofrestru ar gyfer TAW yn y DU, neu os na allwch ddod o hyd i’r cod, gallwch ddewis un o’r rhestr sydd ar wefan Tŷ’r Cwmnïau. Gallwch chwilio am god sy’n disgrifio orau beth mae’ch sefydliad yn ei wneud.
 ecc.start-page.company.para2 = Os ydych yn talu Treth Gorfforaeth yn y DU, byddwn yn gofyn am eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth.
-ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor ffenestr neu dab newydd)</a>.
+ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor tab newydd)</a>.
 
 ecc.start-page.sole-trader.title = Faint o amser y mae’n ei gymryd
 ecc.start-page.sole-trader = Mae ceisiadau’n cymryd 7 i 8 munud ar gyfartaledd i’w cwblhau.

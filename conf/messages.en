@@ -981,7 +981,7 @@ cds.subscription.sic.page.title=What does your organisation do?
 cds.subscription.sic.page.heading=What does your organisation do?
 cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House for your SIC code (opens in new tab).</a>
 cds.subscription.sic.nonuk.soleTrader.description=You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
-cds.subscription.sic.organisation.description=<a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab)</a>
+cds.subscription.sic.organisation.description=<a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new tab)</a>
 cds.subscription.sic.uk.soleTrader.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.charity-description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that helps HMRC identify what your partnership does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
@@ -997,7 +997,7 @@ cds.subscription.sic.page.help.para1=You can find the code on your VAT certifica
 cds.subscription.sic.page.help.para2=<a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Sign in to your VAT online account (opens in new tab)</a> to view your VAT certificate.
 
 cds.subscription.sic.page.help.heading2=If you are not UK VAT registered, or cannot find the code
-cds.subscription.sic.page.help.para3=<a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a> from the list on Companies House.
+cds.subscription.sic.page.help.para3=<a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House.
 cds.subscription.sic.page.help.para4=Enter a word into the search that best describes what your organisation does. For example, ‘clothing’, ‘tools’.
 cds.subscription.sic.page.help.para5=This will return one or more SIC codes that you can choose from.
 
@@ -1858,7 +1858,7 @@ ecc.start-page.solo.title = If you apply as a sole trader or individual
 ecc.start-page.gbeori.para3.title = We will verify your identity by asking for one of the following:
 ecc.start-page.gbeori.para3.bullet1 = National Insurance number, if you have worked in the UK
 ecc.start-page.gbeori.para3.bullet2 = Self Assessment Unique Taxpayer Reference (UTR), if you registered for Self Assessment
-ecc.start-page.gbeori.link = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a>
+ecc.start-page.gbeori.link = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a>
 ecc.start-page.gbeori.link.text = from the list on Companies House
 ecc.start-page.company.title = Standard Industrial Classification Code (SIC code)
 
@@ -1870,7 +1870,7 @@ ecc.start-page.sic.title = Find your SIC code
 ecc.start-page.sic.para1 = If you are UK VAT registered you can find the code on your VAT certificate. It’s called ‘trade classification (SIC code)’.
 ecc.start-page.sic.para2 = If you are not UK VAT registered, or cannot find the code, you can choose one from the list on Companies House. You can search for a code that best describes what your organisation does.
 ecc.start-page.company.para2 = If you pay Corporation Tax in the UK we will ask for your Corporation Tax Unique Taxpayer Reference (UTR).
-ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new window or tab)</a>.
+ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new tab)</a>.
 
 
 ecc.start-page.sole-trader.title = How long it takes
