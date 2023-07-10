@@ -21,17 +21,6 @@ import play.mvc.Http.Status.NO_CONTENT
 
 object CustomsDataStoreStubService {
 
-  private val customsDataStoreUrl = "/customs/update/datastore"
-
-  def stubCustomsDataStoreEndpoint(returnStatus: Int = NO_CONTENT): Unit =
-    stubFor(
-      post(urlEqualTo(customsDataStoreUrl))
-        .willReturn(
-          aResponse()
-            .withStatus(returnStatus)
-        )
-    )
-
   def returnCustomsDataStoreEndpointWhenReceiveRequest(url: String, request: String, status: Int): Unit =
     stubFor(
       post(urlEqualTo(url))
@@ -42,5 +31,4 @@ object CustomsDataStoreStubService {
         )
     )
 
-  def verifyRcmEndpointCalled(): Unit = verify(postRequestedFor(urlEqualTo(customsDataStoreUrl)))
 }

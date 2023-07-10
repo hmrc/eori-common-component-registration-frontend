@@ -26,11 +26,6 @@ case class VatControlListResponse(
   lastReturnMonthPeriod: Option[String] = None
 ) {
 
-  def isLastReturnMonthPeriodNonEmpty: Boolean = lastReturnMonthPeriod.fold(false) {
-    case period if period.equalsIgnoreCase("N/A") => false
-    case _                                        => true
-  }
-
   private def stripSpaces: String => String = s => s.filterNot(_.isSpaceChar)
 
   def isPostcodeAssociatedWithVrn(vatDetails: VatDetails) =

@@ -91,8 +91,6 @@ class VatDetailsController @Inject() (
                     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
                       .determineRoute(service)
                   )
-                else if (vatControlListResponse.isLastReturnMonthPeriodNonEmpty)
-                  Redirect(DateOfVatRegistrationController.createForm(service))
                 else
                   Redirect(DateOfVatRegistrationController.createForm(service))
             }
