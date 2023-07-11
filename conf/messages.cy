@@ -558,17 +558,17 @@ cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
 cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-company.name = Beth yw enw cofrestredig y cwmni?
-cds.matching.name-id-organisation.registered-company.name.para=  <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.registered-company.name.para=  <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.registered-company.name.hint = Nodwch yr union enw sydd ar gofrestr Tŷ’r Cwmnïau.
 cds.matching.name-id-organisation.partnership.name = Beth yw enw cofrestredig eich partneriaeth?
 cds.matching.name-id-organisation.partnership.name.para= <p class="govuk-body">Dyma’r enw sydd wedi’i gofrestru gyda CThEF. Gallwch ddod o hyd i hyn yn <a class="govuk-link" target="_blank" href="https://www.gov.uk/gwasanaethau-cthem-mewngofnodi-neu-gofrestru">gwasanaethau ar-lein CThEF (yn agor tab newydd)</a> neu ar lythyrau oddi wrth CThEF.</p>
 cds.matching.name-id-organisation.partnership.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.organisation.name = Beth yw enw cofrestredig y cwmni?
-cds.matching.name-id-organisation.organisation.name.para= <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.organisation.name.para= <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.organisation.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
 cds.matching.name-id-organisation.registered-partnership.name.para = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw a gofrestrwyd gyda CThEF.
-cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.limited-liability-partnership.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.limited-liability-partnership.name = Beth yw enw cofrestredig eich partneriaeth?
 cds.matching.name-id-organisation.organisation.no-utr=Nid oes gennyf Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
