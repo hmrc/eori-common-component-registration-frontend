@@ -18,8 +18,6 @@ package unit.domain.messaging
 
 import base.UnitSpec
 
-import org.scalatestplus.mockito.MockitoSugar.mock
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   ContactInformation,
@@ -34,9 +32,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import java.time.{LocalDate, LocalDateTime}
 
 class SubscriptionCreateRequestSpec extends UnitSpec {
-  private val mockFeatureFlags = mock[FeatureFlags]
-  private val email            = "john.doe@example.com"
-  private val service          = Service.withName("atar")
+
+  private val email   = "john.doe@example.com"
+  private val service = Service.withName("atar")
 
   private val cachedStreet: String           = "Cached street"
   private val cachedCity: String             = "Cached city"
@@ -276,8 +274,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
         subscriptionDetails,
         Some(cdsOrgType),
         dateOfBirthOrEstablishment,
-        Some(atarService),
-        mockFeatureFlags
+        Some(atarService)
       )
 
       val requestCommon  = request.subscriptionCreateRequest.requestCommon

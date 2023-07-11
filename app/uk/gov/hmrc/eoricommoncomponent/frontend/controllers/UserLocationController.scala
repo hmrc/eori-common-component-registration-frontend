@@ -56,8 +56,7 @@ class UserLocationController @Inject() (
   mcc: MessagesControllerComponents,
   userLocationView: user_location,
   sub01OutcomeProcessing: sub01_outcome_processing,
-  errorTemplate: error_template,
-  featureFlags: FeatureFlags
+  errorTemplate: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
