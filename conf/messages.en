@@ -330,9 +330,9 @@ cds.skip-link=Skip to main content
 #======================================
 # General
 cds.matching.individual.title=Enter your details
-cds.matching.header=What are your organisation details?
-cds.matching.header.partnership=What are your partnership details?
-cds.matching.header.company=What are your company details?
+cds.matching.header=Organisation details
+cds.matching.header.partnership=Partnership details
+cds.matching.header.company=Company details
 cds.matching.intro=This will link your business, Government Gateway ID and EORI number together which helps you move and declare goods.
 cds.matching.individual.header=Enter your details
 cds.matching-lede=We will attempt to match your details against information we currently hold.
@@ -611,19 +611,19 @@ cds.matching.organisation-address.country.error.empty=Enter your country
 # Name and Utr for an Organisation Match
 cds.matching.name-id-organisation.company.name=Company name
 cds.matching.name-id-organisation.company.name.hint=Enter the exact name that’s on your company'’'s certificate of incorporation. We will use this to verify your identity.
-cds.matching.name-id-organisation.registered-company.name=Registered company name
-cds.matching.name-id-organisation.registered-company.name.para=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
-cds.matching.name-id-organisation.registered-company.name.hint=Enter the exact name that'''s on your company’s certificate of incorporation.
-cds.matching.name-id-organisation.partnership.name=Registered partnership name
-cds.matching.name-id-organisation.partnership.name.para=<p class="govuk-body">We will use this to verify your identity. You can get this name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.registered-company.name=What is the registered company name?
+cds.matching.name-id-organisation.registered-company.name.para=<p class="govuk-body">You can find this on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.registered-company.name.hint=Enter the exact name from the Companies House register.
+cds.matching.name-id-organisation.partnership.name=What is the registered partnership name?
+cds.matching.name-id-organisation.partnership.name.para=<p class="govuk-body">This is the name registered with HMRC. You can find this in <a class="govuk-link" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services">HMRC online services (opens in new tab)</a> or in letters from HMRC.</p>
 cds.matching.name-id-organisation.partnership.name.hint=Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
-cds.matching.name-id-organisation.organisation.name=Organisation name
-cds.matching.name-id-organisation.organisation.name.para=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.organisation.name=What is the registered organisation name?
+cds.matching.name-id-organisation.organisation.name.para=<p class="govuk-body">You can find this on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
 cds.matching.name-id-organisation.organisation.name.hint=Enter the exact name that'''s on your organisation’s certificate of incorporation.
 cds.matching.name-id-organisation.registered-partnership.name.para = Enter the exact name that you registered with HMRC. We will use this to verify your identity.
-cds.matching.name-id-organisation.registered-partnership.name.hint = You can find this name on documents from HMRC. For example, a confirmation of your partnership registration.
-cds.matching.name-id-organisation.limited-liability-partnership.name = Registered partnership name
-cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.registered-partnership.name.hint = Enter the exact name registered with HMRC.
+cds.matching.name-id-organisation.limited-liability-partnership.name = What is the registered partnership name?
+cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">You can find this on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
 cds.matching.name-id-organisation.limited-liability-partnership.name.hint = Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
 cds.matching.name-id-organisation.organisation.no-utr=I do not have a Corporation Tax UTR
 cds.matching.name-id-organisation.organisation.no-utr.text=If you are a not for profit organisation or public body and do not have a UTR you need to {0} to complete your EORI number application.
@@ -1584,10 +1584,14 @@ cds.registration.user-location.location.uk.label=United Kingdom
 cds.registration.user-location.location.third-country.label=Outside the European Union
 cds.registration.user-location.location.third-country-inc-eu.label=Rest of the world
 
+cds.matching.name-id-organisation.identity.verify = We use these details to verify your identity.
+
+
 cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.organisation.utr=Corporation Tax Unique Taxpayer Reference (UTR)
+cds.matching.name-id-organisation.registered-company.utr=What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)?
+cds.matching.name-id-organisation.registered-company.matching-page.utr= What is the partnership’s Corporation Tax Unique Taxpayer Reference (UTR)?
+cds.matching.name-id-organisation.partnership.utr=What is the partnership’s Self Assessment Unique Taxpayer Reference (UTR)?
+cds.matching.name-id-organisation.organisation.utr=What is the organisation’s Corporation Tax Unique Taxpayer Reference (UTR)?
 
 cds.subscription.date-of-establishment.company.title-and-heading=Date when your company was established
 
