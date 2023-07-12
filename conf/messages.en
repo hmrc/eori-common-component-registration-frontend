@@ -1584,7 +1584,7 @@ cds.registration.user-location.location.uk.label=United Kingdom
 cds.registration.user-location.location.third-country.label=Outside the European Union
 cds.registration.user-location.location.third-country-inc-eu.label=Rest of the world
 
-cds.matching.name-id-organisation.identity.verify = We use these to verify your identity.
+cds.matching.name-id-organisation.identity.verify = We use these details to verify your identity.
 
 
 cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
