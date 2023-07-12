@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import java.time.format.DateTimeFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
@@ -32,13 +31,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, featureFlags: FeatureFlags)(implicit
-  ec: ExecutionContext
-) {
+class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
-
-  private def maybe(service: Service): Option[Service] = if (featureFlags.sub02UseServiceName) Some(service) else None
 
   def subscribe(
     registration: RegistrationDetails,
@@ -56,7 +51,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
   ): SubscriptionRequest =
     reg match {
       case individual: RegistrationDetailsIndividual =>
-        SubscriptionCreateRequest(individual, subscription, cdsOrgType, individual.dateOfBirth, maybe(service))
+        SubscriptionCreateRequest(individual, subscription, cdsOrgType, individual.dateOfBirth, Some(service))
 
       case org: RegistrationDetailsOrganisation =>
         val doe = subscription.dateEstablished
@@ -67,7 +62,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, fe
           doe.getOrElse(
             throw new IllegalStateException("Date Established must be present for an organisation subscription")
           ),
-          maybe(service)
+          Some(service)
         ).ensuring(
           subscription.sicCode.isDefined,
           "SicCode/Principal Economic Activity must be present for an organisation subscription"

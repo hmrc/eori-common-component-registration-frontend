@@ -14,472 +14,50 @@
  * limitations under the License.
  *@
 
-@import java.time.LocalDate
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{VatRegisteredUkController => VATNumberPage}
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, Eori, Nino, RegistrationDetails, RegistrationDetailsIndividual, Utr}
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.DataUnavailableException
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukSummaryList}
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, SummaryListRow, SummaryList, Key, Value, HtmlContent, Actions, ActionItem}
-@import play.twirl.api.utils.StringEscapeUtils
-@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
-
-@this(layout_di: layout, dateFormatter: DateFormatter, govukButton: GovukButton, govukSummaryList : GovukSummaryList)
-
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, SummaryList}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterViewModel
+@this(layout_di: layout, govukButton: GovukButton, govukSummaryList : GovukSummaryList)
 
 @(
+    viewModel: CheckYourDetailsRegisterViewModel,
     cdsOrgType: Option[CdsOrganisationType],
-    isPartnership: Boolean,
-    registration: RegistrationDetails,
-    subscription: SubscriptionDetails,
-    personalDataDisclosureConsent: Boolean,
-    service: Service,
-    isUserIdentifiedByRegService: Boolean
+    service: Service
 )(implicit request: Request[_], messages: Messages)
 
-@orgNameLabel = @{
-    if(isPartnership) {
-        messages("cds.partner-name.label")
-    } else if(isCharity || isRowOrganisation) {
-        messages("cds.organisation-name.label")
-    } else {
-        messages("cds.business-name.label")
-    }
-}
-
-@euCountry(countryCode: String) = @{
-    messages(messageKeyForEUCountryCode(countryCode))
-}
-
-@messageKeyForEUCountryCode(countryCode: String) = @{
-    s"cds.country.$countryCode"
-}
-
-@isEUCountryCode(countryCode: String) = @{
-    messages.isDefinedAt(messageKeyForEUCountryCode(countryCode))
-}
-
-@transformCountryCodeToOptionalLabel(code: Option[String]) = @{
-    code match {
-        case Some(MatchingForms.countryCodeGB) => Some(messages("cds.country.GB"))
-        case Some(c) if isEUCountryCode(c) => Some(euCountry(c))
-        case Some(nonEuCode) => Some(nonEuCode)
-        case _ => None
-    }
-}
-
-@optionalFaxNumberWithPrefix(fax: Option[String]) = @{
-    fax.map(x => s"${messages("cds.review-page.fax-prefix")} $x")
-}
-
-@formatDate(date: LocalDate) = @{
-    dateFormatter.formatLocalDate(date)
-}
 
 @isIndividual = @{
     cdsOrgType.contains(CdsOrganisationType.Individual) ||
-    cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
-}
-
-@isLlp = @{
-    cdsOrgType.contains(CdsOrganisationType.LimitedLiabilityPartnership)
-}
-
-@isCharity = @{
-    cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
-}
-
-@isSoleTrader = @{
-    cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
-}
-
-@isRowOrganisation = @{
-    cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
-}
-
-@isRowSoleTraderIndividual = @{
-  cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
-}
-
-@getDateOfEstablishmentLabel = @{
-    if(isSoleTrader) {
-        messages("cds.date-of-birth.label")
-    } else {
-        messages("cds.date-established.label")
-    }
-}
-
-@businessDetailsLabel = @{
-    if(isPartnership)
-        messages("cds.form.partnership.contact-details")
-    else if(isIndividual || isSoleTrader) {
-        messages("cds.form.contact-details")
-    }
-    else if(isCharity || isRowOrganisation) {
-        messages("cds.form.organisation-address")
-    } else {
-        messages("cds.form.business-details")
-    }
-}
-
-@ninoOrUtrLabel = @{
-    registration.customsId match {
-        case Some(Utr(_)) => {
-            if(isIndividual || isSoleTrader) {
-                messages("cds.utr.label")
-            }
-            else if(isLlp) {
-                messages("cds.matching.name-id-organisation.company.utr")
-            }
-            else if(isPartnership) {
-                messages("cds.check-your-details.utrnumber.partnership")
-            } else {
-                messages("cds.company.utr.label")
-            }
-        }
-        case Some(Nino(_)) => messages("cds.nino.label")
-        case Some(Eori(_)) => messages("cds.subscription.enter-eori-number.eori-number.label")
-        case _ => messages("cds.nino.label")
-    }
-}
-
-@formattedIndividualDateOfBirth = @{
-    val dateOfBirth: Option[LocalDate] = (subscription.nameDobDetails, registration) match {
-        case (Some(nameDobDetails), _) => Some(nameDobDetails.dateOfBirth)
-        case (None, individual: RegistrationDetailsIndividual) => Some(individual.dateOfBirth)
-        case _ => None
-    }
-    dateOfBirth.map(formatDate)
-}
-
-@individualName = @{
-    subscription.nameDobDetails match {
-        case Some(nameDobDetails) => nameDobDetails.name
-        case _ if registration.name == null  => ""
-        case _ =>  registration.name
-    }
-}
-
-@orgName = @{
-    subscription.nameOrganisationDetails match {
-        case Some(nameOrgDetails) => nameOrgDetails.name
-        case _ if subscription.name == null  => ""
-        case _ => subscription.name
-    }
-}
-
-@orgType = @{cdsOrgType.fold("")(orgType => orgType.id)}
-
-@headerTitle = @{
-    if(isPartnership){
-        messages("cds.form.check-answers-partnership-details")
-    } else if(isIndividual || isSoleTrader) {
-        messages("cds.form.check-answers-your-details")
-    } else if(isCharity || isRowOrganisation) {
-        messages("cds.form.check-answers-organisation-details")
-    }
-    else {
-        messages("cds.form.check-answers-company-details")
-    }
-}
-
-@addressViewModelHtml(ad: AddressViewModel) = {
-    @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.street))
-    @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.city))
-    @ad.postcode.map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-    @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-}
-@addressHtml(ad: Address) = {
-    @helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(ad.addressLine1))
-    @ad.addressLine2.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-    @ad.addressLine3.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-    @ad.addressLine4.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-    @ad.postalCode.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-    @transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-}
-@contactDetailsHtml(details: ContactDetailsModel) = {
-    @details.street.map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-    @details.city.map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-    @details.postcode.map(s =>helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-    @transformCountryCodeToOptionalLabel(details.countryCode).map(s => helpers.noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
-}
-
-@summaryListRow(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "") = @{
-    SummaryListRow(
-        key = Key(
-            content = Text(messages(key))
-        ),
-        value = Value(
-            content = HtmlContent(value.getOrElse("").toString)
-        ),
-        actions = call.flatMap(c => Some(Actions(
-            items = Seq(
-                ActionItem(
-                    href = c.url,
-                    content = Text(messages("cds.form.change")),
-                    visuallyHiddenText = Some(messages(key))
-                )
-            )
-        ))),
-        classes = classes
-    )
-}
-
-@summaryListRowNoChangeOption(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "") = @{
-SummaryListRow(
-key = Key(
-content = Text(messages(key))
-),
-value = Value(
-content = HtmlContent(value.getOrElse("").toString)
-),
-actions = None,
-classes = classes
-)
-}
-
-@email = @{
-    Seq(summaryListRow(
-        key = messages("subscription.enter-email.label"),
-        value = subscription.contactDetails.map(cd => Html(cd.emailAddress)),
-        call = None
-    ))
-}
-
-@individualNameDob = @{
-    if(isIndividual || isSoleTrader) {
-        Seq(summaryListRow(
-            key = messages("subscription.check-your-details.full-name.label"),
-            value = Some(Html(StringEscapeUtils.escapeXml11(individualName))),
-            call = if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None
-        ),
-            summaryListRow(
-                key = messages("subscription.check-your-details.date-of-birth.label"),
-                value = formattedIndividualDateOfBirth.map(dob => Html(dob)),
-                call = if(!isUserIdentifiedByRegService) Some(RowIndividualNameDateOfBirthController.reviewForm(orgType, service)) else None
-            ))
-    } else Seq.empty[SummaryListRow]
-}
-
-@organisationName = @{
-    if(!isIndividual && !isSoleTrader) {
-        Seq(summaryListRow(
-            key = orgNameLabel,
-            value = Some(Text(orgName).asHtml),
-            call = if(!isUserIdentifiedByRegService) Some(WhatIsYourOrgNameController.showForm(isInReviewMode = true, organisationType = orgType, service)) else None
-        ))
-    } else Seq.empty[SummaryListRow]
-}
-
-@organisationUtr = @{
-    if(isRowOrganisation && !isUserIdentifiedByRegService) {
-        Seq(summaryListRow(
-            key = messages("cds.company.utr.label"),
-            value = Some(Html(messages("cds.not-entered.label"))),
-            call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
-        ))
-    } else Seq.empty[SummaryListRow]
-}
-
-@customsId = @{
-    if(registration.customsId.isDefined) {
-        Seq(summaryListRow(
-            key = ninoOrUtrLabel,
-            value = Some(Html(registration.customsId.get.id))
-        ))
-    } else Seq.empty[SummaryListRow]
-}
-
-@individualUtr = @{
-    if(registration.customsId.isEmpty && isRowSoleTraderIndividual) {
-        Seq(
-            summaryListRow(
-                key = messages("cds.utr.label"),
-                value = Some(Html(messages("cds.not-entered.label"))),
-                call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
-            ),
-            summaryListRow(
-                key = messages("cds.nino.label"),
-                value = Some(Html(messages("cds.not-entered.label"))),
-                call = cdsOrgType.map(orgType => DoYouHaveNinoController.displayForm(service))
-            )
-        )
-    } else Seq.empty[SummaryListRow]
-}
-
-@registeredAddress = @{
-    if(isUserIdentifiedByRegService) {
-        subscription.addressDetails.fold {
-            Seq(summaryListRow(
-                key = businessDetailsLabel,
-                value = Some(addressHtml(registration.address)),
-                call = Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service))
-            ))
-        } {
-            address => Seq(summaryListRow(
-                key = businessDetailsLabel,
-                value = Some(addressViewModelHtml(address)),
-                call = Some(ConfirmContactDetailsController.form(service, isInReviewMode = true))
-            ))
-        }
-    } else {
-        Seq(summaryListRow(
-            key = businessDetailsLabel,
-            value = Some(addressHtml(registration.address)),
-            call = Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service))
-        ))
-    }
-}
-
-@dateOfEstablishment = @{
-    Seq(subscription.dateEstablished.map { de =>
-            summaryListRow(
-                key = getDateOfEstablishmentLabel,
-                value = Some(Html(formatDate(de))),
-                call = Some(DateOfEstablishmentController.reviewForm(service))
-            )
-        }
-    ).flatten
-}
-
-@contactName = @{
-    Seq(subscription.contactDetails.map { cd =>
-        summaryListRow(
-            key = messages("cds.form.check-answers.contact-name"),
-            value = Some(Text(cd.fullName).asHtml),
-            call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
-            )
-        }
-    ).flatten
-}
-
-@contactTelephone = @{
-    Seq(subscription.contactDetails.map { cd =>
-        summaryListRow(
-            key = messages("cds.form.check-answers.contact-telephone"),
-            value = Some(Html(cd.telephone)),
-            call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.reviewForm(service))
-            )
-        }
-    ).flatten
-}
-
-@sicCodeDisplay = @{
-    Seq(subscription.sicCode.map { sic =>
-        summaryListRow(
-            key = messages("cds.form.sic-code"),
-            value = Some(Html(sic)),
-            call = Some(SicCodeController.submit(isInReviewMode = true, service))
-        )
-    }).flatten
-}
-
-@vatDetails = @{
-if(!isIndividual && subscription.vatVerificationOption.getOrElse(true) == true) {
-    Seq(
-        summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-number"),
-            value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VATNumberPage.reviewForm(service))
-        ),
-        summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-postcode"),
-            value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VATNumberPage.reviewForm(service))
-        ),
-        summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-date"),
-            value = Some(Html(subscription.vatControlListResponse.map(vat => formatDate(LocalDate.parse(vat.dateOfReg.getOrElse(throw new DataUnavailableException("VAT registration date not found in cache"))))).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VATNumberPage.reviewForm(service))
-        ),
-    )}
-else if(!isIndividual && subscription.vatVerificationOption.getOrElse(false) == false) {
-    Seq(
-        summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-number"),
-            value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VATNumberPage.reviewForm(service))
-        ),
-        summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-postcode"),
-            value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VATNumberPage.reviewForm(service))
-        ),
-        summaryListRowNoChangeOption(
-            key = messages("cds.form.gb-vat-amount"),
-            value = Some(Html(subscription.vatControlListResponse.map(vat => vat.lastNetDue.get.toString).getOrElse(messages("cds.not-entered.label")))),
-            call = Some(VATNumberPage.reviewForm(service))
-        ),
-    )}
-else Seq.empty[SummaryListRow]
-}
-
-@summary = @{
-  Seq(
-    summaryListRow(
-        key = messages("cds.form.disclosure"),
-        value = Some(Html(if(personalDataDisclosureConsent) messages("cds.yes") else messages("cds.no"))),
-        call = Some(DisclosePersonalDetailsConsentController.reviewForm(service))
-    )
-  )
-}
-
-@details = @{
-    Seq(subscription.contactDetails.map { contactDetails =>
-        summaryListRow(
-                key = messages("cds.form.customs-contact-address"),
-                value = Some(contactDetailsHtml(contactDetails)),
-                call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.reviewForm(service))
-            )
-        }
-    ).flatten
+    cdsOrgType.contains(CdsOrganisationType.EUIndividual) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 }
 
 @layout_di(messages("cds.form.check-answers"), displayBackLink = false) {
     <div>
         <h1 class="govuk-heading-l">@messages("cds.form.check-answers")</h1>
         <div>
-            <h2 class="govuk-heading-m">@headerTitle</h2>
-            @govukSummaryList(SummaryList(
-            rows =
-            individualNameDob ++
-            organisationName ++
-            organisationUtr ++
-            customsId ++
-            individualUtr ++
-            registeredAddress ++
-            dateOfEstablishment ++
-            sicCodeDisplay ++
-            summary
-            ))
+            <h2 class="govuk-heading-m">@viewModel.headerTitle</h2>
+            @govukSummaryList(viewModel.providedDetails)
         </div>
+
         @if(!isIndividual){
+
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-vat-details")</h2>
 
             @govukSummaryList(SummaryList(
-                rows = vatDetails
+                rows = viewModel.vatDetails
             ))
         </div>
         }
         <div>
             <h2 class="govuk-heading-m">@messages("cds.form.check-answers-contact-details")</h2>
-        @govukSummaryList(SummaryList(
-            rows = contactName ++
-                   email ++
-                   contactTelephone ++
-                   details
-        ))
+        @govukSummaryList(viewModel.providedContactDetails)
         </div>
         <div>
         <h2 class="govuk-heading-m">@messages("cds.form.check-answers-declaration")</h2>

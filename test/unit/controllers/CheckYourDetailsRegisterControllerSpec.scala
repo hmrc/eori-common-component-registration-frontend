@@ -47,6 +47,8 @@ import util.builders.RegistrationDetailsBuilder.{
 }
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -60,6 +62,7 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockAuthConnector                     = mock[AuthConnector]
   private val mockAuthAction                        = authAction(mockAuthConnector)
   private val mockSessionCache                      = mock[SessionCache]
+  val dateFormatter: DateFormatter                  = instanceOf[DateFormatter]
   private val mockSubscriptionDetails               = mock[SubscriptionDetails]
   private val mockRegisterWithoutIdWithSubscription = mock[RegisterWithoutIdWithSubscriptionService]
   private val mockSubscriptionFlow                  = mock[SubscriptionFlow]
@@ -67,13 +70,16 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockRequestSession                    = mock[RequestSessionData]
   private val checkYourDetailsRegisterView          = instanceOf[check_your_details_register]
 
+  private val viewModelConstructor =
+    new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession)
+
   val controller = new CheckYourDetailsRegisterController(
     mockAuthAction,
-    mockSessionCache,
     mockRequestSession,
     mcc,
     checkYourDetailsRegisterView,
-    mockRegisterWithoutIdWithSubscription
+    mockRegisterWithoutIdWithSubscription,
+    viewModelConstructor
   )
 
   private val organisationRegistrationDetailsWithEmptySafeId = organisationRegistrationDetails.copy(safeId = SafeId(""))
@@ -279,7 +285,7 @@ class CheckYourDetailsRegisterControllerSpec
         page.getSummaryListValue(
           RegistrationReviewPage.SummaryListRowXPath,
           "Contact telephone"
-        ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.telephone
+        ) shouldBe contactUkDetailsModelWithMandatoryValuesOnly.telephone.getOrElse("")
         page.getSummaryListValue(
           RegistrationReviewPage.SummaryListRowXPath,
           "Email address"
@@ -721,7 +727,7 @@ class CheckYourDetailsRegisterControllerSpec
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
         "Show name and address on the 'Check an EORI number' service"
-      ) shouldBe "Yes"
+      ) shouldBe "Yes I want my partnership name and address on the EORI checker"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
         "Show name and address on the 'Check an EORI number' service",
@@ -852,11 +858,11 @@ class CheckYourDetailsRegisterControllerSpec
   )(test: Future[Result] => Any): Unit = {
     val controller = new CheckYourDetailsRegisterController(
       mockAuthAction,
-      mockSessionCache,
       mockRequestSession,
       mcc,
       checkYourDetailsRegisterView,
-      mockRegisterWithoutIdWithSubscription
+      mockRegisterWithoutIdWithSubscription,
+      viewModelConstructor
     )
 
     withAuthorisedUser(userId, mockAuthConnector)

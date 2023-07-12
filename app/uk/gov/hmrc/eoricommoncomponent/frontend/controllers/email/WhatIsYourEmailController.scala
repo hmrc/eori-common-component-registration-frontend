@@ -39,18 +39,9 @@ class WhatIsYourEmailController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  private def populateView(email: Option[String], service: Service)(implicit
-    request: Request[AnyContent]
-  ): Future[Result] = {
-    lazy val form = email.map(EmailViewModel).fold(emailForm) {
-      emailForm.fill
-    }
-    Future.successful(Ok(whatIsYourEmailView(emailForm = form, service)))
-  }
-
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      populateView(None, service)
+      Future.successful(Ok(whatIsYourEmailView(emailForm = emailForm, service)))
     }
 
   def submit(service: Service): Action[AnyContent] =

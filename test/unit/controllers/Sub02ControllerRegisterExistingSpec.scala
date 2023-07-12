@@ -22,7 +22,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CdsSubscriber, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -40,7 +40,6 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
   private val mockSessionCache               = mock[SessionCache]
   private val mockCdsSubscriber              = mock[CdsSubscriber]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockFeatureFlag                = mock[FeatureFlags]
 
   private val sub01OutcomeView                = instanceOf[sub01_outcome_processing]
   private val sub02RequestNotProcessed        = instanceOf[sub02_request_not_processed]
@@ -66,8 +65,7 @@ class Sub02ControllerRegisterExistingSpec extends ControllerSpec with BeforeAndA
     standaloneOutcomeView,
     subscriptionOutcomeView,
     xiEoriGuidanceView,
-    mockCdsSubscriber,
-    mockFeatureFlag
+    mockCdsSubscriber
   )(global)
 
   val eoriNumberResponse: String     = "EORI-Number"

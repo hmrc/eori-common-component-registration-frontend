@@ -18,7 +18,7 @@ package unit.services
 
 import base.UnitSpec
 import org.mockito.Mockito.when
-import org.mockito.{ArgumentCaptor, ArgumentMatchers}
+import org.mockito.{ArgumentCaptor, ArgumentMatchers, Mockito}
 import org.scalacheck.{Gen, Prop}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.prop.TableDrivenPropertyChecks._
@@ -27,7 +27,6 @@ import org.scalatestplus.scalacheck.Checkers
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.FeatureFlags
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
@@ -51,11 +50,11 @@ import scala.concurrent.Future
 class SubscriptionServiceSpec
     extends UnitSpec with MockitoSugar with BeforeAndAfterAll with Checkers with SubscriptionServiceTestData {
   private val mockHeaderCarrier = mock[HeaderCarrier]
-  private val mockConfig        = mock[FeatureFlags]
 
   override def beforeAll() = {
     super.beforeAll()
-    when(mockConfig.sub02UseServiceName).thenReturn(true)
+    Mockito.reset(mockHeaderCarrier)
+
   }
 
   private def subscriptionSuccessResultIgnoreTimestamp(
@@ -640,7 +639,7 @@ class SubscriptionServiceSpec
   private def constructService(setupServiceConnector: SubscriptionServiceConnector => Unit) = {
     val mockSubscriptionServiceConnector = mock[SubscriptionServiceConnector]
     setupServiceConnector(mockSubscriptionServiceConnector)
-    new SubscriptionService(mockSubscriptionServiceConnector, mockConfig)
+    new SubscriptionService(mockSubscriptionServiceConnector)
   }
 
   private def assertSameJson(json: JsValue, expectedJson: JsValue) = {
