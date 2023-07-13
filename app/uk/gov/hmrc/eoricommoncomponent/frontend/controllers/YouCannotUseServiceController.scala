@@ -22,6 +22,7 @@ import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.affinityGroup
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthProviders, AuthorisedFunctions}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthRedirectSupport, EnrolmentExtractor}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 import javax.inject.{Inject, Singleton}
@@ -38,14 +39,14 @@ class YouCannotUseServiceController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with AuthorisedFunctions with AuthRedirectSupport with EnrolmentExtractor {
 
-  def page(): Action[AnyContent] = Action.async { implicit request =>
+  def page(service: Service): Action[AnyContent] = Action.async { implicit request =>
     authorised(AuthProviders(GovernmentGateway))
       .retrieve(affinityGroup) { ag =>
         Future.successful(Unauthorized(youCantUseService(ag)))
       } recover withAuthRecovery(request)
   }
 
-  def unauthorisedPage(): Action[AnyContent] = Action { implicit request =>
+  def unauthorisedPage(service: Service): Action[AnyContent] = Action { implicit request =>
     Unauthorized(unauthorisedView())
   }
 

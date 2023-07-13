@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_groups_cannot_register_using_this_service
 
 import javax.inject.{Inject, Singleton}
@@ -27,7 +28,7 @@ class VatGroupsCannotRegisterUsingThisServiceController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def form(): Action[AnyContent] = Action { implicit request =>
+  def form(service: Service): Action[AnyContent] = Action { implicit request =>
     Ok(view())
   }
 

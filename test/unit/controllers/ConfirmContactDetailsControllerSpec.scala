@@ -109,12 +109,12 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
 
   "processing" should {
 
-    "Correctly redirect to sub01OutcomeProcessingView" in {
+    "Correctly redirect to sub01OutcomeProcessingView" in servicesToTest.foreach { testService =>
       when(mockSessionCache.registrationDetails(any[Request[AnyContent]])).thenReturn(Future.successful(mockRegDetails))
       when(mockSessionCache.sub01Outcome(any[Request[AnyContent]])).thenReturn(Future.successful(mockSub01Outcome))
 
       val result =
-        await(controller.processing()).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+        await(controller.processing(testService)).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       result.header.status shouldBe OK
     }

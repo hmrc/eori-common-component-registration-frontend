@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.use_a_different_service
 
 import javax.inject.{Inject, Singleton}
@@ -27,7 +28,7 @@ class UseADifferentServiceController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def form(): Action[AnyContent] = Action { implicit request =>
+  def form(service: Service): Action[AnyContent] = Action { implicit request =>
     Ok(useADifferentServiceView())
   }
 

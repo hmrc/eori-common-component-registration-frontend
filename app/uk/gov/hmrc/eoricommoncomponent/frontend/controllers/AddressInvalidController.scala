@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address_invalid_individual, address_invalid_organisation}
 
@@ -34,7 +35,7 @@ class AddressInvalidController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def page(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def page(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       if (requestSessionData.isIndividualOrSoleTrader(request))
         Future.successful(Ok(addressInvalidIndividual()))

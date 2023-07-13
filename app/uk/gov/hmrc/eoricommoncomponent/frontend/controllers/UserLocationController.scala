@@ -96,7 +96,7 @@ class UserLocationController @Inject() (
         details =>
           (details.location, loggedInUser.groupId) match {
             case (Some(UserLocation.Iom), Some(_)) =>
-              Future.successful(Redirect(YouNeedADifferentServiceIomController.form()))
+              Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
             case (Some(location), Some(id)) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
             case _ =>
@@ -155,7 +155,7 @@ class UserLocationController @Inject() (
   )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
     preSubStatus match {
       case SubscriptionProcessing =>
-        Future.successful(Redirect(UserLocationController.processing()))
+        Future.successful(Redirect(UserLocationController.processing(service)))
       case SubscriptionExists => handleExistingSubscription(groupId, service)
       case NewSubscription | SubscriptionRejected =>
         Future.successful(
@@ -179,7 +179,7 @@ class UserLocationController @Inject() (
     case _ => Future.successful(InternalServerError(errorTemplate()))
   }
 
-  def processing(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.sub01Outcome
         .map(_.processedDate)

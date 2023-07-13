@@ -67,9 +67,9 @@ class YouCannotUseServiceControllerSpec extends ControllerSpec with BeforeAndAft
   }
 
   def page()(test: Future[Result] => Any): Unit =
-    test(controller.page().apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
+    test(controller.page(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
   def unauthorisedPage()(test: Future[Result] => Any): Unit =
-    test(controller.unauthorisedPage().apply(SessionBuilder.buildRequestWithSessionNoUserAndToken()))
+    test(controller.unauthorisedPage(atarService).apply(SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
 }

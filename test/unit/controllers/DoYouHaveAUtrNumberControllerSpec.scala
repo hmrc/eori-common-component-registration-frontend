@@ -191,7 +191,7 @@ class DoYouHaveAUtrNumberControllerSpec
       submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith(
-          s"/customs-registration-services/register/are-you-vat-registered-in-uk"
+          s"/customs-registration-services/atar/register/are-you-vat-registered-in-uk"
         )
       }
     }

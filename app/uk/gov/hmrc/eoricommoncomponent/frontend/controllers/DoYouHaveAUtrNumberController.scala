@@ -88,7 +88,7 @@ class DoYouHaveAUtrNumberController @Inject() (
   private def noUtrDestination(organisationType: String, service: Service, isInReviewMode: Boolean): Result =
     organisationType match {
       case CdsOrganisationType.CharityPublicBodyNotForProfitId =>
-        Redirect(VatRegisteredUkKanaController.form())
+        Redirect(VatRegisteredUkKanaController.form(service))
       case CdsOrganisationType.ThirdCountryOrganisationId =>
         noUtrOrganisationRedirect(isInReviewMode, organisationType, service)
       case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>

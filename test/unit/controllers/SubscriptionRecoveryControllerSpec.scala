@@ -331,7 +331,7 @@ class SubscriptionRecoveryControllerSpec
 
     callEnrolmentComplete() { result =>
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result) shouldBe Some("/customs-registration-services/register/eori-exist")
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/eori-exist")
     }
   }
 
@@ -348,7 +348,7 @@ class SubscriptionRecoveryControllerSpec
 
     callEnrolmentComplete() { result =>
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result) shouldBe Some("/customs-registration-services/register/eori-exist")
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/eori-exist")
     }
   }
 
@@ -365,7 +365,7 @@ class SubscriptionRecoveryControllerSpec
 
     callEnrolmentComplete() { result =>
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result) shouldBe Some("/customs-registration-services/register/eori-exist")
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/eori-exist")
     }
   }
 
@@ -453,7 +453,7 @@ class SubscriptionRecoveryControllerSpec
   def callExistingEori(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
 
     withAuthorisedUser(userId, mockAuthConnector)
-    test(controller.eoriExist().apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(controller.eoriExist(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
 }

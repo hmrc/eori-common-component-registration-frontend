@@ -96,9 +96,9 @@ class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMo
   }
 
   def showForm()(test: Future[Result] => Any): Unit =
-    test(controller.form().apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
+    test(controller.form(atarService).apply(request = SessionBuilder.buildRequestWithSessionNoUserAndToken()))
 
   def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit =
-    test(controller.submit().apply(SessionBuilder.buildRequestWithFormValues(form)))
+    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithFormValues(form)))
 
 }

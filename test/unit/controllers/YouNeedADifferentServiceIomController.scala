@@ -48,7 +48,7 @@ class YouNeedADifferentServiceIomControllerSpec extends ControllerSpec with Befo
 
     "return youNeedDifferentServiceIom page" in {
 
-      val result = controller.form()(FakeRequest())
+      val result = controller.form(atarService)(FakeRequest())
 
       status(result) shouldBe OK
     }

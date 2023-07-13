@@ -98,7 +98,9 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
         val result = await(
           service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(wrongAddress)))
         )
-        result.header.headers("Location") mustBe s"/customs-registration-services/register/you-cannot-change-address"
+        result.header.headers(
+          "Location"
+        ) mustBe s"/customs-registration-services/${testService.code}/register/you-cannot-change-address"
 
     }
 
@@ -150,7 +152,9 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
         val result = await(
           service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
         )
-        result.header.headers("Location") mustBe s"/customs-registration-services/register/processing"
+        result.header.headers(
+          "Location"
+        ) mustBe s"/customs-registration-services/${testService.code}/register/processing"
 
     }
 
@@ -171,7 +175,7 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
         )
         result.header.headers(
           "Location"
-        ) mustBe s"/customs-registration-services/register/you-need-to-sign-in-with-different-details"
+        ) mustBe s"/customs-registration-services/${testService.code}/register/you-need-to-sign-in-with-different-details"
 
     }
 
@@ -259,7 +263,9 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
           )
 
           val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          result.header.headers("Location") mustBe s"/customs-registration-services/register/address-invalid"
+          result.header.headers(
+            "Location"
+          ) mustBe s"/customs-registration-services/${testService.code}/register/address-invalid"
       }
 
       "Populate confirmContactDetailsView when valid address submitted for individual" in subscriptionToTest.foreach {
@@ -283,7 +289,9 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
           )
 
           val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          result.header.headers("Location") mustBe s"/customs-registration-services/register/address-invalid"
+          result.header.headers(
+            "Location"
+          ) mustBe s"/customs-registration-services/${testService.code}/register/address-invalid"
       }
 
       "Populate confirmContactDetailsView when valid address submitted for organisation" in subscriptionToTest.foreach {

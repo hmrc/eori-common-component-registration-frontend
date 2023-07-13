@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sign_in_with_different_details
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +32,7 @@ class SignInWithDifferentDetailsController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def form(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def form(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(signInWithDifferentDetailsView()))
   }

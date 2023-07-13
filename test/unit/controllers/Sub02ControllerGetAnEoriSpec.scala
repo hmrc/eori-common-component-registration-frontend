@@ -228,7 +228,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.pending().url
+        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.pending(atarService).url
       }
     }
 
@@ -245,7 +245,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyExists().url
+        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyExists(atarService).url
       }
     }
 
@@ -262,7 +262,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyAssociated().url
+        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyAssociated(atarService).url
       }
     }
 
@@ -279,7 +279,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.subscriptionInProgress().url
+        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.subscriptionInProgress(atarService).url
       }
     }
 
@@ -299,7 +299,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         result.header.headers(
           LOCATION
         ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
-          .requestNotProcessed()
+          .requestNotProcessed(atarService)
           .url
       }
     }
@@ -530,27 +530,41 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   private def invokeEoriAlreadyExists(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    test(subscriptionController.eoriAlreadyExists().apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(
+      subscriptionController.eoriAlreadyExists(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+    )
   }
 
   private def invokeSubscriptionInProgress(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    test(subscriptionController.subscriptionInProgress().apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(
+      subscriptionController.subscriptionInProgress(atarService).apply(
+        SessionBuilder.buildRequestWithSession(defaultUserId)
+      )
+    )
   }
 
   private def invokeEoriAlreadyAssociated(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    test(subscriptionController.eoriAlreadyAssociated().apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(
+      subscriptionController.eoriAlreadyAssociated(atarService).apply(
+        SessionBuilder.buildRequestWithSession(defaultUserId)
+      )
+    )
   }
 
   private def invokeRequestNotProcessed(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    test(subscriptionController.requestNotProcessed().apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(
+      subscriptionController.requestNotProcessed(atarService).apply(
+        SessionBuilder.buildRequestWithSession(defaultUserId)
+      )
+    )
   }
 
   private def invokePending(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    test(subscriptionController.pending().apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+    test(subscriptionController.pending(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
 }

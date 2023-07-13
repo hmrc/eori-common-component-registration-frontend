@@ -11,8 +11,8 @@ GET         /customs-registration-services/language/:lang                       
 # enrolment-already-exists
 GET         /customs-registration-services/:service/register/enrolment-already-exists                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service: Service)
 GET         /customs-registration-services/:service/register/enrolment-already-exists-for-group          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service: Service)
-GET         /customs-registration-services/register/cds-enrolment-exists                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone()
-GET         /customs-registration-services/register/cds-enrolment-exists-for-group              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone()
+GET         /customs-registration-services/:service/register/cds-enrolment-exists                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service: Service)
+GET         /customs-registration-services/:service/register/cds-enrolment-exists-for-group              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service: Service)
 
 # eori-already-exists
 GET         /customs-registration-services/:service/register/you-already-have-an-eori                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouAlreadyHaveEoriController.display(service: Service)
@@ -23,10 +23,10 @@ GET         /customs-registration-services/:service/register/already-have-an-eor
 GET         /customs-registration-services/:service/register/display-sign-out                            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SecuritySignOutController.displayPage(service: Service)
 GET         /customs-registration-services/:service/register/sign-out                                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SecuritySignOutController.signOut(service: Service)
 
-GET         /customs-registration-services/register/you-cannot-use-service                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotUseServiceController.page()
-GET         /customs-registration-services/register/unauthorised                                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotUseServiceController.unauthorisedPage()
+GET         /customs-registration-services/:service/register/you-cannot-use-service                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotUseServiceController.page(service: Service)
+GET         /customs-registration-services/:service/register/unauthorised                                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotUseServiceController.unauthorisedPage(service: Service)
 
-GET         /customs-registration-services/register/keep-alive                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.keepAlive()
+GET         /customs-registration-services/:service/register/keep-alive                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.keepAlive(service: Service)
 
 GET         /customs-registration-services/:service/register/email-confirmed                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmailController.emailConfirmed(service: Service)
 GET         /customs-registration-services/:service/register/email-confirmed-continue                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmailController.emailConfirmedContinue(service: Service)
@@ -46,12 +46,12 @@ GET         /customs-registration-services/:service/register/matching/verify-you
 # register Get An Eori
 GET         /customs-registration-services/:service/register                                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.startRegister(service: Service)
 
-GET         /customs-registration-services/register/are-you-vat-registered-in-uk                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkKanaController.form()
-POST        /customs-registration-services/register/are-you-vat-registered-in-uk                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkKanaController.submit()
+GET         /customs-registration-services/:service/register/are-you-vat-registered-in-uk                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkKanaController.form(service: Service)
+POST        /customs-registration-services/:service/register/are-you-vat-registered-in-uk                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatRegisteredUkKanaController.submit(service: Service)
 
-GET         /customs-registration-services/register/you-need-different-service-iom              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouNeedADifferentServiceIomController.form()
+GET         /customs-registration-services/:service/register/you-need-different-service-iom              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouNeedADifferentServiceIomController.form(service: Service)
 
-GET         /customs-registration-services/register/use-a-different-service                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UseADifferentServiceController.form()
+GET         /customs-registration-services/:service/register/use-a-different-service                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UseADifferentServiceController.form(service: Service)
 
 GET         /customs-registration-services/:service/register/review-details                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.reviewDetails(service: Service)
 POST        /customs-registration-services/:service/register/subscribe                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.submitDetails(service: Service)
@@ -59,20 +59,20 @@ POST        /customs-registration-services/:service/register/subscribe          
 GET         /customs-registration-services/:service/register/download/text                                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadTextController.download(service: Service)
 
 
-GET         /customs-registration-services/register/processing                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController.processing()
+GET         /customs-registration-services/:service/register/processing                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController.processing(service: Service)
 
-GET         /customs-registration-services/register/user-already-has-eori                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.eoriAlreadyExists()
-GET         /customs-registration-services/register/user-already-has-eori-associated            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.eoriAlreadyAssociated()
-GET         /customs-registration-services/register/subscription-in-progress                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.subscriptionInProgress()
-GET         /customs-registration-services/register/request-not-processed                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.requestNotProcessed()
-GET         /customs-registration-services/register/review                                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.pending()
+GET         /customs-registration-services/:service/register/user-already-has-eori                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.eoriAlreadyExists(service: Service)
+GET         /customs-registration-services/:service/register/user-already-has-eori-associated            @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.eoriAlreadyAssociated(service: Service)
+GET         /customs-registration-services/:service/register/subscription-in-progress                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.subscriptionInProgress(service: Service)
+GET         /customs-registration-services/:service/register/request-not-processed                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.requestNotProcessed(service: Service)
+GET         /customs-registration-services/:service/register/review                                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.pending(service: Service)
 GET         /customs-registration-services/:service/register/complete                                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller.end(service: Service)
 
 GET         /customs-registration-services/:service/register/business-details-recovery                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessDetailsRecoveryController.form(service: Service)
 GET         /customs-registration-services/:service/register/business-details-recovery/continue          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.BusinessDetailsRecoveryController.continue(service: Service)
 
 # Return
-GET         /customs-registration-services/register/return-processing                           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController.processing()
+GET         /customs-registration-services/:service/register/return-processing                           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController.processing(service: Service)
 GET         /customs-registration-services/:service/register/matching/user-location                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController.form(service: Service)
 POST        /customs-registration-services/:service/register/matching/user-location                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController.submit(service: Service)
 GET         /customs-registration-services/:service/register/matching/organisation-type                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.OrganisationTypeController.form(service: Service)
@@ -130,7 +130,7 @@ GET         /customs-registration-services/:service/register/matching/row/get-ni
 POST        /customs-registration-services/:service/register/matching/row/get-nino                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetNinoController.submit(service: Service)
 
 GET         /customs-registration-services/:service/register/complete-enrolment                          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController.complete(service: Service)
-GET         /customs-registration-services/register/eori-exist                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController.eoriExist()
+GET         /customs-registration-services/:service/register/eori-exist                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController.eoriExist(service: Service)
 
 GET         /customs-registration-services/:service/register/confirm-individual-type                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmIndividualTypeController.form(service: Service)
 POST        /customs-registration-services/:service/register/confirm-individual-type                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmIndividualTypeController.submit(service: Service)
@@ -177,9 +177,9 @@ POST        /customs-registration-services/:service/register/vat-registered-uk/r
 GET         /customs-registration-services/:service/register/vat-group                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/vat-group                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupController.submit(service: Service)
 
-GET         /customs-registration-services/register/you-cannot-register-using-this-service      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupsCannotRegisterUsingThisServiceController.form()
+GET         /customs-registration-services/:service/register/you-cannot-register-using-this-service      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatGroupsCannotRegisterUsingThisServiceController.form(service: Service)
 
-GET         /customs-registration-services/register/you-need-to-sign-in-with-different-details  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SignInWithDifferentDetailsController.form()
+GET         /customs-registration-services/:service/register/you-need-to-sign-in-with-different-details  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SignInWithDifferentDetailsController.form(service: Service)
 
 GET         /customs-registration-services/:service/register/contact-details                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactDetailsController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/contact-details                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ContactDetailsController.submit(isInReviewMode:Boolean = false, service: Service)
@@ -195,9 +195,9 @@ GET         /customs-registration-services/register/xi-eori-guidance            
 
 GET         /customs-registration-services/:service/register/logout                                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.logout(service: Service)
 
-GET         /customs-registration-services/register/you-cannot-change-address                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotChangeAddressController.page()
+GET         /customs-registration-services/:service/register/you-cannot-change-address                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotChangeAddressController.page(service: Service)
 
-GET         /customs-registration-services/register/address-invalid                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressInvalidController.page()
+GET         /customs-registration-services/:service/register/address-invalid                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressInvalidController.page(service: Service)
 
 GET         /admin/metrics                                                                                @com.kenshoo.play.metrics.MetricsController.metrics
 

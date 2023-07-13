@@ -51,14 +51,14 @@ trait AccessController {
       }
 
     if (!isPermittedUserType)
-      Future.successful(Redirect(routes.YouCannotUseServiceController.page()))
+      Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else if (hasEnrolment)
       if (service.code.equalsIgnoreCase(Service.eoriOnly.code))
-        Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone()))
+        Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service)))
       else
         Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExists(service)))
     else if (!isPermittedCredentialRole)
-      Future.successful(Redirect(routes.YouCannotUseServiceController.page()))
+      Future.successful(Redirect(routes.YouCannotUseServiceController.page(service)))
     else
       action
   }

@@ -65,7 +65,7 @@ class SubscriptionRecoveryController @Inject() (
       subscribeGetAnEori(service)
     }
 
-  def eoriExist(): Action[AnyContent] =
+  def eoriExist(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithServiceAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         for {
@@ -108,7 +108,7 @@ class SubscriptionRecoveryController @Inject() (
             // $COVERAGE-OFF$Loggers
             logger.info("Email Missing")
             // $COVERAGE-ON
-            Future.successful(Redirect(SubscriptionRecoveryController.eoriExist()))
+            Future.successful(Redirect(SubscriptionRecoveryController.eoriExist(service)))
           }
         }
       case Left(_) =>

@@ -55,7 +55,7 @@ class ConfirmContactDetailsController @Inject() (
         )
     }
 
-  def processing(): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
         name          <- sessionCache.registrationDetails.map(_.name)

@@ -36,7 +36,7 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
   private val yesNoInputName         = "yes-no-answer"
   private val answerYes              = true.toString
   private val answerNo               = false.toString
-  private val expectedYesRedirectUrl = routes.VatGroupsCannotRegisterUsingThisServiceController.form().url
+  private val expectedYesRedirectUrl = routes.VatGroupsCannotRegisterUsingThisServiceController.form(atarService).url
   private val expectedNoRedirectUrl  = EmailController.form(atarService).url
 
   private val vatGroupView = instanceOf[vat_group]

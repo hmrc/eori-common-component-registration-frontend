@@ -52,7 +52,7 @@ class EnrolmentAlreadyExistsController @Inject() (
     authAction.ggAuthorisedUserAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
-          Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone()))
+          Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service)))
         else
           Future.successful(Ok(registrationExistsView(service)))
     }
@@ -64,7 +64,7 @@ class EnrolmentAlreadyExistsController @Inject() (
         Future.successful(Ok(registrationExistsForGroupView(service)))
     }
 
-  def enrolmentAlreadyExistsStandalone(): Action[AnyContent] =
+  def enrolmentAlreadyExistsStandalone(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
         val eoriNumber = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
@@ -79,7 +79,7 @@ class EnrolmentAlreadyExistsController @Inject() (
         )
     }
 
-  def enrolmentAlreadyExistsForGroupStandalone(): Action[AnyContent] =
+  def enrolmentAlreadyExistsForGroupStandalone(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
         sessionCache.eori.map(
