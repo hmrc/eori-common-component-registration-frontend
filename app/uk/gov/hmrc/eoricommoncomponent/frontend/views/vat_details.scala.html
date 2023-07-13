@@ -47,7 +47,7 @@
             @CSRF.formField
             <h1 class="govuk-heading-l">@messages("cds.subscription.vat-details.heading")</h1>
             <p id="intro-text" class="govuk-body">@messages("cds.subscription.vat-details.intro-text")</p>
-            <p id="intro-link" class="govuk-body">@vatUKLink</p>
+            @vatUKLink
 
 
             @inputText(
