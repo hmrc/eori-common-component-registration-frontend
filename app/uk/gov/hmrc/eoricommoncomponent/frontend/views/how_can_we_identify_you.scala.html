@@ -52,7 +52,7 @@
 
 @layout_di(title, form = Some(ninoUtrForm)) {
     <div>
-        @errorSummary(ninoUtrForm.errors, focusOverrides = Map("ninoOrUtrRadio" -> "nino-radio"))
+        @errorSummary(ninoUtrForm.errors, focusOverrides = Map("ninoOrUtrRadio" -> "ninoOrUtrRadio-nino"))
 
         @helpers.form(HowCanWeIdentifyYouController.submit(service), "nino-utr-form") {
             @CSRF.formField
