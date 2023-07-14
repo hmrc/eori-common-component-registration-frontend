@@ -23,6 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.http.HttpClient
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +36,7 @@ class VatControlListConnector @Inject() (http: HttpClient, appConfig: AppConfig)
   def vatControlList(
     request: VatControlListRequest
   )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, VatControlListResponse]] =
-    http.GET[HttpResponse](url, request.queryParams) map { response =>
+    http.GET[HttpResponse](url, request.queryParams, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"vat-known-facts-control-list successful. url: $url")
       // $COVERAGE-ON

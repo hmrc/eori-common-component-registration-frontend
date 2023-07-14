@@ -26,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegistrationDispla
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.HttpClient
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
@@ -46,7 +47,7 @@ class RegistrationDisplayConnector @Inject() (http: HttpClient, appConfig: AppCo
     )
     // $COVERAGE-ON
 
-    http.POST[RegistrationDisplayRequestHolder, RegistrationDisplayResponseHolder](url, request) map { response =>
+    http.POST[RegistrationDisplayRequestHolder, RegistrationDisplayResponseHolder](url, request, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"[RegistrationDisplay: response: $response")
       // $COVERAGE-ON

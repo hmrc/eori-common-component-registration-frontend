@@ -33,6 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.HttpClient
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
@@ -53,7 +54,7 @@ class SUB09SubscriptionDisplayConnector @Inject() (http: HttpClient, appConfig: 
     logger.debug(s"SubscriptionDisplay SUB09: $url, body: $sub09Request and hc: $hc")
     // $COVERAGE-ON
 
-    http.GET[SubscriptionDisplayResponseHolder](url, sub09Request) map { resp =>
+    http.GET[SubscriptionDisplayResponseHolder](url, sub09Request, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { resp =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"SubscriptionDisplay SUB09: responseCommon: ${resp.subscriptionDisplayResponse.responseCommon}")
       // $COVERAGE-ON

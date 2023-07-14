@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
   RegisterWithIdSubmitted
 }
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -54,7 +55,7 @@ class MatchingServiceConnector @Inject() (http: HttpClient, appConfig: AppConfig
     logger.debug(s"REG01 Lookup: $url, requestCommon: ${req.registerWithIDRequest.requestCommon} and hc: $hc")
     // $COVERAGE-ON
 
-    http.POST[MatchingRequestHolder, MatchingResponse](url, req) map { resp =>
+    http.POST[MatchingRequestHolder, MatchingResponse](url, req, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { resp =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"REG01 Lookup: responseCommon: ${resp.registerWithIDResponse.responseCommon}")
       // $COVERAGE-ON

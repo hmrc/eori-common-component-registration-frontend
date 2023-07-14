@@ -29,6 +29,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Su
 import uk.gov.hmrc.http._
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.SubscriptionDisplayMessagingService
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.inject.bind
 
 class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -42,6 +44,9 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         "auditing.consumer.baseUri.host"                                                      -> Host,
         "auditing.consumer.baseUri.port"                                                      -> Port
       )
+    )
+    .overrides(
+      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
     )
     .build()
 

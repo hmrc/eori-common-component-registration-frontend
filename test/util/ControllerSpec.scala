@@ -37,11 +37,22 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.Application
+import play.api.inject.bind
+
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 import scala.util.Random
 
 trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with Injector with TestData {
+
+  implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .overrides(
+      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
+    )
+    .build()
 
   implicit val messagesApi: MessagesApi = instanceOf[MessagesApi]
 

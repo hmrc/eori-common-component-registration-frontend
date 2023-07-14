@@ -30,6 +30,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Ha
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, HandleSubscriptionService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.inject.bind
 
 class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -54,6 +56,9 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
         "auditing.consumer.baseUri.host"                 -> Host,
         "auditing.consumer.baseUri.port"                 -> Port
       )
+    )
+    .overrides(
+      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
     )
     .build()
 

@@ -29,20 +29,27 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
 import uk.gov.hmrc.http.HeaderCarrier
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, RegistrationDisplay}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.inject.bind
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(
-    Map(
-      "microservice.services.eori-common-component-hods-proxy.host"                         -> Host,
-      "microservice.services.eori-common-component-hods-proxy.port"                         -> Port,
-      "microservice.services.eori-common-component-hods-proxy.registration-display.context" -> "registration-display",
-      "auditing.consumer.baseUri.host"                                                      -> Host,
-      "auditing.consumer.baseUri.port"                                                      -> Port
+  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .configure(
+      Map(
+        "microservice.services.eori-common-component-hods-proxy.host"                         -> Host,
+        "microservice.services.eori-common-component-hods-proxy.port"                         -> Port,
+        "microservice.services.eori-common-component-hods-proxy.registration-display.context" -> "registration-display",
+        "auditing.consumer.baseUri.host"                                                      -> Host,
+        "auditing.consumer.baseUri.port"                                                      -> Port
+      )
     )
-  ).build()
+    .overrides(
+      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
+    )
+    .build()
 
   implicit val hc = HeaderCarrier()
 

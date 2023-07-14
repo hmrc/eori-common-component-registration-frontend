@@ -23,6 +23,7 @@ import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.http.{BadRequestException, _}
 import uk.gov.hmrc.http.HttpClient
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
@@ -48,7 +49,7 @@ class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(imp
     logger.debug(s"GET: $url")
     // $COVERAGE-ON
 
-    http.GET[HttpResponse](url) map { response =>
+    http.GET[HttpResponse](url, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
       logSuccess("Get", url)
 
       response.status match {
@@ -72,7 +73,7 @@ class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(imp
     logger.debug(s"PUT: $url")
     // $COVERAGE-ON
 
-    http.PUT[JsValue, HttpResponse](url, payload) map { response =>
+    http.PUT[JsValue, HttpResponse](url, payload, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
       logSuccess("Put", url)
       response.status match {
         case NO_CONTENT | CREATED | OK => ()
@@ -92,7 +93,7 @@ class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(imp
     logger.debug(s"DELETE: $url")
     // $COVERAGE-ON
 
-    http.DELETE[HttpResponse](url) map { response =>
+    http.DELETE[HttpResponse](url, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
       logSuccess("Delete", url)
       response.status match {
         case NO_CONTENT => ()
@@ -112,7 +113,7 @@ class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(imp
     logger.debug(s"DELETE Key: $url")
     // $COVERAGE-ON
 
-    http.DELETE[HttpResponse](url) map { response =>
+    http.DELETE[HttpResponse](url, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
       logSuccess("Delete key", url)
       response.status match {
         case NO_CONTENT => ()

@@ -31,6 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.HttpClient
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -50,7 +51,7 @@ class SubscriptionStatusConnector @Inject() (http: HttpClient, appConfig: AppCon
     logger.debug(s"Status SUB01: $url, queryParams: ${request.queryParams} and hc: $hc")
     // $COVERAGE-ON
 
-    http.GET[SubscriptionStatusResponseHolder](url, request.queryParams) map { resp =>
+    http.GET[SubscriptionStatusResponseHolder](url, request.queryParams, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { resp =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"Status SUB01: responseCommon: ${resp.subscriptionStatusResponse.responseCommon}")
       // $COVERAGE-ON

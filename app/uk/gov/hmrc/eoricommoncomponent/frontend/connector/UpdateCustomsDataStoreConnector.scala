@@ -44,7 +44,8 @@ class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: Ap
     // $COVERAGE-OFF$Loggers
     logger.info(s"[$LoggerComponentId][call] postUrl: $url")
     // $COVERAGE-ON
-    val headers = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON)
+
+    val headers = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON, AUTHORIZATION -> appConfig.internalAuthToken)
     http.POST[CustomsDataStoreRequest, HttpResponse](url, request, headers) map { response =>
       auditCall(url, request, response)
       response.status match {

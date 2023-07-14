@@ -23,7 +23,6 @@ import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.libs.json.Writes
 import play.api.test.Injecting
 import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR}
@@ -38,11 +37,22 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RequestCommon, ResponseCommon}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, MethodNotAllowedException, _}
 
+import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.Application
+import play.api.inject.bind
+
 import java.time.{LocalDateTime, ZoneOffset}
 import scala.concurrent.{ExecutionContext, Future}
 
 class UpdateVerifiedEmailConnectorSpec
-    extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfter with Injecting with GuiceOneAppPerTest {
+    extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfter with Injecting {
+
+  implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .overrides(
+      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
+    )
+    .build()
 
   private val mockAppConfig  = mock[AppConfig]
   private val mockHttpClient = mock[HttpClient]

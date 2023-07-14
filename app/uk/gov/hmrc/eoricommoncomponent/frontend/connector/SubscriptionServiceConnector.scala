@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{Subscription, SubscriptionResult, SubscriptionSubmitted}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -48,7 +49,7 @@ class SubscriptionServiceConnector @Inject() (http: HttpClient, appConfig: AppCo
     )
     // $COVERAGE-ON
 
-    http.POST[SubscriptionRequest, SubscriptionResponse](url, request) map { response =>
+    http.POST[SubscriptionRequest, SubscriptionResponse](url, request, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"[Subscribe SUB02: responseCommon: ${response.subscriptionCreateResponse.responseCommon}")
       // $COVERAGE-ON

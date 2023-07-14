@@ -19,20 +19,30 @@ package integration
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import util.WireMockRunner
+
+import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.Application
+import play.api.inject.bind
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
 class IntegrationTestsSpec
-    extends PlaySpec with BeforeAndAfter with BeforeAndAfterAll with Eventually with IntegrationPatience
-    with GuiceOneAppPerSuite with WireMockRunner {
+    extends PlaySpec with BeforeAndAfter with BeforeAndAfterAll with Eventually with IntegrationPatience with WireMockRunner {
 
   implicit val defaultTimeout: FiniteDuration = 5 seconds
 
   implicit def extractAwait[A](future: Future[A]): A = await[A](future)
 
   def await[A](future: Future[A])(implicit timeout: Duration): A = Await.result(future, timeout)
+
+  implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .overrides(
+      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
+    )
+    .build()
+
 }

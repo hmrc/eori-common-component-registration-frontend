@@ -26,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegisterWithoutIdRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegisterWithoutId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,7 +46,8 @@ class RegisterWithoutIdConnector @Inject() (http: HttpClient, appConfig: AppConf
 
     http.POST[RegisterWithoutIdRequestHolder, RegisterWithoutIdResponseHolder](
       url,
-      RegisterWithoutIdRequestHolder(request)
+      RegisterWithoutIdRequestHolder(request),
+      headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)
     ) map { response =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"Register: responseCommon: ${response.registerWithoutIDResponse.responseCommon}")

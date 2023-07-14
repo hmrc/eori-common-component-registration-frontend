@@ -36,7 +36,7 @@ class HandleSubscriptionConnector @Inject() (http: HttpClient, appConfig: AppCon
   private val url    = s"${appConfig.handleSubscriptionBaseUrl}/${appConfig.handleSubscriptionServiceContext}"
 
   def call(request: HandleSubscriptionRequest)(implicit hc: HeaderCarrier): Future[Unit] = {
-    val headers = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON)
+    val headers = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON, AUTHORIZATION -> appConfig.internalAuthToken)
 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"Call: $url, eori: ${request.eori}, headers: $headers and hc: $hc")

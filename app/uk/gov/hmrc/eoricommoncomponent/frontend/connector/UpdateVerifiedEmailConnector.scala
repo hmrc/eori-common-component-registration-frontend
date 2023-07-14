@@ -25,6 +25,7 @@ import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
+import play.api.http.HeaderNames.AUTHORIZATION
 
 class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpClient)(implicit ec: ExecutionContext) {
 
@@ -34,7 +35,7 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpCl
   def updateVerifiedEmail(request: VerifiedEmailRequest, currentEmail: Option[String])(implicit
     hc: HeaderCarrier
   ): Future[Either[HttpErrorResponse, VerifiedEmailResponse]] =
-    http.PUT[VerifiedEmailRequest, VerifiedEmailResponse](url, request) map { resp =>
+    http.PUT[VerifiedEmailRequest, VerifiedEmailResponse](url, request, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { resp =>
       Right(resp)
     } recover {
       case _: BadRequestException | UpstreamErrorResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)

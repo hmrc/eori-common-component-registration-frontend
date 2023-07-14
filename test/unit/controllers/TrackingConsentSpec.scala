@@ -33,7 +33,7 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TrackingConsentSpec extends ControllerSpec with GuiceOneAppPerSuite with MockitoSugar with AuthActionMock {
+class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActionMock {
 
   private val mockAuthConnector                    = mock[AuthConnector]
   private val mockAuthAction                       = authAction(mockAuthConnector)
