@@ -28,12 +28,14 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
   private val fieldKeys: List[String] = List("day", "month", "year")
 
   private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
-    Try(LocalDate.of(year, month, day)) match {
-      case Success(date) =>
-        Right(date)
-      case Failure(_) =>
-        Left(Seq(FormError(key, invalidKey, args)))
-    }
+    if (year < 1000) Left(List(FormError(s"$key.${fieldKeys.last}", "date-invalid-year-too-short", args)))
+    else
+      Try(LocalDate.of(year, month, day)) match {
+        case Success(date) =>
+          Right(date)
+        case Failure(_) =>
+          Left(Seq(FormError(key, invalidKey, args)))
+      }
 
   private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
@@ -61,16 +63,20 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
 
     fields.count(_._2.isDefined) match {
       case 3 =>
-        formatDate(key, data).left.map {
-          _.map(_.copy(key = key, args = args))
+        formatDate(key, data).left.map { leftValue =>
+          leftValue.map(formError => formError)
         }
       case 2 =>
-        Left(List(FormError(s"$key.${missingFields.head}", emptyKey, args)))
+        Left(List(FormError(s"$key.${missingFields.head}", s"$key.${missingFields.head}.empty", args)))
       case 1 =>
         Left(
           List(
-            FormError(s"$key.${missingFields.head}", emptyKey, args),
-            (FormError(s"$key.${missingFields.last}", "", args))
+            FormError(
+              s"$key.${missingFields.head}",
+              s"$key.${missingFields.head}-$key.${missingFields.last}.empty",
+              args
+            ),
+            FormError(s"$key.${missingFields.last}", "", args)
           )
         )
       case _ =>

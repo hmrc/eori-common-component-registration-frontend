@@ -427,7 +427,14 @@ cds.subscription.middle-name.error.too-long=The middle name must be 35 character
 cds.subscription.last-name.error.empty=Enter your last name
 cds.subscription.family-name.error.empty=Enter your family name
 cds.subscription.last-name.error.wrong-format=Enter a last name without invalid characters
+
 cds.subscription.name-dob-details.page-error.date-of-birth=Enter your date of birth
+date-of-birth.day.empty=Date of birth must include a day
+date-of-birth.month.empty=Date of birth must include a month
+date-of-birth.year.empty=Date of birth must include a year
+date-of-birth.day-date-of-birth.month.empty=Date of birth must include a day and month
+date-of-birth.day-date-of-birth.year.empty=Date of birth must include a day and year
+date-of-birth.month-date-of-birth.year.empty=Date of birth must include a month and year
 cds.subscription.last-name.error.too-long=The last name must be 35 characters or less
 cds.subscription.family-name.error.too-long=The family name must be 35 characters or less
 
@@ -1548,6 +1555,13 @@ dob.error.invalid-date=Date of birth must be a real date
 dob.error.minMax=Date of birth must be between {0} and today
 
 doe.error.empty-date=Enter your date of establishment
+date-of-establishment.day.empty=Date of establishment must include a day
+date-of-establishment.month.empty=Date of establishment must include a month
+date-of-establishment.year.empty=Date of establishment must include a year
+date-of-establishment.day-date-of-establishment.month.empty=Date of establishment must include a day and month
+date-of-establishment.day-date-of-establishment.year.empty=Date of establishment must include a day and year
+date-of-establishment.month-date-of-establishment.year.empty=Date of establishment must include a month and year
+date-invalid-year-too-short=Year must include 4 numbers
 doe.error.future-date=Date of establishment must be in the past
 doe.error.invalid-date=Date of establishment must be a real date
 doe.error.minMax=Date of establishment must be between {0} and today

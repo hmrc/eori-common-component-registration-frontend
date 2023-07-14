@@ -402,7 +402,16 @@ cds.subscription.middle-name.error.too-long = Rhaid i’r enw canol fod yn 35 o 
 cds.subscription.last-name.error.empty = Nodwch eich enw olaf
 cds.subscription.family-name.error.empty = Nodwch eich enw teuluol
 cds.subscription.last-name.error.wrong-format = Nodwch enw olaf heb gymeriadau annilys
+
 cds.subscription.name-dob-details.page-error.date-of-birth = Nodwch eich dyddiad geni
+date-of-birth.day.empty=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod
+date-of-birth.month.empty=Mae’n rhaid i’r dyddiad geni gynnwys mis
+date-of-birth.year.empty=Mae’n rhaid i’r dyddiad geni gynnwys blwyddyn
+date-of-birth.day-date-of-birth.month.empty=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a mis
+date-of-birth.day-date-of-birth.year.empty=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a blwyddyn
+date-of-birth.month-date-of-birth.year.empty=Mae’n rhaid i’r dyddiad geni gynnwys mis a blwyddyn
+
+
 cds.subscription.last-name.error.too-long = Rhaid i’r enw olaf fod yn 35 o gymeriadau neu lai
 cds.subscription.family-name.error.too-long = Rhaid i’r enw teuluol fod yn 35 o gymeriadau neu lai
 countries-in-the-eu.title = Gwledydd yn yr UE
@@ -1339,6 +1348,13 @@ date.day.error = Nodwch ddiwrnod rhwng 1 a 31
 date.month.error = Nodwch fis rhwng 1 a 12
 date.year.error = Nodwch flwyddyn rhwng {0} a {1}
 dob.error.empty-date = Nodwch eich dyddiad geni
+date-of-establishment.day.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys diwrnod
+date-of-establishment.month.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys mis
+date-of-establishment.year.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys blwyddyn
+date-of-establishment.day-date-of-establishment.month.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys diwrnod a mis
+date-of-establishment.day-date-of-establishment.year.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys diwrnod a blwyddyn
+date-of-establishment.month-date-of-establishment.year.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys mis a blwyddyn
+date-invalid-year-too-short=Mae’n rhaid i’r flwyddyn gynnwys 4 rhif
 dob.error.future-date = Mae’n rhaid i’r dyddiad geni fod yn y gorffennol
 dob.error.invalid-date = Mae’n rhaid i’r dyddiad geni fod yn ddyddiad go iawn
 dob.error.minMax = Mae’n rhaid i’r dyddiad geni fod rhwng {0} a heddiw
