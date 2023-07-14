@@ -130,8 +130,9 @@ class SixLineAddressController @Inject() (
 
   private def formsByOrganisationTypes(implicit request: Request[AnyContent]) = {
     val form = requestSessionData.selectedUserLocationWithIslands(request) match {
-      case Some(UserLocation.Uk) => ukSixLineAddressForm
-      case _                     => thirdCountrySixLineAddressForm
+      case Some(UserLocation.Uk)      => ukSixLineAddressForm
+      case Some(UserLocation.Islands) => channelIslandSixLineAddressForm
+      case _                          => thirdCountrySixLineAddressForm
     }
 
     Map(
