@@ -1615,7 +1615,7 @@ ecc.start-page.para1.bullet2.esc = rhoi gwybod am a rheoli’ch lwfans ar gyfer 
 ecc.start-page.when.title = Yr hyn y bydd ei angen arnoch
 ecc.start-page.when.title2 = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU
 ecc.start-page.when.para1 = I gadarnhau pwy ydych byddwn yn gofyn i chi nodi’r canlynol:
-ecc.start-page.when.para1.bullet1 = cyfanswm y Ffurflen TAW diweddaraf neu ddyddiad cofrestru TAW
+ecc.start-page.when.para1.bullet1 = dyddiad cofrestru TAW
 ecc.start-page.when.para1.bullet2 = Rhif cofrestru TAW
 ecc.start-page.when.para1.bullet3 = y cod post lle rydych wedi cofrestru ar gyfer TAW
 ecc.start-page.gbeori.para1.link = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Mewngofnodwch i’ch cyfrif TAW ar-lein (yn agor tab newydd)</a>
