@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +39,6 @@ class SicCodeController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   subscriptionFlowManager: SubscriptionFlowManager,
   subscriptionDetailsHolderService: SubscriptionDetailsService,
-  orgTypeLookup: OrgTypeLookup,
   mcc: MessagesControllerComponents,
   sicCodeView: sic_code,
   requestSessionData: RequestSessionData
@@ -52,8 +50,7 @@ class SicCodeController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] = {
     lazy val form = sicCode.map(SicCodeViewModel).fold(sicCodeform)(sicCodeform.fill)
-    orgTypeLookup.etmpOrgType map { _ =>
-      Ok(
+    Future.successful(Ok(
         sicCodeView(
           form,
           isInReviewMode,
@@ -61,8 +58,7 @@ class SicCodeController @Inject() (
           service,
           requestSessionData.selectedUserLocation
         )
-      )
-    }
+      ))
   }
 
   def createForm(service: Service): Action[AnyContent] =
@@ -83,9 +79,7 @@ class SicCodeController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sicCodeform.bindFromRequest().fold(
         formWithErrors =>
-          // TODO Check if this etmpOrgType call is necessary
-          orgTypeLookup.etmpOrgType map { _ =>
-            BadRequest(
+            Future.successful(BadRequest(
               sicCodeView(
                 formWithErrors,
                 isInReviewMode,
@@ -93,8 +87,7 @@ class SicCodeController @Inject() (
                 service,
                 requestSessionData.selectedUserLocation
               )
-            )
-          },
+            )),
         formData => submitNewDetails(formData, isInReviewMode, service)
       )
     }
@@ -109,11 +102,7 @@ class SicCodeController @Inject() (
           subscriptionFlowManager.stepInformation(SicCodeSubscriptionFlowPage) match {
             case Right(flowInfo) =>
               if (isInReviewMode)
-                Redirect(
-                  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
-                    service
-                  )
-                )
+                Redirect(routes.DetermineReviewPageController.determineRoute(service))
               else
                 Redirect(flowInfo.nextPage.url(service))
             case Left(_) =>
