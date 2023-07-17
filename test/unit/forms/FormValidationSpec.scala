@@ -400,4 +400,5 @@ class FormValidationSpec extends UnitSpec {
       res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.too-long")))
     }
   }
+
 }
