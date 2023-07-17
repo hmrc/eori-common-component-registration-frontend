@@ -29,7 +29,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfVatRegistrationController
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
 
-@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, p: helpers.paragraph)
 
 
 @(dateForm: Form[VatRegistrationDate], service: Service)(implicit request: Request[_], messages: Messages)
@@ -42,8 +42,8 @@
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfVatRegistrationController.submit(service)) {
 
             @CSRF.formField
-            <h2 class="govuk-heading-l">@messages("ecc.eor-vat-registration-date.heading") </h2>
-            <p class="govuk-body">@messages("ecc.eor-vat-registration-date.para1")</p>
+            @h1(messages("ecc.eor-vat-registration-date.heading"))
+            @p(messages("ecc.eor-vat-registration-date.para1"))
             <p class="govuk-body"> <a target="_blank" href="https://www.gov.uk/send-vat-return">@messages("ecc.eor-vat-registration-date.link")</a> @messages("ecc.eor-vat-registration-date.para2")</p>
 
             @inputDate_di(
