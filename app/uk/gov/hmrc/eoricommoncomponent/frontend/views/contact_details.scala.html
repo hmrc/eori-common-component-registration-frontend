@@ -38,13 +38,9 @@ govukHint: GovukHint
 
 
 @html = {
+    <p id="contact-details-intro" class="govuk-label govuk-!-margin-bottom-6">@messages("cds.subscription.contact-details.intro")</p>
 
-<p id="contact-details-intro" class="govuk-label govuk-!-margin-bottom-6">@messages("cds.subscription.contact-details.intro")</p>
 
-<div id="email-outer" class="govuk-form-group ">
-    <span class="govuk-label govuk-!-font-weight-bold">@messages("subscription.check-your-email.label")</span>
-    <div id="email" class="govuk-body">@email</div>
-</div>
 
 @inputText(
     form = contactForm,
