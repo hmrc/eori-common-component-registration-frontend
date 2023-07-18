@@ -55,7 +55,6 @@ class ContactDetailsViewSpec extends ViewSpec {
         .text() mustBe "EORI number application contact details"
     }
 
-
     "have full Name" in {
       doc.select(fullNameLabel).text() must include("Full name")
     }
