@@ -28,8 +28,7 @@ import scala.util.{Failure, Success, Try}
 
 class DateFormatter @Inject() (languageUtils: LanguageUtils) {
 
-  val dateFormatter: DateTimeFormatter     = DateTimeFormatter.ofPattern("d MMM yyyy")
-  val longDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 
   def format(dateString: String)(implicit messages: Messages): String = {
 
@@ -42,8 +41,8 @@ class DateFormatter @Inject() (languageUtils: LanguageUtils) {
     tryConvert.getOrElse(dateString)
   }
 
-  def formatLocalDate(date: LocalDate): String =
-    Try(date.format(longDateFormatter)) match {
+  def formatLocalDate(date: LocalDate)(implicit messages: Messages): String =
+    Try(languageUtils.Dates.formatDate(date)) match {
       case Success(date) => date
       case Failure(e) =>
         logger.error("Cannot convert date", e)
