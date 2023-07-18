@@ -193,13 +193,10 @@ class DateOfEstablishmentControllerSpec
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(CorporateBody)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementText(SubscriptionDateOfEstablishmentPage.dateOfEstablishmentLabelXPath) should startWith(
-          "Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the Companies House register (opens in new tab)"
-        )
-        page.title() should startWith("Date when your company was established")
+        page.title() should startWith("When was the company established?")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "Date when your company was established"
+        ) shouldBe "When was the company established?"
       }
     }
   }

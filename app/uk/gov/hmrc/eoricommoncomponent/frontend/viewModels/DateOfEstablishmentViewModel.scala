@@ -30,14 +30,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
 
 object DateOfEstablishmentViewModel {
 
-  def introText(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
-    orgType match {
-      case LLP                => messages("cds.subscription.llp.date-established.label")
-      case UnincorporatedBody => messages("cds.subscription.llp.date-established.charity-label")
-      case Partnership        => messages("cds.subscription.business.date-established.label.partnership")
-      case _                  => messages("cds.subscription.business.date-established.label")
-    }
-
   def updateFormErrors(dateForm: Form[LocalDate]): Form[LocalDate] =
     dateForm.copy(errors = DateConverter.updateDateOfEstablishmentErrors(dateForm.errors))
 

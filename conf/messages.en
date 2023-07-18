@@ -964,10 +964,6 @@ cds.subscription.date-of-establishment.title-and-heading=Date when your organisa
 cds.subscription.partnership.date-of-establishment.title-and-heading=When was the partnership established?
 cds.subscription.date-of-establishment.date-of-establishment.label=Date of establishment
 cds.subscription.date-of-establishment.page-error.date-of-establishment=Enter your date of establishment
-cds.subscription.business.date-established.label=Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
-cds.subscription.business.date-established.label.partnership =Enter the date that you registered your partnership with HMRC.
-cds.subscription.llp.date-established.charity-label=Enter the date shown on your organisation’s certificate of incorporation. You can find the date your organisation was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
-cds.subscription.llp.date-established.label=Enter the date shown on the partnership’s certificate of incorporation. You can find the date your business was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 cds.subscription.row.date-established.label=Enter the date your organisation was established
 cds.subscription.date-of-establishment.error.required.date-of-establishment=Enter your date of establishment
 cds.subscription.date-of-establishment.error.invalid.date-of-establishment=Please enter a valid date of establishment
@@ -1593,7 +1589,7 @@ cds.matching.name-id-organisation.registered-company.matching-page.utr= What is 
 cds.matching.name-id-organisation.partnership.utr=What is the partnership’s Self Assessment Unique Taxpayer Reference (UTR)?
 cds.matching.name-id-organisation.organisation.utr=What is the organisation’s Corporation Tax Unique Taxpayer Reference (UTR)?
 
-cds.subscription.date-of-establishment.company.title-and-heading=Date when your company was established
+cds.subscription.date-of-establishment.company.title-and-heading=When was the company established?
 
 cds.subscription.address-details.postcode.row.label=Postal code
 
