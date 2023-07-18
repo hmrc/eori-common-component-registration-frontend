@@ -570,7 +570,6 @@ cds.subscription.outcomes.eori-already-associated.vat-registered2=GB XXXXXXXXX 0
 cds.subscription.outcomes.eori-already-associated.vat-registered3=Where XXXXXXXXX is your VAT number.
 
 # Sub02 Outcome Subscription already in progress
-cds.sub02.outcome.subscription-in-progress.title=Your EORI application is being processed
 cds.sub02.outcome.subscription-in-progress.heading=The EORI application for {0} is being processed
 cds.sub02.outcome.subscription-in-progress.received=Application received by HMRC on {0}
 cds.sub02.outcome.subscription-in-progress.what-happens-next=What happens next

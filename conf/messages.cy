@@ -525,7 +525,6 @@ cds.subscription.outcomes.eori-already-associated.vat-registered-heading = Os yd
 cds.subscription.outcomes.eori-already-associated.vat-registered1 = Bydd eich rhif EORI yn y fformat canlynol:
 cds.subscription.outcomes.eori-already-associated.vat-registered2 = GB XXXXXXXXX 000
 cds.subscription.outcomes.eori-already-associated.vat-registered3 = Lle mai XXXXXXXXX yw eich rhif TAW.
-cds.sub02.outcome.subscription-in-progress.title = Mae’ch cais am EORI wrthi’n cael ei brosesu
 cds.sub02.outcome.subscription-in-progress.heading = Mae’r cais am rif EORI ar gyfer {0} wrthi’n cael ei brosesu
 cds.sub02.outcome.subscription-in-progress.received = Daeth y cais i law CThEM ar {0}
 cds.sub02.outcome.subscription-in-progress.what-happens-next = Yr hyn sy’n digwydd nesaf
