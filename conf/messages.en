@@ -1566,6 +1566,12 @@ doe.error.future-date=Date of establishment must be in the past
 doe.error.invalid-date=Date of establishment must be a real date
 doe.error.minMax=Date of establishment must be between {0} and today
 
+vat-registration-date.day.empty=VAT registration date must include a day
+vat-registration-date.month.empty=VAT registration date must include a month
+vat-registration-date.year.empty=VAT registration date must include a year
+vat-registration-date.day-vat-registration-date.month.empty=VAT registration date must include a day and month
+vat-registration-date.day-vat-registration-date.year.empty=VAT registration date must include a day and year
+vat-registration-date.month-vat-registration-date.year.empty=VAT registration date must include a month and year
 
 vat.error.empty-date-new=Enter your VAT registration date
 vat.error.invalid-date-new=Enter a real date

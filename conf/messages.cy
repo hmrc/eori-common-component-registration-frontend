@@ -1362,6 +1362,16 @@ doe.error.empty-date = Nodwch eich dyddiad sefydlu
 doe.error.future-date = Mae’n rhaid i’r dyddiad sefydlu fod yn y gorffennol
 doe.error.invalid-date = Mae’n rhaid i’r dyddiad sefydlu fod yn ddyddiad go iawn
 doe.error.minMax = Mae’n rhaid i’r dyddiad sefydlu fod rhwng {0} a heddiw
+
+
+vat-registration-date.day.empty=Mae’n rhaid i'r dyddiad cofrestru TAW gynnwys diwrnod.
+vat-registration-date.month.empty=Mae’n rhaid i'r dyddiad cofrestru TAW gynnwys mis.
+vat-registration-date.year.empty=Mae’n rhaid i'r dyddiad cofrestru TAW gynnwys blwyddyn.
+vat-registration-date.day-vat-registration-date.month.empty=Mae’n rhaid i'r dyddiad cofrestru TAW gynnwys diwrnod a mis.
+vat-registration-date.day-vat-registration-date.year.empty=Mae’n rhaid i'r dyddiad cofrestru TAW gynnwys diwrnod a blwyddyn.
+vat-registration-date.month-vat-registration-date.year.empty=Mae’n rhaid i'r dyddiad cofrestru TAW gynnwys mis a blwyddyn.
+
+
 vat.error.empty-date-new=Nodwch eich dyddiad cofrestru TAW
 vat.error.invalid-date-new=Nodwch ddyddiad go iawn
 cds.feedback.continue = Rhagor am {0}
