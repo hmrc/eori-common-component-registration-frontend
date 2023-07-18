@@ -16,10 +16,10 @@
 
 @this()
 
-@(text: String = "", id: Option[String] = None, html: Option[Html] = None)
+@(text: String = "", id: Option[String] = None, classes: String = "govuk-body", html: Option[Html] = None)
 
 
 @content = @{
   html.getOrElse(Html(text))
 }
-<p @{id.fold("")(id => s"id=$id")} class="govuk-body">@content</p>
+<p @{id.fold("")(id => s"id=$id")} class="@classes">@content</p>

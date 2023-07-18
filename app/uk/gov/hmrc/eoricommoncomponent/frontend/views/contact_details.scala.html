@@ -29,7 +29,8 @@ govukButton: GovukButton,
 inputText: helpers.inputText,
 errorSummary: helpers.errorSummary,
 goveukFieldSet: GovukFieldset,
-govukHint: GovukHint
+govukHint: GovukHint,
+        p: helpers.paragraph
 )
 
 
@@ -38,9 +39,9 @@ govukHint: GovukHint
 
 
 @html = {
-    <p id="contact-details-intro" class="govuk-label govuk-!-margin-bottom-6">@messages("cds.subscription.contact-details.intro")</p>
 
 
+@p(messages("cds.subscription.contact-details.intro"), Some("contact-details-intro"), "govuk-body govuk-!-margin-bottom-6")
 
 @inputText(
     form = contactForm,
@@ -73,6 +74,7 @@ govukHint: GovukHint
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.submit(isInReviewMode, service), "contactDetailsForm") {
 
     @CSRF.formField
+
 
     @goveukFieldSet(
         Fieldset(
