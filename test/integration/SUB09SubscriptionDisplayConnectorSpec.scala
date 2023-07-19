@@ -47,7 +47,6 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
 
   private lazy val connector                  = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
   private val requestTaxPayerId               = "GBE9XSDF10BCKEYAX"
-  private val requestEori                     = "GB083456789000"
   private val requestAcknowledgementReference = "1234567890ABCDEFG"
 
   private val reqTaxPayerId = Seq(

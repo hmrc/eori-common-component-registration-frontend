@@ -184,7 +184,7 @@ class RegistrationDetailsCreatorWithIdSpec extends RegistrationDetailsCreatorTes
       individualWithIdTestCases
     ) {
       case ((validResponse, customsId, _), _) =>
-        val Some(responseDetail)      = validResponse.responseDetail
+        val responseDetail            = validResponse.getResponseDetail
         val withoutDateOfBirth        = responseDetail.individual.map(_.copy(dateOfBirth = None))
         val responseDetailWithoutDate = responseDetail.copy(individual = withoutDateOfBirth)
         val response                  = validResponse.copy(responseDetail = Some(responseDetailWithoutDate))

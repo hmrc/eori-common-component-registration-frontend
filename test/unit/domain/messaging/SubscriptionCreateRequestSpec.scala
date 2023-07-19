@@ -17,7 +17,7 @@
 package unit.domain.messaging
 
 import base.UnitSpec
-
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   ContactInformation,
@@ -25,14 +25,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   VatId
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import java.time.{LocalDate, LocalDateTime}
 
 class SubscriptionCreateRequestSpec extends UnitSpec {
-
   private val email   = "john.doe@example.com"
   private val service = Service.withName("atar")
 
@@ -142,7 +140,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       )
       val subscriptionDetails = SubscriptionDetails(contactDetails = Some(contactDetails))
 
-      val request = SubscriptionCreateRequest(registrationDetails, subscriptionDetails, emailAddress, service)
+      val request = SubscriptionCreateRequest(registrationDetails, subscriptionDetails, service)
 
       val requestCommon  = request.requestCommon
       val requestDetails = request.requestDetail
@@ -180,7 +178,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       )
       val subscriptionDetails = SubscriptionDetails(contactDetails = Some(contactDetails))
 
-      val request = SubscriptionCreateRequest(registrationDetails, subscriptionDetails, emailAddress, service)
+      val request = SubscriptionCreateRequest(registrationDetails, subscriptionDetails, service)
 
       val requestCommon  = request.requestCommon
       val requestDetails = request.requestDetail

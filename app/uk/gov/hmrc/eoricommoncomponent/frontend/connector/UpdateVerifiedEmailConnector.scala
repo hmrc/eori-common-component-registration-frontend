@@ -31,9 +31,9 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpCl
   private val url: String = appConfig.getServiceUrl("update-verified-email")
   private val logger      = Logger(this.getClass)
 
-  def updateVerifiedEmail(request: VerifiedEmailRequest, currentEmail: Option[String])(implicit
-    hc: HeaderCarrier
-  ): Future[Either[HttpErrorResponse, VerifiedEmailResponse]] =
+  def updateVerifiedEmail(
+    request: VerifiedEmailRequest
+  )(implicit hc: HeaderCarrier): Future[Either[HttpErrorResponse, VerifiedEmailResponse]] =
     http.PUT[VerifiedEmailRequest, VerifiedEmailResponse](url, request) map { resp =>
       Right(resp)
     } recover {

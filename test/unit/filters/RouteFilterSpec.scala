@@ -119,5 +119,5 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
   private def whenRoutesToBlock(routes: Option[String]) =
     when(mockConfig.getOptional[String]("routes-to-block")).thenReturn(routes)
 
-  private val okAction = (rh: RequestHeader) => Future.successful(Results.Ok)
+  private val okAction = (_: RequestHeader) => Future.successful(Results.Ok)
 }
