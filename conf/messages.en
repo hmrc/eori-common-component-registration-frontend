@@ -1844,7 +1844,7 @@ ecc.start-page.para1.bullet2.esc = a subscription to Report and manage your allo
 ecc.start-page.when.title = What you will need
 ecc.start-page.when.title2 = If you are UK VAT registered
 ecc.start-page.when.para1 = To verify your identity we will ask you to enter:
-ecc.start-page.when.para1.bullet1 = latest VAT Return total or date of VAT registration
+ecc.start-page.when.para1.bullet1 = date of VAT registration
 ecc.start-page.when.para1.bullet2 = VAT registration number
 ecc.start-page.when.para1.bullet3 = postcode where you are registered for VAT
 ecc.start-page.gbeori.para1.link = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Sign in to your VAT online account (opens in new tab)</a>
