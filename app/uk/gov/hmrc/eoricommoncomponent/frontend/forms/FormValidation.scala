@@ -48,9 +48,9 @@ object FormValidation {
   def postcodeMapping: Mapping[Option[String]] =
     ConditionalMapping(
       condition = isAnyOf("countryCode", postCodeMandatoryCountryCodes),
-      wrapped = MandatoryOptionalMapping(text.verifying(validPostcode)),
+      wrapped = MandatoryOptionalMapping(text.verifying(validPostcodeRoW)),
       elseValue = (key, data) => data.get(key)
-    ).verifying(lift(postcodeMax(9)))
+    ).transform[Option[String]](_.map(_.filterNot(_.isWhitespace)), identity).verifying(lift(postcodeMaxRoW(9)))
 
   private def validPostcode: Constraint[String] =
     Constraint({
@@ -58,10 +58,23 @@ object FormValidation {
       case _                                   => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
     })
 
+  private def validPostcodeRoW: Constraint[String] =
+    Constraint({
+      case s if s.trim().replaceAll("\\s", "").matches(postcodeRegex.regex) => Valid
+      case _                                                                => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
+    })
+
   private def postcodeMax(limit: Int): Constraint[String] =
     Constraint({
       case s if s.length > limit => Invalid(ValidationError("cds.subscription.postcode.error.too-long." + limit))
       case _                     => Valid
+    })
+
+  private def postcodeMaxRoW(limit: Int): Constraint[String] =
+    Constraint({
+      case s if s.trim().replaceAll("\\s", "").length > limit =>
+        Invalid(ValidationError("cds.subscription.postcode.error.too-long." + limit))
+      case _ => Valid
     })
 
   def validCity: Constraint[String] =
