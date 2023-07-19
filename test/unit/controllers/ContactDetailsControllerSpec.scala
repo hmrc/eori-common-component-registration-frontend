@@ -131,7 +131,6 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -142,7 +141,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
+
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -151,7 +150,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe empty
-        page.getElementValue(emailFieldXPath) shouldBe empty
+
         page.getElementValue(telephoneFieldXPath) shouldBe empty
       }
     }
@@ -166,7 +165,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
+
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -190,8 +189,6 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showReviewForm(contactDetailsModel = revisedContactDetailsModel) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailLabelXPath) shouldBe emailAddressFieldLabel
-        page.getElementText(emailFieldXPath) shouldBe Email
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
