@@ -1855,7 +1855,7 @@ ecc.start-page.gbeori.para1.title = To verify your identity you will need to pro
 ecc.start-page.gbeori.para1.bullet1 = registered name and address
 
 ecc.start-page.gbeori.para1.bullet3 = Corporation Tax Unique Taxpayer Reference (UTR), if you pay Corporation Tax in the UK
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" target="_blank" rel="noopener noreferrer">Find your UTR number (opens in a new tab)</a>
+ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" target="_blank" rel="noopener noreferrer">Find your UTR number (opens in new tab)</a>
 
 ecc.start-page.solo.title = If you apply as a sole trader or individual
 ecc.start-page.gbeori.para3.title = We will verify your identity by asking for one of the following:
