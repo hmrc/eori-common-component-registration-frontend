@@ -286,7 +286,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         }
 
         caught.statusCode mustBe 400
-        AuditService.verifyXAuditWrite(0)
+        eventually(AuditService.verifyXAuditWrite(0))
       }
     }
   }

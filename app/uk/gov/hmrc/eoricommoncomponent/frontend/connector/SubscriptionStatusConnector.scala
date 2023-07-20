@@ -30,41 +30,50 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
 }
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http._
 import play.api.http.HeaderNames.AUTHORIZATION
+
+import java.net.URLEncoder
+import java.net.URL
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionStatusConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
+class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
   ec: ExecutionContext
 ) {
 
-  private val logger = Logger(this.getClass)
-  private val url    = appConfig.getServiceUrl("subscription-status")
+  private val logger  = Logger(this.getClass)
+  private val baseUrl = appConfig.getServiceUrl("subscription-status")
 
   def status(
     request: SubscriptionStatusQueryParams
   )(implicit hc: HeaderCarrier, originatingService: Service): Future[SubscriptionStatusResponse] = {
 
+    val url = new URL(s"$baseUrl?${makeQueryString(request.queryParams)}")
+
     // $COVERAGE-OFF$Loggers
     logger.debug(s"Status SUB01: $url, queryParams: ${request.queryParams} and hc: $hc")
     // $COVERAGE-ON
 
-    http.GET[SubscriptionStatusResponseHolder](url, request.queryParams, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { resp =>
-      // $COVERAGE-OFF$Loggers
-      logger.debug(s"Status SUB01: responseCommon: ${resp.subscriptionStatusResponse.responseCommon}")
-      // $COVERAGE-ON
-
-      auditCall(url, request, resp)
-      resp.subscriptionStatusResponse
-    } recover {
-      case e: Throwable =>
+    httpClient
+      .get(url)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute[SubscriptionStatusResponseHolder] map { resp =>
         // $COVERAGE-OFF$Loggers
-        logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
+        logger.debug(s"Status SUB01: responseCommon: ${resp.subscriptionStatusResponse.responseCommon}")
         // $COVERAGE-ON
-        throw e
-    }
+
+        auditCall(baseUrl, request, resp)
+        resp.subscriptionStatusResponse
+      } recover {
+        case e: Throwable =>
+          // $COVERAGE-OFF$Loggers
+          logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
+          // $COVERAGE-ON
+          throw e
+      }
   }
 
   private def auditCall(
@@ -82,6 +91,11 @@ class SubscriptionStatusConnector @Inject() (http: HttpClient, appConfig: AppCon
       details = Json.toJson(SubscriptionStatus(subscriptionStatusSubmitted, subscriptionStatusResult)),
       eventType = "SubscriptionStatus"
     )
+  }
+
+  private def makeQueryString(queryParams: Seq[(String, String)]) = {
+    val paramPairs = queryParams.map { case (k, v) => s"$k=${URLEncoder.encode(v, "utf-8")}" }
+    if (paramPairs.isEmpty) "" else paramPairs.mkString("&")
   }
 
 }

@@ -27,19 +27,19 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   SubscriptionResponse
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{Subscription, SubscriptionResult, SubscriptionSubmitted}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
 import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionServiceConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
+class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
   ec: ExecutionContext
 ) {
 
   private val logger = Logger(this.getClass)
-  private val url    = appConfig.getServiceUrl("subscribe")
+  private val url    = url"${appConfig.getServiceUrl("subscribe")}"
 
   def subscribe(request: SubscriptionRequest)(implicit hc: HeaderCarrier): Future[SubscriptionResponse] = {
 
@@ -49,22 +49,26 @@ class SubscriptionServiceConnector @Inject() (http: HttpClient, appConfig: AppCo
     )
     // $COVERAGE-ON
 
-    http.POST[SubscriptionRequest, SubscriptionResponse](url, request, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
-      // $COVERAGE-OFF$Loggers
-      logger.debug(s"[Subscribe SUB02: responseCommon: ${response.subscriptionCreateResponse.responseCommon}")
-      // $COVERAGE-ON
-
-      auditCall(url, request, response)
-      response
-    } recoverWith {
-      case e: Throwable =>
+    httpClient
+      .post(url)
+      .withBody(Json.toJson(request))
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute[SubscriptionResponse] map { response =>
         // $COVERAGE-OFF$Loggers
-        logger.warn(
-          s"Subscribe SUB02 request failed for acknowledgementReference : ${request.subscriptionCreateRequest.requestCommon.acknowledgementReference}. Reason: $e"
-        )
+        logger.debug(s"[Subscribe SUB02: responseCommon: ${response.subscriptionCreateResponse.responseCommon}")
         // $COVERAGE-ON
-        Future.failed(e)
-    }
+
+        auditCall(url.toString, request, response)
+        response
+      } recoverWith {
+        case e: Throwable =>
+          // $COVERAGE-OFF$Loggers
+          logger.warn(
+            s"Subscribe SUB02 request failed for acknowledgementReference : ${request.subscriptionCreateRequest.requestCommon.acknowledgementReference}. Reason: $e"
+          )
+          // $COVERAGE-ON
+          Future.failed(e)
+      }
   }
 
   private def auditCall(url: String, request: SubscriptionRequest, response: SubscriptionResponse)(implicit

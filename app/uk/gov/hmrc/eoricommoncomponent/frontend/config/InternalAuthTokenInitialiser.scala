@@ -34,8 +34,11 @@ abstract class InternalAuthTokenInitialiser {
 }
 
 @Singleton
-class NoOpInternalAuthTokenInitialiser @Inject() () extends InternalAuthTokenInitialiser {
-  override val initialised: Future[Done] = Future.successful(Done)
+class NoOpInternalAuthTokenInitialiser @Inject() () extends InternalAuthTokenInitialiser with Logging {
+  override val initialised: Future[Done] = {
+    logger.info("Internal auth not active")
+    Future.successful(Done)
+  }
 }
 
 @Singleton

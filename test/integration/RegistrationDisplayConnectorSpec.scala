@@ -258,7 +258,7 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
       await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must be(
         Right(serviceRegistrationDisplayResponseJson.as[RegistrationDisplayResponseHolder].registrationDisplayResponse)
       )
-      AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson)
+      eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
     }
 
     "return error RegistrationResponse when registration-display returns 500 with details" in {

@@ -86,7 +86,7 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestTaxPayerId,
         requestAcknowledgementReference
       )
-      await(connector.subscriptionDisplay(reqTaxPayerId)) mustBe Right(expectedResponse)
+      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Right(expectedResponse)
     }
 
     "return Service Unavailable Response when subscription display service returns an exception" in {
@@ -96,7 +96,7 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestAcknowledgementReference,
         returnedStatus = SERVICE_UNAVAILABLE
       )
-      await(connector.subscriptionDisplay(reqTaxPayerId)) mustBe Left(ServiceUnavailableResponse)
+      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Left(ServiceUnavailableResponse)
     }
   }
 }

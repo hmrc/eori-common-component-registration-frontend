@@ -24,46 +24,46 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegisterWithoutIdRequestHolder, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegisterWithoutId
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
 import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RegisterWithoutIdConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
+class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
   ec: ExecutionContext
 ) {
 
   private val logger = Logger(this.getClass)
-  private val url    = appConfig.getServiceUrl("register-without-id")
+  private val url    = url"${appConfig.getServiceUrl("register-without-id")}"
 
   def register(request: RegisterWithoutIDRequest)(implicit hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {
 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"Register: $url, body: $request and hc: $hc")
     // $COVERAGE-ON
-
-    http.POST[RegisterWithoutIdRequestHolder, RegisterWithoutIdResponseHolder](
-      url,
-      RegisterWithoutIdRequestHolder(request),
-      headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)
-    ) map { response =>
-      // $COVERAGE-OFF$Loggers
-      logger.debug(s"Register: responseCommon: ${response.registerWithoutIDResponse.responseCommon}")
-      // $COVERAGE-ON
-
-      auditCall(url, request, response)
-      response.registerWithoutIDResponse
-    } recover {
-      case e: Throwable =>
+   
+    httpClient
+      .post(url)
+      .withBody(Json.toJson(RegisterWithoutIdRequestHolder(request)))
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute[RegisterWithoutIdResponseHolder] map { response =>
         // $COVERAGE-OFF$Loggers
-        logger.warn(
-          s"Failure. postUrl: $url, acknowledgement ref: ${request.requestCommon.acknowledgementReference}, error: $e"
-        )
+        logger.debug(s"Register: responseCommon: ${response.registerWithoutIDResponse.responseCommon}")
         // $COVERAGE-ON
-        throw e
-    }
+
+        auditCall(url.toString, request, response)
+        response.registerWithoutIDResponse
+      } recover {
+        case e: Throwable =>
+          // $COVERAGE-OFF$Loggers
+          logger.warn(
+            s"Failure. postUrl: $url, acknowledgement ref: ${request.requestCommon.acknowledgementReference}, error: $e"
+          )
+          // $COVERAGE-ON
+          throw e
+      }
   }
 
   private def auditCall(url: String, request: RegisterWithoutIDRequest, response: RegisterWithoutIdResponseHolder)(

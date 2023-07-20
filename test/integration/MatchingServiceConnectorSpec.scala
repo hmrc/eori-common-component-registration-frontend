@@ -282,7 +282,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       }
 
       caught.statusCode mustBe 400
-      AuditService.verifyXAuditWrite(0)
+      eventually(AuditService.verifyXAuditWrite(0))
     }
 
   }

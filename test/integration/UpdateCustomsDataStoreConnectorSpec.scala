@@ -86,37 +86,6 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
   override def afterAll(): Unit =
     stopMockServer()
 
-  """{
-    |  "auditSource" : "eori-common-component-registration-frontend",
-    |  "auditType" : "CustomsDataStoreUpdate",
-    |  "eventId" : "ed61cdbc-ce6c-46c3-9f3c-2feb1226805b",
-    |  "tags" : {
-    |    "clientIP" : "-",
-    |    "path" : "http://localhost:11111/customs/update/datastore",
-    |    "X-Session-ID" : "-",
-    |    "Akamai-Reputation" : "-",
-    |    "X-Request-ID" : "-",
-    |    "deviceID" : "-",
-    |    "clientPort" : "-",
-    |    "transactionName" : "customs-data-store"
-    |  },
-    |  "detail" : {
-    |      "eori" : "GBXXXXXXXXX0000",
-    |      "address" : "a@example.com",
-    |      "timestamp" : "timestamp",
-    |      "status" : "204"
-    |  },
-    |  "generatedAt" : "2022-09-20T11:03:17.981Z",
-    |  "dataPipeline" : {
-    |    "redaction" : {
-    |      "containsRedactions" : false
-    |    }
-    |  },
-    |  "metadata" : {
-    |    "metricsKey" : null
-    |  }
-    |}""".stripMargin
-
   val expectedAuditEventJson: JsValue =
     Json.parse("""{
    |  "auditSource" : "eori-common-component-registration-frontend",
@@ -170,7 +139,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         NO_CONTENT
       )
       await(customsDataStoreConnector.updateCustomsDataStore(request))(defaultTimeout)
-      AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson)
+      eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
     }
 
     "return successful future when update email endpoint returns 204" in {

@@ -70,21 +70,21 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
   "UpdateVerifiedEmailService" should {
 
     "return true when connector invokes updateVerifiedEmail method is invoked successfully" in {
-      when(mockUpdateVerifiedEmailConnector.updateVerifiedEmail(any(), any())(any()))
+      when(mockUpdateVerifiedEmailConnector.updateVerifiedEmail(any())(any()))
         .thenReturn(Future.successful(Right(verifiedEmailResponse)))
       when(mockUpdateCustomsDataStoreConnector.updateCustomsDataStore(any())(any()))
         .thenReturn(Future.successful {})
       await(service.updateVerifiedEmail(None, "email-address", eori)) shouldBe true
-      verify(mockUpdateVerifiedEmailConnector).updateVerifiedEmail(any(), any())(any())
+      verify(mockUpdateVerifiedEmailConnector).updateVerifiedEmail(any())(any())
     }
 
     "return false when connector returns failure response" in {
-      when(mockUpdateVerifiedEmailConnector.updateVerifiedEmail(any(), any())(any()))
+      when(mockUpdateVerifiedEmailConnector.updateVerifiedEmail(any())(any()))
         .thenReturn(Future.successful(Left(ServiceUnavailable)))
       when(mockUpdateCustomsDataStoreConnector.updateCustomsDataStore(any())(any()))
         .thenReturn(Future.successful {})
       await(service.updateVerifiedEmail(None, "email-address", eori)) shouldBe false
-      verify(mockUpdateVerifiedEmailConnector).updateVerifiedEmail(any(), any())(any())
+      verify(mockUpdateVerifiedEmailConnector).updateVerifiedEmail(any())(any())
     }
   }
 }

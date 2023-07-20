@@ -25,17 +25,18 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegistrationDisplay
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
 import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-class RegistrationDisplayConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable) {
+class RegistrationDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable) {
 
   private val logger = Logger(this.getClass)
 
-  protected val url: String = appConfig.getServiceUrl("registration-display")
+  protected val url = url"${appConfig.getServiceUrl("registration-display")}"
 
   def registrationDisplay(
     request: RegistrationDisplayRequestHolder
@@ -46,21 +47,25 @@ class RegistrationDisplayConnector @Inject() (http: HttpClient, appConfig: AppCo
       s"RegistrationDisplay: $url, requestCommon: ${request.registrationDisplayRequest.requestCommon} and hc: $hc"
     )
     // $COVERAGE-ON
-
-    http.POST[RegistrationDisplayRequestHolder, RegistrationDisplayResponseHolder](url, request, headers = Seq(AUTHORIZATION -> appConfig.internalAuthToken)) map { response =>
-      // $COVERAGE-OFF$Loggers
-      logger.debug(s"[RegistrationDisplay: response: $response")
-      // $COVERAGE-ON
-
-      auditCall(url, request, response)
-      Right(response.registrationDisplayResponse)
-    } recover {
-      case NonFatal(e) =>
+    
+    httpClient
+      .post(url)
+      .withBody(Json.toJson(request))
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute[RegistrationDisplayResponseHolder] map { response =>
         // $COVERAGE-OFF$Loggers
-        logger.warn(s"registration-display failed. url: $url, error: $e")
+        logger.debug(s"[RegistrationDisplay: response: $response")
         // $COVERAGE-ON
-        Left(ServiceUnavailableResponse)
-    }
+
+        auditCall(url.toString, request, response)
+        Right(response.registrationDisplayResponse)
+      } recover {
+        case NonFatal(e) =>
+          // $COVERAGE-OFF$Loggers
+          logger.warn(s"registration-display failed. url: $url, error: $e")
+          // $COVERAGE-ON
+          Left(ServiceUnavailableResponse)
+      }
   }
 
   private def auditCall(

@@ -82,7 +82,8 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         |}
       """.stripMargin)
 
-  val auditEventBodyJson = Json.parse("""{
+  val auditEventBodyJson = Json.parse("""
+    |{
     |  "auditSource" : "eori-common-component-registration-frontend",
     |  "auditType" : "SubscriptionStatus",
     |  "tags" : {
@@ -145,8 +146,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       await(subscriptionStatusConnector.status(request)) must be(
         responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
       )
-
-      AuditService.verifyXAuditWriteWithBody(auditEventBodyJson)
+      eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
     }
 
     "fail when Internal Server Error" in {

@@ -125,7 +125,7 @@ val compileDependencies = Seq(
   "uk.gov.hmrc"       %% "domain"                        % "8.3.0-play-28",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"            % mongoDbVersion,
   "uk.gov.hmrc"       %% "emailaddress"                  % "3.8.0",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"            % "7.13.0-play-28",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"            % "7.14.0-play-28",
   "uk.gov.hmrc"       %% "internal-auth-client-play-28"  % "1.3.0"
 )
 
@@ -135,8 +135,7 @@ val testDependencies = Seq(
   "org.scalatest"          %% "scalatest"           % "3.2.15"            % "test,it",
   "com.typesafe.play"      %% "play-test"           % PlayVersion.current % "test,it",
   "org.scalatestplus.play" %% "scalatestplus-play"  % "5.1.0"             % "test,it",
-  "com.github.tomakehurst"  % "wiremock-standalone" % "2.27.2"            % "test, it"
-    exclude ("org.apache.httpcomponents", "httpclient") exclude ("org.apache.httpcomponents", "httpcore"),
+  "com.github.tomakehurst"  % "wiremock-standalone" % "2.27.2"            % "test, it",
   "org.scalacheck"      %% "scalacheck"              % "1.17.0"   % "test,it",
   "org.scalatestplus"   %% "scalacheck-1-15"         % "3.2.11.0" % "test,it",
   "org.jsoup"            % "jsoup"                   % "1.15.4"   % "test,it",
