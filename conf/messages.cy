@@ -855,14 +855,10 @@ cds.subscription.date-of-birth.error.required.date-of-birth = Nodwch eich dyddia
 cds.subscription.date-of-birth.error.invalid.date-of-birth = Nodwch ddyddiad geni dilys, er enghraifft “31 3 1980”
 cds.subscription.date-of-birth.error.in-future.date-of-birth = Ni allwch nodi dyddiad geni sydd yn y dyfodol
 cds.subscription.date-of-establishment.steps = eich manylion
-cds.subscription.date-of-establishment.title-and-heading = Dyddiad y sefydlwyd eich sefydliad
+cds.subscription.date-of-establishment.title-and-heading = Pryd y cafodd y sefydliad ei sefydlu?
 cds.subscription.partnership.date-of-establishment.title-and-heading = Pryd y cafodd y bartneriaeth ei sefydlu?
 cds.subscription.date-of-establishment.date-of-establishment.label = Dyddiad sefydlu
 cds.subscription.date-of-establishment.page-error.date-of-establishment = Nodwch eich dyddiad sefydlu
-cds.subscription.business.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich cwmni. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich cwmni ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
-cds.subscription.business.date-established.label.partnership = Nodwch y dyddiad y gwnaethoch gofrestru’ch partneriaeth gyda CThEF.
-cds.subscription.llp.date-established.charity-label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich sefydliad. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich sefydliad ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
-cds.subscription.llp.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r bartneriaeth. Gallwch ddod o hyd i ddyddiad sefydlu’ch busnes ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
 cds.subscription.row.date-established.label = Nodwch ddyddiad sefydlu’ch sefydliad
 cds.subscription.date-of-establishment.error.required.date-of-establishment = Nodwch eich dyddiad sefydlu
 cds.subscription.date-of-establishment.error.invalid.date-of-establishment = Nodwch ddyddiad sefydlu dilys
@@ -1377,7 +1373,7 @@ cds.matching.name-id-organisation.identity.verify = Byddwn yn defnyddio’r many
 cds.matching.name-id-organisation.registered-company.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y cwmni ar gyfer Treth Gorfforaeth?
 cds.matching.name-id-organisation.partnership.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) eich partneriaeth ar gyfer Hunanasesiad?
 cds.matching.name-id-organisation.organisation.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y sefydliad ar gyfer Treth Gorfforaeth?
-cds.subscription.date-of-establishment.company.title-and-heading = Dyddiad y sefydlwyd eich cwmni
+cds.subscription.date-of-establishment.company.title-and-heading = Pryd y cafodd y cwmni ei sefydlu?
 cds.subscription.address-details.postcode.row.label = Cod post
 cds.matching.row-organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth a gyhoeddwyd yn y DU?
 cds.matching.row-organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Dreth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
