@@ -56,10 +56,10 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
 
   "On a RoW journey the 'When was the organisation established?' page" should {
     "display correct title" in {
-      docRestOfWorld.title must startWith("Date when your organisation was established")
+      docRestOfWorld.title must startWith("When was the organisation established?")
     }
     "have the correct h1 text" in {
-      docRestOfWorld.body.getElementsByTag("legend").text() mustBe "Date when your organisation was established"
+      docRestOfWorld.body.getElementsByTag("legend").text() mustBe "When was the organisation established?"
     }
     "have the correct class on the legend" in {
       docRestOfWorld.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true

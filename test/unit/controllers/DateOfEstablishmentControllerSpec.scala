@@ -182,10 +182,10 @@ class DateOfEstablishmentControllerSpec
         .thenReturn(UnincorporatedBody)
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Date when your organisation was established")
+        page.title() should startWith("When was the organisation established?")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "Date when your organisation was established"
+        ) shouldBe "When was the organisation established?"
       }
     }
 

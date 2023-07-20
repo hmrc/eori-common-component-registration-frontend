@@ -960,7 +960,7 @@ cds.subscription.date-of-birth.error.in-future.date-of-birth=You cannot enter a 
 #Subscription Date of Establishment
 
 cds.subscription.date-of-establishment.steps=your details
-cds.subscription.date-of-establishment.title-and-heading=Date when your organisation was established
+cds.subscription.date-of-establishment.title-and-heading=When was the organisation established?
 cds.subscription.partnership.date-of-establishment.title-and-heading=When was the partnership established?
 cds.subscription.date-of-establishment.date-of-establishment.label=Date of establishment
 cds.subscription.date-of-establishment.page-error.date-of-establishment=Enter your date of establishment
