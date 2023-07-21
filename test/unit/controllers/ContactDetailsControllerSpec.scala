@@ -97,7 +97,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       "create Register",
       (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showCreateForm(flow, orgType = orgType)(_)
     ),
-    ("review Register", (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showReviewForm(flow)(_))
+    ("review Register", (flow: SubscriptionFlow, _: EtmpOrganisationType) => showReviewForm(flow)(_))
   )
 
   "Viewing the create form " should {
@@ -131,7 +131,6 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -142,7 +141,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
+
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -151,7 +150,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe empty
-        page.getElementValue(emailFieldXPath) shouldBe empty
+
         page.getElementValue(telephoneFieldXPath) shouldBe empty
       }
     }
@@ -166,7 +165,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
+
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -190,8 +189,6 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showReviewForm(contactDetailsModel = revisedContactDetailsModel) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailLabelXPath) shouldBe emailAddressFieldLabel
-        page.getElementText(emailFieldXPath) shouldBe Email
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }

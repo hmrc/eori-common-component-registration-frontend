@@ -326,7 +326,6 @@ cds.matching.individual.header = Nodwch eich manylion
 cds.matching-lede = Byddwn yn ceisio paru’ch manylion â’r wybodaeth sydd gennym ar hyn o bryd.
 cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
 cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
-cds.matching.partnership.utr.hint-with.link = <p class="govuk-body">Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">dod o hyd i UTR sydd ar goll (yn agor tab newydd)</a></p> Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.eori.hint = Mae gan eich rhif EORI rhwng 14 - 17 o gymeriadau.
 cds.matching.back = Yn ôl
 subscription.start-page.heading = Cael mynediad at y Gwasanaeth Datganiadau Tollau (CDS)
@@ -402,7 +401,16 @@ cds.subscription.middle-name.error.too-long = Rhaid i’r enw canol fod yn 35 o 
 cds.subscription.last-name.error.empty = Nodwch eich enw olaf
 cds.subscription.family-name.error.empty = Nodwch eich enw teuluol
 cds.subscription.last-name.error.wrong-format = Nodwch enw olaf heb gymeriadau annilys
+
 cds.subscription.name-dob-details.page-error.date-of-birth = Nodwch eich dyddiad geni
+date-of-birth.day.empty=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod
+date-of-birth.month.empty=Mae’n rhaid i’r dyddiad geni gynnwys mis
+date-of-birth.year.empty=Mae’n rhaid i’r dyddiad geni gynnwys blwyddyn
+date-of-birth.day-date-of-birth.month.empty=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a mis
+date-of-birth.day-date-of-birth.year.empty=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a blwyddyn
+date-of-birth.month-date-of-birth.year.empty=Mae’n rhaid i’r dyddiad geni gynnwys mis a blwyddyn
+
+
 cds.subscription.last-name.error.too-long = Rhaid i’r enw olaf fod yn 35 o gymeriadau neu lai
 cds.subscription.family-name.error.too-long = Rhaid i’r enw teuluol fod yn 35 o gymeriadau neu lai
 countries-in-the-eu.title = Gwledydd yn yr UE
@@ -525,7 +533,6 @@ cds.subscription.outcomes.eori-already-associated.vat-registered-heading = Os yd
 cds.subscription.outcomes.eori-already-associated.vat-registered1 = Bydd eich rhif EORI yn y fformat canlynol:
 cds.subscription.outcomes.eori-already-associated.vat-registered2 = GB XXXXXXXXX 000
 cds.subscription.outcomes.eori-already-associated.vat-registered3 = Lle mai XXXXXXXXX yw eich rhif TAW.
-cds.sub02.outcome.subscription-in-progress.title = Mae’ch cais am EORI wrthi’n cael ei brosesu
 cds.sub02.outcome.subscription-in-progress.heading = Mae’r cais am rif EORI ar gyfer {0} wrthi’n cael ei brosesu
 cds.sub02.outcome.subscription-in-progress.received = Daeth y cais i law CThEM ar {0}
 cds.sub02.outcome.subscription-in-progress.what-happens-next = Yr hyn sy’n digwydd nesaf
@@ -857,14 +864,10 @@ cds.subscription.date-of-birth.error.required.date-of-birth = Nodwch eich dyddia
 cds.subscription.date-of-birth.error.invalid.date-of-birth = Nodwch ddyddiad geni dilys, er enghraifft “31 3 1980”
 cds.subscription.date-of-birth.error.in-future.date-of-birth = Ni allwch nodi dyddiad geni sydd yn y dyfodol
 cds.subscription.date-of-establishment.steps = eich manylion
-cds.subscription.date-of-establishment.title-and-heading = Dyddiad y sefydlwyd eich sefydliad
+cds.subscription.date-of-establishment.title-and-heading = Pryd y cafodd y sefydliad ei sefydlu?
 cds.subscription.partnership.date-of-establishment.title-and-heading = Pryd y cafodd y bartneriaeth ei sefydlu?
 cds.subscription.date-of-establishment.date-of-establishment.label = Dyddiad sefydlu
 cds.subscription.date-of-establishment.page-error.date-of-establishment = Nodwch eich dyddiad sefydlu
-cds.subscription.business.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich cwmni. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich cwmni ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
-cds.subscription.business.date-established.label.partnership = Nodwch y dyddiad y gwnaethoch gofrestru’ch partneriaeth gyda CThEF.
-cds.subscription.llp.date-established.charity-label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori eich sefydliad. Gallwch ddod o hyd i’r dyddiad y sefydlwyd eich sefydliad ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
-cds.subscription.llp.date-established.label = Nodwch y dyddiad a ddangosir ar dystysgrif ymgorffori’r bartneriaeth. Gallwch ddod o hyd i ddyddiad sefydlu’ch busnes ar <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a>
 cds.subscription.row.date-established.label = Nodwch ddyddiad sefydlu’ch sefydliad
 cds.subscription.date-of-establishment.error.required.date-of-establishment = Nodwch eich dyddiad sefydlu
 cds.subscription.date-of-establishment.error.invalid.date-of-establishment = Nodwch ddyddiad sefydlu dilys
@@ -1339,6 +1342,13 @@ date.day.error = Nodwch ddiwrnod rhwng 1 a 31
 date.month.error = Nodwch fis rhwng 1 a 12
 date.year.error = Nodwch flwyddyn rhwng {0} a {1}
 dob.error.empty-date = Nodwch eich dyddiad geni
+date-of-establishment.day.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys diwrnod
+date-of-establishment.month.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys mis
+date-of-establishment.year.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys blwyddyn
+date-of-establishment.day-date-of-establishment.month.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys diwrnod a mis
+date-of-establishment.day-date-of-establishment.year.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys diwrnod a blwyddyn
+date-of-establishment.month-date-of-establishment.year.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys mis a blwyddyn
+date-invalid-year-too-short=Mae’n rhaid i’r flwyddyn gynnwys 4 rhif
 dob.error.future-date = Mae’n rhaid i’r dyddiad geni fod yn y gorffennol
 dob.error.invalid-date = Mae’n rhaid i’r dyddiad geni fod yn ddyddiad go iawn
 dob.error.minMax = Mae’n rhaid i’r dyddiad geni fod rhwng {0} a heddiw
@@ -1346,6 +1356,16 @@ doe.error.empty-date = Nodwch eich dyddiad sefydlu
 doe.error.future-date = Mae’n rhaid i’r dyddiad sefydlu fod yn y gorffennol
 doe.error.invalid-date = Mae’n rhaid i’r dyddiad sefydlu fod yn ddyddiad go iawn
 doe.error.minMax = Mae’n rhaid i’r dyddiad sefydlu fod rhwng {0} a heddiw
+
+
+vat-registration-date.day.empty=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod
+vat-registration-date.month.empty=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys mis
+vat-registration-date.year.empty=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys blwyddyn
+vat-registration-date.day-vat-registration-date.month.empty=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod a mis
+vat-registration-date.day-vat-registration-date.year.empty=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod a blwyddyn
+vat-registration-date.month-vat-registration-date.year.empty=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys mis a blwyddyn
+
+
 vat.error.empty-date-new=Nodwch eich dyddiad cofrestru TAW
 vat.error.invalid-date-new=Nodwch ddyddiad go iawn
 cds.feedback.continue = Rhagor am {0}
@@ -1379,7 +1399,7 @@ cds.matching.name-id-organisation.identity.verify = Byddwn yn defnyddio’r many
 cds.matching.name-id-organisation.registered-company.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y cwmni ar gyfer Treth Gorfforaeth?
 cds.matching.name-id-organisation.partnership.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) eich partneriaeth ar gyfer Hunanasesiad?
 cds.matching.name-id-organisation.organisation.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y sefydliad ar gyfer Treth Gorfforaeth?
-cds.subscription.date-of-establishment.company.title-and-heading = Dyddiad y sefydlwyd eich cwmni
+cds.subscription.date-of-establishment.company.title-and-heading = Pryd y cafodd y cwmni ei sefydlu?
 cds.subscription.address-details.postcode.row.label = Cod post
 cds.matching.row-organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth a gyhoeddwyd yn y DU?
 cds.matching.row-organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Dreth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’. Gallwch {0}.
@@ -1439,7 +1459,8 @@ subscription-journey.how-confirm-identity.nino.heading = Nodwch eich rhif Yswiri
 subscription-journey.how-confirm-identity.nino.hint = Mae hwn ar eich cerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading = Beth yw'ch Cyfeirnod Unigryw y Trethdalwr ar gyfer Hunanasesiad (UTR)?
 subscription-journey.how-confirm-identity.utr.row.org.heading=Beth yw’ch Cyfeirnod Unigryw y Trethdalwr ar gyfer Treth Gorfforaeth (UTR)?
-subscription-journey.how-confirm-identity.utr.hint = <p class="govuk-body">Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">dod o hyd i UTR sydd ar goll (yn agor tab newydd)</a></p> Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+subscription-journey.how-confirm-identity.utr.para = Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">dod o hyd i UTR sydd ar goll (yn agor tab newydd)</a>
+subscription-journey.how-confirm-identity.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 ecc.reg06.outcome.why-heading = Pam nad oedd y cais yn llwyddiannus
 ecc.reg06.outcome.eori = Rhif EORI {0}
 ecc.reg06.outcome.why.individual = Nid yw’r manylion canlynol yn cyd-fynd â’r enw a nodwyd gennych:
@@ -1615,7 +1636,7 @@ ecc.start-page.para1.bullet2.esc = rhoi gwybod am a rheoli’ch lwfans ar gyfer 
 ecc.start-page.when.title = Yr hyn y bydd ei angen arnoch
 ecc.start-page.when.title2 = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU
 ecc.start-page.when.para1 = I gadarnhau pwy ydych byddwn yn gofyn i chi nodi’r canlynol:
-ecc.start-page.when.para1.bullet1 = cyfanswm y Ffurflen TAW diweddaraf neu ddyddiad cofrestru TAW
+ecc.start-page.when.para1.bullet1 = dyddiad cofrestru TAW
 ecc.start-page.when.para1.bullet2 = Rhif cofrestru TAW
 ecc.start-page.when.para1.bullet3 = y cod post lle rydych wedi cofrestru ar gyfer TAW
 ecc.start-page.gbeori.para1.link = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Mewngofnodwch i’ch cyfrif TAW ar-lein (yn agor tab newydd)</a>

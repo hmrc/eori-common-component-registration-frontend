@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping
 
-import javax.inject.Singleton
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
@@ -29,6 +27,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.RegistrationDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
+import java.time.LocalDate
+import javax.inject.Singleton
+
 @Singleton
 class RegistrationDetailsCreator {
 
@@ -37,8 +38,8 @@ class RegistrationDetailsCreator {
     customsId: CustomsId,
     capturedDate: Option[LocalDate]
   ): RegistrationDetails = {
-    val Some(responseDetail) = response.responseDetail
-    val sapNumber            = extractSapNumber(response.responseCommon.returnParameters)
+    val responseDetail = response.getResponseDetail
+    val sapNumber      = extractSapNumber(response.responseCommon.returnParameters)
     if (responseDetail.isAnIndividual)
       convertIndividualMatchingResponse(
         responseDetail.individual.get,
@@ -231,9 +232,8 @@ class RegistrationDetailsCreator {
     )
 
   def registrationDetails(response: RegistrationDisplayResponse): RegistrationDetails = {
-    val RegistrationDisplayResponse(responseCommon, Some(responseDetail)) =
-      response
-    (responseDetail.individual, responseDetail.organisation, responseCommon.taxPayerID) match {
+    val responseDetail = response.getResponseDetail
+    (responseDetail.individual, responseDetail.organisation, response.responseCommon.taxPayerID) match {
       case (Some(individual), None, Some(taxPayerId)) =>
         convertIndividualMatchingResponse(
           individual,

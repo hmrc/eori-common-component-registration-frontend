@@ -34,7 +34,7 @@
       shortName
 }
 
-@layout_di(messages("cds.sub01.outcome.processing.title", serviceOrEori), displayBackLink = false) {
+@layout_di(messages("cds.sub01.outcome.processing.heading-noname", serviceOrEori), displayBackLink = false) {
     @govukPanel(Panel(
         title = HtmlContent(s"""${messages("cds.sub01.outcome.processing.heading-noname", serviceOrEori)}"""),
         content = HtmlContent(s"""${messages("cds.subscription.outcomes.in-processing.received", dateFormatter.format(processedDate))}""")))

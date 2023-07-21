@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-import java.util.UUID
 import common.pages.registration.UserLocationPageOrganisation._
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
@@ -44,14 +43,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -303,6 +303,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         case UserLocation.Uk           => "uk"
         case UserLocation.Iom          => "iom"
         case UserLocation.Islands      => "islands"
+        case _                         => throw new IllegalArgumentException("Unsupported User Location")
       }
 
       when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier])).thenReturn(Future.successful(None))
@@ -449,7 +450,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       processing() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("The ATaR application is being processed")
+        page.title() should startWith("Your ATaR application is being processed")
       }
     }
   }

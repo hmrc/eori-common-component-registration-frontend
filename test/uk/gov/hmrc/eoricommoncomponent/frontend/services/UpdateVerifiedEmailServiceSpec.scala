@@ -74,7 +74,7 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
         .thenReturn(Future.successful(Right(verifiedEmailResponse)))
       when(mockUpdateCustomsDataStoreConnector.updateCustomsDataStore(any())(any()))
         .thenReturn(Future.successful {})
-      await(service.updateVerifiedEmail(None, "email-address", eori)) shouldBe true
+      await(service.updateVerifiedEmail("email-address", eori)) shouldBe true
       verify(mockUpdateVerifiedEmailConnector).updateVerifiedEmail(any())(any())
     }
 
@@ -83,7 +83,7 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
         .thenReturn(Future.successful(Left(ServiceUnavailable)))
       when(mockUpdateCustomsDataStoreConnector.updateCustomsDataStore(any())(any()))
         .thenReturn(Future.successful {})
-      await(service.updateVerifiedEmail(None, "email-address", eori)) shouldBe false
+      await(service.updateVerifiedEmail("email-address", eori)) shouldBe false
       verify(mockUpdateVerifiedEmailConnector).updateVerifiedEmail(any())(any())
     }
   }

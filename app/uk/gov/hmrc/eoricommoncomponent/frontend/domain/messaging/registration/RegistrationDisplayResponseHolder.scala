@@ -57,7 +57,15 @@ object ResponseCommon {
   implicit val format = Json.format[ResponseCommon]
 }
 
-case class RegistrationDisplayResponse(responseCommon: ResponseCommon, responseDetail: Option[ResponseDetail])
+case class RegistrationDisplayResponse(responseCommon: ResponseCommon, responseDetail: Option[ResponseDetail]) {
+
+  def getResponseDetail: ResponseDetail = responseDetail match {
+    case Some(detail) => detail
+    case None =>
+      throw new IllegalArgumentException("RegistrationDisplayResponse did not include expected ResponseDetail object")
+  }
+
+}
 
 object RegistrationDisplayResponse {
   implicit val format = Json.format[RegistrationDisplayResponse]

@@ -341,7 +341,6 @@ cds.matching.utr.lost-utr-description=find a lost UTR (opens in new tab).
 
 cds.matching.utr.lost-utr-description-llp=find a lost UTR (opens in new tab).
 cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
-cds.matching.partnership.utr.hint-with.link = <p class="govuk-body">You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a></p> This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 
@@ -427,7 +426,14 @@ cds.subscription.middle-name.error.too-long=The middle name must be 35 character
 cds.subscription.last-name.error.empty=Enter your last name
 cds.subscription.family-name.error.empty=Enter your family name
 cds.subscription.last-name.error.wrong-format=Enter a last name without invalid characters
+
 cds.subscription.name-dob-details.page-error.date-of-birth=Enter your date of birth
+date-of-birth.day.empty=Date of birth must include a day
+date-of-birth.month.empty=Date of birth must include a month
+date-of-birth.year.empty=Date of birth must include a year
+date-of-birth.day-date-of-birth.month.empty=Date of birth must include a day and month
+date-of-birth.day-date-of-birth.year.empty=Date of birth must include a day and year
+date-of-birth.month-date-of-birth.year.empty=Date of birth must include a month and year
 cds.subscription.last-name.error.too-long=The last name must be 35 characters or less
 cds.subscription.family-name.error.too-long=The family name must be 35 characters or less
 
@@ -570,7 +576,6 @@ cds.subscription.outcomes.eori-already-associated.vat-registered2=GB XXXXXXXXX 0
 cds.subscription.outcomes.eori-already-associated.vat-registered3=Where XXXXXXXXX is your VAT number.
 
 # Sub02 Outcome Subscription already in progress
-cds.sub02.outcome.subscription-in-progress.title=Your EORI application is being processed
 cds.sub02.outcome.subscription-in-progress.heading=The EORI application for {0} is being processed
 cds.sub02.outcome.subscription-in-progress.received=Application received by HMRC on {0}
 cds.sub02.outcome.subscription-in-progress.what-happens-next=What happens next
@@ -960,14 +965,10 @@ cds.subscription.date-of-birth.error.in-future.date-of-birth=You cannot enter a 
 #Subscription Date of Establishment
 
 cds.subscription.date-of-establishment.steps=your details
-cds.subscription.date-of-establishment.title-and-heading=Date when your organisation was established
+cds.subscription.date-of-establishment.title-and-heading=When was the organisation established?
 cds.subscription.partnership.date-of-establishment.title-and-heading=When was the partnership established?
 cds.subscription.date-of-establishment.date-of-establishment.label=Date of establishment
 cds.subscription.date-of-establishment.page-error.date-of-establishment=Enter your date of establishment
-cds.subscription.business.date-established.label=Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
-cds.subscription.business.date-established.label.partnership =Enter the date that you registered your partnership with HMRC.
-cds.subscription.llp.date-established.charity-label=Enter the date shown on your organisation’s certificate of incorporation. You can find the date your organisation was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
-cds.subscription.llp.date-established.label=Enter the date shown on the partnership’s certificate of incorporation. You can find the date your business was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 cds.subscription.row.date-established.label=Enter the date your organisation was established
 cds.subscription.date-of-establishment.error.required.date-of-establishment=Enter your date of establishment
 cds.subscription.date-of-establishment.error.invalid.date-of-establishment=Please enter a valid date of establishment
@@ -1548,10 +1549,23 @@ dob.error.invalid-date=Date of birth must be a real date
 dob.error.minMax=Date of birth must be between {0} and today
 
 doe.error.empty-date=Enter your date of establishment
+date-of-establishment.day.empty=Date of establishment must include a day
+date-of-establishment.month.empty=Date of establishment must include a month
+date-of-establishment.year.empty=Date of establishment must include a year
+date-of-establishment.day-date-of-establishment.month.empty=Date of establishment must include a day and month
+date-of-establishment.day-date-of-establishment.year.empty=Date of establishment must include a day and year
+date-of-establishment.month-date-of-establishment.year.empty=Date of establishment must include a month and year
+date-invalid-year-too-short=Year must include 4 numbers
 doe.error.future-date=Date of establishment must be in the past
 doe.error.invalid-date=Date of establishment must be a real date
 doe.error.minMax=Date of establishment must be between {0} and today
 
+vat-registration-date.day.empty=VAT registration date must include a day
+vat-registration-date.month.empty=VAT registration date must include a month
+vat-registration-date.year.empty=VAT registration date must include a year
+vat-registration-date.day-vat-registration-date.month.empty=VAT registration date must include a day and month
+vat-registration-date.day-vat-registration-date.year.empty=VAT registration date must include a day and year
+vat-registration-date.month-vat-registration-date.year.empty=VAT registration date must include a month and year
 
 vat.error.empty-date-new=Enter your VAT registration date
 vat.error.invalid-date-new=Enter a real date
@@ -1593,7 +1607,7 @@ cds.matching.name-id-organisation.registered-company.matching-page.utr= What is 
 cds.matching.name-id-organisation.partnership.utr=What is the partnership’s Self Assessment Unique Taxpayer Reference (UTR)?
 cds.matching.name-id-organisation.organisation.utr=What is the organisation’s Corporation Tax Unique Taxpayer Reference (UTR)?
 
-cds.subscription.date-of-establishment.company.title-and-heading=Date when your company was established
+cds.subscription.date-of-establishment.company.title-and-heading=When was the company established?
 
 cds.subscription.address-details.postcode.row.label=Postal code
 
@@ -1672,7 +1686,8 @@ subscription-journey.how-confirm-identity.nino.heading=Enter your National Insur
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Unique Taxpayer Reference (UTR)?
 subscription-journey.how-confirm-identity.utr.row.org.heading=What is your Corporation Tax Unique Taxpayer Reference (UTR)?
-subscription-journey.how-confirm-identity.utr.hint=<p class="govuk-body">You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a></p>  This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
+subscription-journey.how-confirm-identity.utr.para=You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a>
+subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
 ecc.reg06.outcome.eori = EORI number {0}
@@ -1845,7 +1860,7 @@ ecc.start-page.para1.bullet2.esc = a subscription to Report and manage your allo
 ecc.start-page.when.title = What you will need
 ecc.start-page.when.title2 = If you are UK VAT registered
 ecc.start-page.when.para1 = To verify your identity we will ask you to enter:
-ecc.start-page.when.para1.bullet1 = latest VAT Return total or date of VAT registration
+ecc.start-page.when.para1.bullet1 = date of VAT registration
 ecc.start-page.when.para1.bullet2 = VAT registration number
 ecc.start-page.when.para1.bullet3 = postcode where you are registered for VAT
 ecc.start-page.gbeori.para1.link = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Sign in to your VAT online account (opens in new tab)</a>
@@ -1856,7 +1871,7 @@ ecc.start-page.gbeori.para1.title = To verify your identity you will need to pro
 ecc.start-page.gbeori.para1.bullet1 = registered name and address
 
 ecc.start-page.gbeori.para1.bullet3 = Corporation Tax Unique Taxpayer Reference (UTR), if you pay Corporation Tax in the UK
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" target="_blank" rel="noopener noreferrer">Find your UTR number (opens in a new tab)</a>
+ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" target="_blank" rel="noopener noreferrer">Find your UTR number (opens in new tab)</a>
 
 ecc.start-page.solo.title = If you apply as a sole trader or individual
 ecc.start-page.gbeori.para3.title = We will verify your identity by asking for one of the following:
