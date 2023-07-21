@@ -70,7 +70,7 @@
 }
 
 @layout_di(messages("business-details-recovery.title")) {
-<div>
+
     <h1 class="govuk-heading-l">@messages("business-details-recovery.heading")</h1>
 
     @govukSummaryList(SummaryList(
@@ -103,7 +103,7 @@
         id = Some("continue-button")
     ))
 
-    @helpers.helpAndSupport()CheckYourDetailsRegisterControllerSpec
-</div>
+    @helpers.helpAndSupport()
+
 
 }
