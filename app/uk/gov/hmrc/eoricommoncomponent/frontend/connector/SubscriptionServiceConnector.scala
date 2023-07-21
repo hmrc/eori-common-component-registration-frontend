@@ -54,21 +54,21 @@ class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfi
       .withBody(Json.toJson(request))
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[SubscriptionResponse] map { response =>
-        // $COVERAGE-OFF$Loggers
-        logger.debug(s"[Subscribe SUB02: responseCommon: ${response.subscriptionCreateResponse.responseCommon}")
-        // $COVERAGE-ON
+      // $COVERAGE-OFF$Loggers
+      logger.debug(s"[Subscribe SUB02: responseCommon: ${response.subscriptionCreateResponse.responseCommon}")
+      // $COVERAGE-ON
 
-        auditCall(url.toString, request, response)
-        response
-      } recoverWith {
-        case e: Throwable =>
-          // $COVERAGE-OFF$Loggers
-          logger.warn(
-            s"Subscribe SUB02 request failed for acknowledgementReference : ${request.subscriptionCreateRequest.requestCommon.acknowledgementReference}. Reason: $e"
-          )
-          // $COVERAGE-ON
-          Future.failed(e)
-      }
+      auditCall(url.toString, request, response)
+      response
+    } recoverWith {
+      case e: Throwable =>
+        // $COVERAGE-OFF$Loggers
+        logger.warn(
+          s"Subscribe SUB02 request failed for acknowledgementReference : ${request.subscriptionCreateRequest.requestCommon.acknowledgementReference}. Reason: $e"
+        )
+        // $COVERAGE-ON
+        Future.failed(e)
+    }
   }
 
   private def auditCall(url: String, request: SubscriptionRequest, response: SubscriptionResponse)(implicit

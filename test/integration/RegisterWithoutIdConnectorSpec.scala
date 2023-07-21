@@ -47,9 +47,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         "auditing.consumer.baseUri.port"                                                     -> Port
       )
     )
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val registerWithoutIdConnector = app.injector.instanceOf[RegisterWithoutIdConnector]

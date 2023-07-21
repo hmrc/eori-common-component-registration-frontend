@@ -57,9 +57,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         "auditing.consumer.baseUri.port"                 -> Port
       )
     )
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val customsDataStoreConnector = app.injector.instanceOf[UpdateCustomsDataStoreConnector]

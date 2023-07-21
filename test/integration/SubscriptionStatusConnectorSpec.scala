@@ -46,9 +46,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         "auditing.consumer.baseUri.port"                                                     -> Port
       )
     )
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private val subscriptionStatusConnector = app.injector.instanceOf[SubscriptionStatusConnector]

@@ -30,7 +30,9 @@ import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext) {
+class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit
+  ec: ExecutionContext
+) {
 
   private val logger  = Logger(this.getClass)
   private val baseUrl = appConfig.getServiceUrl("vat-known-facts-control-list")
@@ -38,40 +40,39 @@ class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: Ap
   def vatControlList(
     request: VatControlListRequest
   )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, VatControlListResponse]] = {
-    
+
     val url = new URL(s"$baseUrl?${makeQueryString(request.queryParams)}")
 
     httpClient
       .get(url)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute map { response =>
-        // $COVERAGE-OFF$Loggers
-        logger.debug(s"vat-known-facts-control-list successful. url: $url")
-        // $COVERAGE-ON
-        response.status match {
-          case OK        => Right(response.json.as[VatControlListResponse])
-          case NOT_FOUND =>
-            // $COVERAGE-OFF$Loggers
-            logger.warn(
-              s"VatControlList failed. url: $url. Reason: The back end has indicated that vat known facts cannot be returned."
-            )
-            // $COVERAGE-ON
-            Left(NotFoundResponse)
-          case BAD_REQUEST =>
-            // $COVERAGE-OFF$Loggers
-            logger.warn(s"VatControlList failed. url: $url. Reason: Request has not passed validation. Invalid vrn.")
-            // $COVERAGE-ON
-            Left(InvalidResponse)
-          case SERVICE_UNAVAILABLE =>
-            // $COVERAGE-OFF$Loggers
-            logger.warn(s"VatControlList failed. url: $url. Reason: Dependent systems are currently not responding")
-            // $COVERAGE-ON
-            Left(ServiceUnavailableResponse)
-          case _ => throw new Exception("Incorrect VAT Known facts response")
-        }
+      // $COVERAGE-OFF$Loggers
+      logger.debug(s"vat-known-facts-control-list successful. url: $url")
+      // $COVERAGE-ON
+      response.status match {
+        case OK        => Right(response.json.as[VatControlListResponse])
+        case NOT_FOUND =>
+          // $COVERAGE-OFF$Loggers
+          logger.warn(
+            s"VatControlList failed. url: $url. Reason: The back end has indicated that vat known facts cannot be returned."
+          )
+          // $COVERAGE-ON
+          Left(NotFoundResponse)
+        case BAD_REQUEST =>
+          // $COVERAGE-OFF$Loggers
+          logger.warn(s"VatControlList failed. url: $url. Reason: Request has not passed validation. Invalid vrn.")
+          // $COVERAGE-ON
+          Left(InvalidResponse)
+        case SERVICE_UNAVAILABLE =>
+          // $COVERAGE-OFF$Loggers
+          logger.warn(s"VatControlList failed. url: $url. Reason: Dependent systems are currently not responding")
+          // $COVERAGE-ON
+          Left(ServiceUnavailableResponse)
+        case _ => throw new Exception("Incorrect VAT Known facts response")
       }
+    }
   }
-
 
   private def makeQueryString(queryParams: Seq[(String, String)]) = {
     val paramPairs = queryParams.map { case (k, v) => s"$k=${URLEncoder.encode(v, "utf-8")}" }

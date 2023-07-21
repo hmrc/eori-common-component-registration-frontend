@@ -17,4 +17,5 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.models
 
 sealed abstract class Done
+
 object Done extends Done

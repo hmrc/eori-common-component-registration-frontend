@@ -27,9 +27,7 @@ import play.api.inject.bind
 class SessionTimeoutSpec extends UnitSpec with Injector {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private val configuration = instanceOf[Configuration]

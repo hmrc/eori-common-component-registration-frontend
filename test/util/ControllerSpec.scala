@@ -49,9 +49,7 @@ import scala.util.Random
 trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with Injector with TestData {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   implicit val messagesApi: MessagesApi = instanceOf[MessagesApi]

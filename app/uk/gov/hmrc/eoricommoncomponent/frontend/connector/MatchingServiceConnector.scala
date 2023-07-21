@@ -55,7 +55,9 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
   def lookup(req: MatchingRequestHolder)(implicit hc: HeaderCarrier): Future[Option[MatchingResponse]] = {
 
     // $COVERAGE-OFF$Loggers
-    logger.debug(s"REG01 Lookup: ${url.toString}, requestCommon: ${req.registerWithIDRequest.requestCommon} and hc: $hc")
+    logger.debug(
+      s"REG01 Lookup: ${url.toString}, requestCommon: ${req.registerWithIDRequest.requestCommon} and hc: $hc"
+    )
     // $COVERAGE-ON
 
     httpClient
@@ -63,21 +65,21 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
       .withBody(Json.toJson(req))
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[MatchingResponse] map { resp =>
-        // $COVERAGE-OFF$Loggers
-        logger.debug(s"REG01 Lookup: responseCommon: ${resp.registerWithIDResponse.responseCommon}")
-        // $COVERAGE-ON
+      // $COVERAGE-OFF$Loggers
+      logger.debug(s"REG01 Lookup: responseCommon: ${resp.registerWithIDResponse.responseCommon}")
+      // $COVERAGE-ON
 
-        auditCall(url.toString, req, resp)
-        handleResponse(resp)
-      } recover {
-        case e: Throwable =>
-          // $COVERAGE-OFF$Loggers
-          logger.warn(
-            s"REG01 Lookup failed for acknowledgement ref: ${req.registerWithIDRequest.requestCommon.acknowledgementReference}. Reason: $e"
-          )
-          // $COVERAGE-ON
-          throw e
-      }
+      auditCall(url.toString, req, resp)
+      handleResponse(resp)
+    } recover {
+      case e: Throwable =>
+        // $COVERAGE-OFF$Loggers
+        logger.warn(
+          s"REG01 Lookup failed for acknowledgement ref: ${req.registerWithIDRequest.requestCommon.acknowledgementReference}. Reason: $e"
+        )
+        // $COVERAGE-ON
+        throw e
+    }
 
   }
 

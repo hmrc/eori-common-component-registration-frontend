@@ -28,9 +28,7 @@ import play.api.inject.bind
 class CountriesSpec extends AnyWordSpec with Matchers {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   "Countries" should {

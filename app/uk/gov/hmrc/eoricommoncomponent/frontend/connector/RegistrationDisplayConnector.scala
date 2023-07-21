@@ -47,25 +47,25 @@ class RegistrationDisplayConnector @Inject() (httpClient: HttpClientV2, appConfi
       s"RegistrationDisplay: $url, requestCommon: ${request.registrationDisplayRequest.requestCommon} and hc: $hc"
     )
     // $COVERAGE-ON
-    
+
     httpClient
       .post(url)
       .withBody(Json.toJson(request))
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[RegistrationDisplayResponseHolder] map { response =>
-        // $COVERAGE-OFF$Loggers
-        logger.debug(s"[RegistrationDisplay: response: $response")
-        // $COVERAGE-ON
+      // $COVERAGE-OFF$Loggers
+      logger.debug(s"[RegistrationDisplay: response: $response")
+      // $COVERAGE-ON
 
-        auditCall(url.toString, request, response)
-        Right(response.registrationDisplayResponse)
-      } recover {
-        case NonFatal(e) =>
-          // $COVERAGE-OFF$Loggers
-          logger.warn(s"registration-display failed. url: $url, error: $e")
-          // $COVERAGE-ON
-          Left(ServiceUnavailableResponse)
-      }
+      auditCall(url.toString, request, response)
+      Right(response.registrationDisplayResponse)
+    } recover {
+      case NonFatal(e) =>
+        // $COVERAGE-OFF$Loggers
+        logger.warn(s"registration-display failed. url: $url, error: $e")
+        // $COVERAGE-ON
+        Left(ServiceUnavailableResponse)
+    }
   }
 
   private def auditCall(

@@ -29,11 +29,8 @@ import play.api.inject.bind
 class CompanyRegisteredCountrySpec extends UnitSpec with Injector {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
-
 
   implicit val messages = stubMessages()
 

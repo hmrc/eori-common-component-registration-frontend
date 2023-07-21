@@ -43,27 +43,27 @@ class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig:
     // $COVERAGE-OFF$Loggers
     logger.debug(s"Register: $url, body: $request and hc: $hc")
     // $COVERAGE-ON
-   
+
     httpClient
       .post(url)
       .withBody(Json.toJson(RegisterWithoutIdRequestHolder(request)))
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[RegisterWithoutIdResponseHolder] map { response =>
-        // $COVERAGE-OFF$Loggers
-        logger.debug(s"Register: responseCommon: ${response.registerWithoutIDResponse.responseCommon}")
-        // $COVERAGE-ON
+      // $COVERAGE-OFF$Loggers
+      logger.debug(s"Register: responseCommon: ${response.registerWithoutIDResponse.responseCommon}")
+      // $COVERAGE-ON
 
-        auditCall(url.toString, request, response)
-        response.registerWithoutIDResponse
-      } recover {
-        case e: Throwable =>
-          // $COVERAGE-OFF$Loggers
-          logger.warn(
-            s"Failure. postUrl: $url, acknowledgement ref: ${request.requestCommon.acknowledgementReference}, error: $e"
-          )
-          // $COVERAGE-ON
-          throw e
-      }
+      auditCall(url.toString, request, response)
+      response.registerWithoutIDResponse
+    } recover {
+      case e: Throwable =>
+        // $COVERAGE-OFF$Loggers
+        logger.warn(
+          s"Failure. postUrl: $url, acknowledgement ref: ${request.requestCommon.acknowledgementReference}, error: $e"
+        )
+        // $COVERAGE-ON
+        throw e
+    }
   }
 
   private def auditCall(url: String, request: RegisterWithoutIDRequest, response: RegisterWithoutIdResponseHolder)(

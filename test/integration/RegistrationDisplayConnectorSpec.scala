@@ -46,9 +46,7 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
         "auditing.consumer.baseUri.port"                                                      -> Port
       )
     )
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   implicit val hc = HeaderCarrier()

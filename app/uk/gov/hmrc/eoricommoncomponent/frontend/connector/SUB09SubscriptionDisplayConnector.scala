@@ -40,16 +40,16 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
-  ec: ExecutionContext
+class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(
+  implicit ec: ExecutionContext
 ) {
 
-  private val logger = Logger(this.getClass)
+  private val logger  = Logger(this.getClass)
   private val baseUrl = appConfig.getServiceUrl("subscription-display")
 
-  def subscriptionDisplay(
-    safeId: String, acknowledgementReference: String
-  )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, SubscriptionDisplayResponse]] = {
+  def subscriptionDisplay(safeId: String, acknowledgementReference: String)(implicit
+    hc: HeaderCarrier
+  ): Future[Either[EoriHttpResponse, SubscriptionDisplayResponse]] = {
 
     val url = url"$baseUrl?regime=CDS&taxPayerID=$safeId&acknowledgementReference=$acknowledgementReference"
 
@@ -61,17 +61,25 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
       .get(url)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[SubscriptionDisplayResponseHolder] map { resp =>
-        // $COVERAGE-OFF$Loggers
-        logger.debug(s"SubscriptionDisplay SUB09: responseCommon: ${resp.subscriptionDisplayResponse.responseCommon}")
-        // $COVERAGE-ON
+      // $COVERAGE-OFF$Loggers
+      logger.debug(s"SubscriptionDisplay SUB09: responseCommon: ${resp.subscriptionDisplayResponse.responseCommon}")
+      // $COVERAGE-ON
 
-        auditCall(url.toString, Seq("regime" -> Service.regimeCDS, "taxPayerID" -> safeId, "acknowledgementReference" -> acknowledgementReference), resp)
-        Right(resp.subscriptionDisplayResponse)
-      } recover {
-        case NonFatal(e) =>
-          logger.error(s"SubscriptionDisplay SUB09 failed. url: $url, error: $e")
-          Left(ServiceUnavailableResponse)
-      }
+      auditCall(
+        url.toString,
+        Seq(
+          "regime"                   -> Service.regimeCDS,
+          "taxPayerID"               -> safeId,
+          "acknowledgementReference" -> acknowledgementReference
+        ),
+        resp
+      )
+      Right(resp.subscriptionDisplayResponse)
+    } recover {
+      case NonFatal(e) =>
+        logger.error(s"SubscriptionDisplay SUB09 failed. url: $url, error: $e")
+        Left(ServiceUnavailableResponse)
+    }
   }
 
   private def auditCall(url: String, request: Seq[(String, String)], response: SubscriptionDisplayResponseHolder)(

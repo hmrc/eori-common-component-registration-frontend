@@ -29,31 +29,32 @@ import scala.util.control.NonFatal
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
 
-class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, httpClient: HttpClientV2)(implicit ec: ExecutionContext) {
+class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, httpClient: HttpClientV2)(implicit
+  ec: ExecutionContext
+) {
 
-  private val url         = url"${appConfig.getServiceUrl("update-verified-email")}"
-  private val logger      = Logger(this.getClass)
+  private val url    = url"${appConfig.getServiceUrl("update-verified-email")}"
+  private val logger = Logger(this.getClass)
 
-  def updateVerifiedEmail(request: VerifiedEmailRequest)(implicit
-    hc: HeaderCarrier
-  ): Future[Either[HttpErrorResponse, VerifiedEmailResponse]] =
-    
+  def updateVerifiedEmail(
+    request: VerifiedEmailRequest
+  )(implicit hc: HeaderCarrier): Future[Either[HttpErrorResponse, VerifiedEmailResponse]] =
     httpClient
       .put(url)
       .withBody(Json.toJson(request))
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[VerifiedEmailResponse] map { resp =>
-        Right(resp)
-      } recover {
-        case _: BadRequestException | UpstreamErrorResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)
-        case _: ForbiddenException | UpstreamErrorResponse(_, FORBIDDEN, _, _)    => Left(Forbidden)
-        case _: InternalServerException | UpstreamErrorResponse(_, _, _, _) =>
-          Left(ServiceUnavailable)
-        case NonFatal(e) =>
-          logger.error(
-            s"[UpdateVerifiedEmailConnector][updateVerifiedEmail] update-verified-email. url: $url, error: ${e.getMessage}"
-          )
-          Left(UnhandledException)
-      }
+      Right(resp)
+    } recover {
+      case _: BadRequestException | UpstreamErrorResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)
+      case _: ForbiddenException | UpstreamErrorResponse(_, FORBIDDEN, _, _)    => Left(Forbidden)
+      case _: InternalServerException | UpstreamErrorResponse(_, _, _, _) =>
+        Left(ServiceUnavailable)
+      case NonFatal(e) =>
+        logger.error(
+          s"[UpdateVerifiedEmailConnector][updateVerifiedEmail] update-verified-email. url: $url, error: ${e.getMessage}"
+        )
+        Left(UnhandledException)
+    }
 
 }

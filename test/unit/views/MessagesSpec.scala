@@ -29,9 +29,7 @@ import play.api.inject.bind
 class MessagesSpec extends PlaySpec with Injector {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private val messageApi: MessagesApi = instanceOf[MessagesApi]

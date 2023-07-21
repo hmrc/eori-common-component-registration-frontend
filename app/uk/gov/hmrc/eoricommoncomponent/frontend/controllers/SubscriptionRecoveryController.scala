@@ -78,7 +78,7 @@ class SubscriptionRecoveryController @Inject() (
   )(implicit ec: ExecutionContext, request: Request[AnyContent]): Future[Result] = {
     val result = for {
       registrationDetails <- sessionCache.registrationDetails
-      safeId          = registrationDetails.safeId.id
+      safeId = registrationDetails.safeId.id
       sub09Result  <- SUB09Connector.subscriptionDisplay(safeId, uuidGenerator.generateUUIDAsString)
       sub01Outcome <- sessionCache.sub01Outcome
     } yield sub09Result match {

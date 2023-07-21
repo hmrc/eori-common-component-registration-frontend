@@ -61,19 +61,19 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
       .get(url)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[SubscriptionStatusResponseHolder] map { resp =>
-        // $COVERAGE-OFF$Loggers
-        logger.debug(s"Status SUB01: responseCommon: ${resp.subscriptionStatusResponse.responseCommon}")
-        // $COVERAGE-ON
+      // $COVERAGE-OFF$Loggers
+      logger.debug(s"Status SUB01: responseCommon: ${resp.subscriptionStatusResponse.responseCommon}")
+      // $COVERAGE-ON
 
-        auditCall(baseUrl, request, resp)
-        resp.subscriptionStatusResponse
-      } recover {
-        case e: Throwable =>
-          // $COVERAGE-OFF$Loggers
-          logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
-          // $COVERAGE-ON
-          throw e
-      }
+      auditCall(baseUrl, request, resp)
+      resp.subscriptionStatusResponse
+    } recover {
+      case e: Throwable =>
+        // $COVERAGE-OFF$Loggers
+        logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
+        // $COVERAGE-ON
+        throw e
+    }
   }
 
   private def auditCall(

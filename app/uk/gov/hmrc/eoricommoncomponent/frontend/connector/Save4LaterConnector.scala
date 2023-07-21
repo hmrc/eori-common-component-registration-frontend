@@ -53,20 +53,20 @@ class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClien
       .get(url)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute map { response =>
-        logSuccess("Get", url.toString)
+      logSuccess("Get", url.toString)
 
-        response.status match {
-          case OK =>
-            Some(response.json.as[T])
-          case NOT_FOUND =>
-            None
-          case _ => throw new BadRequestException(s"Status:${response.status}")
-        }
-      } recoverWith {
-        case NonFatal(e) =>
-          logFailure("Get", url.toString, e)
-          Future.failed(e)
+      response.status match {
+        case OK =>
+          Some(response.json.as[T])
+        case NOT_FOUND =>
+          None
+        case _ => throw new BadRequestException(s"Status:${response.status}")
       }
+    } recoverWith {
+      case NonFatal(e) =>
+        logFailure("Get", url.toString, e)
+        Future.failed(e)
+    }
   }
 
   def put[T](id: String, key: String, payload: JsValue)(implicit hc: HeaderCarrier): Future[Unit] = {
@@ -81,16 +81,16 @@ class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClien
       .withBody(payload)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute map { response =>
-        logSuccess("Put", url.toString)
-        response.status match {
-          case NO_CONTENT | CREATED | OK => ()
-          case _                         => throw new BadRequestException(s"Status:${response.status}")
-        }
-      } recoverWith {
-        case NonFatal(e) =>
-          logFailure("Put", url.toString, e)
-          Future.failed(e)
+      logSuccess("Put", url.toString)
+      response.status match {
+        case NO_CONTENT | CREATED | OK => ()
+        case _                         => throw new BadRequestException(s"Status:${response.status}")
       }
+    } recoverWith {
+      case NonFatal(e) =>
+        logFailure("Put", url.toString, e)
+        Future.failed(e)
+    }
   }
 
   def delete[T](id: String)(implicit hc: HeaderCarrier): Future[Unit] = {
@@ -104,16 +104,16 @@ class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClien
       .delete(url)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute map { response =>
-        logSuccess("Delete", url.toString)
-        response.status match {
-          case NO_CONTENT => ()
-          case _          => throw new BadRequestException(s"Status:${response.status}")
-        }
-      } recoverWith {
-        case NonFatal(e) =>
-          logFailure("Delete", url.toString, e)
-          Future.failed(e)
+      logSuccess("Delete", url.toString)
+      response.status match {
+        case NO_CONTENT => ()
+        case _          => throw new BadRequestException(s"Status:${response.status}")
       }
+    } recoverWith {
+      case NonFatal(e) =>
+        logFailure("Delete", url.toString, e)
+        Future.failed(e)
+    }
   }
 
   def deleteKey[T](id: String, key: String)(implicit hc: HeaderCarrier): Future[Unit] = {
@@ -124,9 +124,9 @@ class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClien
     // $COVERAGE-ON
 
     httpClient
-    .delete(url)
-    .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
-    .execute map { response =>
+      .delete(url)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute map { response =>
       logSuccess("Delete key", url.toString)
       response.status match {
         case NO_CONTENT => ()

@@ -33,8 +33,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
-  ec: ExecutionContext
+class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(
+  implicit ec: ExecutionContext
 ) {
 
   val LoggerComponentId = "UpdateCustomsDataStoreConnector"
@@ -53,26 +53,26 @@ class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appCo
       .setHeader(CONTENT_TYPE -> MimeTypes.JSON)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[HttpResponse] map { response =>
-        auditCall(url.toString, request, response)
-        response.status match {
-          case OK | NO_CONTENT =>
-            // $COVERAGE-OFF$Loggers
-            logger.info(s"[$LoggerComponentId][call] complete for call to $url with status:${response.status}")
-            // $COVERAGE-ON
-            ()
-          case _ => throw new BadRequestException(s"Status:${response.status}")
-        }
-      } recoverWith {
-        case e: BadRequestException =>
-          logger.error(
-            s"[$LoggerComponentId][call] request failed with BAD_REQUEST status for call to $url: ${e.getMessage}",
-            e
-          )
-          Future.failed(e)
-        case NonFatal(e) =>
-          logger.error(s"[$LoggerComponentId][call] request failed for call to $url: ${e.getMessage}", e)
-          Future.failed(e)
+      auditCall(url.toString, request, response)
+      response.status match {
+        case OK | NO_CONTENT =>
+          // $COVERAGE-OFF$Loggers
+          logger.info(s"[$LoggerComponentId][call] complete for call to $url with status:${response.status}")
+          // $COVERAGE-ON
+          ()
+        case _ => throw new BadRequestException(s"Status:${response.status}")
       }
+    } recoverWith {
+      case e: BadRequestException =>
+        logger.error(
+          s"[$LoggerComponentId][call] request failed with BAD_REQUEST status for call to $url: ${e.getMessage}",
+          e
+        )
+        Future.failed(e)
+      case NonFatal(e) =>
+        logger.error(s"[$LoggerComponentId][call] request failed for call to $url: ${e.getMessage}", e)
+        Future.failed(e)
+    }
   }
 
   private def auditCall(url: String, request: CustomsDataStoreRequest, response: HttpResponse)(implicit

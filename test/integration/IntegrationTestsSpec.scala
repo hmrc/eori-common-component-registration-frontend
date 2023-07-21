@@ -31,7 +31,8 @@ import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
 class IntegrationTestsSpec
-    extends PlaySpec with BeforeAndAfter with BeforeAndAfterAll with Eventually with IntegrationPatience with WireMockRunner {
+    extends PlaySpec with BeforeAndAfter with BeforeAndAfterAll with Eventually with IntegrationPatience
+    with WireMockRunner {
 
   implicit val defaultTimeout: FiniteDuration = 5 seconds
 
@@ -40,9 +41,7 @@ class IntegrationTestsSpec
   def await[A](future: Future[A])(implicit timeout: Duration): A = Await.result(future, timeout)
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
 }

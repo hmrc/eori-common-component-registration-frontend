@@ -34,9 +34,7 @@ import scala.concurrent.duration._
 trait ViewSpec extends PlaySpec with CSRFTest with Injector with TestData {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private val messageApi: MessagesApi = instanceOf[MessagesApi]

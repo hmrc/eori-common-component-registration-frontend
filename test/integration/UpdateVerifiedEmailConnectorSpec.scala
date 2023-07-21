@@ -22,10 +22,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateVerifiedEmailConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.{
-  RequestDetail,
-  UpdateVerifiedEmailRequest
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.{RequestDetail, UpdateVerifiedEmailRequest}
 import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -47,12 +44,10 @@ class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFu
         "auditing.consumer.baseUri.port"                                                       -> Port
       )
     )
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
-  private val connector = app.injector.instanceOf[UpdateVerifiedEmailConnector]
+  private val connector          = app.injector.instanceOf[UpdateVerifiedEmailConnector]
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val responseWithOk: JsValue =
@@ -79,10 +74,10 @@ class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
   val expectedUrl = "/update-verified-email"
 
-  val dateTime = DateTime.now()
-  private val requestDetail = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
-  private val requestDateInd = LocalDateTime.of(2001, 12, 17, 9, 30, 47, 0)
-  private val requestCommon = RequestCommon("CDS", requestDateInd, "012345678901234")
+  val dateTime                     = DateTime.now()
+  private val requestDetail        = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
+  private val requestDateInd       = LocalDateTime.of(2001, 12, 17, 9, 30, 47, 0)
+  private val requestCommon        = RequestCommon("CDS", requestDateInd, "012345678901234")
   private val verifiedEmailRequest = VerifiedEmailRequest(UpdateVerifiedEmailRequest(requestCommon, requestDetail))
 
   "updateVerifiedEmail" should {
@@ -98,39 +93,21 @@ class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFu
     }
 
     "return Left with Forbidden when call returned Upstream4xxResponse with 403" in {
-      UpdateVerifiedEmailMessagingService.stubTheResponse(
-        expectedUrl,
-        "",
-        FORBIDDEN
-      )
+      UpdateVerifiedEmailMessagingService.stubTheResponse(expectedUrl, "", FORBIDDEN)
 
-      await(connector.updateVerifiedEmail(verifiedEmailRequest)) must be(
-        Left(Forbidden)
-      )
+      await(connector.updateVerifiedEmail(verifiedEmailRequest)) must be(Left(Forbidden))
     }
 
     "return Left with BadRequest when call returned Upstream4xxResponse with 400" in {
-      UpdateVerifiedEmailMessagingService.stubTheResponse(
-        expectedUrl,
-        "",
-        BAD_REQUEST
-      )
+      UpdateVerifiedEmailMessagingService.stubTheResponse(expectedUrl, "", BAD_REQUEST)
 
-      await(connector.updateVerifiedEmail(verifiedEmailRequest)) must be(
-        Left(BadRequest)
-      )
+      await(connector.updateVerifiedEmail(verifiedEmailRequest)) must be(Left(BadRequest))
     }
 
     "return Left with ServiceUnavailable when call returned Upstream5xxResponse with 500" in {
-      UpdateVerifiedEmailMessagingService.stubTheResponse(
-        expectedUrl,
-        "",
-        INTERNAL_SERVER_ERROR
-      )
+      UpdateVerifiedEmailMessagingService.stubTheResponse(expectedUrl, "", INTERNAL_SERVER_ERROR)
 
-      await(connector.updateVerifiedEmail(verifiedEmailRequest)) must be(
-        Left(ServiceUnavailable)
-      )
+      await(connector.updateVerifiedEmail(verifiedEmailRequest)) must be(Left(ServiceUnavailable))
     }
 
   }

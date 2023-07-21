@@ -39,9 +39,7 @@ class Save4LaterConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
         "auditing.consumer.baseUri.port"                 -> Port
       )
     )
-    .overrides(
-      bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser]
-    )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val save4LaterConnector = app.injector.instanceOf[Save4LaterConnector]
