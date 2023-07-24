@@ -50,7 +50,8 @@ class SicCodeController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] = {
     lazy val form = sicCode.map(SicCodeViewModel).fold(sicCodeform)(sicCodeform.fill)
-    Future.successful(Ok(
+    Future.successful(
+      Ok(
         sicCodeView(
           form,
           isInReviewMode,
@@ -58,7 +59,8 @@ class SicCodeController @Inject() (
           service,
           requestSessionData.selectedUserLocation
         )
-      ))
+      )
+    )
   }
 
   def createForm(service: Service): Action[AnyContent] =
@@ -79,7 +81,8 @@ class SicCodeController @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       sicCodeform.bindFromRequest().fold(
         formWithErrors =>
-            Future.successful(BadRequest(
+          Future.successful(
+            BadRequest(
               sicCodeView(
                 formWithErrors,
                 isInReviewMode,
@@ -87,7 +90,8 @@ class SicCodeController @Inject() (
                 service,
                 requestSessionData.selectedUserLocation
               )
-            )),
+            )
+          ),
         formData => submitNewDetails(formData, isInReviewMode, service)
       )
     }
