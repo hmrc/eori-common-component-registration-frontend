@@ -29,8 +29,7 @@
 @(sicCodeForm: Form[SicCodeViewModel],isInReviewMode: Boolean, cdsOrgType: Option[CdsOrganisationType], service: Service, selectedUserLocation: Option[String] )(implicit request: Request[_], messages: Messages)
 
 @detailsContent = {
-    <p class="govuk-body">
-        <h2 class="govuk-heading-m" id="help1-heading">@messages("cds.subscription.sic.page.help.heading")</h2>
+    <h2 class="govuk-heading-m" id="help1-heading">@messages("cds.subscription.sic.page.help.heading")</h2>
         <p class="govuk-body" id="help1-para1">@messages("cds.subscription.sic.page.help.para1")</p>
         <p class="govuk-body" id="help1-para2">@Html(messages("cds.subscription.sic.page.help.para2"))</p>
 
@@ -38,7 +37,7 @@
         <p class="govuk-body" id="help2-para3">@Html(messages("cds.subscription.sic.page.help.para3"))</p>
         <p class="govuk-body" id="help-para4">@messages("cds.subscription.sic.page.help.para4")</p>
         <p class="govuk-body" id="help-para5">@messages("cds.subscription.sic.page.help.para5")</p>
-    </p>
+
 }
 
 @subscriptionFlowCommon_di("sic", form = sicCodeForm) {

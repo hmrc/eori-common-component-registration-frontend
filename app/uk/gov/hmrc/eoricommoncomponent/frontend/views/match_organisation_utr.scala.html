@@ -41,9 +41,9 @@
         Map.empty,
         Some(hint),
         None,
-        '_divClass -> "govuk-form-group inline",
-        '_legend -> headerAndTitle,
-        '_isLegendH1 -> true
+        Symbol("_divClass") -> "govuk-form-group inline",
+        Symbol("_legend") -> headerAndTitle,
+        Symbol("_isLegendH1") -> true
     )
 }
 
@@ -67,9 +67,9 @@
 
 @hint = @{
     organisationType match {
-        case ThirdCountryOrganisationId | CharityPublicBodyNotForProfitId => utrLinkText
-        case orgType if rowIndividualOrganisationIds.contains(orgType) =>
-            Html(messages(""))
+        case CharityPublicBodyNotForProfitId => utrLinkText
+        case ThirdCountryOrganisationId => Html(None)
+        case orgType if rowIndividualOrganisationIds.contains(orgType) => Html(None)
         case IndividualId | SoleTraderId =>
             Html(messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrlink))
         case _ => Html(messages("cds.matching.organisation.utr.paragraph", utrlink))

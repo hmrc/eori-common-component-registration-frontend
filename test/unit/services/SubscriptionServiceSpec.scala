@@ -80,13 +80,7 @@ class SubscriptionServiceSpec
             Some(EtmpOrganisationType.apply(cdsOrganisationType)),
             expectedDateEstablishedString = dateEstablishedString
           )
-          assertOrganisationSubscriptionRequest(
-            expectedRequest,
-            subscriptionSuccessResult,
-            vatIds,
-            Some(cdsOrganisationType),
-            Some(etmpOrganisationType)
-          )
+          assertOrganisationSubscriptionRequest(expectedRequest, Some(cdsOrganisationType), Some(etmpOrganisationType))
           Prop.proved
       })
     }
@@ -98,18 +92,7 @@ class SubscriptionServiceSpec
       check(Prop.forAllNoShrink(etmpOrganisationTypeGenerator, vatIdsGenerator) { (etmpOrganisationType, vatIds) =>
         val expectedRequest =
           requestJson(name = businessName, vatIds = vatIds, organisationType = Some(etmpOrganisationType))
-        assertOrganisationSubscriptionRequest(
-          expectedRequest,
-          SubscriptionSuccessful(
-            Eori(responseEoriNumber),
-            responseFormBundleId,
-            processingDateResponse,
-            Some(emailVerificationTimestamp)
-          ),
-          vatIds,
-          None,
-          Some(etmpOrganisationType)
-        )
+        assertOrganisationSubscriptionRequest(expectedRequest, None, Some(etmpOrganisationType))
         Prop.proved
       })
     }
@@ -127,8 +110,6 @@ class SubscriptionServiceSpec
 
         assertOrganisationSubscriptionRequest(
           expectedRequest = expectedRequest,
-          expectedServiceCallResult = subscriptionSuccessResult,
-          vatIds = List(vatIds),
           cdsOrganisationType = None,
           etmpOrganisationType = None
         )
@@ -567,8 +548,6 @@ class SubscriptionServiceSpec
 
   private def assertOrganisationSubscriptionRequest(
     expectedRequest: JsValue,
-    expectedServiceCallResult: SubscriptionResult,
-    vatIds: List[VatIdentification],
     cdsOrganisationType: Option[CdsOrganisationType],
     etmpOrganisationType: Option[EtmpOrganisationType],
     subscriptionContactDetails: ContactDetailsModel = subscriptionContactDetailsModel,

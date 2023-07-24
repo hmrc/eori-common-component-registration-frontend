@@ -16,19 +16,19 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotal
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotalForm.vatReturnTotalForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   ContactDetailsController,
   VatDetailsController,
   VatReturnController
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotal
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotalForm.vatReturnTotalForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,7 +37,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatReturnController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
-  subscriptionDetailsService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
   vatReturnTotalView: vat_return_total,
   weCannotConfirmYourIdentity: we_cannot_confirm_your_identity

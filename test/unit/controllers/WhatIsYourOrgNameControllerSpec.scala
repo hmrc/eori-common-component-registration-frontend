@@ -143,7 +143,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
   "Submitting the form" should {
 
     forAll(organisationTypeOrganisations) {
-      (organisationType, _, nameDescription, submitLocation, userLocation, reviewMode, _) =>
+      (organisationType, _, nameDescription, submitLocation, _, reviewMode, _) =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
           mockAuthConnector,
           controller.submit(reviewMode, organisationType, atarService),
