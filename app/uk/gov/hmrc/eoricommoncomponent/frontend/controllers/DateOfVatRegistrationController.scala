@@ -35,8 +35,7 @@ class DateOfVatRegistrationController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
-  dateOfVatRegistrationView: date_of_vat_registration,
-  weCannotConfirmYourIdentity: we_cannot_confirm_your_identity
+  dateOfVatRegistrationView: date_of_vat_registration
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -52,7 +51,7 @@ class DateOfVatRegistrationController @Inject() (
       case Some(response)
           if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
         Redirect(ContactDetailsController.createForm(service))
-      case _ => Redirect(DateOfVatRegistrationController.redirectToCannotConfirmIdentity(service))
+      case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }
 
   def submit(service: Service): Action[AnyContent] =
@@ -60,13 +59,6 @@ class DateOfVatRegistrationController @Inject() (
       vatRegistrationDateForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
         formData => lookupDateOfVatRegistration(formData, service)
-      )
-    }
-
-  def redirectToCannotConfirmIdentity(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Ok(weCannotConfirmYourIdentity(isInReviewMode = false, VatDetailsController.createForm(service).url, service))
       )
     }
 

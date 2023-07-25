@@ -271,7 +271,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
             summaryListRow(
               key = messages("cds.nino.label"),
               value = Some(Html(messages("cds.not-entered.label"))),
-              call = cdsOrgType.map(orgType => DoYouHaveNinoController.displayForm(service))
+              call = cdsOrgType.map(_ => DoYouHaveNinoController.displayForm(service))
             )
           )
         else Seq.empty[SummaryListRow]

@@ -151,7 +151,7 @@ POST        /customs-registration-services/:service/register/vat-verification-op
 
 GET         /customs-registration-services/:service/register/your-uk-vat-details-date                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfVatRegistrationController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/your-uk-vat-details-date                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfVatRegistrationController.submit(service: Service)
-GET         /customs-registration-services/:service/register/cannot-confirm-vat-details              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfVatRegistrationController.redirectToCannotConfirmIdentity(service: Service)
+GET         /customs-registration-services/:service/register/cannot-confirm-vat-details              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatReturnController.redirectToCannotConfirmIdentity(service: Service)
 
 GET         /customs-registration-services/:service/register/your-uk-vat-details                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/your-uk-vat-details                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController.submit(isInReviewMode: Boolean = false, service: Service)

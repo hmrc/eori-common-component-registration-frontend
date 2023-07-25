@@ -22,11 +22,14 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfVatRegistrationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DateOfVatRegistrationController, VatReturnController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, we_cannot_confirm_your_identity}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  date_of_vat_registration,
+  vat_return_total,
+  we_cannot_confirm_your_identity
+}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -37,17 +40,26 @@ import scala.concurrent.Future
 class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
 
   private val mockDateOfVatRegistrationView   = instanceOf[date_of_vat_registration]
-  private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
 
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
 
+  private val mockVatReturnTotalView          = instanceOf[vat_return_total]
+  private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
+
   private val controller = new DateOfVatRegistrationController(
     mockAuthAction,
     mockSubscriptionBusinessService,
     mcc,
-    mockDateOfVatRegistrationView,
+    mockDateOfVatRegistrationView
+  )
+
+  private val controllerVat = new VatReturnController(
+    mockAuthAction,
+    mockSubscriptionBusinessService,
+    mcc,
+    mockVatReturnTotalView,
     mockWeCannotConfirmYourIdentity
   )
 
@@ -123,7 +135,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
   "redirectToCannotConfirmIdentity" should {
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-      controller.redirectToCannotConfirmIdentity(atarService)
+      controllerVat.redirectToCannotConfirmIdentity(atarService)
     )
 
     "display redirectToCannotConfirmIdentity" in {
@@ -147,7 +159,9 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
 
   private def redirectToCannotConfirmIdentity(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(controller.redirectToCannotConfirmIdentity(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
+    test(
+      controllerVat.redirectToCannotConfirmIdentity(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
+    )
   }
 
 }
