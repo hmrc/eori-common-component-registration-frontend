@@ -22,11 +22,10 @@ import play.api.mvc.{Action, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -38,7 +37,7 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   matchingService: MatchingService,
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you_nino,
-  cdsFrontendDataCache: SessionCache
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -81,8 +80,9 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
     hc: HeaderCarrier,
     request: Request[_]
-  ): Future[Boolean] =
-    retrieveNameDobFromCache().flatMap(ind => matchingService.matchIndividualWithNino(formData.id, ind, groupId))
+  ): Future[Boolean] = sessionCacheService.retrieveNameDobFromCache().flatMap(
+    ind => matchingService.matchIndividualWithNino(formData.id, ind, groupId)
+  )
 
   private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service)(implicit
     request: Request[AnyContent]
@@ -98,16 +98,5 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
       )
     )
   }
-
-  private def retrieveNameDobFromCache()(implicit request: Request[_]): Future[Individual] =
-    cdsFrontendDataCache.subscriptionDetails.map(
-      _.nameDobDetails.getOrElse(throw DataUnavailableException(s"NameDob is not cached in data"))
-    ).map { nameDobDetails =>
-      Individual.withLocalDate(
-        firstName = nameDobDetails.firstName,
-        lastName = nameDobDetails.lastName,
-        dateOfBirth = nameDobDetails.dateOfBirth
-      )
-    }
 
 }

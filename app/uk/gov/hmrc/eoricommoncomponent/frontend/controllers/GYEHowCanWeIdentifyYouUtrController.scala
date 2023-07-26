@@ -26,7 +26,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  SessionCache,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,7 +44,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you_utr,
   orgTypeLookup: OrgTypeLookup,
-  cdsFrontendDataCache: SessionCache
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -90,7 +94,9 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     hc: HeaderCarrier,
     request: Request[_]
   ): Future[Boolean] =
-    retrieveNameDobFromCache().flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
+    sessionCacheService
+      .retrieveNameDobFromCache()
+      .flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
 
   private def matchNotFoundBadRequest(
     individualFormData: IdMatchModel,
@@ -109,16 +115,5 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
       )
     )
   }
-
-  private def retrieveNameDobFromCache()(implicit request: Request[_]): Future[Individual] =
-    cdsFrontendDataCache.subscriptionDetails.map(
-      _.nameDobDetails.getOrElse(throw DataUnavailableException(s"NameDob is not cached in data"))
-    ).map { nameDobDetails =>
-      Individual.withLocalDate(
-        firstName = nameDobDetails.firstName,
-        lastName = nameDobDetails.lastName,
-        dateOfBirth = nameDobDetails.dateOfBirth
-      )
-    }
 
 }
