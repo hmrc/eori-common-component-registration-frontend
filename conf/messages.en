@@ -1855,7 +1855,7 @@ ecc.start-page.para1.bullet2.gbss = a subscription to the Safety and Security GB
 ecc.start-page.para1.bullet2.ctc = a subscription to the New Computerised Transit System (NCTS)
 ecc.start-page.para1.bullet2.cds = a subscription to the Customs Declaration Service
 ecc.start-page.para1.bullet2.eori-only = a subscription to the Customs Declaration Service
-ecc.start-page.para1.bullet2.esc = a subscription to Report and manage your allowance for Customs Duty Waiver claims
+ecc.start-page.para1.bullet2.esc = a subscription to Report and manage your allowance for Customs Duty waiver claims
 
 ecc.start-page.when.title = What you will need
 ecc.start-page.when.title2 = If you are UK VAT registered
@@ -1950,7 +1950,7 @@ cds.subscription.outcomes.success.extra.information.next.new.ss =<li>make entry 
 cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>make entry summary declarations</li>
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>submit union transit declarations through NCTS</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>use the Customs Declaration Service</li>
-cds.subscription.outcomes.success.extra.information.next.new.esc =<li>report and manage your allowance for Customs Duty Waiver claims</li>
+cds.subscription.outcomes.success.extra.information.next.new.esc =<li>report and manage your allowance for Customs Duty waiver claims</li>
 
 ecc.eor-vat-return-error.incorrect.input = Enter a value to 2 decimal places. For example, £100.00
 ecc.eor-vat-return-error.incorrect.no-input = Enter your latest VAT Return total or Box 5 amount
@@ -1971,4 +1971,4 @@ ecc.start-page.para1.bullet2.new.ndrc = a subscription to Customs Trader Service
 ecc.start-page.para1.bullet2.new.gbss = a subscription to the Safety and Security GB service
 ecc.start-page.para1.bullet2.new.ctc = a subscription to the New Computerised Transit System (NCTS)
 ecc.start-page.para1.bullet2.new.cds = a subscription to the Customs Declaration Service
-ecc.start-page.para1.bullet2.new.esc = a subscription to Report and manage your allowance for Customs Duty Waiver claims
+ecc.start-page.para1.bullet2.new.esc = a subscription to Report and manage your allowance for Customs Duty waiver claims
