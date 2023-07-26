@@ -59,7 +59,6 @@ class SicCodeControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockOrgTypeLookup      = mock[OrgTypeLookup]
   private val mockRequestSessionData = mock[RequestSessionData]
   private val sicCodeView            = instanceOf[sic_code]
 
@@ -68,7 +67,6 @@ class SicCodeControllerSpec
     mockSubscriptionBusinessService,
     mockSubscriptionFlowManager,
     mockSubscriptionDetailsService,
-    mockOrgTypeLookup,
     mcc,
     sicCodeView,
     mockRequestSessionData
@@ -87,7 +85,7 @@ class SicCodeControllerSpec
   override protected def afterEach(): Unit = {
     reset(mockSubscriptionBusinessService)
     reset(mockSubscriptionFlowManager)
-    reset(mockOrgTypeLookup)
+
     reset(mockSubscriptionDetailsService)
     reset(mockRequestSessionData)
 
@@ -331,7 +329,6 @@ class SicCodeControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
 
@@ -349,7 +346,6 @@ class SicCodeControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
 
@@ -375,7 +371,6 @@ class SicCodeControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
@@ -391,7 +386,6 @@ class SicCodeControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
     when(mockSubscriptionBusinessService.getCachedSicCode(any[Request[_]])).thenReturn(dataToEdit)
