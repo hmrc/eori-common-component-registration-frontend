@@ -26,12 +26,19 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouNinoController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
+  GYEHowCanWeIdentifyYouNinoController,
+  GYEHowCanWeIdentifyYouUtrController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameDobMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  SessionCache,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_nino
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -47,6 +54,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
   private val mockAuthAction        = authAction(mockAuthConnector)
   private val mockMatchingService   = mock[MatchingService]
   private val mockFrontendDataCache = mock[SessionCache]
+  private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache)
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_nino]
 
@@ -55,7 +63,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     mockMatchingService,
     mcc,
     howCanWeIdentifyYouView,
-    mockFrontendDataCache
+    sessionCacheService
   )
 
   "Viewing the form " should {

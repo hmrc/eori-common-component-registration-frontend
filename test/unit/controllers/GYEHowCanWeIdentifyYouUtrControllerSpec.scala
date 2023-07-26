@@ -31,7 +31,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, NameDobMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  SessionCache,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
 import uk.gov.hmrc.http.HeaderCarrier
@@ -49,6 +53,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
   private val mockMatchingService   = mock[MatchingService]
   private val mockFrontendDataCache = mock[SessionCache]
   private val mockOrgTypeLookup     = mock[OrgTypeLookup]
+  private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache)
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_utr]
 
@@ -58,7 +63,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     mcc,
     howCanWeIdentifyYouView,
     mockOrgTypeLookup,
-    mockFrontendDataCache
+    sessionCacheService
   )
 
   "Viewing the form " should {
