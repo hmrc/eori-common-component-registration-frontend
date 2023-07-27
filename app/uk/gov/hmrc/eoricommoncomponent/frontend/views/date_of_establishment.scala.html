@@ -20,13 +20,10 @@
 @import views.html.helper._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
-@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel
 @import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel.updateFormErrors
 @import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel.headerAndTitle
 @this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary)
@@ -35,14 +32,14 @@
 @(dateForm: Form[LocalDate], isInReviewMode: Boolean, orgType: EtmpOrganisationType, isRestOfWorldJourney: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages(headerAndTitle(orgType, isRestOfWorldJourney)), form = Some(dateForm)) {
-    <div>
+
         @errorSummary(updateFormErrors(dateForm).errors, focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController.submit(isInReviewMode, service), "date-of-birth-form") {
 
             @CSRF.formField
 
-        <div aria-describedby="date-of-establishment-hint-text">
+
             @inputDate_di(
                 form = updateFormErrors(dateForm),
                 legendContent = headerAndTitle(orgType, isRestOfWorldJourney),
@@ -51,7 +48,7 @@
                 legendAsPageHeading = true,
                 id = "date-of-establishment"
             )
-        </div>
+
 
             @govukButton(Button(
                 content = Text(ViewHelper.continueButtonText(isInReviewMode)),
@@ -62,5 +59,5 @@
 
         @helpers.helpAndSupport()
 
-    </div>
+
 }
