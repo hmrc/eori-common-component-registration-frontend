@@ -30,7 +30,8 @@ inputText: helpers.inputText,
 errorSummary: helpers.errorSummary,
 goveukFieldSet: GovukFieldset,
 govukHint: GovukHint,
-        p: helpers.paragraph
+        p: helpers.paragraph,
+        h2: helpers.h2
 )
 
 
@@ -53,6 +54,9 @@ govukHint: GovukHint,
     labelClasses = Some("govuk-!-font-weight-bold")
 )
 
+@h2(messages("cds.subscription.contact-details.telephone.label"), classes = "govuk-heading-s")
+@p(messages("cds.subscription.contact-details.telephone.para"), Some("telephone-para"))
+
 @inputText(
     form = contactForm,
     id = "telephone",
@@ -61,7 +65,7 @@ govukHint: GovukHint,
     isPageHeading = false,
     classes = Some("govuk-!-width-one-half"),
     hint = Some(messages("cds.subscription.contact-details.telephone.hint")),
-    labelClasses = Some("govuk-!-font-weight-bold")
+    labelClasses = Some("govuk-visually-hidden")
     )
 }
 
