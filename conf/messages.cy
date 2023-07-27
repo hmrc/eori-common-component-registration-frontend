@@ -1251,7 +1251,20 @@ business-details-recovery.organisation-address = Cyfeiriad y sefydliad cofrestre
 business-details-recovery.individual-address = Cyfeiriad
 business-details-recovery.problem = Roedd problem gyda’r gwasanaeth pan wnaethoch fewngofnodi y tro diwethaf. Er mwyn rhoi cynnig arall ar eich cais, mae angen i chi ateb ychydig o gwestiynau eraill.
 cds.banner.registration = Cael rhif EORI
-cds.banner.subscription = Tanysgrifio i {0}
+
+
+cds.banner.subscription.ars = Tanysgrifio i ddyfarniadau uwch
+cds.banner.subscription.gagmr=Tanysgrifio i'r Gwasanaeth Symud Cerbydau Nwyddau
+cds.banner.subscription.atar=Tanysgrifio i Ddyfarniadau Tariffau Uwch
+cds.banner.subscription.route1=Tanysgrifio i Wasanaethau Masnachwyr Tollau
+cds.banner.subscription.esc = Tanysgrifiwch ar gyfer Rhoi gwybod am a rheoli'ch lwfans ar gyfer hawliadau Ildio Toll Dramor
+cds.banner.subscription.ivd=Tanysgrifio i Wasanaethau Masnachwyr Tollau
+cds.banner.subscription.ndrc=Tanysgrifio i Wasanaethau Masnachwyr Tollau
+cds.banner.subscription.gbss=Tanysgrifio i'r Gwasanaeth Diogelwch (yn y DU)
+cds.banner.subscription.ctc=Tanysgrifio i'r System Gludo Gyfrifiadurol Newydd (NCTS)
+cds.banner.subscription.cds=Tanysgrifio i'r Gwasanaeth Datganiadau Tollau
+
+
 ecc.subscription.enter-eori-number.heading = Beth yw’ch rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) GB?
 ecc.subscription.organisation-disclose-personal-details-consent.individual.hint =  Bydd CThEM yn ychwanegu eich rhif EORI at <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd (yn agor tab newydd)</a>. Gallwch hefyd gytuno i gynnwys eich enw a’ch cyfeiriad. Gall hyn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu’ch llwythi.
 cds.subscription.enter-eori-number.no-eori.summary = Nid oes gennyf rif EORI
