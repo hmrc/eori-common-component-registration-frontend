@@ -1264,7 +1264,8 @@ cds.subscription.contact-details.heading=EORI number application contact details
 cds.subscription.contact-details.full-name.label=Full name
 cds.subscription.contact-details.email.label=Email address
 cds.subscription.contact-details.telephone.label=Telephone (optional)
-cds.subscription.contact-details.telephone.hint=<p class="govuk-body" id="telephone-para">We’ll only use this if we need to talk to you about this application.</p> For international numbers include the country code.
+cds.subscription.contact-details.telephone.hint= For international numbers include the country code.
+cds.subscription.contact-details.telephone.para=We’ll only use this if we need to talk to you about this application.
 cds.subscription.contact-details.fax.label=Fax (optional)
 cds.subscription.contact-details.fax.hint=For international numbers include the country code.
 cds.subscription.contact-details.street.label=Address line 1
