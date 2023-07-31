@@ -31,6 +31,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, V
 import uk.gov.hmrc.http._
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.VatControlListMessagingService
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.inject.bind
 
 class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -45,6 +47,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
         "auditing.consumer.baseUri.port"                                                              -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   before {

@@ -127,7 +127,7 @@ class SubscriptionRecoveryControllerSpec
     def setupMockCommon() = {
       when(mockSessionCache.subscriptionDetails(any[Request[_]]))
         .thenReturn(Future.successful(mockSubscriptionDetailsHolder))
-      when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any())(any[HeaderCarrier]))
+      when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
         .thenReturn(Future.successful(Right(fullyPopulatedResponse)))
       when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(Some(contactDetails))
       when(contactDetails.emailAddress).thenReturn("test@example.com")
@@ -259,7 +259,7 @@ class SubscriptionRecoveryControllerSpec
         .thenReturn(Future.successful(mockOrgRegistrationDetails))
       when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testSapNumber"))
 
-      when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any())(any[HeaderCarrier]))
+      when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
         .thenReturn(Future.successful(Left(ServiceUnavailableResponse)))
 
       when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
@@ -289,7 +289,7 @@ class SubscriptionRecoveryControllerSpec
     when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
       .thenReturn(Future.successful(true))
 
-    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any())(any[HeaderCarrier]))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(fullyPopulatedResponseWithBlankReturnParameters)))
     when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
 
@@ -307,7 +307,7 @@ class SubscriptionRecoveryControllerSpec
     when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
       .thenReturn(Future.successful(true))
 
-    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any())(any[HeaderCarrier]))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(fullyPopulatedResponseWithNoETMPFORMBUNDLENUMBER)))
     when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
 
@@ -325,7 +325,7 @@ class SubscriptionRecoveryControllerSpec
     when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
       .thenReturn(Future.successful(true))
 
-    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any())(any[HeaderCarrier]))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(responseWithoutContactDetails)))
     when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
 
@@ -342,7 +342,7 @@ class SubscriptionRecoveryControllerSpec
     when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
       .thenReturn(Future.successful(true))
 
-    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any())(any[HeaderCarrier]))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(responseWithoutEmailAddress)))
     when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
 
@@ -359,7 +359,7 @@ class SubscriptionRecoveryControllerSpec
     when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
       .thenReturn(Future.successful(true))
 
-    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any())(any[HeaderCarrier]))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(responseWithUnverifiedEmailAddress)))
     when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
 
@@ -401,7 +401,7 @@ class SubscriptionRecoveryControllerSpec
     when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
       .thenReturn(Future.successful(true))
 
-    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any())(any[HeaderCarrier]))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(responseWithoutPersonOfContact)))
     when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
     when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]]))

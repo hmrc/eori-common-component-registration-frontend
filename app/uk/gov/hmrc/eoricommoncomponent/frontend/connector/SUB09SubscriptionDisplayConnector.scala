@@ -32,33 +32,48 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
 }
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.http.HeaderNames.AUTHORIZATION
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class SUB09SubscriptionDisplayConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
-  ec: ExecutionContext
+class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(
+  implicit ec: ExecutionContext
 ) {
 
-  private val logger = Logger(this.getClass)
-  private val url    = appConfig.getServiceUrl("subscription-display")
+  private val logger  = Logger(this.getClass)
+  private val baseUrl = appConfig.getServiceUrl("subscription-display")
 
-  def subscriptionDisplay(
-    sub09Request: Seq[(String, String)]
-  )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, SubscriptionDisplayResponse]] = {
+  def subscriptionDisplay(safeId: String, acknowledgementReference: String)(implicit
+    hc: HeaderCarrier
+  ): Future[Either[EoriHttpResponse, SubscriptionDisplayResponse]] = {
+
+    val url = url"$baseUrl?regime=CDS&taxPayerID=$safeId&acknowledgementReference=$acknowledgementReference"
 
     // $COVERAGE-OFF$Loggers
-    logger.debug(s"SubscriptionDisplay SUB09: $url, body: $sub09Request and hc: $hc")
+    logger.debug(s"SubscriptionDisplay SUB09: $url and hc: $hc")
     // $COVERAGE-ON
 
-    http.GET[SubscriptionDisplayResponseHolder](url, sub09Request) map { resp =>
+    httpClient
+      .get(url)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute[SubscriptionDisplayResponseHolder] map { resp =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"SubscriptionDisplay SUB09: responseCommon: ${resp.subscriptionDisplayResponse.responseCommon}")
       // $COVERAGE-ON
 
-      auditCall(url, sub09Request, resp)
+      auditCall(
+        url.toString,
+        Seq(
+          "regime"                   -> Service.regimeCDS,
+          "taxPayerID"               -> safeId,
+          "acknowledgementReference" -> acknowledgementReference
+        ),
+        resp
+      )
       Right(resp.subscriptionDisplayResponse)
     } recover {
       case NonFatal(e) =>

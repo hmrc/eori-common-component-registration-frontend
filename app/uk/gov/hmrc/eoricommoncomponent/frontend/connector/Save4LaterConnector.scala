@@ -22,13 +22,14 @@ import play.api.libs.json._
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.http.{BadRequestException, _}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.http.HeaderNames.AUTHORIZATION
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(implicit ec: ExecutionContext) {
+class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClientV2)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
 
@@ -42,14 +43,17 @@ class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(imp
   // $COVERAGE-ON
 
   def get[T](id: String, key: String)(implicit hc: HeaderCarrier, reads: Reads[T]): Future[Option[T]] = {
-    val url = s"${appConfig.handleSubscriptionBaseUrl}/save4later/$id/$key"
+    val url = url"${appConfig.handleSubscriptionBaseUrl}/save4later/$id/$key"
 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"GET: $url")
     // $COVERAGE-ON
 
-    http.GET[HttpResponse](url) map { response =>
-      logSuccess("Get", url)
+    httpClient
+      .get(url)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute map { response =>
+      logSuccess("Get", url.toString)
 
       response.status match {
         case OK =>
@@ -60,67 +64,77 @@ class Save4LaterConnector @Inject() (http: HttpClient, appConfig: AppConfig)(imp
       }
     } recoverWith {
       case NonFatal(e) =>
-        logFailure("Get", url, e)
+        logFailure("Get", url.toString, e)
         Future.failed(e)
     }
   }
 
   def put[T](id: String, key: String, payload: JsValue)(implicit hc: HeaderCarrier): Future[Unit] = {
-    val url = s"${appConfig.handleSubscriptionBaseUrl}/save4later/$id/$key"
+    val url = url"${appConfig.handleSubscriptionBaseUrl}/save4later/$id/$key"
 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"PUT: $url")
     // $COVERAGE-ON
 
-    http.PUT[JsValue, HttpResponse](url, payload) map { response =>
-      logSuccess("Put", url)
+    httpClient
+      .put(url)
+      .withBody(payload)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute map { response =>
+      logSuccess("Put", url.toString)
       response.status match {
         case NO_CONTENT | CREATED | OK => ()
         case _                         => throw new BadRequestException(s"Status:${response.status}")
       }
     } recoverWith {
       case NonFatal(e) =>
-        logFailure("Put", url, e)
+        logFailure("Put", url.toString, e)
         Future.failed(e)
     }
   }
 
   def delete[T](id: String)(implicit hc: HeaderCarrier): Future[Unit] = {
-    val url = s"${appConfig.handleSubscriptionBaseUrl}/save4later/$id"
+    val url = url"${appConfig.handleSubscriptionBaseUrl}/save4later/$id"
 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"DELETE: $url")
     // $COVERAGE-ON
 
-    http.DELETE[HttpResponse](url) map { response =>
-      logSuccess("Delete", url)
+    httpClient
+      .delete(url)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute map { response =>
+      logSuccess("Delete", url.toString)
       response.status match {
         case NO_CONTENT => ()
         case _          => throw new BadRequestException(s"Status:${response.status}")
       }
     } recoverWith {
       case NonFatal(e) =>
-        logFailure("Delete", url, e)
+        logFailure("Delete", url.toString, e)
         Future.failed(e)
     }
   }
 
   def deleteKey[T](id: String, key: String)(implicit hc: HeaderCarrier): Future[Unit] = {
-    val url = s"${appConfig.handleSubscriptionBaseUrl}/save4later/$id/$key"
+    val url = url"${appConfig.handleSubscriptionBaseUrl}/save4later/$id/$key"
 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"DELETE Key: $url")
     // $COVERAGE-ON
 
-    http.DELETE[HttpResponse](url) map { response =>
-      logSuccess("Delete key", url)
+    httpClient
+      .delete(url)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute map { response =>
+      logSuccess("Delete key", url.toString)
       response.status match {
         case NO_CONTENT => ()
         case _          => throw new BadRequestException(s"Status:${response.status}")
       }
     } recoverWith {
       case NonFatal(e) =>
-        logFailure("Delete key", url, e)
+        logFailure("Delete key", url.toString, e)
         Future.failed(e)
     }
   }

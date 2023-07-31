@@ -77,7 +77,8 @@ class Sub02Controller @Inject() (
               Future.successful(Redirect(Sub02Controller.subscriptionInProgress(service)))
             case SubscriptionFailed(RequestNotProcessed, _) =>
               Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-            case _ =>
+            case res: SubscriptionFailed =>
+              logger.error(s"Unexpected response returned from SUB02: ${res.failureReason}")
               throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
           }
         } recoverWith {

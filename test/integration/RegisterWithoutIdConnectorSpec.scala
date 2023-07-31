@@ -31,6 +31,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.{AuditService, RegisterWithoutIdMessagingService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.inject.bind
 
 class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -45,6 +47,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         "auditing.consumer.baseUri.port"                                                     -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val registerWithoutIdConnector = app.injector.instanceOf[RegisterWithoutIdConnector]
@@ -281,7 +284,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         }
 
         caught.statusCode mustBe 400
-        AuditService.verifyXAuditWrite(0)
+        eventually(AuditService.verifyXAuditWrite(0))
       }
     }
   }

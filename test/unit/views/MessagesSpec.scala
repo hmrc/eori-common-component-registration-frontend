@@ -21,7 +21,16 @@ import org.scalatestplus.play.PlaySpec
 import play.api.i18n.{Messages, MessagesApi, MessagesImpl}
 import play.i18n.Lang
 
+import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.Application
+import play.api.inject.bind
+
 class MessagesSpec extends PlaySpec with Injector {
+
+  implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
+    .build()
 
   private val messageApi: MessagesApi = instanceOf[MessagesApi]
 

@@ -21,21 +21,32 @@ import play.api.Logger
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK, SERVICE_UNAVAILABLE}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.http.HeaderNames.AUTHORIZATION
+import java.net.URLEncoder
+import java.net.URL
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatControlListConnector @Inject() (http: HttpClient, appConfig: AppConfig)(implicit ec: ExecutionContext) {
+class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit
+  ec: ExecutionContext
+) {
 
-  private val logger = Logger(this.getClass)
-  private val url    = appConfig.getServiceUrl("vat-known-facts-control-list")
+  private val logger  = Logger(this.getClass)
+  private val baseUrl = appConfig.getServiceUrl("vat-known-facts-control-list")
 
   def vatControlList(
     request: VatControlListRequest
-  )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, VatControlListResponse]] =
-    http.GET[HttpResponse](url, request.queryParams) map { response =>
+  )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, VatControlListResponse]] = {
+
+    val url = new URL(s"$baseUrl?${makeQueryString(request.queryParams)}")
+
+    httpClient
+      .get(url)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute map { response =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"vat-known-facts-control-list successful. url: $url")
       // $COVERAGE-ON
@@ -61,5 +72,11 @@ class VatControlListConnector @Inject() (http: HttpClient, appConfig: AppConfig)
         case _ => throw new Exception("Incorrect VAT Known facts response")
       }
     }
+  }
+
+  private def makeQueryString(queryParams: Seq[(String, String)]) = {
+    val paramPairs = queryParams.map { case (k, v) => s"$k=${URLEncoder.encode(v, "utf-8")}" }
+    if (paramPairs.isEmpty) "" else paramPairs.mkString("&")
+  }
 
 }

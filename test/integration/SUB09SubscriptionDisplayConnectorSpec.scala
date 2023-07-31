@@ -29,6 +29,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Su
 import uk.gov.hmrc.http._
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.SubscriptionDisplayMessagingService
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.inject.bind
 
 class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -43,6 +45,7 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         "auditing.consumer.baseUri.port"                                                      -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val connector                  = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
@@ -80,7 +83,9 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestTaxPayerId,
         requestAcknowledgementReference
       )
-      await(connector.subscriptionDisplay(reqTaxPayerId)) mustBe Right(expectedResponse)
+      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Right(
+        expectedResponse
+      )
     }
 
     "return Service Unavailable Response when subscription display service returns an exception" in {
@@ -90,7 +95,9 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestAcknowledgementReference,
         returnedStatus = SERVICE_UNAVAILABLE
       )
-      await(connector.subscriptionDisplay(reqTaxPayerId)) mustBe Left(ServiceUnavailableResponse)
+      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Left(
+        ServiceUnavailableResponse
+      )
     }
   }
 }

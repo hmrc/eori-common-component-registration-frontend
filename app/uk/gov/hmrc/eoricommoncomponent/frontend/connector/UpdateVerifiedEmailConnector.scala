@@ -20,21 +20,30 @@ import play.api.Logger
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
-import uk.gov.hmrc.http.{ForbiddenException, HttpClient, _}
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
+import play.api.http.HeaderNames.AUTHORIZATION
+import play.api.libs.json.Json
 
-class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, http: HttpClient)(implicit ec: ExecutionContext) {
+class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, httpClient: HttpClientV2)(implicit
+  ec: ExecutionContext
+) {
 
-  private val url: String = appConfig.getServiceUrl("update-verified-email")
-  private val logger      = Logger(this.getClass)
+  private val url    = url"${appConfig.getServiceUrl("update-verified-email")}"
+  private val logger = Logger(this.getClass)
 
   def updateVerifiedEmail(
     request: VerifiedEmailRequest
   )(implicit hc: HeaderCarrier): Future[Either[HttpErrorResponse, VerifiedEmailResponse]] =
-    http.PUT[VerifiedEmailRequest, VerifiedEmailResponse](url, request) map { resp =>
+    httpClient
+      .put(url)
+      .withBody(Json.toJson(request))
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute[VerifiedEmailResponse] map { resp =>
       Right(resp)
     } recover {
       case _: BadRequestException | UpstreamErrorResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)

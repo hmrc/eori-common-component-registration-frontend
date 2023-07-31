@@ -131,4 +131,6 @@ class AppConfig @Inject() (
     s"$baseUrl/$serviceContext"
   }
 
+  val internalAuthToken: String = config.get[String]("internal-auth.token")
+
 }

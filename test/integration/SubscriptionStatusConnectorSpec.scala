@@ -32,6 +32,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.{AuditService, SubscriptionStatusMessagingService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.inject.bind
 
 class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -44,6 +46,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         "auditing.consumer.baseUri.port"                                                     -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private val subscriptionStatusConnector = app.injector.instanceOf[SubscriptionStatusConnector]
@@ -77,7 +80,8 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         |}
       """.stripMargin)
 
-  val auditEventBodyJson = Json.parse("""{
+  val auditEventBodyJson = Json.parse("""
+    |{
     |  "auditSource" : "eori-common-component-registration-frontend",
     |  "auditType" : "SubscriptionStatus",
     |  "tags" : {
@@ -140,8 +144,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       await(subscriptionStatusConnector.status(request)) must be(
         responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
       )
-
-      AuditService.verifyXAuditWriteWithBody(auditEventBodyJson)
+      eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
     }
 
     "fail when Internal Server Error" in {

@@ -27,6 +27,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{TaxEnrolmentsRequest, Ta
 import uk.gov.hmrc.http.HeaderCarrier
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.TaxEnrolmentsService._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import play.api.inject.bind
 
 class TaxEnrolmentsConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -41,6 +43,7 @@ class TaxEnrolmentsConnectorSpec extends IntegrationTestsSpec with ScalaFutures 
         "auditing.consumer.baseUri.port"               -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
