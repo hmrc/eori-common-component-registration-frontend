@@ -76,7 +76,8 @@ object EtmpOrganisationType extends Logging {
     case "Corporate Body"      => CorporateBody
     case "Unincorporated Body" => UnincorporatedBody
     case invalidId =>
-      val error = s"""I got an $invalidId as an ETMP Organisation Type but I wanted one of "Partnership", "LLP", "Corporate Body", "Unincorporated Body""""
+      val error =
+        s"""I got an $invalidId as an ETMP Organisation Type but I wanted one of "Partnership", "LLP", "Corporate Body", "Unincorporated Body""""
       // $COVERAGE-OFF$Loggers
       logger.warn(error)
       // $COVERAGE-ON

@@ -56,13 +56,13 @@ case class InternalId(id: String)
 object InternalId extends Logging {
 
   def apply(id: Option[String]): InternalId =
-    new InternalId(id.getOrElse({
+    new InternalId(id.getOrElse {
       val error = "InternalId is missing"
       // $COVERAGE-OFF$Loggers
       logger.warn(error)
       // $COVERAGE-ON
       throw new IllegalArgumentException(error)
-    }))
+    })
 
   implicit val format = Json.format[InternalId]
 }
@@ -72,13 +72,13 @@ case class GroupId(id: String)
 object GroupId extends Logging {
 
   def apply(id: Option[String]): GroupId =
-    new GroupId(id.getOrElse({
+    new GroupId(id.getOrElse {
       val error = "GroupId is missing"
       // $COVERAGE-OFF$Loggers
       logger.warn(error)
       // $COVERAGE-ON
       throw new IllegalArgumentException(error)
-    }))
+    })
 
   implicit val format = Json.format[GroupId]
 }
@@ -88,21 +88,21 @@ case class CacheIds(internalId: InternalId, safeId: SafeId, serviceCode: Option[
 object CacheIds extends Logging {
 
   def apply(mayBeInternalId: Option[String], mayBeSafeId: Option[String], mayBeService: Option[Service]): CacheIds = {
-    val internalId = InternalId(mayBeInternalId.getOrElse({
+    val internalId = InternalId(mayBeInternalId.getOrElse {
       val error = "InternalId is missing"
       // $COVERAGE-OFF$Loggers
       logger.warn(error)
       // $COVERAGE-ON
       throw new IllegalArgumentException(error)
-    }))
-    val safeId     = SafeId(mayBeSafeId.getOrElse({
+    })
+    val safeId = SafeId(mayBeSafeId.getOrElse {
       val error = "SafeId is missing"
       // $COVERAGE-OFF$Loggers
       logger.warn(error)
       // $COVERAGE-ON
       throw new IllegalArgumentException(error)
-    }))
-    val service    = mayBeService.map(_.code)
+    })
+    val service = mayBeService.map(_.code)
 
     new CacheIds(internalId, safeId, service)
   }
@@ -150,7 +150,7 @@ object CustomsId extends Logging {
       case RegistrationInfoRequest.UTR    => Utr(idNumber)
       case RegistrationInfoRequest.EORI   => Eori(idNumber)
       case RegistrationInfoRequest.SAFEID => SafeId(idNumber)
-      case _                              =>
+      case _ =>
         val error = s"Unknown Identifier: $idType. Expected Nino, UTR or EORI number"
         // $COVERAGE-OFF$Loggers
         logger.warn(error)
