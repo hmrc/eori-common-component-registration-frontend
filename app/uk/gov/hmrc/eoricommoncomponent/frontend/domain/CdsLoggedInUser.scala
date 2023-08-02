@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import play.api.Logger
+import play.api.Logging
 import uk.gov.hmrc.auth.core.{AffinityGroup, CredentialRole, Enrolments, User}
 
-sealed trait LoggedInUser extends Logger {
+sealed trait LoggedInUser extends Logging {
   def affinityGroup: Option[AffinityGroup]
   def internalId: Option[String]
 
