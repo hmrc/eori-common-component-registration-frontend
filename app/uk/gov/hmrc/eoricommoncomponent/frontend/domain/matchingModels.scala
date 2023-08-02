@@ -16,8 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
+import play.api.Logging
+
 import java.time.LocalDate
 import play.api.libs.json._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EtmpOrganisationType.logger
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{IndividualName, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.formatInput
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -50,31 +53,55 @@ object SafeId {
 
 case class InternalId(id: String)
 
-object InternalId {
+object InternalId extends Logging {
 
   def apply(id: Option[String]): InternalId =
-    new InternalId(id.getOrElse(throw new IllegalArgumentException("InternalId is missing")))
+    new InternalId(id.getOrElse({
+      val error = "InternalId is missing"
+      // $COVERAGE-OFF$Loggers
+      logger.warn(error)
+      // $COVERAGE-ON
+      throw new IllegalArgumentException(error)
+    }))
 
   implicit val format = Json.format[InternalId]
 }
 
 case class GroupId(id: String)
 
-object GroupId {
+object GroupId extends Logging {
 
   def apply(id: Option[String]): GroupId =
-    new GroupId(id.getOrElse(throw new IllegalArgumentException("GroupId is missing")))
+    new GroupId(id.getOrElse({
+      val error = "GroupId is missing"
+      // $COVERAGE-OFF$Loggers
+      logger.warn(error)
+      // $COVERAGE-ON
+      throw new IllegalArgumentException(error)
+    }))
 
   implicit val format = Json.format[GroupId]
 }
 
 case class CacheIds(internalId: InternalId, safeId: SafeId, serviceCode: Option[String])
 
-object CacheIds {
+object CacheIds extends Logging {
 
   def apply(mayBeInternalId: Option[String], mayBeSafeId: Option[String], mayBeService: Option[Service]): CacheIds = {
-    val internalId = InternalId(mayBeInternalId.getOrElse(throw new IllegalArgumentException("InternalId missing")))
-    val safeId     = SafeId(mayBeSafeId.getOrElse(throw new IllegalArgumentException("SafeId missing")))
+    val internalId = InternalId(mayBeInternalId.getOrElse({
+      val error = "InternalId is missing"
+      // $COVERAGE-OFF$Loggers
+      logger.warn(error)
+      // $COVERAGE-ON
+      throw new IllegalArgumentException(error)
+    }))
+    val safeId     = SafeId(mayBeSafeId.getOrElse({
+      val error = "SafeId is missing"
+      // $COVERAGE-OFF$Loggers
+      logger.warn(error)
+      // $COVERAGE-ON
+      throw new IllegalArgumentException(error)
+    }))
     val service    = mayBeService.map(_.code)
 
     new CacheIds(internalId, safeId, service)
@@ -84,7 +111,7 @@ object CacheIds {
   implicit def toJsonFormat(cacheIds: CacheIds): JsValue = Json.toJson(cacheIds)
 }
 
-object CustomsId {
+object CustomsId extends Logging {
   val utr        = "utr"
   val eori       = "eori"
   val nino       = "nino"
@@ -123,7 +150,12 @@ object CustomsId {
       case RegistrationInfoRequest.UTR    => Utr(idNumber)
       case RegistrationInfoRequest.EORI   => Eori(idNumber)
       case RegistrationInfoRequest.SAFEID => SafeId(idNumber)
-      case _                              => throw new IllegalArgumentException(s"Unknown Identifier $idType")
+      case _                              =>
+        val error = s"Unknown Identifier: $idType. Expected Nino, UTR or EORI number"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalArgumentException(error)
     }
 
 }

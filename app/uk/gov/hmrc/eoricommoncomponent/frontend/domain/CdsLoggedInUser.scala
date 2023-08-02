@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
+import play.api.Logger
 import uk.gov.hmrc.auth.core.{AffinityGroup, CredentialRole, Enrolments, User}
 
-sealed trait LoggedInUser {
+sealed trait LoggedInUser extends Logger {
   def affinityGroup: Option[AffinityGroup]
   def internalId: Option[String]
 
@@ -26,7 +27,11 @@ sealed trait LoggedInUser {
 
   def userId(): String = internalId match {
     case Some(id) => id
-    case _        => throw new IllegalStateException("No internal id returned by Government Gateway.")
+    case _        =>
+      // $COVERAGE-OFF$Loggers
+      logger.warn("No internal id returned by Government Gateway.")
+      // $COVERAGE-ON
+      throw new IllegalStateException("No internal id returned by Government Gateway.")
   }
 
 }

@@ -148,9 +148,13 @@ class CheckYourEmailService @Inject() (
         // $COVERAGE-ON
         throw new IllegalStateException(s"[CheckYourEmailService][submitNewDetails] - emailStatus cache none")
       } { emailStatus =>
-        val email: String = emailStatus.email.getOrElse(
+        val email: String = emailStatus.email.getOrElse({
+          // $COVERAGE-OFF$Loggers
+          logger.warn(s"[CheckYourEmailService][submitNewDetails] - emailStatus.email none")
+          // $COVERAGE-ON
           throw new IllegalStateException(s"[CheckYourEmailService][submitNewDetails] - emailStatus.email none")
-        )
+        }
+          )
         emailVerificationService.createEmailVerificationRequest(email, EmailController.form(service).url) flatMap {
           case Some(true) =>
             Future.successful(Redirect(CheckYourEmailController.verifyEmailView(service)))
@@ -169,6 +173,9 @@ class CheckYourEmailService @Inject() (
                 }
               }
           case _ =>
+            // $COVERAGE-OFF$Loggers
+            logger.warn("CreateEmailVerificationRequest Failed")
+            // $COVERAGE-ON
             throw new IllegalStateException("CreateEmailVerificationRequest Failed")
         }
       }
