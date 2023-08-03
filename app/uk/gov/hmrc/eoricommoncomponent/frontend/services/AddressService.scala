@@ -46,7 +46,13 @@ class AddressService @Inject() (
       contactDetails <- subscriptionBusinessService.cachedContactDetailsModel
     } yield subscriptionDetailsService.cacheContactAddressDetails(
       ad,
-      contactDetails.getOrElse(throw new IllegalStateException("Address not found in cache"))
+      contactDetails.getOrElse {
+        val error = "contactDetails not found in cache"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
+      }
     )
 
   private def populateCountriesToInclude(

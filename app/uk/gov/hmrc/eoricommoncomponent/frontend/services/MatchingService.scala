@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.Logging
+
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDate
 import play.api.mvc.{AnyContent, Request}
@@ -37,7 +39,8 @@ class MatchingService @Inject() (
   detailsCreator: RegistrationDetailsCreator,
   cache: SessionCache,
   requestSessionData: RequestSessionData
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   private val CustomsIdsMap: Map[Class[_ <: CustomsId], String] =
     Map(
@@ -119,7 +122,15 @@ class MatchingService @Inject() (
     )
 
   private def nameOfCustomsIdType(customsId: CustomsId): String =
-    CustomsIdsMap.getOrElse(customsId.getClass, throw new IllegalArgumentException(s"Invalid matching id $customsId"))
+    CustomsIdsMap.getOrElse(
+      customsId.getClass, {
+        val error = s"Invalid matching id $customsId"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalArgumentException(error)
+      }
+    )
 
   private def individualIdMatchRequest(customsId: CustomsId, individual: Individual): MatchingRequestHolder =
     MatchingRequestHolder(

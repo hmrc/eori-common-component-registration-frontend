@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
+import play.api.Logging
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation._
@@ -25,13 +26,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.{_}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
 import java.time.LocalDate
 
-object MatchingForms extends Mappings {
+object MatchingForms extends Mappings with Logging {
 
   val Length35            = 35
   private val Length2     = 2
@@ -114,9 +115,13 @@ object MatchingForms extends Mappings {
         o =>
           CdsOrganisationType(
             CdsOrganisationType
-              .forId(
-                o.getOrElse(throw new IllegalArgumentException("Could not create CdsOrganisationType for empty ID."))
-              )
+              .forId(o.getOrElse {
+                val error = "Could not create CdsOrganisationType for empty ID."
+                // $COVERAGE-OFF$Loggers
+                logger.warn(error)
+                // $COVERAGE-ON
+                throw new IllegalArgumentException(error)
+              })
               .id
           ),
         x => Some(x.id)

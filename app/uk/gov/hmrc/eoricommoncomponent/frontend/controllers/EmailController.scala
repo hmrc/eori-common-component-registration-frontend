@@ -157,7 +157,7 @@ class EmailController @Inject() (
         Future.successful(Redirect(CheckYourEmailController.verifyEmailView(service)))
       case _ =>
         // $COVERAGE-OFF$Loggers
-        logger.error("Couldn't verify email address")
+        logger.warn("Couldn't verify email address")
         // $COVERAGE-ON
         Future.successful(Redirect(CheckYourEmailController.verifyEmailView(service)))
     }

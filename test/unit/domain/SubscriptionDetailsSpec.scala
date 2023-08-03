@@ -63,7 +63,7 @@ class SubscriptionDetailsSpec extends UnitSpec {
       val sd = SubscriptionDetails()
       the[IllegalArgumentException] thrownBy {
         sd.name
-      } should have message "Name is missing"
+      } should have message "Name is missing in cache"
     }
   }
 

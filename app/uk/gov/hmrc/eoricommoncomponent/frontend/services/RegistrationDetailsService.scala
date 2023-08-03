@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.Logging
 import play.api.mvc.Request
 
 import javax.inject.{Inject, Singleton}
@@ -32,13 +33,18 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext) {
+class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext) extends Logging {
 
   def cacheAddress(address: Address)(implicit request: Request[_]): Future[Boolean] =
     sessionCache.registrationDetails.map {
       case rdo: RegistrationDetailsOrganisation => rdo.copy(address = address)
       case rdi: RegistrationDetailsIndividual   => rdi.copy(address = address)
-      case _                                    => throw new IllegalStateException("Incomplete cache cannot complete journey")
+      case _ =>
+        val error = "Incomplete cache cannot complete journey"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
     }.flatMap(updatedHolder => sessionCache.saveRegistrationDetails(updatedHolder))
 
   def initialiseCacheWithRegistrationDetails(

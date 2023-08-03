@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging
 
+import play.api.Logging
+
 import java.time.ZonedDateTime
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -23,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 case class RegistrationInfoRequest(regime: String = Service.regimeCDS, idType: String, idValue: String)
 
-object RegistrationInfoRequest {
+object RegistrationInfoRequest extends Logging {
   implicit val jsonFormat = Json.format[RegistrationInfoRequest]
 
   val UTR    = "UTR"
@@ -39,7 +41,11 @@ object RegistrationInfoRequest {
       case _: Nino   => NINO
       case _: SafeId => SAFE
       case _: TaxPayerId =>
-        throw new IllegalArgumentException("TaxPayerId is not supported by RegistrationInfo service")
+        val error = "TaxPayerId is not supported by RegistrationInfo service"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalArgumentException(error)
     }
     RegistrationInfoRequest(idType = idType, idValue = customsId.id)
   }

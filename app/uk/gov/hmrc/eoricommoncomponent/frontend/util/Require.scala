@@ -16,11 +16,18 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.util
 
-object Require {
+import play.api.Logging
+
+object Require extends Logging {
 
   @inline final def requireThatUrlValue(requirement: Boolean, message: => Any): Unit =
-    if (!requirement)
-      throw InvalidUrlValueException("invalid value: " + message)
+    if (!requirement) {
+      val error = "invalid URL value: " + message
+      // $COVERAGE-OFF$Loggers
+      logger.warn(error)
+      // $COVERAGE-ON
+      throw InvalidUrlValueException(error)
+    }
 
 }
 

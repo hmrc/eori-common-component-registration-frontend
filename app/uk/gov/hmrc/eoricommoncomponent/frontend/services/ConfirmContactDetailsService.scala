@@ -97,7 +97,11 @@ class ConfirmContactDetailsService @Inject() (
           case SubscriptionExists =>
             onExistingSubscription(service)
           case status =>
-            throw new IllegalStateException(s"Invalid subscription status : $status")
+            val error = s"Invalid subscription status : $status"
+            // $COVERAGE-OFF$Loggers
+            logger.warn(error)
+            // $COVERAGE-ON
+            throw new IllegalStateException(error)
         }
       case No =>
         registrationConfirmService
@@ -118,9 +122,11 @@ class ConfirmContactDetailsService @Inject() (
         )
 
       case _ =>
-        throw new IllegalStateException(
-          "YesNoWrongAddressForm field somehow had a value that wasn't yes, no, wrong address, or empty"
-        )
+        val error = "YesNoWrongAddressForm field somehow had a value that wasn't yes, no, wrong address, or empty"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
     }
 
   private def onNewSubscription(service: Service, isInReviewMode: Boolean)(implicit

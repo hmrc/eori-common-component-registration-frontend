@@ -94,7 +94,7 @@ class CdsSubscriber @Inject() (
         val cdsFullName = Some(regDetails.name)
         val email = contactDetails.map(_.emailAddress).getOrElse {
           // $COVERAGE-OFF$Loggers
-          logger.warn(s"Email not found within contactDetails")
+          logger.warn("Email not found within contactDetails")
           // $COVERAGE-ON
           throw new IllegalStateException("Email required")
         }
@@ -121,7 +121,7 @@ class CdsSubscriber @Inject() (
         val cdsFullName = Some(regDetails.name)
         val email = contactDetails.map(_.emailAddress).getOrElse {
           // $COVERAGE-OFF$Loggers
-          logger.warn(s"Email not found within contactDetails")
+          logger.warn("Email not found within contactDetails")
           // $COVERAGE-ON
           throw new IllegalStateException("Email required")
         }

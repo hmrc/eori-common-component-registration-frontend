@@ -144,15 +144,15 @@ class CheckYourEmailService @Inject() (
     save4LaterService.fetchEmail(groupId) flatMap {
       _.fold {
         // $COVERAGE-OFF$Loggers
-        logger.warn(s"[CheckYourEmailService][submitNewDetails] -  emailStatus cache none")
+        logger.warn("[CheckYourEmailService][submitNewDetails] -  emailStatus cache none")
         // $COVERAGE-ON
-        throw new IllegalStateException(s"[CheckYourEmailService][submitNewDetails] - emailStatus cache none")
+        throw new IllegalStateException("[CheckYourEmailService][submitNewDetails] - emailStatus cache none")
       } { emailStatus =>
         val email: String = emailStatus.email.getOrElse {
           // $COVERAGE-OFF$Loggers
-          logger.warn(s"[CheckYourEmailService][submitNewDetails] - emailStatus.email none")
+          logger.warn("[CheckYourEmailService][submitNewDetails] - emailStatus.email none")
           // $COVERAGE-ON
-          throw new IllegalStateException(s"[CheckYourEmailService][submitNewDetails] - emailStatus.email none")
+          throw new IllegalStateException("[CheckYourEmailService][submitNewDetails] - emailStatus.email none")
         }
         emailVerificationService.createEmailVerificationRequest(email, EmailController.form(service).url) flatMap {
           case Some(true) =>

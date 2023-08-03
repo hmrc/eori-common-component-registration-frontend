@@ -79,16 +79,17 @@ class Sub02Controller @Inject() (
               Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
             case res: SubscriptionFailed =>
               // $COVERAGE-OFF$Loggers
-              logger.error(s"Unexpected response returned from SUB02: ${res.failureReason}")
+              logger.warn(s"Unexpected response returned from SUB02: ${res.failureReason}")
               // $COVERAGE-ON
               throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
           }
         } recoverWith {
         case e: Exception =>
+          val error = "Subscription Error. "
           // $COVERAGE-OFF$Loggers
-          logger.error("Subscription Error. ", e)
+          logger.warn(error, e)
           // $COVERAGE-ON
-          Future.failed(new RuntimeException("Subscription Error. ", e))
+          Future.failed(new RuntimeException(error, e))
       }
     }
 

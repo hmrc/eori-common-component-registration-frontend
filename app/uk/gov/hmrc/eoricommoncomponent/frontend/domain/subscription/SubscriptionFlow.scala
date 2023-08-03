@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
+import play.api.Logging
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -139,12 +140,19 @@ case object ThirdCountryIndividualSubscriptionFlow
 
 case object SoleTraderSubscriptionFlow extends SubscriptionFlow(SoleTrader.id, isIndividualFlow = true)
 
-object SubscriptionFlow {
+object SubscriptionFlow extends Logging {
 
   def apply(flowName: String): SubscriptionFlow =
     SubscriptionFlows.flows.keys
       .find(_.name == flowName)
-      .fold(throw new IllegalStateException(s"Incorrect Subscription flowname $flowName"))(identity)
+      .fold {
+
+        val error = s"Incorrect Subscription flowname $flowName"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
+      }(identity)
 
 }
 
