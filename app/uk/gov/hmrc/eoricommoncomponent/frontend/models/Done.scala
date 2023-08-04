@@ -16,6 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models
 
-sealed abstract class Done
+sealed trait Done
 
-object Done extends Done
+case object Done extends Done

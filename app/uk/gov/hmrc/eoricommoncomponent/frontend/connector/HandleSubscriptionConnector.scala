@@ -49,7 +49,6 @@ class HandleSubscriptionConnector @Inject() (httpClient: HttpClientV2, appConfig
       .withBody(Json.toJson(request))
       .setHeader(ACCEPT -> "application/vnd.hmrc.1.0+json")
       .setHeader(CONTENT_TYPE -> MimeTypes.JSON)
-      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute map { response =>
       response.status match {
         case OK | NO_CONTENT =>
