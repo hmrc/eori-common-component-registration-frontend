@@ -58,14 +58,13 @@ class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appCo
         case OK | NO_CONTENT =>
           // $COVERAGE-OFF$Loggers
           logger.info(s"[$LoggerComponentId][call] complete for call to $url with status:${response.status}")
-          // $COVERAGE-ON
-          ()
+        // $COVERAGE-ON
         case _ => throw new BadRequestException(s"Status:${response.status}")
       }
     } recoverWith {
       case e: BadRequestException =>
         // $COVERAGE-OFF$Loggers
-        logger.error(
+        logger.warn(
           s"[$LoggerComponentId][call] request failed with BAD_REQUEST status for call to $url: ${e.getMessage}",
           e
         )
