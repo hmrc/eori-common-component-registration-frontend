@@ -344,10 +344,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           verify(mockSessionCache).remove(any[Request[_]])
           verify(mockSubscribe01Outcome, times(2)).processedDate
           verify(mockSubscribeOutcome, never()).processedDate
-          page.title() should startWith("Subscription request received for orgName")
-          page.getElementsText(
-            RegistrationCompletePage.panelHeadingXpath
-          ) shouldBe s"Subscription request received for orgName"
+          page.title() should startWith("Application sent")
+          page.getElementsText(RegistrationCompletePage.panelHeadingXpath) shouldBe "Application sent"
           page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe s"Your new EORI number is: $EORI"
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
