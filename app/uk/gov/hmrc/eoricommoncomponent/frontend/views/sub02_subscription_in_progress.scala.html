@@ -17,28 +17,23 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.JourneyStatus
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers._
 @import play.twirl.api.utils.StringEscapeUtils
 
 
-@this(layout_di: layout, feedback_di: helpers.feedback, dateFormatter: DateFormatter)
-@(name: String, processedDate: String)(implicit messages: Messages, request: Request[_])
+@this(layout_di: layout, feedback_di: helpers.feedback, h1: helpers.h1, p: helpers.paragraph, h2: helpers.h2, dateFormatter: DateFormatter)
+@(processedDate: String)(implicit messages: Messages, request: Request[_])
 
 
-@layout_di(messages("cds.sub02.outcome.subscription-in-progress.heading", StringEscapeUtils.escapeXml11(name))) {
-    <div>
-        <div class="govuk-box-highlight">
-            <h1 id="page-heading" class="govuk-heading-xl">@messages("cds.sub02.outcome.subscription-in-progress.heading", StringEscapeUtils.escapeXml11(name))</h1>
-            <p id="processed-date" class="govuk-heading-m">@messages("cds.sub02.outcome.subscription-in-progress.received", dateFormatter.format(processedDate))</p>
-        </div>
-        <h2 id="what-happens-next" class="govuk-heading-m">@messages("cds.sub02.outcome.subscription-in-progress.what-happens-next")</h2>
-        <p class="govuk-body" id="we-are-processing">
-            @messages("cds.sub02.outcome.subscription-in-progress.we-are-processing")<br>
-            @messages("cds.sub02.outcome.subscription-in-progress.send-you-an-email")
-        </p>
+@layout_di(messages("cds.sub02.outcome.subscription-in-progress.heading")) {
+    @h1(messages("cds.sub02.outcome.subscription-in-progress.heading"), Some("page-heading"))
+    @p(messages("cds.sub02.outcome.subscription-in-progress.received", dateFormatter.format(processedDate)), Some("processed-date"))
 
-        @helpers.feedbackBackContinue(service, JourneyStatus.Processing)
+    @h2(messages("cds.sub02.outcome.subscription-in-progress.what-happens-next"), Some("what-happens-next"))
+    @p(messages("cds.sub02.outcome.subscription-in-progress.we-are-processing"), Some("we-are-processing"))
+    @p(messages("cds.sub02.outcome.subscription-in-progress.send-you-an-email"))
 
-        @feedback_di()
-    </div>
+    @helpers.feedbackBackContinue(service, JourneyStatus.Processing)
+
+    @feedback_di()
 }

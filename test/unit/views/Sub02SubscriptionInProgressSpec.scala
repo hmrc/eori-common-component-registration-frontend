@@ -25,10 +25,9 @@ import util.ViewSpec
 
 class Sub02SubscriptionInProgressSpec extends ViewSpec {
 
-  private val name                    = "Test Name"
   private val processedDate           = "1 March 2019"
-  private val pageHeadingExpectedText = s"The EORI application for $name is being processed"
-  private val processDateExpectedText = s"Application received by HMRC on $processedDate"
+  private val pageHeadingExpectedText = "You've already applied"
+  private val processDateExpectedText = s"HMRC received your application on $processedDate"
 
   private val view = instanceOf[sub02_subscription_in_progress]
 
@@ -53,7 +52,7 @@ class Sub02SubscriptionInProgressSpec extends ViewSpec {
     "have we are processing text" in {
       doc
         .getElementById("we-are-processing")
-        .text() mustBe "We are processing your EORI application, this can take up to 5 working days. We will send you an email when your application has been processed."
+        .text() mustBe messages("cds.sub02.outcome.subscription-in-progress.we-are-processing")
     }
 
     "have the feedback link" in {
@@ -68,5 +67,5 @@ class Sub02SubscriptionInProgressSpec extends ViewSpec {
 
   implicit val request = withFakeCSRF(FakeRequest.apply("GET", "/atar/register"))
 
-  lazy val doc: Document = Jsoup.parse(contentAsString(view(name, processedDate)))
+  lazy val doc: Document = Jsoup.parse(contentAsString(view(processedDate)))
 }
