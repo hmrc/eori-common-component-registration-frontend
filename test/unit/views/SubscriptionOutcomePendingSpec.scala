@@ -48,7 +48,7 @@ class SubscriptionOutcomePendingSpec extends ViewSpec {
       doc().body.getElementById("eori-number").hasClass("govuk-heading-m") mustBe true
     }
     "have the correct processing date and text" in {
-      doc().body.getElementById("active-from").text mustBe s"Application received by HMRC on 1 February 2020"
+      doc().body.getElementById("active-from").text mustBe s"Received by HMRC on 1 February 2020"
     }
     "have the correct eori number" in {
       doc().body.getElementById("eori-number").text mustBe s"EORI number: $eoriNumber"

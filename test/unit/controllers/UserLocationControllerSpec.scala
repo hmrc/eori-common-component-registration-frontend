@@ -450,7 +450,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       processing() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Your ATaR application is being processed")
+        page.title() should startWith("Application sent")
       }
     }
   }

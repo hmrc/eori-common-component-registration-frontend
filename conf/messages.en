@@ -1063,7 +1063,7 @@ cds.subscription.outcomes.processing.sub-title=You already have an application b
 cds.subscription.outcomes.processing.next-steps.1=The original applicant will be contacted by HMRC once the application has been processed.
 cds.subscription.outcomes.processing.why-steps.1=Either yourself or someone else in your organisation has already applied for an EORI, so that is being processed.
 cds.subscription.outcomes.in-processing.title-and-heading=We are processing the registration for {0}
-cds.subscription.outcomes.in-processing.received=Application received by HMRC on {0}
+cds.subscription.outcomes.in-processing.received=Received by HMRC on {0}
 cds.subscription.outcomes.inprocessing.eori=EORI number: {0}
 cds.subscription.outcomes.in-processing.sub-title=Your application is being processed
 cds.subscription.outcomes.in-processing.why-steps.1=Your registration is processing but not yet complete.
@@ -1471,10 +1471,10 @@ cds.subscription.outcomes.inprocessing.we-are-processing=We are processing your 
 
 cds.enrolment.already.exists.for-group.para1=Your organisation is already subscribed to {0}. Ask a team member for access.
 
-cds.sub01.outcome.processing.heading-noname=Your {0} application is being processed
-cds.sub01.outcome.processing.title=The {0} application is being processed
-cds.sub01.outcome.processing.we-are-processing.para1=We will email you with the outcome of your application.
-cds.sub01.outcome.processing.we-are-processing.para2=This can take up to 5 working days from the date we received your application.
+cds.sub01.outcome.processing.heading-noname=Application sent
+cds.sub01.outcome.processing.title=Application sent
+cds.sub01.outcome.processing.we-are-processing.para1=We''ll check your application. This can take up to 5 working days.
+cds.sub01.outcome.processing.we-are-processing.para2=Then we''ll email the result of your application.
 
 cds.subscription.verify-email.title=Confirm your email address
 
