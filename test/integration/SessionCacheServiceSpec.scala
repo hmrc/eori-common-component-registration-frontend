@@ -331,18 +331,24 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
       cacheUpdate.data mustBe expectedJson
     }
 
-    "store and fetch sub01Outcome details correctly" in {
+    "store and fetch sub01Outcome details correctly with submissionCompleteDetails matching " in {
 
       when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
 
-      val sub01Outcome = Sub01Outcome(LocalDate.of(1961, 4, 12).toString)
+      val processingDate = LocalDate.of(1961, 4, 12).toString
+
+      val sub01Outcome = Sub01Outcome(processingDate)
+
+      val submissionCompleteDetails = SubmissionCompleteDetails(processingDate = processingDate)
 
       await(sessionCache.saveSub01Outcome(sub01Outcome)(request))
 
       val cacheUpdate = await(sessionCache.cacheRepo.findById(request)).getOrElse(
         throw new IllegalStateException("Cache returned None")
       )
-      val expectedJson = toJson(CachedData(sub01Outcome = Some(sub01Outcome)))
+      val expectedJson = toJson(
+        CachedData(sub01Outcome = Some(sub01Outcome), submissionCompleteDetails = Some(submissionCompleteDetails))
+      )
       cacheUpdate.data mustBe expectedJson
 
       await(sessionCache.sub01Outcome(request)) mustBe sub01Outcome

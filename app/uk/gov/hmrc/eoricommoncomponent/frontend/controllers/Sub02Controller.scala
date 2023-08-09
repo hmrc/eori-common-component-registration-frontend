@@ -155,9 +155,10 @@ class Sub02Controller @Inject() (
   def subscriptionInProgress(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
-        _             <- sessionCache.remove
-      } yield Ok(sub02SubscriptionInProgressView(processedDate)).withSession(newUserSession)
+        submissionCompleteDetails <- sessionCache.submissionCompleteDetails
+        _                         <- sessionCache.remove
+        _                         <- sessionCache.saveSubmissionCompleteDetails(submissionCompleteDetails)
+      } yield Ok(sub02SubscriptionInProgressView(submissionCompleteDetails.processingDate)).withSession(newUserSession)
     }
 
   def requestNotProcessed(service: Service): Action[AnyContent] =

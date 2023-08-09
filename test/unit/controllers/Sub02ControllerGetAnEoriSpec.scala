@@ -417,13 +417,9 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling subscriptionInProgress on Sub02Controller" should {
     "render subscription in-progress page" in {
-
-      when(mockSubscriptionDetails.name).thenReturn("orgName")
-      when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
-      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
-      when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
-      when(mockSessionCache.sub02Outcome(any[Request[_]]))
-        .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
+      when(mockSessionCache.submissionCompleteDetails(any[Request[_]]))
+        .thenReturn(Future.successful(SubmissionCompleteDetails("22 May 2016")))
+      when(mockSessionCache.saveSubmissionCompleteDetails(any())(any[Request[_]])).thenReturn(true)
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokeSubscriptionInProgress { result =>
         assertCleanedSession(result)
