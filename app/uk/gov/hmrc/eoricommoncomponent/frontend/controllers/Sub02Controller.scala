@@ -125,7 +125,6 @@ class Sub02Controller @Inject() (
               service,
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
-              subDetails.name,
               if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate,
               subscriptionTo,
               subscriptionNextSteps(service)

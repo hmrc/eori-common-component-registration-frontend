@@ -53,7 +53,7 @@ class DownloadTextController @Inject() (
             .as(plainText)
             .withHeaders(CONTENT_DISPOSITION -> attachmentTextFile)
         else
-          Ok(subscriptionTextDownloadView(eori, name, processedDate))
+          Ok(subscriptionTextDownloadView(eori, processedDate))
             .as(plainText)
             .withHeaders(CONTENT_DISPOSITION -> attachmentTextFile)
   }
