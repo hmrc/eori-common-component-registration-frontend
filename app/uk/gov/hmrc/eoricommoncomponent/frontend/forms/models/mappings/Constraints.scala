@@ -31,7 +31,7 @@ trait Constraints {
           .getOrElse(Valid)
     }
 
-  protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
+  protected def maxDate(maximum: => LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
     Constraint {
       case date if date.isAfter(maximum) =>
         Invalid(errorKey, args: _*)

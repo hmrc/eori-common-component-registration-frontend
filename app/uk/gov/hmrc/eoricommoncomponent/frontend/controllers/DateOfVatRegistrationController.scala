@@ -22,9 +22,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateForm.vatRegistrationDateForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, we_cannot_confirm_your_identity}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
@@ -35,9 +35,12 @@ class DateOfVatRegistrationController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
-  dateOfVatRegistrationView: date_of_vat_registration
+  dateOfVatRegistrationView: date_of_vat_registration,
+  form: VatRegistrationDateFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val vatRegistrationDateForm = form()
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
