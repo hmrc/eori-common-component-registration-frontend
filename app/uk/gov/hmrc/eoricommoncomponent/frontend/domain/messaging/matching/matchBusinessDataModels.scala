@@ -99,7 +99,9 @@ case class RegisterWithIDResponse(responseCommon: ResponseCommon, responseDetail
   def getResponseDetail: ResponseDetail = responseDetail match {
     case Some(detail) => detail
     case None =>
-      throw new IllegalArgumentException("RegisterWithIDResponse did not include expected ResponseDetail object")
+      throw new IllegalArgumentException(
+        s"REG01 response returned with status: ${responseCommon.statusText.getOrElse("Detail object not returned")}"
+      )
   }
 
 }
