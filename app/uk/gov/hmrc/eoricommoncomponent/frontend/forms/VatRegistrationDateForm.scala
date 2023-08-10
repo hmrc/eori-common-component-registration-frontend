@@ -33,19 +33,21 @@ object VatRegistrationDate {
   implicit val format: Format[VatRegistrationDate] = Json.format[VatRegistrationDate]
 }
 
-class VatRegistrationDateFormProvider @Inject()(timeService: TimeService) extends Mappings with Logging {
+class VatRegistrationDateFormProvider @Inject() (timeService: TimeService) extends Mappings with Logging {
 
   private val minimumDate = LocalDate.of(DateConverter.earliestYearEffectiveVatDate, 1, 1)
 
-  def apply(): Form[VatRegistrationDate] = 
+  def apply(): Form[VatRegistrationDate] =
     Form(
       mapping(
         "vat-registration-date" -> localDate(
           emptyKey = "vat.error.empty-date-new",
           invalidKey = "vat.error.invalid-date-new"
         )
-        .verifying(minDate(minimumDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
-        .verifying(maxDate(timeService.getTodaysDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+          .verifying(minDate(minimumDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+          .verifying(
+            maxDate(timeService.getTodaysDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString)
+          )
       )(VatRegistrationDate.apply)(VatRegistrationDate.unapply)
     )
 

@@ -66,7 +66,7 @@ class UpdateVerifiedEmailService @Inject() (
       case Right(res) =>
         val statusText = res.updateVerifiedEmailResponse.responseCommon.statusText
         // $COVERAGE-OFF$Loggers
-        logger.debug(
+        logger.warn(
           "[UpdateVerifiedEmailService][updateVerifiedEmail]" +
             s" - updating verified email unsuccessful with business error/status code: ${statusText.getOrElse("Status text empty")}"
         )

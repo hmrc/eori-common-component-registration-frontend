@@ -62,7 +62,7 @@ class VatDetailsControllerSpec
   private val vatDetailsView              = instanceOf[vat_details]
   private val errorTemplate               = instanceOf[error_template]
   private val weCannotConfirmYourIdentity = instanceOf[date_of_vat_registration]
-  private val form = instanceOf[VatRegistrationDateFormProvider]
+  private val form                        = instanceOf[VatRegistrationDateFormProvider]
 
   private val controller = new VatDetailsController(
     mockAuthAction,

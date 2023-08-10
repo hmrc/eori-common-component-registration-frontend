@@ -24,9 +24,9 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.BeforeAndAfter
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.TimeService
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
-import java.time.{Year, LocalDate}
+import java.time.{LocalDate, Year}
 import java.time.format.DateTimeFormatter
-import play.api.data.{FormError, Form}
+import play.api.data.{Form, FormError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
 import scala.collection.immutable.ArraySeq
 
@@ -52,17 +52,17 @@ class VatRegistrationDateFormSpec extends UnitSpec with MockitoSugar with Before
     "call the time service every time we try to bind the form" in {
 
       when(mockTimeService.getTodaysDate).thenReturn(LocalDate.of(2023, 1, 23))
-      
+
       val data = Map(
         "vat-registration-date.day"   -> "24",
         "vat-registration-date.month" -> "01",
         "vat-registration-date.year"  -> "2023"
       )
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-registration-date", "vat.error.minMax", ArraySeq("1970")))
 
       when(mockTimeService.getTodaysDate).thenReturn(LocalDate.of(2023, 1, 24))
-      val res2  = form.bind(data)
+      val res2 = form.bind(data)
       res2.errors shouldBe Nil
 
     }
