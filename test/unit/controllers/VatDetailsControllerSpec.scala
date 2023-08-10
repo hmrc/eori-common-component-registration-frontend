@@ -36,6 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registra
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -61,6 +62,7 @@ class VatDetailsControllerSpec
   private val vatDetailsView              = instanceOf[vat_details]
   private val errorTemplate               = instanceOf[error_template]
   private val weCannotConfirmYourIdentity = instanceOf[date_of_vat_registration]
+  private val form                        = instanceOf[VatRegistrationDateFormProvider]
 
   private val controller = new VatDetailsController(
     mockAuthAction,
@@ -70,7 +72,8 @@ class VatDetailsControllerSpec
     vatDetailsView,
     errorTemplate,
     weCannotConfirmYourIdentity,
-    mockSubscriptionDetailsService
+    mockSubscriptionDetailsService,
+    form
   )
 
   private val validRequest = Map("postcode" -> "Z9 1AA", "vat-number" -> "028836662")

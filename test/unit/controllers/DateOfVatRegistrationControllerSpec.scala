@@ -33,6 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -47,12 +48,14 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
 
   private val mockVatReturnTotalView          = instanceOf[vat_return_total]
   private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
+  private val form                            = instanceOf[VatRegistrationDateFormProvider]
 
   private val controller = new DateOfVatRegistrationController(
     mockAuthAction,
     mockSubscriptionBusinessService,
     mcc,
-    mockDateOfVatRegistrationView
+    mockDateOfVatRegistrationView,
+    form
   )
 
   private val controllerVat = new VatReturnController(

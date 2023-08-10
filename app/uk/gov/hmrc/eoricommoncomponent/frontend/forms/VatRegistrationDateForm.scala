@@ -21,6 +21,9 @@ import play.api.data.Forms._
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
+import play.api.Logging
+import javax.inject.Inject
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.TimeService
 
 import java.time.LocalDate
 
@@ -30,11 +33,11 @@ object VatRegistrationDate {
   implicit val format: Format[VatRegistrationDate] = Json.format[VatRegistrationDate]
 }
 
-object VatRegistrationDateForm extends Mappings {
+class VatRegistrationDateFormProvider @Inject() (timeService: TimeService) extends Mappings with Logging {
 
   private val minimumDate = LocalDate.of(DateConverter.earliestYearEffectiveVatDate, 1, 1)
 
-  val vatRegistrationDateForm =
+  def apply(): Form[VatRegistrationDate] =
     Form(
       mapping(
         "vat-registration-date" -> localDate(
@@ -42,7 +45,9 @@ object VatRegistrationDateForm extends Mappings {
           invalidKey = "vat.error.invalid-date-new"
         )
           .verifying(minDate(minimumDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
-          .verifying(maxDate(LocalDate.now(), "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString))
+          .verifying(
+            maxDate(timeService.getTodaysDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString)
+          )
       )(VatRegistrationDate.apply)(VatRegistrationDate.unapply)
     )
 
