@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
 
+import play.api.Logging
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.ContactInformation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetails
@@ -74,14 +75,20 @@ object ContactDetailsModel {
 }
 
 //TODO remove email address read from cache and populate the contact details
-case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: Option[String]) {
+case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: Option[String])
+    extends Logging {
 
   def toContactInfoDetailsModel(contactDetails: Option[ContactDetailsModel]): ContactDetailsModel =
     contactDetails match {
       case Some(cd) =>
         ContactDetailsModel(
           fullName,
-          emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
+          emailAddress.getOrElse {
+            // $COVERAGE-OFF$Loggers
+            logger.warn("SessionTimeOutException. Email is required")
+            // $COVERAGE-ON
+            throw SessionTimeOutException("Email is required")
+          },
           telephone,
           fax = cd.fax,
           useAddressFromRegistrationDetails = false,
@@ -93,7 +100,12 @@ case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String
       case None =>
         ContactDetailsModel(
           fullName,
-          emailAddress.getOrElse(throw SessionTimeOutException("Email is required")),
+          emailAddress.getOrElse {
+            // $COVERAGE-OFF$Loggers
+            logger.warn("SessionTimeOutException. Email is required")
+            // $COVERAGE-ON
+            throw SessionTimeOutException("Email is required")
+          },
           telephone,
           fax = None,
           useAddressFromRegistrationDetails = false,

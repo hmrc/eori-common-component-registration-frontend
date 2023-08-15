@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.Logging
 import play.api.mvc.Request
 
 import javax.inject.{Inject, Singleton}
@@ -36,7 +37,8 @@ class RegisterWithoutIdService @Inject() (
   requestCommonGenerator: RequestCommonGenerator,
   detailsCreator: RegistrationDetailsCreator,
   sessionCache: SessionCache
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   def registerOrganisation(
     orgName: String,
@@ -51,7 +53,13 @@ class RegisterWithoutIdService @Inject() (
       RegisterWithoutIdReqDetails.organisation(
         OrganisationName(orgName),
         address,
-        contactDetail.getOrElse(throw new IllegalStateException("No contact details in cache"))
+        contactDetail.getOrElse {
+          val error = "registerOrganisation: No contact details in cache"
+          // $COVERAGE-OFF$Loggers
+          logger.warn(error)
+          // $COVERAGE-ON
+          throw new IllegalStateException(error)
+        }
       )
     )
 
@@ -75,7 +83,13 @@ class RegisterWithoutIdService @Inject() (
     val reqDetails = RegisterWithoutIdReqDetails.individual(
       address = address,
       individual = individual,
-      contactDetail = contactDetail.getOrElse(throw new IllegalStateException("No contact details in cache"))
+      contactDetail = contactDetail.getOrElse {
+        val error = "registerIndividual: No contact details in cache"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
+      }
     )
     val requestWithoutId =
       RegisterWithoutIDRequest(requestCommonGenerator.generate(), reqDetails)

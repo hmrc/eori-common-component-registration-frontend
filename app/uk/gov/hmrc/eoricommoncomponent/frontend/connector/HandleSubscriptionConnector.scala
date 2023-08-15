@@ -54,8 +54,7 @@ class HandleSubscriptionConnector @Inject() (httpClient: HttpClientV2, appConfig
         case OK | NO_CONTENT =>
           // $COVERAGE-OFF$Loggers
           logger.debug(s"Call complete for call to ${url.toString} and  hc: $hc. Status:${response.status}")
-          // $COVERAGE-ON
-          ()
+        // $COVERAGE-ON
         case _ => throw new BadRequestException(s"Status:${response.status}")
       }
     } recoverWith {

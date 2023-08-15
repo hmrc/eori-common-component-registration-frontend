@@ -69,7 +69,12 @@ class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: Ap
           logger.warn(s"VatControlList failed. url: $url. Reason: Dependent systems are currently not responding")
           // $COVERAGE-ON
           Left(ServiceUnavailableResponse)
-        case _ => throw new Exception("Incorrect VAT Known facts response")
+        case _ =>
+          val error = "Incorrect VAT Known facts response"
+          // $COVERAGE-OFF$Loggers
+          logger.warn(error)
+          // $COVERAGE-ON
+          throw new Exception(error)
       }
     }
   }

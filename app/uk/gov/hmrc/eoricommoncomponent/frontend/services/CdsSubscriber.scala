@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.Logging
+
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDateTime
 import play.api.i18n.Messages
@@ -37,7 +39,8 @@ class CdsSubscriber @Inject() (
   subscriptionService: SubscriptionService,
   sessionCache: SessionCache,
   handleSubscriptionService: HandleSubscriptionService
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   def subscribeWithCachedDetails(cdsOrganisationType: Option[CdsOrganisationType], service: Service)(implicit
     hc: HeaderCarrier,
@@ -89,8 +92,13 @@ class CdsSubscriber @Inject() (
           .flatMap(_.contactDetails.map(_.contactDetails))
         val contactName = contactDetails.map(_.fullName)
         val cdsFullName = Some(regDetails.name)
-        val email       = contactDetails.map(_.emailAddress).getOrElse(throw new IllegalStateException("Email required"))
-        val mayBeEori   = Some(success.eori)
+        val email = contactDetails.map(_.emailAddress).getOrElse {
+          // $COVERAGE-OFF$Loggers
+          logger.warn("Email not found within contactDetails")
+          // $COVERAGE-ON
+          throw new IllegalStateException("Email required")
+        }
+        val mayBeEori = Some(success.eori)
 
         completeSubscription(
           service,
@@ -111,8 +119,13 @@ class CdsSubscriber @Inject() (
           .flatMap(_.contactDetails.map(_.contactDetails))
         val contactName = contactDetails.map(_.fullName)
         val cdsFullName = Some(regDetails.name)
-        val email       = contactDetails.map(_.emailAddress).getOrElse(throw new IllegalStateException("Email required"))
-        val mayBeEori   = None
+        val email = contactDetails.map(_.emailAddress).getOrElse {
+          // $COVERAGE-OFF$Loggers
+          logger.warn("Email not found within contactDetails")
+          // $COVERAGE-ON
+          throw new IllegalStateException("Email required")
+        }
+        val mayBeEori = None
         completeSubscription(
           service,
           regDetails.name,

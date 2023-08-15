@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.Logging
+
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
@@ -38,7 +40,8 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   requestSessionData: RequestSessionData,
   orgTypeLookup: OrgTypeLookup,
   sub02Controller: Sub02Controller
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   def rowRegisterWithoutIdWithSubscription(loggedInUser: LoggedInUserWithEnrolments, service: Service)(implicit
     hc: HeaderCarrier,
@@ -117,12 +120,20 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
             case RegisterWithoutIDResponse(ResponseCommon(status, _, _, _), _) if status == StatusOK =>
               sub02Controller.subscribe(service)(request)
             case _ =>
-              throw new RuntimeException("Registration of individual FAILED")
+              val error = "Registration of individual FAILED"
+              // $COVERAGE-OFF$Loggers
+              logger.warn(error)
+              // $COVERAGE-ON
+              throw new RuntimeException(error)
           }
     ) match {
       case Some(f) => f
       case None =>
-        throw new IllegalArgumentException("Incorrect argument passed for cache Individual Registration")
+        val error = "Incorrect argument passed for cache Individual Registration"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalArgumentException(error)
     }
 
   private def rowOrganisationRegisterWithSubscription(
@@ -144,7 +155,11 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
         case RegisterWithoutIDResponse(ResponseCommon(status, _, _, _), _) if status == StatusOK =>
           sub02Controller.subscribe(service)(request)
         case _ =>
-          throw new RuntimeException("Registration of organisation FAILED")
+          val error = "Registration of organisation FAILED"
+          // $COVERAGE-OFF$Loggers
+          logger.warn(error)
+          // $COVERAGE-ON
+          throw new RuntimeException(error)
       }
 
 }

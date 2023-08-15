@@ -59,15 +59,24 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(im
           org,
           subscription,
           cdsOrgType,
-          doe.getOrElse(
-            throw new IllegalStateException("Date Established must be present for an organisation subscription")
-          ),
+          doe.getOrElse {
+            val error = "Date Established must be present for an organisation subscription"
+            // $COVERAGE-OFF$Loggers
+            logger.warn(error)
+            // $COVERAGE-ON
+            throw new IllegalStateException(error)
+          },
           Some(service)
         ).ensuring(
           subscription.sicCode.isDefined,
           "SicCode/Principal Economic Activity must be present for an organisation subscription"
         )
-      case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
+      case _ =>
+        val error = "Incomplete cache cannot complete journey"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
     }
 
   private def subscribeWithConnector(
@@ -126,9 +135,13 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(im
   private def extractValueFromMessageParams: (String, List[MessagingServiceParam]) => String = { (name, params) =>
     params
       .find(_.paramName == name)
-      .fold(throw new IllegalStateException(s"$name parameter is missing in subscription create response"))(
-        _.paramValue
-      )
+      .fold {
+        val error = s"$name parameter is missing in subscription create response"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
+      }(_.paramValue)
   }
 
 }

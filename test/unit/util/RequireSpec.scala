@@ -29,7 +29,7 @@ class RequireSpec extends AnyWordSpec with Matchers {
       val caught = intercept[InvalidUrlValueException] {
         Require.requireThatUrlValue(1 == 3, "Some Error")
       }
-      caught.getMessage mustBe "invalid value: Some Error"
+      caught.getMessage mustBe "invalid URL value: Some Error"
 
     }
   }

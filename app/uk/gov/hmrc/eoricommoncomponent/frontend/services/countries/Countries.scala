@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.countries
 
+import play.api.Logging
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
-object Countries {
+object Countries extends Logging {
 
   private def mdgCountryCodes(fileName: String): List[String] =
     Source
@@ -41,9 +42,11 @@ object Countries {
             case JsArray(ArrayBuffer(c: JsString, cc: JsString)) => Country(c.value, countryCode(cc.value))
           }
         case _ =>
-          throw new IllegalArgumentException(
-            "Could not read JSON array of countries from : location-autocomplete-canonical-list.json"
-          )
+          val error = "Could not read JSON array of countries from : location-autocomplete-canonical-list.json"
+          // $COVERAGE-OFF$Loggers
+          logger.warn(error)
+          // $COVERAGE-ON
+          throw new IllegalArgumentException(error)
       }
 
     fromJsonFile.sortBy(_.countryName)
