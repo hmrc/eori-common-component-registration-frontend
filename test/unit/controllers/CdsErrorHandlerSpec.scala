@@ -24,18 +24,17 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{client_error_template, error_template, notFound}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, notFound}
 import util.ControllerSpec
 
 class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
   val configuration = mock[Configuration]
 
   private val errorTemplateView       = instanceOf[error_template]
-  private val clientErrorTemplateView = instanceOf[client_error_template]
   private val notFoundView            = instanceOf[notFound]
 
   val cdsErrorHandler =
-    new CdsErrorHandler(messagesApi, configuration, errorTemplateView, clientErrorTemplateView, notFoundView)
+    new CdsErrorHandler(messagesApi, configuration, errorTemplateView, notFoundView)
 
   private val mockRequest = FakeRequest()
 
@@ -98,7 +97,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         val page = CdsPage(contentAsString(result))
 
         result.header.status shouldBe INTERNAL_SERVER_ERROR
-        page.title() should startWith("Something went wrong. Please try again later.")
+        page.title() should startWith("Sorry, there is a problem with the service")
       }
     }
 
