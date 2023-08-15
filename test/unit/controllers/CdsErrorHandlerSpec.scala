@@ -63,6 +63,32 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
       }
     }
 
+    "redirect to subscription security sign out for NO_CSRF_FOUND in body" in {
+      val mockSubRequest = FakeRequest(method = "GET", "/atar/subscribe")
+
+      whenReady(
+        cdsErrorHandler.onClientError(mockSubRequest, statusCode = FORBIDDEN, message = "No CSRF token found in body")
+      ) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/display-sign-out"
+      }
+    }
+
+    "redirect to subscription security sign out for NO_CSRF_FOUND in headers" in {
+      val mockSubRequest = FakeRequest(method = "GET", "/atar/subscribe")
+
+      whenReady(
+        cdsErrorHandler.onClientError(
+          mockSubRequest,
+          statusCode = FORBIDDEN,
+          message = "No CSRF token found in headers"
+        )
+      ) { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/display-sign-out"
+      }
+    }
+
     "redirect to registration security sign out" in {
       val mockRegisterRequest = FakeRequest(method = "GET", path = "/atar/register")
 
