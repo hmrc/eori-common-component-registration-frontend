@@ -161,6 +161,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
             EmailVerificationStubService.internalServerErrorJson.toString
           )
         )
+
         EmailVerificationStubService.stubVerificationRequestError()
 
         val result: EmailVerificationRequestResponse =
