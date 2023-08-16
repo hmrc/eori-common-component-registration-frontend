@@ -1631,7 +1631,7 @@ cds.form.send=Confirm and send
 
 cds.mig.existing.outcomes.application-received.title=Your new EORI number
 cds.reg.existing.outcomes.success.heading.part1=Application sent
-cds.reg.existing.outcomes.success.heading.part1.standalone=Your new EORI number for {0} is {1}
+cds.reg.existing.outcomes.success.heading.part1.standalone=Your new EORI number is: {0}
 
 cds.if.you.need.help.heading=If you need help
 cds.if.you.need.help.telephone1=Telephone: 0300 322 7067

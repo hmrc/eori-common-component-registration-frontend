@@ -25,17 +25,17 @@
 @import play.twirl.api.utils.StringEscapeUtils
 
 @this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter, govukPanel: GovukPanel, appConfig: AppConfig)
-@(eori: String, name: String, processedDate: String)(implicit messages: Messages, request: Request[_])
+@(eori: String, processedDate: String)(implicit messages: Messages, request: Request[_])
 
 @checkEORILink = {
     <a class="govuk-link" href=@appConfig.checkEORINumber target="_blank" rel="noopener noreferrer">@messages("cds.standalone.subscription.outcomes.success.extra.information2")</a>
 }
 
-@layout_di(messages("cds.reg.existing.outcomes.success.heading.part1.standalone", name, eori), displayBackLink = false) {
+@layout_di(messages("cds.reg.existing.outcomes.success.heading.part1"), displayBackLink = false) {
 <div>
     @govukPanel(Panel(
-        title = HtmlContent(messages("cds.reg.existing.outcomes.success.heading.part1.standalone", StringEscapeUtils.escapeXml11(name), eori)),
-        content = HtmlContent(s""" <p id="issued-date" class="govuk-heading-s govuk-panel–-confirmation">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}""")
+        title = HtmlContent(messages("cds.reg.existing.outcomes.success.heading.part1")),
+        content = HtmlContent(s"""<p id="eori-number" class="govuk-heading-m govuk-panel--confirmation govuk-!-font-size-27">${messages("cds.reg.existing.outcomes.success.heading.part1.standalone", eori)}</p> <p id="issued-date" class="govuk-heading-m govuk-panel--confirmation">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</p>""")
     ))
 
     <div id='additional-information' class="govuk-form-group">

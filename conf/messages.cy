@@ -1585,7 +1585,7 @@ cds.subscription.outcomes.success.extra.information.when-you-can.information.sta
 cds.subscription.outcomes.success.extra.information.when-you-can.standalone=Yr hyn sy’n digwydd nesaf
 ecc.standalone.subscription.outcomes.success.cds.info.bullet1=cael eich datganiadau ar gyfer TAW mewnforio ohiriedig 
 ecc.standalone.subscription.outcomes.success.cds.info.bullet2=talu Toll Dramor a TAW mewnforio
-cds.reg.existing.outcomes.success.heading.part1.standalone=Eich rhif EORI newydd ar gyfer {0} yn {1}
+cds.reg.existing.outcomes.success.heading.part1.standalone=Eich rhif EORI newydd sy’n dechrau gyda GB yw: {0}
 ecc.standalone.subscription.outcomes.success.cds.info.bullet=cyflwyno datganiadau mewnforio ac allforio drwy ddefnyddio’ch meddalwedd Datganiadau Tollau
 ecc.subscription.status.gg.h1=Eich rhif EORI a’ch Dynodydd Defnyddiwr (ID) Porth y Llywodraeth
 ecc.subscription.status.gg.p1=Caiff y rhif EORI hwn ei gysylltu â’r Dynodydd Defnyddiwr (ID) Porth y Llywodraeth rydych wedi’i ddefnyddio ar gyfer y cais hwn.
