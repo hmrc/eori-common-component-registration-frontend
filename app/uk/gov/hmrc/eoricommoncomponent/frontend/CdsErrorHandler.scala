@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{client_error_template, error_template, notFound}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, notFound}
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
 import scala.concurrent.Future
@@ -36,7 +36,6 @@ class CdsErrorHandler @Inject() (
   val messagesApi: MessagesApi,
   val configuration: Configuration,
   errorTemplateView: error_template,
-  clientErrorTemplateView: client_error_template,
   notFoundView: notFound
 ) extends FrontendErrorHandler {
 
@@ -55,7 +54,9 @@ class CdsErrorHandler @Inject() (
     statusCode match {
       case NOT_FOUND                                              => Future.successful(Results.NotFound(notFoundView()))
       case BAD_REQUEST if message == Constants.INVALID_PATH_PARAM => Future.successful(Results.NotFound(notFoundView()))
-      case _                                                      => Future.successful(Results.InternalServerError(clientErrorTemplateView(message)))
+      case FORBIDDEN if message.contains(Constants.NO_CSRF_FOUND) =>
+        Future.successful(Redirect(SecuritySignOutController.displayPage(service)).withNewSession)
+      case _ => Future.successful(Results.InternalServerError(errorTemplateView()))
     }
   }
 
