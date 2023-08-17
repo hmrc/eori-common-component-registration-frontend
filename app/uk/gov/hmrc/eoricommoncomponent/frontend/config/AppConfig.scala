@@ -89,8 +89,10 @@ class AppConfig @Inject() (
   val emailVerificationEnabled: Boolean          = config.get[Boolean]("microservice.services.email-verification.enabled")
   val emailVerificationContinueUrlPrefix: String = config.get[String]("external-url.email-verification.continue-url")
 
-  val emailVerificationBaseUrl: String         = servicesConfig.baseUrl("email-verification")
-  val emailVerificationFrontendBaseUrl: String = servicesConfig.baseUrl("email-verification-frontend")
+  val emailVerificationBaseUrl: String = servicesConfig.baseUrl("email-verification")
+
+  val emailVerificationFrontendBaseUrl: String =
+    config.get[String]("microservice.services.email-verification-frontend.prefix")
 
   val emailVerificationServiceContext: String =
     config.get[String]("microservice.services.email-verification.context")
