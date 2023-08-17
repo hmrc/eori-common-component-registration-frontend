@@ -41,7 +41,7 @@ class CheckYourEmailController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
-      implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
+      implicit request => implicit userWithEnrolments: LoggedInUserWithEnrolments =>
         confirmEmailYesNoAnswerForm()
           .bindFromRequest()
           .fold(

@@ -68,16 +68,21 @@ object AuthBuilder {
       mockAuthConnector.authorise(
         any(),
         retrieval = ArgumentMatchers
-          .eq(email and credentialRole and affinityGroup and internalId and allEnrolments and groupIdentifier)
+          .eq(
+            email and credentialRole and affinityGroup and internalId and allEnrolments and groupIdentifier and credentials
+          )
       )(any(), any())
     ).thenReturn(
       Future.successful(
         new ~(
           new ~(
-            new ~(new ~(new ~(userEmail, userCredentialRole), Option(userAffinityGroup)), Option(userId)),
-            Enrolments(userEnrolments)
+            new ~(
+              new ~(new ~(new ~(userEmail, userCredentialRole), Option(userAffinityGroup)), Option(userId)),
+              Enrolments(userEnrolments)
+            ),
+            groupId
           ),
-          groupId
+          userCredentials
         )
       )
     )

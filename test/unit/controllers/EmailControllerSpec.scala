@@ -30,7 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.GroupEnrolmentE
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.{EmailJourneyService, EmailVerificationService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   Save4LaterService,
   SubscriptionProcessing,
@@ -39,12 +39,16 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_pending_against_group_id,
-  enrolment_pending_for_user
+  enrolment_pending_for_user,
+  error_template
 }
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{EmailVerificationStatus, ResponseWithURI}
+import cats.data.EitherT
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -62,9 +66,13 @@ class EmailControllerSpec
   private val groupEnrolmentExtractor            = mock[GroupEnrolmentExtractor]
   private val enrolmentPendingAgainstGroupIdView = instanceOf[enrolment_pending_against_group_id]
   private val enrolmentPendingForUserView        = instanceOf[enrolment_pending_for_user]
+  private val errorView                          = instanceOf[error_template]
 
   private val userGroupIdSubscriptionStatusCheckService =
     new UserGroupIdSubscriptionStatusCheckService(mockSubscriptionStatusService, mockSave4LaterService)
+
+  val emailJourneyService =
+    new EmailJourneyService(mockEmailVerificationService, mockSessionCache, mockSave4LaterService, errorView, appConfig)
 
   private val controller = new EmailController(
     mockAuthAction,
@@ -76,18 +84,28 @@ class EmailControllerSpec
     groupEnrolmentExtractor,
     mockAppConfig,
     enrolmentPendingForUserView,
-    enrolmentPendingAgainstGroupIdView
+    enrolmentPendingAgainstGroupIdView,
+    emailJourneyService
   )
 
   private val emailStatus = EmailStatus(Some("test@example.com"))
+
+  val verifiedEitherT: Future[Either[ResponseError, EmailVerificationStatus]] =
+    Future.successful(Right(EmailVerificationStatus.Verified))
+
+  val unverifiedEitherT: Future[Either[ResponseError, EmailVerificationStatus]] =
+    Future.successful(Right(EmailVerificationStatus.Unverified))
+
+  val lockedEitherT: Future[Either[ResponseError, EmailVerificationStatus]] =
+    Future.successful(Right(EmailVerificationStatus.Locked))
 
   override def beforeEach(): Unit = {
     when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Some(emailStatus)))
     when(
       mockEmailVerificationService
-        .isEmailVerified(any[String])(any[HeaderCarrier])
-    ).thenReturn(Future.successful(Some(true)))
+        .getVerificationStatus(any[String], any[String])(any[HeaderCarrier])
+    ).thenReturn(EitherT(verifiedEitherT))
     when(mockSave4LaterService.saveEmail(any(), any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(()))
     when(mockSessionCache.saveEmail(any())(any[Request[_]]))
@@ -129,8 +147,15 @@ class EmailControllerSpec
         .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = false))))
       when(
         mockEmailVerificationService
-          .isEmailVerified(any[String])(any[HeaderCarrier])
-      ).thenReturn(Future.successful(Some(false)))
+          .getVerificationStatus(any[String], any[String])(any[HeaderCarrier])
+      ).thenReturn(EitherT(unverifiedEitherT))
+      val startVerificationResponse: Future[Either[ResponseError, ResponseWithURI]] =
+        Future.successful(Right(ResponseWithURI("/atar/register/matching/verify-your-email")))
+      when(
+        mockEmailVerificationService
+          .startVerificationJourney(any(), any(), any())(any(), any())
+      ).thenReturn(EitherT(startVerificationResponse))
+
       showFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
         await(result).header.headers("Location") should endWith("/atar/register/matching/verify-your-email")
@@ -142,7 +167,9 @@ class EmailControllerSpec
         .thenReturn(Future.successful(Some(emailStatus.copy(isVerified = true))))
       showFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
-        await(result).header.headers("Location") should endWith("/atar/register/email-confirmed")
+        await(result).header.headers("Location") should endWith(
+          "/customs-registration-services/atar/register/matching/user-location"
+        )
       }
     }
 

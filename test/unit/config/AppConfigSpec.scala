@@ -49,7 +49,7 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
     }
 
     "have emailVerificationBaseUrl defined" in {
-      appConfig.emailVerificationBaseUrl shouldBe "http://localhost:6754"
+      appConfig.emailVerificationBaseUrl shouldBe "http://localhost:9891"
     }
 
     "have emailVerificationServiceContext defined" in {

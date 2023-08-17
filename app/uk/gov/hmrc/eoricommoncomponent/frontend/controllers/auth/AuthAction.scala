@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import uk.gov.hmrc.auth.core.retrieve.Credentials
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,7 +45,7 @@ class AuthAction @Inject() (
     Request[AnyContent] => Option[String] => LoggedInUserWithEnrolments => Future[Result]
 
   private val baseRetrievals     = ggEmail and credentialRole and affinityGroup
-  private val extendedRetrievals = baseRetrievals and internalId and allEnrolments and groupIdentifier
+  private val extendedRetrievals = baseRetrievals and internalId and allEnrolments and groupIdentifier and credentials
 
   /**
     * Allows Gov Gateway user with correct user type, affinity group and no enrolment to service
@@ -79,7 +80,9 @@ class AuthAction @Inject() (
 
     authorised(AuthProviders(GovernmentGateway))
       .retrieve(extendedRetrievals) {
-        case currentUserEmail ~ userCredentialRole ~ userAffinityGroup ~ userInternalId ~ userAllEnrolments ~ groupId =>
+        case currentUserEmail ~ userCredentialRole ~ userAffinityGroup ~ userInternalId ~ userAllEnrolments ~ groupId ~ Some(
+              Credentials(credId, _)
+            ) =>
           transformRequest(
             Right(requestProcessor),
             LoggedInUserWithEnrolments(
@@ -88,7 +91,8 @@ class AuthAction @Inject() (
               userAllEnrolments,
               currentUserEmail,
               groupId,
-              userCredentialRole
+              userCredentialRole,
+              credId
             ),
             checkPermittedAccess,
             checkServiceEnrolment

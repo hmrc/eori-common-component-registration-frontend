@@ -21,20 +21,20 @@ import play.api.Application
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.EmailVerificationStateHttpParser.EmailVerificationStateResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.EmailVerificationRequestHttpParser.{
-  EmailAlreadyVerified,
-  EmailVerificationRequestFailure,
-  EmailVerificationRequestResponse,
-  EmailVerificationRequestSent
-}
 import uk.gov.hmrc.http._
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.EmailVerificationStubService
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.EmailVerificationStateHttpParser._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import play.api.inject.bind
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
+  ResponseWithURI,
+  VerificationStatus,
+  VerificationStatusResponse
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import play.api.i18n._
 
 class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -54,23 +54,15 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
+  implicit val messages: Messages = MessagesImpl(Lang("en"), app.injector.instanceOf[MessagesApi])
+
   private lazy val connector      = app.injector.instanceOf[EmailVerificationConnector]
   private val email               = "john.doe@example.com"
-  private val expectedContinueUrl = "/customs-registration-services/test-email-continue/"
+  private val expectedContinueUrl = "/customs-enrolment-services/test-email-continue/"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  val emailVerifiedResponseJson: JsValue = Json.parse("""{"email": "john.doe@example.com"}""")
-
-  val emailVerificationNotFoundJson: JsValue = Json.parse("""{
-      |  "code": "NOT_VERIFIED",
-      |  "message":"Email not verified."
-      |}""".stripMargin)
-
-  val internalServerErrorJson: JsValue = Json.parse("""{
-      |  "code": "UNEXPECTED_ERROR",
-      |  "message":"An unexpected error occurred."
-      |}""".stripMargin)
+  val verifyEmailSuccessResponse: JsValue = Json.parse("""{"redirectUri": "google.com"}""")
 
   before {
     resetMockServer()
@@ -82,96 +74,82 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
   override def afterAll(): Unit =
     stopMockServer()
 
-  "Calling getEmailVerificationState" when {
+  "startVerificationJourney" should {
 
-    "the email is verified" should {
-      "return an EmailVerified response" in {
-        EmailVerificationStubService.stubEmailVerified()
+    val credId  = "123"
+    val service = Service.cds
+    val email   = "123@abc.com"
 
-        val expected                               = Right(EmailVerified)
-        val result: EmailVerificationStateResponse = await(connector.getEmailVerificationState(email))
+    "return a Right containing the URI when a CREATED is returned" in {
+      EmailVerificationStubService.stubVerifyEmailSuccess()
 
-        result mustBe expected
-      }
-    }
-    "the email is not verified" should {
+      val expected = Right(ResponseWithURI("google.com"))
+      val result: Either[ResponseError, ResponseWithURI] =
+        await(connector.startVerificationJourney(credId, service, email).value)
 
-      "return an EmailNotVerified response" in {
-        EmailVerificationStubService.stubEmailNotVerified()
-
-        val expected = Right(EmailNotVerified)
-        val result: EmailVerificationStateResponse =
-          await(connector.getEmailVerificationState("notverified@example.com"))
-
-        result mustBe expected
-      }
+      result mustBe expected
     }
 
-    "the email service Internal Server Error" should {
+    "return a Left containing the response details when anything but CREATED is returned" in {
+      EmailVerificationStubService.stubVerifyEmailFailure()
 
-      "return an Internal Server Error" in {
-        EmailVerificationStubService.stubEmailVerifiedInternalServerError()
-        val expected = Left(
-          EmailVerificationStateErrorResponse(
-            INTERNAL_SERVER_ERROR,
-            EmailVerificationStubService.internalServerErrorJson.toString
-          )
-        )
-        val result: EmailVerificationStateResponse = await(connector.getEmailVerificationState(email))
+      val expected = Left(ResponseError(500, "Unexpected response from verify-email: Something went wrong"))
+      val result: Either[ResponseError, ResponseWithURI] =
+        await(connector.startVerificationJourney(credId, service, email).value)
 
-        result mustBe expected
-      }
+      result mustBe expected
+    }
+
+    "return a Left describing that the json was invalid when CREATED is returned but the JSON is not in the expected format" in {
+      EmailVerificationStubService.stubVerifyEmailInvalid()
+
+      val expected = Left(ResponseError(500, """Invalid JSON returned: {"something":"google.com"}"""))
+      val result: Either[ResponseError, ResponseWithURI] =
+        await(connector.startVerificationJourney(credId, service, email).value)
+
+      result mustBe expected
     }
 
   }
 
-  "Calling createEmailVerificationRequest" when {
+  "getVerificationStatus" should {
 
-    "the post is successful" should {
-      "return an EmailVerificationRequestSent" in {
-        val expected = Right(EmailVerificationRequestSent)
-        EmailVerificationStubService.stubVerificationRequestSent()
-        val result: EmailVerificationRequestResponse =
-          await(connector.createEmailVerificationRequest(email, expectedContinueUrl))
+    val credId = "123"
 
-        result mustBe expected
-      }
+    "return a Right containing verification status' when an OK is returned" in {
+      EmailVerificationStubService.stubVerificationStatusSuccess(credId)
+
+      val emailVerificationStatuses = Seq(
+        VerificationStatus(emailAddress = "fredbloggs@hotmail.com", verified = true, locked = false),
+        VerificationStatus(emailAddress = "somename@live.com", verified = false, locked = true)
+      )
+
+      val expected = Right(VerificationStatusResponse(emailVerificationStatuses))
+      val result: Either[ResponseError, VerificationStatusResponse] =
+        await(connector.getVerificationStatus(credId).value)
+
+      result mustBe expected
     }
 
-    "the email is already verified" should {
+    "return a Left containing the response details when anything but OK is returned" in {
+      EmailVerificationStubService.stubVerificationStatusFailure(credId)
 
-      "return an EmailAlreadyVerified" in {
-        val expected = Right(EmailAlreadyVerified)
-        EmailVerificationStubService.stubEmailAlreadyVerified()
+      val expected = Left(ResponseError(500, "Unexpected response from verification-status: Something went wrong"))
+      val result: Either[ResponseError, VerificationStatusResponse] =
+        await(connector.getVerificationStatus(credId).value)
 
-        val result: EmailVerificationRequestResponse =
-          await(connector.createEmailVerificationRequest(email, expectedContinueUrl))
-
-        result mustBe expected
-      }
+      result mustBe expected
     }
 
-    "the email service Internal Server Error" should {
+    "return a Left describing that the json was invalid when OK is returned but the JSON is not in the expected format" in {
+      EmailVerificationStubService.stubVerificationStatusInvalid(credId)
 
-      "return an Internal Server Error" in {
+      val expected = Left(ResponseError(500, """Invalid JSON returned: {"something":"google.com"}"""))
+      val result: Either[ResponseError, VerificationStatusResponse] =
+        await(connector.getVerificationStatus(credId).value)
 
-        val expected = Left(
-          EmailVerificationRequestFailure(
-            INTERNAL_SERVER_ERROR,
-            EmailVerificationStubService.internalServerErrorJson.toString
-          )
-        )
-
-        EmailVerificationStubService.stubVerificationRequestError()
-
-        val result: EmailVerificationRequestResponse =
-          await(connector.createEmailVerificationRequest("scala@example.com", "/home"))
-
-        result mustBe expected
-
-      }
+      result mustBe expected
     }
-
   }
 
 }
