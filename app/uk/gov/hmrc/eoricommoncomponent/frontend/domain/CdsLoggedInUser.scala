@@ -42,7 +42,8 @@ case class LoggedInUserWithEnrolments(
   enrolments: Enrolments,
   email: Option[String],
   groupId: Option[String],
-  userCredentialRole: Option[CredentialRole]
+  userCredentialRole: Option[CredentialRole],
+  credId: String
 ) extends LoggedInUser {
 
   def isAdminUser: Boolean = (userCredentialRole, affinityGroup) match {

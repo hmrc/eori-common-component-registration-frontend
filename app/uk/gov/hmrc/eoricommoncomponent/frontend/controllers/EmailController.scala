@@ -43,6 +43,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_pending_for_user
 }
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -58,33 +59,12 @@ class EmailController @Inject() (
   groupEnrolment: GroupEnrolmentExtractor,
   appConfig: AppConfig,
   enrolmentPendingForUser: enrolment_pending_for_user,
-  enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id
+  enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id,
+  emailJourneyService: EmailJourneyService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
   private val logger = Logger(this.getClass)
-
-  private def continue(
-    service: Service
-  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
-    save4LaterService.fetchEmail(GroupId(user.groupId)) flatMap {
-      _.fold {
-        // $COVERAGE-OFF$Loggers
-        logger.info(s"emailStatus cache none ${user.internalId}")
-        // $COVERAGE-ON
-        Future.successful(Redirect(WhatIsYourEmailController.createForm(service)))
-      } { cachedEmailStatus =>
-        cachedEmailStatus.email match {
-          case Some(email) =>
-            if (cachedEmailStatus.isVerified)
-              sessionCache.saveEmail(email) map { _ =>
-                Redirect(CheckYourEmailController.emailConfirmed(service))
-              }
-            else checkWithEmailService(email, cachedEmailStatus, service)
-          case _ => Future.successful(Redirect(WhatIsYourEmailController.createForm(service)))
-        }
-      }
-    }
 
   def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>
@@ -123,43 +103,12 @@ class EmailController @Inject() (
                 Future.successful(Redirect(YouAlreadyHaveEoriController.display(service)))
             case None =>
               userGroupIdSubscriptionStatusCheckService
-                .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(continue(service))(
-                  Future.successful(Ok(enrolmentPendingForUser()))
-                )(Future.successful(Ok(enrolmentPendingAgainstGroupId())))
+                .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
+                  emailJourneyService.continue(service)
+                )(Future.successful(Ok(enrolmentPendingForUser())))(
+                  Future.successful(Ok(enrolmentPendingAgainstGroupId()))
+                )
           }
-    }
-
-  private def checkWithEmailService(email: String, emailStatus: EmailStatus, service: Service)(implicit
-    hc: HeaderCarrier,
-    userWithEnrolments: LoggedInUserWithEnrolments,
-    request: Request[_]
-  ): Future[Result] =
-    emailVerificationService.isEmailVerified(email).flatMap {
-      case Some(true) =>
-        for {
-          _ <- {
-            // $COVERAGE-OFF$Loggers
-            logger.warn("updated verified email status true to save4later")
-            // $COVERAGE-ON
-            save4LaterService.saveEmail(GroupId(userWithEnrolments.groupId), emailStatus.copy(isVerified = true))
-          }
-          _ <- {
-            // $COVERAGE-OFF$Loggers
-            logger.warn("saved verified email address true to cache")
-            // $COVERAGE-ON
-            sessionCache.saveEmail(email)
-          }
-        } yield Redirect(CheckYourEmailController.emailConfirmed(service))
-      case Some(false) =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn("verified email address false")
-        // $COVERAGE-ON
-        Future.successful(Redirect(CheckYourEmailController.verifyEmailView(service)))
-      case _ =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn("Couldn't verify email address")
-        // $COVERAGE-ON
-        Future.successful(Redirect(CheckYourEmailController.verifyEmailView(service)))
     }
 
 }

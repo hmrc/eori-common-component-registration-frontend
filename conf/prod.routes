@@ -195,10 +195,12 @@ GET         /customs-registration-services/register/xi-eori-guidance            
 
 GET         /customs-registration-services/:service/register/logout                                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.logout(service: Service)
 
-GET         /customs-registration-services/:service/register/you-cannot-change-address                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotChangeAddressController.page(service: Service)
+GET         /customs-registration-services/:service/register/you-cannot-change-address                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotChangeAddressController.page(service: Service)
 
-GET         /customs-registration-services/:service/register/address-invalid                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressInvalidController.page(service: Service)
+GET         /customs-registration-services/:service/register/address-invalid                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressInvalidController.page(service: Service)
 
-GET         /admin/metrics                                                                                @com.kenshoo.play.metrics.MetricsController.metrics
+GET         /customs-registration-services/:service/register/matching/locked-email                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.LockedEmailController.onPageLoad(service: Service)
+
+GET         /admin/metrics                                                                               @com.kenshoo.play.metrics.MetricsController.metrics
 
 ->          /                                                                                            health.Routes

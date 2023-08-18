@@ -36,6 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,7 +49,8 @@ class CheckYourEmailService @Inject() (
   mcc: MessagesControllerComponents,
   checkYourEmailView: check_your_email,
   verifyYourEmail: verify_your_email,
-  emailConfirmedView: email_confirmed
+  emailConfirmedView: email_confirmed,
+  emailJourneyService: EmailJourneyService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with Logging {
 
@@ -130,54 +132,11 @@ class CheckYourEmailService @Inject() (
       }
 
   def locationByAnswer(groupId: GroupId, yesNoAnswer: YesNo, service: Service)(implicit
-    request: Request[AnyContent]
+    request: Request[AnyContent],
+    userWithEnrolments: LoggedInUserWithEnrolments
   ): Future[Result] = yesNoAnswer match {
-    case theAnswer if theAnswer.isYes =>
-      submitNewDetails(groupId, service)
-    case _ => Future(Redirect(WhatIsYourEmailController.createForm(service)))
+    case theAnswer if theAnswer.isYes => emailJourneyService.continue(service)
+    case _                            => Future(Redirect(WhatIsYourEmailController.createForm(service)))
   }
-
-  private def submitNewDetails(groupId: GroupId, service: Service)(implicit
-    hc: HeaderCarrier,
-    request: Request[_]
-  ): Future[Result] =
-    save4LaterService.fetchEmail(groupId) flatMap {
-      _.fold {
-        // $COVERAGE-OFF$Loggers
-        logger.warn("[CheckYourEmailService][submitNewDetails] -  emailStatus cache none")
-        // $COVERAGE-ON
-        throw new IllegalStateException("[CheckYourEmailService][submitNewDetails] - emailStatus cache none")
-      } { emailStatus =>
-        val email: String = emailStatus.email.getOrElse {
-          // $COVERAGE-OFF$Loggers
-          logger.warn("[CheckYourEmailService][submitNewDetails] - emailStatus.email none")
-          // $COVERAGE-ON
-          throw new IllegalStateException("[CheckYourEmailService][submitNewDetails] - emailStatus.email none")
-        }
-        emailVerificationService.createEmailVerificationRequest(email, EmailController.form(service).url) flatMap {
-          case Some(true) =>
-            Future.successful(Redirect(CheckYourEmailController.verifyEmailView(service)))
-          case Some(false) =>
-            // $COVERAGE-OFF$Loggers
-            logger.warn(
-              s"[CheckYourEmailService][sendVerification] - " +
-                "Unable to send email verification request. Service responded with 'already verified'"
-            )
-            // $COVERAGE-ON
-            save4LaterService
-              .saveEmail(groupId, emailStatus.copy(isVerified = true))
-              .flatMap { _ =>
-                sessionCache.saveEmail(email).map { _ =>
-                  Redirect(EmailController.form(service))
-                }
-              }
-          case _ =>
-            // $COVERAGE-OFF$Loggers
-            logger.warn("CreateEmailVerificationRequest Failed")
-            // $COVERAGE-ON
-            throw new IllegalStateException("CreateEmailVerificationRequest Failed")
-        }
-      }
-    }
 
 }
