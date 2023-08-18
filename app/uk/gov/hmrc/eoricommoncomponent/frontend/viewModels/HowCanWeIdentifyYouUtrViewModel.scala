@@ -28,7 +28,6 @@ object HowCanWeIdentifyYouUtrViewModel {
 
   def forHintMessage(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
     if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.hint")
-    else if (orgType == UnincorporatedBody) messages("cds.matching.partnership.utr.hint")
     else messages("cds.matching.partnership.utr.hint")
 
   def heading(orgType: String) = orgType match {
