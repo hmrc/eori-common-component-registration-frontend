@@ -104,7 +104,7 @@ class EmailJourneyService @Inject() (
     for {
       _ <- save4LaterService.saveEmail(groupId, emailStatus.copy(isVerified = true))
       _ <- sessionCache.saveEmail(email)
-    } yield Redirect(routes.UserLocationController.form(service))
+    } yield Redirect(emailRoutes.CheckYourEmailController.emailConfirmed(service))
 
   private def submitNewDetails(email: String, service: Service, credId: String)(implicit
     request: Request[AnyContent],

@@ -11,6 +11,6 @@
 
 # Add all the application routes to the prod.routes file
 
-->         /                                                    prod.Routes
+->         /                                                       prod.Routes
 
-GET        /customs-enrolment-services/test-only/passcodes      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly.PasscodesController.getEmailVerificationPasscodes()
+GET        /customs-registration-services/test-only/passcodes      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly.PasscodesController.getEmailVerificationPasscodes()
