@@ -36,24 +36,12 @@
 
 @(matchOrgIdForm: Form[UtrMatchModel],  organisationType: String, displayMode: String, service: Service, isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
-@utrLinkText ={
-      <p class="govuk-body">
-          @Html(messages("cds.matching.you-can.text"))
-       <a class="govuk-link" id="utrLink" href="https://www.tax.service.gov.uk/ask-for-copy-of-your-corporation-tax-utr" target="_blank" rel="noopener noreferrer">@messages("cds.matching.utr.lost-utr-description-llp")</a>
-      </p>
-      @Html(messages("cds.matching.utr.hint"))
-}
-
-@utrlink = {
-<a href="@appConfig.findLostUtr" class="govuk-link" target="_blank" rel="noopener noreferrer">@messages("cds.matching.row-lost-urt.hint.link", messages("cds.navigation.opens-in-new-tab"))</a>
-}
-
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
     @inputRadioGroup(
         matchOrgIdForm(field),
         options,
         Map.empty,
-        Some(hintText(organisationType, utrLinkText, utrlink)),
+        None,
         None,
         Symbol("_divClass") -> "govuk-form-group inline",
         Symbol("_legend") -> headerAndTitle(organisationType),

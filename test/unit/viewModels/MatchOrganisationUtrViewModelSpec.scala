@@ -17,10 +17,8 @@
 package unit.viewModels
 
 import base.UnitSpec
-import play.twirl.api.Html
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   CharityPublicBodyNotForProfitId,
-  CompanyId,
   IndividualId,
   SoleTraderId,
   ThirdCountryIndividualId,
@@ -32,10 +30,6 @@ import util.ControllerSpec
 
 class MatchOrganisationUtrViewModelSpec extends UnitSpec with ControllerSpec {
 
-  val utrLinkText = Html("some link text")
-
-  val utrLink = Html("a link")
-
   val headerAndTitleExpected = Seq[(String, String)](
     (ThirdCountryOrganisationId, messages("cds.matching.row-organisation.utr.title-and-heading")),
     (ThirdCountryIndividualId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
@@ -43,16 +37,6 @@ class MatchOrganisationUtrViewModelSpec extends UnitSpec with ControllerSpec {
     (IndividualId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
     (SoleTraderId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
     (CharityPublicBodyNotForProfitId, messages("cds.matching.organisation.utr.title-and-heading"))
-  )
-
-  val hintTextExpected = Seq[(String, Html)](
-    (ThirdCountryOrganisationId, Html(None)),
-    (ThirdCountryIndividualId, Html(None)),
-    (ThirdCountrySoleTraderId, Html(None)),
-    (IndividualId, Html(messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrLink))),
-    (SoleTraderId, Html(messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrLink))),
-    (CompanyId, Html(messages("cds.matching.organisation.utr.paragraph", utrLink))),
-    (CharityPublicBodyNotForProfitId, utrLinkText)
   )
 
   val isNotSoleTraderExpected = Seq[(String, Boolean)](
@@ -67,14 +51,6 @@ class MatchOrganisationUtrViewModelSpec extends UnitSpec with ControllerSpec {
     headerAndTitleExpected.foreach { expectedHeaderAndTitle =>
       s"return correct header and title for cdsOrgType: ${expectedHeaderAndTitle._1}" in {
         MatchOrganisationUtrViewModel.headerAndTitle(expectedHeaderAndTitle._1) shouldBe expectedHeaderAndTitle._2
-      }
-    }
-  }
-
-  "hintText" should {
-    hintTextExpected.foreach { expectedHintText =>
-      s"return correct hint for cdsOrgType: ${expectedHintText._1}" in {
-        MatchOrganisationUtrViewModel.hintText(expectedHintText._1, utrLinkText, utrLink) shouldBe expectedHintText._2
       }
     }
   }

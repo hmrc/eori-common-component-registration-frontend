@@ -17,7 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 
 import play.api.i18n.Messages
-import play.twirl.api.Html
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 
 object MatchOrganisationUtrViewModel {
@@ -30,18 +29,5 @@ object MatchOrganisationUtrViewModel {
     case _ => messages("cds.matching.organisation.utr.title-and-heading")
   }
 
-  def hintText(cdsOrgTypeString: String, utrLinkText: Html, utrLink: Html)(implicit messages: Messages): Html =
-    cdsOrgTypeString match {
-      case CharityPublicBodyNotForProfitId                                                  => utrLinkText
-      case ThirdCountryOrganisationId | ThirdCountryIndividualId | ThirdCountrySoleTraderId => Html(None)
-      case IndividualId | SoleTraderId =>
-        Html(messages("cds.matching.row-sole-trader-individual.utr.paragraph", utrLink))
-      case _ => Html(messages("cds.matching.organisation.utr.paragraph", utrLink))
-    }
-
-  def isNotSoleTrader(cdsOrgTypeString: String) = cdsOrgTypeString match {
-    case orgType if individualOrganisationIds.contains(orgType) => false
-    case _                                                      => true
-  }
-
+  def isNotSoleTrader(cdsOrgTypeString: String) = !individualOrganisationIds.contains(cdsOrgTypeString)
 }
