@@ -32,12 +32,12 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
 
   private val view = instanceOf[standalone_subscription_outcome]
 
-  private val doc: Document = Jsoup.parse(contentAsString(view(eori, orgName, issuedDate)))
+  private val doc: Document = Jsoup.parse(contentAsString(view(eori, issuedDate)))
 
   "'Standalone Subscription Outcome' Page with name" should {
 
     "display correct heading" in {
-      doc.body.getElementsByTag("h1").text() must startWith(s"Your new EORI number for $orgName is $eori")
+      doc.body.getElementsByTag("h1").text() must startWith(s"Application sent")
     }
     "have the correct class on the h1" in {
       doc.body.getElementsByTag("h1").hasClass("govuk-panel__title") mustBe true
