@@ -31,6 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organi
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.HowCanWeIdentifyYouUtrViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -86,21 +87,14 @@ class GetUtrNumberController @Inject() (
 
   private def view(form: Form[IdMatchModel], organisationType: String, isInReviewMode: Boolean, service: Service)(
     implicit request: Request[AnyContent]
-  ): HtmlFormat.Appendable = {
-    val heading = organisationType match {
-      case CdsOrganisationType.ThirdCountryOrganisationId | CdsOrganisationType.CharityPublicBodyNotForProfitId =>
-        "subscription-journey.how-confirm-identity.utr.row.org.heading"
-      case _ => "subscription-journey.how-confirm-identity.utr.heading"
-    }
-
+  ): HtmlFormat.Appendable =
     matchOrganisationUtrView(
       form,
       isInReviewMode,
       routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode),
-      EtmpOrganisationType(CdsOrganisationType(organisationType)),
-      heading
+      HowCanWeIdentifyYouUtrViewModel.forHintMessage(EtmpOrganisationType(CdsOrganisationType(organisationType))),
+      HowCanWeIdentifyYouUtrViewModel.heading(organisationType)
     )
-  }
 
   private def matchBusinessOrIndividual(
     formData: IdMatchModel,

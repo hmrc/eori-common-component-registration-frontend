@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.HowCanWeIdentifyYouUtrViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -52,7 +53,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
           subscriptionUtrForm,
           isInReviewMode = false,
           routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-          orgType
+          HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType)
         )
       )
 
@@ -70,7 +71,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                     formWithErrors,
                     isInReviewMode = false,
                     routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-                    orgType
+                    HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType)
                   )
                 )
               ),
@@ -106,7 +107,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
         errorForm,
         isInReviewMode = false,
         routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-        etmpOrganisationType
+        HowCanWeIdentifyYouUtrViewModel.forHintMessage(etmpOrganisationType)
       )
     )
   }

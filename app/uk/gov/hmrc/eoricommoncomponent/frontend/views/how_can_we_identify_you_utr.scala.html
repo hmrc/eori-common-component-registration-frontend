@@ -23,22 +23,11 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Button
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EtmpOrganisationType
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CorporateBody
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.UnincorporatedBody
-
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.HowCanWeIdentifyYouUtrViewModel
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h1: helpers.h1, p: helpers.paragraph, errorSummary: helpers.errorSummary)
 
-
-@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, orgType: EtmpOrganisationType, heading: String = "subscription-journey.how-confirm-identity.utr.heading")(implicit request: Request[_], messages: Messages)
-
-@forHintMessage = @{
-    if(orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.hint")
-    else if(orgType == UnincorporatedBody) messages("cds.matching.partnership.utr.hint")
-    else messages("cds.matching.partnership.utr.hint")
-}
-
+@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, hintMessage: String, heading: String = "subscription-journey.how-confirm-identity.utr.heading")(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages(heading), form = Some(utrForm)) {
     <div>
@@ -56,7 +45,7 @@
                 name = "utr",
                 label = heading,
                 isPageHeading = false,
-                hint = Some(forHintMessage),
+                hint = Some(hintMessage),
                 classes = Some("govuk-!-width-one-half"),
                 labelClasses = Some("govuk-visually-hidden")
             )
@@ -67,7 +56,6 @@
             ))
 
         }
-
         @helpers.helpAndSupport()
     </div>
 }
