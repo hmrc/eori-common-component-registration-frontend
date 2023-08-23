@@ -16,6 +16,7 @@
 
 @import play.api.i18n._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
 
 @this(govukSelect: GovukSelect)
 
@@ -48,4 +49,4 @@
   errorMessage = form(name).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*)), visuallyHiddenText = Some(messages("cds.error.field.hint")))),
   classes = classes.getOrElse(""),
   attributes = attributes
-))
+).asAccessibleAutocomplete())
