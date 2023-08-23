@@ -366,7 +366,7 @@ cds.subscription.verify-email.progressive-disclosure.content=Check your junk fol
 subscription.enter-email.heading=What is your email address?
 subscription.check-your-email.heading=Check  your email address
 subscription.check-your-email.label=Email address
-subscription.check-your-email.confirm.label=To confirm it's your email address we will send you a code.
+subscription.check-your-email.confirm.label=To confirm it’s your email address we will send you a code.
 subscription.check-your-email.confirm.question=Is {0} the email address you want to use?
 subscription.check-your-email.confirm.title=Is this the email address you want to use?
 subscription.check-your-email.yes=Yes
@@ -1984,6 +1984,6 @@ ecc.start-page.para1.bullet2.new.cds = a subscription to the Customs Declaration
 ecc.start-page.para1.bullet2.new.esc = a subscription to Report and manage your allowance for Customs Duty waiver claims
 
 #Locked email screen
-lockedEmail.heading = You've entered an incorrect code too many times
+lockedEmail.heading = You’ve entered an incorrect code too many times
 lockedEmail.para1 = You will not be able to continue with your application.
 lockedEmail.para2 = You can try again in 24 hours.
