@@ -1755,3 +1755,7 @@ ecc.start-page.para1.bullet2.new.cds = tanysgrifiad i’r Gwasanaeth Datganiadau
 ecc.start-page.para1.bullet2.new.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.new.esc = tanysgrifiad ar gyfer Rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor
 
+#Locked email screen
+lockedEmail.heading = Rydych wedi nodi cod anghywir gormod o weithiau
+lockedEmail.para1 = Ni fyddwch yn gallu mynd yn eich blaen â’ch cais.
+lockedEmail.para2 = Gallwch roi cynnig arall arni ymhen 24 awr.
