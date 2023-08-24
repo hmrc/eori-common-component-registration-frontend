@@ -324,7 +324,7 @@ cds.matching.header.company = Manylion y cwmni
 cds.matching.intro = Bydd hyn yn cysylltu’ch busnes, eich Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth a’ch rhif EORI â’i gilydd sy’n eich helpu i symud a datgan nwyddau.
 cds.matching.individual.header = Nodwch eich manylion
 cds.matching-lede = Byddwn yn ceisio paru’ch manylion â’r wybodaeth sydd gennym ar hyn o bryd.
-cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
+cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
 cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.eori.hint = Mae gan eich rhif EORI rhwng 14 - 17 o gymeriadau.
 cds.matching.back = Yn ôl
@@ -348,7 +348,7 @@ cds.subscription.verify-email.progressive-disclosure.content = Chwiliwch yn eich
 subscription.enter-email.heading = Beth yw’ch cyfeiriad e-bost?
 subscription.check-your-email.heading = Gwirio’ch cyfeiriad e-bost
 subscription.check-your-email.label = Cyfeiriad e-bost
-subscription.check-your-email.confirm.label = Byddwn yn anfon cysylltiad atoch i gadarnhau’ch cyfeiriad e-bost.
+subscription.check-your-email.confirm.label = I gadarnhau mai’ch cyfeiriad e-bost chi yw hwn, byddwn yn anfon cod atoch.
 subscription.check-your-email.confirm.question= Ai {0} yw’r cyfeiriad e-bost rydych am ei ddefnyddio?
 subscription.check-your-email.confirm.title= Ai dyma’r cyfeiriad e-bost rydych am ei ddefnyddio?
 subscription.check-your-email.yes = Iawn
@@ -416,7 +416,7 @@ cds.subscription.family-name.error.too-long = Rhaid i’r enw teuluol fod yn 35 
 countries-in-the-eu.title = Gwledydd yn yr UE
 subscription-journey.how-confirm-identity = Pa wybodaeth y gallwn ei defnyddio i gadarnhau pwy ydych chi?
 subscription-journey.utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
-subscription-journey.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
+subscription-journey.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
 cds.matching.id.page-error.nino = Nodwch eich rhif Yswiriant Gwladol
 cds.matching.id.page-error.utr = Nodwch eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
 cds.matching.id.page-error.ninoOrUtrRadio = Rhowch wybod sut y gallwn eich adnabod
@@ -564,20 +564,20 @@ cds.matching.organisation-address.postcode.error.empty = Nodwch god post dilys
 cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
 cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
-cds.matching.name-id-organisation.registered-company.name = Beth yw enw cofrestredig y cwmni?
-cds.matching.name-id-organisation.registered-company.name.para=  <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.registered-company.name = Beth yw enw cofrestredig y sefydliad?
+cds.matching.name-id-organisation.registered-company.name.para=  <p class="govuk-body">Gallwch ddod o hyd i hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.registered-company.name.hint = Nodwch yr union enw sydd ar gofrestr Tŷ’r Cwmnïau.
-cds.matching.name-id-organisation.partnership.name = Beth yw enw cofrestredig eich partneriaeth?
-cds.matching.name-id-organisation.partnership.name.para= <p class="govuk-body">Dyma’r enw sydd wedi’i gofrestru gyda CThEF. Gallwch ddod o hyd i hyn yn <a class="govuk-link" target="_blank" href="https://www.gov.uk/gwasanaethau-cthem-mewngofnodi-neu-gofrestru">gwasanaethau ar-lein CThEF (yn agor tab newydd)</a> neu ar lythyrau oddi wrth CThEF.</p>
+cds.matching.name-id-organisation.partnership.name = Beth yw enw cofrestredig y bartneriaeth?
+cds.matching.name-id-organisation.partnership.name.para= <p class="govuk-body">Dyma’r enw sydd wedi’i gofrestru gyda CThEF. Gallwch ddod o hyd i hyn yng <a class="govuk-link" target="_blank" href="https://www.gov.uk/gwasanaethau-cthem-mewngofnodi-neu-gofrestru">ngwasanaethau ar-lein CThEF (yn agor tab newydd)</a> neu ar lythyrau oddi wrth CThEF.</p>
 cds.matching.name-id-organisation.partnership.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
-cds.matching.name-id-organisation.organisation.name = Beth yw enw cofrestredig y cwmni?
-cds.matching.name-id-organisation.organisation.name.para= <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.organisation.name = Beth yw enw cofrestredig y sefydliad?
+cds.matching.name-id-organisation.organisation.name.para= <p class="govuk-body">Gallwch ddod o hyd i hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.organisation.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
 cds.matching.name-id-organisation.registered-partnership.name.para = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw a gofrestrwyd gyda CThEF.
-cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">Gallwch ddod o hyd i hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.limited-liability-partnership.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
-cds.matching.name-id-organisation.limited-liability-partnership.name = Beth yw enw cofrestredig eich partneriaeth?
+cds.matching.name-id-organisation.limited-liability-partnership.name = Beth yw enw cofrestredig y bartneriaeth?
 cds.matching.name-id-organisation.organisation.no-utr=Nid oes gennyf Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.organisation.no-utr.text=Os ydych yn sefydliad nid er elw neu’n gorff cyhoeddus, ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr, bydd angen i chi {0} i gwblhau’ch cais am rif EORI.
 cds.matching.name-id-organisation.organisation.no-utr.link=ddefnyddio gwasanaeth arall
@@ -1123,7 +1123,7 @@ cds.subscription.contact-details.steps = cyswllt
 cds.subscription.contact-details.heading = Cyfeiriad cyswllt ar gyfer y cais am rif EORI
 cds.subscription.contact-details.full-name.label = Enw llawn
 cds.subscription.contact-details.email.label = Cyfeiriad e-bost
-cds.subscription.contact-details.telephone.label = Rhif ffôn (dewisol)
+cds.subscription.contact-details.telephone.label = Ffôn (dewisol)
 cds.subscription.contact-details.telephone.hint = Ar gyfer rhifau rhyngwladol, cofiwch gynnwys cod y wlad
 cds.subscription.contact-details.telephone.para = Byddwn ond yn defnyddio hwn os bydd angen i ni drafod y cais hwn â chi.
 cds.subscription.contact-details.fax.label = Ffacs (dewisol)
@@ -1411,7 +1411,7 @@ cds.matching.name-id-organisation.identity.verify = Byddwn yn defnyddio’r many
 
 
 cds.matching.name-id-organisation.registered-company.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y cwmni ar gyfer Treth Gorfforaeth?
-cds.matching.name-id-organisation.partnership.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) eich partneriaeth ar gyfer Hunanasesiad?
+cds.matching.name-id-organisation.partnership.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y bartneriaeth ar gyfer Hunanasesiad?
 cds.matching.name-id-organisation.organisation.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y sefydliad ar gyfer Treth Gorfforaeth?
 cds.subscription.date-of-establishment.company.title-and-heading = Pryd y cafodd y cwmni ei sefydlu?
 cds.subscription.address-details.postcode.row.label = Cod post
@@ -1755,3 +1755,7 @@ ecc.start-page.para1.bullet2.new.cds = tanysgrifiad i’r Gwasanaeth Datganiadau
 ecc.start-page.para1.bullet2.new.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.new.esc = tanysgrifiad ar gyfer Rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor
 
+#Locked email screen
+lockedEmail.heading = Rydych wedi nodi cod anghywir gormod o weithiau
+lockedEmail.para1 = Ni fyddwch yn gallu mynd yn eich blaen â’ch cais.
+lockedEmail.para2 = Gallwch roi cynnig arall arni ymhen 24 awr.

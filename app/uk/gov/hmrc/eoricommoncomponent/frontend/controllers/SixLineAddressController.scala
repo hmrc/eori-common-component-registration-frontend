@@ -107,14 +107,7 @@ class SixLineAddressController @Inject() (
     if (isInReviewMode)
       registrationDetailsService
         .cacheAddress(regDetailsCreator.registrationAddress(formData))
-        .map(
-          _ =>
-            Redirect(
-              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
-                service
-              )
-            )
-        )
+        .map(_ => Redirect(routes.DetermineReviewPageController.determineRoute(service)))
     else
       registrationDetailsService.cacheAddress(regDetailsCreator.registrationAddress(formData)).flatMap { _ =>
         subscriptionFlowManager.startSubscriptionFlow(service)
