@@ -328,7 +328,7 @@ cds.matching.header.company = Manylion y cwmni
 cds.matching.intro = Bydd hyn yn cysylltu’ch busnes, eich Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth a’ch rhif EORI â’i gilydd sy’n eich helpu i symud a datgan nwyddau.
 cds.matching.individual.header = Nodwch eich manylion
 cds.matching-lede = Byddwn yn ceisio paru’ch manylion â’r wybodaeth sydd gennym ar hyn o bryd.
-cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
+cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
 cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.eori.hint = Mae gan eich rhif EORI rhwng 14 - 17 o gymeriadau.
 cds.matching.back = Yn ôl
@@ -420,7 +420,7 @@ cds.subscription.family-name.error.too-long = Rhaid i’r enw teuluol fod yn 35 
 countries-in-the-eu.title = Gwledydd yn yr UE
 subscription-journey.how-confirm-identity = Pa wybodaeth y gallwn ei defnyddio i gadarnhau pwy ydych chi?
 subscription-journey.utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
-subscription-journey.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890, a gellir ei ddilyn gan K. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
+subscription-journey.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
 cds.matching.id.page-error.nino = Nodwch eich rhif Yswiriant Gwladol
 cds.matching.id.page-error.utr = Nodwch eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
 cds.matching.id.page-error.ninoOrUtrRadio = Rhowch wybod sut y gallwn eich adnabod
@@ -568,20 +568,20 @@ cds.matching.organisation-address.postcode.error.empty = Nodwch god post dilys
 cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
 cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
-cds.matching.name-id-organisation.registered-company.name = Beth yw enw cofrestredig y cwmni?
-cds.matching.name-id-organisation.registered-company.name.para=  <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.registered-company.name = Beth yw enw cofrestredig y sefydliad?
+cds.matching.name-id-organisation.registered-company.name.para=  <p class="govuk-body">Gallwch ddod o hyd i hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.registered-company.name.hint = Nodwch yr union enw sydd ar gofrestr Tŷ’r Cwmnïau.
-cds.matching.name-id-organisation.partnership.name = Beth yw enw cofrestredig eich partneriaeth?
-cds.matching.name-id-organisation.partnership.name.para= <p class="govuk-body">Dyma’r enw sydd wedi’i gofrestru gyda CThEF. Gallwch ddod o hyd i hyn yn <a class="govuk-link" target="_blank" href="https://www.gov.uk/gwasanaethau-cthem-mewngofnodi-neu-gofrestru">gwasanaethau ar-lein CThEF (yn agor tab newydd)</a> neu ar lythyrau oddi wrth CThEF.</p>
+cds.matching.name-id-organisation.partnership.name = Beth yw enw cofrestredig y bartneriaeth?
+cds.matching.name-id-organisation.partnership.name.para= <p class="govuk-body">Dyma’r enw sydd wedi’i gofrestru gyda CThEF. Gallwch ddod o hyd i hyn yng <a class="govuk-link" target="_blank" href="https://www.gov.uk/gwasanaethau-cthem-mewngofnodi-neu-gofrestru">ngwasanaethau ar-lein CThEF (yn agor tab newydd)</a> neu ar lythyrau oddi wrth CThEF.</p>
 cds.matching.name-id-organisation.partnership.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
-cds.matching.name-id-organisation.organisation.name = Beth yw enw cofrestredig y cwmni?
-cds.matching.name-id-organisation.organisation.name.para= <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.organisation.name = Beth yw enw cofrestredig y sefydliad?
+cds.matching.name-id-organisation.organisation.name.para= <p class="govuk-body">Gallwch ddod o hyd i hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.organisation.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
 cds.matching.name-id-organisation.registered-partnership.name.para = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw a gofrestrwyd gyda CThEF.
-cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">Gallwch ddod o hyd hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">Gallwch ddod o hyd i hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.limited-liability-partnership.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
-cds.matching.name-id-organisation.limited-liability-partnership.name = Beth yw enw cofrestredig eich partneriaeth?
+cds.matching.name-id-organisation.limited-liability-partnership.name = Beth yw enw cofrestredig y bartneriaeth?
 cds.matching.name-id-organisation.organisation.no-utr=Nid oes gennyf Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.name-id-organisation.organisation.no-utr.text=Os ydych yn sefydliad nid er elw neu’n gorff cyhoeddus, ac nad oes gennych Gyfeirnod Unigryw y Trethdalwr, bydd angen i chi {0} i gwblhau’ch cais am rif EORI.
 cds.matching.name-id-organisation.organisation.no-utr.link=ddefnyddio gwasanaeth arall
@@ -617,8 +617,8 @@ cds.matching.organisation-name.error.name = Nodwch enw’ch sefydliad cofrestred
 cds.matching.organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth?
 cds.matching.organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.you-can.text = Gallwch
-cds.matching.utr.lost-utr-description=dod o hyd i UTR sydd ar goll (yn agor tab newydd)
-cds.matching.utr.lost-utr-description-llp=dod o hyd i UTR sydd ar goll (yn agor tab newydd)
+cds.matching.utr.lost-utr-description=ddod o hyd i UTR sydd ar goll (yn agor tab newydd)
+cds.matching.utr.lost-utr-description-llp=ddod o hyd i UTR sydd ar goll (yn agor tab newydd)
 cds.matching.organisation-utr.label = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.utr = Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
 cds.matching.organisation-utr.error.have-utr = Rhowch wybod i ni a oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
@@ -1415,7 +1415,7 @@ cds.matching.name-id-organisation.identity.verify = Byddwn yn defnyddio’r many
 
 
 cds.matching.name-id-organisation.registered-company.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y cwmni ar gyfer Treth Gorfforaeth?
-cds.matching.name-id-organisation.partnership.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) eich partneriaeth ar gyfer Hunanasesiad?
+cds.matching.name-id-organisation.partnership.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y bartneriaeth ar gyfer Hunanasesiad?
 cds.matching.name-id-organisation.organisation.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) y sefydliad ar gyfer Treth Gorfforaeth?
 cds.subscription.date-of-establishment.company.title-and-heading = Pryd y cafodd y cwmni ei sefydlu?
 cds.subscription.address-details.postcode.row.label = Cod post
@@ -1477,7 +1477,7 @@ subscription-journey.how-confirm-identity.nino.heading = Nodwch eich rhif Yswiri
 subscription-journey.how-confirm-identity.nino.hint = Mae hwn ar eich cerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading = Beth yw'ch Cyfeirnod Unigryw y Trethdalwr ar gyfer Hunanasesiad (UTR)?
 subscription-journey.how-confirm-identity.utr.row.org.heading=Beth yw’ch Cyfeirnod Unigryw y Trethdalwr ar gyfer Treth Gorfforaeth (UTR)?
-subscription-journey.how-confirm-identity.utr.para = Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">dod o hyd i UTR sydd ar goll (yn agor tab newydd)</a>
+subscription-journey.how-confirm-identity.utr.para = Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">ddod o hyd i UTR sydd ar goll (yn agor tab newydd)</a>
 subscription-journey.how-confirm-identity.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 ecc.reg06.outcome.why-heading = Pam nad oedd y cais yn llwyddiannus
 ecc.reg06.outcome.eori = Rhif EORI {0}
