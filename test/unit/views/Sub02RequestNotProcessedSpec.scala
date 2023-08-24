@@ -25,7 +25,7 @@ import util.ViewSpec
 
 class Sub02RequestNotProcessedSpec extends ViewSpec {
 
-  private val pageHeadingExpectedText = "You cannot use this service"
+  private val pageHeadingExpectedText = messages("cds.request-not-processed.heading")
 
   private val view = instanceOf[sub02_request_not_processed]
 
@@ -37,6 +37,24 @@ class Sub02RequestNotProcessedSpec extends ViewSpec {
 
     "have the correct heading" in {
       doc.getElementById("page-heading").text() mustBe pageHeadingExpectedText
+    }
+
+    "have the correct para1" in {
+      doc.getElementById("para1").text() mustBe messages("cds.error.message.part1")
+    }
+
+    "have the correct para2" in {
+      doc.getElementById("para2").text() mustBe messages("cds.error.message.part2")
+    }
+
+    "have the correct h2" in {
+      doc.getElementById("page-heading2").text() mustBe messages("cds.request-not-processed.heading2")
+    }
+
+    "have the correct link text" in {
+      doc.getElementById("contact-us-text-and-link").text() must startWith(
+        messages("cds.request-not-processed.contact-us")
+      )
     }
   }
 
