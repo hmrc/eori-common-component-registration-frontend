@@ -18,7 +18,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 
 import play.api.data.Form
 import java.time.LocalDate
-import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   CorporateBody,

@@ -32,6 +32,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   ThirdCountryOrganisation
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -113,9 +114,7 @@ class SicCodeControllerSpec
     "display correct hint text when org type is company and user location is UK" in {
       showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company, userLocation = Some("UK")) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementText(
-          sicDescriptionLabelXpath
-        ) shouldBe "We use Standard Industrial Classification (SIC) codes to identify what organisations do."
+        page.getElementText(sicDescriptionLabelXpath) shouldBe messages("cds.subscription.sic.description.para1")
       }
     }
 
@@ -329,6 +328,9 @@ class SicCodeControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
+    when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+      Some(UserLocation.ThirdCountryIncEU)
+    )
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
 
@@ -346,6 +348,9 @@ class SicCodeControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
+    when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+      Some(UserLocation.ThirdCountryIncEU)
+    )
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
 
@@ -386,6 +391,9 @@ class SicCodeControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
+    when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+      Some(UserLocation.ThirdCountryIncEU)
+    )
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
     when(mockSubscriptionBusinessService.getCachedSicCode(any[Request[_]])).thenReturn(dataToEdit)
