@@ -983,7 +983,7 @@ cds.subscription.partnership.date-of-establishment.hint=Enter the date shown on 
 
 #Sic Code
 cds.subscription.sic.page.title=What does your organisation do?
-cds.subscription.sic.page.heading=What does your organisation do?
+cds.subscription.sic.page.heading=Standard Industrial Classification (SIC) code
 cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House for your SIC code (opens in new tab).</a>
 cds.subscription.sic.nonuk.soleTrader.description=You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.organisation.description=<a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab)</a>
@@ -992,10 +992,26 @@ cds.subscription.sic.charity-description=A SIC code is a 5 digit number that hel
 cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that helps HMRC identify what your partnership does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 
 cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
-cds.subscription.sic.hint=For example, 15200 is the SIC code for ‘manufacture of footwear. If you have more than one SIC code you only need to enter one.
-cds.subscription.sic.description.para1=We use Standard Industrial Classification (SIC) codes to identify what organisations do.
+cds.subscription.sic.hint.uk=This will be 5 numbers. If you have more than one SIC code you only need to enter one.
+cds.subscription.sic.hint.row=This will be 5 numbers.
+cds.subscription.sic.description.para1=SIC codes describe business activities. For example, 58110 is the code for book publishing.
 cds.subscription.sic.description.para2=Enter a 5-digit SIC code for your organisation
+cds.subscription.sic.description.para2.company = What is the company’s SIC code?
+cds.subscription.sic.description.para2.sole-trader = What is your SIC code?
+cds.subscription.sic.description.para2.partnership = What is the partnership’s SIC code?
+cds.subscription.sic.description.para2.limited-liability-partnership = What is the partnership’s SIC code?
+cds.subscription.sic.description.para2.charity-public-body-not-for-profit = What is the organisation’s SIC code?
+
+
+
+
 cds.subscription.sic.details=I do not know my SIC code
+cds.subscription.sic.details.company = I do not know the company’s SIC code
+cds.subscription.sic.details.sole-trader = I do not know my SIC code
+cds.subscription.sic.details.partnership = I do not know the partnership’s SIC code
+cds.subscription.sic.details.limited-liability-partnership = I do not know the partnership’s SIC code
+cds.subscription.sic.details.charity-public-body-not-for-profit = I do not know the organisation'''s SIC code
+
 
 cds.subscription.sic.page.help.heading=If you are UK VAT registered
 cds.subscription.sic.page.help.para1=You can find the code on your VAT certificate. It’s called ‘trade classification (SIC code)’.
@@ -1003,6 +1019,16 @@ cds.subscription.sic.page.help.para2=<a href="https://www.gov.uk/send-vat-return
 
 cds.subscription.sic.page.help.heading2=If you are not UK VAT registered, or cannot find the code
 cds.subscription.sic.page.help.para3=<a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House.
+cds.subscription.sic.page.help.para3.company = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes what the company does.
+cds.subscription.sic.page.help.para3.sole-trader = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes your business.
+cds.subscription.sic.page.help.para3.partnership = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes what the partnership does.
+cds.subscription.sic.page.help.para3.limited-liability-partnership= <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes what the partnership does.
+cds.subscription.sic.page.help.para3.charity-public-body-not-for-profit = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes what the organisation does.
+
+cds.subscription.sic.link.company-house.row = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes your business.
+cds.subscription.sic.para2.row = Enter a SIC code
+
+
 cds.subscription.sic.page.help.para4=Enter a word into the search that best describes what your organisation does. For example, ‘clothing’, ‘tools’.
 cds.subscription.sic.page.help.para5=This will return one or more SIC codes that you can choose from.
 

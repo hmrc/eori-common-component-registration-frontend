@@ -906,11 +906,22 @@ cds.subscription.sic.error.too-short = Rhaid i’r cod SIC fod yn fwy na 3 digid
 cds.subscription.sic.error.wrong-format = Nodwch god SIC yn y fformat cywir
 
 cds.subscription.sic.page.title = Beth mae’ch sefydliad yn ei wneud?
-cds.subscription.sic.page.heading = Beth mae’ch sefydliad yn ei wneud?
-cds.subscription.sic.description.para1 = Rydym yn defnyddio codau Dosbarthiad Diwydiannol Safonol (SIC) i nodi’r hyn y mae sefydliadau’n ei wneud.
+cds.subscription.sic.page.heading = Cod Dosbarthiad Diwydiannol Safonol (SIC)
+cds.subscription.sic.description.para1 = Mae codau SIC yn disgrifio gweithgareddau busnes. Er enghraifft, 58110 yw’r cod ar gyfer cyhoeddi llyfrau.
 cds.subscription.sic.description.para2 = Nodwch god SIC 5 digid o hyd ar gyfer eich sefydliad
+cds.subscription.sic.description.para2.company = Beth yw cod SIC y cwmni?
+cds.subscription.sic.description.para2.sole-trader = Beth yw eich cod SIC?
+cds.subscription.sic.description.para2.partnership = Beth yw cod SIC y bartneriaeth?
+cds.subscription.sic.description.para2.limited-liability-partnership = Beth yw cod SIC y bartneriaeth?
+cds.subscription.sic.description.para2.charity-public-body-not-for-profit = Beth yw cod SIC y sefydliad?
+
 cds.subscription.sic.hint = Er enghraifft, 15200 yw’r cod SIC ar gyfer ‘cynhyrchu esgidiau. Os oes gennych fwy nag un cod SIC, dim ond un sydd angen i chi ei nodi.
 cds.subscription.sic.details = Nid wyf yn gwybod fy nghod SIC
+cds.subscription.sic.details.company = Nid wyf yn gwybod cod SIC y cwmni
+cds.subscription.sic.details.sole-trader = Nid wyf yn gwybod fy nghod SIC
+cds.subscription.sic.details.partnership = Nid wyf yn gwybod cod SIC y bartneriaeth
+cds.subscription.sic.details.limited-liability-partnership = Nid wyf yn gwybod cod SIC y bartneriaeth
+cds.subscription.sic.details.charity-public-body-not-for-profit = Nid wyf yn gwybod cod SIC y sefydliad
 
 cds.subscription.sic.page.help.heading = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU
 cds.subscription.sic.page.help.para1 = Mae’r cod i’w gweld ar eich tystysgrif TAW. Fe’i gelwir yn ‘dosbarthiad masnachu (cod SIC)’.
@@ -918,8 +929,20 @@ cds.subscription.sic.page.help.para2 = <a href="https://www.gov.uk/send-vat-retu
 
 cds.subscription.sic.page.help.heading2 = Os nad ydych wedi’ch cofrestru ar gyfer TAW yn y DU, neu os na allwch ddod o hyd i’r cod
 cds.subscription.sic.page.help.para3 = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau.
+cds.subscription.sic.page.help.para3.company = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau. Dewiswch yr un sy’n disgrifio orau yr hyn y mae’r cwmni’n ei wneud.
+cds.subscription.sic.page.help.para3.sole-trader = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau. Dewiswch yr un sy’n disgrifio’ch busnes orau.
+cds.subscription.sic.page.help.para3.partnership = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau. Dewiswch yr un sy’n disgrifio orau yr hyn y mae’r bartneriaeth yn ei wneud.
+cds.subscription.sic.page.help.para3.limited-liability-partnership = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau. Dewiswch yr un sy’n disgrifio orau yr hyn y mae’r bartneriaeth yn ei wneud.
+cds.subscription.sic.page.help.para3.charity-public-body-not-for-profit = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau. Dewiswch yr un sy’n disgrifio orau yr hyn y mae’r sefydliad yn ei wneud.
+
+cds.subscription.sic.link.company-house.row = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a> o’r rhestr ar wefan Dŷ’r Cwmnïau. Dewiswch yr un sy’n disgrifio’ch busnes orau.
+cds.subscription.sic.para2.row = Nodwch god SIC
+cds.subscription.sic.hint.row = 5 rhif yw hwn
+
+
 cds.subscription.sic.page.help.para4 = Nodwch air yn y cyfleuster chwilio sy’n disgrifio orau beth mae’ch sefydliad yn ei wneud. Er enghraifft, ‘dillad’, ‘offer’.
 cds.subscription.sic.page.help.para5 = Bydd hyn yn dychwelyd un neu fwy o godau SIC y gallwch ddewis ohonynt.
+cds.subscription.sic.hint.uk = 5 rhif yw hwn. Os oes gennych fwy nag un cod SIC, dim ond un sydd angen i chi ei nodi.
 
 cds.sic.label = Cod SIC
 cds.subscription.sic.sic.label = Cod SIC
