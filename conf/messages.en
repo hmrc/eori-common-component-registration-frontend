@@ -1006,7 +1006,7 @@ cds.subscription.sic.details.company = I do not know the company’s SIC code
 cds.subscription.sic.details.sole-trader = I do not know my SIC code
 cds.subscription.sic.details.partnership = I do not know the partnership’s SIC code
 cds.subscription.sic.details.limited-liability-partnership = I do not know the partnership’s SIC code
-cds.subscription.sic.details.charity-public-body-not-for-profit = I do not know the organisation's SIC code
+cds.subscription.sic.details.charity-public-body-not-for-profit = I do not know the organisation'''s SIC code
 
 
 cds.subscription.sic.page.help.heading=If you are UK VAT registered
