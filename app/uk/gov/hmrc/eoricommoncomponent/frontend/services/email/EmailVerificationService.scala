@@ -21,7 +21,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationConne
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
   EmailVerificationStatus,
   ResponseWithURI,
-  VerificationStatus
+  VerificationStatus,
+  VerificationStatusResponse
 }
 import uk.gov.hmrc.http.HeaderCarrier
 import cats.data.EitherT
@@ -45,7 +46,7 @@ class EmailVerificationService @Inject() (emailVerificationConnector: EmailVerif
   ): EitherT[Future, ResponseError, EmailVerificationStatus] =
     if (appConfig.emailVerificationEnabled)
       emailVerificationConnector.getVerificationStatus(credId).map { statusResponse =>
-        val emailStatus: Option[VerificationStatus] = statusResponse.emails.find(_.emailAddress == email)
+        val emailStatus: Option[VerificationStatus] = findEmailInResponse(email, statusResponse)
 
         emailStatus match {
           case Some(status) if status.locked   => EmailVerificationStatus.Locked
@@ -54,6 +55,9 @@ class EmailVerificationService @Inject() (emailVerificationConnector: EmailVerif
         }
       }
     else EitherT(verifiedResponse)
+
+  def findEmailInResponse(email: String, statusResponse: VerificationStatusResponse): Option[VerificationStatus] =
+    statusResponse.emails.find(_.emailAddress.trim.toLowerCase == email.trim.toLowerCase)
 
   def startVerificationJourney(credId: String, service: Service, email: String)(implicit
     hc: HeaderCarrier,
