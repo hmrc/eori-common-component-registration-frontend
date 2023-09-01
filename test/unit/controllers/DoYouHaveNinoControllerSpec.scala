@@ -179,18 +179,18 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       }
     }
 
-    "throw exception when N is selected and no org cached" in {
+    "redirect the user to the start of the journey when N is selected and no org cached" in {
 
       when(mockRequestSessionData.userSelectedOrganisationType(any()))
         .thenReturn(None)
       when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheNinoMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
-      intercept[IllegalStateException] {
-        submitForm(form = noNinoSubmitData) { result =>
-          status(result) shouldBe SEE_OTHER
-        }
-      }.getMessage should include("No userSelectedOrganisationType details in session")
+      submitForm(form = noNinoSubmitData) { result =>
+        await(result)
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith("register/check-user")
+      }
     }
   }
 

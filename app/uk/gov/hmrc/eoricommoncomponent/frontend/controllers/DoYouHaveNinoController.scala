@@ -19,7 +19,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{GetNinoController, SixLineAddressController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  EmailController,
+  GetNinoController,
+  SixLineAddressController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveRowIndividualsNinoForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -79,7 +83,8 @@ class DoYouHaveNinoController @Inject() (
     requestSessionData.userSelectedOrganisationType match {
       case Some(cdsOrgType) =>
         Redirect(SixLineAddressController.showForm(false, cdsOrgType.id, service))
-      case _ => throw new IllegalStateException("No userSelectedOrganisationType details in session.")
+      case _ =>
+        Redirect(EmailController.form(service))
     }
 
 }
