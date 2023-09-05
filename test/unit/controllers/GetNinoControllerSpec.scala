@@ -133,7 +133,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       }
     }
 
-    "keep the user on the same page with error message when NINO was not recognized for no name in cache" in {
+    "redirect the user to the start of the journey when the cache is empty" in {
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
       when(
         mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
@@ -145,9 +145,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page = CdsPage(contentAsString(result))
-        status(result) shouldBe BAD_REQUEST
-        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe notMatchedError
+        status(result) shouldBe SEE_OTHER
+        result.header.headers("Location") should endWith("register/check-user")
       }
     }
 
