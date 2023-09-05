@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.i18n.Messages
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, EmailController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
@@ -78,7 +78,7 @@ class GetNinoController @Inject() (
             else
               matchNotFoundBadRequest(formData, service)
           }
-      case None => Future.successful(matchNotFoundBadRequest(formData, service))
+      case None => Future.successful(Redirect(EmailController.form(service)))
     }
 
   private def matchNotFoundBadRequest(formData: IdMatchModel, service: Service)(implicit
