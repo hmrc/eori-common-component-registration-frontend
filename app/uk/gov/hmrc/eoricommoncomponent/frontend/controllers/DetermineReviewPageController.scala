@@ -30,7 +30,7 @@ class DetermineReviewPageController @Inject() (authAction: AuthAction, mcc: Mess
     extends CdsController(mcc) {
 
   def determineRoute(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { _: Request[AnyContent] => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { _: Request[AnyContent] => _: LoggedInUserWithEnrolments =>
       Future.successful(Redirect(CheckYourDetailsRegisterController.reviewDetails(service).url))
     }
 

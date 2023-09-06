@@ -49,7 +49,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
   private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(
           Ok(
@@ -65,7 +65,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.map { isConsentDisclosed =>
           Ok(
@@ -81,7 +81,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       disclosePersonalDetailsYesNoAnswerForm()
         .bindFromRequest()
         .fold(

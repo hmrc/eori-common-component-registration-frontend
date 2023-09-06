@@ -43,7 +43,7 @@ class BusinessDetailsRecoveryController @Inject() (
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         regDetails <- sessionCache.registrationDetails
       } yield regDetails match {
@@ -57,7 +57,7 @@ class BusinessDetailsRecoveryController @Inject() (
     }
 
   def continue(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => userId: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => userId: LoggedInUserWithEnrolments =>
       {
         for {
           regDetails <- sessionCache.registrationDetails

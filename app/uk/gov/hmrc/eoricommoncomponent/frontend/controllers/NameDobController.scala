@@ -38,12 +38,12 @@ class NameDobController @Inject() (
     extends CdsController(mcc) {
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(matchNameDobView(enterNameDobForm, organisationType, service)))
     }
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       enterNameDobForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),
         formData => submitNewDetails(formData, service)

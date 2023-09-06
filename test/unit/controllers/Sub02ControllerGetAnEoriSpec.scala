@@ -96,6 +96,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
     when(mockSubscriptionDetailsService.saveKeyIdentifiers(any[GroupId], any[InternalId], any[Service])(any(), any()))
       .thenReturn(Future.successful(()))
+    when(mockSessionCache.journeyCompleted(any[Request[AnyContent]]))
+      .thenReturn(Future.successful(true))
   }
 
   override protected def afterEach(): Unit = {
@@ -341,7 +343,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
-          verify(mockSessionCache).remove(any[Request[_]])
+          verify(mockSessionCache).journeyCompleted(any[Request[_]])
           verify(mockSubscribe01Outcome, times(2)).processedDate
           verify(mockSubscribeOutcome, never()).processedDate
           page.title() should startWith("Application sent")
@@ -378,7 +380,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
-          verify(mockSessionCache).remove(any[Request[_]])
+          verify(mockSessionCache).journeyCompleted(any[Request[_]])
           verify(mockSubscribe01Outcome, times(4)).processedDate
           verify(mockSubscribeOutcome, never()).processedDate
           page.title() should startWith("Application sent")
@@ -404,7 +406,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
       when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
-      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
+      when(mockSessionCache.journeyCompleted(any[Request[_]])).thenReturn(Future.successful(true))
       invokeEoriAlreadyExists { result =>
         assertCleanedSession(result)
 
@@ -418,7 +420,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(mockSessionCache.submissionCompleteDetails(any[Request[_]]))
         .thenReturn(Future.successful(SubmissionCompleteDetails("22 May 2016")))
       when(mockSessionCache.saveSubmissionCompleteDetails(any())(any[Request[_]])).thenReturn(true)
-      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
+      when(mockSessionCache.journeyCompleted(any[Request[_]])).thenReturn(Future.successful(true))
       invokeSubscriptionInProgress { result =>
         assertCleanedSession(result)
 
@@ -436,7 +438,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
       when(mockSessionCache.sub02Outcome(any[Request[_]]))
         .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
-      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
+      when(mockSessionCache.journeyCompleted(any[Request[_]])).thenReturn(Future.successful(true))
       invokeEoriAlreadyAssociated { result =>
         assertCleanedSession(result)
 
@@ -447,7 +449,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling RequestNotProcessed on Sub02Controller" should {
     "render Request Not Processed page" in {
-      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
+      when(mockSessionCache.journeyCompleted(any[Request[_]])).thenReturn(Future.successful(true))
       invokeRequestNotProcessed { result =>
         assertCleanedSession(result)
 
@@ -466,7 +468,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       when(mockSessionCache.saveSub01Outcome(any[Sub01Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
       when(mockSessionCache.saveSubscriptionDetails(any())(any[Request[_]])).thenReturn(Future.successful(true))
 
-      when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
+      when(mockSessionCache.journeyCompleted(any[Request[_]])).thenReturn(Future.successful(true))
       invokePending { result =>
         assertCleanedSession(result)
 
@@ -480,7 +482,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
     when(mockSessionCache.saveSub01Outcome(any[Sub01Outcome])(any[Request[_]])).thenReturn(Future.successful(true))
     when(mockRegDetails.name).thenReturn("orgName")
-    when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
+    when(mockSessionCache.journeyCompleted(any[Request[_]])).thenReturn(Future.successful(true))
     when(mockSessionCache.sub02Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribeOutcome))
     when(mockSubscribeOutcome.processedDate).thenReturn("22 May 2016")
   }

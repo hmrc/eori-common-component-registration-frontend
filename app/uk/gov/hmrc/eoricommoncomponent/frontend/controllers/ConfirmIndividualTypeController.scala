@@ -39,7 +39,7 @@ class ConfirmIndividualTypeController @Inject() (
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
         Ok(confirmIndividualTypeView(confirmIndividualTypeForm, service))
           .withSession(requestSessionData.sessionWithoutOrganisationType)
@@ -47,7 +47,7 @@ class ConfirmIndividualTypeController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       confirmIndividualTypeForm.bindFromRequest().fold(
         invalidForm => Future.successful(BadRequest(confirmIndividualTypeView(invalidForm, service))),
         selectedIndividualType =>

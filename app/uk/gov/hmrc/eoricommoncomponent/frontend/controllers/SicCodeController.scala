@@ -64,13 +64,13 @@ class SicCodeController @Inject() (
   }
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.cachedSicCode.flatMap(populateView(_, isInReviewMode = false, service))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedSicCode.flatMap(
           sic => populateView(Some(sic), isInReviewMode = true, service)
@@ -78,7 +78,7 @@ class SicCodeController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       sicCodeform.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(

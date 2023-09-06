@@ -67,7 +67,7 @@ class EmailController @Inject() (
   private val logger = Logger(this.getClass)
 
   def form(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => implicit user: LoggedInUserWithEnrolments =>
       startRegisterJourney(service)
     }
 

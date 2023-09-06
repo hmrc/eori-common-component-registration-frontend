@@ -95,7 +95,7 @@ class NameIdOrganisationController @Inject() (
   )
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       requireThatUrlValue(
         OrganisationTypeConfigurations.contains(organisationType),
         invalidOrganisationType(organisationType)
@@ -104,7 +104,7 @@ class NameIdOrganisationController @Inject() (
     }
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       requireThatUrlValue(
         OrganisationTypeConfigurations.contains(organisationType),
         invalidOrganisationType(organisationType)

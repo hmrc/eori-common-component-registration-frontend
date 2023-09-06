@@ -67,7 +67,7 @@ class OrganisationTypeController @Inject() (
     )
 
   def form(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionDetailsService.cachedOrganisationType map { orgType =>
           def filledForm = orgType.map(organisationTypeDetailsForm.fill(_)).getOrElse(organisationTypeDetailsForm)
@@ -80,7 +80,7 @@ class OrganisationTypeController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         organisationTypeDetailsForm.bindFromRequest().fold(
           formWithErrors => {
