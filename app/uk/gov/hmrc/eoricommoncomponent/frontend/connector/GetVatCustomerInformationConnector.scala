@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import cats.data.EitherT
-import play.api.{Logger, Logging}
+import play.api.Logging
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.http.Status.{
   BAD_GATEWAY,
@@ -29,11 +29,7 @@ import play.api.http.Status.{
   SERVICE_UNAVAILABLE
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  GetVatInformationResponse,
-  VatControlListRequest,
-  VatControlListResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.GetVatInformationResponse
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
 

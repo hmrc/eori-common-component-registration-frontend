@@ -46,16 +46,19 @@ class GetVatCustomerInformationService @Inject() (
         vatCustomerInformation => compareApiResponses(vatControlListResponse, vatCustomerInformation)
       )
 
-  private def compareApiResponses(oldResponse: VatControlListResponse, newResponse: GetVatInformationResponse): Unit = {
+  def compareApiResponses(oldResponse: VatControlListResponse, newResponse: GetVatInformationResponse): Boolean = {
     val format          = new java.text.SimpleDateFormat("yyyy-MM-dd")
     val postCodeMatches = oldResponse.postcode.getOrElse("") == newResponse.postCode.getOrElse("")
     val dateMatches =
       format.parse(oldResponse.dateOfReg.getOrElse("")) == newResponse.effectiveRegistrationDate.getOrElse(new Date())
 
-    if (postCodeMatches && dateMatches)
+    if (postCodeMatches && dateMatches) {
       logger.info("data matches for API calls")
-    else
+      true
+    } else {
       logger.warn(s"data does not match for API calls. Postcode: $postCodeMatches, Date: $dateMatches")
+      false
+    }
   }
 
 }
