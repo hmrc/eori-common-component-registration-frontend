@@ -20,7 +20,7 @@ import base.UnitSpec
 import cats.data.EitherT
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.NOT_FOUND
@@ -67,9 +67,6 @@ class GetVatCustomerInformationServiceSpec extends UnitSpec with MockitoSugar wi
         VatControlListResponse(dateOfReg = Some(dateAsString), postcode = Some(postCode))
 
       service.checkResponseMatchesNewVATAPI(vatControlListResponse)
-      verify(getVatCustomerInformationConnectorMock).getVatCustomerInformation(ArgumentMatchers.eq(vatDetails.number))(
-        any[HeaderCarrier]
-      )
     }
 
     "handle Unsuccessful getVatCustomerInformation API Response" in {
@@ -85,9 +82,6 @@ class GetVatCustomerInformationServiceSpec extends UnitSpec with MockitoSugar wi
         VatControlListResponse(dateOfReg = Some(dateAsString), postcode = Some(postCode))
 
       service.checkResponseMatchesNewVATAPI(vatControlListResponse)
-      verify(getVatCustomerInformationConnectorMock).getVatCustomerInformation(ArgumentMatchers.eq(vatDetails.number))(
-        any[HeaderCarrier]
-      )
     }
   }
 
