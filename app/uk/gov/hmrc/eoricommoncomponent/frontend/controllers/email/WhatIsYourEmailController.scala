@@ -40,13 +40,13 @@ class WhatIsYourEmailController @Inject() (
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction(service) {
+    authAction.enrolledUserClearingCacheOnCompletionAction {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(whatIsYourEmailView(emailForm = emailForm, service)))
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction(service) {
+    authAction.enrolledUserClearingCacheOnCompletionAction {
       implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
         emailForm.bindFromRequest().fold(
           formWithErrors => Future.successful(BadRequest(whatIsYourEmailView(emailForm = formWithErrors, service))),

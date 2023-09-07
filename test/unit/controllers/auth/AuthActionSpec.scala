@@ -82,7 +82,7 @@ class AuthActionSpec extends AnyWordSpec with MockitoSugar with BeforeAndAfterEa
       Future.successful(Ok("We succeeded!"))
     }
 
-    def someCallNotRedirecting(service: Service) = authAction.enrolledUserClearingCacheOnCompletionAction(service) {
+    def someCallNotRedirecting(service: Service) = authAction.enrolledUserClearingCacheOnCompletionAction {
       _ => _ =>
         Future.successful(Ok("We succeeded!"))
     }

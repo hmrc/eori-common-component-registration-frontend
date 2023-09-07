@@ -52,7 +52,7 @@ class AuthAction @Inject() (
   private val baseRetrievals     = ggEmail and credentialRole and affinityGroup
   private val extendedRetrievals = baseRetrievals and internalId and allEnrolments and groupIdentifier and credentials
 
-  def enrolledUserClearingCacheOnCompletionAction(service: Service)(requestProcessor: RequestProcessorSimple) =
+  def enrolledUserClearingCacheOnCompletionAction(requestProcessor: RequestProcessorSimple) =
     cacheClearOnCompletionAction.async(implicit request => authorise(requestProcessor))
 
   def enrolledUserWithSessionAction(service: Service)(requestProcessor: RequestProcessorSimple) = {

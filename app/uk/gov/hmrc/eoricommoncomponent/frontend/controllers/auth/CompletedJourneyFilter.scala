@@ -22,18 +22,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import play.api.mvc.Results.Redirect
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys.{
-  selectedOrganisationType,
-  selectedUserLocation,
-  subscriptionFlow,
-  uriBeforeSubscriptionFlow
-}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class CompletedJourneyFilter @Inject() (service: Service, sessionCache: SessionCache, val parser: BodyParsers.Default)(
   implicit val executionContext: ExecutionContext
-) extends ActionBuilder[Request, AnyContent] with ActionFilter[Request] {
+) extends ActionBuilder[Request, AnyContent] with ActionFilter[Request] with NewUserSession {
 
   override protected def filter[A](request: Request[A]) = {
     implicit val req = request
@@ -51,19 +45,5 @@ class CompletedJourneyFilter @Inject() (service: Service, sessionCache: SessionC
   def clearSessionCacheIfComplete(isJourneyComplete: Boolean)(implicit request: Request[_]): Future[Boolean] =
     if (isJourneyComplete) sessionCache.remove
     else Future.successful(false)
-
-  def newUserSession(implicit request: Request[_]): Session = {
-
-    val currentSessionData: Map[String, String] = request.session.data
-    val cleanedUpSessionData: Map[String, String] =
-      currentSessionData -- Seq(
-        selectedUserLocation,
-        subscriptionFlow,
-        selectedOrganisationType,
-        uriBeforeSubscriptionFlow
-      )
-
-    request.session.copy(data = cleanedUpSessionData)
-  }
 
 }

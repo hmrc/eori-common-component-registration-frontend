@@ -116,7 +116,7 @@ class Sub02Controller @Inject() (
                 .getOrElse("EORI not populated from Sub02 response."),
               if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate
             )
-          ).withSession(newUserSession)
+          )
         else {
           val subscriptionTo = s"ecc.start-page.para1.bullet2.new.${service.code}"
           Ok(
@@ -128,7 +128,7 @@ class Sub02Controller @Inject() (
               subscriptionTo,
               subscriptionNextSteps(service)
             )
-          ).withSession(newUserSession)
+          )
         }
   }
 
@@ -138,7 +138,7 @@ class Sub02Controller @Inject() (
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
         _             <- sessionCache.journeyCompleted
-      } yield Ok(sub02EoriAlreadyExists(name, processedDate)).withSession(newUserSession)
+      } yield Ok(sub02EoriAlreadyExists(name, processedDate))
     }
 
   def eoriAlreadyAssociated(service: Service): Action[AnyContent] =
@@ -147,7 +147,7 @@ class Sub02Controller @Inject() (
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
         _             <- sessionCache.journeyCompleted
-      } yield Ok(sub02EoriAlreadyAssociatedView(name, processedDate)).withSession(newUserSession)
+      } yield Ok(sub02EoriAlreadyAssociatedView(name, processedDate))
     }
 
   def subscriptionInProgress(service: Service): Action[AnyContent] =
@@ -156,14 +156,14 @@ class Sub02Controller @Inject() (
         submissionCompleteDetails <- sessionCache.submissionCompleteDetails
         _                         <- sessionCache.journeyCompleted
         _                         <- sessionCache.saveSubmissionCompleteDetails(submissionCompleteDetails)
-      } yield Ok(sub02SubscriptionInProgressView(submissionCompleteDetails.processingDate)).withSession(newUserSession)
+      } yield Ok(sub02SubscriptionInProgressView(submissionCompleteDetails.processingDate))
     }
 
   def requestNotProcessed(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         _ <- sessionCache.journeyCompleted
-      } yield Ok(sub02RequestNotProcessed()).withSession(newUserSession)
+      } yield Ok(sub02RequestNotProcessed())
     }
 
   def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -173,9 +173,7 @@ class Sub02Controller @Inject() (
         sub01Outcome        <- sessionCache.sub01Outcome
         _                   <- sessionCache.journeyCompleted
 
-      } yield Ok(sub01OutcomeView(Some(subscriptionDetails.name), sub01Outcome.processedDate)).withSession(
-        newUserSession
-      )
+      } yield Ok(sub01OutcomeView(Some(subscriptionDetails.name), sub01Outcome.processedDate))
   }
 
 }
