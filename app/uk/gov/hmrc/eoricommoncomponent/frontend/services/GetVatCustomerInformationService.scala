@@ -40,23 +40,34 @@ class GetVatCustomerInformationService @Inject() (
     for {
       vatDetails <- sessionCache.subscriptionDetails.map(_.ukVatDetails)
       vrn = vatDetails.map(_.number)
-    } yield getVatCustomerInformationConnector.getVatCustomerInformation(vrn.getOrElse(""))
-      .fold(
-        response => logger.warn(s"getVatCustomerInformation returned response status $response. Cannot compare values"),
-        vatCustomerInformation => compareApiResponses(vatControlListResponse, vatCustomerInformation)
-      )
+    } yield vrn.map { vatNumber =>
+      getVatCustomerInformationConnector.getVatCustomerInformation(vatNumber)
+        .fold(
+          errorResponse =>
+            logger.warn(s"getVatCustomerInformation returned response: $errorResponse. Cannot compare values"),
+          vatCustomerInformation => compareApiResponses(vatControlListResponse, vatCustomerInformation)
+        )
+    }
 
   def compareApiResponses(oldResponse: VatControlListResponse, newResponse: GetVatInformationResponse): Boolean = {
-    val format          = new java.text.SimpleDateFormat("yyyy-MM-dd")
-    val postCodeMatches = oldResponse.postcode.getOrElse("") == newResponse.postCode.getOrElse("")
-    val dateMatches =
-      format.parse(oldResponse.dateOfReg.getOrElse("")) == newResponse.effectiveRegistrationDate.getOrElse(new Date())
+    val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
+
+    val postCodeMatches = (for {
+      oldPostcode <- oldResponse.postcode
+      newPostcode <- newResponse.postCode
+    } yield oldPostcode == newPostcode).getOrElse(false)
+
+    val dateMatches = (for {
+      oldDateString <- oldResponse.dateOfReg
+      oldDate = format.parse(oldDateString)
+      newDate <- newResponse.effectiveRegistrationDate
+    } yield oldDate == newDate).getOrElse(false)
 
     if (postCodeMatches && dateMatches) {
-      logger.info("data matches for API calls")
+      logger.info("compareApiResponses matches postcode and date")
       true
     } else {
-      logger.warn(s"data does not match for API calls. Postcode: $postCodeMatches, Date: $dateMatches")
+      logger.warn(s"compareApiResponses does not match. Postcode: $postCodeMatches, Date: $dateMatches")
       false
     }
   }
