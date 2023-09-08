@@ -178,9 +178,7 @@ class Sub02Controller @Inject() (
         _                   <- sessionCache.saveSub01Outcome(sub01Outcome)
         _                   <- sessionCache.saveSubscriptionDetails(subscriptionDetails)
 
-      } yield Ok(sub01OutcomeView(Some(subscriptionDetails.name), sub01Outcome.processedDate)).withSession(
-        newUserSession
-      )
+      } yield Ok(sub01OutcomeView(sub01Outcome.processedDate)).withSession(newUserSession)
   }
 
 }
