@@ -172,8 +172,7 @@ class Sub02Controller @Inject() (
         subscriptionDetails <- sessionCache.subscriptionDetails
         sub01Outcome        <- sessionCache.sub01Outcome
         _                   <- sessionCache.journeyCompleted
-
-      } yield Ok(sub01OutcomeView(Some(subscriptionDetails.name), sub01Outcome.processedDate))
+      } yield Ok(sub01OutcomeView(sub01Outcome.processedDate))
   }
 
 }
