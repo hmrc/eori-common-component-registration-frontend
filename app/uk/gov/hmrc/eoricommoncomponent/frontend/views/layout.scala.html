@@ -92,6 +92,7 @@
 
 @scripts = {
     <script @{CSPNonce.attr} src="@routes.Assets.versioned("javascripts/backLink.js")"></script>
+    <script @{CSPNonce.attr} src="@routes.Assets.versioned("javascripts/autocomplete.js")"></script>
     @autocompleteJavascript()
 }
 
