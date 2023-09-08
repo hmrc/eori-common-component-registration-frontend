@@ -17,16 +17,15 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.mvc.Request
-
-import javax.inject.{Inject, Singleton}
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Sub01Outcome, SubscriptionStatusQueryParams}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -50,22 +49,22 @@ class SubscriptionStatusService @Inject() (
     def saveToCache(processingDate: LocalDateTime) =
       cache.saveSub01Outcome(Sub01Outcome(dateFormat.format(processingDate)))
 
-    def checkSubscriptionStatus() =
-      connector.status(createRequest).map { response =>
-        saveToCache(response.responseCommon.processingDate)
-        response.responseDetail.subscriptionStatus match {
-          case "00" => NewSubscription
-          case "01" => SubscriptionProcessing
-          case "04" => SubscriptionExists
-          case "05" => SubscriptionRejected
-          case "11" => SubscriptionProcessing
-          case "14" => SubscriptionProcessing
-          case "99" => SubscriptionRejected
+    def checkSubscriptionStatus(): Future[PreSubscriptionStatus] =
+      connector.status(createRequest).flatMap { response =>
+        saveToCache(response.responseCommon.processingDate).map { _ =>
+          response.responseDetail.subscriptionStatus match {
+            case "00" => NewSubscription
+            case "01" => SubscriptionProcessing
+            case "04" => SubscriptionExists
+            case "05" => SubscriptionRejected
+            case "11" => SubscriptionProcessing
+            case "14" => SubscriptionProcessing
+            case "99" => SubscriptionRejected
+          }
         }
       }
 
     checkSubscriptionStatus()
-
   }
 
 }
