@@ -88,6 +88,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
           Future.successful(responseHolderWithStatusAndProcessingDateWithoutEori(status).subscriptionStatusResponse)
         )
         when(mockRequestCommonGenerator.receiptDate).thenReturn(receiptDate)
+        when(mockSessionCache.saveSub01Outcome(any())(any())).thenReturn(Future.successful(true))
 
         await(service.getStatus("taxPayerID", TaxPayerId(AValidTaxPayerID).mdgTaxPayerId)) shouldBe statusObject
       }
@@ -100,6 +101,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
         )
       )
       when(mockRequestCommonGenerator.receiptDate).thenReturn(receiptDate)
+      when(mockSessionCache.saveSub01Outcome(any())(any())).thenReturn(Future.successful(true))
 
       await(service.getStatus("taxPayerID", TaxPayerId(AValidTaxPayerID).mdgTaxPayerId))
 
@@ -109,6 +111,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
     "return failed future for getStatus when connector fails with INTERNAL_SERVER_ERROR" in {
       when(mockConnector.status(any[SubscriptionStatusQueryParams])(any[HeaderCarrier], any[Service]))
         .thenReturn(Future.failed(UpstreamErrorResponse("failure", INTERNAL_SERVER_ERROR, 1)))
+      when(mockSessionCache.saveSub01Outcome(any())(any())).thenReturn(Future.successful(true))
 
       val caught = intercept[UpstreamErrorResponse] {
         await(service.getStatus("taxPayerID", TaxPayerId(AValidTaxPayerID).mdgTaxPayerId))
@@ -120,6 +123,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
     "return failed future for getStatus when connector fails with BAD_REQUEST" in {
       when(mockConnector.status(any[SubscriptionStatusQueryParams])(any[HeaderCarrier], any[Service]))
         .thenReturn(Future.failed(UpstreamErrorResponse("failure", BAD_REQUEST, 1)))
+      when(mockSessionCache.saveSub01Outcome(any())(any())).thenReturn(Future.successful(true))
 
       val caught = intercept[UpstreamErrorResponse] {
         await(service.getStatus("taxPayerID", TaxPayerId(AValidTaxPayerID).mdgTaxPayerId))
