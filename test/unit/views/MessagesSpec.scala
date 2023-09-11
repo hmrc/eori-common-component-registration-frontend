@@ -39,7 +39,8 @@ class MessagesSpec extends PlaySpec with Injector {
 
   val keysEn: Set[String] =
     messageApi.messages.get("en").map(_.keySet).getOrElse(throw new RuntimeException("no message keys"))
-  val keysCy: Map[String,String] =
+
+  val keysCy: Map[String, String] =
     messageApi.messages.get("cy").value
 
   val sameTranslation: Set[String] = Set(
@@ -64,7 +65,7 @@ class MessagesSpec extends PlaySpec with Injector {
     }
 
     "welsh key must contain value" in {
-      val welshValueForKey = keysCy.flatMap(key => if(key._2.isBlank) Some(key) else None)
+      val welshValueForKey = keysCy.flatMap(key => if (key._2.isBlank) Some(key) else None)
       welshValueForKey mustBe Map.empty
     }
 
@@ -75,7 +76,6 @@ class MessagesSpec extends PlaySpec with Injector {
       )
       sameTranslation mustBe Set.empty
     }
-
 
   }
 }
