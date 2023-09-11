@@ -1445,7 +1445,7 @@ business-details-recovery.problem=There was a problem with the service when you 
 # messages-ecc file
 
 cds.banner.registration=Get an EORI number
-cds.banner.registration.eori-only=Get an EORI number
+cds.banner.subscription.eori-only=Get an EORI number
 cds.banner.subscription.ars = Subscribe to advance rulings
 cds.banner.subscription.gagmr=Subscribe to the Goods Vehicle Movement Service
 cds.banner.subscription.atar=Subscribe to Advance Tariff Rulings
