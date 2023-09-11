@@ -51,10 +51,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class EmailController @Inject() (
   authAction: AuthAction,
-  emailVerificationService: EmailVerificationService,
   sessionCache: SessionCache,
   mcc: MessagesControllerComponents,
-  save4LaterService: Save4LaterService,
   userGroupIdSubscriptionStatusCheckService: UserGroupIdSubscriptionStatusCheckService,
   groupEnrolment: GroupEnrolmentExtractor,
   appConfig: AppConfig,
@@ -63,8 +61,6 @@ class EmailController @Inject() (
   emailJourneyService: EmailJourneyService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
-
-  private val logger = Logger(this.getClass)
 
   def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>

@@ -76,10 +76,8 @@ class EmailControllerSpec
 
   private val controller = new EmailController(
     mockAuthAction,
-    mockEmailVerificationService,
     mockSessionCache,
     mcc,
-    mockSave4LaterService,
     userGroupIdSubscriptionStatusCheckService,
     groupEnrolmentExtractor,
     mockAppConfig,

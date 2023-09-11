@@ -61,7 +61,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
   "submit" should {
     "correctly handle valid confirmEmailYesNoAnswerForm" in servicesToTest.foreach { subscription =>
       withAuthorisedUser(defaultUserId, mockAuthConnector)
-      when(mockCheckYourEmailService.locationByAnswer(any(), any(), any())(any(), any()))
+      when(mockCheckYourEmailService.locationByAnswer(any(), any())(any(), any()))
         .thenReturn(Future.successful(Status(OK)))
 
       val result = await(
@@ -77,7 +77,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
 
     "correctly handle valid confirmEmailYesNoAnswerForm - inReviewMode" in servicesToTest.foreach { subscription =>
       withAuthorisedUser(defaultUserId, mockAuthConnector)
-      when(mockCheckYourEmailService.locationByAnswer(any(), any(), any())(any(), any()))
+      when(mockCheckYourEmailService.locationByAnswer(any(), any())(any(), any()))
         .thenReturn(Future.successful(Status(OK)))
 
       val result = await(
