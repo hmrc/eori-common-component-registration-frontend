@@ -1698,7 +1698,7 @@ ecc.start-page.gbeori.para3.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gy
 ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a>
 ecc.start-page.gbeori.link.text =  o'’'r rhestr ar wefan Dŷ'’'r Cwmnïau.
 ecc.start-page.company.title = Cod Dosbarthiad Diwydiannol Safonol (cod SIC)
-ecc.start-page.company = Mae cod SIC yn dangos yr hyn y mae sefydliadau’n eu gwneud. Byddwn yn gofyn i chi nodi’r cyfeirnod hwn os byddwch y gwneud cais fel un o’r canlynol:
+ecc.start-page.company = Mae cod SIC yn dangos yr hyn y mae sefydliadau’n ei wneud. Byddwn yn gofyn i chi nodi’r cyfeirnod hwn os byddwch y gwneud cais fel un o’r canlynol:
 ecc.start-page.company.bullet1 = cwmni neu sefydliad arall
 ecc.start-page.company.bullet2 = unig fasnachwr
 
