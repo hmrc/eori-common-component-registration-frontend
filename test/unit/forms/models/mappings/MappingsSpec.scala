@@ -71,8 +71,6 @@ class MappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChec
 
         val result = form.bind(data)
 
-        println("ERRORS " + result.errors)
-
         result.errors must contain only FormError("value", "doe.error.empty-date", List.empty)
     }
   }

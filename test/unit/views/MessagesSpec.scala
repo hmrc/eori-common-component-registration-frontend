@@ -39,6 +39,8 @@ class MessagesSpec extends PlaySpec with Injector {
 
   val keysEn: Set[String] =
     messageApi.messages.get("en").map(_.keySet).getOrElse(throw new RuntimeException("no message keys"))
+  val keysCy: Map[String,String] =
+    messageApi.messages.get("cy").value
 
   val sameTranslation: Set[String] = Set(
     "cds.subscription.outcomes.rejected.vat-registered2",
@@ -61,6 +63,11 @@ class MessagesSpec extends PlaySpec with Injector {
       missingCy mustBe Set.empty
     }
 
+    "welsh key must contain value" in {
+      val welshValueForKey = keysCy.flatMap(key => if(key._2.isBlank) Some(key) else None)
+      welshValueForKey mustBe Map.empty
+    }
+
     "contain a different Welsh translation for every key" in {
 
       val sameTranslation: Set[String] = keysEn.flatMap(
@@ -69,14 +76,6 @@ class MessagesSpec extends PlaySpec with Injector {
       sameTranslation mustBe Set.empty
     }
 
-    "print out any untranslated Welsh messages (not a test)" in {
-      val welshMessages = messageApi.messages.get("cy").map(_.values.toList).getOrElse(List.empty)
-      welshMessages must not be List.empty
-
-      val untranslated = welshMessages.filter(_.startsWith("TRANSLATE")).map(_.substring(9))
-      println("Untranslated messages:")
-      untranslated.foreach(m => println(m))
-    }
 
   }
 }
