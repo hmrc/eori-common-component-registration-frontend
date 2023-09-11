@@ -25,7 +25,7 @@
 
 @(service: Service)(implicit messages: Messages, request: Request[_])
 
-@layout_di(messages("cds.security-sign-out.heading")) {
+@layout_di(messages("cds.security-sign-out.heading"), service = service) {
 <div>
     <h1 class="govuk-heading-l">@messages("cds.security-sign-out.heading")</h1>
 

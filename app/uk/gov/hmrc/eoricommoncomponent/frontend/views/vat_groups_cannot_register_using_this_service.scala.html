@@ -19,10 +19,10 @@
 
 
 @this(layout_di: layout)
-@()(implicit request: Request[_], messages: Messages)
+@(service: Service)(implicit request: Request[_], messages: Messages)
 
 
-@layout_di(messages("cds.matching.cannot-register-using-service.title-and-heading")) {
+@layout_di(messages("cds.matching.cannot-register-using-service.title-and-heading"), service = service) {
     <div>
         <h1 class="govuk-heading-l">@messages("cds.matching.cannot-register-using-service.title-and-heading")</h1>
 

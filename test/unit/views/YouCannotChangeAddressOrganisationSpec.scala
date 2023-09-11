@@ -45,6 +45,6 @@ class YouCannotChangeAddressOrganisationSpec extends ViewSpec {
 
   }
 
-  private lazy val orgDoc: Document = Jsoup.parse(contentAsString(youCantChangeAddressOrgView()))
+  private lazy val orgDoc: Document = Jsoup.parse(contentAsString(youCantChangeAddressOrgView(atarService)))
 
 }

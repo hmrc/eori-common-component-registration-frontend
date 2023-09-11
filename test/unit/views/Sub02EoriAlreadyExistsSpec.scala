@@ -56,5 +56,5 @@ class Sub02EoriAlreadyExistsSpec extends ViewSpec {
 
   implicit val request = withFakeCSRF(FakeRequest())
 
-  lazy val doc: Document = Jsoup.parse(contentAsString(view(name, processedDate)))
+  lazy val doc: Document = Jsoup.parse(contentAsString(view(name, processedDate, atarService)))
 }

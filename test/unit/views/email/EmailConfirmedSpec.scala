@@ -44,7 +44,7 @@ class EmailConfirmedSpec extends ViewSpec {
   }
 
   lazy val getEoriDoc: Document = {
-    val result = view()
+    val result = view(atarService)
     Jsoup.parse(contentAsString(result))
   }
 

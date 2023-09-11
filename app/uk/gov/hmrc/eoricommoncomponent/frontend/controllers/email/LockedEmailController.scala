@@ -37,7 +37,7 @@ class LockedEmailController @Inject() (
   def onPageLoad(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(view()))
+        Future.successful(Ok(view(service)))
     }
 
 }

@@ -90,7 +90,7 @@
 </div>
 }
 
-@layout_di(messages("cds.enter-address-details.title"), AllCountriesInCountryPicker, Some(addressForm)) {
+@layout_di(messages("cds.enter-address-details.title"), AllCountriesInCountryPicker, Some(addressForm), service = service) {
 
 <div>
     @errorSummary(addressForm.errors)

@@ -44,7 +44,7 @@
     '_hintText -> messages("cds.subscription.vat-group.intro-text"))
 }
 
-@layout_di(messages("cds.subscription.vat-group.title-and-heading"), form = Some(vatGroupYesNoAnswerForm)) {
+@layout_di(messages("cds.subscription.vat-group.title-and-heading"), form = Some(vatGroupYesNoAnswerForm), service = service) {
     <div>
         @errorSummary(vatGroupYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 

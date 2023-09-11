@@ -31,7 +31,7 @@
 
 @(dateForm: Form[LocalDate], isInReviewMode: Boolean, orgType: EtmpOrganisationType, isRestOfWorldJourney: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages(headerAndTitle(orgType, isRestOfWorldJourney)), form = Some(dateForm)) {
+@layout_di(messages(headerAndTitle(orgType, isRestOfWorldJourney)), form = Some(dateForm), service = service) {
 
         @errorSummary(updateFormErrors(dateForm).errors, focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 

@@ -24,7 +24,7 @@
 
 @this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
 
-@(vatRegisteredUkYesNoAnswerForm: Form[YesNo])(implicit request: Request[_], messages: Messages)
+@(vatRegisteredUkYesNoAnswerForm: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
 
@@ -43,7 +43,7 @@
 uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredUkKanaController.submit(ServiceName.service)
 }
 
-@layout_di(messages("cds.registration.vat-registered-uk.title"), form = Some(vatRegisteredUkYesNoAnswerForm)) {
+@layout_di(messages("cds.registration.vat-registered-uk.title"), form = Some(vatRegisteredUkYesNoAnswerForm), service = service) {
 <div>
     @errorSummary(vatRegisteredUkYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 

@@ -46,7 +46,7 @@
     )
 }
 
-@layout_di(titleAndHeadingLabel(isIndividualSubscriptionFlow, isPartnership), form = Some(vatRegisteredUkYesNoAnswerForm)) {
+@layout_di(titleAndHeadingLabel(isIndividualSubscriptionFlow, isPartnership), form = Some(vatRegisteredUkYesNoAnswerForm), service = service) {
     <div>
         @errorSummary(vatRegisteredUkYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 

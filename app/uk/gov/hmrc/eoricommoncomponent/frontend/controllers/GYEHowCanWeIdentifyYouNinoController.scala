@@ -48,7 +48,8 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
           howCanWeIdentifyYouView(
             subscriptionNinoForm,
             isInReviewMode = false,
-            routes.GYEHowCanWeIdentifyYouNinoController.submit(service)
+            routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+            service = service
           )
         )
       )
@@ -63,7 +64,8 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
               howCanWeIdentifyYouView(
                 formWithErrors,
                 isInReviewMode = false,
-                routes.GYEHowCanWeIdentifyYouNinoController.submit(service)
+                routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+                service = service
               )
             )
           ),
@@ -94,7 +96,8 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
       howCanWeIdentifyYouView(
         errorForm,
         isInReviewMode = false,
-        routes.GYEHowCanWeIdentifyYouNinoController.submit(service)
+        routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+        service = service
       )
     )
   }

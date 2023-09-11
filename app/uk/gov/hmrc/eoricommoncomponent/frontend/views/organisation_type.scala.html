@@ -30,7 +30,7 @@
 @(OrganisationTypeForm: Form[CdsOrganisationType], userLocation: Option[String], service: Service)(implicit request: Request[_], messages: Messages)
 
 
-@layout_di(messages("cds.matching.organisation-type.user.header"), form = Some(OrganisationTypeForm)) {
+@layout_di(messages("cds.matching.organisation-type.user.header"), form = Some(OrganisationTypeForm), service = service) {
     <div>
         @errorSummary(OrganisationTypeForm.errors, focusOverrides = Map("organisation-type" -> s"organisation-type-${validOptions(userLocation).head._1}"))
 

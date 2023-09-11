@@ -100,7 +100,7 @@ class CheckYourEmailService @Inject() (
           save4LaterService
             .saveEmail(GroupId(userWithEnrolments.groupId), email.copy(isConfirmed = Some(true)))
             .map { _ =>
-              Ok(emailConfirmedView())
+              Ok(emailConfirmedView(service))
             }
 
       }

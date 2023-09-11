@@ -29,7 +29,7 @@
 @(email:Option[String],
     confirmEmailYesNoAnswerForm: Form[YesNo],
     isInReviewMode: Boolean,
-    service: Service,
+    service: Service
 )(implicit request: Request[_], messages: Messages)
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
@@ -48,7 +48,7 @@
     <p class="govuk-!-margin-top-2">@messages("subscription.check-your-email.confirm.label")</p>
 }
 
-@layout_di(messages("subscription.check-your-email.confirm.title"), form = Some(confirmEmailYesNoAnswerForm)) {
+@layout_di(messages("subscription.check-your-email.confirm.title"), form = Some(confirmEmailYesNoAnswerForm), service = service) {
 
 <div>
     @errorSummary(confirmEmailYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))

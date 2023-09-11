@@ -20,9 +20,9 @@
 
 
 @this(layout_di: layout)
-@()(implicit request: Request[_], messages: Messages)
+@(service: Service)(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages("cds.registration.you-need-a-different-service-iom.title")) {
+@layout_di(messages("cds.registration.you-need-a-different-service-iom.title"), service = service) {
 <div>
     <h1 class="govuk-heading-l">@messages("cds.registration.you-need-a-different-service-iom.title")</h1>
 

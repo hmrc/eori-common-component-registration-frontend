@@ -32,14 +32,14 @@ class VatRegisteredUkKanaController @Inject() (
 ) extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] = Action { implicit request =>
-    Ok(vatRegisteredUkView(vatRegisteredUkYesNoAnswerForm()))
+    Ok(vatRegisteredUkView(vatRegisteredUkYesNoAnswerForm(), service = service))
   }
 
   def submit(service: Service): Action[AnyContent] = Action { implicit request =>
     vatRegisteredUkYesNoAnswerForm()
       .bindFromRequest()
       .fold(
-        formWithErrors => BadRequest(vatRegisteredUkView(formWithErrors)),
+        formWithErrors => BadRequest(vatRegisteredUkView(formWithErrors, service = service)),
         vatRegisteredUkYesNoAnswerForm => Redirect(destinationsByAnswer(vatRegisteredUkYesNoAnswerForm))
       )
   }

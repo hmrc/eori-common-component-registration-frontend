@@ -40,7 +40,7 @@ class YouNeedADifferentServiceControllerSpec extends ControllerSpec with BeforeA
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(youNeedDifferenceServicePage.apply()(any(), any())).thenReturn(HtmlFormat.empty)
+    when(youNeedDifferenceServicePage.apply(any())(any(), any())).thenReturn(HtmlFormat.empty)
   }
 
   override protected def afterEach(): Unit = {
@@ -56,7 +56,7 @@ class YouNeedADifferentServiceControllerSpec extends ControllerSpec with BeforeA
 
       withAuthorisedUser(defaultUserId, authConnector)
 
-      val result = controller.form()(FakeRequest())
+      val result = controller.form(atarService)(FakeRequest())
 
       status(result) shouldBe OK
     }

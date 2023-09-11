@@ -36,7 +36,7 @@
  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatReturnController.submit(service)
 }
 
-@layout_di(messages("cds.subscription.vat-registration.vat-return.title"), form = Some(vatReturnForm)) {
+@layout_di(messages("cds.subscription.vat-registration.vat-return.title"), form = Some(vatReturnForm), service = service) {
   <div>
    @errorSummary(vatReturnForm.errors)
    @helpers.form(vatFormAction,  "vat-return-form") {

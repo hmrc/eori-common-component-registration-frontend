@@ -24,9 +24,9 @@
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
 
-@(ninoForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call)(implicit request: Request[_], messages: Messages)
+@(ninoForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, service: Service)(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages("subscription-journey.how-confirm-identity.nino.heading"), form = Some(ninoForm)) {
+@layout_di(messages("subscription-journey.how-confirm-identity.nino.heading"), form = Some(ninoForm), service = service) {
     <div>
         @errorSummary(ninoForm.errors)
 
