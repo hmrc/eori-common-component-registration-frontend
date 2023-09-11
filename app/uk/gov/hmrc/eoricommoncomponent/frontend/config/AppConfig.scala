@@ -112,9 +112,6 @@ class AppConfig @Inject() (
   //integration framework - getVatCustomerInformation
   val getVatInformationBaseUrl: String = servicesConfig.baseUrl("integration-framework")
 
-  val getVatInformationContext: String =
-    config.get[String]("microservice.services.integration-framework.context")
-
   val enrolmentStoreProxyBaseUrl: String = servicesConfig.baseUrl("enrolment-store-proxy")
 
   val enrolmentStoreProxyServiceContext: String =
