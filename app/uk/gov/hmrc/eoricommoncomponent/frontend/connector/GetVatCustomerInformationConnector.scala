@@ -44,7 +44,7 @@ class GetVatCustomerInformationConnector @Inject() (httpClient: HttpClientV2, ap
   def getVatCustomerInformation(
     vrn: String
   )(implicit hc: HeaderCarrier): EitherT[Future, Int, GetVatInformationResponse] = EitherT {
-    val url = url"${appConfig.getVatInformationBaseUrl}/vat-customer-information/$vrn"
+    val url = url"${appConfig.handleSubscriptionBaseUrl}/vat-customer-information/$vrn"
 
     httpClient
       .get(url)

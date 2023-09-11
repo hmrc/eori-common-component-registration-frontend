@@ -33,11 +33,11 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
-        "microservice.services.integration-framework.host" -> Host,
-        "microservice.services.integration-framework.port" -> Port,
-        "auditing.enabled"                                 -> true,
-        "auditing.consumer.baseUri.host"                   -> Host,
-        "auditing.consumer.baseUri.port"                   -> Port
+        "microservice.services.handle-subscription.host" -> Host,
+        "microservice.services.handle-subscription.port" -> Port,
+        "auditing.enabled"                               -> true,
+        "auditing.consumer.baseUri.host"                 -> Host,
+        "auditing.consumer.baseUri.port"                 -> Port
       )
     )
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
