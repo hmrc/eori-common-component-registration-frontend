@@ -1279,7 +1279,7 @@ business-details-recovery.organisation-address = Cyfeiriad y sefydliad cofrestre
 business-details-recovery.individual-address = Cyfeiriad
 business-details-recovery.problem = Roedd problem gyda’r gwasanaeth pan wnaethoch fewngofnodi y tro diwethaf. Er mwyn rhoi cynnig arall ar eich cais, mae angen i chi ateb ychydig o gwestiynau eraill.
 cds.banner.registration = Cael rhif EORI
-cds.banner.registration.eori-only = Cael rhif EORI
+cds.banner.subscription.eori-only = Cael rhif EORI
 
 
 cds.banner.subscription.ars = Tanysgrifio i ddyfarniadau uwch
