@@ -29,6 +29,8 @@
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.ReportTechnicalIssue
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.userresearchbanner.UserResearchBanner
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 
 @this(hmrcLayout: HmrcLayout,
         standardBetaBanner: StandardBetaBanner,
@@ -37,7 +39,10 @@
         hmrcTimeoutDialog: HmrcTimeoutDialog,
         govukBackLink: GovukBackLink,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-        hmrcLanguageSelectHelper: HmrcLanguageSelectHelper)
+        hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
+        autocompleteCss: HmrcAccessibleAutocompleteCss,
+        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript
+)
 
 
 @(  title: String,
@@ -87,11 +92,12 @@
 
 @scripts = {
     <script @{CSPNonce.attr} src="@routes.Assets.versioned("javascripts/backLink.js")"></script>
-    <script @{CSPNonce.attr} src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
-    @partials.countrypickerscript(countriesInCountryPicker)
+    <script @{CSPNonce.attr} src="@routes.Assets.versioned("javascripts/autocomplete.js")"></script>
+    @autocompleteJavascript()
 }
 
 @theHead = {
+    @autocompleteCss()
     @if(suppressTelephoneNumberDetection) {
         <meta name="format-detection" content="telephone=no" />
     }
