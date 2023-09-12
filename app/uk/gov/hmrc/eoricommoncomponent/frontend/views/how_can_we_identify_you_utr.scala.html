@@ -27,9 +27,9 @@
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h1: helpers.h1, p: helpers.paragraph, errorSummary: helpers.errorSummary)
 
-@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, hintMessage: String, heading: String = "subscription-journey.how-confirm-identity.utr.heading")(implicit request: Request[_], messages: Messages)
+@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, hintMessage: String, heading: String = "subscription-journey.how-confirm-identity.utr.heading", service: Service)(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages(heading), form = Some(utrForm)) {
+@layout_di(messages(heading), form = Some(utrForm), service = service) {
     <div>
         @errorSummary(utrForm.errors)
 

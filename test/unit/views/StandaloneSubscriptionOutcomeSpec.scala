@@ -32,7 +32,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
 
   private val view = instanceOf[standalone_subscription_outcome]
 
-  private val doc: Document = Jsoup.parse(contentAsString(view(eori, issuedDate)))
+  private val doc: Document = Jsoup.parse(contentAsString(view(eori, issuedDate, atarService)))
 
   "'Standalone Subscription Outcome' Page with name" should {
 

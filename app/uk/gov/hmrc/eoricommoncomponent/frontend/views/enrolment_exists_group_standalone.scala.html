@@ -22,7 +22,7 @@
 
 @this(layout_di: layout, appConfig: AppConfig)
 
-@(eoriNumber: Option[String], isAdminUser: Boolean)(implicit messages: Messages, request: Request[_])
+@(eoriNumber: Option[String], isAdminUser: Boolean, service: Service)(implicit messages: Messages, request: Request[_])
 
 
 @link(url: String, text: String) = {
@@ -38,7 +38,7 @@
 }
 
 
-@layout_di(messages("ecc.eori-exists-group.title")) {
+@layout_di(messages("ecc.eori-exists-group.title"), service = service) {
     <div>
 
         <h1 id="page-heading" class="govuk-heading-l">@messages("ecc.eori-exists-group.heading")</h1>

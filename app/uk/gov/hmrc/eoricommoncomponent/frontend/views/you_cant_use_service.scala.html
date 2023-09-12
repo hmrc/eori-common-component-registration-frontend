@@ -25,11 +25,11 @@
 
 @this(layout_di: layout, govukButton: GovukButton)
 
-@(userType: Option[AffinityGroup])(implicit messages: Messages, request: Request[_])
+@(userType: Option[AffinityGroup], service: Service)(implicit messages: Messages, request: Request[_])
 
 
 
-@layout_di(messages("cds.you-cant-use-service.heading")) {
+@layout_di(messages("cds.you-cant-use-service.heading"), service = service) {
 
 <div>
     <h1 class="govuk-heading-l">@messages("cds.you-cant-use-service.heading")</h1>

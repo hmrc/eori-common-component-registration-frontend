@@ -70,7 +70,7 @@ class SubscriptionRecoveryController @Inject() (
       implicit request => _: LoggedInUserWithEnrolments =>
         for {
           eori <- sessionCache.eori
-        } yield Ok(alreadyHaveEori(eori))
+        } yield Ok(alreadyHaveEori(eori, service))
     }
 
   private def subscribeGetAnEori(
@@ -111,7 +111,7 @@ class SubscriptionRecoveryController @Inject() (
           }
         }
       case Left(_) =>
-        Future.successful(InternalServerError(errorTemplateView()))
+        Future.successful(InternalServerError(errorTemplateView(service)))
     }
     result.flatMap(identity)
   }

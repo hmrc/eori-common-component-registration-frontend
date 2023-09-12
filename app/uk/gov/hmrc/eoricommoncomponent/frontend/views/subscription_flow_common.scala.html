@@ -22,14 +22,15 @@
 @(  pageKey: String,
     form: Form[_],
     errorMsgKeyFun: Option[String => String] = None,
-    customErrorMsgFun: Option[String => String] = None
+    customErrorMsgFun: Option[String => String] = None, 
+    service: Service
 )(content: Html)(implicit request: Request[_], messages: Messages)
 
 @qualifiedPageKey = @{
     "cds.subscription." + pageKey
 }
 
-@layout_di(messages(qualifiedPageKey + ".page.title"), form = Some(form)) {
+@layout_di(messages(qualifiedPageKey + ".page.title"), form = Some(form), service = service) {
 
     <div>
 

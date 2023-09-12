@@ -19,12 +19,12 @@
 
 
 @this(layout_di: layout,appConfig:AppConfig)
-@()(implicit request: Request[_], messages: Messages)
+@(service: Service)(implicit request: Request[_], messages: Messages)
 @link = {
     <a id="contact_link" href="@appConfig.companiesHouseRegister" target="_blank" class="govuk-link" rel="noopener noreferrer">
     @messages("ecc.cannot-change-address-company.link")</a>
 }
-@layout_di(messages("ecc.cannot-change-address-company.title")) {
+@layout_di(messages("ecc.cannot-change-address-company.title"), service = service) {
     <div>
         <h1 class="govuk-heading-l">@messages("ecc.cannot-change-address-company.title")</h1>
 

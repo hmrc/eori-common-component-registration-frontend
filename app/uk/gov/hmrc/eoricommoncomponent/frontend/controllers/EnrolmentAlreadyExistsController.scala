@@ -73,7 +73,8 @@ class EnrolmentAlreadyExistsController @Inject() (
             enrolmentExistsStandaloneView(
               eoriNumber,
               loggedInUser.isAdminUser,
-              EnrolmentExistsUserStandaloneViewModel(loggedInUser.isAdminUser)
+              EnrolmentExistsUserStandaloneViewModel(loggedInUser.isAdminUser),
+              service
             )
           )
         )
@@ -83,7 +84,7 @@ class EnrolmentAlreadyExistsController @Inject() (
     authAction.ggAuthorisedUserAction {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
         sessionCache.eori.map(
-          eoriNumber => Ok(enrolmentExistsForGroupStandaloneView(eoriNumber, loggedInUser.isAdminUser))
+          eoriNumber => Ok(enrolmentExistsForGroupStandaloneView(eoriNumber, loggedInUser.isAdminUser, service))
         )
 
     }

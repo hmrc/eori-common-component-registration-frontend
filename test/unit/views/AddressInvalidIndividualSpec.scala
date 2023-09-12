@@ -45,6 +45,6 @@ class AddressInvalidIndividualSpec extends ViewSpec {
 
   }
 
-  private lazy val indDoc: Document = Jsoup.parse(contentAsString(addressInvalidIndView()))
+  private lazy val indDoc: Document = Jsoup.parse(contentAsString(addressInvalidIndView(atarService)))
 
 }

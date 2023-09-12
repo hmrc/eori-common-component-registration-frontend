@@ -93,7 +93,8 @@ class GetUtrNumberController @Inject() (
       isInReviewMode,
       routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode),
       HowCanWeIdentifyYouUtrViewModel.forHintMessage(EtmpOrganisationType(CdsOrganisationType(organisationType))),
-      HowCanWeIdentifyYouUtrViewModel.heading(organisationType)
+      HowCanWeIdentifyYouUtrViewModel.heading(organisationType),
+      service
     )
 
   private def matchBusinessOrIndividual(

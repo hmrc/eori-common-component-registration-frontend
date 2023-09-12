@@ -21,9 +21,9 @@
         p: helpers.paragraph
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(service: Service)(implicit request: Request[_], messages: Messages)
 
-@layout_di(title = messages("lockedEmail.heading"), displayBackLink = false) {
+@layout_di(title = messages("lockedEmail.heading"), displayBackLink = false, service = service) {
 
     @h1(messages("lockedEmail.heading"))
 

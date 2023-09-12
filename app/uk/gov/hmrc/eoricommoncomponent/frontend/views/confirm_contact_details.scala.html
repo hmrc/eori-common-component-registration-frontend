@@ -58,7 +58,7 @@
     )
 }
 
-@layout_di(pageTitleAndHeading, form = Some(yesNoWrongAddress)) {
+@layout_di(pageTitleAndHeading, form = Some(yesNoWrongAddress), service = service) {
 <div>
     @errorSummary(yesNoWrongAddress.errors, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 

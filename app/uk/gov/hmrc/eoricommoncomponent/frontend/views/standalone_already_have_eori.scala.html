@@ -33,7 +33,7 @@
 <a href="@url" target="_self" class="govuk-link" rel="noopener noreferrer">@messages(text)</a>
 }
 
-@layout_di(viewModel.titleAndHeaderLabel) {
+@layout_di(viewModel.titleAndHeaderLabel, service = service) {
     <div>
 
         <h1 id="page-heading" class="govuk-heading-l">@viewModel.titleAndHeaderLabel</h1>

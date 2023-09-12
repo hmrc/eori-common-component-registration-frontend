@@ -35,7 +35,7 @@ class YouNeedADifferentServiceIomControllerSpec extends ControllerSpec with Befo
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(youNeedDifferenceServiceIomPage.apply()(any(), any())).thenReturn(HtmlFormat.empty)
+    when(youNeedDifferenceServiceIomPage.apply(any())(any(), any())).thenReturn(HtmlFormat.empty)
   }
 
   override protected def afterEach(): Unit = {

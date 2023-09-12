@@ -38,7 +38,7 @@
     <a href="@url" class="govuk-link" target="@target" rel="noopener noreferrer">@messages(text)</a>
 }
 
-@layout_di(messages(headingAndTitleText), suppressTelephoneNumberDetection = false, displayBackLink = false) {
+@layout_di(messages(headingAndTitleText), suppressTelephoneNumberDetection = false, displayBackLink = false, service = service) {
 
     <div>
         <h1 class="govuk-heading-l" id="start-heading">@messages(headingAndTitleText)</h1>

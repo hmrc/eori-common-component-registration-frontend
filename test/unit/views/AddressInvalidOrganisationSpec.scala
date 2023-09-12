@@ -45,6 +45,6 @@ class AddressInvalidOrganisationSpec extends ViewSpec {
 
   }
 
-  private lazy val indDoc: Document = Jsoup.parse(contentAsString(addressInvalidOrgView()))
+  private lazy val indDoc: Document = Jsoup.parse(contentAsString(addressInvalidOrgView(atarService)))
 
 }

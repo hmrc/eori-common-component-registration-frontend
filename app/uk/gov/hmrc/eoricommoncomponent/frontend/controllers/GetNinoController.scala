@@ -44,7 +44,14 @@ class GetNinoController @Inject() (
   def displayForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
-        Ok(matchNinoRowIndividualView(subscriptionNinoForm, false, routes.GetNinoController.submit(service)))
+        Ok(
+          matchNinoRowIndividualView(
+            subscriptionNinoForm,
+            false,
+            routes.GetNinoController.submit(service),
+            service = service
+          )
+        )
       )
     }
 
@@ -54,7 +61,14 @@ class GetNinoController @Inject() (
         subscriptionNinoForm.bindFromRequest().fold(
           formWithErrors =>
             Future.successful(
-              BadRequest(matchNinoRowIndividualView(formWithErrors, false, routes.GetNinoController.submit(service)))
+              BadRequest(
+                matchNinoRowIndividualView(
+                  formWithErrors,
+                  false,
+                  routes.GetNinoController.submit(service),
+                  service = service
+                )
+              )
             ),
           formData => matchIndividual(Nino(formData.id), service, formData, GroupId(loggedInUser.groupId))
         )
@@ -86,7 +100,7 @@ class GetNinoController @Inject() (
   ): Result = {
     val errorMsg  = Messages("cds.matching-error.individual-not-found")
     val errorForm = subscriptionNinoForm.withGlobalError(errorMsg).fill(formData)
-    BadRequest(matchNinoRowIndividualView(errorForm, false, routes.GetNinoController.submit(service)))
+    BadRequest(matchNinoRowIndividualView(errorForm, false, routes.GetNinoController.submit(service), service))
   }
 
 }

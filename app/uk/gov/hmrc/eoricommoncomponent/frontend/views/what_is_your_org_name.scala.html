@@ -27,7 +27,7 @@
 
 @(isInReviewMode: Boolean, matchOrgNameForm: Form[_ <: NameMatch], organisationType: String, service: Service)(implicit request: Request[_], messages: Messages)
 
-    @layout_di(messages("cds.matching.organisation.name.title"), form = Some(matchOrgNameForm)) {
+    @layout_di(messages("cds.matching.organisation.name.title"), form = Some(matchOrgNameForm), service = service) {
     <div>
         @errorSummary(matchOrgNameForm.errors)
 

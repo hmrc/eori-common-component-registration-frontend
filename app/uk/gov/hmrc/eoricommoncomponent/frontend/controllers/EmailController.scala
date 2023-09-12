@@ -101,8 +101,8 @@ class EmailController @Inject() (
               userGroupIdSubscriptionStatusCheckService
                 .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
                   emailJourneyService.continue(service)
-                )(Future.successful(Ok(enrolmentPendingForUser())))(
-                  Future.successful(Ok(enrolmentPendingAgainstGroupId()))
+                )(Future.successful(Ok(enrolmentPendingForUser(service))))(
+                  Future.successful(Ok(enrolmentPendingAgainstGroupId(service)))
                 )
           }
     }

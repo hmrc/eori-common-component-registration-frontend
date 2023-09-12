@@ -176,14 +176,14 @@ class UserLocationController @Inject() (
           )
         )
       }
-    case _ => Future.successful(InternalServerError(errorTemplate()))
+    case _ => Future.successful(InternalServerError(errorTemplate(service)))
   }
 
   def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.sub01Outcome
         .map(_.processedDate)
-        .map(processedDate => Ok(sub01OutcomeProcessing(processedDate)))
+        .map(processedDate => Ok(sub01OutcomeProcessing(processedDate, service)))
   }
 
 }

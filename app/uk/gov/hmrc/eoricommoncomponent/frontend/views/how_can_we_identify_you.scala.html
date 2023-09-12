@@ -50,7 +50,7 @@
         '_isLegendH1 -> true)
 }
 
-@layout_di(title, form = Some(ninoUtrForm)) {
+@layout_di(title, form = Some(ninoUtrForm), service = service) {
     <div>
         @errorSummary(ninoUtrForm.errors, focusOverrides = Map("ninoOrUtrRadio" -> "ninoOrUtrRadio-nino"))
 

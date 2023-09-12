@@ -19,9 +19,9 @@
 
 
 @this(layout_di: layout)
-@()(implicit messages: Messages, request: Request[_])
+@(service: Service)(implicit messages: Messages, request: Request[_])
 
-@layout_di(messages("cds.server-errors.404.title")) {
+@layout_di(messages("cds.server-errors.404.title"), service = service) {
     <div>
         <header class="page-header">
             <h1 class="govuk-heading-xl">@messages("cds.server-errors.404.heading")</h1>

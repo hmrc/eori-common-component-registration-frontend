@@ -68,7 +68,7 @@ class AddressService @Inject() (
       case Some(cdm) =>
         populateOkView(cdm.toAddressViewModel, isInReviewMode = true, service)
       case _ =>
-        Future.successful(InternalServerError(errorTemplate()))
+        Future.successful(InternalServerError(errorTemplate(service)))
     }
 
   def handleFormDataAndRedirect(form: Form[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
