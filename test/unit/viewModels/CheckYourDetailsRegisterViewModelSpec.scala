@@ -17,25 +17,16 @@
 package unit.viewModels
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CustomsId, Eori, Nino, Utr}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, Eori, Nino, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.{
-  CheckYourDetailsRegisterConstructor,
-  CheckYourDetailsRegisterViewModel
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import util.builders.RegistrationDetailsBuilder.{
-  incorporatedRegistrationDetails,
-  individualRegistrationDetails,
-  individualRegistrationDetailsNotIdentifiedByReg01,
   limitedLiabilityPartnershipRegistrationDetails,
-  organisationRegistrationDetails,
   partnershipRegistrationDetails
 }
 import unit.services.SubscriptionServiceTestData
 import util.ControllerSpec
-
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec with SubscriptionServiceTestData {
 

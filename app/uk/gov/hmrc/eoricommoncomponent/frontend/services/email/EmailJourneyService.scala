@@ -98,7 +98,6 @@ class EmailJourneyService @Inject() (
 
   private def onVerifiedEmail(service: Service, email: String, emailStatus: EmailStatus, groupId: GroupId)(implicit
     request: Request[AnyContent],
-    messages: Messages,
     hc: HeaderCarrier
   ) =
     for {
