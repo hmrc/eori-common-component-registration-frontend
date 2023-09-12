@@ -35,7 +35,7 @@
 @(dateForm: Form[VatRegistrationDate], service: Service)(implicit request: Request[_], messages: Messages)
 
 
-@layout_di(messages("ecc.eor-vat-registration-date.heading"), form = Some(dateForm)) {
+@layout_di(messages("ecc.eor-vat-registration-date.heading"), form = Some(dateForm), service = service) {
     <div>
         @errorSummary(dateForm.errors)
 

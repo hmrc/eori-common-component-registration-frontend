@@ -43,7 +43,7 @@
         '_isLegendH1 -> true)
 }
 
-@layout_di(messages("cds.confirm-individual-type.title"), form = Some(confirmationForm)) {
+@layout_di(messages("cds.confirm-individual-type.title"), form = Some(confirmationForm), service = service) {
     <div>
         @errorSummary(confirmationForm.errors, focusOverrides = Map("individual-type" -> s"individual-type-${validOptions.head._1}"))
 

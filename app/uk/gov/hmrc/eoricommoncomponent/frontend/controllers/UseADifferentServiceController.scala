@@ -29,7 +29,7 @@ class UseADifferentServiceController @Inject() (
 ) extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] = Action { implicit request =>
-    Ok(useADifferentServiceView())
+    Ok(useADifferentServiceView(service))
   }
 
 }

@@ -59,7 +59,7 @@ class ConfirmContactDetailsController @Inject() (
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
-      } yield Ok(sub01OutcomeProcessingView(processedDate))
+      } yield Ok(sub01OutcomeProcessingView(processedDate, service))
   }
 
 }

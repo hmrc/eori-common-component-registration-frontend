@@ -94,7 +94,7 @@ class DoYouHaveAUtrNumberController @Inject() (
       case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
         noUtrThirdCountryIndividualsRedirect(service)
       case _ =>
-        Redirect(YouNeedADifferentServiceController.form())
+        Redirect(YouNeedADifferentServiceController.form(service))
     }
 
   private def noUtrOrganisationRedirect(isInReviewMode: Boolean, organisationType: String, service: Service): Result =

@@ -22,10 +22,10 @@
 
 
 @this(layout_di: layout, feedback_di: helpers.feedback, h1: helpers.h1, p: helpers.paragraph, h2: helpers.h2, dateFormatter: DateFormatter)
-@(processedDate: String)(implicit messages: Messages, request: Request[_])
+@(processedDate: String, service: Service)(implicit messages: Messages, request: Request[_])
 
 
-@layout_di(messages("cds.sub02.outcome.subscription-in-progress.heading")) {
+@layout_di(messages("cds.sub02.outcome.subscription-in-progress.heading"), service = service) {
     @h1(messages("cds.sub02.outcome.subscription-in-progress.heading"), Some("page-heading"))
     @p(messages("cds.sub02.outcome.subscription-in-progress.received", dateFormatter.format(processedDate)), Some("processed-date"))
 

@@ -18,9 +18,9 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 @this(layout_di: layout)
-@()(implicit request: Request[_], messages: Messages)
+@(service: Service)(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages("cds.registration.use-a-different-service.title")) {
+@layout_di(messages("cds.registration.use-a-different-service.title"), service = service) {
 <div>
     <h1 class="govuk-heading-l">@messages("cds.registration.use-a-different-service.title")</h1>
 

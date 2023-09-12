@@ -43,6 +43,6 @@ class EnrolmentPendingForUserViewSpec extends ViewSpec {
     }
   }
 
-  private lazy val doc: Document = Jsoup.parse(contentAsString(view()))
+  private lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService)))
 
 }

@@ -37,7 +37,7 @@
     service: Service
 )(implicit request: Request[AnyContent], messages: Messages)
 
-@layout_di(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"), form = Some(disclosePersonalDetailsYesNoAnswerForm)) {
+@layout_di(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"), form = Some(disclosePersonalDetailsYesNoAnswerForm), service = service) {
     <div>
         @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 

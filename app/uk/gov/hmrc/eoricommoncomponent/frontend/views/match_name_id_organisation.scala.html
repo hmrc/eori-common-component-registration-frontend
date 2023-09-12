@@ -75,7 +75,7 @@
     else messages(s"cds.matching.name-id-organisation.$displayMode.utr")
 }
 
-@layout_di(headerAndTitle, form = Some(businessDetailsForm)) {
+@layout_di(headerAndTitle, form = Some(businessDetailsForm), service = service) {
     <div>
         @errorSummary(businessDetailsForm.errors)
 

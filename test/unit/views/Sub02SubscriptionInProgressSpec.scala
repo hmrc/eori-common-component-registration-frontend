@@ -67,5 +67,5 @@ class Sub02SubscriptionInProgressSpec extends ViewSpec {
 
   implicit val request = withFakeCSRF(FakeRequest.apply("GET", "/atar/register"))
 
-  lazy val doc: Document = Jsoup.parse(contentAsString(view(processedDate)))
+  lazy val doc: Document = Jsoup.parse(contentAsString(view(processedDate, atarService)))
 }

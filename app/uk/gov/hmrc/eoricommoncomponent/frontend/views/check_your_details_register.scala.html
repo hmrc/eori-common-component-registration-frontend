@@ -37,7 +37,7 @@
     cdsOrgType.contains(CdsOrganisationType.EUIndividual) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 }
 
-@layout_di(messages("cds.form.check-answers"), displayBackLink = false) {
+@layout_di(messages("cds.form.check-answers"), displayBackLink = false, service = service) {
     <div>
         <h1 class="govuk-heading-l">@messages("cds.form.check-answers")</h1>
         <div>

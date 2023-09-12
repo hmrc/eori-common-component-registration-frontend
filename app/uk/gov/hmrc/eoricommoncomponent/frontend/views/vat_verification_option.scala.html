@@ -44,7 +44,7 @@
     '_isLegendH1 -> true)
 }
 
-@layout_di(messages("cds.subscription.vat-verification-option.title-and-heading"), form = Some(vatVerificationOptionAnswerForm)) {
+@layout_di(messages("cds.subscription.vat-verification-option.title-and-heading"), form = Some(vatVerificationOptionAnswerForm), service = service) {
     <div>
         @errorSummary(vatVerificationOptionAnswerForm.errors, focusOverrides = Map("vat-verification-option" -> "date-amount-option-true"))
 

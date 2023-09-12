@@ -38,8 +38,8 @@ class AddressInvalidController @Inject() (
   def page(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       if (requestSessionData.isIndividualOrSoleTrader(request))
-        Future.successful(Ok(addressInvalidIndividual()))
-      else Future.successful(Ok(addressInvalidOrganisation()))
+        Future.successful(Ok(addressInvalidIndividual(service)))
+      else Future.successful(Ok(addressInvalidOrganisation(service)))
   }
 
 }

@@ -27,7 +27,7 @@
 
 @(service: Service)(implicit messages: Messages, request: Request[_])
 
-@layout_di(messages("cds.registration.you-already-have-eori.title")) {
+@layout_di(messages("cds.registration.you-already-have-eori.title"), service = service) {
     <div>
 
         <h1 id="page-heading" class="govuk-heading-l">@messages("cds.registration.you-already-have-eori.title")</h1>

@@ -48,7 +48,7 @@
 
 }
 
-@layout_di(messages("cds.matching.nino.row.title"), form = Some(matchNinoIdForm)) {
+@layout_di(messages("cds.matching.nino.row.title"), form = Some(matchNinoIdForm), service = service) {
     <div>
         @errorSummary(matchNinoIdForm.errors, focusOverrides = Map("have-nino" -> "have-nino-true"))
 

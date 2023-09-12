@@ -33,7 +33,7 @@
     individualNameAndDateOfBirthForm.copy(errors = DateConverter.updateDateOfBirthErrors(individualNameAndDateOfBirthForm.errors))
 }
 
-@layout_di(messages("cds.matching.individual.title"), form = Some(individualNameAndDateOfBirthForm)) {
+@layout_di(messages("cds.matching.individual.title"), form = Some(individualNameAndDateOfBirthForm), service = service) {
     <div>
         @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))

@@ -19,12 +19,15 @@ package unit.domain
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 
-class CustomsDataStoreRequestSpec extends UnitSpec {
+@this(layout_di: layout)
+@(service: Service)(implicit request: Request[_], messages: Messages)
 
   private val customsDataStoreRequest =
     CustomsDataStoreRequest(eori = "123456789000", address = "address", timestamp = "timestamp")
 
-  "CustomsDataStoreRequest" should {
+@layout_di(messages("cds.not-based-in-uk.page.title"), service = service) {
+    <div>
+        <h1 class="govuk-heading-l">@messages("cds.not-based-in-uk.heading")</h1>
 
     "convert to map" in {
       val asMap = customsDataStoreRequest.toMap(this)

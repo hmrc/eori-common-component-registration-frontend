@@ -24,7 +24,7 @@
 
 @(service: Service)(implicit messages: Messages, request: Request[_])
 
-@layout_di(messages("cds.enrolment.already.exists.title")) {
+@layout_di(messages("cds.enrolment.already.exists.title"), service = service) {
     <div>
 
         <h1 id="page-heading" class="govuk-heading-l">@messages("cds.enrolment.already.exists.heading")</h1>
