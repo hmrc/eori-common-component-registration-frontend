@@ -81,6 +81,42 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         |}
       """.stripMargin)
 
+  private val serviceRequestJsonNino =
+    Json.parse("""{
+        |  "registerWithIDRequest": {
+        |    "requestCommon": {
+        |      "regime": "CDS",
+        |      "receiptDate": "2016-07-08T08:35:13Z",
+        |      "acknowledgementReference": "fce07075-2e2e-4b12-840e-a63bff6ab1bd"
+        |    },
+        |    "requestDetail": {
+        |      "IDType": "NINO",
+        |      "IDNumber": "2108834503",
+        |      "requiresNameMatch": false,
+        |      "isAnAgent": false
+        |    }
+        |  }
+        |}
+      """.stripMargin)
+
+  private val serviceRequestJsonEori =
+    Json.parse("""{
+        |  "registerWithIDRequest": {
+        |    "requestCommon": {
+        |      "regime": "CDS",
+        |      "receiptDate": "2016-07-08T08:35:13Z",
+        |      "acknowledgementReference": "fce07075-2e2e-4b12-840e-a63bff6ab1bd"
+        |    },
+        |    "requestDetail": {
+        |      "IDType": "EORI",
+        |      "IDNumber": "2108834503",
+        |      "requiresNameMatch": false,
+        |      "isAnAgent": false
+        |    }
+        |  }
+        |}
+      """.stripMargin)
+
   private def requestJsonFragment(isAnIndividual: Boolean): String =
     if (isAnIndividual)
       """
@@ -198,10 +234,10 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
     "return successful response with organisation when matching service returns 200" in {
       MatchService.returnTheMatchResponseWhenReceiveRequest(
         expectedPostUrl,
-        serviceRequestJson.toString,
+        serviceRequestJsonNino.toString,
         serviceResponseJsonOrganisationWithOptionalParams.toString
       )
-      await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])).get must be(
+      await(matchingServiceConnector.lookup(serviceRequestJsonNino.as[MatchingRequestHolder])).get must be(
         serviceResponseJsonOrganisationWithOptionalParams.as[MatchingResponse]
       )
     }
@@ -209,10 +245,10 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
     "return successful response with individual when matching service returns 200" in {
       MatchService.returnTheMatchResponseWhenReceiveRequest(
         expectedPostUrl,
-        serviceRequestJson.toString,
+        serviceRequestJsonEori.toString,
         serviceResponseJsonIndividualWithOptionalParams.toString
       )
-      await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])).get must be(
+      await(matchingServiceConnector.lookup(serviceRequestJsonEori.as[MatchingRequestHolder])).get must be(
         serviceResponseJsonIndividualWithOptionalParams.as[MatchingResponse]
       )
     }
