@@ -45,6 +45,6 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
 
   }
 
-  private lazy val indDoc: Document = Jsoup.parse(contentAsString(youCantChangeAddressIndView()))
+  private lazy val indDoc: Document = Jsoup.parse(contentAsString(youCantChangeAddressIndView(atarService)))
 
 }

@@ -25,13 +25,13 @@
 @import play.twirl.api.utils.StringEscapeUtils
 
 @this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter, govukPanel: GovukPanel, appConfig: AppConfig)
-@(eori: String, processedDate: String)(implicit messages: Messages, request: Request[_])
+@(eori: String, processedDate: String, service: Service)(implicit messages: Messages, request: Request[_])
 
 @checkEORILink = {
     <a class="govuk-link" href=@appConfig.checkEORINumber target="_blank" rel="noopener noreferrer">@messages("cds.standalone.subscription.outcomes.success.extra.information2")</a>
 }
 
-@layout_di(messages("cds.reg.existing.outcomes.success.heading.part1"), displayBackLink = false) {
+@layout_di(messages("cds.reg.existing.outcomes.success.heading.part1"), displayBackLink = false, service = service) {
 <div>
     @govukPanel(Panel(
         title = HtmlContent(messages("cds.reg.existing.outcomes.success.heading.part1")),

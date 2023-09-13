@@ -25,10 +25,10 @@
 
 @(
     email:Option[String],
-    service: Service,
+    service: Service
 )(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages("cds.subscription.verify-email.title")) {
+@layout_di(messages("cds.subscription.verify-email.title"), service = service) {
 
 <div>
     @helpers.form(CheckYourEmailController.submit(service)) {

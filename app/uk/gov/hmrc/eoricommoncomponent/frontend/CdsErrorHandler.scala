@@ -52,11 +52,12 @@ class CdsErrorHandler @Inject() (
     implicit val req: Request[_] = Request(request, "")
 
     statusCode match {
-      case NOT_FOUND                                              => Future.successful(Results.NotFound(notFoundView()))
-      case BAD_REQUEST if message == Constants.INVALID_PATH_PARAM => Future.successful(Results.NotFound(notFoundView()))
+      case NOT_FOUND => Future.successful(Results.NotFound(notFoundView(service)))
+      case BAD_REQUEST if message == Constants.INVALID_PATH_PARAM =>
+        Future.successful(Results.NotFound(notFoundView(service)))
       case FORBIDDEN if message.contains(Constants.NO_CSRF_FOUND) =>
         Future.successful(Redirect(SecuritySignOutController.displayPage(service)).withNewSession)
-      case _ => Future.successful(Results.InternalServerError(errorTemplateView()))
+      case _ => Future.successful(Results.InternalServerError(errorTemplateView(service)))
     }
   }
 
@@ -75,7 +76,7 @@ class CdsErrorHandler @Inject() (
         // $COVERAGE-OFF$Loggers
         logger.warn(invalidRequirement.message)
         // $COVERAGE-ON
-        Future.successful(Results.NotFound(notFoundView()))
+        Future.successful(Results.NotFound(notFoundView(service)))
       case dataUnavailableException: DataUnavailableException =>
         // $COVERAGE-OFF$Loggers
         logger.warn("DataUnavailableException - " + dataUnavailableException.message)
@@ -85,7 +86,7 @@ class CdsErrorHandler @Inject() (
         // $COVERAGE-OFF$Loggers
         logger.error("Internal server error: " + exception.getMessage, exception)
         // $COVERAGE-ON
-        Future.successful(Results.InternalServerError(errorTemplateView()))
+        Future.successful(Results.InternalServerError(errorTemplateView(service)))
     }
   }
 

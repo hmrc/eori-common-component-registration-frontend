@@ -22,9 +22,9 @@
 
 
 @this(layout_di: layout, feedback_di: helpers.feedback, dateFormatter: DateFormatter, govukPanel: GovukPanel)
-@(processedDate: String)(implicit messages: Messages, request: Request[_])
+@(processedDate: String, service: Service)(implicit messages: Messages, request: Request[_])
 
-@layout_di(messages("cds.sub01.outcome.processing.heading-noname"), displayBackLink = false) {
+@layout_di(messages("cds.sub01.outcome.processing.heading-noname"), displayBackLink = false, service = service) {
     @govukPanel(Panel(
         title = HtmlContent(s"""${messages("cds.sub01.outcome.processing.heading-noname")}"""),
         content = HtmlContent(s"""${messages("cds.subscription.outcomes.in-processing.received", dateFormatter.format(processedDate))}""")))

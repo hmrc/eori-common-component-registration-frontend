@@ -32,7 +32,7 @@
     ninoForm.copy(errors = DateConverter.updateDateOfBirthErrors(ninoForm.errors))
 }
 
-@layout_di(messages("cds.matching.nino.title"), form = Some(ninoForm)) {
+@layout_di(messages("cds.matching.nino.title"), form = Some(ninoForm), service = service) {
     <div>
         @errorSummary(updateFormErrors.errors,
             focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))

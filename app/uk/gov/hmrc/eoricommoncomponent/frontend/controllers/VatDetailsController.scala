@@ -105,7 +105,7 @@ class VatDetailsController @Inject() (
             Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
           case InvalidResponse =>
             Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate()))
+          case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
         }
     }
 

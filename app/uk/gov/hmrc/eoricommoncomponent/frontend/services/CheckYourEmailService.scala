@@ -44,8 +44,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CheckYourEmailService @Inject() (
   save4LaterService: Save4LaterService,
-  emailVerificationService: EmailVerificationService,
-  sessionCache: SessionCache,
   mcc: MessagesControllerComponents,
   checkYourEmailView: check_your_email,
   verifyYourEmail: verify_your_email,
@@ -100,7 +98,7 @@ class CheckYourEmailService @Inject() (
           save4LaterService
             .saveEmail(GroupId(userWithEnrolments.groupId), email.copy(isConfirmed = Some(true)))
             .map { _ =>
-              Ok(emailConfirmedView())
+              Ok(emailConfirmedView(service))
             }
 
       }
@@ -131,7 +129,7 @@ class CheckYourEmailService @Inject() (
         }
       }
 
-  def locationByAnswer(groupId: GroupId, yesNoAnswer: YesNo, service: Service)(implicit
+  def locationByAnswer(yesNoAnswer: YesNo, service: Service)(implicit
     request: Request[AnyContent],
     userWithEnrolments: LoggedInUserWithEnrolments
   ): Future[Result] = yesNoAnswer match {

@@ -33,8 +33,8 @@ class VatRegisteredUkKanaSpec extends ViewSpec {
   private val view     = instanceOf[vat_registered_uk_kana]
   implicit val request = withFakeCSRF(FakeRequest())
 
-  lazy val doc: Document           = Jsoup.parse(contentAsString(view(form)))
-  lazy val docWithErrors: Document = Jsoup.parse(contentAsString(view(formWithError)))
+  lazy val doc: Document           = Jsoup.parse(contentAsString(view(form, atarService)))
+  lazy val docWithErrors: Document = Jsoup.parse(contentAsString(view(formWithError, atarService)))
 
   "The 'Is your organisation VAT registered in the UK?' Page" should {
 

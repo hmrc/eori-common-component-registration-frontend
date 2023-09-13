@@ -50,7 +50,7 @@
 
 
 
-@layout_di(messages(headerLabel(cdsOrgType)), countriesInCountryPicker, form = Some(addressForm)) {
+@layout_di(messages(headerLabel(cdsOrgType)), countriesInCountryPicker, form = Some(addressForm), service = service) {
 
         @errorSummary(addressForm.errors)
 

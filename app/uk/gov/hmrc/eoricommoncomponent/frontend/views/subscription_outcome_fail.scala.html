@@ -25,7 +25,7 @@
 @this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter)
 @(processedDate: String, name: String, service: Service)(implicit messages: Messages, request: Request[_])
 
-@layout_di(messages("cds.subscription.outcomes.rejected.title", shortName), suppressTelephoneNumberDetection = false) {
+@layout_di(messages("cds.subscription.outcomes.rejected.title", shortName), suppressTelephoneNumberDetection = false, service = service) {
 <div>
     <div>
         <h1 id="page-heading" class="govuk-heading-xl">@messages("cds.subscription.outcomes.rejected.heading", shortName, StringEscapeUtils.escapeXml11(name)) </h1>

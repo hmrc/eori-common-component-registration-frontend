@@ -19,11 +19,11 @@
 
 
 @this(layout_di: layout)
-@()(implicit request: Request[_], messages: Messages)
+@(service: Service)(implicit request: Request[_], messages: Messages)
 
 @import views.html.helper._
 
-@layout_di(messages("cds.not-based-in-uk.page.title")) {
+@layout_di(messages("cds.not-based-in-uk.page.title"), service = service) {
     <div>
         <h1 class="govuk-heading-l">@messages("cds.not-based-in-uk.heading")</h1>
 

@@ -41,8 +41,8 @@ class YouCannotChangeAddressController @Inject() (
   def page(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => _: LoggedInUserWithEnrolments =>
       if (requestSessionData.isIndividualOrSoleTrader(request) || requestSessionData.isPartnership(request))
-        Future.successful(Ok(youCannotChangeAddressIndividual()))
-      else Future.successful(Ok(youCannotChangeAddressOrganisation()))
+        Future.successful(Ok(youCannotChangeAddressIndividual(service)))
+      else Future.successful(Ok(youCannotChangeAddressOrganisation(service)))
   }
 
 }

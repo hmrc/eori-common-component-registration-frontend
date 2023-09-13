@@ -39,7 +39,7 @@
 @formAction = @{
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController.submit(isInReviewMode, service)
 }
-@layout_di(messages("cds.subscription.vat-details.heading"), form = Some(vatForm)) {
+@layout_di(messages("cds.subscription.vat-details.heading"), form = Some(vatForm), service = service) {
     <div>
         @errorSummary(vatForm.errors)
         @helpers.form(formAction, "vat-details-form") {

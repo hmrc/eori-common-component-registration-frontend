@@ -65,7 +65,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   private val standAloneOutcomeView   = instanceOf[standalone_subscription_outcome]
   private val subscriptionOutcomeView = instanceOf[subscription_outcome]
-  private val xiEoriGuidanceView      = instanceOf[xi_eori_guidance]
   private val EORI                    = "ZZZ1ZZZZ23ZZZZZZZ"
 
   private val subscriptionController = new Sub02Controller(
@@ -81,7 +80,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     sub02EoriAlreadyExists,
     standAloneOutcomeView,
     subscriptionOutcomeView,
-    xiEoriGuidanceView,
     mockCdsSubscriber
   )(global)
 

@@ -79,7 +79,7 @@ class EmailJourneyService @Inject() (
     hc: HeaderCarrier
   ): Future[Result] =
     emailVerificationService.getVerificationStatus(email, credId).foldF(
-      (_ => Future.successful(InternalServerError(errorPage()))),
+      (_ => Future.successful(InternalServerError(errorPage(service)))),
       {
         case EmailVerificationStatus.Verified =>
           onVerifiedEmail(service, email, emailStatus, GroupId(userWithEnrolments.groupId))
@@ -98,7 +98,6 @@ class EmailJourneyService @Inject() (
 
   private def onVerifiedEmail(service: Service, email: String, emailStatus: EmailStatus, groupId: GroupId)(implicit
     request: Request[AnyContent],
-    messages: Messages,
     hc: HeaderCarrier
   ) =
     for {
@@ -112,7 +111,7 @@ class EmailJourneyService @Inject() (
     hc: HeaderCarrier
   ): Future[Result] =
     emailVerificationService.startVerificationJourney(credId, service, email).fold(
-      _ => InternalServerError(errorPage()),
+      _ => InternalServerError(errorPage(service)),
       { responseWithUri: ResponseWithURI =>
         Redirect(s"${appConfig.emailVerificationFrontendBaseUrl}${responseWithUri.redirectUri}")
       }

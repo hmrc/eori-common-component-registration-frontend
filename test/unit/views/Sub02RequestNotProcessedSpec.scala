@@ -60,5 +60,5 @@ class Sub02RequestNotProcessedSpec extends ViewSpec {
 
   implicit val request = withFakeCSRF(FakeRequest())
 
-  lazy val doc: Document = Jsoup.parse(contentAsString(view()))
+  lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService)))
 }

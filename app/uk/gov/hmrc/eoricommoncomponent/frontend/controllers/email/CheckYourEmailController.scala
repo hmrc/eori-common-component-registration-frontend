@@ -47,8 +47,7 @@ class CheckYourEmailController @Inject() (
           .fold(
             formWithErrors =>
               checkYourEmailService.handleFormWithErrors(userWithEnrolments, formWithErrors, isInReviewMode, service),
-            yesNoAnswer =>
-              checkYourEmailService.locationByAnswer(GroupId(userWithEnrolments.groupId), yesNoAnswer, service)
+            yesNoAnswer => checkYourEmailService.locationByAnswer(yesNoAnswer, service)
           )
     }
 

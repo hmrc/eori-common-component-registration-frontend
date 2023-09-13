@@ -54,7 +54,7 @@
     '_isLegendH1 -> true)
 }
 
-@layout_di(title, form = Some(userLocationForm)) {
+@layout_di(title, form = Some(userLocationForm), service = service) {
     <div>
         @errorSummary(userLocationForm.errors, focusOverrides = Map("location" -> s"location-${validOptions.head._1}"))
 
