@@ -52,17 +52,14 @@ case class SubscriptionDetails(
   registeredCompany: Option[CompanyRegisteredCountry] = None
 ) extends Logging {
 
-  def name: String =
-    nameIdOrganisationDetails.map(_.name) orElse nameOrganisationDetails.map(_.name) orElse nameDobDetails.map(
-      _.name
-    ) orElse nameDetails
-      .map(_.name) getOrElse ({
-      val error = "Name is missing in cache"
-      // $COVERAGE-OFF$Loggers
-      logger.warn(error)
-      // $COVERAGE-ON
-      throw new IllegalArgumentException(error)
-    })
+  def name: Option[String] = {
+    val idOrgDetailsName = nameIdOrganisationDetails.map(_.name)
+    val orgDetailsName   = nameOrganisationDetails.map(_.name)
+    val dobDetailsName   = nameDobDetails.map(_.name)
+    val nameDetailsName  = nameDetails.map(_.name)
+
+    idOrgDetailsName orElse orgDetailsName orElse dobDetailsName orElse nameDetailsName
+  }
 
 }
 

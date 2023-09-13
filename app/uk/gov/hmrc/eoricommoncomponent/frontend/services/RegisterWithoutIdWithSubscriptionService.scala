@@ -145,7 +145,7 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   )(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
     registerWithoutIdService
       .registerOrganisation(
-        subscriptionDetails.name,
+        subscriptionDetails.name.getOrElse(""),
         registrationDetails.address,
         subscriptionDetails.contactDetails,
         loggedInUser,

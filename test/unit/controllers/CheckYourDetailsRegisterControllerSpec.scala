@@ -49,12 +49,12 @@ import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-//TODO: We need to simplify the reduce no of tests in the class. Review page should be simple, if value is available in holder then display otherwise not.
 class CheckYourDetailsRegisterControllerSpec
     extends ControllerSpec with BusinessDatesOrganisationTypeTables with ReviewPageOrganisationTypeTables
     with BeforeAndAfterEach with AuthActionMock {
@@ -110,6 +110,7 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSubscriptionDetails.vatVerificationOption).thenReturn(Some(true))
     when(mockSubscriptionDetails.vatControlListResponse).thenReturn(vatControlListResponseDetails)
     when(mockVatControlListDetails.dateOfReg).thenReturn(Some("2017-01-01"))
+    when(mockSubscriptionDetails.nameOrganisationDetails).thenReturn(Some(NameOrganisationMatchModel("orgName")))
   }
 
   "Reviewing the details" should {
@@ -121,10 +122,26 @@ class CheckYourDetailsRegisterControllerSpec
       }
     }
 
+    "redirect to email controller for an organisation whose name wasn't entered" in {
+      when(mockSubscriptionDetails.nameOrganisationDetails).thenReturn(None)
+      when(mockSubscriptionDetails.name).thenReturn(None)
+      showForm() { result =>
+        status(result) shouldBe SEE_OTHER
+        result.header.headers(LOCATION) should endWith(routes.EmailController.form(atarService).url)
+      }
+    }
+
+    "redirect to email controller for an organisation where the vat details weren't entered" in {
+      when(mockSubscriptionDetails.vatControlListResponse).thenReturn(None)
+      showForm() { result =>
+        status(result) shouldBe SEE_OTHER
+      }
+    }
+
     "display the sole trader name and dob from the cache when user has been identified by REG01" in {
       when(mockSubscriptionDetails.nameDobDetails)
         .thenReturn(Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23"))))
-      when(mockSubscriptionDetails.name).thenReturn("John Doe")
+      when(mockSubscriptionDetails.name).thenReturn(Some("John Doe"))
 
       showForm(userSelectedOrgType = SoleTrader) { result =>
         val page = CdsPage(contentAsString(result))
@@ -147,7 +164,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display the sole trader name and dob from the cache when user has NOT been identified" in {
-      when(mockSubscriptionDetails.name).thenReturn("John Doe")
+      when(mockSubscriptionDetails.name).thenReturn(Some("John Doe"))
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(individualRegistrationDetailsNotIdentifiedByReg01)
 
@@ -207,7 +224,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display the business name and six line address from the cache when user wasnt registered" in {
-      when(mockSubscriptionDetails.name).thenReturn("orgName")
+      when(mockSubscriptionDetails.nameOrganisationDetails).thenReturn(Some(NameOrganisationMatchModel("orgName")))
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(organisationRegistrationDetailsWithEmptySafeId)
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
@@ -239,7 +256,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display the business name and four line address from the cache when user was registered, and translate EU country to full country name" in {
-      when(mockSubscriptionDetails.name).thenReturn("orgName")
+      when(mockSubscriptionDetails.nameOrganisationDetails).thenReturn(Some(NameOrganisationMatchModel("orgName")))
       when(mockSubscriptionDetails.addressDetails)
         .thenReturn(Some(AddressViewModel("street", "city", Some("322811"), "PL")))
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
