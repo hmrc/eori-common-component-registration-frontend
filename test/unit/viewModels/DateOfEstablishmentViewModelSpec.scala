@@ -17,7 +17,7 @@
 package unit.viewModels
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, LLP, Partnership, UnincorporatedBody}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, Partnership, UnincorporatedBody}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel
 import play.api.data.Form
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter

@@ -19,8 +19,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.config
 import play.api.inject.Binding
 import play.api.{Configuration, Environment}
 
-import java.time.Clock
-
 class Module extends play.api.inject.Module {
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {

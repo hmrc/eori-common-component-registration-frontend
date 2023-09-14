@@ -18,7 +18,6 @@ package integration
 
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
-import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationConnector
@@ -56,9 +55,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
 
   implicit val messages: Messages = MessagesImpl(Lang("en"), app.injector.instanceOf[MessagesApi])
 
-  private lazy val connector      = app.injector.instanceOf[EmailVerificationConnector]
-  private val email               = "john.doe@example.com"
-  private val expectedContinueUrl = "/customs-enrolment-services/test-email-continue/"
+  private lazy val connector = app.injector.instanceOf[EmailVerificationConnector]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 

@@ -31,7 +31,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http._
 import play.api.http.HeaderNames.AUTHORIZATION
 
 import java.net.URLEncoder

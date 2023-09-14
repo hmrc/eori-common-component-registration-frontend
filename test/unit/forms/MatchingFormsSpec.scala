@@ -17,10 +17,9 @@
 package unit.forms
 
 import base.UnitSpec
-import play.api.data.{Form, FormError}
+import play.api.data.Form
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SixLineAddressMatchModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{ContactDetailsForm, MatchingForms}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 
 class MatchingFormsSpec extends UnitSpec {
 

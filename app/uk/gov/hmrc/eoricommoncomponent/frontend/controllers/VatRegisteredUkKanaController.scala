@@ -23,8 +23,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.vatRegistere
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk_kana
 
-import javax.inject.{Inject, Singleton}
-
 @Singleton
 class VatRegisteredUkKanaController @Inject() (
   vatRegisteredUkView: vat_registered_uk_kana,

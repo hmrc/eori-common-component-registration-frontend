@@ -20,7 +20,6 @@ import play.api.Logging
 
 import java.time.LocalDate
 import play.api.libs.json._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EtmpOrganisationType.logger
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{IndividualName, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.formatInput
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service

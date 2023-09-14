@@ -16,23 +16,16 @@
 
 package unit.controllers
 
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
-import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.LockedEmailController
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CdsSubscriber, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.locked_email_view
 import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.builders.AuthBuilder._
-import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import scala.concurrent.ExecutionContext.global
 import util.builders.SessionBuilder
 
 class LockedEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
@@ -60,7 +53,7 @@ class LockedEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach w
 
       status(result) shouldBe OK
       val page = CdsPage(contentAsString(result))
-      page.h1 shouldBe messages("lockedEmail.heading")
+      page.h1() shouldBe messages("lockedEmail.heading")
       page.getElementById("paragraph1").text shouldBe messages("lockedEmail.para1")
       page.getElementById("paragraph2").text shouldBe messages("lockedEmail.para2")
 
