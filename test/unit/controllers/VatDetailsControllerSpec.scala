@@ -16,7 +16,9 @@
 
 package unit.controllers
 
+import cats.data.EitherT
 import common.pages.subscription.SubscriptionVatDetailsPage._
+import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -25,12 +27,17 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   InvalidResponse,
   NotFoundResponse,
+  ResponseError,
   ServiceUnavailableResponse,
   VatControlListConnector
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
+  EnrolmentStoreProxyResponse,
+  VatControlListRequest,
+  VatControlListResponse
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -264,8 +271,13 @@ class VatDetailsControllerSpec
     }
 
     "redirect to cannot confirm your identity url when a Not Found response is returned" in {
-      when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Left(NotFoundResponse)))
+      val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
+        Left(ResponseError(NOT_FOUND, "not found"))
+
+      vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
+        rightValueForEitherT
+      })
+
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
@@ -273,8 +285,14 @@ class VatDetailsControllerSpec
     }
 
     "redirect to cannot confirm your identity url when a Bad Request response is returned" in {
-      when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Left(InvalidResponse)))
+
+      val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
+        Left(ResponseError(BAD_REQUEST, "bad request"))
+
+      vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
+        rightValueForEitherT
+      })
+
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
@@ -282,8 +300,13 @@ class VatDetailsControllerSpec
     }
 
     "redirect to sorry we are experiencing techincal difficulties url when a service unavailable response is returned" in {
-      when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Left(ServiceUnavailableResponse)))
+      val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
+        Left(ResponseError(SERVICE_UNAVAILABLE, "service unavailable"))
+
+      vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
+        rightValueForEitherT
+      })
+
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SERVICE_UNAVAILABLE
       }
@@ -356,8 +379,13 @@ class VatDetailsControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier]))
-      .thenReturn(Future.successful(Right(vatControllerResponse)))
+    val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
+      Right(vatControllerResponse)
+
+    vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
+      rightValueForEitherT
+    })
+
     when(mockSubscriptionDetailsService.cacheUkVatDetails(any[VatDetails])(any[Request[_]]))
       .thenReturn(Future.successful(()))
     test(
@@ -371,5 +399,8 @@ class VatDetailsControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.vatDetailsNotMatched(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
+
+  def vatControlListMock()(response: EitherT[Future, ResponseError, VatControlListResponse]): Unit =
+    when(mockVatControlListConnector.vatControlList(any[VatControlListRequest])(any[HeaderCarrier])) thenReturn response
 
 }

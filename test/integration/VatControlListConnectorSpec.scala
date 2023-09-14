@@ -24,6 +24,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   InvalidResponse,
   NotFoundResponse,
+  ResponseError,
   ServiceUnavailableResponse,
   VatControlListConnector
 }
@@ -89,29 +90,45 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
     "return successful response with OK status when VatControlList service returns 200" in {
 
       VatControlListMessagingService.returnTheVatControlListResponseOK()
-      await(vatControlListConnector.vatControlList(request)) must be(Right(responseWithOk.as[VatControlListResponse]))
+      await(vatControlListConnector.vatControlList(request).value) must be(
+        Right(responseWithOk.as[VatControlListResponse])
+      )
     }
 
     "return Not Found status when VatControlList service returns 404" in {
 
       VatControlListMessagingService.returnNotFoundVatControlListResponse(expectedGetUrl, responseWithNotFound.toString)
-      await(vatControlListConnector.vatControlList(request)) must be(Left(NotFoundResponse))
+      await(vatControlListConnector.vatControlList(request).value) must be(
+        Left(
+          ResponseError(
+            NOT_FOUND,
+            """{"code":"NOT_FOUND","reason":"The back end has indicated that vat known facts cannot be returned"}"""
+          )
+        )
+      )
     }
 
     "fail when Not Found" in {
-      VatControlListMessagingService.stubTheVatControlListResponse(expectedGetUrl, responseWithOk.toString, NOT_FOUND)
+      VatControlListMessagingService.stubTheVatControlListResponse(
+        expectedGetUrl,
+        responseWithNotFound.toString,
+        NOT_FOUND
+      )
 
-      val result = vatControlListConnector.vatControlList(request).futureValue
-
-      result mustBe Left(NotFoundResponse)
+      await(vatControlListConnector.vatControlList(request).value) mustBe Left(
+        ResponseError(
+          NOT_FOUND,
+          """{"code":"NOT_FOUND","reason":"The back end has indicated that vat known facts cannot be returned"}"""
+        )
+      )
     }
 
     "fail when Bad Request" in {
-      VatControlListMessagingService.stubTheVatControlListResponse(expectedGetUrl, responseWithOk.toString, BAD_REQUEST)
+      VatControlListMessagingService.stubTheVatControlListResponse(expectedGetUrl, "bad request", BAD_REQUEST)
 
-      val result = vatControlListConnector.vatControlList(request).futureValue
-
-      result mustBe Left(InvalidResponse)
+      await(vatControlListConnector.vatControlList(request).value) mustBe Left(
+        ResponseError(BAD_REQUEST, "bad request")
+      )
     }
 
     "fail when Internal Server Error" in {
@@ -122,7 +139,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       )
 
       intercept[Exception] {
-        await(vatControlListConnector.vatControlList(request))
+        await(vatControlListConnector.vatControlList(request).value)
       }
     }
 
@@ -133,9 +150,10 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
         SERVICE_UNAVAILABLE
       )
 
-      val result = vatControlListConnector.vatControlList(request).futureValue
+      val result = vatControlListConnector.vatControlList(request).value.futureValue.map(
+        result => result mustBe Left(ServiceUnavailableResponse)
+      )
 
-      result mustBe Left(ServiceUnavailableResponse)
     }
 
     "throw an exception when different status" in {
@@ -143,7 +161,7 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       VatControlListMessagingService.stubTheVatControlListResponse(expectedGetUrl, responseWithOk.toString, FORBIDDEN)
 
       val caught = intercept[Exception] {
-        await(vatControlListConnector.vatControlList(request))
+        await(vatControlListConnector.vatControlList(request).value)
       }
 
       caught.getMessage mustBe "Incorrect VAT Known facts response"

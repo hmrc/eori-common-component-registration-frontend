@@ -81,8 +81,14 @@ class VatDetailsController @Inject() (
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
-    vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {
-      case Right(vatControlListResponse) =>
+    vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).foldF(
+      responseError =>
+        responseError.status match {
+          case NOT_FOUND | BAD_REQUEST =>
+            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
+        },
+      vatControlListResponse =>
         if (vatControlListResponse.isPostcodeAssociatedWithVrn(vatForm))
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
@@ -99,15 +105,7 @@ class VatDetailsController @Inject() (
             }
         else
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-      case Left(errorResponse) =>
-        errorResponse match {
-          case NotFoundResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case InvalidResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
-        }
-    }
+    )
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
