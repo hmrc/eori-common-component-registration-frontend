@@ -47,7 +47,7 @@ class CheckYourDetailsRegisterController @Inject() (
         viewModelConstructor.generateViewModel(service).map(_ match {
           case Some(viewModel) =>
             Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
-          case None => 
+          case None =>
             logger.warn("Data is missing from the cache so the user is being redirected to the start of the journey")
             Redirect(routes.EmailController.form(service))
         })
