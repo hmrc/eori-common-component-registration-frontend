@@ -97,6 +97,8 @@ class AuthAction @Inject() (
             checkPermittedAccess,
             checkServiceEnrolment
           )
+        case _ => Future.failed(new Exception("Auth did not contain user credentials"))
+
       } recover withAuthRecovery(request)
   }
 

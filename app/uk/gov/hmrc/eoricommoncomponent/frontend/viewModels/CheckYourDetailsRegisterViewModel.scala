@@ -331,14 +331,12 @@ class CheckYourDetailsRegisterConstructor @Inject() (
           Seq(
             summaryListRowNoChangeOption(
               key = messages("cds.form.gb-vat-number"),
-              value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label")))),
-              call = Some(VatRegisteredUkController.reviewForm(service))
+              value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label"))))
             ),
             summaryListRowNoChangeOption(
               key = messages("cds.form.gb-vat-postcode"),
               value =
-                Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label")))),
-              call = Some(VatRegisteredUkController.reviewForm(service))
+                Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label"))))
             ),
             if (subscription.vatVerificationOption.getOrElse(true))
               summaryListRowNoChangeOption(
@@ -356,8 +354,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
                         )
                     ).getOrElse(messages("cds.not-entered.label"))
                   )
-                ),
-                call = Some(VatRegisteredUkController.reviewForm(service))
+                )
               )
             else
               summaryListRowNoChangeOption(
@@ -368,8 +365,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
                       messages("cds.not-entered.label")
                     )
                   )
-                ),
-                call = Some(VatRegisteredUkController.reviewForm(service))
+                )
               )
           )
         else Seq.empty[SummaryListRow]
@@ -488,7 +484,6 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   private def summaryListRowNoChangeOption(
     key: String,
     value: Option[Html],
-    call: Option[Call] = None,
     classes: String = ""
   )(implicit messages: Messages) =
     SummaryListRow(

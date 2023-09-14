@@ -28,8 +28,6 @@ import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, MatchService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import play.api.inject.bind
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import play.api.inject.bind
 
 class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 

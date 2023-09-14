@@ -52,12 +52,6 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
   private val requestTaxPayerId               = "GBE9XSDF10BCKEYAX"
   private val requestAcknowledgementReference = "1234567890ABCDEFG"
 
-  private val reqTaxPayerId = Seq(
-    ("regime", "CDS"),
-    ("taxPayerID", requestTaxPayerId),
-    ("acknowledgementReference", requestAcknowledgementReference)
-  )
-
   private val expectedResponse = Json
     .parse(SubscriptionDisplayMessagingService.validResponse(typeOfLegalEntity = "0001"))
     .as[SubscriptionDisplayResponseHolder]

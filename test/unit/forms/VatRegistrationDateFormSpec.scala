@@ -19,7 +19,6 @@ package unit.forms
 import base.UnitSpec
 import org.mockito.Mockito.when
 import org.mockito.Mockito._
-import org.mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.BeforeAndAfter
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.TimeService

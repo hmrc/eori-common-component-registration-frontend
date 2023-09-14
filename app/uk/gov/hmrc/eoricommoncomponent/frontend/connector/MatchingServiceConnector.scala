@@ -28,11 +28,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
   RegisterWithIdConfirmation,
   RegisterWithIdSubmitted
 }
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HeaderCarrier
 import play.api.http.HeaderNames.AUTHORIZATION
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
-import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 

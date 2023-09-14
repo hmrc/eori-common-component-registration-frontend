@@ -17,7 +17,6 @@
 package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import play.mvc.Http.Status.NO_CONTENT
 
 object CustomsDataStoreStubService {
 

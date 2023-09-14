@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.email
 
-import play.api.libs.json.Json
-
 sealed trait EmailVerificationStatus
 
 object EmailVerificationStatus {
