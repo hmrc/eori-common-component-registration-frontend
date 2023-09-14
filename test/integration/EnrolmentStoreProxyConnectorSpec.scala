@@ -101,15 +101,18 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
   "EnrolmentStoreProxy" should {
     "return successful response with OK status when Enrolment Store Proxy returns 200" in {
       EnrolmentStoreProxyService.returnEnrolmentStoreProxyResponseOk("2e4589d9-484c-468a-8099-02a06fb1cd8c")
-      await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId)) must be(
-        responseWithOk.as[EnrolmentStoreProxyResponse]
+      enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value.futureValue.map(
+        res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse])
       )
     }
 
     "return No Content status when no data is returned in response" in {
       EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", NO_CONTENT)
-      enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).futureValue mustBe EnrolmentStoreProxyResponse(
-        enrolments = List.empty[EnrolmentResponse]
+      enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value.futureValue.map(
+        res =>
+          res mustBe EnrolmentStoreProxyResponse(enrolments =
+            List.empty[EnrolmentResponse]
+          )
       )
     }
 
@@ -121,7 +124,7 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
 
       val caught = intercept[BadRequestException] {
-        await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId))
+        await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value)
       }
 
       caught.getMessage must startWith("Enrolment Store Proxy Status : 503")
@@ -135,7 +138,7 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
 
       val caught = intercept[BadRequestException] {
-        await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId))
+        await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value)
       }
       caught.getMessage must startWith("Enrolment Store Proxy Status : 400")
     }

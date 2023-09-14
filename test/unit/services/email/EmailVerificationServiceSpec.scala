@@ -38,7 +38,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import org.mockito.ArgumentMatchers.any
 import play.api.i18n._
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 
 import scala.concurrent.Future

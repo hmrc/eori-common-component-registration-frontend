@@ -47,8 +47,13 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{EmailVerificationStatus, ResponseWithURI}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
+  EmailVerificationStatus,
+  ResponseWithURI,
+  VerificationStatusResponse
+}
 import cats.data.EitherT
+import org.mockito.ArgumentMatchers
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -83,7 +88,8 @@ class EmailControllerSpec
     mockAppConfig,
     enrolmentPendingForUserView,
     enrolmentPendingAgainstGroupIdView,
-    emailJourneyService
+    emailJourneyService,
+    errorView
   )
 
   private val emailStatus = EmailStatus(Some("test@example.com"))
@@ -110,8 +116,13 @@ class EmailControllerSpec
       .thenReturn(Future.successful(true))
     when(mockSave4LaterService.fetchCacheIds(any())(any()))
       .thenReturn(Future.successful(None))
-    when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-      .thenReturn(Future.successful(List.empty))
+
+    val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List.empty[EnrolmentResponse])
+
+    mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+      rightValueForEitherT
+    })
+
     when(mockSave4LaterService.fetchProcessingService(any())(any(), any())).thenReturn(Future.successful(None))
   }
 
@@ -185,8 +196,12 @@ class EmailControllerSpec
     }
 
     "redirect when group enrolled to service" in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(atarGroupEnrolment)))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(atarGroupEnrolment))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        rightValueForEitherT
+      })
 
       showFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
@@ -195,8 +210,12 @@ class EmailControllerSpec
     }
 
     "redirect when user has existing EORI" in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(cdsGroupEnrolment)))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(cdsGroupEnrolment))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        rightValueForEitherT
+      })
 
       showFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
@@ -205,8 +224,13 @@ class EmailControllerSpec
     }
 
     "redirect and display when group enrolled to service and Eori is retreived in standalone journey " in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(cdsGroupEnrolment)))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(cdsGroupEnrolment))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        rightValueForEitherT
+      })
+
       when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
         .thenReturn(Future.successful(true))
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
@@ -217,8 +241,14 @@ class EmailControllerSpec
     }
 
     "redirect and display when group enrolled to service even if Eori couldn't be retrieved in standalone journey " in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(cdsGroupEnrolment.copy(identifiers = List()))))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] =
+        Right(List(cdsGroupEnrolment.copy(identifiers = List())))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        rightValueForEitherT
+      })
+
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
       showStandaloneFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
@@ -227,8 +257,13 @@ class EmailControllerSpec
     }
 
     "redirect and display when not enrolled to CDS and Display Eori in standalone journey " in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(atarGroupEnrolment)))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(atarGroupEnrolment))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        rightValueForEitherT
+      })
+
       when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
         .thenReturn(Future.successful(true))
       showStandaloneFormRegister() { result =>
@@ -254,5 +289,8 @@ class EmailControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.form(eoriOnlyService).apply(SessionBuilder.buildRequestWithSessionAndPath("/eori-only", userId)))
   }
+
+  def mockGroupIdEnrolments()(response: EitherT[Future, ResponseError, List[EnrolmentResponse]]): Unit =
+    when(groupEnrolmentExtractor.groupIdEnrolments(any())(ArgumentMatchers.any[HeaderCarrier])) thenReturn response
 
 }

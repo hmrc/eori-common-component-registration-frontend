@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
+import cats.data.EitherT
+
 import javax.inject.Inject
-import play.api.Logger
 import play.api.libs.json.{Json, Reads}
 import play.mvc.Http.Status.{NO_CONTENT, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse, GroupId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.EnrolmentStoreProxyEvent
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpResponse}
@@ -32,16 +33,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
   ec: ExecutionContext
-) {
-
-  private val logger = Logger(this.getClass)
+) extends HandleResponses {
 
   private val baseUrl        = appConfig.enrolmentStoreProxyBaseUrl
   private val serviceContext = appConfig.enrolmentStoreProxyServiceContext
 
-  def getEnrolmentByGroupId(
-    groupId: String
-  )(implicit hc: HeaderCarrier, reads: Reads[EnrolmentStoreProxyResponse]): Future[EnrolmentStoreProxyResponse] = {
+  def getEnrolmentByGroupId(groupId: String)(implicit
+    hc: HeaderCarrier,
+    reads: Reads[EnrolmentStoreProxyResponse]
+  ): EitherT[Future, ResponseError, EnrolmentStoreProxyResponse] = EitherT {
     val url =
       s"$baseUrl/$serviceContext/enrolment-store/groups/$groupId/enrolments?type=principal"
 
@@ -49,15 +49,15 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
     logger.debug(s"GetEnrolmentByGroupId: $url and hc: $hc")
     // $COVERAGE-ON
 
-    http.GET[HttpResponse](url) map { resp =>
-      logResponse(resp)
+    http.GET[HttpResponse](url) map { response =>
+      logResponse(response)
 
-      val parsedResponse = resp.status match {
-        case OK => resp.json.as[EnrolmentStoreProxyResponse]
+      val parsedResponse = response.status match {
+        case OK => handleResponse[EnrolmentStoreProxyResponse](response)
         case NO_CONTENT =>
-          EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse])
+          Right(EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
         case _ =>
-          throw new BadRequestException(s"Enrolment Store Proxy Status : ${resp.status}")
+          throw new BadRequestException(s"Enrolment Store Proxy Status : ${response.status}")
       }
       auditCall(url, groupId, parsedResponse)
       parsedResponse
@@ -77,14 +77,22 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
 
   // $COVERAGE-ON
 
-  private def auditCall(url: String, groupId: String, response: EnrolmentStoreProxyResponse)(implicit
-    hc: HeaderCarrier
-  ): Unit =
+  private def auditCall(url: String, groupId: String, response: Either[ResponseError, EnrolmentStoreProxyResponse])(
+    implicit hc: HeaderCarrier
+  ): Unit = {
+
+    val auditDetails = response
+      .fold(
+        Json.toJson(_),
+        proxyResponse => Json.toJson(EnrolmentStoreProxyEvent(groupId = groupId, enrolments = proxyResponse.enrolments))
+      )
+
     audit.sendExtendedDataEvent(
       transactionName = "Enrolment-Store-Proxy-Call",
       path = url,
-      details = Json.toJson(EnrolmentStoreProxyEvent(groupId = groupId, enrolments = response.enrolments)),
+      details = auditDetails,
       eventType = "EnrolmentStoreProxyCall"
     )
+  }
 
 }

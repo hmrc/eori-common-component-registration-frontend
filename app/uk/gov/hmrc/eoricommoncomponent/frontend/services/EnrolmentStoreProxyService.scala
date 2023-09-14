@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import cats.data.EitherT
+
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EnrolmentStoreProxyConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EnrolmentStoreProxyConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, GroupId}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -30,10 +32,14 @@ class EnrolmentStoreProxyService @Inject() (enrolmentStoreProxyConnector: Enrolm
 
   private val activatedState = "Activated"
 
-  def enrolmentsForGroup(groupId: GroupId)(implicit hc: HeaderCarrier): Future[List[EnrolmentResponse]] =
-    enrolmentStoreProxyConnector
-      .getEnrolmentByGroupId(groupId.id)
-      .map(_.enrolments)
-      .map(enrolment => enrolment.filter(x => x.state == activatedState))
+  def enrolmentsForGroup(
+    groupId: GroupId
+  )(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, List[EnrolmentResponse]] = EitherT {
+    enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId.id).fold(
+      respError => Left(respError),
+      enrolmentStoreProxyResponse =>
+        Right(enrolmentStoreProxyResponse.enrolments.filter(x => x.state == activatedState))
+    )
+  }
 
 }

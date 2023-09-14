@@ -17,12 +17,14 @@
 package unit.services
 
 import base.UnitSpec
+import cats.data.EitherT
+import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EnrolmentStoreProxyConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EnrolmentStoreProxyConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   EnrolmentResponse,
   EnrolmentStoreProxyResponse,
@@ -66,27 +68,47 @@ class EnrolmentStoreProxyServiceSpec extends UnitSpec with MockitoSugar with Bef
   "EnrolmentStoreProxyService" should {
 
     "return all enrolments for the groupId" in {
-      when(
-        mockEnrolmentStoreProxyConnector
-          .getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
-      ).thenReturn(
-        Future.successful(EnrolmentStoreProxyResponse(List(enrolmentResponse, enrolmentResponseNoHmrcCusOrg)))
+
+      val rightValueForEitherT: Either[ResponseError, EnrolmentStoreProxyResponse] =
+        Right(EnrolmentStoreProxyResponse(List(enrolmentResponse, enrolmentResponseNoHmrcCusOrg)))
+
+      getEnrolmentByGroupId()(EitherT[Future, ResponseError, EnrolmentStoreProxyResponse] {
+        rightValueForEitherT
+      })
+
+      val expected = List(
+        EnrolmentResponse("HMRC-CUS-ORG", "Activated", List(KeyValue("EORINumber", "10000000000000001"))),
+        EnrolmentResponse("HMRC-VAT-ORG", "Activated", List(KeyValue("EORINumber", "10000000000000001")))
       )
 
-      await(service.enrolmentsForGroup(groupId)) shouldBe List(enrolmentResponse, enrolmentResponseNoHmrcCusOrg)
+      service.enrolmentsForGroup(groupId).value.futureValue.map(res => res shouldBe expected)
 
       verify(mockEnrolmentStoreProxyConnector).getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
     }
 
     "exclude non-active enrolments for the groupId" in {
-      when(
-        mockEnrolmentStoreProxyConnector
-          .getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
-      ).thenReturn(Future.successful(EnrolmentStoreProxyResponse(List(enrolmentResponse, enrolmentResponseNotActive))))
+      val rightValueForEitherT: Either[ResponseError, EnrolmentStoreProxyResponse] =
+        Right(EnrolmentStoreProxyResponse(List(enrolmentResponse, enrolmentResponseNotActive)))
 
-      await(service.enrolmentsForGroup(groupId)) shouldBe List(enrolmentResponse)
+      val expected =
+        List(EnrolmentResponse("HMRC-CUS-ORG", "Activated", List(KeyValue("EORINumber", "10000000000000001"))))
+
+      getEnrolmentByGroupId()(EitherT[Future, ResponseError, EnrolmentStoreProxyResponse] {
+        rightValueForEitherT
+      })
+
+      service.enrolmentsForGroup(groupId).value.futureValue.map(res => res shouldBe expected)
 
       verify(mockEnrolmentStoreProxyConnector).getEnrolmentByGroupId(any[String])(meq(headerCarrier), any())
     }
   }
+
+  def getEnrolmentByGroupId()(response: EitherT[Future, ResponseError, EnrolmentStoreProxyResponse]): Unit =
+    when(
+      mockEnrolmentStoreProxyConnector.getEnrolmentByGroupId(ArgumentMatchers.eq(groupId.id))(
+        ArgumentMatchers.any[HeaderCarrier],
+        any()
+      )
+    ) thenReturn response
+
 }
