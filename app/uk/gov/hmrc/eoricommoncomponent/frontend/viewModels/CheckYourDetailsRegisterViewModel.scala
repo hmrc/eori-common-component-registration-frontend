@@ -481,11 +481,9 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       classes = classes
     )
 
-  private def summaryListRowNoChangeOption(
-    key: String,
-    value: Option[Html],
-    classes: String = ""
-  )(implicit messages: Messages) =
+  private def summaryListRowNoChangeOption(key: String, value: Option[Html], classes: String = "")(implicit
+    messages: Messages
+  ) =
     SummaryListRow(
       key = Key(content = Text(messages(key))),
       value = Value(content = HtmlContent(value.getOrElse("").toString)),
