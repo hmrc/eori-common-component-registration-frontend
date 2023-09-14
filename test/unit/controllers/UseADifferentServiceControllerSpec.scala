@@ -28,16 +28,13 @@ import util.ControllerSpec
 
 class UseADifferentServiceControllerSpec extends ControllerSpec with BeforeAndAfterEach {
 
-  private val useADifferentService = mock[use_a_different_service]
+  private val useADifferentService = instanceOf[use_a_different_service]
 
   "useADifferentService" should {
 
     "return OK" in {
-      when(useADifferentService.apply(any())(any(), any())).thenReturn(HtmlFormat.empty)
-
       val controller = new UseADifferentServiceController(useADifferentService, mcc)
       val result     = controller.form(atarService)(FakeRequest())
-
       status(result) shouldBe OK
     }
   }

@@ -152,22 +152,6 @@ trait CaseClassAuditHelper {
     else
       getKeyValue(acc, value)
 
-  def prefixMapKey(prefix: String, map: Map[String, String]): Map[String, String] =
-    map.map(x => prefix + x._1 -> x._2)
-
-  def prefixMapKey(prefix: String, list: Seq[String]): Map[String, String] =
-    list.zipWithIndex.map(kv => prefix + (kv._2 + 1) -> kv._1).toMap
-
-  def convertToMap(list: Seq[Map[String, String]]): Map[String, String] =
-    list.zipWithIndex
-      .flatMap(
-        kv =>
-          kv._1.map { x =>
-            (x._1 + "." + kv._2) -> x._2
-          }
-      )
-      .toMap
-
   private def isLeafNode(value: Any) =
     value match {
       case _: String     => true
