@@ -298,6 +298,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       val holder: SubscriptionDetails = requestCaptor.getValue
       holder.nameDobDetails shouldBe Some(nameDobDetails)
     }
+
   }
 
   "cacheNinoOrUtrChoice" should {
@@ -342,6 +343,13 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
       val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
       subscriptionDetails.vatControlListResponse shouldBe Some(vatControlListResponse)
+    }
+    "clear subscription details with vat return total" in {
+      await(subscriptionDetailsHolderService.clearCachedVatControlListResponse())
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+      val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
+      subscriptionDetails.vatControlListResponse shouldBe None
     }
   }
 
