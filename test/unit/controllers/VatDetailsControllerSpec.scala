@@ -123,6 +123,10 @@ class VatDetailsControllerSpec
 
   "Submitting the form" should {
 
+    when(mockSubscriptionDetailsService.clearCachedVatControlListResponse()(any[Request[_]])).thenReturn(
+      Future.successful()
+    )
+
     "show error when no postcode is supplied" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "")) { result =>
         status(result) shouldBe BAD_REQUEST
@@ -140,14 +144,14 @@ class VatDetailsControllerSpec
     "should match without space in the postcode" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "Z91AA")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("when-did-you-become-vat-registered")
+        result.header.headers("Location") should endWith("your-uk-vat-details-date")
       }
     }
 
     "should match when the postcode is entered in lowercase" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "z91aa")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("when-did-you-become-vat-registered")
+        result.header.headers("Location") should endWith("your-uk-vat-details-date")
       }
     }
 
@@ -204,7 +208,7 @@ class VatDetailsControllerSpec
     "redirect to next page when valid vat number and effective date is supplied" in {
       submitFormInCreateMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("when-did-you-become-vat-registered")
+        result.header.headers("Location") should endWith("your-uk-vat-details-date")
       }
     }
 
@@ -236,7 +240,7 @@ class VatDetailsControllerSpec
       submitFormInReviewMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith(
-          "/customs-registration-services/atar/register/when-did-you-become-vat-registered"
+          "/customs-registration-services/atar/register/matching/review-determine"
         )
       }
     }
