@@ -24,7 +24,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DateOfVatRegistrationController, VatReturnController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{GetVatCustomerInformationService, SubscriptionBusinessService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   date_of_vat_registration,
   vat_return_total,
@@ -40,8 +40,9 @@ import scala.concurrent.Future
 
 class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
 
-  private val mockDateOfVatRegistrationView   = instanceOf[date_of_vat_registration]
-  private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
+  private val mockDateOfVatRegistrationView        = instanceOf[date_of_vat_registration]
+  private val mockSubscriptionBusinessService      = mock[SubscriptionBusinessService]
+  private val mockGetVatCustomerInformationService = mock[GetVatCustomerInformationService]
 
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
@@ -53,6 +54,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
   private val controller = new DateOfVatRegistrationController(
     mockAuthAction,
     mockSubscriptionBusinessService,
+    mockGetVatCustomerInformationService,
     mcc,
     mockDateOfVatRegistrationView,
     form
