@@ -98,6 +98,7 @@ class VatDetailsController @Inject() (
                   Redirect(DateOfVatRegistrationController.createForm(service))
             }
         else
+          subscriptionDetailsService.clearCachedVatControlListResponse
           Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
       case Left(errorResponse) =>
         errorResponse match {
