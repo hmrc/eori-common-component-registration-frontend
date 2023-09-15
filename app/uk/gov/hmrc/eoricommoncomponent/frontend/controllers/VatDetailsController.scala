@@ -99,7 +99,7 @@ class VatDetailsController @Inject() (
             }
         else
           subscriptionDetailsService.clearCachedVatControlListResponse
-          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+        Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
       case Left(errorResponse) =>
         errorResponse match {
           case NotFoundResponse =>
