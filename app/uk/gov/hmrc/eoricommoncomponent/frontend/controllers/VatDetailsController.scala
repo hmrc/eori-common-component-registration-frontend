@@ -104,7 +104,9 @@ class VatDetailsController @Inject() (
                   Redirect(DateOfVatRegistrationController.createForm(service))
             }
         else
-          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          subscriptionDetailsService.clearCachedVatControlListResponse.flatMap(
+            _ => Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          )
     )
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =

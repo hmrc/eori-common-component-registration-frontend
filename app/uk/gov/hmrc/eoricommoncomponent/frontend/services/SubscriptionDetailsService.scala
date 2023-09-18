@@ -139,6 +139,9 @@ class SubscriptionDetailsService @Inject() (
   def clearCachedUkVatDetails(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(ukVatDetails = None))
 
+  def clearCachedVatControlListResponse()(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(vatControlListResponse = None))
+
   def cacheVatControlListResponse(
     vatControlListResponse: VatControlListResponse
   )(implicit request: Request[_]): Future[Unit] =

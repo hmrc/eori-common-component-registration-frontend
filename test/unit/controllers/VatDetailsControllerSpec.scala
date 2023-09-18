@@ -130,6 +130,10 @@ class VatDetailsControllerSpec
 
   "Submitting the form" should {
 
+    when(mockSubscriptionDetailsService.clearCachedVatControlListResponse()(any[Request[_]])).thenReturn(
+      Future.successful()
+    )
+
     "show error when no postcode is supplied" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "")) { result =>
         status(result) shouldBe BAD_REQUEST
