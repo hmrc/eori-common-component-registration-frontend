@@ -18,8 +18,6 @@ package unit.controllers
 
 import common.pages.NinoMatchPage
 import common.pages.matching.NameDateOfBirthPage.{fieldLevelErrorDateOfBirth, pageLevelErrorSummaryListXPath}
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.mockito.{ArgumentMatchers, Mockito}
@@ -36,6 +34,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.NinoFormBuilder
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

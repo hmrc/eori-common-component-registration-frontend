@@ -18,8 +18,6 @@ package unit.controllers
 
 import common.pages.matching.NameDateOfBirthPage
 import common.pages.matching.NameDateOfBirthPage._
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -34,6 +32,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 import util.builders.matching.IndividualIdFormBuilder._
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

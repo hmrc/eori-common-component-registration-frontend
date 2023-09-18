@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-import util.builders.YesNoFormBuilder._
 import common.pages.subscription.ContactAddressPage
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -38,6 +37,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder._
 import util.builders.SessionBuilder
+import util.builders.YesNoFormBuilder._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

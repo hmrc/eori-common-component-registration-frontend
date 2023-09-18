@@ -17,8 +17,6 @@
 package unit.services
 
 import base.UnitSpec
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -33,6 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 import scala.util.Random

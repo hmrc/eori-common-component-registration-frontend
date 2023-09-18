@@ -25,16 +25,16 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.NOT_FOUND
 import play.api.test.FakeRequest
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GetVatInformationResponse, VatControlListResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.GetVatCustomerInformationConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GetVatInformationResponse, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.GetVatCustomerInformationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class GetVatCustomerInformationServiceSpec extends UnitSpec with MockitoSugar with ScalaFutures {
 

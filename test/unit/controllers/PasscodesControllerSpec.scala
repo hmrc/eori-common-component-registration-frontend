@@ -27,8 +27,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationConne
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly.PasscodesController
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import util.ControllerSpec
-import util.builders.{AuthActionMock, SessionBuilder}
 import util.builders.AuthBuilder.withAuthorisedUser
+import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.{ExecutionContext, Future}
 

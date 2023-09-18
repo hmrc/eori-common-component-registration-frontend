@@ -23,8 +23,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{TaxEnrolmentsRequest, TaxEnrolmentsResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{IssuerCall, IssuerRequest, IssuerResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
-import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
+import uk.gov.hmrc.http._
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal

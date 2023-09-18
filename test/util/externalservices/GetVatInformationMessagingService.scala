@@ -21,7 +21,7 @@ import play.api.http.Status.{INTERNAL_SERVER_ERROR, LENGTH_REQUIRED, SERVICE_UNA
 import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
-import play.mvc.Http.Status.{BAD_GATEWAY, BAD_REQUEST, FORBIDDEN, NOT_FOUND, OK}
+import play.mvc.Http.Status._
 
 object GetVatInformationMessagingService {
 

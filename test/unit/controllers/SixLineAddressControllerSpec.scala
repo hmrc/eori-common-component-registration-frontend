@@ -18,7 +18,6 @@ package unit.controllers
 
 import common.pages.matching.AddressPageFactoring._
 import common.pages.subscription.AddressPage
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.prop.TableDrivenPropertyChecks._
@@ -28,7 +27,6 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SixLineAddressController, SubscriptionFlowManager}
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
@@ -45,6 +43,7 @@ import util.builders.RegistrationDetailsBuilder.defaultAddress
 import util.builders.matching._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

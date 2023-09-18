@@ -19,6 +19,7 @@ package util.builders.matching
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NinoMatch
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+
 import java.time.LocalDate
 
 object NinoFormBuilder {

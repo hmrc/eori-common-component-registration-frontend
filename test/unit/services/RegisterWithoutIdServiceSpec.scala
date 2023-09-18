@@ -17,8 +17,6 @@
 package unit.services
 
 import base.UnitSpec
-import java.time.{LocalDate, LocalDateTime, ZoneId}
-
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.mockito._
@@ -37,6 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLoo
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegisterWithoutIdService, RequestCommonGenerator}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 

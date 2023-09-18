@@ -17,7 +17,6 @@
 package unit.controllers
 
 import common.pages.matching.OrganisationUtrPage._
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -42,6 +41,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.OrganisationUtrFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

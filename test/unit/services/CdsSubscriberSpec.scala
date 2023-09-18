@@ -19,31 +19,29 @@ package unit.services
 import base.{Injector, UnitSpec}
 import common.support.testdata.TestData
 import common.support.testdata.subscription.SubscriptionContactDetailsBuilder
-
-import java.time.LocalDateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{when, _}
+import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.Application
 import play.api.i18n.Lang.defaultLang
 import play.api.i18n.{Messages, MessagesApi, MessagesImpl}
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Request
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
-import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import play.api.Application
-import play.api.inject.bind
-
+import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 

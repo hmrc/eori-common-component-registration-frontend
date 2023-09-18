@@ -22,7 +22,6 @@ import common.pages.subscription.{
   SubscriptionDateOfEstablishmentPage,
   SubscriptionPartnershipDateOfEstablishmentPage
 }
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -42,6 +41,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

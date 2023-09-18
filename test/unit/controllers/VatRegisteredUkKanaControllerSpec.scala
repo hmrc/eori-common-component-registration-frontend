@@ -16,8 +16,6 @@
 
 package unit.controllers
 
-import java.util.UUID
-
 import common.pages.registration.VatRegisteredUkPage
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -27,6 +25,7 @@ import util.ControllerSpec
 import util.builders.YesNoFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.util.UUID
 import scala.concurrent.Future
 
 class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMock {

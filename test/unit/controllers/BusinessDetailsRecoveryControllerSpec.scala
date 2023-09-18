@@ -16,18 +16,17 @@
 
 package unit.controllers
 
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfter
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{BusinessDetailsRecoveryController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   ContactDetailsController,
   DateOfEstablishmentController
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{BusinessDetailsRecoveryController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -46,6 +45,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder.{organisationRegistrationDetails, soleTraderRegistrationDetails}
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

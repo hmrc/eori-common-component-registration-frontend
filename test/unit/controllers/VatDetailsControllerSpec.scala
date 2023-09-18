@@ -31,16 +31,16 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 
 import java.time.LocalDate
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class VatDetailsControllerSpec
     extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport

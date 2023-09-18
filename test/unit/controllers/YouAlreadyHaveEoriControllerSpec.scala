@@ -16,20 +16,19 @@
 
 package unit.controllers
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouAlreadyHaveEoriController
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{standalone_already_have_eori, you_already_have_eori}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import org.mockito.Mockito.when
-import org.mockito.ArgumentMatchers.any
-
 import scala.concurrent.Future
 
 class YouAlreadyHaveEoriControllerSpec extends ControllerSpec with AuthActionMock {

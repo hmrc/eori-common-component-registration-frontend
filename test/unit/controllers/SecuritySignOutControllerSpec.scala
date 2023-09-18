@@ -17,7 +17,7 @@
 package unit.controllers
 
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, _}
+import org.mockito.Mockito._
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector

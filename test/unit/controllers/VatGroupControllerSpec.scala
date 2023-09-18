@@ -17,7 +17,6 @@
 package unit.controllers
 
 import common.pages.registration.VatGroupPage
-
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._

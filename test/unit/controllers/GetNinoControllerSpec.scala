@@ -17,8 +17,6 @@
 package unit.controllers
 
 import common.pages.matching.DoYouHaveNinoPage._
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -37,6 +35,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.NinoFormBuilder
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

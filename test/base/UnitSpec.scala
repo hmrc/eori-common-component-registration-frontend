@@ -21,10 +21,10 @@ import org.scalatest.wordspec.AnyWordSpec
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import util.TestData
-import scala.language.postfixOps
 
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.{Duration, DurationInt, FiniteDuration}
+import scala.concurrent.{Await, Future}
+import scala.language.postfixOps
 
 trait UnitSpec extends AnyWordSpec with Matchers with TestData {
 

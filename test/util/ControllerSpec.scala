@@ -16,32 +16,32 @@
 
 package util
 
-import java.util.UUID
-
 import akka.stream.Materializer
 import akka.stream.testkit.NoMaterializer
 import base.{Injector, UnitSpec}
 import common.pages.WebPage
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.{DefaultFileMimeTypes, FileMimeTypesConfiguration}
-import play.api.{Configuration, Environment}
+import play.api.i18n.Lang._
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesImpl}
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc._
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{
+  AppConfig,
+  InternalAuthTokenInitialiser,
+  NoOpInternalAuthTokenInitialiser
+}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import unit.controllers.CdsPage
 import util.builders.{AuthBuilder, SessionBuilder}
-import play.api.i18n.Lang._
-import play.api.test.FakeRequest
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import play.api.Application
-import play.api.inject.bind
-
+import java.util.UUID
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 import scala.util.Random

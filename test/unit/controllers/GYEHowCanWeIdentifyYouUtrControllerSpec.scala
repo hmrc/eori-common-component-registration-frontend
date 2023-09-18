@@ -17,8 +17,6 @@
 package unit.controllers
 
 import common.pages.RegisterHowCanWeIdentifyYouPage
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -43,6 +41,7 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

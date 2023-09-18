@@ -31,8 +31,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionPage
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec

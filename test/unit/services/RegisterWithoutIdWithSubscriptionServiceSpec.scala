@@ -17,8 +17,6 @@
 package unit.services
 
 import base.UnitSpec
-
-import java.time.{LocalDate, LocalDateTime, ZoneId}
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -32,14 +30,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   RegisterWithoutIdService,
   RegisterWithoutIdWithSubscriptionService
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 

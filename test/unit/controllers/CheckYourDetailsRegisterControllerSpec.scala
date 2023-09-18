@@ -34,6 +34,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{Subscriptio
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -47,8 +49,6 @@ import util.builders.RegistrationDetailsBuilder.{
 }
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
-import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -17,8 +17,8 @@
 package unit.filters
 
 import akka.actor.ActorSystem
-import akka.stream.testkit.NoMaterializer
 import akka.stream.Materializer
+import akka.stream.testkit.NoMaterializer
 import base.UnitSpec
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, spy, when}

@@ -20,16 +20,16 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status.OK
-import uk.gov.hmrc.auth.core.AuthConnector
 import play.api.mvc.{Request, Result}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController
-import util.ControllerSpec
-import util.builders.{AuthActionMock, SessionBuilder}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import util.builders.AuthBuilder.withAuthorisedUser
 import play.api.test.Helpers.{LOCATION, _}
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatVerificationOptionController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import unit.controllers.VatVerificationOptionBuilder._
+import util.ControllerSpec
+import util.builders.AuthBuilder.withAuthorisedUser
+import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

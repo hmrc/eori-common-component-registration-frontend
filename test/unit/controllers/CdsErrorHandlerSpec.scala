@@ -19,8 +19,7 @@ package unit.controllers
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Configuration
 import play.api.test.FakeRequest
-import play.api.test.Helpers.LOCATION
-import play.api.test.Helpers._
+import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}

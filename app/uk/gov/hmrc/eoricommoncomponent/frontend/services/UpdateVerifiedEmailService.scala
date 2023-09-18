@@ -24,8 +24,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   UpdateVerifiedEmailConnector
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
