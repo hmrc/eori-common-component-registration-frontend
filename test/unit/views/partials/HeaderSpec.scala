@@ -65,26 +65,6 @@ class HeaderSpec extends ControllerSpec with AuthActionMock with CSRFTest {
     }
   }
 
-  "Feedback URL" should {
-    "be present with service param equal to 'eori-common-component-subscribe''" in {
-      val result = controller
-        .startRegister(atarService)
-        .apply(
-          SessionBuilder.buildRequestWithSessionAndPathNoUser(
-            method = "GET",
-            path = "/customs-registration-services/atar/subscribe/"
-          )
-        )
-
-      val page = CdsPage(contentAsString(result))
-
-      page.getElementAttribute(
-        "//span[@class='govuk-phase-banner__text']//a[@class='govuk-link']",
-        "href"
-      ) should endWith("/contact/beta-feedback?service=eori-common-component-register-atar")
-    }
-  }
-
   "Language switch" should {
 
     "be always presented" in {
