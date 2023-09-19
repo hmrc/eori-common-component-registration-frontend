@@ -96,7 +96,7 @@ class WhatIsYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       submitFormInCreateMode(EmailFieldsMap) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
+        header("Location", result).value should endWith(
           "/customs-registration-services/atar/register/matching/check-your-email"
         )
 

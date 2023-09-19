@@ -437,7 +437,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.getCachedPersonalDataDisclosureConsent(any[Request[_]]))
-      .thenReturn(previouslyAnswered)
+      .thenReturn(Future.successful(previouslyAnswered))
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)
     when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)

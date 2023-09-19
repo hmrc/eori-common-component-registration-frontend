@@ -206,7 +206,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.end(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.end(atarService).url
       }
     }
 
@@ -225,7 +225,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.pending(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.pending(atarService).url
       }
     }
 
@@ -242,7 +242,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyExists(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.eoriAlreadyExists(atarService).url
       }
     }
 
@@ -259,7 +259,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyAssociated(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.eoriAlreadyAssociated(atarService).url
       }
     }
 
@@ -276,7 +276,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.subscriptionInProgress(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.subscriptionInProgress(atarService).url
       }
     }
 
@@ -293,9 +293,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(
-          LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
+        header(
+          LOCATION,
+          result
+        ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
           .requestNotProcessed(atarService)
           .url
       }
@@ -414,7 +415,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     "render subscription in-progress page" in {
       when(mockSessionCache.submissionCompleteDetails(any[Request[_]]))
         .thenReturn(Future.successful(SubmissionCompleteDetails("22 May 2016")))
-      when(mockSessionCache.saveSubmissionCompleteDetails(any())(any[Request[_]])).thenReturn(true)
+      when(mockSessionCache.saveSubmissionCompleteDetails(any())(any[Request[_]])).thenReturn(Future.successful(true))
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokeSubscriptionInProgress { result =>
         assertCleanedSession(result)

@@ -31,6 +31,7 @@ import play.api.i18n.{Messages, MessagesApi, MessagesImpl}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Request
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -167,7 +168,9 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
     }
 
     "propagate a failure when subscriptionDetailsHolder cache fails to be accessed" in {
-      when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(mockRegistrationDetails)
+      when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(
+        Future.successful(mockRegistrationDetails)
+      )
       when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.failed(emulatedFailure))
 
       val caught = the[UnsupportedOperationException] thrownBy {
@@ -328,8 +331,10 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
     registeredName: String = "orgName"
   ) = {
 
-    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(cachedRegistrationDetails)
-    when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(subscriptionDetails)
+    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(
+      Future.successful(cachedRegistrationDetails)
+    )
+    when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(subscriptionDetails))
     when(
       mockSubscriptionService
         .subscribe(any[RegistrationDetails], meq(subscriptionDetails), any[Option[CdsOrganisationType]], any[Service])(
@@ -355,8 +360,12 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
     subscriptionDetails: SubscriptionDetails,
     registeredName: String
   ) = {
-    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(registrationDetails)
-    when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(subscriptionDetails)
+    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(
+      Future.successful(registrationDetails)
+    )
+    when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+      Future.successful(subscriptionDetails)
+    )
     when(
       mockSubscriptionService
         .subscribe(any[RegistrationDetails], any[SubscriptionDetails], any[Option[CdsOrganisationType]], any[Service])(

@@ -55,7 +55,9 @@ class GetVatCustomerInformationServiceSpec extends UnitSpec with MockitoSugar wi
       val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
       val date   = format.parse(dateAsString)
 
-      when(sessionCacheMock.subscriptionDetails).thenReturn(SubscriptionDetails(ukVatDetails = Some(vatDetails)))
+      when(sessionCacheMock.subscriptionDetails).thenReturn(
+        Future.successful(SubscriptionDetails(ukVatDetails = Some(vatDetails)))
+      )
 
       val connectorResponse: Either[Int, GetVatInformationResponse] =
         Right(GetVatInformationResponse(Some(date), Some(postCode)))
@@ -71,7 +73,9 @@ class GetVatCustomerInformationServiceSpec extends UnitSpec with MockitoSugar wi
 
     "handle Unsuccessful getVatCustomerInformation API Response" in {
 
-      when(sessionCacheMock.subscriptionDetails).thenReturn(SubscriptionDetails(ukVatDetails = Some(vatDetails)))
+      when(sessionCacheMock.subscriptionDetails).thenReturn(
+        Future.successful(SubscriptionDetails(ukVatDetails = Some(vatDetails)))
+      )
 
       val connectorResponse: Either[Int, GetVatInformationResponse] = Left(NOT_FOUND)
       mockGetVatCustomerInformation()(

@@ -218,9 +218,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe empty
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
-          "/customs-registration-services/atar/register/matching/confirm"
-        )
+        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
 
         verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }

@@ -163,7 +163,7 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
           page.elementIsPresent(fieldLevelErrorXPath) shouldBe true
         }
         page.getElementsText(fieldLevelErrorXPath) shouldBe s"Error: $errorMessage"
-        result
+        await(result)
       }
 
     def assertPresentOnPage(page: CdsPage)(elementXpath: String): Unit =

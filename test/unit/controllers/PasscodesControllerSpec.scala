@@ -22,6 +22,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.OK
 import play.api.mvc.MessagesControllerComponents
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly.PasscodesController

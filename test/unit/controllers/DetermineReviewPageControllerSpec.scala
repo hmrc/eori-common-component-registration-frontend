@@ -49,7 +49,7 @@ class DetermineReviewPageControllerSpec extends ControllerSpec with BeforeAndAft
 
       determinRouteGetYourEORI { result =>
         val awaitedResult = await(result)
-        status(awaitedResult) shouldBe SEE_OTHER
+        status(result) shouldBe SEE_OTHER
         awaitedResult.header.headers.get("Location") shouldBe
           Some(
             uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.CheckYourDetailsRegisterController

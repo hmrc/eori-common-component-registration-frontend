@@ -279,7 +279,7 @@ class SixLineAddressControllerSpec
           page.getElementsText(PageLevelErrorSummaryListXPath) shouldBe empty
 
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) shouldBe expectedRedirectURL
+          header(LOCATION, result).value shouldBe expectedRedirectURL
         }
       }
     }
@@ -372,8 +372,10 @@ class SixLineAddressControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(CdsOrganisationType.ThirdCountryIndividual))
-    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
-    when(mockSubscriptionDetailsService.cachedCustomsId(any[Request[_]])).thenReturn(None)
+    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+      Future.successful(individualRegistrationDetails)
+    )
+    when(mockSubscriptionDetailsService.cachedCustomsId(any[Request[_]])).thenReturn(Future.successful(None))
 
     test(
       controller.submit(false, CdsOrganisationType.ThirdCountryIndividualId, atarService)(
@@ -398,7 +400,7 @@ class SixLineAddressControllerSpec
       page.getElementsText(PageLevelErrorSummaryListXPath) shouldBe errorMessage
       page.getElementsText(fieldLevelErrorXPath) shouldBe s"Error: $errorMessage"
       page.getElementsText("title") should startWith("Error: ")
-      result
+      await(result)
     }
 
   def showForm[T](

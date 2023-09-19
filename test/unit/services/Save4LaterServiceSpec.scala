@@ -16,6 +16,7 @@
 
 package unit.services
 
+import akka.dispatch.ThreadPoolConfig.defaultTimeout
 import base.UnitSpec
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any

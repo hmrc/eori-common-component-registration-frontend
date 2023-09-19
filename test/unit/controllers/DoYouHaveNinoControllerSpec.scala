@@ -133,7 +133,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/row/get-nino")
+        header("Location", result).value should endWith("register/matching/row/get-nino")
       }
     }
 
@@ -147,7 +147,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/address/third-country-sole-trader")
+        header("Location", result).value should endWith("register/matching/address/third-country-sole-trader")
       }
     }
 
@@ -163,7 +163,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/address/third-country-sole-trader")
+        header("Location", result).value should endWith("register/matching/address/third-country-sole-trader")
       }
     }
 
@@ -188,7 +188,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(form = noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/check-user")
+        header("Location", result).value should endWith("register/check-user")
       }
     }
   }

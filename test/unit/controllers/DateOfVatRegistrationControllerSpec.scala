@@ -79,7 +79,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     super.beforeEach()
 
     when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any[Request[_]])).thenReturn(
-      Some(vatControlListResponse)
+      Future.successful(Some(vatControlListResponse))
     )
   }
 

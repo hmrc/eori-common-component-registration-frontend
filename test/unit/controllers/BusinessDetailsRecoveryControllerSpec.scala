@@ -139,7 +139,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
       invokeContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(ContactDetailsController.createForm(atarService).url)
+        header(LOCATION, result).value should endWith(ContactDetailsController.createForm(atarService).url)
       }
     }
 
@@ -165,7 +165,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
       invokeContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(DateOfEstablishmentController.createForm(atarService).url)
+        header(LOCATION, result).value should endWith(DateOfEstablishmentController.createForm(atarService).url)
       }
     }
 

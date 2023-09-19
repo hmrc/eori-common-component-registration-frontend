@@ -25,6 +25,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Request
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
@@ -136,7 +137,7 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   "Calling cacheOrgName" should {
 
     "save Address in the cache for Organisation" in {
-      when(mockSessionCache.registrationDetails).thenReturn(startingRegDetailsOrganisation)
+      when(mockSessionCache.registrationDetails).thenReturn(Future.successful(startingRegDetailsOrganisation))
 
       await(registrationDetailsService.cacheAddress(updatedAddress))
       val requestCaptor = ArgumentCaptor.forClass(classOf[RegistrationDetailsOrganisation])
@@ -152,7 +153,7 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
 
     "save Address in the cache for Individual" in {
-      when(mockSessionCache.registrationDetails).thenReturn(startingRegDetailsIndividual)
+      when(mockSessionCache.registrationDetails).thenReturn(Future.successful(startingRegDetailsIndividual))
 
       await(registrationDetailsService.cacheAddress(updatedAddress))
       val requestCaptor = ArgumentCaptor.forClass(classOf[RegistrationDetailsIndividual])
@@ -203,7 +204,7 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   "initialise session cache with emptySubDetailsIndividual for organisation type third-country-individual" in {
 
-    when(mockSessionCache.subscriptionDetails).thenReturn(startingSubDetailsOrganisation)
+    when(mockSessionCache.subscriptionDetails).thenReturn(Future.successful(startingSubDetailsOrganisation))
 
     await(registrationDetailsService.initialiseCacheWithRegistrationDetails(CdsOrganisationType.ThirdCountryIndividual))
 
@@ -218,12 +219,12 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
     actualRegistrationDetails shouldBe emptyRegDetailsIndividual
     actualSubscriptionDetails shouldBe emptySubDetailsIndividual
-    mockSessionCache.subscriptionDetails.name shouldBe startingSubDetailsOrganisation.name
+    await(mockSessionCache.subscriptionDetails).name shouldBe startingSubDetailsOrganisation.name
   }
 
   "initialise session cache with RegistrationDetailsOrganisation for remaining organisation types as third-country-organisation" in {
 
-    when(mockSessionCache.subscriptionDetails).thenReturn(startingSubDetailsIndividual)
+    when(mockSessionCache.subscriptionDetails).thenReturn(Future.successful(startingSubDetailsIndividual))
 
     await(
       registrationDetailsService.initialiseCacheWithRegistrationDetails(CdsOrganisationType.ThirdCountryOrganisation)
@@ -240,6 +241,6 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
     actualRegistrationDetails shouldBe emptyRegDetailsOrganisation
     actualSubscriptionDetails shouldBe emptySubDetailsOrganisation
-    mockSessionCache.subscriptionDetails.name shouldBe startingSubDetailsIndividual.name
+    await(mockSessionCache.subscriptionDetails).name shouldBe startingSubDetailsIndividual.name
   }
 }

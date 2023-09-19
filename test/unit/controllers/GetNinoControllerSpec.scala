@@ -97,7 +97,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/confirm")
+        header("Location", result).value should endWith("register/matching/confirm")
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
           any[HeaderCarrier],
@@ -145,7 +145,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/check-user")
+        header("Location", result).value should endWith("register/check-user")
       }
     }
 

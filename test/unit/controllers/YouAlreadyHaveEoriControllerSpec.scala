@@ -71,11 +71,9 @@ class YouAlreadyHaveEoriControllerSpec extends ControllerSpec with AuthActionMoc
   }
 
   private def display(test: Future[Result] => Any) =
-    await(test(controller.display(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
+    test(controller.display(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
 
   private def displayStandAlone(test: Future[Result] => Any) =
-    await(
-      test(controller.displayStandAlone(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
-    )
+    test(controller.displayStandAlone(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
 
 }

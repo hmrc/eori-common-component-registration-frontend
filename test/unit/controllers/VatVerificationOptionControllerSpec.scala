@@ -65,14 +65,14 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
     "redirect to VAT details page for 'date' option" in {
       submitForm(validRequestDate) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/your-uk-vat-details-date")
+        header(LOCATION, result).value should endWith("/your-uk-vat-details-date")
       }
     }
 
     "redirect to cannot verify details page for 'amount' option" in {
       submitForm(validRequestAmount) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/your-uk-vat-details-return")
+        header(LOCATION, result).value should endWith("/your-uk-vat-details-return")
       }
     }
   }

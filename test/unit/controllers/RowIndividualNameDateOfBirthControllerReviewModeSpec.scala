@@ -122,7 +122,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       "should redirect to sign out page if cachedNameDobDetails not found" in withControllerFixture {
         controllerFixture =>
           import controllerFixture._
-          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(None)
+          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
 
           controllerFixture.showForm { result =>
             status(result) shouldBe SEE_OTHER

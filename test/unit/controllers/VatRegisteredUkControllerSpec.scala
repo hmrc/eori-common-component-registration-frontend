@@ -143,7 +143,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       submitForm(ValidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/register/your-uk-vat-details")
+        header(LOCATION, result).value should endWith("/register/your-uk-vat-details")
       }
     }
 
@@ -156,7 +156,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       submitForm(invalidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("atar/register")
+        header(LOCATION, result).value should endWith("atar/register")
       }
     }
 
@@ -169,7 +169,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       reviewForm() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("atar/register")
+        header(LOCATION, result).value should endWith("atar/register")
       }
     }
 
@@ -182,7 +182,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       createForm() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("atar/register")
+        header(LOCATION, result).value should endWith("atar/register")
       }
     }
 
@@ -196,14 +196,14 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       submitForm(validRequestNo) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/contact-details")
+        header(LOCATION, result).value should endWith("register/contact-details")
       }
     }
 
     "redirect to vat groups review page for yes answer and is in review mode" in {
       submitForm(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/your-uk-vat-details/review")
+        header(LOCATION, result).value should endWith("register/your-uk-vat-details/review")
       }
     }
 
@@ -213,7 +213,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       )
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(
+        header(LOCATION, result).value should endWith(
           "customs-registration-services/atar/register/contact-details/review"
         )
       }
@@ -229,7 +229,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private def reviewForm()(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
-    when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(true)
+    when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(Future.successful(true))
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 

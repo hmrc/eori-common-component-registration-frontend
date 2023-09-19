@@ -194,9 +194,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
       ).thenReturn(Future.successful(true))
       submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
-          "/customs-registration-services/atar/register/matching/confirm"
-        )
+        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
       }
     }
   }
@@ -215,7 +213,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/confirm")
+        header("Location", result).value should endWith("register/matching/confirm")
         verify(mockMatchingService).matchBusiness(meq(ValidUtr), meq(thirdCountryOrganisation), meq(None), any())(
           any[Request[AnyContent]],
           any[HeaderCarrier]
@@ -240,7 +238,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/confirm")
+        header("Location", result).value should endWith("register/matching/confirm")
       }
     }
 

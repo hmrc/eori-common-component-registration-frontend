@@ -16,15 +16,15 @@
 
 package unit.services
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
-import base.UnitSpec
 import common.pages.NinoMatchPage.convertToAnyMustWrapper
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ApplicationController, SubscriptionFlowManager}
+import play.api.test.Helpers.{defaultAwaitTimeout, header, status, LOCATION}
+import sttp.model.StatusCode.{InternalServerError, Ok}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
@@ -36,26 +36,23 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
 import uk.gov.hmrc.http.HeaderCarrier
+import util.ControllerSpec
 import util.builders.SessionBuilder
 import util.builders.SubscriptionContactDetailsFormBuilder.contactDetailsModel
 
-import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AddressServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with MatchingServiceTestData {
+class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with MatchingServiceTestData {
 
-  private val mockSubscriptionDetailsService   = mock[SubscriptionDetailsService]
-  private val mockSubscriptionBusinessService  = mock[SubscriptionBusinessService]
-  private val mockSubscriptionFlowManager      = mock[SubscriptionFlowManager]
-  private val mockSubscriptionPage             = mock[SubscriptionPage]
-  private val mockFlowError                    = mock[FlowError]
-  private val mockApplicationController        = mock[ApplicationController]
-  private val mockAddress                      = mock[address]
-  private val mockErrorTemplate                = mock[error_template]
-  private val mockMessagesControllerComponents = mock[MessagesControllerComponents]
-
-  private val defaultUserId: String = s"user-${UUID.randomUUID}"
+  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
+  private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
+  private val mockSubscriptionFlowManager     = mock[SubscriptionFlowManager]
+  private val mockSubscriptionPage            = mock[SubscriptionPage]
+  private val mockFlowError                   = mock[FlowError]
+  private val mockAddress                     = instanceOf[address]
+  private val mockErrorTemplate               = instanceOf[error_template]
+  private val messagesControllerComponents    = instanceOf[MessagesControllerComponents]
 
   private val subscriptionToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
@@ -68,30 +65,36 @@ class AddressServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
     mockSubscriptionFlowManager,
     mockAddress,
     mockErrorTemplate,
-    mockMessagesControllerComponents
+    messagesControllerComponents
   )
 
   "populateViewIfContactDetailsCached" should {
-    "Successfully populate view when details are cached" in subscriptionToTest.foreach { subscription =>
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(
-        Future.successful(Some(contactDetailsModel))
-      )
-      service.populateViewIfContactDetailsCached(subscription)(
-        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
-      ) flatMap (result => {
-        status(result) mustBe Ok
-      })
+    "Successfully populate view when details are cached" in {
+
+      subscriptionToTest.foreach { subscription =>
+        when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(
+          Future.successful(Some(contactDetailsModel))
+        )
+        val result = service.populateViewIfContactDetailsCached(subscription)(
+          SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
+        )
+
+        status(result) mustBe Ok.code
+      }
+
     }
   }
 
   "Should 'successfully' display InternalServerError when data not found in cache" in subscriptionToTest.foreach {
     subscription =>
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(None)
-      service.populateViewIfContactDetailsCached(subscription)(
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(
+        Future.successful(None)
+      )
+      val result = service.populateViewIfContactDetailsCached(subscription)(
         SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
-      ) flatMap (result => {
-        status(result) mustBe Ok
-      })
+      )
+
+      status(result) mustBe InternalServerError.code
   }
 
   "handleFormDataAndRedirect" should {
@@ -105,13 +108,11 @@ class AddressServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         .thenReturn(Right(subscriptionFlowInfo))
       when(subscriptionFlowInfo.nextPage.url(any[Service])).thenReturn("/nextPage")
 
-      await(
-        service.handleFormDataAndRedirect(addressDetailsCreateForm(), isInReviewMode = false, subscription)(
-          SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
-        )
-      ).flatMap { result =>
-        result.header.headers("Location").endsWith("/nextPage")
-      }
+      val result = service.handleFormDataAndRedirect(addressDetailsCreateForm(), isInReviewMode = false, subscription)(
+        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
+      )
+
+      header(LOCATION, result).value.endsWith("/nextPage")
     }
 
     "redirect to start page when subscriptionFlow unavailable" in subscriptionToTest.foreach { subscription =>
@@ -122,13 +123,12 @@ class AddressServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
         .thenReturn(Left(mockFlowError))
 
-      await(
-        service.handleFormDataAndRedirect(addressDetailsCreateForm(), isInReviewMode = false, subscription)(
-          SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
-        )
-      ).flatMap { _ =>
-        verify(mockApplicationController.startRegister(any()))
-      }
+      val result = service.handleFormDataAndRedirect(addressDetailsCreateForm(), isInReviewMode = false, subscription)(
+        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
+      )
+
+      header(LOCATION, result).value shouldBe s"/customs-registration-services/${subscription.code}/register"
     }
+
   }
 }

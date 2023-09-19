@@ -63,12 +63,12 @@ class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
 
   private def displayPage(service: Service)(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(test(controller.displayPage(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
+    test(controller.displayPage(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
   private def signOut(service: Service)(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(test(controller.signOut(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
+    test(controller.signOut(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
 }

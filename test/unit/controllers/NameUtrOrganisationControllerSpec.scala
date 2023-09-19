@@ -358,9 +358,7 @@ class NameUtrOrganisationControllerSpec
       ).thenReturn(Future.successful(true))
       submitForm(ValidNameUtrRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
-          "/customs-registration-services/atar/register/matching/confirm"
-        )
+        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
       }
     }
   }
