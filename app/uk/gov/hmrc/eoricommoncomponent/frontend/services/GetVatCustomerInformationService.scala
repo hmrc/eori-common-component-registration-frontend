@@ -64,7 +64,7 @@ class GetVatCustomerInformationService @Inject() (
     } yield oldDate == newDate).getOrElse(false)
 
     if (postCodeMatches && dateMatches) {
-      logger.info("compareApiResponses matches postcode and date")
+      logger.warn("compareApiResponses matches postcode and date")
       true
     } else {
       logger.warn(s"compareApiResponses does not match. Postcode: $postCodeMatches, Date: $dateMatches")
