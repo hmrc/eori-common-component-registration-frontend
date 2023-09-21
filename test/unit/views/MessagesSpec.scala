@@ -18,13 +18,12 @@ package unit.views
 
 import base.Injector
 import org.scalatestplus.play.PlaySpec
-import play.api.i18n.{Messages, MessagesApi, MessagesImpl}
-import play.i18n.Lang
-
-import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import play.api.Application
+import play.api.i18n.{Messages, MessagesApi, MessagesImpl}
 import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.i18n.Lang
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 
 class MessagesSpec extends PlaySpec with Injector {
 

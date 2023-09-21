@@ -31,16 +31,16 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 
 import java.time.LocalDate
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class VatDetailsControllerSpec
     extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
@@ -124,7 +124,9 @@ class VatDetailsControllerSpec
   "Submitting the form" should {
 
     when(mockSubscriptionDetailsService.clearCachedVatControlListResponse()(any[Request[_]])).thenReturn(
-      Future.successful(())
+
+      Future.successful((): Unit)
+
     )
 
     "show error when no postcode is supplied" in {
@@ -144,14 +146,14 @@ class VatDetailsControllerSpec
     "should match without space in the postcode" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "Z91AA")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("your-uk-vat-details-date")
+        header("Location", result).value should endWith("your-uk-vat-details-date")
       }
     }
 
     "should match when the postcode is entered in lowercase" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "z91aa")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("your-uk-vat-details-date")
+        header("Location", result).value should endWith("your-uk-vat-details-date")
       }
     }
 
@@ -208,7 +210,7 @@ class VatDetailsControllerSpec
     "redirect to next page when valid vat number and effective date is supplied" in {
       submitFormInCreateMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("your-uk-vat-details-date")
+        header("Location", result).value should endWith("your-uk-vat-details-date")
       }
     }
 
@@ -216,7 +218,7 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(lastNetDue = None)
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
+        header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -224,7 +226,7 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(lastReturnMonthPeriod = None)
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
+        header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -232,14 +234,14 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(lastReturnMonthPeriod = Some("N/A"))
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
+        header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
     }
 
     "redirect to next page when valid vat number is supplied and is in review mode" in {
       submitFormInReviewMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
+        header("Location", result).value should endWith(
           "/customs-registration-services/atar/register/matching/review-determine"
         )
       }
@@ -248,7 +250,7 @@ class VatDetailsControllerSpec
     "redirect to cannot confirm your identity when postcode does not match" in {
       submitFormInCreateMode(validRequest + ("postcode" -> "NA1 7NO")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
+        header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -256,14 +258,14 @@ class VatDetailsControllerSpec
       val vatControlResponse = VatControlListResponse(None, Some("2009-11-24"))
       submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
+        header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
     }
 
     "redirect to cannot confirm your identity when postcode does not match and it is in review mode" in {
       submitFormInReviewMode(validRequest + ("postcode" -> "NA1 7NO")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
+        header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -272,7 +274,7 @@ class VatDetailsControllerSpec
         .thenReturn(Future.successful(Left(NotFoundResponse)))
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
+        header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
     }
 
@@ -281,7 +283,7 @@ class VatDetailsControllerSpec
         .thenReturn(Future.successful(Left(InvalidResponse)))
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("/when-did-you-become-vat-registered")
+        header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
     }
 

@@ -16,14 +16,17 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+
 import cats.data.EitherT
 
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDate
+
 import play.api.data.Form
 import play.api.i18n.Messages
-import play.api.mvc.{Action, _}
+import play.api.mvc._
 import play.twirl.api.HtmlFormat
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationModel.{
   CompanyDM,
@@ -32,6 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationMo
   PartnershipLLpDM,
   RegisteredCompanyDM
 }
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
@@ -41,12 +45,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.{
   nameUtrPartnershipForm
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_name_id_organisation}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

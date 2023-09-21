@@ -16,22 +16,23 @@
 
 package integration
 
-import java.time.LocalDateTime
+import org.joda.time.DateTime
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateVerifiedEmailConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.{RequestDetail, UpdateVerifiedEmailRequest}
 import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateVerifiedEmailConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.{RequestDetail, UpdateVerifiedEmailRequest}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestCommon
 import uk.gov.hmrc.http.HeaderCarrier
 import util.externalservices.ExternalServicesConfig._
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import play.api.inject.bind
 import util.externalservices.UpdateVerifiedEmailMessagingService
-import org.joda.time.DateTime
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestCommon
+
+import java.time.LocalDateTime
 
 class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 

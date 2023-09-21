@@ -18,8 +18,6 @@ package unit.controllers
 
 import cats.data.EitherT
 import common.pages.RegisterHowCanWeIdentifyYouPage
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -44,6 +42,7 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -101,7 +100,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       submitForm(Map("nino" -> nino)) {
         result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/confirm"
+          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm"
       }
     }
 

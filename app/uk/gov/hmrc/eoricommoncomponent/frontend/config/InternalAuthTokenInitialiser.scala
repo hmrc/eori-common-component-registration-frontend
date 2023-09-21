@@ -16,19 +16,17 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.config
 
-import play.api.Logging
-import play.api.Configuration
+import play.api.{Configuration, Logging}
+import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
-import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Done
+import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.duration.DurationInt
-import play.api.http.HeaderNames.AUTHORIZATION
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 abstract class InternalAuthTokenInitialiser {

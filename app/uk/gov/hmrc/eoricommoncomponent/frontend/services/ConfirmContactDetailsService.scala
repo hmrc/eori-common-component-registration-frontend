@@ -22,31 +22,10 @@ import play.api.i18n.Messages
 import play.api.mvc.Results.{BadRequest, Ok, Redirect}
 import play.api.mvc.{AnyContent, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ConfirmContactDetailsController,
-  DetermineReviewPageController,
-  OrganisationTypeController,
-  SignInWithDifferentDetailsController,
-  SubscriptionRecoveryController
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  EtmpOrganisationType,
-  LLP,
-  Partnership,
-  RegistrationDetails,
-  RegistrationDetailsIndividual,
-  RegistrationDetailsOrganisation,
-  UnincorporatedBody
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  No,
-  WrongAddress,
-  Yes,
-  YesNoWrong,
-  YesNoWrongAddress
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup

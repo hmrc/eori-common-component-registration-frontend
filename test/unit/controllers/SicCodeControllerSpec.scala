@@ -77,7 +77,7 @@ class SicCodeControllerSpec
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionBusinessService.cachedSicCode(any[Request[_]])).thenReturn(None)
+    when(mockSubscriptionBusinessService.cachedSicCode(any[Request[_]])).thenReturn(Future.successful(None))
     registerSaveDetailsMockSuccess()
     setupMockSubscriptionFlowManager(SicCodeSubscriptionFlowPage)
   }
@@ -391,7 +391,7 @@ class SicCodeControllerSpec
     )
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
-    when(mockSubscriptionBusinessService.getCachedSicCode(any[Request[_]])).thenReturn(dataToEdit)
+    when(mockSubscriptionBusinessService.getCachedSicCode(any[Request[_]])).thenReturn(Future.successful(dataToEdit))
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }

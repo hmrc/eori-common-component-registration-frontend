@@ -73,10 +73,8 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
       val result =
-        await(
-          controller.enrolmentAlreadyExists(atarService).apply(
-            SessionBuilder.buildRequestWithSessionAndPath("/atar/", defaultUserId)
-          )
+        controller.enrolmentAlreadyExists(atarService).apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/atar/", defaultUserId)
         )
 
       status(result) shouldBe OK
@@ -95,10 +93,8 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
       val result =
-        await(
-          controller.enrolmentAlreadyExists(eoriOnlyService).apply(
-            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
-          )
+        controller.enrolmentAlreadyExists(eoriOnlyService).apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
         )
       status(result) shouldBe SEE_OTHER
       await(result).header.headers("Location") should endWith("/eori-only/register/cds-enrolment-exists")
@@ -114,10 +110,8 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
       )
 
       val result =
-        await(
-          controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
-            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
-          )
+        controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
         )
 
       status(result) shouldBe OK
@@ -141,10 +135,8 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
       )
 
       val result =
-        await(
-          controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
-            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
-          )
+        controller.enrolmentAlreadyExistsStandalone(eoriOnlyService).apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
         )
 
       status(result) shouldBe OK
@@ -161,10 +153,8 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
       val result =
-        await(
-          controller.enrolmentAlreadyExistsForGroup(atarService).apply(
-            SessionBuilder.buildRequestWithSessionAndPath("/atar/", defaultUserId)
-          )
+        controller.enrolmentAlreadyExistsForGroup(atarService).apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/atar/", defaultUserId)
         )
 
       status(result) shouldBe OK
@@ -185,10 +175,8 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
       when(mockSessionCache.eori(any[Request[_]]))
         .thenReturn(Future.successful(Some("testEori")))
       val result =
-        await(
-          controller.enrolmentAlreadyExistsForGroupStandalone(eoriOnlyService).apply(
-            SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
-          )
+        controller.enrolmentAlreadyExistsForGroupStandalone(eoriOnlyService).apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/eori-only/", defaultUserId)
         )
 
       status(result) shouldBe OK

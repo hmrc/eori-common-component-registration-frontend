@@ -16,10 +16,7 @@
 
 package unit.controllers
 
-import java.util.UUID
 import common.pages.matching.NameIdOrganisationPage._
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -31,8 +28,8 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameOrganisationMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameOrganisationMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.InvalidUrlValueException
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_name_id_organisation}
@@ -42,6 +39,8 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.NameIdOrganisationFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -390,9 +389,7 @@ class NameUtrOrganisationControllerSpec
       ).thenReturn(eitherT(()))
       submitForm(ValidNameUtrRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
-          "/customs-registration-services/atar/register/matching/confirm"
-        )
+        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
       }
     }
   }

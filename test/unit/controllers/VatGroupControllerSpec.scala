@@ -17,7 +17,6 @@
 package unit.controllers
 
 import common.pages.registration.VatGroupPage
-
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -86,14 +85,14 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
     "redirect to Cannot Register Using This Service when 'yes' " in {
       submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(expectedYesRedirectUrl)
+        header(LOCATION, result).value should endWith(expectedYesRedirectUrl)
       }
     }
 
     "redirect to EmailController.form when 'no' " in {
       submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe expectedNoRedirectUrl
+        header(LOCATION, result).value shouldBe expectedNoRedirectUrl
       }
     }
 

@@ -95,14 +95,14 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
     "redirect to the 'Enter your nino' page when nino is selected" in {
       submitForm(Map("ninoOrUtrRadio" -> "nino")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/chooseid/nino"
+        header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/nino"
       }
     }
 
     "redirect to the 'Enter your utr' page when utr is selected" in {
       submitForm(Map("ninoOrUtrRadio" -> "utr")) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/chooseid/utr"
+        header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/utr"
       }
     }
   }

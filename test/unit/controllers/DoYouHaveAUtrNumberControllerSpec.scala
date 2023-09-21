@@ -113,7 +113,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.CompanyId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/you-need-a-different-service")
+        header("Location", result).value should endWith("register/you-need-a-different-service")
       }
     }
   }
@@ -129,7 +129,7 @@ class DoYouHaveAUtrNumberControllerSpec
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/get-utr/third-country-organisation")
+        header("Location", result).value should endWith("register/matching/get-utr/third-country-organisation")
       }
     }
 
@@ -143,7 +143,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
+        header("Location", result).value should endWith(
           s"register/matching/address/${CdsOrganisationType.ThirdCountryOrganisationId}"
         )
       }
@@ -158,8 +158,8 @@ class DoYouHaveAUtrNumberControllerSpec
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId, isInReviewMode = true) { result =>
-        status(await(result)) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/review-determine")
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith("register/matching/review-determine")
       }
     }
   }
@@ -175,7 +175,7 @@ class DoYouHaveAUtrNumberControllerSpec
       submitForm(form = ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
+        header("Location", result).value should endWith(
           s"register/matching/get-utr/${CdsOrganisationType.CharityPublicBodyNotForProfitId}"
         )
       }
@@ -191,7 +191,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
+        header("Location", result).value should endWith(
           s"/customs-registration-services/atar/register/are-you-vat-registered-in-uk"
         )
       }
@@ -207,8 +207,8 @@ class DoYouHaveAUtrNumberControllerSpec
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId, isInReviewMode = true) {
         result =>
-          status(await(result)) shouldBe SEE_OTHER
-          result.header.headers("Location") should endWith("/register/are-you-vat-registered-in-uk")
+          status(result) shouldBe SEE_OTHER
+          header("Location", result).value should endWith("/register/are-you-vat-registered-in-uk")
       }
     }
   }
@@ -251,7 +251,7 @@ class DoYouHaveAUtrNumberControllerSpec
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/get-utr/third-country-sole-trader")
+        header("Location", result).value should endWith("register/matching/get-utr/third-country-sole-trader")
       }
     }
 
@@ -265,7 +265,7 @@ class DoYouHaveAUtrNumberControllerSpec
 
       submitForm(form = NoUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/row/nino")
+        header("Location", result).value should endWith("register/matching/row/nino")
       }
     }
 

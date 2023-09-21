@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping
 
 import play.api.Logging
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetailsIndividual, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 
 object EtmpTypeOfPerson {
   val NaturalPerson       = "1"

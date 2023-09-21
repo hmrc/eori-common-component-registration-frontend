@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.libs.json.{JsError, JsSuccess, Reads}
-import uk.gov.hmrc.http.HttpResponse
-import play.mvc.Http.Status.INTERNAL_SERVER_ERROR
 import play.api.Logging
+import play.api.libs.json.{JsError, JsSuccess, Reads}
+import play.mvc.Http.Status.INTERNAL_SERVER_ERROR
+import uk.gov.hmrc.http.HttpResponse
 
 trait HandleResponses extends Logging {
 

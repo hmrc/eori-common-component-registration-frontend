@@ -16,20 +16,15 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcReportTechnicalIssue
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcTimeoutDialog
-@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
-@import views.html.helper.CSPNonce
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukBackLink
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcTimeoutDialogHelper, HmrcLanguageSelectHelper}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.ReportTechnicalIssue
+@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcReportTechnicalIssue, HmrcTimeoutDialog}
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.userresearchbanner.UserResearchBanner
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+@import views.html.helper.CSPNonce
 
 @this(hmrcLayout: HmrcLayout,
         standardBetaBanner: StandardBetaBanner,
@@ -59,9 +54,9 @@
 
 @titleWithEnding = @{
     if(service.code.equalsIgnoreCase(appConfig.standaloneServiceCode)) {
-        title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
+        title + " - " + messages("cds.banner.registration") + " - " + messages("cds.country.end-of-title")
     }
-    else title + " - " + messages(s"cds.banner.subscription.${service.code}") + " - " + messages("cds.end-of-title")
+    else title + " - " + messages(s"cds.banner.subscription.${service.code}") + " - " + messages("cds.country.end-of-title")
 }
 
 @banner = @{
@@ -137,13 +132,17 @@
     @getHelpForm
 }
 
+@serviceUrl = @{
+    s"/customs-registration-services/${service.code}/register"
+}
+
 
 
 @hmrcLayout(
     userResearchBannerUrl = if(userResearchBanner) Some(appConfig.userResearchBannerUrl) else None,
     pageTitle = Some(titleErr),
     isWelshTranslationAvailable = true, /* or false if your service has not been translated */
-    serviceUrl = None,
+    serviceUrl = Some(serviceUrl),
     signOutUrl = Some(logOutUrl),
     phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedBackRegister(service))),
     additionalHeadBlock = Some(theHead),
