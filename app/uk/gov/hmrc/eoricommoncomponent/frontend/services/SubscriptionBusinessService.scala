@@ -62,16 +62,8 @@ class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implici
   def cachedSicCode(implicit request: Request[_]): Future[Option[String]] =
     sessionCache.subscriptionDetails map (_.sicCode)
 
-  def getCachedPersonalDataDisclosureConsent(implicit request: Request[_]): Future[Boolean] =
-    sessionCache.subscriptionDetails map {
-      _.personalDataDisclosureConsent.getOrElse {
-        val error = "No Personal Data Disclosure Consent Cached"
-        // $COVERAGE-OFF$Loggers
-        logger.warn(error)
-        // $COVERAGE-ON
-        throw new IllegalStateException(error)
-      }
-    }
+  def getCachedPersonalDataDisclosureConsent(implicit request: Request[_]): Future[Option[Boolean]] =
+    sessionCache.subscriptionDetails.map(_.personalDataDisclosureConsent)
 
   def getCachedVatRegisteredUk(implicit request: Request[_]): Future[Boolean] =
     sessionCache.subscriptionDetails map {
