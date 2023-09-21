@@ -17,11 +17,11 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging
 
 import play.api.Logging
-
-import java.time.ZonedDateTime
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+
+import java.time.ZonedDateTime
 
 case class RegistrationInfoRequest(regime: String = Service.regimeCDS, idType: String, idValue: String)
 

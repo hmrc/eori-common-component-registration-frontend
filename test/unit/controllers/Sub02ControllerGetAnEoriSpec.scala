@@ -18,8 +18,6 @@ package unit.controllers
 
 import common.pages.RegistrationCompletePage
 import common.support.testdata.TestData
-
-import java.time.LocalDateTime
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -32,14 +30,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
@@ -207,7 +206,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.end(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.end(atarService).url
       }
     }
 
@@ -226,7 +225,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.pending(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.pending(atarService).url
       }
     }
 
@@ -243,7 +242,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyExists(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.eoriAlreadyExists(atarService).url
       }
     }
 
@@ -260,7 +259,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyAssociated(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.eoriAlreadyAssociated(atarService).url
       }
     }
 
@@ -277,7 +276,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.subscriptionInProgress(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.subscriptionInProgress(atarService).url
       }
     }
 
@@ -294,9 +293,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(
-          LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
+        header(
+          LOCATION,
+          result
+        ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
           .requestNotProcessed(atarService)
           .url
       }
@@ -415,7 +415,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     "render subscription in-progress page" in {
       when(mockSessionCache.submissionCompleteDetails(any[Request[_]]))
         .thenReturn(Future.successful(SubmissionCompleteDetails("22 May 2016")))
-      when(mockSessionCache.saveSubmissionCompleteDetails(any())(any[Request[_]])).thenReturn(true)
+      when(mockSessionCache.saveSubmissionCompleteDetails(any())(any[Request[_]])).thenReturn(Future.successful(true))
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokeSubscriptionInProgress { result =>
         assertCleanedSession(result)

@@ -89,6 +89,7 @@ class SubscriptionRecoveryController @Inject() (
         sessionCache.saveEori(Eori(eori)).flatMap { _ =>
           val mayBeEmail = subscriptionDisplayResponse.responseDetail.contactInformation
             .flatMap(c => c.emailAddress.filter(EmailAddress.isValid(_) && c.emailVerificationTimestamp.isDefined))
+
           mayBeEmail.map { email =>
             onSUB09Success(
               sub01Outcome.processedDate,
@@ -103,6 +104,7 @@ class SubscriptionRecoveryController @Inject() (
               ),
               service
             )(Redirect(Sub02Controller.end(service)))
+
           }.getOrElse {
             // $COVERAGE-OFF$Loggers
             logger.info("Email Missing")

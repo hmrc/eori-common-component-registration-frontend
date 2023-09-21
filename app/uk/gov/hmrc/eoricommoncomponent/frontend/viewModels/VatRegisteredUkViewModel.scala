@@ -18,8 +18,8 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 
 import play.api.i18n.Messages
 import play.api.mvc.Call
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredUkController
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 object VatRegisteredUkViewModel {
 

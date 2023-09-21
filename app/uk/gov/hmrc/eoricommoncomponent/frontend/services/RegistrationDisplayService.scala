@@ -17,18 +17,17 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.mvc.Request
-
-import java.time.{Clock, LocalDateTime, ZoneId}
-import javax.inject.Inject
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EoriHttpResponse, RegistrationDisplayConnector}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RegistrationInfoRequest, RequestParameter}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RegistrationInfoRequest, RequestParameter}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetails, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.{Clock, LocalDateTime, ZoneId}
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegistrationDisplayService @Inject() (

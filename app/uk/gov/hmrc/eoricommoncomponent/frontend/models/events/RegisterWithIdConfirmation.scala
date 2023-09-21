@@ -17,12 +17,12 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, MessagingServiceParam}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
   IndividualResponse,
   MatchingResponse,
   OrganisationResponse
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, MessagingServiceParam}
 
 case class RegisterWithIdConfirmation(
   status: String,

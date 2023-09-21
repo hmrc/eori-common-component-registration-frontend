@@ -25,16 +25,16 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.NOT_FOUND
 import play.api.test.FakeRequest
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GetVatInformationResponse, VatControlListResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.GetVatCustomerInformationConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GetVatInformationResponse, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.GetVatCustomerInformationService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class GetVatCustomerInformationServiceSpec extends UnitSpec with MockitoSugar with ScalaFutures {
 
@@ -55,7 +55,9 @@ class GetVatCustomerInformationServiceSpec extends UnitSpec with MockitoSugar wi
       val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
       val date   = format.parse(dateAsString)
 
-      when(sessionCacheMock.subscriptionDetails).thenReturn(SubscriptionDetails(ukVatDetails = Some(vatDetails)))
+      when(sessionCacheMock.subscriptionDetails).thenReturn(
+        Future.successful(SubscriptionDetails(ukVatDetails = Some(vatDetails)))
+      )
 
       val connectorResponse: Either[Int, GetVatInformationResponse] =
         Right(GetVatInformationResponse(Some(date), Some(postCode)))
@@ -71,7 +73,9 @@ class GetVatCustomerInformationServiceSpec extends UnitSpec with MockitoSugar wi
 
     "handle Unsuccessful getVatCustomerInformation API Response" in {
 
-      when(sessionCacheMock.subscriptionDetails).thenReturn(SubscriptionDetails(ukVatDetails = Some(vatDetails)))
+      when(sessionCacheMock.subscriptionDetails).thenReturn(
+        Future.successful(SubscriptionDetails(ukVatDetails = Some(vatDetails)))
+      )
 
       val connectorResponse: Either[Int, GetVatInformationResponse] = Left(NOT_FOUND)
       mockGetVatCustomerInformation()(

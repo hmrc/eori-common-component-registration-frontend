@@ -16,28 +16,20 @@
 
 package unit.services
 
+import akka.dispatch.ThreadPoolConfig.defaultTimeout
 import base.UnitSpec
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.time.{Millis, Span}
-import play.api.mvc.{Request, Result}
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Results.Redirect
-import play.api.test.Helpers.LOCATION
+import play.api.mvc.{Request, Result}
+import play.api.test.Helpers.{defaultAwaitTimeout, header, LOCATION}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CacheIds, GroupId, InternalId, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  NewSubscription,
-  PreSubscriptionStatus,
-  Save4LaterService,
-  SubscriptionExists,
-  SubscriptionProcessing,
-  SubscriptionRejected,
-  SubscriptionStatusService,
-  UserGroupIdSubscriptionStatusCheckService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import util.TestData
 
@@ -90,12 +82,10 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
       )
         .thenReturn(Future.successful(SubscriptionProcessing))
 
-      val result: Result = service
-        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(
-          otherUserWithinGroupIsInProcess
-        ).futureValue
+      val result = service
+        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(otherUserWithinGroupIsInProcess)
 
-      result.header.headers(LOCATION) shouldBe "/blocked/userIsInProcess"
+      header(LOCATION, result).value shouldBe "/blocked/userIsInProcess"
     }
 
     "block the user for the groupID is cache and subscription status is SubscriptionProcessing for some other user within the group" in {
@@ -113,12 +103,10 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
       )
         .thenReturn(Future.successful(SubscriptionProcessing))
 
-      val result: Result = service
-        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(
-          otherUserWithinGroupIsInProcess
-        ).futureValue
+      val result = service
+        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(otherUserWithinGroupIsInProcess)
 
-      result.header.headers(LOCATION) shouldBe "/blocked/otherUserWithinGroupIsInProcess"
+      header(LOCATION, result).value shouldBe "/blocked/otherUserWithinGroupIsInProcess"
     }
 
     "block the same user with the same groupID for same service and subscription status is SubscriptionProcessing" in {
@@ -136,12 +124,10 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
       )
         .thenReturn(Future.successful(SubscriptionProcessing))
 
-      val result: Result = service
-        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(
-          otherUserWithinGroupIsInProcess
-        ).futureValue
+      val result = service
+        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(otherUserWithinGroupIsInProcess)
 
-      result.header.headers(LOCATION) shouldBe "/blocked/userIsInProcess"
+      header(LOCATION, result).value shouldBe "/blocked/userIsInProcess"
     }
 
     "Allow the user for the groupID is cached and subscription status is SubscriptionRejected" in {
@@ -175,12 +161,10 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
         .thenReturn(Future.successful(NewSubscription))
       when(mockSave4LaterService.deleteCacheIds(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
 
-      val result: Result = service
-        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(
-          otherUserWithinGroupIsInProcess
-        ).futureValue
+      val result = service
+        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(otherUserWithinGroupIsInProcess)
 
-      result.header.headers(LOCATION) shouldBe "/continue"
+      header(LOCATION, result).value shouldBe "/continue"
     }
 
     "Allow the user if groupID is not cached" in {
@@ -190,12 +174,10 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
           .fetchCacheIds(any())(any[HeaderCarrier])
       ).thenReturn(Future.successful(None))
 
-      val result: Result = service
-        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(
-          otherUserWithinGroupIsInProcess
-        ).futureValue
+      val result = service
+        .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(otherUserWithinGroupIsInProcess)
 
-      result.header.headers(LOCATION) shouldBe "/continue"
+      header(LOCATION, result).value shouldBe "/continue"
     }
   }
 
@@ -214,12 +196,10 @@ class UserGroupIdSubscriptionStatusCheckServiceSpec
       .thenReturn(Future.successful(status))
     when(mockSave4LaterService.deleteCachedGroupId(any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
 
-    val result: Result = service
-      .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(
-        otherUserWithinGroupIsInProcess
-      ).futureValue
+    val result = service
+      .checksToProceed(groupId, internalId, atarService)(continue)(userIsInProcess)(otherUserWithinGroupIsInProcess)
 
-    result.header.headers(LOCATION) shouldBe "/continue"
+    header(LOCATION, result).value shouldBe "/continue"
   }
 
 }

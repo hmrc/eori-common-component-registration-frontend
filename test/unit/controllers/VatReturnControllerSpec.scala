@@ -61,7 +61,7 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     super.beforeEach()
 
     when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any[Request[_]])).thenReturn(
-      Some(vatControlListResponse)
+      Future.successful(Some(vatControlListResponse))
     )
 
   }

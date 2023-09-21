@@ -16,16 +16,14 @@
 
 package unit.forms
 
-import java.time.Year
 import base.UnitSpec
-
-import java.time.LocalDate
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
 
+import java.time.{LocalDate, Year}
 import java.time.format.DateTimeFormatter
 import scala.collection.immutable.ArraySeq
 import scala.util.Random
@@ -332,6 +330,17 @@ class FormValidationSpec extends UnitSpec {
       val data = formDataDoE.updated("date-of-establishment.year", "9999")
       val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.minMax"), ArraySeq("1000")))
+    }
+    "fail with a month error, when month is populated with blanks" in {
+      val data = Map(
+        "date-of-establishment.day"   -> "1",
+        "date-of-establishment.month" -> " ",
+        "date-of-establishment.year"  -> "2019"
+      )
+      val res = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Seq(
+        FormError("date-of-establishment.month", List("date-of-establishment.month.empty"), List())
+      )
     }
   }
 

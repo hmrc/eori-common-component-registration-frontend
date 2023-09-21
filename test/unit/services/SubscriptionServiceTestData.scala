@@ -17,8 +17,6 @@
 package unit.services
 
 import common.support.testdata.TestData
-
-import java.time.{LocalDate, LocalDateTime, ZoneId}
 import org.scalacheck.Gen
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.libs.json.{JsValue, Json}
@@ -27,13 +25,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Su
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionSuccessful
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
   EtmpLegalStatus,
   EtmpTypeOfPerson,
   OrganisationTypeConfiguration
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionSuccessful
 import util.TestData
+
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 
 trait SubscriptionServiceTestData extends TestData {
 

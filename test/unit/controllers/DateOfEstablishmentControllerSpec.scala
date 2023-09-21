@@ -22,7 +22,6 @@ import common.pages.subscription.{
   SubscriptionDateOfEstablishmentPage,
   SubscriptionPartnershipDateOfEstablishmentPage
 }
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -42,6 +41,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -100,7 +100,7 @@ class DateOfEstablishmentControllerSpec
     reset(mockSubscriptionBusinessService)
     reset(mockSubscriptionDetailsService)
     setupMockSubscriptionFlowManager(DateOfEstablishmentSubscriptionFlowPage)
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(CorporateBody)
+    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(CorporateBody))
   }
 
   val formModes = Table(
@@ -156,7 +156,7 @@ class DateOfEstablishmentControllerSpec
     }
 
     "use partnership in title and heading for Partnership Org Type" in {
-      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Partnership)
+      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(Partnership))
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("When was the partnership established?")
@@ -167,7 +167,7 @@ class DateOfEstablishmentControllerSpec
     }
 
     "use partnership in title and heading for Limited Liability Partnership Org Type" in {
-      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(LLP)
+      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(LLP))
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("When was the partnership established?")
@@ -179,7 +179,7 @@ class DateOfEstablishmentControllerSpec
 
     "use business in Date of Establishment title and heading for non-partnership Org Type" in {
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]]))
-        .thenReturn(UnincorporatedBody)
+        .thenReturn(Future.successful(UnincorporatedBody))
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("When was the organisation established?")
@@ -190,7 +190,7 @@ class DateOfEstablishmentControllerSpec
     }
 
     "use business in Date of Establishment text and organisation in title and heading for Company Org Type" in {
-      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(CorporateBody)
+      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(CorporateBody))
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("When was the company established?")
@@ -361,7 +361,9 @@ class DateOfEstablishmentControllerSpec
   private def showReviewForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockSubscriptionBusinessService.getCachedDateEstablished(any[Request[_]])).thenReturn(DateOfEstablishment)
+    when(mockSubscriptionBusinessService.getCachedDateEstablished(any[Request[_]])).thenReturn(
+      Future.successful(DateOfEstablishment)
+    )
 
     val result = controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId))
     test(result)

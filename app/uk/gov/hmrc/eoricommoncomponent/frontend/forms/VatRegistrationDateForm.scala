@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
+import play.api.Logging
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
-import play.api.Logging
-import javax.inject.Inject
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.TimeService
 
 import java.time.LocalDate
+import javax.inject.Inject
 
 case class VatRegistrationDate(dateOfRegistration: LocalDate)
 

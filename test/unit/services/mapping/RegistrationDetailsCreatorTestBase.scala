@@ -19,8 +19,9 @@ package unit.services.mapping
 import base.UnitSpec
 import common.support.testdata.GenTestRunner
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
-import java.time._
 import util.scalacheck.TestDataGenerators
+
+import java.time._
 
 private[mapping] abstract class RegistrationDetailsCreatorTestBase
     extends UnitSpec with GenTestRunner with TestDataGenerators {
