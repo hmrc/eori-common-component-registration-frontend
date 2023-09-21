@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-import cats.data.EitherT
 import common.pages.RegisterHowCanWeIdentifyYouPage
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._

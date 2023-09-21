@@ -19,8 +19,6 @@ package base
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
-import util.TestData
+import util.{ResponseErrorEitherT, TestData}
 
 trait UnitSpec extends AnyWordSpec with Matchers with TestData with OptionValues with ResponseErrorEitherT
-

@@ -16,17 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-
 import cats.data.EitherT
 
 import javax.inject.{Inject, Singleton}
 import java.time.LocalDate
-
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationModel.{
   CompanyDM,
@@ -49,9 +46,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, Subsc
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_name_id_organisation}
 import uk.gov.hmrc.http.HeaderCarrier
-
-import java.time.LocalDate
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
