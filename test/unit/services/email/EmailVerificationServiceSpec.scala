@@ -36,10 +36,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
   VerificationStatus,
   VerificationStatusResponse
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import org.mockito.ArgumentMatchers.any
-import play.api.i18n._
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.http.HeaderCarrier
 

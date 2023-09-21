@@ -49,13 +49,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
-  EmailVerificationStatus,
-  ResponseWithURI,
-  VerificationStatusResponse
-}
-import cats.data.EitherT
 import org.mockito.ArgumentMatchers
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -123,7 +116,7 @@ class EmailControllerSpec
     val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List.empty[EnrolmentResponse])
 
     mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
-      rightValueForEitherT
+      Future.successful(rightValueForEitherT)
     })
 
     when(mockSave4LaterService.fetchProcessingService(any())(any(), any())).thenReturn(Future.successful(None))
@@ -203,7 +196,7 @@ class EmailControllerSpec
       val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(atarGroupEnrolment))
 
       mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       showFormRegister() { result =>
@@ -217,7 +210,7 @@ class EmailControllerSpec
       val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(cdsGroupEnrolment))
 
       mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       showFormRegister() { result =>
@@ -231,7 +224,7 @@ class EmailControllerSpec
       val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(cdsGroupEnrolment))
 
       mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
@@ -249,7 +242,7 @@ class EmailControllerSpec
         Right(List(cdsGroupEnrolment.copy(identifiers = List())))
 
       mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
@@ -264,7 +257,7 @@ class EmailControllerSpec
       val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(atarGroupEnrolment))
 
       mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))

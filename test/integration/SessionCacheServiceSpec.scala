@@ -119,7 +119,7 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
       val groupId = GroupId("123456")
 
-      when(mockSave4LaterService.saveOrgType(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful())
+      when(mockSave4LaterService.saveOrgType(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
 
       await(
         sessionCache.saveRegistrationDetails(
@@ -153,8 +153,8 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
       val groupId = GroupId("123456")
 
-      when(mockSave4LaterService.saveOrgType(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful())
-      when(mockSave4LaterService.saveSafeId(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful())
+      when(mockSave4LaterService.saveOrgType(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
+      when(mockSave4LaterService.saveSafeId(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(()))
 
       await(
         sessionCache.saveRegistrationDetailsWithoutId(

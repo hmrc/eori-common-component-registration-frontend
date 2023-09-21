@@ -28,8 +28,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.GroupEnrolmentE
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, GroupId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.EnrolmentStoreProxyService
 import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class GroupEnrolmentExtractorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures {
@@ -56,7 +54,7 @@ class GroupEnrolmentExtractorSpec extends UnitSpec with MockitoSugar with Before
       val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(enrolmentResponse))
 
       mockEnrolmentsForGroup(groupId)(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       groupEnrolmentExtractor.groupIdEnrolments(groupId)(hc).value.futureValue.map(

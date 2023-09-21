@@ -18,26 +18,14 @@ package unit.controllers
 
 import cats.data.EitherT
 import common.pages.subscription.SubscriptionVatDetailsPage._
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  InvalidResponse,
-  NotFoundResponse,
-  ResponseError,
-  ServiceUnavailableResponse,
-  VatControlListConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{ResponseError, VatControlListConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  EnrolmentStoreProxyResponse,
-  VatControlListRequest,
-  VatControlListResponse
-}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
@@ -280,7 +268,7 @@ class VatDetailsControllerSpec
         Left(ResponseError(NOT_FOUND, "not found"))
 
       vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
@@ -295,7 +283,7 @@ class VatDetailsControllerSpec
         Left(ResponseError(BAD_REQUEST, "bad request"))
 
       vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
@@ -309,7 +297,7 @@ class VatDetailsControllerSpec
         Left(ResponseError(SERVICE_UNAVAILABLE, "service unavailable"))
 
       vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
@@ -388,7 +376,7 @@ class VatDetailsControllerSpec
       Right(vatControllerResponse)
 
     vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
-      rightValueForEitherT
+      Future.successful(rightValueForEitherT)
     })
 
     when(mockSubscriptionDetailsService.cacheUkVatDetails(any[VatDetails])(any[Request[_]]))

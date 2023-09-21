@@ -25,8 +25,6 @@ import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EnrolmentStoreProxyConnector, ResponseError}
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EnrolmentStoreProxyConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   EnrolmentResponse,
   EnrolmentStoreProxyResponse,
@@ -75,7 +73,7 @@ class EnrolmentStoreProxyServiceSpec extends UnitSpec with MockitoSugar with Bef
         Right(EnrolmentStoreProxyResponse(List(enrolmentResponse, enrolmentResponseNoHmrcCusOrg)))
 
       getEnrolmentByGroupId()(EitherT[Future, ResponseError, EnrolmentStoreProxyResponse] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       val expected = List(
@@ -96,7 +94,7 @@ class EnrolmentStoreProxyServiceSpec extends UnitSpec with MockitoSugar with Bef
         List(EnrolmentResponse("HMRC-CUS-ORG", "Activated", List(KeyValue("EORINumber", "10000000000000001"))))
 
       getEnrolmentByGroupId()(EitherT[Future, ResponseError, EnrolmentStoreProxyResponse] {
-        rightValueForEitherT
+        Future.successful(rightValueForEitherT)
       })
 
       service.enrolmentsForGroup(groupId).value.futureValue.map(res => res shouldBe expected)
