@@ -132,13 +132,17 @@
     @getHelpForm
 }
 
+@serviceUrl = @{
+    s"/customs-registration-services/${service.code}/register"
+}
+
 
 
 @hmrcLayout(
     userResearchBannerUrl = if(userResearchBanner) Some(appConfig.userResearchBannerUrl) else None,
     pageTitle = Some(titleErr),
     isWelshTranslationAvailable = true, /* or false if your service has not been translated */
-    serviceUrl = None,
+    serviceUrl = Some(serviceUrl),
     signOutUrl = Some(logOutUrl),
     phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedBackRegister(service))),
     additionalHeadBlock = Some(theHead),
