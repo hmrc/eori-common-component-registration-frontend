@@ -331,6 +331,15 @@ class FormValidationSpec extends UnitSpec {
       val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.minMax"), ArraySeq("1000")))
     }
+    "fail with a month error, when month is populated with blanks" in {
+      val data = Map(
+        "date-of-establishment.day"   -> "1",
+        "date-of-establishment.month" -> " ",
+        "date-of-establishment.year"  -> "2019"
+      )
+      val res  = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Seq(FormError("date-of-establishment.month", List("date-of-establishment.month.empty"), List()))
+    }
   }
 
   "sicCodeForm" should {
