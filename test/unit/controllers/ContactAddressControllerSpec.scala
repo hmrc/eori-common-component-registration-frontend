@@ -209,6 +209,23 @@ class ContactAddressControllerSpec
           .url
 
       }
+    }
+
+    "redirect to the start if the address is not in the cache" in {
+
+      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
+        .thenReturn(Future.successful(None))
+
+      submitFormInCreateMode(ValidRequest, contactDetails = None) { result =>
+        status(result) shouldBe SEE_OTHER
+        header(
+          LOCATION,
+          result
+        ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
+          .form(atarService)
+          .url
+
+      }
 
     }
 
@@ -239,13 +256,15 @@ class ContactAddressControllerSpec
     )
   }
 
-  private def submitFormInCreateMode(form: Map[String, String], userId: String = defaultUserId)(
-    test: Future[Result] => Any
-  ): Unit = {
+  private def submitFormInCreateMode(
+    form: Map[String, String],
+    userId: String = defaultUserId,
+    contactDetails: Option[ContactDetailsModel] = Some(contactDetailsModel)
+  )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-      .thenReturn(Future.successful(Some(contactDetailsModel)))
+      .thenReturn(Future.successful(contactDetails))
     when(mockSubscriptionDetailsService.cacheContactAddressDetails(any(), any())(any[Request[_]]))
       .thenReturn(Future.successful(()))
 
