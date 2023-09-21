@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import java.time.{LocalDateTime, ZoneId, ZoneOffset}
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.CommonHeader
 
 import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneId, ZoneOffset}
 
 case class SubscriptionStatusQueryParams(receiptDate: LocalDateTime, regime: String, idType: String, id: String) {
 

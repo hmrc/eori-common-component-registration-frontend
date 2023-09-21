@@ -34,6 +34,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{Subscriptio
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -47,8 +49,6 @@ import util.builders.RegistrationDetailsBuilder.{
 }
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
-import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -93,7 +93,9 @@ class CheckYourDetailsRegisterControllerSpec
     reset(mockSessionCache)
     reset(mockSubscriptionDetails)
     reset(mockSubscriptionFlow)
-    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
+    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+      Future.successful(organisationRegistrationDetails)
+    )
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
       Right(mockSubscriptionFlow)
     )
@@ -105,7 +107,7 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSubscriptionDetails.addressDetails).thenReturn(Some(addressDetails))
     when(mockSubscriptionDetails.personalDataDisclosureConsent).thenReturn(Some(true))
     when(mockSubscriptionDetails.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
-    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetails)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
     when(mockRequestSession.isPartnershipOrLLP(any[Request[AnyContent]])).thenReturn(false)
     when(mockSubscriptionDetails.vatVerificationOption).thenReturn(Some(true))
     when(mockSubscriptionDetails.vatControlListResponse).thenReturn(vatControlListResponseDetails)
@@ -149,7 +151,7 @@ class CheckYourDetailsRegisterControllerSpec
     "display the sole trader name and dob from the cache when user has NOT been identified" in {
       when(mockSubscriptionDetails.name).thenReturn("John Doe")
       when(mockSessionCache.registrationDetails(any[Request[_]]))
-        .thenReturn(individualRegistrationDetailsNotIdentifiedByReg01)
+        .thenReturn(Future.successful(individualRegistrationDetailsNotIdentifiedByReg01))
 
       showForm(userSelectedOrgType = SoleTrader) { result =>
         val page = CdsPage(contentAsString(result))
@@ -209,7 +211,7 @@ class CheckYourDetailsRegisterControllerSpec
     "display the business name and six line address from the cache when user wasnt registered" in {
       when(mockSubscriptionDetails.name).thenReturn("orgName")
       when(mockSessionCache.registrationDetails(any[Request[_]]))
-        .thenReturn(organisationRegistrationDetailsWithEmptySafeId)
+        .thenReturn(Future.successful(organisationRegistrationDetailsWithEmptySafeId))
       showForm(CdsOrganisationType.ThirdCountryOrganisation) { result =>
         val page = CdsPage(contentAsString(result))
         page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Organisation name") shouldBe "orgName"
@@ -401,7 +403,9 @@ class CheckYourDetailsRegisterControllerSpec
     }
 
     "display all fields when all are provided for an individual" in {
-      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
+      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+        Future.successful(individualRegistrationDetails)
+      )
       val holder = detailsHolderWithAllFields.copy(
         contactDetails = Some(contactDetailsModelWithAllValues),
         dateEstablished = None,
@@ -409,7 +413,7 @@ class CheckYourDetailsRegisterControllerSpec
         addressDetails = Some(addressDetails),
         nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23")))
       )
-      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(holder))
 
       showForm(isIndividualSubscriptionFlow = true) { result =>
         val page = CdsPage(contentAsString(result))
@@ -436,14 +440,14 @@ class CheckYourDetailsRegisterControllerSpec
 
   "display the review page check-your-details for Company" in {
     when(mockSessionCache.registrationDetails(any[Request[_]]))
-      .thenReturn(incorporatedRegistrationDetails.copy(customsId = Some(Utr("7280616009"))))
+      .thenReturn(Future.successful(incorporatedRegistrationDetails.copy(customsId = Some(Utr("7280616009")))))
     val holder = detailsHolderWithAllFields.copy(
       contactDetails = Some(contactDetailsModelWithAllValues),
       dateEstablished = Some(LocalDate.parse("1980-07-23")),
       addressDetails = Some(addressDetails),
       nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName"))
     )
-    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(holder))
 
     showForm(userSelectedOrgType = Company) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
@@ -587,14 +591,14 @@ class CheckYourDetailsRegisterControllerSpec
 
   "display the review page check-your-details for LLP" in {
     when(mockSessionCache.registrationDetails(any[Request[_]]))
-      .thenReturn(incorporatedRegistrationDetails.copy(customsId = Some(Utr("7280616009"))))
+      .thenReturn(Future.successful(incorporatedRegistrationDetails.copy(customsId = Some(Utr("7280616009")))))
     val holder = detailsHolderWithAllFields.copy(
       contactDetails = Some(contactDetailsModelWithAllValues),
       dateEstablished = Some(LocalDate.parse("1980-07-23")),
       addressDetails = Some(addressDetails),
       nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName"))
     )
-    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(holder))
 
     showForm(userSelectedOrgType = LimitedLiabilityPartnership) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
@@ -739,14 +743,14 @@ class CheckYourDetailsRegisterControllerSpec
     val expectedNino = "someNino"
 
     when(mockSessionCache.registrationDetails(any[Request[_]]))
-      .thenReturn(individualRegistrationDetails.copy(customsId = Some(Nino(expectedNino))))
+      .thenReturn(Future.successful(individualRegistrationDetails.copy(customsId = Some(Nino(expectedNino)))))
     val holder = detailsHolderWithAllFields.copy(
       contactDetails = Some(contactDetailsModelWithAllValues),
       dateEstablished = Some(LocalDate.parse("1980-07-23")),
       addressDetails = Some(addressDetails),
       nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23")))
     )
-    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(holder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(holder))
 
     showForm(userSelectedOrgType = Individual, isIndividualSubscriptionFlow = true) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
@@ -779,7 +783,7 @@ class CheckYourDetailsRegisterControllerSpec
 
   "display the form with 'UTR Not entered'" in {
     when(mockSessionCache.registrationDetails(any[Request[_]]))
-      .thenReturn(organisationRegistrationDetailsWithEmptySafeId)
+      .thenReturn(Future.successful(organisationRegistrationDetailsWithEmptySafeId))
 
     showForm(userSelectedOrgType = CdsOrganisationType.ThirdCountryOrganisation) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
@@ -810,7 +814,7 @@ class CheckYourDetailsRegisterControllerSpec
         mockRegisterWithoutIdWithSubscription
           .rowRegisterWithoutIdWithSubscription(any(), any())(any[HeaderCarrier], any())
       ).thenReturn(Future.successful(Results.Ok))
-      submitForm(Map.empty)(verifyRedirectToNextPageIn(_))
+      submitForm(Map.empty)(res => status(res) shouldBe OK)
       verify(mockRegisterWithoutIdWithSubscription, times(1))
         .rowRegisterWithoutIdWithSubscription(any(), any())(any[HeaderCarrier], any())
     }
@@ -887,17 +891,20 @@ class CheckYourDetailsRegisterControllerSpec
     test(controller.submitDetails(atarService)(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
-  private def verifyRedirectToNextPageIn(result: Result) =
-    status(result) shouldBe OK
-
   private def mockRegistrationDetailsBasedOnOrganisationType(orgType: CdsOrganisationType) =
     orgType match {
       case SoleTrader | Individual =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(individualRegistrationDetails)
+        )
       case Partnership =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(partnershipRegistrationDetails)
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(partnershipRegistrationDetails)
+        )
       case _ =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(organisationRegistrationDetails)
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(organisationRegistrationDetails)
+        )
     }
 
 }

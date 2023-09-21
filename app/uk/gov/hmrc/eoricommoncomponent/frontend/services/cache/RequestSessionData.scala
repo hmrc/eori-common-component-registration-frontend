@@ -17,8 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
 import play.api.libs.json.Json
-
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
@@ -32,6 +30,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.http.HeaderCarrier
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class RequestSessionData @Inject() (audit: Auditable) {

@@ -45,7 +45,7 @@ trait SubscriptionFlowCreateModeTestSupport extends SubscriptionFlowTestSupport 
 
   def verifyRedirectToNextPageInCreateMode: Future[Result] => Any = { result =>
     status(result) shouldBe SEE_OTHER
-    result.header.headers(LOCATION) should endWith(nextPageUrl)
+    header(LOCATION, result).value should endWith(nextPageUrl)
   }
 
 }

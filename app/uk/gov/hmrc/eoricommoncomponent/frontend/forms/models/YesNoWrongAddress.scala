@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, text, _}
+import play.api.data.Forms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.oneOf
 
 object YesNoWrongAddress {

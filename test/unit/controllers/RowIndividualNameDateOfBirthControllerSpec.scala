@@ -21,8 +21,6 @@ import common.pages.matching.{
   ThirdCountryIndividualNameAndDateOfBirthPage,
   ThirdCountrySoleTraderNameAndDateOfBirthPage
 }
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop
@@ -41,6 +39,7 @@ import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.scalacheck.TestDataGenerators
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

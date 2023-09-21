@@ -27,9 +27,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, SafeId, TaxEnrolme
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.TaxEnrolmentsService
 import uk.gov.hmrc.http.HeaderCarrier
-import scala.concurrent.ExecutionContext.Implicits.global
 
 import java.time.LocalDate
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter {

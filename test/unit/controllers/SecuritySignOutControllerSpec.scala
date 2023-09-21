@@ -17,7 +17,7 @@
 package unit.controllers
 
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, _}
+import org.mockito.Mockito._
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -63,12 +63,12 @@ class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
 
   private def displayPage(service: Service)(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(test(controller.displayPage(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
+    test(controller.displayPage(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
   private def signOut(service: Service)(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
-    await(test(controller.signOut(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId))))
+    test(controller.signOut(service).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 
 }

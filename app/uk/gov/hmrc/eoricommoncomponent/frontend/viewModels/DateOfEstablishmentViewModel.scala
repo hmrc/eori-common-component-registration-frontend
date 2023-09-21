@@ -17,9 +17,10 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 
 import play.api.data.Form
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, EtmpOrganisationType, LLP, Partnership}
+
+import java.time.LocalDate
 
 object DateOfEstablishmentViewModel {
 

@@ -18,9 +18,11 @@ package integration
 
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.mvc.Http.Status._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{RegistrationDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
   RegistrationDisplayRequestHolder,
@@ -29,8 +31,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
 import uk.gov.hmrc.http.HeaderCarrier
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, RegistrationDisplay}
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import play.api.inject.bind
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
