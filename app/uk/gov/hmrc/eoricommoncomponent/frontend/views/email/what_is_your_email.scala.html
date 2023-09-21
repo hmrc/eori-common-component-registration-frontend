@@ -29,8 +29,6 @@
 
     @layout_di(messages("cds.subscription.enter-email.page.title"), form = Some(emailForm), service = service) {
 
-        <div>
-
             @errorSummary(emailForm.errors)
 
             @helpers.form(WhatIsYourEmailController.submit(service),"emailForm") {
@@ -62,8 +60,6 @@
                         classes = Some("govuk-!-width-one-half"),
                         labelClasses = Some("govuk-body")
                     )
-
-
                     </div>
 
                     <div class="govuk-inset-text"><p>@messages("cds.subscription.enter-email.hint")</p></div>
@@ -93,10 +89,7 @@
                         id = Some("continue-button")
                     ))
                 }
-
                 @helpers.helpAndSupport()
-
             }}
-</div>
 
 
