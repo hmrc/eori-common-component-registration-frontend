@@ -29,8 +29,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{eori_number_text_dow
 import util.ControllerSpec
 import util.builders.{AuthActionMock, AuthBuilder, SessionBuilder}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 

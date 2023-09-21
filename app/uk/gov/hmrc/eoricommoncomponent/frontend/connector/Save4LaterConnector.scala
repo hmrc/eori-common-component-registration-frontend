@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import javax.inject.{Inject, Singleton}
 import play.api.Logger
+import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json._
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.http.{BadRequestException, _}
 import uk.gov.hmrc.http.client.HttpClientV2
-import play.api.http.HeaderNames.AUTHORIZATION
+import uk.gov.hmrc.http.{BadRequestException, _}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 

@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration
 
-import java.time.LocalDateTime
-
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{CommonHeader, RequestParameter}
+
+import java.time.LocalDateTime
 
 case class RequestCommon(receiptDate: LocalDateTime, requestParameters: Seq[RequestParameter])
 

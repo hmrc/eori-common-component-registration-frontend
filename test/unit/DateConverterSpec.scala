@@ -17,8 +17,9 @@
 package unit
 
 import base.UnitSpec
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
+
+import java.time.LocalDate
 
 class DateConverterSpec extends UnitSpec {
 

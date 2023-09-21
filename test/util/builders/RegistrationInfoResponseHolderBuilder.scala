@@ -16,7 +16,8 @@
 
 package util.builders
 
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{NonUKIdentification, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
+
 import java.time.{ZoneOffset, ZonedDateTime}
 
 //TODO THIS MUST DIE !!!

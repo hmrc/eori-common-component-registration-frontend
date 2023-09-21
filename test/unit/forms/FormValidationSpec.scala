@@ -16,16 +16,14 @@
 
 package unit.forms
 
-import java.time.Year
 import base.UnitSpec
-
-import java.time.LocalDate
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel, NinoMatch}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
 
+import java.time.{LocalDate, Year}
 import java.time.format.DateTimeFormatter
 import scala.collection.immutable.ArraySeq
 import scala.util.Random

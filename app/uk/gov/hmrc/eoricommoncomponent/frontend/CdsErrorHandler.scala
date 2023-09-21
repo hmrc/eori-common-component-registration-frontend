@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend
 
-import javax.inject.Inject
-import play.api.{Configuration, Logger}
 import play.api.i18n.MessagesApi
 import play.api.mvc.Results._
 import play.api.mvc._
+import play.api.{Configuration, Logger}
 import play.mvc.Http.Status._
 import play.twirl.api.Html
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
@@ -30,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, notFound}
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
 class CdsErrorHandler @Inject() (

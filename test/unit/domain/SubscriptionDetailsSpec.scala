@@ -17,7 +17,6 @@
 package unit.domain
 
 import base.UnitSpec
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   NameDobMatchModel,
@@ -25,6 +24,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   NameMatchModel,
   NameOrganisationMatchModel
 }
+
+import java.time.LocalDate
 
 class SubscriptionDetailsSpec extends UnitSpec {
 

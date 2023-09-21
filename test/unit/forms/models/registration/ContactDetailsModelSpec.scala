@@ -17,11 +17,10 @@
 package unit.forms.models.registration
 
 import base.UnitSpec
-import java.time.LocalDateTime
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.ContactInformation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, ContactDetailsViewModel}
+
+import java.time.LocalDateTime
 
 class ContactDetailsModelSpec extends UnitSpec {
 

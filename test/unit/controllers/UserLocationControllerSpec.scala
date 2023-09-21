@@ -156,7 +156,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         status(result) shouldBe SEE_OTHER
         val expectedUrl =
           YouNeedADifferentServiceIomController.form(atarService).url
-        result.header.headers(LOCATION) should endWith(expectedUrl)
+        header(LOCATION, result).value should endWith(expectedUrl)
       }
     }
 
@@ -173,7 +173,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     "redirect to OrganisationTypeController form when 'Iom' is selected" in {
       subscriptionStatus() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(OrganisationTypeController.form(atarService).url)
+        header(LOCATION, result).value should endWith(OrganisationTypeController.form(atarService).url)
       }
     }
 
@@ -218,10 +218,10 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
       val test =
         controller.cacheAndRedirect(atarService, "third-country")
-      val result = await(test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail)))))
+      val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
       status(result) shouldBe SEE_OTHER
-      result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+      header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
     }
 
     "cache registration display response and redirect to BusinessDetailsRecoveryPage for organisation response" in {
@@ -240,16 +240,16 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
       val test =
         controller.cacheAndRedirect(atarService, "third-country")
-      val result = await(test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail)))))
+      val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
       status(result) shouldBe SEE_OTHER
-      result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+      header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
     }
 
     "return service unavailable response when failed to retrieve registration display response" in {
       val test =
         controller.cacheAndRedirect(atarService, "third-country")
-      val result = await(test(Left(ServiceUnavailableResponse)))
+      val result = test(Left(ServiceUnavailableResponse))
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
     }
@@ -328,7 +328,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) should endWith(UserLocationController.processing(atarService).url)
+          header(LOCATION, result).value should endWith(UserLocationController.processing(atarService).url)
         }
       }
 
@@ -342,7 +342,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) should endWith(SubscriptionRecoveryController.complete(atarService).url)
+          header(LOCATION, result).value should endWith(SubscriptionRecoveryController.complete(atarService).url)
         }
       }
       s"redirect to BusinessDetailsRecoveryController when NewSubscription status and registration display is enabled and when '$selectedOptionValue' is selected" in {
@@ -383,7 +383,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           )
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+        header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
       }
 
       s"redirect to BusinessDetailsRecoveryController when SubscriptionRejected status and registration display is enabled and when '$selectedOptionValue' is selected" in {
@@ -424,7 +424,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           )
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+        header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
       }
 
     } else if (selectedOptionValue == UserLocation.Uk)
@@ -435,7 +435,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           status(result) shouldBe SEE_OTHER
           val expectedUrl =
             OrganisationTypeController.form(atarService).url
-          result.header.headers(LOCATION) should endWith(expectedUrl)
+          header(LOCATION, result).value should endWith(expectedUrl)
         }
       }
   }

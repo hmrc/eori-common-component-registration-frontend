@@ -17,16 +17,15 @@
 package unit.controllers
 
 import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.LockedEmailController
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.locked_email_view
 import util.ControllerSpec
-import util.builders.AuthActionMock
 import util.builders.AuthBuilder._
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import util.builders.SessionBuilder
+import util.builders.{AuthActionMock, SessionBuilder}
 
 class LockedEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 

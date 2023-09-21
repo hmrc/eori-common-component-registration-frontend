@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import java.time.LocalDate
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.NonUKIdentification
+
+import java.time.LocalDate
 
 sealed trait RegistrationInfo {
   val taxPayerId: TaxPayerId

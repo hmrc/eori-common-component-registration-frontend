@@ -17,10 +17,8 @@
 package unit.viewModels
 
 import base.UnitSpec
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.OrganisationViewModel
 import util.ControllerSpec
 

@@ -17,14 +17,13 @@
 package unit.forms.models.subscription
 
 import base.{Injector, UnitSpec}
-import play.api.data.FormError
-import play.api.test.Helpers.stubMessages
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.CompanyRegisteredCountry
-
-import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import play.api.Application
+import play.api.data.FormError
 import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.Helpers.stubMessages
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.CompanyRegisteredCountry
 
 class CompanyRegisteredCountrySpec extends UnitSpec with Injector {
 

@@ -17,9 +17,9 @@
 package unit.forms
 
 import base.UnitSpec
+import play.api.data.FormError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
-import play.api.data.FormError
 
 class ContactDetailsFormSpec extends UnitSpec {
 

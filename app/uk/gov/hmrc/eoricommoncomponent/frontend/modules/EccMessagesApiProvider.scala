@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.modules
 
-import javax.inject.{Inject, Singleton}
 import play.api.http.HttpConfiguration
 import play.api.i18n.{DefaultMessagesApiProvider, Langs}
 import play.api.{Configuration, Environment}
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class EccMessagesApiProvider @Inject() (

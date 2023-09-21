@@ -67,9 +67,9 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
       ).thenReturn(Future.successful(Status(OK)))
 
-      val result = await(controller.form(testService)).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+      val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
-      result.header.status shouldBe OK
+      status(result) shouldBe OK
     }
   }
 
@@ -82,11 +82,11 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockConfirmContactDetailsService.handleFormWithErrors(any(), any(), any())(any[Request[AnyContent]], any())
       ).thenReturn(Future.successful(Status(OK)))
 
-      val result = await(controller.submit(testService)).apply(
+      val result = controller.submit(testService).apply(
         SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, ValidRequest + ("wrong-address" -> ""))
       )
 
-      result.header.status shouldBe OK
+      status(result) shouldBe OK
 
     }
 
@@ -95,14 +95,14 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockConfirmContactDetailsService.checkAddressDetails(any(), any(), any())(any[Request[AnyContent]], any())
       ).thenReturn(Future.successful(Status(OK)))
 
-      val result = await(controller.submit(testService)).apply(
+      val result = controller.submit(testService).apply(
         SessionBuilder.buildRequestWithSessionAndFormValues(
           defaultUserId,
           ValidRequest + ("yes-no-wrong-address" -> wrongAddress)
         )
       )
 
-      result.header.status shouldBe OK
+      status(result) shouldBe OK
 
     }
   }
@@ -114,9 +114,9 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       when(mockSessionCache.sub01Outcome(any[Request[AnyContent]])).thenReturn(Future.successful(mockSub01Outcome))
 
       val result =
-        await(controller.processing(testService)).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+        controller.processing(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
-      result.header.status shouldBe OK
+      status(result) shouldBe OK
     }
   }
 
