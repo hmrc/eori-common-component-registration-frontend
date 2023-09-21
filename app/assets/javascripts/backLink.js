@@ -1,4 +1,4 @@
-var docReferrer = document.referrer;
+let docReferrer = document.referrer;
 
 if (
   window.history &&
