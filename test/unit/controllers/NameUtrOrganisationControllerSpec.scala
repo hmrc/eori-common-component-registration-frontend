@@ -29,12 +29,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameOrganisationMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.InvalidUrlValueException
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_name_id_organisation
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_name_id_organisation}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -57,6 +58,7 @@ class NameUtrOrganisationControllerSpec
   private val companyId                       = CdsOrganisationType.CompanyId
   private val limitedLiabilityPartnershipId   = CdsOrganisationType.LimitedLiabilityPartnershipId
   private val charityPublicBodyNotForProfitId = CdsOrganisationType.CharityPublicBodyNotForProfitId
+  private val errorView                       = instanceOf[error_template]
 
   private val controller =
     new NameIdOrganisationController(
@@ -64,7 +66,8 @@ class NameUtrOrganisationControllerSpec
       mcc,
       matchNameIdOrganisationView,
       mockMatchingService,
-      mockSubscriptionDetailService
+      mockSubscriptionDetailService,
+      errorView
     )
 
   private val organisationTypeOrganisations =
@@ -248,7 +251,7 @@ class NameUtrOrganisationControllerSpec
             any[Request[AnyContent]],
             any[HeaderCarrier]
           )
-        ).thenReturn(Future.successful(true))
+        ).thenReturn(eitherT(()))
         when(
           mockSubscriptionDetailService.cacheNameDetails(any[NameOrganisationMatchModel])(any[Request[AnyContent]])
         ).thenReturn(Future.successful((): Unit))
@@ -268,7 +271,7 @@ class NameUtrOrganisationControllerSpec
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       val utr = "2108834503K"
       submitForm(Map("name" -> "My company name", "utr" -> utr)) { result =>
@@ -286,7 +289,7 @@ class NameUtrOrganisationControllerSpec
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       val requestUtr  = "21 08 83 45 03k"
       val expectedUtr = "2108834503K"
@@ -305,7 +308,7 @@ class NameUtrOrganisationControllerSpec
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       val utr = "516081700kK"
       submitForm(Map("name" -> "My company name", "utr" -> utr)) { result =>
@@ -323,7 +326,7 @@ class NameUtrOrganisationControllerSpec
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       val utr = "51348170012K"
       submitForm(Map("name" -> "My company name", "utr" -> utr)) { result =>
@@ -341,12 +344,40 @@ class NameUtrOrganisationControllerSpec
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(Future.successful(false))
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
       submitForm(ValidNameUtrRequest) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe BusinessNotMatchedError
         page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "return a error-template page when downstreamFailureResponse" in {
+      when(
+        mockMatchingService.matchBusiness(meq(ValidUtr), meq(CompanyOrganisation), meq(None), any())(
+          any[Request[AnyContent]],
+          any[HeaderCarrier]
+        )
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
+      submitForm(ValidNameUtrRequest) { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+      }
+    }
+
+    "return  500 and a error-template page when unknown error occurred " in {
+      when(
+        mockMatchingService.matchBusiness(meq(ValidUtr), meq(CompanyOrganisation), meq(None), any())(
+          any[Request[AnyContent]],
+          any[HeaderCarrier]
+        )
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
+      submitForm(ValidNameUtrRequest) { result =>
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
@@ -356,7 +387,7 @@ class NameUtrOrganisationControllerSpec
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
       submitForm(ValidNameUtrRequest) { result =>
         status(result) shouldBe SEE_OTHER
         result.header.headers("Location") should endWith(

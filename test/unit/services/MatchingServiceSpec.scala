@@ -17,12 +17,14 @@
 package unit.services
 
 import base.UnitSpec
+import cats.data.EitherT
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.mockito.{ArgumentCaptor, ArgumentMatchers, Mockito}
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
@@ -94,34 +96,33 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       when(
         mockMatchingServiceConnector
           .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-      ).thenReturn(Future.failed(UpstreamErrorResponse("failure", INTERNAL_SERVER_ERROR, 1)))
+      ).thenReturn(eitherT[MatchingResponse](ResponseError(INTERNAL_SERVER_ERROR, "failure")))
 
-      val caught = intercept[UpstreamErrorResponse] {
-        await(
-          service.matchBusiness(
-            Utr("some-utr"),
-            Organisation("name", CorporateBody),
-            establishmentDate = None,
-            mockGroupId
-          )(mockRequest, mockHeaderCarrier)
-        )
-      }
-      caught.statusCode shouldBe 500
-      caught.getMessage shouldBe "failure"
+      val expected = Left(ResponseError(INTERNAL_SERVER_ERROR, "failure"))
+      val result = service.matchBusiness(
+        Utr("some-utr"),
+        Organisation("name", CorporateBody),
+        establishmentDate = None,
+        mockGroupId
+      )(mockRequest, mockHeaderCarrier)
+
+      result.value.futureValue shouldBe expected
     }
 
     "for UTR and name match, call matching api with correct values" in {
       when(
         mockMatchingServiceConnector
           .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-      ).thenReturn(Future.successful(Some(matchSuccessResponse)))
+      ).thenReturn(eitherT(matchSuccessResponse))
 
-      await(
+      val expected = Right(())
+      val result =
         service.matchBusiness(utr, Organisation("someOrg", Partnership), establishmentDate = None, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
         )
-      ) shouldBe true
+
+      result.value.futureValue shouldBe expected
 
       val matchBusinessDataCaptor =
         ArgumentCaptor.forClass(classOf[MatchingRequestHolder])
@@ -134,16 +135,17 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       when(
         mockMatchingServiceConnector
           .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-      ).thenReturn(Future.successful(Some(matchSuccessResponse)))
+      ).thenReturn(eitherT(matchSuccessResponse))
 
-      await(
-        service.matchBusiness(
-          Utr(utrId + "K"),
-          Organisation("someOrg", Partnership),
-          establishmentDate = None,
-          mockGroupId
-        )(mockRequest, mockHeaderCarrier)
-      ) shouldBe true
+      val expected = Right(())
+      val result = service.matchBusiness(
+        Utr(utrId + "K"),
+        Organisation("someOrg", Partnership),
+        establishmentDate = None,
+        mockGroupId
+      )(mockRequest, mockHeaderCarrier)
+
+      result.value.futureValue shouldBe expected
 
       val matchBusinessDataCaptor =
         ArgumentCaptor.forClass(classOf[MatchingRequestHolder])
@@ -156,16 +158,17 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       when(
         mockMatchingServiceConnector
           .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-      ).thenReturn(Future.successful(Some(matchSuccessResponse)))
+      ).thenReturn(eitherT(matchSuccessResponse))
 
-      await(
-        service.matchBusiness(
-          Utr(utrId + "k"),
-          Organisation("someOrg", Partnership),
-          establishmentDate = None,
-          mockGroupId
-        )(mockRequest, mockHeaderCarrier)
-      ) shouldBe true
+      val expected = Right(())
+      val result = service.matchBusiness(
+        Utr(utrId + "k"),
+        Organisation("someOrg", Partnership),
+        establishmentDate = None,
+        mockGroupId
+      )(mockRequest, mockHeaderCarrier)
+
+      result.value.futureValue shouldBe expected
 
       val matchBusinessDataCaptor =
         ArgumentCaptor.forClass(classOf[MatchingRequestHolder])
@@ -178,14 +181,16 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       when(
         mockMatchingServiceConnector
           .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-      ).thenReturn(Future.successful(Some(matchSuccessResponse)))
+      ).thenReturn(eitherT(matchSuccessResponse))
 
-      await(
+      val expected = Right(())
+      val result =
         service.matchBusiness(eori, Organisation("someOrg", UnincorporatedBody), someEstablishmentDate, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
         )
-      ) shouldBe true
+
+      result.value.futureValue shouldBe expected
 
       val matchBusinessDataCaptor =
         ArgumentCaptor.forClass(classOf[MatchingRequestHolder])
@@ -197,7 +202,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       when(
         mockMatchingServiceConnector
           .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-      ).thenReturn(Future.successful(Some(matchSuccessResponse)))
+      ).thenReturn(eitherT(matchSuccessResponse))
 
       when(
         mockDetailsCreator.registrationDetails(
@@ -207,12 +212,13 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         )
       ).thenReturn(mockDetails)
 
-      await(
+      val expected = Right(())
+      val result =
         service.matchBusiness(utr, Organisation("someOrg", Partnership), establishmentDate = None, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
         )
-      ) shouldBe true
+      result.value.futureValue shouldBe expected
 
       verify(mockCache).saveRegistrationDetails(
         ArgumentMatchers.eq(mockDetails),
@@ -223,17 +229,16 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
   }
 
   private def assertMatchIndividualWithUtr(
-    connectorResponse: Option[MatchingResponse],
-    expectedServiceCallResult: Boolean
+    connectorResponse: EitherT[Future, ResponseError, MatchingResponse],
+    expectedServiceCallResult: EitherT[Future, ResponseError, Unit]
   ): Unit = {
     when(
       mockMatchingServiceConnector
         .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-    ).thenReturn(Future.successful(connectorResponse))
+    ).thenReturn(connectorResponse)
 
-    await(
-      service.matchIndividualWithId(utr, individual, mockGroupId)(mockHeaderCarrier, request)
-    ) shouldBe expectedServiceCallResult
+    val result = service.matchIndividualWithId(utr, individual, mockGroupId)(mockHeaderCarrier, request)
+    result.value.futureValue shouldBe expectedServiceCallResult.value.futureValue
 
     val matchBusinessDataCaptor =
       ArgumentCaptor.forClass(classOf[MatchingRequestHolder])
@@ -246,12 +251,15 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
     "call matching api with matched values" in
       assertMatchIndividualWithUtr(
-        connectorResponse = Some(matchIndividualSuccessResponse),
-        expectedServiceCallResult = true
+        connectorResponse = eitherT(matchIndividualSuccessResponse),
+        expectedServiceCallResult = eitherT(())
       )
 
     "call matching api with unmatched values" in
-      assertMatchIndividualWithUtr(connectorResponse = None, expectedServiceCallResult = false)
+      assertMatchIndividualWithUtr(
+        connectorResponse = eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse),
+        expectedServiceCallResult = eitherT[Unit](MatchingServiceConnector.matchFailureResponse)
+      )
 
     "store match details in cache when found a match" in {
       when(
@@ -264,8 +272,8 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(mockDetails)
 
       assertMatchIndividualWithUtr(
-        connectorResponse = Some(matchIndividualSuccessResponse),
-        expectedServiceCallResult = true
+        connectorResponse = eitherT(matchIndividualSuccessResponse),
+        expectedServiceCallResult = eitherT(())
       )
       verify(mockCache).saveRegistrationDetails(
         ArgumentMatchers.eq(mockDetails),
@@ -279,17 +287,16 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
   private def assertMatchIndividualWithEori(
     individual: Individual = individualWithMiddleName,
     expectedRequestJson: JsValue = eoriIndividualRequestJson,
-    connectorResponse: Option[MatchingResponse],
-    expectedServiceCallResult: Boolean
+    connectorResponse: EitherT[Future, ResponseError, MatchingResponse],
+    expectedServiceCallResult: EitherT[Future, ResponseError, Unit]
   ): Unit = {
     when(
       mockMatchingServiceConnector
         .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-    ).thenReturn(Future.successful(connectorResponse))
+    ).thenReturn(connectorResponse)
 
-    await(
-      service.matchIndividualWithId(eori, individual, mockGroupId)(mockHeaderCarrier, request)
-    ) shouldBe expectedServiceCallResult
+    val result = service.matchIndividualWithId(eori, individual, mockGroupId)(mockHeaderCarrier, request)
+    result.value.futureValue shouldBe expectedServiceCallResult.value.futureValue
 
     val matchBusinessDataCaptor =
       ArgumentCaptor.forClass(classOf[MatchingRequestHolder])
@@ -302,12 +309,15 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
     "call matching api with matched values" in
       assertMatchIndividualWithEori(
-        connectorResponse = Some(matchIndividualSuccessResponse),
-        expectedServiceCallResult = true
+        connectorResponse = eitherT(matchIndividualSuccessResponse),
+        expectedServiceCallResult = eitherT(())
       )
 
     "call matching api with unmatched values" in
-      assertMatchIndividualWithEori(connectorResponse = None, expectedServiceCallResult = false)
+      assertMatchIndividualWithEori(
+        connectorResponse = eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse),
+        expectedServiceCallResult = eitherT[Unit](MatchingServiceConnector.matchFailureResponse)
+      )
 
     "store match details in cache when found a match" in {
       when(
@@ -320,8 +330,8 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(mockDetails)
 
       assertMatchIndividualWithEori(
-        connectorResponse = Some(matchIndividualSuccessResponse),
-        expectedServiceCallResult = true
+        connectorResponse = eitherT(matchIndividualSuccessResponse),
+        expectedServiceCallResult = eitherT(())
       )
       verify(mockCache).saveRegistrationDetails(
         ArgumentMatchers.eq(mockDetails),
@@ -334,17 +344,17 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
   }
 
   private def assertMatchIndividualWithNino(
-    connectorResponse: Option[MatchingResponse],
-    serviceCallResult: Boolean
+    connectorResponse: EitherT[Future, ResponseError, MatchingResponse],
+    serviceCallResult: EitherT[Future, ResponseError, Unit]
   ): Unit = {
     when(
       mockMatchingServiceConnector
         .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-    ).thenReturn(Future.successful(connectorResponse))
+    ).thenReturn(connectorResponse)
 
-    await(
+    val result =
       service.matchIndividualWithNino(ninoId, NinoFormBuilder.asIndividual, mockGroupId)(mockHeaderCarrier, request)
-    ) shouldBe serviceCallResult
+    result.value.futureValue shouldBe serviceCallResult.value.futureValue
 
     val matchBusinessDataCaptor =
       ArgumentCaptor.forClass(classOf[MatchingRequestHolder])
@@ -356,18 +366,24 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
   "matching an individual with a nino" should {
 
     "call matching api with matched values" in {
-      assertMatchIndividualWithNino(connectorResponse = Some(matchIndividualSuccessResponse), serviceCallResult = true)
+      assertMatchIndividualWithNino(
+        connectorResponse = eitherT(matchIndividualSuccessResponse),
+        serviceCallResult = eitherT(())
+      )
     }
 
     "call matching api with unmatched values" in {
-      assertMatchIndividualWithNino(connectorResponse = None, serviceCallResult = false)
+      assertMatchIndividualWithNino(
+        connectorResponse = eitherT(MatchingServiceConnector.matchFailureResponse),
+        serviceCallResult = eitherT[Unit](MatchingServiceConnector.matchFailureResponse)
+      )
     }
 
     "store match details in cache" in {
       when(
         mockMatchingServiceConnector
           .lookup(ArgumentMatchers.any())(ArgumentMatchers.any())
-      ).thenReturn(Future.successful(Some(matchIndividualSuccessResponse)))
+      ).thenReturn(eitherT(matchIndividualSuccessResponse))
       when(
         mockDetailsCreator.registrationDetails(
           ArgumentMatchers
@@ -377,9 +393,11 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         )
       ).thenReturn(mockDetails)
 
-      await(
+      val expected = Right(())
+      val result =
         service.matchIndividualWithNino(ninoId, NinoFormBuilder.asIndividual, mockGroupId)(mockHeaderCarrier, request)
-      ) shouldBe true
+      result.value.futureValue shouldBe expected
+
       verify(mockCache).saveRegistrationDetails(
         ArgumentMatchers.eq(mockDetails),
         ArgumentMatchers.eq(mockGroupId),

@@ -16,9 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import cats.data.EitherT
+
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.Messages
 import play.api.mvc.{Action, _}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -40,7 +43,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you_utr,
   orgTypeLookup: OrgTypeLookup,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  errorView: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -78,12 +82,15 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                 )
               ),
             formData =>
-              matchOnId(formData, GroupId(loggedInUser.groupId)).map {
-                case true =>
-                  Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-                case false =>
-                  matchNotFoundBadRequest(formData, service, orgType)
-              }
+              matchOnId(formData, GroupId(loggedInUser.groupId)).fold(
+                {
+                  case MatchingServiceConnector.matchFailureResponse =>
+                    matchNotFoundBadRequest(formData, service, orgType)
+                  case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+                  case _                                                  => InternalServerError(errorView(service))
+                },
+                _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+              )
           )
       )
     }
@@ -91,10 +98,11 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
     hc: HeaderCarrier,
     request: Request[_]
-  ): Future[Boolean] =
+  ): EitherT[Future, ResponseError, Unit] = EitherT {
     sessionCacheService
       .retrieveNameDobFromCache()
-      .flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
+      .flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId).value)
+  }
 
   private def matchNotFoundBadRequest(
     individualFormData: IdMatchModel,

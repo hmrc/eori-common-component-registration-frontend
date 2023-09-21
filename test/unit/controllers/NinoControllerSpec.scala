@@ -27,9 +27,10 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NinoController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_nino
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_nino}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -44,10 +45,11 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
   private val mockAuthConnector   = mock[AuthConnector]
   private val mockAuthAction      = authAction(mockAuthConnector)
   private val mockMatchingService = mock[MatchingService]
+  private val errorView           = instanceOf[error_template]
 
   private val matchNinoView = instanceOf[match_nino]
 
-  val controller = new NinoController(mockAuthAction, mcc, matchNinoView, mockMatchingService)
+  val controller = new NinoController(mockAuthAction, mcc, matchNinoView, mockMatchingService, errorView)
 
   before {
     Mockito.reset(mockMatchingService)
@@ -212,7 +214,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
           any()
         )(any[HeaderCarrier], any[Request[_]])
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       submitForm(form = NinoFormBuilder.asForm) { result =>
         val page = CdsPage(contentAsString(result))
@@ -234,7 +236,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
           any()
         )(any[HeaderCarrier], any[Request[_]])
-      ).thenReturn(Future.successful(false))
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
 
       submitForm(form = NinoFormBuilder.asForm) { result =>
         status(result) shouldBe BAD_REQUEST
@@ -246,6 +248,43 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
         verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }
     }
+
+    "redirect to error-template page when downstreamFailureResponse occurred" in {
+      when(
+        mockMatchingService.matchIndividualWithNino(
+          ArgumentMatchers.eq(NinoFormBuilder.Nino),
+          ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
+          any()
+        )(any[HeaderCarrier], any[Request[_]])
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
+
+      submitForm(form = NinoFormBuilder.asForm) { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+
+        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
+      }
+    }
+
+    "redirect to error-template page when other errors occurred" in {
+      when(
+        mockMatchingService.matchIndividualWithNino(
+          ArgumentMatchers.eq(NinoFormBuilder.Nino),
+          ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
+          any()
+        )(any[HeaderCarrier], any[Request[_]])
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
+
+      submitForm(form = NinoFormBuilder.asForm) { result =>
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+
+        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
+      }
+    }
+
   }
 
   def showForm(

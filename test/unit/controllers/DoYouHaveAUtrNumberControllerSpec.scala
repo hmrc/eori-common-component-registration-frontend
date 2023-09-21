@@ -16,6 +16,7 @@
 
 package unit.controllers
 
+import cats.data.EitherT
 import common.pages.matching.OrganisationUtrPage._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
@@ -24,7 +25,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
@@ -241,11 +242,11 @@ class DoYouHaveAUtrNumberControllerSpec
   "submitting the form for ROW" should {
 
     "redirect to Get UTR page based on YES answer and organisation type sole trader" in {
-
+      val response = EitherT[Future, ResponseError, MatchingResponse](Future.successful(Right(mockMatchingResponse)))
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameDobMatchModel("", "", LocalDate.now()))))
       when(mockMatchingConnector.lookup(mockMatchingRequestHolder))
-        .thenReturn(Future.successful(Option(mockMatchingResponse)))
+        .thenReturn(response)
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         await(result)
