@@ -337,8 +337,10 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> " ",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-establishment.month", List("date-of-establishment.month.empty"), List()))
+      val res = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Seq(
+        FormError("date-of-establishment.month", List("date-of-establishment.month.empty"), List())
+      )
     }
   }
 
