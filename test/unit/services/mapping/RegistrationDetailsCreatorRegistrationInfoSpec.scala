@@ -17,13 +17,14 @@
 package unit.services.mapping
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
-import java.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
+
+import java.time.LocalDate
 
 class RegistrationDetailsCreatorRegistrationInfoSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 

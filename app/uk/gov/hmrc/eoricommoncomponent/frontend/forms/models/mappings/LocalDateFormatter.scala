@@ -42,18 +42,20 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
     val int = intFormatter(requiredKey = invalidKey, wholeNumberKey = invalidKey, nonNumericKey = invalidKey, args)
 
     for {
-      day   <- int.bind(s"$key.day", data.map(d => d._1 -> d._2.trim))
-      month <- int.bind(s"$key.month", data.map(m => m._1 -> m._2.trim))
-      year  <- int.bind(s"$key.year", data.map(y => y._1 -> y._2.trim))
+      day   <- int.bind(s"$key.day", data)
+      month <- int.bind(s"$key.month", data)
+      year  <- int.bind(s"$key.year", data)
       date  <- toDate(key, day, month, year)
     } yield date
   }
 
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
+    val trimmedData = data.map(d => d._1 -> d._2.trim)
+
     val fields = fieldKeys.map {
       field =>
-        field -> data.get(s"$key.$field").filter(_.nonEmpty)
+        field -> trimmedData.get(s"$key.$field").filter(_.nonEmpty)
     }.toMap
 
     lazy val missingFields = fields
@@ -63,7 +65,7 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
 
     fields.count(_._2.isDefined) match {
       case 3 =>
-        formatDate(key, data).left.map { leftValue =>
+        formatDate(key, trimmedData).left.map { leftValue =>
           leftValue.map(formError => formError)
         }
       case 2 =>

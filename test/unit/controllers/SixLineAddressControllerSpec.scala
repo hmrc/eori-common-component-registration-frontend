@@ -18,7 +18,6 @@ package unit.controllers
 
 import common.pages.matching.AddressPageFactoring._
 import common.pages.subscription.AddressPage
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.prop.TableDrivenPropertyChecks._
@@ -28,7 +27,6 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SixLineAddressController, SubscriptionFlowManager}
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
@@ -45,6 +43,7 @@ import util.builders.RegistrationDetailsBuilder.defaultAddress
 import util.builders.matching._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -280,7 +279,7 @@ class SixLineAddressControllerSpec
           page.getElementsText(PageLevelErrorSummaryListXPath) shouldBe empty
 
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) shouldBe expectedRedirectURL
+          header(LOCATION, result).value shouldBe expectedRedirectURL
         }
       }
     }
@@ -373,8 +372,10 @@ class SixLineAddressControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(CdsOrganisationType.ThirdCountryIndividual))
-    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(individualRegistrationDetails)
-    when(mockSubscriptionDetailsService.cachedCustomsId(any[Request[_]])).thenReturn(None)
+    when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+      Future.successful(individualRegistrationDetails)
+    )
+    when(mockSubscriptionDetailsService.cachedCustomsId(any[Request[_]])).thenReturn(Future.successful(None))
 
     test(
       controller.submit(false, CdsOrganisationType.ThirdCountryIndividualId, atarService)(
@@ -399,7 +400,7 @@ class SixLineAddressControllerSpec
       page.getElementsText(PageLevelErrorSummaryListXPath) shouldBe errorMessage
       page.getElementsText(fieldLevelErrorXPath) shouldBe s"Error: $errorMessage"
       page.getElementsText("title") should startWith("Error: ")
-      result
+      await(result)
     }
 
   def showForm[T](

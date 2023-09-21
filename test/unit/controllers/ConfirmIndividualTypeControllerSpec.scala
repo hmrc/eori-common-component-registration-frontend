@@ -126,7 +126,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
     "redirect to subscription flow first page with updated session" in {
       submitForm(validRequestData) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe testSubscriptionStartPageUrl
+        header(LOCATION, result).value shouldBe testSubscriptionStartPageUrl
         verify(mockSubscriptionFlowManager).startSubscriptionFlow(
           ArgumentMatchers.any[Option[SubscriptionPage]],
           ArgumentMatchers.eq(selectedIndividualType),
@@ -136,9 +136,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
           ArgumentMatchers.eq(anotherMockSession),
           ArgumentMatchers.eq(selectedIndividualType)
         )
-        testSessionData foreach (
-          newSessionValue => result.session(mockRequestHeader).data should contain(newSessionValue)
-        )
+        testSessionData foreach (newSessionValue => session(result).data should contain(newSessionValue))
       }
     }
   }

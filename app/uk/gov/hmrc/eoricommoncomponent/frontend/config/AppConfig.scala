@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.config
 
-import javax.inject.{Inject, Named, Singleton}
 import play.api.Configuration
 import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import javax.inject.{Inject, Named, Singleton}
 import scala.concurrent.duration.Duration
 import scala.util.matching.Regex
 
@@ -103,7 +103,7 @@ class AppConfig @Inject() (
   val emailVerificationLinkExpiryDuration: String =
     config.get[String]("microservice.services.email-verification.linkExpiryDuration")
 
-  //handle subscription service
+  //Eori Common Component
   val handleSubscriptionBaseUrl: String = servicesConfig.baseUrl("handle-subscription")
 
   val handleSubscriptionServiceContext: String =
@@ -138,5 +138,7 @@ class AppConfig @Inject() (
   }
 
   val internalAuthToken: String = config.get[String]("internal-auth.token")
+
+  val integrationFrameworkFeatureFlag: Boolean = config.get[Boolean]("integration-framework-feature-flag")
 
 }

@@ -17,9 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.Logging
-
-import javax.inject.{Inject, Singleton}
-import java.time.LocalDateTime
 import play.api.i18n.Messages
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -32,6 +29,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDateTime
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

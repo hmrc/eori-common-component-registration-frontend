@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import java.time.LocalDate
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+
+import java.time.LocalDate
 
 case class BusinessAddress(
   line_1: String,

@@ -33,6 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
 import util.builders.matching.NinoFormBuilder
 import play.api.libs.json._
 import play.api.mvc.{AnyContent, Request}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.mvc.Http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
@@ -82,9 +83,11 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         any[HeaderCarrier],
         any[Request[_]]
       )
-    ).thenReturn(true)
+    ).thenReturn(Future.successful(true))
 
-    when(mockCache.saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]])).thenReturn(true)
+    when(mockCache.saveRegistrationDetails(any[RegistrationDetails])(any[Request[_]])).thenReturn(
+      Future.successful(true)
+    )
     when(loggedInCtUser.isAgent).thenReturn(false)
   }
 

@@ -183,7 +183,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
         submitForm(Map("organisation-type" -> option), organisationType = Some(cdsOrganisationType)) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) should endWith(
+          header(LOCATION, result).value should endWith(
             s"/customs-registration-services/atar/register/matching/$urlParameter"
           )
         }

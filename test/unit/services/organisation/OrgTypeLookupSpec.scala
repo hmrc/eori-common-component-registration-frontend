@@ -19,9 +19,10 @@ package unit.services.organisation
 import base.UnitSpec
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterEach}
 import play.api.mvc.{AnyContent, Request}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CorporateBody, Partnership}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -83,6 +84,40 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
 
       val thrown = intercept[IllegalStateException] {
         await(lookup.etmpOrgType(req))
+      }
+
+      thrown.getMessage shouldBe "No Registration details in cache."
+    }
+  }
+
+  "etmpOrgTypeOpt" should {
+
+    "give org type from request session" in {
+      when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
+        .thenReturn(Some(CdsOrganisationType.Company))
+
+      val orgType = await(lookup.etmpOrgTypeOpt(req))
+
+      orgType shouldBe Some(CorporateBody)
+    }
+
+    "give org type from cache" in {
+      when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
+      when(mockCache.registrationDetails(any[Request[_]]))
+        .thenReturn(Future.successful(RegistrationDetailsBuilder.partnershipRegistrationDetails))
+
+      val orgType = await(lookup.etmpOrgTypeOpt(req))
+
+      orgType shouldBe Some(Partnership)
+    }
+
+    "throw an exception when different type of registration details is retrieved" in {
+      when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
+      when(mockCache.registrationDetails(any[Request[_]]))
+        .thenReturn(Future.successful(RegistrationDetailsBuilder.individualRegistrationDetails))
+
+      val thrown = intercept[IllegalStateException] {
+        await(lookup.etmpOrgTypeOpt(req))
       }
 
       thrown.getMessage shouldBe "No Registration details in cache."

@@ -17,8 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
 import play.api.Logging
-
-import java.time.LocalDate
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
@@ -27,6 +25,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   ContactDetailsModel,
   VatDetails
 }
+
+import java.time.LocalDate
 
 case class SubscriptionDetails(
   businessShortName: Option[BusinessShortName] = None,

@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import java.time.LocalDate
 import com.google.inject.{ImplementedBy, Inject, Singleton}
+
+import java.time.LocalDate
 
 @Singleton
 class TimeServiceImpl @Inject() extends TimeService {

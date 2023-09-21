@@ -1,10 +1,10 @@
-import sbt._
+import sbt.*
 
 object AppDependencies {
   import play.core.PlayVersion
 
   val mongoDbVersion = "1.3.0"
-  val bootstrapVersion = "7.19.0"
+  val bootstrapVersion = "7.22.0"
 
   val compileDependencies = Seq(
     "org.typelevel"     %% "cats-core"                     % "2.8.0",
@@ -14,7 +14,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"            % mongoDbVersion,
     "uk.gov.hmrc"       %% "emailaddress"                  % "3.8.0",
     "uk.gov.hmrc"       %% "play-frontend-hmrc"            % "7.19.0-play-28",
-    "uk.gov.hmrc"       %% "internal-auth-client-play-28"  % "1.3.0"
+    "uk.gov.hmrc"       %% "internal-auth-client-play-28"  % "1.6.0"
   )
 
   val testDependencies = Seq(

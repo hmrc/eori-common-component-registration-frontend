@@ -17,12 +17,12 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.filters
 
 import akka.stream.Materializer
-import javax.inject.Inject
 import play.api.mvc.{Filter, RequestHeader, Result}
 import play.mvc.Http.Status.NOT_FOUND
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
 class RouteFilter @Inject() (appConfig: AppConfig, errorHandler: CdsErrorHandler)(implicit val mat: Materializer)

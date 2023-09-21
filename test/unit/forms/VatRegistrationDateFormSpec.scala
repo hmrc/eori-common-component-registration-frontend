@@ -17,17 +17,15 @@
 package unit.forms
 
 import base.UnitSpec
-import org.mockito.Mockito.when
 import org.mockito.Mockito._
-import org.mockito._
-import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.BeforeAndAfter
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.TimeService
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
-import java.time.{LocalDate, Year}
-import java.time.format.DateTimeFormatter
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.data.{Form, FormError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.TimeService
+
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, Year}
 import scala.collection.immutable.ArraySeq
 
 class VatRegistrationDateFormSpec extends UnitSpec with MockitoSugar with BeforeAndAfter {

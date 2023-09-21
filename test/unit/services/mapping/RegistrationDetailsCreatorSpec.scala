@@ -17,20 +17,21 @@
 package unit.services.mapping
 
 import base.UnitSpec
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
-  RegistrationDisplayResponse,
-  ResponseCommon,
-  ResponseDetail
-}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
   ContactResponse,
   IndividualResponse,
   OrganisationResponse
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
+  RegistrationDisplayResponse,
+  ResponseCommon,
+  ResponseDetail
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
+
+import java.time.LocalDate
 
 class RegistrationDetailsCreatorSpec extends UnitSpec {
 

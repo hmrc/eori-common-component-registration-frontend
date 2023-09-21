@@ -17,8 +17,6 @@
 package unit.controllers
 
 import common.pages.RegisterHowCanWeIdentifyYouPage
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -26,10 +24,7 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
-  GYEHowCanWeIdentifyYouNinoController,
-  GYEHowCanWeIdentifyYouUtrController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouNinoController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameDobMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
@@ -45,6 +40,7 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -100,7 +96,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       submitForm(Map("nino" -> nino)) {
         result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/confirm"
+          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm"
       }
     }
 

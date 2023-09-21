@@ -20,8 +20,8 @@ import base.Injector
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsEmpty, DefaultActionBuilder}
-import play.api.{Configuration, Environment}
 import play.api.test.Helpers.stubBodyParser
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import play.api.{Logger, Logging}
+import play.api.Logging
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 

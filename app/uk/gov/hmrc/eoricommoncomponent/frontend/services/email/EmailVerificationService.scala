@@ -16,8 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.email
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationConnector
+import cats.data.EitherT
+import play.api.i18n.Messages
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationConnector, ResponseError}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
   EmailVerificationStatus,
   ResponseWithURI,
@@ -25,12 +28,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
   VerificationStatusResponse
 }
 import uk.gov.hmrc.http.HeaderCarrier
-import cats.data.EitherT
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import play.api.i18n.Messages
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
