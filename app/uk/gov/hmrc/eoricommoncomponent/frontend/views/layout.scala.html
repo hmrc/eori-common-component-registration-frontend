@@ -54,9 +54,9 @@
 
 @titleWithEnding = @{
     if(service.code.equalsIgnoreCase(appConfig.standaloneServiceCode)) {
-        title + " - " + messages("cds.banner.registration") + " - " + messages("cds.end-of-title")
+        title + " - " + messages("cds.banner.registration") + " - " + messages("cds.country.end-of-title")
     }
-    else title + " - " + messages(s"cds.banner.subscription.${service.code}") + " - " + messages("cds.end-of-title")
+    else title + " - " + messages(s"cds.banner.subscription.${service.code}") + " - " + messages("cds.country.end-of-title")
 }
 
 @banner = @{
