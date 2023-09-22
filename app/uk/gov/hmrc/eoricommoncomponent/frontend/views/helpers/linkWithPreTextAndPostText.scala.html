@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.services
+@this(link: helpers.link)
 
-import com.google.inject.{ImplementedBy, Inject, Singleton}
+@(
+        text: String,
+        href: String,
+        id: Option[String] = None,
+        classes: String = "govuk-link",
+        preText: Option[String] = None,
+        postText: Option[String] = None
+)
 
-import java.time.LocalDate
-
-@Singleton
-class TimeServiceImpl @Inject() extends TimeService {
-  def getTodaysDate: LocalDate = LocalDate.now()
-}
-
-@ImplementedBy(classOf[TimeServiceImpl])
-trait TimeService {
-  def getTodaysDate: LocalDate
-}
+<p class="govuk-body">
+ @preText
+ @link(text, href, id, classes)
+ @postText
+</p>

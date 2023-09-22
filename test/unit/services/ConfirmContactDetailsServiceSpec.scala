@@ -17,7 +17,6 @@
 package unit.services
 
 import base.Injector
-
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -27,21 +26,14 @@ import play.api.mvc.{AnyContent, Request, Session}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.await
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, UnincorporatedBody}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, UnincorporatedBody}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress.{noAnswered, wrongAddress, yesAnswered}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  ConfirmContactDetailsService,
-  NewSubscription,
-  RegistrationConfirmService,
-  SubscriptionExists,
-  SubscriptionProcessing,
-  TaxEnrolmentsService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_contact_details
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ViewSpec

@@ -16,8 +16,8 @@
 
 package common.support.testdata.subscription
 
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 import org.scalatest.prop.Tables.Table
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 
 trait ReviewPageOrganisationTypeTables {
 

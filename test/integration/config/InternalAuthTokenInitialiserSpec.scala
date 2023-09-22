@@ -16,24 +16,23 @@
 
 package integration
 
+import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.time.{Seconds, Span}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import play.api.http.Status.{CREATED, NOT_FOUND, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers.AUTHORIZATION
-import scala.util.Try
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
-
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.InternalAuthTokenInitialiser
+
+import scala.util.Try
 
 class InternalAuthTokenInitialiserSpec
     extends AnyFreeSpec with Matchers with ScalaFutures with IntegrationPatience with BeforeAndAfterAll

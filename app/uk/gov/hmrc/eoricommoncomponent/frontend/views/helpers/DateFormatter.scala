@@ -17,13 +17,12 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers
 
 import play.api.i18n.Lang.logger
-
-import javax.inject.Inject
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.language.LanguageUtils
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 import scala.util.{Failure, Success, Try}
 
 class DateFormatter @Inject() (languageUtils: LanguageUtils) {

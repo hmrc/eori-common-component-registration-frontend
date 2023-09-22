@@ -15,16 +15,15 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukErrorSummary
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorSummary
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.{ErrorLink, ErrorSummary}
 
 @this(govukErrorSummary: GovukErrorSummary)
 
 @(errors: Seq[FormError], errorFieldName: Option[String] = None, focusOverrides: Map[String, String] = Map.empty)(implicit messages: Messages)
 
 @if(errors.nonEmpty) {
-    @defining(errors.map { error =>
+    @defining(errors.filter(_.message.trim.nonEmpty).map { error =>
         ErrorLink(
             href =  Some("#"+focusOverrides.getOrElse(error.key, error.key)),
             content = Text(messages(error.message, error.args:_*))

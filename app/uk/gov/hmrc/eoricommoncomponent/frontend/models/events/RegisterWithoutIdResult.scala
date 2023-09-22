@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import java.time.LocalDateTime
-
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.RegisterWithoutIdResponseHolder
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.CommonHeader
+
+import java.time.LocalDateTime
 
 case class RegisterWithoutIdResult(
   status: String,

@@ -16,8 +16,6 @@
 
 package unit.controllers
 
-import java.util.UUID
-
 import common.pages.registration.VatRegisteredUkPage
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -27,6 +25,7 @@ import util.ControllerSpec
 import util.builders.YesNoFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.util.UUID
 import scala.concurrent.Future
 
 class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMock {
@@ -83,14 +82,14 @@ class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMo
     "redirect to VAT KANA form when 'yes' is selected" in {
       submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(expectedYesRedirectUrl)
+        header(LOCATION, result).value should endWith(expectedYesRedirectUrl)
       }
     }
 
     "redirect to non-VAT KANA form when 'no' is selected" in {
       submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe expectedNoRedirectUrl
+        header(LOCATION, result).value shouldBe expectedNoRedirectUrl
       }
     }
   }

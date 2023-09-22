@@ -17,8 +17,6 @@
 package unit.controllers
 
 import common.pages.matching.DoYouHaveNinoPage._
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
@@ -34,6 +32,7 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -134,7 +133,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/row/get-nino")
+        header("Location", result).value should endWith("register/matching/row/get-nino")
       }
     }
 
@@ -148,7 +147,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/address/third-country-sole-trader")
+        header("Location", result).value should endWith("register/matching/address/third-country-sole-trader")
       }
     }
 
@@ -164,7 +163,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/address/third-country-sole-trader")
+        header("Location", result).value should endWith("register/matching/address/third-country-sole-trader")
       }
     }
 
@@ -189,7 +188,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(form = noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/check-user")
+        header("Location", result).value should endWith("register/check-user")
       }
     }
   }

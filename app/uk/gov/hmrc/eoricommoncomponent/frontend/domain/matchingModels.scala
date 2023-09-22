@@ -17,12 +17,12 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
 import play.api.Logging
-
-import java.time.LocalDate
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{IndividualName, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.formatInput
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+
+import java.time.LocalDate
 
 sealed trait CustomsId {
   def id: String

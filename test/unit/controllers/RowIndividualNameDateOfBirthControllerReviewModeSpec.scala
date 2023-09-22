@@ -21,8 +21,6 @@ import common.pages.matching.{
   ThirdCountryIndividualNameAndDateOfBirthPage,
   ThirdCountrySoleTraderNameAndDateOfBirthPage
 }
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop
@@ -42,6 +40,7 @@ import util.ControllerSpec
 import util.builders.AuthActionMock
 import util.scalacheck.TestDataGenerators
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
@@ -123,7 +122,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       "should redirect to sign out page if cachedNameDobDetails not found" in withControllerFixture {
         controllerFixture =>
           import controllerFixture._
-          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(None)
+          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
 
           controllerFixture.showForm { result =>
             status(result) shouldBe SEE_OTHER

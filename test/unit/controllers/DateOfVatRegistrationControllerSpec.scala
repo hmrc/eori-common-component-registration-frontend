@@ -22,8 +22,10 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DateOfVatRegistrationController, VatReturnController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{GetVatCustomerInformationService, SubscriptionBusinessService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   date_of_vat_registration,
@@ -33,7 +35,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -43,6 +44,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
   private val mockDateOfVatRegistrationView        = instanceOf[date_of_vat_registration]
   private val mockSubscriptionBusinessService      = mock[SubscriptionBusinessService]
   private val mockGetVatCustomerInformationService = mock[GetVatCustomerInformationService]
+  private val mockAppConfig                        = mock[AppConfig]
 
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
@@ -57,7 +59,8 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     mockGetVatCustomerInformationService,
     mcc,
     mockDateOfVatRegistrationView,
-    form
+    form,
+    mockAppConfig
   )
 
   private val controllerVat = new VatReturnController(
@@ -79,7 +82,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     super.beforeEach()
 
     when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any[Request[_]])).thenReturn(
-      Some(vatControlListResponse)
+      Future.successful(Some(vatControlListResponse))
     )
   }
 
