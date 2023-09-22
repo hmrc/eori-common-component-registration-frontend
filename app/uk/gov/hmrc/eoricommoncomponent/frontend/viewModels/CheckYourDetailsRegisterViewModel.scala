@@ -170,7 +170,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       )
 
       for {
-        providedDetailsList   <- providedDetails
+        providedDetailsList <- providedDetails
         vatDetails             = getVatDetails(isIndividual, subscription, service)
         providedContactDetails = getProvidedContactDetails(subscription, service)
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
