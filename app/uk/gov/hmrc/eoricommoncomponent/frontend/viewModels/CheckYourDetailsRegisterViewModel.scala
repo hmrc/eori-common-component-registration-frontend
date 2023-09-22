@@ -170,8 +170,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       )
 
       for {
-        providedDetailsList <- providedDetails
-        vatDetails          <- getVatDetails(isIndividual, subscription, service)
+        providedDetailsList   <- providedDetails
+        vatDetails             = getVatDetails(isIndividual, subscription, service)
         providedContactDetails = getProvidedContactDetails(subscription, service)
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
     }
@@ -400,12 +400,14 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
   def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails, service: Service)(implicit
     messages: Messages
-  ): Option[Seq[SummaryListRow]] =
-    if (!isIndividual)
-      for {
-        controlListResponse <- subscription.vatControlListResponse
-        vatDateOfReg        <- controlListResponse.dateOfReg
-      } yield Seq(
+  ): Seq[SummaryListRow] =
+    if (!isIndividual) {
+      val dateOfReg = for {
+        resp <- subscription.vatControlListResponse
+        date <- resp.dateOfReg
+      } yield formatDate(LocalDate.parse(date))
+
+      Seq(
         summaryListRowNoChangeOption(
           key = messages("cds.form.gb-vat-number"),
           value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label"))))
@@ -417,10 +419,10 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         ),
         summaryListRowNoChangeOption(
           key = messages("cds.form.gb-vat-date"),
-          value = Some(Html(formatDate(LocalDate.parse(vatDateOfReg))))
+          value = Some(Html(dateOfReg.getOrElse(messages("cds.not-entered.label"))))
         )
       )
-    else Some(Seq.empty[SummaryListRow])
+    } else Seq.empty[SummaryListRow]
 
   private def addressViewModelHtml(ad: AddressViewModel)(implicit messages: Messages): Html = Html {
     val lines = Seq(

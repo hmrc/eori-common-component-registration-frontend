@@ -135,13 +135,6 @@ class CheckYourDetailsRegisterControllerSpec
       }
     }
 
-    "redirect to email controller for an organisation where the vat details weren't entered" in {
-      when(mockSubscriptionDetails.vatControlListResponse).thenReturn(None)
-      showForm() { result =>
-        status(result) shouldBe SEE_OTHER
-      }
-    }
-
     "display the sole trader name and dob from the cache when user has been identified by REG01" in {
       when(mockSubscriptionDetails.nameDobDetails)
         .thenReturn(Some(NameDobMatchModel("John", "Doe", LocalDate.parse("1980-07-23"))))
