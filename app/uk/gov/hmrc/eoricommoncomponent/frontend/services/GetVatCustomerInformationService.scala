@@ -22,8 +22,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.GetVatCustomerInformat
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GetVatInformationResponse, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
-
-import java.util.Date
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 

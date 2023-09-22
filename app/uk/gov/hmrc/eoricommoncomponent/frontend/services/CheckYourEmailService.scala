@@ -21,7 +21,7 @@ import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes.WhatIsYourEmailController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{SecuritySignOutController, UserLocationController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SecuritySignOutController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -82,7 +82,7 @@ class CheckYourEmailService @Inject() (
         Future.successful(Redirect(SecuritySignOutController.signOut(service)))
       } { email =>
         if (email.isConfirmed.getOrElse(false))
-          Future.successful(Redirect(UserLocationController.form(service)))
+          Future.successful(toResult(service))
         else
           save4LaterService
             .saveEmail(GroupId(userWithEnrolments.groupId), email.copy(isConfirmed = Some(true)))
@@ -92,6 +92,9 @@ class CheckYourEmailService @Inject() (
 
       }
     }
+
+  def toResult(service: Service)(implicit r: Request[AnyContent]): Result =
+    Ok(emailConfirmedView(service))
 
   def handleFormWithErrors(
     userWithEnrolments: LoggedInUserWithEnrolments,
