@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, p: helpers.paragraph)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWithPreTextAndPostText)
 
 
 @(dateForm: Form[VatRegistrationDate], service: Service)(implicit request: Request[_], messages: Messages)
@@ -30,14 +30,19 @@
 
 @layout_di(messages("ecc.eor-vat-registration-date.heading"), form = Some(dateForm), service = service) {
     <div>
-        @errorSummary(dateForm.errors, focusOverrides = Map("vat-registration-date" -> "vat-registration-date.day")))
+        @errorSummary(dateForm.errors, focusOverrides = Map("vat-registration-date" -> "vat-registration-date.day"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfVatRegistrationController.submit(service)) {
 
             @CSRF.formField
             @h1(messages("ecc.eor-vat-registration-date.heading"))
             @p(messages("ecc.eor-vat-registration-date.para1"))
-            <p class="govuk-body"> <a target="_blank" href="https://www.gov.uk/send-vat-return">@messages("ecc.eor-vat-registration-date.link")</a> @messages("ecc.eor-vat-registration-date.para2")</p>
+            @link(
+                messages("ecc.eor-vat-registration-date.link"),
+                href =  "https://www.gov.uk/send-vat-return",
+                postText = Some(messages("ecc.eor-vat-registration-date.para2"))
+            )
+
 
             @inputDate_di(
                 form = dateForm,

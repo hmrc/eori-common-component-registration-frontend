@@ -49,10 +49,7 @@ import util.builders.RegistrationDetailsBuilder.{
 }
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
-import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
-
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
