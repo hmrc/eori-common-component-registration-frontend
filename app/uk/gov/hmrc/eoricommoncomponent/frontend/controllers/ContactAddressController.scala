@@ -23,11 +23,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -70,7 +71,7 @@ class ContactAddressController @Inject() (
             fetchContactDetails().map { contactAddressDetails =>
               BadRequest(contactAddressView(contactAddressDetails, isInReviewMode, formWithErrors, service))
             },
-          yesNoAnswer => saveAddress().flatMap(_ => locationByAnswer(isInReviewMode, yesNoAnswer, service))
+          yesNoAnswer => saveAddressAndRedirect(isInReviewMode, yesNoAnswer, service)
         )
     }
 
@@ -91,14 +92,30 @@ class ContactAddressController @Inject() (
       }
     }
 
-  private def saveAddress()(implicit request: Request[AnyContent]) =
+  private def saveAddressAndRedirect(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] =
     for {
       addressDetails <- fetchContactDetails()
       contactDetails <- subscriptionBusinessService.cachedContactDetailsModel
-    } yield subscriptionDetailsService.cacheContactAddressDetails(
-      addressDetails,
-      contactDetails.getOrElse(throw new IllegalStateException("Address not found in cache"))
-    )
+      redirection    <- redirect(contactDetails, addressDetails, isInReviewMode, yesNoAnswer, service)
+    } yield redirection
+
+  private def redirect(
+    contactDetails: Option[ContactDetailsModel],
+    addressDetails: AddressViewModel,
+    isInReviewMode: Boolean,
+    yesNoAnswer: YesNo,
+    service: Service
+  )(implicit request: Request[AnyContent]): Future[Result] =
+    contactDetails match {
+      case Some(details) =>
+        for {
+          _      <- subscriptionDetailsService.cacheContactAddressDetails(addressDetails, details)
+          result <- locationByAnswer(isInReviewMode, yesNoAnswer, service)
+        } yield result
+      case None => Future.successful(Redirect(routes.EmailController.form(service)))
+    }
 
   private def populateOkView(isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]

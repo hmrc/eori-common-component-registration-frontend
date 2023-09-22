@@ -17,8 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.Logging
-
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -31,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionDa
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -145,7 +144,7 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   )(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
     registerWithoutIdService
       .registerOrganisation(
-        subscriptionDetails.name,
+        subscriptionDetails.name.getOrElse(""),
         registrationDetails.address,
         subscriptionDetails.contactDetails,
         loggedInUser,

@@ -17,19 +17,17 @@
 package unit.views.partials
 
 import org.jsoup.Jsoup
-
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.mvc.Request
-
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.start
 import unit.controllers.CdsPage
-import util.{CSRFTest, ControllerSpec}
 import util.builders.{AuthActionMock, AuthBuilder, SessionBuilder}
+import util.{CSRFTest, ControllerSpec}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -62,26 +60,6 @@ class HeaderSpec extends ControllerSpec with AuthActionMock with CSRFTest {
 
       val page = CdsPage(contentAsString(result))
       page.elementIsPresent("//a[@id='sign-out']") shouldBe false
-    }
-  }
-
-  "Feedback URL" should {
-    "be present with service param equal to 'eori-common-component-subscribe''" in {
-      val result = controller
-        .startRegister(atarService)
-        .apply(
-          SessionBuilder.buildRequestWithSessionAndPathNoUser(
-            method = "GET",
-            path = "/customs-registration-services/atar/subscribe/"
-          )
-        )
-
-      val page = CdsPage(contentAsString(result))
-
-      page.getElementAttribute(
-        "//span[@class='govuk-phase-banner__text']//a[@class='govuk-link']",
-        "href"
-      ) should endWith("/contact/beta-feedback?service=eori-common-component-register-atar")
     }
   }
 

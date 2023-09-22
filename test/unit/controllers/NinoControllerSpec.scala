@@ -18,8 +18,6 @@ package unit.controllers
 
 import common.pages.NinoMatchPage
 import common.pages.matching.NameDateOfBirthPage.{fieldLevelErrorDateOfBirth, pageLevelErrorSummaryListXPath}
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.mockito.{ArgumentMatchers, Mockito}
@@ -36,6 +34,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.NinoFormBuilder
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -219,9 +218,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe empty
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith(
-          "/customs-registration-services/atar/register/matching/confirm"
-        )
+        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
 
         verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }

@@ -16,33 +16,30 @@
 
 package unit.services.email
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AsyncWordSpec
+import cats.data.EitherT
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
-import play.api.http.Status.BAD_REQUEST
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n._
 import play.api.mvc.{AnyContent, Request}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
-import cats.data.EitherT
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationConnector, ResponseError}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
   EmailVerificationStatus,
   ResponseWithURI,
   VerificationStatus,
   VerificationStatusResponse
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import org.mockito.ArgumentMatchers.any
-import play.api.i18n._
-import scala.concurrent.duration._
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
+import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 
 class EmailVerificationServiceSpec
     extends AsyncWordSpec with Matchers with ScalaFutures with MockitoSugar with BeforeAndAfterAll
@@ -60,7 +57,6 @@ class EmailVerificationServiceSpec
 
   private val email          = "test@example.com"
   private val differentEmail = "different@example.com"
-  private val continueUrl    = "/customs-enrolment-services/test-continue-url"
 
   override protected def beforeEach(): Unit = {
     reset(mockConnector)

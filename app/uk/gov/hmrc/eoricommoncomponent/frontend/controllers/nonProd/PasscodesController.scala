@@ -17,11 +17,10 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly
 
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext

@@ -16,13 +16,13 @@
 
 package util.builders
 
-import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, LocalDateTime, ZoneId}
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetails
+
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 
 object SubscriptionInfoBuilder {
 

@@ -17,13 +17,11 @@
 package unit.controllers
 
 import common.pages.subscription.ShortNamePage
-
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SignInWithDifferentDetailsController
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sign_in_with_different_details
 import util.ControllerSpec

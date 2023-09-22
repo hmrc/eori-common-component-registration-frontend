@@ -16,11 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
-import java.time.LocalDate
 import play.api.data.Form
 import play.api.i18n.Messages
-import play.api.mvc.{Action, _}
+import play.api.mvc._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
@@ -35,6 +33,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.HowCanWeIdentifyYouUt
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -20,8 +20,8 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationKeys
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 
 object ContactDetailsForm {
 

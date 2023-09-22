@@ -19,15 +19,14 @@ package util
 import akka.util.Timeout
 import base.Injector
 import org.scalatestplus.play.PlaySpec
+import play.api.Application
 import play.api.i18n.Lang.defaultLang
 import play.api.i18n._
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Request
 import play.api.test.CSRFTokenHelper
-
-import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import play.api.Application
-import play.api.inject.bind
 
 import scala.concurrent.duration._
 

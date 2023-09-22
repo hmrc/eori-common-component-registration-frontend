@@ -66,7 +66,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
       val result =
-        await(controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+        controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       status(result) shouldBe OK
       contentType(result) shouldBe Some("plain/text")
@@ -84,7 +84,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
       val result =
-        await(controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+        controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       val content = contentAsString(result)
       val lines   = content.split('\n').drop(1)
@@ -102,8 +102,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
-      val result =
-        await(controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+      val result = controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       status(result) shouldBe OK
       contentType(result) shouldBe Some("plain/text")
@@ -123,7 +122,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
       val result =
-        await(controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+        controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       val content = contentAsString(result)
       val lines   = content.split('\n').drop(1)

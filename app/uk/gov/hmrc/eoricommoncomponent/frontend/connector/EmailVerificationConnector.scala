@@ -16,25 +16,25 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import javax.inject.{Inject, Singleton}
+import cats.data.EitherT
+import play.api.i18n.Messages
 import play.api.libs.json.Json
+import play.mvc.Http.Status.{CREATED, NOT_FOUND, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.{routes => emailRoutes}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
   ResponseWithURI,
   StartVerificationJourneyEmail,
   StartVerificationJourneyRequest,
   VerificationStatusResponse
 }
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
-import java.net.URL
-import cats.data.EitherT
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import play.mvc.Http.Status.{CREATED, NOT_FOUND, OK}
-import play.api.i18n.Messages
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.{routes => emailRoutes}
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
+import java.net.URL
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

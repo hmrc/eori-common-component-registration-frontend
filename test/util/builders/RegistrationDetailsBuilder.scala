@@ -18,6 +18,7 @@ package util.builders
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+
 import java.time.LocalDate
 
 object RegistrationDetailsBuilder {

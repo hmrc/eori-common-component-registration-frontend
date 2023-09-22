@@ -27,8 +27,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -98,7 +98,9 @@ class VatDetailsController @Inject() (
                   Redirect(DateOfVatRegistrationController.createForm(service))
             }
         else
-          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          subscriptionDetailsService.clearCachedVatControlListResponse.flatMap(
+            _ => Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          )
       case Left(errorResponse) =>
         errorResponse match {
           case NotFoundResponse =>

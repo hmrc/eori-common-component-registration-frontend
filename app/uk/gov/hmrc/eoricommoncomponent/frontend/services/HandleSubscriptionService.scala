@@ -16,15 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.HandleSubscriptionConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.HandleSubscriptionRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, SafeId, TaxPayerId}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton

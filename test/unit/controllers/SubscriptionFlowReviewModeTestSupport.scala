@@ -46,9 +46,10 @@ trait SubscriptionFlowReviewModeTestSupport extends SubscriptionFlowTestSupport 
 
   def verifyRedirectToReviewPage(): Future[Result] => Any = { result =>
     status(result) shouldBe SEE_OTHER
-    result.header.headers(
-      LOCATION
-    ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
+    header(
+      LOCATION,
+      result
+    ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
       .determineRoute(atarService)
       .url
   }

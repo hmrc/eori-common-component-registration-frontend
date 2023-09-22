@@ -16,30 +16,27 @@
 
 package unit.services.email
 
+import base.Injector
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
-import play.api.mvc.{AnyContent, Request}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.CheckYourEmailService
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
+import play.api.mvc.Results.Redirect
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.await
+import uk.gov.hmrc.auth.core.Enrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CheckYourEmailService, Save4LaterService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
+import uk.gov.hmrc.http.HeaderCarrier
+import util.ViewSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import base.Injector
-import org.mockito.ArgumentMatchers.any
-import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, SEE_OTHER}
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.auth.core.Enrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.{EmailJourneyService, EmailVerificationService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
-import uk.gov.hmrc.http.HeaderCarrier
-import play.api.test.FakeRequest
-import play.api.test.Helpers.await
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
-import util.ViewSpec
-import play.api.mvc.Results.Redirect
 
 class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector {
 
@@ -47,8 +44,6 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
   implicit val rq: Request[AnyContent] = withFakeCSRF(FakeRequest())
 
   private val mockSave4LaterService        = mock[Save4LaterService]
-  private val mockEmailVerificationService = mock[EmailVerificationService]
-  private val mockSessionCache             = mock[SessionCache]
   private val mockEmailJourneyService      = mock[EmailJourneyService]
   private val messagesControllerComponents = instanceOf[MessagesControllerComponents]
 

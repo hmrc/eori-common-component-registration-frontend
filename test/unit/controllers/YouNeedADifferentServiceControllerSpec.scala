@@ -16,12 +16,10 @@
 
 package unit.controllers
 
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouNeedADifferentServiceController
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_need_different_service
@@ -31,22 +29,17 @@ import util.builders.AuthBuilder.withAuthorisedUser
 
 class YouNeedADifferentServiceControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val youNeedDifferenceServicePage = mock[you_need_different_service]
+  private val youNeedDifferenceServicePage = instanceOf[you_need_different_service]
   private val authConnector                = mock[AuthConnector]
   private val mockAuthAction               = authAction(authConnector)
 
   private val controller = new YouNeedADifferentServiceController(mockAuthAction, youNeedDifferenceServicePage, mcc)
 
-  override protected def beforeEach(): Unit = {
+  override protected def beforeEach(): Unit =
     super.beforeEach()
-
-    when(youNeedDifferenceServicePage.apply(any())(any(), any())).thenReturn(HtmlFormat.empty)
-  }
 
   override protected def afterEach(): Unit = {
     reset(authConnector)
-    reset(youNeedDifferenceServicePage)
-
     super.afterEach()
   }
 

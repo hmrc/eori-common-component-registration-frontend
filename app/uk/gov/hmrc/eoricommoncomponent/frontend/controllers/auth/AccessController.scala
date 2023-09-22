@@ -22,7 +22,6 @@ import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core.{AffinityGroup, CredentialRole, Enrolment, User}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
 
 import scala.concurrent.Future

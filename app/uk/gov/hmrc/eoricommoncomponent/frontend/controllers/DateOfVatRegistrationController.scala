@@ -17,14 +17,14 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, we_cannot_confirm_your_identity}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{GetVatCustomerInformationService, SubscriptionBusinessService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_vat_registration
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
@@ -34,9 +34,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateOfVatRegistrationController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
+  getVatCustomerInformationService: GetVatCustomerInformationService,
   mcc: MessagesControllerComponents,
   dateOfVatRegistrationView: date_of_vat_registration,
-  form: VatRegistrationDateFormProvider
+  form: VatRegistrationDateFormProvider,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -53,6 +55,8 @@ class DateOfVatRegistrationController @Inject() (
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)
           if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
+        if (appConfig.integrationFrameworkFeatureFlag)
+          getVatCustomerInformationService.checkResponseMatchesNewVATAPI(response)
         Redirect(ContactDetailsController.createForm(service))
       case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }

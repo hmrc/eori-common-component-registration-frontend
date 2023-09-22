@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.services
+package unit.services
 
 import base.UnitSpec
 import org.joda.time.DateTime
@@ -22,6 +22,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.{ServiceUnavailable, VerifiedEmailResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   UpdateCustomsDataStoreConnector,
@@ -29,6 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.UpdateVerifiedEmailResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RequestCommonGenerator, UpdateVerifiedEmailService}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.{LocalDateTime, ZoneOffset}
@@ -67,6 +69,17 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
     )
   )
 
+  private val verifiedEmailResponseWithoutFormBudleId = VerifiedEmailResponse(
+    UpdateVerifiedEmailResponse(
+      ResponseCommon(
+        "OK",
+        None,
+        LocalDateTime.ofEpochSecond(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC), 0, ZoneOffset.UTC),
+        None
+      )
+    )
+  )
+
   "UpdateVerifiedEmailService" should {
 
     "return true when connector invokes updateVerifiedEmail method is invoked successfully" in {
@@ -76,6 +89,14 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
         .thenReturn(Future.successful {})
       await(service.updateVerifiedEmail("email-address", eori)) shouldBe true
       verify(mockUpdateVerifiedEmailConnector).updateVerifiedEmail(any())(any())
+    }
+
+    "return true when connector invokes updateVerifiedEmail method is invoked successfully without returnedParams" in {
+      when(mockUpdateVerifiedEmailConnector.updateVerifiedEmail(any())(any()))
+        .thenReturn(Future.successful(Right(verifiedEmailResponseWithoutFormBudleId)))
+      when(mockUpdateCustomsDataStoreConnector.updateCustomsDataStore(any())(any()))
+        .thenReturn(Future.successful {})
+      await(service.updateVerifiedEmail("email-address", eori)) shouldBe false
     }
 
     "return false when connector returns failure response" in {

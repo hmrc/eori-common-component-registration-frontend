@@ -23,8 +23,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 import javax.inject.{Inject, Singleton}
@@ -133,7 +133,7 @@ class Sub02Controller @Inject() (
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
         _             <- sessionCache.journeyCompleted
-      } yield Ok(sub02EoriAlreadyExists(name, processedDate, service))
+      } yield Ok(sub02EoriAlreadyExists(name.getOrElse(""), processedDate, service))
     }
 
   def eoriAlreadyAssociated(service: Service): Action[AnyContent] =
@@ -142,7 +142,7 @@ class Sub02Controller @Inject() (
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
         _             <- sessionCache.journeyCompleted
-      } yield Ok(sub02EoriAlreadyAssociatedView(name, processedDate, service))
+      } yield Ok(sub02EoriAlreadyAssociatedView(name.getOrElse(""), processedDate, service))
     }
 
   def subscriptionInProgress(service: Service): Action[AnyContent] =

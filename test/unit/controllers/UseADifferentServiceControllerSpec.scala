@@ -16,28 +16,22 @@
 
 package unit.controllers
 
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UseADifferentServiceController
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.use_a_different_service
 import util.ControllerSpec
 
 class UseADifferentServiceControllerSpec extends ControllerSpec with BeforeAndAfterEach {
 
-  private val useADifferentService = mock[use_a_different_service]
+  private val useADifferentService = instanceOf[use_a_different_service]
 
   "useADifferentService" should {
 
     "return OK" in {
-      when(useADifferentService.apply(any())(any(), any())).thenReturn(HtmlFormat.empty)
-
       val controller = new UseADifferentServiceController(useADifferentService, mcc)
       val result     = controller.form(atarService)(FakeRequest())
-
       status(result) shouldBe OK
     }
   }

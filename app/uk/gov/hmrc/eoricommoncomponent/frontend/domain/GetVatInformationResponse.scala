@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
+import play.api.libs.json.Json
 
-@this(layout_di: layout)
-@(service: Service)(implicit request: Request[_], messages: Messages)
+import java.util.Date
 
-@import views.html.helper._
+case class GetVatInformationResponse(effectiveRegistrationDate: Option[Date], postCode: Option[String])
 
-@layout_di(messages("cds.not-based-in-uk.page.title"), service = service) {
-    <div>
-        <h1 class="govuk-heading-l">@messages("cds.not-based-in-uk.heading")</h1>
-
-        <p class="govuk-body">@messages("cds.not-based-in-uk.para")</p>
-
-        @helpers.helpAndSupport()
-
-    </div>
+object GetVatInformationResponse {
+  implicit val getVatInformationResponseFormat = Json.format[GetVatInformationResponse]
 }

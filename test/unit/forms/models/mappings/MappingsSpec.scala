@@ -16,7 +16,6 @@
 
 package forms.mappings
 
-import java.time.{Instant, LocalDate, ZoneOffset}
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
@@ -24,6 +23,8 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
+
+import java.time.{Instant, LocalDate, ZoneOffset}
 
 class MappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with Mappings {
 
