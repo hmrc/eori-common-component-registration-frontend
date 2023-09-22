@@ -83,6 +83,7 @@ class VatDetailsController @Inject() (
           case NOT_FOUND | BAD_REQUEST =>
             Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
           case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
+          case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
         },
       vatControlListResponse =>
         if (vatControlListResponse.isPostcodeAssociatedWithVrn(vatForm))

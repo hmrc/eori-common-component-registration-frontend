@@ -18,6 +18,8 @@ package unit.controllers
 
 import cats.data.EitherT
 import common.pages.matching.AddressPageFactoring
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
@@ -50,6 +52,7 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 import org.mockito.ArgumentMatchers
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -216,6 +219,22 @@ class EmailControllerSpec
       showFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
         await(result).header.headers("Location") should endWith("/atar/register/you-already-have-an-eori")
+      }
+    }
+
+    "redirect to error page when Left is returned for groupIdEnrolments" in {
+
+      val leftValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] =
+        Left(ResponseError(INTERNAL_SERVER_ERROR, "failed"))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        Future.successful(leftValueForEitherT)
+      })
+
+      showFormRegister() { result =>
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith(messages("cds.error.title"))
+        status(result) shouldBe INTERNAL_SERVER_ERROR
       }
     }
 

@@ -20,11 +20,12 @@ import cats.data.EitherT
 
 import javax.inject.{Inject, Singleton}
 import play.api.http.HeaderNames.AUTHORIZATION
-import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK, SERVICE_UNAVAILABLE}
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SERVICE_UNAVAILABLE}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
+
 import java.net.URLEncoder
 import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
@@ -72,7 +73,7 @@ class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: Ap
           // $COVERAGE-OFF$Loggers
           logger.warn(error)
           // $COVERAGE-ON
-          throw new Exception(error)
+          Left(ResponseError(INTERNAL_SERVER_ERROR, error))
       }
     }
   }

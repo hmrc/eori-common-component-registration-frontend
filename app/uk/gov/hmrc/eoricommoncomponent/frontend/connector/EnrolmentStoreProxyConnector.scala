@@ -20,13 +20,14 @@ import cats.data.EitherT
 
 import javax.inject.Inject
 import play.api.libs.json.{Json, Reads}
-import play.mvc.Http.Status.{NO_CONTENT, OK}
+import play.mvc.Http.Status.{INTERNAL_SERVER_ERROR, NO_CONTENT, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.EnrolmentStoreProxyEvent
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
-import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
@@ -54,15 +55,16 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
         case OK => handleResponse[EnrolmentStoreProxyResponse](response)
         case NO_CONTENT =>
           Right(EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
-        case _ =>
-          throw new BadRequestException(s"Enrolment Store Proxy Status : ${response.status}")
+        case status =>
+          Left(ResponseError(status, s"Enrolment Store Proxy Response : ${response.body}}"))
       }
       auditCall(url, groupId, parsedResponse)
       parsedResponse
     } recover {
       case e: Throwable =>
-        logger.error(s"enrolment-store-proxy failed. url: $url, error: $e", e)
-        throw e
+        val error = s"enrolment-store-proxy failed. url: $url, error: $e"
+        logger.error(error, e)
+        Left(ResponseError(INTERNAL_SERVER_ERROR, error))
     }
   }
 

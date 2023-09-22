@@ -24,7 +24,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EnrolmentStoreProxyConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EnrolmentStoreProxyConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse}
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
 import util.externalservices.EnrolmentStoreProxyService
@@ -115,31 +115,18 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
     }
 
-    "fail when Service unavailable" in {
-      EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(
-        expectedGetUrl,
-        responseWithOk.toString(),
-        SERVICE_UNAVAILABLE
-      )
+    "return left when Service unavailable" in {
+      EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", SERVICE_UNAVAILABLE)
 
-      val caught = intercept[BadRequestException] {
-        await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value)
-      }
-
-      caught.getMessage must startWith("Enrolment Store Proxy Status : 503")
+      val result = await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value)
+      result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, "Enrolment Store Proxy Response : }"))
     }
 
-    "http exception when 4xx status code is received" in {
-      EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(
-        expectedGetUrl,
-        responseWithOk.toString(),
-        BAD_REQUEST
-      )
+    "return left when 4xx status code is received" in {
+      EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", BAD_REQUEST)
 
-      val caught = intercept[BadRequestException] {
-        await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value)
-      }
-      caught.getMessage must startWith("Enrolment Store Proxy Status : 400")
+      val result = await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value)
+      result mustBe Left(ResponseError(BAD_REQUEST, "Enrolment Store Proxy Response : }"))
     }
   }
 }

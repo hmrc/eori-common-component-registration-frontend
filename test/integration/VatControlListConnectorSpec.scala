@@ -22,6 +22,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers._
+import play.mvc.Http.Status.BAD_REQUEST
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   ResponseError,
@@ -129,16 +130,15 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
       )
     }
 
-    "fail when Internal Server Error" in {
+    "return left when Internal Server Error" in {
       VatControlListMessagingService.stubTheVatControlListResponse(
         expectedGetUrl,
         responseWithOk.toString,
         INTERNAL_SERVER_ERROR
       )
 
-      intercept[Exception] {
-        await(vatControlListConnector.vatControlList(request).value)
-      }
+      val result = await(vatControlListConnector.vatControlList(request).value)
+      result mustBe Left(ResponseError(INTERNAL_SERVER_ERROR, "Incorrect VAT Known facts response"))
     }
 
     "fail when Service Unavailable" in {
@@ -148,21 +148,16 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
         SERVICE_UNAVAILABLE
       )
 
-      val result = vatControlListConnector.vatControlList(request).value.futureValue.map(
-        result => result mustBe Left(ServiceUnavailableResponse)
-      )
-
+      val result = await(vatControlListConnector.vatControlList(request).value)
+      result mustBe Left(ResponseError(503, responseWithOk.toString()))
     }
 
-    "throw an exception when different status" in {
+    "return InternalServerError when different status" in {
 
       VatControlListMessagingService.stubTheVatControlListResponse(expectedGetUrl, responseWithOk.toString, FORBIDDEN)
 
-      val caught = intercept[Exception] {
-        await(vatControlListConnector.vatControlList(request).value)
-      }
-
-      caught.getMessage mustBe "Incorrect VAT Known facts response"
+      val result = await(vatControlListConnector.vatControlList(request).value)
+      result mustBe Left(ResponseError(INTERNAL_SERVER_ERROR, "Incorrect VAT Known facts response"))
     }
   }
 }

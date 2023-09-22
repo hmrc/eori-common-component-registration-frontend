@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import cats.data.EitherT
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{
   AuthAction,
   EnrolmentExtractor,
@@ -61,16 +59,15 @@ class EmailController @Inject() (
 
   def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>
-      startRegisterJourney(service).foldF(_ => Future.successful(InternalServerError(errorPage(service))), res => res)
+      startRegisterJourney(service)
     }
 
-  private def startRegisterJourney(service: Service)(implicit
-    hc: HeaderCarrier,
-    request: Request[AnyContent],
-    user: LoggedInUserWithEnrolments
-  ): EitherT[Future, ResponseError, Future[Result]] =
+  private def startRegisterJourney(
+    service: Service
+  )(implicit hc: HeaderCarrier, request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
     groupEnrolment.groupIdEnrolments(user.groupId.getOrElse(throw MissingGroupId()))
-      .map(
+      .foldF(
+        _ => Future.successful(InternalServerError(errorPage(service))),
         enrolmentResponseList =>
           if (enrolmentResponseList.exists(_.service == service.enrolmentKey))
             if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
