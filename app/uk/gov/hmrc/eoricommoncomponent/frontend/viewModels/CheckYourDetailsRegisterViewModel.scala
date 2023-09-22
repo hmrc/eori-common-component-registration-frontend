@@ -25,16 +25,18 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.helpers.noMarginParagraph
+import uk.gov.hmrc.govukfrontend.views.Aliases._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Value}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
   DataUnavailableException,
   RequestSessionData,
   SessionCache
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.helpers.noMarginParagraph
-import uk.gov.hmrc.govukfrontend.views.Aliases._
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Value}
+import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryList
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
@@ -129,15 +131,14 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     messages: Messages,
     request: Request[AnyContent],
     ec: ExecutionContext
-  ): Future[CheckYourDetailsRegisterViewModel] = {
+  ): Future[Option[CheckYourDetailsRegisterViewModel]] =
     for {
       registration <- sessionCache.registrationDetails
       subscription <- sessionCache.subscriptionDetails
     } yield {
-      val personalDataDisclosureConsent = subscription.personalDataDisclosureConsent.getOrElse(false)
-      val isUserIdentifiedByRegService  = registration.safeId.id.nonEmpty
-      val cdsOrgType                    = requestSessionData.userSelectedOrganisationType
-      val isPartnership                 = requestSessionData.isPartnershipOrLLP
+
+      val cdsOrgType    = requestSessionData.userSelectedOrganisationType
+      val isPartnership = requestSessionData.isPartnershipOrLLP
 
       val isIndividual: Boolean = cdsOrgType.contains(CdsOrganisationType.Individual) ||
         cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
@@ -146,33 +147,6 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       val isSoleTrader = cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
       val isRowOrganisation = cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
-      val isRowSoleTraderIndividual = cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
-        cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
-
-      val formattedIndividualDateOfBirth = {
-        val dateOfBirth: Option[LocalDate] = (subscription.nameDobDetails, registration) match {
-          case (Some(nameDobDetails), _)                         => Some(nameDobDetails.dateOfBirth)
-          case (None, individual: RegistrationDetailsIndividual) => Some(individual.dateOfBirth)
-          case _                                                 => None
-        }
-        dateOfBirth.map(formatDate)
-      }
-
-      def individualName = subscription.nameDobDetails match {
-        case Some(nameDobDetails)           => nameDobDetails.name
-        case _ if registration.name == null => ""
-        case _                              => registration.name
-      }
-
-      def orgName = subscription.nameOrganisationDetails match {
-        case Some(nameOrgDetails)           => nameOrgDetails.name
-        case _ if subscription.name == null => ""
-        case _                              => subscription.name
-      }
-
-      val name = if (isIndividual || isSoleTrader) individualName else orgName
-
-      val orgType = cdsOrgType.fold("")(orgType => orgType.id)
 
       val headerTitle =
         if (isPartnership)
@@ -184,6 +158,58 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         else
           messages("cds.form.check-answers-company-details")
 
+      val providedDetails = getProvidedDetails(
+        isIndividual,
+        isSoleTrader,
+        isRowOrganisation,
+        isPartnership,
+        subscription,
+        registration,
+        cdsOrgType,
+        service
+      )
+
+      for {
+        providedDetailsList <- providedDetails
+        vatDetails             = getVatDetails(isIndividual, subscription, service)
+        providedContactDetails = getProvidedContactDetails(subscription, service)
+      } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
+    }
+
+  def getProvidedDetails(
+    isIndividual: Boolean,
+    isSoleTrader: Boolean,
+    isRowOrganisation: Boolean,
+    isPartnership: Boolean,
+    subscription: SubscriptionDetails,
+    registration: RegistrationDetails,
+    cdsOrgType: Option[CdsOrganisationType],
+    service: Service
+  )(implicit messages: Messages): Option[SummaryList] = {
+
+    def individualName: Option[String] = subscription.nameDobDetails.map(_.name) orElse Option(registration.name)
+    def orgName: Option[String]        = subscription.nameOrganisationDetails.map(_.name) orElse subscription.name
+    val nameOpt: Option[String]        = if (isIndividual || isSoleTrader) individualName else orgName
+
+    nameOpt.map { name =>
+      val isRowSoleTraderIndividual = cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
+        cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+
+      val isUserIdentifiedByRegService = registration.safeId.id.nonEmpty
+
+      val personalDataDisclosureConsent = subscription.personalDataDisclosureConsent.getOrElse(false)
+
+      val formattedIndividualDateOfBirth = {
+        val dateOfBirth: Option[LocalDate] = (subscription.nameDobDetails, registration) match {
+          case (Some(nameDobDetails), _)                         => Some(nameDobDetails.dateOfBirth)
+          case (None, individual: RegistrationDetailsIndividual) => Some(individual.dateOfBirth)
+          case _                                                 => None
+        }
+        dateOfBirth.map(formatDate)
+      }
+
+      val orgType = cdsOrgType.fold("")(orgType => orgType.id)
+
       val eoriCheckerConsentYes =
         if (isPartnership)
           messages("cds.eori-checker-consent.partnership.yes")
@@ -191,14 +217,6 @@ class CheckYourDetailsRegisterConstructor @Inject() (
           messages("cds.eori-checker-consent.individual-or-sole-trader.yes")
         else
           messages("cds.yes")
-
-      val email = Seq(
-        summaryListRow(
-          key = messages("subscription.enter-email.label"),
-          value = subscription.contactDetails.map(cd => Html(cd.emailAddress)),
-          call = None
-        )
-      )
 
       val individualNameDob =
         if (isIndividual || isSoleTrader)
@@ -297,24 +315,6 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         )
       }).flatten
 
-      val contactName = Seq(subscription.contactDetails.map { cd =>
-        summaryListRow(
-          key = messages("cds.form.check-answers.contact-name"),
-          value = Some(Text(cd.fullName).asHtml),
-          call =
-            Some(ContactDetailsController.reviewForm(service))
-        )
-      }).flatten
-
-      val contactTelephone = Seq(subscription.contactDetails.map { cd =>
-        summaryListRow(
-          key = messages("cds.form.check-answers.contact-telephone"),
-          value = Some(Html(cd.telephone)),
-          call =
-            Some(ContactDetailsController.reviewForm(service))
-        )
-      }).flatten
-
       val sicCodeDisplay = Seq(subscription.sicCode.map { sic =>
         summaryListRow(
           key = messages("cds.form.sic-code"),
@@ -322,50 +322,6 @@ class CheckYourDetailsRegisterConstructor @Inject() (
           call = Some(SicCodeController.submit(isInReviewMode = true, service))
         )
       }).flatten
-
-      val vatDetails =
-        if (!isIndividual)
-          Seq(
-            summaryListRowNoChangeOption(
-              key = messages("cds.form.gb-vat-number"),
-              value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label"))))
-            ),
-            summaryListRowNoChangeOption(
-              key = messages("cds.form.gb-vat-postcode"),
-              value =
-                Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label"))))
-            ),
-            if (subscription.vatVerificationOption.getOrElse(true))
-              summaryListRowNoChangeOption(
-                key = messages("cds.form.gb-vat-date"),
-                value = Some(
-                  Html(
-                    subscription.vatControlListResponse.map(
-                      vat =>
-                        formatDate(
-                          LocalDate.parse(
-                            vat.dateOfReg.getOrElse(
-                              throw new DataUnavailableException("VAT registration date not found in cache")
-                            )
-                          )
-                        )
-                    ).getOrElse(messages("cds.not-entered.label"))
-                  )
-                )
-              )
-            else
-              summaryListRowNoChangeOption(
-                key = messages("cds.form.gb-vat-amount"),
-                value = Some(
-                  Html(
-                    subscription.vatControlListResponse.map(vat => vat.lastNetDue.get.toString).getOrElse(
-                      messages("cds.not-entered.label")
-                    )
-                  )
-                )
-              )
-          )
-        else Seq.empty[SummaryListRow]
 
       val personalDataDisclosure = Seq(
         summaryListRow(
@@ -380,18 +336,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         )
       )
 
-      val details = Seq(subscription.contactDetails.map { contactDetails =>
-        summaryListRow(
-          key = messages("cds.form.customs-contact-address"),
-          value = Some(contactDetailsHtml(contactDetails)),
-          call =
-            Some(
-              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.reviewForm(service)
-            )
-        )
-      }).flatten
-
-      val providedDetails = SummaryList(rows =
+      SummaryList(rows =
         individualNameDob ++
           organisationName ++
           organisationUtr ++
@@ -403,16 +348,81 @@ class CheckYourDetailsRegisterConstructor @Inject() (
           personalDataDisclosure
       )
 
-      val providedContactDetails = SummaryList(rows =
-        contactName ++
-          email ++
-          contactTelephone ++
-          details
-      )
-
-      CheckYourDetailsRegisterViewModel(headerTitle, providedDetails, vatDetails, providedContactDetails)
     }
+
   }
+
+  def getProvidedContactDetails(subscription: SubscriptionDetails, service: Service)(implicit
+    messages: Messages
+  ): SummaryList = {
+    val contactName = Seq(subscription.contactDetails.map { cd =>
+      summaryListRow(
+        key = messages("cds.form.check-answers.contact-name"),
+        value = Some(Text(cd.fullName).asHtml),
+        call =
+          Some(ContactDetailsController.reviewForm(service))
+      )
+    }).flatten
+
+    val email = Seq(
+      summaryListRow(
+        key = messages("subscription.enter-email.label"),
+        value = subscription.contactDetails.map(cd => Html(cd.emailAddress)),
+        call = None
+      )
+    )
+
+    val contactTelephone = Seq(subscription.contactDetails.map { cd =>
+      summaryListRow(
+        key = messages("cds.form.check-answers.contact-telephone"),
+        value = Some(Html(cd.telephone)),
+        call =
+          Some(ContactDetailsController.reviewForm(service))
+      )
+    }).flatten
+
+    val details = Seq(subscription.contactDetails.map { contactDetails =>
+      summaryListRow(
+        key = messages("cds.form.customs-contact-address"),
+        value = Some(contactDetailsHtml(contactDetails)),
+        call =
+          Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.reviewForm(service))
+      )
+    }).flatten
+
+    SummaryList(rows =
+      contactName ++
+        email ++
+        contactTelephone ++
+        details
+    )
+  }
+
+  def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails, service: Service)(implicit
+    messages: Messages
+  ): Seq[SummaryListRow] =
+    if (!isIndividual) {
+      val dateOfReg = for {
+        resp <- subscription.vatControlListResponse
+        date <- resp.dateOfReg
+      } yield formatDate(LocalDate.parse(date))
+
+      Seq(
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-number"),
+          value = Some(Html(subscription.ukVatDetails.map(_.number).getOrElse(messages("cds.not-entered.label"))))
+        ),
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-postcode"),
+          value =
+            Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label"))))
+        ),
+        summaryListRowNoChangeOption(
+          key = messages("cds.form.gb-vat-date"),
+          value = Some(Html(dateOfReg.getOrElse(messages("cds.not-entered.label"))))
+        )
+      )
+    } else Seq.empty[SummaryListRow]
 
   private def addressViewModelHtml(ad: AddressViewModel)(implicit messages: Messages): Html = Html {
     val lines = Seq(

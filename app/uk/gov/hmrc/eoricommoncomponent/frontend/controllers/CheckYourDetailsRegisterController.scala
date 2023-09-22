@@ -22,8 +22,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
+import play.api.Logging
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -37,15 +39,18 @@ class CheckYourDetailsRegisterController @Inject() (
   registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService,
   viewModelConstructor: CheckYourDetailsRegisterConstructor
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
+    extends CdsController(mcc) with Logging {
 
   def reviewDetails(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        viewModelConstructor.generateViewModel(service).map(
-          viewModel =>
+        viewModelConstructor.generateViewModel(service).map(_ match {
+          case Some(viewModel) =>
             Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
-        )
+          case None =>
+            logger.warn("Data is missing from the cache so the user is being redirected to the start of the journey")
+            Redirect(routes.EmailController.form(service))
+        })
     }
 
   def submitDetails(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
