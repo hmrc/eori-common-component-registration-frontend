@@ -29,7 +29,7 @@
 
 
 @layout_di(messages("ecc.eor-vat-registration-date.heading"), form = Some(dateForm), service = service) {
-    <div>
+
         @errorSummary(dateForm.errors, focusOverrides = Map("vat-registration-date" -> "vat-registration-date.day"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfVatRegistrationController.submit(service)) {
@@ -62,5 +62,5 @@
 
         @helpers.helpAndSupport()
 
-    </div>
+
 }
