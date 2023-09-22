@@ -15,13 +15,12 @@
  *@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
-@import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset}
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 @import views.html.helper.CSRF
 
@@ -90,7 +89,7 @@
 </div>
 }
 
-@layout_di(messages("cds.enter-address-details.title"), AllCountriesInCountryPicker, Some(addressForm)) {
+@layout_di(messages("cds.enter-address-details.title"), AllCountriesInCountryPicker, Some(addressForm), service = service) {
 
 <div>
     @errorSummary(addressForm.errors)

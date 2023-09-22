@@ -17,7 +17,6 @@
 package unit.domain
 
 import base.UnitSpec
-import java.time.LocalDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   NameDobMatchModel,
@@ -25,6 +24,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   NameMatchModel,
   NameOrganisationMatchModel
 }
+
+import java.time.LocalDate
 
 class SubscriptionDetailsSpec extends UnitSpec {
 
@@ -63,7 +64,7 @@ class SubscriptionDetailsSpec extends UnitSpec {
       val sd = SubscriptionDetails()
       the[IllegalArgumentException] thrownBy {
         sd.name
-      } should have message "Name is missing"
+      } should have message "Name is missing in cache"
     }
   }
 

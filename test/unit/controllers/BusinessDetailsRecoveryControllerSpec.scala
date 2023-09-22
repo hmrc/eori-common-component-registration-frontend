@@ -16,18 +16,17 @@
 
 package unit.controllers
 
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfter
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{BusinessDetailsRecoveryController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   ContactDetailsController,
   DateOfEstablishmentController
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{BusinessDetailsRecoveryController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -46,6 +45,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder.{organisationRegistrationDetails, soleTraderRegistrationDetails}
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -139,7 +139,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
       invokeContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(ContactDetailsController.createForm(atarService).url)
+        header(LOCATION, result).value should endWith(ContactDetailsController.createForm(atarService).url)
       }
     }
 
@@ -165,7 +165,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
       invokeContinue() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(DateOfEstablishmentController.createForm(atarService).url)
+        header(LOCATION, result).value should endWith(DateOfEstablishmentController.createForm(atarService).url)
       }
     }
 
@@ -204,6 +204,8 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       case UserLocation.Iom               => "isle-of-man"
       case UserLocation.Islands           => "islands"
       case UserLocation.ThirdCountryIncEU => "third-country-inc-eu"
+      case _                              => throw new IllegalArgumentException("Unsupported User Location")
+
     }
 
   private def mockCacheWithRegistrationDetails(details: RegistrationDetails): Unit =

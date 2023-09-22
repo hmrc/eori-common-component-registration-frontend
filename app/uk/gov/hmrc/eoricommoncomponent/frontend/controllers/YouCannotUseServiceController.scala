@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
-import play.api.{Configuration, Environment}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.affinityGroup
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthProviders, AuthorisedFunctions}
@@ -26,6 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthRedirectSu
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -42,12 +42,12 @@ class YouCannotUseServiceController @Inject() (
   def page(service: Service): Action[AnyContent] = Action.async { implicit request =>
     authorised(AuthProviders(GovernmentGateway))
       .retrieve(affinityGroup) { ag =>
-        Future.successful(Unauthorized(youCantUseService(ag)))
+        Future.successful(Unauthorized(youCantUseService(ag, service)))
       } recover withAuthRecovery(request)
   }
 
   def unauthorisedPage(service: Service): Action[AnyContent] = Action { implicit request =>
-    Unauthorized(unauthorisedView())
+    Unauthorized(unauthorisedView(service))
   }
 
 }

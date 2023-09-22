@@ -15,6 +15,7 @@
  *@
 
 @import play.api.i18n._
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(govukSelect: GovukSelect)
@@ -36,7 +37,7 @@
 @govukSelect(Select(
   id = id,
   name = name,
-  items = Seq(SelectItem(attributes= Map("label" -> " "))) ++ items,
+  items = Seq(SelectItem(attributes= Map("label" -> ""))) ++ items,
   label = Label(
     content = Text(messages(label, headingMessageArgs:_*)),
     isPageHeading = isPageHeading,
@@ -48,4 +49,4 @@
   errorMessage = form(name).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*)), visuallyHiddenText = Some(messages("cds.error.field.hint")))),
   classes = classes.getOrElse(""),
   attributes = attributes
-))
+).asAccessibleAutocomplete())

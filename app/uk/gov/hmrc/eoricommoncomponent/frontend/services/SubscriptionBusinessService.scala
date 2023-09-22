@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import play.api.Logging
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
@@ -27,14 +28,21 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext) {
+class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext)
+    extends Logging {
 
   def cachedContactDetailsModel(implicit request: Request[_]): Future[Option[ContactDetailsModel]] =
     sessionCache.subscriptionDetails map (_.contactDetails)
 
   def getCachedDateEstablished(implicit request: Request[_]): Future[LocalDate] =
     sessionCache.subscriptionDetails map {
-      _.dateEstablished.getOrElse(throw new IllegalStateException("No Date Of Establishment Cached"))
+      _.dateEstablished.getOrElse {
+        val error = "No Date Of Establishment Cached"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
+      }
     }
 
   def maybeCachedDateEstablished(implicit request: Request[_]): Future[Option[LocalDate]] =
@@ -42,7 +50,13 @@ class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implici
 
   def getCachedSicCode(implicit request: Request[_]): Future[String] =
     sessionCache.subscriptionDetails map {
-      _.sicCode.getOrElse(throw new IllegalStateException("No SIC Code Cached"))
+      _.sicCode.getOrElse {
+        val error = "No SIC Code Cached"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
+      }
     }
 
   def cachedSicCode(implicit request: Request[_]): Future[Option[String]] =
@@ -50,16 +64,24 @@ class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implici
 
   def getCachedPersonalDataDisclosureConsent(implicit request: Request[_]): Future[Boolean] =
     sessionCache.subscriptionDetails map {
-      _.personalDataDisclosureConsent.getOrElse(
-        throw new IllegalStateException("No Personal Data Disclosure Consent Cached")
-      )
+      _.personalDataDisclosureConsent.getOrElse {
+        val error = "No Personal Data Disclosure Consent Cached"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
+      }
     }
 
   def getCachedVatRegisteredUk(implicit request: Request[_]): Future[Boolean] =
     sessionCache.subscriptionDetails map {
-      _.vatRegisteredUk.getOrElse(
-        throw new IllegalStateException("Whether the business is VAT registered in the UK has not been Cached")
-      )
+      _.vatRegisteredUk.getOrElse {
+        val error = "Whether the business is VAT registered in the UK has not been Cached"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
+      }
     }
 
   def getCachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =

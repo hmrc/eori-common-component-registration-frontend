@@ -18,7 +18,9 @@ package integration
 
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.http._
 import util.externalservices.AuditService
@@ -37,6 +39,7 @@ class Save4LaterConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
         "auditing.consumer.baseUri.port"                 -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val save4LaterConnector = app.injector.instanceOf[Save4LaterConnector]

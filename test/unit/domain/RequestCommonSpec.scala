@@ -16,13 +16,12 @@
 
 package unit.domain
 
-import java.util.UUID
-
 import base.UnitSpec
-import java.time.{ZoneId, ZonedDateTime}
-
 import play.api.libs.json.{JsResultException, JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestCommon
+
+import java.time.{ZoneId, ZonedDateTime}
+import java.util.UUID
 
 class RequestCommonSpec extends UnitSpec {
 

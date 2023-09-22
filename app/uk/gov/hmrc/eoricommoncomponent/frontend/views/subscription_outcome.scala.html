@@ -14,30 +14,27 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.JourneyStatus
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.{longName, service}
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukPanel
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Text, HtmlContent}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.panel.Panel
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import play.twirl.api.utils.StringEscapeUtils
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.{JourneyStatus, Service}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukPanel
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.panel.Panel
 
 @this(layout_di: layout, feedback_di: helpers.feedback, help_di: partials.if_you_need_help, dateFormatter: DateFormatter, govukPanel: GovukPanel, appConfig: AppConfig)
 
-@(service: Service, eori: String, name: String, processedDate: String, subscriptionTo: String, subscriptionNextSteps: String)(implicit messages: Messages, request: Request[_])
+@(service: Service, eori: String, processedDate: String, subscriptionTo: String, subscriptionNextSteps: String)(implicit messages: Messages, request: Request[_])
 
 @checkEORILink = {
 <a class="govuk-link" href=@appConfig.checkEORINumber target="_blank" rel="noopener noreferrer">@messages("cds.subscription.outcomes.success.extra.information2")</a>
 }
 
-@layout_di(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")} ${StringEscapeUtils.escapeXml11(name)}""", displayBackLink = false) {
+@layout_di(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")}""", displayBackLink = false, service = service) {
 <div>
     @govukPanel(Panel(
-        title = HtmlContent(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")} ${StringEscapeUtils.escapeXml11(name)}"""),
-        content = HtmlContent(s""" <h2 id="issued-date" class="govuk-heading-s govuk-panel--confirmation">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</h2><p id="eori-number" class="govuk-heading-m govuk-panel--confirmation govuk-!-font-size-27">${messages("cds.subscription.outcomes.success.eori")} <br>$eori</p>""")
+        title = HtmlContent(s"""${messages("cds.reg.existing.outcomes.success.heading.part1")}"""),
+        content = HtmlContent(s""" <p id="eori-number" class="govuk-heading-m govuk-panel--confirmation govuk-!-font-size-27">${messages("cds.subscription.outcomes.success.eori")} <br>$eori</p><p id="issued-date" class="govuk-heading-s govuk-panel--confirmation">${messages("cds.subscription.outcomes.success.issued")} ${dateFormatter.format(processedDate)}</p>""")
     ))
 
     <div id='additional-information' class="govuk-form-group">
@@ -76,7 +73,7 @@
 
     <div id="eori-gg">
         <h2 class="govuk-heading-m">@messages("ecc.subscription.status.gg.h1")</h2>
-        <p class="govuk-body">@messages("ecc.subscription.status.gg.p1", longName)</p>
+        <p class="govuk-body">@messages("ecc.subscription.status.gg.p1")</p>
         <p class="govuk-body">@messages("ecc.subscription.status.gg.p2")</p>
     </div>
 

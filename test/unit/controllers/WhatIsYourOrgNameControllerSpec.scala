@@ -143,7 +143,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
   "Submitting the form" should {
 
     forAll(organisationTypeOrganisations) {
-      (organisationType, _, nameDescription, submitLocation, userLocation, reviewMode, _) =>
+      (organisationType, _, nameDescription, submitLocation, _, reviewMode, _) =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
           mockAuthConnector,
           controller.submit(reviewMode, organisationType, atarService),
@@ -180,7 +180,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
           )
           submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
             status(result) shouldBe SEE_OTHER
-            result.header.headers("Location") should endWith(submitLocation)
+            header("Location", result).value should endWith(submitLocation)
             verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any[Request[_]])
           }
         }

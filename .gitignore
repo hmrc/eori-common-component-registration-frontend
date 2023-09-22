@@ -7,6 +7,7 @@ lib_managed
 tmp
 .history
 dist
+/.metals
 /.idea
 /.bsp
 /*.iml
@@ -24,3 +25,9 @@ yarn-debug.log
 yarn-error.log
 .DS_Store
 **/*.DS_Store
+project/metals.sbt
+.metals
+.vscode
+.bloop
+.metals/*
+/.metals

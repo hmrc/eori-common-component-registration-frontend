@@ -18,8 +18,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
   ClearCacheAndRegistrationIdentificationService,
   RequestSessionData,
@@ -27,6 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

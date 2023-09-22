@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import java.time.LocalDateTime
-
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{CommonHeader, MessagingServiceParam}
+
+import java.time.LocalDateTime
 
 case class MDGResponseCommon(
   status: String,

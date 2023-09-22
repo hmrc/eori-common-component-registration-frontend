@@ -17,8 +17,6 @@
 package unit.controllers
 
 import common.pages.matching.DoYouHaveNinoPage._
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -37,6 +35,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.NinoFormBuilder
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -98,7 +97,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        result.header.headers("Location") should endWith("register/matching/confirm")
+        header("Location", result).value should endWith("register/matching/confirm")
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
           any[HeaderCarrier],
@@ -133,7 +132,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       }
     }
 
-    "keep the user on the same page with error message when NINO was not recognized for no name in cache" in {
+    "redirect the user to the start of the journey when the cache is empty" in {
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
       when(
         mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
@@ -145,9 +144,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page = CdsPage(contentAsString(result))
-        status(result) shouldBe BAD_REQUEST
-        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe notMatchedError
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith("register/check-user")
       }
     }
 

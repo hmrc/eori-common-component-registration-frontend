@@ -17,11 +17,10 @@
 package unit.forms.models.registration
 
 import base.UnitSpec
-import java.time.LocalDateTime
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.ContactInformation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, ContactDetailsViewModel}
+
+import java.time.LocalDateTime
 
 class ContactDetailsModelSpec extends UnitSpec {
 
@@ -33,7 +32,7 @@ class ContactDetailsModelSpec extends UnitSpec {
         ContactDetailsModel(
           "Full name",
           "email",
-          "01234123123",
+          Some("01234123123"),
           None,
           false,
           Some("street"),
@@ -60,12 +59,12 @@ class ContactDetailsModelSpec extends UnitSpec {
     "correctly convert ContactDetailsViewModel and update ContactDetailsModel" in {
 
       val contactDetails =
-        ContactDetailsViewModel("Full name", Some("email"), "01234123123")
+        ContactDetailsViewModel("Full name", Some("email"), Some("01234123123"))
       val contactDetailsModel =
         ContactDetailsModel(
           "Name",
           "emailAddress",
-          "012341231234",
+          Some("012341231234"),
           None,
           false,
           Some("street"),
@@ -76,7 +75,7 @@ class ContactDetailsModelSpec extends UnitSpec {
       contactDetails.toContactInfoDetailsModel(Some(contactDetailsModel)) shouldBe ContactDetailsModel(
         "Full name",
         "email",
-        "01234123123",
+        Some("01234123123"),
         None,
         false,
         Some("street"),
@@ -88,7 +87,7 @@ class ContactDetailsModelSpec extends UnitSpec {
       contactDetails.toContactInfoDetailsModel(None) shouldBe ContactDetailsModel(
         "Full name",
         "email",
-        "01234123123",
+        Some("01234123123"),
         None,
         false,
         None,

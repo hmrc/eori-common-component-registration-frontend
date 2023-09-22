@@ -75,8 +75,10 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     reset(mockCdsFrontendDataCache)
     reset(mockSubscriptionFlowManager)
     reset(mockSubscriptionDetailsService)
-    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(None)
-    when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(mockSubscriptionDetails)
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(Future.successful(None))
+    when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+      Future.successful(mockSubscriptionDetails)
+    )
     registerSaveContactDetailsMockSuccess()
     mockFunctionWithRegistrationDetails(mockRegistrationDetails)
     setupMockSubscriptionFlowManager(ContactDetailsSubscriptionFlowPageGetEori)
@@ -97,7 +99,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       "create Register",
       (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showCreateForm(flow, orgType = orgType)(_)
     ),
-    ("review Register", (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showReviewForm(flow)(_))
+    ("review Register", (flow: SubscriptionFlow, _: EtmpOrganisationType) => showReviewForm(flow)(_))
   )
 
   "Viewing the create form " should {
@@ -127,22 +129,21 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
 
     "fill fields with contact details if stored in cache (new address entered)" in {
       when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-        .thenReturn(Some(contactDetailsModel))
+        .thenReturn(Future.successful(Some(contactDetailsModel)))
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
 
     "restore state properly if registered address was used" in {
       when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-        .thenReturn(Some(contactDetailsModelWithRegisteredAddress))
+        .thenReturn(Future.successful(Some(contactDetailsModelWithRegisteredAddress)))
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
+
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -151,7 +152,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe empty
-        page.getElementValue(emailFieldXPath) shouldBe empty
+
         page.getElementValue(telephoneFieldXPath) shouldBe empty
       }
     }
@@ -166,7 +167,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       showReviewForm() { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailFieldXPath) shouldBe Email
+
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -185,13 +186,11 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     "display the contact details stored in the cache under as 'subscription details'" in {
       mockFunctionWithRegistrationDetails(mockRegistrationDetails)
       when(mockSubscriptionBusinessService.cachedContactDetailsModel(any())).thenReturn(
-        Some(revisedContactDetailsModel)
+        Future.successful(Some(revisedContactDetailsModel))
       )
       showReviewForm(contactDetailsModel = revisedContactDetailsModel) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementValue(fullNameFieldXPath) shouldBe FullName
-        page.getElementText(emailLabelXPath) shouldBe emailAddressFieldLabel
-        page.getElementText(emailFieldXPath) shouldBe Email
         page.getElementValue(telephoneFieldXPath) shouldBe Telephone
       }
     }
@@ -387,14 +386,16 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     "redirect to review page when details are valid" in {
       submitFormInReviewMode(createFormMandatoryFieldsMap) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/review-determine")
+        header(LOCATION, result).value should endWith("/review-determine")
       }
     }
 
   }
 
   private def mockFunctionWithRegistrationDetails(registrationDetails: RegistrationDetails): Unit =
-    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(registrationDetails)
+    when(mockCdsFrontendDataCache.registrationDetails(any[Request[_]])).thenReturn(
+      Future.successful(registrationDetails)
+    )
 
   private def submitFormInCreateMode(form: Map[String, String], userId: String = defaultUserId)(
     test: Future[Result] => Any
@@ -422,7 +423,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
+    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(orgType))
     when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
       Right(subscriptionFlow)
     )
@@ -440,7 +441,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       Right(subscriptionFlow)
     )
     when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
-      .thenReturn(Some(contactDetailsModel))
+      .thenReturn(Future.successful(Some(contactDetailsModel)))
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }

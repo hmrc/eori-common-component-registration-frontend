@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging
 
-import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
-
+import play.api.Logging
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postCodeMandatoryCountryCodes, postcodeRegex}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
+
+import java.time.format.DateTimeFormatter
+import java.time._
 
 case class Header(originatingSystem: String, requestTimeStamp: String, correlationId: String)
 
@@ -102,7 +103,7 @@ object Individual {
   implicit val formats = Json.format[Individual]
 }
 
-trait CommonHeader {
+trait CommonHeader extends Logging {
 
   private def dateTimeWritesIsoUtc: Writes[LocalDateTime] = new Writes[LocalDateTime] {
 
@@ -124,7 +125,12 @@ trait CommonHeader {
         ).toLocalDateTime
       )
       catch {
-        case e: Exception => JsError(s"Could not parse '${value.toString()}' as an ISO date. Reason: $e")
+        case e: Exception =>
+          val error = s"Could not parse '${value.toString()}' as an ISO date. Reason: $e"
+          // $COVERAGE-OFF$Loggers
+          logger.warn(error)
+          // $COVERAGE-ON
+          JsError(error)
       }
 
   }

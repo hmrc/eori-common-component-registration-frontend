@@ -17,8 +17,6 @@
 package unit.services
 
 import common.support.testdata.TestData
-
-import java.time.{LocalDate, LocalDateTime, ZoneId}
 import org.scalacheck.Gen
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.libs.json.{JsValue, Json}
@@ -27,13 +25,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Su
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionSuccessful
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
   EtmpLegalStatus,
   EtmpTypeOfPerson,
   OrganisationTypeConfiguration
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionSuccessful
 import util.TestData
+
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 
 trait SubscriptionServiceTestData extends TestData {
 
@@ -65,7 +65,7 @@ trait SubscriptionServiceTestData extends TestData {
   val subscriptionContactDetailsModel = ContactDetailsModel(
     contactName,
     contactEmail,
-    contactTelephone,
+    Some(contactTelephone),
     Some(contactFax),
     useAddressFromRegistrationDetails = false,
     Some(contactStreet),
@@ -77,7 +77,7 @@ trait SubscriptionServiceTestData extends TestData {
   val subscriptionContactDetailsWithPlusSignInTelAndFaxModel = ContactDetailsModel(
     contactName,
     contactEmail,
-    "+01632961234",
+    Some("+01632961234"),
     Some("+01632961235"),
     useAddressFromRegistrationDetails = false,
     Some(contactStreet),
@@ -143,10 +143,23 @@ trait SubscriptionServiceTestData extends TestData {
     addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
   )
 
+  val fullyPopulatedSubscriptionDetailsAllOrgTypes = SubscriptionDetails(
+    ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
+    personalDataDisclosureConsent = Some(true),
+    contactDetails = Some(subscriptionContactDetailsModel),
+    dateEstablished = Some(dateOfEstablishment),
+    sicCode = Some(principalEconomicActivity),
+    email = Some(capturedEmail),
+    eoriNumber = Some("GB123456789000"),
+    nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse(dateOfBirthString))),
+    nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName")),
+    addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
+  )
+
   val fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone: SubscriptionDetails = SubscriptionDetails(
     ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
     personalDataDisclosureConsent = Some(true),
-    contactDetails = Some(subscriptionContactDetailsModel.copy(telephone = "+01632961234")),
+    contactDetails = Some(subscriptionContactDetailsModel.copy(telephone = Some("+01632961234"))),
     dateEstablished = Some(dateOfEstablishment),
     sicCode = Some(principalEconomicActivity),
     email = Some(capturedEmail)

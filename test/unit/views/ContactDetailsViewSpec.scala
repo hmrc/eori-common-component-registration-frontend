@@ -55,19 +55,14 @@ class ContactDetailsViewSpec extends ViewSpec {
         .text() mustBe "EORI number application contact details"
     }
 
-    "have the email" in {
-      doc
-        .body()
-        .getElementById("email")
-        .text() mustBe "email@email.com"
-    }
-
     "have full Name" in {
       doc.select(fullNameLabel).text() must include("Full name")
+      doc.getElementById("full-name").attr("autocomplete") must include("name")
     }
 
     "have telephone" in {
       doc.select(telephoneLabel).text() must include("Telephone")
+      doc.getElementById("telephone").attr("autocomplete") must include("tel")
     }
   }
 

@@ -19,7 +19,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 import play.api.libs.json.{Json, Reads, Writes}
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
@@ -44,7 +43,8 @@ sealed case class CachedData(
   email: Option[String] = None,
   groupEnrolment: Option[EnrolmentResponse] = None,
   keepAlive: Option[String] = None,
-  eori: Option[String] = None
+  eori: Option[String] = None,
+  submissionCompleteDetails: Option[SubmissionCompleteDetails] = None
 )
 
 object CachedData {
@@ -60,6 +60,7 @@ object CachedData {
   val groupIdKey                       = "cachedGroupId"
   val groupEnrolmentKey                = "groupEnrolment"
   val eoriKey                          = "eori"
+  val submissionCompleteKey            = "submissionCompleteDetails"
   implicit val format                  = Json.format[CachedData]
 }
 
@@ -124,8 +125,11 @@ class SessionCache @Inject() (
   def saveSub02Outcome(subscribeOutcome: Sub02Outcome)(implicit request: Request[_]): Future[Boolean] =
     putData(sub02OutcomeKey, Json.toJson(subscribeOutcome)) map (_ => true)
 
-  def saveSub01Outcome(sub01Outcome: Sub01Outcome)(implicit request: Request[_]): Future[Boolean] =
-    putData(sub01OutcomeKey, Json.toJson(sub01Outcome)) map (_ => true)
+  def saveSub01Outcome(sub01Outcome: Sub01Outcome)(implicit request: Request[_]): Future[Boolean] = for {
+    subCompleteDetails <- submissionCompleteDetails
+    _                  <- putData(sub01OutcomeKey, Json.toJson(sub01Outcome)) map (_ => true)
+    _                  <- saveSubmissionCompleteDetails(subCompleteDetails.copy(processingDate = sub01Outcome.processedDate))
+  } yield true
 
   def saveRegistrationInfo(rd: RegistrationInfo)(implicit request: Request[_]): Future[Boolean] =
     putData(regInfoKey, Json.toJson(rd)) map (_ => true)
@@ -137,6 +141,14 @@ class SessionCache @Inject() (
 
   def saveSubscriptionDetails(rdh: SubscriptionDetails)(implicit request: Request[_]): Future[Boolean] =
     putData(subDetailsKey, Json.toJson(rdh)) map (_ => true)
+
+  def saveSubmissionCompleteDetails(
+    submissionCompleteData: SubmissionCompleteDetails
+  )(implicit request: Request[_]): Future[Boolean] =
+    putData(submissionCompleteKey, Json.toJson(submissionCompleteData)) map (_ => true)
+
+  def submissionCompleteDetails(implicit request: Request[_]): Future[SubmissionCompleteDetails] =
+    getData[SubmissionCompleteDetails](submissionCompleteKey).map(_.getOrElse(SubmissionCompleteDetails("")))
 
   def saveEmail(email: String)(implicit request: Request[_]): Future[Boolean] =
     putData(emailKey, Json.toJson(email)) map (_ => true)

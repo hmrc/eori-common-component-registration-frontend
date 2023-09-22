@@ -16,18 +16,19 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import javax.inject.{Inject, Singleton}
-import java.time.LocalDate
+import play.api.Logging
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -37,7 +38,8 @@ class MatchingService @Inject() (
   detailsCreator: RegistrationDetailsCreator,
   cache: SessionCache,
   requestSessionData: RequestSessionData
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   private val CustomsIdsMap: Map[Class[_ <: CustomsId], String] =
     Map(
@@ -119,7 +121,15 @@ class MatchingService @Inject() (
     )
 
   private def nameOfCustomsIdType(customsId: CustomsId): String =
-    CustomsIdsMap.getOrElse(customsId.getClass, throw new IllegalArgumentException(s"Invalid matching id $customsId"))
+    CustomsIdsMap.getOrElse(
+      customsId.getClass, {
+        val error = s"Invalid matching id $customsId"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalArgumentException(error)
+      }
+    )
 
   private def individualIdMatchRequest(customsId: CustomsId, individual: Individual): MatchingRequestHolder =
     MatchingRequestHolder(

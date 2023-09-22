@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.config
 
-import javax.inject.{Inject, Named, Singleton}
 import play.api.Configuration
 import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import javax.inject.{Inject, Named, Singleton}
 import scala.concurrent.duration.Duration
 import scala.util.matching.Regex
 
@@ -86,7 +86,13 @@ class AppConfig @Inject() (
     s"$betafeedbackBaseUrl?service=$serviceIdentifierRegister-${service.code}"
 
   //email verification service
+  val emailVerificationEnabled: Boolean          = config.get[Boolean]("microservice.services.email-verification.enabled")
+  val emailVerificationContinueUrlPrefix: String = config.get[String]("external-url.email-verification.continue-url")
+
   val emailVerificationBaseUrl: String = servicesConfig.baseUrl("email-verification")
+
+  val emailVerificationFrontendBaseUrl: String =
+    config.get[String]("microservice.services.email-verification-frontend.prefix")
 
   val emailVerificationServiceContext: String =
     config.get[String]("microservice.services.email-verification.context")
@@ -97,7 +103,7 @@ class AppConfig @Inject() (
   val emailVerificationLinkExpiryDuration: String =
     config.get[String]("microservice.services.email-verification.linkExpiryDuration")
 
-  //handle subscription service
+  //Eori Common Component
   val handleSubscriptionBaseUrl: String = servicesConfig.baseUrl("handle-subscription")
 
   val handleSubscriptionServiceContext: String =
@@ -122,13 +128,15 @@ class AppConfig @Inject() (
 
   val standaloneServiceCode: String = config.get[String]("application.standalone.service.code")
 
-  val userResearchBannerUrl: String = config.get[String]("external-url.user-research-bannerUrl")
-
   def getServiceUrl(proxyServiceName: String): String = {
     val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
     val serviceContext =
       config.get[String](s"microservice.services.eori-common-component-hods-proxy.$proxyServiceName.context")
     s"$baseUrl/$serviceContext"
   }
+
+  val internalAuthToken: String = config.get[String]("internal-auth.token")
+
+  val integrationFrameworkFeatureFlag: Boolean = config.get[Boolean]("integration-framework-feature-flag")
 
 }

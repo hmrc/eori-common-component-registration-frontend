@@ -18,9 +18,11 @@ package integration
 
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.mvc.Http.Status._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   SUB09SubscriptionDisplayConnector,
   ServiceUnavailableResponse
@@ -43,18 +45,12 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         "auditing.consumer.baseUri.port"                                                      -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val connector                  = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
   private val requestTaxPayerId               = "GBE9XSDF10BCKEYAX"
-  private val requestEori                     = "GB083456789000"
   private val requestAcknowledgementReference = "1234567890ABCDEFG"
-
-  private val reqTaxPayerId = Seq(
-    ("regime", "CDS"),
-    ("taxPayerID", requestTaxPayerId),
-    ("acknowledgementReference", requestAcknowledgementReference)
-  )
 
   private val expectedResponse = Json
     .parse(SubscriptionDisplayMessagingService.validResponse(typeOfLegalEntity = "0001"))
@@ -81,7 +77,9 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestTaxPayerId,
         requestAcknowledgementReference
       )
-      await(connector.subscriptionDisplay(reqTaxPayerId)) mustBe Right(expectedResponse)
+      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Right(
+        expectedResponse
+      )
     }
 
     "return Service Unavailable Response when subscription display service returns an exception" in {
@@ -91,7 +89,9 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestAcknowledgementReference,
         returnedStatus = SERVICE_UNAVAILABLE
       )
-      await(connector.subscriptionDisplay(reqTaxPayerId)) mustBe Left(ServiceUnavailableResponse)
+      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Left(
+        ServiceUnavailableResponse
+      )
     }
   }
 }

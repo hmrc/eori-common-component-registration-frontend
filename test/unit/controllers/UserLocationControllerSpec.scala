@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-import java.util.UUID
 import common.pages.registration.UserLocationPageOrganisation._
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
@@ -28,7 +27,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ServiceUnavailableResponse
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{FeatureFlags, UserLocationController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
@@ -44,14 +43,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -65,7 +65,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockSave4LaterService          = mock[Save4LaterService]
   private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
-  private val mockFeatureFlags               = mock[FeatureFlags]
   private val userLocationView               = instanceOf[user_location]
 
   private val sub01OutcomeProcessing = instanceOf[sub01_outcome_processing]
@@ -82,8 +81,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     mcc,
     userLocationView,
     sub01OutcomeProcessing,
-    errorTemplate,
-    mockFeatureFlags
+    errorTemplate
   )
 
   private val ProblemWithSelectionError = "Select where you are based"
@@ -158,7 +156,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         status(result) shouldBe SEE_OTHER
         val expectedUrl =
           YouNeedADifferentServiceIomController.form(atarService).url
-        result.header.headers(LOCATION) should endWith(expectedUrl)
+        header(LOCATION, result).value should endWith(expectedUrl)
       }
     }
 
@@ -175,7 +173,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     "redirect to OrganisationTypeController form when 'Iom' is selected" in {
       subscriptionStatus() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(OrganisationTypeController.form(atarService).url)
+        header(LOCATION, result).value should endWith(OrganisationTypeController.form(atarService).url)
       }
     }
 
@@ -200,8 +198,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       mcc,
       userLocationView,
       sub01OutcomeProcessing,
-      errorTemplate,
-      mockFeatureFlags
+      errorTemplate
     ) {}
     implicit val fakeRequest = FakeRequest()
 
@@ -221,10 +218,10 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
       val test =
         controller.cacheAndRedirect(atarService, "third-country")
-      val result = await(test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail)))))
+      val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
       status(result) shouldBe SEE_OTHER
-      result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+      header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
     }
 
     "cache registration display response and redirect to BusinessDetailsRecoveryPage for organisation response" in {
@@ -243,16 +240,16 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
       val test =
         controller.cacheAndRedirect(atarService, "third-country")
-      val result = await(test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail)))))
+      val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
       status(result) shouldBe SEE_OTHER
-      result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+      header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
     }
 
     "return service unavailable response when failed to retrieve registration display response" in {
       val test =
         controller.cacheAndRedirect(atarService, "third-country")
-      val result = await(test(Left(ServiceUnavailableResponse)))
+      val result = test(Left(ServiceUnavailableResponse))
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
     }
@@ -306,6 +303,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         case UserLocation.Uk           => "uk"
         case UserLocation.Iom          => "iom"
         case UserLocation.Islands      => "islands"
+        case _                         => throw new IllegalArgumentException("Unsupported User Location")
       }
 
       when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier])).thenReturn(Future.successful(None))
@@ -330,7 +328,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) should endWith(UserLocationController.processing(atarService).url)
+          header(LOCATION, result).value should endWith(UserLocationController.processing(atarService).url)
         }
       }
 
@@ -344,7 +342,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
         submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers(LOCATION) should endWith(SubscriptionRecoveryController.complete(atarService).url)
+          header(LOCATION, result).value should endWith(SubscriptionRecoveryController.complete(atarService).url)
         }
       }
       s"redirect to BusinessDetailsRecoveryController when NewSubscription status and registration display is enabled and when '$selectedOptionValue' is selected" in {
@@ -372,8 +370,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          errorTemplate,
-          mockFeatureFlags
+          errorTemplate
         ) {}
 
         val result = controller
@@ -386,7 +383,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           )
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+        header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
       }
 
       s"redirect to BusinessDetailsRecoveryController when SubscriptionRejected status and registration display is enabled and when '$selectedOptionValue' is selected" in {
@@ -414,8 +411,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          errorTemplate,
-          mockFeatureFlags
+          errorTemplate
         ) {}
 
         val result = controller
@@ -428,7 +424,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           )
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+        header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
       }
 
     } else if (selectedOptionValue == UserLocation.Uk)
@@ -439,7 +435,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           status(result) shouldBe SEE_OTHER
           val expectedUrl =
             OrganisationTypeController.form(atarService).url
-          result.header.headers(LOCATION) should endWith(expectedUrl)
+          header(LOCATION, result).value should endWith(expectedUrl)
         }
       }
   }
@@ -454,7 +450,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       processing() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("The ATaR application is being processed")
+        page.title() should startWith("Application sent")
       }
     }
   }

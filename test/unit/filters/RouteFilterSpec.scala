@@ -17,8 +17,8 @@
 package unit.filters
 
 import akka.actor.ActorSystem
-import akka.stream.testkit.NoMaterializer
 import akka.stream.Materializer
+import akka.stream.testkit.NoMaterializer
 import base.UnitSpec
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, spy, when}
@@ -26,6 +26,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{RequestHeader, Result, Results}
 import play.api.test.FakeRequest
+import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
@@ -68,7 +69,7 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
       val headerToResultFunction: RequestHeader => Future[Result] = _ => Future.successful(Results.Ok)
 
-      val result: Result = await(filter.apply(headerToResultFunction)(request))
+      val result = filter.apply(headerToResultFunction)(request)
 
       status(result) shouldBe 200
     }
@@ -80,7 +81,7 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
       val headerToResultFunction: RequestHeader => Future[Result] = _ => Future.successful(Results.Ok)
 
-      val result: Result = await(filter.apply(headerToResultFunction)(request))
+      val result = filter.apply(headerToResultFunction)(request)
 
       status(result) shouldBe 200
     }
@@ -95,7 +96,7 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
       whenRoutesToBlock(Some("/some-url"))
       val request = FakeRequest("GET", "/some-other-url")
 
-      val result: Result = await(filter.apply(okAction)(request))
+      val result = filter.apply(okAction)(request)
 
       status(result) shouldBe 200
     }
@@ -111,13 +112,13 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
   }
 
   private def thenRouteIsBlocked(url: String) = {
-    val request        = FakeRequest("GET", url)
-    val result: Result = await(filter.apply(okAction)(request))
+    val request = FakeRequest("GET", url)
+    val result  = filter.apply(okAction)(request)
     status(result) shouldBe 404
   }
 
   private def whenRoutesToBlock(routes: Option[String]) =
     when(mockConfig.getOptional[String]("routes-to-block")).thenReturn(routes)
 
-  private val okAction = (rh: RequestHeader) => Future.successful(Results.Ok)
+  private val okAction = (_: RequestHeader) => Future.successful(Results.Ok)
 }

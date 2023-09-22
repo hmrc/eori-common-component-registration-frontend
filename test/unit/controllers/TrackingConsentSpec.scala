@@ -19,7 +19,6 @@ package unit.controllers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -33,7 +32,7 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TrackingConsentSpec extends ControllerSpec with GuiceOneAppPerSuite with MockitoSugar with AuthActionMock {
+class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActionMock {
 
   private val mockAuthConnector                    = mock[AuthConnector]
   private val mockAuthAction                       = authAction(mockAuthConnector)

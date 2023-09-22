@@ -16,21 +16,21 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.i18n.Messages
-import play.api.mvc.{Action, _}
+import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.HowCanWeIdentifyYouUtrViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -40,7 +40,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you_utr,
   orgTypeLookup: OrgTypeLookup,
-  cdsFrontendDataCache: SessionCache
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -53,7 +53,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
           subscriptionUtrForm,
           isInReviewMode = false,
           routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-          orgType
+          HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
+          service = service
         )
       )
 
@@ -71,7 +72,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                     formWithErrors,
                     isInReviewMode = false,
                     routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-                    orgType
+                    HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
+                    service = service
                   )
                 )
               ),
@@ -90,7 +92,9 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     hc: HeaderCarrier,
     request: Request[_]
   ): Future[Boolean] =
-    retrieveNameDobFromCache().flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
+    sessionCacheService
+      .retrieveNameDobFromCache()
+      .flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId))
 
   private def matchNotFoundBadRequest(
     individualFormData: IdMatchModel,
@@ -105,20 +109,10 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
         errorForm,
         isInReviewMode = false,
         routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-        etmpOrganisationType
+        HowCanWeIdentifyYouUtrViewModel.forHintMessage(etmpOrganisationType),
+        service = service
       )
     )
   }
-
-  private def retrieveNameDobFromCache()(implicit request: Request[_]): Future[Individual] =
-    cdsFrontendDataCache.subscriptionDetails.map(
-      _.nameDobDetails.getOrElse(throw DataUnavailableException(s"NameDob is not cached in data"))
-    ).map { nameDobDetails =>
-      Individual.withLocalDate(
-        firstName = nameDobDetails.firstName,
-        lastName = nameDobDetails.lastName,
-        dateOfBirth = nameDobDetails.dateOfBirth
-      )
-    }
 
 }

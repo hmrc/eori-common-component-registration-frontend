@@ -23,8 +23,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 import javax.inject.{Inject, Singleton}
@@ -44,9 +44,7 @@ class Sub02Controller @Inject() (
   sub02EoriAlreadyExists: sub02_eori_already_exists,
   standaloneOutcomeView: standalone_subscription_outcome,
   subscriptionOutcomeView: subscription_outcome,
-  xiEoriGuidancePage: xi_eori_guidance,
-  cdsSubscriber: CdsSubscriber,
-  featureFlag: FeatureFlags
+  cdsSubscriber: CdsSubscriber
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
@@ -78,26 +76,24 @@ class Sub02Controller @Inject() (
               Future.successful(Redirect(Sub02Controller.subscriptionInProgress(service)))
             case SubscriptionFailed(RequestNotProcessed, _) =>
               Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-            case _ =>
+            case res: SubscriptionFailed =>
+              // $COVERAGE-OFF$Loggers
+              logger.warn(s"Unexpected response returned from SUB02: ${res.failureReason}")
+              // $COVERAGE-ON
               throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
           }
         } recoverWith {
         case e: Exception =>
+          val error = "Subscription Error. "
           // $COVERAGE-OFF$Loggers
-          logger.error("Subscription Error. ", e)
+          logger.warn(error, e)
           // $COVERAGE-ON
-          Future.failed(new RuntimeException("Subscription Error. ", e))
+          Future.failed(new RuntimeException(error, e))
       }
     }
 
-  def xiEoriGuidance: Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(xiEoriGuidancePage()))
-  }
-
   def subscriptionNextSteps(service: Service): String =
-    if (featureFlag.arsNewJourney) s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
-    else s"cds.subscription.outcomes.success.extra.information.next.${service.code}"
+    s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
 
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
@@ -115,20 +111,17 @@ class Sub02Controller @Inject() (
             standaloneOutcomeView(
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
-              subDetails.name,
-              if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate
+              if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate,
+              service
             )
           ).withSession(newUserSession)
         else {
-          val subscriptionTo =
-            if (featureFlag.arsNewJourney) s"ecc.start-page.para1.bullet2.new.${service.code}"
-            else s"ecc.start-page.para1.bullet2.${service.code}"
+          val subscriptionTo = s"ecc.start-page.para1.bullet2.new.${service.code}"
           Ok(
             subscriptionOutcomeView(
               service,
               sub02Outcome.eori
                 .getOrElse("EORI not populated from Sub02 response."),
-              subDetails.name,
               if (sub01Outcome.processedDate.nonEmpty) sub01Outcome.processedDate else sub02Outcome.processedDate,
               subscriptionTo,
               subscriptionNextSteps(service)
@@ -143,7 +136,7 @@ class Sub02Controller @Inject() (
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
         _             <- sessionCache.remove
-      } yield Ok(sub02EoriAlreadyExists(name, processedDate)).withSession(newUserSession)
+      } yield Ok(sub02EoriAlreadyExists(name, processedDate, service)).withSession(newUserSession)
     }
 
   def eoriAlreadyAssociated(service: Service): Action[AnyContent] =
@@ -152,23 +145,25 @@ class Sub02Controller @Inject() (
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
         _             <- sessionCache.remove
-      } yield Ok(sub02EoriAlreadyAssociatedView(name, processedDate)).withSession(newUserSession)
+      } yield Ok(sub02EoriAlreadyAssociatedView(name, processedDate, service)).withSession(newUserSession)
     }
 
   def subscriptionInProgress(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        name          <- sessionCache.subscriptionDetails.map(_.name)
-        processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
-        _             <- sessionCache.remove
-      } yield Ok(sub02SubscriptionInProgressView(name, processedDate)).withSession(newUserSession)
+        submissionCompleteDetails <- sessionCache.submissionCompleteDetails
+        _                         <- sessionCache.remove
+        _                         <- sessionCache.saveSubmissionCompleteDetails(submissionCompleteDetails)
+      } yield Ok(sub02SubscriptionInProgressView(submissionCompleteDetails.processingDate, service)).withSession(
+        newUserSession
+      )
     }
 
   def requestNotProcessed(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         _ <- sessionCache.remove
-      } yield Ok(sub02RequestNotProcessed()).withSession(newUserSession)
+      } yield Ok(sub02RequestNotProcessed(service)).withSession(newUserSession)
     }
 
   def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -180,9 +175,7 @@ class Sub02Controller @Inject() (
         _                   <- sessionCache.saveSub01Outcome(sub01Outcome)
         _                   <- sessionCache.saveSubscriptionDetails(subscriptionDetails)
 
-      } yield Ok(sub01OutcomeView(Some(subscriptionDetails.name), sub01Outcome.processedDate)).withSession(
-        newUserSession
-      )
+      } yield Ok(sub01OutcomeView(sub01Outcome.processedDate, service)).withSession(newUserSession)
   }
 
 }

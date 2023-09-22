@@ -17,8 +17,6 @@
 package unit.controllers
 
 import common.pages.RegisterHowCanWeIdentifyYouPage
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -31,7 +29,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, NameDobMatchModel, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  SessionCache,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,6 +41,7 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -49,6 +52,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
   private val mockMatchingService   = mock[MatchingService]
   private val mockFrontendDataCache = mock[SessionCache]
   private val mockOrgTypeLookup     = mock[OrgTypeLookup]
+  private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache)
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_utr]
 
@@ -58,7 +62,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     mcc,
     howCanWeIdentifyYouView,
     mockOrgTypeLookup,
-    mockFrontendDataCache
+    sessionCacheService
   )
 
   "Viewing the form " should {
@@ -66,7 +70,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
     "display howCanWeIdentifyYouView for logged in user" in {
 
-      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(CorporateBody)
+      when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(CorporateBody))
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       form() { result =>
@@ -96,7 +100,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       submitForm(Map("utr" -> utr)) {
         result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/confirm"
+          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm"
       }
     }
 

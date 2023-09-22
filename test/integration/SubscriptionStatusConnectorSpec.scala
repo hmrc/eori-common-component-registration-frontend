@@ -16,12 +16,13 @@
 
 package integration
 
-import java.time.LocalDateTime
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.Status.{FORBIDDEN, INTERNAL_SERVER_ERROR}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   SubscriptionStatusQueryParams,
@@ -32,6 +33,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.{AuditService, SubscriptionStatusMessagingService}
+
+import java.time.LocalDateTime
 
 class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -44,6 +47,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         "auditing.consumer.baseUri.port"                                                     -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private val subscriptionStatusConnector = app.injector.instanceOf[SubscriptionStatusConnector]
@@ -77,7 +81,8 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         |}
       """.stripMargin)
 
-  val auditEventBodyJson = Json.parse("""{
+  val auditEventBodyJson = Json.parse("""
+    |{
     |  "auditSource" : "eori-common-component-registration-frontend",
     |  "auditType" : "SubscriptionStatus",
     |  "tags" : {
@@ -140,8 +145,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       await(subscriptionStatusConnector.status(request)) must be(
         responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
       )
-
-      AuditService.verifyXAuditWriteWithBody(auditEventBodyJson)
+      eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
     }
 
     "fail when Internal Server Error" in {

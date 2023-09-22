@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import javax.inject.{Inject, Singleton}
 import play.api.Logger
+import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
@@ -28,18 +27,21 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
   RegisterWithIdConfirmation,
   RegisterWithIdSubmitted
 }
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, _}
+import uk.gov.hmrc.http.client.HttpClientV2
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class MatchingServiceConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
+class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
   ec: ExecutionContext
 ) {
 
   private val logger = Logger(this.getClass)
 
-  private val url          = appConfig.getServiceUrl("register-with-id")
+  private val url          = url"${appConfig.getServiceUrl("register-with-id")}"
   private val NoMatchFound = "002 - No Match Found"
 
   private def handleResponse(response: MatchingResponse): Option[MatchingResponse] = {
@@ -51,15 +53,21 @@ class MatchingServiceConnector @Inject() (http: HttpClient, appConfig: AppConfig
   def lookup(req: MatchingRequestHolder)(implicit hc: HeaderCarrier): Future[Option[MatchingResponse]] = {
 
     // $COVERAGE-OFF$Loggers
-    logger.debug(s"REG01 Lookup: $url, requestCommon: ${req.registerWithIDRequest.requestCommon} and hc: $hc")
+    logger.debug(
+      s"REG01 Lookup: ${url.toString}, requestCommon: ${req.registerWithIDRequest.requestCommon} and hc: $hc"
+    )
     // $COVERAGE-ON
 
-    http.POST[MatchingRequestHolder, MatchingResponse](url, req) map { resp =>
+    httpClient
+      .post(url)
+      .withBody(Json.toJson(req))
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute[MatchingResponse] map { resp =>
       // $COVERAGE-OFF$Loggers
       logger.debug(s"REG01 Lookup: responseCommon: ${resp.registerWithIDResponse.responseCommon}")
       // $COVERAGE-ON
 
-      auditCall(url, req, resp)
+      auditCall(url.toString, req, resp)
       handleResponse(resp)
     } recover {
       case e: Throwable =>

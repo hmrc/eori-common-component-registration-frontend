@@ -17,8 +17,6 @@
 package unit.services
 
 import base.UnitSpec
-import java.time.{LocalDate, LocalDateTime, ZoneId}
-
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.mockito._
@@ -26,6 +24,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.RegisterWithoutIdConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -37,6 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLoo
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegisterWithoutIdService, RequestCommonGenerator}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
@@ -84,7 +84,7 @@ class RegisterWithoutIdServiceSpec
   private val address = Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "country")
 
   private val contactDetails = Some(
-    ContactDetailsModel("John Doe", "john@example.com", "441234987654", None, true, None, None, None, None)
+    ContactDetailsModel("John Doe", "john@example.com", Some("441234987654"), None, true, None, None, None, None)
   )
 
   private val addressWithEmptyPostcode = Address("add1", Some("add2"), Some("add3"), Some("add4"), Some(""), "country")

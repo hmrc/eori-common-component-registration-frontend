@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
-import java.time.LocalDate
+import play.api.Logging
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
@@ -25,6 +25,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
   ContactDetailsModel,
   VatDetails
 }
+
+import java.time.LocalDate
 
 case class SubscriptionDetails(
   businessShortName: Option[BusinessShortName] = None,
@@ -48,13 +50,19 @@ case class SubscriptionDetails(
   customsId: Option[CustomsId] = None,
   formData: FormData = FormData(),
   registeredCompany: Option[CompanyRegisteredCountry] = None
-) {
+) extends Logging {
 
   def name: String =
     nameIdOrganisationDetails.map(_.name) orElse nameOrganisationDetails.map(_.name) orElse nameDobDetails.map(
       _.name
     ) orElse nameDetails
-      .map(_.name) getOrElse (throw new IllegalArgumentException("Name is missing"))
+      .map(_.name) getOrElse ({
+      val error = "Name is missing in cache"
+      // $COVERAGE-OFF$Loggers
+      logger.warn(error)
+      // $COVERAGE-ON
+      throw new IllegalArgumentException(error)
+    })
 
 }
 

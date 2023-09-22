@@ -47,7 +47,7 @@ cds.eu-establishment.radio.no.label=Indeed It Is Not
 cds.eu-establishment.not-specified.label=(Not Specified)
 cds.proposition.name=Get an EORI number
 cds.proposition.name.cds=Get access to CDS
-cds.end-of-title=GOV.UK
+cds.country.end-of-title= GOV.UK
 cds.sign.out=Sign out
 cds.security-sign-out.heading=For your security, we signed you out
 cds.security-sign-out.note=We did not save your answers.
@@ -56,6 +56,10 @@ cds.you-cant-use-service-agent.hint2=You need to sign in with the Government Gat
 cds.you-cant-use-service-standard-organisation.hint1=You signed in to Government Gateway as a standard user. To apply for an EORI number you must be an administrator user.
 cds.you-cant-use-service-standard-organisation.hint2=Contact the person who set up your Government Gateway.
 cds.you-cant-use-service.heading=You cannot use this service
+cds.request-not-processed.heading=Sorry, there is a problem with the service
+cds.request-not-processed.heading2=What to do if you keep getting this message
+cds.request-not-processed.contact-us=Contact us
+cds.request-not-processed.for-help=for help.
 cds.you-cant-use-service.paragraph=To apply for an EORI number phone 0300 322 7067 and ask for an assisted digital application form. They’re open 8am to 6pm, Monday to Friday (except public holidays).
 cds.country-picker.hint.screen-reader=Start to type the name of the country and then use up and down arrows to review and enter to select a country
 cds.country-picker.no-results=No results found
@@ -330,9 +334,9 @@ cds.skip-link=Skip to main content
 #======================================
 # General
 cds.matching.individual.title=Enter your details
-cds.matching.header=What are your organisation details?
-cds.matching.header.partnership=What are your partnership details?
-cds.matching.header.company=What are your company details?
+cds.matching.header=Organisation details
+cds.matching.header.partnership=Partnership details
+cds.matching.header.company=Company details
 cds.matching.intro=This will link your business, Government Gateway ID and EORI number together which helps you move and declare goods.
 cds.matching.individual.header=Enter your details
 cds.matching-lede=We will attempt to match your details against information we currently hold.
@@ -341,7 +345,6 @@ cds.matching.utr.lost-utr-description=find a lost UTR (opens in new tab).
 
 cds.matching.utr.lost-utr-description-llp=find a lost UTR (opens in new tab).
 cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
-cds.matching.partnership.utr.hint-with.link = <p class="govuk-body">You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a></p> This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 
@@ -367,7 +370,7 @@ cds.subscription.verify-email.progressive-disclosure.content=Check your junk fol
 subscription.enter-email.heading=What is your email address?
 subscription.check-your-email.heading=Check  your email address
 subscription.check-your-email.label=Email address
-subscription.check-your-email.confirm.label=We will send you a link to confirm your email address.
+subscription.check-your-email.confirm.label=To confirm it’s your email address we will send you a code.
 subscription.check-your-email.confirm.question=Is {0} the email address you want to use?
 subscription.check-your-email.confirm.title=Is this the email address you want to use?
 subscription.check-your-email.yes=Yes
@@ -427,7 +430,14 @@ cds.subscription.middle-name.error.too-long=The middle name must be 35 character
 cds.subscription.last-name.error.empty=Enter your last name
 cds.subscription.family-name.error.empty=Enter your family name
 cds.subscription.last-name.error.wrong-format=Enter a last name without invalid characters
+
 cds.subscription.name-dob-details.page-error.date-of-birth=Enter your date of birth
+date-of-birth.day.empty=Date of birth must include a day
+date-of-birth.month.empty=Date of birth must include a month
+date-of-birth.year.empty=Date of birth must include a year
+date-of-birth.day-date-of-birth.month.empty=Date of birth must include a day and month
+date-of-birth.day-date-of-birth.year.empty=Date of birth must include a day and year
+date-of-birth.month-date-of-birth.year.empty=Date of birth must include a month and year
 cds.subscription.last-name.error.too-long=The last name must be 35 characters or less
 cds.subscription.family-name.error.too-long=The family name must be 35 characters or less
 
@@ -570,12 +580,11 @@ cds.subscription.outcomes.eori-already-associated.vat-registered2=GB XXXXXXXXX 0
 cds.subscription.outcomes.eori-already-associated.vat-registered3=Where XXXXXXXXX is your VAT number.
 
 # Sub02 Outcome Subscription already in progress
-cds.sub02.outcome.subscription-in-progress.title=Your EORI application is being processed
-cds.sub02.outcome.subscription-in-progress.heading=The EORI application for {0} is being processed
-cds.sub02.outcome.subscription-in-progress.received=Application received by HMRC on {0}
+cds.sub02.outcome.subscription-in-progress.heading=You''ve already applied
+cds.sub02.outcome.subscription-in-progress.received=HMRC received your application on {0}
 cds.sub02.outcome.subscription-in-progress.what-happens-next=What happens next
-cds.sub02.outcome.subscription-in-progress.we-are-processing=We are processing your EORI application, this can take up to 5 working days.
-cds.sub02.outcome.subscription-in-progress.send-you-an-email=We will send you an email when your application has been processed.
+cds.sub02.outcome.subscription-in-progress.we-are-processing=We''ll process your application. This can take up to 5 working days.
+cds.sub02.outcome.subscription-in-progress.send-you-an-email=Then we''ll email the result of your application.
 
 # Reg06 Outcome EORI already linked 600 and 602
 cds.reg06.outcome.eori-already-linked.title-and-heading=The application for
@@ -611,12 +620,20 @@ cds.matching.organisation-address.country.error.empty=Enter your country
 # Name and Utr for an Organisation Match
 cds.matching.name-id-organisation.company.name=Company name
 cds.matching.name-id-organisation.company.name.hint=Enter the exact name that’s on your company'’'s certificate of incorporation. We will use this to verify your identity.
-cds.matching.name-id-organisation.registered-company.name=Registered company name
-cds.matching.name-id-organisation.registered-company.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p> Enter the exact name that'''s on your company’s certificate of incorporation.
-cds.matching.name-id-organisation.partnership.name=Registered partnership name
-cds.matching.name-id-organisation.partnership.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get this name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
-cds.matching.name-id-organisation.organisation.name=Organisation name
-cds.matching.name-id-organisation.organisation.name.hint=<p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your organisation’s certificate of incorporation.
+cds.matching.name-id-organisation.registered-company.name=What is the registered company name?
+cds.matching.name-id-organisation.registered-company.name.para=<p class="govuk-body">You can find this on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.registered-company.name.hint=Enter the exact name from the Companies House register.
+cds.matching.name-id-organisation.partnership.name=What is the registered partnership name?
+cds.matching.name-id-organisation.partnership.name.para=<p class="govuk-body">This is the name registered with HMRC. You can find this in <a class="govuk-link" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services">HMRC online services (opens in new tab)</a> or in letters from HMRC.</p>
+cds.matching.name-id-organisation.partnership.name.hint=Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
+cds.matching.name-id-organisation.organisation.name=What is the registered organisation name?
+cds.matching.name-id-organisation.organisation.name.para=<p class="govuk-body">You can find this on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.organisation.name.hint=Enter the exact name that'''s on your organisation’s certificate of incorporation.
+cds.matching.name-id-organisation.registered-partnership.name.para = Enter the exact name that you registered with HMRC. We will use this to verify your identity.
+cds.matching.name-id-organisation.registered-partnership.name.hint = Enter the exact name registered with HMRC.
+cds.matching.name-id-organisation.limited-liability-partnership.name = What is the registered partnership name?
+cds.matching.name-id-organisation.limited-liability-partnership.name.para = <p class="govuk-body">You can find this on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.limited-liability-partnership.name.hint = Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
 cds.matching.name-id-organisation.organisation.no-utr=I do not have a Corporation Tax UTR
 cds.matching.name-id-organisation.organisation.no-utr.text=If you are a not for profit organisation or public body and do not have a UTR you need to {0} to complete your EORI number application.
 cds.matching.name-id-organisation.organisation.no-utr.link=use another service
@@ -952,14 +969,10 @@ cds.subscription.date-of-birth.error.in-future.date-of-birth=You cannot enter a 
 #Subscription Date of Establishment
 
 cds.subscription.date-of-establishment.steps=your details
-cds.subscription.date-of-establishment.title-and-heading=Date when your organisation was established
+cds.subscription.date-of-establishment.title-and-heading=When was the organisation established?
 cds.subscription.partnership.date-of-establishment.title-and-heading=When was the partnership established?
 cds.subscription.date-of-establishment.date-of-establishment.label=Date of establishment
 cds.subscription.date-of-establishment.page-error.date-of-establishment=Enter your date of establishment
-cds.subscription.business.date-established.label=Enter the date shown on your company’s certificate of incorporation. You can find the date your company was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
-cds.subscription.business.date-established.label.partnership =Enter the date that you registered your partnership with HMRC.
-cds.subscription.llp.date-established.charity-label=Enter the date shown on your organisation’s certificate of incorporation. You can find the date your organisation was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
-cds.subscription.llp.date-established.label=Enter the date shown on the partnership’s certificate of incorporation. You can find the date your business was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 cds.subscription.row.date-established.label=Enter the date your organisation was established
 cds.subscription.date-of-establishment.error.required.date-of-establishment=Enter your date of establishment
 cds.subscription.date-of-establishment.error.invalid.date-of-establishment=Please enter a valid date of establishment
@@ -970,26 +983,52 @@ cds.subscription.partnership.date-of-establishment.hint=Enter the date shown on 
 
 #Sic Code
 cds.subscription.sic.page.title=What does your organisation do?
-cds.subscription.sic.page.heading=What does your organisation do?
+cds.subscription.sic.page.heading=Standard Industrial Classification (SIC) code
 cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House for your SIC code (opens in new tab).</a>
 cds.subscription.sic.nonuk.soleTrader.description=You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
-cds.subscription.sic.organisation.description=<a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new window or tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in a new window or tab)</a>
+cds.subscription.sic.organisation.description=<a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab)</a>
 cds.subscription.sic.uk.soleTrader.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.charity-description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that helps HMRC identify what your partnership does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 
 cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
-cds.subscription.sic.hint=For example, 15200 is the SIC code for ‘manufacture of footwear. If you have more than one SIC code you only need to enter one.
-cds.subscription.sic.description.para1=We use Standard Industrial Classification (SIC) codes to identify what organisations do.
+cds.subscription.sic.hint.uk=This will be 5 numbers. If you have more than one SIC code you only need to enter one.
+cds.subscription.sic.hint.row=This will be 5 numbers.
+cds.subscription.sic.description.para1=SIC codes describe business activities. For example, 58110 is the code for book publishing.
 cds.subscription.sic.description.para2=Enter a 5-digit SIC code for your organisation
+cds.subscription.sic.description.para2.company = What is the company’s SIC code?
+cds.subscription.sic.description.para2.sole-trader = What is your SIC code?
+cds.subscription.sic.description.para2.partnership = What is the partnership’s SIC code?
+cds.subscription.sic.description.para2.limited-liability-partnership = What is the partnership’s SIC code?
+cds.subscription.sic.description.para2.charity-public-body-not-for-profit = What is the organisation’s SIC code?
+
+
+
+
 cds.subscription.sic.details=I do not know my SIC code
+cds.subscription.sic.details.company = I do not know the company’s SIC code
+cds.subscription.sic.details.sole-trader = I do not know my SIC code
+cds.subscription.sic.details.partnership = I do not know the partnership’s SIC code
+cds.subscription.sic.details.limited-liability-partnership = I do not know the partnership’s SIC code
+cds.subscription.sic.details.charity-public-body-not-for-profit = I do not know the organisation'''s SIC code
+
 
 cds.subscription.sic.page.help.heading=If you are UK VAT registered
 cds.subscription.sic.page.help.para1=You can find the code on your VAT certificate. It’s called ‘trade classification (SIC code)’.
 cds.subscription.sic.page.help.para2=<a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Sign in to your VAT online account (opens in new tab)</a> to view your VAT certificate.
 
 cds.subscription.sic.page.help.heading2=If you are not UK VAT registered, or cannot find the code
-cds.subscription.sic.page.help.para3=<a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a> from the list on Companies House.
+cds.subscription.sic.page.help.para3=<a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House.
+cds.subscription.sic.page.help.para3.company = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes what the company does.
+cds.subscription.sic.page.help.para3.sole-trader = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes your business.
+cds.subscription.sic.page.help.para3.partnership = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes what the partnership does.
+cds.subscription.sic.page.help.para3.limited-liability-partnership= <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes what the partnership does.
+cds.subscription.sic.page.help.para3.charity-public-body-not-for-profit = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes what the organisation does.
+
+cds.subscription.sic.link.company-house.row = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a> from the list on Companies House. Select one that best describes your business.
+cds.subscription.sic.para2.row = Enter a SIC code
+
+
 cds.subscription.sic.page.help.para4=Enter a word into the search that best describes what your organisation does. For example, ‘clothing’, ‘tools’.
 cds.subscription.sic.page.help.para5=This will return one or more SIC codes that you can choose from.
 
@@ -1054,7 +1093,7 @@ cds.subscription.outcomes.processing.sub-title=You already have an application b
 cds.subscription.outcomes.processing.next-steps.1=The original applicant will be contacted by HMRC once the application has been processed.
 cds.subscription.outcomes.processing.why-steps.1=Either yourself or someone else in your organisation has already applied for an EORI, so that is being processed.
 cds.subscription.outcomes.in-processing.title-and-heading=We are processing the registration for {0}
-cds.subscription.outcomes.in-processing.received=Application received by HMRC on {0}
+cds.subscription.outcomes.in-processing.received=Received by HMRC on {0}
 cds.subscription.outcomes.inprocessing.eori=EORI number: {0}
 cds.subscription.outcomes.in-processing.sub-title=Your application is being processed
 cds.subscription.outcomes.in-processing.why-steps.1=Your registration is processing but not yet complete.
@@ -1216,11 +1255,6 @@ cds.subscription.address-details.page-error.countryCode=Enter your country
 cds.subscription.address-details.countryCode.error.label=Enter your country
 cds.subscription.address-details.country.emptyValueText=Pick a country
 cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
-cds.matching.name-id-organisation.registered-partnership.name.hint = Enter the exact name that you registered with HMRC. We will use this to verify your identity. <br><br> You can find this name on documents from HMRC. For example, a confirmation of your partnership registration.
-
-cds.matching.name-id-organisation.limited-liability-partnership.name = Registered partnership name
-cds.matching.name-id-organisation.limited-liability-partnership.name.hint = <p class="govuk-body">We will use this to verify your identity. You can get the name from the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
-
 
 #address check limited companies
 confirm-business-details.heading2=Are these the organisation details you want to use to get an EORI number?
@@ -1260,7 +1294,8 @@ cds.subscription.contact-details.heading=EORI number application contact details
 cds.subscription.contact-details.full-name.label=Full name
 cds.subscription.contact-details.email.label=Email address
 cds.subscription.contact-details.telephone.label=Telephone (optional)
-cds.subscription.contact-details.telephone.hint=<p class="govuk-body" id="telephone-para">We’ll only use this if we need to talk to you about this application.</p> For international numbers include the country code.
+cds.subscription.contact-details.telephone.hint= For international numbers include the country code.
+cds.subscription.contact-details.telephone.para=We’ll only use this if we need to talk to you about this application.
 cds.subscription.contact-details.fax.label=Fax (optional)
 cds.subscription.contact-details.fax.hint=For international numbers include the country code.
 cds.subscription.contact-details.street.label=Address line 1
@@ -1317,7 +1352,7 @@ cds.check-your-details.utrnumber=Corporation Tax UTR number
 cds.check-your-details.utrnumber.partnership=Partnership Self Assessment UTR
 #Error page
 cds.error.title=Sorry, there is a problem with the service
-cds.error.message.part1=Please try again later.
+cds.error.message.part1=Try again later.
 cds.error.message.part2=We have not saved your answers. When the service is available, you will have to start again.
 cds.error.helpSupport=Help and support
 cds.error.contact.part1=Telephone: 0300 322 7067
@@ -1409,8 +1444,18 @@ business-details-recovery.problem=There was a problem with the service when you 
 
 # messages-ecc file
 
-cds.banner.registration=Get an EORI
-cds.banner.subscription=Subscribe to {0}
+cds.banner.registration=Get an EORI number
+cds.banner.subscription.eori-only=Get an EORI number
+cds.banner.subscription.ars = Subscribe to advance rulings
+cds.banner.subscription.gagmr=Subscribe to the Goods Vehicle Movement Service
+cds.banner.subscription.atar=Subscribe to Advance Tariff Rulings
+cds.banner.subscription.esc = Subscribe to Report and manage your allowance for Customs Duty waiver claims
+cds.banner.subscription.route1=Subscribe to Customs Trader Services
+cds.banner.subscription.ivd=Subscribe to Customs Trader Services
+cds.banner.subscription.ndrc=Subscribe to Customs Trader Services
+cds.banner.subscription.gbss=Subscribe to the Safety and Security GB service
+cds.banner.subscription.ctc=Subscribe to the New Computerised Transit System (NCTS)
+cds.banner.subscription.cds=Subscribe to the Customs Declaration Service
 
 ecc.subscription.enter-eori-number.heading=What is your GB Economic Operator Registration and Identification (EORI) number?
 cds.subscription.enter-eori-number.no-eori.summary=I do not have an EORI number
@@ -1457,10 +1502,10 @@ cds.subscription.outcomes.inprocessing.we-are-processing=We are processing your 
 
 cds.enrolment.already.exists.for-group.para1=Your organisation is already subscribed to {0}. Ask a team member for access.
 
-cds.sub01.outcome.processing.heading-noname=Your {0} application is being processed
-cds.sub01.outcome.processing.title=The {0} application is being processed
-cds.sub01.outcome.processing.we-are-processing.para1=We will email you with the outcome of your application.
-cds.sub01.outcome.processing.we-are-processing.para2=This can take up to 5 working days from the date we received your application.
+cds.sub01.outcome.processing.heading-noname=Application sent
+cds.sub01.outcome.processing.title=Application sent
+cds.sub01.outcome.processing.we-are-processing.para1=We''ll check your application. This can take up to 5 working days.
+cds.sub01.outcome.processing.we-are-processing.para2=Then we''ll email the result of your application.
 
 cds.subscription.verify-email.title=Confirm your email address
 
@@ -1485,8 +1530,8 @@ cds.email-confirmed.para.get-access=You can continue with your application.
 
 cds.subscription.outcomes.success.will-send-email=We will send you an email to confirm when you have access to {0}. This can take up to two hours.
 
-cds.registration.you-already-have-eori.title=You already have an EORI
-cds.registration.you-already-have-eori.para1=We have detected you already have an EORI.  You can continue and subscribe to the the {0} service.
+cds.registration.you-already-have-eori.title=You already have an EORI number
+cds.registration.you-already-have-eori.para1=You can subscribe to this service.
 
 cds.registration.you-already-have-eori.individual.title=You already have an EORI number
 cds.registration.you-already-have-eori.group.title=Your business or organisation already has an EORI number
@@ -1545,10 +1590,23 @@ dob.error.invalid-date=Date of birth must be a real date
 dob.error.minMax=Date of birth must be between {0} and today
 
 doe.error.empty-date=Enter your date of establishment
+date-of-establishment.day.empty=Date of establishment must include a day
+date-of-establishment.month.empty=Date of establishment must include a month
+date-of-establishment.year.empty=Date of establishment must include a year
+date-of-establishment.day-date-of-establishment.month.empty=Date of establishment must include a day and month
+date-of-establishment.day-date-of-establishment.year.empty=Date of establishment must include a day and year
+date-of-establishment.month-date-of-establishment.year.empty=Date of establishment must include a month and year
+date-invalid-year-too-short=Year must include 4 numbers
 doe.error.future-date=Date of establishment must be in the past
 doe.error.invalid-date=Date of establishment must be a real date
 doe.error.minMax=Date of establishment must be between {0} and today
 
+vat-registration-date.day.empty=VAT registration date must include a day
+vat-registration-date.month.empty=VAT registration date must include a month
+vat-registration-date.year.empty=VAT registration date must include a year
+vat-registration-date.day-vat-registration-date.month.empty=VAT registration date must include a day and month
+vat-registration-date.day-vat-registration-date.year.empty=VAT registration date must include a day and year
+vat-registration-date.month-vat-registration-date.year.empty=VAT registration date must include a month and year
 
 vat.error.empty-date-new=Enter your VAT registration date
 vat.error.invalid-date-new=Enter a real date
@@ -1581,12 +1639,16 @@ cds.registration.user-location.location.uk.label=United Kingdom
 cds.registration.user-location.location.third-country.label=Outside the European Union
 cds.registration.user-location.location.third-country-inc-eu.label=Rest of the world
 
-cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.registered-company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.partnership.utr=Partnership Self Assessment Unique Taxpayer Reference (UTR)
-cds.matching.name-id-organisation.organisation.utr=Corporation Tax Unique Taxpayer Reference (UTR)
+cds.matching.name-id-organisation.identity.verify = We use these details to verify your identity.
 
-cds.subscription.date-of-establishment.company.title-and-heading=Date when your company was established
+
+cds.matching.name-id-organisation.company.utr=Corporation Tax Unique Taxpayer Reference (UTR)
+cds.matching.name-id-organisation.registered-company.utr=What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)?
+cds.matching.name-id-organisation.registered-company.matching-page.utr= What is the partnership’s Corporation Tax Unique Taxpayer Reference (UTR)?
+cds.matching.name-id-organisation.partnership.utr=What is the partnership’s Self Assessment Unique Taxpayer Reference (UTR)?
+cds.matching.name-id-organisation.organisation.utr=What is the organisation’s Corporation Tax Unique Taxpayer Reference (UTR)?
+
+cds.subscription.date-of-establishment.company.title-and-heading=When was the company established?
 
 cds.subscription.address-details.postcode.row.label=Postal code
 
@@ -1599,8 +1661,8 @@ cds.form.declaration=Declaration
 cds.form.send=Confirm and send
 
 cds.mig.existing.outcomes.application-received.title=Your new EORI number
-cds.reg.existing.outcomes.success.heading.part1=Subscription request received for
-cds.reg.existing.outcomes.success.heading.part1.standalone=Your new EORI number for {0} is {1}
+cds.reg.existing.outcomes.success.heading.part1=Application sent
+cds.reg.existing.outcomes.success.heading.part1.standalone=Your new EORI number is: {0}
 
 cds.if.you.need.help.heading=If you need help
 cds.if.you.need.help.telephone1=Telephone: 0300 322 7067
@@ -1639,7 +1701,7 @@ confirm-business-details.individual.yes-wrong-address=No, I want to change my ad
 yes-no-wrong-address.error=Select yes if this is your address
 
 confirm-contact-address-details.yes=Yes
-confirm-contact-address-details.no=I want to enter the contact address manually
+confirm-contact-address-details.no=No, I want to enter the address manually
 
 ecc.contact-address-details.error.yes-no-answer=Select yes if the contact address is right
 
@@ -1665,7 +1727,8 @@ subscription-journey.how-confirm-identity.nino.heading=Enter your National Insur
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Unique Taxpayer Reference (UTR)?
 subscription-journey.how-confirm-identity.utr.row.org.heading=What is your Corporation Tax Unique Taxpayer Reference (UTR)?
-subscription-journey.how-confirm-identity.utr.hint=<p class="govuk-body">You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a></p>  This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
+subscription-journey.how-confirm-identity.utr.para=You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a>
+subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
 
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
 ecc.reg06.outcome.eori = EORI number {0}
@@ -1792,10 +1855,18 @@ ecc.subscription.outcomes.guidance.xi.eori.bullet2=Query regarding a current EOR
 ecc.subscription.outcomes.guidance.xi.eori.warning.info=Do not tick the box "Query regarding an EORI number already issued" or "EORI number to register for customs system access".
 ecc.subscription.outcomes.guidance.xi.eori.href=<a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" class="govuk-link" target="_blank" rel="noopener noreferrer">Apply for an XI EORI.</a>
 
-ecc.subscription.organisation-disclose-personal-details-consent.title = Can we add your name and address to the EORI number checker?
-ecc.subscription.organisation-disclose-personal-details-consent.hint =HMRC will add your new EORI number to the <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Check an EORI number service (opens in new tab)</a>. This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number.
-ecc.subscription.organisation-disclose-personal-details-consent.hint2 = Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.
-ecc.subscription.organisation-disclose-personal-details-consent.individual.hint = HMRC will add your EORI number to a <a href="https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp" class="govuk-link" target="_blank" rel="noopener noreferrer">public checker kept by the European Commission (opens in new tab)</a>. You can also agree to include your name and address. This can help customs and freight agents identify you and process your shipments.
+ecc.subscription.organisation-disclose-personal-details-consent.title = ‘Check an EORI number’ service
+ecc.subscription.organisation-disclose-personal-details-consent.para1 =Anyone can use this service to <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">check if an EORI number is valid (opens in new tab)</a>. Members of the public cannot use it to find out what your EORI number is.
+ecc.subscription.organisation-disclose-personal-details-consent.org.para2 = You can consent to show the company’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.
+ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2 = You can consent to show the partnership’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.
+ecc.subscription.organisation-disclose-personal-details-consent.charity.para2 = You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods.
+ecc.subscription.organisation-disclose-personal-details-consent.individual.para2 = You can consent to show your name and address alongside your EORI number. Doing so can help reduce errors and delays when moving your goods.
+ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para = You can withdraw your consent at any time by filling in a <a href="https://www.gov.uk/eori/get-help-or-report-a-change-of-circumstances" class="govuk-link" id="change-of-circumstances" target="_blank" rel="noopener noreferrer">change of circumstances form (opens in new tab)</a>.
+
+ecc.subscription.organisation-disclose-personal-details-consent.org.question = Do you consent to show the company’s name and address on the ‘Check an EORI number’ service?
+ecc.subscription.organisation-disclose-personal-details-consent.partnership.question = Do you consent to show the partnership’s name and address on the ‘Check an EORI number’ service?
+ecc.subscription.organisation-disclose-personal-details-consent.charity.question = Do you consent to show the organisation’s name and address on the ‘Check an EORI number’ service?
+ecc.subscription.organisation-disclose-personal-details-consent.individual.question = Do you consent to show your name and address on the ‘Check an EORI number’ service?
 
 ecc.start-page.title.ars = Get a subscription to advance rulings and an EORI number starting with GB
 ecc.start-page.title.gagmr = Get a subscription to the Goods Vehicle Movement Service and an EORI number starting with GB
@@ -1825,12 +1896,12 @@ ecc.start-page.para1.bullet2.gbss = a subscription to the Safety and Security GB
 ecc.start-page.para1.bullet2.ctc = a subscription to the New Computerised Transit System (NCTS)
 ecc.start-page.para1.bullet2.cds = a subscription to the Customs Declaration Service
 ecc.start-page.para1.bullet2.eori-only = a subscription to the Customs Declaration Service
-ecc.start-page.para1.bullet2.esc = a subscription to Report and manage your allowance for Customs Duty Waiver claims
+ecc.start-page.para1.bullet2.esc = a subscription to Report and manage your allowance for Customs Duty waiver claims
 
 ecc.start-page.when.title = What you will need
 ecc.start-page.when.title2 = If you are UK VAT registered
 ecc.start-page.when.para1 = To verify your identity we will ask you to enter:
-ecc.start-page.when.para1.bullet1 = latest VAT Return total or date of VAT registration
+ecc.start-page.when.para1.bullet1 = date of VAT registration
 ecc.start-page.when.para1.bullet2 = VAT registration number
 ecc.start-page.when.para1.bullet3 = postcode where you are registered for VAT
 ecc.start-page.gbeori.para1.link = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Sign in to your VAT online account (opens in new tab)</a>
@@ -1841,13 +1912,13 @@ ecc.start-page.gbeori.para1.title = To verify your identity you will need to pro
 ecc.start-page.gbeori.para1.bullet1 = registered name and address
 
 ecc.start-page.gbeori.para1.bullet3 = Corporation Tax Unique Taxpayer Reference (UTR), if you pay Corporation Tax in the UK
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" target="_blank" rel="noopener noreferrer">Find your UTR number (opens in a new tab)</a>
+ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" target="_blank" class="govuk-link" rel="noopener noreferrer">Find your UTR number (opens in new tab)</a>
 
 ecc.start-page.solo.title = If you apply as a sole trader or individual
 ecc.start-page.gbeori.para3.title = We will verify your identity by asking for one of the following:
 ecc.start-page.gbeori.para3.bullet1 = National Insurance number, if you have worked in the UK
 ecc.start-page.gbeori.para3.bullet2 = Self Assessment Unique Taxpayer Reference (UTR), if you registered for Self Assessment
-ecc.start-page.gbeori.link = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new window or tab)</a>
+ecc.start-page.gbeori.link = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a>
 ecc.start-page.gbeori.link.text = from the list on Companies House
 ecc.start-page.company.title = Standard Industrial Classification Code (SIC code)
 
@@ -1859,7 +1930,7 @@ ecc.start-page.sic.title = Find your SIC code
 ecc.start-page.sic.para1 = If you are UK VAT registered you can find the code on your VAT certificate. It’s called ‘trade classification (SIC code)’.
 ecc.start-page.sic.para2 = If you are not UK VAT registered, or cannot find the code, you can choose one from the list on Companies House. You can search for a code that best describes what your organisation does.
 ecc.start-page.company.para2 = If you pay Corporation Tax in the UK we will ask for your Corporation Tax Unique Taxpayer Reference (UTR).
-ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new window or tab)</a>.
+ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new tab)</a>.
 
 
 ecc.start-page.sole-trader.title = How long it takes
@@ -1920,7 +1991,7 @@ cds.subscription.outcomes.success.extra.information.next.new.ss =<li>make entry 
 cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>make entry summary declarations</li>
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>submit union transit declarations through NCTS</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>use the Customs Declaration Service</li>
-cds.subscription.outcomes.success.extra.information.next.new.esc =<li>report and manage your allowance for Customs Duty Waiver claims</li>
+cds.subscription.outcomes.success.extra.information.next.new.esc =<li>report and manage your allowance for Customs Duty waiver claims</li>
 
 ecc.eor-vat-return-error.incorrect.input = Enter a value to 2 decimal places. For example, £100.00
 ecc.eor-vat-return-error.incorrect.no-input = Enter your latest VAT Return total or Box 5 amount
@@ -1941,4 +2012,9 @@ ecc.start-page.para1.bullet2.new.ndrc = a subscription to Customs Trader Service
 ecc.start-page.para1.bullet2.new.gbss = a subscription to the Safety and Security GB service
 ecc.start-page.para1.bullet2.new.ctc = a subscription to the New Computerised Transit System (NCTS)
 ecc.start-page.para1.bullet2.new.cds = a subscription to the Customs Declaration Service
-ecc.start-page.para1.bullet2.new.esc = a subscription to Report and manage your allowance for Customs Duty Waiver claims
+ecc.start-page.para1.bullet2.new.esc = a subscription to Report and manage your allowance for Customs Duty waiver claims
+
+#Locked email screen
+lockedEmail.heading = You’ve entered an incorrect code too many times
+lockedEmail.para1 = You will not be able to continue with your application.
+lockedEmail.para2 = You can try again in 24 hours.

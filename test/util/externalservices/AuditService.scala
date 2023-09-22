@@ -46,7 +46,7 @@ object AuditService {
   def verifyXAuditWriteWithBody(body: JsValue): Unit =
     verify(
       moreThanOrExactly(1),
-      postRequestedFor(urlEqualTo(AuditWriteUrl)).withRequestBody(equalToJson(body.toString(), true, true))
+      postRequestedFor(urlEqualTo(AuditWriteUrl)).withRequestBody(equalToJson(body.toString, true, true))
     )
 
 }

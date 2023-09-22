@@ -17,14 +17,14 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateForm.vatRegistrationDateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, we_cannot_confirm_your_identity}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{GetVatCustomerInformationService, SubscriptionBusinessService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_vat_registration
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
@@ -34,11 +34,15 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateOfVatRegistrationController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
+  getVatCustomerInformationService: GetVatCustomerInformationService,
   mcc: MessagesControllerComponents,
   dateOfVatRegistrationView: date_of_vat_registration,
-  weCannotConfirmYourIdentity: we_cannot_confirm_your_identity
+  form: VatRegistrationDateFormProvider,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val vatRegistrationDateForm = form()
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
@@ -51,8 +55,10 @@ class DateOfVatRegistrationController @Inject() (
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)
           if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
+        if (appConfig.integrationFrameworkFeatureFlag)
+          getVatCustomerInformationService.checkResponseMatchesNewVATAPI(response)
         Redirect(ContactDetailsController.createForm(service))
-      case _ => Redirect(DateOfVatRegistrationController.redirectToCannotConfirmIdentity(service))
+      case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }
 
   def submit(service: Service): Action[AnyContent] =
@@ -60,13 +66,6 @@ class DateOfVatRegistrationController @Inject() (
       vatRegistrationDateForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
         formData => lookupDateOfVatRegistration(formData, service)
-      )
-    }
-
-  def redirectToCannotConfirmIdentity(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Ok(weCannotConfirmYourIdentity(isInReviewMode = false, VatDetailsController.createForm(service).url, service))
       )
     }
 

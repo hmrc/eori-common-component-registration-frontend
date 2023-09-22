@@ -21,10 +21,12 @@ import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, po
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
 import play.api.http.HeaderNames
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.mvc.Http.MimeTypes
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.HandleSubscriptionConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.HandleSubscriptionRequest
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
@@ -55,6 +57,7 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
         "auditing.consumer.baseUri.port"                 -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val handleSubscriptionConnector = app.injector.instanceOf[HandleSubscriptionConnector]
@@ -98,7 +101,7 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      scala.concurrent.Await.ready(handleSubscriptionConnector.call(handleSubscriptionRequest), defaultTimeout)
+      await(handleSubscriptionConnector.call(handleSubscriptionRequest))(defaultTimeout)
       WireMock.verify(
         postRequestedFor(urlEqualTo(expectedPostUrl))
           .withRequestBody(equalToJson(serviceRequestJson.toString))

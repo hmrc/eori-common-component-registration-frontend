@@ -15,13 +15,13 @@
  *@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
-@import views.html.helper._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset, GovukHint}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset, GovukHint}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
+@import views.html.helper._
 
 @this(
 layout_di: layout,
@@ -29,7 +29,9 @@ govukButton: GovukButton,
 inputText: helpers.inputText,
 errorSummary: helpers.errorSummary,
 goveukFieldSet: GovukFieldset,
-govukHint: GovukHint
+govukHint: GovukHint,
+        p: helpers.paragraph,
+        h2: helpers.h2
 )
 
 
@@ -39,12 +41,8 @@ govukHint: GovukHint
 
 @html = {
 
-<p id="contact-details-intro" class="govuk-label govuk-!-margin-bottom-6">@messages("cds.subscription.contact-details.intro")</p>
 
-<div id="email-outer" class="govuk-form-group ">
-    <span class="govuk-label govuk-!-font-weight-bold">@messages("subscription.check-your-email.label")</span>
-    <div id="email" class="govuk-body">@email</div>
-</div>
+@p(messages("cds.subscription.contact-details.intro"), Some("contact-details-intro"), "govuk-body govuk-!-margin-bottom-6")
 
 @inputText(
     form = contactForm,
@@ -53,8 +51,12 @@ govukHint: GovukHint
     label = "cds.subscription.contact-details.full-name.label",
     isPageHeading = false,
     classes = Some("govuk-!-width-one-half"),
-    labelClasses = Some("govuk-!-font-weight-bold")
+    labelClasses = Some("govuk-!-font-weight-bold"),
+    autocomplete = Some("name")
 )
+
+@h2(messages("cds.subscription.contact-details.telephone.label"), classes = "govuk-heading-s")
+@p(messages("cds.subscription.contact-details.telephone.para"), Some("telephone-para"))
 
 @inputText(
     form = contactForm,
@@ -64,11 +66,12 @@ govukHint: GovukHint
     isPageHeading = false,
     classes = Some("govuk-!-width-one-half"),
     hint = Some(messages("cds.subscription.contact-details.telephone.hint")),
-    labelClasses = Some("govuk-!-font-weight-bold")
+    labelClasses = Some("govuk-visually-hidden"),
+    autocomplete = Some("tel")
     )
 }
 
-@layout_di(messages("cds.subscription.contact-details.page.title"), form = Some(contactForm)) {
+@layout_di(messages("cds.subscription.contact-details.page.title"), form = Some(contactForm), service = service) {
 
 
 <div>
@@ -77,6 +80,7 @@ govukHint: GovukHint
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.submit(isInReviewMode, service), "contactDetailsForm") {
 
     @CSRF.formField
+
 
     @goveukFieldSet(
         Fieldset(

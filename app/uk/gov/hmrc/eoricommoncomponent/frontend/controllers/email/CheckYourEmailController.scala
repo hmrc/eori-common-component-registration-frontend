@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CdsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.CheckYourEmailService
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CheckYourEmailController @Inject() (
@@ -41,14 +42,13 @@ class CheckYourEmailController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
-      implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
+      implicit request => implicit userWithEnrolments: LoggedInUserWithEnrolments =>
         confirmEmailYesNoAnswerForm()
           .bindFromRequest()
           .fold(
             formWithErrors =>
               checkYourEmailService.handleFormWithErrors(userWithEnrolments, formWithErrors, isInReviewMode, service),
-            yesNoAnswer =>
-              checkYourEmailService.locationByAnswer(GroupId(userWithEnrolments.groupId), yesNoAnswer, service)
+            yesNoAnswer => checkYourEmailService.locationByAnswer(yesNoAnswer, service)
           )
     }
 

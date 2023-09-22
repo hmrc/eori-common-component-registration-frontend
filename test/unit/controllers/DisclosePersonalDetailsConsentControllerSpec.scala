@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-import java.util.UUID
 import common.pages.subscription.DisclosePersonalDetailsConsentPage
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -24,12 +23,14 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DisclosePersonalDetailsConsentController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DisclosePersonalDetailsConsentViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -37,6 +38,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 import util.builders.YesNoFormBuilder._
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -57,6 +59,8 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   private val disclosePersonalDetailsConsentView = instanceOf[disclose_personal_details_consent]
 
+  private val mockDisclosePersonalDetailsConsentViewModel = mock[DisclosePersonalDetailsConsentViewModel]
+
   private val problemWithSelectionError =
     "Select yes to show your name and address on the Check an EORI number service."
 
@@ -71,7 +75,8 @@ class DisclosePersonalDetailsConsentControllerSpec
     mockRequestSessionData,
     mcc,
     disclosePersonalDetailsConsentView,
-    mockSubscriptionFlowManager
+    mockSubscriptionFlowManager,
+    mockDisclosePersonalDetailsConsentViewModel
   )
 
   private val subscriptionFlows =
@@ -89,10 +94,10 @@ class DisclosePersonalDetailsConsentControllerSpec
       ),
       (
         ThirdCountryIndividualSubscriptionFlow,
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        "‘Check an EORI number’ service",
+        "mocked paragraph 2",
+        "Yes",
+        "No",
         false,
         true,
         false,
@@ -100,10 +105,10 @@ class DisclosePersonalDetailsConsentControllerSpec
       ),
       (
         ThirdCountryOrganisationSubscriptionFlow,
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        "‘Check an EORI number’ service",
+        "mocked paragraph 2",
+        "Yes",
+        "No",
         false,
         false,
         false,
@@ -111,10 +116,10 @@ class DisclosePersonalDetailsConsentControllerSpec
       ),
       (
         PartnershipSubscriptionFlow,
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        "‘Check an EORI number’ service",
+        "mocked paragraph 2",
+        "Yes",
+        "No",
         true,
         false,
         true,
@@ -122,23 +127,23 @@ class DisclosePersonalDetailsConsentControllerSpec
       ),
       (
         OrganisationSubscriptionFlow,
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        "‘Check an EORI number’ service",
+        "mocked paragraph 2",
+        "Yes",
+        "No",
         true,
         false,
         false,
         true
       ),
       (
-        SoleTraderSubscriptionFlow, // Flow cannot be duplicated in this table and we do not have enough flows, using this to progress with tests
-        "Can we add your name and address to the EORI number checker?",
-        "HMRC will add your new EORI number to the Check an EORI number service (opens in new tab). This is a publicly available checker that lists all EORI numbers starting with GB. Note that the checker cannot be used by anyone to find out your EORI number. Letting us add your name and address next to your EORI number helps customs and freight agents to identify you, which will reduce errors and minimise delays. We will use the name and address you have just confirmed.",
-        "Select yes to show your name and address on the Check an EORI number service",
-        "Select no to just show your EORI number",
+        SoleTraderSubscriptionFlow,
+        "‘Check an EORI number’ service",
+        "mocked paragraph 2",
+        "Yes",
+        "No",
         true,
-        false,
+        true,
         false,
         false
       )
@@ -150,6 +155,10 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockSubscriptionDetailsService.cacheConsentToDisclosePersonalDetails(any[YesNo])(any[Request[_]]))
       .thenReturn(Future.successful {})
     setupMockSubscriptionFlowManager(EoriConsentSubscriptionFlowPage)
+
+    when(mockDisclosePersonalDetailsConsentViewModel.textPara2()(any[Messages], any[Request[AnyContent]])).thenReturn(
+      "mocked paragraph 2"
+    )
   }
 
   override protected def afterEach(): Unit = {
@@ -201,7 +210,7 @@ class DisclosePersonalDetailsConsentControllerSpec
           ) { result =>
             status(result) shouldBe OK
             val page = CdsPage(contentAsString(result))
-            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) shouldBe consentInfo
+            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoPara2Xpath) should include(consentInfo)
             page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
             page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
           }
@@ -223,6 +232,14 @@ class DisclosePersonalDetailsConsentControllerSpec
             isPartnership,
             isCharity
           ) =>
+        val orgType =
+          if (isIndividual) CdsOrganisationType.Individual
+          else if (isPartnership) CdsOrganisationType.Partnership
+          else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+          else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
+          else CdsOrganisationType.Company
+        when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
         s"display the form for subscription flow $subscriptionFlow" in {
           showReviewForm(
             subscriptionFlow = subscriptionFlow,
@@ -231,6 +248,13 @@ class DisclosePersonalDetailsConsentControllerSpec
             isPartnership = isPartnership,
             isCharity = isCharity
           ) { result =>
+            val orgType =
+              if (isIndividual) CdsOrganisationType.Individual
+              else if (isPartnership) CdsOrganisationType.Partnership
+              else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+              else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
+              else CdsOrganisationType.Company
+            when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
             status(result) shouldBe OK
             val html: String = contentAsString(result)
             html should include("id=\"yes-no-answer-true\"")
@@ -247,120 +271,128 @@ class DisclosePersonalDetailsConsentControllerSpec
             isPartnership = isPartnership,
             isCharity = isCharity
           ) { result =>
+            val orgType =
+              if (isIndividual) CdsOrganisationType.Individual
+              else if (isPartnership) CdsOrganisationType.Partnership
+              else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+              else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
+              else CdsOrganisationType.Company
+            when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
             status(result) shouldBe OK
             val page = CdsPage(contentAsString(result))
-            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoXpath) shouldBe consentInfo
+            page.getElementsText(DisclosePersonalDetailsConsentPage.consentInfoPara2Xpath) should include(consentInfo)
             page.getElementsText(DisclosePersonalDetailsConsentPage.yesToDiscloseXpath) shouldBe yesLabel
             page.getElementsText(DisclosePersonalDetailsConsentPage.noToDiscloseXpath) shouldBe noLabel
           }
         }
     }
-  }
 
-  "Loading the page in create mode" should {
+    "Loading the page in create mode" should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
+      assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
-    "set form action url to submit in create mode" in {
-      showCreateForm()(verifyFormActionInCreateMode)
-    }
+      "set form action url to submit in create mode" in {
+        showCreateForm()(verifyFormActionInCreateMode)
+      }
 
-    "display the 'Back' link according the current subscription flow" in {
-      showCreateForm()(verifyBackLinkInCreateModeRegister)
-    }
-  }
-
-  "Loading the page in review mode" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.reviewForm(atarService))
-
-    "set form action url to submit in review mode" in {
-      showReviewForm()(verifyFormSubmitsInReviewMode)
-    }
-
-    "not display the number of steps and display the 'Back' link to review page" in {
-      showReviewForm()(verifyNoStepsAndBackLinkInReviewMode)
-    }
-
-    "display yes when the user's previous answer of yes is in the cache" in {
-      showReviewForm(previouslyAnswered = true) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe false
-        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe true
+      "display the 'Back' link according the current subscription flow" in {
+        showCreateForm()(verifyBackLinkInCreateModeRegister)
       }
     }
 
-    "display no when the user's previous answer of no is in the cache" in {
-      showReviewForm(previouslyAnswered = false) { result =>
-        val page = CdsPage(contentAsString(result))
-        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe true
-        page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe false
+    "Loading the page in review mode" should {
+
+      assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.reviewForm(atarService))
+
+      "set form action url to submit in review mode" in {
+        showReviewForm()(verifyFormSubmitsInReviewMode)
+      }
+
+      "not display the number of steps and display the 'Back' link to review page" in {
+        showReviewForm()(verifyNoStepsAndBackLinkInReviewMode)
+      }
+
+      "display yes when the user's previous answer of yes is in the cache" in {
+        showReviewForm(previouslyAnswered = true) { result =>
+          val page = CdsPage(contentAsString(result))
+          page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe false
+          page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe true
+        }
+      }
+
+      "display no when the user's previous answer of no is in the cache" in {
+        showReviewForm(previouslyAnswered = false) { result =>
+          val page = CdsPage(contentAsString(result))
+          page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe true
+          page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe false
+        }
+      }
+
+      "display the correct text for the continue button" in {
+        showReviewForm() { result =>
+          val page = CdsPage(contentAsString(result))
+          page.getElementText(
+            DisclosePersonalDetailsConsentPage.continueButtonXpath
+          ) shouldBe ContinueButtonTextInReviewMode
+        }
       }
     }
 
-    "display the correct text for the continue button" in {
-      showReviewForm() { result =>
-        val page = CdsPage(contentAsString(result))
-        page.getElementText(
-          DisclosePersonalDetailsConsentPage.continueButtonXpath
-        ) shouldBe ContinueButtonTextInReviewMode
+    "The Yes No Radio Button " should {
+      "display a relevant error if no option is chosen" in {
+        submitForm(ValidRequest - yesNoInputName) { result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            DisclosePersonalDetailsConsentPage.pageLevelErrorSummaryListXPath
+          ) shouldBe problemWithSelectionError
+          page.getElementsText(
+            DisclosePersonalDetailsConsentPage.fieldLevelErrorYesNoAnswer
+          ) shouldBe s"Error: $problemWithSelectionError"
+        }
+      }
+
+      "display a relevant error if an invalid answer option is selected" in {
+        val invalidOption = UUID.randomUUID.toString
+        submitForm(ValidRequest + (yesNoInputName -> invalidOption)) { result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            DisclosePersonalDetailsConsentPage.pageLevelErrorSummaryListXPath
+          ) shouldBe problemWithSelectionError
+          page.getElementsText(
+            DisclosePersonalDetailsConsentPage.fieldLevelErrorYesNoAnswer
+          ) shouldBe s"Error: $problemWithSelectionError"
+        }
       }
     }
-  }
 
-  "The Yes No Radio Button " should {
-    "display a relevant error if no option is chosen" in {
-      submitForm(ValidRequest - yesNoInputName) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          DisclosePersonalDetailsConsentPage.pageLevelErrorSummaryListXPath
-        ) shouldBe problemWithSelectionError
-        page.getElementsText(
-          DisclosePersonalDetailsConsentPage.fieldLevelErrorYesNoAnswer
-        ) shouldBe s"Error: $problemWithSelectionError"
+    "Submitting in Review Mode" should {
+
+      assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
+        mockAuthConnector,
+        controller.submit(isInReviewMode = true, atarService)
+      )
+
+      "allow resubmission in review mode when details are invalid" in {
+        submitFormInReviewMode(ValidRequest - yesNoInputName)(verifyFormSubmitsInReviewMode)
+      }
+
+      "redirect to review page when details are valid" in {
+        submitFormInReviewMode(ValidRequest)(verifyRedirectToReviewPage())
       }
     }
 
-    "display a relevant error if an invalid answer option is selected" in {
-      val invalidOption = UUID.randomUUID.toString
-      submitForm(ValidRequest + (yesNoInputName -> invalidOption)) { result =>
-        status(result) shouldBe BAD_REQUEST
-        val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          DisclosePersonalDetailsConsentPage.pageLevelErrorSummaryListXPath
-        ) shouldBe problemWithSelectionError
-        page.getElementsText(
-          DisclosePersonalDetailsConsentPage.fieldLevelErrorYesNoAnswer
-        ) shouldBe s"Error: $problemWithSelectionError"
+    "Submitting in Create Mode" should {
+
+      "allow resubmission in create mode when details are invalid" in {
+        submitFormInCreateMode(ValidRequest - yesNoInputName)(verifyFormActionInCreateMode)
       }
-    }
-  }
 
-  "Submitting in Review Mode" should {
-
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-      mockAuthConnector,
-      controller.submit(isInReviewMode = true, atarService)
-    )
-
-    "allow resubmission in review mode when details are invalid" in {
-      submitFormInReviewMode(ValidRequest - yesNoInputName)(verifyFormSubmitsInReviewMode)
-    }
-
-    "redirect to review page when details are valid" in {
-      submitFormInReviewMode(ValidRequest)(verifyRedirectToReviewPage())
-    }
-  }
-
-  "Submitting in Create Mode" should {
-
-    "allow resubmission in create mode when details are invalid" in {
-      submitFormInCreateMode(ValidRequest - yesNoInputName)(verifyFormActionInCreateMode)
-    }
-
-    "redirect to next page when details are valid" in {
-      submitFormInCreateMode(ValidRequest)(verifyRedirectToNextPageInCreateMode)
+      "redirect to next page when details are valid" in {
+        submitFormInCreateMode(ValidRequest)(verifyRedirectToNextPageInCreateMode)
+      }
     }
   }
 
@@ -382,6 +414,14 @@ class DisclosePersonalDetailsConsentControllerSpec
     when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
+    val orgType =
+      if (isIndividual) CdsOrganisationType.Individual
+      else if (isPartnership) CdsOrganisationType.Partnership
+      else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit
+      else if (!isUkJourney) CdsOrganisationType.ThirdCountryOrganisation
+      else CdsOrganisationType.Company
+    when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(orgType))
+
     test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
@@ -397,7 +437,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
 
     when(mockSubscriptionBusinessService.getCachedPersonalDataDisclosureConsent(any[Request[_]]))
-      .thenReturn(previouslyAnswered)
+      .thenReturn(Future.successful(previouslyAnswered))
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)
     when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
@@ -422,6 +462,9 @@ class DisclosePersonalDetailsConsentControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier]))
       .thenReturn(Right(OrganisationSubscriptionFlow))
+
+    when(mockRequestSessionData.userSelectedOrganisationType(any())).thenReturn(Some(CdsOrganisationType.Company))
+
     test(
       controller
         .submit(isInReviewMode, atarService)

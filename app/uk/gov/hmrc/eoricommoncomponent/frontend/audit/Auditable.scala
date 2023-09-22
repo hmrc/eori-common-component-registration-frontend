@@ -20,11 +20,11 @@ import play.api.libs.json.JsValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.AuditExtensions._
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Auditable @Inject() (auditConnector: AuditConnector, appConfig: AppConfig)(implicit ec: ExecutionContext) {
@@ -37,7 +37,7 @@ class Auditable @Inject() (auditConnector: AuditConnector, appConfig: AppConfig)
     tags: Map[String, String] = Map.empty,
     details: JsValue,
     eventType: String
-  )(implicit hc: HeaderCarrier): Unit =
+  )(implicit hc: HeaderCarrier): Future[AuditResult] =
     auditConnector.sendExtendedEvent(
       ExtendedDataEvent(auditSource, eventType, tags = hc.toAuditTags(transactionName, path) ++ tags, detail = details)
     )

@@ -54,9 +54,7 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
       }
 
       "display sub heading for CDS" in {
-        adminDoc.body().getElementsByTag("h2").text() must startWith(
-          "Help make GOV.UK better Customs Declaration Service Support links"
-        )
+        adminDoc.body().getElementsByTag("h2").text() must startWith("Customs Declaration Service Support links")
       }
 
       "display tell user about CDS access and link for accessing CDS services" in {
@@ -96,9 +94,7 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
       }
 
       "display sub heading for CDS" in {
-        standardDoc.body().getElementsByTag("h2").text() must startWith(
-          "Help make GOV.UK better Customs Declaration Service Support links"
-        )
+        standardDoc.body().getElementsByTag("h2").text() must startWith("Customs Declaration Service Support links")
       }
 
       "display tell user about CDS access and link for accessing CDS services" in {
@@ -108,23 +104,29 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
           "href"
         ) mustBe "https://www.gov.uk/government/collections/customs-declaration-service"
       }
-
     }
-
   }
 
   private lazy val adminDoc: Document = Jsoup.parse(
-    contentAsString(view(Some("testEORI"), isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(true)))
+    contentAsString(
+      view(Some("testEORI"), isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(true), atarService)
+    )
   )
 
   private lazy val standardDoc: Document = Jsoup.parse(
-    contentAsString(view(Some("testEORI"), isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(false)))
+    contentAsString(
+      view(Some("testEORI"), isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(false), atarService)
+    )
   )
 
   private lazy val adminNoEORIDoc: Document =
-    Jsoup.parse(contentAsString(view(None, isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(true))))
+    Jsoup.parse(
+      contentAsString(view(None, isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(true), atarService))
+    )
 
   private lazy val standardNoEORIDoc: Document =
-    Jsoup.parse(contentAsString(view(None, isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(false))))
+    Jsoup.parse(
+      contentAsString(view(None, isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(false), atarService))
+    )
 
 }

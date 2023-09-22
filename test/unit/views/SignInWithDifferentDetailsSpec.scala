@@ -48,5 +48,5 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
 
   }
 
-  lazy val doc: Document = Jsoup.parse(contentAsString(view()))
+  lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService)))
 }

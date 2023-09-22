@@ -17,11 +17,11 @@
 package unit.viewModels
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, LLP, Partnership, UnincorporatedBody}
-import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel
 import play.api.data.Form
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, Partnership, UnincorporatedBody}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel
 import util.ControllerSpec
 
 import java.time
@@ -29,34 +29,6 @@ import java.time
 class DateOfEstablishmentViewModelSpec extends UnitSpec with ControllerSpec {
 
   "DateOfEstablishmentViewModel" should {
-
-    "return the correct intro text for LLP" in {
-
-      val orgType = LLP
-      val result  = DateOfEstablishmentViewModel.introText(orgType)
-      result should startWith("Enter the date shown on the partnership’s certificate of incorporation.")
-    }
-
-    "return the correct intro text for UnincorporatedBody" in {
-
-      val orgType = UnincorporatedBody
-      val result  = DateOfEstablishmentViewModel.introText(orgType)
-      result should startWith("Enter the date shown on your organisation’s certificate of incorporation.")
-    }
-
-    "return the correct intro text for Partnership" in {
-
-      val orgType = Partnership
-      val result  = DateOfEstablishmentViewModel.introText(orgType)
-      result shouldBe "Enter the date that you registered your partnership with HMRC."
-    }
-
-    "return the correct intro text for other organisation types" in {
-
-      val orgType = CorporateBody
-      val result  = DateOfEstablishmentViewModel.introText(orgType)
-      result should startWith("Enter the date shown on your company’s certificate of incorporation.")
-    }
 
     "return the correct header and title for Partnership and isRestOfWorldJourney true" in {
       val orgType              = Partnership

@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import java.time.{Clock, LocalDateTime, ZoneId}
-
 import play.api.libs.json.Json
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.ContactDetail
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.CommonHeader
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.ContactDetail
+
+import java.time.{Clock, LocalDateTime, ZoneId}
 
 case class ContactInformation(
   personOfContact: Option[String] = None,
@@ -70,7 +70,7 @@ object ContactInformation extends CommonHeader {
       city = Some(dashForEmpty(contactDetails.city)),
       postalCode = contactDetails.postcode.filter(_.nonEmpty),
       countryCode = Some(contactDetails.countryCode),
-      telephoneNumber = if (contactDetails.telephone.isBlank) None else Some(contactDetails.telephone),
+      telephoneNumber = contactDetails.telephone,
       faxNumber = contactDetails.fax,
       emailAddress = Some(contactDetails.emailAddress)
     )

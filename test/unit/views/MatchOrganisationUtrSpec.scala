@@ -55,12 +55,6 @@ class MatchOrganisationUtrSpec extends ViewSpec {
     "have an input of type 'radio' for No I don't have a UTR" in {
       doc.body.getElementById("have-utr-false").attr("type") mustBe "radio"
     }
-    "have aria-described-by on the fieldset" in {
-      doc.body
-        .getElementsByClass("govuk-fieldset")
-        .attr("aria-describedby") mustBe "have-utr-hint"
-
-    }
   }
 
   "Match UTR page in the sole trader case" should {

@@ -70,7 +70,7 @@ class SubscriptionRecoveryController @Inject() (
       implicit request => _: LoggedInUserWithEnrolments =>
         for {
           eori <- sessionCache.eori
-        } yield Ok(alreadyHaveEori(eori))
+        } yield Ok(alreadyHaveEori(eori, service))
     }
 
   private def subscribeGetAnEori(
@@ -78,9 +78,8 @@ class SubscriptionRecoveryController @Inject() (
   )(implicit ec: ExecutionContext, request: Request[AnyContent]): Future[Result] = {
     val result = for {
       registrationDetails <- sessionCache.registrationDetails
-      safeId          = registrationDetails.safeId.id
-      queryParameters = (CustomsId.taxPayerID -> safeId) :: buildQueryParams
-      sub09Result  <- SUB09Connector.subscriptionDisplay(queryParameters)
+      safeId = registrationDetails.safeId.id
+      sub09Result  <- SUB09Connector.subscriptionDisplay(safeId, uuidGenerator.generateUUIDAsString)
       sub01Outcome <- sessionCache.sub01Outcome
     } yield sub09Result match {
       case Right(subscriptionDisplayResponse) =>
@@ -90,6 +89,7 @@ class SubscriptionRecoveryController @Inject() (
         sessionCache.saveEori(Eori(eori)).flatMap { _ =>
           val mayBeEmail = subscriptionDisplayResponse.responseDetail.contactInformation
             .flatMap(c => c.emailAddress.filter(EmailAddress.isValid(_) && c.emailVerificationTimestamp.isDefined))
+
           mayBeEmail.map { email =>
             onSUB09Success(
               sub01Outcome.processedDate,
@@ -104,6 +104,7 @@ class SubscriptionRecoveryController @Inject() (
               ),
               service
             )(Redirect(Sub02Controller.end(service)))
+
           }.getOrElse {
             // $COVERAGE-OFF$Loggers
             logger.info("Email Missing")
@@ -112,13 +113,10 @@ class SubscriptionRecoveryController @Inject() (
           }
         }
       case Left(_) =>
-        Future.successful(InternalServerError(errorTemplateView()))
+        Future.successful(InternalServerError(errorTemplateView(service)))
     }
     result.flatMap(identity)
   }
-
-  private def buildQueryParams: List[(String, String)] =
-    List("regime" -> Service.regimeCDS, "acknowledgementReference" -> uuidGenerator.generateUUIDAsString)
 
   private case class SubscriptionInformation(
     processedDate: String,

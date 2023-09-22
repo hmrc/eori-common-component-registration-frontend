@@ -22,31 +22,10 @@ import play.api.i18n.Messages
 import play.api.mvc.Results.{BadRequest, Ok, Redirect}
 import play.api.mvc.{AnyContent, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ConfirmContactDetailsController,
-  DetermineReviewPageController,
-  OrganisationTypeController,
-  SignInWithDifferentDetailsController,
-  SubscriptionRecoveryController
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  EtmpOrganisationType,
-  LLP,
-  Partnership,
-  RegistrationDetails,
-  RegistrationDetailsIndividual,
-  RegistrationDetailsOrganisation,
-  UnincorporatedBody
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  No,
-  WrongAddress,
-  Yes,
-  YesNoWrong,
-  YesNoWrongAddress
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -97,7 +76,11 @@ class ConfirmContactDetailsService @Inject() (
           case SubscriptionExists =>
             onExistingSubscription(service)
           case status =>
-            throw new IllegalStateException(s"Invalid subscription status : $status")
+            val error = s"Invalid subscription status : $status"
+            // $COVERAGE-OFF$Loggers
+            logger.warn(error)
+            // $COVERAGE-ON
+            throw new IllegalStateException(error)
         }
       case No =>
         registrationConfirmService
@@ -118,9 +101,11 @@ class ConfirmContactDetailsService @Inject() (
         )
 
       case _ =>
-        throw new IllegalStateException(
-          "YesNoWrongAddressForm field somehow had a value that wasn't yes, no, wrong address, or empty"
-        )
+        val error = "YesNoWrongAddressForm field somehow had a value that wasn't yes, no, wrong address, or empty"
+        // $COVERAGE-OFF$Loggers
+        logger.warn(error)
+        // $COVERAGE-ON
+        throw new IllegalStateException(error)
     }
 
   private def onNewSubscription(service: Service, isInReviewMode: Boolean)(implicit

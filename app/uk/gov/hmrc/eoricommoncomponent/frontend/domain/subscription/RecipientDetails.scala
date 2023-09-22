@@ -53,16 +53,4 @@ object RecipientDetails {
       Some(messages.lang.code)
     )
 
-  def apply(service: Service, contactDetails: ContactDetails)(implicit messages: Messages): RecipientDetails =
-    RecipientDetails(
-      RegisterJourney.value,
-      service.enrolmentKey,
-      ServiceName.longName(service),
-      contactDetails.emailAddress,
-      contactDetails.fullName,
-      orgName = None,
-      completionDate = None,
-      Some(messages.lang.code)
-    )
-
 }

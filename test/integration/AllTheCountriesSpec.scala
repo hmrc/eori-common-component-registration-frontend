@@ -18,10 +18,17 @@ package integration
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Application
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 
-class AllTheCountriesSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+class AllTheCountriesSpec extends AnyWordSpec with Matchers {
+
+  implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
+    .build()
 
   "Countries" should {
     "be filtered according to the enum values that MDG accepts " in {

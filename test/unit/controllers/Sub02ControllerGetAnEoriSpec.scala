@@ -18,8 +18,6 @@ package unit.controllers
 
 import common.pages.RegistrationCompletePage
 import common.support.testdata.TestData
-
-import java.time.LocalDateTime
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -27,19 +25,20 @@ import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, FeatureFlags, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, Sub02Controller}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
@@ -56,7 +55,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val mockSubscribe01Outcome         = mock[Sub01Outcome]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockSubscriptionDetails        = mock[SubscriptionDetails]
-  private val mockFeatureFlag                = mock[FeatureFlags]
 
   private val sub01OutcomeView                = instanceOf[sub01_outcome_processing]
   private val sub02RequestNotProcessed        = instanceOf[sub02_request_not_processed]
@@ -66,7 +64,6 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   private val standAloneOutcomeView   = instanceOf[standalone_subscription_outcome]
   private val subscriptionOutcomeView = instanceOf[subscription_outcome]
-  private val xiEoriGuidanceView      = instanceOf[xi_eori_guidance]
   private val EORI                    = "ZZZ1ZZZZ23ZZZZZZZ"
 
   private val subscriptionController = new Sub02Controller(
@@ -82,9 +79,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     sub02EoriAlreadyExists,
     standAloneOutcomeView,
     subscriptionOutcomeView,
-    xiEoriGuidanceView,
-    mockCdsSubscriber,
-    mockFeatureFlag
+    mockCdsSubscriber
   )(global)
 
   val eoriNumberResponse: String                = "EORI-Number"
@@ -211,7 +206,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.end(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.end(atarService).url
       }
     }
 
@@ -230,7 +225,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.pending(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.pending(atarService).url
       }
     }
 
@@ -247,7 +242,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyExists(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.eoriAlreadyExists(atarService).url
       }
     }
 
@@ -264,7 +259,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.eoriAlreadyAssociated(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.eoriAlreadyAssociated(atarService).url
       }
     }
 
@@ -281,7 +276,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe routes.Sub02Controller.subscriptionInProgress(atarService).url
+        header(LOCATION, result).value shouldBe routes.Sub02Controller.subscriptionInProgress(atarService).url
       }
     }
 
@@ -298,9 +293,10 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         assertCleanedSession(result)
 
         status(result) shouldBe SEE_OTHER
-        result.header.headers(
-          LOCATION
-        ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
+        header(
+          LOCATION,
+          result
+        ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
           .requestNotProcessed(atarService)
           .url
       }
@@ -346,10 +342,8 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           verify(mockSessionCache).remove(any[Request[_]])
           verify(mockSubscribe01Outcome, times(2)).processedDate
           verify(mockSubscribeOutcome, never()).processedDate
-          page.title() should startWith("Subscription request received for orgName")
-          page.getElementsText(
-            RegistrationCompletePage.panelHeadingXpath
-          ) shouldBe s"Subscription request received for orgName"
+          page.title() should startWith("Application sent")
+          page.getElementsText(RegistrationCompletePage.panelHeadingXpath) shouldBe "Application sent"
           page.getElementsText(RegistrationCompletePage.eoriXpath) shouldBe s"Your new EORI number is: $EORI"
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
@@ -385,7 +379,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           verify(mockSessionCache).remove(any[Request[_]])
           verify(mockSubscribe01Outcome, times(4)).processedDate
           verify(mockSubscribeOutcome, never()).processedDate
-          page.title() should startWith("Your new EORI number for orgName is")
+          page.title() should startWith("Application sent")
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
@@ -419,13 +413,9 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling subscriptionInProgress on Sub02Controller" should {
     "render subscription in-progress page" in {
-
-      when(mockSubscriptionDetails.name).thenReturn("orgName")
-      when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
-      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
-      when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
-      when(mockSessionCache.sub02Outcome(any[Request[_]]))
-        .thenReturn(Future.successful(Sub02Outcome("testDate", "testFullName", Some("EoriTest"))))
+      when(mockSessionCache.submissionCompleteDetails(any[Request[_]]))
+        .thenReturn(Future.successful(SubmissionCompleteDetails("22 May 2016")))
+      when(mockSessionCache.saveSubmissionCompleteDetails(any())(any[Request[_]])).thenReturn(Future.successful(true))
       when(mockSessionCache.remove(any[Request[_]])).thenReturn(Future.successful(true))
       invokeSubscriptionInProgress { result =>
         assertCleanedSession(result)

@@ -24,8 +24,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
   UpdateVerifiedEmailConnector
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -39,9 +39,7 @@ class UpdateVerifiedEmailService @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def updateVerifiedEmail(currentEmail: Option[String] = None, newEmail: String, eori: String)(implicit
-    hc: HeaderCarrier
-  ): Future[Boolean] = {
+  def updateVerifiedEmail(newEmail: String, eori: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
 
     val requestDetail = RequestDetail(
       IDType = RegistrationInfoRequest.EORI,
@@ -55,7 +53,7 @@ class UpdateVerifiedEmailService @Inject() (
       newEmail,
       requestDetail.emailVerificationTimestamp.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
     )
-    updateVerifiedEmailConnector.updateVerifiedEmail(request, currentEmail).map {
+    updateVerifiedEmailConnector.updateVerifiedEmail(request).map {
       case Right(res)
           if res.updateVerifiedEmailResponse.responseCommon.returnParameters
             .exists(msp => msp.head.paramName == MessagingServiceParam.formBundleIdParamName) =>
@@ -68,7 +66,7 @@ class UpdateVerifiedEmailService @Inject() (
       case Right(res) =>
         val statusText = res.updateVerifiedEmailResponse.responseCommon.statusText
         // $COVERAGE-OFF$Loggers
-        logger.debug(
+        logger.warn(
           "[UpdateVerifiedEmailService][updateVerifiedEmail]" +
             s" - updating verified email unsuccessful with business error/status code: ${statusText.getOrElse("Status text empty")}"
         )

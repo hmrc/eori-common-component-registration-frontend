@@ -21,8 +21,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 import javax.inject.{Inject, Singleton}
@@ -58,9 +58,8 @@ class ConfirmContactDetailsController @Inject() (
   def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        name          <- sessionCache.registrationDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
-      } yield Ok(sub01OutcomeProcessingView(Some(name), processedDate))
+      } yield Ok(sub01OutcomeProcessingView(processedDate, service))
   }
 
 }

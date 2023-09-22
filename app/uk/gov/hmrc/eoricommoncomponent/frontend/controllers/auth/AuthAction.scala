@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
-import javax.inject.Inject
 import play.api.mvc._
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, internalId, email => ggEmail, _}
-import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.retrieve.{~, Credentials}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthAction @Inject() (
@@ -44,7 +44,7 @@ class AuthAction @Inject() (
     Request[AnyContent] => Option[String] => LoggedInUserWithEnrolments => Future[Result]
 
   private val baseRetrievals     = ggEmail and credentialRole and affinityGroup
-  private val extendedRetrievals = baseRetrievals and internalId and allEnrolments and groupIdentifier
+  private val extendedRetrievals = baseRetrievals and internalId and allEnrolments and groupIdentifier and credentials
 
   /**
     * Allows Gov Gateway user with correct user type, affinity group and no enrolment to service
@@ -79,7 +79,9 @@ class AuthAction @Inject() (
 
     authorised(AuthProviders(GovernmentGateway))
       .retrieve(extendedRetrievals) {
-        case currentUserEmail ~ userCredentialRole ~ userAffinityGroup ~ userInternalId ~ userAllEnrolments ~ groupId =>
+        case currentUserEmail ~ userCredentialRole ~ userAffinityGroup ~ userInternalId ~ userAllEnrolments ~ groupId ~ Some(
+              Credentials(credId, _)
+            ) =>
           transformRequest(
             Right(requestProcessor),
             LoggedInUserWithEnrolments(
@@ -88,11 +90,14 @@ class AuthAction @Inject() (
               userAllEnrolments,
               currentUserEmail,
               groupId,
-              userCredentialRole
+              userCredentialRole,
+              credId
             ),
             checkPermittedAccess,
             checkServiceEnrolment
           )
+        case _ => Future.failed(new Exception("Auth did not contain user credentials"))
+
       } recover withAuthRecovery(request)
   }
 

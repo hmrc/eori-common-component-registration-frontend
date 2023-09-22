@@ -43,6 +43,6 @@ class EnrolmentPendingAgainstGroupIdViewSpec extends ViewSpec {
     }
   }
 
-  private lazy val gyeDoc: Document = Jsoup.parse(contentAsString(view()))
+  private lazy val gyeDoc: Document = Jsoup.parse(contentAsString(view(atarService)))
 
 }

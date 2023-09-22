@@ -16,11 +16,12 @@
 
 package util.scalacheck
 
-import java.time.LocalDate
 import org.scalacheck.{Arbitrary, Gen}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import util.scalacheck.TestDataGenerators.Implicits._
+
+import java.time.LocalDate
 
 trait TestDataGenerators {
 

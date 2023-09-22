@@ -19,48 +19,78 @@ package unit.controllers
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Configuration
 import play.api.test.FakeRequest
-import play.api.test.Helpers.LOCATION
-import play.api.test.Helpers._
+import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{client_error_template, error_template, notFound}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, notFound}
 import util.ControllerSpec
+
+import scala.concurrent.Future
 
 class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
   val configuration = mock[Configuration]
 
-  private val errorTemplateView       = instanceOf[error_template]
-  private val clientErrorTemplateView = instanceOf[client_error_template]
-  private val notFoundView            = instanceOf[notFound]
+  private val errorTemplateView = instanceOf[error_template]
+  private val notFoundView      = instanceOf[notFound]
 
   val cdsErrorHandler =
-    new CdsErrorHandler(messagesApi, configuration, errorTemplateView, clientErrorTemplateView, notFoundView)
+    new CdsErrorHandler(messagesApi, configuration, errorTemplateView, notFoundView)
 
   private val mockRequest = FakeRequest()
 
   "Cds error handler" should {
     "redirect to correct page after receive 500 error" in {
       whenReady(cdsErrorHandler.onServerError(mockRequest, new Exception())) { result =>
-        val page = CdsPage(contentAsString(result))
+        val page = CdsPage(contentAsString(Future.successful(result)))
 
-        status(result) shouldBe INTERNAL_SERVER_ERROR
+        result.header.status shouldBe INTERNAL_SERVER_ERROR
         page.title() should startWith("Sorry, there is a problem with the service")
       }
     }
     "redirect to start page If when DataUnavailableException thrown  " in {
       whenReady(cdsErrorHandler.onServerError(mockRequest, DataUnavailableException("DataUnavailableException"))) {
         result =>
-          status(result) shouldBe SEE_OTHER
+          result.header.status shouldBe SEE_OTHER
       }
     }
 
     "redirect to page not found (404) after InvalidUrlValueException" in {
       whenReady(cdsErrorHandler.onServerError(mockRequest, InvalidUrlValueException("some param error"))) { result =>
-        val page = CdsPage(contentAsString(result))
+        val page = CdsPage(contentAsString(Future.successful(result)))
 
         result.header.status shouldBe NOT_FOUND
         page.title() should startWith("Page not found")
+      }
+    }
+
+    "redirect to subscription security sign out for NO_CSRF_FOUND in body" in {
+      val mockSubRequest = FakeRequest(method = "GET", "/atar/subscribe")
+
+      whenReady(
+        cdsErrorHandler.onClientError(mockSubRequest, statusCode = FORBIDDEN, message = "No CSRF token found in body")
+      ) { result =>
+        result.header.status shouldBe SEE_OTHER
+        result.header.headers.get(
+          LOCATION
+        ).value shouldBe "/customs-registration-services/atar/register/display-sign-out"
+      }
+    }
+
+    "redirect to subscription security sign out for NO_CSRF_FOUND in headers" in {
+      val mockSubRequest = FakeRequest(method = "GET", "/atar/subscribe")
+
+      whenReady(
+        cdsErrorHandler.onClientError(
+          mockSubRequest,
+          statusCode = FORBIDDEN,
+          message = "No CSRF token found in headers"
+        )
+      ) { result =>
+        result.header.status shouldBe SEE_OTHER
+        result.header.headers.get(
+          LOCATION
+        ).value shouldBe "/customs-registration-services/atar/register/display-sign-out"
       }
     }
 
@@ -68,14 +98,16 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
       val mockRegisterRequest = FakeRequest(method = "GET", path = "/atar/register")
 
       whenReady(cdsErrorHandler.onServerError(mockRegisterRequest, SessionTimeOutException("xyz"))) { result =>
-        status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/display-sign-out"
+        result.header.status shouldBe SEE_OTHER
+        result.header.headers.get(
+          LOCATION
+        ).value shouldBe "/customs-registration-services/atar/register/display-sign-out"
       }
     }
 
     "Redirect to the notfound page on 404 error" in {
       whenReady(cdsErrorHandler.onClientError(mockRequest, statusCode = NOT_FOUND)) { result =>
-        val page = CdsPage(contentAsString(result))
+        val page = CdsPage(contentAsString(Future.successful(result)))
 
         result.header.status shouldBe NOT_FOUND
         page.title() should startWith("Page not found")
@@ -86,7 +118,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
       whenReady(
         cdsErrorHandler.onClientError(mockRequest, statusCode = BAD_REQUEST, message = Constants.INVALID_PATH_PARAM)
       ) { result =>
-        val page = CdsPage(contentAsString(result))
+        val page = CdsPage(contentAsString(Future.successful(result)))
 
         result.header.status shouldBe NOT_FOUND
         page.title() should startWith("Page not found")
@@ -95,10 +127,10 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
 
     "Redirect to the InternalErrorPage page on 500 error" in {
       whenReady(cdsErrorHandler.onClientError(mockRequest, statusCode = INTERNAL_SERVER_ERROR)) { result =>
-        val page = CdsPage(contentAsString(result))
+        val page = CdsPage(contentAsString(Future.successful(result)))
 
         result.header.status shouldBe INTERNAL_SERVER_ERROR
-        page.title() should startWith("Something went wrong. Please try again later.")
+        page.title() should startWith("Sorry, there is a problem with the service")
       }
     }
 

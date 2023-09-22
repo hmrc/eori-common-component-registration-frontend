@@ -17,8 +17,6 @@
 package unit.controllers
 
 import common.pages.RegisterHowCanWeIdentifyYouPage
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -31,13 +29,18 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameDobMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  SessionCache,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_nino
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -47,6 +50,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
   private val mockAuthAction        = authAction(mockAuthConnector)
   private val mockMatchingService   = mock[MatchingService]
   private val mockFrontendDataCache = mock[SessionCache]
+  private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache)
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_nino]
 
@@ -55,7 +59,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     mockMatchingService,
     mcc,
     howCanWeIdentifyYouView,
-    mockFrontendDataCache
+    sessionCacheService
   )
 
   "Viewing the form " should {
@@ -92,7 +96,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       submitForm(Map("nino" -> nino)) {
         result =>
           status(result) shouldBe SEE_OTHER
-          result.header.headers("Location") shouldBe "/customs-registration-services/atar/register/matching/confirm"
+          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm"
       }
     }
 

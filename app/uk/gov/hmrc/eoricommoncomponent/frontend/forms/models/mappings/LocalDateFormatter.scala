@@ -28,30 +28,34 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
   private val fieldKeys: List[String] = List("day", "month", "year")
 
   private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
-    Try(LocalDate.of(year, month, day)) match {
-      case Success(date) =>
-        Right(date)
-      case Failure(_) =>
-        Left(Seq(FormError(key, invalidKey, args)))
-    }
+    if (year < 1000) Left(List(FormError(s"$key.${fieldKeys.last}", "date-invalid-year-too-short", args)))
+    else
+      Try(LocalDate.of(year, month, day)) match {
+        case Success(date) =>
+          Right(date)
+        case Failure(_) =>
+          Left(Seq(FormError(key, invalidKey, args)))
+      }
 
   private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
     val int = intFormatter(requiredKey = invalidKey, wholeNumberKey = invalidKey, nonNumericKey = invalidKey, args)
 
     for {
-      day   <- int.bind(s"$key.day", data.map(d => d._1 -> d._2.trim))
-      month <- int.bind(s"$key.month", data.map(m => m._1 -> m._2.trim))
-      year  <- int.bind(s"$key.year", data.map(y => y._1 -> y._2.trim))
+      day   <- int.bind(s"$key.day", data)
+      month <- int.bind(s"$key.month", data)
+      year  <- int.bind(s"$key.year", data)
       date  <- toDate(key, day, month, year)
     } yield date
   }
 
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
+    val trimmedData = data.map(d => d._1 -> d._2.trim)
+
     val fields = fieldKeys.map {
       field =>
-        field -> data.get(s"$key.$field").filter(_.nonEmpty)
+        field -> trimmedData.get(s"$key.$field").filter(_.nonEmpty)
     }.toMap
 
     lazy val missingFields = fields
@@ -61,16 +65,20 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
 
     fields.count(_._2.isDefined) match {
       case 3 =>
-        formatDate(key, data).left.map {
-          _.map(_.copy(key = key, args = args))
+        formatDate(key, trimmedData).left.map { leftValue =>
+          leftValue.map(formError => formError)
         }
       case 2 =>
-        Left(List(FormError(s"$key.${missingFields.head}", emptyKey, args)))
+        Left(List(FormError(s"$key.${missingFields.head}", s"$key.${missingFields.head}.empty", args)))
       case 1 =>
         Left(
           List(
-            FormError(s"$key.${missingFields.head}", emptyKey, args),
-            (FormError(s"$key.${missingFields.last}", "", args))
+            FormError(
+              s"$key.${missingFields.head}",
+              s"$key.${missingFields.head}-$key.${missingFields.last}.empty",
+              args
+            ),
+            FormError(s"$key.${missingFields.last}", "", args)
           )
         )
       case _ =>

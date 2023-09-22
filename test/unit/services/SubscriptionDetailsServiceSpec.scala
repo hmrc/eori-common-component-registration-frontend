@@ -23,6 +23,7 @@ import org.mockito.{ArgumentCaptor, ArgumentMatchers}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Request
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
@@ -82,7 +83,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
     val existingHolder = SubscriptionDetails(contactDetails = Some(mock[ContactDetailsModel]))
 
-    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(existingHolder)
+    when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(existingHolder))
     when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(mockpersonalDataDisclosureConsent)
 
     when(mockRegistrationDetailsCreator.registrationDetails(Some(eori))(registrationInfo))
@@ -118,7 +119,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
 
     "return None for customsId when no value found for subscription Details" in {
-      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(SubscriptionDetails())
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(SubscriptionDetails()))
       await(subscriptionDetailsHolderService.cachedCustomsId(request)) shouldBe None
     }
   }
@@ -131,7 +132,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
 
     "return None for utrMatch when no value found for subscription Details" in {
-      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(SubscriptionDetails())
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(SubscriptionDetails()))
       await(subscriptionDetailsHolderService.cachedUtrMatch(request)) shouldBe None
     }
   }
@@ -144,7 +145,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
 
     "return None for ninoMatch when no value found for subscription Details" in {
-      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(SubscriptionDetails())
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(SubscriptionDetails()))
       await(subscriptionDetailsHolderService.cachedNinoMatch(request)) shouldBe None
     }
   }
@@ -161,7 +162,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
 
     "return None for utrMatch when no value found for subscription Details" in {
-      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(SubscriptionDetails())
+      when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(SubscriptionDetails()))
       await(subscriptionDetailsHolderService.cachedOrganisationType(request)) shouldBe None
     }
   }
@@ -198,7 +199,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     val contactDetailsModel = ContactDetailsModel(
       fullName = "John Doe",
       emailAddress = "john.doe@example.com",
-      telephone = "234234",
+      telephone = Some("234234"),
       None,
       false,
       Some("streetName"),
@@ -209,7 +210,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     val updatedContactDetailsModel = ContactDetailsModel(
       fullName = "John Doe",
       emailAddress = "john.doe@example.com",
-      telephone = "234234",
+      telephone = Some("234234"),
       None,
       false,
       Some("Address Line 1"),
@@ -232,7 +233,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     val contactDetails = ContactDetailsModel(
       fullName = "Name",
       emailAddress = "email@mail.com",
-      telephone = "01234567",
+      telephone = Some("01234567"),
       fax = None,
       street = None,
       city = None,
@@ -298,6 +299,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       val holder: SubscriptionDetails = requestCaptor.getValue
       holder.nameDobDetails shouldBe Some(nameDobDetails)
     }
+
   }
 
   "cacheNinoOrUtrChoice" should {
@@ -342,6 +344,13 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
       val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
       subscriptionDetails.vatControlListResponse shouldBe Some(vatControlListResponse)
+    }
+    "clear subscription details with vat return total" in {
+      await(subscriptionDetailsHolderService.clearCachedVatControlListResponse())
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+      val subscriptionDetails: SubscriptionDetails = requestCaptor.getValue
+      subscriptionDetails.vatControlListResponse shouldBe None
     }
   }
 

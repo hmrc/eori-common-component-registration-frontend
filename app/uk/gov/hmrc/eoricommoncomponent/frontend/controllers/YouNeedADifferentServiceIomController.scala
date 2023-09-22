@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_need_different_service_iom
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class YouNeedADifferentServiceIomController @Inject() (
@@ -28,7 +29,7 @@ class YouNeedADifferentServiceIomController @Inject() (
 ) extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] = Action { implicit request =>
-    Ok(youNeedADifferentService())
+    Ok(youNeedADifferentService(service))
   }
 
 }

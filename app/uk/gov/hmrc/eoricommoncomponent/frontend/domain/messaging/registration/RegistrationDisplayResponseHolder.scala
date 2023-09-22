@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration
 
+import play.api.Logging
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
   ContactResponse,
@@ -58,6 +59,19 @@ object ResponseCommon {
 }
 
 case class RegistrationDisplayResponse(responseCommon: ResponseCommon, responseDetail: Option[ResponseDetail])
+    extends Logging {
+
+  def getResponseDetail: ResponseDetail = responseDetail match {
+    case Some(detail) => detail
+    case None =>
+      val error = "RegistrationDisplayResponse did not include expected ResponseDetail object"
+      // $COVERAGE-OFF$Loggers
+      logger.warn(error)
+      // $COVERAGE-ON
+      throw new IllegalArgumentException(error)
+  }
+
+}
 
 object RegistrationDisplayResponse {
   implicit val format = Json.format[RegistrationDisplayResponse]

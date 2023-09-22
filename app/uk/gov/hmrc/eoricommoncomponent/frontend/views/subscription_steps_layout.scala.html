@@ -21,13 +21,14 @@
 @(pageKey: String, form: Form[_],
         isInReviewMode: Boolean,
         fieldName: Option[String] = None,
-        focusOverrides: Map[String, String] = Map.empty)(content: Html)(implicit request: Request[_], messages: Messages)
+        focusOverrides: Map[String, String] = Map.empty, 
+        service: Service)(content: Html)(implicit request: Request[_], messages: Messages)
 
 @qualifiedPageKey = @{
     "cds.subscription." + pageKey
 }
 
-@layout_di(messages(qualifiedPageKey + ".page.title"), form = Some(form)) {
+@layout_di(messages(qualifiedPageKey + ".page.title"), form = Some(form), service = service) {
 
     <div>
 

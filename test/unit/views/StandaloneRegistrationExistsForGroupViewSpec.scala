@@ -54,7 +54,7 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
       "display sub heading for CDS" in {
         adminDoc.body().getElementsByTag("h2").text() must startWith(
-          "Help make GOV.UK better Start using the Customs Declaration Service (CDS) Support links"
+          "Start using the Customs Declaration Service (CDS) Support links"
         )
       }
 
@@ -91,7 +91,7 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
       "display sub heading for CDS" in {
         standardDoc.body().getElementsByTag("h2").text() must startWith(
-          "Help make GOV.UK better Start using the Customs Declaration Service (CDS) Support links"
+          "Start using the Customs Declaration Service (CDS) Support links"
         )
       }
 
@@ -111,8 +111,8 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
   }
 
-  private lazy val adminDoc: Document          = Jsoup.parse(contentAsString(view(Some("testEORI"), true)))
-  private lazy val standardDoc: Document       = Jsoup.parse(contentAsString(view(Some("testEORI"), false)))
-  private lazy val adminNoEoriDoc: Document    = Jsoup.parse(contentAsString(view(None, true)))
-  private lazy val standardNoEoriDoc: Document = Jsoup.parse(contentAsString(view(None, false)))
+  private lazy val adminDoc: Document          = Jsoup.parse(contentAsString(view(Some("testEORI"), true, atarService)))
+  private lazy val standardDoc: Document       = Jsoup.parse(contentAsString(view(Some("testEORI"), false, atarService)))
+  private lazy val adminNoEoriDoc: Document    = Jsoup.parse(contentAsString(view(None, true, atarService)))
+  private lazy val standardNoEoriDoc: Document = Jsoup.parse(contentAsString(view(None, false, atarService)))
 }

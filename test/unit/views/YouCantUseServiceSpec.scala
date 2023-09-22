@@ -20,7 +20,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub02_request_not_processed
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_cant_use_service
 import util.ViewSpec
 
@@ -28,7 +27,6 @@ class YouCantUseServiceSpec extends ViewSpec {
 
   private implicit val request      = withFakeCSRF(fakeAtarRegisterRequest)
   private val youCantUseServiceView = instanceOf[you_cant_use_service]
-  private val sub02View             = instanceOf[sub02_request_not_processed]
 
   "You cannot use this service page for users of type standard org" should {
 
@@ -60,17 +58,9 @@ class YouCantUseServiceSpec extends ViewSpec {
     }
   }
 
-  "You cannot use this service page for users who cannot get an eori" should {
+  private lazy val standardOrgDoc: Document =
+    Jsoup.parse(contentAsString(youCantUseServiceView(Some(Organisation), atarService)))
 
-    "display correct para" in {
-      cannotUseService003.body
-        .getElementById("para")
-        .text mustBe "To apply for an EORI number phone 0300 322 7067 and ask for an assisted digital application form. They’re open 8am to 6pm, Monday to Friday (except public holidays)."
-    }
-  }
-
-  private lazy val standardOrgDoc: Document      = Jsoup.parse(contentAsString(youCantUseServiceView(Some(Organisation))))
-  private lazy val agentDoc: Document            = Jsoup.parse(contentAsString(youCantUseServiceView(Some(Agent))))
-  private lazy val cannotUseService003: Document = Jsoup.parse(contentAsString(sub02View()))
+  private lazy val agentDoc: Document = Jsoup.parse(contentAsString(youCantUseServiceView(Some(Agent), atarService)))
 
 }

@@ -21,10 +21,12 @@ import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, po
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
 import play.api.http.HeaderNames
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers._
 import play.mvc.Http.MimeTypes
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateCustomsDataStoreConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
@@ -55,6 +57,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         "auditing.consumer.baseUri.port"                 -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val customsDataStoreConnector = app.injector.instanceOf[UpdateCustomsDataStoreConnector]
@@ -80,37 +83,6 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
   override def afterAll(): Unit =
     stopMockServer()
-
-  """{
-    |  "auditSource" : "eori-common-component-registration-frontend",
-    |  "auditType" : "CustomsDataStoreUpdate",
-    |  "eventId" : "ed61cdbc-ce6c-46c3-9f3c-2feb1226805b",
-    |  "tags" : {
-    |    "clientIP" : "-",
-    |    "path" : "http://localhost:11111/customs/update/datastore",
-    |    "X-Session-ID" : "-",
-    |    "Akamai-Reputation" : "-",
-    |    "X-Request-ID" : "-",
-    |    "deviceID" : "-",
-    |    "clientPort" : "-",
-    |    "transactionName" : "customs-data-store"
-    |  },
-    |  "detail" : {
-    |      "eori" : "GBXXXXXXXXX0000",
-    |      "address" : "a@example.com",
-    |      "timestamp" : "timestamp",
-    |      "status" : "204"
-    |  },
-    |  "generatedAt" : "2022-09-20T11:03:17.981Z",
-    |  "dataPipeline" : {
-    |    "redaction" : {
-    |      "containsRedactions" : false
-    |    }
-    |  },
-    |  "metadata" : {
-    |    "metricsKey" : null
-    |  }
-    |}""".stripMargin
 
   val expectedAuditEventJson: JsValue =
     Json.parse("""{
@@ -149,7 +121,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      scala.concurrent.Await.ready(customsDataStoreConnector.updateCustomsDataStore(request), defaultTimeout)
+      await(customsDataStoreConnector.updateCustomsDataStore(request))(defaultTimeout)
       WireMock.verify(
         postRequestedFor(urlEqualTo(expectedPostUrl))
           .withRequestBody(equalToJson(serviceRequestJson.toString))
@@ -164,8 +136,8 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      scala.concurrent.Await.ready(customsDataStoreConnector.updateCustomsDataStore(request), defaultTimeout)
-      AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson)
+      await(customsDataStoreConnector.updateCustomsDataStore(request))(defaultTimeout)
+      eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
     }
 
     "return successful future when update email endpoint returns 204" in {

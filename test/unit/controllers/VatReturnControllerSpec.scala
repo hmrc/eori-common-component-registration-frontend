@@ -24,7 +24,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatReturnController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{vat_return_total, we_cannot_confirm_your_identity}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -38,7 +38,6 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
   private val mockVatReturnTotalView          = instanceOf[vat_return_total]
   private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
 
   val mockAuthConnector = mock[AuthConnector]
   val mockAuthAction    = authAction(mockAuthConnector)
@@ -46,7 +45,6 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
   private val controller = new VatReturnController(
     mockAuthAction,
     mockSubscriptionBusinessService,
-    mockSubscriptionDetailsService,
     mcc,
     mockVatReturnTotalView,
     mockWeCannotConfirmYourIdentity
@@ -63,7 +61,7 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     super.beforeEach()
 
     when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any[Request[_]])).thenReturn(
-      Some(vatControlListResponse)
+      Future.successful(Some(vatControlListResponse))
     )
 
   }

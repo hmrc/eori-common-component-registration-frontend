@@ -26,9 +26,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -46,9 +46,12 @@ class VatDetailsController @Inject() (
   vatDetailsView: vat_details,
   errorTemplate: error_template,
   weCannotConfirmYourIdentity: date_of_vat_registration,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  form: VatRegistrationDateFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val dateForm = form()
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
@@ -91,26 +94,25 @@ class VatDetailsController @Inject() (
                     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
                       .determineRoute(service)
                   )
-                else if (vatControlListResponse.isLastReturnMonthPeriodNonEmpty)
-                  Redirect(DateOfVatRegistrationController.createForm(service))
                 else
                   Redirect(DateOfVatRegistrationController.createForm(service))
             }
         else
-          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          subscriptionDetailsService.clearCachedVatControlListResponse.flatMap(
+            _ => Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          )
       case Left(errorResponse) =>
         errorResponse match {
           case NotFoundResponse =>
             Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
           case InvalidResponse =>
             Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate()))
+          case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
         }
     }
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      val dateForm = VatRegistrationDateForm.vatRegistrationDateForm
       Future.successful(Ok(weCannotConfirmYourIdentity(dateForm, service)))
     }
 

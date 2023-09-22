@@ -17,33 +17,24 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers
 
 import play.api.i18n.Lang.logger
-
-import javax.inject.Inject
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.language.LanguageUtils
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 import scala.util.{Failure, Success, Try}
 
 class DateFormatter @Inject() (languageUtils: LanguageUtils) {
 
-  val dateFormatter: DateTimeFormatter     = DateTimeFormatter.ofPattern("d MMM yyyy")
-  val longDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 
-  def format(dateString: String)(implicit messages: Messages): String = {
+  def format(dateString: String)(implicit messages: Messages): String =
+    Try(languageUtils.Dates.formatDate(LocalDate.parse(dateString, dateFormatter)))
+      .getOrElse(dateString)
 
-    def tryConvert =
-      try Some(languageUtils.Dates.formatDate(LocalDate.parse(dateString, dateFormatter)))
-      catch {
-        case e: Exception => None
-      }
-
-    tryConvert.getOrElse(dateString)
-  }
-
-  def formatLocalDate(date: LocalDate): String =
-    Try(date.format(longDateFormatter)) match {
+  def formatLocalDate(date: LocalDate)(implicit messages: Messages): String =
+    Try(languageUtils.Dates.formatDate(date)) match {
       case Success(date) => date
       case Failure(e) =>
         logger.error("Cannot convert date", e)

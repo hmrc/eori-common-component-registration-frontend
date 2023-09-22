@@ -23,11 +23,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
-  FeatureFlags,
-  SubscriptionFlowManager,
-  VatRegisteredUkController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatRegisteredUkController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlow,
@@ -35,8 +31,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionPage
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -58,7 +54,6 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val mockSessionError                = mock[SessionError]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
-  private val mockFeatureFlags                = mock[FeatureFlags]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -73,7 +68,6 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     reset(mockSubscriptionBusinessService)
     reset(mockSubscriptionDetailsService)
     reset(mockSubscriptionFlow)
-    reset(mockFeatureFlags)
     reset(mockRequestSession)
 
     super.afterEach()
@@ -149,7 +143,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       submitForm(ValidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("/register/your-uk-vat-details")
+        header(LOCATION, result).value should endWith("/register/your-uk-vat-details")
       }
     }
 
@@ -162,7 +156,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       submitForm(invalidRequest) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("atar/register")
+        header(LOCATION, result).value should endWith("atar/register")
       }
     }
 
@@ -175,7 +169,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       reviewForm() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("atar/register")
+        header(LOCATION, result).value should endWith("atar/register")
       }
     }
 
@@ -188,7 +182,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       createForm() { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("atar/register")
+        header(LOCATION, result).value should endWith("atar/register")
       }
     }
 
@@ -202,14 +196,14 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
       submitForm(validRequestNo) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/contact-details")
+        header(LOCATION, result).value should endWith("register/contact-details")
       }
     }
 
     "redirect to vat groups review page for yes answer and is in review mode" in {
       submitForm(ValidRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith("register/your-uk-vat-details/review")
+        header(LOCATION, result).value should endWith("register/your-uk-vat-details/review")
       }
     }
 
@@ -219,7 +213,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       )
       submitForm(validRequestNo, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
-        result.header.headers(LOCATION) should endWith(
+        header(LOCATION, result).value should endWith(
           "customs-registration-services/atar/register/contact-details/review"
         )
       }
@@ -235,7 +229,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private def reviewForm()(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     mockIsIndividual()
-    when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(true)
+    when(mockSubscriptionBusinessService.getCachedVatRegisteredUk(any[Request[_]])).thenReturn(Future.successful(true))
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
   }
 

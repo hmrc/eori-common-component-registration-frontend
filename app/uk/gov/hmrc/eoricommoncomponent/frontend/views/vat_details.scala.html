@@ -14,40 +14,35 @@
  * limitations under the License.
  *@
 
-@import views.html.helper._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import views.html.helper._
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, appConfig:AppConfig)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary,
+appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWithPreTextAndPostText)
 
 
 @(vatForm: Form[VatDetails], isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
-@vatUKLink = {
-    <p class="govuk-body">
-    <a id="vat-link" class="govuk-link" href="https://www.gov.uk/sign-in-vat-account" target="_blank" rel="noopener noreferrer">
-    @messages("cds.subscription.vat-details.intro-text.link")</a>
-    @messages("cds.subscription.vat-details.intro-text.link.text")</p>
-}
+
 
 @formAction = @{
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController.submit(isInReviewMode, service)
 }
-@layout_di(messages("cds.subscription.vat-details.heading"), form = Some(vatForm)) {
-    <div>
-        @errorSummary(vatForm.errors)
+@layout_di(messages("cds.subscription.vat-details.heading"), form = Some(vatForm), service = service) {
+        @errorSummary(vatForm.errors.reverse)
         @helpers.form(formAction, "vat-details-form") {
 
             @CSRF.formField
-            <h1 class="govuk-heading-l">@messages("cds.subscription.vat-details.heading")</h1>
-            <p id="intro-text" class="govuk-body">@messages("cds.subscription.vat-details.intro-text")</p>
-            <p id="intro-link" class="govuk-body">@vatUKLink</p>
+            @h1(messages("cds.subscription.vat-details.heading"))
+            @p(messages("cds.subscription.vat-details.intro-text"), Some("intro-text"))
+            @link(messages("cds.subscription.vat-details.intro-text.link"),
+            href="https://www.gov.uk/sign-in-vat-account", id=Some("vat-link"), postText=Some(messages("cds.subscription.vat-details.intro-text.link.text")))
 
 
             @inputText(
@@ -78,5 +73,4 @@
 
         }
         @helpers.helpAndSupport()
-    </div>
 }

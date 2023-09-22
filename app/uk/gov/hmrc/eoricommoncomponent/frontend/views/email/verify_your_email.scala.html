@@ -15,20 +15,20 @@
  *@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.routes._
-@import views.html.helper._
-@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukDetails}
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text, Details, HtmlContent}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Details, HtmlContent, Text}
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukDetails
+@import views.html.helper._
 
 @this(layout_di: layout, govukDetails : GovukDetails)
 
 @(
     email:Option[String],
-    service: Service,
+    service: Service
 )(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages("cds.subscription.verify-email.title")) {
+@layout_di(messages("cds.subscription.verify-email.title"), service = service) {
 
 <div>
     @helpers.form(CheckYourEmailController.submit(service)) {

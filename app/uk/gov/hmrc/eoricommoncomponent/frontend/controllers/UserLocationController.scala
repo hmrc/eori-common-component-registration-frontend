@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
@@ -27,22 +26,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.Re
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  NewSubscription,
-  PreSubscriptionStatus,
-  RegistrationDisplayService,
-  Save4LaterService,
-  SubscriptionExists,
-  SubscriptionProcessing,
-  SubscriptionRejected,
-  SubscriptionStatusService
-}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
+import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub01_outcome_processing
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -56,8 +45,7 @@ class UserLocationController @Inject() (
   mcc: MessagesControllerComponents,
   userLocationView: user_location,
   sub01OutcomeProcessing: sub01_outcome_processing,
-  errorTemplate: error_template,
-  featureFlags: FeatureFlags
+  errorTemplate: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -177,14 +165,14 @@ class UserLocationController @Inject() (
           )
         )
       }
-    case _ => Future.successful(InternalServerError(errorTemplate()))
+    case _ => Future.successful(InternalServerError(errorTemplate(service)))
   }
 
   def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.sub01Outcome
         .map(_.processedDate)
-        .map(processedDate => Ok(sub01OutcomeProcessing(None, processedDate)))
+        .map(processedDate => Ok(sub01OutcomeProcessing(processedDate, service)))
   }
 
 }

@@ -16,14 +16,15 @@
 
 package integration
 
-import java.time.LocalDateTime
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.TableFor3
 import play.api.Application
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.RegisterWithoutIdConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
@@ -31,6 +32,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import util.externalservices.ExternalServicesConfig._
 import util.externalservices.{AuditService, RegisterWithoutIdMessagingService}
+
+import java.time.LocalDateTime
 
 class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
@@ -45,6 +48,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         "auditing.consumer.baseUri.port"                                                     -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val registerWithoutIdConnector = app.injector.instanceOf[RegisterWithoutIdConnector]
@@ -66,7 +70,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
   private val requestDate = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 114)
 
   private val contactDetails =
-    ContactDetailsModel("John Doe", "john@example.com", "441234987654", None, true, None, None, None, None)
+    ContactDetailsModel("John Doe", "john@example.com", Some("441234987654"), None, true, None, None, None, None)
 
   val organisationReq: RegisterWithoutIDRequest = RegisterWithoutIDRequest(
     RequestCommon("CDS", requestDate, "abcdefg1234567890hijklmnop0987654"),
@@ -281,7 +285,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         }
 
         caught.statusCode mustBe 400
-        AuditService.verifyXAuditWrite(0)
+        eventually(AuditService.verifyXAuditWrite(0))
       }
     }
   }

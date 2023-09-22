@@ -107,14 +107,7 @@ class SixLineAddressController @Inject() (
     if (isInReviewMode)
       registrationDetailsService
         .cacheAddress(regDetailsCreator.registrationAddress(formData))
-        .map(
-          _ =>
-            Redirect(
-              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController.determineRoute(
-                service
-              )
-            )
-        )
+        .map(_ => Redirect(routes.DetermineReviewPageController.determineRoute(service)))
     else
       registrationDetailsService.cacheAddress(regDetailsCreator.registrationAddress(formData)).flatMap { _ =>
         subscriptionFlowManager.startSubscriptionFlow(service)
@@ -130,8 +123,9 @@ class SixLineAddressController @Inject() (
 
   private def formsByOrganisationTypes(implicit request: Request[AnyContent]) = {
     val form = requestSessionData.selectedUserLocationWithIslands(request) match {
-      case Some(UserLocation.Uk) => ukSixLineAddressForm
-      case _                     => thirdCountrySixLineAddressForm
+      case Some(UserLocation.Uk)      => ukSixLineAddressForm
+      case Some(UserLocation.Islands) => channelIslandSixLineAddressForm
+      case _                          => thirdCountrySixLineAddressForm
     }
 
     Map(

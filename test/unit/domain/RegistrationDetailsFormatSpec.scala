@@ -17,10 +17,11 @@
 package unit.domain
 
 import base.UnitSpec
-import java.time.LocalDate
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+
+import java.time.LocalDate
 
 class RegistrationDetailsFormatSpec extends UnitSpec {
 

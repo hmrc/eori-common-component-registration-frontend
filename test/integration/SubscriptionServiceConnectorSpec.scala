@@ -18,9 +18,11 @@ package integration
 
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.Status._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
   SubscriptionRequest,
@@ -43,6 +45,7 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
         "auditing.consumer.baseUri.port"                                           -> Port
       )
     )
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val subscriptionServiceConnector = app.injector.instanceOf[SubscriptionServiceConnector]

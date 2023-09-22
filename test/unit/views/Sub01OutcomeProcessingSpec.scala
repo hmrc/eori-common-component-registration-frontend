@@ -34,10 +34,10 @@ class Sub01OutcomeProcessingSpec extends ViewSpec {
   "Sub01 outcome pending Page" should {
 
     "display correct heading" in {
-      docWithName.body.getElementsByTag("h1").text() must startWith(s"Your EORI application is being processed")
+      docWithName.body.getElementsByTag("h1").text() must startWith(s"Application sent")
     }
   }
 
-  lazy val docWithName: Document    = Jsoup.parse(contentAsString(view(Some(orgName), processedDate)))
-  lazy val docWithoutName: Document = Jsoup.parse(contentAsString(view(None, processedDate)))
+  lazy val docWithName: Document    = Jsoup.parse(contentAsString(view(processedDate, atarService)))
+  lazy val docWithoutName: Document = Jsoup.parse(contentAsString(view(processedDate, atarService)))
 }

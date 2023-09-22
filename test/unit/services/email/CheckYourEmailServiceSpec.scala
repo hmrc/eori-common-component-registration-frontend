@@ -16,29 +16,27 @@
 
 package unit.services.email
 
+import base.Injector
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
-import play.api.mvc.{AnyContent, Request}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.CheckYourEmailService
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
+import play.api.mvc.Results.Redirect
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.await
+import uk.gov.hmrc.auth.core.Enrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CheckYourEmailService, Save4LaterService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
+import uk.gov.hmrc.http.HeaderCarrier
+import util.ViewSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import base.Injector
-import org.mockito.ArgumentMatchers.any
-import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, SEE_OTHER}
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.auth.core.Enrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
-import uk.gov.hmrc.http.HeaderCarrier
-import play.api.test.FakeRequest
-import play.api.test.Helpers.await
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
-import util.ViewSpec
 
 class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector {
 
@@ -46,8 +44,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
   implicit val rq: Request[AnyContent] = withFakeCSRF(FakeRequest())
 
   private val mockSave4LaterService        = mock[Save4LaterService]
-  private val mockEmailVerificationService = mock[EmailVerificationService]
-  private val mockSessionCache             = mock[SessionCache]
+  private val mockEmailJourneyService      = mock[EmailJourneyService]
   private val messagesControllerComponents = instanceOf[MessagesControllerComponents]
 
   private val checkYourEmailView = instanceOf[check_your_email]
@@ -56,20 +53,27 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
-  private val loggedInUser =
-    LoggedInUserWithEnrolments(None, None, Enrolments(Set.empty), Some("test@example.com"), Some("groupId"), None)
+  implicit val loggedInUser =
+    LoggedInUserWithEnrolments(
+      None,
+      None,
+      Enrolments(Set.empty),
+      Some("test@example.com"),
+      Some("groupId"),
+      None,
+      "credId"
+    )
 
   private def emailStatus(isConfirmed: Boolean = true) =
     EmailStatus(Some("test@example.com"), isConfirmed = Some(isConfirmed))
 
   val service = new CheckYourEmailService(
     mockSave4LaterService,
-    mockEmailVerificationService,
-    mockSessionCache,
     messagesControllerComponents,
     checkYourEmailView,
     verifyYourEmail,
-    emailConfirmedView
+    emailConfirmedView,
+    mockEmailJourneyService
   )
 
   "fetchEmailAndPopulateView" should {
@@ -187,63 +191,22 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
         when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Some(emailStatus())))
 
-        when(mockEmailVerificationService.createEmailVerificationRequest(any(), any())(any[HeaderCarrier]))
-          .thenReturn(Future.successful(Some(true)))
+        when(mockEmailJourneyService.continue(any())(any(), any(), any(), any()))
+          .thenReturn(
+            Future.successful(
+              Redirect(s"/customs-registration-services/${subscription.code}/register/matching/verify-your-email")
+            )
+          )
 
-        val result = await(service.locationByAnswer(GroupId("groupId"), YesNo.apply(true), subscription))
+        val result = await(service.locationByAnswer(YesNo.apply(true), subscription))
         result.header.status mustBe SEE_OTHER
         result.header.headers(
           "Location"
         ) mustBe s"/customs-registration-services/${subscription.code}/register/matching/verify-your-email"
     }
 
-    "save email and redirect to EmailController when answer is yes and email already verified" in servicesToTest.foreach {
-      subscription =>
-        when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(Some(emailStatus())))
-
-        when(mockSave4LaterService.saveEmail(any[GroupId], any())(any[HeaderCarrier]))
-          .thenReturn(Future.successful((): Unit))
-
-        when(mockSessionCache.saveEmail(any())(any[Request[_]]))
-          .thenReturn(Future.successful(true))
-
-        when(mockEmailVerificationService.createEmailVerificationRequest(any(), any())(any[HeaderCarrier]))
-          .thenReturn(Future.successful(Some(false)))
-
-        val result = await(service.locationByAnswer(GroupId("groupId"), YesNo.apply(true), subscription))
-        result.header.status mustBe SEE_OTHER
-        result.header.headers(
-          "Location"
-        ) mustBe s"/customs-registration-services/${subscription.code}/register/check-user"
-    }
-
-    "throw IllegalStateException when email not in cache" in servicesToTest.foreach { subscription =>
-      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-        .thenReturn(Future.successful(None))
-
-      intercept[IllegalStateException] {
-        val result = await(service.locationByAnswer(GroupId("groupId"), YesNo.apply(true), subscription))
-        result.header.status mustBe INTERNAL_SERVER_ERROR
-      }
-    }
-
-    "throw IllegalStateException when email is cached and createEmailVerificationRequest fails" in servicesToTest.foreach {
-      subscription =>
-        when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(None))
-
-        when(mockEmailVerificationService.createEmailVerificationRequest(any(), any())(any[HeaderCarrier]))
-          .thenReturn(Future.successful(None))
-
-        intercept[IllegalStateException] {
-          val result = await(service.locationByAnswer(GroupId("groupId"), YesNo.apply(true), subscription))
-          result.header.status mustBe INTERNAL_SERVER_ERROR
-        }
-    }
-
     "redirect to WhatIsYourEmailController when answer is no" in servicesToTest.foreach { subscription =>
-      val result = await(service.locationByAnswer(GroupId("groupId"), YesNo.apply(false), subscription))
+      val result = await(service.locationByAnswer(YesNo.apply(false), subscription))
       result.header.status mustBe SEE_OTHER
       result.header.headers(
         "Location"

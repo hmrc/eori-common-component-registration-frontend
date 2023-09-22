@@ -17,14 +17,13 @@
 package unit.services
 
 import base.UnitSpec
-
-import java.time.LocalDate
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Request
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
@@ -33,6 +32,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 import scala.util.Random
@@ -90,7 +90,7 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
 
     val existingHolder = SubscriptionDetails(contactDetails = Some(mock[ContactDetailsModel]))
 
-    when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(existingHolder)
+    when(mockCdsFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(existingHolder))
     when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(mockpersonalDataDisclosureConsent)
 
     when(mockRegistrationDetailsCreator.registrationDetails(Some(eori))(registrationInfo))
@@ -101,14 +101,14 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
     "retrieve cached data if already stored in cdsFrontendCache" in {
       val contactDetailsModel = Some(mockContactDetailsModel)
 
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(contactDetailsModel)
       await(subscriptionBusinessService.cachedContactDetailsModel) shouldBe contactDetailsModel
       verify(mockCdsFrontendDataCache).subscriptionDetails
     }
 
     "return None if no data has been found in the cache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(None)
       await(subscriptionBusinessService.cachedContactDetailsModel) shouldBe None
     }
@@ -116,14 +116,14 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
 
   "Calling maybeCachedSicCode" should {
     "retrieve cached data if already stored in cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.sicCode).thenReturn(sicCode)
       await(subscriptionBusinessService.cachedSicCode) shouldBe sicCode
       verify(mockCdsFrontendDataCache).subscriptionDetails
     }
 
     "return None if no data has been found in the cache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.sicCode).thenReturn(None)
       await(subscriptionBusinessService.cachedSicCode) shouldBe None
     }
@@ -142,14 +142,14 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
 
   "Calling getCachedDateEstablished" should {
     "retrieve any previously cached Date Of Establishment Details from the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.dateEstablished).thenReturn(Some(expectedDate))
       await(subscriptionBusinessService.getCachedDateEstablished) shouldBe expectedDate
 
     }
 
     "throw exception when there are no Date Of Establishment details in the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.dateEstablished).thenReturn(None)
       val thrown = intercept[IllegalStateException] {
         await(subscriptionBusinessService.getCachedDateEstablished)
@@ -160,14 +160,14 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
 
   "Calling maybeCachedDateEstablished" should {
     "retrieve cached date established if already stored in cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.dateEstablished).thenReturn(maybeExpectedDate)
       await(subscriptionBusinessService.maybeCachedDateEstablished) shouldBe maybeExpectedDate
       verify(mockCdsFrontendDataCache).subscriptionDetails
     }
 
     "return None if no data has been found in the cache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.dateEstablished).thenReturn(None)
       await(subscriptionBusinessService.maybeCachedDateEstablished) shouldBe None
     }
@@ -175,14 +175,14 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
 
   "Calling getCachedSicCode" should {
     "retrieve any previously cached Sic Code from the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.sicCode).thenReturn(sicCode)
       await(subscriptionBusinessService.getCachedSicCode) shouldBe "someSicCode"
 
     }
 
     "throw exception when there are no SIC Code details in the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.sicCode).thenReturn(None)
       val thrown = intercept[IllegalStateException] {
         await(subscriptionBusinessService.getCachedSicCode)
@@ -193,13 +193,13 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
 
   "Calling getCachedPersonalDataDisclosureConsent" should {
     "retrieve any previously cached consent Details from the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(Some(false))
       await(subscriptionBusinessService.getCachedPersonalDataDisclosureConsent) shouldBe false
     }
 
     "throw exception when there are no consent details in the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(None)
       val thrown = intercept[IllegalStateException] {
         await(subscriptionBusinessService.getCachedPersonalDataDisclosureConsent)
@@ -210,13 +210,13 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
 
   "Calling getCachedCustomsId" should {
     "retrieve any previously cached Named Id from the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.customsId).thenReturn(customsIDUTR)
       await(subscriptionBusinessService.getCachedCustomsId) shouldBe customsIDUTR
     }
 
     "return None when cache Name Id is not saved in cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.customsId).thenReturn(None)
       await(subscriptionBusinessService.getCachedCustomsId) shouldBe None
     }
@@ -224,13 +224,13 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
 
   "Calling getCachedVatRegisteredUk" should {
     "retrieve any previously cached vat registered UK boolean from the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.vatRegisteredUk).thenReturn(Some(true))
       await(subscriptionBusinessService.getCachedVatRegisteredUk) shouldBe true
     }
 
     "throw exception when there is no vat registered UK boolean in the cdsFrontendCache" in {
-      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(mockSubscriptionDetailsHolder)
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.vatRegisteredUk).thenReturn(None)
       val thrown = intercept[IllegalStateException] {
         await(subscriptionBusinessService.getCachedVatRegisteredUk)

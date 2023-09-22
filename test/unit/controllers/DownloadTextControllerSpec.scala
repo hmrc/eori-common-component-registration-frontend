@@ -66,7 +66,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
       val result =
-        await(controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+        controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       status(result) shouldBe OK
       contentType(result) shouldBe Some("plain/text")
@@ -84,7 +84,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
       val result =
-        await(controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+        controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       val content = contentAsString(result)
       val lines   = content.split('\n').drop(1)
@@ -102,8 +102,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
-      val result =
-        await(controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+      val result = controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       status(result) shouldBe OK
       contentType(result) shouldBe Some("plain/text")
@@ -111,11 +110,11 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
       contentAsString(result).filterNot(_ == '\r') shouldBe
         """HM Revenue & Customs
           |
-          |Subscription request received for Test Company
+          |Application sent
           |
-          |issued by HMRC on 23 June 2018
+          |Your new EORI number is: ZZ123456789000
           |
-          |Your new EORI number is: ZZ123456789000""".stripMargin
+          |issued by HMRC on 23 June 2018""".stripMargin
     }
 
     "have Windows-friendly line terminators in the subscription text file" in {
@@ -123,7 +122,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
 
       val result =
-        await(controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId)))
+        controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       val content = contentAsString(result)
       val lines   = content.split('\n').drop(1)

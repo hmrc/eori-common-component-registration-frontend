@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   EmailController,
@@ -25,6 +24,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group)

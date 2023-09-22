@@ -19,14 +19,22 @@ package util
 import akka.util.Timeout
 import base.Injector
 import org.scalatestplus.play.PlaySpec
+import play.api.Application
 import play.api.i18n.Lang.defaultLang
 import play.api.i18n._
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Request
 import play.api.test.CSRFTokenHelper
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 
 import scala.concurrent.duration._
 
 trait ViewSpec extends PlaySpec with CSRFTest with Injector with TestData {
+
+  implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
+    .build()
 
   private val messageApi: MessagesApi = instanceOf[MessagesApi]
 

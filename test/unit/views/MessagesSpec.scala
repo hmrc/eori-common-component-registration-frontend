@@ -18,10 +18,18 @@ package unit.views
 
 import base.Injector
 import org.scalatestplus.play.PlaySpec
+import play.api.Application
 import play.api.i18n.{Messages, MessagesApi, MessagesImpl}
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.i18n.Lang
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 
 class MessagesSpec extends PlaySpec with Injector {
+
+  implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
+    .build()
 
   private val messageApi: MessagesApi = instanceOf[MessagesApi]
 
@@ -30,6 +38,9 @@ class MessagesSpec extends PlaySpec with Injector {
 
   val keysEn: Set[String] =
     messageApi.messages.get("en").map(_.keySet).getOrElse(throw new RuntimeException("no message keys"))
+
+  val keysCy: Map[String, String] =
+    messageApi.messages.get("cy").value
 
   val sameTranslation: Set[String] = Set(
     "cds.subscription.outcomes.rejected.vat-registered2",
@@ -52,21 +63,17 @@ class MessagesSpec extends PlaySpec with Injector {
       missingCy mustBe Set.empty
     }
 
+    "welsh key must contain value" in {
+      val welshValueForKey = keysCy.flatMap(key => if (key._2.isBlank) Some(key) else None)
+      welshValueForKey mustBe Map.empty
+    }
+
     "contain a different Welsh translation for every key" in {
 
       val sameTranslation: Set[String] = keysEn.flatMap(
         key => if (!ignoreKey(key) && (messagesEn.apply(key) == messagesCy.apply(key))) Some(key) else None
       )
       sameTranslation mustBe Set.empty
-    }
-
-    "print out any untranslated Welsh messages (not a test)" in {
-      val welshMessages = messageApi.messages.get("cy").map(_.values.toList).getOrElse(List.empty)
-      welshMessages must not be List.empty
-
-      val untranslated = welshMessages.filter(_.startsWith("TRANSLATE")).map(_.substring(9))
-      println("Untranslated messages:")
-      untranslated.foreach(m => println(m))
     }
 
   }

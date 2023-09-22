@@ -15,15 +15,12 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukDateInput
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.dateinput.DateInput
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.Fieldset
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.Legend
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.dateinput.InputItem
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.dateinput.{DateInput, InputItem}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 @import uk.gov.hmrc.hmrcfrontend.views.Implicits.RichDateInput
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 
 @this(govukDateInput: GovukDateInput)
 
@@ -84,7 +81,7 @@
     hint = hintText.map(hintHtml => Hint(
         content = HtmlContent(hintHtml)
     )),
-    errorMessage = form.hasErrors match {
+    errorMessage = form(id).hasErrors match {
         case true => Some(ErrorMessage(classes = "govuk-!-margin-bottom-1", content = HtmlContent(formatedErrors), visuallyHiddenText = Some(messages("cds.error.field.hint"))))
         case _ => None
     }).withFormField(form(id)))

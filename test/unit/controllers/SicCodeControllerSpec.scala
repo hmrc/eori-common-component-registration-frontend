@@ -32,9 +32,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   ThirdCountryOrganisation
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
 import util.StringThings._
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -59,7 +59,6 @@ class SicCodeControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockOrgTypeLookup      = mock[OrgTypeLookup]
   private val mockRequestSessionData = mock[RequestSessionData]
   private val sicCodeView            = instanceOf[sic_code]
 
@@ -68,7 +67,6 @@ class SicCodeControllerSpec
     mockSubscriptionBusinessService,
     mockSubscriptionFlowManager,
     mockSubscriptionDetailsService,
-    mockOrgTypeLookup,
     mcc,
     sicCodeView,
     mockRequestSessionData
@@ -79,7 +77,7 @@ class SicCodeControllerSpec
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    when(mockSubscriptionBusinessService.cachedSicCode(any[Request[_]])).thenReturn(None)
+    when(mockSubscriptionBusinessService.cachedSicCode(any[Request[_]])).thenReturn(Future.successful(None))
     registerSaveDetailsMockSuccess()
     setupMockSubscriptionFlowManager(SicCodeSubscriptionFlowPage)
   }
@@ -87,7 +85,7 @@ class SicCodeControllerSpec
   override protected def afterEach(): Unit = {
     reset(mockSubscriptionBusinessService)
     reset(mockSubscriptionFlowManager)
-    reset(mockOrgTypeLookup)
+
     reset(mockSubscriptionDetailsService)
     reset(mockRequestSessionData)
 
@@ -106,18 +104,16 @@ class SicCodeControllerSpec
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "display title as 'What does your organisation do?'" in {
-      showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company) { result =>
+      showCreateForm(userSelectedOrgType = Company) { result =>
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("What does your organisation do?")
       }
     }
 
     "display correct hint text when org type is company and user location is UK" in {
-      showCreateForm(orgType = CorporateBody, userSelectedOrgType = Company, userLocation = Some("UK")) { result =>
+      showCreateForm(userSelectedOrgType = Company, userLocation = Some("UK")) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementText(
-          sicDescriptionLabelXpath
-        ) shouldBe "We use Standard Industrial Classification (SIC) codes to identify what organisations do."
+        page.getElementText(sicDescriptionLabelXpath) shouldBe messages("cds.subscription.sic.description.para1")
       }
     }
 
@@ -326,12 +322,13 @@ class SicCodeControllerSpec
   private def submitFormInCreateMode(
     form: Map[String, String],
     userId: String = defaultUserId,
-    orgType: EtmpOrganisationType = CorporateBody,
     userSelectedOrgType: CdsOrganisationType
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
+    when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+      Some(UserLocation.ThirdCountryIncEU)
+    )
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
 
@@ -344,12 +341,13 @@ class SicCodeControllerSpec
   private def submitFormInReviewMode(
     form: Map[String, String],
     userId: String = defaultUserId,
-    orgType: EtmpOrganisationType = CorporateBody,
     userSelectedOrgType: CdsOrganisationType
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
+    when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+      Some(UserLocation.ThirdCountryIncEU)
+    )
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
 
@@ -369,13 +367,11 @@ class SicCodeControllerSpec
 
   private def showCreateForm(
     userId: String = defaultUserId,
-    orgType: EtmpOrganisationType = CorporateBody,
     userSelectedOrgType: CdsOrganisationType,
     userLocation: Option[String] = Some("uk")
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
@@ -386,15 +382,16 @@ class SicCodeControllerSpec
   private def showReviewForm(
     dataToEdit: String = sic,
     userId: String = defaultUserId,
-    orgType: EtmpOrganisationType = CorporateBody,
     userSelectedOrgType: CdsOrganisationType
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(orgType)
+    when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+      Some(UserLocation.ThirdCountryIncEU)
+    )
     when(mockRequestSessionData.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
-    when(mockSubscriptionBusinessService.getCachedSicCode(any[Request[_]])).thenReturn(dataToEdit)
+    when(mockSubscriptionBusinessService.getCachedSicCode(any[Request[_]])).thenReturn(Future.successful(dataToEdit))
 
     test(controller.reviewForm(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }

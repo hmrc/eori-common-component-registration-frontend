@@ -25,42 +25,50 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{CustomsDataStoreUpdate, UpdateRequest, UpdateResponse}
-import uk.gov.hmrc.http.{HttpClient, _}
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class UpdateCustomsDataStoreConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
-  ec: ExecutionContext
+class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(
+  implicit ec: ExecutionContext
 ) {
 
   val LoggerComponentId = "UpdateCustomsDataStoreConnector"
   private val logger    = Logger(this.getClass)
 
   def updateCustomsDataStore(request: CustomsDataStoreRequest)(implicit hc: HeaderCarrier): Future[Unit] = {
-    val url = s"${appConfig.handleSubscriptionBaseUrl}/customs/update/datastore"
+    val url = url"${appConfig.handleSubscriptionBaseUrl}/customs/update/datastore"
     // $COVERAGE-OFF$Loggers
     logger.info(s"[$LoggerComponentId][call] postUrl: $url")
     // $COVERAGE-ON
-    val headers = Seq(ACCEPT -> "application/vnd.hmrc.1.0+json", CONTENT_TYPE -> MimeTypes.JSON)
-    http.POST[CustomsDataStoreRequest, HttpResponse](url, request, headers) map { response =>
-      auditCall(url, request, response)
+
+    httpClient
+      .post(url)
+      .withBody(Json.toJson(request))
+      .setHeader(ACCEPT -> "application/vnd.hmrc.1.0+json")
+      .setHeader(CONTENT_TYPE -> MimeTypes.JSON)
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+      .execute[HttpResponse] map { response =>
+      auditCall(url.toString, request, response)
       response.status match {
         case OK | NO_CONTENT =>
           // $COVERAGE-OFF$Loggers
           logger.info(s"[$LoggerComponentId][call] complete for call to $url with status:${response.status}")
-          // $COVERAGE-ON
-          ()
+        // $COVERAGE-ON
         case _ => throw new BadRequestException(s"Status:${response.status}")
       }
     } recoverWith {
       case e: BadRequestException =>
-        logger.error(
+        // $COVERAGE-OFF$Loggers
+        logger.warn(
           s"[$LoggerComponentId][call] request failed with BAD_REQUEST status for call to $url: ${e.getMessage}",
           e
         )
+        // $COVERAGE-ON
         Future.failed(e)
       case NonFatal(e) =>
         logger.error(s"[$LoggerComponentId][call] request failed for call to $url: ${e.getMessage}", e)

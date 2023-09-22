@@ -17,26 +17,12 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 
 import play.api.data.Form
-import java.time.LocalDate
-import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  CorporateBody,
-  EtmpOrganisationType,
-  LLP,
-  Partnership,
-  UnincorporatedBody
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, EtmpOrganisationType, LLP, Partnership}
+
+import java.time.LocalDate
 
 object DateOfEstablishmentViewModel {
-
-  def introText(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
-    orgType match {
-      case LLP                => messages("cds.subscription.llp.date-established.label")
-      case UnincorporatedBody => messages("cds.subscription.llp.date-established.charity-label")
-      case Partnership        => messages("cds.subscription.business.date-established.label.partnership")
-      case _                  => messages("cds.subscription.business.date-established.label")
-    }
 
   def updateFormErrors(dateForm: Form[LocalDate]): Form[LocalDate] =
     dateForm.copy(errors = DateConverter.updateDateOfEstablishmentErrors(dateForm.errors))

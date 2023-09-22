@@ -16,19 +16,18 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.data.Form
-import play.api.mvc.{Action, _}
+import play.api.mvc._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -94,7 +93,7 @@ class DoYouHaveAUtrNumberController @Inject() (
       case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
         noUtrThirdCountryIndividualsRedirect(service)
       case _ =>
-        Redirect(YouNeedADifferentServiceController.form())
+        Redirect(YouNeedADifferentServiceController.form(service))
     }
 
   private def noUtrOrganisationRedirect(isInReviewMode: Boolean, organisationType: String, service: Service): Result =

@@ -20,8 +20,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.mockito.{ArgumentMatcher, ArgumentMatchers}
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
@@ -68,16 +68,21 @@ object AuthBuilder {
       mockAuthConnector.authorise(
         any(),
         retrieval = ArgumentMatchers
-          .eq(email and credentialRole and affinityGroup and internalId and allEnrolments and groupIdentifier)
+          .eq(
+            email and credentialRole and affinityGroup and internalId and allEnrolments and groupIdentifier and credentials
+          )
       )(any(), any())
     ).thenReturn(
       Future.successful(
         new ~(
           new ~(
-            new ~(new ~(new ~(userEmail, userCredentialRole), Option(userAffinityGroup)), Option(userId)),
-            Enrolments(userEnrolments)
+            new ~(
+              new ~(new ~(new ~(userEmail, userCredentialRole), Option(userAffinityGroup)), Option(userId)),
+              Enrolments(userEnrolments)
+            ),
+            groupId
           ),
-          groupId
+          userCredentials
         )
       )
     )
