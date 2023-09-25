@@ -195,16 +195,13 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
     "retrieve any previously cached consent Details from the cdsFrontendCache" in {
       when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(Some(false))
-      await(subscriptionBusinessService.getCachedPersonalDataDisclosureConsent) shouldBe false
+      await(subscriptionBusinessService.getCachedPersonalDataDisclosureConsent) shouldBe Some(false)
     }
 
-    "throw exception when there are no consent details in the cdsFrontendCache" in {
+    "pass back None when there are no contact details in the cache" in {
       when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.personalDataDisclosureConsent).thenReturn(None)
-      val thrown = intercept[IllegalStateException] {
-        await(subscriptionBusinessService.getCachedPersonalDataDisclosureConsent)
-      }
-      thrown.getMessage shouldBe "No Personal Data Disclosure Consent Cached"
+      await(subscriptionBusinessService.getCachedPersonalDataDisclosureConsent) shouldBe None
     }
   }
 

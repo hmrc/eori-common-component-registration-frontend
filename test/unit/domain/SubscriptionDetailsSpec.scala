@@ -36,7 +36,7 @@ class SubscriptionDetailsSpec extends UnitSpec {
         nameIdOrganisationDetails = Some(NameIdOrganisationMatchModel("John Doe", "")),
         nameOrganisationDetails = Some(NameOrganisationMatchModel("other name"))
       )
-      sd.name shouldBe "John Doe"
+      sd.name shouldBe Some("John Doe")
     }
 
     "use name from nameOrganisationDetails when nameIdOrganisationDetails not present" in {
@@ -44,7 +44,7 @@ class SubscriptionDetailsSpec extends UnitSpec {
         nameIdOrganisationDetails = None,
         nameOrganisationDetails = Some(NameOrganisationMatchModel("John Doe"))
       )
-      sd.name shouldBe "John Doe"
+      sd.name shouldBe Some("John Doe")
     }
 
     "use name from nameDobDetails when nameOrganisationDetails not present" in {
@@ -52,19 +52,17 @@ class SubscriptionDetailsSpec extends UnitSpec {
         nameOrganisationDetails = None,
         nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.now))
       )
-      sd.name shouldBe "John Doe"
+      sd.name shouldBe Some("John Doe")
     }
 
     "use name from nameDetails when nameDobDetails not present" in {
       val sd = SubscriptionDetails(nameDobDetails = None, nameDetails = Some(NameMatchModel("John Doe")))
-      sd.name shouldBe "John Doe"
+      sd.name shouldBe Some("John Doe")
     }
 
-    "throw exception when no name is present" in {
+    "return None when no name is present" in {
       val sd = SubscriptionDetails()
-      the[IllegalArgumentException] thrownBy {
-        sd.name
-      } should have message "Name is missing in cache"
+      sd.name shouldBe None
     }
   }
 
