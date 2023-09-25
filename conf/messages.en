@@ -386,7 +386,7 @@ cds.subscription.enter-eori-number.eori-number.label=EORI number
 subscription.subscription-results.subscription-complete=Subscription complete
 subscription.subscription-results.active-from=on
 cds.subscription.enter-email.page-error.email=Enter your email address
-cds.subscription.contact-details.form-error.email.wrong-format=Enter a valid email address
+cds.subscription.contact-details.form-error.email.wrong-format=Enter an email address in the correct format, like name@example.com
 
 cds.email-confirmed.para.get-eori=You can continue with your application to get an EORI number.
 

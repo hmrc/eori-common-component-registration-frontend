@@ -65,7 +65,7 @@ class WhatIsYourEmailSpec extends ViewSpec {
         .body()
         .getElementById("email-error")
         .getElementsByClass("govuk-error-message")
-        .text() mustBe "Error: Enter a valid email address"
+        .text() mustBe s"Error: ${messages("cds.subscription.contact-details.form-error.email.wrong-format")}"
     }
 
     "associate error with input field" in {
