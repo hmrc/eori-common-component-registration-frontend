@@ -55,8 +55,6 @@ class DateOfVatRegistrationController @Inject() (
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)
           if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
-        if (appConfig.integrationFrameworkFeatureFlag)
-          getVatCustomerInformationService.checkResponseMatchesNewVATAPI(response)
         Redirect(ContactDetailsController.createForm(service))
       case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }
