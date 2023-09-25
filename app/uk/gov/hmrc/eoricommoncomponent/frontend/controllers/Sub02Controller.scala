@@ -136,7 +136,7 @@ class Sub02Controller @Inject() (
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
         _             <- sessionCache.remove
-      } yield Ok(sub02EoriAlreadyExists(name, processedDate, service)).withSession(newUserSession)
+      } yield Ok(sub02EoriAlreadyExists(name.getOrElse(""), processedDate, service)).withSession(newUserSession)
     }
 
   def eoriAlreadyAssociated(service: Service): Action[AnyContent] =
@@ -145,7 +145,7 @@ class Sub02Controller @Inject() (
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
         _             <- sessionCache.remove
-      } yield Ok(sub02EoriAlreadyAssociatedView(name, processedDate, service)).withSession(newUserSession)
+      } yield Ok(sub02EoriAlreadyAssociatedView(name.getOrElse(""), processedDate, service)).withSession(newUserSession)
     }
 
   def subscriptionInProgress(service: Service): Action[AnyContent] =

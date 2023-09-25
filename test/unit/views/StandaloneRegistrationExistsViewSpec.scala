@@ -54,9 +54,7 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
       }
 
       "display sub heading for CDS" in {
-        adminDoc.body().getElementsByTag("h2").text() must startWith(
-          "Help make GOV.UK better Customs Declaration Service Support links"
-        )
+        adminDoc.body().getElementsByTag("h2").text() must startWith("Customs Declaration Service Support links")
       }
 
       "display tell user about CDS access and link for accessing CDS services" in {
@@ -96,9 +94,7 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
       }
 
       "display sub heading for CDS" in {
-        standardDoc.body().getElementsByTag("h2").text() must startWith(
-          "Help make GOV.UK better Customs Declaration Service Support links"
-        )
+        standardDoc.body().getElementsByTag("h2").text() must startWith("Customs Declaration Service Support links")
       }
 
       "display tell user about CDS access and link for accessing CDS services" in {
@@ -108,9 +104,7 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
           "href"
         ) mustBe "https://www.gov.uk/government/collections/customs-declaration-service"
       }
-
     }
-
   }
 
   private lazy val adminDoc: Document = Jsoup.parse(

@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DisclosePersonalDetailsConsentController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, DisclosePersonalDetailsConsentController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -314,7 +314,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       }
 
       "display yes when the user's previous answer of yes is in the cache" in {
-        showReviewForm(previouslyAnswered = true) { result =>
+        showReviewForm(previouslyAnswered = Some(true)) { result =>
           val page = CdsPage(contentAsString(result))
           page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe false
           page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe true
@@ -322,10 +322,17 @@ class DisclosePersonalDetailsConsentControllerSpec
       }
 
       "display no when the user's previous answer of no is in the cache" in {
-        showReviewForm(previouslyAnswered = false) { result =>
+        showReviewForm(previouslyAnswered = Some(false)) { result =>
           val page = CdsPage(contentAsString(result))
           page.radioButtonChecked(DisclosePersonalDetailsConsentPage.noToDiscloseInputXpath) shouldBe true
           page.radioButtonChecked(DisclosePersonalDetailsConsentPage.yesToDiscloseInputXpath) shouldBe false
+        }
+      }
+
+      "redirect to the start if the previous answer is not in the cache" in {
+        showReviewForm(previouslyAnswered = None) { result =>
+          status(result) shouldBe SEE_OTHER
+          header(LOCATION, result).value shouldBe routes.EmailController.form(atarService).url
         }
       }
 
@@ -427,7 +434,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   private def showReviewForm(
     subscriptionFlow: SubscriptionFlow = OrganisationSubscriptionFlow,
-    previouslyAnswered: Boolean = true,
+    previouslyAnswered: Option[Boolean] = Some(true),
     userId: String = defaultUserId,
     isUkJourney: Boolean = true,
     isIndividual: Boolean = false,

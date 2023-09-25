@@ -324,7 +324,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       invokeEndSubscriptionPageWithAuthenticatedUser() {
         mockSessionCacheForOutcomePage
         when(mockSubscribeOutcome.eori).thenReturn(Some(EORI))
-        when(mockSubscriptionDetails.name).thenReturn("orgName")
+        when(mockSubscriptionDetails.name).thenReturn(Some("orgName"))
         when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
         when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
           Future.successful(mockSubscriptionDetails)
@@ -361,7 +361,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       invokeEndStandAloneWithAuthenticatedUser() {
         mockSessionCacheForOutcomePage
         when(mockSubscribeOutcome.eori).thenReturn(Some(EORI))
-        when(mockSubscriptionDetails.name).thenReturn("orgName")
+        when(mockSubscriptionDetails.name).thenReturn(Some("orgName"))
         when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
         when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
           Future.successful(mockSubscriptionDetails)
@@ -396,7 +396,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling eoriAlreadyExists on Sub02Controller" should {
     "render eori already exists page" in {
-      when(mockSubscriptionDetails.name).thenReturn("orgName")
+      when(mockSubscriptionDetails.name).thenReturn(Some("orgName"))
       when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
       when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
       when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
@@ -427,7 +427,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
 
   "calling eoriAlreadyAssociated on Sub02Controller" should {
     "render Already Associated page" in {
-      when(mockSubscriptionDetails.name).thenReturn("orgName")
+      when(mockSubscriptionDetails.name).thenReturn(Some("orgName"))
       when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
       when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
       when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))
@@ -457,7 +457,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   "calling pending on Sub02Controller" should {
     "render sub01 processing page" in {
 
-      when(mockSubscriptionDetails.name).thenReturn("testFullName")
+      when(mockSubscriptionDetails.name).thenReturn(Some("testFullName"))
       when(mockSubscribe01Outcome.processedDate).thenReturn("22 May 2016")
       when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
       when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSubscribe01Outcome))

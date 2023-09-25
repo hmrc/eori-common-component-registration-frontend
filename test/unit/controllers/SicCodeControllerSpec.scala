@@ -106,7 +106,7 @@ class SicCodeControllerSpec
     "display title as 'What does your organisation do?'" in {
       showCreateForm(userSelectedOrgType = Company) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("What does your organisation do?")
+        page.title() should startWith(messages("cds.subscription.sic.page.title"))
       }
     }
 
