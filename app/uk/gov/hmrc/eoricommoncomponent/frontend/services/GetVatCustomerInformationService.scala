@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GetVatInformationRespons
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class GetVatCustomerInformationService @Inject() (
@@ -34,17 +34,22 @@ class GetVatCustomerInformationService @Inject() (
 
   def checkResponseMatchesNewVATAPI(
     vatControlListResponse: VatControlListResponse
-  )(implicit request: Request[_], hc: HeaderCarrier): Unit =
+  )(implicit request: Request[_], hc: HeaderCarrier): Future[Unit] =
     for {
       vatDetails <- sessionCache.subscriptionDetails.map(_.ukVatDetails)
       vrn = vatDetails.map(_.number)
-    } yield vrn.map { vatNumber =>
-      getVatCustomerInformationConnector.getVatCustomerInformation(vatNumber)
-        .fold(
-          errorResponse =>
-            logger.warn(s"getVatCustomerInformation returned response: $errorResponse. Cannot compare values"),
-          vatCustomerInformation => compareApiResponses(vatControlListResponse, vatCustomerInformation)
-        )
+    } yield {
+      vrn.map { vatNumber =>
+        getVatCustomerInformationConnector.getVatCustomerInformation(vatNumber)
+          .fold(
+            { errorResponse =>
+              logger.warn(s"getVatCustomerInformation returned response: $errorResponse. Cannot compare values")
+              errorResponse
+            },
+            vatCustomerInformation => compareApiResponses(vatControlListResponse, vatCustomerInformation)
+          )
+      }
+      ()
     }
 
   def compareApiResponses(oldResponse: VatControlListResponse, newResponse: GetVatInformationResponse): Boolean = {

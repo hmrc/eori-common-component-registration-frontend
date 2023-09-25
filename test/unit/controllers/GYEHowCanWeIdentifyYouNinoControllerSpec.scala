@@ -24,6 +24,7 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouNinoController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameDobMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
@@ -34,7 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
   SessionCache,
   SessionCacheService
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_nino
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_nino}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -51,6 +52,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
   private val mockMatchingService   = mock[MatchingService]
   private val mockFrontendDataCache = mock[SessionCache]
   private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache)
+  private val errorView             = instanceOf[error_template]
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_nino]
 
@@ -59,7 +61,8 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     mockMatchingService,
     mcc,
     howCanWeIdentifyYouView,
-    sessionCacheService
+    sessionCacheService,
+    errorView
   )
 
   "Viewing the form " should {
@@ -91,7 +94,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       submitForm(Map("nino" -> nino)) {
         result =>
@@ -111,7 +114,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(Future.successful(false))
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
 
       submitForm(Map("nino" -> nino)) {
         result =>
@@ -120,6 +123,48 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
           page.getElementsText(
             RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
           ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
+      }
+    }
+
+    "redirect to error_template when downstreamFailureResponse" in {
+      val nino = "AB123456C"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
+
+      submitForm(Map("nino" -> nino)) {
+        result =>
+          status(result) shouldBe OK
+          val page = CdsPage(contentAsString(result))
+          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+      }
+    }
+
+    "redirect to error_template when any other error is case " in {
+      val nino = "AB123456C"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
+
+      submitForm(Map("nino" -> nino)) {
+        result =>
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+          val page = CdsPage(contentAsString(result))
+          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
@@ -135,7 +180,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       submitForm(Map("nino" -> "")) {
         result =>

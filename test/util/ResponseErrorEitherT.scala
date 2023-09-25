@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package base
+package util
 
-import org.scalatest.OptionValues
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import util.{ResponseErrorEitherT, TestData}
+import cats.data.EitherT
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 
-trait UnitSpec extends AnyWordSpec with Matchers with TestData with OptionValues with ResponseErrorEitherT
+import scala.concurrent.Future
+
+trait ResponseErrorEitherT {
+  def eitherT[A](a: A) = EitherT[Future, ResponseError, A](Future.successful(Right(a)))
+
+  def eitherT[A](responseError: ResponseError) =
+    EitherT[Future, ResponseError, A](Future.successful(Left(responseError)))
+
+}
