@@ -34,7 +34,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   enrolment_pending_against_group_id,
-  enrolment_pending_for_user
+  enrolment_pending_for_user,
+  error_template
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -51,7 +52,8 @@ class EmailController @Inject() (
   appConfig: AppConfig,
   enrolmentPendingForUser: enrolment_pending_for_user,
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id,
-  emailJourneyService: EmailJourneyService
+  emailJourneyService: EmailJourneyService,
+  errorPage: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
@@ -62,42 +64,42 @@ class EmailController @Inject() (
 
   private def startRegisterJourney(
     service: Service
-  )(implicit hc: HeaderCarrier, request: Request[AnyContent], user: LoggedInUserWithEnrolments) =
-    groupEnrolment.groupIdEnrolments(user.groupId.getOrElse(throw MissingGroupId())).flatMap {
-      groupEnrolments =>
-        if (groupEnrolments.exists(_.service == service.enrolmentKey))
-          // user has specified service
-          if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
-            existingEoriForUserOrGroup(user, groupEnrolments) match {
-              case Some(eori) =>
-                sessionCache.saveEori(Eori(eori.id)).map(
-                  _ => Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
-                )
-              case None =>
-                Future.successful(
-                  Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
-                )
-            }
+  )(implicit hc: HeaderCarrier, request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
+    groupEnrolment.groupIdEnrolments(user.groupId.getOrElse(throw MissingGroupId()))
+      .foldF(
+        _ => Future.successful(InternalServerError(errorPage(service))),
+        enrolmentResponseList =>
+          if (enrolmentResponseList.exists(_.service == service.enrolmentKey))
+            if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
+              existingEoriForUserOrGroup(user, enrolmentResponseList) match {
+                case Some(eori) =>
+                  sessionCache.saveEori(Eori(eori.id)).map(
+                    _ => Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
+                  )
+                case None =>
+                  Future.successful(
+                    Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
+                  )
+              }
+            else
+              Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
           else
-            Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
-        else
-          existingEoriForUserOrGroup(user, groupEnrolments) match {
-            case Some(eori) =>
-              // user already has EORI
-              if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
-                sessionCache.saveEori(Eori(eori.id)).map(
-                  _ => Redirect(YouAlreadyHaveEoriController.displayStandAlone(service))
-                )
-              else
-                Future.successful(Redirect(YouAlreadyHaveEoriController.display(service)))
-            case None =>
-              userGroupIdSubscriptionStatusCheckService
-                .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
-                  emailJourneyService.continue(service)
-                )(Future.successful(Ok(enrolmentPendingForUser(service))))(
-                  Future.successful(Ok(enrolmentPendingAgainstGroupId(service)))
-                )
-          }
-    }
+            existingEoriForUserOrGroup(user, enrolmentResponseList) match {
+              case Some(eori) =>
+                if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
+                  sessionCache.saveEori(Eori(eori.id)).map(
+                    _ => Redirect(YouAlreadyHaveEoriController.displayStandAlone(service))
+                  )
+                else
+                  Future.successful(Redirect(YouAlreadyHaveEoriController.display(service)))
+              case None =>
+                userGroupIdSubscriptionStatusCheckService
+                  .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
+                    emailJourneyService.continue(service)
+                  )(Future.successful(Ok(enrolmentPendingForUser(service))))(
+                    Future.successful(Ok(enrolmentPendingAgainstGroupId(service)))
+                  )
+            }
+      )
 
 }

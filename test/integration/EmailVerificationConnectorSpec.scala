@@ -99,7 +99,12 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     "return a Left describing that the json was invalid when CREATED is returned but the JSON is not in the expected format" in {
       EmailVerificationStubService.stubVerifyEmailInvalid()
 
-      val expected = Left(ResponseError(500, """Invalid JSON returned: {"something":"google.com"}"""))
+      val expected = Left(
+        ResponseError(
+          500,
+          """Invalid JSON returned: List((/redirectUri,List(JsonValidationError(List(error.path.missing),ArraySeq()))))"""
+        )
+      )
       val result: Either[ResponseError, ResponseWithURI] =
         await(connector.startVerificationJourney(credId, service, email).value)
 
@@ -140,7 +145,12 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     "return a Left describing that the json was invalid when OK is returned but the JSON is not in the expected format" in {
       EmailVerificationStubService.stubVerificationStatusInvalid(credId)
 
-      val expected = Left(ResponseError(500, """Invalid JSON returned: {"something":"google.com"}"""))
+      val expected = Left(
+        ResponseError(
+          500,
+          """Invalid JSON returned: List((/emails,List(JsonValidationError(List(error.path.missing),ArraySeq()))))"""
+        )
+      )
       val result: Either[ResponseError, VerificationStatusResponse] =
         await(connector.getVerificationStatus(credId).value)
 
