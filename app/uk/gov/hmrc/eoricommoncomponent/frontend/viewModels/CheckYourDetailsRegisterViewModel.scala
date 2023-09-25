@@ -29,11 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.helpers.noMarginParagraph
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Value}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryList
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -171,7 +167,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
       for {
         providedDetailsList <- providedDetails
-        vatDetails             = getVatDetails(isIndividual, subscription, service)
+        vatDetails             = getVatDetails(isIndividual, subscription)
         providedContactDetails = getProvidedContactDetails(subscription, service)
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
     }
@@ -398,7 +394,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     )
   }
 
-  def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails, service: Service)(implicit
+  def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails)(implicit
     messages: Messages
   ): Seq[SummaryListRow] =
     if (!isIndividual) {
