@@ -181,6 +181,22 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       |  "registerWithIDResponse": {
       |    "responseCommon":    {
       |      "status": "OK",
+      |      "statusText":"002 - No match found",
+      |      "processingDate": "2016-07-08T08:35:13Z",
+      |      "returnParameters": [{
+      |       "paramName": "POSITION",
+      |       "paramValue": "FAIL"
+      |      }]
+      |    }
+      |  }
+      |}
+    """.stripMargin)
+
+  private val matchFailureResponseUppercase = Json.parse("""
+      |{
+      |  "registerWithIDResponse": {
+      |    "responseCommon":    {
+      |      "status": "OK",
       |      "statusText":"002 - No Match Found",
       |      "processingDate": "2016-07-08T08:35:13Z",
       |      "returnParameters": [{
@@ -277,6 +293,20 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         expectedPostUrl,
         serviceRequestJson.toString(),
         matchFailureResponse.toString(),
+        OK
+      )
+
+      val expected = Left(MatchingServiceConnector.matchFailureResponse)
+      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+
+      result.value.futureValue mustBe expected
+    }
+
+    "return matchFailureResponse when matching service can't find a match and the message is in a different case" in {
+      MatchService.returnTheMatchResponseWhenReceiveRequest(
+        expectedPostUrl,
+        serviceRequestJson.toString(),
+        matchFailureResponseUppercase.toString(),
         OK
       )
 

@@ -571,7 +571,7 @@ object MatchService {
           |  "registerWithIDResponse": {
           |    "responseCommon":    {
           |      "status": "OK",
-          |      "statusText":"002 - No Match Found",
+          |      "statusText":"002 - No match found",
           |      "processingDate": "2016-07-08T08:35:13Z",
           |      "returnParameters": [{
           |       "paramName": "POSITION",
