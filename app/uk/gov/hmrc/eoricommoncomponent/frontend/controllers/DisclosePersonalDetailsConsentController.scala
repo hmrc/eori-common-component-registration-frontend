@@ -68,16 +68,18 @@ class DisclosePersonalDetailsConsentController @Inject() (
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction {
       implicit request => _: LoggedInUserWithEnrolments =>
-        subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.map { isConsentDisclosed =>
-          Ok(
-            disclosePersonalDetailsConsentView(
-              isInReviewMode = true,
-              disclosePersonalDetailsYesNoAnswerForm().fill(YesNo(isConsentDisclosed)),
-              requestSessionData,
-              disclosePersonalDetailsConsentViewModel,
-              service
+        subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.map {
+          case Some(isConsentDisclosed) =>
+            Ok(
+              disclosePersonalDetailsConsentView(
+                isInReviewMode = true,
+                disclosePersonalDetailsYesNoAnswerForm().fill(YesNo(isConsentDisclosed)),
+                requestSessionData,
+                disclosePersonalDetailsConsentViewModel,
+                service
+              )
             )
-          )
+          case None => Redirect(routes.EmailController.form(service))
         }
     }
 

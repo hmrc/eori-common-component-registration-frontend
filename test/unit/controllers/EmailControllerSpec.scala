@@ -18,6 +18,8 @@ package unit.controllers
 
 import cats.data.EitherT
 import common.pages.matching.AddressPageFactoring
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
@@ -49,6 +51,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
+import org.mockito.ArgumentMatchers
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -83,7 +87,8 @@ class EmailControllerSpec
     mockAppConfig,
     enrolmentPendingForUserView,
     enrolmentPendingAgainstGroupIdView,
-    emailJourneyService
+    emailJourneyService,
+    errorView
   )
 
   private val emailStatus = EmailStatus(Some("test@example.com"))
@@ -110,8 +115,13 @@ class EmailControllerSpec
       .thenReturn(Future.successful(true))
     when(mockSave4LaterService.fetchCacheIds(any())(any()))
       .thenReturn(Future.successful(None))
-    when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-      .thenReturn(Future.successful(List.empty))
+
+    val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List.empty[EnrolmentResponse])
+
+    mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+      Future.successful(rightValueForEitherT)
+    })
+
     when(mockSave4LaterService.fetchProcessingService(any())(any(), any())).thenReturn(Future.successful(None))
   }
 
@@ -185,8 +195,12 @@ class EmailControllerSpec
     }
 
     "redirect when group enrolled to service" in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(atarGroupEnrolment)))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(atarGroupEnrolment))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        Future.successful(rightValueForEitherT)
+      })
 
       showFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
@@ -195,8 +209,12 @@ class EmailControllerSpec
     }
 
     "redirect when user has existing EORI" in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(cdsGroupEnrolment)))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(cdsGroupEnrolment))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        Future.successful(rightValueForEitherT)
+      })
 
       showFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
@@ -204,9 +222,30 @@ class EmailControllerSpec
       }
     }
 
+    "redirect to error page when Left is returned for groupIdEnrolments" in {
+
+      val leftValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] =
+        Left(ResponseError(INTERNAL_SERVER_ERROR, "failed"))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        Future.successful(leftValueForEitherT)
+      })
+
+      showFormRegister() { result =>
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith(messages("cds.error.title"))
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+    }
+
     "redirect and display when group enrolled to service and Eori is retreived in standalone journey " in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(cdsGroupEnrolment)))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(cdsGroupEnrolment))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        Future.successful(rightValueForEitherT)
+      })
+
       when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
         .thenReturn(Future.successful(true))
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
@@ -217,8 +256,14 @@ class EmailControllerSpec
     }
 
     "redirect and display when group enrolled to service even if Eori couldn't be retrieved in standalone journey " in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(cdsGroupEnrolment.copy(identifiers = List()))))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] =
+        Right(List(cdsGroupEnrolment.copy(identifiers = List())))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        Future.successful(rightValueForEitherT)
+      })
+
       when(mockAppConfig.standaloneServiceCode).thenReturn("eori-only")
       showStandaloneFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
@@ -227,8 +272,13 @@ class EmailControllerSpec
     }
 
     "redirect and display when not enrolled to CDS and Display Eori in standalone journey " in {
-      when(groupEnrolmentExtractor.groupIdEnrolments(any())(any()))
-        .thenReturn(Future.successful(List(atarGroupEnrolment)))
+
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(atarGroupEnrolment))
+
+      mockGroupIdEnrolments()(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        Future.successful(rightValueForEitherT)
+      })
+
       when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
         .thenReturn(Future.successful(true))
       showStandaloneFormRegister() { result =>
@@ -254,5 +304,8 @@ class EmailControllerSpec
     withAuthorisedUser(userId, mockAuthConnector)
     test(controller.form(eoriOnlyService).apply(SessionBuilder.buildRequestWithSessionAndPath("/eori-only", userId)))
   }
+
+  def mockGroupIdEnrolments()(response: EitherT[Future, ResponseError, List[EnrolmentResponse]]): Unit =
+    when(groupEnrolmentExtractor.groupIdEnrolments(any())(ArgumentMatchers.any[HeaderCarrier])) thenReturn response
 
 }

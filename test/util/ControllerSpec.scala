@@ -46,7 +46,8 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 import scala.util.Random
 
-trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with Injector with TestData {
+trait ControllerSpec
+    extends UnitSpec with MockitoSugar with I18nSupport with Injector with TestData with ResponseErrorEitherT {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])

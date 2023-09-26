@@ -386,7 +386,7 @@ cds.subscription.enter-eori-number.eori-number.label=EORI number
 subscription.subscription-results.subscription-complete=Subscription complete
 subscription.subscription-results.active-from=on
 cds.subscription.enter-email.page-error.email=Enter your email address
-cds.subscription.contact-details.form-error.email.wrong-format=Enter a valid email address
+cds.subscription.contact-details.form-error.email.wrong-format=Enter an email address in the correct format, like name@example.com
 
 cds.email-confirmed.para.get-eori=You can continue with your application to get an EORI number.
 
@@ -982,7 +982,7 @@ cds.subscription.date-of-establishment.find-it=You can find the incorporated dat
 cds.subscription.partnership.date-of-establishment.hint=Enter the date shown on your partnership’s certificate of incorporation. You can find the date your partnership was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 
 #Sic Code
-cds.subscription.sic.page.title=What does your organisation do?
+cds.subscription.sic.page.title=Standard Industrial Classification (SIC) code
 cds.subscription.sic.page.heading=Standard Industrial Classification (SIC) code
 cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House for your SIC code (opens in new tab).</a>
 cds.subscription.sic.nonuk.soleTrader.description=You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>

@@ -17,6 +17,9 @@
 package unit.controllers
 
 import common.pages.matching.OrganisationUtrPage._
+
+import java.time.LocalDate
+
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -34,14 +37,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
   Organisation
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.OrganisationUtrFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
-
-import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -55,6 +56,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockMatchingResponse           = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val matchOrganisationUtrView       = instanceOf[how_can_we_identify_you_utr]
+  private val errorView                      = instanceOf[error_template]
 
   implicit val hc = mock[HeaderCarrier]
 
@@ -63,7 +65,8 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     mockMatchingService,
     mcc,
     matchOrganisationUtrView,
-    mockSubscriptionDetailsService
+    mockSubscriptionDetailsService,
+    errorView
   )
 
   private val UtrInvalidErrorPage  = "Enter a valid UTR number"
@@ -150,7 +153,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
       submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         await(result)
         verify(mockMatchingService).matchBusiness(
@@ -172,12 +175,48 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           meq(None),
           any()
         )(any[Request[AnyContent]], any[HeaderCarrier])
-      ).thenReturn(Future.successful(false))
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
       submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe BusinessNotMatchedError
         page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
+    "return a OK  when business match is downstreamFailureResponse" in {
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
+        .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
+      when(
+        mockMatchingService.matchBusiness(
+          meq(ValidUtr),
+          meq(charityPublicBodyNotForProfitOrganisation),
+          meq(None),
+          any()
+        )(any[Request[AnyContent]], any[HeaderCarrier])
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
+      submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText("h1") shouldBe messages("cds.error.title")
+      }
+    }
+
+    "return a 500  when any other error occurred" in {
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
+        .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
+      when(
+        mockMatchingService.matchBusiness(
+          meq(ValidUtr),
+          meq(charityPublicBodyNotForProfitOrganisation),
+          meq(None),
+          any()
+        )(any[Request[AnyContent]], any[HeaderCarrier])
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
+      submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText("h1") shouldBe messages("cds.error.title")
       }
     }
 
@@ -191,7 +230,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           meq(None),
           any()
         )(any[Request[AnyContent]], any[HeaderCarrier])
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
       submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
@@ -208,7 +247,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountryOrganisationId) { result =>
         await(result)
@@ -227,14 +266,14 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
       when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameDobMatchModel("", "", LocalDate.now()))))
       when(mockMatchingConnector.lookup(mockMatchingRequestHolder))
-        .thenReturn(Future.successful(Option(mockMatchingResponse)))
+        .thenReturn(eitherT(mockMatchingResponse))
       when(
         mockMatchingService.matchIndividualWithId(meq(ValidUtr), any[Individual], any())(
           any[HeaderCarrier],
           any[Request[_]]
         )
       )
-        .thenReturn(Future.successful(true))
+        .thenReturn(eitherT(()))
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
@@ -250,7 +289,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           any[Request[_]]
         )
       )
-        .thenReturn(Future.successful(false))
+        .thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
       submitForm(ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -268,7 +307,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           meq(None),
           any()
         )(any[Request[AnyContent]], any[HeaderCarrier])
-      ).thenReturn(Future.successful(false))
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
       submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))

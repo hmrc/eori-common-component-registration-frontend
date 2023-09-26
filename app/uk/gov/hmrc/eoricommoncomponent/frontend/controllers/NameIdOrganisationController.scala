@@ -16,11 +16,23 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import cats.data.EitherT
+
+import javax.inject.{Inject, Singleton}
+import java.time.LocalDate
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationModel._
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationModel.{
+  CompanyDM,
+  OrganisationModeDM,
+  PartnershipDM,
+  PartnershipLLpDM,
+  RegisteredCompanyDM
+}
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
@@ -32,11 +44,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require._
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_name_id_organisation
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_name_id_organisation}
 import uk.gov.hmrc.http.HeaderCarrier
-
-import java.time.LocalDate
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -45,7 +54,8 @@ class NameIdOrganisationController @Inject() (
   mcc: MessagesControllerComponents,
   matchNameIdOrganisationView: match_name_id_organisation,
   matchingService: MatchingService,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  errorView: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -122,17 +132,21 @@ class NameIdOrganisationController @Inject() (
             None,
             conf.matchingServiceType,
             groupId
-          ) flatMap {
-            case true =>
-              subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map {
-                _ =>
-                  Redirect(
-                    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-                      .form(service, isInReviewMode = false)
-                  )
+          ).foldF(
+            {
+              case MatchingServiceConnector.matchFailureResponse =>
+                Future.successful(matchNotFoundBadRequest(organisationType, conf, formData, service))
+              case MatchingServiceConnector.downstreamFailureResponse => Future.successful(Ok(errorView(service)))
+              case _                                                  => Future.successful(InternalServerError(errorView(service)))
+            },
+            _ =>
+              subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map { _ =>
+                Redirect(
+                  uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
+                    .form(service, isInReviewMode = false)
+                )
               }
-            case false => Future.successful(matchNotFoundBadRequest(organisationType, conf, formData, service))
-          }
+          )
       )
 
   private def invalidOrganisationType(organisationType: String): Any = s"Invalid organisation type '$organisationType'."
@@ -143,7 +157,7 @@ class NameIdOrganisationController @Inject() (
     dateEstablished: Option[LocalDate],
     matchingServiceType: String,
     groupId: GroupId
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Boolean] =
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier): EitherT[Future, ResponseError, Unit] =
     matchingService.matchBusiness(id, Organisation(name, matchingServiceType), dateEstablished, groupId)
 
   private def matchNotFoundBadRequest[M <: NameIdOrganisationMatch](

@@ -366,7 +366,7 @@ cds.subscription.enter-eori-number.eori-number.label = Rhif EORI
 subscription.subscription-results.subscription-complete = Tanysgrifiad wedi’i gwblhau
 subscription.subscription-results.active-from = ar
 cds.subscription.enter-email.page-error.email = Nodwch eich cyfeiriad e-bost
-cds.subscription.contact-details.form-error.email.wrong-format = Nodwch gyfeiriad e-bost dilys
+cds.subscription.contact-details.form-error.email.wrong-format = Nodwch gyfeiriad e-bost yn y fformat cywir, megis enw@enghraifft.com
 cds.email-confirmed.para.get-eori = Gallwch barhau â’ch cais am rif EORI.
 subscription.check-your-details.full-name.label = Enw llawn
 subscription.check-your-details.date-of-birth.label = Dyddiad geni
@@ -905,7 +905,7 @@ cds.subscription.sic.error.too-long = Rhaid i’r cod SIC fod yn 5 digid neu lai
 cds.subscription.sic.error.too-short = Rhaid i’r cod SIC fod yn fwy na 3 digid
 cds.subscription.sic.error.wrong-format = Nodwch god SIC yn y fformat cywir
 
-cds.subscription.sic.page.title = Beth mae’ch sefydliad yn ei wneud?
+cds.subscription.sic.page.title = Cod Dosbarthiad Diwydiannol Safonol (SIC)
 cds.subscription.sic.page.heading = Cod Dosbarthiad Diwydiannol Safonol (SIC)
 cds.subscription.sic.description.para1 = Mae codau SIC yn disgrifio gweithgareddau busnes. Er enghraifft, 58110 yw’r cod ar gyfer cyhoeddi llyfrau.
 cds.subscription.sic.description.para2 = Nodwch god SIC 5 digid o hyd ar gyfer eich sefydliad

@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
+import cats.data.EitherT
 import play.api.Logging
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, RegistrationInfoRequest}
@@ -57,54 +58,44 @@ class MatchingService @Inject() (
     implicit
     request: Request[AnyContent],
     hc: HeaderCarrier
-  ): Future[Boolean] = {
+  ): EitherT[Future, ResponseError, Unit] = {
     def stripKFromUtr: CustomsId => CustomsId = {
       case Utr(id) => Utr(id.stripSuffix("k").stripSuffix("K"))
       case other   => other
     }
 
     val orgWithCode = org.copy(organisationType = EtmpOrganisationType.orgTypeToEtmpOrgCode(org.organisationType))
-
-    matchingConnector
-      .lookup(idAndNameMatchRequest(stripKFromUtr(customsId), orgWithCode))
-      .flatMap(
-        storeInCacheIfFound(
-          convert(customsId, establishmentDate),
-          groupId,
-          requestSessionData.userSelectedOrganisationType
+    for {
+      response <- matchingConnector.lookup(idAndNameMatchRequest(stripKFromUtr(customsId), orgWithCode))
+      details = convert(customsId, establishmentDate)(response)
+      _ <- EitherT[Future, ResponseError, Unit](
+        cache.saveRegistrationDetails(details, groupId, requestSessionData.userSelectedOrganisationType).map(
+          _ => Right(())
         )
       )
+    } yield ()
+
   }
 
   def matchIndividualWithId(customsId: CustomsId, individual: Individual, groupId: GroupId)(implicit
     hc: HeaderCarrier,
     request: Request[_]
-  ): Future[Boolean] =
-    matchingConnector
-      .lookup(individualIdMatchRequest(customsId, individual))
-      .flatMap(storeInCacheIfFound(convert(customsId, toLocalDate(individual.dateOfBirth)), groupId))
+  ): EitherT[Future, ResponseError, Unit] =
+    for {
+      response <- matchingConnector.lookup(individualIdMatchRequest(customsId, individual))
+      details = convert(customsId, toLocalDate(individual.dateOfBirth))(response)
+      _ <- EitherT[Future, ResponseError, Unit](cache.saveRegistrationDetails(details, groupId).map(_ => Right(())))
+    } yield ()
 
   def matchIndividualWithNino(nino: String, individual: Individual, groupId: GroupId)(implicit
     hc: HeaderCarrier,
     request: Request[_]
-  ): Future[Boolean] =
-    matchingConnector
-      .lookup(individualNinoMatchRequest(nino, individual))
-      .flatMap(
-        storeInCacheIfFound(
-          convert(customsId = Nino(nino), capturedDate = toLocalDate(individual.dateOfBirth)),
-          groupId
-        )
-      )
-
-  private def storeInCacheIfFound(
-    convert: MatchingResponse => RegistrationDetails,
-    groupId: GroupId,
-    orgType: Option[CdsOrganisationType] = None
-  )(mayBeMatchSuccess: Option[MatchingResponse])(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] =
-    mayBeMatchSuccess.map(convert).fold(Future.successful(false)) { details =>
-      cache.saveRegistrationDetails(details, groupId, orgType)
-    }
+  ): EitherT[Future, ResponseError, Unit] =
+    for {
+      response <- matchingConnector.lookup(individualNinoMatchRequest(nino, individual))
+      details = convert(customsId = Nino(nino), capturedDate = toLocalDate(individual.dateOfBirth))(response)
+      _ <- EitherT[Future, ResponseError, Unit](cache.saveRegistrationDetails(details, groupId).map(_ => Right(())))
+    } yield ()
 
   private def idAndNameMatchRequest(customsId: CustomsId, org: Organisation): MatchingRequestHolder =
     MatchingRequestHolder(

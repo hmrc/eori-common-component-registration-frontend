@@ -17,6 +17,8 @@
 package unit.services.email
 
 import base.Injector
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
@@ -24,11 +26,12 @@ import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.await
+import play.api.test.Helpers.{await, contentAsString}
 import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CheckYourEmailService, Save4LaterService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
@@ -112,16 +115,15 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
 
   "emailConfirmed" should {
 
-    "fetch email successfully and redirect to MatchingIdController when confirmed" in servicesToTest.foreach {
+    "fetch email successfully and display confirmed page" in servicesToTest.foreach {
       subscription =>
         when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Some(emailStatus())))
 
         val result = await(service.emailConfirmed(loggedInUser, subscription))
-        result.header.status mustBe SEE_OTHER
-        result.header.headers(
-          "Location"
-        ) mustBe (s"/customs-registration-services/${subscription.code}/register/matching/user-location")
+        result.header.status mustBe OK
+        doc().body().getElementsByTag("h1").text() mustBe messages("cds.email-confirmed.title-and-heading")
+
     }
 
     "redirect to SecuritySignOutController when email not in cache" in servicesToTest.foreach { subscription =>
@@ -214,5 +216,8 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
 
     }
   }
+
+  def doc(service: Service = atarService): Document =
+    Jsoup.parse(contentAsString(emailConfirmedView(service)))
 
 }

@@ -17,12 +17,8 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  InvalidResponse,
-  NotFoundResponse,
-  ServiceUnavailableResponse,
-  VatControlListConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.VatControlListConnector
+
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
@@ -81,8 +77,15 @@ class VatDetailsController @Inject() (
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
-    vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {
-      case Right(vatControlListResponse) =>
+    vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).foldF(
+      responseError =>
+        responseError.status match {
+          case NOT_FOUND | BAD_REQUEST =>
+            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
+          case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
+        },
+      vatControlListResponse =>
         if (vatControlListResponse.isPostcodeAssociatedWithVrn(vatForm))
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
@@ -98,18 +101,10 @@ class VatDetailsController @Inject() (
                   Redirect(DateOfVatRegistrationController.createForm(service))
             }
         else
-          subscriptionDetailsService.clearCachedVatControlListResponse.flatMap(
+          subscriptionDetailsService.clearCachedVatControlListResponse().flatMap(
             _ => Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
           )
-      case Left(errorResponse) =>
-        errorResponse match {
-          case NotFoundResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case InvalidResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
-        }
-    }
+    )
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>

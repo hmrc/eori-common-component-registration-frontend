@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
+package util
 
 import cats.data.EitherT
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, GroupId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.EnrolmentStoreProxyService
-import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
-@Singleton
-class GroupEnrolmentExtractor @Inject() (enrolmentStoreProxyService: EnrolmentStoreProxyService) {
+trait ResponseErrorEitherT {
+  def eitherT[A](a: A) = EitherT[Future, ResponseError, A](Future.successful(Right(a)))
 
-  def groupIdEnrolments(
-    groupId: String
-  )(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, List[EnrolmentResponse]] =
-    enrolmentStoreProxyService.enrolmentsForGroup(GroupId(groupId))
+  def eitherT[A](responseError: ResponseError) =
+    EitherT[Future, ResponseError, A](Future.successful(Left(responseError)))
 
 }

@@ -21,7 +21,6 @@ import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{VatDetails, VatDetailsForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
@@ -32,7 +31,6 @@ class VatDetailsViewSpec extends ViewSpec {
   private implicit val request       = withFakeCSRF(FakeRequest())
   private val view                   = instanceOf[vat_details]
   private val vatNumberLabel         = "label[for=vat-number]"
-  private val postcodeLabel          = "label[for=postcode]"
 
   "VAT Details" should {
     "have the correct title" in {
