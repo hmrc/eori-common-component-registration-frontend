@@ -793,7 +793,7 @@ cds.matching-error.utr.length=The UTR number must be 10 numbers
 cds.matching-error.not-found=Your business details have not been found. Check that your details are correct and try again.
 cds.matching-error-organisation.not-found=Your business details have not been found. Check that your details are correct and try again.
 cds.matching-error.individual-not-found=Your details have not been found. Check that your details are correct and then try again.
-cds.matching-error.country.invalid=Enter a valid country name
+cds.matching-error.country.invalid=Enter your country
 cds.matching-error.country.unacceptable=The entered country is not acceptable
 
 #Confirm individual type
