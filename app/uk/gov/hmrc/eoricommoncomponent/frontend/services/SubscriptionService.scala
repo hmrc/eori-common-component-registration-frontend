@@ -51,26 +51,9 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(im
   ): SubscriptionRequest =
     reg match {
       case individual: RegistrationDetailsIndividual =>
-        SubscriptionCreateRequest(individual, subscription, cdsOrgType, individual.dateOfBirth, Some(service))
-
+        SubscriptionCreateRequest.fromIndividual(individual, subscription, cdsOrgType, Some(service))
       case org: RegistrationDetailsOrganisation =>
-        val doe = subscription.dateEstablished
-        SubscriptionCreateRequest(
-          org,
-          subscription,
-          cdsOrgType,
-          doe.getOrElse {
-            val error = "Date Established must be present for an organisation subscription"
-            // $COVERAGE-OFF$Loggers
-            logger.warn(error)
-            // $COVERAGE-ON
-            throw new IllegalStateException(error)
-          },
-          Some(service)
-        ).ensuring(
-          subscription.sicCode.isDefined,
-          "SicCode/Principal Economic Activity must be present for an organisation subscription"
-        )
+        SubscriptionCreateRequest.fromOrganisation(org, subscription, cdsOrgType, Some(service))
       case _ =>
         val error = "Incomplete cache cannot complete journey"
         // $COVERAGE-OFF$Loggers

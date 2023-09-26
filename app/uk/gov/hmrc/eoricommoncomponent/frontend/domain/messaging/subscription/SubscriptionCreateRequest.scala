@@ -25,13 +25,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Su
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RequestCommon, RequestParameter}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
-  CdsToEtmpOrganisationType,
-  OrganisationTypeConfiguration
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.DataUnavailableException
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.CdsToEtmpOrganisationType
 
-import java.time.format.DateTimeFormatter
 import java.time.{Clock, LocalDate, LocalDateTime, ZoneId}
 import java.util.UUID
 
@@ -42,148 +38,40 @@ object SubscriptionCreateRequest {
   implicit val jsonFormat = Json.format[SubscriptionCreateRequest]
   private val logger      = Logger(this.getClass)
 
-  // ROW without UTR apply - REG01
-  def apply(
-    registration: RegistrationDetails,
-    subscription: SubscriptionDetails,
+  // Registration journey
+  def fromOrganisation(
+    reg: RegistrationDetailsOrganisation,
+    sub: SubscriptionDetails,
+    cdsOrgType: Option[CdsOrganisationType],
     service: Option[Service]
-  ): SubscriptionCreateRequest =
-    registration match {
-      case RegistrationDetailsIndividual(Some(Eori(eori)), _, safeId, name, _, dob) =>
-        mandatoryFieldsReq(
-          eori,
-          safeId,
-          name,
-          createRowAddress(subscription, registration),
-          dob,
-          CdsToEtmpOrganisationType(registration),
-          subscription,
-          service
-        )
-
-      case RegistrationDetailsOrganisation(Some(Eori(eori)), _, safeId, name, _, Some(dateOfEstablishment), _) =>
-        mandatoryFieldsReq(
-          eori,
-          safeId,
-          name,
-          createRowAddress(subscription, registration),
-          dateOfEstablishment,
-          CdsToEtmpOrganisationType(registration),
-          subscription,
-          service
-        )
-      case _ =>
-        val error = "Invalid Registration Details. Unable to create SubscriptionCreateRequest."
-        // $COVERAGE-OFF$Loggers
-        logger.warn(error)
-        // $COVERAGE-ON
-        throw new IllegalArgumentException(error)
+  ): SubscriptionRequest = {
+    val sicCode = sub.sicCode.getOrElse {
+      val error = "SicCode/Principal Economic Activity must be present for an organisation subscription"
+      // $COVERAGE-OFF$Loggers
+      logger.error(error)
+      // $COVERAGE-ON
+      throw DataUnavailableException(error)
     }
 
-  private def createRowAddress(
-    subscription: SubscriptionDetails,
-    registration: RegistrationDetails
-  ): EstablishmentAddress = {
+    val doe = sub.dateEstablished.getOrElse {
+      val error = "Date Established must be present for an organisation subscription"
+      // $COVERAGE-OFF$Loggers
+      logger.error(error)
+      // $COVERAGE-ON
+      throw DataUnavailableException(error)
+    }
 
-    val address =
-      if (Countries.all.map(_.countryCode).contains(registration.address.countryCode)) registration.address
-      else {
-        val registeredCompany =
-          subscription.registeredCompany.getOrElse {
-            val error = "Registered company is not in cache"
-            // $COVERAGE-OFF$Loggers
-            logger.warn(error)
-            // $COVERAGE-ON
-            throw new Exception(error)
-          }
-
-        registration.address.copy(countryCode = registeredCompany.country)
-      }
-
-    val establishmentAddress = createEstablishmentAddress(address)
-
-    establishmentAddress.copy(city = dashForEmpty(establishmentAddress.city))
+    toSubscriptionRequest(reg, sub.copy(sicCode = Some(sicCode)), cdsOrgType, doe, service)
   }
 
-  private def mandatoryFieldsReq(
-    eori: String,
-    safeId: SafeId,
-    fullName: String,
-    establishmentAddress: EstablishmentAddress,
-    dateOfEstablishment: LocalDate,
-    etmpTypeOfPerson: Option[OrganisationTypeConfiguration],
+  def fromIndividual(
+    reg: RegistrationDetailsIndividual,
     sub: SubscriptionDetails,
+    cdsOrgType: Option[CdsOrganisationType],
     service: Option[Service]
-  ) =
-    SubscriptionCreateRequest(
-      generateWithOriginatingSystem(),
-      RequestDetail(
-        SAFE = safeId.id,
-        EORINo = Some(eori),
-        CDSFullName = fullName,
-        CDSEstablishmentAddress = establishmentAddress,
-        establishmentInTheCustomsTerritoryOfTheUnion = None,
-        typeOfLegalEntity = etmpTypeOfPerson.map(_.legalStatus),
-        contactInformation = sub.contactDetails.map(_.toRowContactInformation()),
-        vatIDs = None,
-        consentToDisclosureOfPersonalData = None,
-        shortName = None,
-        dateOfEstablishment = Some(dateOfEstablishment),
-        typeOfPerson = etmpTypeOfPerson.map(_.typeOfPerson),
-        principalEconomicActivity = None,
-        serviceName = service.map(_.enrolmentKey)
-      )
-    )
+  ): SubscriptionRequest = toSubscriptionRequest(reg, sub, cdsOrgType, reg.dateOfBirth, service)
 
-  // ROW with customs ID or UK journey
-  def apply(
-    data: ResponseData,
-    subscription: SubscriptionDetails,
-    email: String,
-    service: Option[Service]
-  ): SubscriptionCreateRequest = {
-
-    val isReg06CountryValid: Boolean = Countries.all.map(_.countryCode).contains(data.establishmentAddress.countryCode)
-
-    val ea =
-      if (isReg06CountryValid) data.establishmentAddress
-      else
-        subscription.addressDetails.map { address =>
-          data.establishmentAddress.updateCountryFromAddress(address)
-        }.getOrElse {
-          val error = "Reg06 EstablishmentAddress cannot be empty"
-          // $COVERAGE-OFF$Loggers
-          logger.warn(error)
-          // $COVERAGE-ON
-          throw new IllegalStateException(error)
-        }
-
-    SubscriptionCreateRequest(
-      generateWithOriginatingSystem(),
-      RequestDetail(
-        SAFE = data.SAFEID,
-        EORINo = subscription.eoriNumber,
-        CDSFullName = data.trader.fullName,
-        CDSEstablishmentAddress = ea,
-        establishmentInTheCustomsTerritoryOfTheUnion =
-          data.hasEstablishmentInCustomsTerritory.map(bool => if (bool) "1" else "0"),
-        typeOfLegalEntity = data.legalStatus,
-        contactInformation = data.contactDetail.map(cd => createContactInformation(cd).withEmail(email)),
-        vatIDs =
-          data.VATIDs.map(_.map(vs => VatId(countryCode = Some(vs.countryCode), vatID = Some(vs.vatNumber))).toList),
-        consentToDisclosureOfPersonalData = None,
-        shortName =
-          None, //sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
-        dateOfEstablishment = handleEmptyDate(data.dateOfEstablishmentBirth),
-        typeOfPerson = data.personType.map(_.toString),
-        principalEconomicActivity = data.principalEconomicActivity,
-        serviceName = service.map(_.enrolmentKey)
-      )
-    )
-  }
-
-  // Registration journey
-  def apply(
+  private def toSubscriptionRequest(
     reg: RegistrationDetails,
     sub: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
@@ -240,15 +128,6 @@ object SubscriptionCreateRequest {
       originatingSystem = Some("MDTP"),
       requestParameters = requestParameters
     )
-
-  private def handleEmptyDate(date: Option[String]): Option[LocalDate] = date match {
-    case Some(d) => Some(LocalDate.parse(d, DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-    case None    =>
-      // $COVERAGE-OFF$Loggers
-      logger.warn("No establishment date returned from REG06")
-      // $COVERAGE-ON
-      None
-  }
 
   private def createVatIds(vis: Option[List[VatIdentification]]): Option[List[VatId]] = {
     def removeEmpty: List[VatIdentification] => List[VatId] = _.flatMap {
