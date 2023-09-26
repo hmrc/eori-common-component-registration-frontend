@@ -38,8 +38,9 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.NameIdOrganisationFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime}
 import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -343,13 +344,32 @@ class NameUtrOrganisationControllerSpec
           any[Request[AnyContent]],
           any[HeaderCarrier]
         )
-      ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
+      ).thenReturn(eitherT[Unit](ResponseError(OK, "002 - No match found")))
       submitForm(ValidNameUtrRequest) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe BusinessNotMatchedError
         page.getElementsText("title") should startWith("Error: ")
       }
+    }
+
+    "return a Bad Request when business match is unsuccessful 2" in {
+
+      import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
+      import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{
+        Address,
+        MessagingServiceParam,
+        NonUKIdentification
+      }
+
+      val errorResponse = ResponseCommon(
+        "200",
+        Some("002 - No match found"),
+        LocalDateTime.now(),
+        Some(List(MessagingServiceParam("POSITION", "FAIL")))
+      )
+      val responseError = ResponseError(OK, errorResponse.statusText.getOrElse("Detail object not returned"))
+      responseError shouldBe MatchingServiceConnector.matchFailureResponse
     }
 
     "return a error-template page when downstreamFailureResponse" in {

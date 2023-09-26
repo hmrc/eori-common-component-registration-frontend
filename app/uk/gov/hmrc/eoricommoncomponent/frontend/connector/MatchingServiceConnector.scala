@@ -62,7 +62,15 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
                     s"REG01 failed Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
                   )
                   // $COVERAGE-ON
-                  Left(ResponseError(OK, idResponse.responseCommon.statusText.getOrElse("Detail object not returned")))
+                  idResponse.responseCommon.statusText match {
+                    case Some(text) if text.equalsIgnoreCase(MatchingServiceConnector.NoMatchFound) =>
+                      Left(MatchingServiceConnector.matchFailureResponse)
+                    case Some(text) =>
+                      Left(ResponseError(OK, text))
+                    case None =>
+                      Left(ResponseError(OK, "Detail object not returned"))
+                  }
+
                 } else {
                   // $COVERAGE-OFF$Loggers
                   logger.debug(
@@ -99,7 +107,7 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
 }
 
 object MatchingServiceConnector {
-  val NoMatchFound                             = "002 - No Match Found"
+  val NoMatchFound                             = "002 - No match found"
   val DownstreamFailure                        = "001 - Request could not be processed"
   val matchFailureResponse: ResponseError      = ResponseError(OK, NoMatchFound)
   val downstreamFailureResponse: ResponseError = ResponseError(OK, DownstreamFailure)
