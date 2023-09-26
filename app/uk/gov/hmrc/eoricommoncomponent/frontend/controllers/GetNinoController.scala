@@ -44,7 +44,7 @@ class GetNinoController @Inject() (
     extends CdsController(mcc) {
 
   def displayForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
         Ok(
           matchNinoRowIndividualView(
@@ -58,7 +58,7 @@ class GetNinoController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
         subscriptionNinoForm.bindFromRequest().fold(
           formWithErrors =>

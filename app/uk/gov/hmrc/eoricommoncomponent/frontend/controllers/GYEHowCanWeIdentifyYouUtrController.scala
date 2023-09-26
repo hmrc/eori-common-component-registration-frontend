@@ -49,7 +49,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         orgType <- orgTypeLookup.etmpOrgType
       } yield Ok(
@@ -65,7 +65,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       orgTypeLookup.etmpOrgType.flatMap(
         orgType =>
           subscriptionUtrForm.bindFromRequest().fold(

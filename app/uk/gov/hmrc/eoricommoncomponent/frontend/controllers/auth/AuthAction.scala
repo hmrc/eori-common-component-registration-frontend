@@ -25,6 +25,9 @@ import uk.gov.hmrc.auth.core.retrieve.{~, Credentials}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import uk.gov.hmrc.auth.core.retrieve.Credentials
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,7 +36,10 @@ class AuthAction @Inject() (
   override val config: Configuration,
   override val env: Environment,
   override val authConnector: AuthConnector,
-  action: DefaultActionBuilder
+  action: DefaultActionBuilder,
+  sessionCache: SessionCache,
+  parser: BodyParsers.Default,
+  cacheClearOnCompletionAction: CacheClearOnCompletionAction
 )(implicit ec: ExecutionContext)
     extends AuthRedirectSupport with AuthorisedFunctions with AccessController {
 
@@ -45,6 +51,14 @@ class AuthAction @Inject() (
 
   private val baseRetrievals     = ggEmail and credentialRole and affinityGroup
   private val extendedRetrievals = baseRetrievals and internalId and allEnrolments and groupIdentifier and credentials
+
+  def enrolledUserClearingCacheOnCompletionAction(requestProcessor: RequestProcessorSimple) =
+    cacheClearOnCompletionAction.async(implicit request => authorise(requestProcessor))
+
+  def enrolledUserWithSessionAction(service: Service)(requestProcessor: RequestProcessorSimple) = {
+    val filter = new CompletedJourneyFilter(service, sessionCache, parser)
+    filter.async(implicit request => authorise(requestProcessor))
+  }
 
   /**
     * Allows Gov Gateway user with correct user type, affinity group and no enrolment to service

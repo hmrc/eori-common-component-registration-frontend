@@ -42,7 +42,7 @@ class CheckYourDetailsRegisterController @Inject() (
     extends CdsController(mcc) with Logging {
 
   def reviewDetails(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         viewModelConstructor.generateViewModel(service).map(_ match {
           case Some(viewModel) =>
@@ -53,7 +53,7 @@ class CheckYourDetailsRegisterController @Inject() (
         })
     }
 
-  def submitDetails(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def submitDetails(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       registerWithoutIdWithSubscription.rowRegisterWithoutIdWithSubscription(loggedInUser, service)
   }

@@ -50,13 +50,13 @@ class VatDetailsController @Inject() (
   val dateForm = form()
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service)))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedUkVatDetails.map {
           case Some(vatDetails) =>
@@ -66,7 +66,7 @@ class VatDetailsController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       vatDetailsForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service))),
         formData => lookupVatDetails(formData, isInReviewMode, service)
@@ -107,7 +107,7 @@ class VatDetailsController @Inject() (
     )
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(weCannotConfirmYourIdentity(dateForm, service)))
     }
 

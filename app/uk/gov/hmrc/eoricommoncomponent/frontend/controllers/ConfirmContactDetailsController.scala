@@ -39,12 +39,12 @@ class ConfirmContactDetailsController @Inject() (
     extends CdsController(mcc) {
 
   def form(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       confirmContactDetailsService.handleAddressAndPopulateView(service, isInReviewMode)
     }
 
   def submit(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       YesNoWrongAddress
         .createForm()
         .bindFromRequest()
@@ -55,7 +55,7 @@ class ConfirmContactDetailsController @Inject() (
         )
     }
 
-  def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def processing(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)

@@ -61,6 +61,7 @@ object CachedData {
   val groupEnrolmentKey                = "groupEnrolment"
   val eoriKey                          = "eori"
   val submissionCompleteKey            = "submissionCompleteDetails"
+  val completed                        = "completed"
   implicit val format                  = Json.format[CachedData]
 }
 
@@ -97,6 +98,11 @@ class SessionCache @Inject() (
     preservingMdc {
       getFromSession[A](DataKey(key))
     }
+
+  def journeyCompleted(implicit request: Request[_]): Future[Boolean] = putData(completed, true)
+
+  def isJourneyComplete(implicit request: Request[_]): Future[Boolean] =
+    getData[Boolean](completed).map(_.contains(true))
 
   def saveRegistrationDetails(rd: RegistrationDetails)(implicit request: Request[_]): Future[Boolean] =
     putData(regDetailsKey, Json.toJson(rd)) map (_ => true)
@@ -164,6 +170,9 @@ class SessionCache @Inject() (
 
   def email(implicit request: Request[_]): Future[String] =
     getData[String](emailKey).map(_.getOrElse(throwException(emailKey)))
+
+  def emailOpt(implicit request: Request[_]): Future[Option[String]] =
+    getData[String](emailKey)
 
   def eori(implicit request: Request[_]): Future[Option[String]] =
     getData[String](eoriKey)

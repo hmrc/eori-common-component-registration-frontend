@@ -21,20 +21,4 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-class CdsController(mcc: MessagesControllerComponents) extends FrontendController(mcc) with I18nSupport {
-
-  def newUserSession(implicit request: Request[_]): Session = {
-
-    val currentSessionData: Map[String, String] = request.session.data
-    val cleanedUpSessionData: Map[String, String] =
-      currentSessionData -- Seq(
-        RequestSessionDataKeys.selectedUserLocation,
-        RequestSessionDataKeys.subscriptionFlow,
-        RequestSessionDataKeys.selectedOrganisationType,
-        RequestSessionDataKeys.uriBeforeSubscriptionFlow
-      )
-
-    request.session.copy(data = cleanedUpSessionData)
-  }
-
-}
+class CdsController(mcc: MessagesControllerComponents) extends FrontendController(mcc) with I18nSupport

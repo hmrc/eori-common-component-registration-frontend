@@ -49,7 +49,7 @@ class DateOfEstablishmentController @Inject() (
   private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         maybeCachedDateModel <- subscriptionBusinessService.maybeCachedDateEstablished
         orgType              <- orgTypeLookup.etmpOrgType
@@ -67,7 +67,7 @@ class DateOfEstablishmentController @Inject() (
   }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         cachedDateModel <- fetchDate
         orgType         <- orgTypeLookup.etmpOrgType
@@ -78,7 +78,7 @@ class DateOfEstablishmentController @Inject() (
     subscriptionBusinessService.getCachedDateEstablished
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionDateOfEstablishmentForm.bindFromRequest().fold(
         formWithErrors =>
           orgTypeLookup.etmpOrgType map { orgType =>

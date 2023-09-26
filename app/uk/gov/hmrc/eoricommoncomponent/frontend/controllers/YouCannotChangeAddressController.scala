@@ -38,7 +38,7 @@ class YouCannotChangeAddressController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def page(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def page(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => _: LoggedInUserWithEnrolments =>
       if (requestSessionData.isIndividualOrSoleTrader(request) || requestSessionData.isPartnership(request))
         Future.successful(Ok(youCannotChangeAddressIndividual(service)))

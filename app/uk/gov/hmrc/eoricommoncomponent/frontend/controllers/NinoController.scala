@@ -41,12 +41,12 @@ class NinoController @Inject() (
     extends CdsController(mcc) {
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(matchNinoView(ninoForm, organisationType, service)))
     }
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       ninoForm.bindFromRequest().fold(
         invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
         form =>
