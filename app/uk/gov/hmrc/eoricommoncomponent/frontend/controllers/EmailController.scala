@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import cats.implicits.toTraverseOps
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{
@@ -71,16 +72,9 @@ class EmailController @Inject() (
         enrolmentResponseList =>
           if (enrolmentResponseList.exists(_.service == service.enrolmentKey))
             if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
-              existingEoriForUserOrGroup(user, enrolmentResponseList) match {
-                case Some(eori) =>
-                  sessionCache.saveEori(Eori(eori.id)).map(
-                    _ => Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
-                  )
-                case None =>
-                  Future.successful(
-                    Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service))
-                  )
-              }
+              existingEoriForUserOrGroup(user, enrolmentResponseList)
+                .traverse(eori => sessionCache.saveEori(Eori(eori.id)))
+                .map(_ => Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroupStandalone(service)))
             else
               Future.successful(Redirect(EnrolmentAlreadyExistsController.enrolmentAlreadyExistsForGroup(service)))
           else
