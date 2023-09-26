@@ -22,7 +22,13 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(
+        layout_di: layout,
+        inputRadioGroup: helpers.inputRadioGroup,
+        govukButton: GovukButton,
+        errorSummary: helpers.errorSummary,
+        h1: helpers.h1
+)
 
 
 @(
@@ -49,21 +55,26 @@
         yesNoWrongAddress(field),
         options,
         Map.empty,
-        Some(addressHtml),
         None,
-        '_divClass -> "govuk-form-group", '_legend -> pageTitleAndHeading, '_isLegendH1 -> true
+        Some("govuk-visually-hidden"),
+        args =
+            Symbol("_divClass") -> "govuk-form-group",
+            Symbol("_legend") -> pageTitleAndHeading,
+            Symbol("_isLegendH1") -> false
+
     )
 }
 
 @layout_di(pageTitleAndHeading, form = Some(yesNoWrongAddress), service = service) {
-<div>
+
     @errorSummary(yesNoWrongAddress.errors, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 
     <div class="govuk-form-group">
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service,isInReviewMode), "yes-no-wrong-address-form") {
             @CSRF.formField
 
-
+            @h1(pageTitleAndHeading)
+            @addressHtml
             @displayInputRadioGroup("yes-no-wrong-address",
                 displayInputRadioGroupOptions)
 
@@ -76,6 +87,6 @@
         }
         @helpers.helpAndSupport()
     </div>
-</div>
+
 
 }
