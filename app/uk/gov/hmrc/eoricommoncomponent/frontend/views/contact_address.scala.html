@@ -33,7 +33,9 @@
     errorSummary: helpers.errorSummary,
     goveukFieldSet: GovukFieldset,
     govukRadios : GovukRadios,
-    govukHint: GovukHint
+    govukHint: GovukHint,
+        h1: helpers.h1
+
 )
 
 
@@ -76,11 +78,11 @@
         contactAddressDetailsYesNoAnswerForm(field),
         options,
         Map.empty,
-        Some(hintHtml),
         None,
-        Symbol("_divClass") -> "createForm-group govuk-form-group",
+        Some("govuk-visually-hidden"),
+        args = Symbol("_divClass") -> "createForm-group govuk-form-group",
         Symbol("_legend") -> messages("ecc.subscription.contact-address.heading"),
-        Symbol("_isLegendH1") -> true
+        Symbol("_isLegendH1") -> false
     )
 }
 
@@ -93,7 +95,8 @@
     @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.submit(isInReviewMode, service), "contactAddressDetailsYesNoAnswerForm") {
 
         @CSRF.formField
-
+        @h1(messages("ecc.subscription.contact-address.heading"))
+        @hintHtml
         @displayInputRadioGroup(YesNo.yesAndNoAnswer,
             Seq("true" -> messages("confirm-contact-address-details.yes"),
                 "false" -> messages("confirm-contact-address-details.no")
