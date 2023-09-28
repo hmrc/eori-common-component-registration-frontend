@@ -49,10 +49,10 @@ class ContactAddressViewSpec extends ViewSpec {
         .text() mustBe "Do you want us to use this address to send you information about your EORI number application?"
     }
     "have the correct class on the h1" in {
-      doc.body().getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
+      doc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
     "have the address" in {
-      doc.body().getElementById("yes-no-answer-hint").text() mustBe "Line 1 city name SE28 1AA ZZ"
+      doc.body().getElementById("contact-address").text() mustBe "Line 1 city name SE28 1AA ZZ"
     }
     "have the right legend" in {
       doc
