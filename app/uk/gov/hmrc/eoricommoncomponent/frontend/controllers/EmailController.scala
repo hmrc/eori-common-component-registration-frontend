@@ -39,7 +39,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
