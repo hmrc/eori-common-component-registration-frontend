@@ -16,29 +16,51 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.i18n.Lang
-import play.api.mvc.{Call, ControllerComponents}
-import uk.gov.hmrc.play.language.{LanguageController, LanguageUtils}
+import play.api.i18n.{I18nSupport, Lang}
+import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.play.language.LanguageUtils
 
+import java.net.URI
 import javax.inject.{Inject, Singleton}
+import scala.util.Try
 
 @Singleton
 class EoriLanguageController @Inject() (languageUtils: LanguageUtils, cc: ControllerComponents)
-    extends LanguageController(languageUtils, cc) {
+    extends AbstractController(cc) with I18nSupport {
+  private def fallbackURL(service: Service): String = routes.ApplicationController.startRegister(service).url
+  def languageMap: Map[String, Lang]        = EoriLanguageController.languageMap
 
-  // TODO Find a way to include a service name in the url
-  override protected def fallbackURL: String =
-    "/customs-registration-services/register" //This will be always register for cds we might need to add a route for fallback cannot be dynamic
+  private val SwitchIndicatorKey       = "switching-language"
+  private val FlashWithSwitchIndicator = Flash(Map(SwitchIndicatorKey -> "true"))
 
-  override def languageMap: Map[String, Lang] =
-    EoriLanguageController.languageMap
+  def switchToLanguage(language: String, service: Service): Action[AnyContent] = Action { implicit request =>
+    val enabled: Boolean = languageMap.get(language).exists(languageUtils.isLangAvailable)
+    val lang: Lang =
+      if (enabled) languageMap.getOrElse(language, languageUtils.getCurrentLang)
+      else languageUtils.getCurrentLang
+
+    val redirectURL: String = request.headers
+      .get(REFERER)
+      .flatMap(asRelativeUrl)
+      .getOrElse(fallbackURL(service))
+    Redirect(redirectURL).withLang(Lang.apply(lang.code)).flashing(FlashWithSwitchIndicator)
+  }
+
+  private def asRelativeUrl(url: String): Option[String] =
+    for {
+      uri      <- Try(new URI(url)).toOption
+      path     <- Option(uri.getRawPath).filterNot(_.isEmpty)
+      query    <- Option(uri.getRawQuery).map("?" + _).orElse(Some(""))
+      fragment <- Option(uri.getRawFragment).map("#" + _).orElse(Some(""))
+    } yield s"$path$query$fragment"
 
 }
 
 object EoriLanguageController {
 
-  def routeToSwitchLanguage: String => Call =
-    (lang: String) => routes.EoriLanguageController.switchToLanguage(lang)
+  def routeToSwitchLanguage: (String, Service) => Call =
+    (lang: String, service: Service) => routes.EoriLanguageController.switchToLanguage(lang, service)
 
   def languageMap: Map[String, Lang] =
     Map("english" -> Lang("en"), "cymraeg" -> Lang("cy"))
