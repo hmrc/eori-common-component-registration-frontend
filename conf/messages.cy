@@ -901,7 +901,7 @@ cds.subscription.sic.individual.description = Mae cod SIC yn rhif 5 digid sy’n
 cds.subscription.sic.label = Cod SIC
 cds.subscription.sic.organisation.hint = Mae cod SIC yn rhif 5 digid sy’n helpu CThEF i nodi’r hyn y mae’ch busnes yn ei wneud. Mewn rhai gwledydd fe’i hadweinir hefyd fel rhif masnach.
 cds.subscription.sic.error.empty = Nodwch god SIC
-cds.subscription.sic.error.too-long = Rhaid i’r cod SIC fod yn 5 digid neu lai
+cds.subscription.sic.error.too-long = Mae’n rhaid i’r cod SIC fod yn 4 neu 5 digid
 cds.subscription.sic.error.too-short = Rhaid i’r cod SIC fod yn fwy na 3 digid
 cds.subscription.sic.error.wrong-format = Nodwch god SIC yn y fformat cywir
 

@@ -1034,7 +1034,7 @@ cds.subscription.sic.page.help.para5=This will return one or more SIC codes that
 
 cds.subscription.sic.label=SIC code
 cds.subscription.sic.error.empty=Enter a SIC code
-cds.subscription.sic.error.too-long=The SIC code must be 5 digits or less
+cds.subscription.sic.error.too-long=SIC code must be 4 or 5 digits
 cds.subscription.sic.error.too-short=The SIC code must be more than 3 digits
 cds.subscription.sic.error.wrong-format= Enter a SIC code in the right format
 cds.sic.label=SIC code
