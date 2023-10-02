@@ -1468,9 +1468,9 @@ cds.has-existing-eori.para1=Our records show that the Government Gateway user ID
 cds.has-existing-eori.para2=Your registration will be linked to this EORI.
 cds.has-existing-eori.para3=If you use a different EORI most of the time then you should sign out and sign back in using the Government Gateway user ID linked to the EORI you would like to register with.
 
-cds.enrolment.already.exists.title=There is a problem
-cds.enrolment.already.exists.heading=There is a problem
-cds.enrolment.already.exists.para1=Our records show that this Government Gateway user ID has already been used to subscribe to {0}.
+cds.enrolment.already.exists.title=Your organisation already has an EORI number
+cds.enrolment.already.exists.heading=Your organisation already has an EORI number
+cds.enrolment.already.exists.para1=You can use that EORI number to subscribe to this service.
 
 cds.proposition.name.service=Register for a customs service
 
