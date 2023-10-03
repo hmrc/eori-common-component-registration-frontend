@@ -35,7 +35,11 @@ class EnrolmentPendingAgainstGroupIdViewSpec extends ViewSpec {
     }
 
     "display correct heading" in {
-      gyeDoc.body().getElementsByTag("h1").text() mustBe "Someone in your organisation has already applied"
+      gyeDoc.body().getElementsByTag("h1").text() mustBe messages("cds.enrolment.pending.group.title")
+    }
+
+    "display correct paragraph" in {
+      gyeDoc.body().getElementsByTag("p").text() mustBe messages("cds.enrolment.pending.group.paragraph1")
     }
 
     "have the correct class on the h1" in {
