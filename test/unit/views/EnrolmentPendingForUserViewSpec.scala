@@ -28,14 +28,15 @@ class EnrolmentPendingForUserViewSpec extends ViewSpec {
 
   private val view                   = instanceOf[enrolment_pending_for_user]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
+  private val date                   = "2 August 2013"
 
   "Enrolment Pending against group id page" should {
     "display correct title" in {
-      doc.title() must startWith("You have already applied")
+      doc.title() must startWith("You've already applied")
     }
 
     "display correct heading" in {
-      doc.body().getElementsByTag("h1").text() mustBe "You have already applied"
+      doc.body().getElementsByTag("h1").text() mustBe "You've already applied"
     }
 
     "have the correct class on the h1" in {
@@ -43,6 +44,6 @@ class EnrolmentPendingForUserViewSpec extends ViewSpec {
     }
   }
 
-  private lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService)))
+  private lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService, date)))
 
 }

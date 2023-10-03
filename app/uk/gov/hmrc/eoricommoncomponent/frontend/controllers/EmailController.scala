@@ -29,7 +29,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, GroupId, InternalId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.UserGroupIdSubscriptionStatusCheckService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  SubscriptionStatusService,
+  UserGroupIdSubscriptionStatusCheckService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
@@ -53,7 +56,8 @@ class EmailController @Inject() (
   enrolmentPendingForUser: enrolment_pending_for_user,
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id,
   emailJourneyService: EmailJourneyService,
-  errorPage: error_template
+  errorPage: error_template,
+  subscriptionStatusService: SubscriptionStatusService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
@@ -96,9 +100,11 @@ class EmailController @Inject() (
                 userGroupIdSubscriptionStatusCheckService
                   .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
                     emailJourneyService.continue(service)
-                  )(Future.successful(Ok(enrolmentPendingForUser(service))))(
-                    Future.successful(Ok(enrolmentPendingAgainstGroupId(service)))
-                  )
+                  ) {
+                    subscriptionStatusService.getProcessingDate.map(
+                      processingDate => Ok(enrolmentPendingForUser(service, processingDate))
+                    )
+                  }(Future.successful(Ok(enrolmentPendingAgainstGroupId(service))))
             }
       )
 

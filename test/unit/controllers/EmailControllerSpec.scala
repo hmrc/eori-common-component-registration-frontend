@@ -88,7 +88,8 @@ class EmailControllerSpec
     enrolmentPendingForUserView,
     enrolmentPendingAgainstGroupIdView,
     emailJourneyService,
-    errorView
+    errorView,
+    mockSubscriptionStatusService
   )
 
   private val emailStatus = EmailStatus(Some("test@example.com"))

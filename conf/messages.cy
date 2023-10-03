@@ -1461,8 +1461,10 @@ cds.subscription.contact-details.intro = Byddwn yn defnyddio’r manylion hyn i 
 cds.enrolment.pending.user.title=Rydych eisoes wedi gwneud cais
 cds.enrolment.pending.group.title=Mae rhywun yn eich sefydliad eisoes wedi gwneud cais
 
-cds.enrolment.pending.user.paragraph1=Byddwn yn anfon e-bost atoch pan fyddwn wedi gorffen prosesu’ch cais.
-cds.enrolment.pending.user.paragraph2=Byddwch yn cael yr e-bost hwn o fewn naill ai:
+cds.enrolment.pending.user.paragraph1=Daeth eich cais i law CThEF ar {0}
+cds.enrolment.pending.user.heading2=Yr hyn sy’n digwydd nesaf
+
+cds.enrolment.pending.user.paragraph2=Byddwn yn prosesu’ch cais. Gall hyn gymryd hyd at 5 diwrnod gwaith.
 
 cds.enrolment.pending.group.paragraph1=Dim ond un person o’ch sefydliad a all wneud cais.
 cds.enrolment.pending.group.paragraph2=Byddwn yn anfon e-bost atynt pan fyddwn wedi gorffen prosesu eu cais.

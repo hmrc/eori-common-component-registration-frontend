@@ -1673,11 +1673,13 @@ cds.subscription.contact-details.intro=We will use these details to contact you 
 
 #Get An EORI Journey
 
-cds.enrolment.pending.user.title=You have already applied
+cds.enrolment.pending.user.title=You''ve already applied
 cds.enrolment.pending.group.title=Someone in your organisation has already applied
 
-cds.enrolment.pending.user.paragraph1=We will send you an email when we have finished processing your application.
-cds.enrolment.pending.user.paragraph2=You will get this email within either:
+cds.enrolment.pending.user.heading2=What happens next
+
+cds.enrolment.pending.user.paragraph1=HMRC received your application on {0}
+cds.enrolment.pending.user.paragraph2=We'll process your application. This can take up to 5 working days.
 
 cds.enrolment.pending.group.paragraph1=Only one person from your organisation can apply.
 cds.enrolment.pending.group.paragraph2=We will send them an email when we have finished processing their application.
