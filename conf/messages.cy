@@ -1460,6 +1460,7 @@ cds.subscription.contact-details.intro = Byddwn yn defnyddio’r manylion hyn i 
 
 cds.enrolment.pending.user.title=Rydych eisoes wedi gwneud cais
 cds.enrolment.pending.group.title=Mae rhywun yn eich sefydliad eisoes wedi gwneud cais
+cds.enrolment.pending.group.title.different.service= Ni allwch danysgrifio gyda Dynodydd Defnyddiwr (ID) hwn ar gyfer Porth y Llywodraeth
 
 cds.enrolment.pending.user.paragraph1=Byddwn yn anfon e-bost atoch pan fyddwn wedi gorffen prosesu’ch cais.
 cds.enrolment.pending.user.paragraph2=Byddwch yn cael yr e-bost hwn o fewn naill ai:
@@ -1467,6 +1468,9 @@ cds.enrolment.pending.user.paragraph2=Byddwch yn cael yr e-bost hwn o fewn naill
 cds.enrolment.pending.group.paragraph1=Dim ond un person o’ch sefydliad a all wneud cais.
 cds.enrolment.pending.group.paragraph2=Byddwn yn anfon e-bost atynt pan fyddwn wedi gorffen prosesu eu cais.
 cds.enrolment.pending.group.paragraph3=Byddant yn cael yr e-bost hwn o fewn naill ai:
+cds.enrolment.pending.group.different.service.paragraph1=Defnyddiodd eich sefydliad Dynodydd Defnyddiwr (ID) gwahanol i danysgrifio i wasanaeth tollau arall. Mae angen i chi ddefnyddio’r Dynodydd Defnyddiwr (ID) hwnnw ar gyfer y gwasanaeth hwn.
+cds.enrolment.pending.group.different.service.paragraph2=Allgofnodwch ac yna mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) hwnnw ar gyfer Porth y Llywodraeth.
+cds.enrolment.pending.group.different.service.heading2= Os nad ydych chi’n gwybod y Dynodydd Defnyddiwr (ID) hwn
 
 cds.enrolment.pending.bullet1=2 awr
 cds.enrolment.pending.bullet2=5 diwrnod gwaith, os bydd angen i ni wneud rhagor o wiriadau

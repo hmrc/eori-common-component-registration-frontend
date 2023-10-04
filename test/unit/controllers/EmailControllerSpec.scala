@@ -88,7 +88,8 @@ class EmailControllerSpec
     enrolmentPendingForUserView,
     enrolmentPendingAgainstGroupIdView,
     emailJourneyService,
-    errorView
+    errorView,
+    mockSave4LaterService
   )
 
   private val emailStatus = EmailStatus(Some("test@example.com"))
@@ -190,7 +191,7 @@ class EmailControllerSpec
       showFormRegister() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Someone in your organisation has already applied")
+        page.title() should startWith(messages("cds.enrolment.pending.group.title.different.service"))
       }
     }
 
