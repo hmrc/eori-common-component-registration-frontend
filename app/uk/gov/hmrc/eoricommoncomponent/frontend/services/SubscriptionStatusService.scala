@@ -67,8 +67,6 @@ class SubscriptionStatusService @Inject() (
     checkSubscriptionStatus()
   }
 
-  def getProcessingDate(implicit req: Request[_]): Future[String] = cache.sub01Outcome.map(_.processedDate)
-
 }
 
 sealed trait PreSubscriptionStatus

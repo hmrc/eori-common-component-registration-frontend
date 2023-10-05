@@ -1677,10 +1677,9 @@ cds.enrolment.pending.user.title=You''ve already applied
 cds.enrolment.pending.group.title=Someone in your organisation has already applied
 cds.enrolment.pending.user.title.other-service = You cannot apply just now
 
-
-
-
-
+cds.enrolment.pending.user.paragraph1.same-service = HMRC received your application on {0}
+cds.enrolment.pending.user.paragraph2.same-service = We'll process your application. This can take up to 5 working days.
+cds.enrolment.pending.user.heading2.same-service = What happens next
 
 cds.enrolment.pending.user.paragraph1=You can apply after we have processed your application to:
 cds.enrolment.pending.user.paragraph2=This takes either:

@@ -133,14 +133,6 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
     }
   }
 
-  "SubscriptionStatusService getProcessingDate" should {
-    "return stored Sub01 Processing Status date" in {
-      when(mockSessionCache.sub01Outcome(any())).thenReturn(Future.successful(Sub01Outcome("3 May 2014")))
-
-      await(service.getProcessingDate) shouldBe "3 May 2014"
-    }
-  }
-
   private def responseHolderWithStatusAndProcessingDateWithoutEori(
     status: String,
     processingDate: String = "2016-03-17T09:30:47Z"

@@ -29,10 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, GroupId, InternalId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  SubscriptionStatusService,
-  UserGroupIdSubscriptionStatusCheckService
-}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
@@ -103,23 +99,14 @@ class EmailController @Inject() (
                     emailJourneyService.continue(service)
                   )(userIsInProcess(service))(Future.successful(Ok(enrolmentPendingAgainstGroupId(service))))
             }
-
-        /*
-
-
-        {
-                            subscriptionStatusService.getProcessingDate.map(
-                              processingDate => Ok(enrolmentPendingForUser(service, processingDate))
-                            )
-                          }
-        * */
       )
 
   private def userIsInProcess(
     service: Service
   )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
-    save4LaterService
-      .fetchProcessingService(GroupId(user.groupId))
-      .map(processingService => Ok(enrolmentPendingForUser(service, processingService)))
+    for {
+      processingService <- save4LaterService.fetchProcessingService(GroupId(user.groupId))
+      processingDate    <- sessionCache.sub01Outcome.map(_.processedDate)
+    } yield Ok(enrolmentPendingForUser(service, processingDate, processingService))
 
 }

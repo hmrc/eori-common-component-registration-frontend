@@ -1462,7 +1462,9 @@ cds.enrolment.pending.user.title=Rydych eisoes wedi gwneud cais
 cds.enrolment.pending.group.title=Mae rhywun yn eich sefydliad eisoes wedi gwneud cais
 cds.enrolment.pending.user.title.other-service = Ni allwch wneud cais ar hyn o bryd
 
-
+cds.enrolment.pending.user.paragraph1.same-service = Daeth eich cais i law CThEF ar {0}
+cds.enrolment.pending.user.paragraph2.same-service = Byddwn yn prosesu’ch cais. Gall hyn gymryd hyd at 5 diwrnod gwaith.
+cds.enrolment.pending.user.heading2.same-service = Yr hyn sy’n digwydd nesaf
 
 cds.enrolment.pending.user.paragraph1= Gallwch wneud cais ar ôl i ni brosesu’ch cais i wneud y canlynol:
 cds.enrolment.pending.user.paragraph2=Mae hyn yn cymryd:
