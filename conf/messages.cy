@@ -1460,9 +1460,12 @@ cds.subscription.contact-details.intro = Byddwn yn defnyddio’r manylion hyn i 
 
 cds.enrolment.pending.user.title=Rydych eisoes wedi gwneud cais
 cds.enrolment.pending.group.title=Mae rhywun yn eich sefydliad eisoes wedi gwneud cais
+cds.enrolment.pending.user.title.other-service = Ni allwch wneud cais ar hyn o bryd
 
-cds.enrolment.pending.user.paragraph1=Byddwn yn anfon e-bost atoch pan fyddwn wedi gorffen prosesu’ch cais.
-cds.enrolment.pending.user.paragraph2=Byddwch yn cael yr e-bost hwn o fewn naill ai:
+
+
+cds.enrolment.pending.user.paragraph1= Gallwch wneud cais ar ôl i ni brosesu’ch cais i wneud y canlynol:
+cds.enrolment.pending.user.paragraph2=Mae hyn yn cymryd:
 
 cds.enrolment.pending.group.paragraph1=Dim ond un person o’ch sefydliad a all wneud cais.
 cds.enrolment.pending.group.paragraph2=Byddwn yn anfon e-bost atynt pan fyddwn wedi gorffen prosesu eu cais.

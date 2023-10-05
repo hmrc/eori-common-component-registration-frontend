@@ -1675,9 +1675,15 @@ cds.subscription.contact-details.intro=We will use these details to contact you 
 
 cds.enrolment.pending.user.title=You have already applied
 cds.enrolment.pending.group.title=Someone in your organisation has already applied
+cds.enrolment.pending.user.title.other-service = You cannot apply just now
 
-cds.enrolment.pending.user.paragraph1=We will send you an email when we have finished processing your application.
-cds.enrolment.pending.user.paragraph2=You will get this email within either:
+
+
+
+
+
+cds.enrolment.pending.user.paragraph1=You can apply after we have processed your application to:
+cds.enrolment.pending.user.paragraph2=This takes either:
 
 cds.enrolment.pending.group.paragraph1=Only one person from your organisation can apply.
 cds.enrolment.pending.group.paragraph2=We will send them an email when we have finished processing their application.
