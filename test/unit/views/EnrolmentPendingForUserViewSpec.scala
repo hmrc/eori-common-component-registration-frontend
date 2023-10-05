@@ -32,11 +32,11 @@ class EnrolmentPendingForUserViewSpec extends ViewSpec {
 
   "Enrolment Pending against group id page" should {
     "display correct title" in {
-      doc.title() must startWith("You've already applied")
+      doc.title() must startWith(messages("cds.enrolment.pending.user.title.other-service"))
     }
 
     "display correct heading" in {
-      doc.body().getElementsByTag("h1").text() mustBe "You've already applied"
+      doc.body().getElementsByTag("h1").text() mustBe messages("cds.enrolment.pending.user.title.other-service")
     }
 
     "have the correct class on the h1" in {
@@ -44,6 +44,7 @@ class EnrolmentPendingForUserViewSpec extends ViewSpec {
     }
   }
 
-  private lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService, date)))
+  private lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService, Some(otherService))))
+  //private lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService, date)))
 
 }

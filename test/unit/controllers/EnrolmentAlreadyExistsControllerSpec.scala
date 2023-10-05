@@ -81,11 +81,11 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
 
       val page = CdsPage(contentAsString(result))
 
-      page.title() should startWith("There is a problem")
-      page.getElementsText(RegistrationCompletePage.pageHeadingXpath) shouldBe "There is a problem"
-      page.getElementsText(paragraphXpath) should include(
-        "Our records show that this Government Gateway user ID has already been used to subscribe to Advance Tariff Rulings"
+      page.title() should startWith(messages("cds.enrolment.already.exists.heading"))
+      page.getElementsText(RegistrationCompletePage.pageHeadingXpath) shouldBe messages(
+        "cds.enrolment.already.exists.heading"
       )
+      page.getElementsText(paragraphXpath) should include(messages("cds.enrolment.already.exists.para1"))
 
     }
 
@@ -161,8 +161,10 @@ class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActio
 
       val page = CdsPage(contentAsString(result))
 
-      page.title() should startWith("There is a problem")
-      page.getElementsText(RegistrationCompletePage.pageHeadingXpath) shouldBe "There is a problem"
+      page.title() should startWith(messages("cds.enrolment.already.exists.heading"))
+      page.getElementsText(RegistrationCompletePage.pageHeadingXpath) shouldBe messages(
+        "cds.enrolment.already.exists.heading"
+      )
       page.getElementsText(paragraphXpath) should include(
         "Your organisation is already subscribed to Advance Tariff Rulings"
       )

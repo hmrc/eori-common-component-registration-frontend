@@ -33,6 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
   SubscriptionStatusService,
   UserGroupIdSubscriptionStatusCheckService
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
@@ -57,7 +58,7 @@ class EmailController @Inject() (
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id,
   emailJourneyService: EmailJourneyService,
   errorPage: error_template,
-  subscriptionStatusService: SubscriptionStatusService
+  save4LaterService: Save4LaterService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
@@ -100,12 +101,25 @@ class EmailController @Inject() (
                 userGroupIdSubscriptionStatusCheckService
                   .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
                     emailJourneyService.continue(service)
-                  ) {
-                    subscriptionStatusService.getProcessingDate.map(
-                      processingDate => Ok(enrolmentPendingForUser(service, processingDate))
-                    )
-                  }(Future.successful(Ok(enrolmentPendingAgainstGroupId(service))))
+                  )(userIsInProcess(service))(Future.successful(Ok(enrolmentPendingAgainstGroupId(service))))
             }
+
+        /*
+
+
+        {
+                            subscriptionStatusService.getProcessingDate.map(
+                              processingDate => Ok(enrolmentPendingForUser(service, processingDate))
+                            )
+                          }
+        * */
       )
+
+  private def userIsInProcess(
+    service: Service
+  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
+    save4LaterService
+      .fetchProcessingService(GroupId(user.groupId))
+      .map(processingService => Ok(enrolmentPendingForUser(service, processingService)))
 
 }

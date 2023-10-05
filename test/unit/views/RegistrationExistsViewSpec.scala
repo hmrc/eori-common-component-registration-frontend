@@ -31,11 +31,11 @@ class RegistrationExistsViewSpec extends ViewSpec {
 
   "Registration Exists page" should {
     "display correct title" in {
-      doc.title() must startWith("There is a problem")
+      doc.title() must startWith(messages("cds.enrolment.already.exists.heading"))
     }
 
     "display correct heading" in {
-      doc.body().getElementsByTag("h1").text() mustBe "There is a problem"
+      doc.body().getElementsByTag("h1").text() mustBe messages("cds.enrolment.already.exists.heading")
     }
 
     "have the correct class on the h1" in {

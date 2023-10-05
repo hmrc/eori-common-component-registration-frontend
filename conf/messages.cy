@@ -901,7 +901,7 @@ cds.subscription.sic.individual.description = Mae cod SIC yn rhif 5 digid sy’n
 cds.subscription.sic.label = Cod SIC
 cds.subscription.sic.organisation.hint = Mae cod SIC yn rhif 5 digid sy’n helpu CThEF i nodi’r hyn y mae’ch busnes yn ei wneud. Mewn rhai gwledydd fe’i hadweinir hefyd fel rhif masnach.
 cds.subscription.sic.error.empty = Nodwch god SIC
-cds.subscription.sic.error.too-long = Rhaid i’r cod SIC fod yn 5 digid neu lai
+cds.subscription.sic.error.too-long = Mae’n rhaid i’r cod SIC fod yn 4 neu 5 digid
 cds.subscription.sic.error.too-short = Rhaid i’r cod SIC fod yn fwy na 3 digid
 cds.subscription.sic.error.wrong-format = Nodwch god SIC yn y fformat cywir
 
@@ -1304,9 +1304,9 @@ cds.has-existing-eori.heading = Mae’ch Dynodydd Defnyddiwr (ID) ar gyfer Porth
 cds.has-existing-eori.para1 = Yn ôl ein cofnodion, mae’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth a ddefnyddioch i fewngofnodi yn gysylltiedig ag EORI:
 cds.has-existing-eori.para2 = Bydd eich cofrestriad yn gysylltiedig â’r EORI hwn.
 cds.has-existing-eori.para3 = Os defnyddiwch EORI gwahanol gan amlaf, dylech allgofnodi a mewngofnodi eto gan ddefnyddio’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth sy’n gysylltiedig â’r EORI yr hoffech gofrestru ag ef.
-cds.enrolment.already.exists.title = Mae problem wedi codi
-cds.enrolment.already.exists.heading = Mae problem wedi codi
-cds.enrolment.already.exists.para1 = Mae ein cofnodion yn dangos bod y Dynodydd Defnyddiwr (ID) hwn ar gyfer Porth y Llywodraeth eisoes wedi’i ddefnyddio i danysgrifio i {0}.
+cds.enrolment.already.exists.title = Mae gan eich sefydliad rif EORI eisoes
+cds.enrolment.already.exists.heading = Mae gan eich sefydliad rif EORI eisoes
+cds.enrolment.already.exists.para1 = Gallwch ddefnyddio’r rhif EORI hwnnw i ddefnyddio’r gwasanaeth hwn.
 cds.proposition.name.service = Cofrestru ar gyfer gwasanaeth tollau
 eds.existing-eori.enrolment.confirmation.title = Cais wedi’i gwblhau
 eds.existing-eori.enrolment.confirmation.heading = Cais wedi’i gwblhau
@@ -1460,11 +1460,12 @@ cds.subscription.contact-details.intro = Byddwn yn defnyddio’r manylion hyn i 
 
 cds.enrolment.pending.user.title=Rydych eisoes wedi gwneud cais
 cds.enrolment.pending.group.title=Mae rhywun yn eich sefydliad eisoes wedi gwneud cais
+cds.enrolment.pending.user.title.other-service = Ni allwch wneud cais ar hyn o bryd
 
-cds.enrolment.pending.user.paragraph1=Daeth eich cais i law CThEF ar {0}
-cds.enrolment.pending.user.heading2=Yr hyn sy’n digwydd nesaf
 
-cds.enrolment.pending.user.paragraph2=Byddwn yn prosesu’ch cais. Gall hyn gymryd hyd at 5 diwrnod gwaith.
+
+cds.enrolment.pending.user.paragraph1= Gallwch wneud cais ar ôl i ni brosesu’ch cais i wneud y canlynol:
+cds.enrolment.pending.user.paragraph2=Mae hyn yn cymryd:
 
 cds.enrolment.pending.group.paragraph1=Dim ond un person o’ch sefydliad a all wneud cais.
 cds.enrolment.pending.group.paragraph2=Byddwn yn anfon e-bost atynt pan fyddwn wedi gorffen prosesu eu cais.
