@@ -1750,9 +1750,9 @@ ecc.eori-exists-group.cds.admin.link = rhoi’r gallu i aelod o’r tîm gael my
 ecc.eori-exists-group.cds.link = rhoi’r gallu i chi’ch hun gael mynediad at dreth, toll neu gynllun (yn agor tab newydd)
 
 
-cds.subscription.outcomes.success.extra.information.next.new.ars = <li>Gwneud cais am Ddyfarniad Tariffau Uwch</li><li>Gwneud cais am Ddyfarniad Prisio Uwch</li>
-cds.subscription.outcomes.success.extra.information.next.new.atar =<li>Gwneud cais am Ddyfarniad Tariffau Uwch</li><li>Gwneud cais am Ddyfarniad Prisio Uwch</li>
-cds.subscription.outcomes.success.extra.information.next.new.gagmr =<li>Cael cyfeirnod symud nwyddau</li>
+cds.subscription.outcomes.success.extra.information.next.new.ars = <li>gwneud cais am Ddyfarniad Tariffau Uwch</li><li>gwneud cais am Ddyfarniad Prisio Uwch</li>
+cds.subscription.outcomes.success.extra.information.next.new.atar =<li>gwneud cais am Ddyfarniad Tariffau Uwch</li><li>gwneud cais am Ddyfarniad Prisio Uwch</li>
+cds.subscription.outcomes.success.extra.information.next.new.gagmr =<li>cael cyfeirnod symud nwyddau</li>
 cds.subscription.outcomes.success.extra.information.next.new.cts =<li>gwneud cais am ad-daliad o dollau mewnforio a TAW (CHIEF)</li><li>anfon dogfennau i'’'w gwirio gan y tollau ar gyfer datganiadau a wneir drwy'''r system CHIEF</li><li>rhoi gwybod i CThEF am dandaliad o ran Toll Dramor neu TAW mewnforio</li>
 cds.subscription.outcomes.success.extra.information.next.new.route1 =<li>gwneud cais am ad-daliad o dollau mewnforio a TAW (CHIEF)</li><li>anfon dogfennau i'’'w gwirio gan y tollau ar gyfer datganiadau a wneir drwy'''r system CHIEF</li><li>rhoi gwybod i CThEF am dandaliad o ran Toll Dramor neu TAW mewnforio</li>
 cds.subscription.outcomes.success.extra.information.next.new.ss =<li>gwneud datganiad cryno wrth gyrraedd</li>
