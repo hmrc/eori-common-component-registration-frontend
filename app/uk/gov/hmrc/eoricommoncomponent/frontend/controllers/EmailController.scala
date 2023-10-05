@@ -98,6 +98,7 @@ class EmailController @Inject() (
                   .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
                     emailJourneyService.continue(service)
                   )(userIsInProcess(service))(otherUserWithinGroupIsInProcess(service))
+
             }
       )
 

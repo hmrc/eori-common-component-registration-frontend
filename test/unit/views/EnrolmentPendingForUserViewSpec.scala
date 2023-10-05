@@ -31,11 +31,11 @@ class EnrolmentPendingForUserViewSpec extends ViewSpec {
 
   "Enrolment Pending against group id page" should {
     "display correct title" in {
-      doc.title() must startWith("You have already applied")
+      doc.title() must startWith(messages("cds.enrolment.pending.user.title.other-service"))
     }
 
     "display correct heading" in {
-      doc.body().getElementsByTag("h1").text() mustBe "You have already applied"
+      doc.body().getElementsByTag("h1").text() mustBe messages("cds.enrolment.pending.user.title.other-service")
     }
 
     "have the correct class on the h1" in {
