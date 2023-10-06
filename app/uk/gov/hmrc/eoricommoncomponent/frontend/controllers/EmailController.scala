@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, GroupId, InternalId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.UserGroupIdSubscriptionStatusCheckService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
@@ -53,7 +53,8 @@ class EmailController @Inject() (
   enrolmentPendingForUser: enrolment_pending_for_user,
   enrolmentPendingAgainstGroupId: enrolment_pending_against_group_id,
   emailJourneyService: EmailJourneyService,
-  errorPage: error_template
+  errorPage: error_template,
+  save4LaterService: Save4LaterService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) with EnrolmentExtractor {
 
@@ -96,10 +97,23 @@ class EmailController @Inject() (
                 userGroupIdSubscriptionStatusCheckService
                   .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
                     emailJourneyService.continue(service)
-                  )(Future.successful(Ok(enrolmentPendingForUser(service))))(
-                    Future.successful(Ok(enrolmentPendingAgainstGroupId(service)))
-                  )
+                  )(userIsInProcess(service))(otherUserWithinGroupIsInProcess(service))
+
             }
       )
+
+  private def userIsInProcess(
+    service: Service
+  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
+    save4LaterService
+      .fetchProcessingService(GroupId(user.groupId))
+      .map(processingService => Ok(enrolmentPendingForUser(service, processingService)))
+
+  private def otherUserWithinGroupIsInProcess(
+    service: Service
+  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
+    save4LaterService
+      .fetchProcessingService(GroupId(user.groupId))
+      .map(processingService => Ok(enrolmentPendingAgainstGroupId(service, processingService)))
 
 }

@@ -29,24 +29,73 @@ class EnrolmentPendingAgainstGroupIdViewSpec extends ViewSpec {
   private val view                   = instanceOf[enrolment_pending_against_group_id]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 
-  "Enrolment Pending against group id page" should {
+  "Enrolment Pending against group id page for different service" should {
     "display correct title" in {
-      gyeDoc.title() must startWith("Someone in your organisation has already applied")
+      otherServiceDoc.title() must startWith(messages("cds.enrolment.pending.group.title.different.service"))
     }
 
     "display correct heading" in {
-      gyeDoc.body().getElementsByTag("h1").text() mustBe messages("cds.enrolment.pending.group.title")
+      otherServiceDoc.body().getElementsByTag("h1").text() mustBe messages(
+        "cds.enrolment.pending.group.title.different.service"
+      )
     }
 
-    "display correct paragraph" in {
-      gyeDoc.body().getElementsByTag("p").text() mustBe messages("cds.enrolment.pending.group.paragraph1")
+    "display correct paragraph 1" in {
+      otherServiceDoc.body().getElementById("info-para1").text() mustBe messages(
+        "cds.enrolment.pending.group.different.service.paragraph1"
+      )
+    }
+
+    "display correct paragraph 2" in {
+      otherServiceDoc.body().getElementById("info-para2").text() mustBe messages(
+        "cds.enrolment.pending.group.different.service.paragraph2"
+      )
+    }
+
+    "display correct h2" in {
+      otherServiceDoc.body().getElementById("heading-2").text() mustBe messages(
+        "cds.enrolment.pending.group.different.service.heading2"
+      )
+    }
+
+    "display correct text for link" in {
+      otherServiceDoc.body().getElementById("link-1").text() mustBe messages("ecc.address-invalid-individual.title")
+    }
+
+    "have the correct class on the link" in {
+      otherServiceDoc.body().getElementById("link-1").hasClass("govuk-link") mustBe true
     }
 
     "have the correct class on the h1" in {
-      gyeDoc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
+      otherServiceDoc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
     }
   }
 
-  private lazy val gyeDoc: Document = Jsoup.parse(contentAsString(view(atarService)))
+  "Enrolment Pending against group id page for same service" should {
+    "display correct title" in {
+      sameServiceDoc.title() must startWith(messages("cds.enrolment.pending.group.title"))
+    }
+
+    "display correct heading" in {
+      sameServiceDoc.body().getElementsByTag("h1").text() mustBe messages("cds.enrolment.pending.group.title")
+    }
+
+    "have the correct class on the h1" in {
+      sameServiceDoc.body().getElementsByTag("h1").hasClass("govuk-heading-l") mustBe true
+    }
+
+    "display correct paragraph" in {
+      sameServiceDoc.body().getElementById("info-para1").text() mustBe messages(
+        "cds.enrolment.pending.group.paragraph1"
+      )
+    }
+
+    "have the correct class on paragraph" in {
+      sameServiceDoc.body().getElementsByTag("p").hasClass("govuk-body") mustBe true
+    }
+  }
+
+  private lazy val otherServiceDoc: Document = Jsoup.parse(contentAsString(view(atarService, Some(otherService))))
+  private lazy val sameServiceDoc: Document  = Jsoup.parse(contentAsString(view(atarService, Some(atarService))))
 
 }

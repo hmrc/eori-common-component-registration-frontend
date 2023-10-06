@@ -1047,7 +1047,7 @@ cds.form.shortened-name = Enw byrrach
 cds.form.sic-code = Cod Dosbarthiad Diwydiannol Safonol (SIC)
 cds.form.gb-vat-number = Rhif TAW
 cds.form.gb-vat-postcode = Cod post eich cyfeiriad cofrestru TAW
-cds.form.gb-vat-date = dyddiad y daw TAW i rym
+cds.form.gb-vat-date = Dyddiad y daw TAW i rym
 cds.form.eu-vat-numbers = Rhifau TAW yn yr UE
 cds.form.customs-contact = Cyswllt
 cds.form.partnership.contact-details = Cyfeiriad y bartneriaeth
@@ -1145,13 +1145,13 @@ cds.sole-trader.address-check.page.name = Enw
 cds.sole-trader.address-check.page.address = Cyfeiriad
 cds.sole-trader.address-check.page-error.yes-no-answer = Rhowch wybod os mai dyma’r manylion rydych am eu cofrestru
 cds.sole-trader.address-check.field-error.yes-no-answer = Dewiswch ‘Iawn’ os yw’r manylion hyn yn gywir
-cds.subscription.contact-details.page.title = Cyfeiriad cyswllt ar gyfer y cais am rif EORI
+cds.subscription.contact-details.page.title = Manylion cyswllt ar gyfer y cais am rif EORI
 cds.subscription.contact-details.steps = cyswllt
-cds.subscription.contact-details.heading = Cyfeiriad cyswllt ar gyfer y cais am rif EORI
+cds.subscription.contact-details.heading = Manylion cyswllt ar gyfer y cais am rif EORI
 cds.subscription.contact-details.full-name.label = Enw llawn
 cds.subscription.contact-details.email.label = Cyfeiriad e-bost
 cds.subscription.contact-details.telephone.label = Ffôn (dewisol)
-cds.subscription.contact-details.telephone.hint = Ar gyfer rhifau rhyngwladol, cofiwch gynnwys cod y wlad
+cds.subscription.contact-details.telephone.hint = Ar gyfer rhifau rhyngwladol, cofiwch gynnwys cod y wlad.
 cds.subscription.contact-details.telephone.para = Byddwn ond yn defnyddio hwn os bydd angen i ni drafod y cais hwn â chi.
 cds.subscription.contact-details.fax.label = Ffacs (dewisol)
 cds.subscription.contact-details.fax.hint = Ar gyfer rhifau rhyngwladol, cofiwch gynnwys cod y wlad
@@ -1460,13 +1460,21 @@ cds.subscription.contact-details.intro = Byddwn yn defnyddio’r manylion hyn i 
 
 cds.enrolment.pending.user.title=Rydych eisoes wedi gwneud cais
 cds.enrolment.pending.group.title=Mae rhywun yn eich sefydliad eisoes wedi gwneud cais
+cds.enrolment.pending.group.title.different.service= Ni allwch danysgrifio gyda Dynodydd Defnyddiwr (ID) hwn ar gyfer Porth y Llywodraeth
+cds.enrolment.pending.user.title.other-service = Ni allwch wneud cais ar hyn o bryd
 
-cds.enrolment.pending.user.paragraph1=Byddwn yn anfon e-bost atoch pan fyddwn wedi gorffen prosesu’ch cais.
-cds.enrolment.pending.user.paragraph2=Byddwch yn cael yr e-bost hwn o fewn naill ai:
+
+
+
+cds.enrolment.pending.user.paragraph1= Gallwch wneud cais ar ôl i ni brosesu’ch cais i wneud y canlynol:
+cds.enrolment.pending.user.paragraph2=Mae hyn yn cymryd:
 
 cds.enrolment.pending.group.paragraph1=Dim ond un person o’ch sefydliad a all wneud cais.
 cds.enrolment.pending.group.paragraph2=Byddwn yn anfon e-bost atynt pan fyddwn wedi gorffen prosesu eu cais.
 cds.enrolment.pending.group.paragraph3=Byddant yn cael yr e-bost hwn o fewn naill ai:
+cds.enrolment.pending.group.different.service.paragraph1=Defnyddiodd eich sefydliad Dynodydd Defnyddiwr (ID) gwahanol i danysgrifio i wasanaeth tollau arall. Mae angen i chi ddefnyddio’r Dynodydd Defnyddiwr (ID) hwnnw ar gyfer y gwasanaeth hwn.
+cds.enrolment.pending.group.different.service.paragraph2=Allgofnodwch ac yna mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) hwnnw ar gyfer Porth y Llywodraeth.
+cds.enrolment.pending.group.different.service.heading2= Os nad ydych chi’n gwybod y Dynodydd Defnyddiwr (ID) hwn
 
 cds.enrolment.pending.bullet1=2 awr
 cds.enrolment.pending.bullet2=5 diwrnod gwaith, os bydd angen i ni wneud rhagor o wiriadau
