@@ -97,7 +97,8 @@ class EmailController @Inject() (
                 userGroupIdSubscriptionStatusCheckService
                   .checksToProceed(GroupId(user.groupId), InternalId(user.internalId), service)(
                     emailJourneyService.continue(service)
-                  )(userIsInProcess(service))(Future.successful(Ok(enrolmentPendingAgainstGroupId(service))))
+                  )(userIsInProcess(service))(otherUserWithinGroupIsInProcess(service))
+
             }
       )
 
@@ -107,5 +108,12 @@ class EmailController @Inject() (
     save4LaterService
       .fetchProcessingService(GroupId(user.groupId))
       .map(processingService => Ok(enrolmentPendingForUser(service, processingService)))
+
+  private def otherUserWithinGroupIsInProcess(
+    service: Service
+  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
+    save4LaterService
+      .fetchProcessingService(GroupId(user.groupId))
+      .map(processingService => Ok(enrolmentPendingAgainstGroupId(service, processingService)))
 
 }
