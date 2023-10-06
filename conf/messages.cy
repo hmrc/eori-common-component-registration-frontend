@@ -329,7 +329,7 @@ cds.matching.intro = Bydd hyn yn cysylltu’ch busnes, eich Dynodydd Defnyddiwr 
 cds.matching.individual.header = Nodwch eich manylion
 cds.matching-lede = Byddwn yn ceisio paru’ch manylion â’r wybodaeth sydd gennym ar hyn o bryd.
 cds.matching.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau “cyfeirnod”, “UTR” neu “defnydd swyddogol”.
-cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+cds.matching.partnership.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
 cds.matching.eori.hint = Mae gan eich rhif EORI rhwng 14 - 17 o gymeriadau.
 cds.matching.back = Yn ôl
 subscription.start-page.heading = Cael mynediad at y Gwasanaeth Datganiadau Tollau (CDS)
@@ -568,7 +568,7 @@ cds.matching.organisation-address.postcode.error.empty = Nodwch god post dilys
 cds.matching.organisation-address.country.error.empty = Nodwch eich gwlad
 cds.matching.name-id-organisation.company.name = Enw’r cwmni
 cds.matching.name-id-organisation.company.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich cwmni. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
-cds.matching.name-id-organisation.registered-company.name = Beth yw enw cofrestredig y sefydliad?
+cds.matching.name-id-organisation.registered-company.name = Beth yw enw cofrestredig y cwmni?
 cds.matching.name-id-organisation.registered-company.name.para=  <p class="govuk-body">Gallwch ddod o hyd i hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
 cds.matching.name-id-organisation.registered-company.name.hint = Nodwch yr union enw sydd ar gofrestr Tŷ’r Cwmnïau.
 cds.matching.name-id-organisation.partnership.name = Beth yw enw cofrestredig y bartneriaeth?
@@ -1433,7 +1433,7 @@ cds.registration.user-location.location.uk.label = Y Deyrnas Unedig
 cds.registration.user-location.location.third-country.label = Y tu allan i’r Undeb Ewropeaidd
 cds.registration.user-location.location.third-country-inc-eu.label = Gweddill y byd
 cds.matching.name-id-organisation.company.utr = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
-cds.matching.name-id-organisation.registered-company.matching-page.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth (UTR) y bartneriaeth?
+cds.matching.name-id-organisation.registered-company.matching-page.utr = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth y bartneriaeth?
 cds.matching.name-id-organisation.identity.verify = Byddwn yn defnyddio’r manylion hyn i gadarnhau pwy ydych.
 
 
