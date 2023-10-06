@@ -24,8 +24,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDat
   uriBeforeSubscriptionFlow
 }
 
-import scala.concurrent.{ExecutionContext, Future}
-
 trait NewUserSession {
 
   def newUserSession(implicit request: Request[_]): Session = {

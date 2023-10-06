@@ -67,7 +67,7 @@ class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMo
 
     "ensure a valid option has been selected" in {
       val invalidOption = UUID.randomUUID.toString
-      submitForm(ValidRequest + (yesNoInputName -> invalidOption)) { result =>
+      submitForm(validRequest + (yesNoInputName -> invalidOption)) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(
@@ -80,14 +80,14 @@ class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMo
     }
 
     "redirect to VAT KANA form when 'yes' is selected" in {
-      submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
+      submitForm(validRequest + (yesNoInputName -> answerYes)) { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value should endWith(expectedYesRedirectUrl)
       }
     }
 
     "redirect to non-VAT KANA form when 'no' is selected" in {
-      submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
+      submitForm(validRequest + (yesNoInputName -> answerNo)) { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value shouldBe expectedNoRedirectUrl
       }

@@ -348,7 +348,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
     "The Yes No Radio Button " should {
       "display a relevant error if no option is chosen" in {
-        submitForm(ValidRequest - yesNoInputName) { result =>
+        submitForm(validRequest - yesNoInputName) { result =>
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
           page.getElementsText(
@@ -362,7 +362,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
       "display a relevant error if an invalid answer option is selected" in {
         val invalidOption = UUID.randomUUID.toString
-        submitForm(ValidRequest + (yesNoInputName -> invalidOption)) { result =>
+        submitForm(validRequest + (yesNoInputName -> invalidOption)) { result =>
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
           page.getElementsText(
@@ -383,22 +383,22 @@ class DisclosePersonalDetailsConsentControllerSpec
       )
 
       "allow resubmission in review mode when details are invalid" in {
-        submitFormInReviewMode(ValidRequest - yesNoInputName)(verifyFormSubmitsInReviewMode)
+        submitFormInReviewMode(validRequest - yesNoInputName)(verifyFormSubmitsInReviewMode)
       }
 
       "redirect to review page when details are valid" in {
-        submitFormInReviewMode(ValidRequest)(verifyRedirectToReviewPage())
+        submitFormInReviewMode(validRequest)(verifyRedirectToReviewPage())
       }
     }
 
     "Submitting in Create Mode" should {
 
       "allow resubmission in create mode when details are invalid" in {
-        submitFormInCreateMode(ValidRequest - yesNoInputName)(verifyFormActionInCreateMode)
+        submitFormInCreateMode(validRequest - yesNoInputName)(verifyFormActionInCreateMode)
       }
 
       "redirect to next page when details are valid" in {
-        submitFormInCreateMode(ValidRequest)(verifyRedirectToNextPageInCreateMode)
+        submitFormInCreateMode(validRequest)(verifyRedirectToNextPageInCreateMode)
       }
     }
   }

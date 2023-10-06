@@ -71,7 +71,6 @@ object Countries extends Logging {
     countries filter (c => mdgCountryCodes("/mdg-country-codes-islands.csv") contains c.countryCode)
 
   def getCountryParameters(location: Option[String]): (List[Country], CountriesInCountryPicker) = location match {
-    case Some(UserLocation.Eu) => (eu, EUCountriesInCountryPicker)
     case Some(UserLocation.ThirdCountry) =>
       (third, ThirdCountriesInCountryPicker)
     case Some(UserLocation.ThirdCountryIncEU) =>
@@ -86,7 +85,6 @@ sealed trait CountriesInCountryPicker
 
 case object AllCountriesInCountryPicker          extends CountriesInCountryPicker
 case object AllCountriesExceptIomInCountryPicker extends CountriesInCountryPicker
-case object EUCountriesInCountryPicker           extends CountriesInCountryPicker
 case object ThirdCountriesInCountryPicker        extends CountriesInCountryPicker
 case object ThirdCountriesIncEuInCountryPicker   extends CountriesInCountryPicker
 case object IslandsInCountryPicker               extends CountriesInCountryPicker

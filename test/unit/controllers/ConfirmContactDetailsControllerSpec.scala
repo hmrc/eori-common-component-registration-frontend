@@ -31,7 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub01_outcome_processing
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.YesNoFormBuilder.ValidRequest
+import util.builders.YesNoFormBuilder.validRequest
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -83,7 +83,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       ).thenReturn(Future.successful(Status(OK)))
 
       val result = controller.submit(testService).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, ValidRequest + ("wrong-address" -> ""))
+        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, validRequest + ("wrong-address" -> ""))
       )
 
       status(result) shouldBe OK
@@ -98,7 +98,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       val result = controller.submit(testService).apply(
         SessionBuilder.buildRequestWithSessionAndFormValues(
           defaultUserId,
-          ValidRequest + ("yes-no-wrong-address" -> wrongAddress)
+          validRequest + ("yes-no-wrong-address" -> wrongAddress)
         )
       )
 

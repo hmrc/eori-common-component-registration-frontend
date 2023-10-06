@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
-import javax.inject.Inject
-import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import play.api.mvc.Results.Redirect
+import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CompletedJourneyFilter @Inject() (service: Service, sessionCache: SessionCache, val parser: BodyParsers.Default)(

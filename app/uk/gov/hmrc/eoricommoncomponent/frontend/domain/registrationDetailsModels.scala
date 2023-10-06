@@ -34,7 +34,6 @@ object BusinessAddress {
   implicit val formats = Json.format[BusinessAddress]
 }
 
-//TODO Should we merge RegistrationDetails and RegistrationInfo? Both are our internal representation of RegistrationDetails
 sealed trait RegistrationDetails {
   def customsId: Option[CustomsId]
 

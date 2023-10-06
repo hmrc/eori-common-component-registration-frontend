@@ -16,12 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
-import play.api.mvc.Results.Redirect
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -306,7 +306,6 @@ object NameMatchModel {
   implicit val jsonFormat = Json.format[NameMatchModel]
 }
 
-// TODO Why haveNino is optional boolean? This field must be always defined
 case class NinoMatchModel(haveNino: Option[Boolean], nino: Option[String])
 
 object NinoMatchModel {

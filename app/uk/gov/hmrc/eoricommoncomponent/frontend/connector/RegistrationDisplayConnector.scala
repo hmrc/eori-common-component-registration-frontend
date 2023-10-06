@@ -24,8 +24,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegistrationDisplay
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, _}
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, _}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

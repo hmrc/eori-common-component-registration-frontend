@@ -17,9 +17,8 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import cats.data.EitherT
-import javax.inject.{Inject, Singleton}
 import play.api.i18n.Messages
-import play.api.mvc.{Action, _}
+import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
@@ -30,6 +29,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
+
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -1,11 +1,9 @@
-import com.typesafe.sbt.packager.MappingsHelper._
-import play.core.PlayVersion
+import com.typesafe.sbt.packager.MappingsHelper.*
 import play.sbt.routes.RoutesKeys
-import play.sbt.routes.RoutesKeys._
-import sbt.Keys._
-import sbt._
+import play.sbt.routes.RoutesKeys.*
+import sbt.*
+import sbt.Keys.*
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, targetJvm}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 import scala.language.postfixOps
 
