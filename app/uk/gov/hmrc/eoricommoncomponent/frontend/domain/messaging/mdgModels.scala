@@ -22,8 +22,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postCodeMa
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 
-import java.time.format.DateTimeFormatter
 import java.time._
+import java.time.format.DateTimeFormatter
 
 case class Header(originatingSystem: String, requestTimeStamp: String, correlationId: String)
 

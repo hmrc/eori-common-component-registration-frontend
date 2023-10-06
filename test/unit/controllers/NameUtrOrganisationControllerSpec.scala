@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameOrganisationMatchModel, Utr}
@@ -38,7 +38,6 @@ import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.matching.NameIdOrganisationFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 
 import java.time.{LocalDate, LocalDateTime}
 import java.util.UUID
@@ -355,12 +354,7 @@ class NameUtrOrganisationControllerSpec
 
     "return a Bad Request when business match is unsuccessful 2" in {
 
-      import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
-      import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{
-        Address,
-        MessagingServiceParam,
-        NonUKIdentification
-      }
+      import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
 
       val errorResponse = ResponseCommon(
         "200",

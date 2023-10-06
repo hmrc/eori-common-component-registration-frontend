@@ -24,11 +24,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers._
 import play.mvc.Http.Status.BAD_REQUEST
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  ResponseError,
-  ServiceUnavailableResponse,
-  VatControlListConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{ResponseError, VatControlListConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.http._
 import util.externalservices.ExternalServicesConfig._

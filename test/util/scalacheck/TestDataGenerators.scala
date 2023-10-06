@@ -16,7 +16,7 @@
 
 package util.scalacheck
 
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Gen
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import util.scalacheck.TestDataGenerators.Implicits._

@@ -18,8 +18,7 @@ package unit.controllers
 
 import cats.data.EitherT
 import common.pages.matching.AddressPageFactoring
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
@@ -51,8 +50,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
-import org.mockito.ArgumentMatchers
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

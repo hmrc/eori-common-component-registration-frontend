@@ -32,8 +32,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWit
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CheckYourEmailService, Save4LaterService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{CheckYourEmailService, Save4LaterService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.{check_your_email, email_confirmed, verify_your_email}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ViewSpec

@@ -17,8 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import cats.data.EitherT
-
-import javax.inject.Inject
 import play.api.libs.json.{Json, Reads}
 import play.mvc.Http.Status.{INTERNAL_SERVER_ERROR, NO_CONTENT, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
@@ -28,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.EnrolmentStoreProx
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
