@@ -24,7 +24,6 @@ object VatId {
   implicit val jsonFormat = Json.format[VatId]
 }
 
-// TODO - When messaging updates their specs with VATID across for all the interfaces,then this case class can be removed.
 case class SubscriptionInfoVatId(countryCode: Option[String], VATID: Option[String])
 
 object SubscriptionInfoVatId {

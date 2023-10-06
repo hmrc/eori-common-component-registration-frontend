@@ -19,19 +19,17 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 
-//TODO Make these sealed trait / case object with a isROW fn
 object UserLocation {
 
   val Uk                = "uk"
   val Iom               = "isle-of-man"
-  val Eu                = "eu" // TODO Remove EU location
   val ThirdCountry      = "third-country"
   val ThirdCountryIncEU = "third-country-inc-eu"
   val Islands           = "islands"
 
-  val validLocations: Set[String] = Set(Uk, Iom, Eu, ThirdCountry, ThirdCountryIncEU, Islands)
+  val validLocations: Set[String] = Set(Uk, Iom, ThirdCountry, ThirdCountryIncEU, Islands)
 
-  private val rowLocations = Set(Eu, ThirdCountry, ThirdCountryIncEU, Islands)
+  private val rowLocations = Set(ThirdCountry, ThirdCountryIncEU, Islands)
 
   def forId(locationId: String): Boolean = validLocations(locationId)
 

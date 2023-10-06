@@ -104,7 +104,6 @@ class UserLocationController @Inject() (
     location match {
       case Some(UserLocation.ThirdCountry)      => UserLocation.ThirdCountry
       case Some(UserLocation.ThirdCountryIncEU) => UserLocation.ThirdCountryIncEU
-      case Some(UserLocation.Eu)                => UserLocation.Eu
       case Some(UserLocation.Iom)               => UserLocation.Iom
       case Some(UserLocation.Islands)           => UserLocation.Islands
       case Some(UserLocation.Uk)                => UserLocation.Uk

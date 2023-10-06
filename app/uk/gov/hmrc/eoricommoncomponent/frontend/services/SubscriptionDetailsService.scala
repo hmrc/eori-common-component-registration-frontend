@@ -164,7 +164,6 @@ class SubscriptionDetailsService @Inject() (
     sessionCache.subscriptionDetails map (_.customsId)
 
   private def updateSubscriptionDetails(implicit request: Request[_]) =
-    // TODO: to be refactored by redesigning the cache
     for {
       subDetails <- sessionCache.subscriptionDetails
       _          <- sessionCache.saveSub01Outcome(Sub01Outcome(""))

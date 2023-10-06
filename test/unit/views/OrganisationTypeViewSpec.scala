@@ -87,11 +87,10 @@ class OrganisationTypeViewSpec
     }
 
     val userLocations =
-      Table("userLocation", Some(UserLocation.Uk), Some(UserLocation.Eu), Some(UserLocation.ThirdCountry))
+      Table("userLocation", Some(UserLocation.Uk), Some(UserLocation.ThirdCountry))
 
     forAll(userLocations) { userLocation =>
       val forUk           = userLocation.fold(true)(_ == UserLocation.Uk)
-      val forEu           = userLocation.fold(true)(_ == UserLocation.Eu)
       val forThirdCountry = userLocation.fold(true)(_ == UserLocation.ThirdCountry)
 
       s"have all the required input fields while on main screen for user location ${userLocation.getOrElse("None")}" in {
@@ -103,8 +102,6 @@ class OrganisationTypeViewSpec
           html.contains("id=\"organisation-type-partnership\"") shouldBe forUk
           html.contains("id=\"organisation-type-limited-liability-partnership\"") shouldBe forUk
           html.contains("id=\"organisation-type-charity-public-body-not-for-profit\"") shouldBe forUk
-          html.contains("id=\"organisation-type-eu-organisation\"") shouldBe forEu
-          html.contains("id=\"organisation-type-eu-individual\"") shouldBe forEu
           html.contains("id=\"organisation-type-third-country-organisation\"") shouldBe forThirdCountry
           html.contains("id=\"organisation-type-third-country-sole-trader\"") shouldBe forThirdCountry
           html.contains("id=\"organisation-type-third-country-individual\"") shouldBe forThirdCountry

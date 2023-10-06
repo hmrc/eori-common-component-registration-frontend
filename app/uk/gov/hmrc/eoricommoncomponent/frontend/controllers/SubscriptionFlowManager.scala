@@ -22,6 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Constants.ONE
@@ -63,10 +64,9 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
     request: Request[AnyContent],
     hc: HeaderCarrier
   ): Either[FlowError, SubscriptionFlow] =
-    //TODO if we add new sessionErrors we need to reassess this
     requestSessionData.userSubscriptionFlow match {
-      case Left(_)     => Left(FlowNotFound())
-      case Right(flow) => Right(flow)
+      case Left(_: DataNotFound) => Left(FlowNotFound())
+      case Right(flow)           => Right(flow)
     }
 
   def stepInformation(
