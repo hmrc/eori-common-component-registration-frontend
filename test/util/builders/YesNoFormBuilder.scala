@@ -16,11 +16,9 @@
 
 package util.builders
 
-// TODO Remove this object, Maps are totally unnecessary, because tests overrides all those values
-// Use Map directly in test spec
 object YesNoFormBuilder {
 
-  val ValidRequest = Map("yes-no-answer" -> true.toString)
+  val validRequest = Map("yes-no-answer" -> true.toString)
 
   val validRequestNo = Map("yes-no-answer" -> false.toString)
 

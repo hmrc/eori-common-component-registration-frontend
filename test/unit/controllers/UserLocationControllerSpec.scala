@@ -162,8 +162,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
     assertCorrectSessionDataAndRedirect(UserLocation.Uk)
 
-    assertCorrectSessionDataAndRedirect(UserLocation.Eu)
-
     assertCorrectSessionDataAndRedirect(UserLocation.ThirdCountry)
 
     assertCorrectSessionDataAndRedirect(UserLocation.Islands)
@@ -298,7 +296,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private def assertCorrectSessionDataAndRedirect(selectedOptionValue: String): Unit = {
     s"store the correct organisation type when '$selectedOptionValue' is selected" in {
       val selectedOptionToJourney = selectedOptionValue match {
-        case UserLocation.Eu           => "eu"
         case UserLocation.ThirdCountry => "third-country"
         case UserLocation.Uk           => "uk"
         case UserLocation.Iom          => "iom"

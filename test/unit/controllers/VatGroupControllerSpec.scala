@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailControll
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, VatGroupController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ControllerSpec
-import util.builders.YesNoFormBuilder.{invalidRequest, ValidRequest}
+import util.builders.YesNoFormBuilder.{invalidRequest, validRequest}
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import java.util.UUID
@@ -70,7 +70,7 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
 
     "ensure a valid option has been selected" in {
       val invalidOption = UUID.randomUUID.toString
-      submitForm(ValidRequest + (yesNoInputName -> invalidOption)) { result =>
+      submitForm(validRequest + (yesNoInputName -> invalidOption)) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(
@@ -83,14 +83,14 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
     }
 
     "redirect to Cannot Register Using This Service when 'yes' " in {
-      submitForm(ValidRequest + (yesNoInputName -> answerYes)) { result =>
+      submitForm(validRequest + (yesNoInputName -> answerYes)) { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value should endWith(expectedYesRedirectUrl)
       }
     }
 
     "redirect to EmailController.form when 'no' " in {
-      submitForm(ValidRequest + (yesNoInputName -> answerNo)) { result =>
+      submitForm(validRequest + (yesNoInputName -> answerNo)) { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value shouldBe expectedNoRedirectUrl
       }

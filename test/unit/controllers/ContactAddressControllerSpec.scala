@@ -183,7 +183,7 @@ class ContactAddressControllerSpec
       when(mockSubscriptionPage.url(any())).thenReturn(
         "/customs-registration-services/atar/register/disclose-personal-details-consent"
       )
-      submitFormInCreateMode(ValidRequest) { result =>
+      submitFormInCreateMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         header(
           LOCATION,
@@ -216,7 +216,7 @@ class ContactAddressControllerSpec
       when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
         .thenReturn(Future.successful(None))
 
-      submitFormInCreateMode(ValidRequest, contactDetails = None) { result =>
+      submitFormInCreateMode(validRequest, contactDetails = None) { result =>
         status(result) shouldBe SEE_OTHER
         header(
           LOCATION,
@@ -235,7 +235,7 @@ class ContactAddressControllerSpec
       when(mockSubscriptionPage.url(any())).thenReturn(
         "/customs-registration-services/atar/register/matching/review-determine"
       )
-      submitFormInReviewMode(ValidRequest)(verifyRedirectToReviewPage())
+      submitFormInReviewMode(validRequest)(verifyRedirectToReviewPage())
     }
   }
 

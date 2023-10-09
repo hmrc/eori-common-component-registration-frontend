@@ -40,7 +40,6 @@ class ApplicationControllerWithAllowlistVerificationSpec extends ControllerSpec 
   val controller =
     new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig)
 
-  // TODO This test doesn't test what described, please check if logout method is not coevered in ApplicationControllerSpec
   "Navigating to logout" should {
     "logout a non-allowlisted user" in {
       withAuthorisedUser(defaultUserId, mockAuthConnector, userEmail = Some("not@example.com"))

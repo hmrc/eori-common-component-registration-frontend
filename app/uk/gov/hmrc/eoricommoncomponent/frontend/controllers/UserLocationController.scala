@@ -26,8 +26,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.Re
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -104,7 +104,6 @@ class UserLocationController @Inject() (
     location match {
       case Some(UserLocation.ThirdCountry)      => UserLocation.ThirdCountry
       case Some(UserLocation.ThirdCountryIncEU) => UserLocation.ThirdCountryIncEU
-      case Some(UserLocation.Eu)                => UserLocation.Eu
       case Some(UserLocation.Iom)               => UserLocation.Iom
       case Some(UserLocation.Islands)           => UserLocation.Islands
       case Some(UserLocation.Uk)                => UserLocation.Uk

@@ -1675,18 +1675,24 @@ cds.subscription.contact-details.intro=We will use these details to contact you 
 
 cds.enrolment.pending.user.title=You''ve already applied
 cds.enrolment.pending.group.title=Someone in your organisation has already applied
+cds.enrolment.pending.group.title.different.service= You cannot subscribe with this Government Gateway user ID
 cds.enrolment.pending.user.title.other-service = You cannot apply just now
 
 cds.enrolment.pending.user.paragraph1.same-service = HMRC received your application on {0}
 cds.enrolment.pending.user.paragraph2.same-service = We'll process your application. This can take up to 5 working days.
 cds.enrolment.pending.user.heading2.same-service = What happens next
 
+
 cds.enrolment.pending.user.paragraph1=You can apply after we have processed your application to:
 cds.enrolment.pending.user.paragraph2=This takes either:
+
 
 cds.enrolment.pending.group.paragraph1=Only one person from your organisation can apply.
 cds.enrolment.pending.group.paragraph2=We will send them an email when we have finished processing their application.
 cds.enrolment.pending.group.paragraph3=They will get this email within either:
+cds.enrolment.pending.group.different.service.paragraph1=Your organisation used a different user ID to subscribe to another customs service. You need to use that user ID for this service.
+cds.enrolment.pending.group.different.service.paragraph2=Sign out and then sign in with that Government Gateway user ID.
+cds.enrolment.pending.group.different.service.heading2= If you don’t know this user ID
 
 cds.enrolment.pending.bullet1=2 hours
 cds.enrolment.pending.bullet2=5 working days, if we need to make more checks
@@ -1992,6 +1998,8 @@ cds.subscription.outcomes.success.extra.information.next.new.atar =<li>apply for
 cds.subscription.outcomes.success.extra.information.next.new.gagmr =<li>get a goods movement reference (GMR)</li>
 cds.subscription.outcomes.success.extra.information.next.new.cts =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
 cds.subscription.outcomes.success.extra.information.next.new.route1 =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
+cds.subscription.outcomes.success.extra.information.next.new.ndrc =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
+cds.subscription.outcomes.success.extra.information.next.new.ivd =<li>apply for repayment of import duty and VAT (CHIEF)</li><li>send documents for a customs check for declarations made in CHIEF</li><li>tell HMRC about an underpayment of Customs Duty or import VAT</li>
 cds.subscription.outcomes.success.extra.information.next.new.ss =<li>make entry summary declarations</li>
 cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>make entry summary declarations</li>
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>submit union transit declarations through NCTS</li>

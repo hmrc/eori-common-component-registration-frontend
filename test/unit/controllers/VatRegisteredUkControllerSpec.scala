@@ -141,7 +141,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       val url = "register/vat-group"
       subscriptionFlowUrl(url)
 
-      submitForm(ValidRequest) { result =>
+      submitForm(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value should endWith("/register/your-uk-vat-details")
       }
@@ -201,7 +201,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     }
 
     "redirect to vat groups review page for yes answer and is in review mode" in {
-      submitForm(ValidRequest, isInReviewMode = true) { result =>
+      submitForm(validRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value should endWith("register/your-uk-vat-details/review")
       }

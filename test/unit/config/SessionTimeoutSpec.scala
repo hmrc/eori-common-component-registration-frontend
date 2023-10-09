@@ -17,9 +17,9 @@
 package unit.config
 
 import base.{Injector, UnitSpec}
-import play.api.{Application, Configuration}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.{Application, Configuration}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 
 class SessionTimeoutSpec extends UnitSpec with Injector {

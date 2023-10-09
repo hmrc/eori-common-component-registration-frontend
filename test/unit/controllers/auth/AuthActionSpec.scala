@@ -16,25 +16,23 @@
 
 package unit.auth
 
+import com.typesafe.config.{Config, ConfigFactory}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers._
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.Results.Ok
 import play.api.mvc._
+import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthProviders, AuthorisedFunctions}
+import play.api.{Configuration, Environment}
+import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, CacheClearOnCompletionAction}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import org.scalatest.wordspec.AnyWordSpec
-import play.api.mvc.Results.{Ok, Redirect}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import util.builders.AuthBuilder
-import play.api.test.Helpers._
-import play.api.test.CSRFTokenHelper
-import play.api.test.FakeRequest
-import org.scalatest.matchers.should.Matchers._
-import play.api.{Configuration, Environment}
-import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

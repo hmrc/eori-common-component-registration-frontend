@@ -109,7 +109,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       }
     }
 
-    val locations = Seq(UserLocation.Eu, UserLocation.ThirdCountry, UserLocation.Iom, UserLocation.Islands)
+    val locations = Seq(UserLocation.ThirdCountry, UserLocation.Iom, UserLocation.Islands)
 
     locations foreach { location =>
       assertAndTestBasedOnTheLocationForIndividual(location)
@@ -199,7 +199,6 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def getSelectedLocation(selectedLocation: String) =
     selectedLocation match {
-      case UserLocation.Eu                => "eu"
       case UserLocation.ThirdCountry      => "third-country"
       case UserLocation.Iom               => "isle-of-man"
       case UserLocation.Islands           => "islands"

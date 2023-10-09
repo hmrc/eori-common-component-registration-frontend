@@ -74,7 +74,6 @@ object ContactDetailsModel {
   def trim(value: Option[String]): Option[String] = value.map(_.trim)
 }
 
-//TODO remove email address read from cache and populate the contact details
 case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: Option[String])
     extends Logging {
 

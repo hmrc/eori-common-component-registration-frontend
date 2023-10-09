@@ -23,8 +23,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfB
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{MatchingForms, SubscriptionForm}
 
-import java.time.{LocalDate, Year}
 import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, Year}
 import scala.collection.immutable.ArraySeq
 import scala.util.Random
 
