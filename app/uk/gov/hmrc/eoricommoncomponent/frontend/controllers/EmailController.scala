@@ -105,9 +105,10 @@ class EmailController @Inject() (
   private def userIsInProcess(
     service: Service
   )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
-    save4LaterService
-      .fetchProcessingService(GroupId(user.groupId))
-      .map(processingService => Ok(enrolmentPendingForUser(service, processingService)))
+    for {
+      processingService <- save4LaterService.fetchProcessingService(GroupId(user.groupId))
+      processingDate    <- sessionCache.sub01Outcome.map(_.processedDate)
+    } yield Ok(enrolmentPendingForUser(service, processingDate, processingService))
 
   private def otherUserWithinGroupIsInProcess(
     service: Service
