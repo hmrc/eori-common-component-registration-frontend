@@ -32,7 +32,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.helpers.noMarginParagraph
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Value}
-
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -166,7 +165,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
       for {
         providedDetailsList <- providedDetails
-        vatDetails             = getVatDetails(isIndividual, subscription, service)
+        vatDetails             = getVatDetails(isIndividual, subscription)
         providedContactDetails = getProvidedContactDetails(subscription, service)
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
     }
@@ -393,7 +392,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     )
   }
 
-  def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails, service: Service)(implicit
+  def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails)(implicit
     messages: Messages
   ): Seq[SummaryListRow] =
     if (!isIndividual) {

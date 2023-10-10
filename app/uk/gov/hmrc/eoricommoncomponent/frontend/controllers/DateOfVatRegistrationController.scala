@@ -17,13 +17,12 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{GetVatCustomerInformationService, SubscriptionBusinessService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_vat_registration
 
 import java.time.LocalDate
@@ -34,11 +33,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateOfVatRegistrationController @Inject() (
   authAction: AuthAction,
   subscriptionBusinessService: SubscriptionBusinessService,
-  getVatCustomerInformationService: GetVatCustomerInformationService,
   mcc: MessagesControllerComponents,
   dateOfVatRegistrationView: date_of_vat_registration,
-  form: VatRegistrationDateFormProvider,
-  appConfig: AppConfig
+  form: VatRegistrationDateFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
