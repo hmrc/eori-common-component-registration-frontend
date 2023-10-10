@@ -35,7 +35,7 @@ class AddressInvalidController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def page(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def page(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => _: LoggedInUserWithEnrolments =>
       if (requestSessionData.isIndividualOrSoleTrader(request))
         Future.successful(Ok(addressInvalidIndividual(service)))

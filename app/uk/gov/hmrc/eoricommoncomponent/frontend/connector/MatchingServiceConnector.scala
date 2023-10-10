@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
+import cats.data.EitherT
 import play.api.http.HeaderNames.AUTHORIZATION
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
@@ -27,7 +28,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
   RegisterWithIdConfirmation,
   RegisterWithIdSubmitted
 }
-import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, _}
 import uk.gov.hmrc.http.client.HttpClientV2
 
@@ -37,49 +37,58 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
   ec: ExecutionContext
-) {
+) extends HandleResponses {
 
-  private val logger = Logger(this.getClass)
+  private val url = url"${appConfig.getServiceUrl("register-with-id")}"
 
-  private val url          = url"${appConfig.getServiceUrl("register-with-id")}"
-  private val NoMatchFound = "002 - No Match Found"
+  def lookup(req: MatchingRequestHolder)(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, MatchingResponse] =
+    EitherT {
 
-  private def handleResponse(response: MatchingResponse): Option[MatchingResponse] = {
-    val statusTxt = response.registerWithIDResponse.responseCommon.statusText
-    if (statusTxt.exists(_.equalsIgnoreCase(NoMatchFound))) None
-    else Some(response)
-  }
+      httpClient
+        .post(url)
+        .withBody(Json.toJson(req))
+        .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+        .execute
+        .map { response =>
+          response.status match {
+            case OK =>
+              handleResponse[MatchingResponse](response).flatMap { matchingResponse =>
+                auditCall(url.toString, req, matchingResponse)
+                val idResponse = matchingResponse.registerWithIDResponse
 
-  def lookup(req: MatchingRequestHolder)(implicit hc: HeaderCarrier): Future[Option[MatchingResponse]] = {
+                if (idResponse.responseDetail.isEmpty) {
+                  // $COVERAGE-OFF$Loggers
+                  logger.warn(
+                    s"REG01 failed Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
+                  )
+                  // $COVERAGE-ON
+                  idResponse.responseCommon.statusText match {
+                    case Some(text) if text.equalsIgnoreCase(MatchingServiceConnector.NoMatchFound) =>
+                      Left(MatchingServiceConnector.matchFailureResponse)
+                    case Some(text) =>
+                      Left(ResponseError(OK, text))
+                    case None =>
+                      Left(ResponseError(OK, "Detail object not returned"))
+                  }
 
-    // $COVERAGE-OFF$Loggers
-    logger.debug(
-      s"REG01 Lookup: ${url.toString}, requestCommon: ${req.registerWithIDRequest.requestCommon} and hc: $hc"
-    )
-    // $COVERAGE-ON
+                } else {
+                  // $COVERAGE-OFF$Loggers
+                  logger.debug(
+                    s"REG01 Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
+                  )
+                  // $COVERAGE-ON
+                  Right(matchingResponse)
+                }
+              }
 
-    httpClient
-      .post(url)
-      .withBody(Json.toJson(req))
-      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
-      .execute[MatchingResponse] map { resp =>
-      // $COVERAGE-OFF$Loggers
-      logger.debug(s"REG01 Lookup: responseCommon: ${resp.registerWithIDResponse.responseCommon}")
-      // $COVERAGE-ON
+            case _ =>
+              val error = s"REG01 Lookup failed with reason: ${response.body}"
+              logger.error(error)
+              Left(ResponseError(response.status, error))
+          }
 
-      auditCall(url.toString, req, resp)
-      handleResponse(resp)
-    } recover {
-      case e: Throwable =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn(
-          s"REG01 Lookup failed for acknowledgement ref: ${req.registerWithIDRequest.requestCommon.acknowledgementReference}. Reason: $e"
-        )
-        // $COVERAGE-ON
-        throw e
+        }
     }
-
-  }
 
   private def auditCall(url: String, request: MatchingRequestHolder, response: MatchingResponse)(implicit
     hc: HeaderCarrier
@@ -95,4 +104,12 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
     )
   }
 
+}
+
+object MatchingServiceConnector {
+  val NoMatchFound                             = "002 - No match found"
+  val DownstreamFailure                        = "001 - Request could not be processed"
+  val matchFailureResponse: ResponseError      = ResponseError(OK, NoMatchFound)
+  val downstreamFailureResponse: ResponseError = ResponseError(OK, DownstreamFailure)
+  val otherErrorHappen: ResponseError          = ResponseError(INTERNAL_SERVER_ERROR, "Unknown error occurred.")
 }

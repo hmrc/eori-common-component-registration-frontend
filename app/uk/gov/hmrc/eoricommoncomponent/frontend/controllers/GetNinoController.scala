@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.i18n.Messages
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, EmailController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -25,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_nino
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_nino}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -37,12 +38,13 @@ class GetNinoController @Inject() (
   matchingService: MatchingService,
   mcc: MessagesControllerComponents,
   matchNinoRowIndividualView: how_can_we_identify_you_nino,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  errorView: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def displayForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
         Ok(
           matchNinoRowIndividualView(
@@ -56,7 +58,7 @@ class GetNinoController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => loggedInUser: LoggedInUserWithEnrolments =>
         subscriptionNinoForm.bindFromRequest().fold(
           formWithErrors =>
@@ -86,12 +88,14 @@ class GetNinoController @Inject() (
             Individual.withLocalDate(details.firstName, details.lastName, details.dateOfBirth),
             groupId
           )
-          .map { matched =>
-            if (matched)
-              Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-            else
-              matchNotFoundBadRequest(formData, service)
-          }
+          .fold(
+            {
+              case MatchingServiceConnector.matchFailureResponse      => matchNotFoundBadRequest(formData, service)
+              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+              case _                                                  => InternalServerError(errorView(service))
+            },
+            _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+          )
       case None => Future.successful(Redirect(EmailController.form(service)))
     }
 

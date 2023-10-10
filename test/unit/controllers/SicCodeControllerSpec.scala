@@ -291,12 +291,12 @@ class SicCodeControllerSpec
       submitFormInCreateMode(Map("sic" -> "123456"), userSelectedOrgType = Company) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(
-          SubscriptionAmendCompanyDetailsPage.pageLevelErrorSummaryListXPath
-        ) shouldBe "The SIC code must be 5 digits or less"
+        page.getElementsText(SubscriptionAmendCompanyDetailsPage.pageLevelErrorSummaryListXPath) shouldBe messages(
+          "cds.subscription.sic.error.too-long"
+        )
         page.getElementsText(
           SubscriptionAmendCompanyDetailsPage.sicFieldLevelErrorXpath
-        ) shouldEqual "Error: The SIC code must be 5 digits or less"
+        ) shouldEqual s"Error: ${messages("cds.subscription.sic.error.too-long")}"
       }
     }
 

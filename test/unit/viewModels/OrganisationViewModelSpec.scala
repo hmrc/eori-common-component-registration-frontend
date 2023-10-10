@@ -47,17 +47,6 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       )
     }
 
-    "return valid options for EU user location" in {
-      val selectedUserLocation = Some(UserLocation.Eu)
-      val viewModel            = OrganisationViewModel
-
-      val options = viewModel.validOptions(selectedUserLocation)
-
-      options should contain theSameElementsAs Seq(
-        CdsOrganisationType.EUOrganisationId -> messages("cds.matching.organisation-type.radio.eu-organisation.label"),
-        CdsOrganisationType.EUIndividualId   -> messages("cds.matching.organisation-type.radio.eu-individual.label")
-      )
-    }
     "return valid options for third-country user location" in {
       val selectedUserLocation = Some(UserLocation.ThirdCountry)
       val viewModel            = OrganisationViewModel

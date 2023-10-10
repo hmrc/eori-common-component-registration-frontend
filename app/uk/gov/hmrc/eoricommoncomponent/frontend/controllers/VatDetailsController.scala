@@ -17,12 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  InvalidResponse,
-  NotFoundResponse,
-  ServiceUnavailableResponse,
-  VatControlListConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.VatControlListConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListRequest}
@@ -54,13 +49,13 @@ class VatDetailsController @Inject() (
   val dateForm = form()
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service)))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedUkVatDetails.map {
           case Some(vatDetails) =>
@@ -70,7 +65,7 @@ class VatDetailsController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       vatDetailsForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service))),
         formData => lookupVatDetails(formData, isInReviewMode, service)
@@ -81,8 +76,15 @@ class VatDetailsController @Inject() (
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
-    vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).flatMap {
-      case Right(vatControlListResponse) =>
+    vatControlListConnector.vatControlList(VatControlListRequest(vatForm.number)).foldF(
+      responseError =>
+        responseError.status match {
+          case NOT_FOUND | BAD_REQUEST =>
+            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
+          case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
+        },
+      vatControlListResponse =>
         if (vatControlListResponse.isPostcodeAssociatedWithVrn(vatForm))
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
@@ -101,18 +103,10 @@ class VatDetailsController @Inject() (
           subscriptionDetailsService.clearCachedVatControlListResponse().flatMap(
             _ => Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
           )
-      case Left(errorResponse) =>
-        errorResponse match {
-          case NotFoundResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case InvalidResponse =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case ServiceUnavailableResponse => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
-        }
-    }
+    )
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(weCannotConfirmYourIdentity(dateForm, service)))
     }
 

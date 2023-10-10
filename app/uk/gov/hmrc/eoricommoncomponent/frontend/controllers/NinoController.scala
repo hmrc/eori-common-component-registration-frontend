@@ -18,13 +18,14 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_nino
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_nino}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,17 +35,18 @@ class NinoController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
   matchNinoView: match_nino,
-  matchingService: MatchingService
+  matchingService: MatchingService,
+  errorView: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(matchNinoView(ninoForm, organisationType, service)))
     }
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       ninoForm.bindFromRequest().fold(
         invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
         form =>
@@ -52,18 +54,24 @@ class NinoController @Inject() (
             form.nino,
             Individual.withLocalDate(form.firstName, form.lastName, form.dateOfBirth),
             GroupId(loggedInUser.groupId)
-          ) map {
-            case true =>
+          ).fold(
+            {
+              case MatchingServiceConnector.matchFailureResponse =>
+                val errorForm = ninoForm
+                  .withGlobalError(Messages("cds.matching-error.individual-not-found"))
+                  .fill(form)
+                BadRequest(matchNinoView(errorForm, organisationType, service))
+              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+              case _                                                  => InternalServerError(errorView(service))
+            },
+            _ =>
               Redirect(
-                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
-                  .form(service, isInReviewMode = false)
+                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.form(
+                  service,
+                  isInReviewMode = false
+                )
               )
-            case false =>
-              val errorForm = ninoForm
-                .withGlobalError(Messages("cds.matching-error.individual-not-found"))
-                .fill(form)
-              BadRequest(matchNinoView(errorForm, organisationType, service))
-          }
+          )
       )
     }
 

@@ -36,16 +36,16 @@
     FieldElements(field.id, field, Html(""), args.toMap, messages)
 }
 @isLegendH1 = @{
-    elements.args.getOrElse('_isLegendH1, false).asInstanceOf[Boolean]
+    elements.args.getOrElse(Symbol("_isLegendH1"), false).asInstanceOf[Boolean]
 }
 @legend = @{
-    elements.args.getOrElse('_legend, "").asInstanceOf[String]
+    elements.args.getOrElse(Symbol("_legend"), "").asInstanceOf[String]
 }
 @legendClasses = @{
     if(isLegendH1){"govuk-fieldset__legend--l"} else {additionalClasses.getOrElse("govuk-fieldset__legend--m")}
 }
 @hasHint = @{
-    elements.args.contains('_hintText)
+    elements.args.contains(Symbol("_hintText"))
 }
 @hintId = @{
     if(hasHint) s"${field.id}-hint" else ""

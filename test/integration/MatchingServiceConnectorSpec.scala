@@ -23,9 +23,9 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, MatchService}
 
@@ -181,7 +181,39 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       |  "registerWithIDResponse": {
       |    "responseCommon":    {
       |      "status": "OK",
+      |      "statusText":"002 - No match found",
+      |      "processingDate": "2016-07-08T08:35:13Z",
+      |      "returnParameters": [{
+      |       "paramName": "POSITION",
+      |       "paramValue": "FAIL"
+      |      }]
+      |    }
+      |  }
+      |}
+    """.stripMargin)
+
+  private val matchFailureResponseUppercase = Json.parse("""
+      |{
+      |  "registerWithIDResponse": {
+      |    "responseCommon":    {
+      |      "status": "OK",
       |      "statusText":"002 - No Match Found",
+      |      "processingDate": "2016-07-08T08:35:13Z",
+      |      "returnParameters": [{
+      |       "paramName": "POSITION",
+      |       "paramValue": "FAIL"
+      |      }]
+      |    }
+      |  }
+      |}
+    """.stripMargin)
+
+  private val downstreamFailureResponse = Json.parse("""
+      |{
+      |  "registerWithIDResponse": {
+      |    "responseCommon":    {
+      |      "status": "OK",
+      |      "statusText":"001 - Request could not be processed",
       |      "processingDate": "2016-07-08T08:35:13Z",
       |      "returnParameters": [{
       |       "paramName": "POSITION",
@@ -235,9 +267,12 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         serviceRequestJsonNino.toString,
         serviceResponseJsonOrganisationWithOptionalParams.toString
       )
-      await(matchingServiceConnector.lookup(serviceRequestJsonNino.as[MatchingRequestHolder])).get must be(
-        serviceResponseJsonOrganisationWithOptionalParams.as[MatchingResponse]
-      )
+
+      val expected = Right(serviceResponseJsonOrganisationWithOptionalParams.as[MatchingResponse])
+      val result   = matchingServiceConnector.lookup(serviceRequestJsonNino.as[MatchingRequestHolder])
+
+      result.value.futureValue mustBe expected
+
     }
 
     "return successful response with individual when matching service returns 200" in {
@@ -246,34 +281,68 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         serviceRequestJsonEori.toString,
         serviceResponseJsonIndividualWithOptionalParams.toString
       )
-      await(matchingServiceConnector.lookup(serviceRequestJsonEori.as[MatchingRequestHolder])).get must be(
-        serviceResponseJsonIndividualWithOptionalParams.as[MatchingResponse]
-      )
+
+      val expected = Right(serviceResponseJsonIndividualWithOptionalParams.as[MatchingResponse])
+      val result   = matchingServiceConnector.lookup(serviceRequestJsonEori.as[MatchingRequestHolder])
+
+      result.value.futureValue mustBe expected
     }
 
-    "return None when matching service can't find a match" in {
+    "return matchFailureResponse when matching service can't find a match" in {
       MatchService.returnTheMatchResponseWhenReceiveRequest(
         expectedPostUrl,
         serviceRequestJson.toString(),
         matchFailureResponse.toString(),
         OK
       )
-      await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])) must be(None)
+
+      val expected = Left(MatchingServiceConnector.matchFailureResponse)
+      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+
+      result.value.futureValue mustBe expected
     }
 
-    "return Exception when matching service returns a downstream 500 response (Internal Service Error)" in {
+    "return matchFailureResponse when matching service can't find a match and the message is in a different case" in {
+      MatchService.returnTheMatchResponseWhenReceiveRequest(
+        expectedPostUrl,
+        serviceRequestJson.toString(),
+        matchFailureResponseUppercase.toString(),
+        OK
+      )
+
+      val expected = Left(MatchingServiceConnector.matchFailureResponse)
+      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+
+      result.value.futureValue mustBe expected
+    }
+
+    "return downstreamFailureResponse when matching REG01 returns 001" in {
+      MatchService.returnTheMatchResponseWhenReceiveRequest(
+        expectedPostUrl,
+        serviceRequestJson.toString(),
+        downstreamFailureResponse.toString(),
+        OK
+      )
+
+      val expected = Left(MatchingServiceConnector.downstreamFailureResponse)
+      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+
+      result.value.futureValue mustBe expected
+    }
+
+    "return Left when matching service returns a downstream 500 response (Internal Service Error)" in {
       MatchService.returnTheMatchResponseWhenReceiveRequest(
         expectedPostUrl,
         serviceRequestJson.toString(),
         match500ErrorResponse.toString(),
         INTERNAL_SERVER_ERROR
       )
-      val caught = intercept[UpstreamErrorResponse] {
-        await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder]))
-      }
 
-      caught.statusCode mustBe 500
-      caught.message must include(s"Response body: '$match500ErrorResponse'")
+      val result = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+      val expected =
+        Left(ResponseError(INTERNAL_SERVER_ERROR, s"REG01 Lookup failed with reason: $match500ErrorResponse"))
+
+      result.value.futureValue mustBe expected
     }
 
     "return Exception when matching service fails with 4xx (any 4xx response apart from 400)" in {
@@ -283,12 +352,12 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         "Forbidden",
         FORBIDDEN
       )
-      val caught = intercept[UpstreamErrorResponse] {
-        await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder]))
-      }
 
-      caught.statusCode mustBe 403
-      caught.message must include("Response body: 'Forbidden'")
+      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+      val expected = Left(ResponseError(FORBIDDEN, s"REG01 Lookup failed with reason: Forbidden"))
+
+      result.value.futureValue mustBe expected
+
     }
 
     "audit a successful request" in {
@@ -297,7 +366,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         serviceRequestJson.toString,
         serviceResponseJsonOrganisationWithOptionalParams.toString
       )
-      await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder]))
+      await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder]).value)
 
       eventually(AuditService.verifyXAuditWrite(1))
     }
@@ -309,11 +378,9 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         match400ErrorResponse.toString(),
         BAD_REQUEST
       )
-      val caught = intercept[UpstreamErrorResponse] {
-        await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder]))
-      }
 
-      caught.statusCode mustBe 400
+      await(matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder]).value)
+
       eventually(AuditService.verifyXAuditWrite(0))
     }
 

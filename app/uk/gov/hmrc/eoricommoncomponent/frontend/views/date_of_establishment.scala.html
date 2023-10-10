@@ -14,9 +14,10 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel.{headerAndTitle, updateFormErrors}
+@import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel.headerAndTitle
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.helpers.inputDate
@@ -32,7 +33,7 @@
 
 @layout_di(messages(headerAndTitle(orgType, isRestOfWorldJourney)), form = Some(dateForm), service = service) {
 
-        @errorSummary(updateFormErrors(dateForm).errors, focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
+        @errorSummary(DateConverter.updateDateOfEstablishmentErrors(dateForm.errors), focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController.submit(isInReviewMode, service), "date-of-birth-form") {
 
@@ -40,7 +41,7 @@
 
 
             @inputDate_di(
-                form = updateFormErrors(dateForm),
+                form = dateForm.copy(errors = DateConverter.updateDateOfEstablishmentErrors(dateForm.errors)),
                 legendContent = headerAndTitle(orgType, isRestOfWorldJourney),
                 legendClasses = Some("govuk-fieldset__legend--l"),
                 hintText = Some(Html(messages("cds.date-established.hint"))),

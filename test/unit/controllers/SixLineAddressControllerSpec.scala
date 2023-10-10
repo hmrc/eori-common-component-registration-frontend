@@ -238,28 +238,28 @@ class SixLineAddressControllerSpec
         "be mandatory" in {
           assertInvalidField(organisationType)(formValues - "countryCode")(
             fieldLevelErrorCountry,
-            "Enter a valid country name"
+            messages("cds.matching-error.country.invalid")
           )
         }
 
         "be non-empty" in {
           assertInvalidField(organisationType)(formValues + ("countryCode" -> ""))(
             fieldLevelErrorCountry,
-            "Enter a valid country name"
+            messages("cds.matching-error.country.invalid")
           )
         }
 
         "be at least 2 characters long" in {
           assertInvalidField(organisationType)(formValues + ("countryCode" -> undersizedString(2)))(
             fieldLevelErrorCountry,
-            "Enter a valid country name"
+            messages("cds.matching-error.country.invalid")
           )
         }
 
         "be at most 2 characters long" in {
           assertInvalidField(organisationType)(formValues + ("countryCode" -> oversizedString(2)))(
             fieldLevelErrorCountry,
-            "Enter a valid country name"
+            messages("cds.matching-error.country.invalid")
           )
         }
       }

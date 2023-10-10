@@ -17,13 +17,15 @@
 package unit.controllers.auth
 
 import base.UnitSpec
-import org.mockito.ArgumentMatchers.any
+import cats.data.EitherT
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.GroupEnrolmentExtractor
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EnrolmentResponse
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, GroupId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.EnrolmentStoreProxyService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -39,6 +41,8 @@ class GroupEnrolmentExtractorSpec extends UnitSpec with MockitoSugar with Before
 
   private val groupEnrolmentExtractor = new GroupEnrolmentExtractor(enrolmentStoreProxyService)
 
+  private val groupId = "123456789"
+
   override protected def afterEach(): Unit = {
     reset(enrolmentStoreProxyService)
 
@@ -46,18 +50,25 @@ class GroupEnrolmentExtractorSpec extends UnitSpec with MockitoSugar with Before
   }
 
   "GroupEnrolmentExtractor" should {
+    "groupId has enrolments" in {
 
-    "return all group enrolments" when {
+      val rightValueForEitherT: Either[ResponseError, List[EnrolmentResponse]] = Right(List(enrolmentResponse))
 
-      "groupId has enrolments" in {
+      mockEnrolmentsForGroup(groupId)(EitherT[Future, ResponseError, List[EnrolmentResponse]] {
+        Future.successful(rightValueForEitherT)
+      })
 
-        when(enrolmentStoreProxyService.enrolmentsForGroup(any())(any()))
-          .thenReturn(Future.successful(List(enrolmentResponse)))
-
-        val result = groupEnrolmentExtractor.groupIdEnrolments("groupId")(hc)
-
-        result.futureValue shouldBe List(enrolmentResponse)
-      }
+      groupEnrolmentExtractor.groupIdEnrolments(groupId)(hc).value.futureValue.map(
+        res => res shouldBe List(EnrolmentResponse("HMRC-CUS-ORG", "ACTIVATED", List.empty))
+      )
     }
   }
+
+  def mockEnrolmentsForGroup(groupId: String)(response: EitherT[Future, ResponseError, List[EnrolmentResponse]]): Unit =
+    when(
+      enrolmentStoreProxyService.enrolmentsForGroup(ArgumentMatchers.eq(GroupId(groupId)))(
+        ArgumentMatchers.any[HeaderCarrier]
+      )
+    ) thenReturn response
+
 }

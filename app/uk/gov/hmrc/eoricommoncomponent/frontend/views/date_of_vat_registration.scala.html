@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDate
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
@@ -30,7 +31,7 @@
 
 @layout_di(messages("ecc.eor-vat-registration-date.heading"), form = Some(dateForm), service = service) {
 
-        @errorSummary(dateForm.errors, focusOverrides = Map("vat-registration-date" -> "vat-registration-date.day"))
+        @errorSummary(DateConverter.updateEffectiveVatDateErrors(dateForm.errors), focusOverrides = Map("vat-registration-date" -> "vat-registration-date.day"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfVatRegistrationController.submit(service)) {
 
@@ -45,7 +46,7 @@
 
 
             @inputDate_di(
-                form = dateForm,
+                form = dateForm.copy(errors = DateConverter.updateEffectiveVatDateErrors(dateForm.errors)),
                 legendContent = messages("ecc.eor-vat-registration-date.heading"),
                 legendClasses = Some("govuk-visually-hidden"),
                 hintText = Some(Html(messages("ecc.eor-vat-registration-date.hint"))),

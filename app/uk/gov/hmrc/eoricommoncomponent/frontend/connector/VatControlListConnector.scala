@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
+import cats.data.EitherT
 import play.api.http.HeaderNames.AUTHORIZATION
-import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK, SERVICE_UNAVAILABLE}
+import play.api.http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.http._
@@ -29,16 +29,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit
-  ec: ExecutionContext
-) {
+class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext)
+    extends HandleResponses {
 
-  private val logger  = Logger(this.getClass)
   private val baseUrl = appConfig.getServiceUrl("vat-known-facts-control-list")
 
   def vatControlList(
     request: VatControlListRequest
-  )(implicit hc: HeaderCarrier): Future[Either[EoriHttpResponse, VatControlListResponse]] = {
+  )(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, VatControlListResponse] = EitherT {
 
     val url = new URL(s"$baseUrl?${makeQueryString(request.queryParams)}")
 
@@ -50,30 +48,30 @@ class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: Ap
       logger.debug(s"vat-known-facts-control-list successful. url: $url")
       // $COVERAGE-ON
       response.status match {
-        case OK        => Right(response.json.as[VatControlListResponse])
+        case OK        => handleResponse[VatControlListResponse](response)
         case NOT_FOUND =>
           // $COVERAGE-OFF$Loggers
           logger.warn(
             s"VatControlList failed. url: $url. Reason: The back end has indicated that vat known facts cannot be returned."
           )
           // $COVERAGE-ON
-          Left(NotFoundResponse)
+          Left(ResponseError(NOT_FOUND, response.body))
         case BAD_REQUEST =>
           // $COVERAGE-OFF$Loggers
           logger.warn(s"VatControlList failed. url: $url. Reason: Request has not passed validation. Invalid vrn.")
           // $COVERAGE-ON
-          Left(InvalidResponse)
+          Left(ResponseError(BAD_REQUEST, response.body))
         case SERVICE_UNAVAILABLE =>
           // $COVERAGE-OFF$Loggers
           logger.warn(s"VatControlList failed. url: $url. Reason: Dependent systems are currently not responding")
           // $COVERAGE-ON
-          Left(ServiceUnavailableResponse)
+          Left(ResponseError(SERVICE_UNAVAILABLE, response.body))
         case _ =>
           val error = "Incorrect VAT Known facts response"
           // $COVERAGE-OFF$Loggers
           logger.warn(error)
           // $COVERAGE-ON
-          throw new Exception(error)
+          Left(ResponseError(INTERNAL_SERVER_ERROR, error))
       }
     }
   }

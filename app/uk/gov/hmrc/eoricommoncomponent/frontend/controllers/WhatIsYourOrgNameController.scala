@@ -45,14 +45,14 @@ class WhatIsYourOrgNameController @Inject() (
   }
 
   def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionDetailsService.cachedNameDetails.flatMap(
         details => populateView(details.map(_.name), isInReviewMode, organisationType, service)
       )
     }
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       organisationNameForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(

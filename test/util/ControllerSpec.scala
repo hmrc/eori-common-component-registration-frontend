@@ -46,7 +46,8 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 import scala.util.Random
 
-trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with Injector with TestData {
+trait ControllerSpec
+    extends UnitSpec with MockitoSugar with I18nSupport with Injector with TestData with ResponseErrorEitherT {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
@@ -125,7 +126,6 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
       )
     }
 
-  // TODO This trait is used in only one controller, extract the necessary logic and use in the test, rest to remove
   trait AbstractControllerFixture[C <: FrontendController] {
     val mockAuthConnector = mock[AuthConnector]
     val userId            = defaultUserId
@@ -173,7 +173,6 @@ trait ControllerSpec extends UnitSpec with MockitoSugar with I18nSupport with In
 
   val defaultUserId: String = s"user-${UUID.randomUUID}"
 
-  // TODO Extract below methods to some Utils class
   def strim(s: String): String = s.stripMargin.trim.split("\n").mkString(" ")
 
   def oversizedString(maxLength: Int): String = Random.alphanumeric.take(maxLength + 1).mkString

@@ -26,8 +26,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.Re
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -58,7 +58,7 @@ class UserLocationController @Inject() (
     Future.successful(Ok(userLocationView(userLocationForm, service, isAffinityOrganisation(user.affinityGroup))))
 
   def form(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => implicit user: LoggedInUserWithEnrolments =>
       continue(service)
     }
 
@@ -76,7 +76,7 @@ class UserLocationController @Inject() (
     }.flatMap(identity _)
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       userLocationForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(
@@ -104,7 +104,6 @@ class UserLocationController @Inject() (
     location match {
       case Some(UserLocation.ThirdCountry)      => UserLocation.ThirdCountry
       case Some(UserLocation.ThirdCountryIncEU) => UserLocation.ThirdCountryIncEU
-      case Some(UserLocation.Eu)                => UserLocation.Eu
       case Some(UserLocation.Iom)               => UserLocation.Iom
       case Some(UserLocation.Islands)           => UserLocation.Islands
       case Some(UserLocation.Uk)                => UserLocation.Uk
@@ -168,7 +167,7 @@ class UserLocationController @Inject() (
     case _ => Future.successful(InternalServerError(errorTemplate(service)))
   }
 
-  def processing(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def processing(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.sub01Outcome
         .map(_.processedDate)

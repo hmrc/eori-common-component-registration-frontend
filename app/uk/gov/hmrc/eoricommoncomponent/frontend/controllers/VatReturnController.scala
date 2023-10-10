@@ -44,13 +44,13 @@ class VatReturnController @Inject() (
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         Future.successful(Ok(vatReturnTotalView(vatReturnTotalForm, service)))
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       vatReturnTotalForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(vatReturnTotalView(formWithErrors, service))),
         formData => lookupVatReturn(formData, service)
@@ -70,7 +70,7 @@ class VatReturnController @Inject() (
     }
 
   def redirectToCannotConfirmIdentity(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
         Ok(weCannotConfirmYourIdentity(isInReviewMode = false, VatDetailsController.createForm(service).url, service))
       )

@@ -71,7 +71,7 @@ class SixLineAddressController @Inject() (
   }
 
   def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       sessionCache.registrationDetails.flatMap(
         rd => populateView(Some(rd.address), isInReviewMode, organisationType, service)
@@ -79,7 +79,7 @@ class SixLineAddressController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       val (countriesToInclude, countriesInCountryPicker) =
         Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
       assertOrganisationTypeIsValid(organisationType)(request)

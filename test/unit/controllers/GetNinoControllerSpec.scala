@@ -23,12 +23,13 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetNinoController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IdMatchModel, NameDobMatchModel, Nino}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_nino
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_nino}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -45,6 +46,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   private val mockAuthAction                 = authAction(mockAuthConnector)
   private val mockMatchingService            = mock[MatchingService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val errorView                      = instanceOf[error_template]
 
   private val matchNinoRowIndividualView = instanceOf[how_can_we_identify_you_nino]
 
@@ -53,7 +55,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     mockMatchingService,
     mcc,
     matchNinoRowIndividualView,
-    mockSubscriptionDetailsService
+    mockSubscriptionDetailsService,
+    errorView
   )
 
   private val notMatchedError =
@@ -92,7 +95,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(Future.successful(true))
+        .thenReturn(eitherT(()))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
@@ -116,7 +119,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(Future.successful(false))
+        .thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
@@ -140,12 +143,63 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(Future.successful(false))
+        .thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("register/check-user")
+      }
+    }
+
+    "redirect to error-template when downstreamFailureResponse" in {
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(
+        Future.successful(Some(NameDobMatchModel("First name", "Last name", LocalDate.of(2015, 10, 15))))
+      )
+      when(
+        mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+      )
+        .thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
+
+      submitForm(yesNinoSubmitData) { result =>
+        await(result)
+        val page = CdsPage(contentAsString(result))
+        status(result) shouldBe OK
+        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
+        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+      }
+    }
+    "redirect to error-template when any other error occurred" in {
+      when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(
+        Future.successful(Some(NameDobMatchModel("First name", "Last name", LocalDate.of(2015, 10, 15))))
+      )
+      when(
+        mockMatchingService.matchIndividualWithId(any[Nino], any[Individual], any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+      )
+        .thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
+
+      submitForm(yesNinoSubmitData) { result =>
+        await(result)
+        val page = CdsPage(contentAsString(result))
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
+        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
+          any[HeaderCarrier],
+          any[Request[_]]
+        )
+
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 

@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmail
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.CheckYourEmailService
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.YesNoFormBuilder.ValidRequest
+import util.builders.YesNoFormBuilder.validRequest
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.Future
@@ -68,7 +68,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         controller.submit(isInReviewMode = false, subscription).apply(
           SessionBuilder.buildRequestWithSessionAndFormValues(
             defaultUserId,
-            ValidRequest + (yesNoInputName -> answerYes)
+            validRequest + (yesNoInputName -> answerYes)
           )
         )
       )
@@ -84,7 +84,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         controller.submit(isInReviewMode = true, subscription).apply(
           SessionBuilder.buildRequestWithSessionAndFormValues(
             defaultUserId,
-            ValidRequest + (yesNoInputName -> answerYes)
+            validRequest + (yesNoInputName -> answerYes)
           )
         )
       )
@@ -98,7 +98,7 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
 
       val result = await(
         controller.submit(isInReviewMode = true, subscription).apply(
-          SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, ValidRequest + (yesNoInputName -> ""))
+          SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, validRequest + (yesNoInputName -> ""))
         )
       )
       result.header.status shouldBe BAD_REQUEST

@@ -41,7 +41,6 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-// TODO Move view spec to separate test and keep here only controller logic test
 class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector              = mock[AuthConnector]
@@ -91,12 +90,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   "Displaying the form" should {
 
     val userLocations =
-      Table(
-        "userLocation",
-        UserLocation.Uk,
-        UserLocation.Eu,
-        UserLocation.ThirdCountry
-      ) // TODO Add all correct locations - EU should be removed
+      Table("userLocation", UserLocation.Uk, UserLocation.ThirdCountry)
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, organisationTypeController.form(atarService))
 
@@ -105,14 +99,11 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         showFormWithAuthenticatedUser(userLocation = Some(userLocation)) { result =>
           status(result) shouldBe OK
           val includeUk           = userLocation == UserLocation.Uk
-          val includeEu           = userLocation == UserLocation.Eu
           val includeThirdCountry = userLocation == UserLocation.ThirdCountry
           val page                = CdsPage(contentAsString(result))
           page.elementIsPresent(companyXpath) shouldBe includeUk
           page.elementIsPresent(soleTraderXpath) shouldBe includeUk
           page.elementIsPresent(individualXpath) shouldBe includeUk
-          page.elementIsPresent(EuOrgOrIndividualPage.organisationXpath) shouldBe includeEu
-          page.elementIsPresent(EuOrgOrIndividualPage.individualXpath) shouldBe includeEu
           page.elementIsPresent(thirdCountryOrganisationXpath) shouldBe includeThirdCountry
           page.elementIsPresent(thirdCountrySoleTraderXpath) shouldBe includeThirdCountry
           page.elementIsPresent(thirdCountryIndividualXpath) shouldBe includeThirdCountry

@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import cats.data.EitherT
 import play.api.i18n.Messages
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -37,12 +39,13 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   matchingService: MatchingService,
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you_nino,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  errorView: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
         Ok(
           howCanWeIdentifyYouView(
@@ -56,7 +59,7 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       subscriptionNinoForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(
@@ -70,21 +73,25 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
             )
           ),
         formData =>
-          matchOnId(formData, GroupId(loggedInUser.groupId)).map {
-            case true =>
-              Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-            case false =>
-              matchNotFoundBadRequest(formData, service)
-          }
+          matchOnId(formData, GroupId(loggedInUser.groupId)).fold(
+            {
+              case MatchingServiceConnector.matchFailureResponse      => matchNotFoundBadRequest(formData, service)
+              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+              case _                                                  => InternalServerError(errorView(service))
+            },
+            _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+          )
       )
     }
 
   private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
     hc: HeaderCarrier,
     request: Request[_]
-  ): Future[Boolean] = sessionCacheService.retrieveNameDobFromCache().flatMap(
-    ind => matchingService.matchIndividualWithNino(formData.id, ind, groupId)
-  )
+  ): EitherT[Future, ResponseError, Unit] = EitherT {
+    sessionCacheService.retrieveNameDobFromCache().flatMap(
+      ind => matchingService.matchIndividualWithNino(formData.id, ind, groupId).value
+    )
+  }
 
   private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service)(implicit
     request: Request[AnyContent]

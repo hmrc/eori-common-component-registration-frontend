@@ -16,10 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import cats.data.EitherT
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector.matchFailureResponse
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.individualOrganisationIds
@@ -30,7 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.HowCanWeIdentifyYouUtrViewModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.LocalDate
@@ -43,17 +46,18 @@ class GetUtrNumberController @Inject() (
   matchingService: MatchingService,
   mcc: MessagesControllerComponents,
   matchOrganisationUtrView: how_can_we_identify_you_utr,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  errorView: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(Ok(view(subscriptionUtrForm, organisationType, isInReviewMode, service)))
     }
 
   def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       subscriptionUtrForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, organisationType, isInReviewMode, service))),
@@ -68,22 +72,34 @@ class GetUtrNumberController @Inject() (
     dateEstablished: Option[LocalDate],
     matchingServiceType: String,
     groupId: GroupId
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Boolean] =
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier): EitherT[Future, ResponseError, Unit] =
     matchingService.matchBusiness(id, Organisation(name, matchingServiceType), dateEstablished, groupId)
+
+  private def matchOrganisation(id: CustomsId, groupId: GroupId, orgType: String)(implicit
+    hc: HeaderCarrier,
+    request: Request[AnyContent]
+  ) = EitherT {
+    subscriptionDetailsService.cachedNameDetails.flatMap {
+      case Some(NameOrganisationMatchModel(name)) =>
+        matchBusiness(id, name, None, EtmpOrganisationType(CdsOrganisationType(orgType)).toString, groupId).value
+      case None => Future.successful(Left(matchFailureResponse))
+    }
+  }
 
   private def matchIndividual(id: CustomsId, groupId: GroupId)(implicit
     hc: HeaderCarrier,
     request: Request[_]
-  ): Future[Boolean] =
+  ): EitherT[Future, ResponseError, Unit] = EitherT {
     subscriptionDetailsService.cachedNameDobDetails flatMap {
       case Some(details) =>
         matchingService.matchIndividualWithId(
           id,
           Individual.withLocalDate(details.firstName, details.lastName, details.dateOfBirth),
           groupId
-        )
-      case None => Future.successful(false)
+        ).value
+      case None => Future.successful(Left(matchFailureResponse))
     }
+  }
 
   private def view(form: Form[IdMatchModel], organisationType: String, isInReviewMode: Boolean, service: Service)(
     implicit request: Request[AnyContent]
@@ -107,24 +123,16 @@ class GetUtrNumberController @Inject() (
     (organisationType match {
       case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
         matchIndividual(Utr(formData.id), groupId)
-      case orgType =>
-        subscriptionDetailsService.cachedNameDetails.flatMap {
-          case Some(NameOrganisationMatchModel(name)) =>
-            matchBusiness(
-              Utr(formData.id),
-              name,
-              None,
-              EtmpOrganisationType(CdsOrganisationType(orgType)).toString,
-              groupId
-            )
-          case None => Future.successful(false)
-        }
-    }).map { matched =>
-      if (matched)
-        Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-      else
-        matchNotFoundBadRequest(organisationType, formData, isInReviewMode, service)
-    }
+      case _ => matchOrganisation(Utr(formData.id), groupId, organisationType)
+    }).fold(
+      {
+        case MatchingServiceConnector.matchFailureResponse =>
+          matchNotFoundBadRequest(organisationType, formData, isInReviewMode, service)
+        case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+        case _                                                  => InternalServerError(errorView(service))
+      },
+      _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+    )
 
   private def matchNotFoundBadRequest(
     organisationType: String,

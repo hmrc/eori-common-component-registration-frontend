@@ -37,11 +37,6 @@ object OrganisationViewModel {
       )
     )
 
-    lazy val euOptions = Seq(
-      CdsOrganisationType.EUOrganisationId -> messages("cds.matching.organisation-type.radio.eu-organisation.label"),
-      CdsOrganisationType.EUIndividualId   -> messages("cds.matching.organisation-type.radio.eu-individual.label")
-    )
-
     lazy val thirdCountryOptions = Seq(
       CdsOrganisationType.ThirdCountryOrganisationId -> messages(
         "cds.matching.organisation-type.radio.organisation.label"
@@ -54,7 +49,6 @@ object OrganisationViewModel {
 
     userLocation match {
       case Some(UserLocation.Uk)                => ukOptionsFirstScreen
-      case Some(UserLocation.Eu)                => euOptions
       case Some(UserLocation.ThirdCountry)      => thirdCountryOptions
       case Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
       case _                                    => ukOptionsFirstScreen

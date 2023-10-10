@@ -16,16 +16,15 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
-import play.api.Logging
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -42,7 +41,7 @@ class CheckYourDetailsRegisterController @Inject() (
     extends CdsController(mcc) with Logging {
 
   def reviewDetails(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction {
+    authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         viewModelConstructor.generateViewModel(service).map(_ match {
           case Some(viewModel) =>
@@ -53,7 +52,7 @@ class CheckYourDetailsRegisterController @Inject() (
         })
     }
 
-  def submitDetails(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
+  def submitDetails(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       registerWithoutIdWithSubscription.rowRegisterWithoutIdWithSubscription(loggedInUser, service)
   }

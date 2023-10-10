@@ -31,9 +31,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, UnincorporatedBody}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress.{noAnswered, wrongAddress, yesAnswered}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_contact_details
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ViewSpec

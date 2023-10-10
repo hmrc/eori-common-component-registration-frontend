@@ -43,7 +43,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     extends CdsController(mcc) {
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       Future.successful(
         Ok(rowIndividualNameDob(thirdCountryIndividualNameDateOfBirthForm, organisationType, service, false))
@@ -51,7 +51,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     }
 
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       subscriptionDetailsService.cachedNameDobDetails flatMap {
         case Some(NameDobMatchModel(firstName, lastName, dateOfBirth)) =>
@@ -64,7 +64,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       thirdCountryIndividualNameDateOfBirthForm.bindFromRequest().fold(
         formWithErrors =>

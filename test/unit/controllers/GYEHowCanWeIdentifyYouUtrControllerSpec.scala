@@ -24,6 +24,7 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouUtrController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
@@ -35,7 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
   SessionCacheService
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you_utr
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -53,6 +54,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
   private val mockFrontendDataCache = mock[SessionCache]
   private val mockOrgTypeLookup     = mock[OrgTypeLookup]
   private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache)
+  private val errorView             = instanceOf[error_template]
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_utr]
 
@@ -62,7 +64,8 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     mcc,
     howCanWeIdentifyYouView,
     mockOrgTypeLookup,
-    sessionCacheService
+    sessionCacheService,
+    errorView
   )
 
   "Viewing the form " should {
@@ -95,7 +98,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(Future.successful(true))
+      ).thenReturn(eitherT(()))
 
       submitForm(Map("utr" -> utr)) {
         result =>
@@ -115,7 +118,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(Future.successful(false))
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
 
       submitForm(Map("utr" -> utr)) {
         result =>
@@ -124,6 +127,47 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
           page.getElementsText(
             RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
           ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
+      }
+    }
+    "give a error-template page when a downstreamFailureResponse happens" in {
+      val utr = "2108834503"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
+
+      submitForm(Map("utr" -> utr)) {
+        result =>
+          status(result) shouldBe OK
+          val page = CdsPage(contentAsString(result))
+          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+      }
+    }
+
+    "give a error-template page when a any other error occurred" in {
+      val utr = "2108834503"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      ).thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
+
+      submitForm(Map("utr" -> utr)) {
+        result =>
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+          val page = CdsPage(contentAsString(result))
+          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
