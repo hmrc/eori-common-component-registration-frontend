@@ -53,7 +53,8 @@ class DateOfVatRegistrationController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionBusinessService.getCachedVatControlListResponse.map {
-      case Some(response) if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
+      case Some(response)
+          if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
         getVatCustomerInformationService.checkResponseMatchesNewVATAPI(response)
         Redirect(ContactDetailsController.createForm(service))
       case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))

@@ -46,10 +46,10 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
 
-  private val mockVatReturnTotalView          = instanceOf[vat_return_total]
-  private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
+  private val mockVatReturnTotalView               = instanceOf[vat_return_total]
+  private val mockWeCannotConfirmYourIdentity      = instanceOf[we_cannot_confirm_your_identity]
   private val mockGetVatCustomerInformationService = mock[GetVatCustomerInformationService]
-  private val form                            = instanceOf[VatRegistrationDateFormProvider]
+  private val form                                 = instanceOf[VatRegistrationDateFormProvider]
 
   private val controller = new DateOfVatRegistrationController(
     mockAuthAction,
