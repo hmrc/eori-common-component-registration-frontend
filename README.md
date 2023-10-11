@@ -3,7 +3,7 @@
 Frontend application for the the ECC (EORI Common Component) Registration service. This service handles EORI Registration journey.
 
 Other related ECC services:
-- Backend service: [EORI Common Component](https://github.com/hmrc/eori-common-component-frontend)
+- Backend service: [EORI Common Component](https://github.com/hmrc/eori-common-component)
 - Stubs: [EORI Common Component Stubs](https://github.com/hmrc/eori-common-component-hods-stubs)
 - Proxy: [EORI Common Component Hods Proxy](https://github.com/hmrc/eori-common-component-hods-proxy)
 - Subscription service: [EORI Common Component Frontend](https://github.com/hmrc/eori-common-component-frontend)
