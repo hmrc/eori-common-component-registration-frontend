@@ -27,6 +27,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_vat_registrat
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.GetVatCustomerInformationService
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -35,7 +37,8 @@ class DateOfVatRegistrationController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   dateOfVatRegistrationView: date_of_vat_registration,
-  form: VatRegistrationDateFormProvider
+  form: VatRegistrationDateFormProvider,
+  getVatCustomerInformationService: GetVatCustomerInformationService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -52,6 +55,7 @@ class DateOfVatRegistrationController @Inject() (
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)
           if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
+        getVatCustomerInformationService.checkResponseMatchesNewVATAPI(response)
         Redirect(ContactDetailsController.createForm(service))
       case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }
