@@ -634,7 +634,11 @@ cds.matching.utr.help-message.footer = Byddai’ch Cyfeirnod Unigryw y Trethdalw
 cds.matching.different-service.title-and-heading = Rhaid i chi ddefnyddio gwasanaeth gwahanol
 cds.matching.different-service.para1 = Nid oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR), felly ni allwch gofrestru ar gyfer EORI. I gofrestru ar gyfer EORI, bydd yn rhaid i chi ddefnyddio’r <a href="https://www.gov.uk/cael-rhif-eori"class="govuk-link">gwasanaeth Cael rhif EORI</a>.
 cds.matching.cannot-register-using-service.title-and-heading = Rhaid i chi ddefnyddio gwasanaeth gwahanol
-cds.matching.cannot-register-using-service.para1 = Nid yw’r gwasanaeth hwn ar gael ar hyn o bryd i ymgeiswyr sy’n rhan o grŵp TAW. Bydd yn rhaid i chi ddefnyddio <a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT"class="govuk-link">gwasanaeth Cael rhif EORI</a> gwahanol.
+cds.matching.cannot-register-using-service.para1 = Nid yw’r gwasanaeth hwn ar gael i sefydliadau sy’n rhan o grŵp TAW.
+cds.matching.cannot-register-using-service.para2 = Defnyddiwch y
+cds.matching.cannot-register-using-service.link.text = ffurflen gais am rif EORI.
+
+
 cds.matching.nino.title = Nodwch eich manylion
 cds.matching.nino.header = Nodwch eich manylion
 cds.matching.nino.first-name = Enw cyntaf

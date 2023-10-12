@@ -46,8 +46,22 @@ class YouCannotRegisterUsingThisServiceSpec extends ViewSpec {
       doc
         .body()
         .getElementById("explanation")
-        .text mustBe "This service is not currently available to applicants that are part of a VAT group. You will need to use a different Get an EORI service."
+        .text mustBe messages("cds.matching.cannot-register-using-service.para1")
     }
+
+    "display the correct link text and have the correct href" in {
+      doc
+        .body()
+        .getElementById("link")
+        .text mustBe messages("cds.matching.cannot-register-using-service.link.text")
+
+      doc
+        .body()
+        .getElementById("link")
+        .attr("href") mustBe "https://www.tax.service.gov.uk/shortforms/form/EORIVAT"
+
+    }
+
   }
 
   lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService)))
