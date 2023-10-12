@@ -192,9 +192,10 @@ class NameIdOrganisationController @Inject() (
 }
 
 object NameIdOrganisationModel {
-  val CompanyDM           = "company"
-  val RegisteredCompanyDM = "registered-company"
-  val PartnershipDM       = "partnership"
-  val OrganisationModeDM  = "organisation"
-  val PartnershipLLpDM    = "limited-liability-partnership"
+  val CompanyDM              = "company"
+  val RegisteredCompanyDM    = "registered-company"
+  val PartnershipDM          = "partnership"
+  val OrganisationModeDM     = "organisation"
+  val CharityPublicBodyNFPDM = "charity-public-body-not-for-profit"
+  val PartnershipLLpDM       = "limited-liability-partnership"
 }

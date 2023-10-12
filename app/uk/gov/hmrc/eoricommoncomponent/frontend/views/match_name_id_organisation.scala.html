@@ -35,9 +35,11 @@
 
 @hintText = @{
   organisationType match {
-      case PartnershipDM => messages(s"cds.matching.name-id-organisation.registered-partnership.name.hint")
-      case CompanyDM | PartnershipLLpDM => messages(s"cds.matching.name-id-organisation.registered-company.name.hint")
-      case _ => ""
+      case PartnershipDM => Some(messages(s"cds.matching.name-id-organisation.registered-partnership.name.hint"))
+      case CharityPublicBodyNFPDM => None
+      case _ => Some(messages(s"cds.matching.name-id-organisation.registered-company.name.hint"))
+
+
   }
 
 }
@@ -98,7 +100,7 @@
                 name = "name",
                 label = s"cds.matching.name-id-organisation.$displayMode.name",
                 isPageHeading = false,
-                hint =  Some(hintText),
+                hint =  hintText,
                 classes = Some("govuk-!-width-one-half"),
                 labelClasses = Some("govuk-visually-hidden")
             )
