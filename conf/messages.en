@@ -627,7 +627,7 @@ cds.matching.name-id-organisation.partnership.name=What is the registered partne
 cds.matching.name-id-organisation.partnership.name.para=<p class="govuk-body">This is the name registered with HMRC. You can find this in <a class="govuk-link" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services">HMRC online services (opens in new tab)</a> or in letters from HMRC.</p>
 cds.matching.name-id-organisation.partnership.name.hint=Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
 cds.matching.name-id-organisation.organisation.name=What is the registered organisation name?
-cds.matching.name-id-organisation.organisation.name.para=<p class="govuk-body">You can find this on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.organisation.name.para=<p class="govuk-body">You can find charities and not for profits on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
 cds.matching.name-id-organisation.organisation.name.hint=Enter the exact name that'''s on your organisation’s certificate of incorporation.
 cds.matching.name-id-organisation.registered-partnership.name.para = Enter the exact name that you registered with HMRC. We will use this to verify your identity.
 cds.matching.name-id-organisation.registered-partnership.name.hint = Enter the exact name registered with HMRC.
