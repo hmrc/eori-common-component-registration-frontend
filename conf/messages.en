@@ -703,7 +703,10 @@ cds.matching.different-service.para1=You do not have a UTR number so you cannot 
 
 #You cannot register for an EORI number using this service
 cds.matching.cannot-register-using-service.title-and-heading=You need to use a different service
-cds.matching.cannot-register-using-service.para1=This service is not currently available to applicants that are part of a VAT group. You will need to use a different <a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT" class="govuk-link"> Get an EORI service.</a>
+cds.matching.cannot-register-using-service.para1=This service is not available to organisations that are part of a VAT group.
+cds.matching.cannot-register-using-service.para2=Use the
+cds.matching.cannot-register-using-service.link.text=EORI number application form.
+
 
 #Nino Match
 cds.matching.nino.title=Enter your details
