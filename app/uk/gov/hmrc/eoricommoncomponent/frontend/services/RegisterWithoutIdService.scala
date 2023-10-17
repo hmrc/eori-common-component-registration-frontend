@@ -87,7 +87,7 @@ class RegisterWithoutIdService @Inject() (
         // $COVERAGE-OFF$Loggers
         logger.warn(error)
         // $COVERAGE-ON
-        throw DataUnavailableException(error) // checking contact details in cache
+        throw DataUnavailableException(error)
       }
     )
     val requestWithoutId =
