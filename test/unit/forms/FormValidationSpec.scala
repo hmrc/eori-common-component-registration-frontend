@@ -350,7 +350,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "2",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", List("doe.error.invalid-date"), List()))
     }
 
@@ -360,7 +360,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "1",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Nil
     }
 
@@ -370,7 +370,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "1",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()))
     }
 
@@ -380,7 +380,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "12",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Nil
     }
 
@@ -390,7 +390,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "13",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq()))
     }
 
@@ -400,7 +400,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "13",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()),
         FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq())

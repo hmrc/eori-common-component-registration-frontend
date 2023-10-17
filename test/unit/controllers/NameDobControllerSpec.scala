@@ -139,8 +139,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(ValidRequest ++ Map("date-of-birth.day" -> "32"), defaultOrganisationType) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Date of birth must be a real date"
-        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Date of birth must be a real date"
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe messages("date.day.error")
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe s"Error: ${messages("date.day.error")}"
         page.getElementsText("title") should startWith("Error: ")
       }
     }

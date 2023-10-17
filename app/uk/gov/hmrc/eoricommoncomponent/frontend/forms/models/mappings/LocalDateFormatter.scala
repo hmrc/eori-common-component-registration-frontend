@@ -25,9 +25,9 @@ import scala.util.{Failure, Success, Try}
 class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String] = Seq.empty)
     extends Formatter[LocalDate] with Formatters {
 
-  private val dayKey = "day"    
-  private val monthKey = "month"
-  private val yearKey = "year"
+  private val dayKey                  = "day"
+  private val monthKey                = "month"
+  private val yearKey                 = "year"
   private val fieldKeys: List[String] = List(dayKey, monthKey, yearKey)
 
   private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
@@ -51,8 +51,8 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
     } yield date
   }
 
-  private def validateFields(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], Unit] = { 
-    
+  private def validateFields(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], Unit] = {
+
     val errors: List[FormError] = List(
       if (day > 31) Some(FormError(s"$key.$dayKey", "date.day.error", args)) else None,
       if (month > 12) Some(FormError(s"$key.$monthKey", "date.month.error", args)) else None,
@@ -61,7 +61,7 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
 
     errors match {
       case Nil => Right(())
-      case _ => Left(errors)
+      case _   => Left(errors)
     }
 
   }

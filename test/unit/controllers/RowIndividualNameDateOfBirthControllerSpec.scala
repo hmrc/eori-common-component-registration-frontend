@@ -290,7 +290,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           assertInvalidField(formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> "32"), webPage)(
             DateOfBirth,
             fieldLevelErrorDateOfBirth,
-            "Date of birth must be a real date"
+            messages("date.day.error")
           )
       }
 
