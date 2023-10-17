@@ -59,7 +59,7 @@ class OrgTypeLookup @Inject() (requestSessionData: RequestSessionData, sessionCa
             // $COVERAGE-OFF$Loggers
             logger.warn(error)
             // $COVERAGE-ON
-            throw new IllegalStateException(error) //TODO Date
+            throw new IllegalStateException(error)
           case _ =>
             val error = "No Registration details in cache."
             // $COVERAGE-OFF$Loggers
