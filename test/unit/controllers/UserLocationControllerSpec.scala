@@ -44,7 +44,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -176,7 +180,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     }
 
     "return IllegalStateException when invalid location is selected" in {
-      val error = intercept[IllegalStateException] {
+      val error = intercept[DataUnavailableException] {
         subscriptionStatus(location = Some("location")) { result =>
           await(result)
         }

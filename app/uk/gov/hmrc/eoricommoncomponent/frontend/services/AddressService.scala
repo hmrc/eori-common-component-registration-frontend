@@ -25,6 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetai
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.DataUnavailableException
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
 
@@ -51,7 +52,7 @@ class AddressService @Inject() (
         // $COVERAGE-OFF$Loggers
         logger.warn(error)
         // $COVERAGE-ON
-        throw new IllegalStateException(error)
+        throw DataUnavailableException(error)
       }
     )
 

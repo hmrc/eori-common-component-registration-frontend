@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   RegistrationDetailsIndividual,
   RegistrationDetailsOrganisation
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +43,7 @@ class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit
         // $COVERAGE-OFF$Loggers
         logger.warn(error)
         // $COVERAGE-ON
-        throw new IllegalStateException(error)
+        throw DataUnavailableException(error)
     }.flatMap(updatedHolder => sessionCache.saveRegistrationDetails(updatedHolder))
 
   def initialiseCacheWithRegistrationDetails(

@@ -36,7 +36,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   DateOfEstablishmentSubscriptionFlowPage
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 import uk.gov.hmrc.http.HeaderCarrier
@@ -190,7 +194,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       )
 
       invokeContinue() { result =>
-        val thrown = intercept[IllegalStateException] {
+        val thrown = intercept[DataUnavailableException] {
           status(result) shouldBe INTERNAL_SERVER_ERROR
         }
         thrown.getMessage shouldBe s"User Location not set"

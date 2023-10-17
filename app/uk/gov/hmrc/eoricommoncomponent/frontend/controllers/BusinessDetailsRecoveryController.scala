@@ -24,7 +24,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.BusinessDeta
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 
 import javax.inject.{Inject, Singleton}
@@ -64,7 +68,7 @@ class BusinessDetailsRecoveryController @Inject() (
           orgType    <- save4LaterService.fetchOrgType(GroupId(userId.groupId))
         } yield {
           val location =
-            requestSessionData.selectedUserLocation.getOrElse(throw new IllegalStateException("Location not set"))
+            requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("Location not set"))
           regDetails match {
             case _: RegistrationDetailsIndividual =>
               continue(service, location, orgType)
@@ -84,7 +88,7 @@ class BusinessDetailsRecoveryController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] = {
 
-    val organisationType = orgType.getOrElse(throw new IllegalStateException("OrganisationType not found in cache"))
+    val organisationType = orgType.getOrElse(throw DataUnavailableException("OrganisationType not found in cache"))
 
     subscriptionFlowManager.startSubscriptionFlow(Some(BusinessDetailsRecoveryPage), organisationType, service) map {
       case (page, newSession) =>
@@ -105,7 +109,7 @@ class BusinessDetailsRecoveryController @Inject() (
       case Some(UserLocation.ThirdCountryIncEU) => UserLocation.ThirdCountryIncEU
       case Some(UserLocation.Iom)               => UserLocation.Iom
       case Some(UserLocation.Islands)           => UserLocation.Islands
-      case _                                    => throw new IllegalStateException("User Location not set")
+      case _                                    => throw DataUnavailableException("User Location not set")
     }
 
   private def concatenateAddress(registrationDetails: RegistrationDetails): AddressViewModel =

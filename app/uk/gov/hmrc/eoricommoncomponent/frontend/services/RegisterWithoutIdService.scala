@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Individual}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.createSixLineAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -57,7 +57,7 @@ class RegisterWithoutIdService @Inject() (
           // $COVERAGE-OFF$Loggers
           logger.warn(error)
           // $COVERAGE-ON
-          throw new IllegalStateException(error)
+          throw DataUnavailableException(error)
         }
       )
     )
@@ -87,7 +87,7 @@ class RegisterWithoutIdService @Inject() (
         // $COVERAGE-OFF$Loggers
         logger.warn(error)
         // $COVERAGE-ON
-        throw new IllegalStateException(error)
+        throw DataUnavailableException(error) // checking contact details in cache
       }
     )
     val requestWithoutId =
