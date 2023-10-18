@@ -103,7 +103,7 @@ class VatRegistrationDateFormSpec extends UnitSpec with MockitoSugar with Before
     "fail when effective date year invalid" in {
       val data = formDataVAT.updated("vat-registration-date.year", Year.now.plusYears(1).getValue.toString)
       val res  = form.bind(data)
-      res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.minMax"), ArraySeq("1970")))
+      res.errors shouldBe Seq(FormError("vat-registration-date.year", List("date.year.error"), List()))
     }
     "fail when effective date too early" in {
       val data = formDataVAT.updated("vat-registration-date.year", "1000")

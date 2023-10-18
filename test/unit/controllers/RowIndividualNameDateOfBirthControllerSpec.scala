@@ -297,7 +297,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "not be in the future " in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           val tomorrow   = LocalDate.now().plusDays(1)
-          val FutureDate = "Date of birth must be between 1900 and today"
+          val FutureDate = "Year must be between 1900 and this year"
           import controllerFixture._
           assertInvalidField(
             formData(individualNameAndDateOfBirth) ++ Map(

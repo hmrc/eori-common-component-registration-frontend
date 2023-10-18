@@ -166,7 +166,7 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth year invalid" in {
       val data = formData.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
       val res  = nameDobForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
+      res.errors shouldBe Seq(FormError("date-of-birth.year", Seq("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formData.updated("date-of-birth.year", "1800")
@@ -224,7 +224,7 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth year invalid" in {
       val data = formDataNino.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
       val res  = ninoForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
+      res.errors shouldBe Seq(FormError("date-of-birth.year", Seq("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formDataNino.updated("date-of-birth.year", "1800")
@@ -286,7 +286,7 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth year invalid" in {
       val data = formDataRow.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
       val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
+      res.errors shouldBe Seq(FormError("date-of-birth.year", List("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formDataRow.updated("date-of-birth.year", "1800")
@@ -325,12 +325,12 @@ class FormValidationSpec extends UnitSpec {
     "fail when date of establishment year invalid" in {
       val data = formDataDoE.updated("date-of-establishment.year", Year.now.plusYears(1).getValue.toString)
       val res  = dateOfEstablishmentForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.minMax"), ArraySeq("1000")))
+      res.errors shouldBe Seq(FormError("date-of-establishment.year", List("date.year.error"), List()))
     }
     "fail when date of establishment too late" in {
       val data = formDataDoE.updated("date-of-establishment.year", "9999")
       val res  = dateOfEstablishmentForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.minMax"), ArraySeq("1000")))
+      res.errors shouldBe Seq(FormError("date-of-establishment.year", List("date.year.error"), List()))
     }
     "fail with a month error, when month is populated with blanks" in {
       val data = Map(

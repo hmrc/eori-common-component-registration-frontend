@@ -170,8 +170,8 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
       ) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Date of birth must be between 1900 and today"
-        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Date of birth must be between 1900 and today"
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Year must be between 1900 and this year"
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Year must be between 1900 and this year"
         page.getElementsText("title") should startWith("Error: ")
       }
     }

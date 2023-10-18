@@ -929,7 +929,7 @@ cds.subscription.eu-vats.vat-eu-number_.label=EU VAT number
 cds.subscription.eu-vats.vat-eu-country_.label=EU VAT registration country
 cds.subscription.vat-registration-number=VAT number
 cds.subscription.vat-registration-number-hint=9 digits, for example, 123456789
-vat.error.minMax=Effective VAT date must be between {0} and today
+vat.error.minMax=Year must be between {0} and this year
 cds.subscription.vat-eu-registration-number-hint=Enter the VAT number and relevant country for each European Union member state the business is registered
 cds.subscription.vat-registration-number-entry.uk=Enter the UK VAT registration number
 cds.subscription.vat-registration-number-entry.hint=You can find this on the VAT registration certificate
@@ -1586,7 +1586,7 @@ cds.error.field.hint=Error
 dob.error.empty-date=Enter your date of birth
 dob.error.future-date=Date of birth must be in the past
 dob.error.invalid-date=Date of birth must be a real date
-dob.error.minMax=Date of birth must be between {0} and today
+dob.error.minMax=Year must be between {0} and this year
 
 doe.error.empty-date=Enter your date of establishment
 date-of-establishment.day.empty=Date of establishment must include a day
@@ -1598,7 +1598,7 @@ date-of-establishment.month-date-of-establishment.year.empty=Date of establishme
 date-invalid-year-too-short=Year must include 4 numbers
 doe.error.future-date=Date of establishment must be in the past
 doe.error.invalid-date=Date of establishment must be a real date
-doe.error.minMax=Date of establishment must be between {0} and today
+doe.error.minMax=Year must be between {0} and this year
 
 vat-registration-date.day.empty=VAT registration date must include a day
 vat-registration-date.month.empty=VAT registration date must include a month
@@ -2033,4 +2033,4 @@ lockedEmail.para2 = You can try again in 24 hours.
 
 date.day.error= Day must be a number from 1 to 31
 date.month.error= Month must be a number from 1 to 12
-date.year.error= Year must be between 1900 and this year
+date.year.error= Year must be between {0} and this year

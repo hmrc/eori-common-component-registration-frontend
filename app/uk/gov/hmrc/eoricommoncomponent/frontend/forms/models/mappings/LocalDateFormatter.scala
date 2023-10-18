@@ -56,7 +56,8 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
     val errors: List[FormError] = List(
       if (day > 31) Some(FormError(s"$key.$dayKey", "date.day.error", args)) else None,
       if (month > 12) Some(FormError(s"$key.$monthKey", "date.month.error", args)) else None,
-      if (year < 1000) Some(FormError(s"$key.$yearKey", "date-invalid-year-too-short", args)) else None
+      if (year < 1000) Some(FormError(s"$key.$yearKey", "date-invalid-year-too-short", args)) else None,
+      if (year > LocalDate.now().getYear) Some(FormError(s"$key.$yearKey", "date.year.error", args)) else None
     ).flatten
 
     errors match {
