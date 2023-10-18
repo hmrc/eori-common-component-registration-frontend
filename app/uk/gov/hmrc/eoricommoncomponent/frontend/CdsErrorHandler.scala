@@ -79,7 +79,9 @@ class CdsErrorHandler @Inject() (
         Future.successful(Results.NotFound(notFoundView(service)))
       case dataUnavailableException: DataUnavailableException =>
         // $COVERAGE-OFF$Loggers
-        logger.warn("DataUnavailableException - " + dataUnavailableException.message)
+        logger.warn(
+          s"DataUnavailableException - ${dataUnavailableException.message} - user is redirected to start page"
+        )
         // $COVERAGE-ON
         Future.successful(Redirect(ApplicationController.startRegister(service)))
       case _ =>
