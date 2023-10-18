@@ -36,7 +36,7 @@ class DateOfVatRegistrationController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   dateOfVatRegistrationView: date_of_vat_registration,
-  form: VatRegistrationDateFormProvider,
+  form: VatRegistrationDateFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
