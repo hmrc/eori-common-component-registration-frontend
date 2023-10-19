@@ -134,7 +134,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         showForm(reviewMode) { result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
-          page.getElementsText(labelForNameOuter) shouldBe "What is your registered organisation name?"
+          page.getElementsText(labelForNameOuter) shouldBe "What is the organisation’s name?"
         }
       }
     }
