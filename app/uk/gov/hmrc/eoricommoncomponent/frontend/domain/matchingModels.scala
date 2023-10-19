@@ -159,8 +159,6 @@ object CustomsId extends Logging {
 
 }
 
-case class UserLocationDetails(location: Option[String])
-
 trait NameIdOrganisationMatch {
   def name: String
   def id: String

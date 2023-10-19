@@ -128,13 +128,8 @@ object MatchingForms extends Mappings with Logging {
       )
   )
 
-  val userLocationForm: Form[UserLocationDetails] = Form(
-    "location" -> optional(text)
-      .verifying(
-        "cds.registration.user-location.error.location",
-        x => x.fold(false)(oneOf(UserLocation.validLocations).apply(_))
-      )
-      .transform[UserLocationDetails](o => UserLocationDetails(o), x => x.location)
+  val userLocationForm: Form[UserLocation] = Form(
+    "location" -> enumerable[UserLocation]("cds.registration.user-location.error.location")
   )
 
   private val validYesNoAnswerOptions = Set("true", "false")

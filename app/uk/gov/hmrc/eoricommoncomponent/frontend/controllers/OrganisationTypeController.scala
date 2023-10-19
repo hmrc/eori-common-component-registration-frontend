@@ -26,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -74,7 +75,7 @@ class OrganisationTypeController @Inject() (
           requestSessionData.selectedUserLocation match {
             case Some(_) =>
               Ok(organisationTypeView(filledForm, requestSessionData.selectedUserLocation, service))
-            case None => Ok(organisationTypeView(filledForm, Some("uk"), service))
+            case None => Ok(organisationTypeView(filledForm, Some(UserLocation.Uk), service))
           }
         }
     }

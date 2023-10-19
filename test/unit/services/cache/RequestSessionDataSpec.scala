@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
@@ -95,8 +96,8 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
       newSession.data should not contain ("selected-organisation-type" -> testOrganisationTypeId)
     }
     "return session third country" in {
-      when(mockRequest.session).thenReturn(Session(Map("selected-user-location" -> "iom")))
-      requestSessionData.selectedUserLocationWithIslands shouldBe Some("iom")
+      when(mockRequest.session).thenReturn(Session(Map("selected-user-location" -> "isle-of-man")))
+      requestSessionData.selectedUserLocationWithIslands shouldBe Some(UserLocation.Iom)
     }
     "return session without organisation-type, subscription-flow and uri-before-sub-flow" in {
       when(mockRequest.session).thenReturn(Session(existingSessionBeforeStartAgain))

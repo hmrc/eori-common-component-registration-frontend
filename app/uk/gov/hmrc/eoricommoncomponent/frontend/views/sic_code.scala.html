@@ -36,7 +36,7 @@
 )
 
 
-@(sicCodeForm: Form[SicCodeViewModel],isInReviewMode: Boolean, cdsOrgType: Option[CdsOrganisationType], service: Service, selectedUserLocation: Option[String] )(implicit request: Request[_], messages: Messages)
+@(sicCodeForm: Form[SicCodeViewModel],isInReviewMode: Boolean, cdsOrgType: Option[CdsOrganisationType], service: Service, selectedUserLocation: Option[UserLocation] )(implicit request: Request[_], messages: Messages)
 
 @dynamicSicCodeContent= {
     @if(selectedUserLocation.contains(UserLocation.ThirdCountry) || selectedUserLocation.contains(UserLocation.ThirdCountryIncEU)){

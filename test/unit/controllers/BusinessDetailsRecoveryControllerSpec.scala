@@ -122,10 +122,9 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
     assertAndTestThrowsExceptionForInvalidLocationOrganisation()
   }
 
-  private def assertAndTestBasedOnTheLocationForIndividual(selectedLocation: String): Unit =
-    s"redirect to contactDetailsPage when orgType is found in cache for Individual and location is selected to $selectedLocation" in {
-      val location: String = getSelectedLocation(selectedLocation)
-      val mockSession      = mock[Session]
+  private def assertAndTestBasedOnTheLocationForIndividual(location: UserLocation): Unit =
+    s"redirect to contactDetailsPage when orgType is found in cache for Individual and location is selected to $location" in {
+      val mockSession = mock[Session]
       val mockFlowStart =
         (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 
@@ -137,7 +136,9 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         )(any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(individualDetails)
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(s"$location"))
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+        UserLocation.enumerable.withName(location)
+      )
       when(mockSave4LaterService.fetchOrgType(any[GroupId])(any[HeaderCarrier]))
         .thenReturn(Future.successful(Some(CdsOrganisationType("third-country-individual"))))
 
@@ -147,11 +148,10 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       }
     }
 
-  private def assertAndTestBasedOnTheLocationForOrganisation(selectedLocation: String): Unit =
-    s"redirect to dateOfEstablishment when orgType is found in cache for Organisation and location is selected to $selectedLocation" in {
-      val location: String = getSelectedLocation(selectedLocation)
-      val mockSession      = mock[Session]
-      val mockFlowStart    = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
+  private def assertAndTestBasedOnTheLocationForOrganisation(location: UserLocation): Unit =
+    s"redirect to dateOfEstablishment when orgType is found in cache for Organisation and location is selected to $location" in {
+      val mockSession   = mock[Session]
+      val mockFlowStart = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
 
       when(
         mockSubscriptionFlowManager.startSubscriptionFlow(
@@ -161,7 +161,9 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         )(any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(organisationDetails)
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(s"$location"))
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+        UserLocation.enumerable.withName(location)
+      )
       when(mockSave4LaterService.fetchOrgType(any[GroupId])(any[HeaderCarrier])).thenReturn(
         Future
           .successful(Some(CdsOrganisationType("third-country-organisation")))
@@ -187,7 +189,9 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         )(any[Request[AnyContent]])
       ).thenReturn(Future.successful(mockFlowStart))
       mockCacheWithRegistrationDetails(organisationDetails)
-      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some(s"$location"))
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+        UserLocation.enumerable.withName(location)
+      )
       when(mockSave4LaterService.fetchOrgType(any[GroupId])(any[HeaderCarrier])).thenReturn(
         Future
           .successful(Some(CdsOrganisationType("third-country-organisation")))
@@ -199,16 +203,6 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         }
         thrown.getMessage shouldBe s"User Location not set"
       }
-    }
-
-  private def getSelectedLocation(selectedLocation: String) =
-    selectedLocation match {
-      case UserLocation.ThirdCountry      => "third-country"
-      case UserLocation.Iom               => "isle-of-man"
-      case UserLocation.Islands           => "islands"
-      case UserLocation.ThirdCountryIncEU => "third-country-inc-eu"
-      case _                              => throw new IllegalArgumentException("Unsupported User Location")
-
     }
 
   private def mockCacheWithRegistrationDetails(details: RegistrationDetails): Unit =

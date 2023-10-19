@@ -76,7 +76,7 @@ class UserLocationController @Inject() (
           .requestDetails(safeId)
           .flatMap(cacheAndRedirect(service, location))
       case (status, _) =>
-        subscriptionStatus(status, groupId, service, Some(location))
+        subscriptionStatus(status, groupId, service, location)
     }.flatMap(identity _)
 
   def submit(service: Service): Action[AnyContent] =
@@ -86,32 +86,22 @@ class UserLocationController @Inject() (
           Future.successful(
             BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup)))
           ),
-        details =>
-          (details.location, loggedInUser.groupId) match {
-            case (Some(UserLocation.Iom), Some(_)) =>
+        location =>
+          (location, loggedInUser.groupId) match {
+            case (UserLocation.Iom, Some(_)) =>
               Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
-            case (Some(location), Some(id)) if UserLocation.isRow(location) =>
+            case (location, Some(id)) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
             case _ =>
               Future.successful(
                 Redirect(OrganisationTypeController.form(service))
                   .withSession(
                     requestSessionData
-                      .sessionWithUserLocationAdded(sessionInfoBasedOnJourney(details.location))
+                      .sessionWithUserLocationAdded(location)
                   )
               )
           }
       )
-    }
-
-  private def sessionInfoBasedOnJourney(location: Option[String]): String =
-    location match {
-      case Some(UserLocation.ThirdCountry)      => UserLocation.ThirdCountry
-      case Some(UserLocation.ThirdCountryIncEU) => UserLocation.ThirdCountryIncEU
-      case Some(UserLocation.Iom)               => UserLocation.Iom
-      case Some(UserLocation.Islands)           => UserLocation.Islands
-      case Some(UserLocation.Uk)                => UserLocation.Uk
-      case _                                    => throw DataUnavailableException("User Location not set")
     }
 
   private def subscriptionStatusBasedOnSafeId(
@@ -139,12 +129,11 @@ class UserLocationController @Inject() (
             .map(_ => Redirect(SubscriptionRecoveryController.complete(service)))
       )
 
-  def subscriptionStatus(
-    preSubStatus: PreSubscriptionStatus,
-    groupId: GroupId,
-    service: Service,
-    location: Option[String]
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
+  def subscriptionStatus(preSubStatus: PreSubscriptionStatus, groupId: GroupId, service: Service, location: String)(
+    implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Future[Result] =
     preSubStatus match {
       case SubscriptionProcessing =>
         Future.successful(Redirect(UserLocationController.processing(service)))
@@ -152,7 +141,7 @@ class UserLocationController @Inject() (
       case NewSubscription | SubscriptionRejected =>
         Future.successful(
           Redirect(OrganisationTypeController.form(service))
-            .withSession(requestSessionData.sessionWithUserLocationAdded(sessionInfoBasedOnJourney(location)))
+            .withSession(requestSessionData.sessionWithUserLocationAdded(location))
         )
     }
 
@@ -164,7 +153,7 @@ class UserLocationController @Inject() (
       registrationDisplayService.cacheDetails(rResponse.value).flatMap { _ =>
         Future.successful(
           Redirect(BusinessDetailsRecoveryController.form(service)).withSession(
-            requestSessionData.sessionWithUserLocationAdded(sessionInfoBasedOnJourney(Some(location)))
+            requestSessionData.sessionWithUserLocationAdded(location)
           )
         )
       }
