@@ -568,10 +568,13 @@ class CheckYourDetailsRegisterControllerSpec
         RegistrationReviewPage.SummaryListRowXPath,
         "Postcode of your VAT registration address"
       ) shouldBe "SE28 1AA"
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "VAT effective date") shouldBe true
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Date of VAT registration"
+      ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "VAT effective date"
+        "Date of VAT registration"
       ) shouldBe "1 January 2017"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -718,10 +721,13 @@ class CheckYourDetailsRegisterControllerSpec
         RegistrationReviewPage.SummaryListRowXPath,
         "Postcode of your VAT registration address"
       ) shouldBe "SE28 1AA"
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "VAT effective date") shouldBe true
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Date of VAT registration"
+      ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "VAT effective date"
+        "Date of VAT registration"
       ) shouldBe "1 January 2017"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -857,7 +863,10 @@ class CheckYourDetailsRegisterControllerSpec
       RegistrationReviewPage.SummaryListRowXPath,
       "Postcode of your VAT registration address"
     ) shouldBe "SE28 1AA"
-    page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "VAT effective date") shouldBe "1 January 2017"
+    page.getSummaryListValue(
+      RegistrationReviewPage.SummaryListRowXPath,
+      "Date of VAT registration"
+    ) shouldBe "1 January 2017"
   }
 
   def showForm(
