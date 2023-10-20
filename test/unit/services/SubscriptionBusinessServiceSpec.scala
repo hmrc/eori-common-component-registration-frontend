@@ -28,7 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{ContactDetailsAdaptor, RegistrationDetailsCreator}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -151,7 +151,7 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
     "throw exception when there are no Date Of Establishment details in the cdsFrontendCache" in {
       when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.dateEstablished).thenReturn(None)
-      val thrown = intercept[IllegalStateException] {
+      val thrown = intercept[DataUnavailableException] {
         await(subscriptionBusinessService.getCachedDateEstablished)
       }
       thrown.getMessage shouldBe "No Date Of Establishment Cached"
@@ -184,7 +184,7 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
     "throw exception when there are no SIC Code details in the cdsFrontendCache" in {
       when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.sicCode).thenReturn(None)
-      val thrown = intercept[IllegalStateException] {
+      val thrown = intercept[DataUnavailableException] {
         await(subscriptionBusinessService.getCachedSicCode)
       }
       thrown.getMessage shouldBe "No SIC Code Cached"
@@ -229,7 +229,7 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
     "throw exception when there is no vat registered UK boolean in the cdsFrontendCache" in {
       when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.vatRegisteredUk).thenReturn(None)
-      val thrown = intercept[IllegalStateException] {
+      val thrown = intercept[DataUnavailableException] {
         await(subscriptionBusinessService.getCachedVatRegisteredUk)
       }
       thrown.getMessage shouldBe "Whether the business is VAT registered in the UK has not been Cached"

@@ -70,7 +70,7 @@ object Countries extends Logging {
   val islands: List[Country] =
     countries filter (c => mdgCountryCodes("/mdg-country-codes-islands.csv") contains c.countryCode)
 
-  def getCountryParameters(location: Option[String]): (List[Country], CountriesInCountryPicker) = location match {
+  def getCountryParameters(location: Option[UserLocation]): (List[Country], CountriesInCountryPicker) = location match {
     case Some(UserLocation.ThirdCountry) =>
       (third, ThirdCountriesInCountryPicker)
     case Some(UserLocation.ThirdCountryIncEU) =>

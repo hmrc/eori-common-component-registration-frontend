@@ -18,18 +18,25 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration
 
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Enumerable, WithName}
 
-object UserLocation {
+sealed trait UserLocation
 
-  val Uk                = "uk"
-  val Iom               = "isle-of-man"
-  val ThirdCountry      = "third-country"
-  val ThirdCountryIncEU = "third-country-inc-eu"
-  val Islands           = "islands"
+object UserLocation extends Enumerable.Implicits {
 
-  val validLocations: Set[String] = Set(Uk, Iom, ThirdCountry, ThirdCountryIncEU, Islands)
+  case object Uk                extends WithName("uk") with UserLocation
+  case object Iom               extends WithName("isle-of-man") with UserLocation
+  case object ThirdCountry      extends WithName("third-country") with UserLocation
+  case object ThirdCountryIncEU extends WithName("third-country-inc-eu") with UserLocation
+  case object Islands           extends WithName("islands") with UserLocation
 
-  private val rowLocations = Set(ThirdCountry, ThirdCountryIncEU, Islands)
+  implicit def convert(location: UserLocation): String =
+    location.toString
+
+  val values: Seq[UserLocation]   = Seq(Uk, Iom, ThirdCountry, ThirdCountryIncEU, Islands)
+  val validLocations: Set[String] = values.map(_.toString).toSet
+
+  private val rowLocations: Set[UserLocation] = Set(ThirdCountry, ThirdCountryIncEU, Islands)
 
   def forId(locationId: String): Boolean = validLocations(locationId)
 
@@ -39,5 +46,9 @@ object UserLocation {
       case _              => false
     }
 
-  def isRow(location: String): Boolean = rowLocations.contains(location)
+  def isRow(location: UserLocation): Boolean = rowLocations.contains(location)
+
+  implicit val enumerable: Enumerable[UserLocation] =
+    Enumerable(values.map(v => v.toString -> v): _*)
+
 }

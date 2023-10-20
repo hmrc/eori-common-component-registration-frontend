@@ -143,8 +143,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       submitForm(Map(locationFieldName -> invalidOption)) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe ProblemWithSelectionError
-        page.getElementsText(fieldLevelErrorLocation) shouldBe s"Error: $ProblemWithSelectionError"
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Invalid value"
+        page.getElementsText(fieldLevelErrorLocation) shouldBe s"Error: Invalid value"
         page.getElementsText("title") should startWith("Error: ")
       }
     }
@@ -175,14 +175,6 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       }
     }
 
-    "return IllegalStateException when invalid location is selected" in {
-      val error = intercept[IllegalStateException] {
-        subscriptionStatus(location = Some("location")) { result =>
-          await(result)
-        }
-      }
-      error.getMessage shouldBe "User Location not set"
-    }
   }
 
   "cacheAndRedirect when registrationDisplay is Enabled" should {
@@ -284,7 +276,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     )
   }
 
-  private def subscriptionStatus(location: Option[String] = Some(UserLocation.Iom))(test: Future[Result] => Any) = {
+  private def subscriptionStatus(location: String = UserLocation.Iom)(test: Future[Result] => Any) = {
 
     val subStatus: PreSubscriptionStatus = NewSubscription
     implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
@@ -293,21 +285,14 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     test(controller.subscriptionStatus(subStatus, GroupId("GroupId"), atarService, location)(rq, hc))
   }
 
-  private def assertCorrectSessionDataAndRedirect(selectedOptionValue: String): Unit = {
+  private def assertCorrectSessionDataAndRedirect(selectedOptionValue: UserLocation): Unit = {
     s"store the correct organisation type when '$selectedOptionValue' is selected" in {
-      val selectedOptionToJourney = selectedOptionValue match {
-        case UserLocation.ThirdCountry => "third-country"
-        case UserLocation.Uk           => "uk"
-        case UserLocation.Iom          => "iom"
-        case UserLocation.Islands      => "islands"
-        case _                         => throw new IllegalArgumentException("Unsupported User Location")
-      }
 
       when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier])).thenReturn(Future.successful(None))
 
       submitForm(Map(locationFieldName -> selectedOptionValue)) { result =>
         status(result)
-        verify(mockRequestSessionData).sessionWithUserLocationAdded(ArgumentMatchers.eq(selectedOptionToJourney))(
+        verify(mockRequestSessionData).sessionWithUserLocationAdded(ArgumentMatchers.eq(selectedOptionValue))(
           any[Request[AnyContent]]
         )
       }

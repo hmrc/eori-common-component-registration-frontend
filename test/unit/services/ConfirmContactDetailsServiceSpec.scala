@@ -39,6 +39,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import util.ViewSpec
 import util.builders.RegistrationDetailsBuilder
 import util.builders.SubscriptionFormBuilder.detailsHolderWithAllFields
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -292,7 +293,7 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
             Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
           )
           when(mockOrgTypeLookup.etmpOrgTypeOpt).thenReturn(Future.successful(Some(CorporateBody)))
-          when(mockRequestSessionData.selectedUserLocation).thenReturn(Some("GB"))
+          when(mockRequestSessionData.selectedUserLocation).thenReturn(Some(UserLocation.Uk))
 
           val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
           result.header.status mustBe OK
@@ -304,7 +305,7 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
             Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
           )
           when(mockOrgTypeLookup.etmpOrgTypeOpt).thenReturn(Future.successful(Some(UnincorporatedBody)))
-          when(mockRequestSessionData.selectedUserLocation).thenReturn(Some("GB"))
+          when(mockRequestSessionData.selectedUserLocation).thenReturn(Some(UserLocation.Uk))
 
           val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
           result.header.status mustBe OK

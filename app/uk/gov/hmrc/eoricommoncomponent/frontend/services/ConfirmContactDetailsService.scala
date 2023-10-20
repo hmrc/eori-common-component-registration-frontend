@@ -31,6 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionDa
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_contact_details
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -229,10 +230,7 @@ class ConfirmContactDetailsService @Inject() (
                     concatenateAddress(org),
                     YesNoWrongAddress.createForm(),
                     service,
-                    pageTitleAndHeading(
-                      Some(ot),
-                      requestSessionData.selectedUserLocation.getOrElse("uk").equalsIgnoreCase("uk")
-                    ),
+                    pageTitleAndHeading(Some(ot), requestSessionData.selectedUserLocation.forall(_ == UserLocation.Uk)),
                     countryCodeToLabel(concatenateAddress(org).countryCode),
                     displayInputRadioGroupOptions(Some(ot))
                   )

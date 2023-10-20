@@ -37,6 +37,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder.defaultAddress
@@ -126,7 +128,9 @@ class SixLineAddressControllerSpec
     when(mockSessionCache.saveRegistrationDetails(any[RegistrationDetails]())(any[Request[_]]()))
       .thenReturn(Future.successful(true))
     when(mockRegistrationDetailsService.cacheAddress(any())(any[Request[_]])).thenReturn(Future.successful(true))
-    when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(Some("third-country"))
+    when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+      Some(UserLocation.ThirdCountry)
+    )
   }
 
   forAll(organisationTypesData) { (organisationType, formBuilder, form, reviewMode, expectedRedirectURL) =>

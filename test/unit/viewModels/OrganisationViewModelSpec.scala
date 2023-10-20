@@ -66,7 +66,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       )
     }
     "return valid options for any other  location user location" in {
-      val selectedUserLocation = Some("Unknown Location")
+      val selectedUserLocation = Some(UserLocation.Islands)
       val viewModel            = OrganisationViewModel
 
       val options = viewModel.validOptions(selectedUserLocation)

@@ -30,6 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import javax.inject.{Inject, Singleton}
 
@@ -85,18 +86,18 @@ class RequestSessionData @Inject() (audit: Auditable) {
       RequestSessionDataKeys.selectedOrganisationType -
       RequestSessionDataKeys.uriBeforeSubscriptionFlow
 
-  def selectedUserLocation(implicit request: Request[AnyContent]): Option[String] = {
+  def selectedUserLocation(implicit request: Request[AnyContent]): Option[UserLocation] = {
     val userLocation = request.session.data.get(RequestSessionDataKeys.selectedUserLocation)
 
     userLocation match {
-      case Some("islands") => Some("third-country")
-      case Some("eu")      => Some("third-country")
-      case _               => userLocation
+      case Some("islands") => Some(UserLocation.ThirdCountry)
+      case Some("eu")      => Some(UserLocation.ThirdCountry)
+      case location        => location.flatMap(UserLocation.enumerable.withName)
     }
   }
 
-  def selectedUserLocationWithIslands(implicit request: Request[AnyContent]): Option[String] =
-    request.session.data.get(RequestSessionDataKeys.selectedUserLocation)
+  def selectedUserLocationWithIslands(implicit request: Request[AnyContent]): Option[UserLocation] =
+    request.session.data.get(RequestSessionDataKeys.selectedUserLocation).flatMap(UserLocation.enumerable.withName)
 
   def sessionWithUserLocationAdded(userLocation: String)(implicit request: Request[AnyContent]): Session =
     request.session + (RequestSessionDataKeys.selectedUserLocation -> userLocation)
