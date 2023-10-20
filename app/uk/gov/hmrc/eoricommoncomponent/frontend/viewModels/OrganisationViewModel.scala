@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 object OrganisationViewModel {
 
-  def validOptions(userLocation: Option[String])(implicit messages: Messages): Seq[(String, String)] = {
+  def validOptions(userLocation: Option[UserLocation])(implicit messages: Messages): Seq[(String, String)] = {
 
     lazy val ukOptionsFirstScreen = Seq(
       CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
@@ -55,7 +55,7 @@ object OrganisationViewModel {
     }
   }
 
-  def hintTextOptions(userLocation: Option[String])(implicit messages: Messages): Seq[(String, String)] = {
+  def hintTextOptions(userLocation: Option[UserLocation])(implicit messages: Messages): Seq[(String, String)] = {
 
     lazy val nonUkOptionHints = Seq(
       CdsOrganisationType.ThirdCountryOrganisationId -> messages(

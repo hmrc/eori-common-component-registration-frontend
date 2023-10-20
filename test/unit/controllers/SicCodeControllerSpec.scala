@@ -111,7 +111,7 @@ class SicCodeControllerSpec
     }
 
     "display correct hint text when org type is company and user location is UK" in {
-      showCreateForm(userSelectedOrgType = Company, userLocation = Some("UK")) { result =>
+      showCreateForm(userSelectedOrgType = Company, userLocation = Some(UserLocation.Uk)) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementText(sicDescriptionLabelXpath) shouldBe messages("cds.subscription.sic.description.para1")
       }
@@ -368,7 +368,7 @@ class SicCodeControllerSpec
   private def showCreateForm(
     userId: String = defaultUserId,
     userSelectedOrgType: CdsOrganisationType,
-    userLocation: Option[String] = Some("uk")
+    userLocation: Option[UserLocation] = Some(UserLocation.Uk)
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 

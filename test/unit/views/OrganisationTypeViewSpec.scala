@@ -119,7 +119,7 @@ class OrganisationTypeViewSpec
 
   def invokeOrganisationTypeWithAuthenticatedUser(
     maybeOrgType: Option[CdsOrganisationType] = None,
-    userLocation: Option[String] = None,
+    userLocation: Option[UserLocation] = None,
     userId: String = defaultUserId
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)

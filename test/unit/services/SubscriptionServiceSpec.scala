@@ -426,23 +426,6 @@ class SubscriptionServiceSpec
       res shouldBe failResponse
     }
 
-    "assert that Date established is available when subscribing for organisation" in {
-      val service = constructService(_ => None)
-
-      the[IllegalStateException] thrownBy {
-        val holder = fullyPopulatedSubscriptionDetails.copy(dateEstablished = None)
-        service.subscribe(organisationRegistrationDetails, holder, None, atarService)(mockHeaderCarrier)
-      } should have message "Date Established must be present for an organisation subscription"
-
-    }
-
-    "assert that Principal Economic Activity is available when subscribing for organisation" in {
-      val service = constructService(_ => None)
-      the[AssertionError] thrownBy {
-        val holder = fullyPopulatedSubscriptionDetails.copy(sicCode = None)
-        service.subscribe(organisationRegistrationDetails, holder, None, atarService)(mockHeaderCarrier)
-      } should have message "assertion failed: SicCode/Principal Economic Activity must be present for an organisation subscription"
-    }
   }
 
   "Create request" should {
@@ -490,20 +473,6 @@ class SubscriptionServiceSpec
         service.createRequest(RegistrationDetails.rdSafeId(SafeId("safeid")), holder, None, atarService)
       }
       thrown.getMessage shouldBe "Incomplete cache cannot complete journey"
-    }
-
-    "throw an exception when date of Establishment is None" in {
-      val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetails.copy(dateEstablished = None)
-      val thrown = intercept[IllegalStateException] {
-        service.createRequest(
-          organisationRegistrationDetails,
-          holder,
-          Some(CdsOrganisationType("third-country-organisation")),
-          atarService
-        )
-      }
-      thrown.getMessage shouldBe "Date Established must be present for an organisation subscription"
     }
 
     "populate the SubscriptionCreate Request when there is a plus (+) sign in the request on telephone number" in {

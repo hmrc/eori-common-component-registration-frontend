@@ -575,7 +575,7 @@ cds.matching.name-id-organisation.partnership.name = Beth yw enw cofrestredig y 
 cds.matching.name-id-organisation.partnership.name.para= <p class="govuk-body">Dyma’r enw sydd wedi’i gofrestru gyda CThEF. Gallwch ddod o hyd i hyn yng <a class="govuk-link" target="_blank" href="https://www.gov.uk/gwasanaethau-cthem-mewngofnodi-neu-gofrestru">ngwasanaethau ar-lein CThEF (yn agor tab newydd)</a> neu ar lythyrau oddi wrth CThEF.</p>
 cds.matching.name-id-organisation.partnership.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori’r bartneriaeth.
 cds.matching.name-id-organisation.organisation.name = Beth yw enw cofrestredig y sefydliad?
-cds.matching.name-id-organisation.organisation.name.para= <p class="govuk-body">Gallwch ddod o hyd i hwn ar gofrestr <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Tŷ’r Cwmnïau (yn agor tab newydd).</a></p>
+cds.matching.name-id-organisation.organisation.name.para= <p class="govuk-body">Gallwch ddod o hyd i elusennau a sefydliadau nid er elw ar <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">gofrestr Tŷ’r Cwmnïau (yn agor tab newydd)</a></p>
 cds.matching.name-id-organisation.organisation.name.hint = Nodwch yr union enw sydd ar dystysgrif ymgorffori eich sefydliad.
 cds.matching.name-id-organisation.registered-partnership.name.para = Nodwch yr union enw y gwnaethoch ei gofrestru gyda CThEF. Byddwn yn defnyddio hwn i gadarnhau pwy ydych.
 cds.matching.name-id-organisation.registered-partnership.name.hint = Nodwch yr union enw a gofrestrwyd gyda CThEF.
@@ -634,7 +634,11 @@ cds.matching.utr.help-message.footer = Byddai’ch Cyfeirnod Unigryw y Trethdalw
 cds.matching.different-service.title-and-heading = Rhaid i chi ddefnyddio gwasanaeth gwahanol
 cds.matching.different-service.para1 = Nid oes gennych Gyfeirnod Unigryw y Trethdalwr (UTR), felly ni allwch gofrestru ar gyfer EORI. I gofrestru ar gyfer EORI, bydd yn rhaid i chi ddefnyddio’r <a href="https://www.gov.uk/cael-rhif-eori"class="govuk-link">gwasanaeth Cael rhif EORI</a>.
 cds.matching.cannot-register-using-service.title-and-heading = Rhaid i chi ddefnyddio gwasanaeth gwahanol
-cds.matching.cannot-register-using-service.para1 = Nid yw’r gwasanaeth hwn ar gael ar hyn o bryd i ymgeiswyr sy’n rhan o grŵp TAW. Bydd yn rhaid i chi ddefnyddio <a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT"class="govuk-link">gwasanaeth Cael rhif EORI</a> gwahanol.
+cds.matching.cannot-register-using-service.para1 = Nid yw’r gwasanaeth hwn ar gael i sefydliadau sy’n rhan o grŵp TAW.
+cds.matching.cannot-register-using-service.para2 = Defnyddiwch y
+cds.matching.cannot-register-using-service.link.text = ffurflen gais am rif EORI.
+
+
 cds.matching.nino.title = Nodwch eich manylion
 cds.matching.nino.header = Nodwch eich manylion
 cds.matching.nino.first-name = Enw cyntaf
@@ -1047,7 +1051,7 @@ cds.form.shortened-name = Enw byrrach
 cds.form.sic-code = Cod Dosbarthiad Diwydiannol Safonol (SIC)
 cds.form.gb-vat-number = Rhif TAW
 cds.form.gb-vat-postcode = Cod post eich cyfeiriad cofrestru TAW
-cds.form.gb-vat-date = Dyddiad y daw TAW i rym
+cds.form.gb-vat-date = Dyddiad cofrestru TAW
 cds.form.eu-vat-numbers = Rhifau TAW yn yr UE
 cds.form.customs-contact = Cyswllt
 cds.form.partnership.contact-details = Cyfeiriad y bartneriaeth

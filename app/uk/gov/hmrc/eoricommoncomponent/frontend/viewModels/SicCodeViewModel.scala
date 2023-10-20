@@ -29,7 +29,7 @@ object SicCodeViewModel {
   def dontKnowSicDropDownContent(cdsOrgType: Option[CdsOrganisationType])(implicit messages: Messages): String =
     messages(s"cds.subscription.sic.details.${cdsOrgType.fold(CompanyId)(_.id)}")
 
-  def secondHeading(cdsOrgType: Option[CdsOrganisationType], selectedUserLocation: Option[String])(implicit
+  def secondHeading(cdsOrgType: Option[CdsOrganisationType], selectedUserLocation: Option[UserLocation])(implicit
     messages: Messages
   ): String =
     selectedUserLocation match {
@@ -38,7 +38,7 @@ object SicCodeViewModel {
       case _ => messages(s"cds.subscription.sic.description.para2.${cdsOrgType.fold(CompanyId)(_.id)}")
     }
 
-  def hintTextForSic(selectedUserLocation: Option[String])(implicit messages: Messages): String =
+  def hintTextForSic(selectedUserLocation: Option[UserLocation])(implicit messages: Messages): String =
     selectedUserLocation match {
       case Some(UserLocation.ThirdCountryIncEU | UserLocation.ThirdCountry) => messages("cds.subscription.sic.hint.row")
       case _                                                                => messages("cds.subscription.sic.hint.uk")

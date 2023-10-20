@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h2: helpers.h2, errorSummary: helpers.errorSummary, appConfig: AppConfig, govukDetails: GovukDetails, p: helpers.paragraph)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h2: helpers.h2, errorSummary: helpers.errorSummary, appConfig: AppConfig, govukDetails: GovukDetails, p: helpers.paragraph, h1: helpers.h1)
 
 @(businessDetailsForm: Form[_ <: NameIdOrganisationMatch], organisationType: String, displayMode: String, isNameAddressRegistrationAvailable: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -34,8 +34,14 @@
 }
 
 @hintText = @{
-    if(organisationType==PartnershipDM) messages(s"cds.matching.name-id-organisation.registered-partnership.name.hint")
-    else messages(s"cds.matching.name-id-organisation.registered-company.name.hint")
+  organisationType match {
+      case PartnershipDM => Some(messages(s"cds.matching.name-id-organisation.registered-partnership.name.hint"))
+      case CharityPublicBodyNFPDM => None
+      case _ => Some(messages(s"cds.matching.name-id-organisation.registered-company.name.hint"))
+
+
+  }
+
 }
 
 @utrHintText = @{
@@ -74,10 +80,11 @@
 }
 
 @layout_di(headerAndTitle, form = Some(businessDetailsForm), service = service) {
-    <div>
+
         @errorSummary(businessDetailsForm.errors)
 
-        <h1 class="govuk-heading-l">@headerAndTitle</h1>
+
+        @h1(headerAndTitle)
         @p(messages("cds.matching.name-id-organisation.identity.verify"))
 
         <div class="govuk-form-group">
@@ -93,7 +100,7 @@
                 name = "name",
                 label = s"cds.matching.name-id-organisation.$displayMode.name",
                 isPageHeading = false,
-                hint =  Some(hintText),
+                hint =  hintText,
                 classes = Some("govuk-!-width-one-half"),
                 labelClasses = Some("govuk-visually-hidden")
             )
@@ -135,5 +142,5 @@
             @helpers.helpAndSupport()
         }
         </div>
-    </div>
+
 }

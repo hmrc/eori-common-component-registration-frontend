@@ -21,7 +21,7 @@ import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
@@ -41,7 +41,7 @@ class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implici
         // $COVERAGE-OFF$Loggers
         logger.warn(error)
         // $COVERAGE-ON
-        throw new IllegalStateException(error)
+        throw DataUnavailableException(error)
       }
     }
 
@@ -55,7 +55,7 @@ class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implici
         // $COVERAGE-OFF$Loggers
         logger.warn(error)
         // $COVERAGE-ON
-        throw new IllegalStateException(error)
+        throw DataUnavailableException(error)
       }
     }
 
@@ -72,7 +72,7 @@ class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implici
         // $COVERAGE-OFF$Loggers
         logger.warn(error)
         // $COVERAGE-ON
-        throw new IllegalStateException(error)
+        throw DataUnavailableException(error)
       }
     }
 

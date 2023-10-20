@@ -90,7 +90,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   "Displaying the form" should {
 
     val userLocations =
-      Table("userLocation", UserLocation.Uk, UserLocation.ThirdCountry)
+      Table(UserLocation.Uk, UserLocation.ThirdCountry)
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, organisationTypeController.form(atarService))
 
@@ -98,8 +98,8 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
       s"show correct options when user has selected location of $userLocation" in {
         showFormWithAuthenticatedUser(userLocation = Some(userLocation)) { result =>
           status(result) shouldBe OK
-          val includeUk           = userLocation == UserLocation.Uk
-          val includeThirdCountry = userLocation == UserLocation.ThirdCountry
+          val includeUk           = userLocation.toString == UserLocation.Uk.toString
+          val includeThirdCountry = userLocation.toString == UserLocation.ThirdCountry.toString
           val page                = CdsPage(contentAsString(result))
           page.elementIsPresent(companyXpath) shouldBe includeUk
           page.elementIsPresent(soleTraderXpath) shouldBe includeUk
@@ -193,7 +193,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
   def showFormWithAuthenticatedUser(
     userId: String = defaultUserId,
-    userLocation: Option[String] = Some(UserLocation.Uk)
+    userLocation: Option[UserLocation] = Some(UserLocation.Uk)
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
@@ -212,7 +212,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     form: Map[String, String],
     userId: String = defaultUserId,
     organisationType: Option[CdsOrganisationType] = None,
-    userLocation: Option[String] = Some(UserLocation.Uk)
+    userLocation: Option[UserLocation] = Some(UserLocation.Uk)
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 

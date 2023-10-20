@@ -56,10 +56,17 @@ class GetVatCustomerInformationService @Inject() (
   def compareApiResponses(oldResponse: VatControlListResponse, newResponse: GetVatInformationResponse): Boolean = {
     val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
 
-    val postCodeMatches = (for {
+    val postCodeMatchesExactly = (for {
       oldPostcode <- oldResponse.postcode
       newPostcode <- newResponse.postCode
     } yield oldPostcode == newPostcode).getOrElse(false)
+
+    val postCodeMatches = (for {
+      oldPostcode <- oldResponse.postcode
+      newPostcode <- newResponse.postCode
+    } yield oldPostcode.replace(" ", "").trim.toLowerCase == newPostcode.replace(" ", "").trim.toLowerCase).getOrElse(
+      false
+    )
 
     val dateMatches = (for {
       oldDateString <- oldResponse.dateOfReg
@@ -71,7 +78,9 @@ class GetVatCustomerInformationService @Inject() (
       logger.info("compareApiResponses matches postcode and date")
       true
     } else {
-      logger.warn(s"compareApiResponses does not match. Postcode: $postCodeMatches, Date: $dateMatches")
+      logger.warn(
+        s"compareApiResponses does not match. Postcode matches exactly: $postCodeMatchesExactly, Postcode matches: $postCodeMatches, Date matches exactly: $dateMatches"
+      )
       false
     }
   }

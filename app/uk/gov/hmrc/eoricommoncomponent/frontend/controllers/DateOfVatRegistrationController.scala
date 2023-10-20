@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_vat_registrat
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

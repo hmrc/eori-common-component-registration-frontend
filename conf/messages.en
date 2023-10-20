@@ -627,7 +627,7 @@ cds.matching.name-id-organisation.partnership.name=What is the registered partne
 cds.matching.name-id-organisation.partnership.name.para=<p class="govuk-body">This is the name registered with HMRC. You can find this in <a class="govuk-link" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services">HMRC online services (opens in new tab)</a> or in letters from HMRC.</p>
 cds.matching.name-id-organisation.partnership.name.hint=Enter the exact name that'''s on your partnership'’'s certificate of incorporation.
 cds.matching.name-id-organisation.organisation.name=What is the registered organisation name?
-cds.matching.name-id-organisation.organisation.name.para=<p class="govuk-body">You can find this on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
+cds.matching.name-id-organisation.organisation.name.para=<p class="govuk-body">You can find charities and not for profits on the <a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Companies House register (opens in new tab).</a></p>
 cds.matching.name-id-organisation.organisation.name.hint=Enter the exact name that'''s on your organisation’s certificate of incorporation.
 cds.matching.name-id-organisation.registered-partnership.name.para = Enter the exact name that you registered with HMRC. We will use this to verify your identity.
 cds.matching.name-id-organisation.registered-partnership.name.hint = Enter the exact name registered with HMRC.
@@ -703,7 +703,10 @@ cds.matching.different-service.para1=You do not have a UTR number so you cannot 
 
 #You cannot register for an EORI number using this service
 cds.matching.cannot-register-using-service.title-and-heading=You need to use a different service
-cds.matching.cannot-register-using-service.para1=This service is not currently available to applicants that are part of a VAT group. You will need to use a different <a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT" class="govuk-link"> Get an EORI service.</a>
+cds.matching.cannot-register-using-service.para1=This service is not available to organisations that are part of a VAT group.
+cds.matching.cannot-register-using-service.para2=Use the
+cds.matching.cannot-register-using-service.link.text=EORI number application form.
+
 
 #Nino Match
 cds.matching.nino.title=Enter your details
@@ -1165,7 +1168,7 @@ cds.form.shortened-name=Shortened name
 cds.form.sic-code=Standard Industrial Classification (SIC) code
 cds.form.gb-vat-number=VAT number
 cds.form.gb-vat-postcode=Postcode of your VAT registration address
-cds.form.gb-vat-date=VAT effective date
+cds.form.gb-vat-date=Date of VAT registration
 cds.form.gb-vat-amount=Your VAT return total or Box 5 amount
 cds.form.eu-vat-numbers=EU VAT numbers
 cds.form.customs-contact=Contact
