@@ -10,7 +10,7 @@ Other related ECC services:
 
 ## Development
 
-This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), and requires Java 8 [JRE](https://www.java.com/en/download/manual.jsp) to run.
+This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), and requires Java 11 [JRE](https://www.java.com/en/download/manual.jsp) to run.
 
 To develop or run service locally you'll also need:
 - [Service Manager](https://github.com/hmrc/service-manager)
@@ -21,15 +21,15 @@ To develop or run service locally you'll also need:
 
 What's running?
 
-    sm -s
+    sm2 -s
 
 Start the required development services (make sure your service-manager-config folder is up to date)
 
-    sm --start EORI_COMMON_COMPONENT_ALL -f
+    sm2 --start EORI_COMMON_COMPONENT_ALL
 
 Stop all ECC related services
 
-    sm --stop EORI_COMMON_COMPONENT_ALL
+    sm2 --stop EORI_COMMON_COMPONENT_ALL
 
 ### Running locally
 
@@ -47,7 +47,7 @@ To run EORI Common Component Registration Frontend using default port number
 
 Before debugging locally you will need to stop the Service Manager-started `eori-common-component-registration-frontend` service
 
-    sm --stop EORI_COMMON_COMPONENT_REGISTRATION_FRONTEND
+    sm2 --stop EORI_COMMON_COMPONENT_REGISTRATION_FRONTEND
 
 Then start your local debugging session on the expected port
 
@@ -89,6 +89,12 @@ Adjust the following in `build.sbt` to configure Scoverage
     ScoverageKeys.coverageMinimum := 80,
     ScoverageKeys.coverageFailOnMinimum := false,
     ...
+
+### Architecture and Flows
+
+High level journey diagram with APIs involved is [documented in Confluence](https://confluence.tools.tax.service.gov.uk/pages/viewpage.action?spaceKey=ECC&title=Journey+Flow+maps).
+
+Different journeys and scenarios can be triggered using [documented scenarios](https://confluence.tools.tax.service.gov.uk/display/ECC/Testing+in+Stubbed+Environments+-+Subscription).
 
 # License
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
