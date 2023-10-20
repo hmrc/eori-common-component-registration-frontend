@@ -659,7 +659,7 @@ cds.matching-error.business-details.business-name.isEmpty=Enter your registered 
 cds.matching-error.business-details.business-name.too-long=The organisation name must be 105 characters or less
 cds.matching-error.business-details.business-name.invalid-chars=Organisation name cannot contain ''<'' or ''>''
 
-cds.matching-error.business-details.utr.isEmpty=Enter your UTR number
+cds.matching-error.business-details.utr.isEmpty=Enter your UTR
 
 cds.matching-error.business-details.partnership-name.isEmpty=Enter your registered partnership name
 cds.matching-error.business-details.partnership-name.too-long=The partnership name must be 105 characters or less
@@ -791,8 +791,8 @@ cds.registration-model.form-error.min-length.last-name=Enter 2 or more character
 # Confirm
 cds.matching.confirm.confirm=Continue
 #Error Messages
-cds.matching-error.utr.invalid=Enter a valid UTR number
-cds.matching-error.utr.length=The UTR number must be 10 numbers
+cds.matching-error.utr.invalid=Enter a valid UTR
+cds.matching-error.utr.length=The UTR must be 10 numbers
 cds.matching-error.not-found=Your business details have not been found. Check that your details are correct and try again.
 cds.matching-error-organisation.not-found=Your business details have not been found. Check that your details are correct and try again.
 cds.matching-error.individual-not-found=Your details have not been found. Check that your details are correct and then try again.
