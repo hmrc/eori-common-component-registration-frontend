@@ -80,7 +80,7 @@ class AuthActionSpec extends AnyWordSpec with MockitoSugar with BeforeAndAfterEa
       Future.successful(Ok("We succeeded!"))
     }
 
-    def someCallNotRedirecting(service: Service) = authAction.enrolledUserClearingCacheOnCompletionAction {
+    def someCallNotRedirecting() = authAction.enrolledUserClearingCacheOnCompletionAction {
       _ => _ =>
         Future.successful(Ok("We succeeded!"))
     }
@@ -160,9 +160,7 @@ class AuthActionSpec extends AnyWordSpec with MockitoSugar with BeforeAndAfterEa
         .thenReturn(Future.successful(true))
       AuthBuilder.withAuthorisedUser("user-2300121", mockAuthConnector, userEmail = Some("some@email.com"))
 
-      val result = TestController.someCallNotRedirecting(Service("cds", "HMRC-CUS-ORG", "", None, "", "", None)).apply(
-        withFakeCSRF
-      )
+      val result = TestController.someCallNotRedirecting().apply(withFakeCSRF)
       status(result) shouldEqual OK
     }
 
@@ -171,9 +169,7 @@ class AuthActionSpec extends AnyWordSpec with MockitoSugar with BeforeAndAfterEa
         .thenReturn(Future.successful(false))
       AuthBuilder.withAuthorisedUser("user-2300121", mockAuthConnector, userEmail = Some("some@email.com"))
 
-      val result = TestController.someCallNotRedirecting(Service("cds", "HMRC-CUS-ORG", "", None, "", "", None)).apply(
-        withFakeCSRF
-      )
+      val result = TestController.someCallNotRedirecting().apply(withFakeCSRF)
       status(result) shouldEqual OK
     }
 

@@ -98,7 +98,6 @@ class Sub02Controller @Inject() (
   def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        subDetails   <- sessionCache.subscriptionDetails
         sub02Outcome <- sessionCache.sub02Outcome
         sub01Outcome <- sessionCache.sub01Outcome
         _            <- sessionCache.journeyCompleted
@@ -163,9 +162,8 @@ class Sub02Controller @Inject() (
   def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
-        subscriptionDetails <- sessionCache.subscriptionDetails
-        sub01Outcome        <- sessionCache.sub01Outcome
-        _                   <- sessionCache.journeyCompleted
+        sub01Outcome <- sessionCache.sub01Outcome
+        _            <- sessionCache.journeyCompleted
       } yield Ok(sub01OutcomeView(sub01Outcome.processedDate, service))
   }
 
