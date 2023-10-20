@@ -180,9 +180,9 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
         result =>
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
-          page.getElementsText(
-            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
-          ) shouldBe "Enter your UTR number"
+          page.getElementsText(RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath) shouldBe messages(
+            "cds.matching-error.business-details.utr.isEmpty"
+          )
       }
     }
 

@@ -68,8 +68,8 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     errorView
   )
 
-  private val UtrInvalidErrorPage  = "Enter a valid UTR number"
-  private val UtrInvalidErrorField = "Error: Enter a valid UTR number"
+  private val UtrInvalidErrorPage  = messages("cds.matching-error.utr.invalid")
+  private val UtrInvalidErrorField = s"Error: ${messages("cds.matching-error.utr.invalid")}"
 
   private val BusinessNotMatchedError =
     "Your business details have not been found. Check that your details are correct and try again."
@@ -107,7 +107,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
 
-          val errorMessage = "Error: Enter your UTR number"
+          val errorMessage = s"Error: ${messages("cds.matching-error.business-details.utr.isEmpty")}"
 
           page.getElementsText(fieldLevelErrorUtr) shouldBe errorMessage
       }
@@ -126,8 +126,10 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
         result =>
           status(result) shouldBe BAD_REQUEST
           val page = CdsPage(contentAsString(result))
-          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your UTR number"
-          page.getElementsText(fieldLevelErrorUtr) shouldBe "Error: Enter your UTR number"
+          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe messages(
+            "cds.matching-error.business-details.utr.isEmpty"
+          )
+          page.getElementsText(fieldLevelErrorUtr) shouldBe s"Error: ${messages("cds.matching-error.business-details.utr.isEmpty")}"
           page.getElementsText("title") should startWith("Error: ")
       }
     }
