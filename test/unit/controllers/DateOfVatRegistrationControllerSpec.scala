@@ -25,7 +25,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DateOfVatRegistrationController, VatReturnController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{GetVatCustomerInformationService, SubscriptionBusinessService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   date_of_vat_registration,
   vat_return_total,
@@ -46,18 +46,16 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
 
-  private val mockVatReturnTotalView               = instanceOf[vat_return_total]
-  private val mockWeCannotConfirmYourIdentity      = instanceOf[we_cannot_confirm_your_identity]
-  private val mockGetVatCustomerInformationService = mock[GetVatCustomerInformationService]
-  private val form                                 = instanceOf[VatRegistrationDateFormProvider]
+  private val mockVatReturnTotalView          = instanceOf[vat_return_total]
+  private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
+  private val form                            = instanceOf[VatRegistrationDateFormProvider]
 
   private val controller = new DateOfVatRegistrationController(
     mockAuthAction,
     mockSubscriptionBusinessService,
     mcc,
     mockDateOfVatRegistrationView,
-    form,
-    mockGetVatCustomerInformationService
+    form
   )
 
   private val controllerVat = new VatReturnController(
