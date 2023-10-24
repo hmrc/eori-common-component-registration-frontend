@@ -32,6 +32,8 @@ lazy val microservice = (project in file("."))
   .configs(testConfig: _*)
   .settings(
     scalacOptions ++= Seq(
+      "-deprecation", // Warn if for usages of deprecated APIs.
+      "-Xlint", //Enable recommended additional warnings.
       "-unchecked", // Enable additional warnings where generated code depends on assumptions.
       "-Wunused:imports", // Warn if an import selector is not referenced.
       "-Wunused:privates", // Warn if a private member is unused.
@@ -39,6 +41,7 @@ lazy val microservice = (project in file("."))
       "-Wunused:locals", // Warn if a local definition is unused.
       "-Wunused:explicits", // Warn if an explicit parameter is unused.
       "-Wunused:implicits", // Warn if an implicit parameter is unused.
+      "-Wunused:nowarn", // Warn if unnecessary @nowarn annotations are used.
     ),
     commonSettings,
     unitTestSettings,
