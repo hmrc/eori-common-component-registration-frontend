@@ -166,13 +166,14 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth year invalid" in {
       val data = formData.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
       val res  = nameDobForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
+      res.errors shouldBe Seq(FormError("date-of-birth.year", Seq("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formData.updated("date-of-birth.year", "1800")
       val res  = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
+
   }
 
   "NinoForm" should {
@@ -223,7 +224,7 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth year invalid" in {
       val data = formDataNino.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
       val res  = ninoForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
+      res.errors shouldBe Seq(FormError("date-of-birth.year", Seq("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formDataNino.updated("date-of-birth.year", "1800")
@@ -285,7 +286,7 @@ class FormValidationSpec extends UnitSpec {
     "fail when a date of birth year invalid" in {
       val data = formDataRow.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
       val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
+      res.errors shouldBe Seq(FormError("date-of-birth.year", List("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formDataRow.updated("date-of-birth.year", "1800")
@@ -324,12 +325,12 @@ class FormValidationSpec extends UnitSpec {
     "fail when date of establishment year invalid" in {
       val data = formDataDoE.updated("date-of-establishment.year", Year.now.plusYears(1).getValue.toString)
       val res  = dateOfEstablishmentForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.minMax"), ArraySeq("1000")))
+      res.errors shouldBe Seq(FormError("date-of-establishment.year", List("date.year.error"), List()))
     }
     "fail when date of establishment too late" in {
       val data = formDataDoE.updated("date-of-establishment.year", "9999")
       val res  = dateOfEstablishmentForm.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.minMax"), ArraySeq("1000")))
+      res.errors shouldBe Seq(FormError("date-of-establishment.year", List("date.year.error"), List()))
     }
     "fail with a month error, when month is populated with blanks" in {
       val data = Map(
@@ -342,6 +343,70 @@ class FormValidationSpec extends UnitSpec {
         FormError("date-of-establishment.month", List("date-of-establishment.month.empty"), List())
       )
     }
+
+    "fail when the date is invalid" in {
+      val data = Map(
+        "date-of-establishment.day"   -> "31",
+        "date-of-establishment.month" -> "2",
+        "date-of-establishment.year"  -> "2019"
+      )
+      val res = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Seq(FormError("date-of-establishment", List("doe.error.invalid-date"), List()))
+    }
+
+    "pass when the date has a day of 31" in {
+      val data = Map(
+        "date-of-establishment.day"   -> "31",
+        "date-of-establishment.month" -> "1",
+        "date-of-establishment.year"  -> "2019"
+      )
+      val res = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Nil
+    }
+
+    "fail when the date contains a day greater than 31" in {
+      val data = Map(
+        "date-of-establishment.day"   -> "32",
+        "date-of-establishment.month" -> "1",
+        "date-of-establishment.year"  -> "2019"
+      )
+      val res = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Seq(FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()))
+    }
+
+    "pass when the date has a month of 12" in {
+      val data = Map(
+        "date-of-establishment.day"   -> "31",
+        "date-of-establishment.month" -> "12",
+        "date-of-establishment.year"  -> "2019"
+      )
+      val res = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Nil
+    }
+
+    "fail when the date contains a month greater than 12" in {
+      val data = Map(
+        "date-of-establishment.day"   -> "31",
+        "date-of-establishment.month" -> "13",
+        "date-of-establishment.year"  -> "2019"
+      )
+      val res = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Seq(FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq()))
+    }
+
+    "fail when the date contains a day greater than 31 and a month greater than 12" in {
+      val data = Map(
+        "date-of-establishment.day"   -> "32",
+        "date-of-establishment.month" -> "13",
+        "date-of-establishment.year"  -> "2019"
+      )
+      val res = dateOfEstablishmentForm.bind(data)
+      res.errors shouldBe Seq(
+        FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()),
+        FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq())
+      )
+    }
+
   }
 
   "sicCodeForm" should {

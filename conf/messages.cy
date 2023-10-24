@@ -486,7 +486,7 @@ cds.registration.you-need-a-different-service-iom.title = Rhaid i chi ddefnyddio
 cds.registration.you-need-a-different-service-iom.info = I wneud cais am rif EORI fel masnachwr o Ynys Manaw, mae angen i chi ddefnyddio ffurflen ar-lein, yn dibynnu a ydych chi:
 cds.registration.you-need-a-different-service-iom.vat-registered = wedi cofrestru ar gyfer TAW
 cds.registration.you-need-a-different-service-iom.not-vat-registered = heb gofrestru ar gyfer TAW
-vat.error.minMax=Mae’n rhaid i’r dyddiad y daw TAW i rym fod rhwng {0} a heddiw
+vat.error.minMax=Mae’n rhaid i’r flwyddyn fod rhwng {0} ac eleni
 
 cds.registration.use-a-different-service.title=Rhaid i chi ddefnyddio gwasanaeth ar-lein gwahanol
 cds.registration.use-a-different-service.info=I wneud cais am rif EORI fel corff cyhoeddus ac nid er elw a hynny heb Gyfeirnod Unigryw y Trethdalwr (UTR), mae angen i chi ddefnyddio ffurflen ar-lein, yn dibynnu a ydych chi:
@@ -1384,9 +1384,9 @@ cds.navigation.subscribe = Tanysgrifio
 subscription.check-your-email.no = Na, mae angen i mi newid y cyfeiriad e-bost hwn
 cds.form.contact-details = Eich cyfeiriad
 cds.error.field.hint = Gwall
-date.day.error = Nodwch ddiwrnod rhwng 1 a 31
-date.month.error = Nodwch fis rhwng 1 a 12
-date.year.error = Nodwch flwyddyn rhwng {0} a {1}
+date.day.error = Mae’n rhaid i’r diwrnod fod yn rhif o 1 i 31
+date.month.error = Mae’n rhaid i’r mis fod yn rhif o 1 i 12
+date.year.error = Mae’n rhaid i’r flwyddyn fod rhwng {0} ac eleni
 dob.error.empty-date = Nodwch eich dyddiad geni
 date-of-establishment.day.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys diwrnod
 date-of-establishment.month.empty=Mae’n rhaid i’r dyddiad sefydlu gynnwys mis
@@ -1397,11 +1397,11 @@ date-of-establishment.month-date-of-establishment.year.empty=Mae’n rhaid i’r
 date-invalid-year-too-short=Mae’n rhaid i’r flwyddyn gynnwys 4 rhif
 dob.error.future-date = Mae’n rhaid i’r dyddiad geni fod yn y gorffennol
 dob.error.invalid-date = Mae’n rhaid i’r dyddiad geni fod yn ddyddiad go iawn
-dob.error.minMax = Mae’n rhaid i’r dyddiad geni fod rhwng {0} a heddiw
+dob.error.minMax = Mae’n rhaid i’r flwyddyn fod rhwng {0} ac eleni
 doe.error.empty-date = Nodwch eich dyddiad sefydlu
 doe.error.future-date = Mae’n rhaid i’r dyddiad sefydlu fod yn y gorffennol
 doe.error.invalid-date = Mae’n rhaid i’r dyddiad sefydlu fod yn ddyddiad go iawn
-doe.error.minMax = Mae’n rhaid i’r dyddiad sefydlu fod rhwng {0} a heddiw
+doe.error.minMax = Mae’n rhaid i’r flwyddyn fod rhwng {0} ac eleni
 
 
 vat-registration-date.day.empty=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod

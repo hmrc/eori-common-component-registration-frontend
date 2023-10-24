@@ -25,17 +25,18 @@ import scala.util.{Failure, Success, Try}
 class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String] = Seq.empty)
     extends Formatter[LocalDate] with Formatters {
 
-  private val fieldKeys: List[String] = List("day", "month", "year")
+  private val dayKey                  = "day"
+  private val monthKey                = "month"
+  private val yearKey                 = "year"
+  private val fieldKeys: List[String] = List(dayKey, monthKey, yearKey)
 
   private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
-    if (year < 1000) Left(List(FormError(s"$key.${fieldKeys.last}", "date-invalid-year-too-short", args)))
-    else
-      Try(LocalDate.of(year, month, day)) match {
-        case Success(date) =>
-          Right(date)
-        case Failure(_) =>
-          Left(Seq(FormError(key, invalidKey, args)))
-      }
+    Try(LocalDate.of(year, month, day)) match {
+      case Success(date) =>
+        Right(date)
+      case Failure(_) =>
+        Left(Seq(FormError(key, invalidKey, args)))
+    }
 
   private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
@@ -45,8 +46,25 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
       day   <- int.bind(s"$key.day", data)
       month <- int.bind(s"$key.month", data)
       year  <- int.bind(s"$key.year", data)
+      _     <- validateFields(key, day, month, year)
       date  <- toDate(key, day, month, year)
     } yield date
+  }
+
+  private def validateFields(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], Unit] = {
+
+    val errors: List[FormError] = List(
+      if (day > 31) Some(FormError(s"$key.$dayKey", "date.day.error", args)) else None,
+      if (month > 12) Some(FormError(s"$key.$monthKey", "date.month.error", args)) else None,
+      if (year < 1000) Some(FormError(s"$key.$yearKey", "date-invalid-year-too-short", args)) else None,
+      if (year > LocalDate.now().getYear) Some(FormError(s"$key.$yearKey", "date.year.error", args)) else None
+    ).flatten
+
+    errors match {
+      case Nil => Right(())
+      case _   => Left(errors)
+    }
+
   }
 
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
