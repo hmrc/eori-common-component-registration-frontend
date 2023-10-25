@@ -21,6 +21,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
+  SubscriptionDisplayFailureResponse,
   SubscriptionDisplayFailureResponseHolder,
   SubscriptionDisplayResponse,
   SubscriptionDisplayResponseHolder
@@ -80,20 +81,20 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
                 resp
               )
               Right(resp.subscriptionDisplayResponse)
-            case None => handleFailure(response)
+            case None => Left(handleFailure(response))
           }
         else {
           logger.error(s"SubscriptionDisplay SUB09 failed. status: ${response.status}, error: ${response.body}")
           Left(ServiceUnavailableResponse)
         }
-    } recover {
+      } recover {
       case NonFatal(e) =>
         logger.error(s"SubscriptionDisplay SUB09 failed. error: $e")
         Left(ServiceUnavailableResponse)
     }
   }
 
-  private def handleFailure(responseBody: HttpResponse): Either[EoriHttpResponse, SubscriptionDisplayResponse] =
+  private def handleFailure(responseBody: HttpResponse): EoriHttpResponse =
     convertFromJson[SubscriptionDisplayFailureResponseHolder](responseBody) match {
       case Some(resp) =>
         // $COVERAGE-OFF$Loggers
@@ -102,10 +103,10 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
         logger.error(
           s"SubscriptionDisplay SUB09 failed. status: ${resp.subscriptionDisplayResponse.responseCommon.status}, error: ${resp.subscriptionDisplayResponse.responseCommon.statusText}"
         )
-        Left(InvalidResponse)
+        InvalidResponse
       case None =>
-        logger.error(s"SubscriptionDisplay SUB09 failed. error: ${responseBody}")
-        Left(InvalidResponse)
+        logger.error(s"SubscriptionDisplay SUB09 failed. error: $responseBody")
+        InvalidResponse
     }
 
   private def auditCall(url: String, request: Seq[(String, String)], response: SubscriptionDisplayResponseHolder)(
