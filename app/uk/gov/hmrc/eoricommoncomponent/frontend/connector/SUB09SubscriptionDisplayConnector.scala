@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
+  SubscriptionDisplayFailureResponseHolder,
   SubscriptionDisplayResponse,
   SubscriptionDisplayResponseHolder
 }
@@ -31,9 +31,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
   SubscriptionDisplayResult,
   SubscriptionDisplaySubmitted
 }
-import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,9 +42,8 @@ import scala.util.control.NonFatal
 @Singleton
 class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(
   implicit ec: ExecutionContext
-) {
+) extends HandleResponses {
 
-  private val logger  = Logger(this.getClass)
   private val baseUrl = appConfig.getServiceUrl("subscription-display")
 
   def subscriptionDisplay(safeId: String, acknowledgementReference: String)(implicit
@@ -60,27 +59,54 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
     httpClient
       .get(url)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
-      .execute[SubscriptionDisplayResponseHolder] map { resp =>
-      // $COVERAGE-OFF$Loggers
-      logger.debug(s"SubscriptionDisplay SUB09: responseCommon: ${resp.subscriptionDisplayResponse.responseCommon}")
-      // $COVERAGE-ON
+      .execute
+      .map { response =>
+        if (HttpStatusCheck.is2xx(response.status))
+          convertFromJson[SubscriptionDisplayResponseHolder](response) match {
+            case Some(resp) =>
+              // $COVERAGE-OFF$Loggers
+              logger.debug(
+                s"SubscriptionDisplay SUB09: responseCommon: ${resp.subscriptionDisplayResponse.responseCommon}"
+              )
+              // $COVERAGE-ON
 
-      auditCall(
-        url.toString,
-        Seq(
-          "regime"                   -> Service.regimeCDS,
-          "taxPayerID"               -> safeId,
-          "acknowledgementReference" -> acknowledgementReference
-        ),
-        resp
-      )
-      Right(resp.subscriptionDisplayResponse)
+              auditCall(
+                url.toString,
+                Seq(
+                  "regime"                   -> Service.regimeCDS,
+                  "taxPayerID"               -> safeId,
+                  "acknowledgementReference" -> acknowledgementReference
+                ),
+                resp
+              )
+              Right(resp.subscriptionDisplayResponse)
+            case None => handleFailure(response)
+          }
+        else {
+          logger.error(s"SubscriptionDisplay SUB09 failed. status: ${response.status}, error: ${response.body}")
+          Left(ServiceUnavailableResponse)
+        }
     } recover {
       case NonFatal(e) =>
-        logger.error(s"SubscriptionDisplay SUB09 failed. url: $url, error: $e")
+        logger.error(s"SubscriptionDisplay SUB09 failed. error: $e")
         Left(ServiceUnavailableResponse)
     }
   }
+
+  private def handleFailure(responseBody: HttpResponse): Either[EoriHttpResponse, SubscriptionDisplayResponse] =
+    convertFromJson[SubscriptionDisplayFailureResponseHolder](responseBody) match {
+      case Some(resp) =>
+        // $COVERAGE-OFF$Loggers
+        logger.debug(s"SubscriptionDisplay SUB09: responseCommon: ${resp.subscriptionDisplayResponse.responseCommon}")
+        // $COVERAGE-ON
+        logger.error(
+          s"SubscriptionDisplay SUB09 failed. status: ${resp.subscriptionDisplayResponse.responseCommon.status}, error: ${resp.subscriptionDisplayResponse.responseCommon.statusText}"
+        )
+        Left(InvalidResponse)
+      case None =>
+        logger.error(s"SubscriptionDisplay SUB09 failed. error: ${responseBody}")
+        Left(InvalidResponse)
+    }
 
   private def auditCall(url: String, request: Seq[(String, String)], response: SubscriptionDisplayResponseHolder)(
     implicit hc: HeaderCarrier

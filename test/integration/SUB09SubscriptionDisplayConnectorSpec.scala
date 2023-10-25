@@ -24,6 +24,7 @@ import play.api.libs.json.Json
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
+  InvalidResponse,
   SUB09SubscriptionDisplayConnector,
   ServiceUnavailableResponse
 }
@@ -91,6 +92,17 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       )
       await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Left(
         ServiceUnavailableResponse
+      )
+    }
+
+    "return InvalidResponse when subscription display service returns a failure" in {
+
+      SubscriptionDisplayMessagingService.returnSubscriptionDisplayFailureWhenReceiveRequest(
+        requestTaxPayerId,
+        requestAcknowledgementReference
+      )
+      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Left(
+        InvalidResponse
       )
     }
   }
