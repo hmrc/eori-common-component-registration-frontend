@@ -86,7 +86,7 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
           logger.error(s"SubscriptionDisplay SUB09 failed. status: ${response.status}, error: ${response.body}")
           Left(ServiceUnavailableResponse)
         }
-    } recover {
+      } recover {
       case NonFatal(e) =>
         logger.error(s"SubscriptionDisplay SUB09 failed. error: $e")
         Left(ServiceUnavailableResponse)
