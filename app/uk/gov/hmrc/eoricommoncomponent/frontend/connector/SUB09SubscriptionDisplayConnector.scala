@@ -21,7 +21,6 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
-  SubscriptionDisplayFailureResponse,
   SubscriptionDisplayFailureResponseHolder,
   SubscriptionDisplayResponse,
   SubscriptionDisplayResponseHolder

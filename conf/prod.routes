@@ -24,7 +24,7 @@ GET         /customs-registration-services/:service/register/sign-out           
 GET         /customs-registration-services/:service/register/you-cannot-use-service                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotUseServiceController.page(service: Service)
 GET         /customs-registration-services/:service/register/unauthorised                                @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.YouCannotUseServiceController.unauthorisedPage(service: Service)
 
-GET         /customs-registration-services/:service/register/keep-alive                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.keepAlive(service: Service)
+GET         /customs-registration-services/register/keep-alive                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationController.keepAlive()
 
 GET         /customs-registration-services/:service/register/email-confirmed                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmailController.emailConfirmed(service: Service)
 GET         /customs-registration-services/:service/register/email-confirmed-continue                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.CheckYourEmailController.emailConfirmedContinue(service: Service)
