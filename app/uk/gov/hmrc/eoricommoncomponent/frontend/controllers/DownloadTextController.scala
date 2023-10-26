@@ -39,7 +39,7 @@ class DownloadTextController @Inject() (
   private val plainText          = "plain/text"
   private val attachmentTextFile = "attachment; filename=EORI-number.txt"
 
-  def download(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
+  def download(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
     implicit request => _: LoggedInUserWithEnrolments =>
       for {
         Some(eori) <- cdsFrontendDataCache.sub02Outcome.map(_.eori)

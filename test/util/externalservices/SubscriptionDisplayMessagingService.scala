@@ -90,6 +90,19 @@ object SubscriptionDisplayMessagingService {
        |}
        | """.stripMargin
 
+  def failureResponse(taxPayerID: String = TestData.TaxPayerID): String =
+    s"""{
+       |  "subscriptionDisplayResponse": {
+       |    "responseCommon": {
+       |      "status": "FAILURE",
+       |      "statusText": "Some status",
+       |      "processingDate": "2016-08-17T19:33:47Z",
+       |      "taxPayerID": "$taxPayerID"
+       |    }
+       |  }
+       |}
+       | """.stripMargin
+
   def returnSubscriptionDisplayWhenReceiveRequest(
     id: String,
     requestAcknowledgementReference: String,
@@ -101,6 +114,21 @@ object SubscriptionDisplayMessagingService {
           aResponse()
             .withStatus(returnedStatus)
             .withBody(validResponse(typeOfLegalEntity = "0001"))
+            .withHeader(CONTENT_TYPE, JSON)
+        )
+    )
+
+  def returnSubscriptionDisplayFailureWhenReceiveRequest(
+    id: String,
+    requestAcknowledgementReference: String,
+    returnedStatus: Int = OK
+  ): Unit =
+    stubFor(
+      get(urlEqualTo(subscriptionPath(id, requestAcknowledgementReference)))
+        .willReturn(
+          aResponse()
+            .withStatus(returnedStatus)
+            .withBody(failureResponse())
             .withHeader(CONTENT_TYPE, JSON)
         )
     )

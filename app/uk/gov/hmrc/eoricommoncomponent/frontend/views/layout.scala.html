@@ -24,8 +24,12 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
 @import views.html.helper.CSPNonce
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.TemplateOverrides
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.HmrcStandardPageParams
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
-@this(hmrcLayout: HmrcLayout,
+@this(hmrcLayout: HmrcStandardPage,
         appConfig: AppConfig,
         reportAProblemLink: HmrcReportTechnicalIssue,
         hmrcTimeoutDialog: HmrcTimeoutDialog,
@@ -45,6 +49,7 @@
     userResearchBanner:Boolean = false,
     service: Service
 )(contentBlock: Html)(implicit messages: Messages, request: Request[_])
+
 
 @isLoggedIn = @{
     !request.session.isEmpty && request.session.get("authToken").isDefined
@@ -138,15 +143,18 @@
 
 
 @hmrcLayout(
-    userResearchBannerUrl = None,
+    HmrcStandardPageParams(
+    serviceURLs = ServiceURLs(
+        serviceUrl = Some(serviceUrl),
+        signOutUrl = Some(logOutUrl),
+        accessibilityStatementUrl = Some(appConfig.accessibilityStatement)
+    ),
     pageTitle = Some(titleErr),
     isWelshTranslationAvailable = true, /* or false if your service has not been translated */
-    serviceUrl = Some(serviceUrl),
-    signOutUrl = Some(logOutUrl),
-    phaseBanner = None,
-    additionalHeadBlock = Some(theHead),
-    serviceName = Some(messages(banner)),
-    accessibilityStatementUrl = Some(appConfig.accessibilityStatement),
-    beforeContentBlock = Some(beforeContent),
-    additionalScriptsBlock = Some(scripts)
+    templateOverrides = TemplateOverrides(
+        additionalHeadBlock = Some(theHead),
+        beforeContentBlock = Some(beforeContent),
+        additionalScriptsBlock = Some(scripts)),
+    serviceName = Some(banner)
+    )
 )(mainContentWithGetHelp)
