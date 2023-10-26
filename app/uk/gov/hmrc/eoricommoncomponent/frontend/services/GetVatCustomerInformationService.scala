@@ -39,18 +39,16 @@ class GetVatCustomerInformationService @Inject() (
     for {
       vatDetails <- sessionCache.subscriptionDetails.map(_.ukVatDetails)
       vrn = vatDetails.map(_.number)
-    } yield {
-      vrn.map { vatNumber =>
-        getVatCustomerInformationConnector.getVatCustomerInformation(vatNumber)
-          .fold(
-            { errorResponse =>
-              logger.warn(s"getVatCustomerInformation returned response: $errorResponse. Cannot compare values")
-              errorResponse
-            },
-            vatCustomerInformation => compareApiResponses(vatControlListResponse, vatCustomerInformation)
-          )
-      }
-      ()
+    } yield vrn.map { vatNumber =>
+      getVatCustomerInformationConnector.getVatCustomerInformation(vatNumber)
+        .fold(
+          errorResponse =>
+            logger.warn(s"getVatCustomerInformation returned response: $errorResponse. Cannot compare values"),
+          { vatCustomerInformation =>
+            compareApiResponses(vatControlListResponse, vatCustomerInformation)
+            ()
+          }
+        )
     }
 
   def compareApiResponses(oldResponse: VatControlListResponse, newResponse: GetVatInformationResponse): Boolean = {
