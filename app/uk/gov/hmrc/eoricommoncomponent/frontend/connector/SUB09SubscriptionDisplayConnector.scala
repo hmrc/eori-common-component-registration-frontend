@@ -81,7 +81,9 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
                 resp
               )
               Right(resp.subscriptionDisplayResponse)
-            case None => Left(handleFailure(response))
+            case None =>
+              logFailure(response)
+              Left(InvalidResponse)
           }
         else {
           logger.error(s"SubscriptionDisplay SUB09 failed. status: ${response.status}, error: ${response.body}")
@@ -94,7 +96,7 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
     }
   }
 
-  private def handleFailure(responseBody: HttpResponse): EoriHttpResponse =
+  private def logFailure(responseBody: HttpResponse): Unit =
     convertFromJson[SubscriptionDisplayFailureResponseHolder](responseBody) match {
       case Some(resp) =>
         // $COVERAGE-OFF$Loggers
@@ -103,10 +105,9 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
         logger.error(
           s"SubscriptionDisplay SUB09 failed. status: ${resp.subscriptionDisplayResponse.responseCommon.status}, error: ${resp.subscriptionDisplayResponse.responseCommon.statusText}"
         )
-        InvalidResponse
       case None =>
         logger.error(s"SubscriptionDisplay SUB09 failed. error: $responseBody")
-        InvalidResponse
+
     }
 
   private def auditCall(url: String, request: Seq[(String, String)], response: SubscriptionDisplayResponseHolder)(
