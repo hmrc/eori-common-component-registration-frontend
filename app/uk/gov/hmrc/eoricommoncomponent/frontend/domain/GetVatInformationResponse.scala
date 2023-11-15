@@ -17,7 +17,6 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
 import play.api.libs.json.Json
-
 import java.util.Date
 
 case class GetVatInformationResponse(effectiveRegistrationDate: Option[Date], postCode: Option[String])
