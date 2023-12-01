@@ -72,7 +72,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     ContactDetailsModel(
       "John Doe",
       "john@example.com",
-      Some("441234987654private "),
+      "441234987654private ",
       None,
       useAddressFromRegistrationDetails = true,
       None,

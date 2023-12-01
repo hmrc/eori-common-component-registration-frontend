@@ -55,7 +55,7 @@ object RegisterWithoutIdReqDetails {
     contactDetail: ContactDetailsModel
   ): RegisterWithoutIdReqDetails = {
     val cd = RegisterWithoutIdContactDetails(
-      contactDetail.telephone,
+      Some(contactDetail.telephone),
       mobileNumber = None,
       faxNumber = contactDetail.fax,
       emailAddress = Some(contactDetail.emailAddress)
@@ -69,7 +69,7 @@ object RegisterWithoutIdReqDetails {
     contactDetail: ContactDetailsModel
   ): RegisterWithoutIdReqDetails = {
     val cd = RegisterWithoutIdContactDetails(
-      contactDetail.telephone,
+      Some(contactDetail.telephone),
       mobileNumber = None,
       faxNumber = contactDetail.fax,
       emailAddress = Some(contactDetail.emailAddress)

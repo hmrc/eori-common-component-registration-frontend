@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionTimeOutExc
 case class ContactDetailsModel(
   fullName: String,
   emailAddress: String,
-  telephone: Option[String],
+  telephone: String,
   fax: Option[String],
   useAddressFromRegistrationDetails: Boolean = true,
   street: Option[String],
@@ -38,7 +38,7 @@ case class ContactDetailsModel(
   def contactDetails: ContactDetails = ContactDetails(
     fullName,
     emailAddress,
-    telephone,
+    Some(telephone),
     fax,
     trim(street).getOrElse(""),
     trim(city).getOrElse(""),
@@ -61,7 +61,7 @@ case class ContactDetailsModel(
     city = None,
     postalCode = None,
     countryCode = None,
-    telephoneNumber = telephone,
+    telephoneNumber = Some(telephone),
     faxNumber = None,
     emailAddress = Some(emailAddress)
   )
@@ -74,8 +74,7 @@ object ContactDetailsModel {
   def trim(value: Option[String]): Option[String] = value.map(_.trim)
 }
 
-case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: Option[String])
-    extends Logging {
+case class ContactDetailsViewModel(fullName: String, emailAddress: Option[String], telephone: String) extends Logging {
 
   def toContactInfoDetailsModel(contactDetails: Option[ContactDetailsModel]): ContactDetailsModel =
     contactDetails match {

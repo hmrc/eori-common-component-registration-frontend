@@ -30,8 +30,7 @@ class ContactDetailsFormSpec extends UnitSpec {
     "map an empty phone number to a None" in {
       val data = Map("full-name" -> "Some name", "telephone" -> "")
       val res  = form.bind(data)
-      res.errors shouldBe Seq.empty
-      res.value shouldBe Some(ContactDetailsViewModel(fullName = "Some name", emailAddress = None, telephone = None))
+      res.errors shouldBe Seq(FormError("telephone", "cds.contact-details.page-error.telephone.isEmpty"))
     }
 
     "map a valid phone number to a Some" in {
@@ -39,7 +38,7 @@ class ContactDetailsFormSpec extends UnitSpec {
       val res  = form.bind(data)
       res.errors shouldBe Seq.empty
       res.value shouldBe Some(
-        ContactDetailsViewModel(fullName = "Some name", emailAddress = None, telephone = Some("012345678"))
+        ContactDetailsViewModel(fullName = "Some name", emailAddress = None, telephone = "012345678")
       )
     }
 

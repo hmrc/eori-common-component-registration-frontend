@@ -38,7 +38,7 @@ object SubscriptionFormBuilder {
   private val contactDetailsModel = ContactDetailsModel(
     fullName = "John Doe",
     emailAddress = "john.doe@example.com",
-    telephone = Some("01632961234"),
+    telephone = "01632961234",
     fax = None,
     street = Some("Line 1"),
     city = Some("line 2"),

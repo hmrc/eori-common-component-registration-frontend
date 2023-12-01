@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class ContactDetailsSubscribeModel(fullName: String, telephone: Option[String]) {
+case class ContactDetailsSubscribeModel(fullName: String, telephone: String) {
 
   def toContactDetailsModel(email: String): ContactDetailsModel = ContactDetailsModel(
     fullName = fullName,
