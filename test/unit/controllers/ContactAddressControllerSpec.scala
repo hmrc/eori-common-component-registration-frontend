@@ -84,7 +84,7 @@ class ContactAddressControllerSpec
   val contactDetailsModel = ContactDetailsModel(
     fullName = "John Doe",
     emailAddress = "john.doe@example.com",
-    telephone = Some("234234"),
+    telephone = "234234",
     None,
     false,
     Some("streetName"),

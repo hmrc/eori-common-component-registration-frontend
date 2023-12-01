@@ -119,7 +119,7 @@ trait SubscriptionDataGenerators {
   val contactDetailsCreateViewModelGenerator: Gen[ContactDetailsModel] = for {
     fullName             <- stringWithoutEmptyString
     emailAddress         <- stringWithoutEmptyString
-    telephone            <- stringWithoutEmptyString.map(Some(_))
+    telephone            <- stringWithoutEmptyString
     fax                  <- Gen.option(stringWithoutEmptyString)
     useRegisteredAddress <- trueFalseGenerator
     street               <- stringWithoutEmptyString.map(Some(_))
@@ -141,7 +141,7 @@ trait SubscriptionDataGenerators {
   val contactDetailsCreateViewModelWithEmptyPostcodeGenerator: Gen[ContactDetailsModel] = for {
     fullName             <- stringWithoutEmptyString
     emailAddress         <- stringWithoutEmptyString
-    telephone            <- stringWithoutEmptyString.map(Some(_))
+    telephone            <- stringWithoutEmptyString
     fax                  <- Gen.option(stringWithoutEmptyString)
     useRegisteredAddress <- trueFalseGenerator
     street               <- stringWithoutEmptyString.map(Some(_))
@@ -162,7 +162,7 @@ trait SubscriptionDataGenerators {
   val contactDetailsCreateViewModelMissingAddressFieldsGenerator: Gen[ContactDetailsModel] = for {
     fullName             <- stringWithoutEmptyString
     emailAddress         <- stringWithoutEmptyString
-    telephone            <- stringWithoutEmptyString.map(Some(_))
+    telephone            <- stringWithoutEmptyString
     fax                  <- Gen.option(stringWithoutEmptyString)
     useRegisteredAddress <- trueFalseGenerator
     street               <- Gen.option(stringWithoutEmptyString)

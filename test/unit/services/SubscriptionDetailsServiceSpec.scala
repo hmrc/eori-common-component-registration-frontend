@@ -199,7 +199,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     val contactDetailsModel = ContactDetailsModel(
       fullName = "John Doe",
       emailAddress = "john.doe@example.com",
-      telephone = Some("234234"),
+      telephone = "234234",
       None,
       false,
       Some("streetName"),
@@ -210,7 +210,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     val updatedContactDetailsModel = ContactDetailsModel(
       fullName = "John Doe",
       emailAddress = "john.doe@example.com",
-      telephone = Some("234234"),
+      telephone = "234234",
       None,
       false,
       Some("Address Line 1"),
@@ -233,7 +233,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     val contactDetails = ContactDetailsModel(
       fullName = "Name",
       emailAddress = "email@mail.com",
-      telephone = Some("01234567"),
+      telephone = "01234567",
       fax = None,
       street = None,
       city = None,

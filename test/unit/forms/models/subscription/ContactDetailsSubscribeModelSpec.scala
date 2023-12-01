@@ -29,12 +29,12 @@ class ContactDetailsSubscribeModelSpec extends UnitSpec {
       val fullName  = "Full name"
       val telephone = "01234123123"
 
-      val contactDetailsSubscribeModel = ContactDetailsSubscribeModel(fullName, Some(telephone))
+      val contactDetailsSubscribeModel = ContactDetailsSubscribeModel(fullName, telephone)
 
       val expectedContactDetails = ContactDetailsModel(
         fullName = fullName,
         emailAddress = email,
-        telephone = Some(telephone),
+        telephone = telephone,
         None,
         false,
         None,
@@ -54,7 +54,7 @@ class ContactDetailsSubscribeModelSpec extends UnitSpec {
       val contactDetails = ContactDetailsModel(
         fullName = fullName,
         emailAddress = "john.doe@example.com",
-        telephone = Some(telephone),
+        telephone = telephone,
         None,
         false,
         Some("street"),
@@ -63,7 +63,7 @@ class ContactDetailsSubscribeModelSpec extends UnitSpec {
         Some("country")
       )
 
-      val expectedContactDetailsSubscribe = ContactDetailsSubscribeModel(fullName, Some(telephone))
+      val expectedContactDetailsSubscribe = ContactDetailsSubscribeModel(fullName, telephone)
 
       ContactDetailsSubscribeModel.fromContactDetailsModel(contactDetails) shouldBe expectedContactDetailsSubscribe
     }

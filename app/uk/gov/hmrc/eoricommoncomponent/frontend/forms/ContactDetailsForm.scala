@@ -33,15 +33,16 @@ object ContactDetailsForm {
       mapping(
         userFullName                   -> text.verifying(validFullName),
         EmailVerificationKeys.EmailKey -> optional(text),
-        userTelephone                  -> optional(text).verifying(validPhone)
+        userTelephone                  -> text.verifying(validPhone)
       )(ContactDetailsViewModel.apply)(ContactDetailsViewModel.unapply)
     )
 
-  private def validPhone: Constraint[Option[String]] =
+  private def validPhone: Constraint[String] =
     Constraint({
-      case Some(e) if e.length > 24 =>
+      case e if e.trim.isEmpty => Invalid(ValidationError("cds.contact-details.page-error.telephone.isEmpty"))
+      case e if e.length > 24 =>
         Invalid(ValidationError("cds.contact-details.page-error.telephone.wrong-length.too-long"))
-      case Some(e) if !e.matches("""[A-Z0-9 +)/(\\\-\*#]{0,24}""") =>
+      case e if !e.matches("""[A-Z0-9 +)/(\\\-\*#]{0,24}""") =>
         Invalid(ValidationError("cds.contact-details.page-error.telephone.wrong-format"))
       case _ => Valid
     })

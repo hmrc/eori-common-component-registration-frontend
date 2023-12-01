@@ -224,12 +224,14 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
         page.getElementsText("title") should startWith("Error: ")
       }
     }
-    "Optional telephone number field submits successfully when empty" in {
-      submitFormInCreateMode(createFormMandatoryFieldsMap + (telephoneFieldName -> "")) { result =>
-        status(result) shouldBe SEE_OTHER
-        val location = redirectLocation(result)
-        location shouldBe Some("next-page-url")
 
+    "produce validation error when Telephone is not submitted" in {
+      submitFormInCreateMode(createFormMandatoryFieldsMap + (telephoneFieldName -> "")) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your contact telephone number"
+        page.getElementsText(telephoneFieldLevelErrorXPath) shouldBe "Error: Enter your contact telephone number"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
 
@@ -271,7 +273,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       submitFormInCreateMode(createFormAllFieldsEmptyMap) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe
-          "Enter your contact name"
+          "Enter your contact name Enter your contact telephone number"
         page.getElementsText("title") should startWith("Error: ")
       }
     }
@@ -327,6 +329,16 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       }
     }
 
+    "produce validation error when Telephone is not submitted" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (telephoneFieldName -> "")) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your contact telephone number"
+        page.getElementsText(telephoneFieldLevelErrorXPath) shouldBe "Error: Enter your contact telephone number"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
     "produce validation error when Telephone more than 24 characters" in {
       submitFormInReviewMode(createFormMandatoryFieldsMap + (telephoneFieldName -> oversizedString(24))) { result =>
         status(result) shouldBe BAD_REQUEST
@@ -365,7 +377,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       submitFormInReviewMode(createFormAllFieldsEmptyMap) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe
-          "Enter your contact name"
+          "Enter your contact name Enter your contact telephone number"
         page.getElementsText("title") should startWith("Error: ")
       }
     }
