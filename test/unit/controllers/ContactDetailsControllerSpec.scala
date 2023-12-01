@@ -233,6 +233,16 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       }
     }
 
+    "produce validation error when Telephone is not submitted" in {
+      submitFormInReviewMode(createFormMandatoryFieldsMap + (telephoneFieldName -> "")) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your contact telephone number"
+        page.getElementsText(telephoneFieldLevelErrorXPath) shouldBe "Error: Enter your contact telephone number"
+        page.getElementsText("title") should startWith("Error: ")
+      }
+    }
+
     "produce validation error when Telephone more than 24 characters" in {
       submitFormInCreateMode(createFormMandatoryFieldsMap + (telephoneFieldName -> oversizedString(24))) { result =>
         status(result) shouldBe BAD_REQUEST

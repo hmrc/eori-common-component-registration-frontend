@@ -39,6 +39,7 @@ object ContactDetailsForm {
 
   private def validPhone: Constraint[Option[String]] =
     Constraint({
+      case Some(e) if e.trim.isEmpty => Invalid(ValidationError("cds.contact-details.page-error.telephone.isEmpty"))
       case Some(e) if e.length > 24 =>
         Invalid(ValidationError("cds.contact-details.page-error.telephone.wrong-length.too-long"))
       case Some(e) if !e.matches("""[A-Z0-9 +)/(\\\-\*#]{0,24}""") =>
