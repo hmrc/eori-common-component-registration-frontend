@@ -39,13 +39,26 @@
 
                     <h1 class="govuk-heading-l">@messages("cds.subscription.enter-email.heading")</h1>
 
-                    <p class="govuk-body">@messages("cds.subscription.enter-email.list-heading")</p>
+                    <p class="govuk-body">@messages("cds.subscription.enter-email.p1")</p>
 
-                    <ul class="govuk-list govuk-list--bullet"><li>@messages("cds.subscription.enter-email.list-bullet-1")</li>
+                    <details class="govuk-details" data-module="govuk-details">
+                        <summary class="govuk-details__summary">
+                            <span class="govuk-details__summary-text">
+                                    @messages("cds.subscription.enter-email.heading-2")
+                            </span>
+                        </summary>
+                        <div class="govuk-details__text">
+                            <p class="govuk-body">@messages("cds.subscription.enter-email.section.content")</p>
+                            <ul class="govuk-list govuk-list--bullet">
+                                <li>@messages("cds.subscription.enter-email.list-bullet-1")</li>
+                                <li>@messages("cds.subscription.enter-email.list-bullet-2")</li>
+                                <li>@messages("cds.subscription.enter-email.list-bullet-3")</li>
+                                <li>@messages("cds.subscription.enter-email.list-bullet-4")</li>
+                            </ul>
+                        </div>
+                    </details>
 
-                        <li>@messages("cds.subscription.enter-email.list-bullet-2")</li>
-
-                        <li>@messages("cds.subscription.enter-email.list-bullet-3")</li></ul>
+                    <p class="govuk-body">@messages("cds.subscription.enter-email.p2")</p>
 
                     <div class="govuk-form-group">
                     @inputText(
@@ -53,11 +66,11 @@
                         id = "email",
                         name = "email",
                         inputType = "email",
-                        label = "cds.subscription.enter-email.para",
+                        label = "cds.subscription.enter-email.p",
                         isPageHeading = true,
                         hint = None,
                         autocomplete = Some("email"),
-                        classes = Some("govuk-!-width-one-half"),
+                        classes = Some("govuk-!-width-two-thirds"),
                         labelClasses = Some("govuk-body")
                     )
                     </div>
