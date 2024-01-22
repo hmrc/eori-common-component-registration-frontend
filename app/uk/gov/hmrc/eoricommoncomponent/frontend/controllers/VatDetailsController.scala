@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.GetVatCustomerInformationConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsController @Inject() (
   authAction: AuthAction,
-  vatConnector: GetVatCustomerInformationConnector,
+  VatDetailsService: VatDetailsService,
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   vatDetailsView: vat_details,
@@ -46,7 +46,7 @@ class VatDetailsController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  val dateForm = form()
+  val dateForm: Form[VatRegistrationDate] = form()
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
@@ -76,14 +76,14 @@ class VatDetailsController @Inject() (
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
-    vatConnector.getVatCustomerInformation(vatForm.number).foldF(
-      status =>
-        status match {
-          case NOT_FOUND | BAD_REQUEST =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-          case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
-          case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
-        },
+    VatDetailsService.getVatCustomerInformation(vatForm.number).foldF(
+      responseError =>
+        responseError.status match {
+        case NOT_FOUND | BAD_REQUEST =>
+          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+        case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
+        case _ => Future.successful(Results.InternalServerError(errorTemplate(service)))
+      },
       response =>
         if (response.isPostcodeAssociatedWithVrn(vatForm))
           subscriptionDetailsService

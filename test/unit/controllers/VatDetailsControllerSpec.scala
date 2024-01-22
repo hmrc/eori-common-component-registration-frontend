@@ -23,12 +23,13 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.VatDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -54,7 +55,7 @@ class VatDetailsControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockVatConnector            = mock[GetVatCustomerInformationConnector]
+  private val mockVatDetailsService       = mock[VatDetailsService]
   private val vatDetailsView              = instanceOf[vat_details]
   private val errorTemplate               = instanceOf[error_template]
   private val weCannotConfirmYourIdentity = instanceOf[date_of_vat_registration]
@@ -62,7 +63,7 @@ class VatDetailsControllerSpec
 
   private val controller = new VatDetailsController(
     mockAuthAction,
-    mockVatConnector,
+    mockVatDetailsService,
     mockSubscriptionBusinessService,
     mcc,
     vatDetailsView,
@@ -79,7 +80,7 @@ class VatDetailsControllerSpec
 
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager)
-    reset(mockVatConnector)
+    reset(mockVatDetailsService)
     setupMockSubscriptionFlowManager(VatDetailsSubscriptionFlowPage)
   }
 
@@ -210,7 +211,7 @@ class VatDetailsControllerSpec
 
     "redirect to next page when valid vat number and effective date is supplied but lastNetDue is missing" in {
       val vatControlResponse = VatControlListResponse(lastNetDue = None)
-      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
+      submitForm(validRequest, isInReviewMode = false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
@@ -218,7 +219,7 @@ class VatDetailsControllerSpec
 
     "redirect to next page when valid vat number and effective date is supplied but lastReturnMonthPeriod is missing" in {
       val vatControlResponse = VatControlListResponse(lastReturnMonthPeriod = None)
-      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
+      submitForm(validRequest, isInReviewMode = false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
@@ -226,7 +227,7 @@ class VatDetailsControllerSpec
 
     "redirect to next page when valid vat number is supplied but lastReturnMonthPeriod is N/A" in {
       val vatControlResponse = VatControlListResponse(lastReturnMonthPeriod = Some("N/A"))
-      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
+      submitForm(validRequest, isInReviewMode = false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
@@ -250,7 +251,7 @@ class VatDetailsControllerSpec
 
     "redirect to cannot confirm your identity when postcode is None" in {
       val vatControlResponse = VatControlListResponse(None, Some("2009-11-24"))
-      submitForm(validRequest, false, vatControllerResponse = vatControlResponse) { result =>
+      submitForm(validRequest, isInReviewMode = false, vatControllerResponse = vatControlResponse) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("/when-did-you-become-vat-registered")
       }
@@ -264,10 +265,10 @@ class VatDetailsControllerSpec
     }
 
     "redirect to cannot confirm your identity url when a Not Found response is returned" in {
-      val leftValueForEitherT: Either[Int, VatControlListResponse] =
-        Left(NOT_FOUND)
+      val leftValueForEitherT: Either[ResponseError, VatControlListResponse] =
+      Left(ResponseError(NOT_FOUND, "not found"))
 
-      vatControlListMock()(EitherT[Future, Int, VatControlListResponse] {
+      vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
         Future.successful(leftValueForEitherT)
       })
 
@@ -279,10 +280,10 @@ class VatDetailsControllerSpec
 
     "redirect to cannot confirm your identity url when a Bad Request response is returned" in {
 
-      val rightValueForEitherT: Either[Int, VatControlListResponse] =
-        Left(BAD_REQUEST)
+      val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
+        Left(ResponseError(BAD_REQUEST, "bad request"))
 
-      vatControlListMock()(EitherT[Future, Int, VatControlListResponse] {
+      vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
         Future.successful(rightValueForEitherT)
       })
 
@@ -293,10 +294,10 @@ class VatDetailsControllerSpec
     }
 
     "redirect to sorry we are experiencing techincal difficulties url when a service unavailable response is returned" in {
-      val rightValueForEitherT: Either[Int, VatControlListResponse] =
-        Left(SERVICE_UNAVAILABLE)
+      val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
+        Left(ResponseError(SERVICE_UNAVAILABLE, "service unavailable"))
 
-      vatControlListMock()(EitherT[Future, Int, VatControlListResponse] {
+      vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
         Future.successful(rightValueForEitherT)
       })
 
@@ -359,7 +360,7 @@ class VatDetailsControllerSpec
       .thenReturn(Future.successful(()))
     test(
       controller
-        .submit(false, atarService)
+        .submit(isInReviewMode = false, atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )
   }
@@ -372,10 +373,10 @@ class VatDetailsControllerSpec
   )(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
 
-    val rightValueForEitherT: Either[Int, VatControlListResponse] =
+    val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
       Right(vatControllerResponse)
 
-    vatControlListMock()(EitherT[Future, Int, VatControlListResponse] {
+    vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
       Future.successful(rightValueForEitherT)
     })
 
@@ -393,7 +394,7 @@ class VatDetailsControllerSpec
     test(controller.vatDetailsNotMatched(atarService).apply(SessionBuilder.buildRequestWithSession(userId)))
   }
 
-  def vatControlListMock()(response: EitherT[Future, Int, VatControlListResponse]): Unit =
-    when(mockVatConnector.getVatCustomerInformation(any[String])(any[HeaderCarrier])) thenReturn response
+  def vatControlListMock()(response: EitherT[Future, ResponseError, VatControlListResponse]): Unit =
+    when(mockVatDetailsService.getVatCustomerInformation(any[String])(any[HeaderCarrier])) thenReturn response
 
 }

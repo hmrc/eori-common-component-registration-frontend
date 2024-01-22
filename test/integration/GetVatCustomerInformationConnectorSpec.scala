@@ -38,7 +38,7 @@ import play.api.http.Status._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.GetVatCustomerInformationConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
 import uk.gov.hmrc.http._
 import util.externalservices.ExternalServicesConfig._
@@ -78,9 +78,8 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
     "return successful GetVatInformationResponse response with OK status" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseOK()
 
-      val format   = new java.text.SimpleDateFormat("yyyy-MM-dd")
       val expected = Right(VatControlListResponse(Some("SE28 1AA"), Some("2021-01-31")))
-      val result: Either[Int, VatControlListResponse] =
+      val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
 
       result mustBe expected
@@ -88,49 +87,49 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
 
     "return NOT FOUND response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseNotFound()
-      val result: Either[Int, VatControlListResponse] =
+      val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
       result mustBe Left(NOT_FOUND)
     }
 
     "return BAD REQUEST response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseBadRequest()
-      val result: Either[Int, VatControlListResponse] =
+      val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
       result mustBe Left(BAD_REQUEST)
     }
 
     "return FORBIDDEN response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseForbidden()
-      val result: Either[Int, VatControlListResponse] =
+      val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
       result mustBe Left(FORBIDDEN)
     }
 
     "return INTERNAL_SERVER_ERROR response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseInternalServerError()
-      val result: Either[Int, VatControlListResponse] =
+      val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
       result mustBe Left(INTERNAL_SERVER_ERROR)
     }
 
     "return BAD_GATEWAY response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseBadGateway()
-      val result: Either[Int, VatControlListResponse] =
+      val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
       result mustBe Left(BAD_GATEWAY)
     }
 
     "return SERVICE_UNAVAILABLE response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseServiceUnavailable()
-      val result: Either[Int, VatControlListResponse] =
+      val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
       result mustBe Left(SERVICE_UNAVAILABLE)
     }
 
     "handle response for unexpected status " in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseUnexpectedStatus()
-      val result: Either[Int, VatControlListResponse] =
+      val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
       result mustBe Left(LENGTH_REQUIRED)
     }
