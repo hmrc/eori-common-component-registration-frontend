@@ -266,7 +266,7 @@ class VatDetailsControllerSpec
 
     "redirect to cannot confirm your identity url when a Not Found response is returned" in {
       val leftValueForEitherT: Either[ResponseError, VatControlListResponse] =
-      Left(ResponseError(NOT_FOUND, "not found"))
+        Left(ResponseError(NOT_FOUND, "not found"))
 
       vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
         Future.successful(leftValueForEitherT)

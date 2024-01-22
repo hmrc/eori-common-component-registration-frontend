@@ -138,6 +138,6 @@ class AppConfig @Inject() (
   val internalAuthToken: String = config.get[String]("internal-auth.token")
 
   val integrationFrameworkFeatureFlag: Boolean = config.get[Boolean]("integration-framework-feature-flag")
-  val vatDetailsFeatureFlag: Boolean = config.get[Boolean]("vat-details-feature-flag")
+  val vatDetailsFeatureFlag: Boolean           = config.get[Boolean]("vat-details-feature-flag")
 
 }

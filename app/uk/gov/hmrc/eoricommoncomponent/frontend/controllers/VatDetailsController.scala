@@ -79,11 +79,11 @@ class VatDetailsController @Inject() (
     VatDetailsService.getVatCustomerInformation(vatForm.number).foldF(
       responseError =>
         responseError.status match {
-        case NOT_FOUND | BAD_REQUEST =>
-          Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
-        case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
-        case _ => Future.successful(Results.InternalServerError(errorTemplate(service)))
-      },
+          case NOT_FOUND | BAD_REQUEST =>
+            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+          case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
+          case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
+        },
       response =>
         if (response.isPostcodeAssociatedWithVrn(vatForm))
           subscriptionDetailsService

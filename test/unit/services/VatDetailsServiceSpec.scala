@@ -24,7 +24,11 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError, VatControlListConnector}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
+  GetVatCustomerInformationConnector,
+  ResponseError,
+  VatControlListConnector
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.VatDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,12 +36,15 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class VatDetailsServiceSpec extends IntegrationTestsSpec with MockitoSugar with BeforeAndAfterEach with  ScalaFutures{
+class VatDetailsServiceSpec extends IntegrationTestsSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
-  private val mockAppConfig: AppConfig                                            = mock[AppConfig]
-  private val mockVatListConnector: VatControlListConnector                       = mock[VatControlListConnector]
-  private val mockGetVatCustomerInfoConnector: GetVatCustomerInformationConnector = mock[GetVatCustomerInformationConnector]
+  implicit val hc: HeaderCarrier                            = HeaderCarrier()
+  private val mockAppConfig: AppConfig                      = mock[AppConfig]
+  private val mockVatListConnector: VatControlListConnector = mock[VatControlListConnector]
+
+  private val mockGetVatCustomerInfoConnector: GetVatCustomerInformationConnector =
+    mock[GetVatCustomerInformationConnector]
+
   private val vatControlListResponse: EitherT[Future, ResponseError, VatControlListResponse] =
     EitherT.fromEither[Future](Right(VatControlListResponse(Some("SE28 1AA"), Some("2021-01-31"))))
 

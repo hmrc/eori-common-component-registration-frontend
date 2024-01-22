@@ -35,7 +35,9 @@ class GetVatCustomerInformationConnector @Inject() (httpClient: HttpClientV2, ap
 
   val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
 
-  def getVatCustomerInformation(vrn: String)(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, VatControlListResponse] =
+  def getVatCustomerInformation(
+    vrn: String
+  )(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, VatControlListResponse] =
     EitherT {
       val url = url"${appConfig.handleSubscriptionBaseUrl}/vat-customer-information/$vrn"
 

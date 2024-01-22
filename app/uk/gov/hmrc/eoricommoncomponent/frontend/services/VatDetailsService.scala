@@ -18,7 +18,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import cats.data.EitherT
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError, VatControlListConnector}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
+  GetVatCustomerInformationConnector,
+  ResponseError,
+  VatControlListConnector
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -28,16 +32,16 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsService @Inject() (
   appConfig: AppConfig,
-  vatCustomerInfoConnector : GetVatCustomerInformationConnector,
+  vatCustomerInfoConnector: GetVatCustomerInformationConnector,
   vatControlListConnector: VatControlListConnector
 )(implicit ec: ExecutionContext) {
 
-  def getVatCustomerInformation(number: String)(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, VatControlListResponse] = {
-    if(appConfig.vatDetailsFeatureFlag) {
+  def getVatCustomerInformation(
+    number: String
+  )(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, VatControlListResponse] =
+    if (appConfig.vatDetailsFeatureFlag)
       vatCustomerInfoConnector.getVatCustomerInformation(number)
-    } else  {
+    else
       vatControlListConnector.vatControlList(VatControlListRequest(number))
-    }
-  }
 
 }
