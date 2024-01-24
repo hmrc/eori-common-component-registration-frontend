@@ -102,45 +102,67 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
       val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
 
-      result mustBe Left(ResponseError(400, """{"failures":{"code":"INVALID_IDVALUE","reason":"Submission has not passed validation. Invalid path parameter idValue."}}"""))
+      result mustBe Left(
+        ResponseError(
+          400,
+          """{"failures":{"code":"INVALID_IDVALUE","reason":"Submission has not passed validation. Invalid path parameter idValue."}}"""
+        )
+      )
     }
 
     "return FORBIDDEN response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseForbidden()
       val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
-      result mustBe Left(ResponseError(FORBIDDEN, """{"failures":{"code":"MIGRATION","reason":"The back end has indicated that a migration is in progress for this identification number"}}"""))
+      result mustBe Left(
+        ResponseError(
+          FORBIDDEN,
+          """{"failures":{"code":"MIGRATION","reason":"The back end has indicated that a migration is in progress for this identification number"}}"""
+        )
+      )
     }
 
     "return INTERNAL_SERVER_ERROR response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseInternalServerError()
       val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
-      result mustBe Left(ResponseError(INTERNAL_SERVER_ERROR, """{"failures":{"code":"SERVER_ERROR.","reason":"IF is currently experiencing problems that require live service intervention."}}"""))
+      result mustBe Left(
+        ResponseError(
+          INTERNAL_SERVER_ERROR,
+          """{"failures":{"code":"SERVER_ERROR.","reason":"IF is currently experiencing problems that require live service intervention."}}"""
+        )
+      )
     }
 
     "return BAD_GATEWAY response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseBadGateway()
       val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
-      result mustBe Left(ResponseError(BAD_GATEWAY, """{"failures":[{"code":"BAD_GATEWAY","reason":"Dependent systems are currently not responding."}]}"""))
+      result mustBe Left(
+        ResponseError(
+          BAD_GATEWAY,
+          """{"failures":[{"code":"BAD_GATEWAY","reason":"Dependent systems are currently not responding."}]}"""
+        )
+      )
     }
 
     "return SERVICE_UNAVAILABLE response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseServiceUnavailable()
       val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
-      result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, """{"failures":[{"code":"SERVICE_UNAVAILABLE","reason":"Dependent systems are currently not responding."}]}"""))
+      result mustBe Left(
+        ResponseError(
+          SERVICE_UNAVAILABLE,
+          """{"failures":[{"code":"SERVICE_UNAVAILABLE","reason":"Dependent systems are currently not responding."}]}"""
+        )
+      )
     }
 
     "handle response for unexpected status " in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseUnexpectedStatus()
       val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
-      result mustBe Left(
-        ResponseError(
-          LENGTH_REQUIRED,
-          ""))
+      result mustBe Left(ResponseError(LENGTH_REQUIRED, ""))
     }
 
   }
