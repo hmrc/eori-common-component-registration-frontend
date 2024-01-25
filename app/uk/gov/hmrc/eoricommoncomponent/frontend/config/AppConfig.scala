@@ -36,9 +36,9 @@ class AppConfig @Inject() (
 
   val ttl: Duration = Duration.create(config.get[String]("cds-frontend-cache.ttl"))
 
-  val contactBaseUrl = servicesConfig.baseUrl("contact-frontend")
+  val contactBaseUrl: String = servicesConfig.baseUrl("contact-frontend")
 
-  val serviceIdentifierRegister =
+  val serviceIdentifierRegister: String =
     config.get[String]("microservice.services.contact-frontend.serviceIdentifierRegister")
 
   private val feedbackLink = config.get[String]("external-url.feedback-survey")
@@ -117,7 +117,7 @@ class AppConfig @Inject() (
   private val eoriCommonComponentFrontendBaseUrl: String =
     config.get[String]("external-url.eori-common-component-frontend.url")
 
-  def eoriCommonComponentFrontend(serviceName: String) =
+  def eoriCommonComponentFrontend(serviceName: String): String =
     eoriCommonComponentFrontendBaseUrl + serviceName + "/subscribe"
 
   val accessibilityStatement: String = config.get[String]("accessibility-statement.service-path")
@@ -137,6 +137,6 @@ class AppConfig @Inject() (
 
   val internalAuthToken: String = config.get[String]("internal-auth.token")
 
-  val integrationFrameworkFeatureFlag: Boolean = config.get[Boolean]("integration-framework-feature-flag")
+  val vatDetailsFeatureFlag: Boolean = config.get[Boolean]("vat-details-feature-flag")
 
 }
