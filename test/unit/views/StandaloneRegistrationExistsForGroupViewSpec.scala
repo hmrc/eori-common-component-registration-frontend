@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.enrolment_exists_group_standalone
 import util.ViewSpec
 
@@ -111,8 +111,8 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
   }
 
-  private lazy val adminDoc: Document          = Jsoup.parse(contentAsString(view(Some("testEORI"), true, atarService)))
-  private lazy val standardDoc: Document       = Jsoup.parse(contentAsString(view(Some("testEORI"), false, atarService)))
-  private lazy val adminNoEoriDoc: Document    = Jsoup.parse(contentAsString(view(None, true, atarService)))
-  private lazy val standardNoEoriDoc: Document = Jsoup.parse(contentAsString(view(None, false, atarService)))
+  private lazy val adminDoc: Document          = Jsoup.parse(contentAsString(view(Some("testEORI"), isAdminUser = true, atarService)))
+  private lazy val standardDoc: Document       = Jsoup.parse(contentAsString(view(Some("testEORI"), isAdminUser = false, atarService)))
+  private lazy val adminNoEoriDoc: Document    = Jsoup.parse(contentAsString(view(None, isAdminUser = true, atarService)))
+  private lazy val standardNoEoriDoc: Document = Jsoup.parse(contentAsString(view(None, isAdminUser = false, atarService)))
 }

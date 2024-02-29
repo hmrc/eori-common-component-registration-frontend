@@ -18,8 +18,9 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub02_request_not_processed
 import util.ViewSpec
 
@@ -58,7 +59,7 @@ class Sub02RequestNotProcessedSpec extends ViewSpec {
     }
   }
 
-  implicit val request = withFakeCSRF(FakeRequest())
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   lazy val doc: Document = Jsoup.parse(contentAsString(view(atarService)))
 }

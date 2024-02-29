@@ -18,7 +18,7 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.subscription_outcome_pending
 import util.ViewSpec

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class ContactDetails(
   fullName: String,
@@ -30,6 +30,6 @@ case class ContactDetails(
 )
 
 object ContactDetails {
-  implicit val jsonFormat = Json.format[ContactDetails]
+  implicit val jsonFormat: OFormat[ContactDetails] = Json.format[ContactDetails]
 
 }

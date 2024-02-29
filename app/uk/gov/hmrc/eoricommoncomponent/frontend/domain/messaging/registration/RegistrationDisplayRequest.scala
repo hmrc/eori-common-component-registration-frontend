@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{CommonHeader, RequestParameter}
 
 import java.time.LocalDateTime
@@ -24,17 +24,17 @@ import java.time.LocalDateTime
 case class RequestCommon(receiptDate: LocalDateTime, requestParameters: Seq[RequestParameter])
 
 object RequestCommon extends CommonHeader {
-  implicit val format = Json.format[RequestCommon]
+  implicit val format: OFormat[RequestCommon] = Json.format[RequestCommon]
 }
 
 case class RegistrationDisplayRequest(requestCommon: RequestCommon)
 
 object RegistrationDisplayRequest {
-  implicit val format = Json.format[RegistrationDisplayRequest]
+  implicit val format: OFormat[RegistrationDisplayRequest] = Json.format[RegistrationDisplayRequest]
 }
 
 case class RegistrationDisplayRequestHolder(registrationDisplayRequest: RegistrationDisplayRequest)
 
 object RegistrationDisplayRequestHolder {
-  implicit val format = Json.format[RegistrationDisplayRequestHolder]
+  implicit val format: OFormat[RegistrationDisplayRequestHolder] = Json.format[RegistrationDisplayRequestHolder]
 }

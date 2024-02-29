@@ -18,15 +18,16 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_groups_cannot_register_using_this_service
 import util.ViewSpec
 
 class YouCannotRegisterUsingThisServiceSpec extends ViewSpec {
 
   private val view     = instanceOf[vat_groups_cannot_register_using_this_service]
-  implicit val request = withFakeCSRF(FakeRequest())
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   "The 'You need to use a different service' Page" should {
 

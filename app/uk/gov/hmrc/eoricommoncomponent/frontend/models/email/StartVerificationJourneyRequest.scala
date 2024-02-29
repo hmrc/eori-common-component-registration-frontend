@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.email
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class StartVerificationJourneyEmail(address: String, enterUrl: String)
 
 object StartVerificationJourneyEmail {
-  implicit val format = Json.format[StartVerificationJourneyEmail]
+  implicit val format: OFormat[StartVerificationJourneyEmail] = Json.format[StartVerificationJourneyEmail]
 }
 
 case class StartVerificationJourneyRequest(
@@ -36,5 +36,5 @@ case class StartVerificationJourneyRequest(
 )
 
 object StartVerificationJourneyRequest {
-  implicit val format = Json.format[StartVerificationJourneyRequest]
+  implicit val format: OFormat[StartVerificationJourneyRequest] = Json.format[StartVerificationJourneyRequest]
 }

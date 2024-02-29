@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.StandaloneAlreadyHaveEoriViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.standalone_already_have_eori
 import util.ViewSpec
@@ -96,18 +96,18 @@ class StandaloneEoriAlreadyExistsViewSpec extends ViewSpec {
 
   private lazy val individualDoc: Document =
     Jsoup.parse(
-      contentAsString(view(Some("GBXXXXXXXX"), false, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(false)))
+      contentAsString(view(Some("GBXXXXXXXX"), isAdminUser = false, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(false)))
     )
 
   private lazy val orgDoc: Document =
     Jsoup.parse(
-      contentAsString(view(Some("GBXXXXXXXX"), true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true)))
+      contentAsString(view(Some("GBXXXXXXXX"), isAdminUser = true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true)))
     )
 
   private lazy val standardDocNoEori: Document =
-    Jsoup.parse(contentAsString(view(None, true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true))))
+    Jsoup.parse(contentAsString(view(None, isAdminUser = true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true))))
 
   private lazy val adminDocNoEORI: Document =
-    Jsoup.parse(contentAsString(view(None, true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true))))
+    Jsoup.parse(contentAsString(view(None, isAdminUser = true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(true))))
 
 }

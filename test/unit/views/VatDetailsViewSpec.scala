@@ -19,8 +19,9 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{VatDetails, VatDetailsForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
@@ -28,7 +29,7 @@ import util.ViewSpec
 class VatDetailsViewSpec extends ViewSpec {
 
   private val form: Form[VatDetails] = VatDetailsForm.vatDetailsForm
-  private implicit val request       = withFakeCSRF(FakeRequest())
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
   private val view                   = instanceOf[vat_details]
   private val vatNumberLabel         = "label[for=vat-number]"
 
@@ -66,7 +67,7 @@ class VatDetailsViewSpec extends ViewSpec {
   }
 
   private lazy val doc: Document = {
-    val result = view(form, false, atarService)
+    val result = view(form, isInReviewMode = false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

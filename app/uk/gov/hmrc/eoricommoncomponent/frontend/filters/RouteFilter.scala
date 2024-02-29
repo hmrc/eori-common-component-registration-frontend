@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.filters
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import play.api.mvc.{Filter, RequestHeader, Result}
 import play.mvc.Http.Status.NOT_FOUND
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler

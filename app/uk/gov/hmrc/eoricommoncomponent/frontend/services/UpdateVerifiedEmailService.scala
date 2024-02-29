@@ -16,18 +16,15 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import org.joda.time.format.ISODateTimeFormat
 import play.api.Logger
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  UpdateCustomsDataStoreConnector,
-  UpdateVerifiedEmailConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{UpdateCustomsDataStoreConnector, UpdateVerifiedEmailConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,13 +42,13 @@ class UpdateVerifiedEmailService @Inject() (
       IDType = RegistrationInfoRequest.EORI,
       IDNumber = eori,
       emailAddress = newEmail,
-      emailVerificationTimestamp = DateTimeUtil.dateTime
+      emailVerificationTimestamp =  LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London"))
     )
     val request = VerifiedEmailRequest(UpdateVerifiedEmailRequest(reqCommonGenerator.generate(), requestDetail))
     val customsDataStoreRequest = CustomsDataStoreRequest(
       eori,
       newEmail,
-      requestDetail.emailVerificationTimestamp.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
+      requestDetail.emailVerificationTimestamp.atZone(ZoneOffset.UTC).toString
     )
     updateVerifiedEmailConnector.updateVerifiedEmail(request).map {
       case Right(res)

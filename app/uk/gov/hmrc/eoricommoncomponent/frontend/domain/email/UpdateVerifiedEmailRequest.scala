@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.email
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RequestCommon
 
 case class UpdateVerifiedEmailRequest(requestCommon: RequestCommon, requestDetail: RequestDetail)
 
 object UpdateVerifiedEmailRequest {
-  implicit val formats = Json.format[UpdateVerifiedEmailRequest]
+  implicit val formats: OFormat[UpdateVerifiedEmailRequest] = Json.format[UpdateVerifiedEmailRequest]
 }

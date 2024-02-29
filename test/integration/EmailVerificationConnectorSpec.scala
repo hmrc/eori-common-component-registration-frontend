@@ -102,7 +102,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
       val expected = Left(
         ResponseError(
           500,
-          """Invalid JSON returned: List((/redirectUri,List(JsonValidationError(List(error.path.missing),ArraySeq()))))"""
+          """Invalid JSON returned: List((/redirectUri,List(JsonValidationError(List(error.path.missing),List()))))"""
         )
       )
       val result: Either[ResponseError, ResponseWithURI] =
@@ -148,7 +148,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
       val expected = Left(
         ResponseError(
           500,
-          """Invalid JSON returned: List((/emails,List(JsonValidationError(List(error.path.missing),ArraySeq()))))"""
+          """Invalid JSON returned: List((/emails,List(JsonValidationError(List(error.path.missing),List()))))"""
         )
       )
       val result: Either[ResponseError, VerificationStatusResponse] =

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{KeyValue, TaxEnrolmentsRequest}
 
 case class IssuerRequest(
@@ -27,7 +27,7 @@ case class IssuerRequest(
 )
 
 object IssuerRequest {
-  implicit val format = Json.format[IssuerRequest]
+  implicit val format: OFormat[IssuerRequest] = Json.format[IssuerRequest]
 
   def apply(request: TaxEnrolmentsRequest): IssuerRequest =
     IssuerRequest(

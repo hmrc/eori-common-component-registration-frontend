@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class SubscriptionDisplayResponseHolder(subscriptionDisplayResponse: SubscriptionDisplayResponse)
 
 object SubscriptionDisplayResponseHolder {
-  implicit val jsonFormat = Json.format[SubscriptionDisplayResponseHolder]
+  implicit val jsonFormat: OFormat[SubscriptionDisplayResponseHolder] = Json.format[SubscriptionDisplayResponseHolder]
 }

@@ -26,7 +26,7 @@ import java.time.LocalDate
 case class GovGatewayCredentials(email: String)
 
 object GovGatewayCredentials {
-  implicit val format = Json.format[GovGatewayCredentials]
+  implicit val format: OFormat[GovGatewayCredentials] = Json.format[GovGatewayCredentials]
 }
 
 case class EstablishmentAddress(
@@ -42,7 +42,7 @@ case class EstablishmentAddress(
 }
 
 object EstablishmentAddress {
-  implicit val jsonFormat = Json.format[EstablishmentAddress]
+  implicit val jsonFormat: OFormat[EstablishmentAddress] = Json.format[EstablishmentAddress]
 
   def createEstablishmentAddress(address: Address): EstablishmentAddress = {
     val fourLineAddress = AddressViewModel(address)
@@ -59,7 +59,7 @@ object EstablishmentAddress {
 case class VatIds(countryCode: String, vatNumber: String)
 
 object VatIds {
-  implicit val format = Json.format[VatIds]
+  implicit val format: OFormat[VatIds] = Json.format[VatIds]
 }
 
 case class ContactDetail(
@@ -71,13 +71,13 @@ case class ContactDetail(
 )
 
 object ContactDetail {
-  implicit val format = Json.format[ContactDetail]
+  implicit val format: OFormat[ContactDetail] = Json.format[ContactDetail]
 }
 
 case class Trader(fullName: String, shortName: String)
 
 object Trader {
-  implicit val format = Json.format[Trader]
+  implicit val format: OFormat[Trader] = Json.format[Trader]
 }
 
 case class ResponseData(
@@ -98,7 +98,7 @@ case class ResponseData(
 )
 
 object ResponseData {
-  implicit val format = Json.format[ResponseData]
+  implicit val format: OFormat[ResponseData] = Json.format[ResponseData]
 }
 
 case class RegisterWithEoriAndIdResponseDetail(
@@ -175,5 +175,5 @@ case class RegisterWithEoriAndIdResponse(
 )
 
 object RegisterWithEoriAndIdResponse {
-  implicit val format = Json.format[RegisterWithEoriAndIdResponse]
+  implicit val format: OFormat[RegisterWithEoriAndIdResponse] = Json.format[RegisterWithEoriAndIdResponse]
 }

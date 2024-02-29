@@ -19,8 +19,9 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
@@ -28,14 +29,14 @@ import util.ViewSpec
 
 class VatRegisteredUkSpec extends ViewSpec {
   val isInReviewMode                        = false
-  val form: Form[YesNo]                     = vatRegisteredUkYesNoAnswerForm(false)
-  val formWithError: Form[YesNo]            = vatRegisteredUkYesNoAnswerForm(false).bind(Map("yes-no-answer" -> ""))
-  val formPartnership: Form[YesNo]          = vatRegisteredUkYesNoAnswerForm(true)
-  val formPartnershipWithError: Form[YesNo] = vatRegisteredUkYesNoAnswerForm(true).bind(Map("yes-no-answer" -> ""))
+  val form: Form[YesNo]                     = vatRegisteredUkYesNoAnswerForm()
+  val formWithError: Form[YesNo]            = vatRegisteredUkYesNoAnswerForm().bind(Map("yes-no-answer" -> ""))
+  val formPartnership: Form[YesNo]          = vatRegisteredUkYesNoAnswerForm(isPartnership = true)
+  val formPartnershipWithError: Form[YesNo] = vatRegisteredUkYesNoAnswerForm(isPartnership = true).bind(Map("yes-no-answer" -> ""))
   val isIndividualFlow                      = false
 
   private val view     = instanceOf[vat_registered_uk]
-  implicit val request = withFakeCSRF(FakeRequest())
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   lazy val doc: Document =
     Jsoup.parse(contentAsString(view(isInReviewMode, form, isIndividualFlow, isPartnership = false, atarService)))

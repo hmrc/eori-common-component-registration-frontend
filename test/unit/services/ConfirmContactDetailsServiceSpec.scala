@@ -24,9 +24,10 @@ import play.api.data.Form
 import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.{AnyContent, Request, Session}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.await
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, UnincorporatedBody}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress
@@ -39,7 +40,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import util.ViewSpec
 import util.builders.RegistrationDetailsBuilder
 import util.builders.SubscriptionFormBuilder.detailsHolderWithAllFields
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}

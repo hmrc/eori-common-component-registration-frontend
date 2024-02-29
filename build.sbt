@@ -1,8 +1,6 @@
 import com.typesafe.sbt.packager.MappingsHelper.*
 import play.sbt.routes.RoutesKeys
 import play.sbt.routes.RoutesKeys.*
-import sbt.*
-import sbt.Keys.*
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, targetJvm}
 
 import scala.language.postfixOps
@@ -14,9 +12,8 @@ name := "eori-common-component-registration-frontend"
 
 targetJvm := "jvm-11"
 
-scalaVersion := "2.13.8"
-
-majorVersion := 0
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.12"
 
 PlayKeys.devSettings := Seq("play.server.http.port" -> "6751")
 
@@ -120,7 +117,7 @@ scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 libraryDependencies ++= AppDependencies()
 
 lazy val silencerSettings: Seq[Setting[_]] = {
-  val silencerVersion = "1.7.12"
+  val silencerVersion = "1.7.14"
   Seq(
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full)

@@ -19,8 +19,9 @@ package unit.views.email
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.{EmailForm, EmailViewModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.what_is_your_email
 import util.ViewSpec
@@ -29,9 +30,9 @@ class WhatIsYourEmailSpec extends ViewSpec {
   val form: Form[EmailViewModel]          = EmailForm.emailForm
   val formWithError: Form[EmailViewModel] = EmailForm.emailForm.bind(Map("email" -> "invalid"))
   val previousPageUrl                     = "/"
-  implicit val request                    = withFakeCSRF(FakeRequest())
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  val view = instanceOf[what_is_your_email]
+  val view: what_is_your_email = instanceOf[what_is_your_email]
 
   "What Is Your Email Address page for CDS access" should {
     "display correct title" in {

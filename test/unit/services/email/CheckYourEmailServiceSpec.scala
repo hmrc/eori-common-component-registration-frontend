@@ -26,7 +26,7 @@ import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{await, contentAsString}
+import play.api.test.Helpers.{await, contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
@@ -56,7 +56,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
-  implicit val loggedInUser =
+  implicit val loggedInUser: LoggedInUserWithEnrolments =
     LoggedInUserWithEnrolments(
       None,
       None,
@@ -134,7 +134,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
       result.header.status mustBe SEE_OTHER
       result.header.headers(
         "Location"
-      ) mustBe (s"/customs-registration-services/${subscription.code}/register/sign-out")
+      ) mustBe s"/customs-registration-services/${subscription.code}/register/sign-out"
     }
 
     "fetch and save email successfully then populate emailConfirmedView when not confirmed" in servicesToTest.foreach {

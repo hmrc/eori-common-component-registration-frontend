@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class VatId(countryCode: Option[String], vatID: Option[String])
 
 object VatId {
-  implicit val jsonFormat = Json.format[VatId]
+  implicit val jsonFormat: OFormat[VatId] = Json.format[VatId]
 }
 
 case class SubscriptionInfoVatId(countryCode: Option[String], VATID: Option[String])
 
 object SubscriptionInfoVatId {
-  implicit val jsonFormat = Json.format[SubscriptionInfoVatId]
+  implicit val jsonFormat: OFormat[SubscriptionInfoVatId] = Json.format[SubscriptionInfoVatId]
 }

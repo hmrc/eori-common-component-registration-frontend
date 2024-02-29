@@ -18,17 +18,18 @@ package unit.views.email
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.verify_your_email
 import util.ViewSpec
 
 class VerifyYourEmailSpec extends ViewSpec {
   val isInReviewMode   = false
   val previousPageUrl  = "/"
-  implicit val request = withFakeCSRF(FakeRequest())
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  val view = instanceOf[verify_your_email]
+  val view: verify_your_email = instanceOf[verify_your_email]
 
   "What Is Your Email Address page" should {
     "display correct title" in {

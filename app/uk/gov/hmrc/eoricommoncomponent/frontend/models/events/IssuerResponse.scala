@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.http.HttpResponse
 
 case class IssuerResponse(status: String, body: String)
 
 object IssuerResponse {
-  implicit val format = Json.format[IssuerResponse]
+  implicit val format: OFormat[IssuerResponse] = Json.format[IssuerResponse]
 
   def apply(response: HttpResponse): IssuerResponse =
     IssuerResponse(status = response.status.toString, body = response.body)

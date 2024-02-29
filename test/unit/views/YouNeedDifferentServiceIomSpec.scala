@@ -18,15 +18,16 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_need_different_service_iom
 import util.ViewSpec
 
 class YouNeedDifferentServiceIomSpec extends ViewSpec {
 
   private val view     = instanceOf[you_need_different_service_iom]
-  implicit val request = withFakeCSRF(FakeRequest())
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   "The 'You need to use a different service' Page" should {
 

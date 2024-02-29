@@ -21,5 +21,5 @@ import play.api.libs.json._
 case class Country(countryName: String, countryCode: String)
 
 case object Country {
-  implicit val formats = Json.format[Country]
+  implicit val formats: OFormat[Country] = Json.format[Country]
 }

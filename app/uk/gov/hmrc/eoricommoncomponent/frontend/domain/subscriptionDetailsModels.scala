@@ -21,7 +21,7 @@ import play.api.libs.json._
 abstract case class VatIdentification private[VatIdentification] (countryCode: Option[String], number: Option[String])
 
 object VatIdentification {
-  implicit val jsonFormat = Json.format[VatIdentification]
+  implicit val jsonFormat: OFormat[VatIdentification] = Json.format[VatIdentification]
 
   def apply(countryCode: Option[String], number: Option[String]): VatIdentification =
     new VatIdentification(countryCode.map(_.toUpperCase), number) {}

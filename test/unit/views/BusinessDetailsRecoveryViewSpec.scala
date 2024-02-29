@@ -18,8 +18,9 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 import util.ViewSpec
@@ -28,7 +29,7 @@ class BusinessDetailsRecoveryViewSpec extends ViewSpec {
 
   private val name             = "Org Name"
   private val address          = AddressViewModel("street", "city", Some("SE28 1AA"), "GB")
-  private implicit val request = withFakeCSRF(FakeRequest())
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[business_details_recovery]
 
@@ -68,12 +69,12 @@ class BusinessDetailsRecoveryViewSpec extends ViewSpec {
   }
 
   private lazy val CorporateBodyDoc: Document = {
-    val result = view(name, address, false, atarService)
+    val result = view(name, address, isIndividual = false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   private lazy val SoleTraderOrIndividualDoc: Document = {
-    val result = view(name, address, true, atarService)
+    val result = view(name, address, isIndividual = true, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

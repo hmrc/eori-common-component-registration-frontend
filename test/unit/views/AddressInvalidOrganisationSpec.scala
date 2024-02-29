@@ -18,13 +18,14 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.test.Helpers.contentAsString
+import play.api.mvc.{AnyContentAsEmpty, Request}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.address_invalid_organisation
 import util.ViewSpec
 
 class AddressInvalidOrganisationSpec extends ViewSpec {
 
-  private implicit val request      = withFakeCSRF(fakeAtarRegisterRequest)
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
   private val addressInvalidOrgView = instanceOf[address_invalid_organisation]
 
   "Address Invalid Organisation page" should {

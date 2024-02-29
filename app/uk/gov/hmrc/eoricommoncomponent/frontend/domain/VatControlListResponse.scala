@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 
 case class VatControlListResponse(
@@ -34,5 +34,5 @@ case class VatControlListResponse(
 }
 
 object VatControlListResponse {
-  implicit val jsonFormat = Json.format[VatControlListResponse]
+  implicit val jsonFormat: OFormat[VatControlListResponse] = Json.format[VatControlListResponse]
 }

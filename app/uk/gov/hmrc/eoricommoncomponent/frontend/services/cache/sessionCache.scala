@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{Json, OFormat, Reads, Writes}
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -62,7 +62,7 @@ object CachedData {
   val eoriKey                          = "eori"
   val submissionCompleteKey            = "submissionCompleteDetails"
   val completed                        = "completed"
-  implicit val format                  = Json.format[CachedData]
+  implicit val format: OFormat[CachedData] = Json.format[CachedData]
 }
 
 @Singleton

@@ -19,8 +19,9 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm.contactDetailsCreateForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_details
@@ -29,7 +30,7 @@ import util.ViewSpec
 class ContactDetailsViewSpec extends ViewSpec {
 
   private val form: Form[ContactDetailsViewModel] = contactDetailsCreateForm()
-  private implicit val request                    = withFakeCSRF(FakeRequest())
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
   private val view                                = instanceOf[contact_details]
   private val fullNameLabel                       = "label[for=full-name]"
   private val telephoneLabel                      = "label[for=telephone]"
@@ -67,7 +68,7 @@ class ContactDetailsViewSpec extends ViewSpec {
   }
 
   private lazy val doc: Document = {
-    val result = view(form, Some("email@email.com"), false, atarService)
+    val result = view(form, Some("email@email.com"), isInReviewMode = false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

@@ -18,13 +18,14 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.test.Helpers.contentAsString
+import play.api.mvc.{AnyContentAsEmpty, Request}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.eori_number_download
 import util.ViewSpec
 
 class EoriNumberDownloadSpec extends ViewSpec {
 
-  implicit val request = withFakeCSRF(fakeAtarRegisterRequest)
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
 
   val eori       = "GB123445562"
   val orgName    = "Test Organisation Name"

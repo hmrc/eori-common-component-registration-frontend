@@ -18,8 +18,9 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.contentAsString
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub02_eori_already_associated
 import util.ViewSpec
 
@@ -62,7 +63,7 @@ class Sub02EoriAlreadyAssociatedSpec extends ViewSpec {
     }
   }
 
-  implicit val request = withFakeCSRF(FakeRequest.apply("GET", "/atar/register"))
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest.apply("GET", "/atar/register"))
 
   lazy val doc: Document = Jsoup.parse(contentAsString(view(name, processedDate, atarService)))
 }

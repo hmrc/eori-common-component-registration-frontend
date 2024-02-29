@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
 import play.api.Logger
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress.createEstablishmentAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.ContactInformation.createContactInformation
@@ -35,7 +35,7 @@ case class SubscriptionCreateRequest(requestCommon: RequestCommon, requestDetail
 
 object SubscriptionCreateRequest {
 
-  implicit val jsonFormat = Json.format[SubscriptionCreateRequest]
+  implicit val jsonFormat: OFormat[SubscriptionCreateRequest] = Json.format[SubscriptionCreateRequest]
   private val logger      = Logger(this.getClass)
 
   // Registration journey

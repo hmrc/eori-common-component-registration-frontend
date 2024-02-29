@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter
 case class Header(originatingSystem: String, requestTimeStamp: String, correlationId: String)
 
 object Header {
-  implicit val jsonFormat = Json.format[Header]
+  implicit val jsonFormat: OFormat[Header] = Json.format[Header]
 }
 
 case class Address(
@@ -58,7 +58,7 @@ case class Address(
 }
 
 object Address {
-  implicit val jsonFormat = Json.format[Address]
+  implicit val jsonFormat: OFormat[Address] = Json.format[Address]
 
   def apply(
     addressLine1: String,
@@ -100,7 +100,7 @@ object Individual {
   def withLocalDate(firstName: String, lastName: String, dateOfBirth: LocalDate): Individual =
     Individual(firstName, lastName, dateOfBirth.toString)
 
-  implicit val formats = Json.format[Individual]
+  implicit val formats: OFormat[Individual] = Json.format[Individual]
 }
 
 trait CommonHeader extends Logging {
@@ -156,7 +156,7 @@ object MessagingServiceParam {
 case class RequestParameter(paramName: String, paramValue: String)
 
 object RequestParameter {
-  implicit val formats = Json.format[RequestParameter]
+  implicit val formats: OFormat[RequestParameter] = Json.format[RequestParameter]
 }
 
 case class RequestCommon(
@@ -168,8 +168,8 @@ case class RequestCommon(
 )
 
 object RequestCommon extends CommonHeader {
-  implicit val requestParamFormat = Json.format[RequestParameter]
-  implicit val formats            = Json.format[RequestCommon]
+  implicit val requestParamFormat: OFormat[RequestParameter] = Json.format[RequestParameter]
+  implicit val formats: OFormat[RequestCommon] = Json.format[RequestCommon]
 }
 
 case class ResponseCommon(
@@ -182,5 +182,5 @@ case class ResponseCommon(
 object ResponseCommon extends CommonHeader {
   val StatusOK         = "OK"
   val StatusNotOK      = "NOT_OK"
-  implicit val formats = Json.format[ResponseCommon]
+  implicit val formats: OFormat[ResponseCommon] = Json.format[ResponseCommon]
 }

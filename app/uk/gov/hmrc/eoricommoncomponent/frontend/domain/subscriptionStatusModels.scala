@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.CommonHeader
 
 import java.time.format.DateTimeFormatter
@@ -38,13 +38,13 @@ case class SubscriptionStatusQueryParams(receiptDate: LocalDateTime, regime: Str
 case class SubscriptionStatusResponseCommon(status: String, processingDate: LocalDateTime)
 
 object SubscriptionStatusResponseCommon extends CommonHeader {
-  implicit val jsonFormat = Json.format[SubscriptionStatusResponseCommon]
+  implicit val jsonFormat: OFormat[SubscriptionStatusResponseCommon] = Json.format[SubscriptionStatusResponseCommon]
 }
 
 case class SubscriptionStatusResponseDetail(subscriptionStatus: String, idValue: Option[String])
 
 object SubscriptionStatusResponseDetail {
-  implicit val jsonFormat = Json.format[SubscriptionStatusResponseDetail]
+  implicit val jsonFormat: OFormat[SubscriptionStatusResponseDetail] = Json.format[SubscriptionStatusResponseDetail]
 }
 
 case class SubscriptionStatusResponse(
@@ -53,11 +53,11 @@ case class SubscriptionStatusResponse(
 )
 
 object SubscriptionStatusResponse {
-  implicit val jsonFormat = Json.format[SubscriptionStatusResponse]
+  implicit val jsonFormat: OFormat[SubscriptionStatusResponse] = Json.format[SubscriptionStatusResponse]
 }
 
 case class SubscriptionStatusResponseHolder(subscriptionStatusResponse: SubscriptionStatusResponse)
 
 object SubscriptionStatusResponseHolder {
-  implicit val jsonFormat = Json.format[SubscriptionStatusResponseHolder]
+  implicit val jsonFormat: OFormat[SubscriptionStatusResponseHolder] = Json.format[SubscriptionStatusResponseHolder]
 }

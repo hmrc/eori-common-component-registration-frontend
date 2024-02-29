@@ -16,7 +16,6 @@
 
 package integration
 
-import org.joda.time.DateTime
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
 import play.api.inject.bind
@@ -75,7 +74,7 @@ class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
   val expectedUrl = "/update-verified-email"
 
-  val dateTime                     = DateTime.now()
+  val dateTime: LocalDateTime = LocalDateTime.now()
   private val requestDetail        = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
   private val requestDateInd       = LocalDateTime.of(2001, 12, 17, 9, 30, 47, 0)
   private val requestCommon        = RequestCommon("CDS", requestDateInd, "012345678901234")
