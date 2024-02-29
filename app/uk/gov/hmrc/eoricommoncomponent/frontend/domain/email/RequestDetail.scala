@@ -23,5 +23,6 @@ import java.time.LocalDateTime
 case class RequestDetail(IDType: String, IDNumber: String, emailAddress: String, emailVerificationTimestamp: LocalDateTime)
 
 object RequestDetail {
+  import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.DateTimeUtil._
   implicit val formats: OFormat[RequestDetail] = Json.format[RequestDetail]
 }

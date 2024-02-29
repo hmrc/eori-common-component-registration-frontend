@@ -42,7 +42,7 @@ class UpdateVerifiedEmailService @Inject() (
       IDType = RegistrationInfoRequest.EORI,
       IDNumber = eori,
       emailAddress = newEmail,
-      emailVerificationTimestamp =  LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London"))
+      emailVerificationTimestamp =  DateTimeUtil.dateTime
     )
     val request = VerifiedEmailRequest(UpdateVerifiedEmailRequest(reqCommonGenerator.generate(), requestDetail))
     val customsDataStoreRequest = CustomsDataStoreRequest(
