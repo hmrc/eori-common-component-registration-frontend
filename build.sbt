@@ -10,8 +10,6 @@ Universal / mappings ++= directory(baseDirectory.value / "public")
 
 name := "eori-common-component-registration-frontend"
 
-targetJvm := "jvm-11"
-
 ThisBuild / majorVersion := 0
 ThisBuild / scalaVersion := "2.13.12"
 
