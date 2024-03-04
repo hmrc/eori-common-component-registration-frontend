@@ -18,7 +18,7 @@ package unit.domain.email
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.{JsResultException, Json}
+import play.api.libs.json.{JsNull, JsNumber, JsResultException, JsString, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.RequestDetail
 
 import java.time.LocalDateTime
@@ -40,9 +40,11 @@ class RequestDetailSpec extends AnyFreeSpec with Matchers {
     }
 
     "expect exception on failing to read json" in {
-      val json = Json.parse("""{"IDType":"idType","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17T09:30:47Z"}""".stripMargin)
+      val json = Json.parse("""{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17111T09:30:47Z"}""".stripMargin)
 
-      intercept[JsResultException](json.as[RequestDetail])
+
+      val exception = intercept[JsResultException](json.as[RequestDetail])
+      exception.getMessage mustBe "JsResultException(errors:List((/emailVerificationTimestamp,List(JsonValidationError(List(Could not parse '\"2001-12-17111T09:30:47Z\"' as an ISO date. Reason: Text '2001-12-17111T09:30:47Z' could not be parsed at index 10),List())))))"
     }
   }
 }

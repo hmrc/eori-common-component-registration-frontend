@@ -30,15 +30,6 @@ object EmailVerificationStubService {
   val verifyEmailFailureResponse          = "Something went wrong"
   val verifyEmailInvalidResponse: JsValue = Json.parse("""{"something": "google.com"}""")
 
-  def stubVerifyEmailSuccess() =
-    stubVerifyEmailResponse(verifyEmailSuccessResponse.toString, CREATED)
-
-  def stubVerifyEmailFailure() =
-    stubVerifyEmailResponse(verifyEmailFailureResponse, INTERNAL_SERVER_ERROR)
-
-  def stubVerifyEmailInvalid() =
-    stubVerifyEmailResponse(verifyEmailInvalidResponse.toString, CREATED)
-
   def stubVerifyEmailResponse(response: String, status: Int): Unit =
     stubFor(
       post(urlEqualTo(expectedPostUrl))
@@ -66,15 +57,6 @@ object EmailVerificationStubService {
    |   }
    |]
    |}""".stripMargin)
-
-  def stubVerificationStatusSuccess(credId: String) =
-    stubVerificationStatusResponse(verificationStatusSuccessResponse.toString, OK, credId)
-
-  def stubVerificationStatusFailure(credId: String) =
-    stubVerificationStatusResponse(verifyEmailFailureResponse, INTERNAL_SERVER_ERROR, credId)
-
-  def stubVerificationStatusInvalid(credId: String) =
-    stubVerificationStatusResponse(verifyEmailInvalidResponse.toString, OK, credId)
 
   def stubVerificationStatusResponse(response: String, status: Int, credId: String): Unit =
     stubFor(

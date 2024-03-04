@@ -28,7 +28,7 @@ package object frontend {
       else
         HtmlFormat.empty
 
-    def notBlank: Boolean = s.trim.nonEmpty
+    private def notBlank: Boolean = s.trim.nonEmpty
   }
 
 }

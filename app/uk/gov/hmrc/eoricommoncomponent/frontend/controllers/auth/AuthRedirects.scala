@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
 import play.api.mvc.Result
 import play.api.mvc.Results._
-import play.api.{Configuration, Environment, Mode}
+import play.api.{Configuration, Environment}
 
 trait AuthRedirects {
 
@@ -28,24 +28,9 @@ trait AuthRedirects {
   def config: Configuration
 
   def env: Environment
+  private def ggLoginUrl: String = config.get[String]("bas-gateway-frontend.sign-in")
 
-  private lazy val envPrefix =
-    if (env.mode.equals(Mode.Test)) "Test"
-    else config.getOptional[String]("run.mode")
-      .getOrElse("Dev")
-
-  private val hostDefaults: Map[String, String] = Map(
-    "Dev.external-url.bas-gateway-frontend.host"           -> "http://localhost:9553"
-  )
-
-  private def host(service: String): String = {
-    val key = s"$envPrefix.external-url.$service.host"
-    config.getOptional[String](key).orElse(hostDefaults.get(key)).getOrElse("")
-  }
-
-  def ggLoginUrl: String = host("bas-gateway-frontend") + "/bas-gateway/sign-in"
-
-  final lazy val defaultOrigin: String = {
+  private final lazy val defaultOrigin: String = {
     config
       .getOptional[String]("sosOrigin")
       .orElse(config.getOptional[String]("appName"))

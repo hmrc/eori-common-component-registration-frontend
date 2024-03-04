@@ -21,6 +21,8 @@ import org.jsoup.nodes.Document
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.eoricommoncomponent.frontend.frontend._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 import util.ViewSpec
@@ -28,7 +30,7 @@ import util.ViewSpec
 class BusinessDetailsRecoveryViewSpec extends ViewSpec {
 
   private val name             = "Org Name"
-  private val address          = AddressViewModel("street", "city", Some("SE28 1AA"), "GB")
+  private val address          = AddressViewModel("street", "", Some("SE28 1AA"), "GB")
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[business_details_recovery]
@@ -52,6 +54,7 @@ class BusinessDetailsRecoveryViewSpec extends ViewSpec {
     "have the right labels in the definition list" in {
       CorporateBodyDoc.body().getElementsByClass("name").text() mustBe "Registered organisation name"
       CorporateBodyDoc.body().getElementsByClass("address").text() mustBe "Registered organisation address"
+      address.city.appendBr mustBe HtmlFormat.empty
 
       SoleTraderOrIndividualDoc.body().getElementsByClass("name").text() mustBe "Name"
       SoleTraderOrIndividualDoc.body().getElementsByClass("address").text() mustBe "Address"

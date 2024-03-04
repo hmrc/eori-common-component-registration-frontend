@@ -66,34 +66,42 @@ class RegistrationDisplayResponseHolderSpec extends UnitSpec {
       |}}
     """.stripMargin)
 
-  val responseCommon = ResponseCommon("OK", None, "2016-09-02T09:30:47Z", None, Some("0100086619"))
+  val responseCommon: ResponseCommon = ResponseCommon("OK", None, "2016-09-02T09:30:47Z", None, Some("0100086619"))
 
-  val individualResponse = IndividualResponse("fname", "lname", Some("1989-01-01"))
+  val individualResponse: IndividualResponse = IndividualResponse("fname", "lname", Some("1989-01-01"))
 
-  val address = Address("Line1", Some("Line2"), None, None, Some("postcode"), "GB")
+  val address: Address = Address("Line1", Some("Line2"), None, None, Some("postcode"), "GB")
 
-  val contactDetails = ContactResponse(Some("01234567890"), None, None, Some("test@example.com"))
+  val contactDetails: ContactResponse = ContactResponse(Some("01234567890"), None, None, Some("test@example.com"))
 
-  val responseDetail = ResponseDetail(
+  val responseDetail: ResponseDetail = ResponseDetail(
     "XY0000100086619",
     None,
     None,
-    true,
-    false,
-    true,
-    Some(individualResponse),
-    None,
-    address,
-    contactDetails
+    isEditable = true,
+    isAnAgent = false,
+    isAnIndividual = true,
+    individual = Some(individualResponse),
+    organisation = None,
+    address = address,
+    contactDetails = contactDetails
   )
 
-  val responseHolder = RegistrationDisplayResponseHolder(
+  val responseHolder: RegistrationDisplayResponseHolder = RegistrationDisplayResponseHolder(
     RegistrationDisplayResponse(responseCommon, Some(responseDetail))
   )
 
   "RegistrationDisplayResponseHolder" should {
     "read from json to case class" in {
       Json.fromJson[RegistrationDisplayResponseHolder](expectedJson).get shouldBe responseHolder
+    }
+
+    "getResponseDetail must throw an exception for invalid input" in {
+      intercept[IllegalArgumentException](responseHolder.registrationDisplayResponse.copy(responseDetail = None).getResponseDetail)
+    }
+
+    "getResponseDetail must return valid response" in {
+      responseHolder.registrationDisplayResponse.getResponseDetail shouldBe responseHolder.registrationDisplayResponse.responseDetail.value
     }
 
     "write case class to json" in {

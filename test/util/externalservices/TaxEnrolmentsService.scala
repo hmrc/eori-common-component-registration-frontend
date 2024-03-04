@@ -20,7 +20,10 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
-import play.mvc.Http.Status.OK
+import play.mvc.Http.Status.{INSUFFICIENT_STORAGE, OK}
+
+import java.lang
+import scala.util.control.NonFatal
 
 object TaxEnrolmentsService {
   val validTaxEnrolmentsIssuerRequestJson = Json.parse("""{
@@ -64,6 +67,9 @@ object TaxEnrolmentsService {
 
   def returnTheTaxEnrolmentsResponseOK(safeId: String): Unit =
     stubTheTaxEnrolmentsResponse(endpoint(safeId), responseWithOk.toString(), OK)
+
+  def returnTheTaxEnrolmentsFailedResponse(safeId: String): Unit =
+    stubTheTaxEnrolmentsResponse(endpoint(safeId), "failed", INSUFFICIENT_STORAGE)
 
   def stubTheTaxEnrolmentsResponse(url: String, response: String, status: Int): Unit =
     stubFor(

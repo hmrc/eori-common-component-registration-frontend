@@ -48,7 +48,7 @@ object DateTimeUtil {
         ).toLocalDateTime
       )
       catch {
-        case e: Exception => JsError(s"Could not parse '${value.toString()}' as an ISO date. Reason: $e")
+        case e: Exception => JsError(s"Could not parse '${value.toString()}' as an ISO date. Reason: ${e.getMessage}")
       }
 
   }
