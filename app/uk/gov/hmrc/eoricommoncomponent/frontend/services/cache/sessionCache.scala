@@ -80,7 +80,7 @@ class SessionCache @Inject() (
       sessionIdKey = SessionKeys.sessionId
     )(ec) {
 
-  val now = LocalDateTime.now(ZoneId.of("Europe/London"))
+  val now: LocalDateTime = LocalDateTime.now(ZoneId.of("Europe/London"))
 
   def sessionId(implicit request: Request[_]): String =
     request.session.get("sessionId") match {

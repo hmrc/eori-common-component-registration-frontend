@@ -20,7 +20,7 @@ import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{RegistrationDisplayConnector, ServiceUnavailableResponse}
@@ -204,7 +204,7 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
       |
       |""".stripMargin)
 
-  val expectedAuditEventJson = Json.parse("""
+  val expectedAuditEventJson: JsValue = Json.parse("""
     |{
     |  "auditSource": "eori-common-component-registration-frontend",
     |  "auditType": "RegistrationDisplay",

@@ -23,7 +23,7 @@ import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status.{INSUFFICIENT_STORAGE, OK}
 
 object TaxEnrolmentsService {
-  val validTaxEnrolmentsIssuerRequestJson = Json.parse("""{
+  val validTaxEnrolmentsIssuerRequestJson: JsValue = Json.parse("""{
                                                          |    "serviceName": "HMRC-CUS-ORG",
                                                          |    "identifiers": [
                                                          |        {

@@ -26,6 +26,7 @@ import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.TableFor2
 import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
@@ -105,7 +106,7 @@ class DateOfEstablishmentControllerSpec
     when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(CorporateBody))
   }
 
-  val formModes = Table(
+  val formModes: TableFor2[String, Map[String, String] => (Future[Result] => Any) => Unit] = Table(
     ("formMode", "submitFormFunction"),
     ("create", (form: Map[String, String]) => submitFormInCreateMode(form) _),
     ("review", (form: Map[String, String]) => submitFormInReviewMode(form) _)

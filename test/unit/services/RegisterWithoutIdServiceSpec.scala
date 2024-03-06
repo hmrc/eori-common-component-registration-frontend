@@ -318,7 +318,7 @@ class RegisterWithoutIdServiceSpec
       await(
         service
           .registerIndividual(individualNameAndDateOfBirth, addressWithEmptyPostcode, contactDetails, mockLoggedInUser)
-      ) should be((registrationResponse.registerWithoutIDResponse))
+      ) should be(registrationResponse.registerWithoutIDResponse)
 
       val captor = ArgumentCaptor.forClass(classOf[RegisterWithoutIDRequest])
       verify(mockConnector).register(captor.capture())(ArgumentMatchers.eq(hc))

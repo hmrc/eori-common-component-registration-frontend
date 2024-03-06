@@ -63,7 +63,7 @@ trait SubscriptionServiceTestData extends TestData {
 
   val EmptyVatIds: List[VatIdentification] = Nil
 
-  val subscriptionContactDetailsModel = ContactDetailsModel(
+  val subscriptionContactDetailsModel: ContactDetailsModel = ContactDetailsModel(
     contactName,
     contactEmail,
     contactTelephone,
@@ -91,9 +91,9 @@ trait SubscriptionServiceTestData extends TestData {
   val responseFormBundleId: String              = "Form-Bundle-Id"
   val processingDateResponse: String            = "18 Aug 2016"
   val emailVerificationTimestamp: LocalDateTime = TestData.emailVerificationTimestamp
-  val eori                                      = Eori(responseEoriNumber)
+  val eori: Eori                                = Eori(responseEoriNumber)
 
-  val subscriptionSuccessResult =
+  val subscriptionSuccessResult: SubscriptionSuccessful =
     SubscriptionSuccessful(eori, responseFormBundleId, processingDateResponse, Some(emailVerificationTimestamp))
 
   val cdsOrganisationTypeToTypeOfPersonMap: Map[CdsOrganisationType, OrganisationTypeConfiguration] = Map(
@@ -133,7 +133,7 @@ trait SubscriptionServiceTestData extends TestData {
     dateOfBirth = dateOfBirth
   )
 
-  val fullyPopulatedSubscriptionDetails = SubscriptionDetails(
+  val fullyPopulatedSubscriptionDetails: SubscriptionDetails = SubscriptionDetails(
     ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
     personalDataDisclosureConsent = Some(true),
     contactDetails = Some(subscriptionContactDetailsModel),
