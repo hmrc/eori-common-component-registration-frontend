@@ -19,13 +19,13 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class CompanyRegisteredCountry(country: String)
 
 object CompanyRegisteredCountry {
 
-  implicit val format = Json.format[CompanyRegisteredCountry]
+  implicit val format: OFormat[CompanyRegisteredCountry] = Json.format[CompanyRegisteredCountry]
 
   def form(errorMessage: String)(implicit messages: Messages): Form[CompanyRegisteredCountry] = Form(
     mapping(

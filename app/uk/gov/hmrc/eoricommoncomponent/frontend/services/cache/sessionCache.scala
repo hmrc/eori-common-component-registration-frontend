@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{Json, OFormat, Reads, Writes}
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -48,21 +48,21 @@ sealed case class CachedData(
 )
 
 object CachedData {
-  val regDetailsKey                    = "regDetails"
-  val regInfoKey                       = "regInfo"
-  val subDetailsKey                    = "subDetails"
-  val sub01OutcomeKey                  = "sub01Outcome"
-  val sub02OutcomeKey                  = "sub02Outcome"
-  val registerWithEoriAndIdResponseKey = "registerWithEoriAndIdResponse"
-  val emailKey                         = "email"
-  val keepAliveKey                     = "keepAlive"
-  val safeIdKey                        = "safeId"
-  val groupIdKey                       = "cachedGroupId"
-  val groupEnrolmentKey                = "groupEnrolment"
-  val eoriKey                          = "eori"
-  val submissionCompleteKey            = "submissionCompleteDetails"
-  val completed                        = "completed"
-  implicit val format                  = Json.format[CachedData]
+  val regDetailsKey                        = "regDetails"
+  val regInfoKey                           = "regInfo"
+  val subDetailsKey                        = "subDetails"
+  val sub01OutcomeKey                      = "sub01Outcome"
+  val sub02OutcomeKey                      = "sub02Outcome"
+  val registerWithEoriAndIdResponseKey     = "registerWithEoriAndIdResponse"
+  val emailKey                             = "email"
+  val keepAliveKey                         = "keepAlive"
+  val safeIdKey                            = "safeId"
+  val groupIdKey                           = "cachedGroupId"
+  val groupEnrolmentKey                    = "groupEnrolment"
+  val eoriKey                              = "eori"
+  val submissionCompleteKey                = "submissionCompleteDetails"
+  val completed                            = "completed"
+  implicit val format: OFormat[CachedData] = Json.format[CachedData]
 }
 
 @Singleton
@@ -80,7 +80,7 @@ class SessionCache @Inject() (
       sessionIdKey = SessionKeys.sessionId
     )(ec) {
 
-  val now = LocalDateTime.now(ZoneId.of("Europe/London"))
+  val now: LocalDateTime = LocalDateTime.now(ZoneId.of("Europe/London"))
 
   def sessionId(implicit request: Request[_]): String =
     request.session.get("sessionId") match {

@@ -1,9 +1,7 @@
 import com.typesafe.sbt.packager.MappingsHelper.*
 import play.sbt.routes.RoutesKeys
 import play.sbt.routes.RoutesKeys.*
-import sbt.*
-import sbt.Keys.*
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, targetJvm}
+import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 
 import scala.language.postfixOps
 
@@ -12,11 +10,8 @@ Universal / mappings ++= directory(baseDirectory.value / "public")
 
 name := "eori-common-component-registration-frontend"
 
-targetJvm := "jvm-11"
-
-scalaVersion := "2.13.8"
-
-majorVersion := 0
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.13"
 
 PlayKeys.devSettings := Seq("play.server.http.port" -> "6751")
 
@@ -33,7 +28,7 @@ lazy val microservice = (project in file("."))
   .settings(
     scalacOptions ++= Seq(
       "-deprecation",       // Warn if for usages of deprecated APIs.
-      "-Xlint",             //Enable recommended additional warnings.
+      "-Xlint",             // Enable recommended additional warnings.
       "-unchecked",         // Enable additional warnings where generated code depends on assumptions.
       "-Wunused:imports",   // Warn if an import selector is not referenced.
       "-Wunused:privates",  // Warn if a private member is unused.
@@ -100,8 +95,7 @@ lazy val scoverageSettings = {
     ScoverageKeys.coverageExcludedPackages := List(
       "<empty>",
       "Reverse.*",
-      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.models\\.data\\..*",
-      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.view.*",
+      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.frontend\\.views.*",
       "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.models.*",
       "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.config.*",
       "logger.*\\(.*\\)",
@@ -120,7 +114,7 @@ scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 libraryDependencies ++= AppDependencies()
 
 lazy val silencerSettings: Seq[Setting[_]] = {
-  val silencerVersion = "1.7.12"
+  val silencerVersion = "1.7.16"
   Seq(
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full)

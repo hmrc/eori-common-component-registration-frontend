@@ -18,13 +18,14 @@ package unit.views
 
 import org.jsoup.Jsoup
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
 import util.ViewSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 class OrganisationTypePageSpec extends ViewSpec {
   private val form: Form[CdsOrganisationType] = organisationTypeDetailsForm
@@ -49,8 +50,10 @@ class OrganisationTypePageSpec extends ViewSpec {
   }
 
   private lazy val doc = {
-    implicit val request = withFakeCSRF(FakeRequest().withSession(("selected-user-location", "third-country")))
-    val result           = view(form, Some(UserLocation.ThirdCountry), atarService)
+    implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(
+      FakeRequest().withSession(("selected-user-location", "third-country"))
+    )
+    val result = view(form, Some(UserLocation.ThirdCountry), atarService)
     Jsoup.parse(contentAsString(result))
   }
 

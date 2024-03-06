@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class AddressDetails(street: String, city: String, postcode: Option[String], countryCode: String)
 
 object AddressDetails {
-  implicit val jsonFormat = Json.format[AddressDetails]
+  implicit val jsonFormat: OFormat[AddressDetails] = Json.format[AddressDetails]
 }

@@ -26,7 +26,7 @@ import java.time.ZonedDateTime
 case class RegistrationInfoRequest(regime: String = Service.regimeCDS, idType: String, idValue: String)
 
 object RegistrationInfoRequest extends Logging {
-  implicit val jsonFormat = Json.format[RegistrationInfoRequest]
+  implicit val jsonFormat: OFormat[RegistrationInfoRequest] = Json.format[RegistrationInfoRequest]
 
   val UTR    = "UTR"
   val EORI   = "EORI"
@@ -55,20 +55,20 @@ object RegistrationInfoRequest extends Logging {
 case class RegistrationInfoResponseCommon(status: String, processingDate: ZonedDateTime, taxPayerID: String)
 
 object RegistrationInfoResponseCommon extends CommonHeader {
-  implicit val jsonFormat = Json.format[RegistrationInfoResponseCommon]
+  implicit val jsonFormat: OFormat[RegistrationInfoResponseCommon] = Json.format[RegistrationInfoResponseCommon]
 }
 
 case class RegistrationInfoIndividual(firstName: String, lastName: String, dateOfBirth: Option[String])
     extends IndividualName
 
 object RegistrationInfoIndividual {
-  implicit val jsonFormat = Json.format[RegistrationInfoIndividual]
+  implicit val jsonFormat: OFormat[RegistrationInfoIndividual] = Json.format[RegistrationInfoIndividual]
 }
 
 case class NonUKIdentification(IDNumber: String, issuingInstitution: String, issuingCountryCode: String)
 
 object NonUKIdentification {
-  implicit val jsonFormat = Json.format[NonUKIdentification]
+  implicit val jsonFormat: OFormat[NonUKIdentification] = Json.format[NonUKIdentification]
 }
 
 case class RegistrationInfoOrganisation(
@@ -79,7 +79,7 @@ case class RegistrationInfoOrganisation(
 )
 
 object RegistrationInfoOrganisation {
-  implicit val jsonFormat = Json.format[RegistrationInfoOrganisation]
+  implicit val jsonFormat: OFormat[RegistrationInfoOrganisation] = Json.format[RegistrationInfoOrganisation]
 }
 
 case class RegistrationInfoAddress(
@@ -92,7 +92,7 @@ case class RegistrationInfoAddress(
 )
 
 object RegistrationInfoAddress {
-  implicit val jsonFormat = Json.format[RegistrationInfoAddress]
+  implicit val jsonFormat: OFormat[RegistrationInfoAddress] = Json.format[RegistrationInfoAddress]
 }
 
 case class RegistrationInfoContactDetails(
@@ -103,7 +103,7 @@ case class RegistrationInfoContactDetails(
 )
 
 object RegistrationInfoContactDetails {
-  implicit val jsonFormat = Json.format[RegistrationInfoContactDetails]
+  implicit val jsonFormat: OFormat[RegistrationInfoContactDetails] = Json.format[RegistrationInfoContactDetails]
 }
 
 case class RegistrationInfoResponseDetail(
@@ -124,7 +124,7 @@ case class RegistrationInfoResponseDetail(
 }
 
 object RegistrationInfoResponseDetail {
-  implicit val jsonFormat = Json.format[RegistrationInfoResponseDetail]
+  implicit val jsonFormat: OFormat[RegistrationInfoResponseDetail] = Json.format[RegistrationInfoResponseDetail]
 }
 
 case class RegistrationInfoResponse(
@@ -133,11 +133,11 @@ case class RegistrationInfoResponse(
 )
 
 object RegistrationInfoResponse {
-  implicit val jsonFormat = Json.format[RegistrationInfoResponse]
+  implicit val jsonFormat: OFormat[RegistrationInfoResponse] = Json.format[RegistrationInfoResponse]
 }
 
 case class RegistrationInfoResponseHolder(registrationDisplayResponse: RegistrationInfoResponse)
 
 object RegistrationInfoResponseHolder {
-  implicit val jsonFormat = Json.format[RegistrationInfoResponseHolder]
+  implicit val jsonFormat: OFormat[RegistrationInfoResponseHolder] = Json.format[RegistrationInfoResponseHolder]
 }

@@ -22,6 +22,7 @@ import common.support.testdata.subscription.BusinessDatesOrganisationTypeTables
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.prop.TableFor3
 import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
@@ -34,8 +35,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
+import uk.gov.hmrc.http.HeaderCarrier
 import util.StringThings._
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
@@ -198,6 +201,16 @@ class SicCodeControllerSpec
     "redirect to next screen" in {
       submitFormInCreateMode(mandatoryFieldsMap, userSelectedOrgType = Company)(verifyRedirectToNextPageInCreateMode)
     }
+
+    "redirect to start of the application" in {
+      when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
+        .thenReturn(Left(FlowNotFound()))
+      submitFormInCreateMode(mandatoryFieldsMap, userSelectedOrgType = Company) { result =>
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe "/customs-registration-services/atar/register"
+
+      }
+    }
   }
 
   "submitting the form with all mandatory fields filled when in review mode for all organisation types" should {
@@ -313,7 +326,7 @@ class SicCodeControllerSpec
     }
   }
 
-  val formModelsROW = Table(
+  val formModelsROW: TableFor3[CdsOrganisationType, String, String] = Table(
     ("userSelectedOrgType", "orgType", "userLocation"),
     (SoleTrader, "SoleTrader", "iom"),
     (ThirdCountryOrganisation, "Organisation", "third-country")

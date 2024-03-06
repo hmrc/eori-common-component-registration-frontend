@@ -42,11 +42,11 @@ case class TaxPayerId(override val id: String) extends CustomsId {
 }
 
 object TaxPayerId {
-  implicit val format = Json.format[TaxPayerId]
+  implicit val format: OFormat[TaxPayerId] = Json.format[TaxPayerId]
 }
 
 object SafeId {
-  implicit val format                                = Json.format[SafeId]
+  implicit val format: OFormat[SafeId]               = Json.format[SafeId]
   implicit def toJsonFormat(safeId: SafeId): JsValue = Json.toJson(safeId)
 }
 
@@ -63,7 +63,7 @@ object InternalId extends Logging {
       throw new IllegalArgumentException(error)
     })
 
-  implicit val format = Json.format[InternalId]
+  implicit val format: OFormat[InternalId] = Json.format[InternalId]
 }
 
 case class GroupId(id: String)
@@ -79,7 +79,7 @@ object GroupId extends Logging {
       throw new IllegalArgumentException(error)
     })
 
-  implicit val format = Json.format[GroupId]
+  implicit val format: OFormat[GroupId] = Json.format[GroupId]
 }
 
 case class CacheIds(internalId: InternalId, safeId: SafeId, serviceCode: Option[String])
@@ -106,7 +106,7 @@ object CacheIds extends Logging {
     new CacheIds(internalId, safeId, service)
   }
 
-  implicit val jsonFormat                                = Json.format[CacheIds]
+  implicit val jsonFormat: OFormat[CacheIds]             = Json.format[CacheIds]
   implicit def toJsonFormat(cacheIds: CacheIds): JsValue = Json.toJson(cacheIds)
 }
 
@@ -126,7 +126,7 @@ object CustomsId extends Logging {
     taxPayerId -> (s => TaxPayerId(s))
   )
 
-  implicit val formats = Format[CustomsId](
+  implicit val formats: Format[CustomsId] = Format[CustomsId](
     fjs = Reads { js =>
       idTypeMapping.view.flatMap {
         case (jsFieldName, idConstruct) =>
@@ -171,7 +171,7 @@ trait NameOrganisationMatch {
 case class NameIdOrganisationMatchModel(name: String, id: String) extends NameIdOrganisationMatch
 
 object NameIdOrganisationMatchModel {
-  implicit val jsonFormat = Json.format[NameIdOrganisationMatchModel]
+  implicit val jsonFormat: OFormat[NameIdOrganisationMatchModel] = Json.format[NameIdOrganisationMatchModel]
 
   def apply(name: String, id: String): NameIdOrganisationMatchModel =
     new NameIdOrganisationMatchModel(name, formatInput(id))
@@ -181,7 +181,7 @@ object NameIdOrganisationMatchModel {
 case class NameOrganisationMatchModel(name: String) extends NameOrganisationMatch
 
 object NameOrganisationMatchModel {
-  implicit val jsonFormat = Json.format[NameOrganisationMatchModel]
+  implicit val jsonFormat: OFormat[NameOrganisationMatchModel] = Json.format[NameOrganisationMatchModel]
 }
 
 case class YesNo(isYes: Boolean) {
@@ -219,7 +219,7 @@ case class NameDobMatchModel(firstName: String, lastName: String, dateOfBirth: L
 }
 
 object NameDobMatchModel {
-  implicit val jsonFormat = Json.format[NameDobMatchModel]
+  implicit val jsonFormat: OFormat[NameDobMatchModel] = Json.format[NameDobMatchModel]
 }
 
 case class NinoOrUtr(nino: Option[String], utr: Option[String], ninoOrUtrRadio: Option[String])
@@ -281,7 +281,7 @@ trait IdMatch {
 case class IdMatchModel(id: String) extends IdMatch
 
 object IdMatchModel {
-  implicit val jsonFormat = Json.format[IdMatchModel]
+  implicit val jsonFormat: OFormat[IdMatchModel] = Json.format[IdMatchModel]
 
   def apply(id: String): IdMatchModel = new IdMatchModel(formatInput(id))
 }
@@ -289,7 +289,7 @@ object IdMatchModel {
 case class UtrMatchModel(haveUtr: Option[Boolean], id: Option[String])
 
 object UtrMatchModel {
-  implicit val jsonFormat = Json.format[UtrMatchModel]
+  implicit val jsonFormat: OFormat[UtrMatchModel] = Json.format[UtrMatchModel]
 
   def apply(haveUtr: Option[Boolean]): UtrMatchModel = new UtrMatchModel(haveUtr, None)
 }
@@ -301,13 +301,13 @@ trait NameMatch {
 case class NameMatchModel(name: String) extends NameMatch
 
 object NameMatchModel {
-  implicit val jsonFormat = Json.format[NameMatchModel]
+  implicit val jsonFormat: OFormat[NameMatchModel] = Json.format[NameMatchModel]
 }
 
 case class NinoMatchModel(haveNino: Option[Boolean], nino: Option[String])
 
 object NinoMatchModel {
-  implicit val jsonFormat = Json.format[NinoMatchModel]
+  implicit val jsonFormat: OFormat[NinoMatchModel] = Json.format[NinoMatchModel]
 
   def apply(haveNino: Option[Boolean]): NinoMatchModel =
     new NinoMatchModel(haveNino, None)
@@ -317,7 +317,7 @@ object NinoMatchModel {
 case class ExistingEori(id: String, enrolmentKey: String)
 
 object ExistingEori {
-  implicit val jsonFormat = Json.format[ExistingEori]
+  implicit val jsonFormat: OFormat[ExistingEori] = Json.format[ExistingEori]
 
   def apply(id: Option[String], enrolmentKey: String): ExistingEori =
     new ExistingEori(id.getOrElse(throw new IllegalArgumentException("EORI is missing")), enrolmentKey)

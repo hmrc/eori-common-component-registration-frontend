@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Individual}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{OrganisationName, RegisterWithoutIDRequest}
 
@@ -27,7 +27,7 @@ case class RegisterWithoutIdSubmitted(
 )
 
 object RegisterWithoutIdSubmitted {
-  implicit val format = Json.format[RegisterWithoutIdSubmitted]
+  implicit val format: OFormat[RegisterWithoutIdSubmitted] = Json.format[RegisterWithoutIdSubmitted]
 
   def apply(request: RegisterWithoutIDRequest): RegisterWithoutIdSubmitted = {
     val requestDetail = request.requestDetail

@@ -49,7 +49,7 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, httpClient: 
     } recover {
       case _: BadRequestException | UpstreamErrorResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)
       case _: ForbiddenException | UpstreamErrorResponse(_, FORBIDDEN, _, _)    => Left(Forbidden)
-      case _: InternalServerException | UpstreamErrorResponse(_, _, _, _) =>
+      case _: InternalServerException | UpstreamErrorResponse(_, INTERNAL_SERVER_ERROR, _, _) =>
         Left(ServiceUnavailable)
       case NonFatal(e) =>
         logger.error(

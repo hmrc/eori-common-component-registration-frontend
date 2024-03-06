@@ -71,6 +71,13 @@ class TaxEnrolmentsConnectorSpec extends IntegrationTestsSpec with ScalaFutures 
       )
     }
 
+    "return failure" in {
+      val safeId = "testId"
+      returnTheTaxEnrolmentsFailedResponse(safeId)
+
+      intercept[Exception](taxEnrolmentsConnector.getEnrolments(safeId).futureValue)
+    }
+
     "call tax enrolment service with correct url and payload" in {
       await(taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId))(defaultTimeout)
       WireMock.verify(

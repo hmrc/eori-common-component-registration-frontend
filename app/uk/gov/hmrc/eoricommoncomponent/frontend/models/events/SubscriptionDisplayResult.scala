@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
 case class SubscriptionInfoVatId(countryCode: Option[String], vatId: Option[String])
 
 object SubscriptionInfoVatId {
-  implicit val format = Json.format[SubscriptionInfoVatId]
+  implicit val format: OFormat[SubscriptionInfoVatId] = Json.format[SubscriptionInfoVatId]
 
   def from(
     vatId: uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionInfoVatId
@@ -55,7 +55,7 @@ case class SubscriptionDisplayResult(
 )
 
 object SubscriptionDisplayResult {
-  implicit val format = Json.format[SubscriptionDisplayResult]
+  implicit val format: OFormat[SubscriptionDisplayResult] = Json.format[SubscriptionDisplayResult]
 
   def apply(response: SubscriptionDisplayResponseHolder): SubscriptionDisplayResult = {
     val responseCommon = response.subscriptionDisplayResponse.responseCommon

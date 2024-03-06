@@ -105,6 +105,14 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
         header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/utr"
       }
     }
+
+    "throw exception on selecting an invalid data" in {
+      intercept[IllegalArgumentException] {
+        submitForm(Map("ninoOrUtrRadio" -> "xyz")) { result =>
+          status(result) shouldBe SEE_OTHER
+        }
+      }
+    }
   }
 
   def showForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {

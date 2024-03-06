@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class SubscriptionRequest(subscriptionCreateRequest: SubscriptionCreateRequest)
 
 object SubscriptionRequest {
-  implicit val jsonFormat             = Json.format[SubscriptionRequest]
-  val principalEconomicActivityLength = 4
+  implicit val jsonFormat: OFormat[SubscriptionRequest] = Json.format[SubscriptionRequest]
+  val principalEconomicActivityLength                   = 4
 }

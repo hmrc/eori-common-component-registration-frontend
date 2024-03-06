@@ -109,24 +109,38 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
 
   private lazy val adminDoc: Document = Jsoup.parse(
     contentAsString(
-      view(Some("testEORI"), isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(true), atarService)
+      view(
+        Some("testEORI"),
+        isAdminUser = true,
+        EnrolmentExistsUserStandaloneViewModel(isAdminUser = true),
+        atarService
+      )
     )
   )
 
   private lazy val standardDoc: Document = Jsoup.parse(
     contentAsString(
-      view(Some("testEORI"), isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(false), atarService)
+      view(
+        Some("testEORI"),
+        isAdminUser = false,
+        EnrolmentExistsUserStandaloneViewModel(isAdminUser = false),
+        atarService
+      )
     )
   )
 
   private lazy val adminNoEORIDoc: Document =
     Jsoup.parse(
-      contentAsString(view(None, isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(true), atarService))
+      contentAsString(
+        view(None, isAdminUser = true, EnrolmentExistsUserStandaloneViewModel(isAdminUser = true), atarService)
+      )
     )
 
   private lazy val standardNoEORIDoc: Document =
     Jsoup.parse(
-      contentAsString(view(None, isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(false), atarService))
+      contentAsString(
+        view(None, isAdminUser = false, EnrolmentExistsUserStandaloneViewModel(isAdminUser = false), atarService)
+      )
     )
 
 }

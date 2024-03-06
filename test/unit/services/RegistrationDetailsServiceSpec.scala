@@ -22,6 +22,7 @@ import org.mockito.Mockito.{reset, verify, when}
 import org.mockito.{ArgumentCaptor, ArgumentMatchers}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.TableFor1
 import org.scalatest.prop.Tables.Table
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Request
@@ -39,7 +40,7 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
-  implicit val hc = mock[HeaderCarrier]
+  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
   private def startingDate = LocalDate.now
 
@@ -110,10 +111,10 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   private val registrationDetailsService = new RegistrationDetailsService(mockSessionCache)(global)
 
-  val individualOrganisationTypes =
+  val individualOrganisationTypes: TableFor1[CdsOrganisationType] =
     Table("organisationType", ThirdCountryIndividual, ThirdCountrySoleTrader, Individual, SoleTrader)
 
-  val nonIndividualOrganisationTypes = Table(
+  val nonIndividualOrganisationTypes: TableFor1[CdsOrganisationType] = Table(
     "organisationType",
     Company,
     ThirdCountryOrganisation,

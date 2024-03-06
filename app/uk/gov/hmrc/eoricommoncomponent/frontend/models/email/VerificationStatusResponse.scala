@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.email
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class VerificationStatus(emailAddress: String, verified: Boolean, locked: Boolean)
 
 object VerificationStatus {
-  implicit val format = Json.format[VerificationStatus]
+  implicit val format: OFormat[VerificationStatus] = Json.format[VerificationStatus]
 }
 
 case class VerificationStatusResponse(emails: Seq[VerificationStatus])
 
 object VerificationStatusResponse {
-  implicit val format = Json.format[VerificationStatusResponse]
+  implicit val format: OFormat[VerificationStatusResponse] = Json.format[VerificationStatusResponse]
 }

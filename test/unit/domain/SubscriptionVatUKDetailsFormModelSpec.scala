@@ -42,13 +42,13 @@ class SubscriptionVatUKDetailsFormModelSpec extends UnitSpec {
     }
 
     "create empty model when empty list of vat identifications is provided as an input" in {
-      val model = SubscriptionVatUKDetailsFormModel(false, None)
+      val model = SubscriptionVatUKDetailsFormModel(hasGbVats = false, None)
 
       model shouldBe SubscriptionVatUKDetailsFormModel(hasGbVats = false, gbVats = None)
     }
 
     "create gb model when list of only UK vat identifications is provided as an input" in {
-      val model = SubscriptionVatUKDetailsFormModel(true, Some(gbVatIdentifications))
+      val model = SubscriptionVatUKDetailsFormModel(hasGbVats = true, Some(gbVatIdentifications))
 
       model shouldBe SubscriptionVatUKDetailsFormModel(hasGbVats = true, gbVats = Some(gbVatIdentifications))
     }

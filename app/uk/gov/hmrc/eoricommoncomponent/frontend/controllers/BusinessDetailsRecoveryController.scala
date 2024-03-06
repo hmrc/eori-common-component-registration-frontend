@@ -51,9 +51,9 @@ class BusinessDetailsRecoveryController @Inject() (
         regDetails <- sessionCache.registrationDetails
       } yield regDetails match {
         case individual: RegistrationDetailsIndividual =>
-          Ok(businessDetailsRecoveryView(individual.name, concatenateAddress(individual), true, service))
+          Ok(businessDetailsRecoveryView(individual.name, concatenateAddress(individual), isIndividual = true, service))
         case org: RegistrationDetailsOrganisation =>
-          Ok(businessDetailsRecoveryView(org.name, concatenateAddress(org), false, service))
+          Ok(businessDetailsRecoveryView(org.name, concatenateAddress(org), isIndividual = false, service))
         case _ =>
           throw new IllegalArgumentException("Required RegistrationDetailsIndividual | RegistrationDetailsOrganisation")
       }

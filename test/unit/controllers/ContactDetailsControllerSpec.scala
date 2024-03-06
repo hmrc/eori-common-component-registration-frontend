@@ -21,7 +21,7 @@ import common.pages.subscription.SubscriptionContactDetailsPage._
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.prop.TableFor3
+import org.scalatest.prop.{TableFor2, TableFor3}
 import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ContactDetailsController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -93,14 +94,15 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       (SoleTraderSubscriptionFlow, "Is this the right contact address?", NA)
     )
 
-  val formModesGYE = Table(
-    ("formMode", "showFormFunction"),
-    (
-      "create Register",
-      (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showCreateForm(flow, orgType = orgType)(_)
-    ),
-    ("review Register", (flow: SubscriptionFlow, _: EtmpOrganisationType) => showReviewForm(flow)(_))
-  )
+  val formModesGYE: TableFor2[String, (SubscriptionFlow, EtmpOrganisationType) => (Future[Result] => Any) => Unit] =
+    Table(
+      ("formMode", "showFormFunction"),
+      (
+        "create Register",
+        (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showCreateForm(flow, orgType = orgType)(_)
+      ),
+      ("review Register", (flow: SubscriptionFlow, _: EtmpOrganisationType) => showReviewForm(flow)(_))
+    )
 
   "Viewing the create form " should {
 
@@ -297,6 +299,16 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
 
     "redirect to next page when details are valid" in {
       submitFormInCreateMode(createFormMandatoryFieldsMap)(verifyRedirectToNextPageInCreateMode)
+    }
+
+    "redirect to start of the page" in {
+      when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
+        .thenReturn(Left(FlowNotFound()))
+      submitFormInCreateMode(createFormMandatoryFieldsMap) { result =>
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe "/customs-registration-services/atar/register"
+
+      }
     }
 
   }

@@ -17,14 +17,14 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{JsPath, Json, Writes}
+import play.api.libs.json.{JsPath, Json, OFormat, Writes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.http.HttpResponse
 
 case class UpdateRequest(eori: String, address: String, timestamp: String)
 
 object UpdateRequest {
-  implicit val format = Json.format[UpdateRequest]
+  implicit val format: OFormat[UpdateRequest] = Json.format[UpdateRequest]
 
   def apply(request: CustomsDataStoreRequest): UpdateRequest =
     UpdateRequest(eori = request.eori, address = request.address, timestamp = request.timestamp)
@@ -34,7 +34,7 @@ object UpdateRequest {
 case class UpdateResponse(status: String)
 
 object UpdateResponse {
-  implicit val format = Json.format[UpdateResponse]
+  implicit val format: OFormat[UpdateResponse] = Json.format[UpdateResponse]
 
   def apply(response: HttpResponse): UpdateResponse =
     UpdateResponse(status = response.status.toString)

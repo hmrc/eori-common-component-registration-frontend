@@ -52,7 +52,7 @@ class OrganisationTypeController @Inject() (
     RowIndividualNameDateOfBirthController.form(orgType, service)
 
   private def organisationWhatIsYourOrgName(orgType: String, service: Service): Call =
-    WhatIsYourOrgNameController.showForm(false, orgType, service)
+    WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
 
   private def matchingDestinations(service: Service): Map[CdsOrganisationType, Call] =
     Map[CdsOrganisationType, Call](
@@ -71,7 +71,7 @@ class OrganisationTypeController @Inject() (
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
         subscriptionDetailsService.cachedOrganisationType map { orgType =>
-          def filledForm = orgType.map(organisationTypeDetailsForm.fill(_)).getOrElse(organisationTypeDetailsForm)
+          def filledForm = orgType.map(organisationTypeDetailsForm.fill).getOrElse(organisationTypeDetailsForm)
           requestSessionData.selectedUserLocation match {
             case Some(_) =>
               Ok(organisationTypeView(filledForm, requestSessionData.selectedUserLocation, service))

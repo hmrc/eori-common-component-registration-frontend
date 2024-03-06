@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 case class EnrolmentStoreProxyResponse(enrolments: List[EnrolmentResponse])
 
 object EnrolmentStoreProxyResponse {
-  implicit val jsonFormat = Json.format[EnrolmentStoreProxyResponse]
+  implicit val jsonFormat: OFormat[EnrolmentStoreProxyResponse] = Json.format[EnrolmentStoreProxyResponse]
 }
 
 case class EnrolmentResponse(service: String, state: String, identifiers: List[KeyValue]) {
@@ -37,5 +37,5 @@ object EnrolmentResponse {
 case class KeyValue(key: String, value: String)
 
 object KeyValue {
-  implicit val format = Json.format[KeyValue]
+  implicit val format: OFormat[KeyValue] = Json.format[KeyValue]
 }

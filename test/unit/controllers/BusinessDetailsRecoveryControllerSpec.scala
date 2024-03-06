@@ -113,12 +113,20 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
       }
     }
 
+    "display registered name when entityType Individual is found in cache with safeId1" in {
+      mockCacheWithRegistrationDetails(RegistrationDetails.rdSafeId(SafeId("safeId")))
+      intercept[IllegalArgumentException](invokeConfirm() { result =>
+        status(result) shouldBe OK
+      })
+    }
+
     val locations = Seq(UserLocation.ThirdCountry, UserLocation.Iom, UserLocation.Islands)
 
     locations foreach { location =>
       assertAndTestBasedOnTheLocationForIndividual(location)
       assertAndTestBasedOnTheLocationForOrganisation(location)
     }
+    assertAndTestBasedOnTheLocationForSafeIdDetails()
     assertAndTestThrowsExceptionForInvalidLocationOrganisation()
   }
 
@@ -146,6 +154,31 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value should endWith(ContactDetailsController.createForm(atarService).url)
       }
+    }
+
+  private def assertAndTestBasedOnTheLocationForSafeIdDetails(): Unit =
+    s"throw an exception" in {
+      val mockSession = mock[Session]
+      val mockFlowStart =
+        (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
+
+      when(
+        mockSubscriptionFlowManager.startSubscriptionFlow(
+          meq(Some(BusinessDetailsRecoveryPage)),
+          meq(CdsOrganisationType.ThirdCountryIndividual),
+          meq(atarService)
+        )(any[Request[AnyContent]])
+      ).thenReturn(Future.successful(mockFlowStart))
+      mockCacheWithRegistrationDetails(RegistrationDetails.rdSafeId(SafeId("safeId")))
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(
+        UserLocation.enumerable.withName(UserLocation.Islands)
+      )
+      when(mockSave4LaterService.fetchOrgType(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(CdsOrganisationType("third-country-individual"))))
+
+      intercept[IllegalArgumentException](invokeContinue() { result =>
+        status(result) shouldBe SEE_OTHER
+      })
     }
 
   private def assertAndTestBasedOnTheLocationForOrganisation(location: UserLocation): Unit =

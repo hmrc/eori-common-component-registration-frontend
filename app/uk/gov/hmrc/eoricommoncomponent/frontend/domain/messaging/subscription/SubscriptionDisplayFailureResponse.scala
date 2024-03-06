@@ -22,11 +22,14 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 case class SubscriptionDisplayFailureResponse(responseCommon: ResponseCommon)
 
 object SubscriptionDisplayFailureResponse {
-  implicit val jsonFormat = Json.format[SubscriptionDisplayFailureResponse]
+  implicit val jsonFormat: OFormat[SubscriptionDisplayFailureResponse] = Json.format[SubscriptionDisplayFailureResponse]
 }
 
 case class SubscriptionDisplayFailureResponseHolder(subscriptionDisplayResponse: SubscriptionDisplayFailureResponse)
 
 object SubscriptionDisplayFailureResponseHolder {
-  implicit val jsonFormat = Json.format[SubscriptionDisplayFailureResponseHolder]
+
+  implicit val jsonFormat: OFormat[SubscriptionDisplayFailureResponseHolder] =
+    Json.format[SubscriptionDisplayFailureResponseHolder]
+
 }

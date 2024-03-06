@@ -19,6 +19,7 @@ package unit.services
 import common.support.testdata.TestData
 import org.scalacheck.Gen
 import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.TableFor1
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionResponse
@@ -48,7 +49,7 @@ trait SubscriptionServiceTestData extends TestData {
   val dateOfEstablishment: LocalDate     = LocalDate.parse(dateEstablishedString)
   val dateEstablishedStringForPublicBody = "1900-01-01"
   val principalEconomicActivity          = "A123"
-  val ukVatDetails                       = Some(VatDetails("SE28 1AA", "123456789"))
+  val ukVatDetails: Option[VatDetails]   = Some(VatDetails("SE28 1AA", "123456789"))
 
   val contactName        = "John Doe"
   val contactStreet      = "Line 1"
@@ -62,7 +63,7 @@ trait SubscriptionServiceTestData extends TestData {
 
   val EmptyVatIds: List[VatIdentification] = Nil
 
-  val subscriptionContactDetailsModel = ContactDetailsModel(
+  val subscriptionContactDetailsModel: ContactDetailsModel = ContactDetailsModel(
     contactName,
     contactEmail,
     contactTelephone,
@@ -74,7 +75,7 @@ trait SubscriptionServiceTestData extends TestData {
     Some(contactCountryCode)
   )
 
-  val subscriptionContactDetailsWithPlusSignInTelAndFaxModel = ContactDetailsModel(
+  val subscriptionContactDetailsWithPlusSignInTelAndFaxModel: ContactDetailsModel = ContactDetailsModel(
     contactName,
     contactEmail,
     "+01632961234",
@@ -90,9 +91,9 @@ trait SubscriptionServiceTestData extends TestData {
   val responseFormBundleId: String              = "Form-Bundle-Id"
   val processingDateResponse: String            = "18 Aug 2016"
   val emailVerificationTimestamp: LocalDateTime = TestData.emailVerificationTimestamp
-  val eori                                      = Eori(responseEoriNumber)
+  val eori: Eori                                = Eori(responseEoriNumber)
 
-  val subscriptionSuccessResult =
+  val subscriptionSuccessResult: SubscriptionSuccessful =
     SubscriptionSuccessful(eori, responseFormBundleId, processingDateResponse, Some(emailVerificationTimestamp))
 
   val cdsOrganisationTypeToTypeOfPersonMap: Map[CdsOrganisationType, OrganisationTypeConfiguration] = Map(
@@ -132,7 +133,7 @@ trait SubscriptionServiceTestData extends TestData {
     dateOfBirth = dateOfBirth
   )
 
-  val fullyPopulatedSubscriptionDetails = SubscriptionDetails(
+  val fullyPopulatedSubscriptionDetails: SubscriptionDetails = SubscriptionDetails(
     ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
     personalDataDisclosureConsent = Some(true),
     contactDetails = Some(subscriptionContactDetailsModel),
@@ -143,7 +144,7 @@ trait SubscriptionServiceTestData extends TestData {
     addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
   )
 
-  val fullyPopulatedSubscriptionDetailsAllOrgTypes = SubscriptionDetails(
+  val fullyPopulatedSubscriptionDetailsAllOrgTypes: SubscriptionDetails = SubscriptionDetails(
     ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
     personalDataDisclosureConsent = Some(true),
     contactDetails = Some(subscriptionContactDetailsModel),
@@ -532,9 +533,15 @@ trait SubscriptionServiceTestData extends TestData {
   ): JsValue = {
 
     val typeOfPersonJson: String =
-      determineTypeOfPersonJson(organisationType.map(x => EtmpOrganisationType.apply(x)), false)
+      determineTypeOfPersonJson(
+        organisationType.map(x => EtmpOrganisationType.apply(x)),
+        isOrganisationEvenIfOrganisationTypeIsNone = false
+      )
     val typeOfLegalStatusJson: String =
-      determineLegalStatus(organisationType.map(x => EtmpOrganisationType.apply(x)), false)
+      determineLegalStatus(
+        organisationType.map(x => EtmpOrganisationType.apply(x)),
+        isOrganisationEvenIfOrganisationTypeIsNone = false
+      )
 
     Json.parse(s"""
          | {
@@ -656,7 +663,6 @@ trait SubscriptionServiceTestData extends TestData {
     isOrganisationEvenIfOrganisationTypeIsNone: Boolean
   ): String = {
     val legalStatus = organisationType match {
-      case Some(o: CdsOrganisationType)  => Some(cdsOrganisationTypeToTypeOfPersonMap(o).legalStatus)
       case Some(o: EtmpOrganisationType) => Some(etmpOrganisationTypeToTypeOfPersonMap(o).legalStatus)
       case None                          => if (isOrganisationEvenIfOrganisationTypeIsNone) None else Some(EtmpLegalStatus.UnincorporatedBody)
     }
@@ -804,5 +810,5 @@ trait SubscriptionServiceTestData extends TestData {
   val subscriptionResponseWithoutPosition: SubscriptionResponse =
     subscriptionResponseWithoutPositionJson.as[SubscriptionResponse]
 
-  val successfulPositionValues = Table("positionValue", "GENERATE", "LINK", "WORKLIST")
+  val successfulPositionValues: TableFor1[String] = Table("positionValue", "GENERATE", "LINK", "WORKLIST")
 }

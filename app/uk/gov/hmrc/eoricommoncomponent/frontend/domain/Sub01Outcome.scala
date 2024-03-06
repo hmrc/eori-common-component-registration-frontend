@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class Sub01Outcome(processedDate: String)
 
 object Sub01Outcome {
-  implicit val format = Json.format[Sub01Outcome]
+  implicit val format: OFormat[Sub01Outcome] = Json.format[Sub01Outcome]
 }

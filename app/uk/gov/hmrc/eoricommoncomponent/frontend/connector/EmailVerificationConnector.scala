@@ -31,7 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
   VerificationStatusResponse
 }
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import java.net.URL
 import javax.inject.{Inject, Singleton}
@@ -106,7 +106,7 @@ class EmailVerificationConnector @Inject() (httpClient: HttpClientV2, appConfig:
   }
 
   //For testing email-verification in non-production environments
-  def getPasscodes(implicit hc: HeaderCarrier) = {
+  def getPasscodes(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     lazy val url: URL = url"${appConfig.emailVerificationBaseUrl}/test-only/passcodes"
 
     httpClient.get(url)

@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 
 case class OrganisationName(organisationName: String)
 
 object OrganisationName {
-  implicit val format = Json.format[OrganisationName]
+  implicit val format: OFormat[OrganisationName] = Json.format[OrganisationName]
 }
 
 case class RegisterWithoutIdContactDetails(
@@ -34,7 +34,7 @@ case class RegisterWithoutIdContactDetails(
 )
 
 object RegisterWithoutIdContactDetails {
-  implicit val jsonFormat = Json.format[RegisterWithoutIdContactDetails]
+  implicit val jsonFormat: OFormat[RegisterWithoutIdContactDetails] = Json.format[RegisterWithoutIdContactDetails]
 }
 
 case class RegisterWithoutIdReqDetails(
@@ -47,7 +47,7 @@ case class RegisterWithoutIdReqDetails(
 }
 
 object RegisterWithoutIdReqDetails {
-  implicit val format = Json.format[RegisterWithoutIdReqDetails]
+  implicit val format: OFormat[RegisterWithoutIdReqDetails] = Json.format[RegisterWithoutIdReqDetails]
 
   def organisation(
     organisation: OrganisationName,
@@ -82,19 +82,19 @@ object RegisterWithoutIdReqDetails {
 case class RegisterWithoutIDRequest(requestCommon: RequestCommon, requestDetail: RegisterWithoutIdReqDetails)
 
 object RegisterWithoutIDRequest {
-  implicit val format = Json.format[RegisterWithoutIDRequest]
+  implicit val format: OFormat[RegisterWithoutIDRequest] = Json.format[RegisterWithoutIDRequest]
 }
 
 case class RegisterWithoutIdRequestHolder(registerWithoutIDRequest: RegisterWithoutIDRequest)
 
 object RegisterWithoutIdRequestHolder {
-  implicit val format = Json.format[RegisterWithoutIdRequestHolder]
+  implicit val format: OFormat[RegisterWithoutIdRequestHolder] = Json.format[RegisterWithoutIdRequestHolder]
 }
 
 case class RegisterWithoutIdResponseDetail(SAFEID: String, ARN: Option[String])
 
 object RegisterWithoutIdResponseDetail {
-  implicit val formats = Json.format[RegisterWithoutIdResponseDetail]
+  implicit val formats: OFormat[RegisterWithoutIdResponseDetail] = Json.format[RegisterWithoutIdResponseDetail]
 }
 
 case class RegisterWithoutIDResponse(
@@ -103,11 +103,11 @@ case class RegisterWithoutIDResponse(
 )
 
 object RegisterWithoutIDResponse {
-  implicit val format = Json.format[RegisterWithoutIDResponse]
+  implicit val format: OFormat[RegisterWithoutIDResponse] = Json.format[RegisterWithoutIDResponse]
 }
 
 case class RegisterWithoutIdResponseHolder(registerWithoutIDResponse: RegisterWithoutIDResponse)
 
 object RegisterWithoutIdResponseHolder {
-  implicit val format = Json.format[RegisterWithoutIdResponseHolder]
+  implicit val format: OFormat[RegisterWithoutIdResponseHolder] = Json.format[RegisterWithoutIdResponseHolder]
 }

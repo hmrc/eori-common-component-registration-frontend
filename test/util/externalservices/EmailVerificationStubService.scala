@@ -20,7 +20,6 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
-import play.mvc.Http.Status._
 
 object EmailVerificationStubService {
 
@@ -29,15 +28,6 @@ object EmailVerificationStubService {
   val verifyEmailSuccessResponse: JsValue = Json.parse("""{"redirectUri": "google.com"}""")
   val verifyEmailFailureResponse          = "Something went wrong"
   val verifyEmailInvalidResponse: JsValue = Json.parse("""{"something": "google.com"}""")
-
-  def stubVerifyEmailSuccess() =
-    stubVerifyEmailResponse(verifyEmailSuccessResponse.toString, CREATED)
-
-  def stubVerifyEmailFailure() =
-    stubVerifyEmailResponse(verifyEmailFailureResponse, INTERNAL_SERVER_ERROR)
-
-  def stubVerifyEmailInvalid() =
-    stubVerifyEmailResponse(verifyEmailInvalidResponse.toString, CREATED)
 
   def stubVerifyEmailResponse(response: String, status: Int): Unit =
     stubFor(
@@ -66,15 +56,6 @@ object EmailVerificationStubService {
    |   }
    |]
    |}""".stripMargin)
-
-  def stubVerificationStatusSuccess(credId: String) =
-    stubVerificationStatusResponse(verificationStatusSuccessResponse.toString, OK, credId)
-
-  def stubVerificationStatusFailure(credId: String) =
-    stubVerificationStatusResponse(verifyEmailFailureResponse, INTERNAL_SERVER_ERROR, credId)
-
-  def stubVerificationStatusInvalid(credId: String) =
-    stubVerificationStatusResponse(verifyEmailInvalidResponse.toString, OK, credId)
 
   def stubVerificationStatusResponse(response: String, status: Int, credId: String): Unit =
     stubFor(

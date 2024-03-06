@@ -18,15 +18,16 @@ package unit.views.email
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.email_confirmed
 import util.ViewSpec
 
 class EmailConfirmedSpec extends ViewSpec {
-  implicit val request = withFakeCSRF(FakeRequest())
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  val view = instanceOf[email_confirmed]
+  val view: email_confirmed = instanceOf[email_confirmed]
 
   "Email Address Confirmed page" should {
     "display correct title" in {

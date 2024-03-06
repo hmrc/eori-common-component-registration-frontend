@@ -22,7 +22,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.{AnyContent, Request, Result, Session}
+import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, Result, Session}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -190,16 +190,16 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       sub01OutcomeProcessing,
       errorTemplate
     ) {}
-    implicit val fakeRequest = FakeRequest()
+    implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
     "cache registration display response and redirect to BusinessDetailsRecoveryPage for individual response" in {
       val responseDetail = ResponseDetail(
         "",
         None,
         None,
-        false,
-        false,
-        true,
+        isEditable = false,
+        isAnAgent = false,
+        isAnIndividual = true,
         Some(mock[IndividualResponse]),
         None,
         mock[Address],
@@ -219,9 +219,9 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         "",
         None,
         None,
-        false,
-        false,
-        false,
+        isEditable = false,
+        isAnAgent = false,
+        isAnIndividual = false,
         None,
         Some(mock[OrganisationResponse]),
         mock[Address],

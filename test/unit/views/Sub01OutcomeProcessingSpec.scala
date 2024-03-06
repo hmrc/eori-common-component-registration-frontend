@@ -18,13 +18,14 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub01_outcome_processing
 import util.ViewSpec
 
 class Sub01OutcomeProcessingSpec extends ViewSpec {
 
-  implicit val request = withFakeCSRF(fakeAtarRegisterRequest)
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
 
   private val view = instanceOf[sub01_outcome_processing]
 

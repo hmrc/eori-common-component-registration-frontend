@@ -16,10 +16,9 @@
 
 package util
 
-import akka.stream.Materializer
-import akka.stream.testkit.NoMaterializer
 import base.{Injector, UnitSpec}
 import common.pages.WebPage
+import org.apache.pekko.stream.testkit.NoMaterializer
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.{DefaultFileMimeTypes, FileMimeTypesConfiguration}
 import play.api.i18n.Lang._
@@ -55,7 +54,7 @@ trait ControllerSpec
 
   implicit val messagesApi: MessagesApi = instanceOf[MessagesApi]
 
-  implicit def materializer: Materializer = NoMaterializer
+  implicit def materializer: NoMaterializer.type = NoMaterializer
 
   implicit val messages: Messages = MessagesImpl(defaultLang, messagesApi)
 
@@ -79,7 +78,7 @@ trait ControllerSpec
 
   val appConfig: AppConfig = new AppConfig(config, serviceConfig, "eori-common-component-registration-frontend")
 
-  val getRequest = FakeRequest("GET", "")
+  val getRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
 
   def postRequest(data: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest("POST", "").withFormUrlEncodedBody(data: _*)
@@ -127,8 +126,8 @@ trait ControllerSpec
     }
 
   trait AbstractControllerFixture[C <: FrontendController] {
-    val mockAuthConnector = mock[AuthConnector]
-    val userId            = defaultUserId
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val userId: String                   = defaultUserId
 
     val controller: C
 

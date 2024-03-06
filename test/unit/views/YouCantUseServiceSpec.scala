@@ -18,6 +18,7 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_cant_use_service
@@ -25,8 +26,8 @@ import util.ViewSpec
 
 class YouCantUseServiceSpec extends ViewSpec {
 
-  private implicit val request      = withFakeCSRF(fakeAtarRegisterRequest)
-  private val youCantUseServiceView = instanceOf[you_cant_use_service]
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
+  private val youCantUseServiceView                             = instanceOf[you_cant_use_service]
 
   "You cannot use this service page for users of type standard org" should {
 

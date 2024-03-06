@@ -19,6 +19,7 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
@@ -34,11 +35,11 @@ import util.ViewSpec
 
 class SixLineAddressSpec extends ViewSpec {
 
-  private val form: Form[SixLineAddressMatchModel] = thirdCountrySixLineAddressForm
-  private val isInReviewMode                       = false
-  private implicit val request                     = withFakeCSRF(FakeRequest())
-  private val ThirdCountryOrganisationId           = "third-country-organisation"
-  private val viewSixLineAddress                   = SixLineAddressViewModel
+  private val form: Form[SixLineAddressMatchModel]              = thirdCountrySixLineAddressForm
+  private val isInReviewMode                                    = false
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
+  private val ThirdCountryOrganisationId                        = "third-country-organisation"
+  private val viewSixLineAddress                                = SixLineAddressViewModel
 
   private val servicesToTest   = Seq(ThirdCountryIndividualId, ThirdCountrySoleTraderId)
   private val anyOtherServices = ThirdCountryOrganisationId

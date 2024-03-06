@@ -19,6 +19,7 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NinoOrUtrChoice
@@ -30,9 +31,9 @@ class HowCanWeIdentifyYouSpec extends ViewSpec {
   val form: Form[NinoOrUtrChoice]                    = ninoOrUtrChoiceForm
   val formWithNothingSelected: Form[NinoOrUtrChoice] = ninoOrUtrChoiceForm.bind(Map("ninoOrUtrRadio" -> ""))
 
-  val isInReviewMode   = false
-  val previousPageUrl  = "/"
-  implicit val request = withFakeCSRF(FakeRequest())
+  val isInReviewMode                                    = false
+  val previousPageUrl                                   = "/"
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[how_can_we_identify_you]
 

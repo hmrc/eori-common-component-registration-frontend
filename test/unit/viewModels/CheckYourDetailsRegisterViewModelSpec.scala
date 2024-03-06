@@ -78,11 +78,11 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
       result shouldBe "Registered partnership name"
     }
     "return correct messages for orgType" in organisationWithCharityToTest.foreach { test =>
-      val result = constructorInstance.orgNameLabel(test, false)
+      val result = constructorInstance.orgNameLabel(test, isPartnership = false)
       result shouldBe "Organisation name"
     }
     "return correct messages for any other " in individualToTest.foreach { test =>
-      val result = constructorInstance.orgNameLabel(test, false)
+      val result = constructorInstance.orgNameLabel(test, isPartnership = false)
       result shouldBe "Registered company name"
     }
   }
@@ -92,7 +92,7 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
       val result = constructorInstance.ninoOrUtrLabel(
         limitedLiabilityPartnershipRegistrationDetails,
         Option(CdsOrganisationType.LimitedLiabilityPartnership),
-        false
+        isPartnership = false
       )
       result shouldBe "Corporation Tax Unique Taxpayer Reference (UTR)"
     }
@@ -101,7 +101,7 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
       val result = constructorInstance.ninoOrUtrLabel(
         partnershipRegistrationDetails,
         Option(CdsOrganisationType.Partnership),
-        true
+        isPartnership = true
       )
       result shouldBe "Partnership Self Assessment UTR"
     }

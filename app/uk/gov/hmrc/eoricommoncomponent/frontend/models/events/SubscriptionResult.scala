@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionResponse
 
@@ -29,7 +29,7 @@ case class SubscriptionResult(
 )
 
 object SubscriptionResult {
-  implicit val format = Json.format[SubscriptionResult]
+  implicit val format: OFormat[SubscriptionResult] = Json.format[SubscriptionResult]
 
   def apply(response: SubscriptionResponse): SubscriptionResult =
     SubscriptionResult(

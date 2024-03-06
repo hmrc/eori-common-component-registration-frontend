@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{CommonHeader, MessagingServiceParam}
 
 import java.time.LocalDateTime
@@ -29,15 +29,15 @@ case class MDGResponseCommon(
 )
 
 object MDGResponseCommon extends CommonHeader {
-  implicit val formats = Json.format[MDGResponseCommon]
+  implicit val formats: OFormat[MDGResponseCommon] = Json.format[MDGResponseCommon]
 }
 
 case class SubscriptionCreateResponse(responseCommon: MDGResponseCommon, responseDetail: Option[ResponseDetail])
 
 object SubscriptionCreateResponse {
-  implicit val jsonFormat    = Json.format[SubscriptionCreateResponse]
-  val EoriAlreadyExists      = "069 - EORI already exists for the VAT Number"
-  val SubscriptionInProgress = "068 - Subscription already in-progress or active"
-  val EoriAlreadyAssociated  = "070 - There is another EORI already associated to this business partner"
-  val RequestNotProcessed    = "003 - Request could not be processed"
+  implicit val jsonFormat: OFormat[SubscriptionCreateResponse] = Json.format[SubscriptionCreateResponse]
+  val EoriAlreadyExists                                        = "069 - EORI already exists for the VAT Number"
+  val SubscriptionInProgress                                   = "068 - Subscription already in-progress or active"
+  val EoriAlreadyAssociated                                    = "070 - There is another EORI already associated to this business partner"
+  val RequestNotProcessed                                      = "003 - Request could not be processed"
 }

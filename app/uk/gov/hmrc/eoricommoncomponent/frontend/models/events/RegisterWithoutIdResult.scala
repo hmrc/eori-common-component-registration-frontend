@@ -31,7 +31,7 @@ case class RegisterWithoutIdResult(
 )
 
 object RegisterWithoutIdResult extends CommonHeader {
-  implicit val format = Json.format[RegisterWithoutIdResult]
+  implicit val format: OFormat[RegisterWithoutIdResult] = Json.format[RegisterWithoutIdResult]
 
   def apply(response: RegisterWithoutIdResponseHolder): RegisterWithoutIdResult = {
     val responseCommon = response.registerWithoutIDResponse.responseCommon

@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class BusinessShortName(shortNameProvided: Boolean, shortName: Option[String])
 
 object BusinessShortName {
-  implicit val jsonFormat = Json.format[BusinessShortName]
+  implicit val jsonFormat: OFormat[BusinessShortName] = Json.format[BusinessShortName]
 
-  def apply(shortName: String): BusinessShortName = BusinessShortName(true, Some(shortName))
+  def apply(shortName: String): BusinessShortName = BusinessShortName(shortNameProvided = true, Some(shortName))
 }

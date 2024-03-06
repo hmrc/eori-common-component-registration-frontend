@@ -26,12 +26,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Session}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Company
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   CdsOrganisationType,
   RegistrationDetailsIndividual,
   RegistrationDetailsOrganisation
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
+import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -76,6 +79,14 @@ class SubscriptionFlowManagerSpec
       )
 
       controller.currentSubscriptionFlow(mockRequest, hc) shouldBe Right(mockSubscriptionFlow)
+    }
+
+    "return FlowNotFound when no data stored there" in {
+      when(mockRequestSessionData.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Left(DataNotFound("key"))
+      )
+
+      controller.currentSubscriptionFlow(mockRequest, hc) shouldBe Left(FlowNotFound())
     }
 
     "fail when there was no flow stored in session before" in {
@@ -312,6 +323,21 @@ class SubscriptionFlowManagerSpec
         SoleTraderSubscriptionFlow,
         RegistrationConfirmPage.url(atarService)
       )(mockRequest)
+    }
+
+    "start Corporate Subscription Flow when cached registration details are for an Organisation and pass organisationType as input" in {
+      when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(None)
+
+      when(mockCdsFrontendDataCache.registrationDetails(mockRequest))
+        .thenReturn(Future.successful(mockOrgRegistrationDetails))
+      val (subscriptionPage, session) =
+        await(controller.startSubscriptionFlow(Some(RegistrationConfirmPage), Company, atarService)(mockRequest))
+
+      subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
+      session shouldBe mockSession
+
+      verify(mockRequestSessionData)
+        .storeUserSubscriptionFlow(OrganisationSubscriptionFlow, RegistrationConfirmPage.url(atarService))(mockRequest)
     }
   }
 }

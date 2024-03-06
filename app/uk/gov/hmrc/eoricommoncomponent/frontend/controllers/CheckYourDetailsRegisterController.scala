@@ -43,13 +43,13 @@ class CheckYourDetailsRegisterController @Inject() (
   def reviewDetails(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => _: LoggedInUserWithEnrolments =>
-        viewModelConstructor.generateViewModel(service).map(_ match {
+        viewModelConstructor.generateViewModel(service).map {
           case Some(viewModel) =>
             Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
           case None =>
             logger.warn("Data is missing from the cache so the user is being redirected to the start of the journey")
             Redirect(routes.EmailController.form(service))
-        })
+        }
     }
 
   def submitDetails(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {

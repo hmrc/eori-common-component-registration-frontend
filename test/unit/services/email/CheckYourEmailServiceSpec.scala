@@ -56,7 +56,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
-  implicit val loggedInUser =
+  implicit val loggedInUser: LoggedInUserWithEnrolments =
     LoggedInUserWithEnrolments(
       None,
       None,
@@ -132,9 +132,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
 
       val result = await(service.emailConfirmed(loggedInUser, subscription))
       result.header.status mustBe SEE_OTHER
-      result.header.headers(
-        "Location"
-      ) mustBe (s"/customs-registration-services/${subscription.code}/register/sign-out")
+      result.header.headers("Location") mustBe s"/customs-registration-services/${subscription.code}/register/sign-out"
     }
 
     "fetch and save email successfully then populate emailConfirmedView when not confirmed" in servicesToTest.foreach {
@@ -200,7 +198,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
             )
           )
 
-        val result = await(service.locationByAnswer(YesNo.apply(true), subscription))
+        val result = await(service.locationByAnswer(YesNo.apply(isYes = true), subscription))
         result.header.status mustBe SEE_OTHER
         result.header.headers(
           "Location"
@@ -208,7 +206,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
     }
 
     "redirect to WhatIsYourEmailController when answer is no" in servicesToTest.foreach { subscription =>
-      val result = await(service.locationByAnswer(YesNo.apply(false), subscription))
+      val result = await(service.locationByAnswer(YesNo.apply(isYes = false), subscription))
       result.header.status mustBe SEE_OTHER
       result.header.headers(
         "Location"

@@ -17,7 +17,6 @@
 package unit.services
 
 import base.UnitSpec
-import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfter
@@ -55,8 +54,8 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
     reset(mockUpdateVerifiedEmailConnector, mockUpdateCustomsDataStoreConnector)
   }
 
-  val dateTime     = DateTime.now()
-  private val eori = "GBXXXXXXXXX0000"
+  val dateTime: LocalDateTime = LocalDateTime.now()
+  private val eori            = "GBXXXXXXXXX0000"
 
   private val verifiedEmailResponse = VerifiedEmailResponse(
     UpdateVerifiedEmailResponse(

@@ -16,35 +16,44 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.email
 
-import org.joda.time.format.ISODateTimeFormat
-import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.json._
 
 import java.time._
+import java.time.format.DateTimeFormatter
 
-// $COVERAGE-OFF$
 object DateTimeUtil {
 
-  def dateTime: DateTime =
-    new DateTime(Clock.systemUTC().instant.toEpochMilli, DateTimeZone.UTC)
+  def dateTime: LocalDateTime = LocalDateTime.ofInstant(
+    Clock.systemUTC().instant,
+    ZoneId.of("Europe/London")
+  ).truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
 
-  private def dateTimeWritesIsoUtc: Writes[DateTime] = new Writes[DateTime] {
+  private def dateTimeWritesIsoUtc: Writes[LocalDateTime] = new Writes[LocalDateTime] {
 
-    def writes(d: org.joda.time.DateTime): JsValue =
-      JsString(d.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()))
+    def writes(d: LocalDateTime): JsValue =
+      JsString(
+        ZonedDateTime.of(d, ZoneId.of("Europe/London")).withNano(0).withZoneSameInstant(ZoneOffset.UTC).format(
+          DateTimeFormatter.ISO_DATE_TIME
+        )
+      )
 
   }
 
-  private def dateTimeReadsIso: Reads[DateTime] = new Reads[DateTime] {
+  private def dateTimeReadsIso: Reads[LocalDateTime] = new Reads[LocalDateTime] {
 
-    def reads(value: JsValue): JsResult[DateTime] =
-      JsSuccess(ISODateTimeFormat.dateTimeParser.parseDateTime(value.as[String]))
+    def reads(value: JsValue): JsResult[LocalDateTime] =
+      try JsSuccess(
+        ZonedDateTime.parse(value.as[String], DateTimeFormatter.ISO_DATE_TIME).withZoneSameInstant(
+          ZoneId.of("Europe/London")
+        ).toLocalDateTime
+      )
+      catch {
+        case e: Exception => JsError(s"Could not parse '${value.toString()}' as an ISO date. Reason: ${e.getMessage}")
+      }
 
   }
 
-  implicit val dateTimeReads: Reads[DateTime]   = dateTimeReadsIso
-  implicit val dateTimeWrites: Writes[DateTime] = dateTimeWritesIsoUtc
+  implicit val dateTimeReads: Reads[LocalDateTime]   = dateTimeReadsIso
+  implicit val dateTimeWrites: Writes[LocalDateTime] = dateTimeWritesIsoUtc
 
 }
-
-// $COVERAGE-ON$

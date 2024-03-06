@@ -27,14 +27,14 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, V
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
 class VatDetailsService @Inject() (
   appConfig: AppConfig,
   vatCustomerInfoConnector: GetVatCustomerInformationConnector,
   vatControlListConnector: VatControlListConnector
-)(implicit ec: ExecutionContext) {
+) {
 
   def getVatCustomerInformation(
     number: String

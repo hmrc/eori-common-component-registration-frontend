@@ -20,7 +20,6 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.NoActiveSession
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
-import uk.gov.hmrc.play.bootstrap.config.AuthRedirects
 
 trait AuthRedirectSupport extends AuthRedirects {
 

@@ -18,14 +18,15 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.you_cannot_change_address_organisation
 import util.ViewSpec
 
 class YouCannotChangeAddressOrganisationSpec extends ViewSpec {
 
-  private implicit val request            = withFakeCSRF(fakeAtarRegisterRequest)
-  private val youCantChangeAddressOrgView = instanceOf[you_cannot_change_address_organisation]
+  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
+  private val youCantChangeAddressOrgView                       = instanceOf[you_cannot_change_address_organisation]
 
   "You cannot change address for Organisation page" should {
 

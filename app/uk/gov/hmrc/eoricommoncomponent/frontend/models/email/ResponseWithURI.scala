@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.email
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class ResponseWithURI(redirectUri: String)
 
 object ResponseWithURI {
-  implicit val format = Json.format[ResponseWithURI]
+  implicit val format: OFormat[ResponseWithURI] = Json.format[ResponseWithURI]
 }

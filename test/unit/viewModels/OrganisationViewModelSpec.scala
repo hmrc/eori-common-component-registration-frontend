@@ -65,6 +65,26 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
         )
       )
     }
+
+    "return valid options for third-country including EU user location" in {
+      val selectedUserLocation = Some(UserLocation.ThirdCountryIncEU)
+      val viewModel            = OrganisationViewModel
+
+      val options = viewModel.validOptions(selectedUserLocation)
+
+      options should contain theSameElementsAs Seq(
+        CdsOrganisationType.ThirdCountryOrganisationId -> messages(
+          "cds.matching.organisation-type.radio.organisation.label"
+        ),
+        CdsOrganisationType.ThirdCountrySoleTraderId -> messages(
+          "cds.matching.organisation-type.radio.sole-trader.label"
+        ),
+        CdsOrganisationType.ThirdCountryIndividualId -> messages(
+          "cds.matching.organisation-type.radio.individual.label"
+        )
+      )
+    }
+
     "return valid options for any other  location user location" in {
       val selectedUserLocation = Some(UserLocation.Islands)
       val viewModel            = OrganisationViewModel
@@ -84,6 +104,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
         )
       )
     }
+
     "return hint text options for non-UK user location" in {
       val userLocation = Some(UserLocation.ThirdCountry)
       val viewModel    = OrganisationViewModel
@@ -103,6 +124,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       result shouldBe expectedResult
 
     }
+
     "return hint text options for UK-option user location" in {
       val userLocation = Some(UserLocation.Uk)
       val viewModel    = OrganisationViewModel

@@ -19,6 +19,7 @@ package unit.forms.models.subscription
 import base.{Injector, UnitSpec}
 import play.api.Application
 import play.api.data.FormError
+import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.stubMessages
@@ -31,7 +32,7 @@ class CompanyRegisteredCountrySpec extends UnitSpec with Injector {
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
-  implicit val messages = stubMessages()
+  implicit val messages: Messages = stubMessages()
 
   "Company Registered Country form" should {
 

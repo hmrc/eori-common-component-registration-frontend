@@ -19,6 +19,7 @@ package unit.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.UtrMatchModel
@@ -27,13 +28,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_ut
 import util.ViewSpec
 
 class MatchOrganisationUtrSpec extends ViewSpec {
-  val form: Form[UtrMatchModel]                     = haveUtrForm
-  val formWithNoSelectionError: Form[UtrMatchModel] = haveUtrForm.bind(Map.empty[String, String])
-  val isInReviewMode                                = false
-  val previousPageUrl                               = "/"
-  val nonSoleTraderType                             = "charity-public-body-not-for-profit"
-  val soleTraderType                                = "sole-trader"
-  implicit val request                              = withFakeCSRF(FakeRequest())
+  val form: Form[UtrMatchModel]                         = haveUtrForm
+  val formWithNoSelectionError: Form[UtrMatchModel]     = haveUtrForm.bind(Map.empty[String, String])
+  val isInReviewMode                                    = false
+  val previousPageUrl                                   = "/"
+  val nonSoleTraderType                                 = "charity-public-body-not-for-profit"
+  val soleTraderType                                    = "sole-trader"
+  implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[match_organisation_utr]
 

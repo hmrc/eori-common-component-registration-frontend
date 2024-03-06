@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription
 
 import play.api.Logger
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress.createEstablishmentAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.ContactInformation.createContactInformation
@@ -35,8 +35,8 @@ case class SubscriptionCreateRequest(requestCommon: RequestCommon, requestDetail
 
 object SubscriptionCreateRequest {
 
-  implicit val jsonFormat = Json.format[SubscriptionCreateRequest]
-  private val logger      = Logger(this.getClass)
+  implicit val jsonFormat: OFormat[SubscriptionCreateRequest] = Json.format[SubscriptionCreateRequest]
+  private val logger                                          = Logger(this.getClass)
 
   // Registration journey
   def fromOrganisation(
@@ -135,12 +135,12 @@ object SubscriptionCreateRequest {
       case VatIdentification(cc, n)      => Some(VatId(cc, n))
     }
 
-    def removeEmptyList: List[VatId] => Option[List[VatId]] = {
+    def removeEmptyList(): List[VatId] => Option[List[VatId]] = {
       case Nil => None
       case vs  => Some(vs)
     }
 
-    vis map removeEmpty flatMap removeEmptyList
+    vis map removeEmpty flatMap removeEmptyList()
   }
 
 }

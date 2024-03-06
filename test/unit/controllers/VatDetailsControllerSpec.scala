@@ -293,7 +293,7 @@ class VatDetailsControllerSpec
       }
     }
 
-    "redirect to sorry we are experiencing techincal difficulties url when a service unavailable response is returned" in {
+    "redirect to sorry we are experiencing technical difficulties url when a service unavailable response is returned" in {
       val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
         Left(ResponseError(SERVICE_UNAVAILABLE, "service unavailable"))
 
@@ -303,6 +303,19 @@ class VatDetailsControllerSpec
 
       submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
         status(result) shouldBe SERVICE_UNAVAILABLE
+      }
+    }
+
+    "redirect to sorry we are experiencing technical difficulties url when a Internal Server Error response is returned" in {
+      val rightValueForEitherT: Either[ResponseError, VatControlListResponse] =
+        Left(ResponseError(INTERNAL_SERVER_ERROR, "internal server error"))
+
+      vatControlListMock()(EitherT[Future, ResponseError, VatControlListResponse] {
+        Future.successful(rightValueForEitherT)
+      })
+
+      submitFormInCreateModeForInvalidHttpStatus(validRequest) { result =>
+        status(result) shouldBe INTERNAL_SERVER_ERROR
       }
     }
   }
