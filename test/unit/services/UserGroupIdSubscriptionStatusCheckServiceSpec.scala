@@ -26,7 +26,7 @@ import org.scalatest.time.{Millis, Span}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{Request, Result}
-import play.api.test.Helpers.{LOCATION, defaultAwaitTimeout, header}
+import play.api.test.Helpers.{defaultAwaitTimeout, header, LOCATION}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CacheIds, GroupId, InternalId, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
