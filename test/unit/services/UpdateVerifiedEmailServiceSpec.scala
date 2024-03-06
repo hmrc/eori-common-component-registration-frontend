@@ -17,17 +17,13 @@
 package unit.services
 
 import base.UnitSpec
-import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.{ServiceUnavailable, VerifiedEmailResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  UpdateCustomsDataStoreConnector,
-  UpdateVerifiedEmailConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{UpdateCustomsDataStoreConnector, UpdateVerifiedEmailConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.UpdateVerifiedEmailResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RequestCommonGenerator, UpdateVerifiedEmailService}
@@ -55,7 +51,7 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
     reset(mockUpdateVerifiedEmailConnector, mockUpdateCustomsDataStoreConnector)
   }
 
-  val dateTime     = DateTime.now()
+  val dateTime: LocalDateTime = LocalDateTime.now()
   private val eori = "GBXXXXXXXXX0000"
 
   private val verifiedEmailResponse = VerifiedEmailResponse(

@@ -24,7 +24,7 @@ import play.api.data.Form
 import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.{AnyContent, Request, Session}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Helpers.await
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation

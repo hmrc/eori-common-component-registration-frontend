@@ -72,7 +72,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         "SAFEID",
         None,
         None,
-        true,
+        isEditable = true,
         isAnAgent = false,
         isAnIndividual = false,
         None,

@@ -20,10 +20,10 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.contentAsString
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.eoricommoncomponent.frontend.frontend._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.frontend._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 import util.ViewSpec
 

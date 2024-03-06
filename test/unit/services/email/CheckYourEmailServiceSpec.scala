@@ -26,7 +26,7 @@ import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{await, contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{await, contentAsString}
 import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm

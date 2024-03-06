@@ -21,11 +21,8 @@ import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  ThirdCountryIndividualId,
-  ThirdCountrySoleTraderId
-}
+import play.api.test.Helpers.contentAsString
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{ThirdCountryIndividualId, ThirdCountrySoleTraderId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SixLineAddressMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._

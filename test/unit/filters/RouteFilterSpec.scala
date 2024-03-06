@@ -16,8 +16,8 @@
 
 package unit.filters
 
-import akka.actor.ActorSystem
 import base.UnitSpec
+import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.testkit.NoMaterializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, spy, when}
@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{RequestHeader, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
-import play.api.{mvc, Configuration, Environment}
+import play.api.{Configuration, Environment, mvc}
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.filters.RouteFilter

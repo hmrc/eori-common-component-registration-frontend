@@ -16,8 +16,8 @@
 
 package unit.services
 
-import akka.dispatch.ThreadPoolConfig.defaultTimeout
 import base.UnitSpec
+import org.apache.pekko.dispatch.ThreadPoolConfig.defaultTimeout
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
