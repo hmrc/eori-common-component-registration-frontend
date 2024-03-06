@@ -19,19 +19,18 @@ object AppDependencies {
   )
 
   val testDependencies: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc"            %% s"bootstrap-test-play-$playVersion" % bootstrapVersion    % "test",
-    "org.scalatest"          %% "scalatest"                         % "3.2.17"            % "test,it",
-    "org.playframework"      %% "play-test"                         % PlayVersion.current % "test,it",
-    "org.scalatestplus.play" %% "scalatestplus-play"                % "7.0.1"             % "test,it",
-    "org.scalacheck"         %% "scalacheck"                        % "1.17.0"            % "test,it",
-    "org.scalatestplus"      %% "scalacheck-1-15"                   % "3.2.11.0"          % "test,it",
-    "org.jsoup"               % "jsoup"                             % "1.17.2"            % "test,it",
-    "us.codecraft"            % "xsoup"                             % "0.3.6"             % "test,it",
-    "org.mockito"             % "mockito-core"                      % "5.10.0"            % "test,it",
-    "org.scalatestplus"      %% "mockito-4-6"                       % "3.2.15.0"          % "test, it",
-    "org.pegdown"             % "pegdown"                           % "1.6.0"             % "test, it",
-    "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-28"           % mongoDbVersion      % "test, it",
-    "com.vladsch.flexmark"    % "flexmark-all"                      % "0.64.8"            % "test,it"
+    "uk.gov.hmrc"            %% s"bootstrap-test-play-$playVersion"  % bootstrapVersion    % "test",
+    "org.scalatest"          %% "scalatest"                          % "3.2.17"            % "test,it",
+    "org.playframework"      %% "play-test"                          % PlayVersion.current % "test,it",
+    "org.scalatestplus.play" %% "scalatestplus-play"                 % "7.0.1"             % "test,it",
+    "org.scalacheck"         %% "scalacheck"                         % "1.17.0"            % "test,it",
+    "org.scalatestplus"      %% "scalacheck-1-15"                    % "3.2.11.0"          % "test,it",
+    "org.jsoup"               % "jsoup"                              % "1.17.2"            % "test,it",
+    "us.codecraft"            % "xsoup"                              % "0.3.6"             % "test,it",
+    "org.mockito"             % "mockito-core"                       % "5.11.0"            % "test,it",
+    "org.scalatestplus"      %% "mockito-4-6"                        % "3.2.15.0"          % "test, it",
+    "uk.gov.hmrc.mongo"      %% s"hmrc-mongo-test-play-$playVersion" % mongoDbVersion      % "test, it",
+    "com.vladsch.flexmark"    % "flexmark-all"                       % "0.64.8"            % "test,it"
   )
 
   def apply(): Seq[ModuleID] = compileDependencies ++ testDependencies
