@@ -34,12 +34,7 @@ case class EstablishmentAddress(
   city: String,
   postalCode: Option[String] = None,
   countryCode: String
-) {
-
-  def updateCountryFromAddress(address: AddressViewModel): EstablishmentAddress =
-    this.copy(countryCode = address.countryCode)
-
-}
+)
 
 object EstablishmentAddress {
   implicit val jsonFormat: OFormat[EstablishmentAddress] = Json.format[EstablishmentAddress]

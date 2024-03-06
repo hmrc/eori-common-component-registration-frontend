@@ -23,10 +23,10 @@ class YesNoSpec extends UnitSpec {
 
   "YesNo" should {
     "when true, have isNo false" in {
-      YesNo(true).isNo shouldBe false
+      YesNo(isYes = true).isNo shouldBe false
     }
     "when false, have isNo true" in {
-      YesNo(false).isNo shouldBe true
+      YesNo(isYes = false).isNo shouldBe true
     }
   }
 }

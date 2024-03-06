@@ -1,7 +1,7 @@
 import com.typesafe.sbt.packager.MappingsHelper.*
 import play.sbt.routes.RoutesKeys
 import play.sbt.routes.RoutesKeys.*
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, targetJvm}
+import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 
 import scala.language.postfixOps
 

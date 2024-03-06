@@ -27,10 +27,11 @@ object EnrolmentPendingViewModel {
       messages("cds.enrolment.pending.otherService")
     )
 
-  def title(processingService: Option[Service], service: Service)(implicit messages: Messages): String =
+  def title(processingService: Option[Service], service: Service)(implicit messages: Messages): String = {
     if (processingService.contains(service))
       messages("cds.enrolment.pending.user.title")
     else messages("cds.enrolment.pending.user.title.other-service")
+  }
 
   def otherServiceParagraph(processingService: Option[Service])(implicit messages: Messages): String =
     messages(processingServiceName(processingService))

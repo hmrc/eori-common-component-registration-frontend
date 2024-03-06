@@ -22,9 +22,6 @@ import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status.{INSUFFICIENT_STORAGE, OK}
 
-import java.lang
-import scala.util.control.NonFatal
-
 object TaxEnrolmentsService {
   val validTaxEnrolmentsIssuerRequestJson = Json.parse("""{
                                                          |    "serviceName": "HMRC-CUS-ORG",

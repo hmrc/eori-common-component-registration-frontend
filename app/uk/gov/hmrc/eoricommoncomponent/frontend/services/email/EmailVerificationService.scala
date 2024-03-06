@@ -37,7 +37,7 @@ class EmailVerificationService @Inject() (emailVerificationConnector: EmailVerif
   implicit ec: ExecutionContext
 ) {
 
-  val verifiedResponse: Future[Either[ResponseError, EmailVerificationStatus]] =
+  private val verifiedResponse: Future[Either[ResponseError, EmailVerificationStatus]] =
     Future.successful(Right(EmailVerificationStatus.Verified))
 
   def getVerificationStatus(email: String, credId: String)(implicit
@@ -55,7 +55,7 @@ class EmailVerificationService @Inject() (emailVerificationConnector: EmailVerif
       }
     else EitherT(verifiedResponse)
 
-  def findEmailInResponse(email: String, statusResponse: VerificationStatusResponse): Option[VerificationStatus] =
+  private def findEmailInResponse(email: String, statusResponse: VerificationStatusResponse): Option[VerificationStatus] =
     statusResponse.emails.find(_.emailAddress.trim.toLowerCase == email.trim.toLowerCase)
 
   def startVerificationJourney(credId: String, service: Service, email: String)(implicit

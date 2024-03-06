@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Cu
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
+import java.time.ZoneOffset
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 

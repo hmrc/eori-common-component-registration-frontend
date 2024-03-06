@@ -25,9 +25,9 @@ object RegistrationDetailsBuilder {
 
   val defaultCountryName = "United Kingdom"
   val defaultEmail       = "john.doe@example.com"
-  val defaultAddress     = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
+  val defaultAddress: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
 
-  val defaultAddressWithMandatoryValuesOnly = Address("Line 1", None, None, None, None, "GB")
+  val defaultAddressWithMandatoryValuesOnly: Address = Address("Line 1", None, None, None, None, "GB")
 
   private val DefaultOrganisationRegistrationDetails =
     RegistrationDetails.organisation(
@@ -62,20 +62,20 @@ object RegistrationDetailsBuilder {
   val emptyETMPOrgTypeRegistrationDetails: RegistrationDetailsOrganisation =
     DefaultOrganisationRegistrationDetails.copy(etmpOrganisationType = None)
 
-  val incorporatedRegistrationDetails =
+  val incorporatedRegistrationDetails: RegistrationDetailsOrganisation =
     DefaultOrganisationRegistrationDetails.copy(etmpOrganisationType = Some(CorporateBody))
 
-  val individualRegistrationDetails                     = DefaultIndividualRegistrationDetails
-  val individualRegistrationDetailsNotIdentifiedByReg01 = DefaultIndividualRegistrationDetails.copy(safeId = SafeId(""))
+  val individualRegistrationDetails: RegistrationDetailsIndividual = DefaultIndividualRegistrationDetails.copy(customsId = None)
+  val individualRegistrationDetailsNotIdentifiedByReg01: RegistrationDetailsIndividual = DefaultIndividualRegistrationDetails.copy(safeId = SafeId(""))
 
-  val existingOrganisationRegistrationDetails = DefaultOrganisationRegistrationDetails
+  val existingOrganisationRegistrationDetails: RegistrationDetailsOrganisation = DefaultOrganisationRegistrationDetails
     .copy(etmpOrganisationType = Some(Partnership))
     .withEstablishmentDate("2001-06-09")
 
   val PartneshipRegistrationDetails: RegistrationDetailsOrganisation =
     DefaultOrganisationRegistrationDetails.copy(etmpOrganisationType = Some(Partnership))
 
-  val soleTraderRegistrationDetails = DefaultIndividualRegistrationDetails.copy(name = "John Doe Sole Trader")
+  val soleTraderRegistrationDetails: RegistrationDetailsIndividual = DefaultIndividualRegistrationDetails.copy(name = "John Doe Sole Trader")
 
   val sub01Outcome: Sub01Outcome = Sub01Outcome("2016-08-18T14:01:05")
 

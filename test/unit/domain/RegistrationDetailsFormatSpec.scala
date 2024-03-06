@@ -27,7 +27,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
 
   import RegistrationDetails.formats
 
-  val organisationDetails = RegistrationDetailsOrganisation(
+  val organisationDetails: RegistrationDetailsOrganisation = RegistrationDetailsOrganisation(
     customsId = Some(Eori("ZZZ1ZZZZ23ZZZZZZZ")),
     TaxPayerId("sapNumber"),
     safeId = SafeId("safe-id"),
@@ -37,7 +37,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
     etmpOrganisationType = Some(CorporateBody)
   )
 
-  val organisationJson = Json.parse("""
+  val organisationJson: JsValue = Json.parse("""
       |{
       |   "customsId": {
       |     "eori": "ZZZ1ZZZZ23ZZZZZZZ"
@@ -59,7 +59,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
       |}
     """.stripMargin)
 
-  val organisationDetailsWithDate = RegistrationDetailsOrganisation(
+  val organisationDetailsWithDate: RegistrationDetailsOrganisation = RegistrationDetailsOrganisation(
     customsId = None,
     TaxPayerId("sapNumber"),
     safeId = SafeId("safe-id"),
@@ -69,7 +69,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
     etmpOrganisationType = Some(CorporateBody)
   )
 
-  val organisationJsonWithDate = Json.parse("""
+  val organisationJsonWithDate: JsValue = Json.parse("""
       |{
       |   "sapNumber":{ "id": "sapNumber"},
       |   "safeId":{ "id": "safe-id"},
@@ -89,14 +89,14 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
       |}
     """.stripMargin)
 
-  val dateOfBirth = {
+  val dateOfBirth: LocalDate = {
     val year  = 1961
     val month = 4
     val day   = 12
     LocalDate.of(year, month, day)
   }
 
-  val individualDetails = RegistrationDetailsIndividual(
+  val individualDetails: RegistrationDetailsIndividual = RegistrationDetailsIndividual(
     customsId = None,
     TaxPayerId("sapNumber"),
     safeId = SafeId("safe-id"),
@@ -105,7 +105,7 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
     dateOfBirth
   )
 
-  val individualJson = Json.parse("""
+  val individualJson: JsValue = Json.parse("""
       |{
       |   "sapNumber":{ "id": "sapNumber"},
       |      "safeId":{ "id": "safe-id"},
@@ -119,6 +119,26 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
       |      "countryCode":"GB"
       |   },
       |   "dateOfBirth": "1961-04-12"
+      |}
+    """.stripMargin)
+
+  val safeIdDetailsJson: JsValue = Json.parse("""
+      |{
+      | "safeId" : {
+      |    "id" : "safe-id"
+      |  },
+      |  "address" : {
+      |    "addressLine1" : "add1",
+      |    "addressLine2" : "add2",
+      |    "addressLine3" : "add3",
+      |    "addressLine4" : "add4",
+      |    "postalCode" : "postcode",
+      |    "countryCode" : "GB"
+      |  },
+      |  "sapNumber" : {
+      |    "id" : "Id"
+      |  },
+      |  "name" : "name"
       |}
     """.stripMargin)
 

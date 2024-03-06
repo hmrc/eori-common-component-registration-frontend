@@ -49,7 +49,7 @@ class GetNinoController @Inject() (
         Ok(
           matchNinoRowIndividualView(
             subscriptionNinoForm,
-            false,
+            isInReviewMode = false,
             routes.GetNinoController.submit(service),
             service = service
           )
@@ -66,7 +66,7 @@ class GetNinoController @Inject() (
               BadRequest(
                 matchNinoRowIndividualView(
                   formWithErrors,
-                  false,
+                  isInReviewMode = false,
                   routes.GetNinoController.submit(service),
                   service = service
                 )
@@ -104,7 +104,7 @@ class GetNinoController @Inject() (
   ): Result = {
     val errorMsg  = Messages("cds.matching-error.individual-not-found")
     val errorForm = subscriptionNinoForm.withGlobalError(errorMsg).fill(formData)
-    BadRequest(matchNinoRowIndividualView(errorForm, false, routes.GetNinoController.submit(service), service))
+    BadRequest(matchNinoRowIndividualView(errorForm, isInReviewMode = false, routes.GetNinoController.submit(service), service))
   }
 
 }

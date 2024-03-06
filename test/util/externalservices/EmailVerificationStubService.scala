@@ -20,7 +20,6 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
-import play.mvc.Http.Status._
 
 object EmailVerificationStubService {
 

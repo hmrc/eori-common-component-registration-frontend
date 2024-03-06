@@ -135,12 +135,12 @@ object SubscriptionCreateRequest {
       case VatIdentification(cc, n)      => Some(VatId(cc, n))
     }
 
-    def removeEmptyList: List[VatId] => Option[List[VatId]] = {
+    def removeEmptyList(): List[VatId] => Option[List[VatId]] = {
       case Nil => None
       case vs  => Some(vs)
     }
 
-    vis map removeEmpty flatMap removeEmptyList
+    vis map removeEmpty flatMap removeEmptyList()
   }
 
 }

@@ -34,7 +34,7 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val mockAudit                  = mock[Auditable]
   private val requestSessionData         = new RequestSessionData(mockAudit)
-  private implicit val mockRequest       = mock[Request[AnyContent]]
+  private implicit val mockRequest: Request[AnyContent] = mock[Request[AnyContent]]
   private val existingSessionValues      = Map("someExistingValue" -> "value")
   private val existingSession: Session   = Session(existingSessionValues)
   private val mockOrganisationType       = mock[CdsOrganisationType]

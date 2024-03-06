@@ -48,10 +48,9 @@ object OrganisationViewModel {
     )
 
     userLocation match {
-      case Some(UserLocation.Uk)                => ukOptionsFirstScreen
-      case Some(UserLocation.ThirdCountry)      => thirdCountryOptions
-      case Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
-      case _                                    => ukOptionsFirstScreen
+      case Some(UserLocation.Uk)                                                  => ukOptionsFirstScreen
+      case Some(UserLocation.ThirdCountry) | Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
+      case _                                                                      => ukOptionsFirstScreen
     }
   }
 

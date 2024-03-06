@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import play.api.Logging
-import play.api.libs.json.{JsError, JsSuccess, Json, Reads}
+import play.api.libs.json.{JsError, JsSuccess, Json, OFormat, Reads}
 import play.mvc.Http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.http.HttpResponse
 
@@ -43,5 +43,5 @@ trait HandleResponses extends Logging {
 final case class ResponseError(status: Int, description: String)
 
 object ResponseError {
-  implicit val format = Json.format[ResponseError]
+  implicit val format: OFormat[ResponseError] = Json.format[ResponseError]
 }

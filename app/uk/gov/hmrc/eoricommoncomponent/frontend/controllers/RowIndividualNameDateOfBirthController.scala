@@ -46,7 +46,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       Future.successful(
-        Ok(rowIndividualNameDob(thirdCountryIndividualNameDateOfBirthForm, organisationType, service, false))
+        Ok(rowIndividualNameDob(thirdCountryIndividualNameDateOfBirthForm, organisationType, service, isInReviewMode = false))
       )
     }
 
@@ -58,7 +58,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
           val form = thirdCountryIndividualNameDateOfBirthForm.fill(
             IndividualNameAndDateOfBirth(firstName, lastName, dateOfBirth)
           )
-          Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, true)))
+          Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, isInReviewMode = true)))
         case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service)))
       }
     }

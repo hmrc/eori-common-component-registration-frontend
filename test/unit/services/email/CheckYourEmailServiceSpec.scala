@@ -200,7 +200,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
             )
           )
 
-        val result = await(service.locationByAnswer(YesNo.apply(true), subscription))
+        val result = await(service.locationByAnswer(YesNo.apply(isYes = true), subscription))
         result.header.status mustBe SEE_OTHER
         result.header.headers(
           "Location"
@@ -208,7 +208,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
     }
 
     "redirect to WhatIsYourEmailController when answer is no" in servicesToTest.foreach { subscription =>
-      val result = await(service.locationByAnswer(YesNo.apply(false), subscription))
+      val result = await(service.locationByAnswer(YesNo.apply(isYes = false), subscription))
       result.header.status mustBe SEE_OTHER
       result.header.headers(
         "Location"

@@ -16,7 +16,7 @@
 
 package util.builders
 
-import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys
 import uk.gov.hmrc.http.SessionKeys
@@ -33,7 +33,7 @@ object SessionBuilder {
   def addToken[T](fakeRequest: FakeRequest[T]): FakeRequest[T] =
     new FakeRequest(CSRFTokenHelper.addCSRFToken(fakeRequest))
 
-  def buildRequestWithSession(authtoken: String) =
+  def buildRequestWithSession(authtoken: String): FakeRequest[AnyContentAsEmpty.type] =
     addToken(FakeRequest().withSession(sessionMap(authtoken): _*))
 
   def buildRequestWithSessionAndFormValues(
@@ -45,27 +45,27 @@ object SessionBuilder {
   def buildRequestWithFormValues(form: Map[String, String]): FakeRequest[AnyContentAsFormUrlEncoded] =
     buildRequestWithSessionNoUserAndToken().withMethod("POST").withFormUrlEncodedBody(form.toList: _*)
 
-  def buildRequestWithSessionNoUser = {
+  def buildRequestWithSessionNoUser: FakeRequest[AnyContentAsEmpty.type] = {
     val sessionId = s"session-${UUID.randomUUID}"
     FakeRequest("GET", "/atar/register").withSession(SessionKeys.sessionId -> sessionId)
   }
 
-  def buildRequestWithSessionNoUserAndToken() = {
+  def buildRequestWithSessionNoUserAndToken(): FakeRequest[AnyContentAsEmpty.type] = {
     val sessionId = s"session-${UUID.randomUUID}"
     addToken(FakeRequest("GET", "/atar/register").withSession(SessionKeys.sessionId -> sessionId))
   }
 
-  def buildRequestWithSessionAndPathNoUserAndBasedInUkNotSelected(method: String, path: String) = {
+  def buildRequestWithSessionAndPathNoUserAndBasedInUkNotSelected(method: String, path: String): FakeRequest[AnyContentAsEmpty.type] = {
     val sessionId = s"session-${UUID.randomUUID}"
     FakeRequest(method, path).withSession(SessionKeys.sessionId -> sessionId)
   }
 
-  def buildRequestWithSessionAndPathNoUser(method: String, path: String) = {
+  def buildRequestWithSessionAndPathNoUser(method: String, path: String): FakeRequest[AnyContentAsEmpty.type] = {
     val sessionId = s"session-${UUID.randomUUID}"
     FakeRequest(method, path).withSession(SessionKeys.sessionId -> sessionId, "visited-uk-page" -> "true")
   }
 
-  def buildRequestWithSessionAndPath(path: String, authToken: String, method: String = "GET") =
+  def buildRequestWithSessionAndPath(path: String, authToken: String, method: String = "GET"): FakeRequest[AnyContentAsEmpty.type] =
     addToken(FakeRequest(method, path)).withSession(sessionMap(authToken): _*)
 
   def buildRequestWithSessionAndPathAndFormValues(
@@ -76,7 +76,7 @@ object SessionBuilder {
   ): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(method, path).withSession(sessionMap(authToken): _*).withFormUrlEncodedBody(form.toList: _*)
 
-  def buildRequestWithSessionAndOrgType(authToken: String, orgTypeId: String) = {
+  def buildRequestWithSessionAndOrgType(authToken: String, orgTypeId: String): FakeRequest[AnyContentAsEmpty.type] = {
     val list    = (RequestSessionDataKeys.selectedOrganisationType -> orgTypeId) :: sessionMap(authToken)
     val request = FakeRequest().withSession(list: _*)
     addToken(request)

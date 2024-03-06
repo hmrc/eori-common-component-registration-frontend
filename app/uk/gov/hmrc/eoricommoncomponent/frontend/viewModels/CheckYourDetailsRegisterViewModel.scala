@@ -170,7 +170,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
     }
 
-  def getProvidedDetails(
+  private def getProvidedDetails(
     isIndividual: Boolean,
     isSoleTrader: Boolean,
     isRowOrganisation: Boolean,
@@ -254,7 +254,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
             summaryListRow(
               key = messages("cds.company.utr.label"),
               value = Some(Html(messages("cds.not-entered.label"))),
-              call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
+              call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false))
             )
           )
         else Seq.empty[SummaryListRow]
@@ -275,7 +275,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
             summaryListRow(
               key = messages("cds.utr.label"),
               value = Some(Html(messages("cds.not-entered.label"))),
-              call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, false))
+              call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false))
             ),
             summaryListRow(
               key = messages("cds.nino.label"),
@@ -346,8 +346,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
   }
 
-  def getProvidedContactDetails(subscription: SubscriptionDetails, service: Service)(implicit
-    messages: Messages
+  private def getProvidedContactDetails(subscription: SubscriptionDetails, service: Service)(implicit
+                                                                                             messages: Messages
   ): SummaryList = {
     val contactName = Seq(subscription.contactDetails.map { cd =>
       summaryListRow(
@@ -392,8 +392,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     )
   }
 
-  def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails)(implicit
-    messages: Messages
+  private def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails)(implicit
+                                                                                      messages: Messages
   ): Seq[SummaryListRow] =
     if (!isIndividual) {
       val dateOfReg = for {
@@ -459,8 +459,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     lines.flatten.map(_.toString).mkString("")
   }
 
-  def summaryListRow(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "")(implicit
-    messages: Messages
+  private def summaryListRow(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "")(implicit
+                                                                                                                messages: Messages
   ) =
     SummaryListRow(
       key = Key(content = Text(messages(key))),

@@ -23,5 +23,5 @@ case class BusinessShortName(shortNameProvided: Boolean, shortName: Option[Strin
 object BusinessShortName {
   implicit val jsonFormat: OFormat[BusinessShortName] = Json.format[BusinessShortName]
 
-  def apply(shortName: String): BusinessShortName = BusinessShortName(true, Some(shortName))
+  def apply(shortName: String): BusinessShortName = BusinessShortName(shortNameProvided = true, Some(shortName))
 }

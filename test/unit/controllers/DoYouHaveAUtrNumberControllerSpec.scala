@@ -52,7 +52,7 @@ class DoYouHaveAUtrNumberControllerSpec
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val matchOrganisationUtrView       = instanceOf[match_organisation_utr]
 
-  implicit val hc = mock[HeaderCarrier]
+  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
   private val controller =
     new DoYouHaveAUtrNumberController(mockAuthAction, mcc, matchOrganisationUtrView, mockSubscriptionDetailsService)

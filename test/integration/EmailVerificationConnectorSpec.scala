@@ -18,7 +18,7 @@ package integration
 
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Application
-import play.api.http.Status.{NOT_FOUND, OK, CREATED, INTERNAL_SERVER_ERROR}
+import play.api.http.Status.{CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
 import play.api.i18n._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{ResponseWithURI, VerificationStatus, VerificationStatusResponse}
 import uk.gov.hmrc.http._
 import util.externalservices.EmailVerificationStubService
-import util.externalservices.EmailVerificationStubService.{verificationStatusSuccessResponse, verifyEmailFailureResponse, verifyEmailInvalidResponse, verifyEmailSuccessResponse}
+import util.externalservices.EmailVerificationStubService.{verificationStatusSuccessResponse, verifyEmailFailureResponse, verifyEmailInvalidResponse}
 import util.externalservices.ExternalServicesConfig._
 
 class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutures {

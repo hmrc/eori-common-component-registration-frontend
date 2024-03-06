@@ -18,7 +18,7 @@ package unit.domain.email
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.{JsNull, JsNumber, JsResultException, JsString, Json}
+import play.api.libs.json.{JsResultException, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.RequestDetail
 
 import java.time.LocalDateTime

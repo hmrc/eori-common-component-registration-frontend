@@ -217,7 +217,7 @@ class CheckYourDetailsRegisterControllerSpec
       }
     }
 
-    "display the business name and six line address from the cache when user wasnt registered" in {
+    "display the business name and six line address from the cache when user wasn't registered" in {
       when(mockSubscriptionDetails.nameOrganisationDetails).thenReturn(Some(NameOrganisationMatchModel("orgName")))
       when(mockSessionCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(organisationRegistrationDetailsWithEmptySafeId))
@@ -424,7 +424,7 @@ class CheckYourDetailsRegisterControllerSpec
       )
       when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(holder))
 
-      showForm(isIndividualSubscriptionFlow = true) { result =>
+      showForm(isIndividualSubscriptionFlow = true, userSelectedOrgType = ThirdCountrySoleTrader) { result =>
         val page = CdsPage(contentAsString(result))
 
         page.getSummaryListValue(

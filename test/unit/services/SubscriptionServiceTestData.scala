@@ -19,6 +19,7 @@ package unit.services
 import common.support.testdata.TestData
 import org.scalacheck.Gen
 import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.TableFor1
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionResponse
@@ -26,11 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Messa
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionSuccessful
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
-  EtmpLegalStatus,
-  EtmpTypeOfPerson,
-  OrganisationTypeConfiguration
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{EtmpLegalStatus, EtmpTypeOfPerson, OrganisationTypeConfiguration}
 import util.TestData
 
 import java.time.{LocalDate, LocalDateTime, ZoneId}
@@ -48,7 +45,7 @@ trait SubscriptionServiceTestData extends TestData {
   val dateOfEstablishment: LocalDate     = LocalDate.parse(dateEstablishedString)
   val dateEstablishedStringForPublicBody = "1900-01-01"
   val principalEconomicActivity          = "A123"
-  val ukVatDetails                       = Some(VatDetails("SE28 1AA", "123456789"))
+  val ukVatDetails: Option[VatDetails] = Some(VatDetails("SE28 1AA", "123456789"))
 
   val contactName        = "John Doe"
   val contactStreet      = "Line 1"
@@ -74,7 +71,7 @@ trait SubscriptionServiceTestData extends TestData {
     Some(contactCountryCode)
   )
 
-  val subscriptionContactDetailsWithPlusSignInTelAndFaxModel = ContactDetailsModel(
+  val subscriptionContactDetailsWithPlusSignInTelAndFaxModel: ContactDetailsModel = ContactDetailsModel(
     contactName,
     contactEmail,
     "+01632961234",
@@ -143,7 +140,7 @@ trait SubscriptionServiceTestData extends TestData {
     addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
   )
 
-  val fullyPopulatedSubscriptionDetailsAllOrgTypes = SubscriptionDetails(
+  val fullyPopulatedSubscriptionDetailsAllOrgTypes: SubscriptionDetails = SubscriptionDetails(
     ukVatDetails = Some(VatDetails("SE28 1AA", "123456789")),
     personalDataDisclosureConsent = Some(true),
     contactDetails = Some(subscriptionContactDetailsModel),
@@ -532,9 +529,9 @@ trait SubscriptionServiceTestData extends TestData {
   ): JsValue = {
 
     val typeOfPersonJson: String =
-      determineTypeOfPersonJson(organisationType.map(x => EtmpOrganisationType.apply(x)), false)
+      determineTypeOfPersonJson(organisationType.map(x => EtmpOrganisationType.apply(x)), isOrganisationEvenIfOrganisationTypeIsNone = false)
     val typeOfLegalStatusJson: String =
-      determineLegalStatus(organisationType.map(x => EtmpOrganisationType.apply(x)), false)
+      determineLegalStatus(organisationType.map(x => EtmpOrganisationType.apply(x)), isOrganisationEvenIfOrganisationTypeIsNone = false)
 
     Json.parse(s"""
          | {
@@ -656,7 +653,6 @@ trait SubscriptionServiceTestData extends TestData {
     isOrganisationEvenIfOrganisationTypeIsNone: Boolean
   ): String = {
     val legalStatus = organisationType match {
-      case Some(o: CdsOrganisationType)  => Some(cdsOrganisationTypeToTypeOfPersonMap(o).legalStatus)
       case Some(o: EtmpOrganisationType) => Some(etmpOrganisationTypeToTypeOfPersonMap(o).legalStatus)
       case None                          => if (isOrganisationEvenIfOrganisationTypeIsNone) None else Some(EtmpLegalStatus.UnincorporatedBody)
     }
@@ -804,5 +800,5 @@ trait SubscriptionServiceTestData extends TestData {
   val subscriptionResponseWithoutPosition: SubscriptionResponse =
     subscriptionResponseWithoutPositionJson.as[SubscriptionResponse]
 
-  val successfulPositionValues = Table("positionValue", "GENERATE", "LINK", "WORKLIST")
+  val successfulPositionValues: TableFor1[String] = Table("positionValue", "GENERATE", "LINK", "WORKLIST")
 }

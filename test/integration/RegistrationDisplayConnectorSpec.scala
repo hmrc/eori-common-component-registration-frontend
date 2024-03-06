@@ -49,7 +49,7 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
-  implicit val hc = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   before {
     resetMockServer()

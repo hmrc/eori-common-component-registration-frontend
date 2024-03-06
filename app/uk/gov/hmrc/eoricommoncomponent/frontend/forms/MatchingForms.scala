@@ -358,7 +358,7 @@ object MatchingForms extends Mappings with Logging {
       )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
     )
 
-  def validLine1: Constraint[String] =
+  private def validLine1: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.organisation-address.line-1.error.empty"))
       case s if s.trim.length > 35 =>
@@ -368,7 +368,7 @@ object MatchingForms extends Mappings with Logging {
       case _ => Valid
     })
 
-  def validLine2: Constraint[String] =
+  private def validLine2: Constraint[String] =
     Constraint({
       case s if s.trim.length > 34 =>
         Invalid(ValidationError("cds.matching.organisation-address.line-2.error.too-long"))
@@ -377,7 +377,7 @@ object MatchingForms extends Mappings with Logging {
       case _ => Valid
     })
 
-  def validLine3: Constraint[String] =
+  private def validLine3: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.organisation-address.line-3.error.empty"))
       case s if s.trim.length > 34 =>
@@ -387,7 +387,7 @@ object MatchingForms extends Mappings with Logging {
       case _ => Valid
     })
 
-  def validLine4: Constraint[String] =
+  private def validLine4: Constraint[String] =
     Constraint({
       case s if s.trim.length > 35 =>
         Invalid(ValidationError("cds.matching.organisation-address.line-4.error.too-long"))
@@ -419,7 +419,7 @@ object MatchingForms extends Mappings with Logging {
     mapping("name" -> text.verifying(validOrganisationName))(NameMatchModel.apply)(NameMatchModel.unapply)
   )
 
-  def validHaveUtr: Constraint[Option[Boolean]] =
+  private def validHaveUtr: Constraint[Option[Boolean]] =
     Constraint({
       case None => Invalid(ValidationError("cds.matching.organisation-utr.field-error.have-utr"))
       case _    => Valid
@@ -429,7 +429,7 @@ object MatchingForms extends Mappings with Logging {
     mapping("have-utr" -> optional(boolean).verifying(validHaveUtr))(UtrMatchModel.apply)(model => Some(model.haveUtr))
   )
 
-  def validHaveNino: Constraint[Option[Boolean]] =
+  private def validHaveNino: Constraint[Option[Boolean]] =
     Constraint({
       case None => Invalid(ValidationError("cds.matching.nino.row.yes-no.error"))
       case _    => Valid
