@@ -27,7 +27,11 @@ import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SicCodeController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, SoleTrader, ThirdCountryOrganisation}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
+  Company,
+  SoleTrader,
+  ThirdCountryOrganisation
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
@@ -201,7 +205,7 @@ class SicCodeControllerSpec
     "redirect to start of the application" in {
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
         .thenReturn(Left(FlowNotFound()))
-      submitFormInCreateMode(mandatoryFieldsMap, userSelectedOrgType = Company){result =>
+      submitFormInCreateMode(mandatoryFieldsMap, userSelectedOrgType = Company) { result =>
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe "/customs-registration-services/atar/register"
 

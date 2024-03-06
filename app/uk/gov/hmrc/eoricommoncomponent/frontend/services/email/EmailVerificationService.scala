@@ -55,7 +55,10 @@ class EmailVerificationService @Inject() (emailVerificationConnector: EmailVerif
       }
     else EitherT(verifiedResponse)
 
-  private def findEmailInResponse(email: String, statusResponse: VerificationStatusResponse): Option[VerificationStatus] =
+  private def findEmailInResponse(
+    email: String,
+    statusResponse: VerificationStatusResponse
+  ): Option[VerificationStatus] =
     statusResponse.emails.find(_.emailAddress.trim.toLowerCase == email.trim.toLowerCase)
 
   def startVerificationJourney(credId: String, service: Service, email: String)(implicit

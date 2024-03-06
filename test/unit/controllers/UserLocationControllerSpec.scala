@@ -31,8 +31,16 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationControll
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, OrganisationResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayResponse, ResponseCommon, ResponseDetail}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
+  ContactResponse,
+  IndividualResponse,
+  OrganisationResponse
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
+  RegistrationDisplayResponse,
+  ResponseCommon,
+  ResponseDetail
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._

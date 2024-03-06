@@ -21,7 +21,16 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 
 class LoggedInUserSpec extends UnitSpec {
-  val loggedInUser: LoggedInUserWithEnrolments = LoggedInUserWithEnrolments(Some(AffinityGroup.Individual), internalId = Some("id"), Enrolments(Set.empty), None, None, None, "cred")
+
+  val loggedInUser: LoggedInUserWithEnrolments = LoggedInUserWithEnrolments(
+    Some(AffinityGroup.Individual),
+    internalId = Some("id"),
+    Enrolments(Set.empty),
+    None,
+    None,
+    None,
+    "cred"
+  )
 
   "LoggedInUser" should {
     "return an userId when internalId has a value" in {

@@ -29,8 +29,8 @@ import util.ViewSpec
 
 class BusinessDetailsRecoveryViewSpec extends ViewSpec {
 
-  private val name             = "Org Name"
-  private val address          = AddressViewModel("street", "", Some("SE28 1AA"), "GB")
+  private val name                                              = "Org Name"
+  private val address                                           = AddressViewModel("street", "", Some("SE28 1AA"), "GB")
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[business_details_recovery]

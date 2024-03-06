@@ -72,7 +72,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
   }
 
   val yesNinoSubmitData: Map[String, String] = Map("have-nino" -> "true")
-  val noNinoSubmitData: Map[String, String] = Map("have-nino" -> "false")
+  val noNinoSubmitData: Map[String, String]  = Map("have-nino" -> "false")
 
   "Viewing the NINO Individual/Sole trader Rest of World Matching form" should {
 

@@ -94,14 +94,15 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
       (SoleTraderSubscriptionFlow, "Is this the right contact address?", NA)
     )
 
-  val formModesGYE: TableFor2[String, (SubscriptionFlow, EtmpOrganisationType) => (Future[Result] => Any) => Unit] = Table(
-    ("formMode", "showFormFunction"),
-    (
-      "create Register",
-      (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showCreateForm(flow, orgType = orgType)(_)
-    ),
-    ("review Register", (flow: SubscriptionFlow, _: EtmpOrganisationType) => showReviewForm(flow)(_))
-  )
+  val formModesGYE: TableFor2[String, (SubscriptionFlow, EtmpOrganisationType) => (Future[Result] => Any) => Unit] =
+    Table(
+      ("formMode", "showFormFunction"),
+      (
+        "create Register",
+        (flow: SubscriptionFlow, orgType: EtmpOrganisationType) => showCreateForm(flow, orgType = orgType)(_)
+      ),
+      ("review Register", (flow: SubscriptionFlow, _: EtmpOrganisationType) => showReviewForm(flow)(_))
+    )
 
   "Viewing the create form " should {
 
@@ -303,9 +304,9 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     "redirect to start of the page" in {
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
         .thenReturn(Left(FlowNotFound()))
-      submitFormInCreateMode(createFormMandatoryFieldsMap){result =>
+      submitFormInCreateMode(createFormMandatoryFieldsMap) { result =>
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe  "/customs-registration-services/atar/register"
+        redirectLocation(result).value mustBe "/customs-registration-services/atar/register"
 
       }
     }

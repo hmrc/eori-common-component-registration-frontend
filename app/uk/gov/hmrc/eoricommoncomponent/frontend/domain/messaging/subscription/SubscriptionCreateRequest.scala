@@ -36,7 +36,7 @@ case class SubscriptionCreateRequest(requestCommon: RequestCommon, requestDetail
 object SubscriptionCreateRequest {
 
   implicit val jsonFormat: OFormat[SubscriptionCreateRequest] = Json.format[SubscriptionCreateRequest]
-  private val logger      = Logger(this.getClass)
+  private val logger                                          = Logger(this.getClass)
 
   // Registration journey
   def fromOrganisation(

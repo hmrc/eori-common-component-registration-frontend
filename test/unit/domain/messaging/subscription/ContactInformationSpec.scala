@@ -33,8 +33,20 @@ class ContactInformationSpec extends UnitSpec {
         Some("89067"),
         Some("john.doe@example.com")
       )
-      val result = ContactInformation.createContactInformation(contactDetail).copy(emailVerificationTimestamp = Some(date))
-      val expectedResult =  ContactInformation(Some("John Contact Doe"), Some(true), Some("Line 1"), Some("City Name"), Some("SE28 1AA"), Some("GB"), Some("1234567"), Some("89067"), Some("john.doe@example.com"), Some(date))
+      val result =
+        ContactInformation.createContactInformation(contactDetail).copy(emailVerificationTimestamp = Some(date))
+      val expectedResult = ContactInformation(
+        Some("John Contact Doe"),
+        Some(true),
+        Some("Line 1"),
+        Some("City Name"),
+        Some("SE28 1AA"),
+        Some("GB"),
+        Some("1234567"),
+        Some("89067"),
+        Some("john.doe@example.com"),
+        Some(date)
+      )
 
       result shouldBe expectedResult
       result.withEmail("test@gmail.com") shouldBe expectedResult.copy(emailAddress = Some("test@gmail.com"))

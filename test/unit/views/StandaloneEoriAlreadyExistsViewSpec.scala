@@ -96,18 +96,40 @@ class StandaloneEoriAlreadyExistsViewSpec extends ViewSpec {
 
   private lazy val individualDoc: Document =
     Jsoup.parse(
-      contentAsString(view(Some("GBXXXXXXXX"), isAdminUser = false, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(isAdminUser = false)))
+      contentAsString(
+        view(
+          Some("GBXXXXXXXX"),
+          isAdminUser = false,
+          eoriOnlyService,
+          StandaloneAlreadyHaveEoriViewModel(isAdminUser = false)
+        )
+      )
     )
 
   private lazy val orgDoc: Document =
     Jsoup.parse(
-      contentAsString(view(Some("GBXXXXXXXX"), isAdminUser = true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(isAdminUser = true)))
+      contentAsString(
+        view(
+          Some("GBXXXXXXXX"),
+          isAdminUser = true,
+          eoriOnlyService,
+          StandaloneAlreadyHaveEoriViewModel(isAdminUser = true)
+        )
+      )
     )
 
   private lazy val standardDocNoEori: Document =
-    Jsoup.parse(contentAsString(view(None, isAdminUser = true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(isAdminUser = true))))
+    Jsoup.parse(
+      contentAsString(
+        view(None, isAdminUser = true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(isAdminUser = true))
+      )
+    )
 
   private lazy val adminDocNoEORI: Document =
-    Jsoup.parse(contentAsString(view(None, isAdminUser = true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(isAdminUser = true))))
+    Jsoup.parse(
+      contentAsString(
+        view(None, isAdminUser = true, eoriOnlyService, StandaloneAlreadyHaveEoriViewModel(isAdminUser = true))
+      )
+    )
 
 }

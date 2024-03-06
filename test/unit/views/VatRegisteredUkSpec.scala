@@ -28,14 +28,17 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 import util.ViewSpec
 
 class VatRegisteredUkSpec extends ViewSpec {
-  val isInReviewMode                        = false
-  val form: Form[YesNo]                     = vatRegisteredUkYesNoAnswerForm()
-  val formWithError: Form[YesNo]            = vatRegisteredUkYesNoAnswerForm().bind(Map("yes-no-answer" -> ""))
-  val formPartnership: Form[YesNo]          = vatRegisteredUkYesNoAnswerForm(isPartnership = true)
-  val formPartnershipWithError: Form[YesNo] = vatRegisteredUkYesNoAnswerForm(isPartnership = true).bind(Map("yes-no-answer" -> ""))
-  val isIndividualFlow                      = false
+  val isInReviewMode               = false
+  val form: Form[YesNo]            = vatRegisteredUkYesNoAnswerForm()
+  val formWithError: Form[YesNo]   = vatRegisteredUkYesNoAnswerForm().bind(Map("yes-no-answer" -> ""))
+  val formPartnership: Form[YesNo] = vatRegisteredUkYesNoAnswerForm(isPartnership = true)
 
-  private val view     = instanceOf[vat_registered_uk]
+  val formPartnershipWithError: Form[YesNo] =
+    vatRegisteredUkYesNoAnswerForm(isPartnership = true).bind(Map("yes-no-answer" -> ""))
+
+  val isIndividualFlow = false
+
+  private val view                                      = instanceOf[vat_registered_uk]
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   lazy val doc: Document =

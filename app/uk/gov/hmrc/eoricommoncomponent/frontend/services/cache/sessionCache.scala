@@ -48,20 +48,20 @@ sealed case class CachedData(
 )
 
 object CachedData {
-  val regDetailsKey                    = "regDetails"
-  val regInfoKey                       = "regInfo"
-  val subDetailsKey                    = "subDetails"
-  val sub01OutcomeKey                  = "sub01Outcome"
-  val sub02OutcomeKey                  = "sub02Outcome"
-  val registerWithEoriAndIdResponseKey = "registerWithEoriAndIdResponse"
-  val emailKey                         = "email"
-  val keepAliveKey                     = "keepAlive"
-  val safeIdKey                        = "safeId"
-  val groupIdKey                       = "cachedGroupId"
-  val groupEnrolmentKey                = "groupEnrolment"
-  val eoriKey                          = "eori"
-  val submissionCompleteKey            = "submissionCompleteDetails"
-  val completed                        = "completed"
+  val regDetailsKey                        = "regDetails"
+  val regInfoKey                           = "regInfo"
+  val subDetailsKey                        = "subDetails"
+  val sub01OutcomeKey                      = "sub01Outcome"
+  val sub02OutcomeKey                      = "sub02Outcome"
+  val registerWithEoriAndIdResponseKey     = "registerWithEoriAndIdResponse"
+  val emailKey                             = "email"
+  val keepAliveKey                         = "keepAlive"
+  val safeIdKey                            = "safeId"
+  val groupIdKey                           = "cachedGroupId"
+  val groupEnrolmentKey                    = "groupEnrolment"
+  val eoriKey                              = "eori"
+  val submissionCompleteKey                = "submissionCompleteDetails"
+  val completed                            = "completed"
   implicit val format: OFormat[CachedData] = Json.format[CachedData]
 }
 

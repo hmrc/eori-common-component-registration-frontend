@@ -31,8 +31,8 @@ import util.ViewSpec
 import java.time
 
 class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
-  val form: Form[time.LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
-  val isInReviewMode             = false
+  val form: Form[time.LocalDate]                        = SubscriptionForm.subscriptionDateOfEstablishmentForm
+  val isInReviewMode                                    = false
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[date_of_establishment]

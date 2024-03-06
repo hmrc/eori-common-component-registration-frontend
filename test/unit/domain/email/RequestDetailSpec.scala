@@ -29,19 +29,24 @@ class RequestDetailSpec extends AnyFreeSpec with Matchers {
   "RequestDetail" - {
     "serialise to json" in {
 
-       val requestDetail        = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
-      Json.toJson(requestDetail).toString() mustBe """{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17T09:30:47Z"}"""
+      val requestDetail = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
+      Json.toJson(
+        requestDetail
+      ).toString() mustBe """{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17T09:30:47Z"}"""
     }
 
     "de-serialise from json" in {
-      val json = Json.parse("""{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17T09:30:47Z"}""".stripMargin)
+      val json = Json.parse(
+        """{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17T09:30:47Z"}""".stripMargin
+      )
 
       json.as[RequestDetail] mustBe RequestDetail("idType", "idNumber", "test@email.com", dateTime)
     }
 
     "expect exception on failing to read json" in {
-      val json = Json.parse("""{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17111T09:30:47Z"}""".stripMargin)
-
+      val json = Json.parse(
+        """{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17111T09:30:47Z"}""".stripMargin
+      )
 
       val exception = intercept[JsResultException](json.as[RequestDetail])
       exception.getMessage mustBe "JsResultException(errors:List((/emailVerificationTimestamp,List(JsonValidationError(List(Could not parse '\"2001-12-17111T09:30:47Z\"' as an ISO date. Reason: Text '2001-12-17111T09:30:47Z' could not be parsed at index 10),List())))))"

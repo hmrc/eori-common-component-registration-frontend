@@ -28,5 +28,8 @@ object SubscriptionDisplayFailureResponse {
 case class SubscriptionDisplayFailureResponseHolder(subscriptionDisplayResponse: SubscriptionDisplayFailureResponse)
 
 object SubscriptionDisplayFailureResponseHolder {
-  implicit val jsonFormat: OFormat[SubscriptionDisplayFailureResponseHolder] = Json.format[SubscriptionDisplayFailureResponseHolder]
+
+  implicit val jsonFormat: OFormat[SubscriptionDisplayFailureResponseHolder] =
+    Json.format[SubscriptionDisplayFailureResponseHolder]
+
 }

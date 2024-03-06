@@ -26,10 +26,18 @@ import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{ResponseWithURI, VerificationStatus, VerificationStatusResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
+  ResponseWithURI,
+  VerificationStatus,
+  VerificationStatusResponse
+}
 import uk.gov.hmrc.http._
 import util.externalservices.EmailVerificationStubService
-import util.externalservices.EmailVerificationStubService.{verificationStatusSuccessResponse, verifyEmailFailureResponse, verifyEmailInvalidResponse}
+import util.externalservices.EmailVerificationStubService.{
+  verificationStatusSuccessResponse,
+  verifyEmailFailureResponse,
+  verifyEmailInvalidResponse
+}
 import util.externalservices.ExternalServicesConfig._
 
 class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
@@ -116,7 +124,11 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     val credId = "123"
 
     "return a Right containing verification status' when an OK is returned" in {
-      EmailVerificationStubService.stubVerificationStatusResponse(verificationStatusSuccessResponse.toString, OK, credId)
+      EmailVerificationStubService.stubVerificationStatusResponse(
+        verificationStatusSuccessResponse.toString,
+        OK,
+        credId
+      )
 
       val emailVerificationStatuses = Seq(
         VerificationStatus(emailAddress = "fredbloggs@hotmail.com", verified = true, locked = false),
@@ -131,7 +143,11 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     }
 
     "return a Left containing the response details when anything but OK is returned" in {
-      EmailVerificationStubService.stubVerificationStatusResponse(verifyEmailFailureResponse, INTERNAL_SERVER_ERROR, credId)
+      EmailVerificationStubService.stubVerificationStatusResponse(
+        verifyEmailFailureResponse,
+        INTERNAL_SERVER_ERROR,
+        credId
+      )
 
       val expected = Left(ResponseError(500, "Unexpected response from verification-status: Something went wrong"))
       val result: Either[ResponseError, VerificationStatusResponse] =
@@ -155,10 +171,9 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
       result mustBe expected
     }
 
-
     "return a Right of Nil response when NOT_FOUND status is returned" in {
 
-      EmailVerificationStubService.stubVerificationStatusResponse("",  NOT_FOUND, credId)
+      EmailVerificationStubService.stubVerificationStatusResponse("", NOT_FOUND, credId)
 
       val expected = Right(VerificationStatusResponse(List()))
       val result: Either[ResponseError, VerificationStatusResponse] =

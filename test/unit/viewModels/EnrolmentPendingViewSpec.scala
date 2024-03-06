@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.EnrolmentPendingViewM
 import util.ControllerSpec
 
 class EnrolmentPendingViewSpec extends UnitSpec with ControllerSpec {
-  val mockMessages: Messages = mock[Messages]
+  val mockMessages: Messages                    = mock[Messages]
   val viewModel: EnrolmentPendingViewModel.type = EnrolmentPendingViewModel
 
   "EnrolmentPendingViewModel" should {
@@ -71,8 +71,8 @@ class EnrolmentPendingViewSpec extends UnitSpec with ControllerSpec {
     }
 
     "return the correct service name for paragraph when processingService is 'None'" in {
-      val viewModel        = EnrolmentPendingViewModel
-      val result           = viewModel.otherServiceParagraph(None)
+      val viewModel = EnrolmentPendingViewModel
+      val result    = viewModel.otherServiceParagraph(None)
 
       result shouldEqual "cds.enrolment.pending.otherService"
     }

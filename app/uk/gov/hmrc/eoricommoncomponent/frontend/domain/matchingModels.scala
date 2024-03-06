@@ -46,7 +46,7 @@ object TaxPayerId {
 }
 
 object SafeId {
-  implicit val format: OFormat[SafeId] = Json.format[SafeId]
+  implicit val format: OFormat[SafeId]               = Json.format[SafeId]
   implicit def toJsonFormat(safeId: SafeId): JsValue = Json.toJson(safeId)
 }
 
@@ -106,7 +106,7 @@ object CacheIds extends Logging {
     new CacheIds(internalId, safeId, service)
   }
 
-  implicit val jsonFormat: OFormat[CacheIds] = Json.format[CacheIds]
+  implicit val jsonFormat: OFormat[CacheIds]             = Json.format[CacheIds]
   implicit def toJsonFormat(cacheIds: CacheIds): JsValue = Json.toJson(cacheIds)
 }
 

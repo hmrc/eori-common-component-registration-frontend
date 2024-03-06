@@ -254,7 +254,9 @@ class CheckYourDetailsRegisterConstructor @Inject() (
             summaryListRow(
               key = messages("cds.company.utr.label"),
               value = Some(Html(messages("cds.not-entered.label"))),
-              call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false))
+              call = cdsOrgType.map(
+                orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false)
+              )
             )
           )
         else Seq.empty[SummaryListRow]
@@ -275,7 +277,9 @@ class CheckYourDetailsRegisterConstructor @Inject() (
             summaryListRow(
               key = messages("cds.utr.label"),
               value = Some(Html(messages("cds.not-entered.label"))),
-              call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false))
+              call = cdsOrgType.map(
+                orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false)
+              )
             ),
             summaryListRow(
               key = messages("cds.nino.label"),
@@ -347,7 +351,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   }
 
   private def getProvidedContactDetails(subscription: SubscriptionDetails, service: Service)(implicit
-                                                                                             messages: Messages
+    messages: Messages
   ): SummaryList = {
     val contactName = Seq(subscription.contactDetails.map { cd =>
       summaryListRow(
@@ -393,7 +397,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   }
 
   private def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails)(implicit
-                                                                                      messages: Messages
+    messages: Messages
   ): Seq[SummaryListRow] =
     if (!isIndividual) {
       val dateOfReg = for {
@@ -460,7 +464,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   }
 
   private def summaryListRow(key: String, value: Option[Html], call: Option[Call] = None, classes: String = "")(implicit
-                                                                                                                messages: Messages
+    messages: Messages
   ) =
     SummaryListRow(
       key = Key(content = Text(messages(key))),

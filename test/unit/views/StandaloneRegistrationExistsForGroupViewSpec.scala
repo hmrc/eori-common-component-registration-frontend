@@ -111,8 +111,15 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
   }
 
-  private lazy val adminDoc: Document          = Jsoup.parse(contentAsString(view(Some("testEORI"), isAdminUser = true, atarService)))
-  private lazy val standardDoc: Document       = Jsoup.parse(contentAsString(view(Some("testEORI"), isAdminUser = false, atarService)))
-  private lazy val adminNoEoriDoc: Document    = Jsoup.parse(contentAsString(view(None, isAdminUser = true, atarService)))
-  private lazy val standardNoEoriDoc: Document = Jsoup.parse(contentAsString(view(None, isAdminUser = false, atarService)))
+  private lazy val adminDoc: Document =
+    Jsoup.parse(contentAsString(view(Some("testEORI"), isAdminUser = true, atarService)))
+
+  private lazy val standardDoc: Document =
+    Jsoup.parse(contentAsString(view(Some("testEORI"), isAdminUser = false, atarService)))
+
+  private lazy val adminNoEoriDoc: Document = Jsoup.parse(contentAsString(view(None, isAdminUser = true, atarService)))
+
+  private lazy val standardNoEoriDoc: Document =
+    Jsoup.parse(contentAsString(view(None, isAdminUser = false, atarService)))
+
 }

@@ -25,7 +25,9 @@ object RegistrationDetailsBuilder {
 
   val defaultCountryName = "United Kingdom"
   val defaultEmail       = "john.doe@example.com"
-  val defaultAddress: Address = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
+
+  val defaultAddress: Address =
+    Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
 
   val defaultAddressWithMandatoryValuesOnly: Address = Address("Line 1", None, None, None, None, "GB")
 
@@ -65,8 +67,11 @@ object RegistrationDetailsBuilder {
   val incorporatedRegistrationDetails: RegistrationDetailsOrganisation =
     DefaultOrganisationRegistrationDetails.copy(etmpOrganisationType = Some(CorporateBody))
 
-  val individualRegistrationDetails: RegistrationDetailsIndividual = DefaultIndividualRegistrationDetails.copy(customsId = None)
-  val individualRegistrationDetailsNotIdentifiedByReg01: RegistrationDetailsIndividual = DefaultIndividualRegistrationDetails.copy(safeId = SafeId(""))
+  val individualRegistrationDetails: RegistrationDetailsIndividual =
+    DefaultIndividualRegistrationDetails.copy(customsId = None)
+
+  val individualRegistrationDetailsNotIdentifiedByReg01: RegistrationDetailsIndividual =
+    DefaultIndividualRegistrationDetails.copy(safeId = SafeId(""))
 
   val existingOrganisationRegistrationDetails: RegistrationDetailsOrganisation = DefaultOrganisationRegistrationDetails
     .copy(etmpOrganisationType = Some(Partnership))
@@ -75,7 +80,8 @@ object RegistrationDetailsBuilder {
   val PartneshipRegistrationDetails: RegistrationDetailsOrganisation =
     DefaultOrganisationRegistrationDetails.copy(etmpOrganisationType = Some(Partnership))
 
-  val soleTraderRegistrationDetails: RegistrationDetailsIndividual = DefaultIndividualRegistrationDetails.copy(name = "John Doe Sole Trader")
+  val soleTraderRegistrationDetails: RegistrationDetailsIndividual =
+    DefaultIndividualRegistrationDetails.copy(name = "John Doe Sole Trader")
 
   val sub01Outcome: Sub01Outcome = Sub01Outcome("2016-08-18T14:01:05")
 

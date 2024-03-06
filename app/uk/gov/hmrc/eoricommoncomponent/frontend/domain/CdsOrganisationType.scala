@@ -21,7 +21,7 @@ import play.api.libs.json.{JsValue, Json, OFormat}
 case class CdsOrganisationType(id: String)
 
 object CdsOrganisationType {
-  implicit val formats: OFormat[CdsOrganisationType] = Json.format[CdsOrganisationType]
+  implicit val formats: OFormat[CdsOrganisationType]                            = Json.format[CdsOrganisationType]
   implicit def toJsonFormat(mayBeOrgType: Option[CdsOrganisationType]): JsValue = Json.toJson(mayBeOrgType)
 
   val CompanyId                       = "company"

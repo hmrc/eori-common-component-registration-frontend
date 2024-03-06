@@ -25,8 +25,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.verify_your_ema
 import util.ViewSpec
 
 class VerifyYourEmailSpec extends ViewSpec {
-  val isInReviewMode   = false
-  val previousPageUrl  = "/"
+  val isInReviewMode                                    = false
+  val previousPageUrl                                   = "/"
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   val view: verify_your_email = instanceOf[verify_your_email]

@@ -28,7 +28,11 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Company
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, RegistrationDetailsIndividual, RegistrationDetailsOrganisation}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
+  CdsOrganisationType,
+  RegistrationDetailsIndividual,
+  RegistrationDetailsOrganisation
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -82,7 +86,7 @@ class SubscriptionFlowManagerSpec
         Left(DataNotFound("key"))
       )
 
-      controller.currentSubscriptionFlow(mockRequest, hc) shouldBe  Left(FlowNotFound())
+      controller.currentSubscriptionFlow(mockRequest, hc) shouldBe Left(FlowNotFound())
     }
 
     "fail when there was no flow stored in session before" in {
@@ -320,7 +324,6 @@ class SubscriptionFlowManagerSpec
         RegistrationConfirmPage.url(atarService)
       )(mockRequest)
     }
-
 
     "start Corporate Subscription Flow when cached registration details are for an Organisation and pass organisationType as input" in {
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(None)

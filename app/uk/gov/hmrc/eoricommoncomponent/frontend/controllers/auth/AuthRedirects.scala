@@ -30,20 +30,15 @@ trait AuthRedirects {
   def env: Environment
   private def ggLoginUrl: String = config.get[String]("bas-gateway-frontend.sign-in")
 
-  private final lazy val defaultOrigin: String = {
+  private final lazy val defaultOrigin: String =
     config
       .getOptional[String]("sosOrigin")
       .orElse(config.getOptional[String]("appName"))
       .getOrElse("undefined")
-  }
 
   def origin: String = defaultOrigin
 
   def toGGLogin(continueUrl: String): Result =
-    Redirect(
-      ggLoginUrl,
-      Map(
-        "continue_url" -> Seq(continueUrl),
-        "origin"   -> Seq(origin)
-      ))
+    Redirect(ggLoginUrl, Map("continue_url" -> Seq(continueUrl), "origin" -> Seq(origin)))
+
 }

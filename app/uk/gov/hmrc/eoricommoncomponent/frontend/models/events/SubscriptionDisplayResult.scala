@@ -19,7 +19,10 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{ContactInformation, SubscriptionDisplayResponseHolder}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
+  ContactInformation,
+  SubscriptionDisplayResponseHolder
+}
 
 case class SubscriptionInfoVatId(countryCode: Option[String], vatId: Option[String])
 

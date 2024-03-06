@@ -84,7 +84,17 @@ class RegisterWithoutIdServiceSpec
   private val address = Address("add1", Some("add2"), Some("add3"), Some("add4"), Some("postcode"), "country")
 
   private val contactDetails = Some(
-    ContactDetailsModel("John Doe", "john@example.com", "441234987654", None, useAddressFromRegistrationDetails = true, None, None, None, None)
+    ContactDetailsModel(
+      "John Doe",
+      "john@example.com",
+      "441234987654",
+      None,
+      useAddressFromRegistrationDetails = true,
+      None,
+      None,
+      None,
+      None
+    )
   )
 
   private val addressWithEmptyPostcode = Address("add1", Some("add2"), Some("add3"), Some("add4"), Some(""), "country")

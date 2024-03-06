@@ -55,7 +55,10 @@ object SessionBuilder {
     addToken(FakeRequest("GET", "/atar/register").withSession(SessionKeys.sessionId -> sessionId))
   }
 
-  def buildRequestWithSessionAndPathNoUserAndBasedInUkNotSelected(method: String, path: String): FakeRequest[AnyContentAsEmpty.type] = {
+  def buildRequestWithSessionAndPathNoUserAndBasedInUkNotSelected(
+    method: String,
+    path: String
+  ): FakeRequest[AnyContentAsEmpty.type] = {
     val sessionId = s"session-${UUID.randomUUID}"
     FakeRequest(method, path).withSession(SessionKeys.sessionId -> sessionId)
   }
@@ -65,7 +68,11 @@ object SessionBuilder {
     FakeRequest(method, path).withSession(SessionKeys.sessionId -> sessionId, "visited-uk-page" -> "true")
   }
 
-  def buildRequestWithSessionAndPath(path: String, authToken: String, method: String = "GET"): FakeRequest[AnyContentAsEmpty.type] =
+  def buildRequestWithSessionAndPath(
+    path: String,
+    authToken: String,
+    method: String = "GET"
+  ): FakeRequest[AnyContentAsEmpty.type] =
     addToken(FakeRequest(method, path)).withSession(sessionMap(authToken): _*)
 
   def buildRequestWithSessionAndPathAndFormValues(

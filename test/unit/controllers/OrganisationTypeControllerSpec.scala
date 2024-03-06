@@ -195,9 +195,14 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         mockRegistrationDetailsService
           .initialiseCacheWithRegistrationDetails(any[CdsOrganisationType]())(any[Request[_]])
       ).thenReturn(Future.successful(false))
-      intercept[IllegalStateException](submitForm(Map("organisation-type" -> CdsOrganisationType.Company.id), organisationType = Some(CdsOrganisationType.Company)) { result =>
-        await(result) //this is needed to ensure the future is completed before the verify is called
-      })
+      intercept[IllegalStateException](
+        submitForm(
+          Map("organisation-type" -> CdsOrganisationType.Company.id),
+          organisationType = Some(CdsOrganisationType.Company)
+        ) { result =>
+          await(result) //this is needed to ensure the future is completed before the verify is called
+        }
+      )
     }
   }
 

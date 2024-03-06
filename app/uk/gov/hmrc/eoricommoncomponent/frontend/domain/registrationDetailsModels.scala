@@ -114,8 +114,8 @@ object RegistrationDetails {
   def rdSafeId(safeId: SafeId): RegistrationDetailsSafeId =
     RegistrationDetailsSafeId(safeId, Address("", Some(""), Some(""), Some(""), Some(""), ""), TaxPayerId(""), None, "")
 
-  private val orgFormat: OFormat[RegistrationDetailsOrganisation] = Json.format[RegistrationDetailsOrganisation]
-  private val individualFormat: OFormat[RegistrationDetailsIndividual] = Json.format[RegistrationDetailsIndividual]
+  private val orgFormat: OFormat[RegistrationDetailsOrganisation]          = Json.format[RegistrationDetailsOrganisation]
+  private val individualFormat: OFormat[RegistrationDetailsIndividual]     = Json.format[RegistrationDetailsIndividual]
   private val registrationSafeIdFormat: OFormat[RegistrationDetailsSafeId] = Json.format[RegistrationDetailsSafeId]
 
   implicit val formats: Format[RegistrationDetails] = Format[RegistrationDetails](

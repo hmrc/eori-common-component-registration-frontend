@@ -28,8 +28,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import util.ViewSpec
 
 class VatGroupSpec extends ViewSpec {
-  val form: Form[YesNo]          = vatGroupYesNoAnswerForm()
-  val formWithError: Form[YesNo] = vatGroupYesNoAnswerForm().bind(Map("yes-no-answer" -> ""))
+  val form: Form[YesNo]                                 = vatGroupYesNoAnswerForm()
+  val formWithError: Form[YesNo]                        = vatGroupYesNoAnswerForm().bind(Map("yes-no-answer" -> ""))
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val view = instanceOf[vat_group]

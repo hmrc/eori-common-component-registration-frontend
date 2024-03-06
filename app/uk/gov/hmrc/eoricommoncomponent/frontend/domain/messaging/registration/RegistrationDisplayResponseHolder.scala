@@ -18,7 +18,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration
 
 import play.api.Logging
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, OrganisationResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
+  ContactResponse,
+  IndividualResponse,
+  OrganisationResponse
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, MessagingServiceParam, NonUKIdentification}
 
 case class ResponseDetail(

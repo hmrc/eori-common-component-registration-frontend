@@ -46,7 +46,14 @@ class RowIndividualNameDateOfBirthController @Inject() (
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
       Future.successful(
-        Ok(rowIndividualNameDob(thirdCountryIndividualNameDateOfBirthForm, organisationType, service, isInReviewMode = false))
+        Ok(
+          rowIndividualNameDob(
+            thirdCountryIndividualNameDateOfBirthForm,
+            organisationType,
+            service,
+            isInReviewMode = false
+          )
+        )
       )
     }
 

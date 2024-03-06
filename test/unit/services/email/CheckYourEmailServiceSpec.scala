@@ -132,9 +132,7 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector
 
       val result = await(service.emailConfirmed(loggedInUser, subscription))
       result.header.status mustBe SEE_OTHER
-      result.header.headers(
-        "Location"
-      ) mustBe s"/customs-registration-services/${subscription.code}/register/sign-out"
+      result.header.headers("Location") mustBe s"/customs-registration-services/${subscription.code}/register/sign-out"
     }
 
     "fetch and save email successfully then populate emailConfirmedView when not confirmed" in servicesToTest.foreach {

@@ -29,11 +29,11 @@ import util.ViewSpec
 
 class ContactDetailsViewSpec extends ViewSpec {
 
-  private val form: Form[ContactDetailsViewModel] = contactDetailsCreateForm()
+  private val form: Form[ContactDetailsViewModel]               = contactDetailsCreateForm()
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
-  private val view                                = instanceOf[contact_details]
-  private val fullNameLabel                       = "label[for=full-name]"
-  private val telephoneLabel                      = "label[for=telephone]"
+  private val view                                              = instanceOf[contact_details]
+  private val fullNameLabel                                     = "label[for=full-name]"
+  private val telephoneLabel                                    = "label[for=telephone]"
 
   "Contact Details" should {
     "display correct title" in {

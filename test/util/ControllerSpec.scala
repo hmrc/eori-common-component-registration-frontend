@@ -30,7 +30,11 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{AppConfig, InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{
+  AppConfig,
+  InternalAuthTokenInitialiser,
+  NoOpInternalAuthTokenInitialiser
+}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import unit.controllers.CdsPage
@@ -123,7 +127,7 @@ trait ControllerSpec
 
   trait AbstractControllerFixture[C <: FrontendController] {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val userId: String = defaultUserId
+    val userId: String                   = defaultUserId
 
     val controller: C
 

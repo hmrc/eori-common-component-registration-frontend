@@ -17,7 +17,11 @@
 package unit.controllers
 
 import common.pages.subscription.SubscriptionContactDetailsPage._
-import common.pages.subscription.{SubscriptionDateOfBirthPage, SubscriptionDateOfEstablishmentPage, SubscriptionPartnershipDateOfEstablishmentPage}
+import common.pages.subscription.{
+  SubscriptionDateOfBirthPage,
+  SubscriptionDateOfEstablishmentPage,
+  SubscriptionPartnershipDateOfEstablishmentPage
+}
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -27,7 +31,10 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfEstablishmentController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{DateOfEstablishmentSubscriptionFlowPage, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
+  DateOfEstablishmentSubscriptionFlowPage,
+  SubscriptionDetails
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -331,7 +338,7 @@ class DateOfEstablishmentControllerSpec
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
         .thenReturn(Left(FlowNotFound()))
 
-      submitFormInCreateMode(ValidRequest){
+      submitFormInCreateMode(ValidRequest) {
         result =>
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).value shouldBe "/customs-registration-services/atar/register"

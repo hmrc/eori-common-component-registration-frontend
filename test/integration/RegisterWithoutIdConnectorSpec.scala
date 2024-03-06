@@ -70,7 +70,17 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
   private val requestDate = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 114)
 
   private val contactDetails =
-    ContactDetailsModel("John Doe", "john@example.com", "441234987654", None, useAddressFromRegistrationDetails = true, None, None, None, None)
+    ContactDetailsModel(
+      "John Doe",
+      "john@example.com",
+      "441234987654",
+      None,
+      useAddressFromRegistrationDetails = true,
+      None,
+      None,
+      None,
+      None
+    )
 
   val organisationReq: RegisterWithoutIDRequest = RegisterWithoutIDRequest(
     RequestCommon("CDS", requestDate, "abcdefg1234567890hijklmnop0987654"),

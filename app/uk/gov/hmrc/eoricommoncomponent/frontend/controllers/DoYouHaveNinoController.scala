@@ -57,7 +57,7 @@ class DoYouHaveNinoController @Inject() (
       implicit request => _: LoggedInUserWithEnrolments =>
         haveRowIndividualsNinoForm.bindFromRequest().fold(
           formWithErrors => Future.successful(BadRequest(matchNinoRowIndividualView(formWithErrors, service))),
-          formData => {
+          formData =>
             subscriptionDetailsService.cachedNinoMatch.flatMap { cachedNinoOpt =>
               formData.haveNino match {
                 case Some(true) =>
@@ -76,7 +76,6 @@ class DoYouHaveNinoController @Inject() (
                   throw new IllegalArgumentException("Have NINO must be Some(true) or Some(false) but was None")
               }
             }
-          }
         )
     }
 

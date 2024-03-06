@@ -26,7 +26,7 @@ import util.ViewSpec
 class YouCannotChangeAddressIndividualSpec extends ViewSpec {
 
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
-  private val youCantChangeAddressIndView = instanceOf[you_cannot_change_address_individual]
+  private val youCantChangeAddressIndView                       = instanceOf[you_cannot_change_address_individual]
 
   "You cannot change address for individual" should {
 

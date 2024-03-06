@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{RequestHeader, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
-import play.api.{Configuration, Environment, mvc}
+import play.api.{mvc, Configuration, Environment}
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.filters.RouteFilter
@@ -39,10 +39,10 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
   val env: Environment          = Environment.simple()
   val realConfig: Configuration = Configuration.load(env)
 
-  implicit val system: ActorSystem = ActorSystem()
-  implicit val mat: NoMaterializer.type = NoMaterializer
-  val mockErrorHandler: CdsErrorHandler = mock[CdsErrorHandler]
-  val mockConfig: Configuration = spy(realConfig)
+  implicit val system: ActorSystem       = ActorSystem()
+  implicit val mat: NoMaterializer.type  = NoMaterializer
+  val mockErrorHandler: CdsErrorHandler  = mock[CdsErrorHandler]
+  val mockConfig: Configuration          = spy(realConfig)
   val mockServicesConfig: ServicesConfig = mock[ServicesConfig]
 
   private def filter =
@@ -119,5 +119,7 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
   private def whenRoutesToBlock(routes: Option[String]) =
     when(mockConfig.getOptional[String]("routes-to-block")).thenReturn(routes)
 
-  private val okAction: RequestHeader => Future[mvc.Results.Status] = (_: RequestHeader) => Future.successful(Results.Ok)
+  private val okAction: RequestHeader => Future[mvc.Results.Status] = (_: RequestHeader) =>
+    Future.successful(Results.Ok)
+
 }

@@ -27,7 +27,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Messa
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionSuccessful
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{EtmpLegalStatus, EtmpTypeOfPerson, OrganisationTypeConfiguration}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
+  EtmpLegalStatus,
+  EtmpTypeOfPerson,
+  OrganisationTypeConfiguration
+}
 import util.TestData
 
 import java.time.{LocalDate, LocalDateTime, ZoneId}
@@ -45,7 +49,7 @@ trait SubscriptionServiceTestData extends TestData {
   val dateOfEstablishment: LocalDate     = LocalDate.parse(dateEstablishedString)
   val dateEstablishedStringForPublicBody = "1900-01-01"
   val principalEconomicActivity          = "A123"
-  val ukVatDetails: Option[VatDetails] = Some(VatDetails("SE28 1AA", "123456789"))
+  val ukVatDetails: Option[VatDetails]   = Some(VatDetails("SE28 1AA", "123456789"))
 
   val contactName        = "John Doe"
   val contactStreet      = "Line 1"
@@ -529,9 +533,15 @@ trait SubscriptionServiceTestData extends TestData {
   ): JsValue = {
 
     val typeOfPersonJson: String =
-      determineTypeOfPersonJson(organisationType.map(x => EtmpOrganisationType.apply(x)), isOrganisationEvenIfOrganisationTypeIsNone = false)
+      determineTypeOfPersonJson(
+        organisationType.map(x => EtmpOrganisationType.apply(x)),
+        isOrganisationEvenIfOrganisationTypeIsNone = false
+      )
     val typeOfLegalStatusJson: String =
-      determineLegalStatus(organisationType.map(x => EtmpOrganisationType.apply(x)), isOrganisationEvenIfOrganisationTypeIsNone = false)
+      determineLegalStatus(
+        organisationType.map(x => EtmpOrganisationType.apply(x)),
+        isOrganisationEvenIfOrganisationTypeIsNone = false
+      )
 
     Json.parse(s"""
          | {

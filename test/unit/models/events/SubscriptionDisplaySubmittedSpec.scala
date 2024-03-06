@@ -32,7 +32,14 @@ class SubscriptionDisplaySubmittedSpec extends AnyWordSpec with Matchers {
         "taxPayerID"               -> "safeId",
         "acknowledgementReference" -> "acknowledgementReference"
       )
-      SubscriptionDisplaySubmitted.applyAndAlignKeys(params.toMap) mustBe SubscriptionDisplaySubmitted(Map("regime" -> "CDS", "eori" -> "EORI1234", "taxPayerID" -> "safeId", "acknowledgementReference" -> "acknowledgementReference"))
+      SubscriptionDisplaySubmitted.applyAndAlignKeys(params.toMap) mustBe SubscriptionDisplaySubmitted(
+        Map(
+          "regime"                   -> "CDS",
+          "eori"                     -> "EORI1234",
+          "taxPayerID"               -> "safeId",
+          "acknowledgementReference" -> "acknowledgementReference"
+        )
+      )
     }
   }
 }

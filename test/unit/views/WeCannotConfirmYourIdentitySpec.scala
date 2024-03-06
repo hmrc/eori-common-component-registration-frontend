@@ -66,7 +66,11 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
     "have the VAT Details link for the try again button in review mode" in {
       val doc = Jsoup.parse(
         contentAsString(
-          view(isInReviewMode = true, "/customs-registration-services/atar/register/what-are-your-uk-vat-details/review", atarService)
+          view(
+            isInReviewMode = true,
+            "/customs-registration-services/atar/register/what-are-your-uk-vat-details/review",
+            atarService
+          )
         )
       )
       doc
@@ -78,7 +82,11 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
 
   lazy val doc: Document = Jsoup.parse(
     contentAsString(
-      view(isInReviewMode = false, "/customs-registration-services/atar/register/what-are-your-uk-vat-details", atarService)
+      view(
+        isInReviewMode = false,
+        "/customs-registration-services/atar/register/what-are-your-uk-vat-details",
+        atarService
+      )
     )
   )
 

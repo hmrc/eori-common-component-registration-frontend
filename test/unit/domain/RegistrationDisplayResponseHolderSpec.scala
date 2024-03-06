@@ -97,7 +97,9 @@ class RegistrationDisplayResponseHolderSpec extends UnitSpec {
     }
 
     "getResponseDetail must throw an exception for invalid input" in {
-      intercept[IllegalArgumentException](responseHolder.registrationDisplayResponse.copy(responseDetail = None).getResponseDetail)
+      intercept[IllegalArgumentException](
+        responseHolder.registrationDisplayResponse.copy(responseDetail = None).getResponseDetail
+      )
     }
 
     "getResponseDetail must return valid response" in {

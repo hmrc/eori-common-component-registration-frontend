@@ -37,7 +37,7 @@ import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, GATEWAY_TIMEOUT}
+import play.mvc.Http.Status.{BAD_REQUEST, FORBIDDEN, GATEWAY_TIMEOUT, INTERNAL_SERVER_ERROR}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateVerifiedEmailConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
@@ -90,7 +90,7 @@ class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
   val expectedUrl = "/update-verified-email"
 
-  val dateTime: LocalDateTime = LocalDateTime.now()
+  val dateTime: LocalDateTime      = LocalDateTime.now()
   private val requestDetail        = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
   private val requestDateInd       = LocalDateTime.of(2001, 12, 17, 9, 30, 47, 0)
   private val requestCommon        = RequestCommon("CDS", requestDateInd, "012345678901234")
