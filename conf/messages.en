@@ -51,8 +51,8 @@ cds.country.end-of-title= GOV.UK
 cds.sign.out=Sign out
 cds.security-sign-out.heading=For your security, we signed you out
 cds.security-sign-out.note=We did not save your answers.
-cds.you-cant-use-service-agent.hint1=You signed in to Government Gateway with an agent services account.
-cds.you-cant-use-service-agent.hint2=You need to sign in with the Government Gateway for the organisation or individual that is applying for an EORI number.
+cds.you-cant-use-service-agent.hint1=You have signed in with an agent services account.
+cds.you-cant-use-service-agent.hint2=You need to sign in with the account for the organisation or individual that is applying for an EORI number.
 cds.you-cant-use-service-standard-organisation.hint1=You signed in to Government Gateway as a standard user. To apply for an EORI number you must be an administrator user.
 cds.you-cant-use-service-standard-organisation.hint2=Contact the person who set up your Government Gateway.
 cds.you-cant-use-service.heading=You cannot use this service
@@ -1467,7 +1467,7 @@ cds.subscription.enter-eori-number.no-eori.link=get an EORI number
 
 cds.has-existing-eori.title=Your Government Gateway user ID is linked to an EORI
 cds.has-existing-eori.heading=Your Government Gateway user ID is linked to an EORI
-cds.has-existing-eori.para1=Our records show that the Government Gateway user ID you signed in with is connected to the EORI:
+cds.has-existing-eori.para1=Our records show that the account you signed in with is connected to the EORI:
 cds.has-existing-eori.para2=Your registration will be linked to this EORI.
 cds.has-existing-eori.para3=If you use a different EORI most of the time then you should sign out and sign back in using the Government Gateway user ID linked to the EORI you would like to register with.
 
@@ -1754,16 +1754,15 @@ ecc.reg06.outcome.why.org.utr = Corporation Tax Unique Taxpayer Reference (UTR)
 ecc.reg06.outcome.why.eori = EORI number
 ecc.reg06.outcome.apply.again = Review these details and <a href="{0}" class="govuk-link">apply again</a>.
 
-ecc.unable-to-use.title = You cannot access {0} with this Government Gateway account
+ecc.unable-to-use.title = You cannot access {0} with this account
 ecc.unable-to-use.this-eori-number = The EORI number:
-ecc.unable-to-use.para1 = which is linked to your Government Gateway account is already used by another account to access {0}. You will need to sign in with that account to access {0}.
-ecc.unable-to-use.para2 = Sign out and sign in again with a different Government Gateway account.
+ecc.unable-to-use.para1 = Sign out and sign in with another account to access {0}.
 
-ecc.what-is-your-eori.unable-to-use.title = Your Government Gateway account is not linked to this EORI
+ecc.what-is-your-eori.unable-to-use.title = Your account is not linked to this EORI
 ecc.what-is-your-eori.unable-to-use.question = What would you like to do?
 ecc.what-is-your-eori.unable-to-use.empty = Select what you would like to do
 ecc.what-is-your-eori.unable-to-use.changeEori = Change the EORI number
-ecc.what-is-your-eori.unable-to-use.signout = Sign out and sign in again with a different Government Gateway ID
+ecc.what-is-your-eori.unable-to-use.signout = Sign out and sign in again with a different account
 
 ecc.unable-to-use.signout.title = You are about to sign out
 ecc.unable-to-use.signout.question = Is this what you want to do?
@@ -1849,15 +1848,15 @@ ecc.standalone.subscription.outcomes.success.xi.info.bullet3=get a customs decis
 ecc.standalone.subscription.outcomes.success.xi.info.href=Apply for an EORI number that starts with XI (opens in new tab).
 ecc.standalone.subscription.outcomes.success.xi.info2=If you have an EORI number issued by any EU country, you do not need to obtain an EORI number starting with XI.
 
-ecc.subscription.status.gg.h1=Your EORI number and Government Gateway user ID
-ecc.subscription.status.gg.p1=This EORI number gets linked to the Government Gateway user ID you used for this application.
-ecc.subscription.status.gg.p2=We recommend using the same Government Gateway user ID for all customs services.
+ecc.subscription.status.gg.h1=Your EORI number and sign in details
+ecc.subscription.status.gg.p1=This EORI number gets linked to the HMRC sign in details you used for this application.
+ecc.subscription.status.gg.p2=We recommend using the same sign in details for all customs services.
 ecc.subscription.status.eori-xi.h1=When you can get an EORI number starting with XI
 ecc.subscription.status.eori-xi.p1=When your EORI number starting with GB is ready to use you will be able to apply for an EORI number starting with XI.
 ecc.subscription.status.eori-xi.p2=We will send you an email to confirm when your EORI number starting with GB is ready to use.
 ecc.standalone.subscription.status.gg.h1=Your EORI number and Government Gateway user ID
-ecc.standalone.subscription.status.gg.p1=This EORI number gets linked to the Government Gateway user ID you used for this application.
-ecc.standalone.subscription.status.gg.p2=We recommend using the same Government Gateway user ID for all customs services.
+ecc.standalone.subscription.status.gg.p1=This EORI number gets linked to the HMRC sign in details you used for this application.
+ecc.standalone.subscription.status.gg.p2=We recommend using the same sign in details for all customs services.
 
 
 ecc.subscription.outcomes.guidance.title=Get an XI EORI number
