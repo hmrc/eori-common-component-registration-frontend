@@ -18,17 +18,13 @@ package unit.services
 
 import cats.data.EitherT
 import integration.IntegrationTestsSpec
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{any, anyString, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  GetVatCustomerInformationConnector,
-  ResponseError,
-  VatControlListConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError, VatControlListConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.VatDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -64,8 +60,8 @@ class VatDetailsServiceSpec extends IntegrationTestsSpec with MockitoSugar with 
         mockGetVatCustomerInfoConnector.getVatCustomerInformation(any[String])(any[HeaderCarrier])
       ) thenReturn vatControlListResponse
 
-      await(vatService.getVatCustomerInformation("number").value)
-      verify(mockGetVatCustomerInfoConnector, times(1)).getVatCustomerInformation(any())(any())
+      await(vatService.getVatCustomerInformation("123 456 789").value)
+      verify(mockGetVatCustomerInfoConnector, times(1)).getVatCustomerInformation(meq("123456789"))(any())
       verify(mockVatListConnector, never()).vatControlList(any())(any())
 
     }
