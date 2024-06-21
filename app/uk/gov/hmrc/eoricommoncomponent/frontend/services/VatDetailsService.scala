@@ -40,7 +40,7 @@ class VatDetailsService @Inject() (
     number: String
   )(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, VatControlListResponse] =
     if (appConfig.vatDetailsFeatureFlag)
-      vatCustomerInfoConnector.getVatCustomerInformation(number)
+      vatCustomerInfoConnector.getVatCustomerInformation(number.filterNot(_.isWhitespace))
     else
       vatControlListConnector.vatControlList(VatControlListRequest(number))
 
