@@ -40,7 +40,7 @@ object VatDetailsForm extends Mappings {
 
     }
 
-  def validVatNumber: Constraint[String] =
+  private def validVatNumber: Constraint[String] =
     Constraint("constraints.vat-number") { vat =>
       vat.filterNot(_.isWhitespace) match {
         case s if s.trim.isEmpty             => Invalid(ValidationError("cds.subscription.vat-uk.required.error"))
@@ -50,10 +50,10 @@ object VatDetailsForm extends Mappings {
 
     }
 
-  val vatDetailsForm =
+  val vatDetailsForm: Form[VatDetails] =
     Form(
       mapping("postcode" -> text.verifying(validPostcode), "vat-number" -> text.verifying(validVatNumber))(
-        VatDetails.apply
+        (postCode, vat) => VatDetails.apply(postCode, vat.filterNot(_.isWhitespace))
       )(VatDetails.unapply)
     )
 
