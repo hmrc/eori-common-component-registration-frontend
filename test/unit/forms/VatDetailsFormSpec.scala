@@ -57,6 +57,12 @@ class VatDetailsFormSpec extends UnitSpec {
       res.errors shouldBe Seq(FormError("vat-number", "cds.subscription.vat-uk.length.error"))
     }
 
+    "fail when vat-number contains invalid vat number" in {
+      val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "12345678,")
+      val res  = form.bind(data)
+      res.errors shouldBe Seq(FormError("vat-number", "cds.subscription.vat-uk.length.error"))
+    }
+
   }
 
 }
