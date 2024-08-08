@@ -39,16 +39,25 @@ class NameDobController @Inject() (
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(matchNameDobView(enterNameDobForm, organisationType, service)))
+      Future.successful(
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+            service
+          )
+        )
+      )
+    //  Previous usual behavior DDCYLS-5614
+//      Future.successful(Ok(matchNameDobView(enterNameDobForm, organisationType, service)))
     }
 
-  def submit(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      enterNameDobForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),
-        formData => submitNewDetails(formData, service)
-      )
-    }
+  //  Previous usual behavior DDCYLS-5614
+//  def submit(organisationType: String, service: Service): Action[AnyContent] =
+//    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+//      enterNameDobForm.bindFromRequest().fold(
+//        formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),
+//        formData => submitNewDetails(formData, service)
+//      )
+//    }
 
   private def submitNewDetails(formData: NameDobMatchModel, service: Service)(implicit
     request: Request[_]

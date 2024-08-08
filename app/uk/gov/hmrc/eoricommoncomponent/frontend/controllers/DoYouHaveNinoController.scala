@@ -45,39 +45,48 @@ class DoYouHaveNinoController @Inject() (
 
   def displayForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionDetailsService.cachedNinoMatch.map { cachedNinoOpt =>
-        val form = cachedNinoOpt.fold(haveRowIndividualsNinoForm)(haveRowIndividualsNinoForm.fill(_))
-
-        Ok(matchNinoRowIndividualView(form, service))
-      }
-    }
-
-  def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        haveRowIndividualsNinoForm.bindFromRequest().fold(
-          formWithErrors => Future.successful(BadRequest(matchNinoRowIndividualView(formWithErrors, service))),
-          formData =>
-            subscriptionDetailsService.cachedNinoMatch.flatMap { cachedNinoOpt =>
-              formData.haveNino match {
-                case Some(true) =>
-                  subscriptionDetailsService
-                    .cacheNinoMatch(Some(formData))
-                    .map(_ => Redirect(GetNinoController.displayForm(service)))
-                case Some(false) if cachedNinoOpt.exists(_.haveNino.exists(_ == false)) =>
-                  Future.successful(noNinoRedirect(service))
-                case Some(false) =>
-                  subscriptionDetailsService.updateSubscriptionDetailsIndividual.flatMap { _ =>
-                    subscriptionDetailsService.cacheNinoMatch(Some(formData)).map { _ =>
-                      noNinoRedirect(service)
-                    }
-                  }
-                case _ =>
-                  throw new IllegalArgumentException("Have NINO must be Some(true) or Some(false) but was None")
-              }
-            }
+      Future.successful(
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+            service
+          )
         )
+      )
+    //  Previous usual behavior DDCYLS-5614
+//      subscriptionDetailsService.cachedNinoMatch.map { cachedNinoOpt =>
+//        val form = cachedNinoOpt.fold(haveRowIndividualsNinoForm)(haveRowIndividualsNinoForm.fill(_))
+//
+//        Ok(matchNinoRowIndividualView(form, service))
+//      }
     }
+
+  //  Previous usual behavior DDCYLS-5614
+//  def submit(service: Service): Action[AnyContent] =
+//    authAction.enrolledUserWithSessionAction(service) {
+//      implicit request => _: LoggedInUserWithEnrolments =>
+//        haveRowIndividualsNinoForm.bindFromRequest().fold(
+//          formWithErrors => Future.successful(BadRequest(matchNinoRowIndividualView(formWithErrors, service))),
+//          formData =>
+//            subscriptionDetailsService.cachedNinoMatch.flatMap { cachedNinoOpt =>
+//              formData.haveNino match {
+//                case Some(true) =>
+//                  subscriptionDetailsService
+//                    .cacheNinoMatch(Some(formData))
+//                    .map(_ => Redirect(GetNinoController.displayForm(service)))
+//                case Some(false) if cachedNinoOpt.exists(_.haveNino.exists(_ == false)) =>
+//                  Future.successful(noNinoRedirect(service))
+//                case Some(false) =>
+//                  subscriptionDetailsService.updateSubscriptionDetailsIndividual.flatMap { _ =>
+//                    subscriptionDetailsService.cacheNinoMatch(Some(formData)).map { _ =>
+//                      noNinoRedirect(service)
+//                    }
+//                  }
+//                case _ =>
+//                  throw new IllegalArgumentException("Have NINO must be Some(true) or Some(false) but was None")
+//              }
+//            }
+//        )
+//    }
 
   private def noNinoRedirect(service: Service)(implicit request: Request[AnyContent]): Result =
     requestSessionData.userSelectedOrganisationType match {

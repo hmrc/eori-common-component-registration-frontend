@@ -707,6 +707,12 @@ cds.matching.cannot-register-using-service.para1=This service is not available t
 cds.matching.cannot-register-using-service.para2=Use the
 cds.matching.cannot-register-using-service.link.text=EORI number application form.
 
+#You cannot register for an EORI number using this service for individuals or sole traders
+cds.matching.ind-st-cannot-register-using-service.title-and-heading=You need to use a different service
+cds.matching.ind-st-cannot-register-using-service.para1=This service is not available to individuals or sole traders.
+cds.matching.ind-st-cannot-register-using-service.para2=You can:
+cds.matching.ind-st-cannot-register-using-service.link.text1=apply for an EORI number if you are VAT registered
+cds.matching.ind-st-cannot-register-using-service.link.text2=apply for an EORI number if you are not VAT registered
 
 #Nino Match
 cds.matching.nino.title=Enter your details

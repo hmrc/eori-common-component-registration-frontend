@@ -20,6 +20,7 @@ import cats.data.EitherT
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json
+import play.mvc.Http.Status
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
@@ -43,51 +44,56 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
 
   def lookup(req: MatchingRequestHolder)(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, MatchingResponse] =
     EitherT {
+      if (req.registerWithIDRequest.requestDetail.individual.isEmpty)
+        httpClient
+          .post(url)
+          .withBody(Json.toJson(req))
+          .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
+          .execute
+          .map { response =>
+            response.status match {
+              case OK =>
+                handleResponse[MatchingResponse](response).flatMap { matchingResponse =>
+                  auditCall(url.toString, req, matchingResponse)
+                  val idResponse = matchingResponse.registerWithIDResponse
 
-      httpClient
-        .post(url)
-        .withBody(Json.toJson(req))
-        .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
-        .execute
-        .map { response =>
-          response.status match {
-            case OK =>
-              handleResponse[MatchingResponse](response).flatMap { matchingResponse =>
-                auditCall(url.toString, req, matchingResponse)
-                val idResponse = matchingResponse.registerWithIDResponse
+                  if (idResponse.responseDetail.isEmpty) {
+                    // $COVERAGE-OFF$Loggers
+                    logger.warn(
+                      s"REG01 failed Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
+                    )
+                    // $COVERAGE-ON
+                    idResponse.responseCommon.statusText match {
+                      case Some(text) if text.equalsIgnoreCase(MatchingServiceConnector.NoMatchFound) =>
+                        Left(MatchingServiceConnector.matchFailureResponse)
+                      case Some(text) =>
+                        Left(ResponseError(OK, text))
+                      case None =>
+                        Left(ResponseError(OK, "Detail object not returned"))
+                    }
 
-                if (idResponse.responseDetail.isEmpty) {
-                  // $COVERAGE-OFF$Loggers
-                  logger.warn(
-                    s"REG01 failed Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
-                  )
-                  // $COVERAGE-ON
-                  idResponse.responseCommon.statusText match {
-                    case Some(text) if text.equalsIgnoreCase(MatchingServiceConnector.NoMatchFound) =>
-                      Left(MatchingServiceConnector.matchFailureResponse)
-                    case Some(text) =>
-                      Left(ResponseError(OK, text))
-                    case None =>
-                      Left(ResponseError(OK, "Detail object not returned"))
+                  } else {
+                    // $COVERAGE-OFF$Loggers
+                    logger.debug(
+                      s"REG01 Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
+                    )
+                    // $COVERAGE-ON
+                    Right(matchingResponse)
                   }
-
-                } else {
-                  // $COVERAGE-OFF$Loggers
-                  logger.debug(
-                    s"REG01 Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
-                  )
-                  // $COVERAGE-ON
-                  Right(matchingResponse)
                 }
-              }
 
-            case _ =>
-              val error = s"REG01 Lookup failed with reason: ${response.body}"
-              logger.error(error)
-              Left(ResponseError(response.status, error))
+              case _ =>
+                val error = s"REG01 Lookup failed with reason: ${response.body}"
+                logger.error(error)
+                Left(ResponseError(response.status, error))
+            }
+
           }
-
-        }
+      else
+        //Need to remove this after we find solution for DDCYLS-5614
+        Future.successful(
+          Left(ResponseError(Status.INTERNAL_SERVER_ERROR, "Individuals and Sole traders are disabled"))
+        )
     }
 
   private def auditCall(url: String, request: MatchingRequestHolder, response: MatchingResponse)(implicit

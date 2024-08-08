@@ -75,7 +75,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "display the form" in {
       displayForm() { result =>
-        status(result) shouldBe OK
+//        status(result) shouldBe OK  //  Previous usual behavior DDCYLS-5614
+        status(result) shouldBe SEE_OTHER
         val page = CdsPage(contentAsString(result))
         page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe empty
         page.getElementsText(fieldLevelErrorNino) shouldBe empty
@@ -100,12 +101,13 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/matching/confirm")
+        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
-        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
-          any[HeaderCarrier],
-          any[Request[_]]
-        )
+      //  Previous usual behavior DDCYLS-5614
+//        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
+//          any[HeaderCarrier],
+//          any[Request[_]]
+//        )
       }
     }
 
@@ -124,14 +126,17 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         val page = CdsPage(contentAsString(result))
-        status(result) shouldBe BAD_REQUEST
-        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
-        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
-          any[HeaderCarrier],
-          any[Request[_]]
-        )
-
-        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe notMatchedError
+//        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+      //  Previous usual behavior DDCYLS-5614
+//        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
+//        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
+//          any[HeaderCarrier],
+//          any[Request[_]]
+//        )
+//
+//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe notMatchedError
       }
     }
 
@@ -148,7 +153,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/check-user")
+//        header("Location", result).value should endWith("register/check-user") //  Previous usual behavior DDCYLS-5614
+        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
       }
     }
 
@@ -167,14 +173,17 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         val page = CdsPage(contentAsString(result))
-        status(result) shouldBe OK
-        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
-        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
-          any[HeaderCarrier],
-          any[Request[_]]
-        )
-
-        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+//        status(result) shouldBe OK //  Previous usual behavior DDCYLS-5614
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+      //  Previous usual behavior DDCYLS-5614
+//        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
+//        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
+//          any[HeaderCarrier],
+//          any[Request[_]]
+//        )
+//
+//        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
     "redirect to error-template when any other error occurred" in {
@@ -191,36 +200,46 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page = CdsPage(contentAsString(result))
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
-        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
-          any[HeaderCarrier],
-          any[Request[_]]
-        )
-
-        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+//        val page = CdsPage(contentAsString(result))
+//        status(result) shouldBe INTERNAL_SERVER_ERROR //  Previous usual behavior DDCYLS-5614
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+      //  Previous usual behavior DDCYLS-5614
+//        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
+//        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
+//          any[HeaderCarrier],
+//          any[Request[_]]
+//        )
+//
+//        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
     "nino" should {
       "be mandatory" in {
         submitForm(yesNinoNotProvidedSubmitData) { result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your National Insurance number"
-          page.getElementsText(fieldLevelErrorNino) shouldBe "Error: Enter your National Insurance number"
+//          status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
+          status(result) shouldBe SEE_OTHER
+          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+//        Previous usual behavior DDCYLS-5614
+//          val page = CdsPage(contentAsString(result))
+//
+//          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your National Insurance number"
+//          page.getElementsText(fieldLevelErrorNino) shouldBe "Error: Enter your National Insurance number"
         }
       }
 
       "be valid" in {
         submitForm(yesNinoWrongFormatSubmitData) { result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText(
-            pageLevelErrorSummaryListXPath
-          ) shouldBe "The National Insurance number must be 9 characters"
-          page.getElementText(fieldLevelErrorNino) shouldBe "Error: The National Insurance number must be 9 characters"
+//          status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
+          status(result) shouldBe SEE_OTHER
+          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+//          Previous usual behavior DDCYLS-5614
+//          val page = CdsPage(contentAsString(result))
+//          page.getElementsText(
+//            pageLevelErrorSummaryListXPath
+//          ) shouldBe "The National Insurance number must be 9 characters"
+//          page.getElementText(fieldLevelErrorNino) shouldBe "Error: The National Insurance number must be 9 characters"
         }
       }
     }
@@ -239,7 +258,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       doYouHaveNinoController
-        .submit(atarService)
+      //        .submit(atarService) //  Previous usual behavior DDCYLS-5614
+        .displayForm(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )
   }

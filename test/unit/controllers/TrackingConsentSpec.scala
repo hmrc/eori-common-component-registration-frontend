@@ -22,9 +22,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.HowCanWeIdentifyYouController
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetUtrNumberController
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  MatchingService,
+  SubscriptionBusinessService,
+  SubscriptionDetailsService
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -36,16 +40,18 @@ class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActi
 
   private val mockAuthConnector                    = mock[AuthConnector]
   private val mockAuthAction                       = authAction(mockAuthConnector)
-  private val mockSubscriptionBusinessService      = mock[SubscriptionBusinessService]
+  private val mockMatchingService                  = mock[MatchingService]
   private val mockSubscriptionDetailsHolderService = mock[SubscriptionDetailsService]
-  private val howCanWeIdentifyYouView              = instanceOf[how_can_we_identify_you]
+  private val howCanWeIdentifyYouView              = instanceOf[how_can_we_identify_you_utr]
+  private val errorTemplateView                    = instanceOf[error_template]
 
-  private val controller = new HowCanWeIdentifyYouController(
+  private val controller = new GetUtrNumberController(
     mockAuthAction,
-    mockSubscriptionBusinessService,
+    mockMatchingService,
     mcc,
     howCanWeIdentifyYouView,
-    mockSubscriptionDetailsHolderService
+    mockSubscriptionDetailsHolderService,
+    errorTemplateView
   )
 
   "Tracking Consent Snippet" should {
@@ -59,9 +65,11 @@ class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActi
 
   def showForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-    when(mockSubscriptionBusinessService.getCachedNinoOrUtrChoice(any[Request[_]]))
-      .thenReturn(Future.successful(Some("utr")))
-    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
+    test(
+      controller.form("individual", atarService).apply(
+        SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)
+      )
+    )
   }
 
 }
