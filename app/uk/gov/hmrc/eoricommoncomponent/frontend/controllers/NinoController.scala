@@ -42,8 +42,14 @@ class NinoController @Inject() (
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
-      //  Previous usual behavior DDCYLS-5614
+      Future.successful(
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+            service
+          )
+        )
+      )
+    //  Previous usual behavior DDCYLS-5614
 //      Future.successful(Ok(matchNinoView(ninoForm, organisationType, service)))
     }
 

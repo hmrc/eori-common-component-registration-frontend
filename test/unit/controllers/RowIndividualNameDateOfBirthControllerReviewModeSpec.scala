@@ -128,7 +128,9 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
           controllerFixture.showForm { result =>
             status(result) shouldBe SEE_OTHER
 //            result.futureValue.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/sign-out" //  Previous usual behavior DDCYLS-5614
-            result.futureValue.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+            result.futureValue.header.headers(
+              LOCATION
+            ) shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
           }
       }
     }

@@ -191,7 +191,13 @@ class ConfirmContactDetailsService @Inject() (
   ): Future[Result] =
     sessionCache.registrationDetails.flatMap {
       case individual: RegistrationDetailsIndividual =>
-        Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
+        Future.successful(
+          Redirect(
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+              service
+            )
+          )
+        )
       //  Previous usual behavior DDCYLS-5614
 //        if (!individual.address.isValidAddress)
 //          Future.successful(
@@ -258,8 +264,14 @@ class ConfirmContactDetailsService @Inject() (
   )(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
     sessionCache.registrationDetails.flatMap {
       case individual: RegistrationDetailsIndividual =>
-        Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
-        //  Previous usual behavior DDCYLS-5614
+        Future.successful(
+          Redirect(
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+              service
+            )
+          )
+        )
+      //  Previous usual behavior DDCYLS-5614
 //        Future.successful(
 //          BadRequest(
 //            confirmContactDetailsView(

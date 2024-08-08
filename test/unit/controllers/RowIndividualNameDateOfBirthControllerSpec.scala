@@ -141,7 +141,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any[Request[_]])).thenReturn(
             Future.successful((): Unit)
           )
-          if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual") {
+          if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual")
             submitForm(formData(individualNameAndDateOfBirth)) { result =>
               CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
               status(result) shouldBe SEE_OTHER
@@ -152,7 +152,7 @@ class RowIndividualNameDateOfBirthControllerSpec
               ) shouldBe s"/customs-registration-services/atar/register/ind-st-use-a-different-service"
             }
 //            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any()) //  Previous usual behavior DDCYLS-5614
-          } else {
+          else
             submitForm(formData(individualNameAndDateOfBirth)) { result =>
               CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
               status(result) shouldBe SEE_OTHER
@@ -163,7 +163,6 @@ class RowIndividualNameDateOfBirthControllerSpec
               ) shouldBe s"/customs-registration-services/atar/register/ind-st-use-a-different-service"
             }
 //            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
-          }
       }
 
       "wait until the registration request is completed" in testControllerWithModel(validFormModelGens) {
@@ -178,10 +177,10 @@ class RowIndividualNameDateOfBirthControllerSpec
 //          }
 //          caught shouldBe emulatedFailure
 
-        submitForm(formData(individualNameAndDateOfBirth)) { result =>
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        }
+          submitForm(formData(individualNameAndDateOfBirth)) { result =>
+            status(result) shouldBe SEE_OTHER
+            header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+          }
 
       }
     }
@@ -354,7 +353,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           val lettersDateFields: Map[String, String] = webPage.dateOfBirthFields.zip(List("1", "May", "2000")).toMap
           //  Previous usual behavior DDCYLS-5614
 //          assertInvalidField(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
-            assertRedirect(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
+          assertRedirect(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
             DateOfBirth,
             fieldLevelErrorDateOfBirth,
             "Date of birth must be a real date"

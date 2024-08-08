@@ -71,7 +71,7 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
       showForm(Map.empty) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
+      //  Previous usual behavior DDCYLS-5614
 //        status(result) shouldBe OK
 //        val page = CdsPage(contentAsString(result))
 //        page.getElementsText(SubscribeHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath) shouldBe empty
@@ -88,7 +88,7 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
       submitForm(Map("ninoOrUtrRadio" -> "")) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
+      //  Previous usual behavior DDCYLS-5614
 //        status(result) shouldBe BAD_REQUEST
 //        val page = CdsPage(contentAsString(result))
 //        page.getElementsText(
@@ -103,7 +103,10 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
       submitForm(Map("ninoOrUtrRadio" -> "nino")) { result =>
         status(result) shouldBe SEE_OTHER
 //        header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/nino" //  Previous usual behavior DDCYLS-5614
-        header("Location", result).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+        header(
+          "Location",
+          result
+        ).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
       }
     }
 
@@ -111,7 +114,10 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
       submitForm(Map("ninoOrUtrRadio" -> "utr")) { result =>
         status(result) shouldBe SEE_OTHER
 //        header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/utr" //  Previous usual behavior DDCYLS-5614
-        header("Location", result).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+        header(
+          "Location",
+          result
+        ).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
       }
     }
 

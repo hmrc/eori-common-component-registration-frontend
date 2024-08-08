@@ -223,7 +223,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
   private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit =
     test(
       doYouHaveNinoController
-//        .submit(atarService) //  Previous usual behavior DDCYLS-5614
+      //        .submit(atarService) //  Previous usual behavior DDCYLS-5614
         .displayForm(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )

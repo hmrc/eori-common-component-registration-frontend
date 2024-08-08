@@ -45,8 +45,14 @@ class RowIndividualNameDateOfBirthController @Inject() (
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
-      Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
-      //  Previous usual behavior DDCYLS-5614
+      Future.successful(
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+            service
+          )
+        )
+      )
+    //  Previous usual behavior DDCYLS-5614
 //      Future.successful(
 //        Ok(
 //          rowIndividualNameDob(
@@ -62,8 +68,14 @@ class RowIndividualNameDateOfBirthController @Inject() (
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
-      Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
-      //  Previous usual behavior DDCYLS-5614
+      Future.successful(
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+            service
+          )
+        )
+      )
+    //  Previous usual behavior DDCYLS-5614
 //      subscriptionDetailsService.cachedNameDobDetails flatMap {
 //        case Some(NameDobMatchModel(firstName, lastName, dateOfBirth)) =>
 //          val form = thirdCountryIndividualNameDateOfBirthForm.fill(

@@ -39,13 +39,19 @@ class HowCanWeIdentifyYouController @Inject() (
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request =>
-      _: LoggedInUserWithEnrolments =>
-        Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+            service
+          )
+        )
+      )
 
-      //  Previous usual behavior DDCYLS-5614
-      //      populateView(service)
+    //  Previous usual behavior DDCYLS-5614
+    //      populateView(service)
     }
+
   private def populateView(service: Service)(implicit request: Request[_]): Future[Result] =
     subscriptionBusinessService.getCachedNinoOrUtrChoice.map { choice =>
       Ok(howCanWeIdentifyYouView(ninoOrUtrChoiceForm.fill(NinoOrUtrChoice(choice)), service))

@@ -61,7 +61,7 @@ case class RegistrationDetailsOrganisation(
   override def dateOfEstablishmentOption: Option[LocalDate] = dateOfEstablishment
 }
 
-case class  RegistrationDetailsIndividual(
+case class RegistrationDetailsIndividual(
   customsId: Option[CustomsId],
   sapNumber: TaxPayerId,
   safeId: SafeId,

@@ -211,7 +211,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
 //      nameDobController.submit(defaultOrganisationType, atarService) //  Previous usual behavior DDCYLS-5614
-      nameDobController. form(defaultOrganisationType, atarService)
+      nameDobController.form(defaultOrganisationType, atarService)
     )
 
     "be successful when all mandatory fields filled" in {
@@ -245,7 +245,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = nameDobController
-//      .submit(organisationType, atarService) //  Previous usual behavior DDCYLS-5614
+    //      .submit(organisationType, atarService) //  Previous usual behavior DDCYLS-5614
       .form(organisationType, atarService)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
 

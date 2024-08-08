@@ -107,7 +107,10 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
         result =>
           status(result) shouldBe SEE_OTHER
 //          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm" //  Previous usual behavior DDCYLS-5614
-          header("Location", result).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+          header(
+            "Location",
+            result
+          ).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
       }
     }
 
@@ -128,7 +131,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
         result =>
           status(result) shouldBe SEE_OTHER
           header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-          //  Previous usual behavior DDCYLS-5614
+        //  Previous usual behavior DDCYLS-5614
 //          status(result) shouldBe BAD_REQUEST
 //          val page = CdsPage(contentAsString(result))
 //          page.getElementsText(
@@ -192,7 +195,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
         result =>
           status(result) shouldBe SEE_OTHER
           header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-          //  Previous usual behavior DDCYLS-5614
+        //  Previous usual behavior DDCYLS-5614
 //          status(result) shouldBe BAD_REQUEST
 //          val page = CdsPage(contentAsString(result))
 //          page.getElementsText(RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath) shouldBe messages(

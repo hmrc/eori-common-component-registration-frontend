@@ -45,8 +45,14 @@ class GetNinoController @Inject() (
 
   def displayForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
-      //  Previous usual behavior DDCYLS-5614
+      Future.successful(
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
+            service
+          )
+        )
+      )
+    //  Previous usual behavior DDCYLS-5614
 //      Future.successful(
 //        Ok(
 //          matchNinoRowIndividualView(
@@ -107,7 +113,12 @@ class GetNinoController @Inject() (
     val errorMsg  = Messages("cds.matching-error.individual-not-found")
     val errorForm = subscriptionNinoForm.withGlobalError(errorMsg).fill(formData)
     BadRequest(
-      matchNinoRowIndividualView(errorForm, isInReviewMode = false, routes.GetNinoController.displayForm(service), service)
+      matchNinoRowIndividualView(
+        errorForm,
+        isInReviewMode = false,
+        routes.GetNinoController.displayForm(service),
+        service
+      )
 //      matchNinoRowIndividualView(errorForm, isInReviewMode = false, routes.GetNinoController.submit(service), service)//  Previous usual behavior DDCYLS-5614
     )
   }

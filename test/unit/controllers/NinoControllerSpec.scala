@@ -252,7 +252,9 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
         //  Previous usual behavior DDCYLS-5614
 //        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
 //        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
-        header("Location", result).value should endWith("/customs-registration-services/atar/register/ind-st-use-a-different-service")
+        header("Location", result).value should endWith(
+          "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+        )
 
       }
     }
@@ -346,7 +348,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = controller
-//      .submit(organisationType, atarService) //  Previous usual behavior DDCYLS-5614
+    //      .submit(organisationType, atarService) //  Previous usual behavior DDCYLS-5614
       .form(organisationType, atarService)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)

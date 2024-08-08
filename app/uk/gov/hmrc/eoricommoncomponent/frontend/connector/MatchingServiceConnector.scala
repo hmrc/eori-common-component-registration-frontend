@@ -24,7 +24,11 @@ import play.mvc.Http.Status
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{RegisterWithId, RegisterWithIdConfirmation, RegisterWithIdSubmitted}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
+  RegisterWithId,
+  RegisterWithIdConfirmation,
+  RegisterWithIdSubmitted
+}
 import uk.gov.hmrc.http.{HeaderCarrier, _}
 import uk.gov.hmrc.http.client.HttpClientV2
 
@@ -40,8 +44,7 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
 
   def lookup(req: MatchingRequestHolder)(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, MatchingResponse] =
     EitherT {
-      if(req.registerWithIDRequest.requestDetail.individual.isEmpty) {
-
+      if (req.registerWithIDRequest.requestDetail.individual.isEmpty)
         httpClient
           .post(url)
           .withBody(Json.toJson(req))
@@ -86,10 +89,11 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
             }
 
           }
-      } else {
+      else
         //Need to remove this after we find solution for DDCYLS-5614
-        Future.successful(Left(ResponseError(Status.INTERNAL_SERVER_ERROR, "Individuals and Sole traders are disabled")))
-      }
+        Future.successful(
+          Left(ResponseError(Status.INTERNAL_SERVER_ERROR, "Individuals and Sole traders are disabled"))
+        )
     }
 
   private def auditCall(url: String, request: MatchingRequestHolder, response: MatchingResponse)(implicit

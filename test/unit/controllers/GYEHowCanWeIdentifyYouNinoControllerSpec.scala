@@ -103,9 +103,12 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       submitForm(Map("nino" -> nino)) {
         result =>
           status(result) shouldBe SEE_OTHER
-        //  Previous usual behavior DDCYLS-5614
+          //  Previous usual behavior DDCYLS-5614
 //          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm"
-          header("Location", result).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+          header(
+            "Location",
+            result
+          ).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
       }
     }
 
@@ -231,7 +234,8 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 //      caught.message should startWith("NameDob is not cached in data")
 
       val result = controller.form(atarService).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("nino" -> nino)))
+        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("nino" -> nino))
+      )
 
       status(result) shouldBe SEE_OTHER
       header("Location", result).value should endWith("register/ind-st-use-a-different-service")

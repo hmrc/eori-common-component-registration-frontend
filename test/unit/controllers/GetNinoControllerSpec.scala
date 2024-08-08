@@ -103,7 +103,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("register/ind-st-use-a-different-service")
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
-        //  Previous usual behavior DDCYLS-5614
+      //  Previous usual behavior DDCYLS-5614
 //        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
 //          any[HeaderCarrier],
 //          any[Request[_]]
@@ -129,7 +129,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 //        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
+      //  Previous usual behavior DDCYLS-5614
 //        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
 //        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
 //          any[HeaderCarrier],
@@ -176,7 +176,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 //        status(result) shouldBe OK //  Previous usual behavior DDCYLS-5614
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
+      //  Previous usual behavior DDCYLS-5614
 //        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
 //        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
 //          any[HeaderCarrier],
@@ -204,7 +204,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 //        status(result) shouldBe INTERNAL_SERVER_ERROR //  Previous usual behavior DDCYLS-5614
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
+      //  Previous usual behavior DDCYLS-5614
 //        val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
 //        verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
 //          any[HeaderCarrier],
@@ -258,7 +258,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
       doYouHaveNinoController
-//        .submit(atarService) //  Previous usual behavior DDCYLS-5614
+      //        .submit(atarService) //  Previous usual behavior DDCYLS-5614
         .displayForm(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )

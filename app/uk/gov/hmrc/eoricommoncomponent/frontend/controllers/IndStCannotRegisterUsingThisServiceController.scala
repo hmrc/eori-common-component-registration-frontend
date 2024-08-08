@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.ind_st_cannot_registe
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class IndStCannotRegisterUsingThisServiceController @Inject()(
+class IndStCannotRegisterUsingThisServiceController @Inject() (
   view: ind_st_cannot_register_using_this_service,
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {

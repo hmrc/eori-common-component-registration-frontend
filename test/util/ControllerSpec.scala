@@ -150,9 +150,9 @@ trait ControllerSpec
 
     //To be removed after DDCYLS-5614 fix
     def assertRedirect(
-                            formValues: Map[String, String],
-                            webPage: WebPage
-                          )(problemField: String, fieldLevelErrorXPath: String, errorMessage: String): Result =
+      formValues: Map[String, String],
+      webPage: WebPage
+    )(problemField: String, fieldLevelErrorXPath: String, errorMessage: String): Result =
       submitForm(formValues) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith("register/ind-st-use-a-different-service")
