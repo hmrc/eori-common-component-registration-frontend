@@ -42,37 +42,40 @@ class NinoController @Inject() (
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(matchNinoView(ninoForm, organisationType, service)))
+      Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
+      //  Previous usual behavior DDCYLS-5614
+//      Future.successful(Ok(matchNinoView(ninoForm, organisationType, service)))
     }
 
-  def submit(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      ninoForm.bindFromRequest().fold(
-        invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
-        form =>
-          matchingService.matchIndividualWithNino(
-            form.nino,
-            Individual.withLocalDate(form.firstName, form.lastName, form.dateOfBirth),
-            GroupId(loggedInUser.groupId)
-          ).fold(
-            {
-              case MatchingServiceConnector.matchFailureResponse =>
-                val errorForm = ninoForm
-                  .withGlobalError(Messages("cds.matching-error.individual-not-found"))
-                  .fill(form)
-                BadRequest(matchNinoView(errorForm, organisationType, service))
-              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-              case _                                                  => InternalServerError(errorView(service))
-            },
-            _ =>
-              Redirect(
-                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.form(
-                  service,
-                  isInReviewMode = false
-                )
-              )
-          )
-      )
-    }
+  //  Previous usual behavior DDCYLS-5614
+//  def submit(organisationType: String, service: Service): Action[AnyContent] =
+//    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+//      ninoForm.bindFromRequest().fold(
+//        invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
+//        form =>
+//          matchingService.matchIndividualWithNino(
+//            form.nino,
+//            Individual.withLocalDate(form.firstName, form.lastName, form.dateOfBirth),
+//            GroupId(loggedInUser.groupId)
+//          ).fold(
+//            {
+//              case MatchingServiceConnector.matchFailureResponse =>
+//                val errorForm = ninoForm
+//                  .withGlobalError(Messages("cds.matching-error.individual-not-found"))
+//                  .fill(form)
+//                BadRequest(matchNinoView(errorForm, organisationType, service))
+//              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+//              case _                                                  => InternalServerError(errorView(service))
+//            },
+//            _ =>
+//              Redirect(
+//                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.form(
+//                  service,
+//                  isInReviewMode = false
+//                )
+//              )
+//          )
+//      )
+//    }
 
 }

@@ -140,13 +140,21 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     val urlParameters =
       Table[CdsOrganisationType, String](
         ("option", "urlParameter"),
-        (CdsOrganisationType.Company, "company"),
-        (CdsOrganisationType.SoleTrader, "name-date-of-birth/sole-trader"),
-        (CdsOrganisationType.Individual, "name-date-of-birth/individual"),
-        (CdsOrganisationType.ThirdCountryOrganisation, "name/third-country-organisation"),
-        (CdsOrganisationType.ThirdCountrySoleTrader, "row-name-date-of-birth/third-country-sole-trader"),
-        (CdsOrganisationType.ThirdCountryIndividual, "row-name-date-of-birth/third-country-individual"),
-        (CdsOrganisationType.CharityPublicBodyNotForProfit, "charity-public-body-not-for-profit")
+        //  Previous usual behavior DDCYLS-5614
+//        (CdsOrganisationType.Company, "company"),
+//        (CdsOrganisationType.SoleTrader, "name-date-of-birth/sole-trader"),
+//        (CdsOrganisationType.Individual, "name-date-of-birth/individual"),
+//        (CdsOrganisationType.ThirdCountryOrganisation, "name/third-country-organisation"),
+//        (CdsOrganisationType.ThirdCountrySoleTrader, "row-name-date-of-birth/third-country-sole-trader"),
+//        (CdsOrganisationType.ThirdCountryIndividual, "row-name-date-of-birth/third-country-individual"),
+//        (CdsOrganisationType.CharityPublicBodyNotForProfit, "charity-public-body-not-for-profit")
+        (CdsOrganisationType.Company, "matching/company"),
+        (CdsOrganisationType.SoleTrader, "ind-st-use-a-different-service"),
+        (CdsOrganisationType.Individual, "ind-st-use-a-different-service"),
+        (CdsOrganisationType.ThirdCountryOrganisation, "matching/name/third-country-organisation"),
+        (CdsOrganisationType.ThirdCountrySoleTrader, "ind-st-use-a-different-service"),
+        (CdsOrganisationType.ThirdCountryIndividual, "ind-st-use-a-different-service"),
+        (CdsOrganisationType.CharityPublicBodyNotForProfit, "matching/charity-public-body-not-for-profit")
       )
 
     val subscriptionPage: Map[CdsOrganisationType, SubscriptionPage] = Map(
@@ -175,7 +183,8 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         submitForm(Map("organisation-type" -> option), organisationType = Some(cdsOrganisationType)) { result =>
           status(result) shouldBe SEE_OTHER
           header(LOCATION, result).value should endWith(
-            s"/customs-registration-services/atar/register/matching/$urlParameter"
+//            s"/customs-registration-services/atar/register/matching/$urlParameter" //  Previous usual behavior DDCYLS-5614
+            s"/customs-registration-services/atar/register/$urlParameter"
           )
         }
       }

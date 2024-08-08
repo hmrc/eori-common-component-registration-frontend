@@ -53,7 +53,8 @@
     <div>
         @errorSummary(ninoUtrForm.errors, focusOverrides = Map("ninoOrUtrRadio" -> "ninoOrUtrRadio-nino"))
 
-        @helpers.form(HowCanWeIdentifyYouController.submit(service), "nino-utr-form") {
+@*        @helpers.form(HowCanWeIdentifyYouController.submit(service), "nino-utr-form") { //  Previous usual behavior DDCYLS-5614 *@
+        @helpers.form(HowCanWeIdentifyYouController.createForm(service), "nino-utr-form") {
             @CSRF.formField
 
             @displayInputRadioGroup("ninoOrUtrRadio", validOptions)

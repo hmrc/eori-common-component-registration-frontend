@@ -45,36 +45,38 @@ class GetNinoController @Inject() (
 
   def displayForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Ok(
-          matchNinoRowIndividualView(
-            subscriptionNinoForm,
-            isInReviewMode = false,
-            routes.GetNinoController.submit(service),
-            service = service
-          )
-        )
-      )
+      Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
+      //  Previous usual behavior DDCYLS-5614
+//      Future.successful(
+//        Ok(
+//          matchNinoRowIndividualView(
+//            subscriptionNinoForm,
+//            isInReviewMode = false,
+//            routes.GetNinoController.submit(service),
+//            service = service
+//          )
+//        )
+//      )
     }
 
-  def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        subscriptionNinoForm.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(
-              BadRequest(
-                matchNinoRowIndividualView(
-                  formWithErrors,
-                  isInReviewMode = false,
-                  routes.GetNinoController.submit(service),
-                  service = service
-                )
-              )
-            ),
-          formData => matchIndividual(Nino(formData.id), service, formData, GroupId(loggedInUser.groupId))
-        )
-    }
+//  def submit(service: Service): Action[AnyContent] =
+//    authAction.enrolledUserWithSessionAction(service) {
+//      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+//        subscriptionNinoForm.bindFromRequest().fold(
+//          formWithErrors =>
+//            Future.successful(
+//              BadRequest(
+//                matchNinoRowIndividualView(
+//                  formWithErrors,
+//                  isInReviewMode = false,
+//                  routes.GetNinoController.submit(service),
+//                  service = service
+//                )
+//              )
+//            ),
+//          formData => matchIndividual(Nino(formData.id), service, formData, GroupId(loggedInUser.groupId))
+//        )
+//    }
 
   private def matchIndividual(id: CustomsId, service: Service, formData: IdMatchModel, groupId: GroupId)(implicit
     request: Request[AnyContent],
@@ -105,7 +107,8 @@ class GetNinoController @Inject() (
     val errorMsg  = Messages("cds.matching-error.individual-not-found")
     val errorForm = subscriptionNinoForm.withGlobalError(errorMsg).fill(formData)
     BadRequest(
-      matchNinoRowIndividualView(errorForm, isInReviewMode = false, routes.GetNinoController.submit(service), service)
+      matchNinoRowIndividualView(errorForm, isInReviewMode = false, routes.GetNinoController.displayForm(service), service)
+//      matchNinoRowIndividualView(errorForm, isInReviewMode = false, routes.GetNinoController.submit(service), service)//  Previous usual behavior DDCYLS-5614
     )
   }
 

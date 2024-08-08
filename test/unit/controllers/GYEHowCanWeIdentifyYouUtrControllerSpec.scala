@@ -77,14 +77,17 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       form() { result =>
-        status(result) shouldBe OK
+//        status(result) shouldBe OK //  Previous usual behavior DDCYLS-5614
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
       }
     }
   }
 
   "Submitting the form " should {
 
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
+//    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService)) //  Previous usual behavior DDCYLS-5614
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
 
     "redirect to the Confirm page when a UTR is matched" in {
 
@@ -103,7 +106,8 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       submitForm(Map("utr" -> utr)) {
         result =>
           status(result) shouldBe SEE_OTHER
-          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm"
+//          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm" //  Previous usual behavior DDCYLS-5614
+          header("Location", result).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
       }
     }
 
@@ -122,11 +126,14 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
       submitForm(Map("utr" -> utr)) {
         result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText(
-            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
-          ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
+          status(result) shouldBe SEE_OTHER
+          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+          //  Previous usual behavior DDCYLS-5614
+//          status(result) shouldBe BAD_REQUEST
+//          val page = CdsPage(contentAsString(result))
+//          page.getElementsText(
+//            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
+//          ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
       }
     }
     "give a error-template page when a downstreamFailureResponse happens" in {
@@ -144,9 +151,12 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
       submitForm(Map("utr" -> utr)) {
         result =>
-          status(result) shouldBe OK
-          val page = CdsPage(contentAsString(result))
-          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+          status(result) shouldBe SEE_OTHER
+          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        //  Previous usual behavior DDCYLS-5614
+//          status(result) shouldBe OK
+//          val page = CdsPage(contentAsString(result))
+//          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
@@ -165,9 +175,11 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
       submitForm(Map("utr" -> utr)) {
         result =>
-          status(result) shouldBe INTERNAL_SERVER_ERROR
-          val page = CdsPage(contentAsString(result))
-          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+          status(result) shouldBe SEE_OTHER
+        //  Previous usual behavior DDCYLS-5614
+//          status(result) shouldBe INTERNAL_SERVER_ERROR
+//          val page = CdsPage(contentAsString(result))
+//          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
@@ -178,37 +190,42 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       )
       submitForm(Map("utr" -> "")) {
         result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText(RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath) shouldBe messages(
-            "cds.matching-error.business-details.utr.isEmpty"
-          )
+          status(result) shouldBe SEE_OTHER
+          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+          //  Previous usual behavior DDCYLS-5614
+//          status(result) shouldBe BAD_REQUEST
+//          val page = CdsPage(contentAsString(result))
+//          page.getElementsText(RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath) shouldBe messages(
+//            "cds.matching-error.business-details.utr.isEmpty"
+//          )
       }
     }
 
-    "throw exception when no NameDob present in cache" in {
-
-      val utr = "2108834503"
-      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(SubscriptionDetails(nameDobDetails = None))
-      )
-
-      withAuthorisedUser(defaultUserId, mockAuthConnector)
-      val caught = intercept[DataUnavailableException] {
-        await(
-          controller.submit(atarService).apply(
-            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("utr" -> utr))
-          )
-        )
-      }
-
-      caught.message should startWith("NameDob is not cached in data")
-    }
+    //  Previous usual behavior DDCYLS-5614
+//    "throw exception when no NameDob present in cache" in {
+//
+//      val utr = "2108834503"
+//      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+//        Future.successful(SubscriptionDetails(nameDobDetails = None))
+//      )
+//
+//      withAuthorisedUser(defaultUserId, mockAuthConnector)
+//      val caught = intercept[DataUnavailableException] {
+//        await(
+//          controller.submit(atarService).apply(
+//            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("utr" -> utr))
+//          )
+//        )
+//      }
+//
+//      caught.message should startWith("NameDob is not cached in data")
+//    }
   }
 
   def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
+//    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))) //  Previous usual behavior DDCYLS-5614
+    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
   def form(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {

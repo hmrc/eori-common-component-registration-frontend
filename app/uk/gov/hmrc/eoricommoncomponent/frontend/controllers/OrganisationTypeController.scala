@@ -46,10 +46,12 @@ class OrganisationTypeController @Inject() (
     NameIdOrganisationController.form(orgType, service)
 
   private def individualMatching(orgType: String, service: Service): Call =
-    NameDobController.form(orgType, service)
+    IndStCannotRegisterUsingThisServiceController.form(service)
+//    NameDobController.form(orgType, service) //Previous usual behavior DDCYLS-5614
 
   private def thirdCountryIndividualMatching(orgType: String, service: Service): Call =
-    RowIndividualNameDateOfBirthController.form(orgType, service)
+    IndStCannotRegisterUsingThisServiceController.form(service)
+//    RowIndividualNameDateOfBirthController.form(orgType, service) //Previous usual behavior DDCYLS-5614
 
   private def organisationWhatIsYourOrgName(orgType: String, service: Service): Call =
     WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)

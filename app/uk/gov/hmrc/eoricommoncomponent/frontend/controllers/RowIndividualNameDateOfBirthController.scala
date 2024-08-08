@@ -45,42 +45,47 @@ class RowIndividualNameDateOfBirthController @Inject() (
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
-      Future.successful(
-        Ok(
-          rowIndividualNameDob(
-            thirdCountryIndividualNameDateOfBirthForm,
-            organisationType,
-            service,
-            isInReviewMode = false
-          )
-        )
-      )
+      Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
+      //  Previous usual behavior DDCYLS-5614
+//      Future.successful(
+//        Ok(
+//          rowIndividualNameDob(
+//            thirdCountryIndividualNameDateOfBirthForm,
+//            organisationType,
+//            service,
+//            isInReviewMode = false
+//          )
+//        )
+//      )
     }
 
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
-      subscriptionDetailsService.cachedNameDobDetails flatMap {
-        case Some(NameDobMatchModel(firstName, lastName, dateOfBirth)) =>
-          val form = thirdCountryIndividualNameDateOfBirthForm.fill(
-            IndividualNameAndDateOfBirth(firstName, lastName, dateOfBirth)
-          )
-          Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, isInReviewMode = true)))
-        case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service)))
-      }
+      Future.successful(Redirect(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(service)))
+      //  Previous usual behavior DDCYLS-5614
+//      subscriptionDetailsService.cachedNameDobDetails flatMap {
+//        case Some(NameDobMatchModel(firstName, lastName, dateOfBirth)) =>
+//          val form = thirdCountryIndividualNameDateOfBirthForm.fill(
+//            IndividualNameAndDateOfBirth(firstName, lastName, dateOfBirth)
+//          )
+//          Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, isInReviewMode = true)))
+//        case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service)))
+//      }
     }
 
-  def submit(isInReviewMode: Boolean, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
-      assertOrganisationTypeIsValid(organisationType)
-      thirdCountryIndividualNameDateOfBirthForm.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, isInReviewMode))
-          ),
-        form => submitDetails(isInReviewMode, form, organisationType, service)
-      )
-    }
+  //  Previous usual behavior DDCYLS-5614
+//  def submit(isInReviewMode: Boolean, organisationType: String, service: Service): Action[AnyContent] =
+//    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
+//      assertOrganisationTypeIsValid(organisationType)
+//      thirdCountryIndividualNameDateOfBirthForm.bindFromRequest().fold(
+//        formWithErrors =>
+//          Future.successful(
+//            BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, isInReviewMode))
+//          ),
+//        form => submitDetails(isInReviewMode, form, organisationType, service)
+//      )
+//    }
 
   private def assertOrganisationTypeIsValid(cdsOrganisationType: String): Unit =
     requireThatUrlValue(

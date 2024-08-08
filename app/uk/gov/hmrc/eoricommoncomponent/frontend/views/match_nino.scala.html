@@ -38,7 +38,8 @@
 
         <h1>@messages("cds.matching.nino.header")</h1>
 
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NinoController.submit(organisationType, service), "nino-form") {
+@*        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NinoController.submit(organisationType, service), "nino-form") { //  Previous usual behavior DDCYLS-5614 *@
+        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NinoController.form(organisationType, service), "nino-form") {
             @CSRF.formField
             @inputText(
                 form = ninoForm,
