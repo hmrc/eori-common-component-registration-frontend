@@ -47,51 +47,42 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       Future.successful(
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-            service
+        Ok(
+          howCanWeIdentifyYouView(
+            subscriptionNinoForm,
+            isInReviewMode = false,
+            routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+            service = service
           )
         )
       )
-    //  Previous usual behavior DDCYLS-5614
-//      Future.successful(
-//        Ok(
-//          howCanWeIdentifyYouView(
-//            subscriptionNinoForm,
-//            isInReviewMode = false,
-//            routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
-//            service = service
-//          )
-//        )
-//      )
     }
 
-  //  Previous usual behavior DDCYLS-5614
-//  def submit(service: Service): Action[AnyContent] =
-//    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-//      subscriptionNinoForm.bindFromRequest().fold(
-//        formWithErrors =>
-//          Future.successful(
-//            BadRequest(
-//              howCanWeIdentifyYouView(
-//                formWithErrors,
-//                isInReviewMode = false,
-//                routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
-//                service = service
-//              )
-//            )
-//          ),
-//        formData =>
-//          matchOnId(formData, GroupId(loggedInUser.groupId)).fold(
-//            {
-//              case MatchingServiceConnector.matchFailureResponse      => matchNotFoundBadRequest(formData, service)
-//              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-//              case _                                                  => InternalServerError(errorView(service))
-//            },
-//            _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-//          )
-//      )
-//    }
+  def submit(service: Service): Action[AnyContent] =
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      subscriptionNinoForm.bindFromRequest().fold(
+        formWithErrors =>
+          Future.successful(
+            BadRequest(
+              howCanWeIdentifyYouView(
+                formWithErrors,
+                isInReviewMode = false,
+                routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+                service = service
+              )
+            )
+          ),
+        formData =>
+          matchOnId(formData, GroupId(loggedInUser.groupId)).fold(
+            {
+              case MatchingServiceConnector.matchFailureResponse      => matchNotFoundBadRequest(formData, service)
+              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+              case _                                                  => InternalServerError(errorView(service))
+            },
+            _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+          )
+      )
+    }
 
   private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
     hc: HeaderCarrier,
@@ -112,8 +103,7 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
       howCanWeIdentifyYouView(
         errorForm,
         isInReviewMode = false,
-        routes.GYEHowCanWeIdentifyYouNinoController.form(service),
-//        routes.GYEHowCanWeIdentifyYouNinoController.submit(service),//  Previous usual behavior DDCYLS-5614
+        routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
         service = service
       )
     )

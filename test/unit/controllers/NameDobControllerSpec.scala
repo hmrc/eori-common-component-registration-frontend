@@ -63,14 +63,11 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "display the form" in {
       showForm(soleTraderType) { result =>
-//        status(result) shouldBe OK //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsHtml(pageLevelErrorSummaryListXPath) shouldBe empty
-//        page.getElementsText(firstName) shouldBe empty
-//        page.getElementsText(lastName) shouldBe empty
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml(pageLevelErrorSummaryListXPath) shouldBe empty
+        page.getElementsText(firstName) shouldBe empty
+        page.getElementsText(lastName) shouldBe empty
       }
     }
   }
@@ -78,14 +75,11 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   "first name" should {
     "be mandatory" in {
       submitForm(form = ValidRequest ++ Map("first-name" -> ""), defaultOrganisationType) { result =>
-//        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your first name"
-//        page.getElementsText(fieldLevelErrorFirstName) shouldBe "Error: Enter your first name"
-//        page.getElementsText("title") should startWith("Error: ")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your first name"
+        page.getElementsText(fieldLevelErrorFirstName) shouldBe "Error: Enter your first name"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
 
@@ -93,14 +87,11 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       val firstNameMaxLength = 35
       submitForm(ValidRequest ++ Map("first-name" -> oversizedString(firstNameMaxLength)), defaultOrganisationType) {
         result =>
-//          status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-          //  Previous usual behavior DDCYLS-5614
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(firstNameMaxLength, "first")
-//          page.getElementsText(fieldLevelErrorFirstName) shouldBe s"Error: ${maxLengthError(firstNameMaxLength, "first")}"
-//          page.getElementsText("title") should startWith("Error: ")
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(firstNameMaxLength, "first")
+          page.getElementsText(fieldLevelErrorFirstName) shouldBe s"Error: ${maxLengthError(firstNameMaxLength, "first")}"
+          page.getElementsText("title") should startWith("Error: ")
       }
     }
   }
@@ -109,28 +100,22 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "be mandatory" in {
       submitForm(ValidRequest ++ Map("last-name" -> ""), defaultOrganisationType) { result =>
-//        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your last name"
-//        page.getElementsText(fieldLevelErrorLastName) shouldBe "Error: Enter your last name"
-//        page.getElementsText("title") should startWith("Error: ")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your last name"
+        page.getElementsText(fieldLevelErrorLastName) shouldBe "Error: Enter your last name"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
 
     "be restricted to 35 characters" in {
       val lastNameMaxLength = 35
       submitForm(ValidRequest ++ Map("last-name" -> oversizedString(lastNameMaxLength)), soleTraderType) { result =>
-//        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(lastNameMaxLength, "last")
-//        page.getElementsText(fieldLevelErrorLastName) shouldBe s"Error: ${maxLengthError(lastNameMaxLength, "last")}"
-//        page.getElementsText("title") should startWith("Error: ")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(lastNameMaxLength, "last")
+        page.getElementsText(fieldLevelErrorLastName) shouldBe s"Error: ${maxLengthError(lastNameMaxLength, "last")}"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
   }
@@ -142,27 +127,21 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         ValidRequest ++ Map("date-of-birth.day" -> "", "date-of-birth.month" -> "", "date-of-birth.year" -> ""),
         defaultOrganisationType
       ) { result =>
-//        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your date of birth"
-//        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Enter your date of birth"
-//        page.getElementsText("title") should startWith("Error: ")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Enter your date of birth"
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Enter your date of birth"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
 
     "be a valid date" in {
       submitForm(ValidRequest ++ Map("date-of-birth.day" -> "32"), defaultOrganisationType) { result =>
-//        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe messages("date.day.error")
-//        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe s"Error: ${messages("date.day.error")}"
-//        page.getElementsText("title") should startWith("Error: ")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe messages("date.day.error")
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe s"Error: ${messages("date.day.error")}"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
 
@@ -177,14 +156,11 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         ),
         soleTraderType
       ) { result =>
-//        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe futureDateError
-//        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe s"Error: $futureDateError"
-//        page.getElementsText("title") should startWith("Error: ")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe futureDateError
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe s"Error: $futureDateError"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
 
@@ -193,15 +169,12 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         ValidRequest ++ Map("date-of-birth.day" -> "a", "date-of-birth.month" -> "b", "date-of-birth.year" -> "c"),
         defaultOrganisationType
       ) { result =>
-//        status(result) shouldBe BAD_REQUEST //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//        val page = CdsPage(contentAsString(result))
-//
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe s"Date of birth must be a real date"
-//        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe s"Error: Date of birth must be a real date"
-//        page.getElementsText("title") should startWith("Error: ")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe s"Date of birth must be a real date"
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe s"Error: Date of birth must be a real date"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
   }
@@ -210,8 +183,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-//      nameDobController.submit(defaultOrganisationType, atarService) //  Previous usual behavior DDCYLS-5614
-      nameDobController.form(defaultOrganisationType, atarService)
+      nameDobController.submit(defaultOrganisationType, atarService)
     )
 
     "be successful when all mandatory fields filled" in {
@@ -224,8 +196,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(ValidRequest, defaultOrganisationType) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith(
-//          "/customs-registration-services/atar/register/matching/chooseid" //  Previous usual behavior DDCYLS-5614
-          "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+          "/customs-registration-services/atar/register/matching/chooseid"
         )
       }
     }
@@ -245,8 +216,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = nameDobController
-    //      .submit(organisationType, atarService) //  Previous usual behavior DDCYLS-5614
-      .form(organisationType, atarService)
+      .submit(organisationType, atarService)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
 
     test(result)

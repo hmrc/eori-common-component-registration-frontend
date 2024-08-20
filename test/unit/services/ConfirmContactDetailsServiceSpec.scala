@@ -256,13 +256,9 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
           )
 
           val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          //  Previous usual behavior DDCYLS-5614
-//          result.header.headers(
-//            "Location"
-//          ) mustBe s"/customs-registration-services/${testService.code}/register/address-invalid"
           result.header.headers(
             "Location"
-          ) mustBe s"/customs-registration-services/${testService.code}/register/ind-st-use-a-different-service"
+          ) mustBe s"/customs-registration-services/${testService.code}/register/address-invalid"
       }
 
       "Populate confirmContactDetailsView when valid address submitted for individual" in subscriptionToTest.foreach {
@@ -272,9 +268,7 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
           )
 
           val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          //  Previous usual behavior DDCYLS-5614
-//          result.header.status mustBe OK
-          result.header.status mustBe SEE_OTHER
+          result.header.status mustBe OK
       }
 
       "Redirect to AddressInvalidController when invalid address submitted for organisation" in subscriptionToTest.foreach {
@@ -342,9 +336,7 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
       )
 
       val result = await(service.handleFormWithErrors(isInReviewMode = false, yesNoWrongAddressForm, testService))
-      //  Previous usual behavior DDCYLS-5614
-//      result.header.status mustBe BAD_REQUEST
-      result.header.status mustBe SEE_OTHER
+      result.header.status mustBe BAD_REQUEST
     }
 
     "redirect to confirmContactDetailsView for organisation" in subscriptionToTest.foreach { testService =>

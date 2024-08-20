@@ -76,12 +76,9 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
     "show the form without errors" in {
       showForm(Map()) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe OK
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe empty
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe empty
       }
     }
   }
@@ -90,29 +87,23 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
     "be mandatory" in {
       submitForm(NinoFormBuilder.asForm + ("first-name" -> "")) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe FirstNamePage
-//        page.getElementsText(NinoMatchPage.fieldLevelErrorFirstName) shouldBe FirstNameField
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe FirstNamePage
+        page.getElementsText(NinoMatchPage.fieldLevelErrorFirstName) shouldBe FirstNameField
       }
     }
 
     "be restricted to 35 characters" in {
       submitForm(NinoFormBuilder.asForm + ("first-name" -> oversizedString(35))) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(
-//          NinoMatchPage.pageLevelErrorSummaryListXPath
-//        ) shouldBe "The first name must be 35 characters or less"
-//        page.getElementsText(
-//          NinoMatchPage.fieldLevelErrorFirstName
-//        ) shouldBe "Error: The first name must be 35 characters or less"
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          NinoMatchPage.pageLevelErrorSummaryListXPath
+        ) shouldBe "The first name must be 35 characters or less"
+        page.getElementsText(
+          NinoMatchPage.fieldLevelErrorFirstName
+        ) shouldBe "Error: The first name must be 35 characters or less"
       }
     }
   }
@@ -121,29 +112,23 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
     "be mandatory" in {
       submitForm(NinoFormBuilder.asForm + ("last-name" -> "")) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe LastNamePage
-//        page.getElementsText(NinoMatchPage.fieldLevelErrorLastName) shouldBe LastNameField
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe LastNamePage
+        page.getElementsText(NinoMatchPage.fieldLevelErrorLastName) shouldBe LastNameField
       }
     }
 
     "be restricted to 35 characters" in {
       submitForm(NinoFormBuilder.asForm + ("last-name" -> oversizedString(35))) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(
-//          NinoMatchPage.pageLevelErrorSummaryListXPath
-//        ) shouldBe "The last name must be 35 characters or less"
-//        page.getElementsText(
-//          NinoMatchPage.fieldLevelErrorLastName
-//        ) shouldBe "Error: The last name must be 35 characters or less"
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          NinoMatchPage.pageLevelErrorSummaryListXPath
+        ) shouldBe "The last name must be 35 characters or less"
+        page.getElementsText(
+          NinoMatchPage.fieldLevelErrorLastName
+        ) shouldBe "Error: The last name must be 35 characters or less"
       }
     }
   }
@@ -158,25 +143,19 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           "date-of-birth.year"  -> ""
         )
       ) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe "Enter your date of birth"
-//        page.getElementsText(NinoMatchPage.fieldLevelErrorDateOfBirth) shouldBe "Error: Enter your date of birth"
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe "Enter your date of birth"
+        page.getElementsText(NinoMatchPage.fieldLevelErrorDateOfBirth) shouldBe "Error: Enter your date of birth"
       }
     }
 
     "be a valid date" in {
       submitForm(NinoFormBuilder.asForm + ("date-of-birth.day" -> "32")) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe messages("date.day.error")
-//        page.getElementsText(NinoMatchPage.fieldLevelErrorDateOfBirth) shouldBe s"Error: ${messages("date.day.error")}"
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe messages("date.day.error")
+        page.getElementsText(NinoMatchPage.fieldLevelErrorDateOfBirth) shouldBe s"Error: ${messages("date.day.error")}"
       }
     }
 
@@ -189,14 +168,11 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           "date-of-birth.year"  -> tomorrow.getYear.toString
         )
       ) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Year must be between 1900 and this year"
-//        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Year must be between 1900 and this year"
-//        page.getElementsText("title") should startWith("Error: ")
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe "Year must be between 1900 and this year"
+        page.getElementsText(fieldLevelErrorDateOfBirth) shouldBe "Error: Year must be between 1900 and this year"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
   }
@@ -204,25 +180,19 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
   "NINO" should {
     "be mandatory" in {
       submitForm(NinoFormBuilder.asForm + ("nino" -> "")) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe NinoPage
-//        page.getElementsText(NinoMatchPage.fieldLevelErrorNino) shouldBe NinoField
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe NinoPage
+        page.getElementsText(NinoMatchPage.fieldLevelErrorNino) shouldBe NinoField
       }
     }
 
     "be valid" in {
       submitForm(NinoFormBuilder.asForm + ("nino" -> "AB123456E")) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe InvalidNinoPage
-//        page.getElementsText(NinoMatchPage.fieldLevelErrorNino) shouldBe InvalidNinoField
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe InvalidNinoPage
+        page.getElementsText(NinoMatchPage.fieldLevelErrorNino) shouldBe InvalidNinoField
       }
     }
   }
@@ -231,8 +201,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
       mockAuthConnector,
-//      controller.submit(defaultOrganisationType, atarService) //  Previous usual behavior DDCYLS-5614
-      controller.form(defaultOrganisationType, atarService)
+      controller.submit(defaultOrganisationType, atarService)
     )
 
     "redirect to the confirm page when there's a successful match" in {
@@ -249,13 +218,9 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe empty
 
         status(result) shouldBe SEE_OTHER
-        //  Previous usual behavior DDCYLS-5614
-//        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
-//        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
-        header("Location", result).value should endWith(
-          "/customs-registration-services/atar/register/ind-st-use-a-different-service"
-        )
+        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
 
+        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }
     }
 
@@ -269,16 +234,13 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
       ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
 
       submitForm(form = NinoFormBuilder.asForm) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(
-//          NinoMatchPage.pageLevelErrorSummaryListXPath
-//        ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
-//        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          NinoMatchPage.pageLevelErrorSummaryListXPath
+        ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
 
+        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }
     }
 
@@ -292,15 +254,11 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
       ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
 
       submitForm(form = NinoFormBuilder.asForm) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe OK
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
-//
-//        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
 
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }
     }
 
@@ -314,14 +272,11 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
       ).thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
 
       submitForm(form = NinoFormBuilder.asForm) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe INTERNAL_SERVER_ERROR
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
-//
-//        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+
+        verify(mockMatchingService).matchIndividualWithNino(any(), any(), any())(any[HeaderCarrier], any[Request[_]])
       }
     }
 
@@ -348,8 +303,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     withAuthorisedUser(userId, mockAuthConnector)
 
     val result = controller
-    //      .submit(organisationType, atarService) //  Previous usual behavior DDCYLS-5614
-      .form(organisationType, atarService)
+      .submit(organisationType, atarService)
       .apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))
     test(result)
   }

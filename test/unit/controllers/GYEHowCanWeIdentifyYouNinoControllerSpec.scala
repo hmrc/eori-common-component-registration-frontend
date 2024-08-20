@@ -71,20 +71,16 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     "display howCanWeIdentifyYouView for logged in user" in {
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       form() { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe OK
-//        val page = CdsPage(contentAsString(result))
-//        page.title() should startWith("Enter your National Insurance number")
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith("Enter your National Insurance number")
       }
     }
   }
 
   "Submitting the form " should {
 
-//    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService)) //  Previous usual behavior DDCYLS-5614
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
 
     "redirect to the Confirm page when a nino is matched" in {
 
@@ -103,12 +99,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       submitForm(Map("nino" -> nino)) {
         result =>
           status(result) shouldBe SEE_OTHER
-          //  Previous usual behavior DDCYLS-5614
-//          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm"
-          header(
-            "Location",
-            result
-          ).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm"
       }
     }
 
@@ -127,14 +118,11 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
       submitForm(Map("nino" -> nino)) {
         result =>
-          //  Previous usual behavior DDCYLS-5614
-//          status(result) shouldBe BAD_REQUEST
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsText(
-//            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
-//          ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
+          ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
       }
     }
 
@@ -153,12 +141,9 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
       submitForm(Map("nino" -> nino)) {
         result =>
-          //  Previous usual behavior DDCYLS-5614
-//          status(result) shouldBe OK
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+          status(result) shouldBe OK
+          val page = CdsPage(contentAsString(result))
+          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
@@ -177,12 +162,9 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
       submitForm(Map("nino" -> nino)) {
         result =>
-          //  Previous usual behavior DDCYLS-5614
-//          status(result) shouldBe INTERNAL_SERVER_ERROR
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+          val page = CdsPage(contentAsString(result))
+          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
@@ -202,14 +184,11 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
       submitForm(Map("nino" -> "")) {
         result =>
-          //  Previous usual behavior DDCYLS-5614
-//          status(result) shouldBe BAD_REQUEST
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsText(
-//            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
-//          ) shouldBe "Enter your National Insurance number"
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
+          ) shouldBe "Enter your National Insurance number"
       }
     }
 
@@ -221,31 +200,21 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       )
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
-      //  Previous usual behavior DDCYLS-5614
-//      val caught = intercept[DataUnavailableException] {
-//        await(
-////          controller.submit(atarService).apply( //  Previous usual behavior DDCYLS-5614
-//          controller.form(atarService).apply(
-//            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("nino" -> nino))
-//          )
-//        )
-//      }
-//
-//      caught.message should startWith("NameDob is not cached in data")
+      val caught = intercept[DataUnavailableException] {
+        await(
+          controller.submit(atarService).apply(
+            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("nino" -> nino))
+          )
+        )
+      }
 
-      val result = controller.form(atarService).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("nino" -> nino))
-      )
-
-      status(result) shouldBe SEE_OTHER
-      header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+      caught.message should startWith("NameDob is not cached in data")
     }
   }
 
   def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-//    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))) //  Previous usual behavior DDCYLS-5614
-    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
+    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
   def form(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {

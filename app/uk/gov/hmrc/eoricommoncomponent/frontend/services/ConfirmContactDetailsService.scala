@@ -191,35 +191,27 @@ class ConfirmContactDetailsService @Inject() (
   ): Future[Result] =
     sessionCache.registrationDetails.flatMap {
       case individual: RegistrationDetailsIndividual =>
-        Future.successful(
-          Redirect(
-            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-              service
+        if (!individual.address.isValidAddress)
+          Future.successful(
+            Redirect(
+              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
+                .page(service)
             )
           )
-        )
-      //  Previous usual behavior DDCYLS-5614
-//        if (!individual.address.isValidAddress)
-//          Future.successful(
-//            Redirect(
-//              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
-//                .page(service)
-//            )
-//          )
-//        else
-//          Future.successful(
-//            Ok(
-//              confirmContactDetailsView(
-//                isInReviewMode,
-//                concatenateAddress(individual),
-//                YesNoWrongAddress.createForm(),
-//                service,
-//                pageTitleAndHeading(None),
-//                countryCodeToLabel(concatenateAddress(individual).countryCode),
-//                displayInputRadioGroupOptions(None)
-//              )
-//            )
-//          )
+        else
+          Future.successful(
+            Ok(
+              confirmContactDetailsView(
+                isInReviewMode,
+                concatenateAddress(individual),
+                YesNoWrongAddress.createForm(),
+                service,
+                pageTitleAndHeading(None),
+                countryCodeToLabel(concatenateAddress(individual).countryCode),
+                displayInputRadioGroupOptions(None)
+              )
+            )
+          )
       case org: RegistrationDetailsOrganisation =>
         if (!org.address.isValidAddress)
           Future.successful(
@@ -265,26 +257,18 @@ class ConfirmContactDetailsService @Inject() (
     sessionCache.registrationDetails.flatMap {
       case individual: RegistrationDetailsIndividual =>
         Future.successful(
-          Redirect(
-            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-              service
+          BadRequest(
+            confirmContactDetailsView(
+              isInReviewMode,
+              concatenateAddress(individual),
+              formWithErrors,
+              service,
+              pageTitleAndHeading(None),
+              countryCodeToLabel(concatenateAddress(individual).countryCode),
+              displayInputRadioGroupOptions(None)
             )
           )
         )
-      //  Previous usual behavior DDCYLS-5614
-//        Future.successful(
-//          BadRequest(
-//            confirmContactDetailsView(
-//              isInReviewMode,
-//              concatenateAddress(individual),
-//              formWithErrors,
-//              service,
-//              pageTitleAndHeading(None),
-//              countryCodeToLabel(concatenateAddress(individual).countryCode),
-//              displayInputRadioGroupOptions(None)
-//            )
-//          )
-//        )
       case org: RegistrationDetailsOrganisation =>
         orgTypeLookup.etmpOrgTypeOpt.flatMap {
           case Some(ot) =>
