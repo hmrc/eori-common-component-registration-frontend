@@ -81,13 +81,10 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
 
       displayForm() { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe OK
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe empty
-//        page.getElementsText(fieldLevelErrorNino) shouldBe empty
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe empty
+        page.getElementsText(fieldLevelErrorNino) shouldBe empty
       }
     }
 
@@ -98,13 +95,10 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       )
 
       displayForm() { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe OK
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe empty
-//        page.getElementsText(fieldLevelErrorNino) shouldBe empty
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe empty
+        page.getElementsText(fieldLevelErrorNino) shouldBe empty
       }
     }
 
@@ -113,18 +107,15 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
 
       displayForm() { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe OK
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(yesLabel) shouldBe "Yes"
-//        page.elementIsPresent(yesRadioButton) shouldBe true
-//
-//        page.getElementsText(noLabel) shouldBe "No"
-//        page.elementIsPresent(noRadioButton) shouldBe true
-//
-//        page.getElementsText(fieldLevelErrorNino) shouldBe empty
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(yesLabel) shouldBe "Yes"
+        page.elementIsPresent(yesRadioButton) shouldBe true
+
+        page.getElementsText(noLabel) shouldBe "No"
+        page.elementIsPresent(noRadioButton) shouldBe true
+
+        page.getElementsText(fieldLevelErrorNino) shouldBe empty
       }
     }
 
@@ -142,9 +133,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(yesNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        //  Previous usual behavior DDCYLS-5614
-//        header("Location", result).value should endWith("register/matching/row/get-nino")
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        header("Location", result).value should endWith("register/matching/row/get-nino")
       }
     }
 
@@ -158,9 +147,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        //  Previous usual behavior DDCYLS-5614
-//        header("Location", result).value should endWith("register/matching/address/third-country-sole-trader")
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        header("Location", result).value should endWith("register/matching/address/third-country-sole-trader")
       }
     }
 
@@ -176,23 +163,18 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        //  Previous usual behavior DDCYLS-5614
-//        header("Location", result).value should endWith("register/matching/address/third-country-sole-trader")
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        header("Location", result).value should endWith("register/matching/address/third-country-sole-trader")
       }
     }
 
     "display error when form empty" in {
 
       submitForm(Map("have-nino" -> "")) { result =>
-        //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText("//div[@class='govuk-error-summary__body']") should include(
-//          "Select yes if you have a National Insurance number"
-//        )
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText("//div[@class='govuk-error-summary__body']") should include(
+          "Select yes if you have a National Insurance number"
+        )
       }
     }
 
@@ -206,9 +188,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
       submitForm(form = noNinoSubmitData) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
-        //  Previous usual behavior DDCYLS-5614
-//        header("Location", result).value should endWith("register/check-user")
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        header("Location", result).value should endWith("register/check-user")
       }
     }
   }
@@ -223,8 +203,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
   private def submitForm(form: Map[String, String])(test: Future[Result] => Any): Unit =
     test(
       doYouHaveNinoController
-      //        .submit(atarService) //  Previous usual behavior DDCYLS-5614
-        .displayForm(atarService)
+        .submit(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, form))
     )
 

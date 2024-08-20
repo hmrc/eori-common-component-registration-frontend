@@ -49,59 +49,50 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
 
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-            service
-          )
+      for {
+        orgType <- orgTypeLookup.etmpOrgType
+      } yield Ok(
+        howCanWeIdentifyYouView(
+          subscriptionUtrForm,
+          isInReviewMode = false,
+          routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+          HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
+          service = service
         )
       )
-    //  Previous usual behavior DDCYLS-5614
-//      for {
-//        orgType <- orgTypeLookup.etmpOrgType
-//      } yield Ok(
-//        howCanWeIdentifyYouView(
-//          subscriptionUtrForm,
-//          isInReviewMode = false,
-//          routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-//          HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
-//          service = service
-//        )
-//      )
 
     }
 
-  //  Previous usual behavior DDCYLS-5614
-//  def submit(service: Service): Action[AnyContent] =
-//    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-//      orgTypeLookup.etmpOrgType.flatMap(
-//        orgType =>
-//          subscriptionUtrForm.bindFromRequest().fold(
-//            formWithErrors =>
-//              Future.successful(
-//                BadRequest(
-//                  howCanWeIdentifyYouView(
-//                    formWithErrors,
-//                    isInReviewMode = false,
-//                    routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-//                    HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
-//                    service = service
-//                  )
-//                )
-//              ),
-//            formData =>
-//              matchOnId(formData, GroupId(loggedInUser.groupId)).fold(
-//                {
-//                  case MatchingServiceConnector.matchFailureResponse =>
-//                    matchNotFoundBadRequest(formData, service, orgType)
-//                  case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-//                  case _                                                  => InternalServerError(errorView(service))
-//                },
-//                _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-//              )
-//          )
-//      )
-//    }
+  def submit(service: Service): Action[AnyContent] =
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      orgTypeLookup.etmpOrgType.flatMap(
+        orgType =>
+          subscriptionUtrForm.bindFromRequest().fold(
+            formWithErrors =>
+              Future.successful(
+                BadRequest(
+                  howCanWeIdentifyYouView(
+                    formWithErrors,
+                    isInReviewMode = false,
+                    routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+                    HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
+                    service = service
+                  )
+                )
+              ),
+            formData =>
+              matchOnId(formData, GroupId(loggedInUser.groupId)).fold(
+                {
+                  case MatchingServiceConnector.matchFailureResponse =>
+                    matchNotFoundBadRequest(formData, service, orgType)
+                  case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+                  case _                                                  => InternalServerError(errorView(service))
+                },
+                _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+              )
+          )
+      )
+    }
 
   private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
     hc: HeaderCarrier,
@@ -124,8 +115,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
       howCanWeIdentifyYouView(
         errorForm,
         isInReviewMode = false,
-        routes.GYEHowCanWeIdentifyYouUtrController.form(service),
-//        routes.GYEHowCanWeIdentifyYouUtrController.submit(service), //  Previous usual behavior DDCYLS-5614
+        routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
         HowCanWeIdentifyYouUtrViewModel.forHintMessage(etmpOrganisationType),
         service = service
       )

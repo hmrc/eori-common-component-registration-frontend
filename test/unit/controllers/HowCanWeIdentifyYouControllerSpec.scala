@@ -69,68 +69,48 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
 
     "show the form without errors" in {
       showForm(Map.empty) { result =>
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-      //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe OK
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(SubscribeHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath) shouldBe empty
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(SubscribeHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath) shouldBe empty
       }
     }
   }
 
   "Submitting the form" should {
 
-//    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService)) //  Previous usual behavior DDCYLS-5614
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
 
     "give a page level error when neither radio button is selected" in {
       submitForm(Map("ninoOrUtrRadio" -> "")) { result =>
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-      //  Previous usual behavior DDCYLS-5614
-//        status(result) shouldBe BAD_REQUEST
-//        val page = CdsPage(contentAsString(result))
-//        page.getElementsText(
-//          SubscribeHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
-//        ) shouldBe "Select how we can identify you"
-//        page.getElementsText(SubscribeHowCanWeIdentifyYouPage.fieldLevelErrorUtr) shouldBe empty
-//        page.getElementsText(SubscribeHowCanWeIdentifyYouPage.fieldLevelErrorNino) shouldBe empty
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          SubscribeHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
+        ) shouldBe "Select how we can identify you"
+        page.getElementsText(SubscribeHowCanWeIdentifyYouPage.fieldLevelErrorUtr) shouldBe empty
+        page.getElementsText(SubscribeHowCanWeIdentifyYouPage.fieldLevelErrorNino) shouldBe empty
       }
     }
 
     "redirect to the 'Enter your nino' page when nino is selected" in {
       submitForm(Map("ninoOrUtrRadio" -> "nino")) { result =>
         status(result) shouldBe SEE_OTHER
-//        header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/nino" //  Previous usual behavior DDCYLS-5614
-        header(
-          "Location",
-          result
-        ).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+        header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/nino"
       }
     }
 
     "redirect to the 'Enter your utr' page when utr is selected" in {
       submitForm(Map("ninoOrUtrRadio" -> "utr")) { result =>
         status(result) shouldBe SEE_OTHER
-//        header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/utr" //  Previous usual behavior DDCYLS-5614
-        header(
-          "Location",
-          result
-        ).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+        header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/chooseid/utr"
       }
     }
 
     "throw exception on selecting an invalid data" in {
-      //  Previous usual behavior DDCYLS-5614
-//      intercept[IllegalArgumentException] {
-//        submitForm(Map("ninoOrUtrRadio" -> "xyz")) { result =>
-//          status(result) shouldBe SEE_OTHER
-//        }
-//      }
-      submitForm(Map("ninoOrUtrRadio" -> "xyz")) { result =>
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+      intercept[IllegalArgumentException] {
+        submitForm(Map("ninoOrUtrRadio" -> "xyz")) { result =>
+          status(result) shouldBe SEE_OTHER
+        }
       }
     }
   }
@@ -144,8 +124,7 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
 
   def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-//    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))) //  Previous usual behavior DDCYLS-5614
-    test(controller.createForm(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
+    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
 }

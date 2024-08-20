@@ -67,8 +67,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       с.reviewForm(organisationType, atarService)
 
     protected def submit(c: RowIndividualNameDateOfBirthController): Action[AnyContent] =
-//      c.submit(true, organisationType, atarService) //  Previous usual behavior DDCYLS-5614
-      c.form(organisationType, atarService)
+      c.submit(true, organisationType, atarService)
 
     def formData(thirdCountryIndividual: IndividualNameAndDateOfBirth): Map[String, String] =
       form.mapping.unbind(thirdCountryIndividual)
@@ -99,24 +98,24 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
             .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
 
           controllerFixture.showForm { result =>
-//            status(result) shouldBe OK //  Previous usual behavior DDCYLS-5614
-            status(result) shouldBe SEE_OTHER
+            status(result) shouldBe OK
             val page = CdsPage(contentAsString(result))
             page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
 
-            //  Previous usual behavior(uncomment below tests) DDCYLS-5614
-//            assertPresentOnPage(webPage.givenNameElement)
-//            assertPresentOnPage(webPage.familyNameElement)
-//            assertPresentOnPage(webPage.dateOfBirthElement)
-//            page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthController
-//              .reviewForm(organisationType, atarService)
-//              .url
-//
-//            page.getElementValue(webPage.givenNameElement) shouldBe "firstName"
-//            page.getElementValue(webPage.familyNameElement) shouldBe "lastName"
-//            page.getElementValue(webPage.dobDayElement) shouldBe "31"
-//            page.getElementValue(webPage.dobMonthElement) shouldBe "3"
-//            page.getElementValue(webPage.dobYearElement) shouldBe "1980"
+            val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
+
+            assertPresentOnPage(webPage.givenNameElement)
+            assertPresentOnPage(webPage.familyNameElement)
+            assertPresentOnPage(webPage.dateOfBirthElement)
+            page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthController
+              .reviewForm(organisationType, atarService)
+              .url
+
+            page.getElementValue(webPage.givenNameElement) shouldBe "firstName"
+            page.getElementValue(webPage.familyNameElement) shouldBe "lastName"
+            page.getElementValue(webPage.dobDayElement) shouldBe "31"
+            page.getElementValue(webPage.dobMonthElement) shouldBe "3"
+            page.getElementValue(webPage.dobYearElement) shouldBe "1980"
           }
       }
 
@@ -127,10 +126,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
 
           controllerFixture.showForm { result =>
             status(result) shouldBe SEE_OTHER
-//            result.futureValue.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/sign-out" //  Previous usual behavior DDCYLS-5614
-            result.futureValue.header.headers(
-              LOCATION
-            ) shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+            result.futureValue.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/sign-out"
           }
       }
     }
@@ -140,8 +136,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       withControllerFixture { controllerFixture =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
           controllerFixture.mockAuthConnector,
-//          controllerFixture.controller.submit(true, organisationType, atarService) //  Previous usual behavior DDCYLS-5614
-          controllerFixture.controller.reviewForm(organisationType, atarService)
+          controllerFixture.controller.submit(true, organisationType, atarService)
         )
       }
 
@@ -156,9 +151,8 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
             status(result) shouldBe SEE_OTHER
             result.futureValue.header.headers(
               LOCATION
-//            ) shouldBe "/customs-registration-services/atar/register/matching/review-determine" //  Previous usual behavior DDCYLS-5614
-            ) shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
-//            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any()) //  Previous usual behavior(uncomment) DDCYLS-5614
+            ) shouldBe "/customs-registration-services/atar/register/matching/review-determine"
+            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
           }
       }
     }

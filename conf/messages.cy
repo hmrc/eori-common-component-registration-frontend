@@ -638,13 +638,6 @@ cds.matching.cannot-register-using-service.para1 = Nid yw’r gwasanaeth hwn ar 
 cds.matching.cannot-register-using-service.para2 = Defnyddiwch y
 cds.matching.cannot-register-using-service.link.text = ffurflen gais am rif EORI.
 
-#You cannot register for an EORI number using this service for individuals or sole traders
-cds.matching.ind-st-cannot-register-using-service.title-and-heading=Rhaid i chi ddefnyddio gwasanaeth gwahanol
-cds.matching.ind-st-cannot-register-using-service.para1=Nid yw?r gwasanaeth hwn ar gael i unigolion nac i unig fasnachwyr.
-cds.matching.ind-st-cannot-register-using-service.para2=Gallwch:
-cds.matching.ind-st-cannot-register-using-service.link.text1=gwneud cais am rif EORI os ydych wedi?ch cofrestru ar gyfer TAW
-cds.matching.ind-st-cannot-register-using-service.link.text2=gwneud cais am rif EORI os nad ydych wedi?ch cofrestru ar gyfer TAW
-
 
 cds.matching.nino.title = Nodwch eich manylion
 cds.matching.nino.header = Nodwch eich manylion
