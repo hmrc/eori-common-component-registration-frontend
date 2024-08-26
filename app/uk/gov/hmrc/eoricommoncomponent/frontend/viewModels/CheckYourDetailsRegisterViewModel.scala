@@ -48,8 +48,7 @@ case class CheckYourDetailsRegisterViewModel(
 class CheckYourDetailsRegisterConstructor @Inject() (
   dateFormatter: DateFormatter,
   sessionCache: SessionCache,
-  requestSessionData: RequestSessionData,
-  sessionCacheService: SessionCacheService
+  requestSessionData: RequestSessionData
 ) {
 
   def getDateOfEstablishmentLabel(cdsOrgType: Option[CdsOrganisationType])(implicit messages: Messages): String = {

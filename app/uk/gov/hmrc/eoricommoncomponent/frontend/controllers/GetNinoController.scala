@@ -30,7 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_nino}
 import uk.gov.hmrc.http.HeaderCarrier

@@ -34,7 +34,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{
   AddressLookupFailure,
   AddressLookupSuccess
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.postcode_address_result
 import uk.gov.hmrc.http.HeaderCarrier
 

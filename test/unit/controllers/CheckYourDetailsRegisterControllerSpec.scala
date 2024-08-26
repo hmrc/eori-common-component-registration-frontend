@@ -71,12 +71,7 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockSessionCacheService               = instanceOf[SessionCacheService]
 
   private val viewModelConstructor =
-    new CheckYourDetailsRegisterConstructor(
-      dateFormatter,
-      mockSessionCache,
-      mockRequestSession,
-      mockSessionCacheService
-    )
+    new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession)
 
   val controller = new CheckYourDetailsRegisterController(
     mockAuthAction,

@@ -24,7 +24,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnec
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   ApplicationController,
   IndStCannotRegisterUsingThisServiceController,
-  PostCodeController,
   YouCannotChangeAddressController
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual

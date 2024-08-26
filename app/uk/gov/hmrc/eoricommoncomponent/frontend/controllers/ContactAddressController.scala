@@ -20,13 +20,12 @@ import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
 

@@ -33,7 +33,6 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
   val mockDateFormatter: DateFormatter         = mock[DateFormatter]
   val mockSessionCache: SessionCache           = mock[SessionCache]
   val mockRegistrationData: RequestSessionData = mock[RequestSessionData]
-  private val mockSessionCacheService          = mock[SessionCacheService]
 
   private val organisationToTest =
     Seq(
@@ -61,12 +60,7 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
   private val soleAndIndividualToTest = individualToTest ++ soleTraderToTest
 
   val constructorInstance =
-    new CheckYourDetailsRegisterConstructor(
-      mockDateFormatter,
-      mockSessionCache,
-      mockRegistrationData,
-      mockSessionCacheService
-    )
+    new CheckYourDetailsRegisterConstructor(mockDateFormatter, mockSessionCache, mockRegistrationData)
 
   "getDateOfEstablishmentLabel" should {
     "return correct messages for SoleTrader is true" in soleTraderToTest.foreach { test =>
