@@ -27,26 +27,20 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, CheckYourDetailsRegisterController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CheckYourDetailsRegisterController, routes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Partnership, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlow}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.RegistrationDetailsBuilder.{
-  incorporatedRegistrationDetails,
-  individualRegistrationDetails,
-  individualRegistrationDetailsNotIdentifiedByReg01,
-  organisationRegistrationDetails,
-  partnershipRegistrationDetails
-}
+import util.builders.RegistrationDetailsBuilder.{incorporatedRegistrationDetails, individualRegistrationDetails, individualRegistrationDetailsNotIdentifiedByReg01, organisationRegistrationDetails, partnershipRegistrationDetails}
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
@@ -68,18 +62,20 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockVatControlListDetails             = mock[VatControlListResponse]
   private val mockRequestSession                    = mock[RequestSessionData]
   private val checkYourDetailsRegisterView          = instanceOf[check_your_details_register]
+  private val mockSessionCacheService               = instanceOf[SessionCacheService]
 
   private val viewModelConstructor =
-    new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession)
+    new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession, mockSessionCacheService)
 
   val controller = new CheckYourDetailsRegisterController(
     mockAuthAction,
     mockRequestSession,
+    mockSessionCacheService,
     mcc,
     checkYourDetailsRegisterView,
     mockRegisterWithoutIdWithSubscription,
     viewModelConstructor
-  )
+  )(global)
 
   private val organisationRegistrationDetailsWithEmptySafeId = organisationRegistrationDetails.copy(safeId = SafeId(""))
 
@@ -877,13 +873,14 @@ class CheckYourDetailsRegisterControllerSpec
     val controller = new CheckYourDetailsRegisterController(
       mockAuthAction,
       mockRequestSession,
+      mockSessionCacheService,
       mcc,
       checkYourDetailsRegisterView,
       mockRegisterWithoutIdWithSubscription,
       viewModelConstructor
-    )
+    )(global)
 
-    withAuthorisedUser(userId, mockAuthConnector)
+    withAuthorisedUser(userId = userId, mockAuthConnector = mockAuthConnector, groupId = Some("groupId"))
 
     when(mockRequestSession.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))

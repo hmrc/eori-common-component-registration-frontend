@@ -25,7 +25,7 @@ import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameDobController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -40,9 +40,10 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   protected override val formId: String      = NameDateOfBirthPage.formId
   val mockCdsFrontendDataCache: SessionCache = mock[SessionCache]
   private val matchNameDobView               = instanceOf[match_namedob]
+  private val mockRequestSessionData         = instanceOf[RequestSessionData]
 
   private def nameDobController =
-    new NameDobController(mockAuthAction, mcc, matchNameDobView, mockCdsFrontendDataCache)
+    new NameDobController(mockAuthAction, mcc, matchNameDobView, mockRequestSessionData, mockCdsFrontendDataCache)(global)
 
   val defaultOrganisationType = "individual"
   val soleTraderType          = "sole-trader"

@@ -23,6 +23,7 @@ import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.HowCanWeIdentifyYouController
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
 import util.ControllerSpec
@@ -39,14 +40,16 @@ class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActi
   private val mockSubscriptionBusinessService      = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsHolderService = mock[SubscriptionDetailsService]
   private val howCanWeIdentifyYouView              = instanceOf[how_can_we_identify_you]
+  private val mockSessionCacheService              = instanceOf[SessionCacheService]
 
   private val controller = new HowCanWeIdentifyYouController(
     mockAuthAction,
     mockSubscriptionBusinessService,
     mcc,
     howCanWeIdentifyYouView,
-    mockSubscriptionDetailsHolderService
-  )
+    mockSubscriptionDetailsHolderService,
+    mockSessionCacheService
+  )(global)
 
   "Tracking Consent Snippet" should {
     "include the javascript file in the header" in {

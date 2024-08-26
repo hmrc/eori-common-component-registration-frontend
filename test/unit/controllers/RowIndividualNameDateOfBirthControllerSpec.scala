@@ -16,11 +16,7 @@
 
 package unit.controllers
 
-import common.pages.matching.{
-  IndividualNameAndDateOfBirthPage,
-  ThirdCountryIndividualNameAndDateOfBirthPage,
-  ThirdCountrySoleTraderNameAndDateOfBirthPage
-}
+import common.pages.matching.{IndividualNameAndDateOfBirthPage, ThirdCountryIndividualNameAndDateOfBirthPage, ThirdCountrySoleTraderNameAndDateOfBirthPage}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop
@@ -34,6 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.RowIndividualNameDat
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
 import util.ControllerSpec
 import util.builders.AuthActionMock
@@ -53,10 +50,12 @@ class RowIndividualNameDateOfBirthControllerSpec
 
     private val rowIndividualNameDob = instanceOf[row_individual_name_dob]
     private val mockAuthAction       = authAction(mockAuthConnector)
+    private val mockRequestSessionData = instanceOf[RequestSessionData]
 
     override val controller = new RowIndividualNameDateOfBirthController(
       mockAuthAction,
       mockSubscriptionDetailsService,
+      mockRequestSessionData,
       mcc,
       rowIndividualNameDob
     )(global)

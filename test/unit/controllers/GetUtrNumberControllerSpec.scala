@@ -27,12 +27,9 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  MatchingRequestHolder,
-  MatchingResponse,
-  Organisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon, matching}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse, Organisation, RegisterWithIDResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -56,6 +53,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val matchOrganisationUtrView       = instanceOf[how_can_we_identify_you_utr]
   private val errorView                      = instanceOf[error_template]
+  private val mockSessionCacheService        = instanceOf[SessionCacheService]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
@@ -65,8 +63,9 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     mcc,
     matchOrganisationUtrView,
     mockSubscriptionDetailsService,
-    errorView
-  )
+    errorView,
+    mockSessionCacheService
+  )(global)
 
   private val UtrInvalidErrorPage  = messages("cds.matching-error.utr.invalid")
   private val UtrInvalidErrorField = s"Error: ${messages("cds.matching-error.utr.invalid")}"
@@ -274,7 +273,9 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT(()))
+        .thenReturn(eitherT[MatchingResponse](MatchingResponse(RegisterWithIDResponse(ResponseCommon("OK",
+          Some("002 - No match found"), LocalDate.now.atTime(8, 35, 2),
+          Some(List(MessagingServiceParam("POSITION", "FAIL")))), None))))
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER
@@ -290,7 +291,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
+        .thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse))
       submitForm(ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))

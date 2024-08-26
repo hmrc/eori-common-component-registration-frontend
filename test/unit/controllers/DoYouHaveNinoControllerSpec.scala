@@ -24,6 +24,7 @@ import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveNinoController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameDobMatchModel, NinoMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -78,6 +79,8 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
 
     "display the form" in {
 
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
+
       when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
 
       displayForm() { result =>
@@ -89,6 +92,8 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
     }
 
     "display the form with cached nino" in {
+
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
 
       when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(
         Future.successful(Some(NinoMatchModel(Some(true), Some("12345"))))
@@ -103,6 +108,8 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
     }
 
     "ensure the labels are correct" in {
+
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
 
       when(mockSubscriptionDetailsService.cachedNinoMatch(any())).thenReturn(Future.successful(None))
 

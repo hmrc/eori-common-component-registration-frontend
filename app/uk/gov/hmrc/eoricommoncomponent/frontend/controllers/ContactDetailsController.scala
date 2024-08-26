@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetai
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm.contactDetailsCreateForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_details
 
@@ -40,22 +40,24 @@ class ContactDetailsController @Inject() (
   subscriptionFlowManager: SubscriptionFlowManager,
   subscriptionDetailsService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
-  contactDetailsView: contact_details
+  contactDetailsView: contact_details,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      populateFormGYE(service)(false)
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      populateFormGYE(user, service)(false)
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      populateFormGYE(service)(true)
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      populateFormGYE(user, service)(true)
     }
 
   private def populateFormGYE(
+    user: LoggedInUserWithEnrolments,
     service: Service
   )(isInReviewMode: Boolean)(implicit request: Request[AnyContent]): Future[Result] =
     subscriptionBusinessService.cachedContactDetailsModel.flatMap { contactDetails =>
@@ -65,7 +67,8 @@ class ContactDetailsController @Inject() (
           Some(email),
           isInReviewMode = isInReviewMode,
           service
-        )
+        ).flatMap(sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
       }
     }
 

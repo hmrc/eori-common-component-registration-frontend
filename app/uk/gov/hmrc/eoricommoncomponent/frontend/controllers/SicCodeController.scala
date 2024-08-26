@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm.sicCodeform
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
 
@@ -40,16 +40,18 @@ class SicCodeController @Inject() (
   subscriptionDetailsHolderService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
   sicCodeView: sic_code,
-  requestSessionData: RequestSessionData
+  requestSessionData: RequestSessionData,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
 
-  private def populateView(sicCode: Option[String], isInReviewMode: Boolean, service: Service)(implicit
+  private def populateView(sicCode: Option[String], isInReviewMode: Boolean, service: Service, user: LoggedInUserWithEnrolments)(implicit
     request: Request[AnyContent]
   ): Future[Result] = {
     lazy val form = sicCode.map(SicCodeViewModel).fold(sicCodeform)(sicCodeform.fill)
-    Future.successful(
+    sessionCacheService.individualAndSoleTraderRouter(
+      user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
       Ok(
         sicCodeView(
           form,
@@ -64,15 +66,15 @@ class SicCodeController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        subscriptionBusinessService.cachedSicCode.flatMap(populateView(_, isInReviewMode = false, service))
+      implicit request => user: LoggedInUserWithEnrolments =>
+        subscriptionBusinessService.cachedSicCode.flatMap(populateView(_, isInReviewMode = false, service, user))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
+      implicit request => user: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedSicCode.flatMap(
-          sic => populateView(Some(sic), isInReviewMode = true, service)
+          sic => populateView(Some(sic), isInReviewMode = true, service, user)
         )
     }
 

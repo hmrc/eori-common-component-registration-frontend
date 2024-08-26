@@ -22,17 +22,18 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CheckYourDetailsRegisterController @Inject() (
   authAction: AuthAction,
   requestSessionData: RequestSessionData,
+  sessionCacheService: SessionCacheService,
   mcc: MessagesControllerComponents,
   checkYourDetailsRegisterView: check_your_details_register,
   registerWithoutIdWithSubscription: RegisterWithoutIdWithSubscriptionService,
@@ -42,13 +43,15 @@ class CheckYourDetailsRegisterController @Inject() (
 
   def reviewDetails(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        viewModelConstructor.generateViewModel(service).map {
+      implicit request => user: LoggedInUserWithEnrolments =>
+        viewModelConstructor.generateViewModel(service).flatMap {
           case Some(viewModel) =>
-            Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
+            val result = Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
+            sessionCacheService.individualAndSoleTraderRouter(
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, result)
           case None =>
             logger.warn("Data is missing from the cache so the user is being redirected to the start of the journey")
-            Redirect(routes.EmailController.form(service))
+            Future.successful(Redirect(routes.EmailController.form(service)))
         }
     }
 

@@ -20,26 +20,32 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address_invalid_individual, address_invalid_organisation}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AddressInvalidController @Inject() (
   authAction: AuthAction,
+  sessionCacheService: SessionCacheService,
   requestSessionData: RequestSessionData,
   addressInvalidOrganisation: address_invalid_organisation,
   addressInvalidIndividual: address_invalid_individual,
   mcc: MessagesControllerComponents
-) extends CdsController(mcc) {
+)(implicit ec: ExecutionContext) extends CdsController(mcc) {
 
   def page(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      if (requestSessionData.isIndividualOrSoleTrader(request))
+    implicit request => user: LoggedInUserWithEnrolments =>
+      val result = if (requestSessionData.isIndividualOrSoleTrader(request))
         Future.successful(Ok(addressInvalidIndividual(service)))
       else Future.successful(Ok(addressInvalidOrganisation(service)))
+
+      result.flatMap(
+      sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+
   }
 
 }

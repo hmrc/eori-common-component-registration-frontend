@@ -18,15 +18,13 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  DetermineReviewPageController,
-  DoYouHaveAUtrNumberController,
-  SecuritySignOutController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, DoYouHaveAUtrNumberController, IndStCannotRegisterUsingThisServiceController, SecuritySignOutController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
 
@@ -37,6 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RowIndividualNameDateOfBirthController @Inject() (
   authAction: AuthAction,
   subscriptionDetailsService: SubscriptionDetailsService,
+  requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   rowIndividualNameDob: row_individual_name_dob
 )(implicit ec: ExecutionContext)
@@ -44,17 +43,20 @@ class RowIndividualNameDateOfBirthController @Inject() (
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
-      assertOrganisationTypeIsValid(organisationType)
-      Future.successful(
-        Ok(
-          rowIndividualNameDob(
-            thirdCountryIndividualNameDateOfBirthForm,
-            organisationType,
-            service,
-            isInReviewMode = false
+      if(requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        assertOrganisationTypeIsValid(organisationType)
+        Future.successful(
+          Ok(
+            rowIndividualNameDob(
+              thirdCountryIndividualNameDateOfBirthForm,
+              organisationType,
+              service,
+              isInReviewMode = false
+            )
           )
         )
-      )
     }
 
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =

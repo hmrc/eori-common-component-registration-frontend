@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EtmpOrganisationType, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
@@ -43,17 +43,21 @@ class DateOfEstablishmentController @Inject() (
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   dateOfEstablishmentView: date_of_establishment,
-  orgTypeLookup: OrgTypeLookup
+  orgTypeLookup: OrgTypeLookup,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      for {
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      (for {
         maybeCachedDateModel <- subscriptionBusinessService.maybeCachedDateEstablished
         orgType              <- orgTypeLookup.etmpOrgType
-      } yield populateView(maybeCachedDateModel, isInReviewMode = false, orgType, service)
+      } yield populateView(maybeCachedDateModel, isInReviewMode = false, orgType, service)).flatMap(
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _)
+      )
     }
 
   private def populateView(
@@ -67,11 +71,14 @@ class DateOfEstablishmentController @Inject() (
   }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      for {
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      (for {
         cachedDateModel <- fetchDate
         orgType         <- orgTypeLookup.etmpOrgType
-      } yield populateView(Some(cachedDateModel), isInReviewMode = true, orgType, service)
+      } yield populateView(Some(cachedDateModel), isInReviewMode = true, orgType, service)).flatMap(
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _)
+      )
     }
 
   private def fetchDate(implicit request: Request[_]): Future[LocalDate] =

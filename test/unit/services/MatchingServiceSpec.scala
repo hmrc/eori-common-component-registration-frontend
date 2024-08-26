@@ -26,12 +26,8 @@ import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  MatchingRequestHolder,
-  MatchingResponse,
-  Organisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Individual, MessagingServiceParam, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, MatchingRequestHolder, MatchingResponse, Organisation, RegisterWithIDResponse, ResponseDetail}
 import util.builders.matching.NinoFormBuilder
 import play.api.libs.json._
 import play.api.mvc.{AnyContent, Request}
@@ -41,6 +37,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDet
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, RequestCommonGenerator}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
@@ -232,7 +229,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
   private def assertMatchIndividualWithUtr(
     connectorResponse: EitherT[Future, ResponseError, MatchingResponse],
-    expectedServiceCallResult: EitherT[Future, ResponseError, Unit]
+    expectedServiceCallResult: EitherT[Future, ResponseError, MatchingResponse]
   ): Unit = {
     when(
       mockMatchingServiceConnector
@@ -254,13 +251,13 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     "call matching api with matched values" in
       assertMatchIndividualWithUtr(
         connectorResponse = eitherT(matchIndividualSuccessResponse),
-        expectedServiceCallResult = eitherT(())
+        expectedServiceCallResult = eitherT(matchIndividualSuccessResponse)
       )
 
     "call matching api with unmatched values" in
       assertMatchIndividualWithUtr(
         connectorResponse = eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse),
-        expectedServiceCallResult = eitherT[Unit](MatchingServiceConnector.matchFailureResponse)
+        expectedServiceCallResult = eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse)
       )
 
     "store match details in cache when found a match" in {
@@ -275,7 +272,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
       assertMatchIndividualWithUtr(
         connectorResponse = eitherT(matchIndividualSuccessResponse),
-        expectedServiceCallResult = eitherT(())
+        expectedServiceCallResult = eitherT(matchIndividualSuccessResponse)
       )
       verify(mockCache).saveRegistrationDetails(
         ArgumentMatchers.eq(mockDetails),
@@ -290,7 +287,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     individual: Individual = individualWithMiddleName,
     expectedRequestJson: JsValue = eoriIndividualRequestJson,
     connectorResponse: EitherT[Future, ResponseError, MatchingResponse],
-    expectedServiceCallResult: EitherT[Future, ResponseError, Unit]
+    expectedServiceCallResult: EitherT[Future, ResponseError, MatchingResponse]
   ): Unit = {
     when(
       mockMatchingServiceConnector
@@ -312,13 +309,13 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     "call matching api with matched values" in
       assertMatchIndividualWithEori(
         connectorResponse = eitherT(matchIndividualSuccessResponse),
-        expectedServiceCallResult = eitherT(())
+        expectedServiceCallResult = eitherT(matchIndividualSuccessResponse)
       )
 
     "call matching api with unmatched values" in
       assertMatchIndividualWithEori(
         connectorResponse = eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse),
-        expectedServiceCallResult = eitherT[Unit](MatchingServiceConnector.matchFailureResponse)
+        expectedServiceCallResult = eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse)
       )
 
     "store match details in cache when found a match" in {
@@ -333,7 +330,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
       assertMatchIndividualWithEori(
         connectorResponse = eitherT(matchIndividualSuccessResponse),
-        expectedServiceCallResult = eitherT(())
+        expectedServiceCallResult = eitherT(matchIndividualSuccessResponse)
       )
       verify(mockCache).saveRegistrationDetails(
         ArgumentMatchers.eq(mockDetails),
@@ -347,7 +344,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
   private def assertMatchIndividualWithNino(
     connectorResponse: EitherT[Future, ResponseError, MatchingResponse],
-    serviceCallResult: EitherT[Future, ResponseError, Unit]
+    serviceCallResult: EitherT[Future, ResponseError, MatchingResponse]
   ): Unit = {
     when(
       mockMatchingServiceConnector
@@ -370,14 +367,14 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     "call matching api with matched values" in {
       assertMatchIndividualWithNino(
         connectorResponse = eitherT(matchIndividualSuccessResponse),
-        serviceCallResult = eitherT(())
+        serviceCallResult = eitherT(matchIndividualSuccessResponse)
       )
     }
 
     "call matching api with unmatched values" in {
       assertMatchIndividualWithNino(
         connectorResponse = eitherT(MatchingServiceConnector.matchFailureResponse),
-        serviceCallResult = eitherT[Unit](MatchingServiceConnector.matchFailureResponse)
+        serviceCallResult = eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse)
       )
     }
 
@@ -395,7 +392,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         )
       ).thenReturn(mockDetails)
 
-      val expected = Right(())
+      val expected = Right(matchIndividualSuccessResponse)
       val result =
         service.matchIndividualWithNino(ninoId, NinoFormBuilder.asIndividual, mockGroupId)(mockHeaderCarrier, request)
       result.value.futureValue shouldBe expected

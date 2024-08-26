@@ -26,10 +26,10 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, DisclosePersonalDetailsConsentController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DisclosePersonalDetailsConsentController, routes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, YesNo}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DisclosePersonalDetailsConsentViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
 import uk.gov.hmrc.http.HeaderCarrier
@@ -68,6 +68,8 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   private val mockRequestSessionData = mock[RequestSessionData]
 
+  private val mockSessionCacheService = instanceOf[SessionCacheService]
+
   private val controller = new DisclosePersonalDetailsConsentController(
     mockAuthAction,
     mockSubscriptionDetailsService,
@@ -76,8 +78,9 @@ class DisclosePersonalDetailsConsentControllerSpec
     mcc,
     disclosePersonalDetailsConsentView,
     mockSubscriptionFlowManager,
-    mockDisclosePersonalDetailsConsentViewModel
-  )
+    mockDisclosePersonalDetailsConsentViewModel,
+    mockSessionCacheService
+  )(global)
 
   private val subscriptionFlows =
     Table[SubscriptionFlow, String, String, String, String, Boolean, Boolean, Boolean, Boolean](

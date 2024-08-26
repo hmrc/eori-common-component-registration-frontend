@@ -21,6 +21,7 @@ import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.CachedData._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
@@ -61,6 +62,8 @@ object CachedData {
   val groupEnrolmentKey                    = "groupEnrolment"
   val eoriKey                              = "eori"
   val submissionCompleteKey                = "submissionCompleteDetails"
+  val postcodeAndLine1DetailsKey           = "PostcodeAndLine1Details"
+  val ninoOrUtrKey                         = "NinoOrUtr"
   val completed                            = "completed"
   implicit val format: OFormat[CachedData] = Json.format[CachedData]
 }
@@ -106,6 +109,12 @@ class SessionCache @Inject() (
 
   def saveRegistrationDetails(rd: RegistrationDetails)(implicit request: Request[_]): Future[Boolean] =
     putData(regDetailsKey, Json.toJson(rd)) map (_ => true)
+
+  def savePostcodeAndLine1Details(pcDetails: PostcodeViewModel)(implicit request: Request[_]): Future[Boolean] =
+    putData(postcodeAndLine1DetailsKey, Json.toJson(pcDetails)) map (_ => true)
+
+  def saveNinoOrUtrDetails(ninoOrUtr: NinoOrUtr)(implicit request: Request[_]): Future[Boolean] =
+    putData(ninoOrUtrKey, Json.toJson(ninoOrUtr)) map (_ => true)
 
   def saveRegistrationDetails(
     rd: RegistrationDetails,
@@ -216,6 +225,12 @@ class SessionCache @Inject() (
 
   def registrationInfo(implicit request: Request[_]): Future[RegistrationInfo] =
     getData[RegistrationInfo](regInfoKey).map(_.getOrElse(throwException(regInfoKey)))
+
+  def getPostcodeAndLine1Details(implicit request: Request[_]): Future[Option[PostcodeViewModel]] =
+    getData[PostcodeViewModel](postcodeAndLine1DetailsKey)
+
+  def getNinoOrUtrDetails(implicit request: Request[_]): Future[Option[NinoOrUtr]] =
+    getData[NinoOrUtr](ninoOrUtrKey)
 
   def groupEnrolment(implicit request: Request[_]): Future[EnrolmentResponse] =
     getData[EnrolmentResponse](groupEnrolmentKey).map(_.getOrElse(throwException(groupEnrolmentKey)))

@@ -53,10 +53,12 @@ GET         /customs-registration-services/:service/register/you-need-different-
 
 GET         /customs-registration-services/:service/register/use-a-different-service                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UseADifferentServiceController.form(service: Service)
 
+GET         /customs-registration-services/:service/register/ind-st-use-a-different-service             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.IndStCannotRegisterUsingThisServiceController.form(service: Service)
+
 GET         /customs-registration-services/:service/register/review-details                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.reviewDetails(service: Service)
 POST        /customs-registration-services/:service/register/subscribe                                   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.CheckYourDetailsRegisterController.submitDetails(service: Service)
 
-GET         /customs-registration-services/:service/register/download/text                                        @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadTextController.download(service: Service)
+GET         /customs-registration-services/:service/register/download/text                               @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DownloadTextController.download(service: Service)
 
 
 GET         /customs-registration-services/:service/register/processing                                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController.processing(service: Service)
@@ -92,6 +94,15 @@ GET         /customs-registration-services/:service/register/matching/chooseid/n
 POST        /customs-registration-services/:service/register/matching/chooseid/nino                      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouNinoController.submit(service: Service)
 GET         /customs-registration-services/:service/register/matching/chooseid/utr                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouUtrController.form(service: Service)
 POST        /customs-registration-services/:service/register/matching/chooseid/utr                       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouUtrController.submit(service: Service)
+
+GET         /customs-registration-services/:service/register/postcode                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.PostCodeController.createForm(service: Service)
+POST        /customs-registration-services/:service/register/postcode                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.PostCodeController.submit(service: Service)
+
+GET         /customs-registration-services/:service/register/manual/address                               @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ManualAddressController.createForm(service: Service)
+POST        /customs-registration-services/:service/register/manual/address                               @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ManualAddressController.submit(service: Service)
+
+GET         /customs-registration-services/:service/register/postcode/lookup                               @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.PostcodeLookupResultsController.displayPage(service: Service)
+POST        /customs-registration-services/:service/register/postcode/lookup                               @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.PostcodeLookupResultsController.submit(service: Service)
 
 GET         /customs-registration-services/:service/register/matching/address/:organisationType          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SixLineAddressController.showForm(isInReviewMode: Boolean = false, organisationType, service: Service)
 POST        /customs-registration-services/:service/register/matching/address/:organisationType          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SixLineAddressController.submit(isInReviewMode: Boolean = false, organisationType, service: Service)

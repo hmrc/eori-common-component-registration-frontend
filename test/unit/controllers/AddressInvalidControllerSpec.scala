@@ -22,12 +22,13 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressInvalidController
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address_invalid_individual, address_invalid_organisation}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
+import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class AddressInvalidControllerSpec extends ControllerSpec with AuthActionMock {
@@ -35,17 +36,19 @@ class AddressInvalidControllerSpec extends ControllerSpec with AuthActionMock {
   private val mockAuthConnector      = mock[AuthConnector]
   private val mockAuthAction         = authAction(mockAuthConnector)
   private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCacheService = instanceOf[SessionCacheService]
 
   private val addressInvalidOrgView = instanceOf[address_invalid_organisation]
   private val addressInvalidIndView = instanceOf[address_invalid_individual]
 
   val controller = new AddressInvalidController(
     mockAuthAction,
+    mockSessionCacheService,
     mockRequestSessionData,
     addressInvalidOrgView,
     addressInvalidIndView,
     mcc
-  )
+  )(global)
 
   "Address Invalid page" should {
     "display contact HMRC page for individual" in {

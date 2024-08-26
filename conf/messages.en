@@ -1,3 +1,4 @@
+common.continue=Continue
 cds.not-applicable.label=N/A
 cds.not-entered.label=Not entered
 cds.no=No
@@ -1721,7 +1722,15 @@ ecc.contact-address-details.error.yes-no-answer=Select yes if the contact addres
 
 ecc.subscription.contact-address.heading=Do you want us to use this address to send you information about your EORI number application?
 ecc.subscription.contact-address.title=Do you want us to use this address to send you information about your EORI number application?
-ecc.manual-address-details.heading.hint=We will use this address to contact you about your EORI number application.
+ecc.address-details.heading.hint=We will use this address to contact you about your EORI number application.
+
+ecc.manual-address-details.heading.hint=We will use this address to validate.
+ecc.manual-address-details.heading = Enter your address manually
+ecc.manual-address-details.addressLine1.label=Address line 1
+ecc.manual-address-details.city.label=Town or city
+ecc.manual-address-details.postcode.label=Postcode
+ecc.manual-address-details.countryCode-auto-complete.label=Country
+
 
 
 cds.enter-address-details.company.title-and-heading=Enter your full registered company address
@@ -1774,21 +1783,26 @@ ecc.registered-company-country.individual.title = In which country is you busine
 ecc.registered-company-country.individual.error = Enter the country in which your business is registered
 ecc.registered-company-country.summary = Country location
 
+ecc.address-lookup.postcode.title = Choose your address
 ecc.address-lookup.postcode.organisation.title = What is your registered company address?
-ecc.address-lookup.postcode.individual.title = What is your registered business address?
+ecc.address-lookup.postcode.individual.title = What is your address?
 ecc.address-lookup.postcode.partnership.title = What is your registered partnership address?
 ecc.address-lookup.postcode.charity.title = What is your registered organisation address?
 ecc.address-lookup.postcode.default.hint = This may not be your business address.
 ecc.address-lookup.postcode.organisation.hint = This is the address registered with Companies House which may not be your business address.
 ecc.address-lookup.postcode.label = Postcode
-ecc.address-lookup.postcode.line1.label = Property name or number (optional)
-ecc.address-lookup.postcode.line1.error = Property name or number cannot have more than 35 characters
+ecc.address-lookup.postcode.hint = For example, AA3 1AB
+ecc.address-lookup.postcode.line1.label = House number or name (optional)
+ecc.address-lookup.postcode.link.text = Enter your address manually
+ecc.address-lookup.postcode.line1.too-long.error = Property name or number cannot have more than 35 characters
+ecc.address-lookup.postcode.line1.invalid-chars.error = Address line cannot contain ''<'' or ''>''
 ecc.address-lookup.postcode.summary.label = Postcode
 ecc.address-lookup.postcode.line1.summary.label = Property name or number
 ecc.address-lookup.postcode.address.label = Select your address
 ecc.address-lookup.postcode.address.error = Please select address from the list
 ecc.address-lookup.postcode.cannot-find-address = I can''t find my address in the list
-ecc.address-lookup.postcode.line1.hint = For example, The Mill, 116 or Flat 37a.
+ecc.address-lookup.postcode.line1.hint = For example, 15 or Prospect Cottage.
+
 ecc.address-lookup.postcode.find-address = Find address
 ecc.address-lookup.postcode.find-address.manual = The registered address is outside the UK
 
@@ -2037,3 +2051,10 @@ lockedEmail.para2 = You can try again in 24 hours.
 date.day.error= Day must be a number from 1 to 31
 date.month.error= Month must be a number from 1 to 12
 date.year.error= Year must be between {0} and this year
+
+#You cannot register for an EORI number using this service for individuals or sole traders
+cds.matching.ind-st-cannot-register-using-service.title-and-heading=You need to use a different service
+cds.matching.ind-st-cannot-register-using-service.para1=This service is not available to individuals or sole traders.
+cds.matching.ind-st-cannot-register-using-service.para2=You can:
+cds.matching.ind-st-cannot-register-using-service.link.text1=apply for an EORI number if you are VAT registered
+cds.matching.ind-st-cannot-register-using-service.link.text2=apply for an EORI number if you are not VAT registered

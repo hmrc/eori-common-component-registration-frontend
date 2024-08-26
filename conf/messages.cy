@@ -1,3 +1,4 @@
+common.continue = Yn eich blaen
 cds.not-applicable.label = Amherthnasol
 cds.not-entered.label = Heb ei nodi
 cds.no = Na
@@ -1502,7 +1503,14 @@ confirm-contact-address-details.no = Na, hoffwn nodi’r cyfeiriad â llaw
 ecc.contact-address-details.error.yes-no-answer = Dewiswch ‘Iawn’ os yw’r cyfeiriad cyswllt yn gywir
 ecc.subscription.contact-address.heading = A ydych am i ni ddefnyddio’r cyfeiriad hwn i anfon gwybodaeth atoch ynglŷn â’ch cais am rif EORI?
 ecc.subscription.contact-address.title = A ydych am i ni ddefnyddio’r cyfeiriad hwn i anfon gwybodaeth atoch ynglŷn â’ch cais am rif EORI?
-ecc.manual-address-details.heading.hint = Byddwn yn defnyddio’r cyfeiriad hwn i gysylltu â chi ynglŷn â’ch cais am rif EORI.
+ecc.address-details.heading.hint = Byddwn yn defnyddio’r cyfeiriad hwn i gysylltu â chi ynglŷn â’ch cais am rif EORI.
+ecc.manual-address-details.heading.hint = Byddwn yn defnyddio'r cyfeiriad hwn i ddilysu.
+ecc.manual-address-details.heading =  Nodwch eich cyfeiriad � llaw
+ecc.manual-address-details.addressLine1.label = Cyfeiriad – llinell 1
+ecc.manual-address-details.city.label = Tref neu ddinas
+ecc.manual-address-details.postcode.label = Cod post
+ecc.manual-address-details.countryCode-auto-complete.label = Gwlad
+
 cds.enter-address-details.company.title-and-heading = Nodwch gyfeiriad cofrestredig llawn eich cwmni
 cds.existing.reg.eori-already-exists.title = Mae gennych EORI eisoes
 cds.existing.reg.eori.number = Rhif EORI:
@@ -1543,15 +1551,20 @@ ecc.registered-company-country.organisation.error = Nodwch y wlad lle y mae’ch
 ecc.registered-company-country.individual.title = Ym mha wlad y mae’ch busnes wedi’i gofrestru?
 ecc.registered-company-country.individual.error = Nodwch y wlad lle y mae’ch busnes wedi’i gofrestru
 ecc.registered-company-country.summary = Lleoliad y wlad
+
+ecc.address-lookup.postcode.title = Dewiswch eich cyfeiriad
 ecc.address-lookup.postcode.organisation.title = Beth yw cyfeiriad cofrestredig eich cwmni?
-ecc.address-lookup.postcode.individual.title = Beth yw cyfeiriad cofrestredig eich busnes?
+ecc.address-lookup.postcode.individual.title = Beth yw?ch cyfeiriad?
 ecc.address-lookup.postcode.partnership.title = Beth yw cyfeiriad cofrestredig eich partneriaeth?
 ecc.address-lookup.postcode.charity.title = Beth yw cyfeiriad cofrestredig eich sefydliad?
 ecc.address-lookup.postcode.default.hint = Mae’n bosibl nad dyma gyfeiriad eich busnes.
 ecc.address-lookup.postcode.organisation.hint = Dyma’r cyfeiriad sydd wedi’i gofrestru gyda Thŷ’r Cwmnïau. Mae’n bosibl nad dyma’ch cyfeiriad busnes.
 ecc.address-lookup.postcode.label = Cod post
+ecc.address-lookup.postcode.hint = Er enghraifft, AA3 1AB
 ecc.address-lookup.postcode.line1.label = Enw neu rif yr eiddo (dewisol)
-ecc.address-lookup.postcode.line1.error = Ni all enw neu rif yr eiddo fod yn fwy na 35 o gymeriadau
+ecc.address-lookup.postcode.link.text = Nodwch eich cyfeiriad â llaw.
+ecc.address-lookup.postcode.line1.too-long.error = Ni all enw neu rif yr eiddo fod yn fwy na 35 o gymeriadau
+ecc.address-lookup.postcode.line1.invalid-chars.error = Ni all y cyfeiriad gynnwys ''<'' na ''>''
 ecc.address-lookup.postcode.summary.label = Cod post
 ecc.address-lookup.postcode.line1.summary.label = Enw neu rif yr eiddo
 ecc.address-lookup.postcode.address.label = Dewiswch eich cyfeiriad
@@ -1561,6 +1574,9 @@ ecc.address-lookup.postcode.line1.hint = Er enghraifft, Tegfan, 116 neu Fflat 37
 ecc.address-lookup.postcode.find-address = Dod o hyd i gyfeiriad
 ecc.address-lookup.postcode.find-address.manual = Mae’r cyfeiriad cofrestredig y tu allan i’r DU
 ecc.address-lookup.postcode.error = Mae problem wedi codi
+
+
+
 enter-email-body-text=Byddwn yn defnyddio hwn i anfon y canlynol atoch:
 cds.subscription.enter-email.list-bullet-1=diweddaru chi ynghylch newidiadau i’r Gwasanaeth Datganiadau Tollau (CDS)
 cds.subscription.enter-email.list-bullet-2=rhoi gwybod i chi ynghylch diweddariadau brys am nwyddau mewn tollau, os byddwch yn cyflwyno datganiadau mewnforio neu allforio
@@ -1808,3 +1824,10 @@ ecc.start-page.para1.bullet2.new.esc = tanysgrifiad ar gyfer Rhoi gwybod am a rh
 lockedEmail.heading = Rydych wedi nodi cod anghywir gormod o weithiau
 lockedEmail.para1 = Ni fyddwch yn gallu mynd yn eich blaen â’ch cais.
 lockedEmail.para2 = Gallwch roi cynnig arall arni ymhen 24 awr.
+
+#You cannot register for an EORI number using this service for individuals or sole traders
+cds.matching.ind-st-cannot-register-using-service.title-and-heading=Rhaid i chi ddefnyddio gwasanaeth gwahanol
+cds.matching.ind-st-cannot-register-using-service.para1=Nid yw?r gwasanaeth hwn ar gael i unigolion nac i unig fasnachwyr.
+cds.matching.ind-st-cannot-register-using-service.para2=Gallwch:
+cds.matching.ind-st-cannot-register-using-service.link.text1=gwneud cais am rif EORI os ydych wedi?ch cofrestru ar gyfer TAW
+cds.matching.ind-st-cannot-register-using-service.link.text2=gwneud cais am rif EORI os nad ydych wedi?ch cofrestru ar gyfer TAW

@@ -22,9 +22,11 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
 
 import javax.inject.{Inject, Singleton}
@@ -34,6 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DoYouHaveAUtrNumberController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
+  requestSessionData: RequestSessionData,
   matchOrganisationUtrView: match_organisation_utr,
   subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
@@ -43,11 +46,14 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>
-        val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
+      if(requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>
+          val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
 
-        Ok(matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service, isInReviewMode))
-      }
+          Ok(matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service, isInReviewMode))
+        }
     }
 
   def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =

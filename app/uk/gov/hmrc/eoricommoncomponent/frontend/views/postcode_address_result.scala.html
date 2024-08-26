@@ -1,0 +1,112 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset, GovukHint}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
+@import views.html.helper.CSRF
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukSummaryList
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.PostcodeForm
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookup
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukRadios
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.Radios
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
+
+@this(layout_di: layout,
+        errorSummary: helpers.errorSummary,
+        govukSummaryList: GovukSummaryList,
+        govukRadios: GovukRadios,
+        govukButton: GovukButton,
+        h1: helpers.h1,
+        p: helpers.paragraph
+)
+
+@(addressResultsForm: Form[AddressResultsForm],
+        addressLookupParams: PostcodeViewModel,
+        addresses: Seq[AddressLookup],
+        service: Service)(implicit request: Request[_], messages: Messages)
+
+@manualAddressLink = @{
+    ManualAddressController.createForm(service)
+}
+
+@manualAddressLinkHtml = {
+    <a href="@manualAddressLink" id="cannot-find-address" class="govuk-link">@messages("ecc.address-lookup.postcode.cannot-find-address")</a>
+}
+
+@addressSeq = @{
+    addresses.zipWithIndex.map { case (address, index) =>
+        RadioItem(
+            content = HtmlContent(address.dropDownView),
+            value = Some(address.dropDownView),
+            id = if (index == 0) Some("address") else Some(s"addressId-$index"),
+            checked = addressResultsForm(s"${address.dropDownView}").value.isDefined
+        )
+    }
+}
+
+@layout_di(messages("ecc.address-lookup.postcode.title"), form = Some(addressResultsForm), service = service) {
+    <div>
+
+        @errorSummary(addressResultsForm.errors)
+
+        @helpers.form(PostcodeLookupResultsController.submit(service), "addressLookupPostcodeResultsForm") {
+
+            @CSRF.formField
+
+            @h1(messages("ecc.address-lookup.postcode.title"))
+
+            @p(classes="govuk-!-margin-bottom-6 govuk-body",html = Some(manualAddressLinkHtml))
+
+
+
+
+
+            <div class="govuk-!-margin-bottom-6 govuk-body">
+                @govukRadios(Radios(
+                    idPrefix = Some(addressResultsForm("address").id),
+                    name = addressResultsForm("address").name,
+                    fieldset = Some(Fieldset(
+                        legend = Some(Legend(
+                            content = Text(messages("ecc.address-lookup.postcode.address.label")),
+                            isPageHeading = false,
+                            classes = "govuk-visually-hidden"
+                        ))
+                    )),
+                    items = addressSeq,
+                    errorMessage = addressResultsForm("address").error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*)), visuallyHiddenText = Some(messages("cds.error.field.hint"))))
+                ))
+
+            </div>
+
+            @govukButton(Button(
+                content = Text(messages("common.continue")),
+                id = Some("continue-button")
+            ))
+        }
+    </div>
+}

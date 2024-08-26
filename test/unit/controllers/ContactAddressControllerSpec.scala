@@ -24,13 +24,9 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ContactAddressController, SubscriptionFlowManager}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  SubscriptionDetails,
-  SubscriptionFlowInfo,
-  SubscriptionPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
 import uk.gov.hmrc.http.HeaderCarrier
@@ -51,18 +47,20 @@ class ContactAddressControllerSpec
   private val mockSubscriptionFlow     = mock[SubscriptionFlowManager]
   private val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
   private val mockSubscriptionPage     = mock[SubscriptionPage]
+  private val mockSessionCacheService  = instanceOf[SessionCacheService]
 
   private val viewContactAddress = instanceOf[contact_address]
 
   private val controller = new ContactAddressController(
     mockAuthAction,
+    mockSessionCacheService,
     mockSubscriptionDetailsService,
     mockSubscriptionBusinessService,
     mockCdsFrontendDataCache,
     mockSubscriptionFlow,
     mcc,
     viewContactAddress
-  )
+  )(global)
 
   def stringOfLengthXGen(minLength: Int): Gen[String] =
     for {

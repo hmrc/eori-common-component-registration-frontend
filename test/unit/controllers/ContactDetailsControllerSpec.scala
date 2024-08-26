@@ -31,7 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_details
 import uk.gov.hmrc.http.HeaderCarrier
@@ -56,6 +56,7 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   private val mockRequestSessionData  = mock[RequestSessionData]
   private val mockRegistrationDetails = mock[RegistrationDetails](RETURNS_DEEP_STUBS)
   private val mockSubscriptionDetails = mock[SubscriptionDetails](RETURNS_DEEP_STUBS)
+  private val mockSessionCacheService = instanceOf[SessionCacheService]
 
   private val mockCdsFrontendDataCache = mock[SessionCache]
   private val mockOrgTypeLookup        = mock[OrgTypeLookup]
@@ -68,8 +69,9 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
     mockSubscriptionFlowManager,
     mockSubscriptionDetailsService,
     mcc,
-    contactDetailsView
-  )
+    contactDetailsView,
+    mockSessionCacheService
+  )(global)
 
   override def beforeEach(): Unit = {
     reset(mockSubscriptionBusinessService)

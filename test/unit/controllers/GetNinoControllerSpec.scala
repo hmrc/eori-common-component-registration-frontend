@@ -25,9 +25,11 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetNinoController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingResponse, RegisterWithIDResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IdMatchModel, NameDobMatchModel, Nino}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_nino}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -47,6 +49,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   private val mockMatchingService            = mock[MatchingService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val errorView                      = instanceOf[error_template]
+  private val mockRequestSessionData         = instanceOf[RequestSessionData]
 
   private val matchNinoRowIndividualView = instanceOf[how_can_we_identify_you_nino]
 
@@ -56,8 +59,9 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     mcc,
     matchNinoRowIndividualView,
     mockSubscriptionDetailsService,
-    errorView
-  )
+    errorView,
+    mockRequestSessionData
+  )(global)
 
   private val notMatchedError =
     "Your details have not been found. Check that your details are correct and then try again."
@@ -95,7 +99,9 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT(()))
+        .thenReturn(eitherT[MatchingResponse](MatchingResponse(RegisterWithIDResponse(ResponseCommon("OK",
+          Some("002 - No match found"), LocalDate.now.atTime(8, 35, 2),
+          Some(List(MessagingServiceParam("POSITION", "FAIL")))), None))))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
@@ -119,7 +125,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
+        .thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
@@ -143,7 +149,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
+        .thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
@@ -162,7 +168,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
+        .thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.downstreamFailureResponse))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
@@ -187,7 +193,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
+        .thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.otherErrorHappen))
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)

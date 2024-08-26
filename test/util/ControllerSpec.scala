@@ -30,11 +30,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{
-  AppConfig,
-  InternalAuthTokenInitialiser,
-  NoOpInternalAuthTokenInitialiser
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{AppConfig, InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import unit.controllers.CdsPage
@@ -42,7 +38,7 @@ import util.builders.{AuthBuilder, SessionBuilder}
 
 import java.util.UUID
 import scala.concurrent.ExecutionContext.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Random
 
 trait ControllerSpec

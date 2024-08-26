@@ -80,22 +80,22 @@ class MatchingService @Inject() (
   def matchIndividualWithId(customsId: CustomsId, individual: Individual, groupId: GroupId)(implicit
     hc: HeaderCarrier,
     request: Request[_]
-  ): EitherT[Future, ResponseError, Unit] =
+  ): EitherT[Future, ResponseError, MatchingResponse] =
     for {
       response <- matchingConnector.lookup(individualIdMatchRequest(customsId, individual))
       details = convert(customsId, toLocalDate(individual.dateOfBirth))(response)
       _ <- EitherT[Future, ResponseError, Unit](cache.saveRegistrationDetails(details, groupId).map(_ => Right(())))
-    } yield ()
+    } yield (response)
 
   def matchIndividualWithNino(nino: String, individual: Individual, groupId: GroupId)(implicit
     hc: HeaderCarrier,
     request: Request[_]
-  ): EitherT[Future, ResponseError, Unit] =
+  ): EitherT[Future, ResponseError, MatchingResponse] =
     for {
       response <- matchingConnector.lookup(individualNinoMatchRequest(nino, individual))
       details = convert(customsId = Nino(nino), capturedDate = toLocalDate(individual.dateOfBirth))(response)
       _ <- EitherT[Future, ResponseError, Unit](cache.saveRegistrationDetails(details, groupId).map(_ => Right(())))
-    } yield ()
+    } yield (response)
 
   private def idAndNameMatchRequest(customsId: CustomsId, org: Organisation): MatchingRequestHolder =
     MatchingRequestHolder(

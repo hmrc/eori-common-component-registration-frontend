@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetail
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress.wrongAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sub01_outcome_processing
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -44,14 +44,16 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private val mockConfirmContactDetailsService = mock[ConfirmContactDetailsService]
   private val mockSessionCache                 = mock[SessionCache]
   private val sub01OutcomeProcessingView       = instanceOf[sub01_outcome_processing]
+  private val mockSessionCacheService          = instanceOf[SessionCacheService]
 
   private val controller = new ConfirmContactDetailsController(
     mockAuthAction,
     mockConfirmContactDetailsService,
     mockSessionCache,
+    mockSessionCacheService,
     mcc,
     sub01OutcomeProcessingView
-  )
+  )(global)
 
   private val mockSub01Outcome = mock[Sub01Outcome]
   private val mockRegDetails   = mock[RegistrationDetails]

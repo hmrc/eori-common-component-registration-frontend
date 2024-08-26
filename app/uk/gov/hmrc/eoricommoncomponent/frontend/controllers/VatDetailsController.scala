@@ -26,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -42,7 +43,8 @@ class VatDetailsController @Inject() (
   errorTemplate: error_template,
   weCannotConfirmYourIdentity: date_of_vat_registration,
   subscriptionDetailsService: SubscriptionDetailsService,
-  form: VatRegistrationDateFormProvider
+  form: VatRegistrationDateFormProvider,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -50,18 +52,21 @@ class VatDetailsController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service)))
+      implicit request => user: LoggedInUserWithEnrolments =>
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+          Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service)))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
+      implicit request => user: LoggedInUserWithEnrolments =>
         subscriptionBusinessService.getCachedUkVatDetails.map {
           case Some(vatDetails) =>
             Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, service))
           case None => Ok(vatDetailsView(vatDetailsForm, isInReviewMode = true, service))
-        }
+        }.flatMap(sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
@@ -106,8 +111,9 @@ class VatDetailsController @Inject() (
     )
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(weCannotConfirmYourIdentity(dateForm, service)))
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, Ok(weCannotConfirmYourIdentity(dateForm, service)))
     }
 
 }

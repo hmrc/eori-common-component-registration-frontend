@@ -19,16 +19,12 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ApplicationController,
-  ContactDetailsController,
-  VatDetailsController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, ContactDetailsController, VatDetailsController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 
@@ -42,7 +38,8 @@ class VatRegisteredUkController @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService,
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
-  vatRegisteredUkView: vat_registered_uk
+  vatRegisteredUkView: vat_registered_uk,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -50,10 +47,11 @@ class VatRegisteredUkController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
+      implicit request => user: LoggedInUserWithEnrolments =>
         isIndividualFlow match {
           case Right(isIndividual) =>
-            Future.successful(
+            sessionCacheService.individualAndSoleTraderRouter(
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
               Ok(
                 vatRegisteredUkView(
                   isInReviewMode = false,
@@ -73,25 +71,28 @@ class VatRegisteredUkController @Inject() (
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        for {
+      implicit request => user: LoggedInUserWithEnrolments =>
+        (for {
           isVatRegisteredUk <- subscriptionBusinessService.getCachedVatRegisteredUk
           yesNo: YesNo = YesNo(isVatRegisteredUk)
         } yield isIndividualFlow match {
           case Right(individual) =>
-            Ok(
-              vatRegisteredUkView(
-                isInReviewMode = true,
-                vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
-                individual,
-                requestSessionData.isPartnershipOrLLP,
-                service
+            sessionCacheService.individualAndSoleTraderRouter(
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+              Ok(
+                vatRegisteredUkView(
+                  isInReviewMode = true,
+                  vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
+                  individual,
+                  requestSessionData.isPartnershipOrLLP,
+                  service
+                )
               )
             )
           case Left(_) =>
             logger.warn(s"Unable to identify subscription flow: key not found in cache in review mode")
-            Redirect(ApplicationController.startRegister(service))
-        }
+            Future.successful(Redirect(ApplicationController.startRegister(service)))
+        }).flatten
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =

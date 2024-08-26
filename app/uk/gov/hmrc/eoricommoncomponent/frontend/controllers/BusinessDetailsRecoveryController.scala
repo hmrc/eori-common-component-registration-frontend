@@ -23,11 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.BusinessDeta
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 
 import javax.inject.{Inject, Singleton}
@@ -41,13 +37,14 @@ class BusinessDetailsRecoveryController @Inject() (
   mcc: MessagesControllerComponents,
   businessDetailsRecoveryView: business_details_recovery,
   save4LaterService: Save4LaterService,
-  subscriptionFlowManager: SubscriptionFlowManager
+  subscriptionFlowManager: SubscriptionFlowManager,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      for {
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      (for {
         regDetails <- sessionCache.registrationDetails
       } yield regDetails match {
         case individual: RegistrationDetailsIndividual =>
@@ -56,7 +53,8 @@ class BusinessDetailsRecoveryController @Inject() (
           Ok(businessDetailsRecoveryView(org.name, concatenateAddress(org), isIndividual = false, service))
         case _ =>
           throw new IllegalArgumentException("Required RegistrationDetailsIndividual | RegistrationDetailsOrganisation")
-      }
+      }).flatMap(sessionCacheService.individualAndSoleTraderRouter(
+      user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
     }
 
   def continue(service: Service): Action[AnyContent] =

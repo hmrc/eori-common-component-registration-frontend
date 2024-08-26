@@ -21,10 +21,10 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, internalId, email => ggEmail, _}
-import uk.gov.hmrc.auth.core.retrieve.{~, Credentials}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
@@ -86,7 +86,8 @@ class AuthAction @Inject() (
   private def authorise(
     requestProcessor: RequestProcessorSimple,
     checkPermittedAccess: Boolean = true,
-    checkServiceEnrolment: Boolean = true
+    checkServiceEnrolment: Boolean = true,
+    validateDobAndPostCode: Boolean = false //Refer to ticket DDCYLS-5624 for this change
   )(implicit request: Request[AnyContent]) = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
@@ -95,6 +96,15 @@ class AuthAction @Inject() (
         case currentUserEmail ~ userCredentialRole ~ userAffinityGroup ~ userInternalId ~ userAllEnrolments ~ groupId ~ Some(
               Credentials(credId, _)
             ) =>
+//          if(validateDobAndPostCode) {
+//            sessionCache.subscriptionDetails.map(subDetails =>
+//              for {
+//                nameDobDetails <- subDetails.nameDobDetails
+//                postCode
+//              }
+//              _.nameDobDetails.getOrElse(throw DataUnavailableException(s"NameDob is not cached in data"))
+//            )
+//          }
           transformRequest(
             Right(requestProcessor),
             LoggedInUserWithEnrolments(

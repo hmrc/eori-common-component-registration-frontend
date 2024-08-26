@@ -1,0 +1,110 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
+@import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+@import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
+@import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukFieldset, GovukHint}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
+@import views.html.helper.CSRF
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
+@import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController
+
+@this(layout_di: layout,
+    govukButton: GovukButton,
+    inputText: helpers.inputText,
+    errorSummary: helpers.errorSummary,
+    countryField: helpers.countryField,
+    goveukFieldSet: GovukFieldset,
+    govukHint: GovukHint,
+    p: helpers.paragraph
+)
+
+@(
+    postCodeForm: Form[PostcodeViewModel],
+    service: Service
+)(implicit request: Request[_], messages: Messages)
+
+@manualAddressLink = @{
+    ManualAddressController.createForm(service)
+}
+@manualAddressLinkHtml = {
+    <a href="@manualAddressLink" id="cannot-find-address" class="govuk-link">@messages("ecc.address-lookup.postcode.link.text")</a>
+}
+
+@html = {
+
+<div id="contact">
+
+@inputText(
+    form = postCodeForm,
+    id = "postcode",
+    name = "postcode",
+    label = "ecc.address-lookup.postcode.label",
+    isPageHeading = false,
+    classes = Some("govuk-!-width-one-half"),
+    hint = Some("ecc.address-lookup.postcode.hint"),
+    labelClasses = Some("govuk-!-font-weight-bold postcode")
+)
+@inputText(
+    form = postCodeForm,
+    id = "addressLine1",
+    name = "addressLine1",
+    label = "ecc.address-lookup.postcode.line1.label",
+    isPageHeading = false,
+    hint = Some("ecc.address-lookup.postcode.line1.hint"),
+    classes = Some("govuk-!-width-one-half"),
+    labelClasses = Some("govuk-!-font-weight-bold")
+)
+
+</div>
+
+@p(classes="govuk-!-margin-bottom-6 govuk-body",html = Some(manualAddressLinkHtml))
+
+}
+
+@layout_di(messages("ecc.address-lookup.postcode.individual.title"), AllCountriesInCountryPicker, Some(postCodeForm), service = service) {
+
+<div>
+    @errorSummary(postCodeForm.errors)
+
+    @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostCodeController.submit(service), "addressDetailsForm") {
+
+    @CSRF.formField
+
+    @goveukFieldSet(
+        Fieldset(
+            legend = Some(Legend(
+            content = Text(messages("ecc.address-lookup.postcode.individual.title")),
+            classes = "govuk-fieldset__legend--l",
+            isPageHeading = true
+            )),
+            html = html
+        )
+    )
+
+    @govukButton(Button(
+            content = Text(messages("common.continue")),
+        id = Some("continue-button")
+    ))
+    }
+
+    @helpers.helpAndSupport()
+
+</div>
+}

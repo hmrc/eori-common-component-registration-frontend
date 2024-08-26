@@ -22,20 +22,28 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class AddressController @Inject() (authorise: AuthAction, addressService: AddressService) {
+class AddressController @Inject() (authorise: AuthAction,
+                                   addressService: AddressService,
+                                   sessionCacheService: SessionCacheService,
+                                   mcc: MessagesControllerComponents)
+                                  (implicit ec:ExecutionContext) extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      addressService.populateOkView(None, isInReviewMode = false, service)
+    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
+        addressService.populateOkView(None, isInReviewMode = false, service).flatMap(
+          sessionCacheService.individualAndSoleTraderRouter(user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      addressService.populateViewIfContactDetailsCached(service)
+    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
+      addressService.populateViewIfContactDetailsCached(service).flatMap(
+        sessionCacheService.individualAndSoleTraderRouter(user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =

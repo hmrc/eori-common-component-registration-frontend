@@ -19,15 +19,12 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ApplicationController,
-  DetermineReviewPageController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, DetermineReviewPageController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DisclosePersonalDetailsConsentViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.disclose_personal_details_consent
@@ -44,15 +41,17 @@ class DisclosePersonalDetailsConsentController @Inject() (
   mcc: MessagesControllerComponents,
   disclosePersonalDetailsConsentView: disclose_personal_details_consent,
   subscriptionFlowManager: SubscriptionFlowManager,
-  disclosePersonalDetailsConsentViewModel: DisclosePersonalDetailsConsentViewModel
+  disclosePersonalDetailsConsentViewModel: DisclosePersonalDetailsConsentViewModel,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(
+      implicit request => user: LoggedInUserWithEnrolments =>
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
           Ok(
             disclosePersonalDetailsConsentView(
               isInReviewMode = false,
@@ -60,26 +59,28 @@ class DisclosePersonalDetailsConsentController @Inject() (
               requestSessionData,
               disclosePersonalDetailsConsentViewModel,
               service
-            )
-          )
+            ))
         )
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.map {
+      implicit request => user: LoggedInUserWithEnrolments =>
+        subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.flatMap {
           case Some(isConsentDisclosed) =>
-            Ok(
-              disclosePersonalDetailsConsentView(
-                isInReviewMode = true,
-                disclosePersonalDetailsYesNoAnswerForm().fill(YesNo(isConsentDisclosed)),
-                requestSessionData,
-                disclosePersonalDetailsConsentViewModel,
-                service
+            sessionCacheService.individualAndSoleTraderRouter(
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+              Ok(
+                disclosePersonalDetailsConsentView(
+                  isInReviewMode = true,
+                  disclosePersonalDetailsYesNoAnswerForm().fill(YesNo(isConsentDisclosed)),
+                  requestSessionData,
+                  disclosePersonalDetailsConsentViewModel,
+                  service
+                )
               )
             )
-          case None => Redirect(routes.EmailController.form(service))
+          case None => Future.successful(Redirect(routes.EmailController.form(service)))
         }
     }
 

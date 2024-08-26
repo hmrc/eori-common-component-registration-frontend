@@ -23,11 +23,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_vat_registration
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -36,15 +36,17 @@ class DateOfVatRegistrationController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   dateOfVatRegistrationView: date_of_vat_registration,
-  form: VatRegistrationDateFormProvider
+  form: VatRegistrationDateFormProvider,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   val vatRegistrationDateForm = form()
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(dateOfVatRegistrationView(vatRegistrationDateForm, service)))
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, Ok(dateOfVatRegistrationView(vatRegistrationDateForm, service)))
     }
 
   private def lookupDateOfVatRegistration(vatRegistrationDateInput: VatRegistrationDate, service: Service)(implicit

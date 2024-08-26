@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ConfirmIndividualTypePage
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm.confirmIndividualTypeForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_individual_type
 
 import javax.inject.{Inject, Singleton}
@@ -34,15 +34,16 @@ class ConfirmIndividualTypeController @Inject() (
   requestSessionData: RequestSessionData,
   subscriptionFlowManager: SubscriptionFlowManager,
   confirmIndividualTypeView: confirm_individual_type,
-  mcc: MessagesControllerComponents
+  mcc: MessagesControllerComponents,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Ok(confirmIndividualTypeView(confirmIndividualTypeForm, service))
-          .withSession(requestSessionData.sessionWithoutOrganisationType)
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+        Ok(confirmIndividualTypeView(confirmIndividualTypeForm, service)).withSession(requestSessionData.sessionWithoutOrganisationType)
       )
     }
 

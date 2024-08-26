@@ -18,21 +18,19 @@ package unit.viewModels
 
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, Eori, Nino, Utr}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import unit.services.SubscriptionServiceTestData
 import util.ControllerSpec
-import util.builders.RegistrationDetailsBuilder.{
-  limitedLiabilityPartnershipRegistrationDetails,
-  partnershipRegistrationDetails
-}
+import util.builders.RegistrationDetailsBuilder.{limitedLiabilityPartnershipRegistrationDetails, partnershipRegistrationDetails}
 
 class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec with SubscriptionServiceTestData {
 
   val mockDateFormatter: DateFormatter         = mock[DateFormatter]
   val mockSessionCache: SessionCache           = mock[SessionCache]
   val mockRegistrationData: RequestSessionData = mock[RequestSessionData]
+  private val mockSessionCacheService          = mock[SessionCacheService]
 
   private val organisationToTest =
     Seq(
@@ -60,7 +58,7 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
   private val soleAndIndividualToTest = individualToTest ++ soleTraderToTest
 
   val constructorInstance =
-    new CheckYourDetailsRegisterConstructor(mockDateFormatter, mockSessionCache, mockRegistrationData)
+    new CheckYourDetailsRegisterConstructor(mockDateFormatter, mockSessionCache, mockRegistrationData, mockSessionCacheService)
 
   "getDateOfEstablishmentLabel" should {
     "return correct messages for SoleTrader is true" in soleTraderToTest.foreach { test =>

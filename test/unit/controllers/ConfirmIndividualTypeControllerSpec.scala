@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ConfirmIndividualTy
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_individual_type
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -43,14 +43,16 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
   private val mockRequestSessionData      = mock[RequestSessionData]
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
   private val confirmIndividualTypeView   = instanceOf[confirm_individual_type]
+  private val mockSessionCacheService     = instanceOf[SessionCacheService]
 
   private val controller = new ConfirmIndividualTypeController(
     mockAuthAction,
     mockRequestSessionData,
     mockSubscriptionFlowManager,
     confirmIndividualTypeView,
-    mcc
-  )
+    mcc,
+    mockSessionCacheService
+  )(global)
 
   private val mockSubscriptionPage = mock[SubscriptionPage]
   private val mockSession          = mock[Session]
@@ -143,7 +145,7 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
 
   private def showForm(test: Future[Result] => Any): Unit = {
     val aUserId = defaultUserId
-    withAuthorisedUser(aUserId, mockAuthConnector)
+    withAuthorisedUser(userId = aUserId, mockAuthConnector = mockAuthConnector, groupId = Some("groupId"))
 
     when(mockSession.data).thenReturn(testSessionData)
     when(mockRequestSessionData.sessionWithoutOrganisationType(ArgumentMatchers.any[Request[AnyContent]]))

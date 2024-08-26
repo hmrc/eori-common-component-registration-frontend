@@ -22,6 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.ninoOrUtrChoiceForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
 
@@ -34,13 +35,15 @@ class HowCanWeIdentifyYouController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you,
-  subscriptionDetailsHolderService: SubscriptionDetailsService
+  subscriptionDetailsHolderService: SubscriptionDetailsService,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      populateView(service)
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      populateView(service).flatMap(sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
     }
 
   private def populateView(service: Service)(implicit request: Request[_]): Future[Result] =

@@ -20,11 +20,13 @@ import play.api.i18n.Messages
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, EmailController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, EmailController, IndStCannotRegisterUsingThisServiceController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_nino}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,22 +41,26 @@ class GetNinoController @Inject() (
   mcc: MessagesControllerComponents,
   matchNinoRowIndividualView: how_can_we_identify_you_nino,
   subscriptionDetailsService: SubscriptionDetailsService,
-  errorView: error_template
+  errorView: error_template,
+  requestSessionData: RequestSessionData
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def displayForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Ok(
-          matchNinoRowIndividualView(
-            subscriptionNinoForm,
-            isInReviewMode = false,
-            routes.GetNinoController.submit(service),
-            service = service
+      if(requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        Future.successful(
+          Ok(
+            matchNinoRowIndividualView(
+              subscriptionNinoForm,
+              isInReviewMode = false,
+              routes.GetNinoController.submit(service),
+              service = service
+            )
           )
         )
-      )
     }
 
   def submit(service: Service): Action[AnyContent] =

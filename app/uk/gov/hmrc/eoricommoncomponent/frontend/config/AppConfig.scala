@@ -139,4 +139,9 @@ class AppConfig @Inject() (
 
   val vatDetailsFeatureFlag: Boolean = config.get[Boolean]("vat-details-feature-flag")
 
+  private val addressLookupBaseUrl: String = servicesConfig.baseUrl("address-lookup")
+  private val addressLookupContext: String = config.get[String]("microservice.services.address-lookup.context")
+
+  val addressLookup: String        = addressLookupBaseUrl + addressLookupContext
+
 }

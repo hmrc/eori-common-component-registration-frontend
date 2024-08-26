@@ -328,7 +328,7 @@ object MatchingForms extends Mappings with Logging {
         "line-2"      -> optional(text.verifying(validLine2)),
         "line-3"      -> text.verifying(validLine3),
         "line-4"      -> optional(text.verifying(validLine4)),
-        "postcode"    -> mandatoryPostCodeMapping,
+        "postcode"    -> mandatoryOptPostCodeMapping,
         "countryCode" -> mandatoryString("cds.matching-error.country.invalid")(s => s.length == Length2)
       )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
     )
@@ -340,7 +340,7 @@ object MatchingForms extends Mappings with Logging {
         "line-2"      -> optional(text.verifying(validLine2)),
         "line-3"      -> text.verifying(validLine3),
         "line-4"      -> optional(text.verifying(validLine4)),
-        "postcode"    -> mandatoryPostCodeMapping,
+        "postcode"    -> mandatoryOptPostCodeMapping,
         "countryCode" -> default(text, countryCodeGB)
       )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
     )
