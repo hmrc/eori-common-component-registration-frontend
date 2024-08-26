@@ -27,8 +27,18 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon, matching}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse, Organisation, RegisterWithIDResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{
+  matching,
+  Individual,
+  MessagingServiceParam,
+  ResponseCommon
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
+  MatchingRequestHolder,
+  MatchingResponse,
+  Organisation,
+  RegisterWithIDResponse
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
@@ -273,9 +283,21 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT[MatchingResponse](MatchingResponse(RegisterWithIDResponse(ResponseCommon("OK",
-          Some("002 - No match found"), LocalDate.now.atTime(8, 35, 2),
-          Some(List(MessagingServiceParam("POSITION", "FAIL")))), None))))
+        .thenReturn(
+          eitherT[MatchingResponse](
+            MatchingResponse(
+              RegisterWithIDResponse(
+                ResponseCommon(
+                  "OK",
+                  Some("002 - No match found"),
+                  LocalDate.now.atTime(8, 35, 2),
+                  Some(List(MessagingServiceParam("POSITION", "FAIL")))
+                ),
+                None
+              )
+            )
+          )
+        )
       submitForm(form = ValidUtrRequest, CdsOrganisationType.ThirdCountrySoleTraderId) { result =>
         await(result)
         status(result) shouldBe SEE_OTHER

@@ -19,7 +19,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, ContactDetailsController, VatDetailsController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  ApplicationController,
+  ContactDetailsController,
+  VatDetailsController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -51,7 +55,8 @@ class VatRegisteredUkController @Inject() (
         isIndividualFlow match {
           case Right(isIndividual) =>
             sessionCacheService.individualAndSoleTraderRouter(
-              user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+              service,
               Ok(
                 vatRegisteredUkView(
                   isInReviewMode = false,
@@ -78,7 +83,8 @@ class VatRegisteredUkController @Inject() (
         } yield isIndividualFlow match {
           case Right(individual) =>
             sessionCacheService.individualAndSoleTraderRouter(
-              user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+              service,
               Ok(
                 vatRegisteredUkView(
                   isInReviewMode = true,

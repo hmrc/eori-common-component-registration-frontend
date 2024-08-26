@@ -26,8 +26,21 @@ import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Individual, MessagingServiceParam, ResponseCommon}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, MatchingRequestHolder, MatchingResponse, Organisation, RegisterWithIDResponse, ResponseDetail}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{
+  Address,
+  Individual,
+  MessagingServiceParam,
+  ResponseCommon
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
+  ContactResponse,
+  IndividualResponse,
+  MatchingRequestHolder,
+  MatchingResponse,
+  Organisation,
+  RegisterWithIDResponse,
+  ResponseDetail
+}
 import util.builders.matching.NinoFormBuilder
 import play.api.libs.json._
 import play.api.mvc.{AnyContent, Request}

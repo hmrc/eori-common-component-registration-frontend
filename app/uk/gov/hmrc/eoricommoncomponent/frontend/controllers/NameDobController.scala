@@ -42,7 +42,7 @@ class NameDobController @Inject() (
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      if(requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
         Future.successful(Ok(matchNameDobView(enterNameDobForm, organisationType, service)))

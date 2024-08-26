@@ -27,7 +27,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CheckYourDetailsRegisterController, routes}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, CheckYourDetailsRegisterController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Partnership, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlow}
@@ -40,7 +40,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_re
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.RegistrationDetailsBuilder.{incorporatedRegistrationDetails, individualRegistrationDetails, individualRegistrationDetailsNotIdentifiedByReg01, organisationRegistrationDetails, partnershipRegistrationDetails}
+import util.builders.RegistrationDetailsBuilder.{
+  incorporatedRegistrationDetails,
+  individualRegistrationDetails,
+  individualRegistrationDetailsNotIdentifiedByReg01,
+  organisationRegistrationDetails,
+  partnershipRegistrationDetails
+}
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
@@ -65,7 +71,12 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockSessionCacheService               = instanceOf[SessionCacheService]
 
   private val viewModelConstructor =
-    new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession, mockSessionCacheService)
+    new CheckYourDetailsRegisterConstructor(
+      dateFormatter,
+      mockSessionCache,
+      mockRequestSession,
+      mockSessionCacheService
+    )
 
   val controller = new CheckYourDetailsRegisterController(
     mockAuthAction,

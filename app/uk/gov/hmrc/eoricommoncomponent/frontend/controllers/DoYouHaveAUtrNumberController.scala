@@ -46,7 +46,7 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      if(requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
         subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>

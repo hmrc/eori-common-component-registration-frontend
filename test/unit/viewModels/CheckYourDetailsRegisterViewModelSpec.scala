@@ -23,7 +23,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegis
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import unit.services.SubscriptionServiceTestData
 import util.ControllerSpec
-import util.builders.RegistrationDetailsBuilder.{limitedLiabilityPartnershipRegistrationDetails, partnershipRegistrationDetails}
+import util.builders.RegistrationDetailsBuilder.{
+  limitedLiabilityPartnershipRegistrationDetails,
+  partnershipRegistrationDetails
+}
 
 class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec with SubscriptionServiceTestData {
 
@@ -58,7 +61,12 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
   private val soleAndIndividualToTest = individualToTest ++ soleTraderToTest
 
   val constructorInstance =
-    new CheckYourDetailsRegisterConstructor(mockDateFormatter, mockSessionCache, mockRegistrationData, mockSessionCacheService)
+    new CheckYourDetailsRegisterConstructor(
+      mockDateFormatter,
+      mockSessionCache,
+      mockRegistrationData,
+      mockSessionCacheService
+    )
 
   "getDateOfEstablishmentLabel" should {
     "return correct messages for SoleTrader is true" in soleTraderToTest.foreach { test =>

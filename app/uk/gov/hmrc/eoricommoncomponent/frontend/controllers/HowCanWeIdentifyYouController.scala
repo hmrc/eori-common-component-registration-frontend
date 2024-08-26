@@ -42,8 +42,13 @@ class HowCanWeIdentifyYouController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
-      populateView(service).flatMap(sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+      populateView(service).flatMap(
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          _
+        )
+      )
     }
 
   private def populateView(service: Service)(implicit request: Request[_]): Future[Result] =

@@ -28,22 +28,34 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AddressController @Inject() (authorise: AuthAction,
-                                   addressService: AddressService,
-                                   sessionCacheService: SessionCacheService,
-                                   mcc: MessagesControllerComponents)
-                                  (implicit ec:ExecutionContext) extends CdsController(mcc) {
+class AddressController @Inject() (
+  authorise: AuthAction,
+  addressService: AddressService,
+  sessionCacheService: SessionCacheService,
+  mcc: MessagesControllerComponents
+)(implicit ec: ExecutionContext)
+    extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
-        addressService.populateOkView(None, isInReviewMode = false, service).flatMap(
-          sessionCacheService.individualAndSoleTraderRouter(user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+      addressService.populateOkView(None, isInReviewMode = false, service).flatMap(
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          _
+        )
+      )
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
       addressService.populateViewIfContactDetailsCached(service).flatMap(
-        sessionCacheService.individualAndSoleTraderRouter(user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          _
+        )
+      )
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =

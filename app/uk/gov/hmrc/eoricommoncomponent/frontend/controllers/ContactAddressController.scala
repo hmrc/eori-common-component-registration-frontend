@@ -58,13 +58,16 @@ class ContactAddressController @Inject() (
       populateFormGYE(user, service)(true)
     }
 
-  private def populateFormGYE(
-    user: LoggedInUserWithEnrolments,
-    service: Service
-  )(isInReviewMode: Boolean)(implicit request: Request[AnyContent]): Future[Result] =
+  private def populateFormGYE(user: LoggedInUserWithEnrolments, service: Service)(
+    isInReviewMode: Boolean
+  )(implicit request: Request[AnyContent]): Future[Result] =
     populateOkView(isInReviewMode = isInReviewMode, service).flatMap(
-    sessionCacheService.individualAndSoleTraderRouter(
-      user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+      sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
+        _
+      )
+    )
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>

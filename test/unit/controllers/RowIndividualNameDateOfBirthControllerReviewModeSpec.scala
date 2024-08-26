@@ -16,7 +16,11 @@
 
 package unit.controllers
 
-import common.pages.matching.{IndividualNameAndDateOfBirthPage, ThirdCountryIndividualNameAndDateOfBirthPage, ThirdCountrySoleTraderNameAndDateOfBirthPage}
+import common.pages.matching.{
+  IndividualNameAndDateOfBirthPage,
+  ThirdCountryIndividualNameAndDateOfBirthPage,
+  ThirdCountrySoleTraderNameAndDateOfBirthPage
+}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop

@@ -29,11 +29,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PostCodeController @Inject()(authorise: AuthAction,
-                                   postcodeView: postcode,
-                                   mcc: MessagesControllerComponents,
-                                   cache: SessionCache
-                                  )(implicit ec: ExecutionContext) extends CdsController(mcc) {
+class PostCodeController @Inject() (
+  authorise: AuthAction,
+  postcodeView: postcode,
+  mcc: MessagesControllerComponents,
+  cache: SessionCache
+)(implicit ec: ExecutionContext)
+    extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
@@ -49,8 +51,6 @@ class PostCodeController @Inject()(authorise: AuthAction,
             cache.savePostcodeAndLine1Details(validPostcodeAndLine1).map { _ =>
               Redirect(PostcodeLookupResultsController.displayPage(service))
             }
-
-
         )
     }
 

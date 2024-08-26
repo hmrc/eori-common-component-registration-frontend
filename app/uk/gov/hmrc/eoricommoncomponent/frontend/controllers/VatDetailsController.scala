@@ -54,8 +54,10 @@ class VatDetailsController @Inject() (
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => user: LoggedInUserWithEnrolments =>
         sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
-          Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service)))
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service))
+        )
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
@@ -65,8 +67,13 @@ class VatDetailsController @Inject() (
           case Some(vatDetails) =>
             Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, service))
           case None => Ok(vatDetailsView(vatDetailsForm, isInReviewMode = true, service))
-        }.flatMap(sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+        }.flatMap(
+          sessionCacheService.individualAndSoleTraderRouter(
+            user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+            service,
+            _
+          )
+        )
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
@@ -113,7 +120,10 @@ class VatDetailsController @Inject() (
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, Ok(weCannotConfirmYourIdentity(dateForm, service)))
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
+        Ok(weCannotConfirmYourIdentity(dateForm, service))
+      )
     }
 
 }

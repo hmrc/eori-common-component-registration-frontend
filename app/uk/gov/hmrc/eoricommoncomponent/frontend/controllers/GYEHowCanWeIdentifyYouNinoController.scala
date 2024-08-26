@@ -41,7 +41,8 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
         Ok(
           howCanWeIdentifyYouView(
             subscriptionNinoForm,
@@ -68,7 +69,9 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
             )
           ),
         ninoForm =>
-          sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id)))).map(_ => Redirect(PostCodeController.createForm(service)))
+          sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id)))).map(
+            _ => Redirect(PostCodeController.createForm(service))
+          )
       )
     }
 

@@ -28,10 +28,9 @@ object PostcodeForm {
 
   def postCodeCreateForm: Form[PostcodeViewModel] =
     Form(
-      mapping(
-        "postcode"    -> mandatoryPostCodeMapping,
-        "addressLine1" -> optional(text.verifying(addressLine1))
-      )(PostcodeViewModel.apply)(PostcodeViewModel.unapply)
+      mapping("postcode" -> mandatoryPostCodeMapping, "addressLine1" -> optional(text.verifying(addressLine1)))(
+        PostcodeViewModel.apply
+      )(PostcodeViewModel.unapply)
     )
 
   private def addressLine1: Constraint[String] =

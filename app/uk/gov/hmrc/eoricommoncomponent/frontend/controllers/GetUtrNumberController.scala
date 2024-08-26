@@ -56,7 +56,8 @@ class GetUtrNumberController @Inject() (
   def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
         Ok(view(subscriptionUtrForm, organisationType, isInReviewMode, service))
       )
     }

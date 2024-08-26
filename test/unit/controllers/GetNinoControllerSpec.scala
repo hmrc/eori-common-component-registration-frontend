@@ -99,9 +99,21 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
           any[Request[_]]
         )
       )
-        .thenReturn(eitherT[MatchingResponse](MatchingResponse(RegisterWithIDResponse(ResponseCommon("OK",
-          Some("002 - No match found"), LocalDate.now.atTime(8, 35, 2),
-          Some(List(MessagingServiceParam("POSITION", "FAIL")))), None))))
+        .thenReturn(
+          eitherT[MatchingResponse](
+            MatchingResponse(
+              RegisterWithIDResponse(
+                ResponseCommon(
+                  "OK",
+                  Some("002 - No match found"),
+                  LocalDate.now.atTime(8, 35, 2),
+                  Some(List(MessagingServiceParam("POSITION", "FAIL")))
+                ),
+                None
+              )
+            )
+          )
+        )
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)

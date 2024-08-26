@@ -19,14 +19,20 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 import play.api.Logger
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookup, AddressLookupFailure, AddressLookupResponse, AddressLookupSuccess, AddressRequestBody}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{
+  AddressLookup,
+  AddressLookupFailure,
+  AddressLookupResponse,
+  AddressLookupSuccess,
+  AddressRequestBody
+}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AddressLookupConnector @Inject()(http: HttpClient, appConfig: AppConfig)(implicit ec: ExecutionContext) {
+class AddressLookupConnector @Inject() (http: HttpClient, appConfig: AppConfig)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
 

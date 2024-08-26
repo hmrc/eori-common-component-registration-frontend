@@ -34,17 +34,23 @@ class AddressInvalidController @Inject() (
   addressInvalidOrganisation: address_invalid_organisation,
   addressInvalidIndividual: address_invalid_individual,
   mcc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends CdsController(mcc) {
+)(implicit ec: ExecutionContext)
+    extends CdsController(mcc) {
 
   def page(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => user: LoggedInUserWithEnrolments =>
-      val result = if (requestSessionData.isIndividualOrSoleTrader(request))
-        Future.successful(Ok(addressInvalidIndividual(service)))
-      else Future.successful(Ok(addressInvalidOrganisation(service)))
+      val result =
+        if (requestSessionData.isIndividualOrSoleTrader(request))
+          Future.successful(Ok(addressInvalidIndividual(service)))
+        else Future.successful(Ok(addressInvalidOrganisation(service)))
 
       result.flatMap(
-      sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          _
+        )
+      )
 
   }
 

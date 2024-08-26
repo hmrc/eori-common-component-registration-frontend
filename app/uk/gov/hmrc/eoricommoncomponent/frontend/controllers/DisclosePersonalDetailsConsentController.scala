@@ -19,7 +19,10 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, DetermineReviewPageController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  ApplicationController,
+  DetermineReviewPageController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -51,7 +54,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => user: LoggedInUserWithEnrolments =>
         sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
           Ok(
             disclosePersonalDetailsConsentView(
               isInReviewMode = false,
@@ -59,7 +63,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
               requestSessionData,
               disclosePersonalDetailsConsentViewModel,
               service
-            ))
+            )
+          )
         )
     }
 
@@ -69,7 +74,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
         subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.flatMap {
           case Some(isConsentDisclosed) =>
             sessionCacheService.individualAndSoleTraderRouter(
-              user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+              service,
               Ok(
                 disclosePersonalDetailsConsentView(
                   isInReviewMode = true,

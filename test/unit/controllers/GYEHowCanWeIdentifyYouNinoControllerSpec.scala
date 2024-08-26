@@ -42,14 +42,16 @@ import scala.concurrent.Future
 
 class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector     = mock[AuthConnector]
-  private val mockAuthAction        = authAction(mockAuthConnector)
-  private val mockMatchingService   = mock[MatchingService]
-  private val mockFrontendDataCache = mock[SessionCache]
+  private val mockAuthConnector      = mock[AuthConnector]
+  private val mockAuthAction         = authAction(mockAuthConnector)
+  private val mockMatchingService    = mock[MatchingService]
+  private val mockFrontendDataCache  = mock[SessionCache]
   private val mockRequestSessionData = instanceOf[RequestSessionData]
 
-  private val errorView             = instanceOf[error_template]
-  private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
+  private val errorView = instanceOf[error_template]
+
+  private val sessionCacheService =
+    new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_nino]
 
@@ -82,9 +84,9 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
 
       val nino = "AB123456C"
 
-      when(mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Nino(nino)))))(any[Request[_]])).thenReturn(
-        Future.successful(true)
-      )
+      when(
+        mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Nino(nino)))))(any[Request[_]])
+      ).thenReturn(Future.successful(true))
 
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
@@ -95,9 +97,21 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(eitherT[MatchingResponse](MatchingResponse(RegisterWithIDResponse(ResponseCommon("OK",
-        Some("002 - No match found"), LocalDate.now.atTime(8, 35, 2),
-        Some(List(MessagingServiceParam("POSITION", "FAIL")))), None))))
+      ).thenReturn(
+        eitherT[MatchingResponse](
+          MatchingResponse(
+            RegisterWithIDResponse(
+              ResponseCommon(
+                "OK",
+                Some("002 - No match found"),
+                LocalDate.now.atTime(8, 35, 2),
+                Some(List(MessagingServiceParam("POSITION", "FAIL")))
+              ),
+              None
+            )
+          )
+        )
+      )
 
       submitForm(Map("nino" -> nino)) {
         result =>

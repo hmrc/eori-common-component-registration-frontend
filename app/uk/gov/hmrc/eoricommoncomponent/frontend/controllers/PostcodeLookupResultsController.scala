@@ -21,12 +21,19 @@ import play.api.mvc._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, ManualAddressController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  ConfirmContactDetailsController,
+  ManualAddressController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookup, AddressLookupFailure, AddressLookupSuccess}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{
+  AddressLookup,
+  AddressLookupFailure,
+  AddressLookupSuccess
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.postcode_address_result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -35,7 +42,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PostcodeLookupResultsController @Inject()(
+class PostcodeLookupResultsController @Inject() (
   authAction: AuthAction,
   sessionCache: SessionCache,
   addressLookupConnector: AddressLookupConnector,
@@ -49,9 +56,7 @@ class PostcodeLookupResultsController @Inject()(
       displayPage(service)
     }
 
-  private def displayPage(service: Service)(implicit
-    request: Request[AnyContent]
-  ): Future[Result] =
+  private def displayPage(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
     sessionCache.getPostcodeAndLine1Details.flatMap {
       case Some(addressLookupParams) =>
         addressLookupConnector.lookup(
@@ -83,19 +88,17 @@ class PostcodeLookupResultsController @Inject()(
     }
 
   private def prepareView(
-                           form: Form[AddressResultsForm],
-                           postcodeViewModel: PostcodeViewModel,
-                           addresses: Seq[AddressLookup],
-                           service: Service
-  )(implicit request: Request[AnyContent]): HtmlFormat.Appendable = {
-
+    form: Form[AddressResultsForm],
+    postcodeViewModel: PostcodeViewModel,
+    addresses: Seq[AddressLookup],
+    service: Service
+  )(implicit request: Request[AnyContent]): HtmlFormat.Appendable =
     addressLookupResultsPage(form, postcodeViewModel, addresses, service)
-  }
 
-  private def repeatQueryWithoutLine1(
-                                       postcodeViewModel: PostcodeViewModel,
-                                       service: Service
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
+  private def repeatQueryWithoutLine1(postcodeViewModel: PostcodeViewModel, service: Service)(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Future[Result] = {
     val addressLookupParamsWithoutLine1 = PostcodeViewModel(postcodeViewModel.postcode, None)
 
     addressLookupConnector.lookup(addressLookupParamsWithoutLine1.postcode.replaceAll(" ", ""), None).flatMap {
@@ -132,9 +135,7 @@ class PostcodeLookupResultsController @Inject()(
                 val addressesList = addressesMap.keys.toSeq
                 AddressResultsForm.form(addressesList).bindFromRequest().fold(
                   formWithErrors =>
-                    Future.successful(
-                      BadRequest(prepareView(formWithErrors, addressLookupParams, addresses, service))
-                    ),
+                    Future.successful(BadRequest(prepareView(formWithErrors, addressLookupParams, addresses, service))),
                   validAnswer => {
                     val address = addressesMap(validAnswer.address).toAddressViewModel
                     Future.successful(Redirect(ConfirmContactDetailsController.form(service, false)))

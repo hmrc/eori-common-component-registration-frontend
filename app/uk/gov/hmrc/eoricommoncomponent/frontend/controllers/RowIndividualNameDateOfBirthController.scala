@@ -18,7 +18,12 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, DoYouHaveAUtrNumberController, IndStCannotRegisterUsingThisServiceController, SecuritySignOutController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  DetermineReviewPageController,
+  DoYouHaveAUtrNumberController,
+  IndStCannotRegisterUsingThisServiceController,
+  SecuritySignOutController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
@@ -43,20 +48,20 @@ class RowIndividualNameDateOfBirthController @Inject() (
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
-      if(requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
         assertOrganisationTypeIsValid(organisationType)
-        Future.successful(
-          Ok(
-            rowIndividualNameDob(
-              thirdCountryIndividualNameDateOfBirthForm,
-              organisationType,
-              service,
-              isInReviewMode = false
-            )
+      Future.successful(
+        Ok(
+          rowIndividualNameDob(
+            thirdCountryIndividualNameDateOfBirthForm,
+            organisationType,
+            service,
+            isInReviewMode = false
           )
         )
+      )
     }
 
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =

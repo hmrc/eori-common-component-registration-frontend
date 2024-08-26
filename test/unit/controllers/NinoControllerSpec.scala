@@ -44,15 +44,18 @@ import scala.concurrent.Future
 
 class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector   = mock[AuthConnector]
-  private val mockAuthAction      = authAction(mockAuthConnector)
-  private val mockMatchingService = mock[MatchingService]
-  private val errorView           = instanceOf[error_template]
+  private val mockAuthConnector       = mock[AuthConnector]
+  private val mockAuthAction          = authAction(mockAuthConnector)
+  private val mockMatchingService     = mock[MatchingService]
+  private val errorView               = instanceOf[error_template]
   private val mockSessionCacheService = instanceOf[SessionCacheService]
 
   private val matchNinoView = instanceOf[match_nino]
 
-  val controller = new NinoController(mockAuthAction, mcc, matchNinoView, mockMatchingService, errorView, mockSessionCacheService)(global)
+  val controller =
+    new NinoController(mockAuthAction, mcc, matchNinoView, mockMatchingService, errorView, mockSessionCacheService)(
+      global
+    )
 
   before {
     Mockito.reset(mockMatchingService)
@@ -215,9 +218,21 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
           ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
           any()
         )(any[HeaderCarrier], any[Request[_]])
-      ).thenReturn(eitherT[MatchingResponse](MatchingResponse(RegisterWithIDResponse(ResponseCommon("OK",
-        Some("002 - No match found"), LocalDate.now.atTime(8, 35, 2),
-        Some(List(MessagingServiceParam("POSITION", "FAIL")))), None))))
+      ).thenReturn(
+        eitherT[MatchingResponse](
+          MatchingResponse(
+            RegisterWithIDResponse(
+              ResponseCommon(
+                "OK",
+                Some("002 - No match found"),
+                LocalDate.now.atTime(8, 35, 2),
+                Some(List(MessagingServiceParam("POSITION", "FAIL")))
+              ),
+              None
+            )
+          )
+        )
+      )
 
       submitForm(form = NinoFormBuilder.asForm) { result =>
         val page = CdsPage(contentAsString(result))

@@ -20,7 +20,11 @@ import play.api.i18n.Messages
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, EmailController, IndStCannotRegisterUsingThisServiceController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  ConfirmContactDetailsController,
+  EmailController,
+  IndStCannotRegisterUsingThisServiceController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
@@ -48,7 +52,7 @@ class GetNinoController @Inject() (
 
   def displayForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      if(requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
         Future.successful(

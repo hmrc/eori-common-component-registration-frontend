@@ -31,17 +31,22 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ManualAddressController @Inject()(authorise: AuthAction,
-                                        view: manual_address,
-                                        mcc: MessagesControllerComponents,
-                                        sessionCache: SessionCache,
-                                        sessionCacheService: SessionCacheService
-                                       )(implicit ec: ExecutionContext) extends CdsController(mcc)  {
+class ManualAddressController @Inject() (
+  authorise: AuthAction,
+  view: manual_address,
+  mcc: MessagesControllerComponents,
+  sessionCache: SessionCache,
+  sessionCacheService: SessionCacheService
+)(implicit ec: ExecutionContext)
+    extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
       sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, Ok(view(addressDetailsCreateForm(), Countries.all, service)))
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
+        Ok(view(addressDetailsCreateForm(), Countries.all, service))
+      )
     }
 
   def submit(service: Service): Action[AnyContent] =
@@ -51,7 +56,8 @@ class ManualAddressController @Inject()(authorise: AuthAction,
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, Countries.all, service))),
           validAddress =>
             sessionCache.savePostcodeAndLine1Details(
-              PostcodeViewModel(validAddress.postcode.getOrElse(throw PostcodeException), Some(validAddress.street))).map { _ =>
+              PostcodeViewModel(validAddress.postcode.getOrElse(throw PostcodeException), Some(validAddress.street))
+            ).map { _ =>
               Redirect(ContactAddressController.createForm(service))
             }
         )

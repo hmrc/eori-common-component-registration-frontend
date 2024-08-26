@@ -57,7 +57,13 @@ class DoYouHaveAUtrNumberControllerSpec
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
   private val controller =
-    new DoYouHaveAUtrNumberController(mockAuthAction, mcc, mockRequestSessionData, matchOrganisationUtrView, mockSubscriptionDetailsService)(global)
+    new DoYouHaveAUtrNumberController(
+      mockAuthAction,
+      mcc,
+      mockRequestSessionData,
+      matchOrganisationUtrView,
+      mockSubscriptionDetailsService
+    )(global)
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()

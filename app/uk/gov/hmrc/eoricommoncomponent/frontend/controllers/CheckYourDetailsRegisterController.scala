@@ -46,9 +46,13 @@ class CheckYourDetailsRegisterController @Inject() (
       implicit request => user: LoggedInUserWithEnrolments =>
         viewModelConstructor.generateViewModel(service).flatMap {
           case Some(viewModel) =>
-            val result = Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
+            val result =
+              Ok(checkYourDetailsRegisterView(viewModel, requestSessionData.userSelectedOrganisationType, service))
             sessionCacheService.individualAndSoleTraderRouter(
-              user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, result)
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+              service,
+              result
+            )
           case None =>
             logger.warn("Data is missing from the cache so the user is being redirected to the start of the journey")
             Future.successful(Redirect(routes.EmailController.form(service)))

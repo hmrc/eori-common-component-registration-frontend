@@ -53,8 +53,13 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
           HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
           service = service
         )
-      )).flatMap(sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+      )).flatMap(
+        sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          _
+        )
+      )
     }
 
   def submit(service: Service): Action[AnyContent] =
@@ -75,8 +80,11 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                 )
               ),
             formData =>
-              sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Utr(formData.id)))).map(_ => Redirect(PostCodeController.createForm(service)))
+              sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Utr(formData.id)))).map(
+                _ => Redirect(PostCodeController.createForm(service))
+              )
           )
       )
     }
+
 }

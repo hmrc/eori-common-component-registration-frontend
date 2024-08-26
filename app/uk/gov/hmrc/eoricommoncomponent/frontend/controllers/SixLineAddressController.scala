@@ -20,7 +20,12 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUser, LoggedInUserWithEnrolments, SixLineAddressMatchModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
+  CdsOrganisationType,
+  LoggedInUser,
+  LoggedInUserWithEnrolments,
+  SixLineAddressMatchModel
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
@@ -59,7 +64,8 @@ class SixLineAddressController @Inject() (
     val (countriesToInclude, countriesInCountryPicker) =
       Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
     sessionCacheService.individualAndSoleTraderRouter(
-      user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
+      user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+      service,
       Ok(
         sixLineAddressView(
           isInReviewMode,

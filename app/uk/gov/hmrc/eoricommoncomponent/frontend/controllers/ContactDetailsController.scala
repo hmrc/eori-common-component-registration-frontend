@@ -56,10 +56,9 @@ class ContactDetailsController @Inject() (
       populateFormGYE(user, service)(true)
     }
 
-  private def populateFormGYE(
-    user: LoggedInUserWithEnrolments,
-    service: Service
-  )(isInReviewMode: Boolean)(implicit request: Request[AnyContent]): Future[Result] =
+  private def populateFormGYE(user: LoggedInUserWithEnrolments, service: Service)(
+    isInReviewMode: Boolean
+  )(implicit request: Request[AnyContent]): Future[Result] =
     subscriptionBusinessService.cachedContactDetailsModel.flatMap { contactDetails =>
       cdsFrontendDataCache.email.flatMap { email =>
         populateOkView(
@@ -67,8 +66,13 @@ class ContactDetailsController @Inject() (
           Some(email),
           isInReviewMode = isInReviewMode,
           service
-        ).flatMap(sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _))
+        ).flatMap(
+          sessionCacheService.individualAndSoleTraderRouter(
+            user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+            service,
+            _
+          )
+        )
       }
     }
 

@@ -21,7 +21,12 @@ import play.api.i18n.Messages
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, IndStCannotRegisterUsingThisServiceController, PostCodeController, YouCannotChangeAddressController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
+  ApplicationController,
+  IndStCannotRegisterUsingThisServiceController,
+  PostCodeController,
+  YouCannotChangeAddressController
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.MatchingResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -37,11 +42,12 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SessionCacheService @Inject() (cache: SessionCache,
-                                     requestSessionData: RequestSessionData,
-                                     matchingService: MatchingService,
-                                     errorView: error_template
-                                    )(implicit ec: ExecutionContext) {
+class SessionCacheService @Inject() (
+  cache: SessionCache,
+  requestSessionData: RequestSessionData,
+  matchingService: MatchingService,
+  errorView: error_template
+)(implicit ec: ExecutionContext) {
 
   def retrieveNameDobFromCache()(implicit request: Request[_], ec: ExecutionContext): Future[Individual] =
     cache.subscriptionDetails.map(
@@ -54,20 +60,27 @@ class SessionCacheService @Inject() (cache: SessionCache,
       )
     }
 
-  def individualAndSoleTraderRouter(groupId: String, service: Service, result: Result)
-                                   (implicit request: Request[AnyContent], hc: HeaderCarrier, messages: Messages): Future[Result] = {
-    if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader) {
+  def individualAndSoleTraderRouter(groupId: String, service: Service, result: Result)(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier,
+    messages: Messages
+  ): Future[Result] =
+    if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
       Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
-    } else if (requestSessionData.isIndividualOrSoleTrader && requestSessionData.selectedUserLocation.contains(UserLocation.Uk)) {
+    else if (
+      requestSessionData.isIndividualOrSoleTrader && requestSessionData.selectedUserLocation.contains(UserLocation.Uk)
+    )
       cache.getNinoOrUtrDetails flatMap {
         case Some(ninoOrUtr) =>
           cache.getPostcodeAndLine1Details flatMap {
             case Some(postcodeViewModel) =>
-              matchOnId(ninoOrUtr, GroupId(groupId), postcodeViewModel).fold({
-                case MatchingServiceConnector.matchFailureResponse => Redirect(YouCannotChangeAddressController.page(service))
-                case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-                case _ => InternalServerError(errorView(service))
-              },
+              matchOnId(ninoOrUtr, GroupId(groupId), postcodeViewModel).fold(
+                {
+                  case MatchingServiceConnector.matchFailureResponse =>
+                    Redirect(YouCannotChangeAddressController.page(service))
+                  case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+                  case _                                                  => InternalServerError(errorView(service))
+                },
                 matchResult =>
                   if (matchResult) result
                   else Redirect(YouCannotChangeAddressController.page(service))
@@ -76,38 +89,46 @@ class SessionCacheService @Inject() (cache: SessionCache,
           }
         case _ => Future.successful(Redirect(ApplicationController.startRegister(service)))
       }
-    } else {
+    else
       Future.successful(result)
-    }
-  }
 
-  private def matchOnId(ninoOrUtr: NinoOrUtr,
-                        groupId: GroupId,
-                        postcodeViewModel: PostcodeViewModel
-                       )(implicit hc: HeaderCarrier, request: Request[_]): EitherT[Future, ResponseError, Boolean] = EitherT {
+  private def matchOnId(ninoOrUtr: NinoOrUtr, groupId: GroupId, postcodeViewModel: PostcodeViewModel)(implicit
+    hc: HeaderCarrier,
+    request: Request[_]
+  ): EitherT[Future, ResponseError, Boolean] = EitherT {
     retrieveNameDobFromCache().flatMap(
-      ind => ninoOrUtr.ninoOrUtrRadio match {
-        case Some(Nino(id)) => matchingService.matchIndividualWithNino(id, ind, groupId).value.flatMap {
-          case Right(matchingResponse) =>
-            if (matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)) Future.successful(Right(true))
-            else Future.successful(Right(false))
-          case Left(errorResponse) => Future.successful(Left(errorResponse))
-          case _ => Future.successful(Left(ResponseError(500, "Unexpected response from Matching service")))
+      ind =>
+        ninoOrUtr.ninoOrUtrRadio match {
+          case Some(Nino(id)) =>
+            matchingService.matchIndividualWithNino(id, ind, groupId).value.flatMap {
+              case Right(matchingResponse) =>
+                if (matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)) Future.successful(Right(true))
+                else Future.successful(Right(false))
+              case Left(errorResponse) => Future.successful(Left(errorResponse))
+              case _                   => Future.successful(Left(ResponseError(500, "Unexpected response from Matching service")))
+            }
+          case Some(Utr(id)) =>
+            matchingService.matchIndividualWithId(Utr(id), ind, groupId).value.flatMap {
+              case Right(matchingResponse) =>
+                Future.successful(Right(matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)))
+              case Left(errorResponse) => Future.successful(Left(errorResponse))
+              case _                   => Future.successful(Left(ResponseError(500, "Unexpected response from Matching service")))
+            }
+          case _ => Future.successful(Left(ResponseError(500, "Nino or UTR does not exists")))
         }
-        case Some(Utr(id)) => matchingService.matchIndividualWithId(Utr(id), ind, groupId).value.flatMap {
-          case Right(matchingResponse) => Future.successful(Right(matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)))
-          case Left(errorResponse) => Future.successful(Left(errorResponse))
-          case _ => Future.successful(Left(ResponseError(500, "Unexpected response from Matching service")))
-        }
-        case _ => Future.successful(Left(ResponseError(500, "Nino or UTR does not exists")))
-      }
     )
   }
 
-  private def matchIndDobAndPostCode(matchingResponse: MatchingResponse, individual: Individual, postcodeViewModel: PostcodeViewModel): Boolean ={
+  private def matchIndDobAndPostCode(
+    matchingResponse: MatchingResponse,
+    individual: Individual,
+    postcodeViewModel: PostcodeViewModel
+  ): Boolean =
     matchingResponse.registerWithIDResponse.responseDetail.exists(
-      detail => detail.isAnIndividual &&
-        detail.address.postalCode.contains(postcodeViewModel.postcode)
-        && detail.individual.exists(_.dateOfBirth.contains(individual.dateOfBirth)))
-  }
+      detail =>
+        detail.isAnIndividual &&
+          detail.address.postalCode.contains(postcodeViewModel.postcode)
+          && detail.individual.exists(_.dateOfBirth.contains(individual.dateOfBirth))
+    )
+
 }

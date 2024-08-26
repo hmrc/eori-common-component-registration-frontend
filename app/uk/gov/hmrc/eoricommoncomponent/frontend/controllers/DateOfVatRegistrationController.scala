@@ -46,7 +46,10 @@ class DateOfVatRegistrationController @Inject() (
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, Ok(dateOfVatRegistrationView(vatRegistrationDateForm, service)))
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
+        Ok(dateOfVatRegistrationView(vatRegistrationDateForm, service))
+      )
     }
 
   private def lookupDateOfVatRegistration(vatRegistrationDateInput: VatRegistrationDate, service: Service)(implicit

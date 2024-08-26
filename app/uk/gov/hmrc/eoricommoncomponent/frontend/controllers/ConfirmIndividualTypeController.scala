@@ -42,8 +42,11 @@ class ConfirmIndividualTypeController @Inject() (
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service,
-        Ok(confirmIndividualTypeView(confirmIndividualTypeForm, service)).withSession(requestSessionData.sessionWithoutOrganisationType)
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
+        Ok(confirmIndividualTypeView(confirmIndividualTypeForm, service)).withSession(
+          requestSessionData.sessionWithoutOrganisationType
+        )
       )
     }
 

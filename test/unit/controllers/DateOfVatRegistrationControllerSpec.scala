@@ -27,7 +27,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, vat_return_total, we_cannot_confirm_your_identity}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
+  date_of_vat_registration,
+  vat_return_total,
+  we_cannot_confirm_your_identity
+}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}

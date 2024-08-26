@@ -24,9 +24,9 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class IndStCannotRegisterUsingThisServiceController @Inject() (
-                                                                view: ind_st_cannot_register_using_this_service,
-                                                                mcc: MessagesControllerComponents
-                                                              ) extends CdsController(mcc) {
+  view: ind_st_cannot_register_using_this_service,
+  mcc: MessagesControllerComponents
+) extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] = Action { implicit request =>
     Ok(view(service))

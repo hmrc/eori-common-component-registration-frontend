@@ -56,7 +56,10 @@ class DateOfEstablishmentController @Inject() (
         orgType              <- orgTypeLookup.etmpOrgType
       } yield populateView(maybeCachedDateModel, isInReviewMode = false, orgType, service)).flatMap(
         sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _)
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          _
+        )
       )
     }
 
@@ -77,7 +80,10 @@ class DateOfEstablishmentController @Inject() (
         orgType         <- orgTypeLookup.etmpOrgType
       } yield populateView(Some(cachedDateModel), isInReviewMode = true, orgType, service)).flatMap(
         sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")), service, _)
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          _
+        )
       )
     }
 

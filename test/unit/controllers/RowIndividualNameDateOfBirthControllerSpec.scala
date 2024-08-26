@@ -16,7 +16,11 @@
 
 package unit.controllers
 
-import common.pages.matching.{IndividualNameAndDateOfBirthPage, ThirdCountryIndividualNameAndDateOfBirthPage, ThirdCountrySoleTraderNameAndDateOfBirthPage}
+import common.pages.matching.{
+  IndividualNameAndDateOfBirthPage,
+  ThirdCountryIndividualNameAndDateOfBirthPage,
+  ThirdCountrySoleTraderNameAndDateOfBirthPage
+}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop
@@ -48,8 +52,8 @@ class RowIndividualNameDateOfBirthControllerSpec
       extends AbstractControllerFixture[RowIndividualNameDateOfBirthController] {
     val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
-    private val rowIndividualNameDob = instanceOf[row_individual_name_dob]
-    private val mockAuthAction       = authAction(mockAuthConnector)
+    private val rowIndividualNameDob   = instanceOf[row_individual_name_dob]
+    private val mockAuthAction         = authAction(mockAuthConnector)
     private val mockRequestSessionData = instanceOf[RequestSessionData]
 
     override val controller = new RowIndividualNameDateOfBirthController(

@@ -43,7 +43,9 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   private val mockRequestSessionData         = instanceOf[RequestSessionData]
 
   private def nameDobController =
-    new NameDobController(mockAuthAction, mcc, matchNameDobView, mockRequestSessionData, mockCdsFrontendDataCache)(global)
+    new NameDobController(mockAuthAction, mcc, matchNameDobView, mockRequestSessionData, mockCdsFrontendDataCache)(
+      global
+    )
 
   val defaultOrganisationType = "individual"
   val soleTraderType          = "sole-trader"

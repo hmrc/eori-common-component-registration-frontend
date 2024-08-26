@@ -31,4 +31,3 @@ object PostcodeViewModel {
     new PostcodeViewModel(postcode, addressLine1.map(_.trim))
 
 }
-

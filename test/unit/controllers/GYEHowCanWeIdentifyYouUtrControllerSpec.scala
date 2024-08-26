@@ -31,7 +31,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{Match
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, NameDobMatchModel, NinoOrUtr, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -45,14 +50,16 @@ import scala.concurrent.Future
 
 class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector     = mock[AuthConnector]
-  private val mockAuthAction        = authAction(mockAuthConnector)
-  private val mockMatchingService   = mock[MatchingService]
-  private val mockFrontendDataCache = mock[SessionCache]
-  private val mockOrgTypeLookup     = mock[OrgTypeLookup]
+  private val mockAuthConnector      = mock[AuthConnector]
+  private val mockAuthAction         = authAction(mockAuthConnector)
+  private val mockMatchingService    = mock[MatchingService]
+  private val mockFrontendDataCache  = mock[SessionCache]
+  private val mockOrgTypeLookup      = mock[OrgTypeLookup]
   private val mockRequestSessionData = instanceOf[RequestSessionData]
-  private val errorView             = instanceOf[error_template]
-  private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
+  private val errorView              = instanceOf[error_template]
+
+  private val sessionCacheService =
+    new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_utr]
 
@@ -87,9 +94,9 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
 
       val utr = "2108834503"
 
-      when(mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Utr(utr)))))(any[Request[_]])).thenReturn(
-        Future.successful(true)
-      )
+      when(
+        mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Utr(utr)))))(any[Request[_]])
+      ).thenReturn(Future.successful(true))
 
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
@@ -101,9 +108,21 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(eitherT[MatchingResponse](MatchingResponse(RegisterWithIDResponse(ResponseCommon("OK",
-        Some("002 - No match found"), LocalDate.now.atTime(8, 35, 2),
-        Some(List(MessagingServiceParam("POSITION", "FAIL")))), None))))
+      ).thenReturn(
+        eitherT[MatchingResponse](
+          MatchingResponse(
+            RegisterWithIDResponse(
+              ResponseCommon(
+                "OK",
+                Some("002 - No match found"),
+                LocalDate.now.atTime(8, 35, 2),
+                Some(List(MessagingServiceParam("POSITION", "FAIL")))
+              ),
+              None
+            )
+          )
+        )
+      )
 
       submitForm(Map("utr" -> utr)) {
         result =>
