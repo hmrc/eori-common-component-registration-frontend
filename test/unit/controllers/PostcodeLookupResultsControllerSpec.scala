@@ -89,6 +89,56 @@ class PostcodeLookupResultsControllerSpec
           status(result) shouldBe OK
         }
       }
+      "display successfully when no address is returned and try without address line 1" in {
+
+        val postcode = "TF3 2BX"
+        when(mockSessionCache.savePostcodeAndLine1Details(any())(any())).thenReturn(Future.successful(true))
+
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
+          Future.successful(Some(PostcodeViewModel(postcode, Some("addressLine 1"))))
+        )
+        when(
+          mockAddressLookupConnector.lookup(
+            ArgumentMatchers.eq(postcode.replaceAll(" ", "")),
+            ArgumentMatchers.eq(Some("addressLine 1"))
+          )(any())
+        )
+          .thenReturn(Future.successful(AddressLookupSuccess(Seq())))
+
+        when(
+          mockAddressLookupConnector.lookup(
+            ArgumentMatchers.eq(postcode.replaceAll(" ", "")),
+            ArgumentMatchers.eq(None)
+          )(any())
+        )
+          .thenReturn(Future.successful(AddressLookupSuccess(Seq(addressLookup))))
+
+        showCreateForm(atarService) { result =>
+          status(result) shouldBe OK
+        }
+      }
+
+      "display manual address page when no address is returned back" in {
+
+        val postcode = "TF3 2BX"
+        when(mockSessionCache.savePostcodeAndLine1Details(any())(any())).thenReturn(Future.successful(true))
+
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
+          Future.successful(Some(PostcodeViewModel(postcode, None)))
+        )
+        when(
+          mockAddressLookupConnector.lookup(
+            ArgumentMatchers.eq(postcode.replaceAll(" ", "")),
+            ArgumentMatchers.eq(None)
+          )(any())
+        )
+          .thenReturn(Future.successful(AddressLookupSuccess(Seq())))
+
+        showCreateForm(atarService) { result =>
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some("/customs-registration-services/atar/register/manual/address")
+        }
+      }
     }
 
     "return 400 (BAD_REQUEST)" when {

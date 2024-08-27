@@ -24,6 +24,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameDobController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
@@ -40,7 +41,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   protected override val formId: String      = NameDateOfBirthPage.formId
   val mockCdsFrontendDataCache: SessionCache = mock[SessionCache]
   private val matchNameDobView               = instanceOf[match_namedob]
-  private val mockRequestSessionData         = instanceOf[RequestSessionData]
+  private val mockRequestSessionData         = mock[RequestSessionData]
 
   private def nameDobController =
     new NameDobController(mockAuthAction, mcc, matchNameDobView, mockRequestSessionData, mockCdsFrontendDataCache)(
@@ -64,7 +65,23 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       nameDobController.form(defaultOrganisationType, atarService)
     )
 
+    "redirect to you cannot use this service page if country is ROW and Org type soletrader" in {
+
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
+      showForm(soleTraderType) { result =>
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(
+          "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+        )
+      }
+    }
+
     "display the form" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
       showForm(soleTraderType) { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
@@ -77,6 +94,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
   "first name" should {
     "be mandatory" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       submitForm(form = ValidRequest ++ Map("first-name" -> ""), defaultOrganisationType) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -87,6 +106,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     s"be restricted to 35 characters" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       val firstNameMaxLength = 35
       submitForm(ValidRequest ++ Map("first-name" -> oversizedString(firstNameMaxLength)), defaultOrganisationType) {
         result =>
@@ -102,6 +123,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   "last name" should {
 
     "be mandatory" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       submitForm(ValidRequest ++ Map("last-name" -> ""), defaultOrganisationType) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -113,6 +136,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
     "be restricted to 35 characters" in {
       val lastNameMaxLength = 35
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       submitForm(ValidRequest ++ Map("last-name" -> oversizedString(lastNameMaxLength)), soleTraderType) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -126,6 +151,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   "date of birth" should {
 
     "be mandatory" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       submitForm(
         ValidRequest ++ Map("date-of-birth.day" -> "", "date-of-birth.month" -> "", "date-of-birth.year" -> ""),
         defaultOrganisationType
@@ -139,6 +166,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     "be a valid date" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       submitForm(ValidRequest ++ Map("date-of-birth.day" -> "32"), defaultOrganisationType) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
@@ -151,6 +180,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     "not be in the future" in {
       val tomorrow        = LocalDate.now().plusDays(1)
       val futureDateError = "Year must be between 1900 and this year"
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       submitForm(
         ValidRequest ++ Map(
           "date-of-birth.day"   -> tomorrow.getDayOfMonth.toString,

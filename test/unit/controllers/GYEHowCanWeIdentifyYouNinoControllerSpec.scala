@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouNinoController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingResponse, RegisterWithIDResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameDobMatchModel, Nino, NinoOrUtr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
@@ -46,7 +47,7 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
   private val mockAuthAction         = authAction(mockAuthConnector)
   private val mockMatchingService    = mock[MatchingService]
   private val mockFrontendDataCache  = mock[SessionCache]
-  private val mockRequestSessionData = instanceOf[RequestSessionData]
+  private val mockRequestSessionData = mock[RequestSessionData]
 
   private val errorView = instanceOf[error_template]
 
@@ -68,8 +69,23 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
   "Viewing the form " should {
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
 
+    "display you need to use a different for logged in user if country is ROW and individual" in {
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
+      form() { result =>
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(
+          "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+        )
+      }
+    }
+
     "display howCanWeIdentifyYouView for logged in user" in {
       withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       form() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
@@ -85,6 +101,8 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     "redirect to the Confirm page when a nino is matched" in {
 
       val nino = "AB123456C"
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
 
       when(
         mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Nino(nino)))))(any[Request[_]])
@@ -119,6 +137,48 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
         result =>
           status(result) shouldBe SEE_OTHER
           header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
+      }
+    }
+    "Load Nino page with errors" in {
+
+      val nino = ""
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
+      when(
+        mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Nino(nino)))))(any[Request[_]])
+      ).thenReturn(Future.successful(true))
+
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      ).thenReturn(
+        eitherT[MatchingResponse](
+          MatchingResponse(
+            RegisterWithIDResponse(
+              ResponseCommon(
+                "OK",
+                Some("002 - No match found"),
+                LocalDate.now.atTime(8, 35, 2),
+                Some(List(MessagingServiceParam("POSITION", "FAIL")))
+              ),
+              None
+            )
+          )
+        )
+      )
+
+      submitForm(Map("nino" -> nino)) {
+        result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText("title") should startWith("Error: ")
       }
     }
   }

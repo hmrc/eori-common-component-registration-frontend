@@ -50,30 +50,35 @@ class RowIndividualNameDateOfBirthController @Inject() (
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
-      else
+      else {
         assertOrganisationTypeIsValid(organisationType)
-      Future.successful(
-        Ok(
-          rowIndividualNameDob(
-            thirdCountryIndividualNameDateOfBirthForm,
-            organisationType,
-            service,
-            isInReviewMode = false
+        Future.successful(
+          Ok(
+            rowIndividualNameDob(
+              thirdCountryIndividualNameDateOfBirthForm,
+              organisationType,
+              service,
+              isInReviewMode = false
+            )
           )
         )
-      )
+      }
     }
 
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
-      assertOrganisationTypeIsValid(organisationType)
-      subscriptionDetailsService.cachedNameDobDetails flatMap {
-        case Some(NameDobMatchModel(firstName, lastName, dateOfBirth)) =>
-          val form = thirdCountryIndividualNameDateOfBirthForm.fill(
-            IndividualNameAndDateOfBirth(firstName, lastName, dateOfBirth)
-          )
-          Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, isInReviewMode = true)))
-        case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service)))
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else {
+        assertOrganisationTypeIsValid(organisationType)
+        subscriptionDetailsService.cachedNameDobDetails flatMap {
+          case Some(NameDobMatchModel(firstName, lastName, dateOfBirth)) =>
+            val form = thirdCountryIndividualNameDateOfBirthForm.fill(
+              IndividualNameAndDateOfBirth(firstName, lastName, dateOfBirth)
+            )
+            Future.successful(Ok(rowIndividualNameDob(form, organisationType, service, isInReviewMode = true)))
+          case _ => Future.successful(Redirect(SecuritySignOutController.signOut(service)))
+        }
       }
     }
 

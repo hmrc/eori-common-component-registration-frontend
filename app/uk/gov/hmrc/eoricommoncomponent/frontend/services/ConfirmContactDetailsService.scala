@@ -181,7 +181,7 @@ class ConfirmContactDetailsService @Inject() (
   private def radioGroupWrongAddressText(orgType: Option[EtmpOrganisationType])(implicit messages: Messages): String =
     orgType match {
       case orgType if isPartnershipOrLLP(orgType) => messages("confirm-business-details.partnership.yes-wrong-address")
-      case orgType if isIndividual(orgType)       => messages("confirm-business-details.individual.yes-wrong-address")
+      case orgType if isIndividual(orgType)       => messages("cds.no")
       case _                                      => messages("confirm-business-details.yes-wrong-address")
     }
 

@@ -33,6 +33,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.RowIndividualNameDateOfBirthController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -53,7 +54,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       extends AbstractControllerFixture[RowIndividualNameDateOfBirthController] {
     val mockRegistrationInfo           = mock[IndividualRegistrationInfo]
     val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-    private val mockRequestSessionData = mock[RequestSessionData]
+    val mockRequestSessionData         = mock[RequestSessionData]
 
     private val rowIndividualNameDob = instanceOf[row_individual_name_dob]
     private val mockAuthAction       = authAction(mockAuthConnector)
@@ -93,10 +94,31 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
           controllerFixture.controller.reviewForm(organisationType, atarService)
         )
       }
+      "redirect to you you cannot use this service page" in withControllerFixture {
+        controllerFixture =>
+          import controllerFixture._
+
+          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
+          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
+          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
+            .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
+
+          controllerFixture.showForm { result =>
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(
+              "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+            )
+          }
+      }
 
       "show the form in review mode without errors, the input fields are prepopulated from the cache" in withControllerFixture {
         controllerFixture =>
           import controllerFixture._
+
+          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
           when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
             .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
 
@@ -125,6 +147,10 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       "should redirect to sign out page if cachedNameDobDetails not found" in withControllerFixture {
         controllerFixture =>
           import controllerFixture._
+
+          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
           when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
 
           controllerFixture.showForm { result =>
