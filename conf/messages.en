@@ -1800,7 +1800,7 @@ ecc.address-lookup.postcode.summary.label = Postcode
 ecc.address-lookup.postcode.line1.summary.label = Property name or number
 ecc.address-lookup.postcode.address.label = Select your address
 ecc.address-lookup.postcode.address.error = Please select address from the list
-ecc.address-lookup.postcode.cannot-find-address = I can''t find my address in the list
+ecc.address-lookup.postcode.cannot-find-address = Enter your address manually
 ecc.address-lookup.postcode.line1.hint = For example, 15 or Prospect Cottage.
 
 ecc.address-lookup.postcode.find-address = Find address
