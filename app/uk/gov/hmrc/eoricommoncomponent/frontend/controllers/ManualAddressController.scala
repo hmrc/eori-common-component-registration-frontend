@@ -18,14 +18,14 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.manual_address
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -53,7 +53,7 @@ class ManualAddressController @Inject() (
             sessionCache.savePostcodeAndLine1Details(
               PostcodeViewModel(validAddress.postcode.getOrElse(throw PostcodeException), Some(validAddress.street))
             ).map { _ =>
-              Redirect(ContactAddressController.createForm(service))
+              Redirect(ConfirmContactDetailsController.form(service, false))
             }
         )
     }

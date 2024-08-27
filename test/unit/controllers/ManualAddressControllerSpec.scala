@@ -88,6 +88,7 @@ class ManualAddressControllerSpec
       )
       submitForm(form, atarService) { result =>
         status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some("/customs-registration-services/atar/register/matching/confirm")
       }
     }
     "return 400 with invalid data" in {
