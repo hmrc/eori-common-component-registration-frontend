@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ManualAddressControl
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.manual_address
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
@@ -49,13 +49,12 @@ class ManualAddressControllerSpec
   def submitInCreateModeUrl: String =
     ManualAddressController.submit(atarService).url
 
-  private val mockAddressService      = mock[AddressService]
-  private val mockSessionCacheService = instanceOf[SessionCacheService]
-  private val mockSessionCache        = mock[SessionCache]
-  private val view                    = instanceOf[manual_address]
+  private val mockAddressService = mock[AddressService]
+  private val mockSessionCache   = mock[SessionCache]
+  private val view               = instanceOf[manual_address]
 
   private val controller =
-    new ManualAddressController(mockAuthAction, view, mcc, mockSessionCache, mockSessionCacheService)
+    new ManualAddressController(mockAuthAction, view, mcc, mockSessionCache)
 
   override def beforeEach(): Unit =
     super.beforeEach()

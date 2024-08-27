@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.manual_address
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,18 +35,13 @@ class ManualAddressController @Inject() (
   authorise: AuthAction,
   view: manual_address,
   mcc: MessagesControllerComponents,
-  sessionCache: SessionCache,
-  sessionCacheService: SessionCacheService
+  sessionCache: SessionCache
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
-      sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-        service,
-        Ok(view(addressDetailsCreateForm(), Countries.all, service))
-      )
+    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(Ok(view(addressDetailsCreateForm(), Countries.all, service)))
     }
 
   def submit(service: Service): Action[AnyContent] =
