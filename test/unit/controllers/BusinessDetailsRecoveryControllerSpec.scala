@@ -52,7 +52,7 @@ import util.builders.{AuthActionMock, SessionBuilder}
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 

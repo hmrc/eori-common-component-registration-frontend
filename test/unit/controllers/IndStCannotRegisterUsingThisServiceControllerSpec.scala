@@ -33,7 +33,6 @@ class IndStCannotRegisterUsingThisServiceControllerSpec
     extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
   private val view              = instanceOf[ind_st_cannot_register_using_this_service]
 
   private val controller =

@@ -18,9 +18,7 @@ package unit.forms
 
 import base.UnitSpec
 import play.api.data.{Form, FormError}
-import play.api.data.validation.Constraint
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsViewModel, VatDetails, VatDetailsForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{VatDetails, VatDetailsForm}
 
 class VatDetailsFormSpec extends UnitSpec {
 

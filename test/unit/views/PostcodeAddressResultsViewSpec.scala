@@ -21,8 +21,6 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookup
@@ -46,9 +44,6 @@ class PostcodeAddressResultsViewSpec extends ViewSpec {
     AddressResultsForm.form(allowedAddress.map(_.dropDownView)).bind(Map("address" -> "invalid"))
 
   private def doc(): Document =
-    Jsoup.parse(contentAsString(view(form, params, allowedAddress, atarService)))
-
-  private val reviewDoc: Document =
     Jsoup.parse(contentAsString(view(form, params, allowedAddress, atarService)))
 
   private val docWithErrorSummary =

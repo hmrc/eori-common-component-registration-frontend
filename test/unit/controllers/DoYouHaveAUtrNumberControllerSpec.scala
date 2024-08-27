@@ -30,7 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberC
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec

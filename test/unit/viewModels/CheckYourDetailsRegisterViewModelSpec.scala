@@ -18,7 +18,7 @@ package unit.viewModels
 
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, Eori, Nino, Utr}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import unit.services.SubscriptionServiceTestData

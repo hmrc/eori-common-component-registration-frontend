@@ -42,7 +42,7 @@ import util.builders.{AuthBuilder, SessionBuilder}
 
 import java.util.UUID
 import scala.concurrent.ExecutionContext.global
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.util.Random
 
 trait ControllerSpec

@@ -21,9 +21,7 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{AddressDetailsForm, PostcodeForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.PostcodeForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.postcode
 import util.ViewSpec

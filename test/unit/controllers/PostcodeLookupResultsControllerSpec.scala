@@ -24,9 +24,8 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{PostCodeController, PostcodeLookupResultsController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.PostcodeLookupResultsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookup, AddressLookupSuccess}
