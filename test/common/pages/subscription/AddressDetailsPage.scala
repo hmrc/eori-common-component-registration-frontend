@@ -21,7 +21,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 sealed trait AddressDetailsPage extends WebPage {
 
-  override val title = "Your details"
+  override val title     = "Your details"
+  val manualAddressTitle = "Enter your address manually"
 
   val formId: String = "addressDetailsForm"
 

@@ -20,9 +20,11 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 import javax.inject.{Inject, Singleton}
@@ -34,24 +36,27 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   mcc: MessagesControllerComponents,
   sessionCache: SessionCache,
   howCanWeIdentifyYouView: how_can_we_identify_you_nino,
+  requestSessionData: RequestSessionData,
+  matchingService: MatchingService,
   sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
-      sessionCacheService.individualAndSoleTraderRouter(
-        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-        service,
-        Ok(
-          howCanWeIdentifyYouView(
-            subscriptionNinoForm,
-            isInReviewMode = false,
-            routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
-            service = service
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        Future.successful(
+          Ok(
+            howCanWeIdentifyYouView(
+              subscriptionNinoForm,
+              isInReviewMode = false,
+              routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+              service = service
+            )
           )
         )
-      )
     }
 
   def submit(service: Service): Action[AnyContent] =
@@ -69,9 +74,15 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
             )
           ),
         ninoForm =>
-          sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id)))).map(
-            _ => Redirect(PostCodeController.createForm(service))
-          )
+          for {
+            _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id))))
+            ind <- sessionCacheService.retrieveNameDobFromCache()
+            _ = matchingService.matchIndividualWithNino(
+              ninoForm.id,
+              ind,
+              GroupId(loggedInUser.groupId.getOrElse(throw new Exception("GroupId does not exists")))
+            )
+          } yield Redirect(PostCodeController.createForm(service))
       )
     }
 

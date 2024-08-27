@@ -20,9 +20,10 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.ninoOrUtrChoiceForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
 
@@ -36,19 +37,16 @@ class HowCanWeIdentifyYouController @Inject() (
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you,
   subscriptionDetailsHolderService: SubscriptionDetailsService,
-  sessionCacheService: SessionCacheService
+  requestSessionData: RequestSessionData
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
-      populateView(service).flatMap(
-        sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-          service,
-          _
-        )
-      )
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        populateView(service)
     }
 
   private def populateView(service: Service)(implicit request: Request[_]): Future[Result] =

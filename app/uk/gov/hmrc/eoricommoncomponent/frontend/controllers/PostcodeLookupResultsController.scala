@@ -136,10 +136,7 @@ class PostcodeLookupResultsController @Inject() (
                 AddressResultsForm.form(addressesList).bindFromRequest().fold(
                   formWithErrors =>
                     Future.successful(BadRequest(prepareView(formWithErrors, addressLookupParams, addresses, service))),
-                  validAnswer => {
-                    val address = addressesMap(validAnswer.address).toAddressViewModel
-                    Future.successful(Redirect(ConfirmContactDetailsController.form(service, false)))
-                  }
+                  _ => Future.successful(Redirect(ConfirmContactDetailsController.form(service, false)))
                 )
               case AddressLookupSuccess(_) => Future.successful(redirectToManualAddressPage(service))
               case AddressLookupFailure    => throw AddressLookupException

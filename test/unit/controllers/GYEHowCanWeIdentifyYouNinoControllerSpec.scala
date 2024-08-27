@@ -60,6 +60,8 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     mcc,
     mockFrontendDataCache,
     howCanWeIdentifyYouView,
+    mockRequestSessionData,
+    mockMatchingService,
     sessionCacheService
   )(global)
 
@@ -119,116 +121,6 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
           header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
       }
     }
-
-//    "give a page level error when a nino is not matched" in {
-//      val nino = "AB123456C"
-//      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-//        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
-//      )
-//      when(
-//        mockMatchingService
-//          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
-//            any[HeaderCarrier],
-//            any[Request[_]]
-//          )
-//      ).thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse))
-//
-//      submitForm(Map("nino" -> nino)) {
-//        result =>
-//          status(result) shouldBe BAD_REQUEST
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsText(
-//            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
-//          ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
-//      }
-//    }
-//
-//    "redirect to error_template when downstreamFailureResponse" in {
-//      val nino = "AB123456C"
-//      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-//        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
-//      )
-//      when(
-//        mockMatchingService
-//          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
-//            any[HeaderCarrier],
-//            any[Request[_]]
-//          )
-//      ).thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.downstreamFailureResponse))
-//
-//      submitForm(Map("nino" -> nino)) {
-//        result =>
-//          status(result) shouldBe OK
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
-//      }
-//    }
-//
-//    "redirect to error_template when any other error is case " in {
-//      val nino = "AB123456C"
-//      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-//        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
-//      )
-//      when(
-//        mockMatchingService
-//          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
-//            any[HeaderCarrier],
-//            any[Request[_]]
-//          )
-//      ).thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.otherErrorHappen))
-//
-//      submitForm(Map("nino" -> nino)) {
-//        result =>
-//          status(result) shouldBe INTERNAL_SERVER_ERROR
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
-//      }
-//    }
-//
-//    "display error when no input" in {
-//
-//      val nino = "AB123456C"
-//      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-//        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
-//      )
-//      when(
-//        mockMatchingService
-//          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
-//            any[HeaderCarrier],
-//            any[Request[_]]
-//          )
-//      ).thenReturn(eitherT[MatchingResponse](MatchingResponse(RegisterWithIDResponse(ResponseCommon("OK",
-//        Some("002 - No match found"), LocalDate.now.atTime(8, 35, 2),
-//        Some(List(MessagingServiceParam("POSITION", "FAIL")))), None))))
-//
-//      submitForm(Map("nino" -> "")) {
-//        result =>
-//          status(result) shouldBe BAD_REQUEST
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsText(
-//            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
-//          ) shouldBe "Enter your National Insurance number"
-//      }
-//    }
-//
-//    "throw exception when no NameDob present in cache" in {
-//
-//      val nino = "AB123456C"
-//      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-//        Future.successful(SubscriptionDetails(nameDobDetails = None))
-//      )
-//
-//      withAuthorisedUser(defaultUserId, mockAuthConnector)
-//      val caught = intercept[DataUnavailableException] {
-//        await(
-//          controller.submit(atarService).apply(
-//            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("nino" -> nino))
-//          )
-//        )
-//      }
-//
-//      caught.message should startWith("NameDob is not cached in data")
-//    }
   }
 
   def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {

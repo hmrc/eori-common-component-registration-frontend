@@ -24,10 +24,11 @@ case class AddressResultsForm(address: String)
 
 object AddressResultsForm {
 
-  def form(allowedAddresses: Seq[String]): Form[AddressResultsForm] = Form(
-    mapping("address" -> mandatoryString("ecc.address-lookup.postcode.address.error")(allowedAddresses.contains(_)))(
-      AddressResultsForm.apply
-    )(AddressResultsForm.unapply)
-  )
+  def form(allowedAddresses: Seq[String]): Form[AddressResultsForm] =
+    Form(
+      mapping("address" -> mandatoryString("ecc.address-lookup.postcode.address.error")(allowedAddresses.contains(_)))(
+        AddressResultsForm.apply
+      )(AddressResultsForm.unapply)
+    )
 
 }

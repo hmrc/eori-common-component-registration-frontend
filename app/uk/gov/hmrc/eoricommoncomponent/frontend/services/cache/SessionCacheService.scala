@@ -101,15 +101,16 @@ class SessionCacheService @Inject() (
           case Some(Nino(id)) =>
             matchingService.matchIndividualWithNino(id, ind, groupId).value.flatMap {
               case Right(matchingResponse) =>
-                if (matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)) Future.successful(Right(true))
-                else Future.successful(Right(false))
+                val matchResult = matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)
+                Future.successful(Right(matchResult))
               case Left(errorResponse) => Future.successful(Left(errorResponse))
               case _                   => Future.successful(Left(ResponseError(500, "Unexpected response from Matching service")))
             }
           case Some(Utr(id)) =>
             matchingService.matchIndividualWithId(Utr(id), ind, groupId).value.flatMap {
               case Right(matchingResponse) =>
-                Future.successful(Right(matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)))
+                val matchResult = matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)
+                Future.successful(Right(matchResult))
               case Left(errorResponse) => Future.successful(Left(errorResponse))
               case _                   => Future.successful(Left(ResponseError(500, "Unexpected response from Matching service")))
             }
@@ -126,7 +127,8 @@ class SessionCacheService @Inject() (
     matchingResponse.registerWithIDResponse.responseDetail.exists(
       detail =>
         detail.isAnIndividual &&
-          detail.address.postalCode.contains(postcodeViewModel.postcode)
+          (detail.address.postalCode.exists(_.equalsIgnoreCase(postcodeViewModel.postcode))
+            || detail.address.postalCode.exists(_.replaceAll(" ", "").equalsIgnoreCase(postcodeViewModel.postcode)))
           && detail.individual.exists(_.dateOfBirth.contains(individual.dateOfBirth))
     )
 

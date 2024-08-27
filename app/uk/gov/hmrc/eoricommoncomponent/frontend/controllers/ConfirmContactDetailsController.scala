@@ -41,13 +41,14 @@ class ConfirmContactDetailsController @Inject() (
 
   def form(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
-      confirmContactDetailsService.handleAddressAndPopulateView(service, isInReviewMode).flatMap(
-        sessionCacheService.individualAndSoleTraderRouter(
+      for {
+        res <- confirmContactDetailsService.handleAddressAndPopulateView(service, isInReviewMode)
+        result <- sessionCacheService.individualAndSoleTraderRouter(
           user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
           service,
-          _
+          res
         )
-      )
+      } yield result
     }
 
   def submit(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =

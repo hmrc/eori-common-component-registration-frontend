@@ -69,7 +69,9 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     howCanWeIdentifyYouView,
     mockOrgTypeLookup,
     mockFrontendDataCache,
-    sessionCacheService
+    mockRequestSessionData,
+    sessionCacheService,
+    mockMatchingService
   )(global)
 
   "Viewing the form " should {
