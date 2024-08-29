@@ -1755,9 +1755,14 @@ date.fields.year = Blwyddyn
 ecc.cannot-change-address-company.title = Cysylltwch â Thŷ’r Cwmnïau
 ecc.cannot-change-address-company.info = Cedwir eich cyfieiriad cofrestredig gan {0}. Bydd angen i chi ddiweddaru’ch manylion yno a dychwelyd i gwblhau’ch cais am rif EORI.
 ecc.cannot-change-address-company.link = Nhŷ’r Cwmnïau (yn agor tab newydd)
-ecc.cannot-change-address-individual.title = Cysylltwch â CThEF
-ecc.cannot-change-address-individual.info = Delir eich cyfeiriad cofrestredig yn {0}. Bydd angen i chi ddiweddaru’ch manylion yno a dychwelyd i gwblhau’ch cais am rif EORI.
-ecc.cannot-change-address-individual.link = CThEF (yn agor tab newydd)
+
+ecc.cannot-change-address-individual.title = Nid yw?ch atebion yn cyd-fynd �?n cofnodion
+ecc.cannot-change-address-individual.info.line1 = Nid yw?r wybodaeth a roesoch yn cyd-fynd �?r cofnodion sydd gan CThEF amdanoch.
+ecc.cannot-change-address-individual.info.line2 = Gallwch {0}
+ecc.cannot-change-address-individual.info.line2.linkText = geisio nodi?ch manylion eto.
+ecc.cannot-change-address-individual.info.line3 = Os oes unrhyw newid wedi bod i?ch manylion personol, bydd angen i chi {0} Yna, gallwch fynd yn eich blaen �?ch cais am rif EORI.
+ecc.cannot-change-address-individual.info.line3.linkText = roi gwybod i CThEF beth sydd wedi newid (yn agor tab newydd).
+
 ecc.address-invalid-individual.title = Cysylltwch â CThEF
 ecc.address-invalid-individual.info = Mae’n ymddangos bod y cyfeiriad cofrestredig sydd gennym ar eich cyfer yn anghywir. Bydd angen i chi gysylltu â {0} i ddiweddaru’ch manylion a dychwelyd i gwblhau’ch cais am rif EORI.
 ecc.address-invalid-individual.link = CThEF (yn agor tab newydd)

@@ -28,20 +28,35 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
   private val youCantChangeAddressIndView                       = instanceOf[you_cannot_change_address_individual]
 
+
   "You cannot change address for individual" should {
 
     "display correct title" in {
-      indDoc.title must startWith("Contact HMRC")
+      indDoc.title must startWith("Your answers do not match our records")
     }
 
     "display correct heading" in {
-      indDoc.body.getElementsByTag("h1").text mustBe "Contact HMRC"
+      indDoc.body.getElementsByTag("h1").text mustBe "Your answers do not match our records"
     }
 
     "display correct info" in {
       indDoc.body
+        .getElementById("info-do-no-match")
+        .text mustBe "The information you provided does not match the records HMRC holds about you."
+
+      indDoc.body
+        .getElementById("try-again")
+        .text mustBe "You can try entering your details again."
+
+      indDoc.body
+        .getElementById("try_again_link").attr("href") mustBe "/customs-registration-services/atar/register/matching/organisation-type"
+
+      indDoc.body
         .getElementById("contact-info")
-        .text mustBe "Your registered address is held at HMRC (opens in new tab) . You will need to update your details there and return to complete your EORI number application."
+        .text mustBe "If any of your personal details have changed, you need to tell HMRC what has changed (opens in new tab). You can then continue with your EORI number application."
+
+      indDoc.body
+        .getElementById("contact_link").attr("href") mustBe "https://www.gov.uk/tell-hmrc-change-of-details"
     }
 
   }

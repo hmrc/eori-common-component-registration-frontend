@@ -1974,9 +1974,13 @@ ecc.cannot-change-address-company.title = Contact Companies House
 ecc.cannot-change-address-company.info = Your registered address is held at {0}. You will need to update your details there and return to complete your EORI number application.
 ecc.cannot-change-address-company.link = Companies House (opens in new tab)
 
-ecc.cannot-change-address-individual.title = Contact HMRC
-ecc.cannot-change-address-individual.info = Your registered address is held at {0}. You will need to update your details there and return to complete your EORI number application.
-ecc.cannot-change-address-individual.link = HMRC (opens in new tab)
+ecc.cannot-change-address-individual.title = Your answers do not match our records
+ecc.cannot-change-address-individual.info.line1 = The information you provided does not match the records HMRC holds about you.
+ecc.cannot-change-address-individual.info.line2 = You can {0}
+ecc.cannot-change-address-individual.info.line2.linkText = try entering your details again.
+ecc.cannot-change-address-individual.info.line3 = If any of your personal details have changed, you need to {0} You can then continue with your EORI number application.
+ecc.cannot-change-address-individual.info.line3.linkText = tell HMRC what has changed (opens in new tab).
+
 
 ecc.address-invalid-individual.title = Contact HMRC
 ecc.address-invalid-individual.info = The registered address we hold for you seems to be incorrect. You will need to contact {0} to update your details and return to complete your EORI application.
