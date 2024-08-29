@@ -28,7 +28,6 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
   private val youCantChangeAddressIndView                       = instanceOf[you_cannot_change_address_individual]
 
-
   "You cannot change address for individual" should {
 
     "display correct title" in {
@@ -49,7 +48,9 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
         .text mustBe "You can try entering your details again."
 
       indDoc.body
-        .getElementById("try_again_link").attr("href") mustBe "/customs-registration-services/atar/register/matching/organisation-type"
+        .getElementById("try_again_link").attr(
+          "href"
+        ) mustBe "/customs-registration-services/atar/register/matching/organisation-type"
 
       indDoc.body
         .getElementById("contact-info")
