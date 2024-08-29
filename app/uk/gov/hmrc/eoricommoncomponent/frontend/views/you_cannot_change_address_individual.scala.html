@@ -20,9 +20,14 @@
 
 @this(layout_di: layout,feedback_di: helpers.feedback,appConfig:AppConfig)
 @(service: Service)(implicit request: Request[_], messages: Messages)
-@link = {
+@contactLink = {
     <a id="contact_link" href="@{appConfig.hmrcChangeDetails}" target="_blank" class="govuk-link" rel="noopener noreferrer">
-    @messages("ecc.cannot-change-address-individual.link")
+    @messages("ecc.cannot-change-address-individual.info.line3.linkText")
+    </a>
+}
+@tryAgainLink = {
+    <a id="try_again_link" href="@{uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.OrganisationTypeController.form(service).url}" class="govuk-link" rel="noopener noreferrer">
+    @messages("ecc.cannot-change-address-individual.info.line2.linkText")
     </a>
 }
 
@@ -30,7 +35,11 @@
     <div>
         <h1 class="govuk-heading-l">@messages("ecc.cannot-change-address-individual.title")</h1>
 
-        <p class="govuk-body" id="contact-info">@Html(messages("ecc.cannot-change-address-individual.info", link))</p>
+        <p class="govuk-body" id="info-do-no-match">@Html(messages("ecc.cannot-change-address-individual.info.line1"))</p>
+
+        <p class="govuk-body" id="try-again">@Html(messages("ecc.cannot-change-address-individual.info.line2", tryAgainLink))</p>
+
+        <p class="govuk-body" id="contact-info">@Html(messages("ecc.cannot-change-address-individual.info.line3", contactLink))</p>
         @feedback_di()
         @helpers.helpAndSupport()
     </div>

@@ -36,7 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.sic_code
 import uk.gov.hmrc.http.HeaderCarrier
 import util.StringThings._
@@ -62,8 +62,9 @@ class SicCodeControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockRequestSessionData = mock[RequestSessionData]
-  private val sicCodeView            = instanceOf[sic_code]
+  private val mockRequestSessionData  = mock[RequestSessionData]
+  private val sicCodeView             = instanceOf[sic_code]
+  private val mockSessionCacheService = instanceOf[SessionCacheService]
 
   private val controller = new SicCodeController(
     mockAuthAction,
@@ -72,8 +73,9 @@ class SicCodeControllerSpec
     mockSubscriptionDetailsService,
     mcc,
     sicCodeView,
-    mockRequestSessionData
-  )
+    mockRequestSessionData,
+    mockSessionCacheService
+  )(global)
 
   private val emulatedFailure = new UnsupportedOperationException("Emulation of service call failure")
 

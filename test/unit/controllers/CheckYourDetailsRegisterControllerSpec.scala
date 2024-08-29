@@ -33,7 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlow}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegisterWithoutIdWithSubscriptionService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegisterConstructor
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_register
@@ -68,6 +68,7 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockVatControlListDetails             = mock[VatControlListResponse]
   private val mockRequestSession                    = mock[RequestSessionData]
   private val checkYourDetailsRegisterView          = instanceOf[check_your_details_register]
+  private val mockSessionCacheService               = instanceOf[SessionCacheService]
 
   private val viewModelConstructor =
     new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession)
@@ -75,11 +76,12 @@ class CheckYourDetailsRegisterControllerSpec
   val controller = new CheckYourDetailsRegisterController(
     mockAuthAction,
     mockRequestSession,
+    mockSessionCacheService,
     mcc,
     checkYourDetailsRegisterView,
     mockRegisterWithoutIdWithSubscription,
     viewModelConstructor
-  )
+  )(global)
 
   private val organisationRegistrationDetailsWithEmptySafeId = organisationRegistrationDetails.copy(safeId = SafeId(""))
 
@@ -877,13 +879,14 @@ class CheckYourDetailsRegisterControllerSpec
     val controller = new CheckYourDetailsRegisterController(
       mockAuthAction,
       mockRequestSession,
+      mockSessionCacheService,
       mcc,
       checkYourDetailsRegisterView,
       mockRegisterWithoutIdWithSubscription,
       viewModelConstructor
-    )
+    )(global)
 
-    withAuthorisedUser(userId, mockAuthConnector)
+    withAuthorisedUser(userId = userId, mockAuthConnector = mockAuthConnector, groupId = Some("groupId"))
 
     when(mockRequestSession.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))

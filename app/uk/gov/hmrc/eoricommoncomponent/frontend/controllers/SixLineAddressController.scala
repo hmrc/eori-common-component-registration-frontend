@@ -20,11 +20,16 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUser, SixLineAddressMatchModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
+  CdsOrganisationType,
+  LoggedInUser,
+  LoggedInUserWithEnrolments,
+  SixLineAddressMatchModel
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require.requireThatUrlValue
@@ -42,7 +47,8 @@ class SixLineAddressController @Inject() (
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   sixLineAddressView: six_line_address,
-  registrationDetailsService: RegistrationDetailsService
+  registrationDetailsService: RegistrationDetailsService,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -50,13 +56,16 @@ class SixLineAddressController @Inject() (
     address: Option[Address],
     isInReviewMode: Boolean,
     organisationType: String,
-    service: Service
+    service: Service,
+    user: LoggedInUserWithEnrolments
   )(implicit request: Request[AnyContent]): Future[Result] = {
     val formByOrgType = formsByOrganisationTypes(request)(organisationType)
     lazy val form     = address.map(ad => createSixLineAddress(ad)).fold(formByOrgType)(formByOrgType.fill)
     val (countriesToInclude, countriesInCountryPicker) =
       Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
-    Future.successful(
+    sessionCacheService.individualAndSoleTraderRouter(
+      user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+      service,
       Ok(
         sixLineAddressView(
           isInReviewMode,
@@ -71,10 +80,10 @@ class SixLineAddressController @Inject() (
   }
 
   def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       assertOrganisationTypeIsValid(organisationType)
       sessionCache.registrationDetails.flatMap(
-        rd => populateView(Some(rd.address), isInReviewMode, organisationType, service)
+        rd => populateView(Some(rd.address), isInReviewMode, organisationType, service, user)
       )
     }
 

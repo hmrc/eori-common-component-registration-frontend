@@ -23,18 +23,18 @@
 
 @layout_di(messages("cds.matching.ind-st-cannot-register-using-service.title-and-heading"), service = service) {
 
-        @h1(messages("cds.matching.ind-st-cannot-register-using-service.title-and-heading"))
-        @p(messages("cds.matching.ind-st-cannot-register-using-service.para1"), Some("para1"))
-        @p(messages("cds.matching.ind-st-cannot-register-using-service.para2"), Some("para2"))
-        <ul class="govuk-list govuk-list--bullet">
-            <li>@link(text=messages("cds.matching.ind-st-cannot-register-using-service.link.text1"),
-                href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes",
-                id=Some("link1"))</li>
-            <li>@link(text=messages("cds.matching.ind-st-cannot-register-using-service.link.text2"),
-                href="https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no",
-                id=Some("link2"))</li>
-        </ul>
+    @h1(messages("cds.matching.ind-st-cannot-register-using-service.title-and-heading"))
+    @p(messages("cds.matching.ind-st-cannot-register-using-service.para1"), Some("para1"))
+    @p(messages("cds.matching.ind-st-cannot-register-using-service.para2"), Some("para2"))
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@link(text=messages("cds.matching.ind-st-cannot-register-using-service.link.text1"),
+            href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes",
+            id=Some("link1"))</li>
+        <li>@link(text=messages("cds.matching.ind-st-cannot-register-using-service.link.text2"),
+            href="https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no",
+            id=Some("link2"))</li>
+    </ul>
 
-        @helpers.helpAndSupport()
+    @helpers.helpAndSupport()
 
 }

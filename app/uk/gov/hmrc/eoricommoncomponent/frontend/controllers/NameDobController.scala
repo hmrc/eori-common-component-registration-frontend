@@ -22,8 +22,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.enterNameDobForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,31 +35,26 @@ class NameDobController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
   matchNameDobView: match_namedob,
+  requestSessionData: RequestSessionData,
   cdsFrontendDataCache: SessionCache
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-            service
-          )
-        )
-      )
-    //  Previous usual behavior DDCYLS-5614
-//      Future.successful(Ok(matchNameDobView(enterNameDobForm, organisationType, service)))
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        Future.successful(Ok(matchNameDobView(enterNameDobForm, organisationType, service)))
     }
 
-  //  Previous usual behavior DDCYLS-5614
-//  def submit(organisationType: String, service: Service): Action[AnyContent] =
-//    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-//      enterNameDobForm.bindFromRequest().fold(
-//        formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),
-//        formData => submitNewDetails(formData, service)
-//      )
-//    }
+  def submit(organisationType: String, service: Service): Action[AnyContent] =
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      enterNameDobForm.bindFromRequest().fold(
+        formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),
+        formData => submitNewDetails(formData, service)
+      )
+    }
 
   private def submitNewDetails(formData: NameDobMatchModel, service: Service)(implicit
     request: Request[_]

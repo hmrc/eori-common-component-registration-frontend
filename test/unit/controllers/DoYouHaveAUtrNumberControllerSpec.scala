@@ -30,6 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberC
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -51,11 +52,18 @@ class DoYouHaveAUtrNumberControllerSpec
   private val mockMatchingResponse           = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val matchOrganisationUtrView       = instanceOf[match_organisation_utr]
+  private val mockRequestSessionData         = instanceOf[RequestSessionData]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
   private val controller =
-    new DoYouHaveAUtrNumberController(mockAuthAction, mcc, matchOrganisationUtrView, mockSubscriptionDetailsService)
+    new DoYouHaveAUtrNumberController(
+      mockAuthAction,
+      mcc,
+      mockRequestSessionData,
+      matchOrganisationUtrView,
+      mockSubscriptionDetailsService
+    )(global)
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
