@@ -31,7 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionPage
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 import uk.gov.hmrc.http.HeaderCarrier
@@ -54,6 +54,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val mockSessionError                = mock[SessionError]
   private val mockRequestSession              = mock[RequestSessionData]
   private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
+  private val mockSessionCacheService         = instanceOf[SessionCacheService]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -79,8 +80,9 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
     mockSubscriptionDetailsService,
     mockRequestSession,
     mcc,
-    vatRegisteredUkView
-  )
+    vatRegisteredUkView,
+    mockSessionCacheService
+  )(global)
 
   "Vat registered Uk Controller" should {
     when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(

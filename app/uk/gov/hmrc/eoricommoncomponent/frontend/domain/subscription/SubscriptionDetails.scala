@@ -49,7 +49,8 @@ case class SubscriptionDetails(
   idDetails: Option[IdMatchModel] = None,
   customsId: Option[CustomsId] = None,
   formData: FormData = FormData(),
-  registeredCompany: Option[CompanyRegisteredCountry] = None
+  registeredCompany: Option[CompanyRegisteredCountry] = None,
+  postCodeForValidation: Option[String] = None
 ) extends Logging {
 
   def name: Option[String] = {

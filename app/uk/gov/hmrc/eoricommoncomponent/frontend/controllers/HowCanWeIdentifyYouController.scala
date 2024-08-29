@@ -20,8 +20,10 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.ninoOrUtrChoiceForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
 
@@ -34,22 +36,17 @@ class HowCanWeIdentifyYouController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you,
-  subscriptionDetailsHolderService: SubscriptionDetailsService
+  subscriptionDetailsHolderService: SubscriptionDetailsService,
+  requestSessionData: RequestSessionData
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-            service
-          )
-        )
-      )
-
-    //  Previous usual behavior DDCYLS-5614
-    //      populateView(service)
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        populateView(service)
     }
 
   private def populateView(service: Service)(implicit request: Request[_]): Future[Result] =
@@ -57,16 +54,15 @@ class HowCanWeIdentifyYouController @Inject() (
       Ok(howCanWeIdentifyYouView(ninoOrUtrChoiceForm.fill(NinoOrUtrChoice(choice)), service))
     }
 
-  //  Previous usual behavior DDCYLS-5614
-//  def submit(service: Service): Action[AnyContent] =
-//    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-//      ninoOrUtrChoiceForm
-//        .bindFromRequest()
-//        .fold(
-//          invalidForm => Future.successful(BadRequest(howCanWeIdentifyYouView(invalidForm, service))),
-//          form => storeChoice(form, service)
-//        )
-//    }
+  def submit(service: Service): Action[AnyContent] =
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      ninoOrUtrChoiceForm
+        .bindFromRequest()
+        .fold(
+          invalidForm => Future.successful(BadRequest(howCanWeIdentifyYouView(invalidForm, service))),
+          form => storeChoice(form, service)
+        )
+    }
 
   private def storeChoice(formData: NinoOrUtrChoice, service: Service)(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsHolderService

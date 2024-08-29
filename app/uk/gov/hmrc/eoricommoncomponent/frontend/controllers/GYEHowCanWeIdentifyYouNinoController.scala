@@ -16,19 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import cats.data.EitherT
-import play.api.i18n.Messages
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,87 +33,57 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class GYEHowCanWeIdentifyYouNinoController @Inject() (
   authAction: AuthAction,
-  matchingService: MatchingService,
   mcc: MessagesControllerComponents,
+  sessionCache: SessionCache,
   howCanWeIdentifyYouView: how_can_we_identify_you_nino,
-  sessionCacheService: SessionCacheService,
-  errorView: error_template
+  requestSessionData: RequestSessionData,
+  matchingService: MatchingService,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-            service
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        Future.successful(
+          Ok(
+            howCanWeIdentifyYouView(
+              subscriptionNinoForm,
+              isInReviewMode = false,
+              routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+              service = service
+            )
           )
         )
-      )
-    //  Previous usual behavior DDCYLS-5614
-//      Future.successful(
-//        Ok(
-//          howCanWeIdentifyYouView(
-//            subscriptionNinoForm,
-//            isInReviewMode = false,
-//            routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
-//            service = service
-//          )
-//        )
-//      )
     }
 
-  //  Previous usual behavior DDCYLS-5614
-//  def submit(service: Service): Action[AnyContent] =
-//    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-//      subscriptionNinoForm.bindFromRequest().fold(
-//        formWithErrors =>
-//          Future.successful(
-//            BadRequest(
-//              howCanWeIdentifyYouView(
-//                formWithErrors,
-//                isInReviewMode = false,
-//                routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
-//                service = service
-//              )
-//            )
-//          ),
-//        formData =>
-//          matchOnId(formData, GroupId(loggedInUser.groupId)).fold(
-//            {
-//              case MatchingServiceConnector.matchFailureResponse      => matchNotFoundBadRequest(formData, service)
-//              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-//              case _                                                  => InternalServerError(errorView(service))
-//            },
-//            _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-//          )
-//      )
-//    }
-
-  private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
-    hc: HeaderCarrier,
-    request: Request[_]
-  ): EitherT[Future, ResponseError, Unit] = EitherT {
-    sessionCacheService.retrieveNameDobFromCache().flatMap(
-      ind => matchingService.matchIndividualWithNino(formData.id, ind, groupId).value
-    )
-  }
-
-  private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service)(implicit
-    request: Request[AnyContent]
-  ): Result = {
-    val errorForm =
-      subscriptionNinoForm.withGlobalError(Messages("cds.matching-error.individual-not-found")).fill(individualFormData)
-
-    BadRequest(
-      howCanWeIdentifyYouView(
-        errorForm,
-        isInReviewMode = false,
-        routes.GYEHowCanWeIdentifyYouNinoController.form(service),
-//        routes.GYEHowCanWeIdentifyYouNinoController.submit(service),//  Previous usual behavior DDCYLS-5614
-        service = service
+  def submit(service: Service): Action[AnyContent] =
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      subscriptionNinoForm.bindFromRequest().fold(
+        formWithErrors =>
+          Future.successful(
+            BadRequest(
+              howCanWeIdentifyYouView(
+                formWithErrors,
+                isInReviewMode = false,
+                routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+                service = service
+              )
+            )
+          ),
+        ninoForm =>
+          for {
+            _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id))))
+            ind <- sessionCacheService.retrieveNameDobFromCache()
+            _ = matchingService.matchIndividualWithNino(
+              ninoForm.id,
+              ind,
+              GroupId(loggedInUser.groupId.getOrElse(throw new Exception("GroupId does not exists")))
+            )
+          } yield Redirect(PostCodeController.createForm(service))
       )
-    )
-  }
+    }
 
 }

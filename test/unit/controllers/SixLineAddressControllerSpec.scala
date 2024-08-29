@@ -32,13 +32,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder.defaultAddress
@@ -63,6 +62,7 @@ class SixLineAddressControllerSpec
   private val mockRegistrationDetailsService      = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService      = mock[SubscriptionDetailsService]
   private val sixLineAddressView                  = instanceOf[six_line_address]
+  private val mockSessionCacheService             = instanceOf[SessionCacheService]
 
   private val controller = new SixLineAddressController(
     mockAuthAction,
@@ -72,8 +72,9 @@ class SixLineAddressControllerSpec
     mockRequestSessionData,
     mcc,
     sixLineAddressView,
-    mockRegistrationDetailsService
-  )
+    mockRegistrationDetailsService,
+    mockSessionCacheService
+  )(global)
 
   private val mockSubscriptionPage         = mock[SubscriptionPage]
   private val mockSubscriptionStartSession = mock[Session]

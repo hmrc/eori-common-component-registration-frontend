@@ -51,8 +51,7 @@
     <div>
         @errorSummary(matchNinoIdForm.errors, focusOverrides = Map("have-nino" -> "have-nino-true"))
 
-@*        @helpers.form(DoYouHaveNinoController.submit(service), "matchRowIndividualsNinoForm") { //  Previous usual behavior DDCYLS-5614 *@
-        @helpers.form(DoYouHaveNinoController.displayForm(service), "matchRowIndividualsNinoForm") {
+        @helpers.form(DoYouHaveNinoController.submit(service), "matchRowIndividualsNinoForm") {
             @CSRF.formField
 
             <div class="govuk-form-group">

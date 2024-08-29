@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-import common.pages.RegisterHowCanWeIdentifyYouPage
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -24,17 +23,14 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouUtrController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingResponse, RegisterWithIDResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, NameDobMatchModel, Utr}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, NameDobMatchModel, NinoOrUtr, Utr}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  SessionCache,
-  SessionCacheService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -48,187 +44,155 @@ import scala.concurrent.Future
 
 class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector     = mock[AuthConnector]
-  private val mockAuthAction        = authAction(mockAuthConnector)
-  private val mockMatchingService   = mock[MatchingService]
-  private val mockFrontendDataCache = mock[SessionCache]
-  private val mockOrgTypeLookup     = mock[OrgTypeLookup]
-  private val sessionCacheService   = new SessionCacheService(mockFrontendDataCache)
-  private val errorView             = instanceOf[error_template]
+  private val mockAuthConnector      = mock[AuthConnector]
+  private val mockAuthAction         = authAction(mockAuthConnector)
+  private val mockMatchingService    = mock[MatchingService]
+  private val mockFrontendDataCache  = mock[SessionCache]
+  private val mockOrgTypeLookup      = mock[OrgTypeLookup]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val errorView              = instanceOf[error_template]
+
+  private val sessionCacheService =
+    new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
 
   private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_utr]
 
   private val controller = new GYEHowCanWeIdentifyYouUtrController(
     mockAuthAction,
-    mockMatchingService,
     mcc,
     howCanWeIdentifyYouView,
     mockOrgTypeLookup,
+    mockFrontendDataCache,
+    mockRequestSessionData,
     sessionCacheService,
-    errorView
-  )
+    mockMatchingService
+  )(global)
 
   "Viewing the form " should {
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
 
-    "display howCanWeIdentifyYouView for logged in user" in {
+    "display you need to use a different for logged in user if country is ROW and individual" in {
+      withAuthorisedUser(defaultUserId, mockAuthConnector)
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
 
+      form() { result =>
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(
+          "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+        )
+      }
+    }
+
+    "display howCanWeIdentifyYouView for logged in user" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(CorporateBody))
 
       withAuthorisedUser(defaultUserId, mockAuthConnector)
       form() { result =>
-//        status(result) shouldBe OK //  Previous usual behavior DDCYLS-5614
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+        status(result) shouldBe OK
       }
     }
   }
 
   "Submitting the form " should {
 
-//    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService)) //  Previous usual behavior DDCYLS-5614
-    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
+    assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.submit(atarService))
 
     "redirect to the Confirm page when a UTR is matched" in {
 
       val utr = "2108834503"
+
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
+      when(
+        mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Utr(utr)))))(any[Request[_]])
+      ).thenReturn(Future.successful(true))
+
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
+
       when(
         mockMatchingService
           .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(eitherT(()))
+      ).thenReturn(
+        eitherT[MatchingResponse](
+          MatchingResponse(
+            RegisterWithIDResponse(
+              ResponseCommon(
+                "OK",
+                Some("002 - No match found"),
+                LocalDate.now.atTime(8, 35, 2),
+                Some(List(MessagingServiceParam("POSITION", "FAIL")))
+              ),
+              None
+            )
+          )
+        )
+      )
 
       submitForm(Map("utr" -> utr)) {
         result =>
           status(result) shouldBe SEE_OTHER
-//          header("Location", result).value shouldBe "/customs-registration-services/atar/register/matching/confirm" //  Previous usual behavior DDCYLS-5614
-          header(
-            "Location",
-            result
-          ).value shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+          header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
       }
     }
 
-    "give a page level error when a UTR is not matched" in {
-      val utr = "2108834503"
+    "Load UTR page with errors" in {
+
+      val utr = "210883"
+
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+      when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
+      when(
+        mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Utr(utr)))))(any[Request[_]])
+      ).thenReturn(Future.successful(true))
+
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
+
       when(
         mockMatchingService
           .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
             any[HeaderCarrier],
             any[Request[_]]
           )
-      ).thenReturn(eitherT[Unit](MatchingServiceConnector.matchFailureResponse))
-
-      submitForm(Map("utr" -> utr)) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//          status(result) shouldBe BAD_REQUEST
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsText(
-//            RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
-//          ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
-      }
-    }
-    "give a error-template page when a downstreamFailureResponse happens" in {
-      val utr = "2108834503"
-      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
-      )
-      when(
-        mockMatchingService
-          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
-            any[HeaderCarrier],
-            any[Request[_]]
+      ).thenReturn(
+        eitherT[MatchingResponse](
+          MatchingResponse(
+            RegisterWithIDResponse(
+              ResponseCommon(
+                "OK",
+                Some("002 - No match found"),
+                LocalDate.now.atTime(8, 35, 2),
+                Some(List(MessagingServiceParam("POSITION", "FAIL")))
+              ),
+              None
+            )
           )
-      ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
+        )
+      )
 
       submitForm(Map("utr" -> utr)) {
         result =>
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//          status(result) shouldBe OK
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText("title") should startWith("Error: ")
       }
     }
-
-    "give a error-template page when a any other error occurred" in {
-      val utr = "2108834503"
-      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
-      )
-      when(
-        mockMatchingService
-          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
-            any[HeaderCarrier],
-            any[Request[_]]
-          )
-      ).thenReturn(eitherT[Unit](MatchingServiceConnector.otherErrorHappen))
-
-      submitForm(Map("utr" -> utr)) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-        //  Previous usual behavior DDCYLS-5614
-//          status(result) shouldBe INTERNAL_SERVER_ERROR
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsHtml("h1") shouldBe messages("cds.error.title")
-      }
-    }
-
-    "display error when no input" in {
-
-      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
-      )
-      submitForm(Map("utr" -> "")) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("register/ind-st-use-a-different-service")
-        //  Previous usual behavior DDCYLS-5614
-//          status(result) shouldBe BAD_REQUEST
-//          val page = CdsPage(contentAsString(result))
-//          page.getElementsText(RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath) shouldBe messages(
-//            "cds.matching-error.business-details.utr.isEmpty"
-//          )
-      }
-    }
-
-    //  Previous usual behavior DDCYLS-5614
-//    "throw exception when no NameDob present in cache" in {
-//
-//      val utr = "2108834503"
-//      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
-//        Future.successful(SubscriptionDetails(nameDobDetails = None))
-//      )
-//
-//      withAuthorisedUser(defaultUserId, mockAuthConnector)
-//      val caught = intercept[DataUnavailableException] {
-//        await(
-//          controller.submit(atarService).apply(
-//            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, Map("utr" -> utr))
-//          )
-//        )
-//      }
-//
-//      caught.message should startWith("NameDob is not cached in data")
-//    }
   }
 
   def submitForm(form: Map[String, String], userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
     withAuthorisedUser(userId, mockAuthConnector)
-//    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form))) //  Previous usual behavior DDCYLS-5614
-    test(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
+    test(controller.submit(atarService).apply(SessionBuilder.buildRequestWithSessionAndFormValues(userId, form)))
   }
 
   def form(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {

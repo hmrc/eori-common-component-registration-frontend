@@ -26,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DateOfVatRegistrati
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   date_of_vat_registration,
   vat_return_total,
@@ -49,14 +50,16 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
   private val mockVatReturnTotalView          = instanceOf[vat_return_total]
   private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
   private val form                            = instanceOf[VatRegistrationDateFormProvider]
+  private val mockSessionCacheService         = instanceOf[SessionCacheService]
 
   private val controller = new DateOfVatRegistrationController(
     mockAuthAction,
     mockSubscriptionBusinessService,
     mcc,
     mockDateOfVatRegistrationView,
-    form
-  )
+    form,
+    mockSessionCacheService
+  )(global)
 
   private val controllerVat = new VatReturnController(
     mockAuthAction,
@@ -64,7 +67,7 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     mcc,
     mockVatReturnTotalView,
     mockWeCannotConfirmYourIdentity
-  )
+  )(global)
 
   private val vatControlListResponse = VatControlListResponse(
     postcode = Some("SE28 1AA"),

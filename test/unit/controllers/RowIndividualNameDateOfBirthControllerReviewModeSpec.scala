@@ -33,8 +33,10 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.RowIndividualNameDateOfBirthController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
 import util.ControllerSpec
 import util.builders.AuthActionMock
@@ -52,6 +54,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       extends AbstractControllerFixture[RowIndividualNameDateOfBirthController] {
     val mockRegistrationInfo           = mock[IndividualRegistrationInfo]
     val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+    val mockRequestSessionData         = mock[RequestSessionData]
 
     private val rowIndividualNameDob = instanceOf[row_individual_name_dob]
     private val mockAuthAction       = authAction(mockAuthConnector)
@@ -59,6 +62,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
     override val controller = new RowIndividualNameDateOfBirthController(
       mockAuthAction,
       mockSubscriptionDetailsService,
+      mockRequestSessionData,
       mcc,
       rowIndividualNameDob
     )(global)
@@ -67,8 +71,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       с.reviewForm(organisationType, atarService)
 
     protected def submit(c: RowIndividualNameDateOfBirthController): Action[AnyContent] =
-//      c.submit(true, organisationType, atarService) //  Previous usual behavior DDCYLS-5614
-      c.form(organisationType, atarService)
+      c.submit(true, organisationType, atarService)
 
     def formData(thirdCountryIndividual: IndividualNameAndDateOfBirth): Map[String, String] =
       form.mapping.unbind(thirdCountryIndividual)
@@ -91,46 +94,68 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
           controllerFixture.controller.reviewForm(organisationType, atarService)
         )
       }
-
-      "show the form in review mode without errors, the input fields are prepopulated from the cache" in withControllerFixture {
+      "redirect to you you cannot use this service page" in withControllerFixture {
         controllerFixture =>
           import controllerFixture._
+
+          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
+          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
           when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
             .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
 
           controllerFixture.showForm { result =>
-//            status(result) shouldBe OK //  Previous usual behavior DDCYLS-5614
             status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(
+              "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+            )
+          }
+      }
+
+      "show the form in review mode without errors, the input fields are prepopulated from the cache" in withControllerFixture {
+        controllerFixture =>
+          import controllerFixture._
+
+          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
+          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
+            .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
+
+          controllerFixture.showForm { result =>
+            status(result) shouldBe OK
             val page = CdsPage(contentAsString(result))
             page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
 
-            //  Previous usual behavior(uncomment below tests) DDCYLS-5614
-//            assertPresentOnPage(webPage.givenNameElement)
-//            assertPresentOnPage(webPage.familyNameElement)
-//            assertPresentOnPage(webPage.dateOfBirthElement)
-//            page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthController
-//              .reviewForm(organisationType, atarService)
-//              .url
-//
-//            page.getElementValue(webPage.givenNameElement) shouldBe "firstName"
-//            page.getElementValue(webPage.familyNameElement) shouldBe "lastName"
-//            page.getElementValue(webPage.dobDayElement) shouldBe "31"
-//            page.getElementValue(webPage.dobMonthElement) shouldBe "3"
-//            page.getElementValue(webPage.dobYearElement) shouldBe "1980"
+            val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
+
+            assertPresentOnPage(webPage.givenNameElement)
+            assertPresentOnPage(webPage.familyNameElement)
+            assertPresentOnPage(webPage.dateOfBirthElement)
+            page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthController
+              .reviewForm(organisationType, atarService)
+              .url
+
+            page.getElementValue(webPage.givenNameElement) shouldBe "firstName"
+            page.getElementValue(webPage.familyNameElement) shouldBe "lastName"
+            page.getElementValue(webPage.dobDayElement) shouldBe "31"
+            page.getElementValue(webPage.dobMonthElement) shouldBe "3"
+            page.getElementValue(webPage.dobYearElement) shouldBe "1980"
           }
       }
 
       "should redirect to sign out page if cachedNameDobDetails not found" in withControllerFixture {
         controllerFixture =>
           import controllerFixture._
+
+          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+
           when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
 
           controllerFixture.showForm { result =>
             status(result) shouldBe SEE_OTHER
-//            result.futureValue.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/sign-out" //  Previous usual behavior DDCYLS-5614
-            result.futureValue.header.headers(
-              LOCATION
-            ) shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+            result.futureValue.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/sign-out"
           }
       }
     }
@@ -140,8 +165,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
       withControllerFixture { controllerFixture =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
           controllerFixture.mockAuthConnector,
-//          controllerFixture.controller.submit(true, organisationType, atarService) //  Previous usual behavior DDCYLS-5614
-          controllerFixture.controller.reviewForm(organisationType, atarService)
+          controllerFixture.controller.submit(true, organisationType, atarService)
         )
       }
 
@@ -156,9 +180,8 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
             status(result) shouldBe SEE_OTHER
             result.futureValue.header.headers(
               LOCATION
-//            ) shouldBe "/customs-registration-services/atar/register/matching/review-determine" //  Previous usual behavior DDCYLS-5614
-            ) shouldBe "/customs-registration-services/atar/register/ind-st-use-a-different-service"
-//            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any()) //  Previous usual behavior(uncomment) DDCYLS-5614
+            ) shouldBe "/customs-registration-services/atar/register/matching/review-determine"
+            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
           }
       }
     }

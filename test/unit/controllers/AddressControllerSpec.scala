@@ -24,6 +24,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import unit.controllers.{
   SubscriptionFlowCreateModeTestSupport,
   SubscriptionFlowReviewModeTestSupport,
@@ -32,6 +33,7 @@ import unit.controllers.{
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 
+import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class AddressControllerSpec
@@ -40,9 +42,12 @@ class AddressControllerSpec
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
-  private val mockAddressService = mock[AddressService]
+  private val mockAddressService      = mock[AddressService]
+  private val mockSessionCacheService = instanceOf[SessionCacheService]
 
-  private val controller = new AddressController(mockAuthAction, mockAddressService)
+  private val controller = new AddressController(mockAuthAction, mockAddressService, mockSessionCacheService, mcc)(
+    global
+  )
 
   protected override val formId: String = "addressDetailsForm"
 

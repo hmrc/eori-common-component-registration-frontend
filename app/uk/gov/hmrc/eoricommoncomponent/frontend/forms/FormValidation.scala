@@ -42,7 +42,9 @@ object FormValidation {
 
   val amountRegex: Regex = "^([0-9]+\\.[0-9]{2})$".r
 
-  def mandatoryPostCodeMapping: Mapping[Option[String]] =
+  def mandatoryPostCodeMapping: Mapping[String] = text.verifying(validPostcode)
+
+  def mandatoryOptPostCodeMapping: Mapping[Option[String]] =
     MandatoryOptionalMapping(text.verifying(validPostcode)).verifying(lift(postcodeMax(9)))
 
   def postcodeMapping: Mapping[Option[String]] =

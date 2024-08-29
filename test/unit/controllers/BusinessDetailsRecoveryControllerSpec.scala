@@ -39,7 +39,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
   DataUnavailableException,
   RequestSessionData,
-  SessionCache
+  SessionCache,
+  SessionCacheService
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
@@ -62,6 +63,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
   private val mockOrgTypeLookup           = mock[OrgTypeLookup]
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
   private val mockSave4LaterService       = mock[Save4LaterService]
+  private val mockSessionCacheService     = instanceOf[SessionCacheService]
 
   private val businessDetailsRecoveryView = instanceOf[business_details_recovery]
 
@@ -91,8 +93,9 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
     mcc,
     businessDetailsRecoveryView,
     mockSave4LaterService,
-    mockSubscriptionFlowManager
-  )
+    mockSubscriptionFlowManager,
+    mockSessionCacheService
+  )(global)
 
   "Recovery details" should {
     "display registered name when entityType Organisation found in cache with safeId" in {

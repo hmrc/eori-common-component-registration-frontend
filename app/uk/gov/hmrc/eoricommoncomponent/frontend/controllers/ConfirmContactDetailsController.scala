@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 import javax.inject.{Inject, Singleton}
@@ -33,14 +33,22 @@ class ConfirmContactDetailsController @Inject() (
   authAction: AuthAction,
   confirmContactDetailsService: ConfirmContactDetailsService,
   sessionCache: SessionCache,
+  sessionCacheService: SessionCacheService,
   mcc: MessagesControllerComponents,
   sub01OutcomeProcessingView: sub01_outcome_processing
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      confirmContactDetailsService.handleAddressAndPopulateView(service, isInReviewMode)
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      for {
+        res <- confirmContactDetailsService.handleAddressAndPopulateView(service, isInReviewMode)
+        result <- sessionCacheService.individualAndSoleTraderRouter(
+          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+          service,
+          res
+        )
+      } yield result
     }
 
   def submit(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =

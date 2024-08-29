@@ -18,7 +18,7 @@ package unit.services
 
 import cats.data.EitherT
 import integration.IntegrationTestsSpec
-import org.mockito.ArgumentMatchers.{any, anyString, eq => meq}
+import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
