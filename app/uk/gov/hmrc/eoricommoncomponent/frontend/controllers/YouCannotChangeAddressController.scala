@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
@@ -36,13 +37,16 @@ class YouCannotChangeAddressController @Inject() (
   youCannotChangeAddressOrganisation: you_cannot_change_address_organisation,
   youCannotChangeAddressIndividual: you_cannot_change_address_individual,
   mcc: MessagesControllerComponents
-) extends CdsController(mcc) {
+) extends CdsController(mcc) with Logging {
 
   def page(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
     implicit request => _: LoggedInUserWithEnrolments =>
       if (requestSessionData.isIndividualOrSoleTrader(request) || requestSessionData.isPartnership(request))
         Future.successful(Ok(youCannotChangeAddressIndividual(service)))
-      else Future.successful(Ok(youCannotChangeAddressOrganisation(service)))
+      else {
+        logger.info("Your answers do not match our records page loaded")
+        Future.successful(Ok(youCannotChangeAddressOrganisation(service)))
+      }
   }
 
 }
