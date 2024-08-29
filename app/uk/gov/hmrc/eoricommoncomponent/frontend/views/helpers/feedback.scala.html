@@ -17,14 +17,23 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
 
-@this(appConfig: AppConfig)
+@this(link: link, appConfig: AppConfig,subHeading: h2, paragraph: paragraph)
 
 @()(implicit messages: Messages, request: Request[_])
 
-<div id="what-you-think" class="govuk-!-padding-top-5 govuk-!-padding-bottom-5">
+<div id="what-you-think" class="govuk-!-margin-top-2 govuk-!-margin-bottom-9">
+    @subHeading(
+        msg = "cds.common.feedback.title",
+        id = Some("feedback-heading")
+    )
+
+    @paragraph(
+        text = messages("cds.common.feedback.info"),
+        id = Some("feedback-text1")
+    )
+
     <p class="govuk-body">
-        <a id="feedback_link" href="@{appConfig.feedbackUrl(service)}" class="govuk-link" rel="noopener noreferrer">
-            @messages("cds.subscription.outcomes.feedback")
-        </a>
+        <a id="feedback_link" href="@{appConfig.feedbackUrl(service)}" class="govuk-link">@messages("cds.common.feedback.link")</a>
+        @messages("cds.common.feedback.link.description")
     </p>
 </div>

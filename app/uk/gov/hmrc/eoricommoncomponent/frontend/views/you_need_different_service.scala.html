@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 
-@this(layout_di: layout)
+@this(layout_di: layout, feedback_di: helpers.feedback)
 @(service: Service)(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages("cds.matching.different-service.title-and-heading"), service = service) {
@@ -26,6 +26,7 @@
 
         <p class="govuk-body">@Html(messages("cds.matching.different-service.para1"))</p>
 
+        @feedback_di()
         @helpers.helpAndSupport()
     </div>
 }

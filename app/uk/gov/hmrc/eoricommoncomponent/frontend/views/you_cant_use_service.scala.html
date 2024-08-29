@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 
-@this(layout_di: layout, govukButton: GovukButton)
+@this(layout_di: layout, feedback_di: helpers.feedback, govukButton: GovukButton)
 
 @(userType: Option[AffinityGroup], service: Service)(implicit messages: Messages, request: Request[_])
 
@@ -38,7 +38,7 @@
         href = Some(logout(service).url),
         id = Some("continue-button")
     ))
-
+    @feedback_di()
     @helpers.helpAndSupport()
 </div>
 }
