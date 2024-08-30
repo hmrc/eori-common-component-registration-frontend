@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 
-@this(layout_di: layout,appConfig:AppConfig)
+@this(layout_di: layout,feedback_di: helpers.feedback, appConfig:AppConfig)
 @(service: Service)(implicit request: Request[_], messages: Messages)
 @link = {
     <a id="contact_link" href="@appConfig.companiesHouseRegister" target="_blank" class="govuk-link" rel="noopener noreferrer">
@@ -30,6 +30,10 @@
 
         <p class="govuk-body" id="contact-info">@Html(messages("ecc.cannot-change-address-company.info",link))</p>
 
+        @feedback_di()
+
         @helpers.helpAndSupport()
+
+
     </div>
 }

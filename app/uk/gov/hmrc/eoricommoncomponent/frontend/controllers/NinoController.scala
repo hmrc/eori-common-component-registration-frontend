@@ -25,6 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWit
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_nino}
 
 import javax.inject.{Inject, Singleton}
@@ -36,52 +37,48 @@ class NinoController @Inject() (
   mcc: MessagesControllerComponents,
   matchNinoView: match_nino,
   matchingService: MatchingService,
-  errorView: error_template
+  errorView: error_template,
+  sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-            service
-          )
-        )
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
+        Ok(matchNinoView(ninoForm, organisationType, service))
       )
-    //  Previous usual behavior DDCYLS-5614
-//      Future.successful(Ok(matchNinoView(ninoForm, organisationType, service)))
     }
 
-  //  Previous usual behavior DDCYLS-5614
-//  def submit(organisationType: String, service: Service): Action[AnyContent] =
-//    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-//      ninoForm.bindFromRequest().fold(
-//        invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
-//        form =>
-//          matchingService.matchIndividualWithNino(
-//            form.nino,
-//            Individual.withLocalDate(form.firstName, form.lastName, form.dateOfBirth),
-//            GroupId(loggedInUser.groupId)
-//          ).fold(
-//            {
-//              case MatchingServiceConnector.matchFailureResponse =>
-//                val errorForm = ninoForm
-//                  .withGlobalError(Messages("cds.matching-error.individual-not-found"))
-//                  .fill(form)
-//                BadRequest(matchNinoView(errorForm, organisationType, service))
-//              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-//              case _                                                  => InternalServerError(errorView(service))
-//            },
-//            _ =>
-//              Redirect(
-//                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.form(
-//                  service,
-//                  isInReviewMode = false
-//                )
-//              )
-//          )
-//      )
-//    }
+  def submit(organisationType: String, service: Service): Action[AnyContent] =
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      ninoForm.bindFromRequest().fold(
+        invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
+        form =>
+          matchingService.matchIndividualWithNino(
+            form.nino,
+            Individual.withLocalDate(form.firstName, form.lastName, form.dateOfBirth),
+            GroupId(loggedInUser.groupId)
+          ).fold(
+            {
+              case MatchingServiceConnector.matchFailureResponse =>
+                val errorForm = ninoForm
+                  .withGlobalError(Messages("cds.matching-error.individual-not-found"))
+                  .fill(form)
+                BadRequest(matchNinoView(errorForm, organisationType, service))
+              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+              case _                                                  => InternalServerError(errorView(service))
+            },
+            _ =>
+              Redirect(
+                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.form(
+                  service,
+                  isInReviewMode = false
+                )
+              )
+          )
+      )
+    }
 
 }

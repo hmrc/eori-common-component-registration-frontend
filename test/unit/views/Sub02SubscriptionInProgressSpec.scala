@@ -59,7 +59,9 @@ class Sub02SubscriptionInProgressSpec extends ViewSpec {
     "have the feedback link" in {
       doc
         .getElementById("what-you-think")
-        .text() must include("What did you think of this service?")
+        .text() must include(
+        "Before you go Your feedback helps us make our service better. Take a short survey to share your feedback on this service."
+      )
       doc.getElementById("feedback_link").attributes().get("href") must endWith(
         "/feedback/eori-common-component-register-atar"
       )

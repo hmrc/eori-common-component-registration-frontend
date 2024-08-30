@@ -16,21 +16,18 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import cats.data.EitherT
-import play.api.i18n.Messages
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.HowCanWeIdentifyYouUtrViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,98 +35,63 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class GYEHowCanWeIdentifyYouUtrController @Inject() (
   authAction: AuthAction,
-  matchingService: MatchingService,
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you_utr,
   orgTypeLookup: OrgTypeLookup,
+  sessionCache: SessionCache,
+  requestSessionData: RequestSessionData,
   sessionCacheService: SessionCacheService,
-  errorView: error_template
+  matchingService: MatchingService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def form(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController.form(
-            service
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
+        Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
+      else
+        for {
+          orgType <- orgTypeLookup.etmpOrgType
+        } yield Ok(
+          howCanWeIdentifyYouView(
+            subscriptionUtrForm,
+            isInReviewMode = false,
+            routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+            HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
+            service = service
           )
         )
-      )
-    //  Previous usual behavior DDCYLS-5614
-//      for {
-//        orgType <- orgTypeLookup.etmpOrgType
-//      } yield Ok(
-//        howCanWeIdentifyYouView(
-//          subscriptionUtrForm,
-//          isInReviewMode = false,
-//          routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-//          HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
-//          service = service
-//        )
-//      )
-
     }
 
-  //  Previous usual behavior DDCYLS-5614
-//  def submit(service: Service): Action[AnyContent] =
-//    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-//      orgTypeLookup.etmpOrgType.flatMap(
-//        orgType =>
-//          subscriptionUtrForm.bindFromRequest().fold(
-//            formWithErrors =>
-//              Future.successful(
-//                BadRequest(
-//                  howCanWeIdentifyYouView(
-//                    formWithErrors,
-//                    isInReviewMode = false,
-//                    routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-//                    HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
-//                    service = service
-//                  )
-//                )
-//              ),
-//            formData =>
-//              matchOnId(formData, GroupId(loggedInUser.groupId)).fold(
-//                {
-//                  case MatchingServiceConnector.matchFailureResponse =>
-//                    matchNotFoundBadRequest(formData, service, orgType)
-//                  case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-//                  case _                                                  => InternalServerError(errorView(service))
-//                },
-//                _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-//              )
-//          )
-//      )
-//    }
-
-  private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
-    hc: HeaderCarrier,
-    request: Request[_]
-  ): EitherT[Future, ResponseError, Unit] = EitherT {
-    sessionCacheService
-      .retrieveNameDobFromCache()
-      .flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId).value)
-  }
-
-  private def matchNotFoundBadRequest(
-    individualFormData: IdMatchModel,
-    service: Service,
-    etmpOrganisationType: EtmpOrganisationType
-  )(implicit request: Request[AnyContent]): Result = {
-    val errorForm = subscriptionUtrForm
-      .withGlobalError(Messages("cds.matching-error.individual-not-found"))
-      .fill(individualFormData)
-    BadRequest(
-      howCanWeIdentifyYouView(
-        errorForm,
-        isInReviewMode = false,
-        routes.GYEHowCanWeIdentifyYouUtrController.form(service),
-//        routes.GYEHowCanWeIdentifyYouUtrController.submit(service), //  Previous usual behavior DDCYLS-5614
-        HowCanWeIdentifyYouUtrViewModel.forHintMessage(etmpOrganisationType),
-        service = service
+  def submit(service: Service): Action[AnyContent] =
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      orgTypeLookup.etmpOrgType.flatMap(
+        orgType =>
+          subscriptionUtrForm.bindFromRequest().fold(
+            formWithErrors =>
+              Future.successful(
+                BadRequest(
+                  howCanWeIdentifyYouView(
+                    formWithErrors,
+                    isInReviewMode = false,
+                    routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+                    HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
+                    service = service
+                  )
+                )
+              ),
+            formData =>
+              for {
+                _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Utr(formData.id))))
+                ind <- sessionCacheService.retrieveNameDobFromCache()
+                _ = matchingService.matchIndividualWithNino(
+                  formData.id,
+                  ind,
+                  GroupId(user.groupId.getOrElse(throw new Exception("GroupId does not exists")))
+                )
+              } yield Redirect(PostCodeController.createForm(service))
+          )
       )
-    )
-  }
+    }
 
 }

@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 
 
-@this(layout_di: layout)
+@this(layout_di: layout, feedback_di: helpers.feedback)
 @(service: Service)(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages("cds.registration.you-need-a-different-service-iom.title"), service = service) {
@@ -30,7 +30,7 @@
         <li><a href="https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes" id="vat-registered" class="govuk-link">@messages("cds.registration.you-need-a-different-service-iom.vat-registered")</a></li>
         <li><a href="https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no" id="not-vat-registered" class="govuk-link">@messages("cds.registration.you-need-a-different-service-iom.not-vat-registered")</a></li>
     </ul>
-
+    @feedback_di()
     @helpers.helpAndSupport()
 </div>
 }

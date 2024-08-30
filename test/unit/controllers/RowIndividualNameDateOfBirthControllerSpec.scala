@@ -34,6 +34,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.RowIndividualNameDat
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
 import util.ControllerSpec
 import util.builders.AuthActionMock
@@ -51,12 +52,14 @@ class RowIndividualNameDateOfBirthControllerSpec
       extends AbstractControllerFixture[RowIndividualNameDateOfBirthController] {
     val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
-    private val rowIndividualNameDob = instanceOf[row_individual_name_dob]
-    private val mockAuthAction       = authAction(mockAuthConnector)
+    private val rowIndividualNameDob   = instanceOf[row_individual_name_dob]
+    private val mockAuthAction         = authAction(mockAuthConnector)
+    private val mockRequestSessionData = instanceOf[RequestSessionData]
 
     override val controller = new RowIndividualNameDateOfBirthController(
       mockAuthAction,
       mockSubscriptionDetailsService,
+      mockRequestSessionData,
       mcc,
       rowIndividualNameDob
     )(global)
@@ -73,8 +76,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       с.form(organisationType, atarService)
 
     protected def submit(c: RowIndividualNameDateOfBirthController): Action[AnyContent] =
-//      c.submit(false, organisationType, atarService) //  Previous usual behavior DDCYLS-5614
-      c.form(organisationType, atarService)
+      c.submit(false, organisationType, atarService)
 
     def formData(thirdCountryIndividual: IndividualNameAndDateOfBirth): Map[String, String] =
       form.mapping.unbind(thirdCountryIndividual)
@@ -103,23 +105,20 @@ class RowIndividualNameDateOfBirthControllerSpec
       "show the form without errors when user hasn't been registered yet" in withControllerFixture {
         controllerFixture =>
           controllerFixture.showForm { result =>
-            //  Previous usual behavior DDCYLS-5614
-//            status(result) shouldBe OK
-//            val page = CdsPage(contentAsString(result))
-//            page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
-//
-//            val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
-//
-//            assertPresentOnPage(webPage.givenNameElement)
-//            assertPresentOnPage(webPage.familyNameElement)
-//            assertPresentOnPage(webPage.dateOfBirthElement)
-//            page.getElementAttributeAction(
-//              webPage.formElement
-//            ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController
-//              .form(organisationType, atarService)
-//              .url
-            status(result) shouldBe SEE_OTHER
-            header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+            status(result) shouldBe OK
+            val page = CdsPage(contentAsString(result))
+            page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+
+            val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
+
+            assertPresentOnPage(webPage.givenNameElement)
+            assertPresentOnPage(webPage.familyNameElement)
+            assertPresentOnPage(webPage.dateOfBirthElement)
+            page.getElementAttributeAction(
+              webPage.formElement
+            ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController
+              .form(organisationType, atarService)
+              .url
           }
       }
     }
@@ -129,8 +128,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       withControllerFixture { controllerFixture =>
         assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
           controllerFixture.mockAuthConnector,
-//          controllerFixture.controller.submit(false, organisationType, atarService) //  Previous usual behavior DDCYLS-5614
-          controllerFixture.controller.form(organisationType, atarService)
+          controllerFixture.controller.submit(false, organisationType, atarService)
         )
       }
 
@@ -141,28 +139,25 @@ class RowIndividualNameDateOfBirthControllerSpec
           when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any[Request[_]])).thenReturn(
             Future.successful((): Unit)
           )
-          if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual")
+          if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual") {
             submitForm(formData(individualNameAndDateOfBirth)) { result =>
               CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
               status(result) shouldBe SEE_OTHER
               result.futureValue.header.headers(
                 LOCATION
-                //  Previous usual behavior DDCYLS-5614
-//              ) shouldBe s"/customs-registration-services/atar/register/matching/utr/$organisationType"
-              ) shouldBe s"/customs-registration-services/atar/register/ind-st-use-a-different-service"
+              ) shouldBe s"/customs-registration-services/atar/register/matching/utr/$organisationType"
             }
-//            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any()) //  Previous usual behavior DDCYLS-5614
-          else
+            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
+          } else {
             submitForm(formData(individualNameAndDateOfBirth)) { result =>
               CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
               status(result) shouldBe SEE_OTHER
               result.futureValue.header.headers(
                 LOCATION
-                //  Previous usual behavior DDCYLS-5614
-//              ) shouldBe s"/customs-registration-services/atar/register/matching/address/$organisationType"
-              ) shouldBe s"/customs-registration-services/atar/register/ind-st-use-a-different-service"
+              ) shouldBe s"/customs-registration-services/atar/register/matching/address/$organisationType"
             }
-//            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
+            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
+          }
       }
 
       "wait until the registration request is completed" in testControllerWithModel(validFormModelGens) {
@@ -170,18 +165,12 @@ class RowIndividualNameDateOfBirthControllerSpec
           import controllerFixture._
           registerIndividualMockFailure(emulatedFailure)
 
-//          val caught = intercept[RuntimeException] {
-//            submitForm(formData(individualNameAndDateOfBirth)) { result =>
-//              await(result)
-//            }
-//          }
-//          caught shouldBe emulatedFailure
-
-          submitForm(formData(individualNameAndDateOfBirth)) { result =>
-            status(result) shouldBe SEE_OTHER
-            header("Location", result).value should endWith("register/ind-st-use-a-different-service")
+          val caught = intercept[RuntimeException] {
+            submitForm(formData(individualNameAndDateOfBirth)) { result =>
+              await(result)
+            }
           }
-
+          caught shouldBe emulatedFailure
       }
     }
 
@@ -191,9 +180,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "be mandatory" in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> ""), webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth) + (givenNameField -> ""), webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> ""), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
             "Enter your given name"
@@ -203,9 +190,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "not be empty" in testControllerWithModel(validFormModelGens.copy(firstNameGen = emptyString)) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth), webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
             "Enter your given name"
@@ -215,9 +200,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "not allow invalid characters" in testControllerWithModel(validFormModelGens.copy(firstNameGen = emptyString)) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> "!!!!!!''''!!!"), webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth) + (givenNameField -> "!!!!!!''''!!!"), webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> "!!!!!!''''!!!"), webPage)(
             givenNameField,
             fieldLevelErrorGivenName,
             "Enter a given name without invalid characters"
@@ -228,9 +211,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         validFormModelGens.copy(firstNameGen = oversizedNameGenerator())
       ) { (controllerFixture, individualNameAndDateOfBirth) =>
         import controllerFixture._
-        //  Previous usual behavior DDCYLS-5614
-//        assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
-        assertRedirect(formData(individualNameAndDateOfBirth), webPage)(
+        assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
           GivenName,
           fieldLevelErrorGivenName,
           "The given name must be 35 characters or less"
@@ -244,9 +225,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "be mandatory" in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> ""), webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth) + (familyNameField -> ""), webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> ""), webPage)(
             familyNameField,
             fieldLevelErrorFamilyName,
             "Enter your family name"
@@ -256,9 +235,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "not be empty" in testControllerWithModel(validFormModelGens.copy(lastNameGen = emptyString)) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth), webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
             familyNameField,
             fieldLevelErrorFamilyName,
             "Enter your family name"
@@ -268,9 +245,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "not allow invalid characters" in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> "!!!!!!''''!!!"), webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth) + (familyNameField -> "!!!!!!''''!!!"), webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> "!!!!!!''''!!!"), webPage)(
             familyNameField,
             fieldLevelErrorFamilyName,
             "Enter a family name without invalid characters"
@@ -281,9 +256,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         validFormModelGens.copy(lastNameGen = oversizedNameGenerator())
       ) { (controllerFixture, individualNameAndDateOfBirth) =>
         import controllerFixture._
-        //  Previous usual behavior DDCYLS-5614
-//        assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
-        assertRedirect(formData(individualNameAndDateOfBirth), webPage)(
+        assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
           FamilyName,
           fieldLevelErrorFamilyName,
           "The family name must be 35 characters or less"
@@ -297,9 +270,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "be mandatory" in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(
-          assertRedirect(
+          assertInvalidField(
             formData(individualNameAndDateOfBirth).view.filterKeys(!webPage.dateOfBirthFields.contains(_)).toMap,
             webPage
           )(DateOfBirth, fieldLevelErrorDateOfBirth, "Enter your date of birth")
@@ -309,9 +280,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
           val emptyDateFields: Map[String, String] = webPage.dateOfBirthFields.map(_ -> "").toMap
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth) ++ emptyDateFields, webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth) ++ emptyDateFields, webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth) ++ emptyDateFields, webPage)(
             DateOfBirth,
             fieldLevelErrorDateOfBirth,
             "Enter your date of birth"
@@ -321,9 +290,7 @@ class RowIndividualNameDateOfBirthControllerSpec
       "be a valid date" in testControllerWithModel(validFormModelGens) {
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> "32"), webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> "32"), webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> "32"), webPage)(
             DateOfBirth,
             fieldLevelErrorDateOfBirth,
             messages("date.day.error")
@@ -335,9 +302,7 @@ class RowIndividualNameDateOfBirthControllerSpec
           val tomorrow   = LocalDate.now().plusDays(1)
           val FutureDate = "Year must be between 1900 and this year"
           import controllerFixture._
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(
-          assertRedirect(
+          assertInvalidField(
             formData(individualNameAndDateOfBirth) ++ Map(
               dateOfBirthDayField   -> tomorrow.getDayOfMonth.toString,
               dateOfBirthMonthField -> tomorrow.getMonthValue.toString,
@@ -351,9 +316,7 @@ class RowIndividualNameDateOfBirthControllerSpec
         (controllerFixture, individualNameAndDateOfBirth) =>
           import controllerFixture._
           val lettersDateFields: Map[String, String] = webPage.dateOfBirthFields.zip(List("1", "May", "2000")).toMap
-          //  Previous usual behavior DDCYLS-5614
-//          assertInvalidField(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
-          assertRedirect(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
+          assertInvalidField(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
             DateOfBirth,
             fieldLevelErrorDateOfBirth,
             "Date of birth must be a real date"

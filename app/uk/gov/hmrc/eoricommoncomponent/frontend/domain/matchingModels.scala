@@ -222,12 +222,14 @@ object NameDobMatchModel {
   implicit val jsonFormat: OFormat[NameDobMatchModel] = Json.format[NameDobMatchModel]
 }
 
-case class NinoOrUtr(nino: Option[String], utr: Option[String], ninoOrUtrRadio: Option[String])
+case class NinoOrUtr(ninoOrUtrRadio: Option[CustomsId])
 
 object NinoOrUtr {
 
-  def apply(nino: Option[String], utr: Option[String], ninoOrUtrRadio: Option[String]): NinoOrUtr =
-    new NinoOrUtr(formatInput(nino), formatInput(utr), ninoOrUtrRadio)
+  implicit val jsonFormat: OFormat[NinoOrUtr] = Json.format[NinoOrUtr]
+
+  def apply(ninoOrUtrRadio: Option[CustomsId]): NinoOrUtr =
+    new NinoOrUtr(ninoOrUtrRadio)
 
 }
 

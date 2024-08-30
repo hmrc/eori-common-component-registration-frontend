@@ -51,12 +51,12 @@ class YouCannotChangeAddressControllerSpec extends ControllerSpec with AuthActio
   )
 
   "You cannot change address page" should {
-    "display contact HMRC page for individual" in {
+    "display Your answers do not match our records for individual" in {
       when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       createForm() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("Contact HMRC")
+        page.title() should startWith("Your answers do not match our records")
       }
     }
     "display contact Companies House page for organisation" in {
