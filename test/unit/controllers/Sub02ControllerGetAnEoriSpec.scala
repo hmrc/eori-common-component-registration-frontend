@@ -354,9 +354,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
             .getElementById("what-you-think")
             .text() shouldBe "Before you go Your feedback helps us make our service better. Take a short survey to share your feedback on this service."
 
-          page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include(
-            "Take a short survey"
-          )
+          page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include("Take a short survey")
           page.getElementsHref(RegistrationCompletePage.LeaveFeedbackLinkXpath) should endWith(
             "/feedback/eori-common-component-register-atar"
           )
@@ -389,9 +387,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
           page.getElementsText(RegistrationCompletePage.issuedDateXpath) shouldBe "issued by HMRC on 22 May 2016"
 
           page.elementIsPresent(RegistrationCompletePage.LeaveFeedbackLinkXpath) shouldBe true
-          page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include(
-            "Take a short survey"
-          )
+          page.getElementsText(RegistrationCompletePage.LeaveFeedbackLinkXpath) should include("Take a short survey")
           page.getElementsHref(RegistrationCompletePage.LeaveFeedbackLinkXpath) should endWith(
             "feedback/eori-common-component-register-eori-only"
           )
