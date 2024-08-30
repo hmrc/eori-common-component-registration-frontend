@@ -77,6 +77,12 @@ cds.enrolment-already-exists-against-groupid.step6=Save and exit.
 cds.enrolment-already-pending-against-groupid-gye.paragraph=The Government Gateway ID you used to sign in is part of a team that has already applied for an EORI number. This application is being processed.
 cds.enrolment-already-pending-against-groupid-migrate.paragraph=The Government Gateway ID you used to sign in is part of a team that has already applied Get access to CDS. This application is being processed.
 
+
+cds.common.feedback.title = Before you go
+cds.common.feedback.info = Your feedback helps us make our service better.
+cds.common.feedback.link = Take a short survey
+cds.common.feedback.link.description = to share your feedback on this service.
+
 #======================================
 # Countries
 #======================================
