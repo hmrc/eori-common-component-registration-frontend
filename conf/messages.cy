@@ -1513,7 +1513,7 @@ ecc.subscription.contact-address.heading = A ydych am i ni ddefnyddio’r cyfeir
 ecc.subscription.contact-address.title = A ydych am i ni ddefnyddio’r cyfeiriad hwn i anfon gwybodaeth atoch ynglŷn â’ch cais am rif EORI?
 ecc.address-details.heading.hint = Byddwn yn defnyddio’r cyfeiriad hwn i gysylltu â chi ynglŷn â’ch cais am rif EORI.
 ecc.manual-address-details.heading.hint = Byddwn yn defnyddio'r cyfeiriad hwn i ddilysu.
-ecc.manual-address-details.heading =  Nodwch eich cyfeiriad � llaw
+ecc.manual-address-details.heading =  Nodwch eich cyfeiriad � llaw
 ecc.manual-address-details.addressLine1.label = Cyfeiriad – llinell 1
 ecc.manual-address-details.city.label = Tref neu ddinas
 ecc.manual-address-details.postcode.label = Cod post
@@ -1766,11 +1766,11 @@ ecc.cannot-change-address-company.title = Cysylltwch â Thŷ’r Cwmnïau
 ecc.cannot-change-address-company.info = Cedwir eich cyfieiriad cofrestredig gan {0}. Bydd angen i chi ddiweddaru’ch manylion yno a dychwelyd i gwblhau’ch cais am rif EORI.
 ecc.cannot-change-address-company.link = Nhŷ’r Cwmnïau (yn agor tab newydd)
 
-ecc.cannot-change-address-individual.title = Nid yw?ch atebion yn cyd-fynd �?n cofnodion
-ecc.cannot-change-address-individual.info.line1 = Nid yw?r wybodaeth a roesoch yn cyd-fynd �?r cofnodion sydd gan CThEF amdanoch.
+ecc.cannot-change-address-individual.title = Nid yw?ch atebion yn cyd-fynd �?n cofnodion
+ecc.cannot-change-address-individual.info.line1 = Nid yw?r wybodaeth a roesoch yn cyd-fynd �?r cofnodion sydd gan CThEF amdanoch.
 ecc.cannot-change-address-individual.info.line2 = Gallwch {0}
 ecc.cannot-change-address-individual.info.line2.linkText = geisio nodi?ch manylion eto.
-ecc.cannot-change-address-individual.info.line3 = Os oes unrhyw newid wedi bod i?ch manylion personol, bydd angen i chi {0} Yna, gallwch fynd yn eich blaen �?ch cais am rif EORI.
+ecc.cannot-change-address-individual.info.line3 = Os oes unrhyw newid wedi bod i?ch manylion personol, bydd angen i chi {0} Yna, gallwch fynd yn eich blaen �?ch cais am rif EORI.
 ecc.cannot-change-address-individual.info.line3.linkText = roi gwybod i CThEF beth sydd wedi newid (yn agor tab newydd).
 
 ecc.address-invalid-individual.title = Cysylltwch â CThEF

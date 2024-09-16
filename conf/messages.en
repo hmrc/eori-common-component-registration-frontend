@@ -1467,7 +1467,7 @@ cds.banner.subscription.ndrc=Subscribe to Customs Trader Services
 cds.banner.subscription.gbss=Subscribe to the Safety and Security GB service
 cds.banner.subscription.ctc=Subscribe to the New Computerised Transit System (NCTS)
 cds.banner.subscription.cds=Subscribe to the Customs Declaration Service
-cds.banner.subscription.ma=Subscribe to Apply for and manage your customs and excise authorisations
+cds.banner.subscription.ma=Subscribe to customs and excise authorisations
 
 ecc.subscription.enter-eori-number.heading=What is your GB Economic Operator Registration and Identification (EORI) number?
 cds.subscription.enter-eori-number.no-eori.summary=I do not have an EORI number
