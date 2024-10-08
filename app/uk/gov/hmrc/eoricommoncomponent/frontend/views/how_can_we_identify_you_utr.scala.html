@@ -24,7 +24,7 @@
 
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h1: helpers.h1, h2 :helpers.h2, p: helpers.paragraph, errorSummary: helpers.errorSummary)
 
-@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, hintMessage: String,paragraph:String,subHeading:String, heading: String = "subscription-journey.how-confirm-identity.utr.heading", service: Service)(implicit request: Request[_], messages: Messages)
+@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, hintMessage: String,paragraph:String,subHeading:String, linkText:String, heading: String = "subscription-journey.how-confirm-identity.utr.heading", service: Service)(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages(heading), form = Some(utrForm), service = service) {
     <div>
@@ -35,7 +35,7 @@
 
         @h1(heading)
         @p(messages(paragraph))
-        @p(messages("subscription-journey.how-confirm-identity.utr.para"))  
+        @p(messages(linkText))  
         @h2(subHeading)
 
             @inputText(

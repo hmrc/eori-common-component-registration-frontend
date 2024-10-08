@@ -37,4 +37,8 @@ object HowCanWeIdentifyYouUtrViewModel {
     def forSubHeading(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
     if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.row.org.subheading")
     else messages("subscription-journey.how-confirm-identity.utr.row.subheading")
+
+    def forLinkText(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
+    if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.para")
+    else messages("subscription-journey.how-confirm-identity.utr.self.para")
 }

@@ -60,6 +60,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
             HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
             HowCanWeIdentifyYouUtrViewModel.forMessage(orgType),
             HowCanWeIdentifyYouUtrViewModel.forSubHeading(orgType),
+            HowCanWeIdentifyYouUtrViewModel.forLinkText(orgType),
             service = service
           )
         )
@@ -80,6 +81,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                     HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
                     HowCanWeIdentifyYouUtrViewModel.forMessage(orgType),
                     HowCanWeIdentifyYouUtrViewModel.forSubHeading(orgType),
+                    HowCanWeIdentifyYouUtrViewModel.forLinkText(orgType),
                     service = service
                   )
                 )
