@@ -22,9 +22,9 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h1: helpers.h1, p: helpers.paragraph, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h1: helpers.h1, h2 :helpers.h2, p: helpers.paragraph, errorSummary: helpers.errorSummary)
 
-@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, hintMessage: String, heading: String = "subscription-journey.how-confirm-identity.utr.heading", service: Service)(implicit request: Request[_], messages: Messages)
+@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, hintMessage: String,paragraph:String,subHeading:String, heading: String = "subscription-journey.how-confirm-identity.utr.heading", service: Service)(implicit request: Request[_], messages: Messages)
 
 @layout_di(messages(heading), form = Some(utrForm), service = service) {
     <div>
@@ -34,7 +34,9 @@
             @CSRF.formField
 
         @h1(heading)
-        @p(messages("subscription-journey.how-confirm-identity.utr.para"))
+        @p(messages(paragraph))
+        @p(messages("subscription-journey.how-confirm-identity.utr.para"))  
+        @h2(subHeading)
 
             @inputText(
                 form = utrForm,

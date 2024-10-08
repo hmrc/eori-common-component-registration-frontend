@@ -30,5 +30,11 @@ object HowCanWeIdentifyYouUtrViewModel {
       "subscription-journey.how-confirm-identity.utr.row.org.heading"
     case _ => "subscription-journey.how-confirm-identity.utr.heading"
   }
+    def forMessage(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
+    if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.row.org.message")
+    else messages("subscription-journey.how-confirm-identity.utr.row.message")
 
+    def forSubHeading(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
+    if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.row.org.subheading")
+    else messages("subscription-journey.how-confirm-identity.utr.row.subheading")
 }

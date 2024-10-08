@@ -1531,9 +1531,13 @@ cds.subscription.organisation-disclose-personal-details-consent.no = Dewiswch �
 subscription-journey.how-confirm-identity.nino.heading = Nodwch eich rhif Yswiriant Gwladol
 subscription-journey.how-confirm-identity.nino.hint = Mae hwn ar eich cerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading = Beth yw'ch Cyfeirnod Unigryw y Trethdalwr ar gyfer Hunanasesiad (UTR)?
-subscription-journey.how-confirm-identity.utr.row.org.heading=Beth yw’ch Cyfeirnod Unigryw y Trethdalwr ar gyfer Treth Gorfforaeth (UTR)?
-subscription-journey.how-confirm-identity.utr.para = Gallwch <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">ddod o hyd i UTR sydd ar goll (yn agor tab newydd)</a>
-subscription-journey.how-confirm-identity.utr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+subscription-journey.how-confirm-identity.utr.row.org.heading=Eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
+subscription-journey.how-confirm-identity.utr.para = <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">Gofynnwch am gopi o’ch UTR ar gyfer Treth Gorfforaeth (yn agor tab newydd)</a>
+subscription-journey.how-confirm-identity.utr.row.org.subheading=Beth yw eich UTR ar gyfer Treth Gorfforaeth?
+subscription-journey.how-confirm-identity.utr.hint = Gall eich UTR fod yn 10 neu’n 13 digid o hyd.
+subscription-journey.how-confirm-identity.utr.row.org.message=Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Treth Gorfforaeth. Efallai y cyfeirir ato gan ddefnyddio’r geiriau '‘cyfeirnod’', '‘UTR’' neu '‘defnydd swyddogol’'.
+subscription-journey.how-confirm-identity.utr.row.subheading=Beth yw eich UTR ar gyfer Hunanasesiad?
+subscription-journey.how-confirm-identity.utr.row.message=Bydd i’w weld yn eich Cyfrif Treth Personol, yn ap CThEF, neu ar Ffurflenni Treth a dogfennau eraill oddi wrth CThEF. Efallai y cyfeirir ato gan ddefnyddio’r geiriau '‘cyfeirnod’', '‘UTR’' neu '‘defnydd swyddogol’'.
 ecc.reg06.outcome.why-heading = Pam nad oedd y cais yn llwyddiannus
 ecc.reg06.outcome.eori = Rhif EORI {0}
 ecc.reg06.outcome.why.individual = Nid yw’r manylion canlynol yn cyd-fynd â’r enw a nodwyd gennych:

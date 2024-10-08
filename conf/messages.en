@@ -1758,11 +1758,14 @@ cds.subscription.vat-verification-option.no=Your latest VAT Return total
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ 12 34 56 C''
-subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Unique Taxpayer Reference (UTR)?
-subscription-journey.how-confirm-identity.utr.row.org.heading=What is your Corporation Tax Unique Taxpayer Reference (UTR)?
-subscription-journey.how-confirm-identity.utr.para=You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a>
-subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
-
+subscription-journey.how-confirm-identity.utr.heading=Your Self Assessment Unique Taxpayer Reference (UTR)
+subscription-journey.how-confirm-identity.utr.row.org.heading=Your Corporation Tax Unique Taxpayer Reference (UTR)
+subscription-journey.how-confirm-identity.utr.para=<a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Ask for a copy of your Corporation Tax UTR (opens in new tab)</a>
+subscription-journey.how-confirm-identity.utr.hint=Your UTR can be 10 or 13 digits long.
+subscription-journey.how-confirm-identity.utr.row.org.message= It will be on tax returns and other letters about Corporation Tax. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
+subscription-journey.how-confirm-identity.utr.row.message= You can find it in your Personal Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
+subscription-journey.how-confirm-identity.utr.row.org.subheading= What is your Corporation Tax UTR?
+subscription-journey.how-confirm-identity.utr.row.subheading= What is your Self Assessment UTR?
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
 ecc.reg06.outcome.eori = EORI number {0}
 ecc.reg06.outcome.why.individual = The following details do not match the name you entered:

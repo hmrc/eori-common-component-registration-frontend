@@ -58,6 +58,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
             isInReviewMode = false,
             routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
             HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
+            HowCanWeIdentifyYouUtrViewModel.forMessage(orgType),
+            HowCanWeIdentifyYouUtrViewModel.forSubHeading(orgType),
             service = service
           )
         )
@@ -76,6 +78,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                     isInReviewMode = false,
                     routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
                     HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
+                    HowCanWeIdentifyYouUtrViewModel.forMessage(orgType),
+                    HowCanWeIdentifyYouUtrViewModel.forSubHeading(orgType),
                     service = service
                   )
                 )
