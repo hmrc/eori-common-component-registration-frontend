@@ -75,7 +75,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                     formWithErrors,
                     isInReviewMode = false,
                     routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-                    HowCanWeIdentifyYouUtrViewModel.getPageContent(orgType, orgType.toString()),
+                    HowCanWeIdentifyYouUtrViewModel.getPageContent(orgType),
                     service = service
                   )
                 )
