@@ -1533,8 +1533,9 @@ subscription-journey.how-confirm-identity.nino.heading = Nodwch eich rhif Yswiri
 subscription-journey.how-confirm-identity.nino.hint = Mae hwn ar eich cerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading = Eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad
 subscription-journey.how-confirm-identity.utr.row.org.heading=Eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth
-subscription-journey.how-confirm-identity.utr.para = <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">Gofynnwch am gopi o’ch UTR ar gyfer Treth Gorfforaeth (yn agor tab newydd)</a>
-subscription-journey.how-confirm-identity.utr.self.para= <a href="https://www.gov.uk/dod-o-hyd-i-utr-sydd-ar-goll" class="govuk-link" target="_blank" rel="noopener noreferrer">Rhagor o help i ddod o hyd i’ch UTR (yn agor tab newydd)</a>
+subscription-journey.how-confirm-identity.find.utr=https://www.gov.uk/find-lost-utr-number
+subscription-journey.how-confirm-identity.utr.para = Gofynnwch am gopi o’ch UTR ar gyfer Treth Gorfforaeth (yn agor tab newydd)
+subscription-journey.how-confirm-identity.utr.self.para= Rhagor o help i ddod o hyd i’ch UTR (yn agor tab newydd)
 subscription-journey.how-confirm-identity.utr.row.org.subheading=Beth yw eich UTR ar gyfer Treth Gorfforaeth?
 subscription-journey.how-confirm-identity.utr.hint = Gall eich UTR fod yn 10 neu’n 13 digid o hyd.
 cds.matching.selction.utr.hint =Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.

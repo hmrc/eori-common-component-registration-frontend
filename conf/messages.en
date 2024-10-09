@@ -1761,8 +1761,9 @@ subscription-journey.how-confirm-identity.nino.heading=Enter your National Insur
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading=Your Self Assessment Unique Taxpayer Reference (UTR)
 subscription-journey.how-confirm-identity.utr.row.org.heading=Your Corporation Tax Unique Taxpayer Reference (UTR)
-subscription-journey.how-confirm-identity.utr.para=<a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Ask for a copy of your Corporation Tax UTR (opens in new tab)</a>
-subscription-journey.how-confirm-identity.utr.self.para=<a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Get more help to find your UTR (opens in new tab)</a>
+subscription-journey.how-confirm-identity.find.utr=https://www.gov.uk/find-lost-utr-number
+subscription-journey.how-confirm-identity.utr.para=Ask for a copy of your Corporation Tax UTR (opens in new tab)
+subscription-journey.how-confirm-identity.utr.self.para=Get more help to find your UTR (opens in new tab)
 subscription-journey.how-confirm-identity.utr.hint=Your UTR can be 10 or 13 digits long.
 subscription-journey.how-confirm-identity.utr.row.org.message= It will be on tax returns and other letters about Corporation Tax. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
 subscription-journey.how-confirm-identity.utr.row.message= You can find it in your Personal Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
