@@ -57,10 +57,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
             subscriptionUtrForm,
             isInReviewMode = false,
             routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-            HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
-            HowCanWeIdentifyYouUtrViewModel.forMessage(orgType),
-            HowCanWeIdentifyYouUtrViewModel.forSubHeading(orgType),
-            HowCanWeIdentifyYouUtrViewModel.forLinkText(orgType),
+            HowCanWeIdentifyYouUtrViewModel.getPageContent(orgType),
             service = service
           )
         )
@@ -78,10 +75,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                     formWithErrors,
                     isInReviewMode = false,
                     routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
-                    HowCanWeIdentifyYouUtrViewModel.forHintMessage(orgType),
-                    HowCanWeIdentifyYouUtrViewModel.forMessage(orgType),
-                    HowCanWeIdentifyYouUtrViewModel.forSubHeading(orgType),
-                    HowCanWeIdentifyYouUtrViewModel.forLinkText(orgType),
+                    HowCanWeIdentifyYouUtrViewModel.getPageContent(orgType, orgType.toString()),
                     service = service
                   )
                 )

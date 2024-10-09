@@ -22,29 +22,30 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
+
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h1: helpers.h1, h2 :helpers.h2, p: helpers.paragraph, errorSummary: helpers.errorSummary)
 
-@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, hintMessage: String,paragraph:String,subHeading:String, linkText:String, heading: String = "subscription-journey.how-confirm-identity.utr.heading", service: Service)(implicit request: Request[_], messages: Messages)
+@(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, pageContent: Map[String,String], service: Service)(implicit request: Request[_], messages: Messages)
 
-@layout_di(messages(heading), form = Some(utrForm), service = service) {
+@layout_di(messages(pageContent("headingMessage")), form = Some(utrForm), service = service) {
     <div>
         @errorSummary(utrForm.errors)
 
         @helpers.form(submit, "utrForm") {
             @CSRF.formField
 
-        @h1(heading)
-        @p(messages(paragraph))
-        @p(messages(linkText))  
-        @h2(subHeading)
+        @h1(messages(pageContent("headingMessage")))
+        @p(messages(pageContent("message")))
+        @p(messages(pageContent("linkText")))  
+        @h2(messages(pageContent("subHeading")))
 
             @inputText(
                 form = utrForm,
                 id = "utr",
                 name = "utr",
-                label = heading,
+                label = pageContent("headingMessage"),
                 isPageHeading = false,
-                hint = Some(hintMessage),
+                hint = Some(messages(pageContent("hintMessage"))),
                 classes = Some("govuk-!-width-one-half"),
                 labelClasses = Some("govuk-visually-hidden")
             )

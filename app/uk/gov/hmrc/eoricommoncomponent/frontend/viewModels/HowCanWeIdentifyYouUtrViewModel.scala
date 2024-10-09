@@ -21,26 +21,46 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, Cor
 
 object HowCanWeIdentifyYouUtrViewModel {
 
-  def forHintMessage(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
-    if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.hint")
-    else messages("cds.matching.partnership.utr.hint")
+  def getPageContent(orgType: EtmpOrganisationType, cdsOrgType: String = "")(implicit
+    messages: Messages
+  ): Map[String, String] = {
+    val hintMessage =
+      if (orgType == CorporateBody)
+        messages("subscription-journey.how-confirm-identity.utr.hint")
+      else
+        messages("cds.matching.partnership.utr.hint")
 
-  def heading(orgType: String) = orgType match {
-    case CdsOrganisationType.ThirdCountryOrganisationId | CdsOrganisationType.CharityPublicBodyNotForProfitId =>
-      "subscription-journey.how-confirm-identity.utr.row.org.heading"
-    case _ => "subscription-journey.how-confirm-identity.utr.heading"
+    val headingMessage = cdsOrgType match {
+      case CdsOrganisationType.ThirdCountryOrganisationId | CdsOrganisationType.CharityPublicBodyNotForProfitId =>
+        messages("subscription-journey.how-confirm-identity.utr.row.org.heading")
+      case _ => messages("subscription-journey.how-confirm-identity.utr.heading")
+    }
+
+    val message =
+      if (orgType == CorporateBody)
+        messages("subscription-journey.how-confirm-identity.utr.row.org.message")
+      else
+        messages("subscription-journey.how-confirm-identity.utr.row.message")
+
+    val subHeading =
+      if (orgType == CorporateBody)
+        messages("subscription-journey.how-confirm-identity.utr.row.org.subheading")
+      else
+        messages("subscription-journey.how-confirm-identity.utr.row.subheading")
+
+    val linkText =
+      if (orgType == CorporateBody)
+        messages("subscription-journey.how-confirm-identity.utr.para")
+      else
+        messages("subscription-journey.how-confirm-identity.utr.self.para")
+
+    Map(
+      "hintMessage"    -> hintMessage,
+      "headingMessage" -> headingMessage,
+      "message"        -> message,
+      "subHeading"     -> subHeading,
+      "linkText"       -> linkText
+    )
   }
-
-  def forMessage(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
-    if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.row.org.message")
-    else messages("subscription-journey.how-confirm-identity.utr.row.message")
-
-  def forSubHeading(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
-    if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.row.org.subheading")
-    else messages("subscription-journey.how-confirm-identity.utr.row.subheading")
-
-  def forLinkText(orgType: EtmpOrganisationType)(implicit messages: Messages): String =
-    if (orgType == CorporateBody) messages("subscription-journey.how-confirm-identity.utr.para")
-    else messages("subscription-journey.how-confirm-identity.utr.self.para")
 
 }
