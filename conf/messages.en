@@ -347,11 +347,12 @@ cds.matching.header.company=Company details
 cds.matching.intro=This will link your business, Government Gateway ID and EORI number together which helps you move and declare goods.
 cds.matching.individual.header=Enter your details
 cds.matching-lede=We will attempt to match your details against information we currently hold.
-cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
+cds.matching.utr.hint=Your UTR can be 10 or 13 digits long.
 cds.matching.utr.lost-utr-description=find a lost UTR (opens in new tab).
 
 cds.matching.utr.lost-utr-description-llp=find a lost UTR (opens in new tab).
-cds.matching.partnership.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
+cds.matching.partnership.utr.hint=Your UTR can be 10 or 13 digits long.
+cds.matching.selction.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
 
@@ -453,7 +454,7 @@ countries-in-the-eu.title=Countries in the EU
 #How can we identify you?
 subscription-journey.how-confirm-identity=What information can we use to confirm your identity?
 subscription-journey.utr.label=Self Assessment Unique Taxpayer Reference (UTR)
-subscription-journey.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or '''official use''.
+subscription-journey.utr.hint=Your UTR can be 10 or 13 digits long.
 
 cds.matching.id.page-error.nino=Enter your National Insurance number
 cds.matching.id.page-error.utr=Enter your Self Assessment UTR number
@@ -1266,7 +1267,7 @@ cds.subscription.address-details.page-error.postcode=Enter a valid postcode
 cds.subscription.address-details.page-error.countryCode=Enter your country
 cds.subscription.address-details.countryCode.error.label=Enter your country
 cds.subscription.address-details.country.emptyValueText=Pick a country
-cds.matching.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
+cds.matching.utr.hint=Your UTR can be 10 or 13 digits long.
 
 #address check limited companies
 confirm-business-details.heading2=Are these the organisation details you want to use to get an EORI number?
@@ -1758,11 +1759,16 @@ cds.subscription.vat-verification-option.no=Your latest VAT Return total
 
 subscription-journey.how-confirm-identity.nino.heading=Enter your National Insurance number
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ 12 34 56 C''
-subscription-journey.how-confirm-identity.utr.heading=What is your Self Assessment Unique Taxpayer Reference (UTR)?
-subscription-journey.how-confirm-identity.utr.row.org.heading=What is your Corporation Tax Unique Taxpayer Reference (UTR)?
-subscription-journey.how-confirm-identity.utr.para=You can <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">find a lost UTR (opens in new tab)</a>
-subscription-journey.how-confirm-identity.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ''reference'', ''UTR'' or ''official use''.
-
+subscription-journey.how-confirm-identity.utr.heading=Your Self Assessment Unique Taxpayer Reference (UTR)
+subscription-journey.how-confirm-identity.utr.row.org.heading=Your Corporation Tax Unique Taxpayer Reference (UTR)
+subscription-journey.how-confirm-identity.find.utr=https://www.gov.uk/find-lost-utr-number
+subscription-journey.how-confirm-identity.utr.para=Ask for a copy of your Corporation Tax UTR (opens in new tab)
+subscription-journey.how-confirm-identity.utr.self.para=Get more help to find your UTR (opens in new tab)
+subscription-journey.how-confirm-identity.utr.hint=Your UTR can be 10 or 13 digits long.
+subscription-journey.how-confirm-identity.utr.row.org.message= It will be on tax returns and other letters about Corporation Tax. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
+subscription-journey.how-confirm-identity.utr.row.message= You can find it in your Personal Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
+subscription-journey.how-confirm-identity.utr.row.org.subheading= What is your Corporation Tax UTR?
+subscription-journey.how-confirm-identity.utr.row.subheading= What is your Self Assessment UTR?
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
 ecc.reg06.outcome.eori = EORI number {0}
 ecc.reg06.outcome.why.individual = The following details do not match the name you entered:
