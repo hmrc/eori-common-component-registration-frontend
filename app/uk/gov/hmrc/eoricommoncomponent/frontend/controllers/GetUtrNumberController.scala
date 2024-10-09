@@ -114,7 +114,10 @@ class GetUtrNumberController @Inject() (
       form,
       isInReviewMode,
       routes.GetUtrNumberController.submit(organisationType, service, isInReviewMode),
-      HowCanWeIdentifyYouUtrViewModel.getPageContent(EtmpOrganisationType(CdsOrganisationType(organisationType)),organisationType),
+      HowCanWeIdentifyYouUtrViewModel.getPageContent(
+        EtmpOrganisationType(CdsOrganisationType(organisationType)),
+        organisationType
+      ),
       service
     )
 
