@@ -368,7 +368,7 @@ class NameUtrOrganisationControllerSpec
       responseError shouldBe MatchingServiceConnector.matchFailureResponse
     }
 
-    "return a error-template page when downstreamFailureResponse" in {
+    "return a 500 with error-template page when downstreamFailureResponse" in {
       when(
         mockMatchingService.matchBusiness(meq(ValidUtr), meq(CompanyOrganisation), meq(None), any())(
           any[Request[AnyContent]],
@@ -376,7 +376,7 @@ class NameUtrOrganisationControllerSpec
         )
       ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
       submitForm(ValidNameUtrRequest) { result =>
-        status(result) shouldBe OK
+        status(result) shouldBe INTERNAL_SERVER_ERROR
         val page = CdsPage(contentAsString(result))
         page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }

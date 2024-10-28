@@ -129,8 +129,9 @@ class NameIdOrganisationController @Inject() (
             {
               case MatchingServiceConnector.matchFailureResponse =>
                 Future.successful(matchNotFoundBadRequest(organisationType, conf, formData, service))
-              case MatchingServiceConnector.downstreamFailureResponse => Future.successful(Ok(errorView(service)))
-              case _                                                  => Future.successful(InternalServerError(errorView(service)))
+              case MatchingServiceConnector.downstreamFailureResponse =>
+                Future.successful(InternalServerError(errorView(service)))
+              case _ => Future.successful(InternalServerError(errorView(service)))
             },
             _ =>
               subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) map { _ =>
