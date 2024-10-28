@@ -136,7 +136,7 @@ class GetUtrNumberController @Inject() (
       {
         case MatchingServiceConnector.matchFailureResponse =>
           matchNotFoundBadRequest(organisationType, formData, isInReviewMode, service)
-        case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+        case MatchingServiceConnector.downstreamFailureResponse => InternalServerError(errorView(service))
         case _                                                  => InternalServerError(errorView(service))
       },
       _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))

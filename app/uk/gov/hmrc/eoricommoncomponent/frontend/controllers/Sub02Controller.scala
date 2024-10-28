@@ -156,7 +156,7 @@ class Sub02Controller @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
       for {
         _ <- sessionCache.journeyCompleted
-      } yield Ok(sub02RequestNotProcessed(service))
+      } yield InternalServerError(sub02RequestNotProcessed(service))
     }
 
   def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {

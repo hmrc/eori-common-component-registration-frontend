@@ -452,7 +452,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
       invokeRequestNotProcessed { result =>
         assertCleanedSession(result)
 
-        status(result) shouldBe OK
+        status(result) shouldBe INTERNAL_SERVER_ERROR
       }
     }
   }

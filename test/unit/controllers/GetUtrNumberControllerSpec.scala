@@ -189,7 +189,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
       }
     }
 
-    "return a OK  when business match is downstreamFailureResponse" in {
+    "return an INTERNAL_SERVER_ERROR when business match is downstreamFailureResponse" in {
       when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
       when(
@@ -201,7 +201,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
         )(any[Request[AnyContent]], any[HeaderCarrier])
       ).thenReturn(eitherT[Unit](MatchingServiceConnector.downstreamFailureResponse))
       submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
-        status(result) shouldBe OK
+        status(result) shouldBe INTERNAL_SERVER_ERROR
         val page = CdsPage(contentAsString(result))
         page.getElementsText("h1") shouldBe messages("cds.error.title")
       }
