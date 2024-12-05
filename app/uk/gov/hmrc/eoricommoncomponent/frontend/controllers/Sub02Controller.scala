@@ -154,9 +154,13 @@ class Sub02Controller @Inject() (
 
   def requestNotProcessed(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      for {
-        _ <- sessionCache.journeyCompleted
-      } yield Ok(sub02RequestNotProcessed(service))
+      sessionCache.journeyCompleted
+        .map(_ => Ok(sub02RequestNotProcessed(service)))
+        .recover {
+          case thrown: Throwable =>
+            logger.error(s"problem marking journey as completed, cause: ${thrown.getCause}, message: ${thrown.getMessage}")
+            Ok(sub02RequestNotProcessed(service))
+        }
     }
 
   def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
