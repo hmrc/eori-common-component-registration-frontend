@@ -524,6 +524,7 @@ cds.registration.user-location.location.islands.label=The Channel Islands
 cds.registration.user-location.location.islands-or-iom.label=Channel Islands or the Isle of Man
 cds.registration.user-location.location.eu.summary=Countries in the EU
 cds.registration.user-location.location.eu.hint=When trading, Channel Islands, Isle of Man, Akrotiri and Dhekelia, Faroe Islands are within the EU customs union.
+cds.registration.user-location.hint=This should be the location of the address you want to use for your EORI number registration.
 
 # Pre Journey Checks
 cds.registration.based-in-uk.title=Are you or your organisation based in the UK?
@@ -559,6 +560,11 @@ cds.matching.organisation-type.radio.individual.hint-text=Someone who is moving 
 cds.matching.organisation-type.radio.partnership.label=Partnership
 cds.matching.organisation-type.radio.limited-liability-partnership.label=Limited Liability Partnership
 cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label=Charity, public body or not for profit organisation
+cds.matching.organisation-type.radio.embassy.label=Embassy
+cds.matching.organisation-type.details.embassy=Help with these options
+cds.matching.organisation-type.details.content=<p>This is the business type you chose when you set up a business or registered with HMRC.</p>\
+<p>If your business is registered with Companies House, you can check your company type on your Companies House profile.</p>\
+<p><a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Search Companies House for company information (opens in new tab).</a></p>
 
 cds.matching.organisation-type.radio.eu-organisation.label=EU Organisation
 cds.matching.organisation-type.radio.eu-individual.label=EU Individual
@@ -1174,6 +1180,7 @@ cds.form.partner-address=Partnership address
 cds.form.company-address=Company address
 cds.form.organisation-address=Organisation address
 cds.form.business-details=Registered company address
+cds.form.embassy-address=Embassy’s address
 cds.form.shortened-name=Shortened name
 cds.form.sic-code=Standard Industrial Classification (SIC) code
 cds.form.gb-vat-number=VAT number
@@ -1193,6 +1200,7 @@ cds.form.check-answers.contact-telephone=Contact telephone
 cds.form.check-answers-company-details=Company details
 cds.form.check-answers-your-details=Your details
 cds.form.check-answers-partnership-details=Partnership details
+cds.form.check-answers-embassy-details=Embassy details
 cds.form.check-answers-organisation-details=Organisation details
 cds.form.check-answers-vat-details=VAT details
 cds.form.check-answers-contact-details=Contact details
@@ -1360,6 +1368,7 @@ cds.review-page.fax-prefix=fax:
 cds.registration.reg06.fail=Submission Failed
 cds.business-name.label=Registered company name
 cds.organisation-name.label=Organisation name
+cds.embassy-name.label=Embassy’s name
 cds.partner-name.label=Registered partnership name
 cds.check-your-details.utrnumber=Corporation Tax UTR number
 cds.check-your-details.utrnumber.partnership=Partnership Self Assessment UTR
@@ -2086,3 +2095,30 @@ cds.matching.ind-st-cannot-register-using-service.para1=This service is not avai
 cds.matching.ind-st-cannot-register-using-service.para2=You can:
 cds.matching.ind-st-cannot-register-using-service.link.text1=apply for an EORI number if you are VAT registered
 cds.matching.ind-st-cannot-register-using-service.link.text2=apply for an EORI number if you are not VAT registered
+
+#Embassy Name
+cds.matching.embassy.name.title=What is the embassy’s name?
+cds.matching.embassy.name.heading=What is the embassy’s name?
+cds.matching.embassy-name.error.name=Enter your registered embassy name
+cds.matching-error.business-details.embassy-name.invalid-char=Embassy name cannot contain ''<'' or ''>''
+
+#Embassy Address
+cds.matching.embassy-address.title=What is the embassy’s address?
+cds.matching.embassy-address.header=What is the embassy’s address?
+cds.matching.embassy-address.line-1=Address line 1
+cds.matching.embassy-address.line-2=Address line 2 (optional)
+cds.matching.embassy-address.town-city=Town or city
+cds.matching.embassy-address.postcode=Postcode
+cds.matching.embassy-address.line-1.error.empty=Enter the first line of your address
+cds.matching.embassy-address.line.error.invalid-chars=Address line cannot contain ''<'' or ''>''
+cds.matching.embassy-address.town-city.error.empty=Enter your town or city
+cds.matching.embassy-address.town-city.error.too-long=The town or city must be 35 characters or less
+
+#Your Contact Address
+cds.your-contact-address.title=What is your contact address?
+cds.your-contact-address.header=What is your contact address?
+cds.your-contact-address.info=We will use this address to contact you about this EORI number application.
+cds.your-contact-address.line-1=Address line 1
+cds.your-contact-address.line-2=Address line 2 (optional)
+cds.your-contact-address.town-city=Town or city
+cds.your-contact-address.postcode=Postcode

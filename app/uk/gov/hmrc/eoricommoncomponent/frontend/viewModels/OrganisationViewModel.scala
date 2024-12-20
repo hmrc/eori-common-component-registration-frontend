@@ -34,7 +34,8 @@ object OrganisationViewModel {
       ),
       CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
         "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
-      )
+      ),
+      CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
     )
 
     lazy val thirdCountryOptions = Seq(

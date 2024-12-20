@@ -20,6 +20,7 @@ import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Embassy
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -81,7 +82,7 @@ class ContactAddressController @Inject() (
         )
     }
 
-  private def fetchContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] =
+  private def fetchContactDetails()(implicit request: Request[AnyContent]): Future[AddressViewModel] = {
     cdsFrontendDataCache.subscriptionDetails flatMap { sd =>
       sd.contactDetails match {
         case Some(contactDetails) if contactDetails.street.isDefined =>
@@ -97,6 +98,7 @@ class ContactAddressController @Inject() (
           cdsFrontendDataCache.registrationDetails.map(rd => AddressViewModel(rd.address))
       }
     }
+  }
 
   private def saveAddressAndRedirect(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service)(implicit
     request: Request[AnyContent]
@@ -133,20 +135,32 @@ class ContactAddressController @Inject() (
 
   private def locationByAnswer(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service)(implicit
     request: Request[AnyContent]
-  ): Future[Result] = yesNoAnswer match {
-    case theAnswer if theAnswer.isYes =>
-      if (isInReviewMode)
-        Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
-      else
-        subscriptionFlowManager.stepInformation(ContactAddressSubscriptionFlowPageGetEori) match {
-          case Right(flowInfo) => Future.successful(Redirect(flowInfo.nextPage.url(service)))
-          case Left(_) =>
-            logger.warn(s"Unable to identify subscription flow: key not found in cache")
-            Future.successful(Redirect(ApplicationController.startRegister(service)))
+  ): Future[Result] = {
+    subscriptionDetailsService.cachedOrganisationType.map { optOrgType =>
+      if (optOrgType.contains(Embassy)) {
+        if (yesNoAnswer.isYes) {
+          Redirect(DetermineReviewPageController.determineRoute(service))
+        } else {
+          Redirect(WhatIsYourContactAddressController.showForm(service))
         }
-    case _ =>
-      Future(Redirect(AddressController.createForm(service)))
-
+      } else {
+        yesNoAnswer match {
+          case theAnswer if theAnswer.isYes =>
+            if (isInReviewMode) {
+              Redirect(DetermineReviewPageController.determineRoute(service))
+            } else {
+              subscriptionFlowManager.stepInformation(ContactAddressSubscriptionFlowPageGetEori) match {
+                case Right(flowInfo) => Redirect(flowInfo.nextPage.url(service))
+                case Left(_) =>
+                  logger.warn(s"Unable to identify subscription flow: key not found in cache")
+                  Redirect(ApplicationController.startRegister(service))
+              }
+            }
+          case _ =>
+            Redirect(AddressController.createForm(service))
+        }
+      }
+    }
   }
 
 }

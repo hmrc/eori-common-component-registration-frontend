@@ -271,6 +271,22 @@ object SixLineAddressMatchModel {
 
 }
 
+case class EmbassyAddressMatchModel(
+  lineOne: String,
+  lineTwo: Option[String],
+  townCity: String,
+  postcode: String,
+  country: String
+)
+
+case class ContactAddressMatchModel(
+  lineOne: String,
+  lineTwo: Option[String],
+  townCity: String,
+  postcode: String,
+  country: String
+)
+
 case class IndividualNameAndDateOfBirth(firstName: String, lastName: String, dateOfBirth: LocalDate)
     extends IndividualName
 

@@ -38,6 +38,18 @@ object Service {
   val regimeCDS         = "CDS"
   val eoriOnly: Service = Service("eori-only", "HMRC-CUS-ORG", "", None, "", "", None)
 
+  val goodsVehiclMovementCode = "gagmr"
+
+  val gagmr: Service = Service(
+    goodsVehiclMovementCode,
+    "HMRC-GVMS-ORG",
+    "GaGMR",
+    None,
+    "the Goods Vehicle Movement Service",
+    "y Gwasanaeth Symud Cerbydau Nwyddau",
+    None
+  )
+
   private val supportedServicesMap: Map[String, Service] = new ServiceConfig(
     Configuration(ConfigFactory.load())
   ).supportedServicesMap

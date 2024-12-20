@@ -453,6 +453,33 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
         holder.formData shouldBe subscriptionDetails.formData
         holderR shouldBe a[RegistrationDetailsOrganisation]
       }
+
+      "save subscription details with details updated from cache (Embassy)" in {
+        when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
+        when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
+        await(subscriptionDetailsHolderService.updateSubscriptionDetailsEmbassyName("U.S. Embassy"))
+
+        val requestCaptor  = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        val requestCaptorR = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+
+        verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+        verify(mockSessionCache).saveRegistrationDetails(requestCaptorR.capture())(ArgumentMatchers.eq(request))
+
+        val holder: SubscriptionDetails  = requestCaptor.getValue
+        val holderR: RegistrationDetails = requestCaptorR.getValue
+
+        holder.embassyName shouldBe subscriptionDetails.embassyName
+        holder.formData shouldBe subscriptionDetails.formData
+        holderR shouldBe a[RegistrationDetailsEmbassy]
+      }
+    }
+
+    "cachedEmbassyName" should {
+      "return cached embassy name" in {
+        val subscriptionDetails = SubscriptionDetails(embassyName = Some("Embassy Of Japan"))
+        when(mockSessionCache.subscriptionDetails).thenReturn(Future.successful(subscriptionDetails))
+        await(subscriptionDetailsHolderService.cachedEmbassyName(request)) shouldBe Some("Embassy Of Japan")
+      }
     }
   }
 }
