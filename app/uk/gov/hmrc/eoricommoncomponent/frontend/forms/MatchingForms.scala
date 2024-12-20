@@ -219,6 +219,14 @@ object MatchingForms extends Mappings with Logging {
     })
   }
 
+  private def validEmbassyName: Constraint[String] =
+    Constraint({
+      case s if s.isEmpty => Invalid(ValidationError("cds.matching.embassy-name.error.name"))
+      case s if !s.matches(noTagsRegex) =>
+        Invalid(ValidationError("cds.matching-error.business-details.embassy-name.invalid-char"))
+      case _ => Valid
+    })
+
   val nameUtrOrganisationForm: Form[NameIdOrganisationMatchModel] = Form(
     mapping("name" -> text.verifying(validBusinessName), "utr" -> text.verifying(validUtr))(
       NameIdOrganisationMatchModel.apply
@@ -439,6 +447,10 @@ object MatchingForms extends Mappings with Logging {
     mapping("have-nino" -> optional(boolean).verifying(validHaveNino))(NinoMatchModel.apply)(
       model => Some(model.haveNino)
     )
+  )
+
+  val embassyNameForm: Form[String] = Form(
+    mapping("name" -> text.verifying(validEmbassyName))(name => name)(name => Some(name))
   )
 
 }

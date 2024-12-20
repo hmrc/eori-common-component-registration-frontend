@@ -21,10 +21,11 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukDetails
+
 @import views.html.helper._
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
-
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, govukDetails : GovukDetails)
 
 @(OrganisationTypeForm: Form[CdsOrganisationType], userLocation: Option[UserLocation], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -36,16 +37,22 @@
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.OrganisationTypeController.submit(service), "OrganisationTypeForm") {
             @CSRF.formField
 
+            @h1(messages("cds.matching.organisation-type.user.header"))
+
+            @govukDetails(Details(
+                summary = Text(messages("cds.matching.organisation-type.details.embassy")),
+                content = HtmlContent(messages("cds.matching.organisation-type.details.content"))
+            ))
 
             @inputRadioGroup(
                 OrganisationTypeForm("organisation-type"),
                 validOptions(userLocation),
                 hintTextOptions(userLocation).toMap,
                 None,
-                None,
+                Some("govuk-visually-hidden"),
                 '_divClass -> "govuk-form-group",
                 '_legend -> messages("cds.matching.organisation-type.user.header"),
-                '_isLegendH1 -> true)
+                '_isLegendH1 -> false)
 
             @govukButton(Button(
                 content = Text(messages("cds.navigation.continue")),

@@ -30,6 +30,7 @@ object CdsOrganisationType {
   val PartnershipId                   = "partnership"
   val LimitedLiabilityPartnershipId   = "limited-liability-partnership"
   val CharityPublicBodyNotForProfitId = "charity-public-body-not-for-profit"
+  val EmbassyId                       = "embassy"
 
   val EUOrganisationId = "eu-organisation"
   val EUIndividualId   = "eu-individual"
@@ -44,6 +45,7 @@ object CdsOrganisationType {
   val Partnership: CdsOrganisationType                   = CdsOrganisationType(PartnershipId)
   val LimitedLiabilityPartnership: CdsOrganisationType   = CdsOrganisationType(LimitedLiabilityPartnershipId)
   val CharityPublicBodyNotForProfit: CdsOrganisationType = CdsOrganisationType(CharityPublicBodyNotForProfitId)
+  val Embassy: CdsOrganisationType                       = CdsOrganisationType(EmbassyId)
 
   val EUOrganisation: CdsOrganisationType = CdsOrganisationType(EUOrganisationId)
   val EUIndividual: CdsOrganisationType   = CdsOrganisationType(EUIndividualId)
@@ -63,7 +65,8 @@ object CdsOrganisationType {
     EUIndividualId                  -> EUIndividual,
     ThirdCountryOrganisationId      -> ThirdCountryOrganisation,
     ThirdCountrySoleTraderId        -> ThirdCountrySoleTrader,
-    ThirdCountryIndividualId        -> ThirdCountryIndividual
+    ThirdCountryIndividualId        -> ThirdCountryIndividual,
+    EmbassyId                       -> Embassy
   )
 
   val IndividualOrganisations: Seq[CdsOrganisationType] =

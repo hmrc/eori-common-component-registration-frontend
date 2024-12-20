@@ -145,7 +145,7 @@ class SubscriptionDetailsService @Inject() (
   )(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatControlListResponse = Some(vatControlListResponse)))
 
-  def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]) =
+  def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatRegisteredUk = Some(yesNoAnswer.isYes)))
 
   def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]): Future[Unit] =
@@ -162,6 +162,9 @@ class SubscriptionDetailsService @Inject() (
 
   def cachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =
     sessionCache.subscriptionDetails map (_.customsId)
+
+  def cachedEmbassyName(implicit request: Request[_]): Future[Option[String]] =
+    sessionCache.subscriptionDetails map (_.embassyName)
 
   private def updateSubscriptionDetails(implicit request: Request[_]) =
     for {
