@@ -36,7 +36,7 @@ class MatchOrganisationUtrViewModelSpec extends UnitSpec with ControllerSpec {
     (ThirdCountrySoleTraderId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
     (IndividualId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
     (SoleTraderId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
-    (CharityPublicBodyNotForProfitId, messages("cds.matching.organisation.utr.title-and-heading"))
+    (CharityPublicBodyNotForProfitId, messages("cds.matching.row-charity-public-body.utr.title-and-heading"))
   )
 
   val isNotSoleTraderExpected = Seq[(String, Boolean)](

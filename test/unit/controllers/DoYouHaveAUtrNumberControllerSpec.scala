@@ -200,7 +200,7 @@ class DoYouHaveAUtrNumberControllerSpec
       submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith(
-          s"/customs-registration-services/atar/register/are-you-vat-registered-in-uk"
+          s"/customs-registration-services/atar/register/your-organisation-address"
         )
       }
     }
@@ -216,7 +216,7 @@ class DoYouHaveAUtrNumberControllerSpec
       submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId, isInReviewMode = true) {
         result =>
           status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("/register/are-you-vat-registered-in-uk")
+          header("Location", result).value should endWith("/register/your-organisation-address")
       }
     }
   }

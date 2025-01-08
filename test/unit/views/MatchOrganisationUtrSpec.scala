@@ -40,12 +40,12 @@ class MatchOrganisationUtrSpec extends ViewSpec {
 
   "Match UTR page in the non sole trader case" should {
     "display correct title" in {
-      doc.title must startWith("Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) number?")
+      doc.title must startWith("Does your organisation have a Unique Taxpayer Reference (UTR) issued in the UK?")
     }
     "have the correct h1 text" in {
       doc.body
         .getElementsByTag("h1")
-        .text() mustBe "Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) number?"
+        .text() mustBe "Does your organisation have a Unique Taxpayer Reference (UTR) issued in the UK?"
     }
     "have the correct class on the h1" in {
       doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true

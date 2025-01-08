@@ -121,6 +121,10 @@ GET         /customs-registration-services/:service/register/your-contact-addres
 POST        /customs-registration-services/:service/register/your-contact-address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourContactAddressController.submit(isInReviewMode:Boolean = false, service: Service)
 POST        /customs-registration-services/:service/register/your-contact-address/review                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourContactAddressController.submit(isInReviewMode:Boolean = true, service: Service)
 
+GET         /customs-registration-services/:service/register/your-organisation-address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrganisationsAddressController.showForm(isInReviewMode:Boolean = false, service: Service)
+POST        /customs-registration-services/:service/register/your-organisation-address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrganisationsAddressController.submit(isInReviewMode:Boolean = false, service: Service)
+POST        /customs-registration-services/:service/register/your-organisation-address/review                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrganisationsAddressController.submit(isInReviewMode:Boolean = true, service: Service)
+
 GET         /customs-registration-services/:service/register/matching/:organisationType                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController.form(organisationType, service: Service)
 POST        /customs-registration-services/:service/register/matching/:organisationType                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController.submit(organisationType, service: Service)
 GET         /customs-registration-services/:service/register/matching/name/:organisationType             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController.showForm(isInReviewMode: Boolean = false, organisationType, service: Service)

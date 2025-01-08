@@ -59,6 +59,8 @@ class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit
   private def saveRegistrationDetails(orgType: CdsOrganisationType)(implicit request: Request[_]): Future[Boolean] = {
     if (IndividualOrganisations.contains(orgType)) sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
     else if (Embassy == orgType) sessionCache.saveRegistrationDetails(RegistrationDetailsEmbassy.initEmpty())
+    else if (CharityPublicBodyNotForProfit == orgType)
+      sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation.charityPublicBodyNotForProfit)
     else sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
   }
 

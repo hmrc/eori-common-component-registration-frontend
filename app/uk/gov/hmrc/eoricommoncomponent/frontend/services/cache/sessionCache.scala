@@ -120,11 +120,12 @@ class SessionCache @Inject() (
     rd: RegistrationDetails,
     groupId: GroupId,
     orgType: Option[CdsOrganisationType] = None
-  )(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] =
+  )(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] = {
     for {
       _                <- save4LaterService.saveOrgType(groupId, orgType)
       createdOrUpdated <- putData(regDetailsKey, Json.toJson(rd)) map (_ => true)
     } yield createdOrUpdated
+  }
 
   def saveRegistrationDetailsWithoutId(
     rd: RegistrationDetails,

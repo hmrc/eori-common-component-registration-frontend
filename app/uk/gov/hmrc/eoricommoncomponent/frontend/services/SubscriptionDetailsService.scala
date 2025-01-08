@@ -202,9 +202,16 @@ class SubscriptionDetailsService @Inject() (
 
   def updateSubscriptionDetailsOrganisation(implicit request: Request[_]): Future[Unit] =
     for {
-      _ <- sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
       _ <- updateSubscriptionDetails
     } yield ()
+
+  def updateSubscriptionDetailsOrgName(orgName: String)(implicit request: Request[_]): Future[Unit] = {
+    sessionCache.registrationDetails.flatMap {
+      case rdo: RegistrationDetailsOrganisation =>
+        sessionCache.saveRegistrationDetails(rdo.copy(name = orgName))
+          .map(_ => updateSubscriptionDetails)
+    }
+  }
 
   def updateSubscriptionDetailsIndividual(implicit request: Request[_]): Future[Unit] =
     for {

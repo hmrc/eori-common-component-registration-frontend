@@ -26,6 +26,8 @@ object MatchOrganisationUtrViewModel {
       messages("cds.matching.row-organisation.utr.title-and-heading")
     case orgType if individualOrganisationIds.contains(orgType) =>
       messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")
+    case CharityPublicBodyNotForProfitId =>
+      messages("cds.matching.row-charity-public-body.utr.title-and-heading")
     case _ => messages("cds.matching.organisation.utr.title-and-heading")
   }
 

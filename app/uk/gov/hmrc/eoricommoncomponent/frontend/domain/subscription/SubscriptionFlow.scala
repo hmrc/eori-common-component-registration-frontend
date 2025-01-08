@@ -107,6 +107,27 @@ object SubscriptionFlows {
     )
   )
 
+  private val charityPublicBodyNotForProfitFlowConfig = createFlowConfig(
+    List(
+      SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
+      VatRegisteredUkSubscriptionFlowPage,
+      VatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
+  private val charityPublicBodySubscriptionNoUtrFlowConfig = createFlowConfig(
+    List(
+      EoriConsentSubscriptionFlowPage,
+      VatRegisteredUkSubscriptionFlowPage,
+      VatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
   val flows: Map[SubscriptionFlow, SubscriptionFlowConfig] = Map(
     OrganisationSubscriptionFlow             -> corporateFlowConfig,
     PartnershipSubscriptionFlow              -> partnershipFlowConfig,
@@ -115,7 +136,9 @@ object SubscriptionFlows {
     IndividualSubscriptionFlow               -> individualFlowConfig,
     ThirdCountryOrganisationSubscriptionFlow -> thirdCountryCorporateFlowConfig,
     ThirdCountrySoleTraderSubscriptionFlow   -> thirdCountrySoleTraderFlowConfig,
-    ThirdCountryIndividualSubscriptionFlow   -> thirdCountryIndividualFlowConfig
+    ThirdCountryIndividualSubscriptionFlow   -> thirdCountryIndividualFlowConfig,
+    CharityPublicBodySubscriptionFlow        -> charityPublicBodyNotForProfitFlowConfig,
+    CharityPublicBodySubscriptionNoUtrFlow   -> charityPublicBodySubscriptionNoUtrFlowConfig
   )
 
   private def createFlowConfig(flowStepList: List[SubscriptionPage]): SubscriptionFlowConfig =
@@ -150,6 +173,11 @@ case object ThirdCountryIndividualSubscriptionFlow
     extends SubscriptionFlow(ThirdCountryIndividual.id, isIndividualFlow = true)
 
 case object SoleTraderSubscriptionFlow extends SubscriptionFlow(SoleTrader.id, isIndividualFlow = true)
+
+case object CharityPublicBodySubscriptionFlow extends SubscriptionFlow("CharityPublicBody", isIndividualFlow = false)
+
+case object CharityPublicBodySubscriptionNoUtrFlow
+    extends SubscriptionFlow("CharityPublicBody", isIndividualFlow = false)
 
 object SubscriptionFlow extends Logging {
 

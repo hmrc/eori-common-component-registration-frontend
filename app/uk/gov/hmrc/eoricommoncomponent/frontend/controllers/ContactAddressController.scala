@@ -20,7 +20,7 @@ import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Embassy
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, Embassy}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -137,7 +137,7 @@ class ContactAddressController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] = {
     subscriptionDetailsService.cachedOrganisationType.map { optOrgType =>
-      if (optOrgType.contains(Embassy)) {
+      if (optOrgType.contains(Embassy) || optOrgType.contains(CharityPublicBodyNotForProfit)) {
         if (yesNoAnswer.isYes) {
           Redirect(DetermineReviewPageController.determineRoute(service))
         } else {

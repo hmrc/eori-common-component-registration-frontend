@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Embas
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.RegistrationDetailsEmbassy.{embassyReads, embassyWrites}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 
-import java.time.{Instant, LocalDate}
+import java.time.LocalDate
 
 case class BusinessAddress(
   line_1: String,
@@ -195,6 +195,17 @@ object RegistrationDetailsOrganisation {
       Address("", None, None, None, None, ""),
       None,
       None
+    )
+
+  def charityPublicBodyNotForProfit: RegistrationDetailsOrganisation =
+    new RegistrationDetailsOrganisation(
+      None,
+      TaxPayerId(""),
+      SafeId(""),
+      "",
+      Address("", None, None, None, None, ""),
+      None,
+      Some(UnincorporatedBody)
     )
 
 }

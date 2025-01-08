@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.ServiceConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Constants
 
 case class Service(
-  code: String,
+  code: String, // TODO consider a specific type for this later
   enrolmentKey: String,
   shortName: String,
   callBack: Option[String],
@@ -34,14 +34,15 @@ case class Service(
 
 object Service {
 
-  val cds: Service      = Service("cds", "HMRC-CUS-ORG", "", None, "", "", None)
-  val regimeCDS         = "CDS"
-  val eoriOnly: Service = Service("eori-only", "HMRC-CUS-ORG", "", None, "", "", None)
+  val regimeCDS = "CDS"
 
-  val goodsVehiclMovementCode = "gagmr"
+  val cdsCode                  = "cds"
+  val cds: Service             = Service(cdsCode, "HMRC-CUS-ORG", "", None, "", "", None)
+  val eoriOnly: Service        = Service("eori-only", "HMRC-CUS-ORG", "", None, "", "", None)
+  val goodsVehicleMovementCode = "gagmr"
 
   val gagmr: Service = Service(
-    goodsVehiclMovementCode,
+    goodsVehicleMovementCode,
     "HMRC-GVMS-ORG",
     "GaGMR",
     None,

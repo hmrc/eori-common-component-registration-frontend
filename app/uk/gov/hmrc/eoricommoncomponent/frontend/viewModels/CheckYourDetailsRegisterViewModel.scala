@@ -61,18 +61,18 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   def orgNameLabel(cdsOrgType: Option[CdsOrganisationType], isPartnership: Boolean)(implicit
     messages: Messages
   ): String = {
-    val orgNameLabel =
-      cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) || cdsOrgType.contains(
-        CdsOrganisationType.ThirdCountryOrganisation
-      )
+    val orgNameLabel = cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
+
+    val charityPublicBodiesLabel = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
 
     val isEmbassy = cdsOrgType.contains(CdsOrganisationType.Embassy)
 
-    (orgNameLabel, isPartnership, isEmbassy) match {
-      case (false, true, false) => messages("cds.partner-name.label")
-      case (true, false, false) => messages("cds.organisation-name.label")
-      case (false, false, true) => messages("cds.embassy-name.label")
-      case (_, _, _)            => messages("cds.business-name.label")
+    (orgNameLabel, isPartnership, isEmbassy, charityPublicBodiesLabel) match {
+      case (false, true, false, false) => messages("cds.partner-name.label")
+      case (true, false, false, false) => messages("cds.organisation-name.label")
+      case (false, false, false, true) => messages("cds.charity-public-body-name.label")
+      case (false, false, true, false) => messages("cds.embassy-name.label")
+      case (_, _, _, _)                => messages("cds.business-name.label")
 
     }
   }
@@ -86,18 +86,19 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         cdsOrgType.contains(CdsOrganisationType.Individual) ||
         cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
-    val orgNameLabel =
-      cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) ||
-        cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
+    val orgNameLabel = cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
+
+    val charityPublicBodyLabel = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
 
     val isEmbassy = cdsOrgType.contains(CdsOrganisationType.Embassy)
 
-    (isPartnership, soleAndIndividual, orgNameLabel, isEmbassy) match {
-      case (true, false, false, false) => messages("cds.form.partnership.contact-details")
-      case (false, true, false, false) => messages("cds.form.contact-details")
-      case (false, false, true, false) => messages("cds.form.organisation-address")
-      case (false, false, false, true) => messages("cds.form.embassy-address")
-      case (_, _, _, _)                => messages("cds.form.business-details")
+    (isPartnership, soleAndIndividual, orgNameLabel, isEmbassy, charityPublicBodyLabel) match {
+      case (true, false, false, false, false) => messages("cds.form.partnership.contact-details")
+      case (false, true, false, false, false) => messages("cds.form.contact-details")
+      case (false, false, true, false, false) => messages("cds.form.organisation-address")
+      case (false, false, false, false, true) => messages("cds.form.charity-public-body-address")
+      case (false, false, false, true, false) => messages("cds.form.embassy-address")
+      case (_, _, _, _, _)                    => messages("cds.form.business-details")
     }
   }
 
@@ -114,6 +115,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
     }
 
+    val isCharityPublicBodyNotForProfit = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
+
     registration.customsId match {
       case Some(Utr(_)) =>
         if (soleAndIndividual)
@@ -122,6 +125,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
           messages("cds.matching.name-id-organisation.company.utr")
         else if (isPartnership)
           messages("cds.check-your-details.utrnumber.partnership")
+        else if (isCharityPublicBodyNotForProfit)
+          messages("cds.organisation.utr.label")
         else
           messages("cds.company.utr.label")
       case Some(Nino(_)) => messages("cds.nino.label")

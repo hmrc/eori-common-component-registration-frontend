@@ -19,11 +19,12 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.CharityPublicBodyNotForProfit
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_vat_registration
 
 import java.time.LocalDate
@@ -37,7 +38,8 @@ class DateOfVatRegistrationController @Inject() (
   mcc: MessagesControllerComponents,
   dateOfVatRegistrationView: date_of_vat_registration,
   form: VatRegistrationDateFormProvider,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -54,20 +56,35 @@ class DateOfVatRegistrationController @Inject() (
 
   private def lookupDateOfVatRegistration(vatRegistrationDateInput: VatRegistrationDate, service: Service)(implicit
     request: Request[AnyContent]
-  ): Future[Result] =
+  ): Future[Result] = {
     subscriptionBusinessService.getCachedVatControlListResponse.map {
       case Some(response)
           if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
         Redirect(ContactDetailsController.createForm(service))
-      case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
+      case _ =>
+        Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }
+  }
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       vatRegistrationDateForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
-        formData => lookupDateOfVatRegistration(formData, service)
+        formData =>
+          subscriptionDetailsService.cachedOrganisationType.flatMap { optOrgType =>
+            optOrgType.filter(_ == CharityPublicBodyNotForProfit) match {
+              case Some(_) => saveDateOfRegAndRedirect(formData.dateOfRegistration, service)
+              case None    => lookupDateOfVatRegistration(formData, service)
+            }
+          }
       )
     }
+
+  private def saveDateOfRegAndRedirect(dateOfReg: LocalDate, service: Service)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] = {
+    subscriptionDetailsService.cacheVatControlListResponse(VatControlListResponse(dateOfReg = Some(dateOfReg.toString)))
+      .map(_ => Redirect(ContactDetailsController.createForm(service)))
+  }
 
 }

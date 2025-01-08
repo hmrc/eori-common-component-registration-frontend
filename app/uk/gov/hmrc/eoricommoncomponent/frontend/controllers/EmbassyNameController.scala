@@ -27,7 +27,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.embassy.EmbassyNameForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_embassy_name
 
 import javax.inject.Inject
@@ -38,8 +37,7 @@ class EmbassyNameController @Inject() (
   mcc: MessagesControllerComponents,
   embassyNameForm: EmbassyNameForm,
   whatIsYourEmbassyNameView: what_is_your_embassy_name,
-  subscriptionDetailsService: SubscriptionDetailsService,
-  requestSessionData: RequestSessionData
+  subscriptionDetailsService: SubscriptionDetailsService
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
