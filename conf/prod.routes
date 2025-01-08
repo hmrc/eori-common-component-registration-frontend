@@ -108,12 +108,18 @@ GET         /customs-registration-services/:service/register/matching/address/:o
 POST        /customs-registration-services/:service/register/matching/address/:organisationType          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SixLineAddressController.submit(isInReviewMode: Boolean = false, organisationType, service: Service)
 GET         /customs-registration-services/:service/register/matching/address/:organisationType/review   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SixLineAddressController.showForm(isInReviewMode: Boolean = true, organisationType, service: Service)
 POST        /customs-registration-services/:service/register/matching/address/:organisationType/review   @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SixLineAddressController.submit(isInReviewMode: Boolean = true, organisationType, service: Service)
-
-
+GET         /customs-registration-services/:service/register/matching/embassy-address                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyAddressController.showForm(isInReviewMode: Boolean = false, service: Service)
+POST        /customs-registration-services/:service/register/matching/embassy-address                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyAddressController.submit(isInReviewMode: Boolean = false, service: Service)
+GET         /customs-registration-services/:service/register/matching/embassy-address/review             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyAddressController.showForm(isInReviewMode: Boolean = true, service: Service)
+POST        /customs-registration-services/:service/register/matching/embassy-address/review             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyAddressController.submit(isInReviewMode: Boolean = true, service: Service)
 GET         /customs-registration-services/:service/register/address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController.createForm(service: Service)
 POST        /customs-registration-services/:service/register/address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController.submit(isInReviewMode:Boolean = false, service: Service)
 GET         /customs-registration-services/:service/register/address/review                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController.reviewForm(service: Service)
 POST        /customs-registration-services/:service/register/address/review                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController.submit(isInReviewMode:Boolean = true, service: Service)
+
+GET         /customs-registration-services/:service/register/your-contact-address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourContactAddressController.showForm(isInReviewMode:Boolean = false, service: Service)
+POST        /customs-registration-services/:service/register/your-contact-address                                     @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourContactAddressController.submit(isInReviewMode:Boolean = false, service: Service)
+POST        /customs-registration-services/:service/register/your-contact-address/review                              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourContactAddressController.submit(isInReviewMode:Boolean = true, service: Service)
 
 GET         /customs-registration-services/:service/register/matching/:organisationType                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController.form(organisationType, service: Service)
 POST        /customs-registration-services/:service/register/matching/:organisationType                  @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController.submit(organisationType, service: Service)
@@ -121,6 +127,12 @@ GET         /customs-registration-services/:service/register/matching/name/:orga
 POST        /customs-registration-services/:service/register/matching/name/:organisationType             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController.submit(isInReviewMode: Boolean = false, organisationType, service: Service)
 GET         /customs-registration-services/:service/register/matching/name/:organisationType/review      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController.showForm(isInReviewMode: Boolean = true,organisationType, service: Service)
 POST        /customs-registration-services/:service/register/matching/name/:organisationType/review      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController.submit(isInReviewMode: Boolean = true, organisationType, service: Service)
+
+GET         /customs-registration-services/:service/register/matching/embassy-name/:organisationType             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyNameController.showForm(isInReviewMode: Boolean = false, organisationType, service: Service)
+POST        /customs-registration-services/:service/register/matching/embassy-name/:organisationType             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyNameController.submit(isInReviewMode: Boolean = false, organisationType, service: Service)
+GET         /customs-registration-services/:service/register/matching/embassy-name/:organisationType/review      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyNameController.showForm(isInReviewMode: Boolean = true,organisationType, service: Service)
+POST        /customs-registration-services/:service/register/matching/embassy-name/:organisationType/review      @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyNameController.submit(isInReviewMode: Boolean = true, organisationType, service: Service)
+
 GET         /customs-registration-services/:service/register/matching/utr/:organisationType              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController.form(organisationType, service: Service, isInReviewMode: Boolean = false)
 POST        /customs-registration-services/:service/register/matching/utr/:organisationType              @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController.submit(organisationType, service: Service, isInReviewMode: Boolean = false)
 GET         /customs-registration-services/:service/register/matching/utr/:organisationType/review       @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController.form(organisationType, service: Service, isInReviewMode: Boolean = true)

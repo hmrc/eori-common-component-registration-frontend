@@ -32,7 +32,7 @@ case class CdsPage(html: String) {
   def getElementValue(xpath: String): String =
     selectElement(xpath).`val`()
 
-  def getElementById(id: String) = page.getElementById(id)
+  def getElementById(id: String): Element = page.getElementById(id)
 
   def getElementValueForLabel(labelXpath: String): String = {
     val elementId = getElementAttributeFor(labelXpath)

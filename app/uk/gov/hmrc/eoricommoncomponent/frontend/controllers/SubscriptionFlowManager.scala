@@ -128,6 +128,8 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
           SubscriptionFlow(OrganisationSubscriptionFlow.name)
         case _: RegistrationDetailsIndividual =>
           SubscriptionFlow(IndividualSubscriptionFlow.name)
+        case _: RegistrationDetailsEmbassy =>
+          SubscriptionFlow(EmbassySubscriptionFlow.name)
         case _ => throw DataUnavailableException("Incomplete cache cannot complete journey")
       }
 

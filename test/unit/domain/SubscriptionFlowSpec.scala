@@ -17,13 +17,20 @@
 package unit.domain
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{OrganisationSubscriptionFlow, SubscriptionFlow}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
+  EmbassySubscriptionFlow,
+  IndividualSubscriptionFlow,
+  OrganisationSubscriptionFlow,
+  SubscriptionFlow
+}
 
 class SubscriptionFlowSpec extends UnitSpec {
 
   "SubscriptionFlow object" should {
     "create for valid flow name" in {
       SubscriptionFlow("Organisation") shouldBe OrganisationSubscriptionFlow
+      SubscriptionFlow("Individual") shouldBe IndividualSubscriptionFlow
+      SubscriptionFlow("Embassy") shouldBe EmbassySubscriptionFlow
     }
     "throw an exception for create for invalid flow name" in {
       val thrown = intercept[IllegalStateException] {

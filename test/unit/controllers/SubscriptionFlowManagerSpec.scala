@@ -26,10 +26,11 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Session}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Company
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Embassy}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   CdsOrganisationType,
+  RegistrationDetailsEmbassy,
   RegistrationDetailsIndividual,
   RegistrationDetailsOrganisation
 }
@@ -54,6 +55,7 @@ class SubscriptionFlowManagerSpec
 
   private val mockOrgRegistrationDetails        = mock[RegistrationDetailsOrganisation]
   private val mockIndividualRegistrationDetails = mock[RegistrationDetailsIndividual]
+  private val mockEmbassyRegistrationDetails    = mock[RegistrationDetailsEmbassy]
   private val mockSession                       = mock[Session]
 
   private val mockRequest = mock[Request[AnyContent]]
@@ -248,7 +250,16 @@ class SubscriptionFlowManagerSpec
         6,
         6,
         ReviewDetailsPageGetYourEORI
-      )
+      ),
+      (EmbassySubscriptionFlow, EoriConsentSubscriptionFlowPage, 1, 3, ContactDetailsSubscriptionFlowPageGetEori),
+      (
+        EmbassySubscriptionFlow,
+        ContactDetailsSubscriptionFlowPageGetEori,
+        2,
+        3,
+        ContactAddressSubscriptionFlowPageGetEori
+      ),
+      (EmbassySubscriptionFlow, ContactAddressSubscriptionFlowPageGetEori, 3, 3, ReviewDetailsPageGetYourEORI)
     )
 
     TableDrivenPropertyChecks.forAll(values) {
@@ -338,6 +349,21 @@ class SubscriptionFlowManagerSpec
 
       verify(mockRequestSessionData)
         .storeUserSubscriptionFlow(OrganisationSubscriptionFlow, RegistrationConfirmPage.url(atarService))(mockRequest)
+    }
+
+    "start Embassy flow when cached registration details are for an Embassy" in {
+      when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(Some(Embassy))
+
+      when(mockCdsFrontendDataCache.registrationDetails(mockRequest))
+        .thenReturn(Future.successful(mockEmbassyRegistrationDetails))
+
+      val (subscriptionPage, session) = await(controller.startSubscriptionFlow(eoriOnlyService)(mockRequest))
+
+      subscriptionPage.isInstanceOf[SubscriptionPage] shouldBe true
+      session shouldBe mockSession
+
+      verify(mockRequestSessionData)
+        .storeUserSubscriptionFlow(EmbassySubscriptionFlow, RegistrationConfirmPage.url(eoriOnlyService))(mockRequest)
     }
   }
 }

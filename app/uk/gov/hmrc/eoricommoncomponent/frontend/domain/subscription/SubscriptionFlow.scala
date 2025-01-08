@@ -99,9 +99,18 @@ object SubscriptionFlows {
     )
   )
 
+  private val embassyFlowConfig = createFlowConfig(
+    List(
+      EoriConsentSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
   val flows: Map[SubscriptionFlow, SubscriptionFlowConfig] = Map(
     OrganisationSubscriptionFlow             -> corporateFlowConfig,
     PartnershipSubscriptionFlow              -> partnershipFlowConfig,
+    EmbassySubscriptionFlow                  -> embassyFlowConfig,
     SoleTraderSubscriptionFlow               -> soleTraderFlowConfig,
     IndividualSubscriptionFlow               -> individualFlowConfig,
     ThirdCountryOrganisationSubscriptionFlow -> thirdCountryCorporateFlowConfig,
@@ -124,6 +133,8 @@ case class SubscriptionFlowInfo(stepNumber: Int, totalSteps: Int, nextPage: Subs
 sealed abstract class SubscriptionFlow(val name: String, val isIndividualFlow: Boolean)
 
 case object OrganisationSubscriptionFlow extends SubscriptionFlow("Organisation", isIndividualFlow = false)
+
+case object EmbassySubscriptionFlow extends SubscriptionFlow("Embassy", isIndividualFlow = false)
 
 case object PartnershipSubscriptionFlow extends SubscriptionFlow("Partnership", isIndividualFlow = false)
 

@@ -61,13 +61,18 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   def orgNameLabel(cdsOrgType: Option[CdsOrganisationType], isPartnership: Boolean)(implicit
     messages: Messages
   ): String = {
-    val orgNameLabel = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) || cdsOrgType.contains(
-      CdsOrganisationType.ThirdCountryOrganisation
-    )
-    (orgNameLabel, isPartnership) match {
-      case (false, true) => messages("cds.partner-name.label")
-      case (true, false) => messages("cds.organisation-name.label")
-      case (_, _)        => messages("cds.business-name.label")
+    val orgNameLabel =
+      cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) || cdsOrgType.contains(
+        CdsOrganisationType.ThirdCountryOrganisation
+      )
+
+    val isEmbassy = cdsOrgType.contains(CdsOrganisationType.Embassy)
+
+    (orgNameLabel, isPartnership, isEmbassy) match {
+      case (false, true, false) => messages("cds.partner-name.label")
+      case (true, false, false) => messages("cds.organisation-name.label")
+      case (false, false, true) => messages("cds.embassy-name.label")
+      case (_, _, _)            => messages("cds.business-name.label")
 
     }
   }
@@ -85,11 +90,14 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
 
-    (isPartnership, soleAndIndividual, orgNameLabel) match {
-      case (true, false, false) => messages("cds.form.partnership.contact-details")
-      case (false, true, false) => messages("cds.form.contact-details")
-      case (false, false, true) => messages("cds.form.organisation-address")
-      case (_, _, _)            => messages("cds.form.business-details")
+    val isEmbassy = cdsOrgType.contains(CdsOrganisationType.Embassy)
+
+    (isPartnership, soleAndIndividual, orgNameLabel, isEmbassy) match {
+      case (true, false, false, false) => messages("cds.form.partnership.contact-details")
+      case (false, true, false, false) => messages("cds.form.contact-details")
+      case (false, false, true, false) => messages("cds.form.organisation-address")
+      case (false, false, false, true) => messages("cds.form.embassy-address")
+      case (_, _, _, _)                => messages("cds.form.business-details")
     }
   }
 
@@ -135,13 +143,18 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       val cdsOrgType    = requestSessionData.userSelectedOrganisationType
       val isPartnership = requestSessionData.isPartnershipOrLLP
 
-      val isIndividual: Boolean = cdsOrgType.contains(CdsOrganisationType.Individual) ||
+      val isIndividual = cdsOrgType.contains(CdsOrganisationType.Individual) ||
         cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+
       val isCharity = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
+
       val isSoleTrader = cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
+
       val isRowOrganisation = cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
+
+      val isEmbassy = cdsOrgType.contains(CdsOrganisationType.Embassy)
 
       val headerTitle =
         if (isPartnership)
@@ -150,6 +163,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
           messages("cds.form.check-answers-your-details")
         else if (isCharity || isRowOrganisation)
           messages("cds.form.check-answers-organisation-details")
+        else if (isEmbassy)
+          messages("cds.form.check-answers-embassy-details")
         else
           messages("cds.form.check-answers-company-details")
 
@@ -166,7 +181,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
       for {
         providedDetailsList <- providedDetails
-        vatDetails             = getVatDetails(isIndividual, subscription)
+        vatDetails             = getVatDetails(isIndividual, isEmbassy, subscription)
         providedContactDetails = getProvidedContactDetails(subscription, service)
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
     }
@@ -397,10 +412,10 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     )
   }
 
-  private def getVatDetails(isIndividual: Boolean, subscription: SubscriptionDetails)(implicit
+  private def getVatDetails(isIndividual: Boolean, isEmbassy: Boolean, subscription: SubscriptionDetails)(implicit
     messages: Messages
   ): Seq[SummaryListRow] =
-    if (!isIndividual) {
+    if (!isIndividual && !isEmbassy) {
       val dateOfReg = for {
         resp <- subscription.vatControlListResponse
         date <- resp.dateOfReg

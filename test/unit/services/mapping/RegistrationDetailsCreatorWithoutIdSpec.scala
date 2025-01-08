@@ -110,6 +110,34 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
       )
   }
 
+  private val addressFromEmbassyAddressTestCases: Gen[(EmbassyAddressMatchModel, Address)] = {
+    val embassyAddressGen = for {
+      addressLine1 <- Gen.alphaStr
+      addressLine2 <- Gen.alphaStr.asOption
+      townCity     <- Gen.alphaStr
+      postcode     <- Gen.alphaStr
+      country      <- Gen.alphaStr
+    } yield EmbassyAddressMatchModel(
+      lineOne = addressLine1,
+      lineTwo = addressLine2,
+      townCity = townCity,
+      postcode = postcode,
+      country = country
+    )
+
+    for {
+      embassyAddress <- embassyAddressGen
+    } yield embassyAddress ->
+      Address(
+        addressLine1 = embassyAddress.lineOne,
+        addressLine2 = embassyAddress.lineTwo,
+        addressLine3 = Some(embassyAddress.townCity),
+        addressLine4 = None,
+        postalCode = Some(embassyAddress.postcode),
+        countryCode = embassyAddress.country
+      )
+  }
+
   private val addressFromAddressViewModelTestCases: Gen[(AddressViewModel, Address)] = {
     val addressViewModelGen = for {
       addressLine1 <- Gen.alphaStr
@@ -198,6 +226,11 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
     "create Address from OrganisationAddress" in testWithGen(addressFromOrganisationAddressTestCases) {
       case (organisationAddress, expectedAddress) =>
         registrationDetailsCreator.registrationAddress(organisationAddress) shouldBe expectedAddress
+    }
+
+    "create Address from EmbassyAddress" in testWithGen(addressFromEmbassyAddressTestCases) {
+      case (embassyAddress, expectedAddress) =>
+        registrationDetailsCreator.registrationAddressEmbassyAddress(embassyAddress) shouldBe expectedAddress
     }
 
     "create Address from AddressViewModel" in testWithGen(addressFromAddressViewModelTestCases) {

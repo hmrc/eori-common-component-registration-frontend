@@ -24,6 +24,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ContactAddressController, SubscriptionFlowManager}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionDetails,
   SubscriptionFlowInfo,
@@ -188,6 +189,9 @@ class ContactAddressControllerSpec
       when(mockSubscriptionPage.url(any())).thenReturn(
         "/customs-registration-services/atar/register/disclose-personal-details-consent"
       )
+      when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
+        Future.successful(Some(CdsOrganisationType.Company))
+      )
       submitFormInCreateMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         header(
@@ -198,11 +202,14 @@ class ContactAddressControllerSpec
           .url
 
       }
-
     }
+
     "redirect to create form if valid request is selected" in {
       when(mockSubscriptionPage.url(any())).thenReturn(
         "/customs-registration-services/atar/register/disclose-personal-details-consent"
+      )
+      when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
+        Future.successful(Some(CdsOrganisationType.Company))
       )
       submitFormInCreateMode(validRequestNo) { result =>
         status(result) shouldBe SEE_OTHER
@@ -217,7 +224,6 @@ class ContactAddressControllerSpec
     }
 
     "redirect to the start if the address is not in the cache" in {
-
       when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]]))
         .thenReturn(Future.successful(None))
 
@@ -229,9 +235,48 @@ class ContactAddressControllerSpec
         ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmailController
           .form(atarService)
           .url
+      }
+    }
 
+    "embassy redirect to next page" when {
+
+      "yes is selected" in {
+        when(mockSubscriptionPage.url(any())).thenReturn(
+          "/customs-registration-services/atar/register/disclose-personal-details-consent"
+        )
+        when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
+          Future.successful(Some(CdsOrganisationType.Embassy))
+        )
+        submitFormInCreateMode(validRequest) { result =>
+          status(result) shouldBe SEE_OTHER
+          header(
+            LOCATION,
+            result
+          ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
+            .determineRoute(atarService)
+            .url
+
+        }
       }
 
+      "no is selected" in {
+        when(mockSubscriptionPage.url(any())).thenReturn(
+          "/customs-registration-services/atar/register/disclose-personal-details-consent"
+        )
+        when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
+          Future.successful(Some(CdsOrganisationType.Embassy))
+        )
+        submitFormInCreateMode(validRequestNo) { result =>
+          status(result) shouldBe SEE_OTHER
+          header(
+            LOCATION,
+            result
+          ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourContactAddressController
+            .showForm(atarService)
+            .url
+
+        }
+      }
     }
 
   }
@@ -239,6 +284,9 @@ class ContactAddressControllerSpec
     "redirect to review page when details are valid" in {
       when(mockSubscriptionPage.url(any())).thenReturn(
         "/customs-registration-services/atar/register/matching/review-determine"
+      )
+      when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
+        Future.successful(Some(CdsOrganisationType.Company))
       )
       submitFormInReviewMode(validRequest)(verifyRedirectToReviewPage())
     }

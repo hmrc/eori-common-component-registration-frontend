@@ -54,6 +54,9 @@ class OrganisationTypeController @Inject() (
   private def organisationWhatIsYourOrgName(orgType: String, service: Service): Call =
     WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
 
+  def embassyMatching(orgType: String, service: Service): Call =
+    EmbassyNameController.showForm(isInReviewMode = false, orgType, service)
+
   private def matchingDestinations(service: Service): Map[CdsOrganisationType, Call] =
     Map[CdsOrganisationType, Call](
       Company                       -> nameIdOrganisationMatching(CompanyId, service),
@@ -64,7 +67,8 @@ class OrganisationTypeController @Inject() (
       CharityPublicBodyNotForProfit -> nameIdOrganisationMatching(CharityPublicBodyNotForProfitId, service),
       ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
       ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
-      ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service)
+      ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),
+      Embassy                       -> embassyMatching(EmbassyId, service)
     )
 
   def form(service: Service): Action[AnyContent] =

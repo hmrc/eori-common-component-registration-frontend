@@ -23,6 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   CdsOrganisationType,
+  RegistrationDetailsEmbassy,
   RegistrationDetailsIndividual,
   RegistrationDetailsOrganisation
 }
@@ -38,6 +39,7 @@ class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit
     sessionCache.registrationDetails.map {
       case rdo: RegistrationDetailsOrganisation => rdo.copy(address = address)
       case rdi: RegistrationDetailsIndividual   => rdi.copy(address = address)
+      case rde: RegistrationDetailsEmbassy      => rde.copy(address = address)
       case _ =>
         val error = "Incomplete cache cannot complete journey"
         // $COVERAGE-OFF$Loggers
@@ -48,13 +50,16 @@ class RegistrationDetailsService @Inject() (sessionCache: SessionCache)(implicit
 
   def initialiseCacheWithRegistrationDetails(
     organisationType: CdsOrganisationType
-  )(implicit request: Request[_]): Future[Boolean] =
+  )(implicit request: Request[_]): Future[Boolean] = {
     sessionCache.saveSubscriptionDetails(
       SubscriptionDetails(formData = FormData(organisationType = Some(organisationType)))
     ).flatMap(_ => saveRegistrationDetails(organisationType))
+  }
 
-  private def saveRegistrationDetails(orgType: CdsOrganisationType)(implicit request: Request[_]) =
+  private def saveRegistrationDetails(orgType: CdsOrganisationType)(implicit request: Request[_]): Future[Boolean] = {
     if (IndividualOrganisations.contains(orgType)) sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
+    else if (Embassy == orgType) sessionCache.saveRegistrationDetails(RegistrationDetailsEmbassy.initEmpty())
     else sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
+  }
 
 }

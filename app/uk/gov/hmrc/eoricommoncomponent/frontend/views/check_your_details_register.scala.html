@@ -36,6 +36,11 @@
     cdsOrgType.contains(CdsOrganisationType.EUIndividual) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
 }
 
+@vatHidden = @{
+    if (cdsOrgType.contains(CdsOrganisationType.Embassy)) "govuk-visually-hidden"
+    else ""
+}
+
 @layout_di(messages("cds.form.check-answers"), displayBackLink = false, service = service) {
     <div>
         <h1 class="govuk-heading-l">@messages("cds.form.check-answers")</h1>
@@ -47,7 +52,8 @@
         @if(!isIndividual){
 
         <div>
-            <h2 class="govuk-heading-m">@messages("cds.form.check-answers-vat-details")</h2>
+
+            <h2 class="govuk-heading-m @vatHidden">@messages("cds.form.check-answers-vat-details")</h2>
 
             @govukSummaryList(SummaryList(
                 rows = viewModel.vatDetails

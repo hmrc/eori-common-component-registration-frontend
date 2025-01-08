@@ -43,7 +43,8 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
         ),
         CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
           "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
-        )
+        ),
+        CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
       )
     }
 
@@ -85,7 +86,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       )
     }
 
-    "return valid options for any other  location user location" in {
+    "return valid options for any other location user location" in {
       val selectedUserLocation = Some(UserLocation.Islands)
       val viewModel            = OrganisationViewModel
 
@@ -101,7 +102,8 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
         ),
         CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
           "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
-        )
+        ),
+        CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
       )
     }
 
