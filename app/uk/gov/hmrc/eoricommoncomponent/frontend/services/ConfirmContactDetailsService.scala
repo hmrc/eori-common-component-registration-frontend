@@ -66,7 +66,7 @@ class ConfirmContactDetailsService @Inject() (
   private def determineRoute(detailsCorrect: YesNoWrong, service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent],
     hc: HeaderCarrier
-  ): Future[Result] =
+  ): Future[Result] = {
     detailsCorrect match {
       case Yes =>
         registrationConfirmService.currentSubscriptionStatus(hc, service, request) flatMap {
@@ -108,12 +108,15 @@ class ConfirmContactDetailsService @Inject() (
         // $COVERAGE-ON
         throw new IllegalStateException(error)
     }
+  }
 
   private def onNewSubscription(service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent]
   ): Future[Result] = {
+
     lazy val noSelectedOrganisationType =
       requestSessionData.userSelectedOrganisationType.isEmpty
+
     if (isInReviewMode)
       Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
     else

@@ -122,8 +122,7 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     Company,
     ThirdCountryOrganisation,
     CdsOrganisationType.Partnership,
-    LimitedLiabilityPartnership,
-    CharityPublicBodyNotForProfit
+    LimitedLiabilityPartnership
   )
 
   implicit val request: Request[Any] = mock[Request[Any]]
@@ -219,6 +218,23 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
         actualRegistrationDetails shouldBe emptyRegDetailsOrganisation
       }
+    }
+
+    s"initialise session cache with RegistrationDetailsOrganisation for remaining $CharityPublicBodyNotForProfit" in {
+
+      await(
+        registrationDetailsService.initialiseCacheWithRegistrationDetails(
+          CdsOrganisationType.CharityPublicBodyNotForProfit
+        )
+      )
+
+      val requestCaptorReg = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+
+      verify(mockSessionCache).saveRegistrationDetails(requestCaptorReg.capture())(ArgumentMatchers.eq(request))
+
+      val actualRegistrationDetails: RegistrationDetails = requestCaptorReg.getValue
+
+      actualRegistrationDetails shouldBe RegistrationDetailsOrganisation.charityPublicBodyNotForProfit
     }
   }
 

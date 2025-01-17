@@ -53,7 +53,7 @@ class ManualAddressController @Inject() (
             sessionCache.savePostcodeAndLine1Details(
               PostcodeViewModel(validAddress.postcode.getOrElse(throw PostcodeException), Some(validAddress.street))
             ).map { _ =>
-              Redirect(ConfirmContactDetailsController.form(service, false))
+              Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
             }
         )
     }

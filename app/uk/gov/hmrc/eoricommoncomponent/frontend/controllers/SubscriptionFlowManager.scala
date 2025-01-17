@@ -97,6 +97,26 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
   ): Future[(SubscriptionPage, Session)] =
     startSubscriptionFlow(previousPage, requestSessionData.userSelectedOrganisationType, service)
 
+  def startSubscriptionFlowWithPage(
+    previousPage: Option[SubscriptionPage] = None,
+    service: Service,
+    flow: SubscriptionFlow
+  )(implicit request: Request[AnyContent]): Future[(SubscriptionPage, Session)] = {
+    val maybePreviousPageUrl = previousPage.map(page => page.url(service))
+    // $COVERAGE-OFF$Loggers
+    logger.info(s"select Subscription flow: ${flow.name}")
+    // $COVERAGE-ON
+    Future.successful(
+      (
+        SubscriptionFlows(flow).pagesInOrder.head,
+        requestSessionData.storeUserSubscriptionFlow(
+          flow,
+          SubscriptionFlows(flow).determinePageBeforeSubscriptionFlow(maybePreviousPageUrl).url(service)
+        )
+      )
+    )
+  }
+
   private def startSubscriptionFlow(
     previousPage: Option[SubscriptionPage],
     orgType: => Option[CdsOrganisationType],
@@ -122,16 +142,20 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
     registrationDetails: RegistrationDetails,
     maybeOrgType: => Option[CdsOrganisationType]
   ): SubscriptionFlow = {
-    val selectedFlow: SubscriptionFlow =
+    val selectedFlow: SubscriptionFlow = {
       registrationDetails match {
-        case _: RegistrationDetailsOrganisation =>
-          SubscriptionFlow(OrganisationSubscriptionFlow.name)
+        case rdo: RegistrationDetailsOrganisation =>
+          rdo.etmpOrganisationType match {
+            case Some(UnincorporatedBody) => SubscriptionFlow(CharityPublicBodySubscriptionFlow.name)
+            case _                        => SubscriptionFlow(OrganisationSubscriptionFlow.name)
+          }
         case _: RegistrationDetailsIndividual =>
           SubscriptionFlow(IndividualSubscriptionFlow.name)
         case _: RegistrationDetailsEmbassy =>
           SubscriptionFlow(EmbassySubscriptionFlow.name)
         case _ => throw DataUnavailableException("Incomplete cache cannot complete journey")
       }
+    }
 
     maybeOrgType.fold(selectedFlow)(
       orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow)

@@ -26,7 +26,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.EmbassyNameControlle
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.EmbassyId
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.embassy.EmbassyNameForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_embassy_name
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -43,16 +42,9 @@ class EmbassyNameControllerSpec extends ControllerSpec with BeforeAndAfterEach w
   private val form                           = new EmbassyNameForm()
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockEmbassyNameView            = instanceOf[what_is_your_embassy_name]
-  private val mockRequestSessionData         = mock[RequestSessionData]
 
-  private val embassyNameController = new EmbassyNameController(
-    mockAuthAction,
-    mcc,
-    form,
-    mockEmbassyNameView,
-    mockSubscriptionDetailsService,
-    mockRequestSessionData
-  )
+  private val embassyNameController =
+    new EmbassyNameController(mockAuthAction, mcc, form, mockEmbassyNameView, mockSubscriptionDetailsService)
 
   private val fieldLevelErrorName            = "//p[@id='name-error' and @class='govuk-error-message']"
   private val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"

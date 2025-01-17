@@ -42,10 +42,10 @@ class MatchOrganisationNameSpec extends ViewSpec {
       doc.title() must startWith(doc.body().getElementsByTag("h1").text())
     }
     "display correct heading" in {
-      doc.body().getElementsByTag("h1").text() mustBe "What is the organisation’s name?"
+      doc.body().getElementsByTag("h1").text() mustBe "What is the name of your organisation?"
     }
     "have the correct h1 text" in {
-      doc.body().getElementsByTag("h1").text() mustBe "What is the organisation’s name?"
+      doc.body().getElementsByTag("h1").text() mustBe "What is the name of your organisation?"
     }
     "have an input of type 'text' for organisation name" in {
       doc.body().getElementById("name").attr("type") mustBe "text"

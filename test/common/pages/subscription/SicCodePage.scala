@@ -30,7 +30,7 @@ sealed trait SicCodePageCommon extends WebPage {
 
   val headingXpath: String = "//*[@id='page-heading']"
 
-  val sicDescriptionLabelXpath = "//*[@id='description']"
+  val sicDescriptionLabelXpath = "//*[@id='description-part-1']"
 
   val sicLabelXpath = "//*label[@for='sic']"
 }

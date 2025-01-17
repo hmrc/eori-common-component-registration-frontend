@@ -70,7 +70,7 @@ class WhatIsYourOrgNameController @Inject() (
   )(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) flatMap { _ =>
       if (!isInReviewMode)
-        subscriptionDetailsService.updateSubscriptionDetailsOrganisation.map(
+        subscriptionDetailsService.updateSubscriptionDetailsOrgName(formData.name).map(
           _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
         )
       else

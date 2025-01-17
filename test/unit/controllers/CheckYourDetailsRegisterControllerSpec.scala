@@ -346,8 +346,10 @@ class CheckYourDetailsRegisterControllerSpec
           "Registered partnership name"
         case Partnership =>
           "Registered partnership name"
-        case CharityPublicBodyNotForProfit | ThirdCountryOrganisation =>
+        case ThirdCountryOrganisation =>
           "Organisation name"
+        case CharityPublicBodyNotForProfit =>
+          "Organisation’s name"
         case _ =>
           "Registered company name"
       }
@@ -364,8 +366,9 @@ class CheckYourDetailsRegisterControllerSpec
       }
 
       val UtrLabelText = organisationType match {
-        case LimitedLiabilityPartnership => "Corporation Tax Unique Taxpayer Reference (UTR)"
-        case Partnership                 => "Partnership Self Assessment UTR"
+        case LimitedLiabilityPartnership   => "Corporation Tax Unique Taxpayer Reference (UTR)"
+        case Partnership                   => "Partnership Self Assessment UTR"
+        case CharityPublicBodyNotForProfit => "Organisation’s UTR"
         case _ =>
           "Corporation Tax UTR"
       }

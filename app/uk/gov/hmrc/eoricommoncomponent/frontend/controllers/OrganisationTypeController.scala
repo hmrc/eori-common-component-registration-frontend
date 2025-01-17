@@ -21,12 +21,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Partnership, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationTypeDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -57,6 +57,10 @@ class OrganisationTypeController @Inject() (
   def embassyMatching(orgType: String, service: Service): Call =
     EmbassyNameController.showForm(isInReviewMode = false, orgType, service)
 
+  def orgMatching(orgType: String, service: Service): Call = {
+    WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
+  }
+
   private def matchingDestinations(service: Service): Map[CdsOrganisationType, Call] =
     Map[CdsOrganisationType, Call](
       Company                       -> nameIdOrganisationMatching(CompanyId, service),
@@ -64,7 +68,7 @@ class OrganisationTypeController @Inject() (
       Individual                    -> individualMatching(IndividualId, service),
       Partnership                   -> nameIdOrganisationMatching(PartnershipId, service),
       LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service),
-      CharityPublicBodyNotForProfit -> nameIdOrganisationMatching(CharityPublicBodyNotForProfitId, service),
+      CharityPublicBodyNotForProfit -> orgMatching(CharityPublicBodyNotForProfitId, service),
       ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
       ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
       ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),

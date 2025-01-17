@@ -134,7 +134,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         showForm(reviewMode) { result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
-          page.getElementsText(labelForNameOuter) shouldBe "What is the organisation’s name?"
+          page.getElementsText(labelForNameOuter) shouldBe "What is the name of your organisation?"
         }
       }
     }
@@ -175,8 +175,8 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         }
 
         s"redirect to the next page when successful when organisation type is $organisationType and reviewMode is $reviewMode" in {
-          when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any[Request[_]])).thenReturn(
-            Future.successful((): Unit)
+          when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrgName(any())(any[Request[_]])).thenReturn(
+            Future.unit
           )
           submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
             status(result) shouldBe SEE_OTHER

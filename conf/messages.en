@@ -352,6 +352,7 @@ cds.matching.utr.lost-utr-description=find a lost UTR (opens in new tab).
 
 cds.matching.utr.lost-utr-description-llp=find a lost UTR (opens in new tab).
 cds.matching.partnership.utr.hint=Your UTR can be 10 or 13 digits long.
+cds.matching.charity-public-body.utr.hint=It can be 10 or 13 digits long.
 cds.matching.selction.utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ''reference'', ''UTR'' or ''official use''.
 cds.matching.eori.hint=Your EORI number is made up of 14 - 17 characters.
 cds.matching.back=Back
@@ -406,6 +407,7 @@ cds.partnership.name.label=Registered partnership name
 cds.nino.label=National Insurance number
 cds.utr.label=Self Assessment Unique Taxpayer Reference (UTR)
 cds.company.utr.label=Corporation Tax UTR
+cds.organisation.utr.label=Organisation’s UTR
 cds.partnership-utr.label=Partnership Self Assessment UTR number
 
 subscription.check-your-details.utrnumber.individual=UTR number
@@ -684,8 +686,10 @@ cds.matching-error.business-details.company-name.too-long=The company name must 
 cds.matching-error.business-details.company-name.invalid-chars=Company name cannot contain ''<'' or ''>''
 
 cds.matching.organisation.name.title=What is the organisation’s name?
+gagmr.matching.organisation.name.title=What is the name of your organisation?
 cds.matching.organisation.name.label=Organisation name
 cds.matching.organisation.name.heading=What is the organisation’s name?
+gagmr.matching.organisation.name.heading=What is the name of your organisation?
 cds.matching.organisation-name.error.name=Enter your registered organisation name
 
 #Matching UTR UK
@@ -999,8 +1003,8 @@ cds.subscription.date-of-establishment.find-it=You can find the incorporated dat
 cds.subscription.partnership.date-of-establishment.hint=Enter the date shown on your partnership’s certificate of incorporation. You can find the date your partnership was established on the <a href="https://beta.companieshouse.gov.uk/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House register (opens in new tab)</a>
 
 #Sic Code
-cds.subscription.sic.page.title=Standard Industrial Classification (SIC) code
-cds.subscription.sic.page.heading=Standard Industrial Classification (SIC) code
+cds.subscription.sic.page.title=Your Standard Industrial Classification (SIC) code
+cds.subscription.sic.page.heading=Your Standard Industrial Classification (SIC) code
 cds.subscription.sic.description=A SIC code is a 5 digit number that helps HMRC identify what your organisation does. You can search the register on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House for your SIC code (opens in new tab).</a>
 cds.subscription.sic.nonuk.soleTrader.description=You can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.organisation.description=<a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a><br><br>If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab)</a>
@@ -1009,17 +1013,21 @@ cds.subscription.sic.charity-description=A SIC code is a 5 digit number that hel
 cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that helps HMRC identify what your partnership does. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 
 cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
-cds.subscription.sic.hint.uk=This will be 5 numbers. If you have more than one SIC code you only need to enter one.
+cds.subscription.sic.hint.uk=It is 5 digits, like 58110 or 81221.
 cds.subscription.sic.hint.row=This will be 5 numbers.
-cds.subscription.sic.description.para1=SIC codes describe business activities. For example, 58110 is the code for book publishing.
+cds.subscription.sic.description.para1=You choose a SIC code when you register an organisation or business with Companies House.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para2=SIC codes describe business activities. For example, 58110 is the code for book publishing.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para3=You can find your SIC code on your Companies House profile.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4=You can:
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet1=search Companies House for company information (opens in new tab)
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet2=check a full list of SIC codes (opens in new tab)
+
 cds.subscription.sic.description.para2=Enter a 5-digit SIC code for your organisation
 cds.subscription.sic.description.para2.company = What is the company’s SIC code?
 cds.subscription.sic.description.para2.sole-trader = What is your SIC code?
 cds.subscription.sic.description.para2.partnership = What is the partnership’s SIC code?
 cds.subscription.sic.description.para2.limited-liability-partnership = What is the partnership’s SIC code?
-cds.subscription.sic.description.para2.charity-public-body-not-for-profit = What is the organisation’s SIC code?
-
-
+cds.subscription.sic.description.para2.charity-public-body-not-for-profit = What is your SIC code?
 
 
 cds.subscription.sic.details=I do not know my SIC code
@@ -1179,6 +1187,7 @@ cds.form.name=Name
 cds.form.partner-address=Partnership address
 cds.form.company-address=Company address
 cds.form.organisation-address=Organisation address
+cds.form.charity-public-body-address=Organisation’s address
 cds.form.business-details=Registered company address
 cds.form.embassy-address=Embassy’s address
 cds.form.shortened-name=Shortened name
@@ -1368,6 +1377,7 @@ cds.review-page.fax-prefix=fax:
 cds.registration.reg06.fail=Submission Failed
 cds.business-name.label=Registered company name
 cds.organisation-name.label=Organisation name
+cds.charity-public-body-name.label=Organisation’s name
 cds.embassy-name.label=Embassy’s name
 cds.partner-name.label=Registered partnership name
 cds.check-your-details.utrnumber=Corporation Tax UTR number
@@ -1677,7 +1687,7 @@ cds.subscription.date-of-establishment.company.title-and-heading=When was the co
 cds.subscription.address-details.postcode.row.label=Postal code
 
 cds.matching.row-organisation.utr.title-and-heading=Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) issued in the UK?
-cds.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?
+cds.matching.row-charity-public-body.utr.title-and-heading=Does your organisation have a Unique Taxpayer Reference (UTR) issued in the UK?
 ecc.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?
 ecc.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
 
@@ -1726,7 +1736,7 @@ cds.languageSelect.select.label=Cymraeg
 cds.languageSelect.select.hint=Newid yr iaith ir Gymraeg
 
 confirm-business-details.title-and-heading=Is this your registered company address?
-confirm-business-details.row.title-and-heading=Is this your registered organisation address?
+confirm-business-details.row.title-and-heading=Is this your address?
 confirm-business-details.partnership.title-and-heading=Is this your registered address?
 confirm-business-details.individual.title-and-heading=Is this your address?
 confirm-business-details.yes=Yes
@@ -1770,13 +1780,16 @@ subscription-journey.how-confirm-identity.nino.heading=Enter your National Insur
 subscription-journey.how-confirm-identity.nino.hint=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ''QQ 12 34 56 C''
 subscription-journey.how-confirm-identity.utr.heading=Your Self Assessment Unique Taxpayer Reference (UTR)
 subscription-journey.how-confirm-identity.utr.row.org.heading=Your Corporation Tax Unique Taxpayer Reference (UTR)
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.heading=Your Unique Taxpayer Reference (UTR)
 subscription-journey.how-confirm-identity.find.utr=https://www.gov.uk/find-lost-utr-number
 subscription-journey.how-confirm-identity.utr.para=Ask for a copy of your Corporation Tax UTR (opens in new tab)
 subscription-journey.how-confirm-identity.utr.self.para=Get more help to find your UTR (opens in new tab)
 subscription-journey.how-confirm-identity.utr.hint=Your UTR can be 10 or 13 digits long.
 subscription-journey.how-confirm-identity.utr.row.org.message= It will be on tax returns and other letters about Corporation Tax. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
 subscription-journey.how-confirm-identity.utr.row.message= You can find it in your Personal Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.message= You can find it in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called '‘reference’', '‘UTR’' or '‘official use’'.
 subscription-journey.how-confirm-identity.utr.row.org.subheading= What is your Corporation Tax UTR?
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.subheading= What is your organisation’s UTR?
 subscription-journey.how-confirm-identity.utr.row.subheading= What is your Self Assessment UTR?
 ecc.reg06.outcome.why-heading = Why the application was unsuccessful
 ecc.reg06.outcome.eori = EORI number {0}
@@ -2122,3 +2135,11 @@ cds.your-contact-address.line-1=Address line 1
 cds.your-contact-address.line-2=Address line 2 (optional)
 cds.your-contact-address.town-city=Town or city
 cds.your-contact-address.postcode=Postcode
+
+#Your Organisation Address
+cds.your-organisation-address.title=What is your organisation’s address?
+cds.your-organisation-address.header=What is your organisation’s address?
+cds.your-organisation-address.line-1=Address line 1
+cds.your-organisation-address.line-2=Address line 2 (optional)
+cds.your-organisation-address.town-city=Town or city
+cds.your-organisation-address.postcode=Postcode

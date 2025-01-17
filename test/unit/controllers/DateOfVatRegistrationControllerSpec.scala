@@ -25,8 +25,8 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{DateOfVatRegistrationController, VatReturnController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
   date_of_vat_registration,
   vat_return_total,
@@ -37,12 +37,14 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.duration.{Duration, SECONDS}
+import scala.concurrent.{Await, Future}
 
 class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
 
   private val mockDateOfVatRegistrationView   = instanceOf[date_of_vat_registration]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
+  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
 
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
@@ -58,7 +60,8 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     mcc,
     mockDateOfVatRegistrationView,
     form,
-    mockSessionCacheService
+    mockSessionCacheService,
+    mockSubscriptionDetailsService
   )(global)
 
   private val controllerVat = new VatReturnController(
@@ -82,6 +85,9 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any[Request[_]])).thenReturn(
       Future.successful(Some(vatControlListResponse))
     )
+
+    when(mockSubscriptionDetailsService.cachedOrganisationType(any[Request[_]]))
+      .thenReturn(Future.successful(Some(CdsOrganisationType.ThirdCountrySoleTrader)))
   }
 
   "Date of VAT registration Controller" should {
@@ -103,6 +109,29 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
 
       submitForm(validReturnTotal) { result =>
         status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some("/customs-registration-services/atar/register/contact-details")
+      }
+    }
+
+    "be successful when submitted with valid and save and redirect" in {
+      reset(mockSubscriptionBusinessService)
+      when(mockSubscriptionDetailsService.cachedOrganisationType(any[Request[_]]))
+        .thenReturn(Future.successful(Some(CdsOrganisationType.CharityPublicBodyNotForProfit)))
+
+      when(mockSubscriptionDetailsService.cacheVatControlListResponse(any())(any[Request[_]]))
+        .thenReturn(Future.unit)
+
+      val validReturnTotal: Map[String, String] = Map(
+        "vat-registration-date.day"   -> "01",
+        "vat-registration-date.month" -> "01",
+        "vat-registration-date.year"  -> "2017"
+      )
+
+      verify(mockSubscriptionBusinessService, never()).getCachedVatControlListResponse(any[Request[_]])
+
+      submitForm(validReturnTotal) { result =>
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some("/customs-registration-services/atar/register/contact-details")
       }
     }
 
