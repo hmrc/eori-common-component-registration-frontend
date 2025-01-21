@@ -202,6 +202,7 @@ class SubscriptionDetailsService @Inject() (
 
   def updateSubscriptionDetailsOrganisation(implicit request: Request[_]): Future[Unit] =
     for {
+      _ <- sessionCache.saveRegistrationDetails(RegistrationDetailsOrganisation())
       _ <- updateSubscriptionDetails
     } yield ()
 
