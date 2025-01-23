@@ -22,8 +22,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
   ApplicationController,
   ContactDetailsController,
-  VatDetailsController
+  VatDetailsController,
+  YourVatDetailsController
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -49,7 +51,7 @@ class VatRegisteredUkController @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def createForm(service: Service): Action[AnyContent] =
+  def createForm(service: Service): Action[AnyContent] = {
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => user: LoggedInUserWithEnrolments =>
         isIndividualFlow match {
@@ -63,6 +65,7 @@ class VatRegisteredUkController @Inject() (
                   vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP),
                   isIndividual,
                   requestSessionData.isPartnershipOrLLP,
+                  requestSessionData.selectedUserLocation.head, // todo fix head
                   service
                 )
               )
@@ -73,6 +76,7 @@ class VatRegisteredUkController @Inject() (
         }
 
     }
+  }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
@@ -91,6 +95,7 @@ class VatRegisteredUkController @Inject() (
                   vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
                   individual,
                   requestSessionData.isPartnershipOrLLP,
+                  requestSessionData.selectedUserLocation.head, //todo fix head
                   service
                 )
               )
@@ -116,6 +121,7 @@ class VatRegisteredUkController @Inject() (
                       formWithErrors,
                       individual,
                       requestSessionData.isPartnershipOrLLP,
+                      requestSessionData.selectedUserLocation.head, // todo fix head
                       service
                     )
                   )
@@ -128,8 +134,8 @@ class VatRegisteredUkController @Inject() (
             subscriptionDetailsService.cacheVatRegisteredUk(yesNoAnswer).flatMap {
               _ =>
                 val result = (isInReviewMode, yesNoAnswer.isYes) match {
-                  case (false, true) => Future.successful(VatDetailsController.createForm(service).url)
-                  case (true, true)  => Future.successful(VatDetailsController.reviewForm(service).url)
+                  case (false, true) => Future.successful(redirectCreateNext(service))
+                  case (true, true)  => Future.successful(redirectReviewNext(service))
                   case (true, false) =>
                     subscriptionDetailsService.clearCachedUkVatDetails.map(
                       _ => ContactDetailsController.reviewForm(service).url
@@ -144,6 +150,24 @@ class VatRegisteredUkController @Inject() (
             }
         )
     }
+
+  private def redirectCreateNext(service: Service)(implicit request: Request[AnyContent]) = {
+    val userLocation = requestSessionData.selectedUserLocation.head // TODO fix head
+    if (userLocation == Iom) {
+      YourVatDetailsController.createForm(service).url
+    } else {
+      VatDetailsController.createForm(service).url
+    }
+  }
+
+  private def redirectReviewNext(service: Service)(implicit request: Request[AnyContent]) = {
+    val userLocation = requestSessionData.selectedUserLocation.head // TODO fix head
+    if (userLocation == Iom) {
+      YourVatDetailsController.reviewForm(service).url
+    } else {
+      VatDetailsController.reviewForm(service).url
+    }
+  }
 
   private def isIndividualFlow(implicit rq: Request[AnyContent]): Either[SessionError, Boolean] =
     requestSessionData.userSubscriptionFlow map {

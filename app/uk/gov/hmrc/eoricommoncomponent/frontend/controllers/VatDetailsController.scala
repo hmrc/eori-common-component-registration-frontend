@@ -21,12 +21,13 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -44,7 +45,8 @@ class VatDetailsController @Inject() (
   weCannotConfirmYourIdentity: date_of_vat_registration,
   subscriptionDetailsService: SubscriptionDetailsService,
   form: VatRegistrationDateFormProvider,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  requestSessionData: RequestSessionData
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -53,20 +55,22 @@ class VatDetailsController @Inject() (
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => user: LoggedInUserWithEnrolments =>
+        val userLocation = requestSessionData.selectedUserLocation.head // todo fix head
         sessionCacheService.individualAndSoleTraderRouter(
           user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
           service,
-          Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, service))
+          Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, userLocation, service))
         )
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => user: LoggedInUserWithEnrolments =>
+        val userLocation = requestSessionData.selectedUserLocation.head // todo fix head
         subscriptionBusinessService.getCachedUkVatDetails.map {
           case Some(vatDetails) =>
-            Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, service))
-          case None => Ok(vatDetailsView(vatDetailsForm, isInReviewMode = true, service))
+            Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, userLocation, service))
+          case None => Ok(vatDetailsView(vatDetailsForm, isInReviewMode = true, userLocation, service))
         }.flatMap(
           sessionCacheService.individualAndSoleTraderRouter(
             user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
@@ -78,8 +82,10 @@ class VatDetailsController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      val userLocation = requestSessionData.selectedUserLocation.head // todo fix head
       vatDetailsForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, service))),
+        formWithErrors =>
+          Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, userLocation, service))),
         formData => lookupVatDetails(formData, isInReviewMode, service)
       )
     }
@@ -92,7 +98,7 @@ class VatDetailsController @Inject() (
       responseError =>
         responseError.status match {
           case NOT_FOUND | BAD_REQUEST =>
-            Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+            Future.successful(Redirect(redirectNext(service)))
           case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
           case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
         },
@@ -113,7 +119,7 @@ class VatDetailsController @Inject() (
             }
         else
           subscriptionDetailsService.clearCachedVatControlListResponse().flatMap(
-            _ => Future.successful(Redirect(VatDetailsController.vatDetailsNotMatched(service)))
+            _ => Future.successful(Redirect(redirectNext(service)))
           )
     )
 
@@ -125,5 +131,14 @@ class VatDetailsController @Inject() (
         Ok(weCannotConfirmYourIdentity(dateForm, service))
       )
     }
+
+  private def redirectNext(service: Service)(implicit request: Request[AnyContent]) = {
+    val userLocation = requestSessionData.selectedUserLocation.head // TODO fix head
+    if (userLocation == Iom) {
+      YourVatDetailsController.vatDetailsNotMatched(service)
+    } else {
+      VatDetailsController.vatDetailsNotMatched(service)
+    }
+  }
 
 }

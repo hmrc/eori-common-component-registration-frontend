@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 import play.api.Logging
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionFlows.charityPublicBodySubscriptionNoUtrFlowIomConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 object SubscriptionFlows {
@@ -128,17 +129,40 @@ object SubscriptionFlows {
     )
   )
 
+  private val charityPublicBodyNotForProfitFlowIomConfig = createFlowConfig(
+    List(
+      SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
+      VatRegisteredSubscriptionFlowPage,
+      YourVatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
+  private val charityPublicBodySubscriptionNoUtrFlowIomConfig = createFlowConfig(
+    List(
+      EoriConsentSubscriptionFlowPage,
+      VatRegisteredSubscriptionFlowPage,
+      YourVatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
   val flows: Map[SubscriptionFlow, SubscriptionFlowConfig] = Map(
-    OrganisationSubscriptionFlow             -> corporateFlowConfig,
-    PartnershipSubscriptionFlow              -> partnershipFlowConfig,
-    EmbassySubscriptionFlow                  -> embassyFlowConfig,
-    SoleTraderSubscriptionFlow               -> soleTraderFlowConfig,
-    IndividualSubscriptionFlow               -> individualFlowConfig,
-    ThirdCountryOrganisationSubscriptionFlow -> thirdCountryCorporateFlowConfig,
-    ThirdCountrySoleTraderSubscriptionFlow   -> thirdCountrySoleTraderFlowConfig,
-    ThirdCountryIndividualSubscriptionFlow   -> thirdCountryIndividualFlowConfig,
-    CharityPublicBodySubscriptionFlow        -> charityPublicBodyNotForProfitFlowConfig,
-    CharityPublicBodySubscriptionNoUtrFlow   -> charityPublicBodySubscriptionNoUtrFlowConfig
+    OrganisationSubscriptionFlow              -> corporateFlowConfig,
+    PartnershipSubscriptionFlow               -> partnershipFlowConfig,
+    EmbassySubscriptionFlow                   -> embassyFlowConfig,
+    SoleTraderSubscriptionFlow                -> soleTraderFlowConfig,
+    IndividualSubscriptionFlow                -> individualFlowConfig,
+    ThirdCountryOrganisationSubscriptionFlow  -> thirdCountryCorporateFlowConfig,
+    ThirdCountrySoleTraderSubscriptionFlow    -> thirdCountrySoleTraderFlowConfig,
+    ThirdCountryIndividualSubscriptionFlow    -> thirdCountryIndividualFlowConfig,
+    CharityPublicBodySubscriptionFlow         -> charityPublicBodyNotForProfitFlowConfig,
+    CharityPublicBodySubscriptionNoUtrFlow    -> charityPublicBodySubscriptionNoUtrFlowConfig,
+    CharityPublicBodySubscriptionFlowIom      -> charityPublicBodyNotForProfitFlowIomConfig,
+    CharityPublicBodySubscriptionNoUtrFlowIom -> charityPublicBodySubscriptionNoUtrFlowIomConfig
   )
 
   private def createFlowConfig(flowStepList: List[SubscriptionPage]): SubscriptionFlowConfig =
@@ -176,8 +200,14 @@ case object SoleTraderSubscriptionFlow extends SubscriptionFlow(SoleTrader.id, i
 
 case object CharityPublicBodySubscriptionFlow extends SubscriptionFlow("CharityPublicBody", isIndividualFlow = false)
 
+case object CharityPublicBodySubscriptionFlowIom
+    extends SubscriptionFlow("CharityPublicBodyIom", isIndividualFlow = false)
+
 case object CharityPublicBodySubscriptionNoUtrFlow
     extends SubscriptionFlow("CharityPublicBody", isIndividualFlow = false)
+
+case object CharityPublicBodySubscriptionNoUtrFlowIom
+    extends SubscriptionFlow("CharityPublicBodyNoUtrIom", isIndividualFlow = false)
 
 object SubscriptionFlow extends Logging {
 
@@ -235,10 +265,28 @@ case object VatRegisteredUkSubscriptionFlowPage extends SubscriptionPage {
 
 }
 
+case object VatRegisteredSubscriptionFlowPage extends SubscriptionPage {
+
+  override def url(service: Service): String =
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredController
+      .createForm(service)
+      .url
+
+}
+
 case object VatDetailsSubscriptionFlowPage extends SubscriptionPage {
 
   override def url(service: Service): String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
+      .createForm(service)
+      .url
+
+}
+
+case object YourVatDetailsSubscriptionFlowPage extends SubscriptionPage {
+
+  override def url(service: Service): String =
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.YourVatDetailsController
       .createForm(service)
       .url
 

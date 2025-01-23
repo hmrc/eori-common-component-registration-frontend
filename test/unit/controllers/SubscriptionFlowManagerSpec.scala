@@ -27,6 +27,7 @@ import play.api.mvc.{AnyContent, Request, Session}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Embassy}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
   CdsOrganisationType,
@@ -72,6 +73,7 @@ class SubscriptionFlowManagerSpec
       .thenReturn(mockSession)
     when(mockCdsFrontendDataCache.saveSubscriptionDetails(any[SubscriptionDetails])(any[Request[_]]))
       .thenReturn(Future.successful(true))
+    when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
   }
 
   "Getting current subscription flow" should {

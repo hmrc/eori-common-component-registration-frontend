@@ -22,6 +22,7 @@ import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{VatDetails, VatDetailsForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
@@ -32,10 +33,11 @@ class VatDetailsViewSpec extends ViewSpec {
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
   private val view                                              = instanceOf[vat_details]
   private val vatNumberLabel                                    = "label[for=vat-number]"
+  private val postcodeLabel                                     = "label[for=postcode]"
 
   "VAT Details" should {
-    "have the correct title" in {
-      doc.title() must startWith(messages("cds.subscription.vat-details.heading"))
+    "have the correct title for UK" in {
+      doc.title() must startWith(messages("cds.subscription.uk.vat-details.heading"))
     }
     "have the correct h1 text" in {
       doc
@@ -64,10 +66,28 @@ class VatDetailsViewSpec extends ViewSpec {
     "have a question asking for VAT Registration number " in {
       doc.select(vatNumberLabel).text() must startWith(messages("cds.subscription.vat-details.vat-number"))
     }
+
+    "have the correct title for Iom" in {
+      iomDoc.title() must startWith(messages("cds.subscription.vat-details.heading"))
+    }
+    "have the correct h1 text for Iom" in {
+      iomDoc
+        .body()
+        .getElementsByTag("h1")
+        .text() mustBe "Your VAT details"
+    }
+    "have the correct postcode label for Iom" in {
+      iomDoc.select(postcodeLabel).text() must startWith(messages("cds.subscription.vat-details.postcode"))
+    }
   }
 
   private lazy val doc: Document = {
-    val result = view(form, isInReviewMode = false, atarService)
+    val result = view(form, isInReviewMode = false, UserLocation.Uk, atarService)
+    Jsoup.parse(contentAsString(result))
+  }
+
+  private lazy val iomDoc: Document = {
+    val result = view(form, isInReviewMode = false, UserLocation.Iom, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

@@ -26,11 +26,12 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.VatDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -62,6 +63,7 @@ class VatDetailsControllerSpec
   private val weCannotConfirmYourIdentity = instanceOf[date_of_vat_registration]
   private val form                        = instanceOf[VatRegistrationDateFormProvider]
   private val mockSessionCacheService     = instanceOf[SessionCacheService]
+  private val mockRequestSession          = mock[RequestSessionData]
 
   private val controller = new VatDetailsController(
     mockAuthAction,
@@ -73,7 +75,8 @@ class VatDetailsControllerSpec
     weCannotConfirmYourIdentity,
     mockSubscriptionDetailsService,
     form,
-    mockSessionCacheService
+    mockSessionCacheService,
+    mockRequestSession
   )(global)
 
   private val validRequest = Map("postcode" -> "Z9 1AA", "vat-number" -> "028836662")
@@ -85,6 +88,7 @@ class VatDetailsControllerSpec
     reset(mockSubscriptionFlowManager)
     reset(mockVatDetailsService)
     setupMockSubscriptionFlowManager(VatDetailsSubscriptionFlowPage)
+    when(mockRequestSession.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
   }
 
   "Loading the page in create mode" should {
@@ -108,6 +112,19 @@ class VatDetailsControllerSpec
         status(result) shouldBe OK
         verifyFormActionInCreateMode
         CdsPage(contentAsString(result)).title() should startWith("Your UK VAT details")
+      }
+    }
+
+    "display the right header & title for Iom" in {
+      when(mockRequestSession.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
+      when(mockSubscriptionBusinessService.getCachedUkVatDetails(any())) thenReturn Future.successful(
+        Some(VatDetails("123", "123"))
+      )
+      reviewForm() { result =>
+        status(result) shouldBe OK
+        verifyFormActionInCreateMode
+        CdsPage(contentAsString(result)).title() should startWith("Your VAT details")
+        CdsPage(contentAsString(result)).h1() should startWith("Your VAT details")
       }
     }
 

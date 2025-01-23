@@ -25,6 +25,7 @@ import play.api.test.Helpers.{LOCATION, _}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatRegisteredUkController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionFlow,
   SubscriptionFlowInfo,
@@ -61,6 +62,8 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
     when(mockSubscriptionDetailsService.cacheVatRegisteredUk(any[YesNo])(any[Request[_]]))
       .thenReturn(Future.successful {})
+
+    when(mockRequestSession.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
   }
 
   override protected def afterEach(): Unit = {
@@ -149,6 +152,20 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       }
     }
 
+    "redirect for Iom to vat group page for yes answer" in {
+      when(mockRequestSession.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
+      when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
+        Right(mockSubscriptionFlow)
+      )
+      val url = "register/vat-group"
+      subscriptionFlowUrl(url)
+
+      submitForm(validRequest) { result =>
+        status(result) shouldBe SEE_OTHER
+        header(LOCATION, result).value should endWith("/register/your-vat-details")
+      }
+    }
+
     "redirect to start new journey for no data left case - submit form" in {
       when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
         Left(mockSessionError)
@@ -206,6 +223,14 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
       submitForm(validRequest, isInReviewMode = true) { result =>
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value should endWith("register/your-uk-vat-details/review")
+      }
+    }
+
+    "redirect for Iom to vat groups review page for yes answer and is in review mode" in {
+      when(mockRequestSession.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
+      submitForm(validRequest, isInReviewMode = true) { result =>
+        status(result) shouldBe SEE_OTHER
+        header(LOCATION, result).value should endWith("register/your-vat-details/review")
       }
     }
 

@@ -19,6 +19,8 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
@@ -124,7 +126,10 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
   )(implicit request: Request[AnyContent]): Future[(SubscriptionPage, Session)] = {
     val maybePreviousPageUrl = previousPage.map(page => page.url(service))
     cdsFrontendDataCache.registrationDetails map { registrationDetails =>
-      val flow = selectFlow(registrationDetails, orgType)
+      val userLocation = requestSessionData.selectedUserLocation.getOrElse(
+        throw new Exception("unable to start flow without user's location")
+      )
+      val flow = selectFlow(registrationDetails, orgType, userLocation)
       // $COVERAGE-OFF$Loggers
       logger.info(s"select Subscription flow: ${flow.name}")
       // $COVERAGE-ON
@@ -140,18 +145,23 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
 
   private def selectFlow(
     registrationDetails: RegistrationDetails,
-    maybeOrgType: => Option[CdsOrganisationType]
+    maybeOrgType: => Option[CdsOrganisationType],
+    userLocation: UserLocation
   ): SubscriptionFlow = {
     val selectedFlow: SubscriptionFlow = {
-      registrationDetails match {
-        case rdo: RegistrationDetailsOrganisation =>
-          rdo.etmpOrganisationType match {
-            case Some(UnincorporatedBody) => SubscriptionFlow(CharityPublicBodySubscriptionFlow.name)
-            case _                        => SubscriptionFlow(OrganisationSubscriptionFlow.name)
+      (registrationDetails, userLocation) match {
+        case (rdo: RegistrationDetailsOrganisation, loc) =>
+          (rdo.etmpOrganisationType, loc) match {
+            case (Some(UnincorporatedBody), Iom) => SubscriptionFlow(CharityPublicBodySubscriptionFlowIom.name)
+            case (Some(UnincorporatedBody), _)   => SubscriptionFlow(CharityPublicBodySubscriptionFlow.name)
+            case (_, Iom)                        => throw new Exception("to be done in DDCYLS-6242")
+            case _                               => SubscriptionFlow(OrganisationSubscriptionFlow.name)
           }
-        case _: RegistrationDetailsIndividual =>
+        case (_: RegistrationDetailsIndividual, Iom) =>
           SubscriptionFlow(IndividualSubscriptionFlow.name)
-        case _: RegistrationDetailsEmbassy =>
+        case (_: RegistrationDetailsIndividual, _) =>
+          SubscriptionFlow(IndividualSubscriptionFlow.name)
+        case (_: RegistrationDetailsEmbassy, _) =>
           SubscriptionFlow(EmbassySubscriptionFlow.name)
         case _ => throw DataUnavailableException("Incomplete cache cannot complete journey")
       }

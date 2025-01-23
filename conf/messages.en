@@ -880,18 +880,18 @@ cds.subscription-details.amend.legal-entity.user.header=Edit legal entity
 cds.subscription-details.amend.legal-entity.submitButton=Save and go to dashboard
 cds.multi.input.add-another=Add another
 #Subscription VAT details
-cds.subscription.vat-details.heading=Your UK VAT details
+cds.subscription.vat-details.heading=Your VAT details
+cds.subscription.uk.vat-details.heading=Your UK VAT details
 cds.subscription.vat-details.intro-text-old=You can find your VAT details on your VAT registration certificate. To view this login to your tax account and select ''More VAT details''. Select the ''View VAT certificate'' link under the heading ''Help with tax''.
 cds.subscription.vat-details.intro-text.link-old=Find your VAT details (opens in new tab).
 
 cds.subscription.vat-details.intro-text=You can find these on your VAT certificate.
 cds.subscription.vat-details.intro-text.link=Sign in to your VAT online account (opens in new tab)
 cds.subscription.vat-details.intro-text.link.text = to view your VAT certificate.
-cds.subscription.vat-details.postcode=What is the UK postcode where your organisation is registered for VAT?
+cds.subscription.vat-details.uk.postcode=What is the UK postcode where your organisation is registered for VAT?
+cds.subscription.vat-details.postcode=What is the postcode where your organisation is registered for VAT?
 cds.subscription.vat-details.vat-number=What is your VAT registration number?
-cds.subscription.vat-details.vat-number.hint-text = This is the 9-digit number on your VAT certificate. For example, 123456789
-
-
+cds.subscription.vat-details.vat-number.hint-text = This is 9 numbers, sometimes with ‘GB’ at the start, for example 123456789 or GB123456789.
 
 
 cds.subscription.vat-details.postcode-old=VAT registration address postcode
@@ -1232,6 +1232,7 @@ cds.subscription.organisation-disclose-personal-details-consent.individual.no=No
 cds.subscription.organisation-disclose-personal-details-consent.error.yes-no-answer=Select yes to show your name and address on the Check an EORI number service.
 cds.subscription.organisation-disclose-personal-details-consent.form-error.yes-no-answer=Select yes to show your name and address on the Check an EORI number service.
 
+cds.subscription.vat-registered.title-and-heading=Is your organisation VAT registered?
 cds.subscription.vat-registered-uk.title-and-heading=Is your organisation VAT registered in the UK?
 cds.subscription.vat-registered-uk.partnership.title-and-heading=Is your partnership VAT registered in the UK?
 cds.subscription.vat-registered-uk.page-error.yes-no-answer=Confirm whether the organisation is VAT registered in the UK
@@ -1688,6 +1689,7 @@ cds.subscription.address-details.postcode.row.label=Postal code
 
 cds.matching.row-organisation.utr.title-and-heading=Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) issued in the UK?
 cds.matching.row-charity-public-body.utr.title-and-heading=Does your organisation have a Unique Taxpayer Reference (UTR) issued in the UK?
+cds.matching.row-charity-public-body.utr.iom.title-and-heading=Does your organisation have a Unique Taxpayer Reference (UTR)?
 ecc.matching.row-sole-trader-individual.utr.title-and-heading=Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?
 ecc.matching.row-sole-trader-individual.utr.paragraph=This is 10 numbers, for example 1234567890, which may be followed by a K. It will be on tax returns and other letters about Income Tax. It may be called reference, UTR or official use. You can {0}.
 

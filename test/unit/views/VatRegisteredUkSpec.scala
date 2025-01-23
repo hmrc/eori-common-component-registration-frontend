@@ -23,6 +23,7 @@ import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 import util.ViewSpec
@@ -42,18 +43,33 @@ class VatRegisteredUkSpec extends ViewSpec {
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   lazy val doc: Document =
-    Jsoup.parse(contentAsString(view(isInReviewMode, form, isIndividualFlow, isPartnership = false, atarService)))
+    Jsoup.parse(
+      contentAsString(view(isInReviewMode, form, isIndividualFlow, isPartnership = false, UserLocation.Uk, atarService))
+    )
 
   lazy val docWithErrors: Document = Jsoup.parse(
-    contentAsString(view(isInReviewMode, formWithError, isIndividualFlow, isPartnership = false, atarService))
+    contentAsString(
+      view(isInReviewMode, formWithError, isIndividualFlow, isPartnership = false, UserLocation.Uk, atarService)
+    )
   )
 
   lazy val docPartnership: Document = Jsoup.parse(
-    contentAsString(view(isInReviewMode, formPartnership, isIndividualFlow, isPartnership = true, atarService))
+    contentAsString(
+      view(isInReviewMode, formPartnership, isIndividualFlow, isPartnership = true, UserLocation.Uk, atarService)
+    )
   )
 
   lazy val docPartnershipWithErrors: Document = Jsoup.parse(
-    contentAsString(view(isInReviewMode, formPartnershipWithError, isIndividualFlow, isPartnership = true, atarService))
+    contentAsString(
+      view(
+        isInReviewMode,
+        formPartnershipWithError,
+        isIndividualFlow,
+        isPartnership = true,
+        UserLocation.Uk,
+        atarService
+      )
+    )
   )
 
   "The 'Is your organisation VAT registered in the UK?' Page" should {
