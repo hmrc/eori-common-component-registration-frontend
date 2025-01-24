@@ -17,6 +17,7 @@
 package unit.viewModels
 
 import base.UnitSpec
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.VatRegisteredUkViewModel
 import util.ControllerSpec
 
@@ -31,21 +32,24 @@ class VatRegisteredUkViewModelSpec extends UnitSpec with ControllerSpec {
     "display correct message for individual" in {
       viewModel.titleAndHeadingLabel(
         isIndividualSubscriptionFlow = true,
-        isPartnership = false
+        isPartnership = false,
+        UserLocation.Uk
       ) shouldBe "Are you VAT registered in the UK?"
     }
 
     "display correct message for partnership" in {
       viewModel.titleAndHeadingLabel(
         isIndividualSubscriptionFlow = false,
-        isPartnership = true
+        isPartnership = true,
+        UserLocation.Uk
       ) shouldBe "Is your partnership VAT registered in the UK?"
     }
 
     "display correct message for other orgType" in {
       viewModel.titleAndHeadingLabel(
         isIndividualSubscriptionFlow = false,
-        isPartnership = false
+        isPartnership = false,
+        UserLocation.Uk
       ) shouldBe "Is your organisation VAT registered in the UK?"
     }
   }

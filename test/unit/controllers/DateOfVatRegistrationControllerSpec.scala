@@ -37,8 +37,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.{Duration, SECONDS}
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 
 class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
 

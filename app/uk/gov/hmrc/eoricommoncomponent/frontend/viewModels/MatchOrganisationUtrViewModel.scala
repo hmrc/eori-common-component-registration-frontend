@@ -18,18 +18,24 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 
 import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 object MatchOrganisationUtrViewModel {
 
-  def headerAndTitle(cdsOrgTypeString: String)(implicit messages: Messages): String = cdsOrgTypeString match {
-    case ThirdCountryOrganisationId =>
-      messages("cds.matching.row-organisation.utr.title-and-heading")
-    case orgType if individualOrganisationIds.contains(orgType) =>
-      messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")
-    case CharityPublicBodyNotForProfitId =>
-      messages("cds.matching.row-charity-public-body.utr.title-and-heading")
-    case _ => messages("cds.matching.organisation.utr.title-and-heading")
-  }
+  def headerAndTitle(cdsOrgTypeString: String, userLocation: UserLocation)(implicit messages: Messages): String =
+    cdsOrgTypeString match {
+      case ThirdCountryOrganisationId =>
+        messages("cds.matching.row-organisation.utr.title-and-heading")
+      case orgType if individualOrganisationIds.contains(orgType) =>
+        messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")
+      case CharityPublicBodyNotForProfitId =>
+        if (userLocation == UserLocation.Iom) {
+          messages("cds.matching.row-charity-public-body.utr.iom.title-and-heading")
+        } else {
+          messages("cds.matching.row-charity-public-body.utr.title-and-heading")
+        }
+      case _ => messages("cds.matching.organisation.utr.title-and-heading")
+    }
 
   def isNotSoleTrader(cdsOrgTypeString: String) = !individualOrganisationIds.contains(cdsOrgTypeString)
 }

@@ -20,6 +20,8 @@ import play.api.Logger
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.convert
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.CachedData
@@ -36,6 +38,7 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
   private val orgTypeKey = "orgType"
   private val emailKey   = "email"
   private val safeIdKey  = "safeId"
+  private val userLocKey = "userLoc"
 
   def saveSafeId(groupId: GroupId, safeId: SafeId)(implicit hc: HeaderCarrier): Future[Unit] = {
     // $COVERAGE-OFF$Loggers
@@ -115,6 +118,21 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
         case _              => None
       }
 
+  }
+
+  def saveUserLocation(groupId: GroupId, userLocation: UserLocation)(implicit hc: HeaderCarrier): Future[Unit] = {
+    // $COVERAGE-OFF$Loggers
+    logger.debug(s"saving location $userLocation for groupId $groupId")
+    // $COVERAGE-ON
+    save4LaterConnector.put[UserLocation](groupId.id, userLocKey, Json.toJson(convert(userLocation)))
+  }
+
+  def fetchUserLocation(groupId: GroupId)(implicit hc: HeaderCarrier): Future[Option[UserLocation]] = {
+    // $COVERAGE-OFF$Loggers
+    logger.debug(s"fetching location groupId $groupId")
+    // $COVERAGE-ON
+    save4LaterConnector
+      .get[UserLocation](groupId.id, userLocKey)
   }
 
 }

@@ -16,16 +16,22 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.EmbassyId
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.CharityPublicBodySubscriptionNoUtrFlow
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
+  CharityPublicBodySubscriptionNoUtrFlow,
+  CharityPublicBodySubscriptionNoUtrFlowIom,
+  SubscriptionFlow
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.contactAddressForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_organisations_address
 
 import javax.inject.{Inject, Singleton}
@@ -38,6 +44,7 @@ class WhatIsYourOrganisationsAddressController @Inject() (
   requestSessionData: RequestSessionData,
   subscriptionDetailsService: SubscriptionDetailsService,
   subscriptionFlowManager: SubscriptionFlowManager,
+  registrationDetailsService: RegistrationDetailsService,
   what_is_your_organisations_address_view: what_is_your_organisations_address
 )(implicit executionContext: ExecutionContext)
     extends CdsController(mcc) {
@@ -83,19 +90,26 @@ class WhatIsYourOrganisationsAddressController @Inject() (
           )
         )
       else {
-        subscriptionDetailsService.cacheAddressDetails(filledForm.value.head)
-          .flatMap(
-            _ =>
-              subscriptionFlowManager.startSubscriptionFlowWithPage(
-                None,
-                service,
-                CharityPublicBodySubscriptionNoUtrFlow
-              )
-          )
-          .map {
-            case (flowPageOne, session) => Redirect(flowPageOne.url(service)).withSession(session)
-          }
+        val addr = filledForm.value.head
+        registrationDetailsService.cacheAddress(
+          Address(addr.lineOne, addr.lineTwo, Some(addr.townCity), None, Some(addr.postcode), addr.country)
+        ).flatMap { _ =>
+          subscriptionDetailsService.cacheAddressDetails(filledForm.value.head)
+            .flatMap(_ => subscriptionFlowManager.startSubscriptionFlowWithPage(None, service, redirectFlowLocation))
+            .map {
+              case (flowPageOne, session) => Redirect(flowPageOne.url(service)).withSession(session)
+            }
+
+        }
       }
+    }
+  }
+
+  private def redirectFlowLocation(implicit request: Request[AnyContent]): SubscriptionFlow = {
+    if (requestSessionData.selectedUserLocation.contains(UserLocation.Iom)) {
+      CharityPublicBodySubscriptionNoUtrFlowIom
+    } else {
+      CharityPublicBodySubscriptionNoUtrFlow
     }
   }
 

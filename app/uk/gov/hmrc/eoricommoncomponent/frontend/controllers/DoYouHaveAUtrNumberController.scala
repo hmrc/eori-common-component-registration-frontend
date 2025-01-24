@@ -22,6 +22,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -51,8 +52,12 @@ class DoYouHaveAUtrNumberController @Inject() (
       else
         subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>
           val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
-
-          Ok(matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service, isInReviewMode))
+          val userLocation: UserLocation = requestSessionData.selectedUserLocation.getOrElse(
+            throw new RuntimeException("Unable to find user location in session")
+          )
+          Ok(
+            matchOrganisationUtrView(form, organisationType, userLocation, OrganisationModeDM, service, isInReviewMode)
+          )
         }
     }
 
@@ -116,7 +121,11 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   private def view(organisationType: String, form: Form[UtrMatchModel], service: Service)(implicit
     request: Request[AnyContent]
-  ): HtmlFormat.Appendable =
-    matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service)
+  ): HtmlFormat.Appendable = {
+    val userLocation: UserLocation = requestSessionData.selectedUserLocation.getOrElse(
+      throw new RuntimeException("Unable to find user location in session")
+    )
+    matchOrganisationUtrView(form, organisationType, userLocation, OrganisationModeDM, service)
+  }
 
 }

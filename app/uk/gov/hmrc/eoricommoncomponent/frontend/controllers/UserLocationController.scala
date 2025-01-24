@@ -62,7 +62,7 @@ class UserLocationController @Inject() (
       continue(service)
     }
 
-  private def forRow(service: Service, groupId: GroupId, location: String)(implicit
+  private def forRow(service: Service, groupId: GroupId, location: UserLocation)(implicit
     request: Request[AnyContent],
     hc: HeaderCarrier
   ) =
@@ -70,7 +70,7 @@ class UserLocationController @Inject() (
       case (NewSubscription | SubscriptionRejected, Some(safeId)) =>
         registrationDisplayService
           .requestDetails(safeId)
-          .flatMap(cacheAndRedirect(service, location))
+          .flatMap(cacheAndRedirect(service, location, groupId))
       case (status, _) =>
         subscriptionStatus(status, groupId, service, location)
     }.flatMap(identity _)
@@ -84,18 +84,17 @@ class UserLocationController @Inject() (
           ),
         location =>
           (location, loggedInUser.groupId) match {
-            case (UserLocation.Iom, Some(_)) =>
-              Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
             case (location, Some(id)) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
             case _ =>
-              Future.successful(
-                Redirect(OrganisationTypeController.form(service))
-                  .withSession(
-                    requestSessionData
-                      .sessionWithUserLocationAdded(location)
-                  )
-              )
+              save4LaterService.saveUserLocation(GroupId(loggedInUser.groupId.head), location)
+                .map { _ =>
+                  Redirect(OrganisationTypeController.form(service))
+                    .withSession(
+                      requestSessionData
+                        .sessionWithUserLocationAdded(location)
+                    )
+                }
           }
       )
     }
@@ -125,33 +124,37 @@ class UserLocationController @Inject() (
             .map(_ => Redirect(SubscriptionRecoveryController.complete(service)))
       )
 
-  def subscriptionStatus(preSubStatus: PreSubscriptionStatus, groupId: GroupId, service: Service, location: String)(
-    implicit
-    request: Request[AnyContent],
-    hc: HeaderCarrier
-  ): Future[Result] =
+  def subscriptionStatus(
+    preSubStatus: PreSubscriptionStatus,
+    groupId: GroupId,
+    service: Service,
+    location: UserLocation
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] =
     preSubStatus match {
       case SubscriptionProcessing =>
         Future.successful(Redirect(UserLocationController.processing(service)))
       case SubscriptionExists => handleExistingSubscription(groupId, service)
       case NewSubscription | SubscriptionRejected =>
-        Future.successful(
-          Redirect(OrganisationTypeController.form(service))
-            .withSession(requestSessionData.sessionWithUserLocationAdded(location))
-        )
+        save4LaterService.saveUserLocation(groupId, location).flatMap { _ =>
+          Future.successful(
+            Redirect(OrganisationTypeController.form(service))
+              .withSession(requestSessionData.sessionWithUserLocationAdded(location))
+          )
+        }
     }
 
-  def cacheAndRedirect(service: Service, location: String)(implicit
+  def cacheAndRedirect(service: Service, location: UserLocation, groupId: GroupId)(implicit
     request: Request[AnyContent]
   ): Either[_, RegistrationDisplayResponse] => Future[Result] = {
 
     case rResponse @ Right(RegistrationDisplayResponse(_, Some(_))) =>
       registrationDisplayService.cacheDetails(rResponse.value).flatMap { _ =>
-        Future.successful(
+        save4LaterService.saveUserLocation(groupId, location).map { _ =>
           Redirect(BusinessDetailsRecoveryController.form(service)).withSession(
             requestSessionData.sessionWithUserLocationAdded(location)
           )
-        )
+
+        }
       }
     case _ => Future.successful(InternalServerError(errorTemplate(service)))
   }

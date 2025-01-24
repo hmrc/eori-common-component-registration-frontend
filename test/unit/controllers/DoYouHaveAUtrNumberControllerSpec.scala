@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnec
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
@@ -52,7 +53,7 @@ class DoYouHaveAUtrNumberControllerSpec
   private val mockMatchingResponse           = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val matchOrganisationUtrView       = instanceOf[match_organisation_utr]
-  private val mockRequestSessionData         = instanceOf[RequestSessionData]
+  private val mockRequestSessionData         = mock[RequestSessionData]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
@@ -69,6 +70,7 @@ class DoYouHaveAUtrNumberControllerSpec
     super.beforeEach()
 
     when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
+    when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
   }
 
   "Viewing the Utr Organisation Matching form" should {
@@ -242,6 +244,19 @@ class DoYouHaveAUtrNumberControllerSpec
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?")
         page.h1() shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
+        page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
+      }
+    }
+  }
+
+  "display the form for IOM" should {
+    "have the right content" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
+
+      showForm(CdsOrganisationType.CharityPublicBodyNotForProfitId, defaultUserId) { result =>
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith("Does your organisation have a Unique Taxpayer Reference (UTR)?")
+        page.h1() shouldBe "Does your organisation have a Unique Taxpayer Reference (UTR)?"
         page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
       }
     }
