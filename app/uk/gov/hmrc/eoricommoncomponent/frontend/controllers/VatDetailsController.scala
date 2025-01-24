@@ -27,7 +27,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -55,7 +59,8 @@ class VatDetailsController @Inject() (
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => user: LoggedInUserWithEnrolments =>
-        val userLocation = requestSessionData.selectedUserLocation.head // todo fix head
+        val userLocation =
+          requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
         sessionCacheService.individualAndSoleTraderRouter(
           user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
           service,
@@ -66,7 +71,8 @@ class VatDetailsController @Inject() (
   def reviewForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
       implicit request => user: LoggedInUserWithEnrolments =>
-        val userLocation = requestSessionData.selectedUserLocation.head // todo fix head
+        val userLocation =
+          requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
         subscriptionBusinessService.getCachedUkVatDetails.map {
           case Some(vatDetails) =>
             Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, userLocation, service))
@@ -82,7 +88,8 @@ class VatDetailsController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      val userLocation = requestSessionData.selectedUserLocation.head // todo fix head
+      val userLocation =
+        requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
       vatDetailsForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, userLocation, service))),
@@ -133,7 +140,8 @@ class VatDetailsController @Inject() (
     }
 
   private def redirectNext(service: Service)(implicit request: Request[AnyContent]) = {
-    val userLocation = requestSessionData.selectedUserLocation.head // TODO fix head
+    val userLocation =
+      requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
     if (userLocation == Iom) {
       YourVatDetailsController.vatDetailsNotMatched(service)
     } else {

@@ -30,7 +30,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolmen
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_registered_uk
 
@@ -56,6 +60,8 @@ class VatRegisteredUkController @Inject() (
       implicit request => user: LoggedInUserWithEnrolments =>
         isIndividualFlow match {
           case Right(isIndividual) =>
+            val location =
+              requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
             sessionCacheService.individualAndSoleTraderRouter(
               user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
               service,
@@ -65,7 +71,7 @@ class VatRegisteredUkController @Inject() (
                   vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP),
                   isIndividual,
                   requestSessionData.isPartnershipOrLLP,
-                  requestSessionData.selectedUserLocation.head, // todo fix head
+                  location,
                   service
                 )
               )
@@ -86,6 +92,8 @@ class VatRegisteredUkController @Inject() (
           yesNo: YesNo = YesNo(isVatRegisteredUk)
         } yield isIndividualFlow match {
           case Right(individual) =>
+            val location =
+              requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
             sessionCacheService.individualAndSoleTraderRouter(
               user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
               service,
@@ -95,7 +103,7 @@ class VatRegisteredUkController @Inject() (
                   vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
                   individual,
                   requestSessionData.isPartnershipOrLLP,
-                  requestSessionData.selectedUserLocation.head, //todo fix head
+                  location,
                   service
                 )
               )
@@ -114,6 +122,9 @@ class VatRegisteredUkController @Inject() (
           formWithErrors =>
             isIndividualFlow match {
               case Right(individual) =>
+                val location = requestSessionData.selectedUserLocation.getOrElse(
+                  throw DataUnavailableException("User Location not set")
+                )
                 Future.successful(
                   BadRequest(
                     vatRegisteredUkView(
@@ -121,7 +132,7 @@ class VatRegisteredUkController @Inject() (
                       formWithErrors,
                       individual,
                       requestSessionData.isPartnershipOrLLP,
-                      requestSessionData.selectedUserLocation.head, // todo fix head
+                      location,
                       service
                     )
                   )
@@ -152,7 +163,8 @@ class VatRegisteredUkController @Inject() (
     }
 
   private def redirectCreateNext(service: Service)(implicit request: Request[AnyContent]) = {
-    val userLocation = requestSessionData.selectedUserLocation.head // TODO fix head
+    val userLocation =
+      requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
     if (userLocation == Iom) {
       YourVatDetailsController.createForm(service).url
     } else {
@@ -161,7 +173,8 @@ class VatRegisteredUkController @Inject() (
   }
 
   private def redirectReviewNext(service: Service)(implicit request: Request[AnyContent]) = {
-    val userLocation = requestSessionData.selectedUserLocation.head // TODO fix head
+    val userLocation =
+      requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
     if (userLocation == Iom) {
       YourVatDetailsController.reviewForm(service).url
     } else {
