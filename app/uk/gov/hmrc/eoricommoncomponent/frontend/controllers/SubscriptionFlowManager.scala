@@ -154,6 +154,8 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
           (rdo.etmpOrganisationType, loc) match {
             case (Some(UnincorporatedBody), Iom) => SubscriptionFlow(CharityPublicBodySubscriptionFlowIom.name)
             case (Some(UnincorporatedBody), _)   => SubscriptionFlow(CharityPublicBodySubscriptionFlow.name)
+            case (Some(Partnership), Iom)        => SubscriptionFlow(PartnershipSubscriptionFlowIom.name)
+            case (Some(Partnership), _)          => SubscriptionFlow(PartnershipSubscriptionFlow.name)
             case (_, Iom)                        => throw new Exception("to be done in DDCYLS-6242")
             case _                               => SubscriptionFlow(OrganisationSubscriptionFlow.name)
           }

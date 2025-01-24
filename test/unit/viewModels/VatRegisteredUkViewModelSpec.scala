@@ -45,6 +45,14 @@ class VatRegisteredUkViewModelSpec extends UnitSpec with ControllerSpec {
       ) shouldBe "Is your partnership VAT registered in the UK?"
     }
 
+    "display correct message for partnership for IOM" in {
+      viewModel.titleAndHeadingLabel(
+        isIndividualSubscriptionFlow = false,
+        isPartnership = true,
+        UserLocation.Iom
+      ) shouldBe "Is your partnership VAT registered?"
+    }
+
     "display correct message for other orgType" in {
       viewModel.titleAndHeadingLabel(
         isIndividualSubscriptionFlow = false,

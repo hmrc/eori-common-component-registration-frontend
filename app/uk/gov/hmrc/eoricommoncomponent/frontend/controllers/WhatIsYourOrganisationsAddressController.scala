@@ -18,18 +18,18 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.EmbassyId
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Partnership
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   CharityPublicBodySubscriptionNoUtrFlow,
-  CharityPublicBodySubscriptionNoUtrFlowIom,
+  PartnershipSubscriptionFlowIom,
   SubscriptionFlow
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.contactAddressForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_organisations_address
@@ -54,62 +54,70 @@ class WhatIsYourOrganisationsAddressController @Inject() (
       val (countriesToInclude, countriesInCountryPicker) =
         Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
 
-      Future.successful(
+      subscriptionDetailsService.cachedOrganisationType.map { optOrgType =>
+        val orgType = optOrgType.getOrElse(throw DataUnavailableException("organisation type unavailable"))
         Ok(
           what_is_your_organisations_address_view(
             isInReviewMode,
             contactAddressForm,
             countriesToInclude,
             countriesInCountryPicker,
-            EmbassyId,
+            orgType.id,
             service
           )
         )
-      )
+      }
     }
   }
 
   def submit(isInReviewMode: Boolean = false, service: Service): Action[AnyContent] = {
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      val filledForm = contactAddressForm.bindFromRequest()
+      subscriptionDetailsService.cachedOrganisationType.flatMap { optOrgType =>
+        val orgType = optOrgType.getOrElse(throw DataUnavailableException("organisation type unavailable"))
 
-      val (countriesToInclude, countriesInCountryPicker) =
-        Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
+        val filledForm = contactAddressForm.bindFromRequest()
 
-      if (filledForm.hasErrors)
-        Future.successful(
-          BadRequest(
-            what_is_your_organisations_address_view(
-              isInReviewMode,
-              filledForm,
-              countriesToInclude,
-              countriesInCountryPicker,
-              EmbassyId,
-              service
+        val (countriesToInclude, countriesInCountryPicker) =
+          Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
+
+        if (filledForm.hasErrors)
+          Future.successful(
+            BadRequest(
+              what_is_your_organisations_address_view(
+                isInReviewMode,
+                filledForm,
+                countriesToInclude,
+                countriesInCountryPicker,
+                orgType.id,
+                service
+              )
             )
           )
-        )
-      else {
-        val addr = filledForm.value.head
-        registrationDetailsService.cacheAddress(
-          Address(addr.lineOne, addr.lineTwo, Some(addr.townCity), None, Some(addr.postcode), addr.country)
-        ).flatMap { _ =>
-          subscriptionDetailsService.cacheAddressDetails(filledForm.value.head)
-            .flatMap(_ => subscriptionFlowManager.startSubscriptionFlowWithPage(None, service, redirectFlowLocation))
-            .map {
-              case (flowPageOne, session) => Redirect(flowPageOne.url(service)).withSession(session)
-            }
+        else {
+          val addr = filledForm.value.head
+          registrationDetailsService.cacheAddress(
+            Address(addr.lineOne, addr.lineTwo, Some(addr.townCity), None, Some(addr.postcode), addr.country)
+          ).flatMap { _ =>
+            subscriptionDetailsService.cacheAddressDetails(filledForm.value.head)
+              .flatMap(
+                _ => subscriptionFlowManager.startSubscriptionFlowWithPage(None, service, redirectFlowLocation(orgType))
+              )
+              .map {
+                case (flowPageOne, session) => Redirect(flowPageOne.url(service)).withSession(session)
+              }
 
+          }
         }
       }
     }
   }
 
-  private def redirectFlowLocation(implicit request: Request[AnyContent]): SubscriptionFlow = {
-    if (requestSessionData.selectedUserLocation.contains(UserLocation.Iom)) {
-      CharityPublicBodySubscriptionNoUtrFlowIom
-    } else {
-      CharityPublicBodySubscriptionNoUtrFlow
+  private def redirectFlowLocation(
+    cdsOrganisationType: CdsOrganisationType
+  )(implicit request: Request[AnyContent]): SubscriptionFlow = {
+    (requestSessionData.selectedUserLocation, cdsOrganisationType) match {
+      case (Some(UserLocation.Iom), Partnership) => PartnershipSubscriptionFlowIom
+      case _                                     => CharityPublicBodySubscriptionNoUtrFlow
     }
   }
 

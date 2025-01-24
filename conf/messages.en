@@ -32,6 +32,7 @@ cds.use-short-name.label=Does your company use a shortened or alternative name?
 cds.short-name.label=Short name
 cds.subscription.sic.individual.sic.label=SIC code
 cds.date-established.label=Date of establishment
+cds.date-established.partnership.label=Partnership establish date
 cds.date-of-birth.label=Date of birth
 cds.date-incorporated.label=Date of incorporation
 cds.date-established.hint=For example, 31 03 1980
@@ -686,9 +687,11 @@ cds.matching-error.business-details.company-name.too-long=The company name must 
 cds.matching-error.business-details.company-name.invalid-chars=Company name cannot contain ''<'' or ''>''
 
 cds.matching.organisation.name.title=What is the organisation’s name?
+cds.matching.partnership.name.title=What is your registered partnership name?
 gagmr.matching.organisation.name.title=What is the name of your organisation?
 cds.matching.organisation.name.label=Organisation name
 cds.matching.organisation.name.heading=What is the organisation’s name?
+cds.matching.partnership.name.heading=What is your registered partnership name?
 gagmr.matching.organisation.name.heading=What is the name of your organisation?
 cds.matching.organisation-name.error.name=Enter your registered organisation name
 
@@ -1198,7 +1201,7 @@ cds.form.gb-vat-date=Date of VAT registration
 cds.form.gb-vat-amount=Your VAT return total or Box 5 amount
 cds.form.eu-vat-numbers=EU VAT numbers
 cds.form.customs-contact=Contact
-cds.form.partnership.contact-details=Partnership address
+cds.form.partnership.contact-details=Registered partnership address
 cds.form.disclosure=Show name and address on the ''Check an EORI number'' service
 cds.form.third-country=Third country unique identifier number
 cds.form.union=Establishment in the customs territory of the Union
@@ -1235,6 +1238,7 @@ cds.subscription.organisation-disclose-personal-details-consent.form-error.yes-n
 cds.subscription.vat-registered.title-and-heading=Is your organisation VAT registered?
 cds.subscription.vat-registered-uk.title-and-heading=Is your organisation VAT registered in the UK?
 cds.subscription.vat-registered-uk.partnership.title-and-heading=Is your partnership VAT registered in the UK?
+cds.subscription.vat-registered.partnership.title-and-heading=Is your partnership VAT registered?
 cds.subscription.vat-registered-uk.page-error.yes-no-answer=Confirm whether the organisation is VAT registered in the UK
 cds.subscription.vat-group.title-and-heading=Is your organisation part of a VAT group in the UK?
 cds.subscription.vat-verification-option.title-and-heading=What do you want to use to verify your identity?
@@ -2140,7 +2144,9 @@ cds.your-contact-address.postcode=Postcode
 
 #Your Organisation Address
 cds.your-organisation-address.title=What is your organisation’s address?
+cds.your-partnership-address.title=What is your registered partnership address?
 cds.your-organisation-address.header=What is your organisation’s address?
+cds.your-partnership-address.header=What is your registered partnership address?
 cds.your-organisation-address.line-1=Address line 1
 cds.your-organisation-address.line-2=Address line 2 (optional)
 cds.your-organisation-address.town-city=Town or city
