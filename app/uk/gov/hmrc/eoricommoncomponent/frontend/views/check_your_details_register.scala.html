@@ -31,9 +31,8 @@
 )(implicit request: Request[_], messages: Messages)
 
 
-@isIndividual = @{
-    cdsOrgType.contains(CdsOrganisationType.Individual) ||
-    cdsOrgType.contains(CdsOrganisationType.EUIndividual) || cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
+@isEmbassy = @{
+    cdsOrgType.contains(CdsOrganisationType.Embassy)
 }
 
 @vatHidden = @{
@@ -49,7 +48,7 @@
             @govukSummaryList(viewModel.providedDetails)
         </div>
 
-        @if(!isIndividual){
+        @if(!isEmbassy){
 
         <div>
 

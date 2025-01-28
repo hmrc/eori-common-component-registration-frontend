@@ -190,7 +190,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
       for {
         providedDetailsList <- providedDetails
-        vatDetails             = getVatDetails(isIndividual, isEmbassy, subscription)
+        vatDetails             = getVatDetails(isEmbassy, subscription)
         providedContactDetails = getProvidedContactDetails(subscription, service)
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
     }
@@ -421,10 +421,10 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     )
   }
 
-  private def getVatDetails(isIndividual: Boolean, isEmbassy: Boolean, subscription: SubscriptionDetails)(implicit
+  private def getVatDetails(isEmbassy: Boolean, subscription: SubscriptionDetails)(implicit
     messages: Messages
   ): Seq[SummaryListRow] =
-    if (!isIndividual && !isEmbassy) {
+    if (!isEmbassy) {
       val dateOfReg = for {
         resp <- subscription.vatControlListResponse
         date <- resp.dateOfReg

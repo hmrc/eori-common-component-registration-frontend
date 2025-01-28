@@ -141,7 +141,10 @@ class CheckYourDetailsRegisterControllerSpec
 
       showForm(userSelectedOrgType = SoleTrader) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Full name") shouldBe
+        page.getSummaryListValue(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Registered first name and last name"
+        ) shouldBe
           strim("""
                 |John
                 |Doe
@@ -166,7 +169,10 @@ class CheckYourDetailsRegisterControllerSpec
 
       showForm(userSelectedOrgType = SoleTrader) { result =>
         val page = CdsPage(contentAsString(result))
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Full name") shouldBe
+        page.getSummaryListValue(
+          RegistrationReviewPage.SummaryListRowXPath,
+          "Registered first name and last name"
+        ) shouldBe
           strim("""
                 |John
                 |Doe
@@ -174,12 +180,12 @@ class CheckYourDetailsRegisterControllerSpec
 
         page.getSummaryListLink(
           RegistrationReviewPage.SummaryListRowXPath,
-          "Full name",
+          "Registered first name and last name",
           "Change"
-        ) shouldBe RegistrationReviewPage.changeAnswerText("Full name")
+        ) shouldBe RegistrationReviewPage.changeAnswerText("Registered first name and last name")
         page.getSummaryListHref(
           RegistrationReviewPage.SummaryListRowXPath,
-          "Full name",
+          "Registered first name and last name",
           "Change"
         ) shouldBe "/customs-registration-services/atar/register/matching/row-name-date-of-birth/sole-trader/review"
 
@@ -398,7 +404,7 @@ class CheckYourDetailsRegisterControllerSpec
         showForm(userSelectedOrgType = organisationType) { result =>
           val page = CdsPage(contentAsString(result))
 
-          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Your address") shouldBe true
+          page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Registered address") shouldBe true
         }
       }
     }
@@ -775,7 +781,7 @@ class CheckYourDetailsRegisterControllerSpec
     showForm(userSelectedOrgType = Individual, isIndividualSubscriptionFlow = true) { result =>
       val page: CdsPage = CdsPage(contentAsString(result))
 
-      page.h2() should startWith("Your details Contact details Declaration Support links")
+      page.h2() should startWith("Your details VAT details Contact details Declaration Support links")
 
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,

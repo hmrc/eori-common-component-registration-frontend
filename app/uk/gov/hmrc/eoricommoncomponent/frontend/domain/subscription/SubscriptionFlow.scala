@@ -44,6 +44,17 @@ object SubscriptionFlows {
     )
   )
 
+  private val individualSoleTraderFlowIomConfig = createFlowConfig(
+    List(
+      SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
+      VatRegisteredSubscriptionFlowPage,
+      YourVatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
   private val corporateFlowConfig = createFlowConfig(
     List(
       DateOfEstablishmentSubscriptionFlowPage,
@@ -175,7 +186,8 @@ object SubscriptionFlows {
     CharityPublicBodySubscriptionNoUtrFlow    -> charityPublicBodySubscriptionNoUtrFlowConfig,
     CharityPublicBodySubscriptionFlowIom      -> charityPublicBodyNotForProfitFlowIomConfig,
     CharityPublicBodySubscriptionNoUtrFlowIom -> charityPublicBodySubscriptionNoUtrFlowIomConfig,
-    PartnershipSubscriptionFlowIom            -> partnershipFlowIomConfig
+    PartnershipSubscriptionFlowIom            -> partnershipFlowIomConfig,
+    IndividualSoleTraderFlowIom               -> individualSoleTraderFlowIomConfig
   )
 
   private def createFlowConfig(flowStepList: List[SubscriptionPage]): SubscriptionFlowConfig =
@@ -212,6 +224,8 @@ case object ThirdCountryIndividualSubscriptionFlow
     extends SubscriptionFlow(ThirdCountryIndividual.id, isIndividualFlow = true)
 
 case object SoleTraderSubscriptionFlow extends SubscriptionFlow(SoleTrader.id, isIndividualFlow = true)
+
+case object IndividualSoleTraderFlowIom extends SubscriptionFlow("IndividualSoleTraderIom", isIndividualFlow = true)
 
 case object CharityPublicBodySubscriptionFlow extends SubscriptionFlow("CharityPublicBody", isIndividualFlow = false)
 

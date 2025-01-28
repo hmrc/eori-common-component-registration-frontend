@@ -15,7 +15,7 @@
  *@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
-@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.PartnershipId
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{IndividualId, PartnershipId, SoleTraderId}
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain.ContactAddressMatchModel
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
@@ -45,11 +45,13 @@
 
 @title = @{
     if(cdsOrgType==PartnershipId) messages("cds.your-partnership-address.title")
+    else if(cdsOrgType==IndividualId || cdsOrgType==SoleTraderId) messages("cds.your-individual-sole-trader-address.title")
     else messages("cds.your-organisation-address.title")
 }
 
 @header = @{
     if(cdsOrgType==PartnershipId) messages("cds.your-partnership-address.header")
+    else if(cdsOrgType==IndividualId || cdsOrgType==SoleTraderId) messages("cds.your-individual-sole-trader-address.header")
     else messages("cds.your-organisation-address.header")
 }
 

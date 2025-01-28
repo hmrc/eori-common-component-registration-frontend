@@ -400,7 +400,7 @@ cds.subscription.contact-details.form-error.email.wrong-format=Enter an email ad
 
 cds.email-confirmed.para.get-eori=You can continue with your application to get an EORI number.
 
-subscription.check-your-details.full-name.label=Full name
+subscription.check-your-details.full-name.label=Registered first name and last name
 subscription.check-your-details.date-of-birth.label=Date of birth
 cds.organisation.name.label=Organisation name
 cds.company.name.label=Company name
@@ -893,6 +893,7 @@ cds.subscription.vat-details.intro-text.link=Sign in to your VAT online account 
 cds.subscription.vat-details.intro-text.link.text = to view your VAT certificate.
 cds.subscription.vat-details.uk.postcode=What is the UK postcode where your organisation is registered for VAT?
 cds.subscription.vat-details.postcode=What is the postcode where your organisation is registered for VAT?
+cds.subscription.vat-details.individual-sole-trader.postcode=What is the postcode where you are registered for VAT?
 cds.subscription.vat-details.vat-number=What is your VAT registration number?
 cds.subscription.vat-details.vat-number.hint-text = This is 9 numbers, sometimes with ‘GB’ at the start, for example 123456789 or GB123456789.
 
@@ -1028,6 +1029,7 @@ cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet
 cds.subscription.sic.description.para2=Enter a 5-digit SIC code for your organisation
 cds.subscription.sic.description.para2.company = What is the company’s SIC code?
 cds.subscription.sic.description.para2.sole-trader = What is your SIC code?
+cds.subscription.sic.description.para2.individual = What is your SIC code?
 cds.subscription.sic.description.para2.partnership = What is the partnership’s SIC code?
 cds.subscription.sic.description.para2.limited-liability-partnership = What is the partnership’s SIC code?
 cds.subscription.sic.description.para2.charity-public-body-not-for-profit = What is your SIC code?
@@ -1239,6 +1241,7 @@ cds.subscription.vat-registered.title-and-heading=Is your organisation VAT regis
 cds.subscription.vat-registered-uk.title-and-heading=Is your organisation VAT registered in the UK?
 cds.subscription.vat-registered-uk.partnership.title-and-heading=Is your partnership VAT registered in the UK?
 cds.subscription.vat-registered.partnership.title-and-heading=Is your partnership VAT registered?
+cds.subscription.vat-registered.individual.title-and-heading=Are you VAT registered?
 cds.subscription.vat-registered-uk.page-error.yes-no-answer=Confirm whether the organisation is VAT registered in the UK
 cds.subscription.vat-group.title-and-heading=Is your organisation part of a VAT group in the UK?
 cds.subscription.vat-verification-option.title-and-heading=What do you want to use to verify your identity?
@@ -1619,7 +1622,7 @@ cds.navigation.subscribe=Subscribe
 
 subscription.check-your-email.no=No, I need to change this email address
 
-cds.form.contact-details=Your address
+cds.form.contact-details=Registered address
 
 cds.error.field.hint=Error
 
@@ -2145,8 +2148,10 @@ cds.your-contact-address.postcode=Postcode
 #Your Organisation Address
 cds.your-organisation-address.title=What is your organisation’s address?
 cds.your-partnership-address.title=What is your registered partnership address?
+cds.your-individual-sole-trader-address.title=What is your address?
 cds.your-organisation-address.header=What is your organisation’s address?
 cds.your-partnership-address.header=What is your registered partnership address?
+cds.your-individual-sole-trader-address.header=What is your address?
 cds.your-organisation-address.line-1=Address line 1
 cds.your-organisation-address.line-2=Address line 2 (optional)
 cds.your-organisation-address.town-city=Town or city
