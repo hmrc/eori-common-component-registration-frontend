@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.PartnershipId
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationNameForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -70,9 +71,13 @@ class WhatIsYourOrgNameController @Inject() (
   )(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) flatMap { _ =>
       if (!isInReviewMode)
-        subscriptionDetailsService.updateSubscriptionDetailsOrgName(formData.name).map(
-          _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
-        )
+        subscriptionDetailsService.updateSubscriptionDetailsOrgName(formData.name).map { _ =>
+          if (organisationType == PartnershipId) {
+            Redirect(WhatIsYourOrganisationsAddressController.showForm(service))
+          } else {
+            Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
+          }
+        }
       else
         Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
     }

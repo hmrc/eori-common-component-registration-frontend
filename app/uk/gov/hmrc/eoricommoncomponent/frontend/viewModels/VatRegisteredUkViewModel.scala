@@ -32,7 +32,10 @@ object VatRegisteredUkViewModel {
     implicit messages: Messages
   ): String =
     if (isIndividualSubscriptionFlow) messages("cds.subscription.vat-question-uk.individual")
-    else if (isPartnership) messages("cds.subscription.vat-registered-uk.partnership.title-and-heading")
+    else if (isPartnership && userLocation != Iom)
+      messages("cds.subscription.vat-registered-uk.partnership.title-and-heading")
+    else if (isPartnership && userLocation == Iom)
+      messages("cds.subscription.vat-registered.partnership.title-and-heading")
     else if (userLocation == Iom) messages("cds.subscription.vat-registered.title-and-heading")
     else messages("cds.subscription.vat-registered-uk.title-and-heading")
 

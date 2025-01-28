@@ -54,7 +54,11 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   def getDateOfEstablishmentLabel(cdsOrgType: Option[CdsOrganisationType])(implicit messages: Messages): String = {
     val isSoleTrader = cdsOrgType.contains(CdsOrganisationType.SoleTrader) ||
       cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader)
+
+    val isPartnership = cdsOrgType.contains(CdsOrganisationType.Partnership)
+
     if (isSoleTrader) messages("cds.date-of-birth.label")
+    else if (isPartnership) messages("cds.date-established.partnership.label")
     else messages("cds.date-established.label")
   }
 

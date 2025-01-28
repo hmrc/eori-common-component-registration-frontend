@@ -68,6 +68,18 @@ object SubscriptionFlows {
     )
   )
 
+  private val partnershipFlowIomConfig = createFlowConfig(
+    List(
+      DateOfEstablishmentSubscriptionFlowPage,
+      SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
+      VatRegisteredSubscriptionFlowPage,
+      YourVatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
   private val thirdCountryIndividualFlowConfig =
     createFlowConfig(
       List(
@@ -162,7 +174,8 @@ object SubscriptionFlows {
     CharityPublicBodySubscriptionFlow         -> charityPublicBodyNotForProfitFlowConfig,
     CharityPublicBodySubscriptionNoUtrFlow    -> charityPublicBodySubscriptionNoUtrFlowConfig,
     CharityPublicBodySubscriptionFlowIom      -> charityPublicBodyNotForProfitFlowIomConfig,
-    CharityPublicBodySubscriptionNoUtrFlowIom -> charityPublicBodySubscriptionNoUtrFlowIomConfig
+    CharityPublicBodySubscriptionNoUtrFlowIom -> charityPublicBodySubscriptionNoUtrFlowIomConfig,
+    PartnershipSubscriptionFlowIom            -> partnershipFlowIomConfig
   )
 
   private def createFlowConfig(flowStepList: List[SubscriptionPage]): SubscriptionFlowConfig =
@@ -184,6 +197,8 @@ case object OrganisationSubscriptionFlow extends SubscriptionFlow("Organisation"
 case object EmbassySubscriptionFlow extends SubscriptionFlow("Embassy", isIndividualFlow = false)
 
 case object PartnershipSubscriptionFlow extends SubscriptionFlow("Partnership", isIndividualFlow = false)
+
+case object PartnershipSubscriptionFlowIom extends SubscriptionFlow("PartnershipIom", isIndividualFlow = false)
 
 case object IndividualSubscriptionFlow extends SubscriptionFlow("Individual", isIndividualFlow = true)
 
@@ -352,6 +367,13 @@ case object BusinessDetailsRecoveryPage extends SubscriptionPage {
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.BusinessDetailsRecoveryController
       .form(service)
       .url
+
+}
+
+case object WhatIsYourContactAddressPage extends SubscriptionPage {
+
+  override def url(service: Service): String =
+    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourContactAddressController.showForm(service).url
 
 }
 
