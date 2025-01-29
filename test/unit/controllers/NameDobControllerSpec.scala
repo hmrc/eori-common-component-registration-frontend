@@ -226,7 +226,17 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       }
     }
 
-    "redirect to the confirm page when successful" in {
+    "redirect to the confirm page when successful for UK" in {
+      submitForm(ValidRequest, defaultOrganisationType) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith(
+          "/customs-registration-services/atar/register/matching/chooseid"
+        )
+      }
+    }
+
+    "redirect to the confirm page when successful for Isle Of Man" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
       submitForm(ValidRequest, defaultOrganisationType) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith(
@@ -234,6 +244,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         )
       }
     }
+
   }
 
   def showForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {

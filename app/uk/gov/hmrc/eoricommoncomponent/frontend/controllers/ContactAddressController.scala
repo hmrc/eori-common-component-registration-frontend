@@ -22,17 +22,25 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   CharityPublicBodyNotForProfit,
+  Company,
   Embassy,
   Individual,
+  LimitedLiabilityPartnership,
   Partnership,
   SoleTrader
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
 
@@ -47,6 +55,7 @@ class ContactAddressController @Inject() (
   subscriptionBusinessService: SubscriptionBusinessService,
   cdsFrontendDataCache: SessionCache,
   subscriptionFlowManager: SubscriptionFlowManager,
+  requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   contactAddressView: contact_address
 )(implicit ec: ExecutionContext)
@@ -146,12 +155,20 @@ class ContactAddressController @Inject() (
       if (
         optOrgType.contains(Embassy) || optOrgType.contains(CharityPublicBodyNotForProfit) || optOrgType.contains(
           Partnership
-        ) || optOrgType.contains(Individual) || optOrgType.contains(SoleTrader)
+        ) || optOrgType.contains(Individual) || optOrgType.contains(SoleTrader) || optOrgType.contains(Company)
+        || optOrgType.contains(LimitedLiabilityPartnership)
       ) {
         if (yesNoAnswer.isYes) {
           Redirect(DetermineReviewPageController.determineRoute(service))
         } else {
-          Redirect(WhatIsYourContactAddressController.showForm(service))
+          val userLocation = requestSessionData.selectedUserLocation.getOrElse(
+            throw new DataUnavailableException("unable to find user location")
+          )
+          if (userLocation == UserLocation.Iom || optOrgType.contains(Embassy)) {
+            Redirect(WhatIsYourContactAddressController.showForm(service))
+          } else {
+            Redirect(AddressController.createForm(service))
+          }
         }
       } else {
         yesNoAnswer match {

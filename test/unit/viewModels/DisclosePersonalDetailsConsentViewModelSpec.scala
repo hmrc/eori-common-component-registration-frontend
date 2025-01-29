@@ -47,8 +47,8 @@ class DisclosePersonalDetailsConsentViewModelSpec extends UnitSpec with Controll
     ),
     (
       CdsOrganisationType.LimitedLiabilityPartnership,
-      messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.question"),
-      messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2")
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.org.question"),
+      messages("ecc.subscription.organisation-disclose-personal-details-consent.org.para2")
     ),
     (
       CdsOrganisationType.CharityPublicBodyNotForProfit,

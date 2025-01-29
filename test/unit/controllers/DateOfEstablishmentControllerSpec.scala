@@ -171,14 +171,14 @@ class DateOfEstablishmentControllerSpec
       }
     }
 
-    "use partnership in title and heading for Limited Liability Partnership Org Type" in {
+    "use organisation in title and heading for Limited Liability Partnership Org Type" in {
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(LLP))
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("When was the partnership established?")
+        page.title() should startWith("When was the organisation established?")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "When was the partnership established?"
+        ) shouldBe "When was the organisation established?"
       }
     }
 
@@ -194,14 +194,14 @@ class DateOfEstablishmentControllerSpec
       }
     }
 
-    "use business in Date of Establishment text and organisation in title and heading for Company Org Type" in {
+    "use organisation in Date of Establishment text and in title and heading for Company Org Type" in {
       when(mockOrgTypeLookup.etmpOrgType(any[Request[AnyContent]])).thenReturn(Future.successful(CorporateBody))
       showCreateForm(cachedDate = Some(DateOfEstablishment)) { result =>
         val page = CdsPage(contentAsString(result))
-        page.title() should startWith("When was the company established?")
+        page.title() should startWith("When was the organisation established?")
         page.getElementsText(
           SubscriptionDateOfEstablishmentPage.dateOfEstablishmentHeadingXPath
-        ) shouldBe "When was the company established?"
+        ) shouldBe "When was the organisation established?"
       }
     }
   }

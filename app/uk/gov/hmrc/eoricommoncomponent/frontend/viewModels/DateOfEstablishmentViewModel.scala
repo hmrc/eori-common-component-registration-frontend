@@ -29,9 +29,9 @@ object DateOfEstablishmentViewModel {
 
   def headerAndTitle(orgType: EtmpOrganisationType, isRestOfWorldJourney: Boolean): String =
     (orgType, isRestOfWorldJourney) match {
-      case (Partnership | LLP, _) => "cds.subscription.partnership.date-of-establishment.title-and-heading"
-      case (CorporateBody, false) => "cds.subscription.date-of-establishment.company.title-and-heading"
-      case (_, _)                 => "cds.subscription.date-of-establishment.title-and-heading"
+      case (Partnership, _)             => "cds.subscription.partnership.date-of-establishment.title-and-heading"
+      case (CorporateBody | LLP, false) => "cds.subscription.date-of-establishment.company.title-and-heading"
+      case (_, _)                       => "cds.subscription.date-of-establishment.title-and-heading"
     }
 
 }

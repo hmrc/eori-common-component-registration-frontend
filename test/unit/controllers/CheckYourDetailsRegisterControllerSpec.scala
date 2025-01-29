@@ -109,7 +109,7 @@ class CheckYourDetailsRegisterControllerSpec
     when(mockSubscriptionDetails.personalDataDisclosureConsent).thenReturn(Some(true))
     when(mockSubscriptionDetails.contactDetails).thenReturn(Some(contactUkDetailsModelWithMandatoryValuesOnly))
     when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(Future.successful(mockSubscriptionDetails))
-    when(mockRequestSession.isPartnershipOrLLP(any[Request[AnyContent]])).thenReturn(false)
+    when(mockRequestSession.isPartnership(any[Request[AnyContent]])).thenReturn(false)
     when(mockSubscriptionDetails.vatVerificationOption).thenReturn(Some(true))
     when(mockSubscriptionDetails.vatControlListResponse).thenReturn(vatControlListResponseDetails)
     when(mockVatControlListDetails.dateOfReg).thenReturn(Some("2017-01-01"))
@@ -214,7 +214,7 @@ class CheckYourDetailsRegisterControllerSpec
     "display the business name and address from the cache" in {
       showForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered company address") shouldBe
+        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered organisation address") shouldBe
           strim("""
                 |street
                 |city
@@ -285,7 +285,7 @@ class CheckYourDetailsRegisterControllerSpec
 
       showForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered company address") shouldBe
+        page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered organisation address") shouldBe
           strim("""
                 |street
                 |city
@@ -340,7 +340,7 @@ class CheckYourDetailsRegisterControllerSpec
         ) shouldBe "9999"
         page.getSummaryListValue(
           RegistrationReviewPage.SummaryListRowXPath,
-          "Date of establishment"
+          "Organisation establish date"
         ) shouldBe "11 November 1900"
         page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Date of birth") shouldBe false
       }
@@ -349,7 +349,7 @@ class CheckYourDetailsRegisterControllerSpec
     forAll(businessDetailsOrganisationTypes) { organisationType =>
       val labelText = organisationType match {
         case LimitedLiabilityPartnership =>
-          "Registered partnership name"
+          "Registered company name"
         case Partnership =>
           "Registered partnership name"
         case ThirdCountryOrganisation =>
@@ -473,7 +473,7 @@ class CheckYourDetailsRegisterControllerSpec
       val page: CdsPage = CdsPage(contentAsString(result))
       page.title() should startWith("Check your answers")
 
-      page.h2() should startWith("Company details VAT details Contact details Declaration Support links")
+      page.h2() should startWith("Organisation details VAT details Contact details Declaration Support links")
 
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -491,9 +491,9 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company address"
+        "Registered organisation address"
       ) shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered company address") shouldBe
+      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered organisation address") shouldBe
         strim("""
               |street
               |city
@@ -502,29 +502,32 @@ class CheckYourDetailsRegisterControllerSpec
           """)
       page.summaryListHrefPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company address",
+        "Registered organisation address",
         "Change"
       ) shouldBe true
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company address",
+        "Registered organisation address",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/matching/confirm/review"
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe true
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation establish date"
+      ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Date of establishment"
+        "Organisation establish date"
       ) shouldBe "23 July 1980"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Date of establishment",
+        "Organisation establish date",
         "Change"
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Date of establishment")
+        .changeAnswerText("Organisation establish date")
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Date of establishment",
+        "Organisation establish date",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
@@ -612,7 +615,7 @@ class CheckYourDetailsRegisterControllerSpec
     }
   }
 
-  "display the review page check-your-details for LLP" ignore {
+  "display the review page check-your-details for LLP" in {
     when(mockSessionCache.registrationDetails(any[Request[_]]))
       .thenReturn(Future.successful(incorporatedRegistrationDetails.copy(customsId = Some(Utr("7280616009")))))
     val holder = detailsHolderWithAllFields.copy(
@@ -627,7 +630,7 @@ class CheckYourDetailsRegisterControllerSpec
       val page: CdsPage = CdsPage(contentAsString(result))
       page.title() should startWith("Check your answers")
 
-      page.h2() should startWith("Partnership details VAT details Contact details Declaration Support links")
+      page.h2() should startWith("Organisation details VAT details Contact details Declaration Support links")
 
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -636,12 +639,9 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered partnership name"
+        "Registered company name"
       ) shouldBe true
-      page.getSummaryListValue(
-        RegistrationReviewPage.SummaryListRowXPath,
-        "Registered partnership name"
-      ) shouldBe "orgName"
+      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered company name") shouldBe "orgName"
 
       page.summaryListElementPresent(
         RegistrationReviewPage.SummaryListRowXPath,
@@ -652,8 +652,11 @@ class CheckYourDetailsRegisterControllerSpec
         "Corporation Tax Unique Taxpayer Reference (UTR)"
       ) shouldBe "7280616009"
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Partnership address") shouldBe true
-      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Partnership address") shouldBe
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Registered organisation address"
+      ) shouldBe true
+      page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "Registered organisation address") shouldBe
         strim("""
               |street
               |city
@@ -662,24 +665,27 @@ class CheckYourDetailsRegisterControllerSpec
           """)
       page.summaryListHrefPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Partnership address",
+        "Registered organisation address",
         "Change"
       ) shouldBe true
 
-      page.summaryListElementPresent(RegistrationReviewPage.SummaryListRowXPath, "Date of establishment") shouldBe true
+      page.summaryListElementPresent(
+        RegistrationReviewPage.SummaryListRowXPath,
+        "Organisation establish date"
+      ) shouldBe true
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Date of establishment"
+        "Organisation establish date"
       ) shouldBe "23 July 1980"
       page.getSummaryListLink(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Date of establishment",
+        "Organisation establish date",
         "Change"
       ) shouldBe SubscriptionExistingDetailsReviewPage
-        .changeAnswerText("Date of establishment")
+        .changeAnswerText("Organisation establish date")
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Date of establishment",
+        "Organisation establish date",
         "Change"
       ) shouldBe "/customs-registration-services/atar/register/date-established/review"
 
@@ -753,7 +759,7 @@ class CheckYourDetailsRegisterControllerSpec
       page.getSummaryListValue(
         RegistrationReviewPage.SummaryListRowXPath,
         "Show name and address on the 'Check an EORI number' service"
-      ) shouldBe "Yes I want my partnership name and address on the EORI checker"
+      ) shouldBe "Yes"
       page.getSummaryListHref(
         RegistrationReviewPage.SummaryListRowXPath,
         "Show name and address on the 'Check an EORI number' service",
@@ -801,7 +807,7 @@ class CheckYourDetailsRegisterControllerSpec
 
       page.summaryListHrefPresent(
         RegistrationReviewPage.SummaryListRowXPath,
-        "Registered company address",
+        "Registered organisation address",
         "Change"
       ) shouldBe true
     }
@@ -902,7 +908,7 @@ class CheckYourDetailsRegisterControllerSpec
     if (
       userSelectedOrgType.id == CdsOrganisationType.PartnershipId || userSelectedOrgType.id == CdsOrganisationType.LimitedLiabilityPartnershipId
     )
-      when(mockRequestSession.isPartnershipOrLLP(any[Request[AnyContent]])).thenReturn(true)
+      when(mockRequestSession.isPartnership(any[Request[AnyContent]])).thenReturn(true)
 
     when(mockSubscriptionFlow.isIndividualFlow).thenReturn(isIndividualSubscriptionFlow)
 

@@ -19,7 +19,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.PartnershipId
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
+  CompanyId,
+  LimitedLiabilityPartnershipId,
+  PartnershipId
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationNameForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -72,7 +76,9 @@ class WhatIsYourOrgNameController @Inject() (
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) flatMap { _ =>
       if (!isInReviewMode)
         subscriptionDetailsService.updateSubscriptionDetailsOrgName(formData.name).map { _ =>
-          if (organisationType == PartnershipId) {
+          if (
+            organisationType == PartnershipId || organisationType == CompanyId || organisationType == LimitedLiabilityPartnershipId
+          ) {
             Redirect(WhatIsYourOrganisationsAddressController.showForm(service))
           } else {
             Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))

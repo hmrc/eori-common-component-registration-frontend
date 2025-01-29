@@ -31,13 +31,13 @@
     @title = @{
         if(service.code==cdsCode) messages("cds.matching.organisation.name.title")
         else if(organisationType==PartnershipId) messages("cds.matching.partnership.name.title")
-        else messages("gagmr.matching.organisation.name.title")
+        else messages("cds.matching.organisation.name.title")
     }
 
     @formHeading = @{
         if(service.code==cdsCode) messages("cds.matching.organisation.name.heading")
         else if(organisationType==PartnershipId) messages("cds.matching.partnership.name.heading")
-        else messages("gagmr.matching.organisation.name.heading")
+        else messages("cds.matching.organisation.name.heading")
     }
 
     @layout_di(title, form = Some(matchOrgNameForm), service = service) {

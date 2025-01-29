@@ -25,6 +25,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ContactAddressController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   SubscriptionDetails,
   SubscriptionFlowInfo,
@@ -63,6 +64,7 @@ class ContactAddressControllerSpec
     mockSubscriptionBusinessService,
     mockCdsFrontendDataCache,
     mockSubscriptionFlow,
+    mockRequestSessionData,
     mcc,
     viewContactAddress
   )(global)
@@ -192,13 +194,14 @@ class ContactAddressControllerSpec
       when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
         Future.successful(Some(CdsOrganisationType.Company))
       )
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
       submitFormInCreateMode(validRequest) { result =>
         status(result) shouldBe SEE_OTHER
         header(
           LOCATION,
           result
-        ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
-          .createForm(atarService)
+        ).value shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
+          .determineRoute(atarService)
           .url
 
       }
@@ -211,6 +214,7 @@ class ContactAddressControllerSpec
       when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
         Future.successful(Some(CdsOrganisationType.Company))
       )
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
       submitFormInCreateMode(validRequestNo) { result =>
         status(result) shouldBe SEE_OTHER
         header(
@@ -266,6 +270,7 @@ class ContactAddressControllerSpec
         when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
           Future.successful(Some(CdsOrganisationType.Embassy))
         )
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
         submitFormInCreateMode(validRequestNo) { result =>
           status(result) shouldBe SEE_OTHER
           header(

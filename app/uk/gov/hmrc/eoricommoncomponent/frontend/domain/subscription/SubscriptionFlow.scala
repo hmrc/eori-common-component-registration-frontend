@@ -19,7 +19,6 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription
 import play.api.Logging
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionFlows.charityPublicBodySubscriptionNoUtrFlowIomConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 object SubscriptionFlows {
@@ -173,6 +172,18 @@ object SubscriptionFlows {
     )
   )
 
+  private val companyLlpFlowIomConfig = createFlowConfig(
+    List(
+      DateOfEstablishmentSubscriptionFlowPage,
+      SicCodeSubscriptionFlowPage,
+      EoriConsentSubscriptionFlowPage,
+      VatRegisteredSubscriptionFlowPage,
+      YourVatDetailsSubscriptionFlowPage,
+      ContactDetailsSubscriptionFlowPageGetEori,
+      ContactAddressSubscriptionFlowPageGetEori
+    )
+  )
+
   val flows: Map[SubscriptionFlow, SubscriptionFlowConfig] = Map(
     OrganisationSubscriptionFlow              -> corporateFlowConfig,
     PartnershipSubscriptionFlow               -> partnershipFlowConfig,
@@ -187,7 +198,8 @@ object SubscriptionFlows {
     CharityPublicBodySubscriptionFlowIom      -> charityPublicBodyNotForProfitFlowIomConfig,
     CharityPublicBodySubscriptionNoUtrFlowIom -> charityPublicBodySubscriptionNoUtrFlowIomConfig,
     PartnershipSubscriptionFlowIom            -> partnershipFlowIomConfig,
-    IndividualSoleTraderFlowIom               -> individualSoleTraderFlowIomConfig
+    IndividualSoleTraderFlowIom               -> individualSoleTraderFlowIomConfig,
+    CompanyLlpFlowIom                         -> companyLlpFlowIomConfig
   )
 
   private def createFlowConfig(flowStepList: List[SubscriptionPage]): SubscriptionFlowConfig =
@@ -237,6 +249,8 @@ case object CharityPublicBodySubscriptionNoUtrFlow
 
 case object CharityPublicBodySubscriptionNoUtrFlowIom
     extends SubscriptionFlow("CharityPublicBodyNoUtrIom", isIndividualFlow = false)
+
+case object CompanyLlpFlowIom extends SubscriptionFlow("CompanyLlpIom", isIndividualFlow = false)
 
 object SubscriptionFlow extends Logging {
 

@@ -22,10 +22,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.enterNameDobForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -65,11 +70,21 @@ class NameDobController @Inject() (
         formData = FormData(organisationType = requestSessionData.userSelectedOrganisationType)
       )
     ).map { _ =>
-      Redirect(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrganisationsAddressController.showForm(
-          service
-        )
+      val userLocation = requestSessionData.selectedUserLocation.getOrElse(
+        throw DataUnavailableException("unable to obtain user location")
       )
+
+      if (userLocation == UserLocation.Iom) {
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrganisationsAddressController.showForm(
+            service
+          )
+        )
+      } else {
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.HowCanWeIdentifyYouController.createForm(service)
+        )
+      }
     }
   }
 

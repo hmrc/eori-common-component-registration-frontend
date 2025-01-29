@@ -150,7 +150,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     } yield {
 
       val cdsOrgType    = requestSessionData.userSelectedOrganisationType
-      val isPartnership = requestSessionData.isPartnershipOrLLP
+      val isPartnership = cdsOrgType.contains(CdsOrganisationType.Partnership)
 
       val isIndividual = cdsOrgType.contains(CdsOrganisationType.Individual) ||
         cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
@@ -175,7 +175,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         else if (isEmbassy)
           messages("cds.form.check-answers-embassy-details")
         else
-          messages("cds.form.check-answers-company-details")
+          messages("cds.form.check-answers-organisation-details")
 
       val providedDetails = getProvidedDetails(
         isIndividual,
