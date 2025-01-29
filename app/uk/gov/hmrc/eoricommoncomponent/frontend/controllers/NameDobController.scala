@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.enterNameDobForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -56,14 +56,21 @@ class NameDobController @Inject() (
       )
     }
 
-  private def submitNewDetails(formData: NameDobMatchModel, service: Service)(implicit
-    request: Request[_]
-  ): Future[Result] =
-    cdsFrontendDataCache.saveSubscriptionDetails(SubscriptionDetails(nameDobDetails = Some(formData))).map { _ =>
+  private def submitNewDetails(nameDob: NameDobMatchModel, service: Service)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] = {
+    cdsFrontendDataCache.saveSubscriptionDetails(
+      SubscriptionDetails(
+        nameDobDetails = Some(nameDob),
+        formData = FormData(organisationType = requestSessionData.userSelectedOrganisationType)
+      )
+    ).map { _ =>
       Redirect(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.HowCanWeIdentifyYouController
-          .createForm(service)
+        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrganisationsAddressController.showForm(
+          service
+        )
       )
     }
+  }
 
 }

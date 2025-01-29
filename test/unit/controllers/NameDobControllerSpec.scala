@@ -230,7 +230,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       submitForm(ValidRequest, defaultOrganisationType) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith(
-          "/customs-registration-services/atar/register/matching/chooseid"
+          "/customs-registration-services/atar/register/your-organisation-address"
         )
       }
     }

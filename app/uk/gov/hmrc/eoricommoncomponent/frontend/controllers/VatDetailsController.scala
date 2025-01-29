@@ -64,7 +64,15 @@ class VatDetailsController @Inject() (
         sessionCacheService.individualAndSoleTraderRouter(
           user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
           service,
-          Ok(vatDetailsView(vatDetailsForm, isInReviewMode = false, userLocation, service))
+          Ok(
+            vatDetailsView(
+              vatDetailsForm,
+              isInReviewMode = false,
+              userLocation,
+              requestSessionData.isIndividualOrSoleTrader,
+              service
+            )
+          )
         )
     }
 
@@ -75,8 +83,25 @@ class VatDetailsController @Inject() (
           requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
         subscriptionBusinessService.getCachedUkVatDetails.map {
           case Some(vatDetails) =>
-            Ok(vatDetailsView(vatDetailsForm.fill(vatDetails), isInReviewMode = true, userLocation, service))
-          case None => Ok(vatDetailsView(vatDetailsForm, isInReviewMode = true, userLocation, service))
+            Ok(
+              vatDetailsView(
+                vatDetailsForm.fill(vatDetails),
+                isInReviewMode = true,
+                userLocation,
+                requestSessionData.isIndividualOrSoleTrader,
+                service
+              )
+            )
+          case None =>
+            Ok(
+              vatDetailsView(
+                vatDetailsForm,
+                isInReviewMode = true,
+                userLocation,
+                requestSessionData.isIndividualOrSoleTrader,
+                service
+              )
+            )
         }.flatMap(
           sessionCacheService.individualAndSoleTraderRouter(
             user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
@@ -92,7 +117,17 @@ class VatDetailsController @Inject() (
         requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
       vatDetailsForm.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(vatDetailsView(formWithErrors, isInReviewMode, userLocation, service))),
+          Future.successful(
+            BadRequest(
+              vatDetailsView(
+                formWithErrors,
+                isInReviewMode,
+                userLocation,
+                requestSessionData.isIndividualOrSoleTrader,
+                service
+              )
+            )
+          ),
         formData => lookupVatDetails(formData, isInReviewMode, service)
       )
     }

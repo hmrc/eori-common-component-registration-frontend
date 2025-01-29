@@ -30,7 +30,7 @@
 appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWithPreTextAndPostText)
 
 
-@(vatForm: Form[VatDetails], isInReviewMode: Boolean, userLocation: UserLocation, service: Service)(implicit request: Request[_], messages: Messages)
+@(vatForm: Form[VatDetails], isInReviewMode: Boolean, userLocation: UserLocation, isIndividualOrSoleTrader: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @heading = @{
     if(userLocation == Iom) {
@@ -42,7 +42,11 @@ appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWit
 
 @postcodeLabel = @{
     if(userLocation == Iom) {
-        messages("cds.subscription.vat-details.postcode")
+        if(isIndividualOrSoleTrader) {
+            messages("cds.subscription.vat-details.individual-sole-trader.postcode")
+        } else {
+            messages("cds.subscription.vat-details.postcode")
+        }
     } else {
         messages("cds.subscription.vat-details.uk.postcode")
     }

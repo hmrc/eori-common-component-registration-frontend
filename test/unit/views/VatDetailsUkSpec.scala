@@ -49,6 +49,10 @@ class VatDetailsUkSpec extends ViewSpec {
   }
 
   private lazy val doc: Document =
-    Jsoup.parse(contentAsString(view(form, isInReviewMode = false, UserLocation.Uk, atarService)))
+    Jsoup.parse(
+      contentAsString(
+        view(form, isInReviewMode = false, UserLocation.Uk, isIndividualOrSoleTrader = false, atarService)
+      )
+    )
 
 }

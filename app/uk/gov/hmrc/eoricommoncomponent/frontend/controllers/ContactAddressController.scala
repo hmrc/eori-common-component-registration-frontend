@@ -23,7 +23,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   CharityPublicBodyNotForProfit,
   Embassy,
-  Partnership
+  Individual,
+  Partnership,
+  SoleTrader
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
@@ -144,7 +146,7 @@ class ContactAddressController @Inject() (
       if (
         optOrgType.contains(Embassy) || optOrgType.contains(CharityPublicBodyNotForProfit) || optOrgType.contains(
           Partnership
-        )
+        ) || optOrgType.contains(Individual) || optOrgType.contains(SoleTrader)
       ) {
         if (yesNoAnswer.isYes) {
           Redirect(DetermineReviewPageController.determineRoute(service))

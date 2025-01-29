@@ -30,13 +30,17 @@ object VatRegisteredUkViewModel {
 
   def titleAndHeadingLabel(isIndividualSubscriptionFlow: Boolean, isPartnership: Boolean, userLocation: UserLocation)(
     implicit messages: Messages
-  ): String =
-    if (isIndividualSubscriptionFlow) messages("cds.subscription.vat-question-uk.individual")
+  ): String = {
+    if (isIndividualSubscriptionFlow && userLocation == Iom)
+      messages("cds.subscription.vat-registered.individual.title-and-heading")
+    else if (isIndividualSubscriptionFlow && userLocation != Iom)
+      messages("cds.subscription.vat-question-uk.individual")
     else if (isPartnership && userLocation != Iom)
       messages("cds.subscription.vat-registered-uk.partnership.title-and-heading")
     else if (isPartnership && userLocation == Iom)
       messages("cds.subscription.vat-registered.partnership.title-and-heading")
     else if (userLocation == Iom) messages("cds.subscription.vat-registered.title-and-heading")
     else messages("cds.subscription.vat-registered-uk.title-and-heading")
+  }
 
 }

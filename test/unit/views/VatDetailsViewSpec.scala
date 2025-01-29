@@ -82,12 +82,12 @@ class VatDetailsViewSpec extends ViewSpec {
   }
 
   private lazy val doc: Document = {
-    val result = view(form, isInReviewMode = false, UserLocation.Uk, atarService)
+    val result = view(form, isInReviewMode = false, UserLocation.Uk, isIndividualOrSoleTrader = false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   private lazy val iomDoc: Document = {
-    val result = view(form, isInReviewMode = false, UserLocation.Iom, atarService)
+    val result = view(form, isInReviewMode = false, UserLocation.Iom, isIndividualOrSoleTrader = false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
