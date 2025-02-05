@@ -90,6 +90,10 @@ Adjust the following in `build.sbt` to configure Scoverage
     ScoverageKeys.coverageFailOnMinimum := false,
     ...
 
+### Local Running
+
+    sbt run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes -Dconfig.resource=local.conf
+
 ### Architecture and Flows
 
 High level journey diagram with APIs involved is [documented in Confluence](https://confluence.tools.tax.service.gov.uk/pages/viewpage.action?spaceKey=ECC&title=Journey+Flow+maps).

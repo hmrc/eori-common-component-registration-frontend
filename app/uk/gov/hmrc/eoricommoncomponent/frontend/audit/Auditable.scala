@@ -42,4 +42,13 @@ class Auditable @Inject() (auditConnector: AuditConnector, appConfig: AppConfig)
       ExtendedDataEvent(auditSource, eventType, tags = hc.toAuditTags(transactionName, path) ++ tags, detail = details)
     )
 
+  def sendSubscriptionDataEvent(path: String, details: JsValue)(implicit hc: HeaderCarrier): Future[AuditResult] = {
+    sendExtendedDataEvent(
+      transactionName = "ecc-subscription",
+      path = path,
+      details = details,
+      eventType = "Subscription"
+    )
+  }
+
 }
