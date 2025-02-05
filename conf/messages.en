@@ -31,7 +31,7 @@ cds.third-country-ids.third-country-uid-5.label=Third Country Unique Identificat
 cds.use-short-name.label=Does your company use a shortened or alternative name?
 cds.short-name.label=Short name
 cds.subscription.sic.individual.sic.label=SIC code
-cds.date-established.label=Date of establishment
+cds.date-established.label=Organisation establish date
 cds.date-established.partnership.label=Partnership establish date
 cds.date-of-birth.label=Date of birth
 cds.date-incorporated.label=Date of incorporation
@@ -688,11 +688,11 @@ cds.matching-error.business-details.company-name.invalid-chars=Company name cann
 
 cds.matching.organisation.name.title=What is the organisation’s name?
 cds.matching.partnership.name.title=What is your registered partnership name?
-gagmr.matching.organisation.name.title=What is the name of your organisation?
+cds.matching.organisation.name.title=What is your registered company name?
 cds.matching.organisation.name.label=Organisation name
 cds.matching.organisation.name.heading=What is the organisation’s name?
 cds.matching.partnership.name.heading=What is your registered partnership name?
-gagmr.matching.organisation.name.heading=What is the name of your organisation?
+cds.matching.organisation.name.heading=What is your registered company name?
 cds.matching.organisation-name.error.name=Enter your registered organisation name
 
 #Matching UTR UK
@@ -1193,7 +1193,7 @@ cds.form.partner-address=Partnership address
 cds.form.company-address=Company address
 cds.form.organisation-address=Organisation address
 cds.form.charity-public-body-address=Organisation’s address
-cds.form.business-details=Registered company address
+cds.form.business-details=Registered organisation address
 cds.form.embassy-address=Embassy’s address
 cds.form.shortened-name=Shortened name
 cds.form.sic-code=Standard Industrial Classification (SIC) code
@@ -1690,7 +1690,7 @@ cds.matching.name-id-organisation.registered-company.matching-page.utr= What is 
 cds.matching.name-id-organisation.partnership.utr=What is the partnership’s Self Assessment Unique Taxpayer Reference (UTR)?
 cds.matching.name-id-organisation.organisation.utr=What is the organisation’s Corporation Tax Unique Taxpayer Reference (UTR)?
 
-cds.subscription.date-of-establishment.company.title-and-heading=When was the company established?
+cds.subscription.date-of-establishment.company.title-and-heading=When was the organisation established?
 
 cds.subscription.address-details.postcode.row.label=Postal code
 
@@ -1931,13 +1931,13 @@ ecc.subscription.outcomes.guidance.xi.eori.href=<a href="https://www.tax.service
 
 ecc.subscription.organisation-disclose-personal-details-consent.title = ‘Check an EORI number’ service
 ecc.subscription.organisation-disclose-personal-details-consent.para1 =Anyone can use this service to <a href="https://www.tax.service.gov.uk/check-eori-number" class="govuk-link" target="_blank" rel="noopener noreferrer">check if an EORI number is valid (opens in new tab)</a>. Members of the public cannot use it to find out what your EORI number is.
-ecc.subscription.organisation-disclose-personal-details-consent.org.para2 = You can consent to show the company’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.
+ecc.subscription.organisation-disclose-personal-details-consent.org.para2 = You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.
 ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2 = You can consent to show the partnership’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving goods.
 ecc.subscription.organisation-disclose-personal-details-consent.charity.para2 = You can consent to show the organisation’s name and address alongside the EORI number. Doing so can help reduce errors and delays when moving your goods.
 ecc.subscription.organisation-disclose-personal-details-consent.individual.para2 = You can consent to show your name and address alongside your EORI number. Doing so can help reduce errors and delays when moving your goods.
 ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para = You can withdraw your consent at any time by filling in a <a href="https://www.gov.uk/eori/get-help-or-report-a-change-of-circumstances" class="govuk-link" id="change-of-circumstances" target="_blank" rel="noopener noreferrer">change of circumstances form (opens in new tab)</a>.
 
-ecc.subscription.organisation-disclose-personal-details-consent.org.question = Do you consent to show the company’s name and address on the ‘Check an EORI number’ service?
+ecc.subscription.organisation-disclose-personal-details-consent.org.question = Do you consent to show the organisation’s name and address on the ‘Check an EORI number’ service?
 ecc.subscription.organisation-disclose-personal-details-consent.partnership.question = Do you consent to show the partnership’s name and address on the ‘Check an EORI number’ service?
 ecc.subscription.organisation-disclose-personal-details-consent.charity.question = Do you consent to show the organisation’s name and address on the ‘Check an EORI number’ service?
 ecc.subscription.organisation-disclose-personal-details-consent.individual.question = Do you consent to show your name and address on the ‘Check an EORI number’ service?

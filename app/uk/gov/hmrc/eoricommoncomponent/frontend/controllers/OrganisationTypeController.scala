@@ -24,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationTypeDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
 
@@ -42,8 +42,13 @@ class OrganisationTypeController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  private def nameIdOrganisationMatching(orgType: String, service: Service): Call =
-    NameIdOrganisationController.form(orgType, service)
+  private def nameIdOrganisationMatching(orgType: String, service: Service, userLocation: UserLocation): Call = {
+    if (userLocation == UserLocation.Iom) {
+      WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
+    } else {
+      NameIdOrganisationController.form(orgType, service)
+    }
+  }
 
   private def individualMatching(orgType: String, service: Service): Call =
     NameDobController.form(orgType, service)
@@ -61,13 +66,13 @@ class OrganisationTypeController @Inject() (
     WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
   }
 
-  private def matchingDestinations(service: Service): Map[CdsOrganisationType, Call] =
+  private def matchingDestinations(service: Service, userLocation: UserLocation): Map[CdsOrganisationType, Call] =
     Map[CdsOrganisationType, Call](
-      Company                       -> nameIdOrganisationMatching(CompanyId, service),
+      Company                       -> nameIdOrganisationMatching(CompanyId, service, userLocation),
       SoleTrader                    -> individualMatching(SoleTraderId, service),
       Individual                    -> individualMatching(IndividualId, service),
-      Partnership                   -> orgMatching(PartnershipId, service),
-      LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service),
+      Partnership                   -> nameIdOrganisationMatching(PartnershipId, service, userLocation),
+      LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service, userLocation),
       CharityPublicBodyNotForProfit -> orgMatching(CharityPublicBodyNotForProfitId, service),
       ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
       ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
@@ -96,15 +101,18 @@ class OrganisationTypeController @Inject() (
             val userLocation = requestSessionData.selectedUserLocation
             Future.successful(BadRequest(organisationTypeView(formWithErrors, userLocation, service)))
           },
-          organisationType =>
+          organisationType => {
+            val userLocation =
+              requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
             registrationDetailsService.initialiseCacheWithRegistrationDetails(organisationType) flatMap { ok =>
               if (ok)
                 Future.successful(
-                  Redirect(matchingDestinations(service)(organisationType))
+                  Redirect(matchingDestinations(service, userLocation)(organisationType))
                     .withSession(requestSessionData.sessionWithOrganisationTypeAdded(organisationType))
                 )
               else throw new IllegalStateException(s"Unable to save $organisationType registration in cache")
             }
+          }
         )
     }
 

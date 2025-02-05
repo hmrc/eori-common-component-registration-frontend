@@ -105,11 +105,6 @@ class RequestSessionData @Inject() (audit: Auditable) {
   def existingSessionWithUserLocationAdded(existingSession: Session, userLocation: String): Session =
     existingSession + (RequestSessionDataKeys.selectedUserLocation -> userLocation)
 
-  def isPartnershipOrLLP(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
-    orgType =>
-      orgType == CdsOrganisationType.Partnership || orgType == CdsOrganisationType.LimitedLiabilityPartnership
-  }
-
   def isPartnership(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
     orgType => orgType == CdsOrganisationType.Partnership
   }

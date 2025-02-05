@@ -421,7 +421,7 @@ class DisclosePersonalDetailsConsentControllerSpec
     )
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)
-    when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
+    when(mockRequestSessionData.isPartnership(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
     val orgType =
@@ -450,7 +450,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       .thenReturn(Future.successful(previouslyAnswered))
     when(mockRequestSessionData.isRegistrationUKJourney(any())).thenReturn(isUkJourney)
     when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(isIndividual)
-    when(mockRequestSessionData.isPartnershipOrLLP(any())).thenReturn(isPartnership)
+    when(mockRequestSessionData.isPartnership(any())).thenReturn(isPartnership)
     when(mockRequestSessionData.isCharity(any())).thenReturn(isCharity)
 
     when(mockSubscriptionFlowManager.currentSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(

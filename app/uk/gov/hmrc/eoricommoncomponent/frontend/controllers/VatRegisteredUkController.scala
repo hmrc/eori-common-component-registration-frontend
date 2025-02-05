@@ -68,9 +68,9 @@ class VatRegisteredUkController @Inject() (
               Ok(
                 vatRegisteredUkView(
                   isInReviewMode = false,
-                  vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP),
+                  vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnership),
                   isIndividual,
-                  requestSessionData.isPartnershipOrLLP,
+                  requestSessionData.isPartnership,
                   location,
                   service
                 )
@@ -100,9 +100,9 @@ class VatRegisteredUkController @Inject() (
               Ok(
                 vatRegisteredUkView(
                   isInReviewMode = true,
-                  vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP).fill(yesNo),
+                  vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnership).fill(yesNo),
                   individual,
-                  requestSessionData.isPartnershipOrLLP,
+                  requestSessionData.isPartnership,
                   location,
                   service
                 )
@@ -116,7 +116,7 @@ class VatRegisteredUkController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnershipOrLLP)
+      vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnership)
         .bindFromRequest()
         .fold(
           formWithErrors =>
@@ -131,7 +131,7 @@ class VatRegisteredUkController @Inject() (
                       isInReviewMode,
                       formWithErrors,
                       individual,
-                      requestSessionData.isPartnershipOrLLP,
+                      requestSessionData.isPartnership,
                       location,
                       service
                     )

@@ -18,11 +18,18 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Individual, Partnership, SoleTrader}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
+  Company,
+  Individual,
+  LimitedLiabilityPartnership,
+  Partnership,
+  SoleTrader
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
   CharityPublicBodySubscriptionNoUtrFlow,
+  CompanyLlpFlowIom,
   IndividualSoleTraderFlowIom,
   PartnershipSubscriptionFlowIom,
   SubscriptionFlow
@@ -117,10 +124,12 @@ class WhatIsYourOrganisationsAddressController @Inject() (
     cdsOrganisationType: CdsOrganisationType
   )(implicit request: Request[AnyContent]): SubscriptionFlow = {
     (requestSessionData.selectedUserLocation, cdsOrganisationType) match {
-      case (Some(UserLocation.Iom), Partnership) => PartnershipSubscriptionFlowIom
-      case (Some(UserLocation.Iom), Individual)  => IndividualSoleTraderFlowIom
-      case (Some(UserLocation.Iom), SoleTrader)  => IndividualSoleTraderFlowIom
-      case _                                     => CharityPublicBodySubscriptionNoUtrFlow
+      case (Some(UserLocation.Iom), Partnership)                 => PartnershipSubscriptionFlowIom
+      case (Some(UserLocation.Iom), Individual)                  => IndividualSoleTraderFlowIom
+      case (Some(UserLocation.Iom), SoleTrader)                  => IndividualSoleTraderFlowIom
+      case (Some(UserLocation.Iom), Company)                     => CompanyLlpFlowIom
+      case (Some(UserLocation.Iom), LimitedLiabilityPartnership) => CompanyLlpFlowIom
+      case _                                                     => CharityPublicBodySubscriptionNoUtrFlow
     }
   }
 

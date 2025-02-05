@@ -69,7 +69,7 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
     }
     "return correct messages for SoleTrader is false" in organisationToTest.foreach { test =>
       val result = constructorInstance.getDateOfEstablishmentLabel(test)
-      result shouldBe "Date of establishment"
+      result shouldBe "Organisation establish date"
     }
   }
   "orgNameLabel" should {
