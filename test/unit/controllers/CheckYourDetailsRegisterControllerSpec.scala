@@ -844,11 +844,11 @@ class CheckYourDetailsRegisterControllerSpec
     "redirect to next screen" in {
       when(
         mockRegisterWithoutIdWithSubscription
-          .rowRegisterWithoutIdWithSubscription(any(), any())(any[HeaderCarrier], any())
+          .rowRegisterWithoutIdWithSubscription(any(), any())(any[HeaderCarrier], any(), any())
       ).thenReturn(Future.successful(Results.Ok))
       submitForm(Map.empty)(res => status(res) shouldBe OK)
       verify(mockRegisterWithoutIdWithSubscription, times(1))
-        .rowRegisterWithoutIdWithSubscription(any(), any())(any[HeaderCarrier], any())
+        .rowRegisterWithoutIdWithSubscription(any(), any())(any[HeaderCarrier], any(), any())
     }
   }
 
