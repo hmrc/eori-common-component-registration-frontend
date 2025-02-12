@@ -47,7 +47,7 @@ class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   val nonExistingServiceKey = "Test-Service-Don't-Exist"
   val safeId                = SafeId("safeid")
   val eori                  = Eori("GB99999999")
-  val formBundleId          = "formBundleId"
+  val formBundleId          = "884736281923"
   val date                  = LocalDate.parse("2010-04-28")
 
   "TaxEnrolmentsService" should {
@@ -95,6 +95,18 @@ class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
       ).thenReturn(Future.successful(NO_CONTENT))
 
       await(service.issuerCall(formBundleId, eori, Some(date), testService)) shouldBe NO_CONTENT
+
+      verify(mockTaxEnrolmentsConnector)
+        .enrol(any[TaxEnrolmentsRequest], any[String])(any[HeaderCarrier])
+    }
+
+    "make issuer call with safe id" in {
+      when(
+        mockTaxEnrolmentsConnector
+          .enrol(any[TaxEnrolmentsRequest], any[String])(any[HeaderCarrier])
+      ).thenReturn(Future.successful(NO_CONTENT))
+
+      await(service.issuerCallSafeId(formBundleId, safeId, Some(date), testService)) shouldBe NO_CONTENT
 
       verify(mockTaxEnrolmentsConnector)
         .enrol(any[TaxEnrolmentsRequest], any[String])(any[HeaderCarrier])

@@ -144,4 +144,5 @@ class AppConfig @Inject() (
 
   val addressLookup: String = addressLookupBaseUrl + addressLookupContext
 
+  val taxudBaseUrl: String = servicesConfig.baseUrl("taxud")
 }

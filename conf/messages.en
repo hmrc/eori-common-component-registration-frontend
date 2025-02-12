@@ -2156,3 +2156,6 @@ cds.your-organisation-address.line-1=Address line 1
 cds.your-organisation-address.line-2=Address line 2 (optional)
 cds.your-organisation-address.town-city=Town or city
 cds.your-organisation-address.postcode=Postcode
+
+#We are processing the EORI number
+cds.eori-processing.title-and-heading=We are processing the EORI number application for {0}

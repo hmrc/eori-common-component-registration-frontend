@@ -17,15 +17,24 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.Logging
+import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, Request, Result}
+import play.mvc.Http.Status.NO_CONTENT
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.EmbassyId
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -38,7 +47,9 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   sessionCache: SessionCache,
   requestSessionData: RequestSessionData,
   orgTypeLookup: OrgTypeLookup,
-  sub02Controller: Sub02Controller
+  sub02Controller: Sub02Controller,
+  taxudConnector: TaxUDConnector,
+  taxEnrolmentsService: TaxEnrolmentsService
 )(implicit ec: ExecutionContext)
     extends Logging {
 
@@ -51,15 +62,51 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
 
     def applicableForRegistration(rd: RegistrationDetails): Boolean = rd.safeId.id.isEmpty && isRow
 
+    val userLocation = requestSessionData.selectedUserLocation.getOrElse(
+      throw DataUnavailableException("unable to retrieve user's location")
+    )
+
     sessionCache.registrationDetails flatMap {
       case rd if applicableForRegistration(rd) =>
         rowServiceCall(loggedInUser, service)
+      case rd if rd.orgType.contains(EmbassyId) =>
+        createEmbassySubscription(rd.asInstanceOf[RegistrationDetailsEmbassy], userLocation, service)
       case _ => createSubscription(service)(request)
     }
   }
 
   def createSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
     sub02Controller.subscribe(service)(request)
+
+  private def createEmbassySubscription(
+    regDetails: RegistrationDetailsEmbassy,
+    userLocation: UserLocation,
+    service: Service
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
+    if (regDetails.safeId.id.nonEmpty) {
+      Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
+    } else {
+      sessionCache.subscriptionDetails.flatMap { subDetails =>
+        taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
+          .flatMap {
+            case SuccessResponse(formBundleNumber, sid, _) =>
+              sessionCache.saveRegistrationDetails(regDetails.copy(safeId = sid))
+                .flatMap { saved =>
+                  if (saved) {
+                    taxEnrolmentsService.issuerCallSafeId(formBundleNumber, sid, None, service)
+                      .flatMap {
+                        case NO_CONTENT => Future.successful(Redirect(Sub02Controller.pending(service)))
+                        case _          => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+                      }
+                  } else {
+                    Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+                  }
+                }
+            case _ => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+          }
+      }
+    }
+  }
 
   private def rowServiceCall(loggedInUser: LoggedInUserWithEnrolments, service: Service)(implicit
     hc: HeaderCarrier,
