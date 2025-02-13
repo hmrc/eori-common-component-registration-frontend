@@ -65,21 +65,29 @@ class TaxudController @Inject() (action: DefaultActionBuilder, mcc: MessagesCont
     request: Request[AnyContent]
   ): Future[Result] = {
     if (isEmbassyOfJapan(createEoriSubscriptionRequest)) {
-      Future.successful(
-        Created(Json.toJson(createEoriSubResponse))
-          .withHeaders(
-            CONTENT_TYPE     -> MimeTypes.JSON,
-            DATE             -> LocalDateTime.now().atOffset(ZoneOffset.UTC).format(RFC_1123_DATE_TIME),
-            X_CORRELATION_ID -> correlationId(request)
-          )
-      )
+      Future.successful(createdResponse(request))
+    } else if (isleOfManSolutionsLtd(createEoriSubscriptionRequest)) {
+      Future.successful(createdResponse(request))
     } else {
       Future.successful(InternalServerError(Json.toJson(BackendInternalServerError())))
     }
   }
 
+  private def createdResponse(request: Request[AnyContent]): Result = {
+    Created(Json.toJson(createEoriSubResponse))
+      .withHeaders(
+        CONTENT_TYPE     -> MimeTypes.JSON,
+        DATE             -> LocalDateTime.now().atOffset(ZoneOffset.UTC).format(RFC_1123_DATE_TIME),
+        X_CORRELATION_ID -> correlationId(request)
+      )
+  }
+
   private def isEmbassyOfJapan(createEoriSubscriptionRequest: CreateEoriSubscriptionRequest): Boolean = {
     createEoriSubscriptionRequest.edgeCaseType == "01" && createEoriSubscriptionRequest.organisation.organisationName.toLowerCase == "embassy of japan"
+  }
+
+  private def isleOfManSolutionsLtd(createEoriSubscriptionRequest: CreateEoriSubscriptionRequest): Boolean = {
+    createEoriSubscriptionRequest.edgeCaseType == "02" && createEoriSubscriptionRequest.organisation.organisationName.toLowerCase == "solutions ltd"
   }
 
   private def createEoriSubResponse = {

@@ -69,20 +69,19 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     )
 
     sessionCache.registrationDetails flatMap {
-      case rd if applicableForRegistration(rd) =>
-        rowServiceCall(loggedInUser, service)
-      case rd if rd.orgType.contains(EmbassyId) =>
-        createEmbassySubscription(loggedInUser, rd.asInstanceOf[RegistrationDetailsEmbassy], userLocation, service)
-      case _ => createSubscription(service)(request)
+      case rd if userLocation == UserLocation.Iom => createSubscription(loggedInUser, rd, userLocation, service)
+      case rd if applicableForRegistration(rd)    => rowServiceCall(loggedInUser, service)
+      case rd if rd.orgType.contains(EmbassyId)   => createSubscription(loggedInUser, rd, userLocation, service)
+      case _                                      => createSubscription(service)(request)
     }
   }
 
   def createSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
     sub02Controller.subscribe(service)(request)
 
-  private def createEmbassySubscription(
+  private def createSubscription(
     loggedInUser: LoggedInUserWithEnrolments,
-    regDetails: RegistrationDetailsEmbassy,
+    regDetails: RegistrationDetails,
     userLocation: UserLocation,
     service: Service
   )(implicit request: Request[AnyContent], hc: HeaderCarrier, messages: Messages): Future[Result] = {
@@ -93,7 +92,12 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
         taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
           .flatMap {
             case SuccessResponse(formBundleNumber, sid, _) =>
-              sessionCache.saveRegistrationDetails(regDetails.copy(safeId = sid))
+              val updatedRegDetails = regDetails match {
+                case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
+                case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
+              }
+
+              sessionCache.saveRegistrationDetails(updatedRegDetails)
                 .flatMap { saved =>
                   save4LaterService.fetchEmail(GroupId(loggedInUser.groupId)).flatMap { optEmailStatus =>
                     if (saved) {

@@ -39,7 +39,7 @@ case class CreateEoriSubscriptionRequest(
 )
 
 object CreateEoriSubscriptionRequest {
-  case class Organisation(dateOfEstablishment: String, organisationName: String)
+  case class Organisation(dateOfEstablishment: Option[String], organisationName: String)
 
   case class CdsEstablishmentAddress(
     city: Option[String],
