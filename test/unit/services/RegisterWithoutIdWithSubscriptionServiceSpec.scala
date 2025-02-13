@@ -210,8 +210,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       )
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
+      mockSessionCacheSubscriptionDetails()
       when(mockRegistrationDetails.orgType).thenReturn(Some(IndividualId))
-
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSub02Controller, times(1)).subscribe(any())
@@ -232,6 +232,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       when(mockRegistrationDetails.orgType).thenReturn(Some(CompanyId))
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
+      mockSessionCacheSubscriptionDetails()
 
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
@@ -261,7 +262,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
         any()
       )
       verify(mockSessionCache, times(2)).registrationDetails(any())
-      verify(mockSessionCache).subscriptionDetails(any())
+      verify(mockSessionCache, times(2)).subscriptionDetails(any())
     }
 
     "when CorporateBody and ROW, call Register without id Successfully, then call SUB02" in {
@@ -287,7 +288,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       )(any(), any())
       verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
       verify(mockSessionCache, times(2)).registrationDetails(any())
-      verify(mockSessionCache).subscriptionDetails(any())
+      verify(mockSessionCache, times(2)).subscriptionDetails(any())
     }
 
     "when CorporateBody and ROW, call Register without id which fails, do not call SUB02" in {

@@ -23,7 +23,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationSubmissionController, Sub02Controller}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.EmbassyId
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, EmbassyId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
@@ -68,12 +68,20 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
       throw DataUnavailableException("unable to retrieve user's location")
     )
 
-    sessionCache.registrationDetails flatMap {
-      case rd if userLocation == UserLocation.Iom => createSubscription(loggedInUser, rd, userLocation, service)
-      case rd if applicableForRegistration(rd)    => rowServiceCall(loggedInUser, service)
-      case rd if rd.orgType.contains(EmbassyId)   => createSubscription(loggedInUser, rd, userLocation, service)
-      case _                                      => createSubscription(service)(request)
-    }
+    for {
+      rd <- sessionCache.registrationDetails
+      sd <- sessionCache.subscriptionDetails.recover({ case _ => SubscriptionDetails() })
+      result <-
+        if (userLocation == UserLocation.Iom) createSubscription(loggedInUser, rd, userLocation, service)
+        else if (applicableForRegistration(rd)) rowServiceCall(loggedInUser, service)
+        else if (rd.orgType.contains(EmbassyId)) createSubscription(loggedInUser, rd, userLocation, service)
+        else if (
+          userLocation == UserLocation.Uk &&
+          sd.formData.organisationType.contains(CharityPublicBodyNotForProfit) &&
+          sd.ukVatDetails.exists(vat => vat.number.startsWith("654") || vat.number.startsWith("8888"))
+        ) createSubscription(loggedInUser, rd, userLocation, service)
+        else createSubscription(service)(request)
+    } yield result
   }
 
   def createSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] =

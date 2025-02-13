@@ -322,6 +322,47 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
         }
       }
     }
+
+    "UK public bodies" - {
+      val createEoriSubscriptionRequest =
+        transformer.transform(
+          givenRegistrationDetailsUkCharityPublicBody,
+          givenSubscriptionDetailsUkCharityPublicBody,
+          Uk,
+          gagmr
+        )
+
+      "should have legal status Unincorporated Body" in {
+        createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.UnincorporatedBody
+      }
+
+      "should have edge case type 03" in {
+        createEoriSubscriptionRequest.edgeCaseType shouldBe "03"
+      }
+
+      "should have VAT identification when present" in {
+        createEoriSubscriptionRequest.vatIdentificationNumbers.value shouldBe List(VatIdentification("GB", "888812345"))
+      }
+
+      "should contain principal economic activity, the first 4 digits of the SIC Code" in {
+        createEoriSubscriptionRequest.principalEconomicActivity.value shouldBe "1073"
+        givenSubscriptionDetailsCharityPublicBody.sicCode.value.take(
+          4
+        ) shouldBe createEoriSubscriptionRequest.principalEconomicActivity.value
+      }
+
+      "should have type of person as 3 (AssociationOfPerson)" in {
+        createEoriSubscriptionRequest.typeOfPerson.value shouldBe "3"
+      }
+
+      "should not have a date established" in {
+        createEoriSubscriptionRequest.organisation.head.dateOfEstablishment shouldBe empty
+      }
+
+      "should have the organisation name" in {
+        createEoriSubscriptionRequest.organisation.head.organisationName shouldBe "Government Dept"
+      }
+    }
   }
 
   private def givenRegistrationDetailsEmbassy: RegistrationDetailsEmbassy = {
@@ -371,6 +412,15 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
       name = "Wish Upon A Dream",
       etmpOrganisationType = Some(UnincorporatedBody),
       address = Address("33-37 Athol St", None, Some("Douglas"), None, Some("IM1 1LB"), "GB"),
+      customsId = Some(CustomsId("UTR", "1160902011"))
+    )
+  }
+
+  private def givenRegistrationDetailsUkCharityPublicBody: RegistrationDetailsOrganisation = {
+    givenRegistrationDetailsCompany.copy(
+      name = "Government Dept",
+      etmpOrganisationType = Some(UnincorporatedBody),
+      address = Address("33-37 Athol St", None, Some("Douglas"), None, Some("SE10 1LB"), "GB"),
       customsId = Some(CustomsId("UTR", "1160902011"))
     )
   }
@@ -448,6 +498,21 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
         vatControlListResponse = Some(VatControlListResponse(Some("SE28 1AA"), Some("2017-01-01"))),
         sicCode = Some("10730"),
         nameOrganisationDetails = Some(NameOrganisationMatchModel("Wish Upon A Dream")),
+        customsId = Some(CustomsId("UTR", "1160902011"))
+      )
+  }
+
+  private def givenSubscriptionDetailsUkCharityPublicBody: SubscriptionDetails = {
+    givenSubscriptionDetails(
+      FormData(organisationType = Some(CharityPublicBodyNotForProfit), utrMatch = Some(UtrMatchModel(Some(true))))
+    )
+      .copy(
+        dateEstablished = Some(LocalDate.of(1980, 1, 1)),
+        vatRegisteredUk = Some(true),
+        ukVatDetails = Some(VatDetails("NW11 5RP", "888812345")),
+        vatControlListResponse = Some(VatControlListResponse(Some("SE28 1AA"), Some("2017-01-01"))),
+        sicCode = Some("10730"),
+        nameOrganisationDetails = Some(NameOrganisationMatchModel("Government Dept")),
         customsId = Some(CustomsId("UTR", "1160902011"))
       )
   }
