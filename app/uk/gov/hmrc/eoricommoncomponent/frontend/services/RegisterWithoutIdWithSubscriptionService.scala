@@ -30,7 +30,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon.
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -89,7 +93,7 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
           .flatMap {
             case SuccessResponse(formBundleNumber, sid, _) =>
               val updatedRegDetails = regDetails match {
-                case rde: RegistrationDetailsEmbassy => rde.copy(safeId = sid)
+                case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
                 case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
               }
 
