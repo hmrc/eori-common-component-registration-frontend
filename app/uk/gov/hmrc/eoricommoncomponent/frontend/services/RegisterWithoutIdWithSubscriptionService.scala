@@ -30,11 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon.
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -67,22 +63,20 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     )
 
     sessionCache.registrationDetails flatMap {
-      case rd if applicableForRegistration(rd) =>
-        rowServiceCall(loggedInUser, service)
-      case rd if rd.orgType.contains(EmbassyId) =>
-        createEmbassySubscription(rd.asInstanceOf[RegistrationDetailsEmbassy], userLocation, service)
-      case _ => createSubscription(service)(request)
+      case rd if userLocation == UserLocation.Iom => createSubscription(rd, userLocation, service)
+      case rd if applicableForRegistration(rd)    => rowServiceCall(loggedInUser, service)
+      case rd if rd.orgType.contains(EmbassyId)   => createSubscription(rd, userLocation, service)
+      case _                                      => createSubscription(service)(request)
     }
   }
 
   def createSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
     sub02Controller.subscribe(service)(request)
 
-  private def createEmbassySubscription(
-    regDetails: RegistrationDetailsEmbassy,
-    userLocation: UserLocation,
-    service: Service
-  )(implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
+  private def createSubscription(regDetails: RegistrationDetails, userLocation: UserLocation, service: Service)(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Future[Result] = {
     if (regDetails.safeId.id.nonEmpty) {
       Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
     } else {
@@ -90,7 +84,12 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
         taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
           .flatMap {
             case SuccessResponse(formBundleNumber, sid, _) =>
-              sessionCache.saveRegistrationDetails(regDetails.copy(safeId = sid))
+              val updatedRegDetails = regDetails match {
+                case rde: RegistrationDetailsEmbassy => rde.copy(safeId = sid)
+                case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
+              }
+
+              sessionCache.saveRegistrationDetails(updatedRegDetails)
                 .flatMap { saved =>
                   if (saved) {
                     taxEnrolmentsService.issuerCallSafeId(formBundleNumber, sid, None, service)

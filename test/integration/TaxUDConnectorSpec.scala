@@ -73,7 +73,6 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
       |  "edgeCaseType": "01",
       |  "cdsFullName": "Masahiro Moro",
       |  "organisation": {
-      |    "dateOfEstablishment": "",
       |    "organisationName": "Embassy Of Japan"
       |  },
       |  "cdsEstablishmentAddress": {

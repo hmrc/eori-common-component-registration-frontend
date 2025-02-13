@@ -16,11 +16,18 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.transformer
 
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, Embassy}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
+  CharityPublicBodyNotForProfit,
+  Company,
+  Embassy,
+  LimitedLiabilityPartnership
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionRequest.principalEconomicActivityLength
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{
   CdsEstablishmentAddress,
   ContactInformation,
-  Organisation
+  Organisation,
+  VatIdentification
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -28,8 +35,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, RegistrationDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpLegalStatus
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{CdsToEtmpOrganisationType, EtmpLegalStatus}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpLegalStatus.{CorporateBody, Llp}
 
+import java.time.format.DateTimeFormatter
 import javax.inject.Singleton
 
 @Singleton
@@ -49,6 +58,8 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
         userLocation: UserLocation,
         service: Service
       )
+    } else if (userLocation == UserLocation.Iom) {
+      transformCompanyLLP(regDetails, subDetails, userLocation, service)
     } else {
       throw new UnsupportedOperationException(
         s"Unable to create EORI for organisation type: ${subDetails.formData.organisationType}"
@@ -65,10 +76,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
     CreateEoriSubscriptionRequest(
       edgeCaseType(subDetails.formData.organisationType.head, userLocation),
       subDetails.contactDetails.map(_.fullName).getOrElse(""),
-      Organisation(
-        "",
-        subDetails.embassyName.head
-      ), // TODO awaiting stakeholder decision on optional date of establishment
+      Organisation(None, subDetails.embassyName.head),
       CdsEstablishmentAddress(
         regDetails.address.addressLine3,
         regDetails.address.countryCode,
@@ -89,6 +97,51 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
       None,
       None
     )
+  }
+
+  private def transformCompanyLLP(
+    regDetails: RegistrationDetails,
+    subDetails: SubscriptionDetails,
+    userLocation: UserLocation,
+    service: Service
+  ): CreateEoriSubscriptionRequest = {
+    val cdsOrgType = subDetails.formData.organisationType.head
+    val org        = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
+
+    CreateEoriSubscriptionRequest(
+      edgeCaseType(cdsOrgType, userLocation),
+      subDetails.contactDetails.map(_.fullName).getOrElse(""),
+      Organisation(
+        subDetails.dateEstablished.map(_.format(DateTimeFormatter.ISO_DATE)),
+        subDetails.nameOrganisationDetails.head.name
+      ),
+      CdsEstablishmentAddress(
+        regDetails.address.addressLine3,
+        regDetails.address.countryCode,
+        regDetails.address.postalCode,
+        s"${regDetails.address.addressLine1},${regDetails.address.addressLine2.map(l2 => s" $l2").getOrElse("")}"
+      ),
+      legalStatusFromOrgType(cdsOrgType),
+      !subDetails.contactDetails.map(_.useAddressFromRegistrationDetails).head,
+      subDetails.personalDataDisclosureConsent,
+      contactInformation(subDetails.contactDetails),
+      None,
+      None,
+      None,
+      subDetails.sicCode.map(_.take(principalEconomicActivityLength)),
+      Some(service.enrolmentKey),
+      None,
+      None,
+      org.map(_.typeOfPerson),
+      subDetails.ukVatDetails.map(vd => List(VatIdentification("IM", vd.number)))
+    )
+  }
+
+  private def legalStatusFromOrgType(cdsOrganisationType: CdsOrganisationType): String = {
+    cdsOrganisationType match {
+      case Company                     => CorporateBody
+      case LimitedLiabilityPartnership => Llp
+    }
   }
 
   private def edgeCaseType(cdsOrgType: CdsOrganisationType, userLocation: UserLocation): String = {
