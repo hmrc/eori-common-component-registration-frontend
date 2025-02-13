@@ -1959,7 +1959,7 @@ ecc.start-page.title.tgp = Get a subscription to Trader Goods Profile and an EOR
 
 ecc.start-page.para1 = If we approve your application we will give you:
 ecc.start-page.para1.bullet1 = an EORI number
-ecc.start-page.para2 = You only need to apply once.
+ecc.start-page.para2 = It usually takes 7 to 8 minutes to fill in this application.
 
 ecc.start-page.para1.bullet2.ars = a subscription to advance rulings
 ecc.start-page.para1.bullet2.gagmr = a subscription to the Goods Vehicle Movement Service
@@ -1977,45 +1977,35 @@ ecc.start-page.para1.bullet2.ma = a subscription to Apply for and manage your cu
 ecc.start-page.para1.bullet2.tgp = a subscription to Trader Goods Profile
 
 ecc.start-page.when.title = What you will need
-ecc.start-page.when.title2 = If you are UK VAT registered
-ecc.start-page.when.para1 = To verify your identity we will ask you to enter:
-ecc.start-page.when.para1.bullet1 = date of VAT registration
-ecc.start-page.when.para1.bullet2 = VAT registration number
-ecc.start-page.when.para1.bullet3 = postcode where you are registered for VAT
-ecc.start-page.gbeori.para1.link = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Sign in to your VAT online account (opens in new tab)</a>
-ecc.start-page.gbeori.para1.link2 = to get these details.
+ecc.start-page.when.para1 = You need to tell us:
+ecc.start-page.when.para1.bullet1 = your registered address
+ecc.start-page.when.para1.bullet2 = an email address we can use to contact you
+ecc.start-page.when.para1.bullet3 = your Unique Taxpayer Reference (UTR), if you or your organisation are registered for Self Assessment or Corporation Tax
+ecc.start-page.when.para2 = Find your UTR
+ecc.start-page.when.para3 = If you apply as a sole trader or individual, you can provide your National Insurance number instead of a UTR.
 
-ecc.start-page.gbeori.title = If you apply as a company, partnership or other organisation
-ecc.start-page.gbeori.para1.title = To verify your identity you will need to provide your organisation’s:
-ecc.start-page.gbeori.para1.bullet1 = registered name and address
+ecc.start-page.vat.title = If you are UK VAT registered
+ecc.start-page.vat.para1 = We will ask you to enter:
+ecc.start-page.vat.para1.bullet1 = your VAT registration number
+ecc.start-page.vat.para1.bullet2 = the postcode where you are registered for VAT
+ecc.start-page.vat.para1.bullet3 = the date you registered for VAT
+ecc.start-page.vat.para2 = You can find these details by
+ecc.start-page.vat.link = signing in to your VAT online account
 
-ecc.start-page.gbeori.para1.bullet3 = Corporation Tax Unique Taxpayer Reference (UTR), if you pay Corporation Tax in the UK
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" target="_blank" class="govuk-link" rel="noopener noreferrer">Find your UTR number (opens in new tab)</a>
+ecc.start-page.sic.title = Standard Industrial Classification (SIC) code
+ecc.start-page.sic.para1 = A SIC code identifies business activities. We will ask you to enter one if you apply as:
+ecc.start-page.sic.para1.bullet1 = a company or partnership
+ecc.start-page.sic.para1.bullet2 = a sole trader
+ecc.start-page.sic.para1.bullet3 = a charity, public body or not-for-profit organisation
+ecc.start-page.sic.para2 = You may already have a SIC code if you are registered with
+ecc.start-page.sic.link = Companies House
 
-ecc.start-page.solo.title = If you apply as a sole trader or individual
-ecc.start-page.gbeori.para3.title = We will verify your identity by asking for one of the following:
-ecc.start-page.gbeori.para3.bullet1 = National Insurance number, if you have worked in the UK
-ecc.start-page.gbeori.para3.bullet2 = Self Assessment Unique Taxpayer Reference (UTR), if you registered for Self Assessment
-ecc.start-page.gbeori.link = <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Choose a SIC code (opens in new tab)</a>
-ecc.start-page.gbeori.link.text = from the list on Companies House
-ecc.start-page.company.title = Standard Industrial Classification Code (SIC code)
+ecc.start-page.timing.title = When you will get your subscription and EORI number
+ecc.start-page.timing.para1 = The subscription and EORI number will be ready to use within either:
+ecc.start-page.timing.para1.bullet1 = 2 hours
+ecc.start-page.timing.para1.bullet2 = 5 working days, if we need to make more checks
 
-ecc.start-page.company = A SIC code identifies what organisations do. We will ask you to enter one if you apply as:
-ecc.start-page.company.bullet1 = a company or other organisation
-ecc.start-page.company.bullet2 = a sole trader
-
-ecc.start-page.sic.title = Find your SIC code
-ecc.start-page.sic.para1 = If you are UK VAT registered you can find the code on your VAT certificate. It’s called ‘trade classification (SIC code)’.
-ecc.start-page.sic.para2 = If you are not UK VAT registered, or cannot find the code, you can choose one from the list on Companies House. You can search for a code that best describes what your organisation does.
-ecc.start-page.company.para2 = If you pay Corporation Tax in the UK we will ask for your Corporation Tax Unique Taxpayer Reference (UTR).
-ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Find a UTR number (opens in new tab)</a>.
-
-
-ecc.start-page.sole-trader.title = How long it takes
-ecc.start-page.sole-trader = Applications take an average of 7 to 8 minutes to complete.
-ecc.start-page.sole-trader.para2 = The subscription and EORI number will be ready to use within either:
-ecc.start-page.sole-trader.bullet1 = 2 hours
-ecc.start-page.sole-trader.bullet2 = 5 working days, if we need to make more checks
+ecc.start-page.button = Start now
 
 date.fields.day = Day
 date.fields.month = Month

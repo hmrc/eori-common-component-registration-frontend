@@ -1714,7 +1714,7 @@ ecc.start-page.title.tgp = Cael tanysgrifiad i Broffil Nwyddau Masnachwyr a chae
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
 ecc.start-page.para1.bullet1 = rhif EORI
-ecc.start-page.para2 = Dim ond unwaith y bydd angen i chi wneud hyn.
+ecc.start-page.para2 = Fel arfer, mae’n cymryd 7 i 8 munud i lenwi’r cais hwn.
 
 ecc.start-page.para1.bullet2.ars = tanysgrifiad i ddyfarniadau uwch
 ecc.start-page.para1.bullet2.gagmr = tanysgrifiad i’r Gwasanaeth Symud Cerbydau Nwyddau
@@ -1732,43 +1732,35 @@ ecc.start-page.para1.bullet2.ma = todo
 ecc.start-page.para1.bullet2.tgp = tanysgrifiad i Broffil Nwyddau Masnachwyr
 
 ecc.start-page.when.title = Yr hyn y bydd ei angen arnoch
-ecc.start-page.when.title2 = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU
-ecc.start-page.when.para1 = I gadarnhau pwy ydych byddwn yn gofyn i chi nodi’r canlynol:
-ecc.start-page.when.para1.bullet1 = dyddiad cofrestru TAW
-ecc.start-page.when.para1.bullet2 = Rhif cofrestru TAW
-ecc.start-page.when.para1.bullet3 = y cod post lle rydych wedi cofrestru ar gyfer TAW
-ecc.start-page.gbeori.para1.link = <a href="https://www.gov.uk/send-vat-return" class="govuk-link" target="_blank" rel="noopener noreferrer">Mewngofnodwch i’ch cyfrif TAW ar-lein (yn agor tab newydd)</a>
-ecc.start-page.gbeori.para1.link2 = i gael y manylion hyn.
+ecc.start-page.when.para1 = Mae’n rhaid i chi roi’r canlynol i ni:
+ecc.start-page.when.para1.bullet1 = eich cyfeiriad cofrestredig
+ecc.start-page.when.para1.bullet2 = cyfeiriad e-bost y gallwn ei ddefnyddio i gysylltu â chi
+ecc.start-page.when.para1.bullet3 = eich Cyfeirnod Unigryw y Trethdalwr (UTR), os ydych chi neu’ch sefydliad wedi cofrestru ar gyfer Hunanasesiad neu Dreth Gorfforaeth
+ecc.start-page.when.para2 = Dod o hyd i’ch UTR
+ecc.start-page.when.para3 = Os ydych yn gwneud cais fel unig fasnachwr neu fel unigolyn, gallwch roi’ch rhif Yswiriant Gwladol arnoch yn lle UTR.
 
-ecc.start-page.gbeori.title = Os byddwch yn gwneud cais fel cwmni, partneriaeth neu sefydliad arall
-ecc.start-page.gbeori.para1.title = I gadarnhau pwy ydych, bydd angen i chi ddarparu’r manylion canlynol am eich sefydliad:
-ecc.start-page.gbeori.para1.bullet1 = enw a chyfeiriad cofrestredig
+ecc.start-page.vat.title = Os ydych wedi cofrestru ar gyfer TAW yn y DU
+ecc.start-page.vat.para1 = Byddwn yn gofyn i chi nodi’r canlynol:
+ecc.start-page.vat.para1.bullet1 = eich rhif cofrestru TAW
+ecc.start-page.vat.para1.bullet2 = y cod post y man lle rydych wedi cofrestru ar gyfer TAW
+ecc.start-page.vat.para1.bullet3 = y dyddiad y gwnaethoch gofrestru ar gyfer TAW
+ecc.start-page.vat.para2 = Gallwch ddod o hyd i’r manylion hyn drwy
+ecc.start-page.vat.link = fewngofnodi i’ch cyfrif TAW ar-lein (yn agor tab newydd)
 
-ecc.start-page.gbeori.para1.bullet3 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth os ydych yn talu Treth Gorfforaeth yn y DU
-ecc.start-page.gbeori.para2 = <a href="https://www.gov.uk/find-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dod o hyd i UTR (yn agor tab newydd)</a>
+ecc.start-page.sic.title = Cod Dosbarthiad Diwydiannol Safonol (SIC)
+ecc.start-page.sic.para1 = Mae cod SIC yn disgrifio gweithgareddau busnes. Byddwn yn gofyn i chi nodi un os byddwch yn gwneud cais fel:
+ecc.start-page.sic.para1.bullet1 = cwmni neu bartneriaeth
+ecc.start-page.sic.para1.bullet2 = unig fasnachwr
+ecc.start-page.sic.para1.bullet3 = elusen, corff cyhoeddus neu sefydliad ‘nid er elw’
+ecc.start-page.sic.para2 = Efallai bod cod SIC gennych eisoes os ydych wedi eich cofrestru gyda
+ecc.start-page.sic.link = Thŷ’r Cwmnïau
 
-ecc.start-page.solo.title = Os byddwch yn gwneud cais fel unig fasnachwr neu fel unigolyn
-ecc.start-page.gbeori.para3.title = Byddwn yn gofyn am un o’r canlynol er mwyn cadarnhau pwy ydych:
-ecc.start-page.gbeori.para3.bullet1 = rhif Yswiriant Gwladol, os ydych wedi gweithio yn y DU
-ecc.start-page.gbeori.para3.bullet2 = Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Hunanasesiad, os ydych wedi cofrestru ar gyfer Hunanasesiad
-ecc.start-page.gbeori.link = <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewiswch god SIC (yn agor tab newydd)</a>
-ecc.start-page.gbeori.link.text =  o'’'r rhestr ar wefan Dŷ'’'r Cwmnïau.
-ecc.start-page.company.title = Cod Dosbarthiad Diwydiannol Safonol (cod SIC)
-ecc.start-page.company = Mae cod SIC yn dangos yr hyn y mae sefydliadau’n ei wneud. Byddwn yn gofyn i chi nodi’r cyfeirnod hwn os byddwch y gwneud cais fel un o’r canlynol:
-ecc.start-page.company.bullet1 = cwmni neu sefydliad arall
-ecc.start-page.company.bullet2 = unig fasnachwr
+ecc.start-page.timing.title = Pryd y byddwch yn cael eich tanysgrifiad a’ch rhif EORI
+ecc.start-page.timing.para1 = Bydd y tanysgrifiad a’r rhif EORI yn barod i’w defnyddio cyn pen y naill neu’r llall o’r canlynol:
+ecc.start-page.timing.para1.bullet1 = 2 awr
+ecc.start-page.timing.para1.bullet2 = 5 diwrnod gwaith, os bydd angen i ni wneud rhagor o wiriadau
 
-ecc.start-page.sic.title = Dod o hyd i’ch cod SIC
-ecc.start-page.sic.para1 = Os ydych wedi’ch cofrestru ar gyfer TAW yn y DU mae’r cod i’w weld ar eich tystysgrif TAW. ‘Dosbarthiad masnachu (cod SIC)’ yw’r enw ar hwn.
-ecc.start-page.sic.para2 = Os nad ydych wedi’ch cofrestru ar gyfer TAW yn y DU, neu os na allwch ddod o hyd i’r cod, gallwch ddewis un o’r rhestr sydd ar wefan Tŷ’r Cwmnïau. Gallwch chwilio am god sy’n disgrifio orau beth mae’ch sefydliad yn ei wneud.
-ecc.start-page.company.para2 = Os ydych yn talu Treth Gorfforaeth yn y DU, byddwn yn gofyn am eich Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth.
-ecc.start-page.company.link = <a href="https://www.gov.uk/find-lost-utr-number" class="govuk-link" target="_blank" rel="noopener noreferrer">Dewch o hyd i UTR (yn agor tab newydd)</a>.
-
-ecc.start-page.sole-trader.title = Faint o amser y mae’n ei gymryd
-ecc.start-page.sole-trader = Mae ceisiadau’n cymryd 7 i 8 munud ar gyfartaledd i’w cwblhau.
-ecc.start-page.sole-trader.para2 = Bydd y tanysgrifiad a’r rhif EORI yn barod i’w defnyddio cyn pen naill ai:
-ecc.start-page.sole-trader.bullet1 = 2 awr
-ecc.start-page.sole-trader.bullet2 = 5 diwrnod gwaith, os bydd angen i ni wneud rhagor o wiriadau
+ecc.start-page.button = Dechrau nawr
 
 date.fields.day = Diwrnod
 date.fields.month = Mis
