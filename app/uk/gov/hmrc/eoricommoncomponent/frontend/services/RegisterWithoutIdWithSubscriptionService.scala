@@ -17,9 +17,9 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.Logging
+import play.api.i18n.Messages
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, Request, Result}
-import play.mvc.Http.Status.NO_CONTENT
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
@@ -28,7 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -45,13 +45,15 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   orgTypeLookup: OrgTypeLookup,
   sub02Controller: Sub02Controller,
   taxudConnector: TaxUDConnector,
-  taxEnrolmentsService: TaxEnrolmentsService
+  handleSubscriptionService: HandleSubscriptionService,
+  save4LaterService: Save4LaterService
 )(implicit ec: ExecutionContext)
     extends Logging {
 
   def rowRegisterWithoutIdWithSubscription(loggedInUser: LoggedInUserWithEnrolments, service: Service)(implicit
     hc: HeaderCarrier,
-    request: Request[AnyContent]
+    request: Request[AnyContent],
+    messages: Messages
   ): Future[Result] = {
 
     def isRow = UserLocation.isRow(requestSessionData)
@@ -63,9 +65,9 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     )
 
     sessionCache.registrationDetails flatMap {
-      case rd if userLocation == UserLocation.Iom => createSubscription(rd, userLocation, service)
+      case rd if userLocation == UserLocation.Iom => createSubscription(loggedInUser, rd, userLocation, service)
       case rd if applicableForRegistration(rd)    => rowServiceCall(loggedInUser, service)
-      case rd if rd.orgType.contains(EmbassyId)   => createSubscription(rd, userLocation, service)
+      case rd if rd.orgType.contains(EmbassyId)   => createSubscription(loggedInUser, rd, userLocation, service)
       case _                                      => createSubscription(service)(request)
     }
   }
@@ -73,10 +75,12 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   def createSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
     sub02Controller.subscribe(service)(request)
 
-  private def createSubscription(regDetails: RegistrationDetails, userLocation: UserLocation, service: Service)(implicit
-    request: Request[AnyContent],
-    hc: HeaderCarrier
-  ): Future[Result] = {
+  private def createSubscription(
+    loggedInUser: LoggedInUserWithEnrolments,
+    regDetails: RegistrationDetails,
+    userLocation: UserLocation,
+    service: Service
+  )(implicit request: Request[AnyContent], hc: HeaderCarrier, messages: Messages): Future[Result] = {
     if (regDetails.safeId.id.nonEmpty) {
       Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
     } else {
@@ -91,14 +95,27 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
 
               sessionCache.saveRegistrationDetails(updatedRegDetails)
                 .flatMap { saved =>
-                  if (saved) {
-                    taxEnrolmentsService.issuerCallSafeId(formBundleNumber, sid, None, service)
-                      .flatMap {
-                        case NO_CONTENT => Future.successful(Redirect(Sub02Controller.pending(service)))
-                        case _          => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-                      }
-                  } else {
-                    Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+                  save4LaterService.fetchEmail(GroupId(loggedInUser.groupId)).flatMap { optEmailStatus =>
+                    if (saved) {
+                      handleSubscriptionService
+                        .handleSubscription(
+                          formBundleNumber,
+                          RecipientDetails(
+                            service,
+                            optEmailStatus.head.email.head,
+                            subDetails.contactDetails.map(_.fullName).head,
+                            None,
+                            None
+                          ),
+                          TaxPayerId(""),
+                          None,
+                          None,
+                          sid
+                        )
+                        .flatMap(_ => Future.successful(Redirect(Sub02Controller.pending(service))))
+                    } else {
+                      Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+                    }
                   }
                 }
             case _ => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
