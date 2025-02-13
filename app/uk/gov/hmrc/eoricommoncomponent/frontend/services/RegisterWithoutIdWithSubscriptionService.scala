@@ -22,7 +22,7 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationSubmissionController, Sub02Controller}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.EmbassyId
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
@@ -30,11 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon.
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -91,34 +87,38 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
       sessionCache.subscriptionDetails.flatMap { subDetails =>
         taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
           .flatMap {
-            case SuccessResponse(formBundleNumber, sid, _) =>
+            case SuccessResponse(formBundleNumber, sid, processingDate) =>
               val updatedRegDetails = regDetails match {
                 case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
                 case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
+                case rdi: RegistrationDetailsIndividual   => rdi.copy(safeId = sid)
+                case rds: RegistrationDetailsSafeId       => rds.copy(safeId = sid)
               }
 
               sessionCache.saveRegistrationDetails(updatedRegDetails)
-                .flatMap { saved =>
-                  save4LaterService.fetchEmail(GroupId(loggedInUser.groupId)).flatMap { optEmailStatus =>
-                    if (saved) {
-                      handleSubscriptionService
-                        .handleSubscription(
-                          formBundleNumber,
-                          RecipientDetails(
-                            service,
-                            optEmailStatus.head.email.head,
-                            subDetails.contactDetails.map(_.fullName).head,
+                .flatMap { _ =>
+                  sessionCache.saveTxe13ProcessedDate(processingDate.toString).flatMap { saved =>
+                    save4LaterService.fetchEmail(GroupId(loggedInUser.groupId)).flatMap { optEmailStatus =>
+                      if (saved) {
+                        handleSubscriptionService
+                          .handleSubscription(
+                            formBundleNumber,
+                            RecipientDetails(
+                              service,
+                              optEmailStatus.head.email.head,
+                              subDetails.contactDetails.map(_.fullName).head,
+                              None,
+                              None
+                            ),
+                            TaxPayerId(""),
                             None,
-                            None
-                          ),
-                          TaxPayerId(""),
-                          None,
-                          None,
-                          sid
-                        )
-                        .flatMap(_ => Future.successful(Redirect(Sub02Controller.pending(service))))
-                    } else {
-                      Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+                            None,
+                            sid
+                          )
+                          .flatMap(_ => Future.successful(Redirect(ApplicationSubmissionController.processing(service))))
+                      } else {
+                        Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+                      }
                     }
                   }
                 }
