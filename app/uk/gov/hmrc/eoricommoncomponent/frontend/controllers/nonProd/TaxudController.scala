@@ -66,7 +66,9 @@ class TaxudController @Inject() (action: DefaultActionBuilder, mcc: MessagesCont
   ): Future[Result] = {
     if (isEmbassyOfJapan(createEoriSubscriptionRequest)) {
       Future.successful(createdResponse(request))
-    } else if (isleOfManSolutionsLtd(createEoriSubscriptionRequest)) {
+    } else if (isleOfManCompanyLlp(createEoriSubscriptionRequest)) {
+      Future.successful(createdResponse(request))
+    } else if (isleOfManSoleTraderIndividual(createEoriSubscriptionRequest)) {
       Future.successful(createdResponse(request))
     } else {
       Future.successful(InternalServerError(Json.toJson(BackendInternalServerError())))
@@ -83,11 +85,19 @@ class TaxudController @Inject() (action: DefaultActionBuilder, mcc: MessagesCont
   }
 
   private def isEmbassyOfJapan(createEoriSubscriptionRequest: CreateEoriSubscriptionRequest): Boolean = {
-    createEoriSubscriptionRequest.edgeCaseType == "01" && createEoriSubscriptionRequest.organisation.organisationName.toLowerCase == "embassy of japan"
+    createEoriSubscriptionRequest.edgeCaseType == "01" && createEoriSubscriptionRequest.organisation.head.organisationName.toLowerCase == "embassy of japan"
   }
 
-  private def isleOfManSolutionsLtd(createEoriSubscriptionRequest: CreateEoriSubscriptionRequest): Boolean = {
-    createEoriSubscriptionRequest.edgeCaseType == "02" && createEoriSubscriptionRequest.organisation.organisationName.toLowerCase == "solutions ltd"
+  private def isleOfManCompanyLlp(createEoriSubscriptionRequest: CreateEoriSubscriptionRequest): Boolean = {
+    createEoriSubscriptionRequest.edgeCaseType == "02" && createEoriSubscriptionRequest.organisation.exists(
+      _.organisationName.toLowerCase == "solutions ltd"
+    )
+  }
+
+  private def isleOfManSoleTraderIndividual(createEoriSubscriptionRequest: CreateEoriSubscriptionRequest): Boolean = {
+    createEoriSubscriptionRequest.edgeCaseType == "02" && createEoriSubscriptionRequest.individual.exists(
+      _.firstName.toLowerCase == "thomas"
+    )
   }
 
   private def createEoriSubResponse = {

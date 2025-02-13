@@ -17,29 +17,41 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13
 
 import play.api.libs.json.{Json, OWrites, Reads}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{
+  CdsEstablishmentAddress,
+  ContactInformation,
+  Id,
+  Individual,
+  Organisation,
+  ThirdCountryUniqueIdentificationNumber,
+  VatIdentification
+}
 
 case class CreateEoriSubscriptionRequest(
   edgeCaseType: String,
   cdsFullName: String,
-  organisation: CreateEoriSubscriptionRequest.Organisation,
-  cdsEstablishmentAddress: CreateEoriSubscriptionRequest.CdsEstablishmentAddress,
+  organisation: Option[Organisation],
+  individual: Option[Individual],
+  cdsEstablishmentAddress: CdsEstablishmentAddress,
   legalStatus: String,
   separateCorrespondenceAddressIndicator: Boolean,
   consentToDisclosureOfPersonalData: Option[Boolean],
-  contactInformation: Option[CreateEoriSubscriptionRequest.ContactInformation],
+  contactInformation: Option[ContactInformation],
   establishmentCustomsInTheTerritory: Option[Boolean],
-  id: Option[CreateEoriSubscriptionRequest.Id],
+  id: Option[Id],
   preBrexitIndicator: Option[Boolean],
   principalEconomicActivity: Option[String],
   serviceName: Option[String],
   shortName: Option[String],
-  thirdCountryUniqueIdentificationNumber: Option[CreateEoriSubscriptionRequest.ThirdCountryUniqueIdentificationNumber],
+  thirdCountryUniqueIdentificationNumber: Option[ThirdCountryUniqueIdentificationNumber],
   typeOfPerson: Option[String],
-  vatIdentificationNumbers: Option[List[CreateEoriSubscriptionRequest.VatIdentification]]
+  vatIdentificationNumbers: Option[List[VatIdentification]]
 )
 
 object CreateEoriSubscriptionRequest {
   case class Organisation(dateOfEstablishment: Option[String], organisationName: String)
+
+  case class Individual(dateOfBirth: String, firstName: String, lastName: String)
 
   case class CdsEstablishmentAddress(
     city: Option[String],
@@ -71,6 +83,9 @@ object CreateEoriSubscriptionRequest {
   )
 
   case class VatIdentification(countryCode: String, vatIdentificationNumber: String)
+
+  implicit val individualReads: Reads[Individual]    = Json.reads[Individual]
+  implicit val individualWrites: OWrites[Individual] = Json.writes[Individual]
 
   implicit val organisationReads: Reads[Organisation]    = Json.reads[Organisation]
   implicit val organisationWrites: OWrites[Organisation] = Json.writes[Organisation]

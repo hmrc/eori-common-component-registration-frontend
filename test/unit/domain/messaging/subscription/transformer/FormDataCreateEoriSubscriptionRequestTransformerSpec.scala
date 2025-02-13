@@ -22,7 +22,8 @@ import org.scalatest.matchers.should.Matchers
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   Company,
   Embassy,
-  LimitedLiabilityPartnership
+  LimitedLiabilityPartnership,
+  SoleTrader
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.transformer.FormDataCreateEoriSubscriptionRequestTransformer
@@ -56,7 +57,7 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
       }
 
       "should have an empty date of establishment" in {
-        createEoriSubscriptionRequest.organisation.dateOfEstablishment shouldBe empty
+        createEoriSubscriptionRequest.organisation.head.dateOfEstablishment shouldBe empty
       }
 
       "should have an edge case type 01" in {
@@ -110,16 +111,16 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
           ) shouldBe createEoriSubscriptionRequest.principalEconomicActivity.value
         }
 
-        "should have type of person as 02 (Legal Person)" in {
+        "should have type of person as 2 (Legal Person)" in {
           createEoriSubscriptionRequest.typeOfPerson.value shouldBe "2"
         }
 
         "should have a date established when present" in {
-          createEoriSubscriptionRequest.organisation.dateOfEstablishment.value shouldBe "1980-01-01"
+          createEoriSubscriptionRequest.organisation.head.dateOfEstablishment.value shouldBe "1980-01-01"
         }
 
         "should have the organisation name" in {
-          createEoriSubscriptionRequest.organisation.organisationName shouldBe "Solutions Ltd"
+          createEoriSubscriptionRequest.organisation.head.organisationName shouldBe "Solutions Ltd"
         }
       }
 
@@ -148,17 +149,57 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
           ) shouldBe createEoriSubscriptionRequest.principalEconomicActivity.value
         }
 
-        "should have type of person as 02 (Legal Person)" in {
+        "should have type of person as 2 (Legal Person)" in {
           createEoriSubscriptionRequest.typeOfPerson.value shouldBe "2"
         }
 
         "should have a date established when present" in {
-          createEoriSubscriptionRequest.organisation.dateOfEstablishment.value shouldBe "1990-12-12"
+          createEoriSubscriptionRequest.organisation.head.dateOfEstablishment.value shouldBe "1990-12-12"
         }
 
         "should have the organisation name" in {
-          createEoriSubscriptionRequest.organisation.organisationName shouldBe "Top Lawyers"
+          createEoriSubscriptionRequest.organisation.head.organisationName shouldBe "Top Lawyers"
         }
+      }
+
+      "Sole Trader" - {
+        val createEoriSubscriptionRequest =
+          transformer.transform(givenRegistrationDetailsSoleTrader, givenSubscriptionDetailsSoleTrader, Iom, gagmr)
+
+        "should have legal status Llp" in {
+          createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.UnincorporatedBody
+        }
+
+        "should have edge case type 02" in {
+          createEoriSubscriptionRequest.edgeCaseType shouldBe "02"
+        }
+
+        "should have VAT identification when present" in {
+          createEoriSubscriptionRequest.vatIdentificationNumbers.value shouldBe List(
+            VatIdentification("IM", "123456789")
+          )
+        }
+
+        "should contain principal economic activity, the first 4 digits of the SIC Code" in {
+          createEoriSubscriptionRequest.principalEconomicActivity.value shouldBe "5811"
+          givenSubscriptionDetailsSoleTrader.sicCode.value.take(
+            4
+          ) shouldBe createEoriSubscriptionRequest.principalEconomicActivity.value
+        }
+
+        "should have type of person as 1 (Natural Person)" in {
+          createEoriSubscriptionRequest.typeOfPerson.value shouldBe "1"
+        }
+
+        "should have Name & DOB details" in {
+          createEoriSubscriptionRequest.individual.head.dateOfBirth shouldBe "1980-12-12"
+          createEoriSubscriptionRequest.individual.head.firstName shouldBe "Thomas"
+          createEoriSubscriptionRequest.individual.head.lastName shouldBe "Tell"
+        }
+      }
+
+      "Individual" - {
+        //
       }
     }
   }
@@ -189,6 +230,12 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
     givenRegistrationDetailsCompany.copy(name = "Top Lawyers")
   }
 
+  private def givenRegistrationDetailsSoleTrader: RegistrationDetailsIndividual = {
+    RegistrationDetailsIndividual(fullName = "Thomas Tell", dateOfBirth = LocalDate.of(1980, 12, 12)).copy(address =
+      Address("Bay view road", Some("Bay Place"), Some("Port St. Mary"), None, Some("IM9 5AQ"), "GB")
+    )
+  }
+
   private def givenSubscriptionDetailsEmbassy: SubscriptionDetails = {
     givenSubscriptionDetails(FormData(organisationType = Some(Embassy))).copy(embassyName = Some("Embassy Of Japan"))
   }
@@ -214,6 +261,17 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
         vatControlListResponse = Some(VatControlListResponse(Some("SE28 1AA"), Some("2015-02-02"))),
         sicCode = Some("8111"),
         nameOrganisationDetails = Some(NameOrganisationMatchModel("Top Lawyers"))
+      )
+  }
+
+  private def givenSubscriptionDetailsSoleTrader: SubscriptionDetails = {
+    givenSubscriptionDetails(FormData(organisationType = Some(SoleTrader)))
+      .copy(
+        nameDobDetails = Some(NameDobMatchModel("Thomas", "Tell", LocalDate.of(1980, 12, 12))),
+        sicCode = Some("58110"),
+        vatRegisteredUk = Some(true),
+        ukVatDetails = Some(VatDetails("NW11 5RP", "123456789")),
+        vatControlListResponse = Some(VatControlListResponse(Some("SE28 1AA"), Some("2015-02-02")))
       )
   }
 

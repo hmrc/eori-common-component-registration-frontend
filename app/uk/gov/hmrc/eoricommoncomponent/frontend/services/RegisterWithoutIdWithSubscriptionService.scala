@@ -95,6 +95,8 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
               val updatedRegDetails = regDetails match {
                 case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
                 case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
+                case rdi: RegistrationDetailsIndividual   => rdi.copy(safeId = sid)
+                case rds: RegistrationDetailsSafeId       => rds.copy(safeId = sid)
               }
 
               sessionCache.saveRegistrationDetails(updatedRegDetails)
