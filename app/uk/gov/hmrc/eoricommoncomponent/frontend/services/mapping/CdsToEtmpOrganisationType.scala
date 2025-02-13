@@ -30,6 +30,7 @@ object EtmpLegalStatus {
   val UnincorporatedBody = "Unincorporated Body"
   val Llp                = "LLP"
   val Partnership        = "Partnership"
+  val Embassy            = "diplomatic mission"
 }
 
 case class OrganisationTypeConfiguration(typeOfPerson: String, legalStatus: String)

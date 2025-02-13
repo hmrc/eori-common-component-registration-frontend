@@ -51,4 +51,21 @@ class TaxEnrolmentsService @Inject() (taxEnrolmentsConnector: TaxEnrolmentsConne
     taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId)
   }
 
+  def issuerCallSafeId(formBundleId: String, safeId: SafeId, dateOfEstablishment: Option[LocalDate], service: Service)(
+    implicit hc: HeaderCarrier
+  ): Future[Int] = {
+
+    val identifiers = List(KeyValue(key = "SAFEID", value = safeId.id))
+    val verifiers =
+      dateOfEstablishment.map(doe => List(KeyValue(key = "DATEOFESTABLISHMENT", value = pattern.format(doe))))
+    val taxEnrolmentsRequest =
+      TaxEnrolmentsRequest(
+        serviceName = service.enrolmentKey,
+        identifiers = identifiers,
+        verifiers = verifiers,
+        subscriptionState = "SUCCEEDED"
+      )
+    taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId)
+  }
+
 }

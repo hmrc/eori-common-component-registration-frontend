@@ -16,6 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SafeId
+
+import java.time.LocalDateTime
+
 sealed trait EoriHttpResponse
 
 case object NotFoundResponse extends EoriHttpResponse
@@ -23,3 +27,8 @@ case object NotFoundResponse extends EoriHttpResponse
 case object InvalidResponse extends EoriHttpResponse
 
 case object ServiceUnavailableResponse extends EoriHttpResponse
+
+case class SuccessResponse(formBundleNumber: String, safeId: SafeId, processingDate: LocalDateTime)
+    extends EoriHttpResponse
+
+case object ErrorResponse extends EoriHttpResponse

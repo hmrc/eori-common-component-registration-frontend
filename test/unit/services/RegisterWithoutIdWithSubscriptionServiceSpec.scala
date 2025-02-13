@@ -21,21 +21,29 @@ import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n
+import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, Request, Results}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{ErrorResponse, SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CompanyId, Embassy, IndividualId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
+  HandleSubscriptionService,
   RegisterWithoutIdService,
-  RegisterWithoutIdWithSubscriptionService
+  RegisterWithoutIdWithSubscriptionService,
+  Save4LaterService
 }
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -44,15 +52,19 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
-  private val mockRegisterWithoutIdService = mock[RegisterWithoutIdService]
-  private val mockSessionCache             = mock[SessionCache]
-  private val mockRequestSessionData       = mock[RequestSessionData]
-  private val mockSub02Controller          = mock[Sub02Controller]
-  private val mockOrgTypeLookup            = mock[OrgTypeLookup]
-  private val mockRegistrationDetails      = mock[RegistrationDetails]
+  private val mockRegisterWithoutIdService  = mock[RegisterWithoutIdService]
+  private val mockSessionCache              = mock[SessionCache]
+  private val mockRequestSessionData        = mock[RequestSessionData]
+  private val mockSub02Controller           = mock[Sub02Controller]
+  private val mockOrgTypeLookup             = mock[OrgTypeLookup]
+  private val mockRegistrationDetails       = mock[RegistrationDetails]
+  private val mockTaxudConnector            = mock[TaxUDConnector]
+  private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
+  private val mockSave4LaterService         = mock[Save4LaterService]
 
   private implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
   private implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
+  private implicit val msg: Messages           = mock[Messages]
 
   private val loggedInUserId   = java.util.UUID.randomUUID.toString
   private val mockLoggedInUser = mock[LoggedInUserWithEnrolments]
@@ -86,7 +98,10 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     mockSessionCache,
     mockRequestSessionData,
     mockOrgTypeLookup,
-    mockSub02Controller
+    mockSub02Controller,
+    mockTaxudConnector,
+    mockHandleSubscriptionService,
+    mockSave4LaterService
   )(global)
 
   override protected def beforeEach(): Unit = {
@@ -195,8 +210,9 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       )
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
+      when(mockRegistrationDetails.orgType).thenReturn(Some(IndividualId))
 
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSub02Controller, times(1)).subscribe(any())
       verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
@@ -213,10 +229,11 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
         Future.successful(Some(CorporateBody))
       )
       when(mockRegistrationDetails.safeId).thenReturn(SafeId("SAFEID"))
+      when(mockRegistrationDetails.orgType).thenReturn(Some(CompanyId))
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
 
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSub02Controller, times(1)).subscribe(any())
       verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
@@ -235,7 +252,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       mockSessionCacheRegistrationDetails()
       mockSessionCacheSubscriptionDetails()
 
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockRegisterWithoutIdService, times(1)).registerIndividual(any(), any(), any(), any(), any())(any(), any())
       verify(mockSub02Controller, times(1)).subscribe(any())
@@ -258,7 +275,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
 
-      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSub02Controller, times(1)).subscribe(any[Service])
       verify(mockRegisterWithoutIdService, times(1)).registerOrganisation(
@@ -285,7 +302,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       mockRegisterWithoutIdFailure()
 
       val thrown = the[RuntimeException] thrownBy {
-        await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
+        await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
       }
       thrown shouldBe emulatedFailure
     }
@@ -302,8 +319,128 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       mockRegisterWithoutIdNotOKResponse()
 
       the[RuntimeException] thrownBy {
-        await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq))
+        await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
       } should have message "Registration of organisation FAILED"
+    }
+
+    "when Embassy and txe13 call is successful" in {
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
+        .thenReturn(Some(UserLocation.Uk))
+
+      val registrationDetailsEmbassy = RegistrationDetailsEmbassy(
+        embassyName = "Embassy Of Japan",
+        embassyAddress =
+          Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SE28 1AA"), "GB"),
+        embassyCustomsId = None,
+        embassySafeId = SafeId("")
+      )
+
+      when(mockSessionCache.registrationDetails(any[Request[_]]))
+        .thenReturn(Future.successful(registrationDetailsEmbassy))
+
+      val subscriptionDetails = SubscriptionDetails(
+        personalDataDisclosureConsent = Some(true),
+        contactDetails = Some(
+          ContactDetailsModel(
+            "Masahiro Moro",
+            "masahiro.moro@gmail.com",
+            "07806674501",
+            None,
+            useAddressFromRegistrationDetails = false,
+            Some("101-104 Piccadilly"),
+            Some("Greater London"),
+            Some("SE28 1AA"),
+            Some("GB")
+          )
+        ),
+        formData = FormData(organisationType = Some(Embassy)),
+        embassyName = Some("Embassy Of Japan")
+      )
+
+      when(mockSessionCache.subscriptionDetails(any())).thenReturn(Future.successful(subscriptionDetails))
+
+      when(
+        mockTaxudConnector.createEoriSubscription(registrationDetailsEmbassy, subscriptionDetails, Uk, atarService)(hc)
+      )
+        .thenReturn(Future.successful(SuccessResponse("448377221902", SafeId("XR0000100051093"), LocalDateTime.now())))
+
+      when(mockSessionCache.saveRegistrationDetails(any())(any())).thenReturn(Future.successful(true))
+
+      when(msg.lang).thenReturn(i18n.Lang("gb"))
+
+      when(mockLoggedInUser.groupId).thenReturn(Some("123456"))
+
+      when(mockSave4LaterService.fetchEmail(any())(any())).thenReturn(
+        Future.successful(Some(EmailStatus(Some("tom.tell@gmail.com"), isVerified = true, Some(true))))
+      )
+
+      when(
+        mockHandleSubscriptionService.handleSubscription(any(), any(), any(), any(), any(), any())(any())
+      ).thenReturn(Future.unit)
+
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
+
+      verify(mockSessionCache).saveRegistrationDetails(
+        registrationDetailsEmbassy.copy(safeId = SafeId("XR0000100051093"))
+      )
+
+      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
+        any(),
+        any()
+      )
+      verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
+    }
+
+    "when Embassy" in {
+      when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
+        .thenReturn(Some(UserLocation.Uk))
+
+      val registrationDetailsEmbassy = RegistrationDetailsEmbassy(
+        embassyName = "Embassy Of Japan",
+        embassyAddress =
+          Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SE28 1AA"), "GB"),
+        embassyCustomsId = None,
+        embassySafeId = SafeId("")
+      )
+
+      when(mockSessionCache.registrationDetails(any[Request[_]]))
+        .thenReturn(Future.successful(registrationDetailsEmbassy))
+
+      val subscriptionDetails = SubscriptionDetails(
+        personalDataDisclosureConsent = Some(true),
+        contactDetails = Some(
+          ContactDetailsModel(
+            "Masahiro Moro",
+            "masahiro.moro@gmail.com",
+            "07806674501",
+            None,
+            useAddressFromRegistrationDetails = false,
+            Some("101-104 Piccadilly"),
+            Some("Greater London"),
+            Some("SE28 1AA"),
+            Some("GB")
+          )
+        ),
+        formData = FormData(organisationType = Some(Embassy)),
+        embassyName = Some("Embassy Of Japan")
+      )
+
+      when(mockSessionCache.subscriptionDetails(any())).thenReturn(Future.successful(subscriptionDetails))
+
+      when(
+        mockTaxudConnector.createEoriSubscription(registrationDetailsEmbassy, subscriptionDetails, Uk, atarService)(hc)
+      )
+        .thenReturn(Future.successful(ErrorResponse))
+
+      await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
+
+      verify(mockSessionCache, times(0)).saveRegistrationDetails(any())(any())
+
+      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
+        any(),
+        any()
+      )
+      verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
     }
   }
 
