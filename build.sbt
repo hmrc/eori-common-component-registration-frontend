@@ -96,6 +96,8 @@ lazy val scoverageSettings = {
       "<empty>",
       "Reverse.*",
       "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.frontend\\.views.*",
+      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.frontend\\.controllers\\nonProd.*",
+      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.frontend\\.controllers\\testOnly.*",
       "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.models.*",
       "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.config.*",
       "logger.*\\(.*\\)",
