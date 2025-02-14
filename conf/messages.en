@@ -2148,7 +2148,7 @@ cds.your-organisation-address.town-city=Town or city
 cds.your-organisation-address.postcode=Postcode
 
 #We are processing the EORI number
-cds.application-processing.title-=Application sent
+cds.application-processing.title=Application sent
 cds.application-processing.title-and-heading=We are processing the EORI number application for {0}
 cds.application-processing.content=Application received by HMRC on {0}
 cds.application-processing.what-next.para1=We are processing your application. This can take up to 5 working days.

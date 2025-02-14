@@ -25,21 +25,23 @@
 @(name: String, email: String, processedDate: String, service: Service)(implicit messages: Messages, request: Request[_])
 
 @layout_di(messages("cds.application-processing.title"), displayBackLink = false, service = service) {
-    @govukPanel(Panel(
-        title = HtmlContent(s"""${messages("cds.application-processing.title-and-heading", name)}"""),
-        content = HtmlContent(s"""${messages("cds.application-processing.content", dateFormatter.format(processedDate))}""")))
+@govukPanel(Panel(
+title = HtmlContent(s"""${messages("cds.application-processing.title-and-heading", name)}"""),
+content = HtmlContent(s"""${messages("cds.application-processing.content", dateFormatter.format(processedDate))}""")))
 
-    <div id="what-happens-next">
-        <h2 class="govuk-heading-m">@messages("cds.subscription.outcomes.steps.next")</h2>
-        <p class="govuk-body">@messages("cds.application-processing.what-next.para1")</p>
-        <p class="govuk-body">@messages("cds.application-processing.what-next.para2", email)</p>
-    </div>
+<div id="what-happens-next">
+    <h2 class="govuk-heading-m">@messages("cds.subscription.outcomes.steps.next")</h2>
+    <p class="govuk-body">@messages("cds.application-processing.what-next.para1")</p>
+    <p class="govuk-body">@messages("cds.application-processing.what-next.para2", email)</p>
+</div>
 
-    <div id="help-support">
-        <h2 class="govuk-heading-m">@messages("cds.application-processing.help.title-and-heading")</h2>
-        <p class="govuk-body">@messages("cds.application-processing.help.para1")</p>
-        <p class="govuk-body">@messages("cds.application-processing.help.para2")</p>
-    </div>
+<div id="help-support">
+    <h2 class="govuk-heading-m">@messages("cds.application-processing.help.title-and-heading")</h2>
+    <p class="govuk-body"><a href="https://www.tax.service.gov.uk/customs/register-for-cds/are-you-based-in-uk "
+                             id="register-for-cds"
+                             class="govuk-link">@messages("cds.application-processing.help.para1")</a></p>
+    <p class="govuk-body">@messages("cds.application-processing.help.para2")</p>
+</div>
 
-    @feedback_di()
+@feedback_di()
 }
