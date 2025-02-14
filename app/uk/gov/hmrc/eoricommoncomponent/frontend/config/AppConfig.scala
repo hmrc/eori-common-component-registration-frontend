@@ -145,4 +145,8 @@ class AppConfig @Inject() (
   val addressLookup: String = addressLookupBaseUrl + addressLookupContext
 
   val taxudBaseUrl: String = servicesConfig.baseUrl("taxud")
+
+  val startPageUtrLink = "https://www.gov.uk/find-utr-number"
+  val startPageVatLink = "https://www.gov.uk/send-vat-return"
+  val startPageSicLink = "https://resources.companieshouse.gov.uk/sic/"
 }
