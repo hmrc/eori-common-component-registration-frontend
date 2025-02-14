@@ -85,52 +85,46 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     userLocation: UserLocation,
     service: Service
   )(implicit request: Request[AnyContent], hc: HeaderCarrier, messages: Messages): Future[Result] = {
-    if (regDetails.safeId.id.nonEmpty) {
-      Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
-    } else {
-      sessionCache.subscriptionDetails.flatMap { subDetails =>
-        taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
-          .flatMap {
-            case SuccessResponse(formBundleNumber, sid, processingDate) =>
-              val updatedRegDetails = regDetails match {
-                case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
-                case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
-                case rdi: RegistrationDetailsIndividual   => rdi.copy(safeId = sid)
-                case rds: RegistrationDetailsSafeId       => rds.copy(safeId = sid)
-              }
+    sessionCache.subscriptionDetails.flatMap { subDetails =>
+      taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
+        .flatMap {
+          case SuccessResponse(formBundleNumber, sid, processingDate) =>
+            val updatedRegDetails = regDetails match {
+              case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
+              case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
+              case rdi: RegistrationDetailsIndividual   => rdi.copy(safeId = sid)
+              case rds: RegistrationDetailsSafeId       => rds.copy(safeId = sid)
+            }
 
-              sessionCache.saveRegistrationDetails(updatedRegDetails)
-                .flatMap { _ =>
-                  sessionCache.saveTxe13ProcessedDate(processingDate.toString).flatMap { saved =>
-                    save4LaterService.fetchEmail(GroupId(loggedInUser.groupId)).flatMap { optEmailStatus =>
-                      if (saved) {
-                        handleSubscriptionService
-                          .handleSubscription(
-                            formBundleNumber,
-                            RecipientDetails(
-                              service,
-                              optEmailStatus.head.email.head,
-                              subDetails.contactDetails.map(_.fullName).head,
-                              None,
-                              None
-                            ),
-                            TaxPayerId(""),
+            sessionCache.saveRegistrationDetails(updatedRegDetails)
+              .flatMap { _ =>
+                sessionCache.saveTxe13ProcessedDate(processingDate.toString).flatMap { saved =>
+                  save4LaterService.fetchEmail(GroupId(loggedInUser.groupId)).flatMap { optEmailStatus =>
+                    if (saved) {
+                      handleSubscriptionService
+                        .handleSubscription(
+                          formBundleNumber,
+                          RecipientDetails(
+                            service,
+                            optEmailStatus.head.email.head,
+                            subDetails.contactDetails.map(_.fullName).head,
                             None,
-                            None,
-                            sid
-                          )
-                          .flatMap(
-                            _ => Future.successful(Redirect(ApplicationSubmissionController.processing(service)))
-                          )
-                      } else {
-                        Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-                      }
+                            None
+                          ),
+                          TaxPayerId(""),
+                          None,
+                          None,
+                          sid
+                        )
+                        .flatMap(_ => Future.successful(Redirect(ApplicationSubmissionController.processing(service))))
+                    } else {
+                      Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
                     }
                   }
                 }
-            case _ => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-          }
-      }
+              }
+          case _ => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+        }
     }
   }
 

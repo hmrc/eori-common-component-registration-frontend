@@ -70,7 +70,7 @@ class TaxudController @Inject() (action: DefaultActionBuilder, mcc: MessagesCont
       Future.successful(createdResponse(request))
     } else if (isleOfManSoleTraderIndividual(createEoriSubscriptionRequest)) {
       Future.successful(createdResponse(request))
-    } else if(isleOfManCharityPublicBody(createEoriSubscriptionRequest)) {
+    } else if (isleOfManCharityPublicBody(createEoriSubscriptionRequest)) {
       Future.successful(createdResponse(request))
     } else {
       Future.successful(InternalServerError(Json.toJson(BackendInternalServerError())))
