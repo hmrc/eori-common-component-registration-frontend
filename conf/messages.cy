@@ -5,7 +5,7 @@ cds.no = Na
 cds.yes = Iawn
 cds.i-dont-know = Dydw i ddim yn gwybod
 cds.navigation.back = Yn ôl
-cds.navigation.continue = Yn eich blaen
+cds.navigation.continue = Parhau
 cds.navigation.cancel = Canslo
 cds.navigation.match = Paru
 cds.navigation.save-and-review = Cadw ac adolygu
@@ -485,6 +485,7 @@ cds.registration.user-location.location.islands.label = Ynysoedd y Sianel
 cds.registration.user-location.location.islands-or-iom.label = Ynysoedd y Sianel neu Ynys Manaw
 cds.registration.user-location.location.eu.summary = Gwledydd yn yr UE
 cds.registration.user-location.location.eu.hint = Wrth fasnachu, mae Ynysoedd y Sianel, Ynys Manaw, Akrotiri a Dhekelia, ac Ynysoedd Føroyar yn rhan o Undeb Tollau’r UE.
+cds.registration.user-location.hint = Dylech nodi lleoliad y cyfeiriad yr ydych am ei ddefnyddio ar gyfer eich rhif cofrestru EORI.
 cds.registration.based-in-uk.title = Ydych chi neu’ch sefydliad wedi’i leoli yn y DU?
 cds.registration.based-in-uk.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi neu’ch sefydliad wedi’i leoli yn y DU
 cds.registration.vat-registered-uk.title = A yw’ch sefydliad wedi’i gofrestru ar gyfer TAW yn y DU?
@@ -508,7 +509,12 @@ cds.subscription.vat-verification-option.title-and-heading=Beth ydych am ei ddef
 cds.subscription.vat-verification-option.error=Dewiswch os ydych am ddefnyddio dyddiad Cofrestru TAW neu gyfanswm y Ffurflen TAW diweddaraf
 cds.registration.part-of-vat-group.title = Ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW?
 cds.registration.part-of-vat-group.page-error.yes-no-answer = Rhowch wybod i ni a ydych chi’n gwneud cais ar ran busnes sy’n rhan o grŵp TAW
-cds.matching.organisation-type.user.header = Fel beth rydych am wneud cais?
+cds.matching.organisation-type.user.header = O ran gwneud cais, pa un o’r canlynol fyddai’n eich disgrifio orau?
+cds.matching.organisation-type.details.embassy =  Help gyda’r opsiynau hyn
+cds.matching.organisation-type.details.content = <p>Dyma’r math o fusnes y dewisoch pan wnaethoch sefydlu busnes neu gofrestru gyda CThEF.</p>\
+<p>If your business is registered with Companies House, you can check your company type on your Companies House profile.</p>\
+<p><a class="govuk-link" target="_blank" href="https://beta.companieshouse.gov.uk/">Chwiliwch yn Nhŷ’r Cwmnïau am wybodaeth am y cwmni (yn agor tab newydd).</a></p>
+
 
 cds.subscription.vat-registration.vat-return.title = Beth yw cyfanswm eich Ffurflen TAW ddiweddaraf?
 cds.subscription.vat-registration.vat-return.para1 = Mae'’'r swm hwn i'’'w weld ym mlwch 5 yn y Ffurflen TAW ddiweddaraf i chi ei chyflwyno i CThEF.
@@ -524,13 +530,14 @@ cds.matching.organisation-type.radio.sole-trader.hint-text = Enw arall ar hyn yw
 cds.matching.organisation-type.radio.individual.label = Unigolyn
 cds.matching.organisation-type.radio.individual.hint-text = Rhywun sy’n symud nwyddau at ddefnydd personol
 cds.matching.organisation-type.radio.partnership.label = Partneriaeth
-cds.matching.organisation-type.radio.limited-liability-partnership.label = Partneriaeth Atebolrwydd Cyfyngedig
-cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label = Elusen, corff cyhoeddus neu sefydliad nid er elw
+cds.matching.organisation-type.radio.limited-liability-partnership.label = Partneriaeth atebolrwydd cyfyngedig
+cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label = Elusen, corff cyhoeddus neu sefydliad dielw
 cds.matching.organisation-type.radio.eu-organisation.label = Sefydliad yn yr UE
 cds.matching.organisation-type.radio.eu-individual.label = Unigolyn yn yr UE
 cds.matching.organisation-type.radio.third-country-organisation.label = Sefydliad trydedd wlad
 cds.matching.organisation-type.radio.third-country-sole-trader.label = Unig fasnachwr trydedd wlad
 cds.matching.organisation-type.radio.third-country-individual.label = Unigolyn trydedd wlad
+cds.matching.organisation-type.radio.embassy.label = Llysgenhadaeth
 cds.sub01.outcome.rejected.heading = Mae’r cais am rif EORI ar gyfer {0} wedi bod yn aflwyddiannus
 cds.sub01.outcome.rejected.heading-noname = Mae’r cais am rif EORI wedi bod yn aflwyddiannus
 cds.sub01.outcome.rejected.title = Mae’r cais am rif EORI wedi bod yn aflwyddiannus
@@ -618,9 +625,9 @@ cds.matching-error.business-details.partnership-name.invalid-chars=Ni all enw’
 cds.matching-error.business-details.company-name.isEmpty = Nodwch enw’ch cwmni cofrestredig
 cds.matching-error.business-details.company-name.too-long = Rhaid i enw’r cwmni fod yn 105 o gymeriadau neu lai
 cds.matching-error.business-details.company-name.invalid-chars=Ni all enw’r cwmni gynnwys ''<'' na ''>''
-cds.matching.organisation.name.title = Beth yw enw’r sefydliad?
+cds.matching.organisation.name.title = Beth yw enw cofrestredig eich cwmni?
 cds.matching.organisation.name.label = Enw’r sefydliad
-cds.matching.organisation.name.heading = Beth yw enw’r sefydliad?
+cds.matching.organisation.name.heading = Beth yw enw cofrestredig eich cwmni?
 cds.matching.organisation-name.error.name = Nodwch enw’ch sefydliad cofrestredig
 cds.matching.organisation.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer Treth Gorfforaeth?
 cds.matching.organisation.utr.paragraph = Rhif 10 digid yw hwn, er enghraifft, 1234567890, a all gael ei ddilyn gan ‘K’. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill am Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
@@ -1082,6 +1089,7 @@ cds.form.date-of-birth.label = Dyddiad geni
 cds.check-answers.error-heading = Ni allwn brosesu’ch cais. I fynd yn eich blaen:
 cds.form.check-answers-declaration = Datganiad
 cds.form.disclaimer = Rydych yn cadarnhau, hyd eithaf eich gwybodaeth, fod y manylion rydych yn eu rhoi yn gywir.
+cds.form.charity-public-body-address=Cyfeiriad y sefydliad
 cds.subscription.organisation-disclose-personal-details-consent.partner.heading = A ydych am gynnwys enw a chyfeiriad eich partneriaeth ar y gwiriwr EORI?
 cds.subscription.organisation-disclose-personal-details-consent.partner.declaration = Bydd CThEF yn ychwanegu eich rhif EORI at wiriwr cyhoeddus a gedwir gan y Comisiwn Ewropeaidd. Gallwch hefyd gytuno i gynnwys enw a chyfeiriad eich partneriaeth. Gall hyn helpu asiantau tollau a chludo nwyddau i gadarnhau pwy ydych a phrosesu’ch llwythi.
 cds.subscription.organisation-disclose-personal-details-consent.partner.yes = Iawn – Rwyf am i enw a chyfeiriad fy mhartneriaeth fod ar y gwiriwr EORI
@@ -1861,3 +1869,64 @@ cds.matching.ind-st-cannot-register-using-service.para1=Nid yw?r gwasanaeth hwn 
 cds.matching.ind-st-cannot-register-using-service.para2=Gallwch:
 cds.matching.ind-st-cannot-register-using-service.link.text1=gwneud cais am rif EORI os ydych wedi?ch cofrestru ar gyfer TAW
 cds.matching.ind-st-cannot-register-using-service.link.text2=gwneud cais am rif EORI os nad ydych wedi?ch cofrestru ar gyfer TAW
+
+#Embassy Name
+cds.matching.embassy.name.title= Beth yw enw’r llysgenhadaeth?
+cds.matching.embassy.name.heading= Beth yw enw’r llysgenhadaeth?
+cds.matching.embassy-name.error.name = Nodwch enw’r llysgenhadaeth
+
+#Embassy Address
+cds.matching.embassy-address.title= Beth yw cyfeiriad y llysgenhadaeth?
+cds.matching.embassy-address.header= Beth yw cyfeiriad y llysgenhadaeth?
+cds.matching.embassy-address.line-1= Cyfeiriad – llinell 1
+cds.matching.embassy-address.line-2= Cyfeiriad – llinell 2 (dewisol)
+cds.matching.embassy-address.town-city= Tref neu ddinas
+cds.matching.embassy-address.postcode= Cod post
+cds.matching.embassy-address.line-1.error.empty=Nodwch linell 1 y cyfeiriad (enw’r adeilad a’r stryd gan amlaf)
+cds.matching.embassy-address.line.error.invalid-chars=Address line cannot contain ''<'' or ''>''
+cds.matching.embassy-address.town-city.error.empty=Nodwch dref neu ddinas
+cds.matching.embassy-address.town-city.error.too-long=The town or city must be 35 characters or less
+
+#Your Contact Address
+cds.your-contact-address.title= Beth yw’ch cyfeiriad cyswllt?
+cds.your-contact-address.header= Beth yw’ch cyfeiriad cyswllt?
+cds.your-contact-address.info= Byddwn yn defnyddio’r cyfeiriad hwn i gysylltu â chi ynglŷn â’r cais hwn am rif EORI.
+cds.your-contact-address.line-1= Cyfeiriad – llinell 1
+cds.your-contact-address.line-2= Cyfeiriad – llinell 2 (dewisol)
+cds.your-contact-address.town-city= Tref neu ddinas
+cds.your-contact-address.postcode= Cod post
+
+cds.form.check-answers-embassy-details= Manylion y llysgenhadaeth
+cds.embassy-name.label=Enw’r llysgenhadaeth
+cds.form.embassy-address= Cyfeiriad y llysgenhadaeth
+cds.matching.row-charity-public-body.utr.title-and-heading= A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) a gyhoeddwyd yn y DU?
+
+
+#Your Organisation Address
+cds.your-organisation-address.title=Beth yw cyfeiriad y sefydliad?
+cds.your-partnership-address.title=What is your registered partnership address?
+cds.your-individual-sole-trader-address.title=What is your address?
+cds.your-organisation-address.header=Beth yw cyfeiriad y sefydliad?
+cds.your-partnership-address.header=What is your registered partnership address?
+cds.your-individual-sole-trader-address.header=What is your address?
+cds.your-organisation-address.line-1=Cyfeiriad – llinell 1
+cds.your-organisation-address.line-2=Cyfeiriad – llinell 2 (dewisol)
+cds.your-organisation-address.town-city=Tref neu ddinas
+cds.your-organisation-address.postcode=Cod post
+
+cds.subscription.uk.vat-details.heading=Eich manylion TAW
+cds.subscription.vat-details.uk.postcode=Beth yw’r cod post ar gyfer y lleoliad [lle’r ydych chi/lle y mae’ch sefydliad] wedi cofrestru ar gyfer TAW?
+cds.charity-public-body-name.label=Enw’r sefydliad
+
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.heading=Eich Cyfeirnod Unigryw y Trethdalwr (UTR)
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.message=Bydd i’w weld yn eich Cyfrif Treth Busnes, yn ap CThEF, neu ar Ffurflenni Treth a dogfennau eraill oddi wrth CThEF. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.subheading=Beth yw UTR eich sefydliad?
+cds.matching.charity-public-body.utr.hint=Gall fod yn 10 neu’n 13 digid o hyd.
+
+cds.subscription.sic.description.charity-public-body-not-for-profit.para2=Mae codau SIC yn disgrifio gweithgareddau busnes. Er enghraifft, 58110 yw’r cod ar gyfer cyhoeddi llyfrau.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para3=Gallwch ddod o hyd i’ch cod SIC ar y proffil sydd gennych gyda Thŷ’r Cwmnïau. 
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4=Gallwch wneud y canlynol:
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet1=chwilio yn Nhŷ’r Cwmnïau ar gyfer eich rhif cofrestru’r cwmni (yn agor tab newydd)
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet2=gwirio rhestr lawn o godau SIC (yn agor tab newydd)
+cds.organisation.utr.label=UTR y sefydliad
+
