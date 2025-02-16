@@ -19,13 +19,17 @@ package unit.views
 import common.pages.subscription.SubscriptionVatDetailsPage
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.data.Form
-import play.api.mvc.{AnyContentAsEmpty, Request}
+import play.api.mvc.AnyContentAsEmpty
+import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
 
@@ -35,7 +39,13 @@ class VatDetailsUkSpec extends ViewSpec {
 
   private val view = instanceOf[vat_details]
 
-  val form: Form[VatDetails] = vatDetailsForm
+  val mockAuditable: Auditable = mock[Auditable]
+
+  val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable) {
+    def isRestOfTheWorld: Boolean = false
+  }
+
+  def form: Form[VatDetails] = new VatDetailsForm(mockRequestSessionData).vatDetailsForm
 
   "Vat Details UK Page" should {
 

@@ -20,8 +20,10 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.libs.json.{Format, Json}
+import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 
 case class VatDetails(postcode: String, number: String)
 
@@ -31,11 +33,12 @@ object VatDetails {
 
 object VatDetailsForm extends Mappings {
 
-  def validPostcode: Constraint[String] =
+  def validPostcode(requestSessionData: RequestSessionData)(implicit request: Request[AnyContent]): Constraint[String] =
     Constraint("constraints.postcode") { pcode =>
       pcode.filterNot(_.isWhitespace) match {
-        case s if s.matches(postcodeRegex.regex) => Valid
-        case _                                   => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
+        case s if s.matches(postcodeRegex.regex)      => Valid
+        case _ if requestSessionData.isRestOfTheWorld => Valid
+        case _                                        => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
       }
 
     }
@@ -50,11 +53,14 @@ object VatDetailsForm extends Mappings {
 
     }
 
-  val vatDetailsForm: Form[VatDetails] =
-    Form(
-      mapping("postcode" -> text.verifying(validPostcode), "vat-number" -> text.verifying(validVatNumber))(
-        (postCode, vat) => VatDetails.apply(postCode, vat.filterNot(_.isWhitespace))
-      )(VatDetails.unapply)
-    )
+  class VatDetailsForm(requestSessionData: RequestSessionData) {
+    def vatDetailsForm(implicit request: Request[AnyContent]): Form[VatDetails] =
+      Form(
+        mapping(
+          "postcode"   -> text.verifying(validPostcode(requestSessionData)),
+          "vat-number" -> text.verifying(validVatNumber)
+        )((postCode, vat) => VatDetails.apply(postCode, vat.filterNot(_.isWhitespace)))(VatDetails.unapply)
+      )
+  }
 
 }

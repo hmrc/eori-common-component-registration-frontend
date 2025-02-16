@@ -22,16 +22,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.vatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCacheService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -55,6 +51,7 @@ class VatDetailsController @Inject() (
     extends CdsController(mcc) {
 
   val dateForm: Form[VatRegistrationDate] = form()
+  val vatDetailsForm = new VatDetailsForm(requestSessionData)
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
@@ -66,10 +63,11 @@ class VatDetailsController @Inject() (
           service,
           Ok(
             vatDetailsView(
-              vatDetailsForm,
+              vatDetailsForm.vatDetailsForm,
               isInReviewMode = false,
               userLocation,
               requestSessionData.isIndividualOrSoleTrader,
+              requestSessionData.isRestOfTheWorld,
               service
             )
           )
@@ -85,20 +83,22 @@ class VatDetailsController @Inject() (
           case Some(vatDetails) =>
             Ok(
               vatDetailsView(
-                vatDetailsForm.fill(vatDetails),
+                vatDetailsForm.vatDetailsForm.fill(vatDetails),
                 isInReviewMode = true,
                 userLocation,
                 requestSessionData.isIndividualOrSoleTrader,
+                requestSessionData.isRestOfTheWorld,
                 service
               )
             )
           case None =>
             Ok(
               vatDetailsView(
-                vatDetailsForm,
+                vatDetailsForm.vatDetailsForm,
                 isInReviewMode = true,
                 userLocation,
                 requestSessionData.isIndividualOrSoleTrader,
+                requestSessionData.isRestOfTheWorld,
                 service
               )
             )
@@ -115,7 +115,7 @@ class VatDetailsController @Inject() (
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       val userLocation =
         requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
-      vatDetailsForm.bindFromRequest().fold(
+      vatDetailsForm.vatDetailsForm.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(
             BadRequest(
@@ -124,6 +124,7 @@ class VatDetailsController @Inject() (
                 isInReviewMode,
                 userLocation,
                 requestSessionData.isIndividualOrSoleTrader,
+                requestSessionData.isRestOfTheWorld,
                 service
               )
             )
@@ -145,7 +146,7 @@ class VatDetailsController @Inject() (
           case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
         },
       response =>
-        if (response.isPostcodeAssociatedWithVrn(vatForm))
+        if (response.isPostcodeAssociatedWithVrn(vatForm,requestSessionData.isRestOfTheWorld))
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
             .map {

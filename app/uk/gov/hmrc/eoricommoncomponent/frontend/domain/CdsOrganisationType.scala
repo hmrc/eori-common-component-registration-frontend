@@ -69,6 +69,9 @@ object CdsOrganisationType {
     EmbassyId                       -> Embassy
   )
 
+  val RestOfTheWorld: Seq[CdsOrganisationType] =
+    Seq(ThirdCountryOrganisation, ThirdCountrySoleTrader, ThirdCountryIndividual)
+
   val IndividualOrganisations: Seq[CdsOrganisationType] =
     Seq(SoleTrader, Individual, ThirdCountryIndividual, ThirdCountrySoleTrader)
 
