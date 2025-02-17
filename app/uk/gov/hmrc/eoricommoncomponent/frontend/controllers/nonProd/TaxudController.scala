@@ -72,6 +72,8 @@ class TaxudController @Inject() (action: DefaultActionBuilder, mcc: MessagesCont
       Future.successful(createdResponse(request))
     } else if (isleOfManCharityPublicBody(createEoriSubscriptionRequest)) {
       Future.successful(createdResponse(request))
+    } else if (ukCharityPublicBody(createEoriSubscriptionRequest)) {
+      Future.successful(createdResponse(request))
     } else {
       Future.successful(InternalServerError(Json.toJson(BackendInternalServerError())))
     }
@@ -106,6 +108,10 @@ class TaxudController @Inject() (action: DefaultActionBuilder, mcc: MessagesCont
     createEoriSubscriptionRequest.edgeCaseType == "02" && createEoriSubscriptionRequest.organisation.exists(
       _.organisationName.toLowerCase == "cancer research"
     )
+  }
+
+  private def ukCharityPublicBody(createEoriSubscriptionRequest: CreateEoriSubscriptionRequest): Boolean = {
+    createEoriSubscriptionRequest.edgeCaseType == "03"
   }
 
   private def createEoriSubResponse = {
