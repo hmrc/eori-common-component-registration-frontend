@@ -24,6 +24,8 @@ object OrganisationViewModel {
 
   def validOptions(userLocation: Option[UserLocation])(implicit messages: Messages): Seq[(String, String)] = {
 
+    println(userLocation);
+
     lazy val ukOptionsFirstScreen = Seq(
       CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
       CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
@@ -38,6 +40,19 @@ object OrganisationViewModel {
       CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
     )
 
+    lazy val iomOptions = Seq(
+      CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
+      CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
+      CdsOrganisationType.IndividualId  -> messages("cds.matching.organisation-type.radio.individual.label"),
+      CdsOrganisationType.PartnershipId -> messages("cds.matching.organisation-type.radio.partnership.label"),
+      CdsOrganisationType.LimitedLiabilityPartnershipId -> messages(
+        "cds.matching.organisation-type.radio.limited-liability-partnership.label"
+      ),
+      CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
+        "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
+      ),
+    )
+
     lazy val thirdCountryOptions = Seq(
       CdsOrganisationType.ThirdCountryOrganisationId -> messages(
         "cds.matching.organisation-type.radio.organisation.label"
@@ -50,6 +65,8 @@ object OrganisationViewModel {
 
     userLocation match {
       case Some(UserLocation.Uk)                                                  => ukOptionsFirstScreen
+      case Some(UserLocation.Iom)                                                  => iomOptions
+
       case Some(UserLocation.ThirdCountry) | Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
       case _                                                                      => ukOptionsFirstScreen
     }
