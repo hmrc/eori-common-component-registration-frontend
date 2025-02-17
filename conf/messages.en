@@ -1041,6 +1041,7 @@ cds.subscription.sic.details.sole-trader = I do not know my SIC code
 cds.subscription.sic.details.partnership = I do not know the partnership’s SIC code
 cds.subscription.sic.details.limited-liability-partnership = I do not know the partnership’s SIC code
 cds.subscription.sic.details.charity-public-body-not-for-profit = I do not know the organisation'''s SIC code
+cds.subscription.sic.details.individual = I do not know the partnership’s SIC code
 
 
 cds.subscription.sic.page.help.heading=If you are UK VAT registered
@@ -2156,3 +2157,5 @@ cds.application-processing.what-next.para2=We will send a confirmation email to 
 cds.application-processing.help.title-and-heading=Help and support
 cds.application-processing.help.para1=You can check the status of an application you've already made.
 cds.application-processing.help.para2=If you need help with your application, you can contact HMRC's EORI team by phone at 0300 322 7067. Open 8am to 6pm, Monday to Friday (closed bank holidays).
+cds.eori-processing.title-and-heading=We are processing the EORI number application for {0}
+

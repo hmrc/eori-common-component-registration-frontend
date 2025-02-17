@@ -1853,3 +1853,65 @@ cds.matching.ind-st-cannot-register-using-service.para1=Nid yw?r gwasanaeth hwn 
 cds.matching.ind-st-cannot-register-using-service.para2=Gallwch:
 cds.matching.ind-st-cannot-register-using-service.link.text1=gwneud cais am rif EORI os ydych wedi?ch cofrestru ar gyfer TAW
 cds.matching.ind-st-cannot-register-using-service.link.text2=gwneud cais am rif EORI os nad ydych wedi?ch cofrestru ar gyfer TAW
+
+#Embassy Name
+cds.matching.embassy-address.title =Beth yw cyfeiriad y llysgenhadaeth?
+cds.matching.embassy-name.error.name= Nodwch enw’r llysgenhadaeth
+cds.matching.embassy.name.title=Beth yw enw’r llysgenhadaeth?
+cds.matching.organisation-type.radio.embassy.label = Llysgenhadaeth
+cds.matching.embassy-address.header = Beth yw cyfeiriad y llysgenhadaeth?
+cds.matching.embassy.name.heading=Beth yw enw’r llysgenhadaeth?
+cds.matching-error.business-details.embassy-name.invalid-char=Ni all enw'r llysgenhadaeth gynnwys ''<'' neu ''>''
+
+#Embassy Address
+cds.matching.embassy-address.line-1=Cyfeiriad – llinell 1
+cds.matching.embassy-address.line-2=Cyfeiriad – llinell 2 (dewisol)
+cds.matching.embassy-address.town-city= Tref neu ddinas
+cds.matching.embassy-address.postcode=Cod post
+cds.matching.embassy-address.line-1.error.empty=Nodwch linell gyntaf eich cyfeiriad
+cds.matching.embassy-address.line.error.invalid-chars=Ni all y cyfeiriad gynnwys ''<'' na ''>''
+cds.matching.embassy-address.town-city.error.empty=Nodwch eich tref neu ddinas
+cds.matching.embassy-address.town-city.error.too-long=Mae’n rhaid i’r dref neu’r ddinas fod yn 35 o gymeriadau neu lai
+
+#Public Bodies
+cds.matching.row-charity-public-body.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) a gyhoeddwyd yn y DU?
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.heading = Eich Cyfeirnod Unigryw y Trethdalwr (UTR)
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.message=Bydd i’w weld yn eich Cyfrif Treth Busnes, yn ap CThEF, neu ar Ffurflenni Treth a dogfennau eraill oddi wrth CThEF. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.subheading=Nodwch UTR eich sefydliad
+cds.matching.charity-public-body.utr.hint=Gall fod yn 10 neu’n 13 digid o hyd.
+
+cds.subscription.sic.description.charity-public-body-not-for-profit.para2=Mae codau SIC yn disgrifio gweithgareddau busnes. Er enghraifft, 58110 yw’r cod ar gyfer cyhoeddi llyfrau.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para3=Gallwch ddod o hyd i’ch cod SIC ar y proffil sydd gennych gyda Thŷ’r Cwmnïau. 
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4=Gallwch wneud y canlynol:
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet1=chwilio yn Nhŷ’r Cwmnïau ar gyfer eich rhif cofrestru’r cwmni (yn agor tab newydd)
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet2=gwirio rhestr lawn o godau SIC (yn agor tab newydd)
+cds.subscription.uk.vat-details.heading=Eich manylion TAW yn y DU
+cds.subscription.vat-details.uk.postcode= Beth yw’r post cod ar gyfer y lleoliad lle’r y mae’ch sefydliad wedi cofrestru ar gyfer TAW?
+cds.charity-public-body-name.label= Enw’r sefydliad
+
+cds.your-organisation-address.header=Beth yw cyfeiriad y sefydliad??
+
+cds.your-organisation-address.line-1=Cyfeiriad – llinell 1
+cds.your-organisation-address.line-2=Cyfeiriad – llinell 2 (dewisol)
+cds.your-organisation-address.town-city= Tref neu ddinas
+cds.your-organisation-address.postcode=Cod post
+
+cds.subscription.vat-registered.title-and-heading=A yw’ch sefydliad wedi’i gofrestru ar gyfer TAW?
+cds.subscription.vat-registered.individual.title-and-heading=A ydych wedi’ch cofrestru ar gyfer TAW?
+cds.subscription.vat-details.individual-sole-trader.postcode=Beth yw’r post cod ar gyfer y lleoliad lle’r y mae’ch sefydliad wedi cofrestru ar gyfer TAW?
+cds.your-individual-sole-trader-address.header=Beth yw’ch cyfeiriad?
+
+cds.subscription.sic.details.individual= Nid wyf yn gwybod fy nghod SIC
+cds.subscription.vat-registered.partnership.title-and-heading= Beth yw enw cofrestredig eich partneriaeth?
+cds.your-partnership-address.header=Beth yw cyfeiriad cofrestredig eich partneriaeth?
+cds.your-partnership-address.title=Beth yw cyfeiriad cofrestredig eich partneriaeth?
+cds.date-established.partnership.label= Dyddiad sefydlu partneriaeth
+cds.matching.row-charity-public-body.utr.iom.title-and-heading= A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) a gyhoeddwyd yn y DU?
+cds.embassy-name.label=Enw’r llysgenhadaeth
+cds.form.embassy-address=Cyfeiriad y llysgenhadaeth
+cds.form.check-answers-embassy-details=Manylion y llysgenhadaeth
+cds.organisation.utr.label=UTR y sefydliad
+cds.form.charity-public-body-address=Cyfeiriad y sefydliad	
+cds.your-individual-sole-trader-address.title =Beth yw’ch cyfeiriad cyswllt?
+cds.subscription.sic.description.para2.individual=Beth yw’ch cod SIC?
+cds.subscription.sic.description.para2.sole-trader=Beth yw’ch cod SIC?
