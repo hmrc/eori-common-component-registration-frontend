@@ -50,7 +50,7 @@ object OrganisationViewModel {
       ),
       CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
         "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
-      ),
+      )
     )
 
     lazy val thirdCountryOptions = Seq(
@@ -64,8 +64,8 @@ object OrganisationViewModel {
     )
 
     userLocation match {
-      case Some(UserLocation.Uk)                                                  => ukOptionsFirstScreen
-      case Some(UserLocation.Iom)                                                  => iomOptions
+      case Some(UserLocation.Uk)  => ukOptionsFirstScreen
+      case Some(UserLocation.Iom) => iomOptions
 
       case Some(UserLocation.ThirdCountry) | Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
       case _                                                                      => ukOptionsFirstScreen
