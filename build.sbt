@@ -95,11 +95,11 @@ lazy val scoverageSettings = {
     ScoverageKeys.coverageExcludedPackages := List(
       "<empty>",
       "Reverse.*",
-      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.frontend\\.views.*",
-      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.frontend\\.controllers\\nonProd.*",
-      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.frontend\\.controllers\\testOnly.*",
-      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.models.*",
-      "uk\\.gov\\.hmrc\\.eoricommoncomponent\\.config.*",
+      "uk.gov.hmrc.eoricommoncomponent.frontend.views.*",
+      "uk.gov.hmrc.eoricommoncomponent.frontend.controllers.nonProd.*",
+      "uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly.*",
+      "uk.gov.hmrc.eoricommoncomponent.models.*",
+      "uk.gov.hmrc.eoricommoncomponent.config.*",
       "logger.*\\(.*\\)",
       ".*(AuthService|BuildInfo|Routes|TestOnly).*"
     ).mkString(";"),

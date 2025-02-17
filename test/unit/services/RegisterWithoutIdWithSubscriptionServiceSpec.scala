@@ -366,6 +366,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
 
       when(mockSessionCache.saveRegistrationDetails(any())(any())).thenReturn(Future.successful(true))
 
+      when(mockSessionCache.saveTxe13ProcessedDate(any())(any())).thenReturn(Future.successful(true))
+
       when(msg.lang).thenReturn(i18n.Lang("gb"))
 
       when(mockLoggedInUser.groupId).thenReturn(Some("123456"))
@@ -435,6 +437,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSessionCache, times(0)).saveRegistrationDetails(any())(any())
+
+      verify(mockSessionCache, times(0)).saveTxe13ProcessedDate(any())(any())
 
       verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
         any(),

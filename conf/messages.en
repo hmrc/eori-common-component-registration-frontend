@@ -2148,4 +2148,11 @@ cds.your-organisation-address.town-city=Town or city
 cds.your-organisation-address.postcode=Postcode
 
 #We are processing the EORI number
-cds.eori-processing.title-and-heading=We are processing the EORI number application for {0}
+cds.application-processing.title=Application sent
+cds.application-processing.title-and-heading=We are processing the EORI number application for {0}
+cds.application-processing.content=Application received by HMRC on {0}
+cds.application-processing.what-next.para1=We are processing your application. This can take up to 5 working days.
+cds.application-processing.what-next.para2=We will send a confirmation email to {0} when your application has been processed.
+cds.application-processing.help.title-and-heading=Help and support
+cds.application-processing.help.para1=You can check the status of an application you've already made.
+cds.application-processing.help.para2=If you need help with your application, you can contact HMRC's EORI team by phone at 0300 322 7067. Open 8am to 6pm, Monday to Friday (closed bank holidays).
