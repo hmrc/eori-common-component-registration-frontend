@@ -80,6 +80,11 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
           sd.formData.organisationType.contains(CharityPublicBodyNotForProfit) &&
           sd.ukVatDetails.exists(_.isGiant)
         ) createSubscription(loggedInUser, rd, userLocation, service)
+        else if (
+          rd.safeId.id.isEmpty && sd.vatRegisteredUk.contains(false) && sd.formData.utrMatch.exists(
+            _.haveUtr.exists(_ == false)
+          )
+        ) createSubscription(loggedInUser, rd, userLocation, service)
         else createSubscription(service)(request)
     } yield result
   }
