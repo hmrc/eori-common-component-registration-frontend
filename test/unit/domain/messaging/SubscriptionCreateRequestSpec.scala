@@ -19,7 +19,11 @@ package unit.domain.messaging
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{ContactInformation, SubscriptionCreateRequest, VatId}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
+  ContactInformation,
+  SubscriptionCreateRequest,
+  VatId
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 
