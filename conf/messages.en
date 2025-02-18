@@ -1019,9 +1019,9 @@ cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that
 cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.hint.uk=It is 5 digits, like 58110 or 81221.
 cds.subscription.sic.hint.row=This will be 5 numbers.
-cds.subscription.sic.description.para1=You choose a SIC code when you register an organisation or business with Companies House.
-cds.subscription.sic.description.charity-public-body-not-for-profit.para2=SIC codes describe business activities. For example, 58110 is the code for book publishing.
-cds.subscription.sic.description.charity-public-body-not-for-profit.para3=You can find your SIC code on your Companies House profile.
+cds.subscription.sic.description.para1=SIC codes describe business activities. For example, 58110 is the code for book publishing.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para2=If you are registered with Companies House, you may already have a SIC code. You can find it on your business profile on <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a>.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para3=If you do not have one, you can <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">choose a SIC code from the list on Companies House (opens in new tab)</a>. Select one that best describes your business.</br>
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4=You can:
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet1=search Companies House for company information (opens in new tab)
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet2=check a full list of SIC codes (opens in new tab)
