@@ -74,6 +74,8 @@ class TaxudController @Inject() (action: DefaultActionBuilder, mcc: MessagesCont
       Future.successful(createdResponse(request))
     } else if (ukCharityPublicBody(createEoriSubscriptionRequest)) {
       Future.successful(createdResponse(request))
+    } else if (hasGiantVrn(createEoriSubscriptionRequest)) {
+      Future.successful(createdResponse(request))
     } else {
       Future.successful(InternalServerError(Json.toJson(BackendInternalServerError())))
     }
@@ -120,6 +122,15 @@ class TaxudController @Inject() (action: DefaultActionBuilder, mcc: MessagesCont
 
   private def correlationId(request: Request[AnyContent]): String = {
     request.headers.get(X_CORRELATION_ID).getOrElse(UUID.randomUUID().toString)
+  }
+
+  private def hasGiantVrn(createEoriSubscriptionRequest: CreateEoriSubscriptionRequest): Boolean = {
+    createEoriSubscriptionRequest.vatIdentificationNumbers.exists(
+      vids =>
+        vids.exists(
+          vidn => vidn.vatIdentificationNumber.startsWith("654") || vidn.vatIdentificationNumber.startsWith("8888")
+        )
+    )
   }
 
 }
