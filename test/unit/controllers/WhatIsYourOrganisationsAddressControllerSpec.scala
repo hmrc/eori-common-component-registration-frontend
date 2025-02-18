@@ -27,9 +27,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
   SubscriptionFlowManager,
   WhatIsYourOrganisationsAddressController
 }
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
+  EoriConsentSubscriptionFlowPage,
+  SicCodeSubscriptionFlowPage
+}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, UtrMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_organisations_address
@@ -173,6 +176,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
         when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
           Future.successful(Some(CdsOrganisationType.Company))
         )
+        when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
 
         when(mockSubscriptionFlowManager.startSubscriptionFlowWithPage(any(), any(), any())(any())).thenReturn(
           Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
@@ -209,6 +213,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
         when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
           Future.successful(Some(CdsOrganisationType.Company))
         )
+        when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
 
         when(mockSubscriptionFlowManager.startSubscriptionFlowWithPage(any(), any(), any())(any())).thenReturn(
           Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
@@ -230,7 +235,86 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
 
         status(result) shouldBe SEE_OTHER
         header(LOCATION, result).value shouldBe expectedUrl
+      }
+    }
 
+    "use correct redirect location" when {
+      "Charity Public Body with UTR" in {
+        val expectedUrl =
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
+            .createForm(eoriOnlyService)
+            .url
+        val userId = UUID.randomUUID().toString
+        withAuthorisedUser(userId, mockAuthConnector)
+        when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
+        when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(Uk))
+        when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
+          Future.successful(Some(CdsOrganisationType.CharityPublicBodyNotForProfit))
+        )
+        when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(
+          Future.successful(Some(UtrMatchModel(Some(true))))
+        )
+
+        when(mockSubscriptionFlowManager.startSubscriptionFlowWithPage(any(), any(), any())(any())).thenReturn(
+          Future.successful((SicCodeSubscriptionFlowPage, Session(Map.empty[String, String])))
+        )
+
+        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+          .apply(
+            SessionBuilder.buildRequestWithSessionAndFormValues(
+              userId,
+              Map(
+                "line-1"      -> "101-104 Piccadilly",
+                "line-2"      -> "Greater London",
+                "townCity"    -> "London",
+                "postcode"    -> "SW3 5DA",
+                "countryCode" -> "GB"
+              )
+            )
+          )
+
+        status(result) shouldBe SEE_OTHER
+        header(LOCATION, result).value shouldBe expectedUrl
+      }
+
+      "Charity Public Body with no UTR" in {
+        val expectedUrl =
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
+            .createForm(eoriOnlyService)
+            .url
+        val userId = UUID.randomUUID().toString
+        withAuthorisedUser(userId, mockAuthConnector)
+        when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
+        when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(Uk))
+        when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
+          Future.successful(Some(CdsOrganisationType.CharityPublicBodyNotForProfit))
+        )
+        when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(
+          Future.successful(Some(UtrMatchModel(Some(true))))
+        )
+
+        when(mockSubscriptionFlowManager.startSubscriptionFlowWithPage(any(), any(), any())(any())).thenReturn(
+          Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
+        )
+
+        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+          .apply(
+            SessionBuilder.buildRequestWithSessionAndFormValues(
+              userId,
+              Map(
+                "line-1"      -> "101-104 Piccadilly",
+                "line-2"      -> "Greater London",
+                "townCity"    -> "London",
+                "postcode"    -> "SW3 5DA",
+                "countryCode" -> "GB"
+              )
+            )
+          )
+
+        status(result) shouldBe SEE_OTHER
+        header(LOCATION, result).value shouldBe expectedUrl
       }
     }
   }
