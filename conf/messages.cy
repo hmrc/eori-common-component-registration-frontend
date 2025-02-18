@@ -1880,8 +1880,8 @@ subscription-journey.how-confirm-identity.utr.row.charity-public-body.message=By
 subscription-journey.how-confirm-identity.utr.row.charity-public-body.subheading=Nodwch UTR eich sefydliad
 cds.matching.charity-public-body.utr.hint=Gall fod yn 10 neu’n 13 digid o hyd.
 
-cds.subscription.sic.description.charity-public-body-not-for-profit.para2=Mae codau SIC yn disgrifio gweithgareddau busnes. Er enghraifft, 58110 yw’r cod ar gyfer cyhoeddi llyfrau.
-cds.subscription.sic.description.charity-public-body-not-for-profit.para3=Gallwch ddod o hyd i’ch cod SIC ar y proffil sydd gennych gyda Thŷ’r Cwmnïau. 
+cds.subscription.sic.description.charity-public-body-not-for-profit.para2=Os ydych wedi eich cofrestru gyda Thŷ’r Cwmnïau, efallai bod cod SIC gennych eisoes. Mae i’w weld ar eich proffil busnes ar <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer"> wefan Dŷ’r Cwmnïau (yn agor tab newydd). </a>
+cds.subscription.sic.description.charity-public-body-not-for-profit.para3=Os nad oes gennych un, gallwch <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer"> ddewis cod SIC o’r rhestr ar wefan Dŷ’r Cwmnïau (yn agor tab newydd).</a> Dewiswch yr un sy’n disgrifio’ch busnes orau”
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4=Gallwch wneud y canlynol:
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet1=chwilio yn Nhŷ’r Cwmnïau ar gyfer eich rhif cofrestru’r cwmni (yn agor tab newydd)
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet2=gwirio rhestr lawn o godau SIC (yn agor tab newydd)
