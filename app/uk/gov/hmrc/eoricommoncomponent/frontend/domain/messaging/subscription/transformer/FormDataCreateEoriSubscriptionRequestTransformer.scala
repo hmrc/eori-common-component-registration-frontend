@@ -74,7 +74,10 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
         case CharityPublicBodyNotForProfit =>
           transformCharityPublicBodyNotForProfit(regDetails, subDetails, userLocation, service)
       }
-
+    } else if (
+      userLocation == UserLocation.Uk && subDetails.formData.organisationType.contains(CharityPublicBodyNotForProfit)
+    ) {
+      transformCharityPublicBodyNotForProfit(regDetails, subDetails, userLocation, service)
     } else {
       throw new UnsupportedOperationException(
         s"Unable to create EORI for organisation type: ${subDetails.formData.organisationType}"
@@ -206,7 +209,10 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
   ): CreateEoriSubscriptionRequest = {
     val cdsOrgType = subDetails.formData.organisationType.head
     val org        = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
-
+    val countryCode = userLocation match {
+      case UserLocation.Uk  => "GB"
+      case UserLocation.Iom => "IM"
+    }
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
       subDetails.contactDetails.map(_.fullName).getOrElse(""),
@@ -230,7 +236,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
       None,
       None,
       org.map(_.typeOfPerson),
-      subDetails.ukVatDetails.map(vd => List(VatIdentification("IM", vd.number)))
+      subDetails.ukVatDetails.map(vd => List(VatIdentification(countryCode, vd.number)))
     )
   }
 
