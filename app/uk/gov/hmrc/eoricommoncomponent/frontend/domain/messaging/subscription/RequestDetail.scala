@@ -36,9 +36,7 @@ case class RequestDetail(
   typeOfPerson: Option[String],
   principalEconomicActivity: Option[String],
   serviceName: Option[String]
-) {
-  require(dateOfEstablishment.isDefined)
-}
+)
 
 object RequestDetail {
 

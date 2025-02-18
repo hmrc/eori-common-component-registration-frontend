@@ -78,7 +78,7 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
         else if (
           userLocation == UserLocation.Uk &&
           sd.formData.organisationType.contains(CharityPublicBodyNotForProfit) &&
-          sd.ukVatDetails.exists(vat => vat.number.startsWith("654") || vat.number.startsWith("8888"))
+          sd.ukVatDetails.exists(_.isGiant)
         ) createSubscription(loggedInUser, rd, userLocation, service)
         else createSubscription(service)(request)
     } yield result
