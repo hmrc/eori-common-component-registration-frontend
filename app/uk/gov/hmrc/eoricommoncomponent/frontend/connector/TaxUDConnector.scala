@@ -71,7 +71,7 @@ class TaxUDConnector @Inject() (
     httpClient
       .post(new URL(fullUrl))
       .setHeader(
-        AUTHORIZATION    -> appConfig.internalAuthToken,
+        AUTHORIZATION    -> appConfig.eisToken,
         ACCEPT           -> MimeTypes.JSON,
         CONTENT_TYPE     -> MimeTypes.JSON,
         DATE             -> LocalDateTime.now().atOffset(ZoneOffset.UTC).format(RFC_1123_DATE_TIME),
