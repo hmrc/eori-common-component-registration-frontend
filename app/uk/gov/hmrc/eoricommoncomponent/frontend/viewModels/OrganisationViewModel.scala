@@ -24,8 +24,6 @@ object OrganisationViewModel {
 
   def validOptions(userLocation: Option[UserLocation])(implicit messages: Messages): Seq[(String, String)] = {
 
-    println(userLocation);
-
     lazy val ukOptionsFirstScreen = Seq(
       CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
       CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
