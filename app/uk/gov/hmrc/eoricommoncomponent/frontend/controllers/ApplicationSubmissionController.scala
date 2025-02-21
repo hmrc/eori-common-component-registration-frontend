@@ -18,21 +18,15 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  CharityPublicBodyNotForProfit,
-  Company,
-  Embassy,
-  Individual,
-  LimitedLiabilityPartnership,
-  Partnership,
-  SoleTrader
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, Company, Embassy, Individual, LimitedLiabilityPartnership, Partnership, SoleTrader}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.application_processing
 
-import java.time.LocalDateTime
+import java.time.ZoneOffset.UTC
+import java.time.format.DateTimeFormatter.ofPattern
+import java.time.{LocalDateTime, ZoneOffset}
 import java.time.format.{DateTimeFormatter, FormatStyle}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -65,7 +59,7 @@ class ApplicationSubmissionController @Inject() (
             application_processing_view(
               name,
               email,
-              LocalDateTime.parse(txe13ProcessedDate).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)),
+              LocalDateTime.parse(txe13ProcessedDate).atOffset(UTC).format(ofPattern("dd MMMM yyyy")),
               service
             )
           )
