@@ -65,7 +65,7 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
     .build()
 
   private lazy val taxUdConnector = app.injector.instanceOf[TaxUDConnector]
-  val txe13Url: String            = "/txe13/eori/subscription/v1"
+  val txe13Url: String            = "/taxud/txe13/eori/subscription/v1"
 
   private lazy val mockRequest =
     """

@@ -49,7 +49,7 @@ class TaxUDConnector @Inject() (
 )(implicit ec: ExecutionContext)
     extends HandleResponses {
 
-  private val subscribeUrl     = "/txe13/eori/subscription/v1"
+  private val subscribeUrl     = "/taxud/txe13/eori/subscription/v1"
   private val fullUrl          = s"${appConfig.taxudBaseUrl}$subscribeUrl"
   private val X_CORRELATION_ID = "x-correlation-id"
 

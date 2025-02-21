@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl --location 'http://localhost:6751/txe13/eori/subscription/v1' \
+curl --location 'http://localhost:6751/taxud/txe13/eori/subscription/v1' \
 --header 'Content-Type: application/json' \
 --header 'Cookie: mdtpdi=mdtpdi#329c9d91-54a3-4b54-b772-2368ec46c636#1738929937440_JvKIODQQ1hyOSJ/Q7Z6s8g==' \
 --data-raw '{
