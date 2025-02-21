@@ -16,4 +16,4 @@
 GET        /customs-registration-services/test-only/passcodes                    @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly.PasscodesController.getEmailVerificationPasscodes()
 
 + nocsrf
-POST       /txe13/eori/subscription/v1                                           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly.TaxudController.createSubscription()
+POST       /taxud/txe13/eori/subscription/v1                                           @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.testOnly.TaxudController.createSubscription()
