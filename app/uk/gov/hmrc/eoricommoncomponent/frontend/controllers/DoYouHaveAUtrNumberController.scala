@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.data.Form
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -39,7 +40,8 @@ class DoYouHaveAUtrNumberController @Inject() (
   mcc: MessagesControllerComponents,
   requestSessionData: RequestSessionData,
   matchOrganisationUtrView: match_organisation_utr,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -98,7 +100,11 @@ class DoYouHaveAUtrNumberController @Inject() (
   private def noUtrDestination(organisationType: String, service: Service, isInReviewMode: Boolean): Result =
     organisationType match {
       case CdsOrganisationType.CharityPublicBodyNotForProfitId =>
-        Redirect(WhatIsYourOrganisationsAddressController.showForm(service))
+        if (appConfig.allowNoIdJourney) {
+          Redirect(WhatIsYourOrganisationsAddressController.showForm(service))
+        } else {
+          Redirect(VatRegisteredUkKanaController.form(service))
+        }
       case CdsOrganisationType.ThirdCountryOrganisationId =>
         noUtrOrganisationRedirect(isInReviewMode, organisationType, service)
       case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>

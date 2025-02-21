@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Partnership, _}
@@ -38,12 +39,15 @@ class OrganisationTypeController @Inject() (
   mcc: MessagesControllerComponents,
   organisationTypeView: organisation_type,
   registrationDetailsService: RegistrationDetailsService,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   private def nameIdOrganisationMatching(orgType: String, service: Service, userLocation: UserLocation): Call = {
-    if (userLocation == UserLocation.Iom) {
+    if (
+      (userLocation == UserLocation.Iom || orgType == CharityPublicBodyNotForProfitId) && appConfig.allowNoIdJourney
+    ) {
       WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
     } else {
       NameIdOrganisationController.form(orgType, service)
@@ -62,22 +66,22 @@ class OrganisationTypeController @Inject() (
   def embassyMatching(orgType: String, service: Service): Call =
     EmbassyNameController.showForm(isInReviewMode = false, orgType, service)
 
-  def orgMatching(orgType: String, service: Service): Call = {
-    WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
-  }
-
   private def matchingDestinations(service: Service, userLocation: UserLocation): Map[CdsOrganisationType, Call] =
     Map[CdsOrganisationType, Call](
-      Company                       -> nameIdOrganisationMatching(CompanyId, service, userLocation),
-      SoleTrader                    -> individualMatching(SoleTraderId, service),
-      Individual                    -> individualMatching(IndividualId, service),
-      Partnership                   -> nameIdOrganisationMatching(PartnershipId, service, userLocation),
-      LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service, userLocation),
-      CharityPublicBodyNotForProfit -> orgMatching(CharityPublicBodyNotForProfitId, service),
-      ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
-      ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
-      ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),
-      Embassy                       -> embassyMatching(EmbassyId, service)
+      Company                     -> nameIdOrganisationMatching(CompanyId, service, userLocation),
+      SoleTrader                  -> individualMatching(SoleTraderId, service),
+      Individual                  -> individualMatching(IndividualId, service),
+      Partnership                 -> nameIdOrganisationMatching(PartnershipId, service, userLocation),
+      LimitedLiabilityPartnership -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service, userLocation),
+      CharityPublicBodyNotForProfit -> nameIdOrganisationMatching(
+        CharityPublicBodyNotForProfitId,
+        service,
+        userLocation
+      ),
+      ThirdCountryOrganisation -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
+      ThirdCountrySoleTrader   -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
+      ThirdCountryIndividual   -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),
+      Embassy                  -> embassyMatching(EmbassyId, service)
     )
 
   def form(service: Service): Action[AnyContent] =
@@ -87,8 +91,16 @@ class OrganisationTypeController @Inject() (
           def filledForm = orgType.map(organisationTypeDetailsForm.fill).getOrElse(organisationTypeDetailsForm)
           requestSessionData.selectedUserLocation match {
             case Some(_) =>
-              Ok(organisationTypeView(filledForm, requestSessionData.selectedUserLocation, service))
-            case None => Ok(organisationTypeView(filledForm, Some(UserLocation.Uk), service))
+              Ok(
+                organisationTypeView(
+                  filledForm,
+                  requestSessionData.selectedUserLocation,
+                  appConfig.allowNoIdJourney,
+                  service
+                )
+              )
+            case None =>
+              Ok(organisationTypeView(filledForm, Some(UserLocation.Uk), appConfig.allowNoIdJourney, service))
           }
         }
     }
@@ -99,7 +111,9 @@ class OrganisationTypeController @Inject() (
         organisationTypeDetailsForm.bindFromRequest().fold(
           formWithErrors => {
             val userLocation = requestSessionData.selectedUserLocation
-            Future.successful(BadRequest(organisationTypeView(formWithErrors, userLocation, service)))
+            Future.successful(
+              BadRequest(organisationTypeView(formWithErrors, userLocation, appConfig.allowNoIdJourney, service))
+            )
           },
           organisationType => {
             val userLocation =

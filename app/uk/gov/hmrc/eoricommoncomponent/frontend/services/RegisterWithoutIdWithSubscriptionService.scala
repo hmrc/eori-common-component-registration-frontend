@@ -20,6 +20,7 @@ import play.api.Logging
 import play.api.i18n.Messages
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, Request, Result}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationSubmissionController, Sub02Controller}
@@ -50,7 +51,8 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   sub02Controller: Sub02Controller,
   taxudConnector: TaxUDConnector,
   handleSubscriptionService: HandleSubscriptionService,
-  save4LaterService: Save4LaterService
+  save4LaterService: Save4LaterService,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends Logging {
 
@@ -72,18 +74,21 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
       rd <- sessionCache.registrationDetails
       sd <- sessionCache.subscriptionDetails.recover({ case _ => SubscriptionDetails() })
       result <-
-        if (userLocation == UserLocation.Iom) createSubscription(loggedInUser, rd, userLocation, service)
+        if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney)
+          createSubscription(loggedInUser, rd, userLocation, service)
         else if (applicableForRegistration(rd)) rowServiceCall(loggedInUser, service)
-        else if (rd.orgType.contains(EmbassyId)) createSubscription(loggedInUser, rd, userLocation, service)
+        else if (rd.orgType.contains(EmbassyId) && appConfig.allowNoIdJourney)
+          createSubscription(loggedInUser, rd, userLocation, service)
         else if (
           userLocation == UserLocation.Uk &&
           sd.formData.organisationType.contains(CharityPublicBodyNotForProfit) &&
-          sd.ukVatDetails.exists(_.isGiant)
+          sd.ukVatDetails.exists(_.isGiant) &&
+          appConfig.allowNoIdJourney
         ) createSubscription(loggedInUser, rd, userLocation, service)
         else if (
           rd.safeId.id.isEmpty && sd.vatRegisteredUk.contains(false) && sd.formData.utrMatch.exists(
             _.haveUtr.exists(_ == false)
-          )
+          ) && appConfig.allowNoIdJourney
         ) createSubscription(loggedInUser, rd, userLocation, service)
         else createSubscription(service)(request)
     } yield result

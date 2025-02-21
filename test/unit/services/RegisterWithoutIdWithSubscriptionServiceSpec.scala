@@ -25,6 +25,7 @@ import play.api.i18n
 import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, Request, Results}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{ErrorResponse, SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CompanyId, Embassy, IndividualId}
@@ -61,6 +62,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
   private val mockTaxudConnector            = mock[TaxUDConnector]
   private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
   private val mockSave4LaterService         = mock[Save4LaterService]
+  private val mockAppConfig                 = mock[AppConfig]
 
   private implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
   private implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
@@ -101,7 +103,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     mockSub02Controller,
     mockTaxudConnector,
     mockHandleSubscriptionService,
-    mockSave4LaterService
+    mockSave4LaterService,
+    mockAppConfig
   )(global)
 
   override protected def beforeEach(): Unit = {
@@ -325,6 +328,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     }
 
     "when Embassy and txe13 call is successful" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.Uk))
 
@@ -395,6 +399,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     }
 
     "when Embassy" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.Uk))
 
