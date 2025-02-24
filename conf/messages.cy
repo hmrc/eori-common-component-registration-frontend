@@ -986,7 +986,6 @@ cds.subscription.outcomes.success.extra.information.next.ss =<li>gwneud datgania
 cds.subscription.outcomes.success.extra.information.next.gbss =<li>gwneud datganiad cryno wrth gyrraedd</li>
 cds.subscription.outcomes.success.extra.information.next.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
 cds.subscription.outcomes.success.extra.information.next.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
-cds.subscription.outcomes.success.extra.information.next.ma = todo
 cds.subscription.outcomes.success.extra.information.next.tgp = <li>bwrw golwg dros restr o symudiadau nwyddau blaenorol os ydych eisoes yn fasnachwr UKIMS sydd wedi symud nwyddau i Ogledd Iwerddon o’r blaen</li><li>ychwanegu cofnodion newydd at eich Proffil Nwyddau Masnachwyr (TGP)</li><li>gofyn i CThEF am gyngor ynghylch cod nwyddau a disgrifiad o’r nwyddau</li><li>gwirio’r categori ar gyfer eich nwyddau, a ph’un a ydynt yn gymwys ar gyfer Gwybodaeth Symud Marchnad Fewnol (IMMI)</li><li>tanysgrifio i ragor o wasanaethau tollau</li>
 
 cds.subscription.outcomes.success.extra.information.bullet1 = tanysgrifio i ragor o wasanaethau tollau
@@ -1306,7 +1305,6 @@ cds.banner.subscription.ndrc=Tanysgrifio i Wasanaethau Masnachwyr Tollau
 cds.banner.subscription.gbss=Tanysgrifio i'''r Gwasanaeth Diogelwch (yn y DU)
 cds.banner.subscription.ctc=Tanysgrifio i'''r System Gludo Gyfrifiadurol Newydd (NCTS)
 cds.banner.subscription.cds=Tanysgrifio i'''r Gwasanaeth Datganiadau Tollau
-cds.banner.subscription.ma= todo
 cds.banner.subscription.tgp=Tanysgrifio i Broffil Nwyddau Masnachwyr
 
 ecc.subscription.enter-eori-number.heading = Beth yw’ch rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) GB?
@@ -1709,7 +1707,6 @@ ecc.start-page.title.ctc = Tanysgrifiwch i’r System Gludo Gyfrifiadurol Newydd
 ecc.start-page.title.cds = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.eori-only = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.esc = Tanysgrifiwch ac ewch ati i gael rhif EORI sy’n dechrau gyda GB
-ecc.start-page.title.ma = todo
 ecc.start-page.title.tgp = Cael tanysgrifiad i Broffil Nwyddau Masnachwyr a chael rhif EORI sy’n dechrau gyda GB
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
@@ -1728,7 +1725,6 @@ ecc.start-page.para1.bullet2.ctc = tanysgrifiad i’r System Gludo Gyfrifiadurol
 ecc.start-page.para1.bullet2.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.esc = rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor
-ecc.start-page.para1.bullet2.ma = todo
 ecc.start-page.para1.bullet2.tgp = tanysgrifiad i Broffil Nwyddau Masnachwyr
 
 ecc.start-page.when.title = Yr hyn y bydd ei angen arnoch
@@ -1815,7 +1811,6 @@ cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>gwneud da
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
 cds.subscription.outcomes.success.extra.information.next.new.esc =<li>rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor</li>
-cds.subscription.outcomes.success.extra.information.next.new.ma = todo
 cds.subscription.outcomes.success.extra.information.next.new.tgp = <li>bwrw golwg dros restr o symudiadau nwyddau blaenorol os ydych eisoes yn fasnachwr UKIMS sydd wedi symud nwyddau i Ogledd Iwerddon o’r blaen</li><li>ychwanegu cofnodion newydd at eich Proffil Nwyddau Masnachwyr (TGP)</li><li>gofyn i CThEF am gyngor ynghylch cod nwyddau a disgrifiad o’r nwyddau</li><li>gwirio’r categori ar gyfer eich nwyddau, a ph’un a ydynt yn gymwys ar gyfer Gwybodaeth Symud Marchnad Fewnol (IMMI)</li>
 
 ecc.eor-vat-return-error.incorrect.input =  Nodwch werth hyd at 2 le degol. Er enghraifft, £100.00
@@ -1839,7 +1834,6 @@ ecc.start-page.para1.bullet2.new.ctc = tanysgrifiad i’r System Gludo Gyfrifiad
 ecc.start-page.para1.bullet2.new.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.new.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.new.esc = tanysgrifiad ar gyfer Rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor
-ecc.start-page.para1.bullet2.new.ma = todo
 ecc.start-page.para1.bullet2.new.tgp = tanysgrifiad i Broffil Nwyddau Masnachwyr
 
 #Locked email screen
