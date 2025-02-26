@@ -155,6 +155,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
     "redirect to uk vat registered page  when 'iom' is selected" in {
       when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier])).thenReturn(Future.successful(None))
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
 
       submitForm(Map(locationFieldName -> UserLocation.Iom)) { result =>
         status(result) shouldBe SEE_OTHER
