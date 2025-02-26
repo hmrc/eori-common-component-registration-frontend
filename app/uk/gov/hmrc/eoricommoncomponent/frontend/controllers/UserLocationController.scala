@@ -88,7 +88,7 @@ class UserLocationController @Inject() (
           (location, loggedInUser.groupId) match {
             case (location, Some(id)) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
-            case (UserLocation.Iom, Some(_)) if appConfig.allowNoIdJourney =>
+            case (UserLocation.Iom, Some(_)) if !appConfig.allowNoIdJourney =>
               Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
             case _ =>
               save4LaterService.saveUserLocation(GroupId(loggedInUser.groupId.head), location)
