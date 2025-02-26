@@ -53,19 +53,19 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
-        "microservice.services.taxud.host"    -> Host,
-        "microservice.services.taxud.port"    -> Port,
-        "microservice.services.taxud.context" -> "taxud",
-        "auditing.enabled"                    -> true,
-        "auditing.consumer.baseUri.host"      -> Host,
-        "auditing.consumer.baseUri.port"      -> Port
+        "microservice.services.eori-common-component-hods-proxy.host"                                  -> Host,
+        "microservice.services.eori-common-component-hods-proxy.port"                                  -> Port,
+        "microservice.services.eori-common-component-hods-proxy.subscribe-register-without-id.context" -> "register-subscribe-without-id",
+        "auditing.enabled"                                                                             -> true,
+        "auditing.consumer.baseUri.host"                                                               -> Host,
+        "auditing.consumer.baseUri.port"                                                               -> Port
       )
     )
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
   private lazy val taxUdConnector = app.injector.instanceOf[TaxUDConnector]
-  val txe13Url: String            = "/txe13/eori/subscription/v1"
+  val txe13Url: String            = "/register-subscribe-without-id"
 
   private lazy val mockRequest =
     """

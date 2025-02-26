@@ -117,8 +117,6 @@ class AppConfig @Inject() (
 
   val taxEnrolmentsServiceContext: String = config.get[String]("microservice.services.tax-enrolments.context")
 
-  val eisToken: String = config.get[String]("microservice.services.taxud.token")
-
   val standaloneServiceCode: String = config.get[String]("application.standalone.service.code")
 
   def getServiceUrl(proxyServiceName: String): String = {
@@ -136,8 +134,6 @@ class AppConfig @Inject() (
   private val addressLookupContext: String = config.get[String]("microservice.services.address-lookup.context")
 
   val addressLookup: String = addressLookupBaseUrl + addressLookupContext
-
-  val taxudBaseUrl: String = servicesConfig.baseUrl("taxud")
 
   val startPageUtrLink = "https://www.gov.uk/find-utr-number"
   val startPageVatLink = "https://www.gov.uk/send-vat-return"

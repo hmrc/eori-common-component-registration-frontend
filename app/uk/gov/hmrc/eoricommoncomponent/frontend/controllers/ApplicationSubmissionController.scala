@@ -33,7 +33,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.application_processing
 
 import java.time.LocalDateTime
-import java.time.format.{DateTimeFormatter, FormatStyle}
+import java.time.ZoneOffset.UTC
+import java.time.format.DateTimeFormatter.ofPattern
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
@@ -65,7 +66,7 @@ class ApplicationSubmissionController @Inject() (
             application_processing_view(
               name,
               email,
-              LocalDateTime.parse(txe13ProcessedDate).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)),
+              LocalDateTime.parse(txe13ProcessedDate).atOffset(UTC).format(ofPattern("dd MMMM yyyy")),
               service
             )
           )
