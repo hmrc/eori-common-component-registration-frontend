@@ -25,6 +25,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -54,6 +55,7 @@ class DoYouHaveAUtrNumberControllerSpec
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val matchOrganisationUtrView       = instanceOf[match_organisation_utr]
   private val mockRequestSessionData         = mock[RequestSessionData]
+  private val mockAppConfig                  = mock[AppConfig]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
@@ -63,7 +65,8 @@ class DoYouHaveAUtrNumberControllerSpec
       mcc,
       mockRequestSessionData,
       matchOrganisationUtrView,
-      mockSubscriptionDetailsService
+      mockSubscriptionDetailsService,
+      mockAppConfig
     )(global)
 
   override protected def beforeEach(): Unit = {
@@ -191,8 +194,8 @@ class DoYouHaveAUtrNumberControllerSpec
       }
     }
 
-    "redirect to Address page based on NO answer" in {
-
+    "redirect to Address page based on NO answer & feature switch on" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
         Future.successful((): Unit)
       )
@@ -207,8 +210,24 @@ class DoYouHaveAUtrNumberControllerSpec
       }
     }
 
-    "redirect to Review page while on review mode" in {
+    "redirect to UK VAT page based on NO answer & feature switch off" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful((): Unit)
+      )
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
+      submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith(
+          s"/customs-registration-services/atar/register/are-you-vat-registered-in-uk"
+        )
+      }
+    }
+
+    "redirect to Review page while on review mode" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
         Future.successful((): Unit)
       )

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
@@ -41,7 +42,8 @@ class NameDobController @Inject() (
   mcc: MessagesControllerComponents,
   matchNameDobView: match_namedob,
   requestSessionData: RequestSessionData,
-  cdsFrontendDataCache: SessionCache
+  cdsFrontendDataCache: SessionCache,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -74,7 +76,7 @@ class NameDobController @Inject() (
         throw DataUnavailableException("unable to obtain user location")
       )
 
-      if (userLocation == UserLocation.Iom) {
+      if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney) {
         Redirect(
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrganisationsAddressController.showForm(
             service

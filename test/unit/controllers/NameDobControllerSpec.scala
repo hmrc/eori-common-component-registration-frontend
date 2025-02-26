@@ -23,6 +23,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameDobController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
@@ -42,11 +43,17 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   val mockCdsFrontendDataCache: SessionCache = mock[SessionCache]
   private val matchNameDobView               = instanceOf[match_namedob]
   private val mockRequestSessionData         = mock[RequestSessionData]
+  private val mockAppConfig                  = mock[AppConfig]
 
   private def nameDobController =
-    new NameDobController(mockAuthAction, mcc, matchNameDobView, mockRequestSessionData, mockCdsFrontendDataCache)(
-      global
-    )
+    new NameDobController(
+      mockAuthAction,
+      mcc,
+      matchNameDobView,
+      mockRequestSessionData,
+      mockCdsFrontendDataCache,
+      mockAppConfig
+    )(global)
 
   val defaultOrganisationType = "individual"
   val soleTraderType          = "sole-trader"
@@ -235,12 +242,24 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       }
     }
 
-    "redirect to the confirm page when successful for Isle Of Man" in {
+    "redirect to the your organisation address page when successful for Isle Of Man and feature switch is on" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
       submitForm(ValidRequest, defaultOrganisationType) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value should endWith(
           "/customs-registration-services/atar/register/your-organisation-address"
+        )
+      }
+    }
+
+    "redirect to the confirm page when successful for Isle Of Man and feature switch is off" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
+      submitForm(ValidRequest, defaultOrganisationType) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith(
+          "/customs-registration-services/atar/register/matching/chooseid"
         )
       }
     }

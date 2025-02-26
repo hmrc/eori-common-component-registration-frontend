@@ -26,6 +26,7 @@ import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, Result, Session}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ServiceUnavailableResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
@@ -65,6 +66,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockSave4LaterService          = mock[Save4LaterService]
   private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
+  private val mockAppConfig                  = mock[AppConfig]
   private val userLocationView               = instanceOf[user_location]
 
   private val sub01OutcomeProcessing = instanceOf[sub01_outcome_processing]
@@ -81,7 +83,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     mcc,
     userLocationView,
     sub01OutcomeProcessing,
-    errorTemplate
+    errorTemplate,
+    mockAppConfig
   )
 
   private val ProblemWithSelectionError = "Select where you are based"
@@ -152,6 +155,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
     "redirect to uk vat registered page  when 'iom' is selected" in {
       when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier])).thenReturn(Future.successful(None))
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
 
       submitForm(Map(locationFieldName -> UserLocation.Iom)) { result =>
         status(result) shouldBe SEE_OTHER
@@ -190,7 +194,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       mcc,
       userLocationView,
       sub01OutcomeProcessing,
-      errorTemplate
+      errorTemplate,
+      mockAppConfig
     ) {}
     implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
@@ -354,7 +359,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          errorTemplate
+          errorTemplate,
+          mockAppConfig
         ) {}
 
         val result = controller
@@ -395,7 +401,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          errorTemplate
+          errorTemplate,
+          mockAppConfig
         ) {}
 
         val result = controller

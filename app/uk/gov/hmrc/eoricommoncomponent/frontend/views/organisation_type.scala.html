@@ -27,12 +27,12 @@
 
 @this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, govukDetails : GovukDetails)
 
-@(OrganisationTypeForm: Form[CdsOrganisationType], userLocation: Option[UserLocation], service: Service)(implicit request: Request[_], messages: Messages)
+@(OrganisationTypeForm: Form[CdsOrganisationType], userLocation: Option[UserLocation], allowNoIdJourney: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 
 @layout_di(messages("cds.matching.organisation-type.user.header"), form = Some(OrganisationTypeForm), service = service) {
     <div>
-        @errorSummary(OrganisationTypeForm.errors, focusOverrides = Map("organisation-type" -> s"organisation-type-${validOptions(userLocation).head._1}"))
+        @errorSummary(OrganisationTypeForm.errors, focusOverrides = Map("organisation-type" -> s"organisation-type-${validOptions(userLocation, allowNoIdJourney).head._1}"))
 
         @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.OrganisationTypeController.submit(service), "OrganisationTypeForm") {
             @CSRF.formField
@@ -46,7 +46,7 @@
 
             @inputRadioGroup(
                 OrganisationTypeForm("organisation-type"),
-                validOptions(userLocation),
+                validOptions(userLocation, allowNoIdJourney),
                 hintTextOptions(userLocation).toMap,
                 None,
                 Some("govuk-visually-hidden"),

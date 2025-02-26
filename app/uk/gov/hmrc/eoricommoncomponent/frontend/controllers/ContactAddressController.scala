@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.Logger
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
@@ -57,7 +58,8 @@ class ContactAddressController @Inject() (
   subscriptionFlowManager: SubscriptionFlowManager,
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
-  contactAddressView: contact_address
+  contactAddressView: contact_address,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -153,10 +155,10 @@ class ContactAddressController @Inject() (
   ): Future[Result] = {
     subscriptionDetailsService.cachedOrganisationType.map { optOrgType =>
       if (
-        optOrgType.contains(Embassy) || optOrgType.contains(CharityPublicBodyNotForProfit) || optOrgType.contains(
+        (optOrgType.contains(Embassy) || optOrgType.contains(CharityPublicBodyNotForProfit) || optOrgType.contains(
           Partnership
         ) || optOrgType.contains(Individual) || optOrgType.contains(SoleTrader) || optOrgType.contains(Company)
-        || optOrgType.contains(LimitedLiabilityPartnership)
+        || optOrgType.contains(LimitedLiabilityPartnership)) && appConfig.allowNoIdJourney
       ) {
         if (yesNoAnswer.isYes) {
           Redirect(DetermineReviewPageController.determineRoute(service))
