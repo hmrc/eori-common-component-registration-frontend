@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.t
 
 import play.api.libs.json.{__, JsObject, Reads}
 
-case class EtmpErrorCode(errorCode: EtmpError)
+case class EtmpErrorCode(errorCode: EisError)
 
 object EtmpErrorCode {
 
@@ -32,7 +32,7 @@ object EtmpErrorCode {
     */
   implicit val reads: Reads[EtmpErrorCode] = {
     __.read[JsObject].map(_.keys.head).flatMap { key =>
-      (__ \ key).read[EtmpError](EtmpError.etmpErrorReads).map(EtmpErrorCode(_))
+      (__ \ key).read[EisError](EisError.etmpErrorReads).map(EtmpErrorCode(_))
     }
   }
 

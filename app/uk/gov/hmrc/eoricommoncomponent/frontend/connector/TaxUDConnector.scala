@@ -67,8 +67,6 @@ class TaxUDConnector @Inject() (
 
     val correlationId = UUID.randomUUID().toString
 
-    println(s"\n\n==== ${fullUrl.toString} ====\n\n")
-
     httpClient
       .post(fullUrl)
       .setHeader(
@@ -106,13 +104,13 @@ class TaxUDConnector @Inject() (
             }
 
           case UNPROCESSABLE_ENTITY =>
-            logger.error(s"422 received from ETMP, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(s"422 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
             Future.successful(ErrorResponse)
           case BAD_REQUEST =>
-            logger.error(s"400 received from ETMP, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(s"400 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
             Future.successful(ErrorResponse)
           case INTERNAL_SERVER_ERROR =>
-            logger.error(s"500 received from ETMP, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(s"500 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
             Future.successful(ErrorResponse)
           case _ =>
             logger.error(
