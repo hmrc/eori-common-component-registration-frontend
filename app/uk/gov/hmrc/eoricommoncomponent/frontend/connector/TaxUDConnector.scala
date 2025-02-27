@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetails, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.CreateEoriSubscriptionNoIdentifier
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
 
 import java.net.URL
@@ -49,8 +49,7 @@ class TaxUDConnector @Inject() (
 )(implicit ec: ExecutionContext)
     extends HandleResponses {
 
-  private val subscribeUrl     = "/taxud/txe13/eori/subscription/v1"
-  private val fullUrl          = s"${appConfig.taxudBaseUrl}$subscribeUrl"
+  private val fullUrl          = url"${appConfig.getServiceUrl("register-subscribe-without-id")}"
   private val X_CORRELATION_ID = "x-correlation-id"
 
   def createEoriSubscription(
@@ -69,9 +68,9 @@ class TaxUDConnector @Inject() (
     val correlationId = UUID.randomUUID().toString
 
     httpClient
-      .post(new URL(fullUrl))
+      .post(fullUrl)
       .setHeader(
-        AUTHORIZATION    -> appConfig.eisToken,
+        AUTHORIZATION    -> appConfig.internalAuthToken,
         ACCEPT           -> MimeTypes.JSON,
         CONTENT_TYPE     -> MimeTypes.JSON,
         DATE             -> LocalDateTime.now().atOffset(ZoneOffset.UTC).format(RFC_1123_DATE_TIME),
@@ -91,7 +90,7 @@ class TaxUDConnector @Inject() (
 
               case Right(response: CreateEoriSubscriptionResponse) =>
                 audit.sendSubscriptionDataEvent(
-                  fullUrl,
+                  fullUrl.toString,
                   Json.toJson(CreateEoriSubscriptionNoIdentifier(createEoriSubscriptionRequest, response))
                 )
                   .map(
@@ -105,13 +104,13 @@ class TaxUDConnector @Inject() (
             }
 
           case UNPROCESSABLE_ENTITY =>
-            logger.error(s"422 received from ETMP, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(s"422 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
             Future.successful(ErrorResponse)
           case BAD_REQUEST =>
-            logger.error(s"400 received from ETMP, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(s"400 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
             Future.successful(ErrorResponse)
           case INTERNAL_SERVER_ERROR =>
-            logger.error(s"500 received from ETMP, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(s"500 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
             Future.successful(ErrorResponse)
           case _ =>
             logger.error(

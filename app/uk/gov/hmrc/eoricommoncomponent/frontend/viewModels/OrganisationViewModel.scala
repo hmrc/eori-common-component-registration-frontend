@@ -22,7 +22,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 object OrganisationViewModel {
 
-  def validOptions(userLocation: Option[UserLocation])(implicit messages: Messages): Seq[(String, String)] = {
+  def validOptions(userLocation: Option[UserLocation], allowNoIdJourney: Boolean)(implicit
+    messages: Messages
+  ): Seq[(String, String)] = {
 
     lazy val ukOptionsFirstScreen = Seq(
       CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
@@ -34,8 +36,7 @@ object OrganisationViewModel {
       ),
       CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
         "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
-      ),
-      CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
+      )
     )
 
     lazy val iomOptions = Seq(
@@ -62,11 +63,16 @@ object OrganisationViewModel {
     )
 
     userLocation match {
-      case Some(UserLocation.Uk)  => ukOptionsFirstScreen
-      case Some(UserLocation.Iom) => iomOptions
-
+      case Some(UserLocation.Iom)                                                 => iomOptions
       case Some(UserLocation.ThirdCountry) | Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
-      case _                                                                      => ukOptionsFirstScreen
+      case _ =>
+        if (allowNoIdJourney) {
+          ukOptionsFirstScreen.:+(
+            CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
+          )
+        } else {
+          ukOptionsFirstScreen
+        }
     }
   }
 

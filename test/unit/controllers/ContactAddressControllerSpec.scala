@@ -23,6 +23,7 @@ import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ContactAddressController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -53,6 +54,7 @@ class ContactAddressControllerSpec
   private val mockSubscriptionFlow     = mock[SubscriptionFlowManager]
   private val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
   private val mockSubscriptionPage     = mock[SubscriptionPage]
+  private val mockAppConfig            = mock[AppConfig]
   private val mockSessionCacheService  = instanceOf[SessionCacheService]
 
   private val viewContactAddress = instanceOf[contact_address]
@@ -66,7 +68,8 @@ class ContactAddressControllerSpec
     mockSubscriptionFlow,
     mockRequestSessionData,
     mcc,
-    viewContactAddress
+    viewContactAddress,
+    mockAppConfig
   )(global)
 
   def stringOfLengthXGen(minLength: Int): Gen[String] =
@@ -188,6 +191,7 @@ class ContactAddressControllerSpec
     }
 
     "redirect to next page if valid request is selected" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockSubscriptionPage.url(any())).thenReturn(
         "/customs-registration-services/atar/register/disclose-personal-details-consent"
       )
@@ -243,6 +247,7 @@ class ContactAddressControllerSpec
     }
 
     "embassy redirect to next page" when {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
 
       "yes is selected" in {
         when(mockSubscriptionPage.url(any())).thenReturn(
