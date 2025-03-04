@@ -17,13 +17,28 @@
 package unit.forms
 
 import base.UnitSpec
-import play.api.data.{Form, FormError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{VatDetails, VatDetailsForm}
+import org.scalatestplus.mockito.MockitoSugar.mock
+import play.api.data.Form
+import play.api.data.FormError
+import play.api.mvc.AnyContent
+import play.api.test.FakeRequest
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 
 class VatDetailsFormSpec extends UnitSpec {
 
-  def form: Form[VatDetails] = VatDetailsForm.vatDetailsForm
 
+  implicit val request: FakeRequest[AnyContent] = FakeRequest()
+
+  val mockAuditable: Auditable = mock[Auditable]
+
+  val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable) {
+    def isRestOfTheWorld: Boolean = false
+  }
+
+  def form: Form[VatDetails] = new VatDetailsForm(mockRequestSessionData).vatDetailsForm
   "contactDetailsCreateForm" should {
 
     "fail when mandatory fields are empty" in {
