@@ -27,7 +27,7 @@ class SignInWithDifferentDetailsSpec extends ViewSpec {
 
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
 
-  private val view = instanceOf[sign_in_with_different_details]
+  private val view = inject[sign_in_with_different_details]
 
   val orgName = "Test Organisation Name"
 

@@ -49,7 +49,7 @@ class PostCodeControllerSpec
     PostCodeController.submit(atarService).url
 
   private val mockSessionCache = mock[SessionCache]
-  private val view             = instanceOf[postcode]
+  private val view             = inject[postcode]
 
   private val controller = new PostCodeController(mockAuthAction, view, mcc, mockSessionCache)
 

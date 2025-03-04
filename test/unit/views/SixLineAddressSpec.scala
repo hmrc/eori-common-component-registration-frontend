@@ -51,7 +51,7 @@ class SixLineAddressSpec extends ViewSpec {
     Country("Japan", "country:JP")
   )
 
-  private val view = instanceOf[six_line_address]
+  private val view = inject[six_line_address]
 
   "header Label" should {
     "return correct header for individual " in servicesToTest.foreach { service =>

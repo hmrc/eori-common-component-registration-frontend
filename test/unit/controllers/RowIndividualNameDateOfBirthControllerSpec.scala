@@ -52,9 +52,9 @@ class RowIndividualNameDateOfBirthControllerSpec
       extends AbstractControllerFixture[RowIndividualNameDateOfBirthController] {
     val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
-    private val rowIndividualNameDob   = instanceOf[row_individual_name_dob]
+    private val rowIndividualNameDob   = inject[row_individual_name_dob]
     private val mockAuthAction         = authAction(mockAuthConnector)
-    private val mockRequestSessionData = instanceOf[RequestSessionData]
+    private val mockRequestSessionData = inject[RequestSessionData]
 
     override val controller = new RowIndividualNameDateOfBirthController(
       mockAuthAction,

@@ -61,14 +61,14 @@ class CheckYourDetailsRegisterControllerSpec
   private val mockAuthConnector                     = mock[AuthConnector]
   private val mockAuthAction                        = authAction(mockAuthConnector)
   private val mockSessionCache                      = mock[SessionCache]
-  val dateFormatter: DateFormatter                  = instanceOf[DateFormatter]
+  val dateFormatter: DateFormatter                  = inject[DateFormatter]
   private val mockSubscriptionDetails               = mock[SubscriptionDetails]
   private val mockRegisterWithoutIdWithSubscription = mock[RegisterWithoutIdWithSubscriptionService]
   private val mockSubscriptionFlow                  = mock[SubscriptionFlow]
   private val mockVatControlListDetails             = mock[VatControlListResponse]
   private val mockRequestSession                    = mock[RequestSessionData]
-  private val checkYourDetailsRegisterView          = instanceOf[check_your_details_register]
-  private val mockSessionCacheService               = instanceOf[SessionCacheService]
+  private val checkYourDetailsRegisterView          = inject[check_your_details_register]
+  private val mockSessionCacheService               = inject[SessionCacheService]
 
   private val viewModelConstructor =
     new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession)

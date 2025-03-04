@@ -56,11 +56,11 @@ class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAf
   private val mockRequestSessionData  = mock[RequestSessionData]
   private val mockRegistrationDetails = mock[RegistrationDetails](RETURNS_DEEP_STUBS)
   private val mockSubscriptionDetails = mock[SubscriptionDetails](RETURNS_DEEP_STUBS)
-  private val mockSessionCacheService = instanceOf[SessionCacheService]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val mockCdsFrontendDataCache = mock[SessionCache]
   private val mockOrgTypeLookup        = mock[OrgTypeLookup]
-  private val contactDetailsView       = instanceOf[contact_details]
+  private val contactDetailsView       = inject[contact_details]
 
   private val controller = new ContactDetailsController(
     mockAuthAction,

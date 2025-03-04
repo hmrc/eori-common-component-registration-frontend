@@ -16,7 +16,6 @@
 
 package util
 
-import base.Injector
 import org.apache.pekko.util.Timeout
 import org.scalatestplus.play.PlaySpec
 import play.api.Application
@@ -25,18 +24,18 @@ import play.api.i18n._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{AnyContentAsEmpty, Request}
-import play.api.test.CSRFTokenHelper
+import play.api.test.{CSRFTokenHelper, Injecting}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 
 import scala.concurrent.duration._
 
-trait ViewSpec extends PlaySpec with CSRFTest with Injector with TestData {
+trait ViewSpec extends PlaySpec with CSRFTest with Injecting with TestData {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
-  private val messageApi: MessagesApi = instanceOf[MessagesApi]
+  private val messageApi: MessagesApi = inject[MessagesApi]
 
   implicit val messages: Messages = MessagesImpl(defaultLang, messageApi)
 

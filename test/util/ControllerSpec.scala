@@ -16,7 +16,7 @@
 
 package util
 
-import base.{Injector, UnitSpec}
+import base.UnitSpec
 import common.pages.WebPage
 import org.apache.pekko.stream.testkit.NoMaterializer
 import org.scalatestplus.mockito.MockitoSugar
@@ -26,8 +26,8 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesImpl}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc._
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.api.test.{FakeRequest, Injecting}
 import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{
@@ -46,13 +46,14 @@ import scala.concurrent.Future
 import scala.util.Random
 
 trait ControllerSpec
-    extends UnitSpec with MockitoSugar with I18nSupport with Injector with TestData with ResponseErrorEitherT {
+    extends UnitSpec with MockitoSugar with I18nSupport with Injecting with TestData with ResponseErrorEitherT {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
+    .configure("hmrc.mongo.init.timeout" -> "30 seconds")
     .build()
 
-  implicit val messagesApi: MessagesApi = instanceOf[MessagesApi]
+  implicit val messagesApi: MessagesApi = inject[MessagesApi]
 
   implicit def materializer: NoMaterializer.type = NoMaterializer
 

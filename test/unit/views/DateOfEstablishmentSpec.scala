@@ -35,7 +35,7 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
   val isInReviewMode                                    = false
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  private val view = instanceOf[date_of_establishment]
+  private val view = inject[date_of_establishment]
 
   "On a UK journey the 'When was the organisation established?' page" should {
     "display correct title" in {

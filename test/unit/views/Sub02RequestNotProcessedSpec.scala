@@ -28,7 +28,7 @@ class Sub02RequestNotProcessedSpec extends ViewSpec {
 
   private val pageHeadingExpectedText = messages("cds.request-not-processed.heading")
 
-  private val view = instanceOf[sub02_request_not_processed]
+  private val view = inject[sub02_request_not_processed]
 
   "GYE Request not processed outcome page" should {
 

@@ -26,9 +26,11 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.PostcodeLookupResultsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookup, AddressLookupSuccess}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookupSuccess
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.postcode_address_result
 import util.builders.AuthBuilder.withAuthorisedUser
@@ -45,7 +47,7 @@ class PostcodeLookupResultsControllerSpec
 
   protected override val formId: String = "addressDetailsForm"
 
-  private val addressLookup = AddressLookup("addressLine 1", "city", "TF3 2BX", "GB")
+  private val addressLookup = Address("addressLine 1", None, None, Some("city"), Some("TF3 2BX"), "GB")
 
   val form: Map[String, String]        = Map("address" -> addressLookup.dropDownView)
   val invalidForm: Map[String, String] = Map()
@@ -53,12 +55,20 @@ class PostcodeLookupResultsControllerSpec
   def submitInCreateModeUrl: String =
     PostcodeLookupResultsController.submit(atarService).url
 
-  private val mockSessionCache           = mock[SessionCache]
-  private val mockAddressLookupConnector = mock[AddressLookupConnector]
-  private val view                       = mock[postcode_address_result]
+  private val mockSessionCache               = mock[SessionCache]
+  private val mockAddressLookupConnector     = mock[AddressLookupConnector]
+  private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
+  private val view                           = mock[postcode_address_result]
 
   private val controller =
-    new PostcodeLookupResultsController(mockAuthAction, mockSessionCache, mockAddressLookupConnector, mcc, view)
+    new PostcodeLookupResultsController(
+      mockAuthAction,
+      mockSessionCache,
+      mockRegistrationDetailsService,
+      mockAddressLookupConnector,
+      mcc,
+      view
+    )
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -66,6 +76,8 @@ class PostcodeLookupResultsControllerSpec
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     when(view.apply(any(), any(), any(), any())(any(), any()))
       .thenReturn(HtmlFormat.empty)
+    when(mockRegistrationDetailsService.cacheAddress(any())(any()))
+      .thenReturn(Future.successful(true))
   }
 
   override protected def afterEach(): Unit =

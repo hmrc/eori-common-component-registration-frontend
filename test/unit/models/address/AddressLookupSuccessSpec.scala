@@ -17,7 +17,8 @@
 package unit.models.address
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookup, AddressLookupSuccess}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookupSuccess
 
 class AddressLookupSuccessSpec extends UnitSpec {
 
@@ -25,11 +26,11 @@ class AddressLookupSuccessSpec extends UnitSpec {
 
     "correctly sort the addresses with numbers combined with letters at the end of the address line" in {
 
-      val address1 = AddressLookup("Flat 1, Test Street", "City", "postcode", "GB")
-      val address2 = AddressLookup("Flat 1A, Test Street", "City", "postcode", "GB")
-      val address3 = AddressLookup("Flat 1B, Test Street", "City", "postcode", "GB")
-      val address4 = AddressLookup("Flat 2, Test Street", "City", "postcode", "GB")
-      val address5 = AddressLookup("Flat 3, Test Street", "City", "postcode", "GB")
+      val address1 = Address("Flat 1", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
+      val address2 = Address("Flat 1A", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
+      val address3 = Address("Flat 1B", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
+      val address4 = Address("Flat 2", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
+      val address5 = Address("Flat 3", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
 
       val addresses = Seq(address3, address4, address2, address1, address5)
 
@@ -40,11 +41,11 @@ class AddressLookupSuccessSpec extends UnitSpec {
 
     "correctly sort the addresses with numbers" in {
 
-      val address1 = AddressLookup("121 Test Street", "City", "postcode", "GB")
-      val address2 = AddressLookup("122 Test Street", "City", "postcode", "GB")
-      val address3 = AddressLookup("123 Test Street", "City", "postcode", "GB")
-      val address4 = AddressLookup("124 Test Street", "City", "postcode", "GB")
-      val address5 = AddressLookup("125 Test Street", "City", "postcode", "GB")
+      val address1 = Address("121 Test Street", None, None, Some("City"), Some("postcode"), "GB")
+      val address2 = Address("122 Test Street", None, None, Some("City"), Some("postcode"), "GB")
+      val address3 = Address("123 Test Street", None, None, Some("City"), Some("postcode"), "GB")
+      val address4 = Address("124 Test Street", None, None, Some("City"), Some("postcode"), "GB")
+      val address5 = Address("125 Test Street", None, None, Some("City"), Some("postcode"), "GB")
 
       val addresses = Seq(address3, address4, address2, address1, address5)
 
@@ -55,11 +56,11 @@ class AddressLookupSuccessSpec extends UnitSpec {
 
     "correctly sort the alphabetic addresses" in {
 
-      val address1 = AddressLookup("A Test address, Test Street", "City", "postcode", "GB")
-      val address2 = AddressLookup("B Test address, Test Street", "City", "postcode", "GB")
-      val address3 = AddressLookup("C Test address, Test Street", "City", "postcode", "GB")
-      val address4 = AddressLookup("D Test address, Test Street", "City", "postcode", "GB")
-      val address5 = AddressLookup("E Test address, Test Street", "City", "postcode", "GB")
+      val address1 = Address("A Test address", None, Some("Test Street"), Some("City"), Some("postcode"), "GB")
+      val address2 = Address("B Test address", None, Some("Test Street"), Some("City"), Some("postcode"), "GB")
+      val address3 = Address("C Test address", None, Some("Test Street"), Some("City"), Some("postcode"), "GB")
+      val address4 = Address("D Test address", None, Some("Test Street"), Some("City"), Some("postcode"), "GB")
+      val address5 = Address("E Test address", None, Some("Test Street"), Some("City"), Some("postcode"), "GB")
 
       val addresses = Seq(address3, address4, address2, address1, address5)
 
@@ -70,11 +71,11 @@ class AddressLookupSuccessSpec extends UnitSpec {
 
     "correctly sort the alphanumeric addresses with different middle part" in {
 
-      val address1 = AddressLookup("Test 120 address, Test Street", "City", "postcode", "GB")
-      val address2 = AddressLookup("Test 121 address, Test Street", "City", "postcode", "GB")
-      val address3 = AddressLookup("Test 122 address, Test Street", "City", "postcode", "GB")
-      val address4 = AddressLookup("Test 123 address, Test Street", "City", "postcode", "GB")
-      val address5 = AddressLookup("Test 124 address, Test Street", "City", "postcode", "GB")
+      val address1 = Address("Test 120 address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
+      val address2 = Address("Test 121 address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
+      val address3 = Address("Test 122 address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
+      val address4 = Address("Test 123 address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
+      val address5 = Address("Test 124 address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
 
       val addresses = Seq(address3, address4, address2, address1, address5)
 
@@ -85,11 +86,11 @@ class AddressLookupSuccessSpec extends UnitSpec {
 
     "correctly sort the mixture of alphabetic and alphanumeric addresses" in {
 
-      val address1 = AddressLookup("Test 121 address, Test Street", "City", "postcode", "GB")
-      val address2 = AddressLookup("Test 122 address, Test Street", "City", "postcode", "GB")
-      val address3 = AddressLookup("Test 123 address, Test Street", "City", "postcode", "GB")
-      val address4 = AddressLookup("Test first address, Test Street", "City", "postcode", "GB")
-      val address5 = AddressLookup("Test second address, Test Street", "City", "postcode", "GB")
+      val address1 = Address("Test 121 address", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
+      val address2 = Address("Test 122 address", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
+      val address3 = Address("Test 123 address", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
+      val address4 = Address("Test first address", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
+      val address5 = Address("Test second address", Some("Test Street"), Some("City"), None, Some("postcode"), "GB")
 
       val addresses = Seq(address3, address4, address2, address1, address5)
 
@@ -100,11 +101,11 @@ class AddressLookupSuccessSpec extends UnitSpec {
 
     "correctly sort the special characters" in {
 
-      val address1 = AddressLookup("Test 3-5 address, Test Street", "City", "postcode", "GB")
-      val address2 = AddressLookup("Test 10 address, Test Street", "City", "postcode", "GB")
-      val address3 = AddressLookup("b/y, Test Street", "City", "postcode", "GB")
-      val address4 = AddressLookup("Test & Address, Test Street", "City", "postcode", "GB")
-      val address5 = AddressLookup("Test address, Test Street", "City", "postcode", "GB")
+      val address1 = Address("Test 3-5 address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
+      val address2 = Address("Test 10 address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
+      val address3 = Address("b/y", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
+      val address4 = Address("Test & Address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
+      val address5 = Address("Test address", Some("Test Street"), None, Some("City"), Some("postcode"), "GB")
 
       val addresses = Seq(address3, address4, address2, address1, address5)
 

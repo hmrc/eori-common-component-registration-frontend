@@ -41,7 +41,7 @@ class AddressSpec extends ViewSpec {
     Country("Japan", "country:JP")
   )
 
-  private val view = instanceOf[address]
+  private val view = inject[address]
 
   "Address Page" should {
     "display correct title" in {

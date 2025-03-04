@@ -30,7 +30,7 @@ class VatDetailsViewSpec extends ViewSpec {
 
   private val form: Form[VatDetails]                            = VatDetailsForm.vatDetailsForm
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
-  private val view                                              = instanceOf[vat_details]
+  private val view                                              = inject[vat_details]
   private val vatNumberLabel                                    = "label[for=vat-number]"
 
   "VAT Details" should {

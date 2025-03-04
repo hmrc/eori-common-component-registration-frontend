@@ -56,14 +56,14 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockSubscriptionDetails        = mock[SubscriptionDetails]
 
-  private val sub01OutcomeView                = instanceOf[sub01_outcome_processing]
-  private val sub02RequestNotProcessed        = instanceOf[sub02_request_not_processed]
-  private val sub02SubscriptionInProgressView = instanceOf[sub02_subscription_in_progress]
-  private val sub02EoriAlreadyAssociatedView  = instanceOf[sub02_eori_already_associated]
-  private val sub02EoriAlreadyExists          = instanceOf[sub02_eori_already_exists]
+  private val sub01OutcomeView                = inject[sub01_outcome_processing]
+  private val sub02RequestNotProcessed        = inject[sub02_request_not_processed]
+  private val sub02SubscriptionInProgressView = inject[sub02_subscription_in_progress]
+  private val sub02EoriAlreadyAssociatedView  = inject[sub02_eori_already_associated]
+  private val sub02EoriAlreadyExists          = inject[sub02_eori_already_exists]
 
-  private val standAloneOutcomeView   = instanceOf[standalone_subscription_outcome]
-  private val subscriptionOutcomeView = instanceOf[subscription_outcome]
+  private val standAloneOutcomeView   = inject[standalone_subscription_outcome]
+  private val subscriptionOutcomeView = inject[subscription_outcome]
   private val EORI                    = "ZZZ1ZZZZ23ZZZZZZZ"
 
   private val subscriptionController = new Sub02Controller(

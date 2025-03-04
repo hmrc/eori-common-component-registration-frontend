@@ -36,7 +36,7 @@ class MatchOrganisationUtrSpec extends ViewSpec {
   val soleTraderType                                    = "sole-trader"
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  private val view = instanceOf[match_organisation_utr]
+  private val view = inject[match_organisation_utr]
 
   "Match UTR page in the non sole trader case" should {
     "display correct title" in {

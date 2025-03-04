@@ -59,8 +59,8 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private val mockSessionCache                 = mock[SessionCache]
   private val mockRequestSessionData           = mock[RequestSessionData]
   private val mockMatchingService              = mock[MatchingService]
-  private val sub01OutcomeProcessingView       = instanceOf[sub01_outcome_processing]
-  private val error_view                       = instanceOf[error_template]
+  private val sub01OutcomeProcessingView       = inject[sub01_outcome_processing]
+  private val error_view                       = inject[error_template]
 
   private val sessionCacheService =
     new SessionCacheService(mockSessionCache, mockRequestSessionData, mockMatchingService, error_view)

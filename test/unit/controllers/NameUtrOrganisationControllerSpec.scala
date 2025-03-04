@@ -51,13 +51,13 @@ class NameUtrOrganisationControllerSpec
   private val mockAuthAction                = authAction(mockAuthConnector)
   private val mockMatchingService           = mock[MatchingService]
   private val mockSubscriptionDetailService = mock[SubscriptionDetailsService]
-  private val matchNameIdOrganisationView   = instanceOf[match_name_id_organisation]
+  private val matchNameIdOrganisationView   = inject[match_name_id_organisation]
 
   private val partnershipId                   = CdsOrganisationType.PartnershipId
   private val companyId                       = CdsOrganisationType.CompanyId
   private val limitedLiabilityPartnershipId   = CdsOrganisationType.LimitedLiabilityPartnershipId
   private val charityPublicBodyNotForProfitId = CdsOrganisationType.CharityPublicBodyNotForProfitId
-  private val errorView                       = instanceOf[error_template]
+  private val errorView                       = inject[error_template]
 
   private val controller =
     new NameIdOrganisationController(
