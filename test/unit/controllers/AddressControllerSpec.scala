@@ -43,7 +43,7 @@ class AddressControllerSpec
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
   private val mockAddressService      = mock[AddressService]
-  private val mockSessionCacheService = instanceOf[SessionCacheService]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new AddressController(mockAuthAction, mockAddressService, mockSessionCacheService, mcc)(
     global

@@ -35,8 +35,8 @@ class YouCannotUseServiceControllerSpec extends ControllerSpec with BeforeAndAft
   private val mockAuthConnector = mock[AuthConnector]
   private val mockEnv           = mock[Environment]
   private val mockAppConfig     = mock[Configuration]
-  private val youCantUseService = instanceOf[you_cant_use_service]
-  private val unauthorisedView  = instanceOf[unauthorized]
+  private val youCantUseService = inject[you_cant_use_service]
+  private val unauthorisedView  = inject[unauthorized]
 
   private val controller =
     new YouCannotUseServiceController(

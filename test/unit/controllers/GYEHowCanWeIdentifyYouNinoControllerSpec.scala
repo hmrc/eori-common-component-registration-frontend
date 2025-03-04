@@ -49,12 +49,12 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
   private val mockFrontendDataCache  = mock[SessionCache]
   private val mockRequestSessionData = mock[RequestSessionData]
 
-  private val errorView = instanceOf[error_template]
+  private val errorView = inject[error_template]
 
   private val sessionCacheService =
     new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
 
-  private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_nino]
+  private val howCanWeIdentifyYouView = inject[how_can_we_identify_you_nino]
 
   private val controller = new GYEHowCanWeIdentifyYouNinoController(
     mockAuthAction,

@@ -16,22 +16,22 @@
 
 package unit.views
 
-import base.Injector
 import org.scalatestplus.play.PlaySpec
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi, MessagesImpl}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.Injecting
 import play.i18n.Lang
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 
-class MessagesSpec extends PlaySpec with Injector {
+class MessagesSpec extends PlaySpec with Injecting {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
-  private val messageApi: MessagesApi = instanceOf[MessagesApi]
+  private val messageApi: MessagesApi = inject[MessagesApi]
 
   private val messagesEn: Messages = MessagesImpl(Lang.forCode("en"), messageApi)
   private val messagesCy: Messages = MessagesImpl(Lang.forCode("cy"), messageApi)

@@ -57,7 +57,7 @@ class DisclosePersonalDetailsConsentControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val disclosePersonalDetailsConsentView = instanceOf[disclose_personal_details_consent]
+  private val disclosePersonalDetailsConsentView = inject[disclose_personal_details_consent]
 
   private val mockDisclosePersonalDetailsConsentViewModel = mock[DisclosePersonalDetailsConsentViewModel]
 
@@ -68,7 +68,7 @@ class DisclosePersonalDetailsConsentControllerSpec
 
   private val mockRequestSessionData = mock[RequestSessionData]
 
-  private val mockSessionCacheService = instanceOf[SessionCacheService]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new DisclosePersonalDetailsConsentController(
     mockAuthAction,

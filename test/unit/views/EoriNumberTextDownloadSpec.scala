@@ -31,7 +31,7 @@ class EoriNumberTextDownloadSpec extends ViewSpec {
   val orgName    = "Test Organisation Name"
   val issuedDate = "01 Jan 2019"
 
-  private val view = instanceOf[eori_number_text_download]
+  private val view = inject[eori_number_text_download]
 
   private val doc: Document = Jsoup.parse(contentAsString(view(eori, orgName, issuedDate)))
 

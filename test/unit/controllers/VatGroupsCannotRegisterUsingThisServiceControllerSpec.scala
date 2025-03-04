@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class VatGroupsCannotRegisterUsingThisServiceControllerSpec
     extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val view = instanceOf[vat_groups_cannot_register_using_this_service]
+  private val view = inject[vat_groups_cannot_register_using_this_service]
 
   private val controller =
     new VatGroupsCannotRegisterUsingThisServiceController(view, mcc)

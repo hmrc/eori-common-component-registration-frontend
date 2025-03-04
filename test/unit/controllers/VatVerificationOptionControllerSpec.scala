@@ -36,7 +36,7 @@ import scala.concurrent.Future
 
 class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val vatVerificationOptionView      = instanceOf[vat_verification_option]
+  private val vatVerificationOptionView      = inject[vat_verification_option]
   private val mockAuthConnector              = mock[AuthConnector]
   private val mockAuthAction                 = authAction(mockAuthConnector)
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]

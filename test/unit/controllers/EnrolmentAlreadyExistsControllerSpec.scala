@@ -41,10 +41,10 @@ import scala.concurrent.Future
 
 class EnrolmentAlreadyExistsControllerSpec extends ControllerSpec with AuthActionMock {
 
-  private val registrationExistsView             = instanceOf[registration_exists]
-  private val registrationExistsGroupView        = instanceOf[registration_exists_group]
-  private val enrolmentExistsStandaloneView      = instanceOf[enrolment_exists_user_standalone]
-  private val enrolmentExistsGroupStandaloneView = instanceOf[enrolment_exists_group_standalone]
+  private val registrationExistsView             = inject[registration_exists]
+  private val registrationExistsGroupView        = inject[registration_exists_group]
+  private val enrolmentExistsStandaloneView      = inject[enrolment_exists_user_standalone]
+  private val enrolmentExistsGroupStandaloneView = inject[enrolment_exists_group_standalone]
   private val mockAuthConnector                  = mock[AuthConnector]
   private val mockSessionCache                   = mock[SessionCache]
   private val mockAppConfig                      = mock[AppConfig]

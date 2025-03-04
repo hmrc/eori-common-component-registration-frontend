@@ -36,7 +36,7 @@ class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMo
   private val expectedYesRedirectUrl = s"https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes"
   private val expectedNoRedirectUrl  = s"https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no"
 
-  private val vatRegisteredUkView = instanceOf[vat_registered_uk_kana]
+  private val vatRegisteredUkView = inject[vat_registered_uk_kana]
 
   val controller = new VatRegisteredUkKanaController(vatRegisteredUkView, mcc)
 

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
 import cats.data.EitherT
+import play.api.Logging
 import play.api.i18n.Messages
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -31,7 +32,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Matchi
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, Nino, NinoOrUtr, Utr}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.error_template
@@ -46,7 +46,8 @@ class SessionCacheService @Inject() (
   requestSessionData: RequestSessionData,
   matchingService: MatchingService,
   errorView: error_template
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   def retrieveNameDobFromCache()(implicit request: Request[_], ec: ExecutionContext): Future[Individual] =
     cache.subscriptionDetails.map(
@@ -71,18 +72,23 @@ class SessionCacheService @Inject() (
     )
       cache.getNinoOrUtrDetails flatMap {
         case Some(ninoOrUtr) =>
-          cache.getPostcodeAndLine1Details flatMap {
-            case Some(postcodeViewModel) =>
-              matchOnId(ninoOrUtr, GroupId(groupId), postcodeViewModel).fold(
+          cache.registrationDetails flatMap {
+            case regDetails if regDetails.address.postalCode.isDefined =>
+              matchOnId(ninoOrUtr, GroupId(groupId), regDetails.address.postalCode.get).fold(
                 {
                   case MatchingServiceConnector.matchFailureResponse =>
+                    logger.warn("Matching service returned Match Failure Response, cannot change address")
                     Redirect(YouCannotChangeAddressController.page(service))
                   case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
                   case _                                                  => InternalServerError(errorView(service))
                 },
                 matchResult =>
-                  if (matchResult) result
-                  else Redirect(YouCannotChangeAddressController.page(service))
+                  if (matchResult)
+                    result
+                  else {
+                    logger.warn("Matching service returned False on match, cannot change address")
+                    Redirect(YouCannotChangeAddressController.page(service))
+                  }
               )
             case _ => Future.successful(Redirect(ApplicationController.startRegister(service)))
           }
@@ -91,7 +97,7 @@ class SessionCacheService @Inject() (
     else
       Future.successful(result)
 
-  private def matchOnId(ninoOrUtr: NinoOrUtr, groupId: GroupId, postcodeViewModel: PostcodeViewModel)(implicit
+  private def matchOnId(ninoOrUtr: NinoOrUtr, groupId: GroupId, postcode: String)(implicit
     hc: HeaderCarrier,
     request: Request[_]
   ): EitherT[Future, ResponseError, Boolean] = EitherT {
@@ -101,7 +107,7 @@ class SessionCacheService @Inject() (
           case Some(Nino(id)) =>
             matchingService.matchIndividualWithNino(id, ind, groupId).value.flatMap {
               case Right(matchingResponse) =>
-                val matchResult = matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)
+                val matchResult = matchIndDobAndPostCode(matchingResponse, ind, postcode)
                 Future.successful(Right(matchResult))
               case Left(errorResponse) => Future.successful(Left(errorResponse))
               case _                   => Future.successful(Left(ResponseError(500, "Unexpected response from Matching service")))
@@ -109,7 +115,7 @@ class SessionCacheService @Inject() (
           case Some(Utr(id)) =>
             matchingService.matchIndividualWithId(Utr(id), ind, groupId).value.flatMap {
               case Right(matchingResponse) =>
-                val matchResult = matchIndDobAndPostCode(matchingResponse, ind, postcodeViewModel)
+                val matchResult = matchIndDobAndPostCode(matchingResponse, ind, postcode)
                 Future.successful(Right(matchResult))
               case Left(errorResponse) => Future.successful(Left(errorResponse))
               case _                   => Future.successful(Left(ResponseError(500, "Unexpected response from Matching service")))
@@ -122,13 +128,13 @@ class SessionCacheService @Inject() (
   private def matchIndDobAndPostCode(
     matchingResponse: MatchingResponse,
     individual: Individual,
-    postcodeViewModel: PostcodeViewModel
+    postcode: String
   ): Boolean =
     matchingResponse.registerWithIDResponse.responseDetail.exists(
       detail =>
         detail.isAnIndividual &&
-          (detail.address.postalCode.exists(_.equalsIgnoreCase(postcodeViewModel.postcode))
-            || detail.address.postalCode.exists(_.replaceAll(" ", "").equalsIgnoreCase(postcodeViewModel.postcode)))
+          (detail.address.postalCode.exists(_.equalsIgnoreCase(postcode))
+            || detail.address.postalCode.exists(_.replaceAll(" ", "").equalsIgnoreCase(postcode)))
           && detail.individual.exists(_.dateOfBirth.contains(individual.dateOfBirth))
     )
 

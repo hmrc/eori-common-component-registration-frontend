@@ -16,48 +16,12 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.address
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Reads._
-import play.api.libs.json._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
-
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import scala.util.Try
-
-case class AddressLookup(addressLine: String, city: String, postcode: String, country: String) {
-
-  def dropDownView: String = List(addressLine, city, postcode).mkString(", ")
-
-  def toAddressViewModel: AddressViewModel = AddressViewModel(addressLine, city, Some(postcode), country)
-
-  def nonEmpty: Boolean = addressLine.nonEmpty
-}
-
-object AddressLookup {
-
-  def applyWithLines(lines: Seq[String], town: String, postcode: String, country: String): AddressLookup = {
-    val addressLine = lines.toList match {
-      case line1 :: line2 :: _ => line1 + ", " + line2
-      case line1 :: Nil        => line1
-      case Nil                 => ""
-
-    }
-    val countryCode = if (country == "UK") "GB" else country
-
-    AddressLookup(addressLine, town, postcode, countryCode)
-  }
-
-  implicit val addressReads: Reads[AddressLookup] = (
-    (JsPath \ "address" \ "lines").read[Seq[String]] and
-      (JsPath \ "address" \ "town").read[String] and
-      (JsPath \ "address" \ "postcode").read[String] and
-      (JsPath \ "address" \ "country" \ "code").read[String]
-  )(AddressLookup.applyWithLines _)
-
-}
 
 sealed trait AddressLookupResponse
 
-case class AddressLookupSuccess(addresses: Seq[AddressLookup]) extends AddressLookupResponse {
+case class AddressLookupSuccess(addresses: Seq[Address]) extends AddressLookupResponse {
 
   def sorted(): AddressLookupSuccess = {
     val sortedAddresses = addresses.sortWith { (a, b) =>
@@ -69,7 +33,7 @@ case class AddressLookupSuccess(addresses: Seq[AddressLookup]) extends AddressLo
         case (Some(nA), Some(nB)) :: _                => nA < nB
         case (Some(_), None) :: _                     => true
         case (None, Some(_)) :: _                     => false
-        case _                                        => a.addressLine.toLowerCase < b.addressLine.toLowerCase
+        case _                                        => a.addressLine1.toLowerCase < b.addressLine1.toLowerCase
       }
 
       sort(numbersInA.zipAll(numbersInB, None, None).toList)
@@ -78,8 +42,8 @@ case class AddressLookupSuccess(addresses: Seq[AddressLookup]) extends AddressLo
     AddressLookupSuccess(sortedAddresses)
   }
 
-  private def numbersIn(address: AddressLookup): Seq[Option[Int]] =
-    "([0-9]+)".r.findAllIn(address.addressLine.toLowerCase).map(n => Try(n.toInt).toOption).toSeq.reverse :+ None
+  private def numbersIn(address: Address): Seq[Option[Int]] =
+    "([0-9]+)".r.findAllIn(address.addressLine1.toLowerCase).map(n => Try(n.toInt).toOption).toSeq.reverse :+ None
 
 }
 

@@ -51,8 +51,8 @@ class DoYouHaveAUtrNumberControllerSpec
   private val mockMatchingRequestHolder      = mock[MatchingRequestHolder]
   private val mockMatchingResponse           = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val matchOrganisationUtrView       = instanceOf[match_organisation_utr]
-  private val mockRequestSessionData         = instanceOf[RequestSessionData]
+  private val matchOrganisationUtrView       = inject[match_organisation_utr]
+  private val mockRequestSessionData         = inject[RequestSessionData]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 

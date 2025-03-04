@@ -51,7 +51,7 @@ class ManualAddressControllerSpec
 
   private val mockAddressService = mock[AddressService]
   private val mockSessionCache   = mock[SessionCache]
-  private val view               = instanceOf[manual_address]
+  private val view               = inject[manual_address]
 
   private val controller =
     new ManualAddressController(mockAuthAction, view, mcc, mockSessionCache)

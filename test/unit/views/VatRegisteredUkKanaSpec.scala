@@ -31,7 +31,7 @@ class VatRegisteredUkKanaSpec extends ViewSpec {
   val form: Form[YesNo]          = vatRegisteredUkYesNoAnswerForm()
   val formWithError: Form[YesNo] = vatRegisteredUkYesNoAnswerForm().bind(Map("yes-no-answer" -> ""))
 
-  private val view                                      = instanceOf[vat_registered_uk_kana]
+  private val view                                      = inject[vat_registered_uk_kana]
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   lazy val doc: Document           = Jsoup.parse(contentAsString(view(form, atarService)))

@@ -63,9 +63,9 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
   private val mockOrgTypeLookup           = mock[OrgTypeLookup]
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
   private val mockSave4LaterService       = mock[Save4LaterService]
-  private val mockSessionCacheService     = instanceOf[SessionCacheService]
+  private val mockSessionCacheService     = inject[SessionCacheService]
 
-  private val businessDetailsRecoveryView = instanceOf[business_details_recovery]
+  private val businessDetailsRecoveryView = inject[business_details_recovery]
 
   private val organisationDetails = RegistrationDetailsOrganisation(
     customsId = Some(Eori("ZZZ1ZZZZ23ZZZZZZZ")),

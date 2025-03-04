@@ -27,7 +27,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukSummaryList
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.PostcodeForm
-@import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookup
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
@@ -45,9 +45,9 @@
         p: helpers.paragraph
 )
 
-@(addressResultsForm: Form[AddressResultsForm],
+@(addressResultsForm: Form[Address],
         addressLookupParams: PostcodeViewModel,
-        addresses: Seq[AddressLookup],
+        addresses: Seq[Address],
         service: Service)(implicit request: Request[_], messages: Messages)
 
 @manualAddressLink = @{

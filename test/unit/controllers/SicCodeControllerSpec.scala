@@ -63,8 +63,8 @@ class SicCodeControllerSpec
       .url
 
   private val mockRequestSessionData  = mock[RequestSessionData]
-  private val sicCodeView             = instanceOf[sic_code]
-  private val mockSessionCacheService = instanceOf[SessionCacheService]
+  private val sicCodeView             = inject[sic_code]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new SicCodeController(
     mockAuthAction,

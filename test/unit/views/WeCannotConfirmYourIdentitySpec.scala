@@ -28,7 +28,7 @@ class WeCannotConfirmYourIdentitySpec extends ViewSpec {
 
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  private val view = instanceOf[we_cannot_confirm_your_identity]
+  private val view = inject[we_cannot_confirm_your_identity]
 
   "The 'We cannot confirm your identity' Page" should {
 

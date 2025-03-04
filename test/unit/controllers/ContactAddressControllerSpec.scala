@@ -51,9 +51,9 @@ class ContactAddressControllerSpec
   private val mockSubscriptionFlow     = mock[SubscriptionFlowManager]
   private val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
   private val mockSubscriptionPage     = mock[SubscriptionPage]
-  private val mockSessionCacheService  = instanceOf[SessionCacheService]
+  private val mockSessionCacheService  = inject[SessionCacheService]
 
-  private val viewContactAddress = instanceOf[contact_address]
+  private val viewContactAddress = inject[contact_address]
 
   private val controller = new ContactAddressController(
     mockAuthAction,

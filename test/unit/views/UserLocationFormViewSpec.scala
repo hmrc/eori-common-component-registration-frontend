@@ -50,11 +50,11 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
   private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
   private val mockSave4LaterConnector        = mock[Save4LaterConnector]
-  private val userLocationView               = instanceOf[user_location]
+  private val userLocationView               = inject[user_location]
 
-  private val sub01OutcomeProcessing = instanceOf[sub01_outcome_processing]
+  private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 
-  private val errorTemplate = instanceOf[error_template]
+  private val errorTemplate = inject[error_template]
 
   private val controller = new UserLocationController(
     mockAuthAction,

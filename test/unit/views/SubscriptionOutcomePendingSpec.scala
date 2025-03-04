@@ -28,7 +28,7 @@ class SubscriptionOutcomePendingSpec extends ViewSpec {
 
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
 
-  private val view = instanceOf[subscription_outcome_pending]
+  private val view = inject[subscription_outcome_pending]
 
   val orgName       = "Test Organisation Name"
   val eoriNumber    = "EORI123"

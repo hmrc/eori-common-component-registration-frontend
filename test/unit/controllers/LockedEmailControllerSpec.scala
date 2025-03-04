@@ -32,8 +32,8 @@ class LockedEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach w
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
 
-  private val view                         = instanceOf[locked_email_view]
-  private val messagesControllerComponents = instanceOf[MessagesControllerComponents]
+  private val view                         = inject[locked_email_view]
+  private val messagesControllerComponents = inject[MessagesControllerComponents]
 
   private val controller = new LockedEmailController(messagesApi, messagesControllerComponents, mockAuthAction, view)
 

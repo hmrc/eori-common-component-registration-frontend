@@ -28,7 +28,7 @@ import util.ViewSpec
 
 class PostcodeViewSpec extends ViewSpec {
 
-  private val view = instanceOf[postcode]
+  private val view = inject[postcode]
 
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 

@@ -36,8 +36,8 @@ class YouAlreadyHaveEoriControllerSpec extends ControllerSpec with AuthActionMoc
   private val mockAuthAction    = authAction(mockAuthConnector)
   private val mockSessionCache  = mock[SessionCache]
 
-  private val youAlreadyHaveEoriView = instanceOf[you_already_have_eori]
-  private val standAloneHaveEoriView = instanceOf[standalone_already_have_eori]
+  private val youAlreadyHaveEoriView = inject[you_already_have_eori]
+  private val standAloneHaveEoriView = inject[standalone_already_have_eori]
 
   private val controller =
     new YouAlreadyHaveEoriController(

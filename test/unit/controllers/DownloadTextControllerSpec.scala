@@ -39,8 +39,8 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
   val mockAuthAction    = authAction(mockAuthConnector)
   val mockCache         = mock[SessionCache]
 
-  private val eoriNumberTextDownloadView   = instanceOf[eori_number_text_download]
-  private val subscriptionTextDownloadView = instanceOf[subscription_text_download]
+  private val eoriNumberTextDownloadView   = inject[eori_number_text_download]
+  private val subscriptionTextDownloadView = inject[subscription_text_download]
 
   override def beforeEach(): Unit = {
     val mockSubscribeOutcome = mock[Sub02Outcome]

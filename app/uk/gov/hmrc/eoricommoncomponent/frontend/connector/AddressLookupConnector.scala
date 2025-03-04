@@ -19,8 +19,8 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 import play.api.Logger
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{
-  AddressLookup,
   AddressLookupFailure,
   AddressLookupResponse,
   AddressLookupSuccess,
@@ -50,7 +50,7 @@ class AddressLookupConnector @Inject() (http: HttpClient, appConfig: AppConfig)(
 
     http.POST[AddressRequestBody, HttpResponse](url, body) map { response =>
       response.status match {
-        case OK => AddressLookupSuccess(response.json.as[Seq[AddressLookup]]).sorted()
+        case OK => AddressLookupSuccess(response.json.as[Seq[Address]](Address.lookupReads)).sorted()
         case _ =>
           logger.warn(s"Address lookup respond with status ${response.status} and body: ${response.body}")
           AddressLookupFailure

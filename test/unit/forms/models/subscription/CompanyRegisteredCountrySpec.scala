@@ -16,17 +16,18 @@
 
 package unit.forms.models.subscription
 
-import base.{Injector, UnitSpec}
+import base.UnitSpec
 import play.api.Application
 import play.api.data.FormError
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.stubMessages
+import play.api.test.Injecting
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.CompanyRegisteredCountry
 
-class CompanyRegisteredCountrySpec extends UnitSpec with Injector {
+class CompanyRegisteredCountrySpec extends UnitSpec with Injecting {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])

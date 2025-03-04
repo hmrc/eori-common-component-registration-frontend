@@ -37,7 +37,7 @@ class SignInWithDifferentDetailsControllerSpec
   protected override val submitInReviewModeUrl: String = ""
 
   private val mockCdsFrontendDataCache       = mock[SessionCache]
-  private val signInWithDifferentDetailsView = instanceOf[sign_in_with_different_details]
+  private val signInWithDifferentDetailsView = inject[sign_in_with_different_details]
 
   private val controller = new SignInWithDifferentDetailsController(mockAuthAction, signInWithDifferentDetailsView, mcc)
 

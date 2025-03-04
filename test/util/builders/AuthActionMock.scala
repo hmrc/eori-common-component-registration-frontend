@@ -16,14 +16,14 @@
 
 package util.builders
 
-import base.Injector
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.Helpers.stubBodyParser
-import play.api.{Configuration, Environment}
+import play.api.test.Injecting
+import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, CacheClearOnCompletionAction}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -31,9 +31,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-trait AuthActionMock extends AnyWordSpec with MockitoSugar with Injector {
+trait AuthActionMock extends AnyWordSpec with MockitoSugar with Injecting {
 
-  val configuration             = instanceOf[Configuration]
+  implicit val app: Application
+
+  val configuration             = inject[Configuration]
   val environment               = Environment.simple()
   val mockedSessionCacheForAuth = mock[SessionCache]
   when(mockedSessionCacheForAuth.emailOpt(any[Request[AnyContent]]))
@@ -50,8 +52,8 @@ trait AuthActionMock extends AnyWordSpec with MockitoSugar with Injector {
       authConnector,
       actionBuilder,
       mockedSessionCacheForAuth,
-      instanceOf[BodyParsers.Default],
-      instanceOf[CacheClearOnCompletionAction]
+      inject[BodyParsers.Default],
+      inject[CacheClearOnCompletionAction]
     )(global)
 
 }

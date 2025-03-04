@@ -35,7 +35,7 @@ class HowCanWeIdentifyYouSpec extends ViewSpec {
   val previousPageUrl                                   = "/"
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  private val view = instanceOf[how_can_we_identify_you]
+  private val view = inject[how_can_we_identify_you]
 
   "How Can We Identify You Page" should {
 

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging
 
 import play.api.Logging
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postCodeMandatoryCountryCodes, postcodeRegex}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
@@ -55,9 +56,25 @@ case class Address(
       if (isPostcodeRequired) hasValidPostcode else true
     else false
 
+  def lookupFieldsDefined: Boolean =
+    addressLine1.nonEmpty && addressLine4.exists(_.nonEmpty) && postalCode.exists(_.nonEmpty) && countryCode.nonEmpty
+
+  def dropDownView: String =
+    List(Some(addressLine1), addressLine2, addressLine3, addressLine4, postalCode).flatten.mkString(", ")
+
 }
 
 object Address {
+
+  val lookupReads: Reads[Seq[Address]] = Reads.seq(
+    (
+      (JsPath \ "address" \ "lines").read[Seq[String]] and
+        (JsPath \ "address" \ "town").read[String] and
+        (JsPath \ "address" \ "postcode").read[String] and
+        (JsPath \ "address" \ "country" \ "code").read[String]
+    )(applyFromLookup _)
+  )
+
   implicit val jsonFormat: OFormat[Address] = Json.format[Address]
 
   def apply(
@@ -79,6 +96,15 @@ object Address {
 
   def apply(address: AddressViewModel): Address =
     new Address(address.street, None, Some(address.city), None, address.postcode, address.countryCode) {}
+
+  private def applyFromLookup(lines: Seq[String], town: String, postcode: String, countryCode: String): Address = {
+    val code = if (countryCode == "UK") "GB" else countryCode
+    lines match {
+      case Seq(first)                => Address(first, None, None, Some(town), Some(postcode), code)
+      case Seq(first, second)        => Address(first, Some(second), None, Some(town), Some(postcode), code)
+      case Seq(first, second, third) => Address(first, Some(second), Some(third), Some(town), Some(postcode), code)
+    }
+  }
 
 }
 

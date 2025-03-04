@@ -50,12 +50,12 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
   private val mockFrontendDataCache  = mock[SessionCache]
   private val mockOrgTypeLookup      = mock[OrgTypeLookup]
   private val mockRequestSessionData = mock[RequestSessionData]
-  private val errorView              = instanceOf[error_template]
+  private val errorView              = inject[error_template]
 
   private val sessionCacheService =
     new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
 
-  private val howCanWeIdentifyYouView = instanceOf[how_can_we_identify_you_utr]
+  private val howCanWeIdentifyYouView = inject[how_can_we_identify_you_utr]
 
   private val controller = new GYEHowCanWeIdentifyYouUtrController(
     mockAuthAction,

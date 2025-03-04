@@ -34,7 +34,5 @@ trait Injector {
     */
   SharedMetricRegistries.clear()
 
-  private val injector = app.injector
-
-  def instanceOf[T <: AnyRef](implicit classTag: ClassTag[T]): T = injector.instanceOf[T]
+  def instanceOf[T <: AnyRef](implicit classTag: ClassTag[T]): T = app.injector.instanceOf[T]
 }

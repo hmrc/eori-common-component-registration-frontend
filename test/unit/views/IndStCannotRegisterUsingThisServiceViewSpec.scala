@@ -26,7 +26,7 @@ import util.ViewSpec
 
 class IndStCannotRegisterUsingThisServiceViewSpec extends ViewSpec {
 
-  private val view = instanceOf[ind_st_cannot_register_using_this_service]
+  private val view = inject[ind_st_cannot_register_using_this_service]
 
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 

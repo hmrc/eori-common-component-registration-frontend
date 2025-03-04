@@ -16,7 +16,6 @@
 
 package unit.services.email
 
-import base.Injector
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.ArgumentMatchers.any
@@ -25,8 +24,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
-import play.api.test.FakeRequest
 import play.api.test.Helpers.{await, contentAsString}
+import play.api.test.{FakeRequest, Injecting}
 import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailForm.confirmEmailYesNoAnswerForm
@@ -41,18 +40,18 @@ import util.ViewSpec
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injector {
+class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injecting {
 
   implicit val hc: HeaderCarrier       = HeaderCarrier()
   implicit val rq: Request[AnyContent] = withFakeCSRF(FakeRequest())
 
   private val mockSave4LaterService        = mock[Save4LaterService]
   private val mockEmailJourneyService      = mock[EmailJourneyService]
-  private val messagesControllerComponents = instanceOf[MessagesControllerComponents]
+  private val messagesControllerComponents = inject[MessagesControllerComponents]
 
-  private val checkYourEmailView = instanceOf[check_your_email]
-  private val emailConfirmedView = instanceOf[email_confirmed]
-  private val verifyYourEmail    = instanceOf[verify_your_email]
+  private val checkYourEmailView = inject[check_your_email]
+  private val emailConfirmedView = inject[email_confirmed]
+  private val verifyYourEmail    = inject[verify_your_email]
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 

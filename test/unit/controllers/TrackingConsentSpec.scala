@@ -39,8 +39,8 @@ class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActi
   private val mockAuthAction                       = authAction(mockAuthConnector)
   private val mockSubscriptionBusinessService      = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsHolderService = mock[SubscriptionDetailsService]
-  private val howCanWeIdentifyYouView              = instanceOf[how_can_we_identify_you]
-  private val mockRequestSessionData               = instanceOf[RequestSessionData]
+  private val howCanWeIdentifyYouView              = inject[how_can_we_identify_you]
+  private val mockRequestSessionData               = inject[RequestSessionData]
 
   private val controller = new HowCanWeIdentifyYouController(
     mockAuthAction,

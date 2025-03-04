@@ -35,7 +35,7 @@ class ApplicationControllerWithAllowlistVerificationSpec extends ControllerSpec 
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
   private val mockSessionCache  = mock[SessionCache]
-  private val startRegisterView = instanceOf[start]
+  private val startRegisterView = inject[start]
 
   val controller =
     new ApplicationController(mockAuthAction, mcc, startRegisterView, mockSessionCache, appConfig)

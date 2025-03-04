@@ -37,7 +37,7 @@ class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
   private val mockAuthAction    = authAction(mockAuthConnector)
   private val mockSessionCache  = mock[SessionCache]
 
-  private val displaySignOutView = instanceOf[display_sign_out]
+  private val displaySignOutView = inject[display_sign_out]
 
   private val controller =
     new SecuritySignOutController(mockAuthAction, mockSessionCache, displaySignOutView, mcc)

@@ -31,7 +31,7 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
   val orgName    = "Test Organisation Name"
   val issuedDate = "01 Jan 2019"
 
-  private val view = instanceOf[standalone_subscription_outcome]
+  private val view = inject[standalone_subscription_outcome]
 
   private val doc: Document = Jsoup.parse(contentAsString(view(eori, issuedDate, atarService)))
 
