@@ -40,10 +40,10 @@ class VatDetailsViewSpec extends ViewSpec {
     def isRestOfTheWorld: Boolean = false
   }
 
-  private val form: Form[VatDetails]                            = new VatDetailsForm(mockRequestSessionData).vatDetailsForm
-  private val view                                              = instanceOf[vat_details]
-  private val vatNumberLabel                                    = "label[for=vat-number]"
-  private val postcodeLabel                                     = "label[for=postcode]"
+  private val form: Form[VatDetails] = new VatDetailsForm(mockRequestSessionData).vatDetailsForm
+  private val view                   = instanceOf[vat_details]
+  private val vatNumberLabel         = "label[for=vat-number]"
+  private val postcodeLabel          = "label[for=postcode]"
 
   "VAT Details" should {
     "have the correct title for UK" in {
@@ -92,12 +92,14 @@ class VatDetailsViewSpec extends ViewSpec {
   }
 
   private lazy val doc: Document = {
-    val result = view(form, isInReviewMode = false, UserLocation.Uk, isIndividualOrSoleTrader = false, atarService)
+    val result =
+      view(form, isInReviewMode = false, UserLocation.Uk, isIndividualOrSoleTrader = false, false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   private lazy val iomDoc: Document = {
-    val result = view(form, isInReviewMode = false, UserLocation.Iom, isIndividualOrSoleTrader = false, atarService)
+    val result =
+      view(form, isInReviewMode = false, UserLocation.Iom, isIndividualOrSoleTrader = false, false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
