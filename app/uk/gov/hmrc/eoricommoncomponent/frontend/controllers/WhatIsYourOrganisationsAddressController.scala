@@ -28,6 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
+  CharityPublicBodySubscriptionFlow,
   CharityPublicBodySubscriptionNoUtrFlow,
   CompanyLlpFlowIom,
   IndividualSoleTraderFlowIom,
@@ -107,9 +108,16 @@ class WhatIsYourOrganisationsAddressController @Inject() (
             Address(addr.lineOne, addr.lineTwo, Some(addr.townCity), None, Some(addr.postcode), addr.country)
           ).flatMap { _ =>
             subscriptionDetailsService.cacheAddressDetails(filledForm.value.head)
-              .flatMap(
-                _ => subscriptionFlowManager.startSubscriptionFlowWithPage(None, service, redirectFlowLocation(orgType))
-              )
+              .flatMap { _ =>
+                subscriptionDetailsService.cachedUtrMatch.flatMap { optUtrMatchModel =>
+                  val hasUtr = optUtrMatchModel.exists(_.haveUtr.contains(true))
+                  subscriptionFlowManager.startSubscriptionFlowWithPage(
+                    None,
+                    service,
+                    redirectFlowLocation(orgType, hasUtr)
+                  )
+                }
+              }
               .map {
                 case (flowPageOne, session) => Redirect(flowPageOne.url(service)).withSession(session)
               }
@@ -120,16 +128,21 @@ class WhatIsYourOrganisationsAddressController @Inject() (
     }
   }
 
-  private def redirectFlowLocation(
-    cdsOrganisationType: CdsOrganisationType
-  )(implicit request: Request[AnyContent]): SubscriptionFlow = {
+  private def redirectFlowLocation(cdsOrganisationType: CdsOrganisationType, hasUtr: Boolean)(implicit
+    request: Request[AnyContent]
+  ): SubscriptionFlow = {
     (requestSessionData.selectedUserLocation, cdsOrganisationType) match {
       case (Some(UserLocation.Iom), Partnership)                 => PartnershipSubscriptionFlowIom
       case (Some(UserLocation.Iom), Individual)                  => IndividualSoleTraderFlowIom
       case (Some(UserLocation.Iom), SoleTrader)                  => IndividualSoleTraderFlowIom
       case (Some(UserLocation.Iom), Company)                     => CompanyLlpFlowIom
       case (Some(UserLocation.Iom), LimitedLiabilityPartnership) => CompanyLlpFlowIom
-      case _                                                     => CharityPublicBodySubscriptionNoUtrFlow
+      case _ =>
+        if (hasUtr) {
+          CharityPublicBodySubscriptionFlow
+        } else {
+          CharityPublicBodySubscriptionNoUtrFlow
+        }
     }
   }
 

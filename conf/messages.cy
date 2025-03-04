@@ -986,7 +986,6 @@ cds.subscription.outcomes.success.extra.information.next.ss =<li>gwneud datgania
 cds.subscription.outcomes.success.extra.information.next.gbss =<li>gwneud datganiad cryno wrth gyrraedd</li>
 cds.subscription.outcomes.success.extra.information.next.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
 cds.subscription.outcomes.success.extra.information.next.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
-cds.subscription.outcomes.success.extra.information.next.ma = todo
 cds.subscription.outcomes.success.extra.information.next.tgp = <li>bwrw golwg dros restr o symudiadau nwyddau blaenorol os ydych eisoes yn fasnachwr UKIMS sydd wedi symud nwyddau i Ogledd Iwerddon o’r blaen</li><li>ychwanegu cofnodion newydd at eich Proffil Nwyddau Masnachwyr (TGP)</li><li>gofyn i CThEF am gyngor ynghylch cod nwyddau a disgrifiad o’r nwyddau</li><li>gwirio’r categori ar gyfer eich nwyddau, a ph’un a ydynt yn gymwys ar gyfer Gwybodaeth Symud Marchnad Fewnol (IMMI)</li><li>tanysgrifio i ragor o wasanaethau tollau</li>
 
 cds.subscription.outcomes.success.extra.information.bullet1 = tanysgrifio i ragor o wasanaethau tollau
@@ -1306,7 +1305,6 @@ cds.banner.subscription.ndrc=Tanysgrifio i Wasanaethau Masnachwyr Tollau
 cds.banner.subscription.gbss=Tanysgrifio i'''r Gwasanaeth Diogelwch (yn y DU)
 cds.banner.subscription.ctc=Tanysgrifio i'''r System Gludo Gyfrifiadurol Newydd (NCTS)
 cds.banner.subscription.cds=Tanysgrifio i'''r Gwasanaeth Datganiadau Tollau
-cds.banner.subscription.ma= todo
 cds.banner.subscription.tgp=Tanysgrifio i Broffil Nwyddau Masnachwyr
 
 ecc.subscription.enter-eori-number.heading = Beth yw’ch rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) GB?
@@ -1709,7 +1707,6 @@ ecc.start-page.title.ctc = Tanysgrifiwch i’r System Gludo Gyfrifiadurol Newydd
 ecc.start-page.title.cds = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.eori-only = Tanysgrifiwch i’r Gwasanaeth Datganiadau Tollau a chael rhif EORI sy’n dechrau gyda GB
 ecc.start-page.title.esc = Tanysgrifiwch ac ewch ati i gael rhif EORI sy’n dechrau gyda GB
-ecc.start-page.title.ma = todo
 ecc.start-page.title.tgp = Cael tanysgrifiad i Broffil Nwyddau Masnachwyr a chael rhif EORI sy’n dechrau gyda GB
 
 ecc.start-page.para1 = Os byddwn yn cymeradwyo’ch cais, byddwn yn rhoi’r canlynol i chi:
@@ -1728,7 +1725,6 @@ ecc.start-page.para1.bullet2.ctc = tanysgrifiad i’r System Gludo Gyfrifiadurol
 ecc.start-page.para1.bullet2.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.esc = rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor
-ecc.start-page.para1.bullet2.ma = todo
 ecc.start-page.para1.bullet2.tgp = tanysgrifiad i Broffil Nwyddau Masnachwyr
 
 ecc.start-page.when.title = Yr hyn y bydd ei angen arnoch
@@ -1815,7 +1811,6 @@ cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>gwneud da
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>cyflwyno datganiadau ‘Cludo yn yr Undeb’ trwy ddefnyddio’r System Gludo Gyfrifiadurol Newydd (NCTS)</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>defnyddio’r Gwasanaeth Datganiadau Tollau</li>
 cds.subscription.outcomes.success.extra.information.next.new.esc =<li>rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor</li>
-cds.subscription.outcomes.success.extra.information.next.new.ma = todo
 cds.subscription.outcomes.success.extra.information.next.new.tgp = <li>bwrw golwg dros restr o symudiadau nwyddau blaenorol os ydych eisoes yn fasnachwr UKIMS sydd wedi symud nwyddau i Ogledd Iwerddon o’r blaen</li><li>ychwanegu cofnodion newydd at eich Proffil Nwyddau Masnachwyr (TGP)</li><li>gofyn i CThEF am gyngor ynghylch cod nwyddau a disgrifiad o’r nwyddau</li><li>gwirio’r categori ar gyfer eich nwyddau, a ph’un a ydynt yn gymwys ar gyfer Gwybodaeth Symud Marchnad Fewnol (IMMI)</li>
 
 ecc.eor-vat-return-error.incorrect.input =  Nodwch werth hyd at 2 le degol. Er enghraifft, £100.00
@@ -1839,7 +1834,6 @@ ecc.start-page.para1.bullet2.new.ctc = tanysgrifiad i’r System Gludo Gyfrifiad
 ecc.start-page.para1.bullet2.new.cds = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.new.eori-only = tanysgrifiad i’r Gwasanaeth Datganiadau Tollau
 ecc.start-page.para1.bullet2.new.esc = tanysgrifiad ar gyfer Rhoi gwybod am a rheoli’ch lwfans ar gyfer hawliadau Ildio Toll Dramor
-ecc.start-page.para1.bullet2.new.ma = todo
 ecc.start-page.para1.bullet2.new.tgp = tanysgrifiad i Broffil Nwyddau Masnachwyr
 
 #Locked email screen
@@ -1853,3 +1847,65 @@ cds.matching.ind-st-cannot-register-using-service.para1=Nid yw?r gwasanaeth hwn 
 cds.matching.ind-st-cannot-register-using-service.para2=Gallwch:
 cds.matching.ind-st-cannot-register-using-service.link.text1=gwneud cais am rif EORI os ydych wedi?ch cofrestru ar gyfer TAW
 cds.matching.ind-st-cannot-register-using-service.link.text2=gwneud cais am rif EORI os nad ydych wedi?ch cofrestru ar gyfer TAW
+
+#Embassy Name
+cds.matching.embassy-address.title =Beth yw cyfeiriad y llysgenhadaeth?
+cds.matching.embassy-name.error.name= Nodwch enw’r llysgenhadaeth
+cds.matching.embassy.name.title=Beth yw enw’r llysgenhadaeth?
+cds.matching.organisation-type.radio.embassy.label = Llysgenhadaeth
+cds.matching.embassy-address.header = Beth yw cyfeiriad y llysgenhadaeth?
+cds.matching.embassy.name.heading=Beth yw enw’r llysgenhadaeth?
+cds.matching-error.business-details.embassy-name.invalid-char=Ni all enw'r llysgenhadaeth gynnwys ''<'' neu ''>''
+
+#Embassy Address
+cds.matching.embassy-address.line-1=Cyfeiriad – llinell 1
+cds.matching.embassy-address.line-2=Cyfeiriad – llinell 2 (dewisol)
+cds.matching.embassy-address.town-city= Tref neu ddinas
+cds.matching.embassy-address.postcode=Cod post
+cds.matching.embassy-address.line-1.error.empty=Nodwch linell gyntaf eich cyfeiriad
+cds.matching.embassy-address.line.error.invalid-chars=Ni all y cyfeiriad gynnwys ''<'' na ''>''
+cds.matching.embassy-address.town-city.error.empty=Nodwch eich tref neu ddinas
+cds.matching.embassy-address.town-city.error.too-long=Mae’n rhaid i’r dref neu’r ddinas fod yn 35 o gymeriadau neu lai
+
+#Public Bodies
+cds.matching.row-charity-public-body.utr.title-and-heading = A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) a gyhoeddwyd yn y DU?
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.heading = Eich Cyfeirnod Unigryw y Trethdalwr (UTR)
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.message=Bydd i’w weld yn eich Cyfrif Treth Busnes, yn ap CThEF, neu ar Ffurflenni Treth a dogfennau eraill oddi wrth CThEF. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+subscription-journey.how-confirm-identity.utr.row.charity-public-body.subheading=Nodwch UTR eich sefydliad
+cds.matching.charity-public-body.utr.hint=Gall fod yn 10 neu’n 13 digid o hyd.
+
+cds.subscription.sic.description.charity-public-body-not-for-profit.para2=Os ydych wedi eich cofrestru gyda Thŷ’r Cwmnïau, efallai bod cod SIC gennych eisoes. Mae i’w weld ar eich proffil busnes ar <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer"> wefan Dŷ’r Cwmnïau (yn agor tab newydd). </a>
+cds.subscription.sic.description.charity-public-body-not-for-profit.para3=Os nad oes gennych un, gallwch <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer"> ddewis cod SIC o’r rhestr ar wefan Dŷ’r Cwmnïau (yn agor tab newydd).</a> Dewiswch yr un sy’n disgrifio’ch busnes orau”
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4=Gallwch wneud y canlynol:
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet1=chwilio yn Nhŷ’r Cwmnïau ar gyfer eich rhif cofrestru’r cwmni (yn agor tab newydd)
+cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet2=gwirio rhestr lawn o godau SIC (yn agor tab newydd)
+cds.subscription.uk.vat-details.heading=Eich manylion TAW yn y DU
+cds.subscription.vat-details.uk.postcode= Beth yw’r post cod ar gyfer y lleoliad lle’r y mae’ch sefydliad wedi cofrestru ar gyfer TAW?
+cds.charity-public-body-name.label= Enw’r sefydliad
+
+cds.your-organisation-address.header=Beth yw cyfeiriad y sefydliad??
+
+cds.your-organisation-address.line-1=Cyfeiriad – llinell 1
+cds.your-organisation-address.line-2=Cyfeiriad – llinell 2 (dewisol)
+cds.your-organisation-address.town-city= Tref neu ddinas
+cds.your-organisation-address.postcode=Cod post
+
+cds.subscription.vat-registered.title-and-heading=A yw’ch sefydliad wedi’i gofrestru ar gyfer TAW?
+cds.subscription.vat-registered.individual.title-and-heading=A ydych wedi’ch cofrestru ar gyfer TAW?
+cds.subscription.vat-details.individual-sole-trader.postcode=Beth yw’r post cod ar gyfer y lleoliad lle’r y mae’ch sefydliad wedi cofrestru ar gyfer TAW?
+cds.your-individual-sole-trader-address.header=Beth yw’ch cyfeiriad?
+
+cds.subscription.sic.details.individual= Nid wyf yn gwybod fy nghod SIC
+cds.subscription.vat-registered.partnership.title-and-heading= Beth yw enw cofrestredig eich partneriaeth?
+cds.your-partnership-address.header=Beth yw cyfeiriad cofrestredig eich partneriaeth?
+cds.your-partnership-address.title=Beth yw cyfeiriad cofrestredig eich partneriaeth?
+cds.date-established.partnership.label= Dyddiad sefydlu partneriaeth
+cds.matching.row-charity-public-body.utr.iom.title-and-heading= A oes gan eich sefydliad Gyfeirnod Unigryw y Trethdalwr (UTR) a gyhoeddwyd yn y DU?
+cds.embassy-name.label=Enw’r llysgenhadaeth
+cds.form.embassy-address=Cyfeiriad y llysgenhadaeth
+cds.form.check-answers-embassy-details=Manylion y llysgenhadaeth
+cds.organisation.utr.label=UTR y sefydliad
+cds.form.charity-public-body-address=Cyfeiriad y sefydliad	
+cds.your-individual-sole-trader-address.title =Beth yw’ch cyfeiriad cyswllt?
+cds.subscription.sic.description.para2.individual=Beth yw’ch cod SIC?
+cds.subscription.sic.description.para2.sole-trader=Beth yw’ch cod SIC?

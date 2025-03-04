@@ -25,7 +25,10 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 
-case class VatDetails(postcode: String, number: String)
+case class VatDetails(postcode: String, number: String) {
+
+  def isGiant: Boolean = number.startsWith("654") || number.startsWith("8888")
+}
 
 object VatDetails {
   implicit val format: Format[VatDetails] = Json.format[VatDetails]

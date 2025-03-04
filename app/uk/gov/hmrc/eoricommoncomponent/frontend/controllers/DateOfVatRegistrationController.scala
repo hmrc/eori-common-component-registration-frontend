@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.CharityPublicBodyNotForProfit
@@ -39,7 +40,8 @@ class DateOfVatRegistrationController @Inject() (
   dateOfVatRegistrationView: date_of_vat_registration,
   form: VatRegistrationDateFormProvider,
   sessionCacheService: SessionCacheService,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -72,7 +74,7 @@ class DateOfVatRegistrationController @Inject() (
         formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
         formData =>
           subscriptionDetailsService.cachedOrganisationType.flatMap { optOrgType =>
-            optOrgType.filter(_ == CharityPublicBodyNotForProfit) match {
+            optOrgType.filter(_ == CharityPublicBodyNotForProfit && appConfig.allowNoIdJourney) match {
               case Some(_) => saveDateOfRegAndRedirect(formData.dateOfRegistration, service)
               case None    => lookupDateOfVatRegistration(formData, service)
             }

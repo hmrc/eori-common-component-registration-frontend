@@ -56,12 +56,8 @@ class AppConfig @Inject() (
   def companiesHouseRegister()(implicit messages: Messages): String =
     config.get[String](s"external-url.company-house-register-$languageKey")
 
-  val traderSupportService: String                       = config.get[String]("external-url.trader-support-service")
-  val getCompanyInformation: String                      = config.get[String]("external-url.get-company-information")
-  val contactEORITeam: String                            = config.get[String]("external-url.contact-eori-team")
   val checkEORINumber: String                            = config.get[String]("external-url.check-eori-number")
   val hmrcChangeDetails: String                          = config.get[String]("external-url.hmrc-change-details")
-  val vatUKDetails: String                               = config.get[String]("external-url.vat-uk-details")
   val getAccessToCDS: String                             = config.get[String]("external-url.get-access-to-cds")
   val cdsServices: String                                = config.get[String]("external-url.cds-services")
   val addAccessToTeamMember: String                      = config.get[String]("external-url.adding-access-to-team-member")
@@ -79,11 +75,6 @@ class AppConfig @Inject() (
 
   def reportAProblemNonJSUrlRegister(service: Service): String =
     s"$contactBaseUrl/contact/problem_reports_nonjs?service=$serviceIdentifierRegister-${service.code}"
-
-  private val betafeedbackBaseUrl = s"$contactBaseUrl/contact/beta-feedback"
-
-  def betaFeedBackRegister(service: Service) =
-    s"$betafeedbackBaseUrl?service=$serviceIdentifierRegister-${service.code}"
 
   //email verification service
   val emailVerificationEnabled: Boolean          = config.get[Boolean]("microservice.services.email-verification.enabled")
@@ -144,9 +135,9 @@ class AppConfig @Inject() (
 
   val addressLookup: String = addressLookupBaseUrl + addressLookupContext
 
-  val taxudBaseUrl: String = servicesConfig.baseUrl("taxud")
-
   val startPageUtrLink = "https://www.gov.uk/find-utr-number"
   val startPageVatLink = "https://www.gov.uk/send-vat-return"
   val startPageSicLink = "https://resources.companieshouse.gov.uk/sic/"
+
+  val allowNoIdJourney: Boolean = config.get[Boolean]("microservice.services.features.allow-no-id-journey")
 }

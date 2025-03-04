@@ -238,4 +238,6 @@ GET         /customs-registration-services/:service/register/you-cannot-change-a
 
 GET         /customs-registration-services/:service/register/address-invalid                             @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressInvalidController.page(service: Service)
 
+GET         /customs-registration-services/:service/register/review-in-progress                          @uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ApplicationSubmissionController.processing(service: Service)
+
 ->          /                                                                                            health.Routes

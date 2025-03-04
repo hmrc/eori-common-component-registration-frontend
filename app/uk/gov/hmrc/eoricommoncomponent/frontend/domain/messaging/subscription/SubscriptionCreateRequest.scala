@@ -25,7 +25,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Su
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{RequestCommon, RequestParameter}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.DataUnavailableException
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.CdsToEtmpOrganisationType
 
 import java.time.{Clock, LocalDate, LocalDateTime, ZoneId}
@@ -45,23 +44,7 @@ object SubscriptionCreateRequest {
     cdsOrgType: Option[CdsOrganisationType],
     service: Option[Service]
   ): SubscriptionRequest = {
-    val sicCode = sub.sicCode.getOrElse {
-      val error = "SicCode/Principal Economic Activity must be present for an organisation subscription"
-      // $COVERAGE-OFF$Loggers
-      logger.error(error)
-      // $COVERAGE-ON
-      throw DataUnavailableException(error)
-    }
-
-    val doe = sub.dateEstablished.getOrElse {
-      val error = "Date Established must be present for an organisation subscription"
-      // $COVERAGE-OFF$Loggers
-      logger.error(error)
-      // $COVERAGE-ON
-      throw DataUnavailableException(error)
-    }
-
-    toSubscriptionRequest(reg, sub.copy(sicCode = Some(sicCode)), cdsOrgType, doe, service)
+    toSubscriptionRequest(reg, sub, cdsOrgType, sub.dateEstablished, service)
   }
 
   def fromIndividual(
@@ -69,13 +52,13 @@ object SubscriptionCreateRequest {
     sub: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
     service: Option[Service]
-  ): SubscriptionRequest = toSubscriptionRequest(reg, sub, cdsOrgType, reg.dateOfBirth, service)
+  ): SubscriptionRequest = toSubscriptionRequest(reg, sub, cdsOrgType, Some(reg.dateOfBirth), service)
 
   private def toSubscriptionRequest(
     reg: RegistrationDetails,
     sub: SubscriptionDetails,
     cdsOrgType: Option[CdsOrganisationType],
-    dateEstablished: LocalDate,
+    dateEstablished: Option[LocalDate],
     service: Option[Service]
   ): SubscriptionRequest = {
     val org = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
@@ -97,7 +80,7 @@ object SubscriptionCreateRequest {
           consentToDisclosureOfPersonalData = sub.personalDataDisclosureConsent.map(bool => if (bool) "1" else "0"),
           shortName =
             None, //sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
-          dateOfEstablishment = Some(dateEstablished),
+          dateOfEstablishment = dateEstablished,
           typeOfPerson = org.map(_.typeOfPerson),
           principalEconomicActivity = sub.sicCode.map(_.take(principalEconomicActivityLength)),
           serviceName = service.map(_.enrolmentKey)

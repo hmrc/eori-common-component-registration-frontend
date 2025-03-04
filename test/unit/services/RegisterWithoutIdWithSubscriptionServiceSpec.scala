@@ -25,6 +25,7 @@ import play.api.i18n
 import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, Request, Results}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{ErrorResponse, SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CompanyId, Embassy, IndividualId}
@@ -61,6 +62,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
   private val mockTaxudConnector            = mock[TaxUDConnector]
   private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
   private val mockSave4LaterService         = mock[Save4LaterService]
+  private val mockAppConfig                 = mock[AppConfig]
 
   private implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
   private implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
@@ -101,7 +103,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     mockSub02Controller,
     mockTaxudConnector,
     mockHandleSubscriptionService,
-    mockSave4LaterService
+    mockSave4LaterService,
+    mockAppConfig
   )(global)
 
   override protected def beforeEach(): Unit = {
@@ -210,8 +213,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       )
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
+      mockSessionCacheSubscriptionDetails()
       when(mockRegistrationDetails.orgType).thenReturn(Some(IndividualId))
-
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSub02Controller, times(1)).subscribe(any())
@@ -232,6 +235,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       when(mockRegistrationDetails.orgType).thenReturn(Some(CompanyId))
       mockRegisterWithoutIdOKResponse()
       mockSub02ControllerCall()
+      mockSessionCacheSubscriptionDetails()
 
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
@@ -261,7 +265,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
         any()
       )
       verify(mockSessionCache, times(2)).registrationDetails(any())
-      verify(mockSessionCache).subscriptionDetails(any())
+      verify(mockSessionCache, times(2)).subscriptionDetails(any())
     }
 
     "when CorporateBody and ROW, call Register without id Successfully, then call SUB02" in {
@@ -287,7 +291,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       )(any(), any())
       verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
       verify(mockSessionCache, times(2)).registrationDetails(any())
-      verify(mockSessionCache).subscriptionDetails(any())
+      verify(mockSessionCache, times(2)).subscriptionDetails(any())
     }
 
     "when CorporateBody and ROW, call Register without id which fails, do not call SUB02" in {
@@ -324,6 +328,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     }
 
     "when Embassy and txe13 call is successful" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.Uk))
 
@@ -366,6 +371,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
 
       when(mockSessionCache.saveRegistrationDetails(any())(any())).thenReturn(Future.successful(true))
 
+      when(mockSessionCache.saveTxe13ProcessedDate(any())(any())).thenReturn(Future.successful(true))
+
       when(msg.lang).thenReturn(i18n.Lang("gb"))
 
       when(mockLoggedInUser.groupId).thenReturn(Some("123456"))
@@ -392,6 +399,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     }
 
     "when Embassy" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.Uk))
 
@@ -435,6 +443,8 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSessionCache, times(0)).saveRegistrationDetails(any())(any())
+
+      verify(mockSessionCache, times(0)).saveTxe13ProcessedDate(any())(any())
 
       verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
         any(),

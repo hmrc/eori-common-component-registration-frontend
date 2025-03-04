@@ -456,6 +456,23 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
     }
 
+    "store and fetch txe13ProcessedDate correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val txe13ProcessedDate = "2025-02-14T12:37:03"
+
+      await(sessionCache.saveTxe13ProcessedDate(txe13ProcessedDate)(request))
+
+      val cacheItem = await(sessionCache.cacheRepo.findById(request)).getOrElse(
+        throw new IllegalStateException("Cache returned None")
+      )
+      val expectedJson = toJson(CachedData(txe13ProcessedDate = Some(txe13ProcessedDate)))
+
+      cacheItem.data mustBe expectedJson
+      await(sessionCache.txe13ProcessingDate(request)) mustBe txe13ProcessedDate
+    }
+
   }
 
   private def setupSession: SessionId = {

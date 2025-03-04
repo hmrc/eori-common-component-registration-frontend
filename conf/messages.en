@@ -1020,9 +1020,9 @@ cds.subscription.sic.partnership.description=A SIC code is a 5 digit number that
 cds.subscription.sic.individual.description=A SIC code is a 5 digit number that helps HMRC identify what your business does. In some countries it is also known as a trade number. If you do not have one, you can search for a relevant SIC code on <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">Companies House (opens in new tab).</a>
 cds.subscription.sic.hint.uk=It is 5 digits, like 58110 or 81221.
 cds.subscription.sic.hint.row=This will be 5 numbers.
-cds.subscription.sic.description.para1=You choose a SIC code when you register an organisation or business with Companies House.
-cds.subscription.sic.description.charity-public-body-not-for-profit.para2=SIC codes describe business activities. For example, 58110 is the code for book publishing.
-cds.subscription.sic.description.charity-public-body-not-for-profit.para3=You can find your SIC code on your Companies House profile.
+cds.subscription.sic.description.para1=SIC codes describe business activities. For example, 58110 is the code for book publishing.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para2=If you are registered with Companies House, you may already have a SIC code. You can find it on your business profile on <a href="https://www.gov.uk/get-information-about-a-company" class="govuk-link" target="_blank" rel="noopener noreferrer">Find your SIC code (opens in new tab)</a>.
+cds.subscription.sic.description.charity-public-body-not-for-profit.para3=If you do not have one, you can <a href="https://resources.companieshouse.gov.uk/sic/" class="govuk-link" target="_blank" rel="noopener noreferrer">choose a SIC code from the list on Companies House (opens in new tab)</a>. Select one that best describes your business.</br>
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4=You can:
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet1=search Companies House for company information (opens in new tab)
 cds.subscription.sic.description.charity-public-body-not-for-profit.para4.bullet2=check a full list of SIC codes (opens in new tab)
@@ -1042,6 +1042,7 @@ cds.subscription.sic.details.sole-trader = I do not know my SIC code
 cds.subscription.sic.details.partnership = I do not know the partnership’s SIC code
 cds.subscription.sic.details.limited-liability-partnership = I do not know the partnership’s SIC code
 cds.subscription.sic.details.charity-public-body-not-for-profit = I do not know the organisation'''s SIC code
+cds.subscription.sic.details.individual = I do not know the partnership’s SIC code
 
 
 cds.subscription.sic.page.help.heading=If you are UK VAT registered
@@ -1100,7 +1101,6 @@ cds.subscription.outcomes.success.extra.information.next.ss =<li>make entry summ
 cds.subscription.outcomes.success.extra.information.next.gbss =<li>make entry summary declarations</li>
 cds.subscription.outcomes.success.extra.information.next.ctc =<li>submit union transit declarations through NCTS</li>
 cds.subscription.outcomes.success.extra.information.next.cds =<li>use the Customs Declaration Service</li>
-cds.subscription.outcomes.success.extra.information.next.ma =<li>apply for customs and excise authorisations</li>
 cds.subscription.outcomes.success.extra.information.next.tgp = <li>view a list of previous goods movements if you are already a UKIMS trader who has moved goods to Northern Ireland before</li><li>add new records to your Trader Goods Profile (TGP)</li><li>ask HMRC for advice on a commodity code and goods description</li><li>check what category your goods are and if they are eligible for Internal Market Movement Information (IMMI)</li><li>subscribe to more customs services</li>
 
 cds.subscription.outcomes.success.extra.information.bullet1 = subscribe to more customs services
@@ -1498,7 +1498,6 @@ cds.banner.subscription.gbss=Subscribe to the Safety and Security GB service
 cds.banner.subscription.ctc=Subscribe to the New Computerised Transit System (NCTS)
 cds.banner.subscription.cds=Subscribe to the Customs Declaration Service
 cds.banner.subscription.tgp = Subscribe to Trader Goods Profile
-cds.banner.subscription.ma=Subscribe to customs and excise authorisations
 
 ecc.subscription.enter-eori-number.heading=What is your GB Economic Operator Registration and Identification (EORI) number?
 cds.subscription.enter-eori-number.no-eori.summary=I do not have an EORI number
@@ -1955,7 +1954,6 @@ ecc.start-page.title.ctc = Get a subscription to the New Computerised Transit Sy
 ecc.start-page.title.cds = Get a subscription to the Customs Declaration Service and an EORI number starting with GB
 ecc.start-page.title.eori-only = Get a subscription to the Customs Declaration Service and an EORI number starting with GB
 ecc.start-page.title.esc = Get a subscription and an EORI number starting with GB
-ecc.start-page.title.ma = Get a subscription to Apply for and manage your customs and excise authorisations
 ecc.start-page.title.tgp = Get a subscription to Trader Goods Profile and an EORI number starting with GB
 
 ecc.start-page.para1 = If we approve your application we will give you:
@@ -1974,7 +1972,6 @@ ecc.start-page.para1.bullet2.ctc = a subscription to the New Computerised Transi
 ecc.start-page.para1.bullet2.cds = a subscription to the Customs Declaration Service
 ecc.start-page.para1.bullet2.eori-only = a subscription to the Customs Declaration Service
 ecc.start-page.para1.bullet2.esc = a subscription to Report and manage your allowance for Customs Duty waiver claims
-ecc.start-page.para1.bullet2.ma = a subscription to Apply for and manage your customs and excise authorisations
 ecc.start-page.para1.bullet2.tgp = a subscription to Trader Goods Profile
 
 ecc.start-page.when.title = What you will need
@@ -2067,7 +2064,6 @@ cds.subscription.outcomes.success.extra.information.next.new.gbss =<li>make entr
 cds.subscription.outcomes.success.extra.information.next.new.ctc =<li>submit union transit declarations through NCTS</li>
 cds.subscription.outcomes.success.extra.information.next.new.cds =<li>use the Customs Declaration Service</li>
 cds.subscription.outcomes.success.extra.information.next.new.esc =<li>report and manage your allowance for Customs Duty waiver claims</li>
-cds.subscription.outcomes.success.extra.information.next.new.ma = <li>apply for customs and excise authorisations</li>
 cds.subscription.outcomes.success.extra.information.next.new.tgp = <li>view a list of previous goods movements if you are already a UKIMS trader who has moved goods to Northern Ireland before</li><li>add new records to your Trader Goods Profile (TGP)</li><li>ask HMRC for advice on a commodity code and goods description</li><li>check what category your goods are and if they are eligible for Internal Market Movement Information (IMMI)</li>
 
 ecc.eor-vat-return-error.incorrect.input = Enter a value to 2 decimal places. For example, £100.00
@@ -2090,7 +2086,6 @@ ecc.start-page.para1.bullet2.new.gbss = a subscription to the Safety and Securit
 ecc.start-page.para1.bullet2.new.ctc = a subscription to the New Computerised Transit System (NCTS)
 ecc.start-page.para1.bullet2.new.cds = a subscription to the Customs Declaration Service
 ecc.start-page.para1.bullet2.new.esc = a subscription to Report and manage your allowance for Customs Duty waiver claims
-ecc.start-page.para1.bullet2.new.ma = a subscription to Apply for and manage your customs and excise authorisations
 ecc.start-page.para1.bullet2.new.tgp = a subscription to Trader Goods Profile
 
 #Locked email screen
@@ -2149,4 +2144,13 @@ cds.your-organisation-address.town-city=Town or city
 cds.your-organisation-address.postcode=Postcode
 
 #We are processing the EORI number
+cds.application-processing.title=Application sent
+cds.application-processing.title-and-heading=We are processing the EORI number application for {0}
+cds.application-processing.content=Application received by HMRC on {0}
+cds.application-processing.what-next.para1=We are processing your application. This can take up to 5 working days.
+cds.application-processing.what-next.para2=We will send a confirmation email to {0} when your application has been processed.
+cds.application-processing.help.title-and-heading=Help and support
+cds.application-processing.help.para1=You can check the status of an application you've already made.
+cds.application-processing.help.para2=If you need help with your application, you can contact HMRC's EORI team by phone at 0300 322 7067. Open 8am to 6pm, Monday to Friday (closed bank holidays).
 cds.eori-processing.title-and-heading=We are processing the EORI number application for {0}
+

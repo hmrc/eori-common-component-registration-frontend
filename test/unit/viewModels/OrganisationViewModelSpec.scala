@@ -31,7 +31,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       val selectedUserLocation = Some(UserLocation.Uk)
       val viewModel            = OrganisationViewModel
 
-      val options = viewModel.validOptions(selectedUserLocation)
+      val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
       options should contain theSameElementsAs Seq(
         CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
@@ -48,11 +48,31 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       )
     }
 
+    "return uk options without embassy when no id journey not allowed" in {
+      val selectedUserLocation = Some(UserLocation.Uk)
+      val viewModel            = OrganisationViewModel
+
+      val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = false)
+
+      options should contain theSameElementsAs Seq(
+        CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
+        CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
+        CdsOrganisationType.IndividualId  -> messages("cds.matching.organisation-type.radio.individual.label"),
+        CdsOrganisationType.PartnershipId -> messages("cds.matching.organisation-type.radio.partnership.label"),
+        CdsOrganisationType.LimitedLiabilityPartnershipId -> messages(
+          "cds.matching.organisation-type.radio.limited-liability-partnership.label"
+        ),
+        CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
+          "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
+        )
+      )
+    }
+
     "return valid options for third-country user location" in {
       val selectedUserLocation = Some(UserLocation.ThirdCountry)
       val viewModel            = OrganisationViewModel
 
-      val options = viewModel.validOptions(selectedUserLocation)
+      val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
       options should contain theSameElementsAs Seq(
         CdsOrganisationType.ThirdCountryOrganisationId -> messages(
@@ -71,7 +91,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       val selectedUserLocation = Some(UserLocation.ThirdCountryIncEU)
       val viewModel            = OrganisationViewModel
 
-      val options = viewModel.validOptions(selectedUserLocation)
+      val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
       options should contain theSameElementsAs Seq(
         CdsOrganisationType.ThirdCountryOrganisationId -> messages(
@@ -90,7 +110,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       val selectedUserLocation = Some(UserLocation.Islands)
       val viewModel            = OrganisationViewModel
 
-      val options = viewModel.validOptions(selectedUserLocation)
+      val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
       options should contain theSameElementsAs Seq(
         CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),

@@ -53,7 +53,7 @@ class OrganisationTypePageSpec extends ViewSpec {
     implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(
       FakeRequest().withSession(("selected-user-location", "third-country"))
     )
-    val result = view(form, Some(UserLocation.ThirdCountry), atarService)
+    val result = view(form, Some(UserLocation.ThirdCountry), allowNoIdJourney = true, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

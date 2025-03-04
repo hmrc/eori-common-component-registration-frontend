@@ -40,6 +40,7 @@ sealed case class CachedData(
   regInfo: Option[RegistrationInfo] = None,
   sub02Outcome: Option[Sub02Outcome] = None,
   sub01Outcome: Option[Sub01Outcome] = None,
+  txe13ProcessedDate: Option[String] = None,
   registerWithEoriAndIdResponse: Option[RegisterWithEoriAndIdResponse] = None,
   email: Option[String] = None,
   groupEnrolment: Option[EnrolmentResponse] = None,
@@ -54,6 +55,7 @@ object CachedData {
   val subDetailsKey                        = "subDetails"
   val sub01OutcomeKey                      = "sub01Outcome"
   val sub02OutcomeKey                      = "sub02Outcome"
+  val txe13ProcessedDateKey                = "txe13ProcessedDate"
   val registerWithEoriAndIdResponseKey     = "registerWithEoriAndIdResponse"
   val emailKey                             = "email"
   val keepAliveKey                         = "keepAlive"
@@ -147,6 +149,9 @@ class SessionCache @Inject() (
     _                  <- saveSubmissionCompleteDetails(subCompleteDetails.copy(processingDate = sub01Outcome.processedDate))
   } yield true
 
+  def saveTxe13ProcessedDate(processedDate: String)(implicit request: Request[_]): Future[Boolean] =
+    putData(txe13ProcessedDateKey, Json.toJson(processedDate)) map (_ => true)
+
   def saveRegistrationInfo(rd: RegistrationInfo)(implicit request: Request[_]): Future[Boolean] =
     putData(regInfoKey, Json.toJson(rd)) map (_ => true)
 
@@ -223,6 +228,9 @@ class SessionCache @Inject() (
 
   def sub02Outcome(implicit request: Request[_]): Future[Sub02Outcome] =
     getData[Sub02Outcome](sub02OutcomeKey).map(_.getOrElse(throwException(sub02OutcomeKey)))
+
+  def txe13ProcessingDate(implicit request: Request[_]): Future[String] =
+    getData[String](txe13ProcessedDateKey).map(_.getOrElse(throwException(txe13ProcessedDateKey)))
 
   def registrationInfo(implicit request: Request[_]): Future[RegistrationInfo] =
     getData[RegistrationInfo](regInfoKey).map(_.getOrElse(throwException(regInfoKey)))

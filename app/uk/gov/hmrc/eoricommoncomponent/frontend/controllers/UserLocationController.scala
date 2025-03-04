@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AffinityGroup
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -45,7 +46,8 @@ class UserLocationController @Inject() (
   mcc: MessagesControllerComponents,
   userLocationView: user_location,
   sub01OutcomeProcessing: sub01_outcome_processing,
-  errorTemplate: error_template
+  errorTemplate: error_template,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -86,6 +88,8 @@ class UserLocationController @Inject() (
           (location, loggedInUser.groupId) match {
             case (location, Some(id)) if UserLocation.isRow(location) =>
               forRow(service, GroupId(id), location)
+            case (UserLocation.Iom, Some(_)) if !appConfig.allowNoIdJourney =>
+              Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
             case _ =>
               save4LaterService.saveUserLocation(GroupId(loggedInUser.groupId.head), location)
                 .map { _ =>

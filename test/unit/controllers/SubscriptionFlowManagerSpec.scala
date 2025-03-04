@@ -25,6 +25,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Session}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Embassy}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -49,10 +50,11 @@ class SubscriptionFlowManagerSpec
 
   private val mockRequestSessionData     = mock[RequestSessionData]
   private val mockCdsFrontendDataCache   = mock[SessionCache]
+  private val mockAppConfig              = mock[AppConfig]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val controller =
-    new SubscriptionFlowManager(mockRequestSessionData, mockCdsFrontendDataCache)(global)
+    new SubscriptionFlowManager(mockRequestSessionData, mockCdsFrontendDataCache, mockAppConfig)(global)
 
   private val mockOrgRegistrationDetails        = mock[RegistrationDetailsOrganisation]
   private val mockIndividualRegistrationDetails = mock[RegistrationDetailsIndividual]
@@ -353,7 +355,8 @@ class SubscriptionFlowManagerSpec
         .storeUserSubscriptionFlow(OrganisationSubscriptionFlow, RegistrationConfirmPage.url(atarService))(mockRequest)
     }
 
-    "start Embassy flow when cached registration details are for an Embassy" in {
+    "start Embassy flow when cached registration details are for an Embassy and feature switch is on" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(Some(Embassy))
 
       when(mockCdsFrontendDataCache.registrationDetails(mockRequest))

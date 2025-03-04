@@ -20,10 +20,11 @@ import play.api.Logging
 import play.api.i18n.Messages
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContent, Request, Result}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.Sub02Controller
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.EmbassyId
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationSubmissionController, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, EmbassyId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
@@ -50,7 +51,8 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
   sub02Controller: Sub02Controller,
   taxudConnector: TaxUDConnector,
   handleSubscriptionService: HandleSubscriptionService,
-  save4LaterService: Save4LaterService
+  save4LaterService: Save4LaterService,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends Logging {
 
@@ -68,12 +70,28 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
       throw DataUnavailableException("unable to retrieve user's location")
     )
 
-    sessionCache.registrationDetails flatMap {
-      case rd if userLocation == UserLocation.Iom => createSubscription(loggedInUser, rd, userLocation, service)
-      case rd if applicableForRegistration(rd)    => rowServiceCall(loggedInUser, service)
-      case rd if rd.orgType.contains(EmbassyId)   => createSubscription(loggedInUser, rd, userLocation, service)
-      case _                                      => createSubscription(service)(request)
-    }
+    for {
+      rd <- sessionCache.registrationDetails
+      sd <- sessionCache.subscriptionDetails.recover({ case _ => SubscriptionDetails() })
+      result <-
+        if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney)
+          createSubscription(loggedInUser, rd, userLocation, service)
+        else if (applicableForRegistration(rd)) rowServiceCall(loggedInUser, service)
+        else if (rd.orgType.contains(EmbassyId) && appConfig.allowNoIdJourney)
+          createSubscription(loggedInUser, rd, userLocation, service)
+        else if (
+          userLocation == UserLocation.Uk &&
+          sd.formData.organisationType.contains(CharityPublicBodyNotForProfit) &&
+          sd.ukVatDetails.exists(_.isGiant) &&
+          appConfig.allowNoIdJourney
+        ) createSubscription(loggedInUser, rd, userLocation, service)
+        else if (
+          rd.safeId.id.isEmpty && sd.vatRegisteredUk.contains(false) && sd.formData.utrMatch.exists(
+            _.haveUtr.exists(_ == false)
+          ) && appConfig.allowNoIdJourney
+        ) createSubscription(loggedInUser, rd, userLocation, service)
+        else createSubscription(service)(request)
+    } yield result
   }
 
   def createSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
@@ -85,22 +103,20 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     userLocation: UserLocation,
     service: Service
   )(implicit request: Request[AnyContent], hc: HeaderCarrier, messages: Messages): Future[Result] = {
-    if (regDetails.safeId.id.nonEmpty) {
-      Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
-    } else {
-      sessionCache.subscriptionDetails.flatMap { subDetails =>
-        taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
-          .flatMap {
-            case SuccessResponse(formBundleNumber, sid, _) =>
-              val updatedRegDetails = regDetails match {
-                case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
-                case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
-                case rdi: RegistrationDetailsIndividual   => rdi.copy(safeId = sid)
-                case rds: RegistrationDetailsSafeId       => rds.copy(safeId = sid)
-              }
+    sessionCache.subscriptionDetails.flatMap { subDetails =>
+      taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
+        .flatMap {
+          case SuccessResponse(formBundleNumber, sid, processingDate) =>
+            val updatedRegDetails = regDetails match {
+              case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
+              case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
+              case rdi: RegistrationDetailsIndividual   => rdi.copy(safeId = sid)
+              case rds: RegistrationDetailsSafeId       => rds.copy(safeId = sid)
+            }
 
-              sessionCache.saveRegistrationDetails(updatedRegDetails)
-                .flatMap { saved =>
+            sessionCache.saveRegistrationDetails(updatedRegDetails)
+              .flatMap { _ =>
+                sessionCache.saveTxe13ProcessedDate(processingDate.toString).flatMap { saved =>
                   save4LaterService.fetchEmail(GroupId(loggedInUser.groupId)).flatMap { optEmailStatus =>
                     if (saved) {
                       handleSubscriptionService
@@ -118,15 +134,15 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
                           None,
                           sid
                         )
-                        .flatMap(_ => Future.successful(Redirect(Sub02Controller.pending(service))))
+                        .flatMap(_ => Future.successful(Redirect(ApplicationSubmissionController.processing(service))))
                     } else {
                       Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
                     }
                   }
                 }
-            case _ => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-          }
-      }
+              }
+          case _ => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+        }
     }
   }
 

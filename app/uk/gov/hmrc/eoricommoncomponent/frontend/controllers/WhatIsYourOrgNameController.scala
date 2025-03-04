@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
@@ -38,7 +39,8 @@ class WhatIsYourOrgNameController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
   whatIsYourOrgNameView: what_is_your_org_name,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -77,7 +79,7 @@ class WhatIsYourOrgNameController @Inject() (
       if (!isInReviewMode)
         subscriptionDetailsService.updateSubscriptionDetailsOrgName(formData.name).map { _ =>
           if (
-            organisationType == PartnershipId || organisationType == CompanyId || organisationType == LimitedLiabilityPartnershipId
+            (organisationType == PartnershipId || organisationType == CompanyId || organisationType == LimitedLiabilityPartnershipId) && appConfig.allowNoIdJourney
           ) {
             Redirect(WhatIsYourOrganisationsAddressController.showForm(service))
           } else {

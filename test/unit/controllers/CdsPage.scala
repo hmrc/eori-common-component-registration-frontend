@@ -48,6 +48,9 @@ case class CdsPage(html: String) {
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
       .fold("")(_.getElementsByClass("govuk-summary-list__value").text())
 
+  def getPanelTitle: String = selectElements("//h1[@class='govuk-panel__title']").text()
+  def getPanelBody: String  = selectElements("//div[@class='govuk-panel__body']").text()
+
   def getSummaryListLink(xpath: String, key: String, action: String): String =
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)

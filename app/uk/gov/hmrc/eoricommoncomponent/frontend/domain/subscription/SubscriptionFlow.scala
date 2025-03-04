@@ -245,7 +245,7 @@ case object CharityPublicBodySubscriptionFlowIom
     extends SubscriptionFlow("CharityPublicBodyIom", isIndividualFlow = false)
 
 case object CharityPublicBodySubscriptionNoUtrFlow
-    extends SubscriptionFlow("CharityPublicBody", isIndividualFlow = false)
+    extends SubscriptionFlow("CharityPublicBodyNoUtr", isIndividualFlow = false)
 
 case object CharityPublicBodySubscriptionNoUtrFlowIom
     extends SubscriptionFlow("CharityPublicBodyNoUtrIom", isIndividualFlow = false)

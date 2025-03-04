@@ -26,7 +26,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
 }
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.DataUnavailableException
 
 import java.time.{LocalDate, LocalDateTime}
 
@@ -117,70 +116,6 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
       requestDetails.typeOfPerson shouldBe Some("2")
       requestDetails.principalEconomicActivity shouldBe Some("1234")
       requestDetails.serviceName shouldBe Some(atarService.enrolmentKey)
-    }
-
-    "throw DataUnavailableException exception when DataOfEstablishment is missing from the cache for Organisation" in {
-      val registrationDetails = RegistrationDetailsOrganisation(
-        customsId = None,
-        sapNumber = taxPayerId,
-        safeId = safeId,
-        name = fullName,
-        address = address,
-        dateOfEstablishment = None,
-        etmpOrganisationType = Some(CorporateBody)
-      )
-      val subscriptionDetails = SubscriptionDetails(
-        ukVatDetails = Some(VatDetails("AA11 1AA", "123456")),
-        addressDetails = Some(addressViewModel),
-        contactDetails = Some(contactDetails),
-        personalDataDisclosureConsent = Some(true),
-        businessShortName = Some(BusinessShortName("short name")),
-        sicCode = Some("12345")
-      )
-      val cdsOrgType = CdsOrganisationType.Company
-
-      val thrown = intercept[DataUnavailableException] {
-        SubscriptionCreateRequest.fromOrganisation(
-          registrationDetails,
-          subscriptionDetails,
-          Some(cdsOrgType),
-          Some(atarService)
-        )
-      }
-
-      thrown.getMessage shouldBe "Date Established must be present for an organisation subscription"
-    }
-
-    "throw DataUnavailableException exception when SicCode is missing from the cache for Organisation" in {
-      val registrationDetails = RegistrationDetailsOrganisation(
-        customsId = None,
-        sapNumber = taxPayerId,
-        safeId = safeId,
-        name = fullName,
-        address = address,
-        dateOfEstablishment = Some(dateOfBirthOrEstablishment),
-        etmpOrganisationType = Some(CorporateBody)
-      )
-      val subscriptionDetails = SubscriptionDetails(
-        ukVatDetails = Some(VatDetails("AA11 1AA", "123456")),
-        addressDetails = Some(addressViewModel),
-        contactDetails = Some(contactDetails),
-        personalDataDisclosureConsent = Some(true),
-        businessShortName = Some(BusinessShortName("short name")),
-        sicCode = None
-      )
-      val cdsOrgType = CdsOrganisationType.Company
-
-      val thrown = intercept[DataUnavailableException] {
-        SubscriptionCreateRequest.fromOrganisation(
-          registrationDetails,
-          subscriptionDetails,
-          Some(cdsOrgType),
-          Some(atarService)
-        )
-      }
-
-      thrown.getMessage shouldBe "SicCode/Principal Economic Activity must be present for an organisation subscription"
     }
 
     "correctly build Individual request during registration journey" in {

@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.Logger
 import play.api.mvc.{AnyContent, Request, Session}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
@@ -60,9 +61,11 @@ case class SubscriptionFlowConfig(
 }
 
 @Singleton
-class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData, cdsFrontendDataCache: SessionCache)(
-  implicit ec: ExecutionContext
-) {
+class SubscriptionFlowManager @Inject() (
+  requestSessionData: RequestSessionData,
+  cdsFrontendDataCache: SessionCache,
+  appConfig: AppConfig
+)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
 
@@ -129,7 +132,13 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
       val userLocation = requestSessionData.selectedUserLocation.getOrElse(
         throw new Exception("unable to start flow without user's location")
       )
-      val flow = selectFlow(registrationDetails, orgType, userLocation)
+
+      val flow = if (appConfig.allowNoIdJourney) {
+        selectFlow(registrationDetails, orgType, userLocation)
+      } else {
+        oldFlow(registrationDetails, orgType)
+      }
+
       // $COVERAGE-OFF$Loggers
       logger.info(s"select Subscription flow: ${flow.name}")
       // $COVERAGE-ON
@@ -168,6 +177,24 @@ class SubscriptionFlowManager @Inject() (requestSessionData: RequestSessionData,
         case _ => throw DataUnavailableException("Incomplete cache cannot complete journey")
       }
     }
+
+    maybeOrgType.fold(selectedFlow)(
+      orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow)
+    )
+  }
+
+  private def oldFlow(
+    registrationDetails: RegistrationDetails,
+    maybeOrgType: => Option[CdsOrganisationType]
+  ): SubscriptionFlow = {
+    val selectedFlow: SubscriptionFlow =
+      registrationDetails match {
+        case _: RegistrationDetailsOrganisation =>
+          SubscriptionFlow(OrganisationSubscriptionFlow.name)
+        case _: RegistrationDetailsIndividual =>
+          SubscriptionFlow(IndividualSubscriptionFlow.name)
+        case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
+      }
 
     maybeOrgType.fold(selectedFlow)(
       orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow)

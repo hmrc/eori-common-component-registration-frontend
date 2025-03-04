@@ -23,7 +23,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.EtmpErrorCode
 import util.Txe13JsonErrors
 
-class EtmpErrorSpec extends AnyFreeSpec with Matchers with OptionValues with Txe13JsonErrors {
+class EisErrorSpec extends AnyFreeSpec with Matchers with OptionValues with Txe13JsonErrors {
 
   "reads" - {
     "unprocessable entity" - {
