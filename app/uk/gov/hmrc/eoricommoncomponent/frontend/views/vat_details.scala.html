@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.ThirdCountry
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
@@ -30,7 +31,7 @@
 appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWithPreTextAndPostText)
 
 
-@(vatForm: Form[VatDetails], isInReviewMode: Boolean, userLocation: UserLocation, isIndividualOrSoleTrader: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
+@(vatForm: Form[VatDetails], isInReviewMode: Boolean, userLocation: UserLocation, isIndividualOrSoleTrader: Boolean, isRow : Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
 @heading = @{
     if(userLocation == Iom) {
@@ -41,6 +42,7 @@ appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWit
 }
 
 @postcodeLabel = @{
+    println(ThirdCountry)
     if(userLocation == Iom) {
         if(isIndividualOrSoleTrader) {
             messages("cds.subscription.vat-details.individual-sole-trader.postcode")
@@ -48,7 +50,11 @@ appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWit
             messages("cds.subscription.vat-details.postcode")
         }
     } else {
-        messages("cds.subscription.vat-details.uk.postcode")
+        if(isRow){
+            messages("cds.subscription.vat-details.row.postcode")
+        } else {
+            messages("cds.subscription.vat-details.uk.postcode")
+        }
     }
 }
 

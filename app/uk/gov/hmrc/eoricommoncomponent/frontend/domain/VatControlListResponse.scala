@@ -28,8 +28,12 @@ case class VatControlListResponse(
 
   private def stripSpaces: String => String = s => s.filterNot(_.isSpaceChar)
 
-  def isPostcodeAssociatedWithVrn(vatDetails: VatDetails) =
-    postcode.fold(false)(stripSpaces(_) equalsIgnoreCase stripSpaces(vatDetails.postcode))
+  def isPostcodeAssociatedWithVrn(vatDetails: VatDetails, isRestOfTheWorld: Boolean): Boolean = {
+    postcode match {
+      case Some(pc) => stripSpaces(pc) equalsIgnoreCase stripSpaces(vatDetails.postcode)
+      case None     => isRestOfTheWorld
+    }
+  }
 
 }
 
