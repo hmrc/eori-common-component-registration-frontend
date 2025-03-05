@@ -57,6 +57,7 @@ object VatDetailsForm extends Mappings {
     }
 
   class VatDetailsForm(requestSessionData: RequestSessionData) {
+
     def vatDetailsForm(implicit request: Request[AnyContent]): Form[VatDetails] =
       Form(
         mapping(
@@ -64,6 +65,7 @@ object VatDetailsForm extends Mappings {
           "vat-number" -> text.verifying(validVatNumber)
         )((postCode, vat) => VatDetails.apply(postCode, vat.filterNot(_.isWhitespace)))(VatDetails.unapply)
       )
+
   }
 
 }

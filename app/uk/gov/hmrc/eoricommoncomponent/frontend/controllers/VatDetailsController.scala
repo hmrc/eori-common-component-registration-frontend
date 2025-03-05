@@ -27,7 +27,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatD
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCacheService}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCacheService
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -51,7 +55,7 @@ class VatDetailsController @Inject() (
     extends CdsController(mcc) {
 
   val dateForm: Form[VatRegistrationDate] = form()
-  val vatDetailsForm = new VatDetailsForm(requestSessionData)
+  val vatDetailsForm                      = new VatDetailsForm(requestSessionData)
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) {
@@ -146,7 +150,7 @@ class VatDetailsController @Inject() (
           case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
         },
       response =>
-        if (response.isPostcodeAssociatedWithVrn(vatForm,requestSessionData.isRestOfTheWorld))
+        if (response.isPostcodeAssociatedWithVrn(vatForm, requestSessionData.isRestOfTheWorld))
           subscriptionDetailsService
             .cacheUkVatDetails(vatForm)
             .map {
