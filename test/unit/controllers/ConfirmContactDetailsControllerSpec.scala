@@ -36,7 +36,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.YesNoWrongAddress.wrongAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
@@ -83,6 +82,9 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
   private val dobToday = LocalDate.now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+  private val registrationDetailsResponse: RegistrationDetailsIndividual =
+    RegistrationDetailsIndividual().copy(address = Address("address line 1", None, None, None, Some("SE28 2AA"), "GB"))
 
   private def matchingResponse(postCode: String = "SE28 2AA", dob: String = dobToday) =
     MatchingResponse(
@@ -139,9 +141,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
           Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
         )
-        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-          Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-        )
+        when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
         when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
           eitherT[MatchingResponse](matchingResponse())
         )
@@ -164,9 +164,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
           when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
             Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
           )
-          when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-            Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-          )
+          when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
           when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
             eitherT[MatchingResponse](matchingResponse("SE28 2BB"))
           )
@@ -192,9 +190,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
           when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
             Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
           )
-          when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-            Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-          )
+          when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
           when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
             eitherT[MatchingResponse](matchingResponse("SE28 2AA", "1980-02-02"))
           )
@@ -220,9 +216,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
           when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
             Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
           )
-          when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-            Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-          )
+          when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
           when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
             eitherT[MatchingResponse](matchFailureResponse)
           )
@@ -248,9 +242,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
           Future.successful(Some(NinoOrUtr(Some(Utr("7280616009")))))
         )
-        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-          Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-        )
+        when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
         when(mockMatchingService.matchIndividualWithId(any(), any(), any())(any(), any())).thenReturn(
           eitherT[MatchingResponse](matchingResponse())
         )
@@ -272,9 +264,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
           Future.successful(Some(NinoOrUtr(Some(Utr("7280616009")))))
         )
-        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-          Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-        )
+        when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
         when(mockMatchingService.matchIndividualWithId(any(), any(), any())(any(), any())).thenReturn(
           eitherT[MatchingResponse](matchingResponse("SE28 2BB"))
         )
@@ -299,9 +289,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
           Future.successful(Some(NinoOrUtr(Some(Utr("7280616009")))))
         )
-        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-          Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-        )
+        when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
         when(mockMatchingService.matchIndividualWithId(any(), any(), any())(any(), any())).thenReturn(
           eitherT[MatchingResponse](matchingResponse("SE28 2AA", "1980-02-02"))
         )
@@ -332,9 +320,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
         Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
       )
-      when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-        Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-      )
+      when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
       when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
         eitherT[MatchingResponse](matchingResponse())
       )
@@ -359,9 +345,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
         Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
       )
-      when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-        Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-      )
+      when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
       when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
         eitherT[MatchingResponse](matchingResponse())
       )
@@ -392,9 +376,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
       when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
         Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
       )
-      when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(
-        Future.successful(Some(PostcodeViewModel("SE28 2AA", None)))
-      )
+      when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(registrationDetailsResponse))
       when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
         eitherT[MatchingResponse](matchingResponse())
       )

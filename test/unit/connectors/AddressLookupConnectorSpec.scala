@@ -100,19 +100,12 @@ class AddressLookupConnectorSpec
         val postcode = "AA11 1AA"
 
         val expectedFirstAddress =
-          Address(
-            "First Address Line 1",
-            Some("First Address Line 2"),
-            None,
-            Some("First town"),
-            Some("AA11 1AA"),
-            "GB"
-          )
+          Address("First Address Line 1", None, None, Some("First town"), Some("AA11 1AA"), "GB")
         val expectedSecondAddress =
           Address(
             "Second Address Line 1",
             Some("Second Address Line 2"),
-            None,
+            Some("Second Address Line 3"),
             Some("Second town"),
             Some("AA11 1AA"),
             "GB"
@@ -183,8 +176,7 @@ object AddressLookupConnectorSpec {
                                                          |        "uprn": 123,
                                                          |        "address": {
                                                          |            "lines": [
-                                                         |                "First Address Line 1",
-                                                         |                "First Address Line 2"
+                                                         |                "First Address Line 1"
                                                          |            ],
                                                          |            "town": "First town",
                                                          |            "county": "County",
@@ -210,7 +202,8 @@ object AddressLookupConnectorSpec {
                                                          |        "address": {
                                                          |            "lines": [
                                                          |                "Second Address Line 1",
-                                                         |                "Second Address Line 2"
+                                                         |                "Second Address Line 2",
+                                                         |                "Second Address Line 3"
                                                          |            ],
                                                          |            "town": "Second town",
                                                          |            "county": "County",

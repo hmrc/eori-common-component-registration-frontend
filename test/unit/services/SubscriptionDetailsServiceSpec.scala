@@ -380,7 +380,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   "cacheVatRegisteredUk" should {
-    val yesNoAnswer = YesNo(true)
+    val yesNoAnswer = YesNo(isYes = true)
     "save subscription details with vat registered uk" in {
       await(subscriptionDetailsHolderService.cacheVatRegisteredUk(yesNoAnswer))
       val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -390,7 +390,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
 
     "cacheVatRegisteredUk" should {
-      val yesNoAnswer = YesNo(true)
+      val yesNoAnswer = YesNo(isYes = true)
       "save subscription details with vat registered uk" in {
         await(subscriptionDetailsHolderService.cacheVatRegisteredUk(yesNoAnswer))
         val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
@@ -401,7 +401,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     }
 
     "cacheConsentToDisclosePersonalDetails" should {
-      val yesNoAnswer = YesNo(true)
+      val yesNoAnswer = YesNo(isYes = true)
       "save subscription details with consent to disclose personal details" in {
         await(subscriptionDetailsHolderService.cacheConsentToDisclosePersonalDetails(yesNoAnswer))
         val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
