@@ -20,6 +20,7 @@ import base.UnitSpec
 import common.pages.WebPage
 import org.apache.pekko.stream.testkit.NoMaterializer
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.{DefaultFileMimeTypes, FileMimeTypesConfiguration}
 import play.api.i18n.Lang._
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesImpl}
@@ -46,11 +47,11 @@ import scala.concurrent.Future
 import scala.util.Random
 
 trait ControllerSpec
-    extends UnitSpec with MockitoSugar with I18nSupport with Injecting with TestData with ResponseErrorEitherT {
+    extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with I18nSupport with Injecting with TestData
+    with ResponseErrorEitherT {
 
-  implicit lazy val app: Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
-    .configure("hmrc.mongo.init.timeout" -> "30 seconds")
     .build()
 
   implicit val messagesApi: MessagesApi = inject[MessagesApi]

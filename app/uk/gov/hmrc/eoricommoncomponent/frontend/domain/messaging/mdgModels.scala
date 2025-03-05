@@ -103,6 +103,7 @@ object Address {
       case Seq(first)                => Address(first, None, None, Some(town), Some(postcode), code)
       case Seq(first, second)        => Address(first, Some(second), None, Some(town), Some(postcode), code)
       case Seq(first, second, third) => Address(first, Some(second), Some(third), Some(town), Some(postcode), code)
+      case x                         => throw new IllegalArgumentException(s"Cannot construct address from ${x.size} address lines")
     }
   }
 
