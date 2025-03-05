@@ -29,7 +29,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDat
 
 class VatDetailsFormSpec extends UnitSpec {
 
-
   implicit val request: FakeRequest[AnyContent] = FakeRequest()
 
   val mockAuditable: Auditable = mock[Auditable]
