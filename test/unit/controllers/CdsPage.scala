@@ -32,7 +32,7 @@ case class CdsPage(html: String) {
   def getElementValue(xpath: String): String =
     selectElement(xpath).`val`()
 
-  def getElementById(id: String) = page.getElementById(id)
+  def getElementById(id: String): Element = page.getElementById(id)
 
   def getElementValueForLabel(labelXpath: String): String = {
     val elementId = getElementAttributeFor(labelXpath)
@@ -47,6 +47,9 @@ case class CdsPage(html: String) {
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
       .fold("")(_.getElementsByClass("govuk-summary-list__value").text())
+
+  def getPanelTitle: String = selectElements("//h1[@class='govuk-panel__title']").text()
+  def getPanelBody: String  = selectElements("//div[@class='govuk-panel__body']").text()
 
   def getSummaryListLink(xpath: String, key: String, action: String): String =
     selectElements(xpath)

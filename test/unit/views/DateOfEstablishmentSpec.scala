@@ -39,13 +39,13 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
 
   "On a UK journey the 'When was the organisation established?' page" should {
     "display correct title" in {
-      doc.title() must startWith("When was the company established?")
+      doc.title() must startWith("When was the organisation established?")
     }
     "have the correct h1 text" in {
-      doc.body.getElementsByTag("h1").text() mustBe "When was the company established?"
+      doc.body.getElementsByTag("h1").text() mustBe "When was the organisation established?"
     }
     "have the correct h2 text" in {
-      doc.body.getElementsByTag("h2").text() startsWith "When was the company established?"
+      doc.body.getElementsByTag("h2").text() startsWith "When was the organisation established?"
     }
     "have the correct class on the legend" in {
       doc.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
@@ -74,10 +74,10 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
 
   "On an LLP org type journey Date Established page" should {
     "display correct title" in {
-      docLlp.title must startWith("When was the partnership established?")
+      docLlp.title must startWith("When was the organisation established?")
     }
     "have the correct legend text" in {
-      docLlp.body.getElementsByTag("legend").text() mustBe "When was the partnership established?"
+      docLlp.body.getElementsByTag("legend").text() mustBe "When was the organisation established?"
     }
     "have the correct class on the legend" in {
       docLlp.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true

@@ -15,6 +15,8 @@
  *@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
 @import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.subscription.ViewHelper
@@ -23,23 +25,42 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
+
 @this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary,
 appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWithPreTextAndPostText)
 
 
-@(vatForm: Form[VatDetails], isInReviewMode: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
+@(vatForm: Form[VatDetails], isInReviewMode: Boolean, userLocation: UserLocation, isIndividualOrSoleTrader: Boolean, service: Service)(implicit request: Request[_], messages: Messages)
 
+@heading = @{
+    if(userLocation == Iom) {
+        messages("cds.subscription.vat-details.heading")
+    } else {
+        messages("cds.subscription.uk.vat-details.heading")
+    }
+}
 
+@postcodeLabel = @{
+    if(userLocation == Iom) {
+        if(isIndividualOrSoleTrader) {
+            messages("cds.subscription.vat-details.individual-sole-trader.postcode")
+        } else {
+            messages("cds.subscription.vat-details.postcode")
+        }
+    } else {
+        messages("cds.subscription.vat-details.uk.postcode")
+    }
+}
 
 @formAction = @{
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController.submit(isInReviewMode, service)
 }
-@layout_di(messages("cds.subscription.vat-details.heading"), form = Some(vatForm), service = service) {
+@layout_di(heading, form = Some(vatForm), service = service) {
         @errorSummary(vatForm.errors.reverse)
         @helpers.form(formAction, "vat-details-form") {
 
             @CSRF.formField
-            @h1(messages("cds.subscription.vat-details.heading"))
+            @h1(heading)
             @p(messages("cds.subscription.vat-details.intro-text"), Some("intro-text"))
             @link(messages("cds.subscription.vat-details.intro-text.link"),
             href="https://www.gov.uk/sign-in-vat-account", id=Some("vat-link"), postText=Some(messages("cds.subscription.vat-details.intro-text.link.text")))
@@ -60,7 +81,7 @@ appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWit
                 form = vatForm,
                 id = "postcode",
                 name = "postcode",
-                label = "cds.subscription.vat-details.postcode",
+                label = postcodeLabel,
                 labelClasses = Some("govuk-!-font-weight-bold"),
                 classes = Some("govuk-!-width-one-half"),
                 isPageHeading = false

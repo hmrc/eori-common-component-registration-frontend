@@ -22,6 +22,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
@@ -39,9 +40,16 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
   private val mockAuthAction                 = authAction(mockAuthConnector)
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val whatIsYourOrgNameView          = inject[what_is_your_org_name]
+  private val mockAppConfig                  = mock[AppConfig]
 
   private val controller =
-    new WhatIsYourOrgNameController(mockAuthAction, mcc, whatIsYourOrgNameView, mockSubscriptionDetailsService)
+    new WhatIsYourOrgNameController(
+      mockAuthAction,
+      mcc,
+      whatIsYourOrgNameView,
+      mockSubscriptionDetailsService,
+      mockAppConfig
+    )
 
   override protected def afterEach(): Unit = {
     reset(mockSubscriptionDetailsService)
@@ -57,7 +65,7 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
       "and isInReviewMode is false"
     )
     "redirect to the 'Do you have a UTR? page when isInReviewMode is false" in {
-      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any[Request[_]])).thenReturn(
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrgName(any())(any[Request[_]])).thenReturn(
         Future.successful((): Unit)
       )
       when(mockSubscriptionDetailsService.cacheNameDetails(any())(any[Request[_]]))

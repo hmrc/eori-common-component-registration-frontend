@@ -25,10 +25,12 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
@@ -52,7 +54,8 @@ class DoYouHaveAUtrNumberControllerSpec
   private val mockMatchingResponse           = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val matchOrganisationUtrView       = inject[match_organisation_utr]
-  private val mockRequestSessionData         = inject[RequestSessionData]
+  private val mockRequestSessionData         = mock[RequestSessionData]
+  private val mockAppConfig                  = mock[AppConfig]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
@@ -62,13 +65,15 @@ class DoYouHaveAUtrNumberControllerSpec
       mcc,
       mockRequestSessionData,
       matchOrganisationUtrView,
-      mockSubscriptionDetailsService
+      mockSubscriptionDetailsService,
+      mockAppConfig
     )(global)
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
     when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any[Request[_]])).thenReturn(Future.successful(()))
+    when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
   }
 
   "Viewing the Utr Organisation Matching form" should {
@@ -189,8 +194,24 @@ class DoYouHaveAUtrNumberControllerSpec
       }
     }
 
-    "redirect to Address page based on NO answer" in {
+    "redirect to Address page based on NO answer & feature switch on" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
+      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
+        Future.successful((): Unit)
+      )
+      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
+      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
+      submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith(
+          s"/customs-registration-services/atar/register/your-organisation-address"
+        )
+      }
+    }
+
+    "redirect to UK VAT page based on NO answer & feature switch off" in {
+      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
         Future.successful((): Unit)
       )
@@ -206,7 +227,7 @@ class DoYouHaveAUtrNumberControllerSpec
     }
 
     "redirect to Review page while on review mode" in {
-
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
         Future.successful((): Unit)
       )
@@ -216,7 +237,7 @@ class DoYouHaveAUtrNumberControllerSpec
       submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId, isInReviewMode = true) {
         result =>
           status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("/register/are-you-vat-registered-in-uk")
+          header("Location", result).value should endWith("/register/your-organisation-address")
       }
     }
   }
@@ -242,6 +263,19 @@ class DoYouHaveAUtrNumberControllerSpec
         val page = CdsPage(contentAsString(result))
         page.title() should startWith("Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?")
         page.h1() shouldBe "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
+        page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
+      }
+    }
+  }
+
+  "display the form for IOM" should {
+    "have the right content" in {
+      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
+
+      showForm(CdsOrganisationType.CharityPublicBodyNotForProfitId, defaultUserId) { result =>
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith("Does your organisation have a Unique Taxpayer Reference (UTR)?")
+        page.h1() shouldBe "Does your organisation have a Unique Taxpayer Reference (UTR)?"
         page.getElementsText("//*[@id='have-utr-hint']") shouldBe ""
       }
     }

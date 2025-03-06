@@ -142,6 +142,31 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
       |}
     """.stripMargin)
 
+  val embassyDetailsJson: JsValue = Json.parse("""
+      |{
+      |  "orgType": "embassy",
+      |  "name": "Embassy Of Japan",
+      |  "address": {
+      |    "addressLine1": "101-104 Piccadilly",
+      |    "addressLine2": "Greater London",
+      |    "addressLine3": "London",
+      |    "postalCode": "W1J 7JT",
+      |    "countryCode": "GB"
+      |  },
+      |  "customsId": null,
+      |  "safeId": {
+      |    "id": ""
+      |  }
+      |}
+      |""".stripMargin)
+
+  val embassyDetails: RegistrationDetailsEmbassy = RegistrationDetailsEmbassy.apply(
+    "Embassy Of Japan",
+    Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("W1J 7JT"), "GB"),
+    None,
+    SafeId("")
+  )
+
   "RegistrationDetails formats" should {
 
     "marshall organisation details" in {
@@ -166,6 +191,14 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
 
     "unmarshall individual details" in {
       unmarshall(individualJson) shouldBe JsSuccess(individualDetails)
+    }
+
+    "marshall embassy details" in {
+      Json.prettyPrint(marshall(embassyDetails)) shouldBe Json.prettyPrint(embassyDetailsJson)
+    }
+
+    "unmarshall embassy details" in {
+      unmarshall(embassyDetailsJson) shouldBe JsSuccess(embassyDetails)
     }
   }
 

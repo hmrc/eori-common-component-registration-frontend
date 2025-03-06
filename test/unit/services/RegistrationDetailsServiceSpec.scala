@@ -97,6 +97,9 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     startingDate
   )
 
+  private val startingRegDetailsEmbassy =
+    RegistrationDetailsEmbassy("U.S. Embassy", startingBlankAddress, None, startingSafeId)
+
   private val startingSubDetailsOrganisation =
     SubscriptionDetails(
       nameDetails = Some(NameMatchModel("Jimbob")),
@@ -119,8 +122,7 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     Company,
     ThirdCountryOrganisation,
     CdsOrganisationType.Partnership,
-    LimitedLiabilityPartnership,
-    CharityPublicBodyNotForProfit
+    LimitedLiabilityPartnership
   )
 
   implicit val request: Request[Any] = mock[Request[Any]]
@@ -168,6 +170,22 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
       holder.name shouldBe startingBlankFullName
       holder.dateOfBirth shouldBe startingDate
     }
+
+    "save Address in the cache for Embassy" in {
+      when(mockSessionCache.registrationDetails).thenReturn(Future.successful(startingRegDetailsEmbassy))
+
+      await(registrationDetailsService.cacheAddress(updatedAddress))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[RegistrationDetailsEmbassy])
+
+      verify(mockSessionCache).registrationDetails(ArgumentMatchers.eq(request))
+      verify(mockSessionCache).saveRegistrationDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+
+      val holder: RegistrationDetailsEmbassy = requestCaptor.getValue
+      holder.address shouldBe updatedAddress
+      holder.safeId shouldBe startingSafeId
+      holder.name shouldBe "U.S. Embassy"
+      holder.orgType shouldBe Some(EmbassyId)
+    }
   }
 
   "Calling initialiseCacheWithRegistrationDetails" should {
@@ -200,6 +218,23 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
         actualRegistrationDetails shouldBe emptyRegDetailsOrganisation
       }
+    }
+
+    s"initialise session cache with RegistrationDetailsOrganisation for remaining $CharityPublicBodyNotForProfit" in {
+
+      await(
+        registrationDetailsService.initialiseCacheWithRegistrationDetails(
+          CdsOrganisationType.CharityPublicBodyNotForProfit
+        )
+      )
+
+      val requestCaptorReg = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+
+      verify(mockSessionCache).saveRegistrationDetails(requestCaptorReg.capture())(ArgumentMatchers.eq(request))
+
+      val actualRegistrationDetails: RegistrationDetails = requestCaptorReg.getValue
+
+      actualRegistrationDetails shouldBe RegistrationDetailsOrganisation.charityPublicBodyNotForProfit
     }
   }
 
@@ -243,5 +278,17 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     actualRegistrationDetails shouldBe emptyRegDetailsOrganisation
     actualSubscriptionDetails shouldBe emptySubDetailsOrganisation
     await(mockSessionCache.subscriptionDetails).name shouldBe startingSubDetailsIndividual.name
+  }
+
+  "initialise session cache with RegistrationDetailsEmbassy for embassy type" in {
+    await(registrationDetailsService.initialiseCacheWithRegistrationDetails(Embassy))
+
+    val requestCaptorReg = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+
+    verify(mockSessionCache).saveRegistrationDetails(requestCaptorReg.capture())(ArgumentMatchers.eq(request))
+
+    val actualRegistrationDetails: RegistrationDetails = requestCaptorReg.getValue
+
+    actualRegistrationDetails shouldBe RegistrationDetailsEmbassy.initEmpty()
   }
 }

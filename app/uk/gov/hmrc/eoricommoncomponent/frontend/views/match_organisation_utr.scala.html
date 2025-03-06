@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 @import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
+@import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 @import uk.gov.hmrc.eoricommoncomponent.frontend.domain.UtrMatchModel
 @import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 @import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.MatchOrganisationUtrViewModel._
@@ -33,7 +34,7 @@
         govukDetails : GovukDetails)
 
 
-@(matchOrgIdForm: Form[UtrMatchModel],  organisationType: String, displayMode: String, service: Service, isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(matchOrgIdForm: Form[UtrMatchModel],  organisationType: String, userLocation: UserLocation, displayMode: String, service: Service, isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String)]) = {
     @inputRadioGroup(
@@ -43,12 +44,12 @@
         None,
         None,
         Symbol("_divClass") -> "govuk-form-group inline",
-        Symbol("_legend") -> headerAndTitle(organisationType),
+        Symbol("_legend") -> headerAndTitle(organisationType, userLocation),
         Symbol("_isLegendH1") -> true
     )
 }
 
-@layout_di(headerAndTitle(organisationType), form = Some(matchOrgIdForm), service = service) {
+@layout_di(headerAndTitle(organisationType, userLocation), form = Some(matchOrgIdForm), service = service) {
         @errorSummary(matchOrgIdForm.errors, focusOverrides = Map("have-utr" -> "have-utr-true"))
 
             @helpers.form(routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), "matchOrganisationUtrForm") {

@@ -19,9 +19,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.data.Form
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveUtrForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -38,7 +40,8 @@ class DoYouHaveAUtrNumberController @Inject() (
   mcc: MessagesControllerComponents,
   requestSessionData: RequestSessionData,
   matchOrganisationUtrView: match_organisation_utr,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -51,8 +54,12 @@ class DoYouHaveAUtrNumberController @Inject() (
       else
         subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>
           val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
-
-          Ok(matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service, isInReviewMode))
+          val userLocation: UserLocation = requestSessionData.selectedUserLocation.getOrElse(
+            throw new RuntimeException("Unable to find user location in session")
+          )
+          Ok(
+            matchOrganisationUtrView(form, organisationType, userLocation, OrganisationModeDM, service, isInReviewMode)
+          )
         }
     }
 
@@ -93,7 +100,11 @@ class DoYouHaveAUtrNumberController @Inject() (
   private def noUtrDestination(organisationType: String, service: Service, isInReviewMode: Boolean): Result =
     organisationType match {
       case CdsOrganisationType.CharityPublicBodyNotForProfitId =>
-        Redirect(VatRegisteredUkKanaController.form(service))
+        if (appConfig.allowNoIdJourney) {
+          Redirect(WhatIsYourOrganisationsAddressController.showForm(service))
+        } else {
+          Redirect(VatRegisteredUkKanaController.form(service))
+        }
       case CdsOrganisationType.ThirdCountryOrganisationId =>
         noUtrOrganisationRedirect(isInReviewMode, organisationType, service)
       case CdsOrganisationType.ThirdCountrySoleTraderId | CdsOrganisationType.ThirdCountryIndividualId =>
@@ -116,7 +127,11 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   private def view(organisationType: String, form: Form[UtrMatchModel], service: Service)(implicit
     request: Request[AnyContent]
-  ): HtmlFormat.Appendable =
-    matchOrganisationUtrView(form, organisationType, OrganisationModeDM, service)
+  ): HtmlFormat.Appendable = {
+    val userLocation: UserLocation = requestSessionData.selectedUserLocation.getOrElse(
+      throw new RuntimeException("Unable to find user location in session")
+    )
+    matchOrganisationUtrView(form, organisationType, userLocation, OrganisationModeDM, service)
+  }
 
 }

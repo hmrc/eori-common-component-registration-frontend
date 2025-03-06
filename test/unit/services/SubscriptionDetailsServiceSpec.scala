@@ -439,6 +439,22 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
         when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
         await(subscriptionDetailsHolderService.updateSubscriptionDetailsOrganisation(request))
 
+        val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+
+        verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+
+        val holder: SubscriptionDetails = requestCaptor.getValue
+
+        holder.nameDobDetails shouldBe subscriptionDetails.nameDobDetails
+        holder.nameOrganisationDetails shouldBe subscriptionDetails.nameOrganisationDetails
+        holder.formData shouldBe subscriptionDetails.formData
+      }
+
+      "save subscription details with details updated from cache (Embassy)" in {
+        when(mockSessionCache.subscriptionDetails) thenReturn Future.successful(subscriptionDetails)
+        when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
+        await(subscriptionDetailsHolderService.updateSubscriptionDetailsEmbassyName("U.S. Embassy"))
+
         val requestCaptor  = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
         val requestCaptorR = ArgumentCaptor.forClass(classOf[RegistrationDetails])
 
@@ -448,10 +464,35 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
         val holder: SubscriptionDetails  = requestCaptor.getValue
         val holderR: RegistrationDetails = requestCaptorR.getValue
 
-        holder.nameDobDetails shouldBe subscriptionDetails.nameDobDetails
-        holder.nameOrganisationDetails shouldBe subscriptionDetails.nameOrganisationDetails
+        holder.embassyName shouldBe subscriptionDetails.embassyName
         holder.formData shouldBe subscriptionDetails.formData
-        holderR shouldBe a[RegistrationDetailsOrganisation]
+        holderR shouldBe a[RegistrationDetailsEmbassy]
+      }
+    }
+
+    "cachedEmbassyName" should {
+      "return cached embassy name" in {
+        val subscriptionDetails = SubscriptionDetails(embassyName = Some("Embassy Of Japan"))
+        when(mockSessionCache.subscriptionDetails).thenReturn(Future.successful(subscriptionDetails))
+        await(subscriptionDetailsHolderService.cachedEmbassyName(request)) shouldBe Some("Embassy Of Japan")
+      }
+    }
+
+    "updateSubscriptionDetailsOrgName" should {
+      "update organisation name in subscription" in {
+        // Given
+        val rdo     = RegistrationDetailsOrganisation.apply()
+        val orgName = "Solutions Ltd"
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(Future.successful(rdo))
+        when(mockSessionCache.saveRegistrationDetails(rdo.copy(name = orgName))).thenReturn(Future.successful(true))
+
+        // When
+        await(subscriptionDetailsHolderService.updateSubscriptionDetailsOrgName(orgName))
+
+        // Then
+        val requestCaptorR = ArgumentCaptor.forClass(classOf[RegistrationDetails])
+        verify(mockSessionCache).saveRegistrationDetails(requestCaptorR.capture())(ArgumentMatchers.eq(request))
+
       }
     }
   }

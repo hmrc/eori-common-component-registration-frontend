@@ -26,6 +26,7 @@ import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, Result, Session}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ServiceUnavailableResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
@@ -65,6 +66,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockSave4LaterService          = mock[Save4LaterService]
   private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
+  private val mockAppConfig                  = mock[AppConfig]
   private val userLocationView               = inject[user_location]
 
   private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
@@ -81,7 +83,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     mcc,
     userLocationView,
     sub01OutcomeProcessing,
-    errorTemplate
+    errorTemplate,
+    mockAppConfig
   )
 
   private val ProblemWithSelectionError = "Select where you are based"
@@ -102,6 +105,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       .thenReturn(Future.successful(true))
     when(mockSave4LaterService.fetchSafeId(any[GroupId]())(any[HeaderCarrier]())).thenReturn(Future.successful(None))
     when(mockSessionCache.saveRegistrationDetails(any())(any())).thenReturn(Future.successful(true))
+    when(mockSave4LaterService.saveUserLocation(any(), any())(any())).thenReturn(Future.unit)
   }
 
   override protected def afterEach(): Unit = {
@@ -151,11 +155,13 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
     "redirect to uk vat registered page  when 'iom' is selected" in {
       when(mockSave4LaterService.fetchSafeId(any[GroupId])(any[HeaderCarrier])).thenReturn(Future.successful(None))
+      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
 
       submitForm(Map(locationFieldName -> UserLocation.Iom)) { result =>
         status(result) shouldBe SEE_OTHER
-        val expectedUrl =
-          YouNeedADifferentServiceIomController.form(atarService).url
+        val expectedUrl = {
+          OrganisationTypeController.form(atarService).url
+        }
         header(LOCATION, result).value should endWith(expectedUrl)
       }
     }
@@ -188,7 +194,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       mcc,
       userLocationView,
       sub01OutcomeProcessing,
-      errorTemplate
+      errorTemplate,
+      mockAppConfig
     ) {}
     implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
@@ -207,7 +214,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       )
 
       val test =
-        controller.cacheAndRedirect(atarService, "third-country")
+        controller.cacheAndRedirect(atarService, UserLocation.ThirdCountry, GroupId("GroupId"))
       val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
       status(result) shouldBe SEE_OTHER
@@ -229,7 +236,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       )
 
       val test =
-        controller.cacheAndRedirect(atarService, "third-country")
+        controller.cacheAndRedirect(atarService, UserLocation.ThirdCountry, GroupId("GroupId"))
       val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
       status(result) shouldBe SEE_OTHER
@@ -238,7 +245,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
     "return service unavailable response when failed to retrieve registration display response" in {
       val test =
-        controller.cacheAndRedirect(atarService, "third-country")
+        controller.cacheAndRedirect(atarService, UserLocation.ThirdCountry, GroupId("GroupId"))
       val result = test(Left(ServiceUnavailableResponse))
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
@@ -276,7 +283,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     )
   }
 
-  private def subscriptionStatus(location: String = UserLocation.Iom)(test: Future[Result] => Any) = {
+  private def subscriptionStatus(location: UserLocation = UserLocation.Iom)(test: Future[Result] => Any) = {
 
     val subStatus: PreSubscriptionStatus = NewSubscription
     implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
@@ -352,7 +359,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          errorTemplate
+          errorTemplate,
+          mockAppConfig
         ) {}
 
         val result = controller
@@ -393,7 +401,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           mcc,
           userLocationView,
           sub01OutcomeProcessing,
-          errorTemplate
+          errorTemplate,
+          mockAppConfig
         ) {}
 
         val result = controller

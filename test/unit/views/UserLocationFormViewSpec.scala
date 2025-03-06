@@ -23,6 +23,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -51,6 +52,7 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
   private val mockSave4LaterConnector        = mock[Save4LaterConnector]
   private val userLocationView               = inject[user_location]
+  private val mockAppConfig                  = mock[AppConfig]
 
   private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 
@@ -66,7 +68,8 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
     mcc,
     userLocationView,
     sub01OutcomeProcessing,
-    errorTemplate
+    errorTemplate,
+    mockAppConfig
   )
 
   override def beforeEach(): Unit = {

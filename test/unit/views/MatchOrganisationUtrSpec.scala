@@ -23,6 +23,7 @@ import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.UtrMatchModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
 import util.ViewSpec
@@ -40,12 +41,12 @@ class MatchOrganisationUtrSpec extends ViewSpec {
 
   "Match UTR page in the non sole trader case" should {
     "display correct title" in {
-      doc.title must startWith("Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) number?")
+      doc.title must startWith("Does your organisation have a Unique Taxpayer Reference (UTR) issued in the UK?")
     }
     "have the correct h1 text" in {
       doc.body
         .getElementsByTag("h1")
-        .text() mustBe "Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) number?"
+        .text() mustBe "Does your organisation have a Unique Taxpayer Reference (UTR) issued in the UK?"
     }
     "have the correct class on the h1" in {
       doc.body.getElementsByTag("h1").hasClass("govuk-fieldset__heading") mustBe true
@@ -122,23 +123,23 @@ class MatchOrganisationUtrSpec extends ViewSpec {
   lazy val doc: Document = getDoc(form)
 
   private def getDoc(form: Form[UtrMatchModel]) = {
-    val result = view(form, nonSoleTraderType, "", atarService)
+    val result = view(form, nonSoleTraderType, UserLocation.Uk, "", atarService)
     val doc    = Jsoup.parse(contentAsString(result))
     doc
   }
 
   lazy val docWithNoSelectionError: Document = {
-    val result = view(formWithNoSelectionError, nonSoleTraderType, "", atarService)
+    val result = view(formWithNoSelectionError, nonSoleTraderType, UserLocation.Uk, "", atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   lazy val docAsSoleTraderIndividual: Document = {
-    val result = view(form, soleTraderType, "", atarService)
+    val result = view(form, soleTraderType, UserLocation.Uk, "", atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   lazy val docWithNoSelectionErrorAsSoleTrader: Document = {
-    val result = view(formWithNoSelectionError, soleTraderType, "", atarService)
+    val result = view(formWithNoSelectionError, soleTraderType, UserLocation.Uk, "", atarService)
     Jsoup.parse(contentAsString(result))
   }
 

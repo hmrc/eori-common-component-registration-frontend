@@ -150,6 +150,16 @@ class RegistrationDetailsCreator {
       orgAddress.country
     )
 
+  def registrationAddressEmbassyAddress(embassyAddress: EmbassyAddressMatchModel): Address =
+    Address(
+      embassyAddress.lineOne,
+      embassyAddress.lineTwo,
+      Some(embassyAddress.townCity),
+      None,
+      Some(embassyAddress.postcode),
+      embassyAddress.country
+    )
+
   def registrationAddressFromAddressViewModel(addressViewModel: AddressViewModel): Address =
     Address(
       addressViewModel.street,

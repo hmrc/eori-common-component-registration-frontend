@@ -139,7 +139,13 @@ class GetUtrNumberController @Inject() (
         case MatchingServiceConnector.downstreamFailureResponse => InternalServerError(errorView(service))
         case _                                                  => InternalServerError(errorView(service))
       },
-      _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+      _ => {
+        if (organisationType == CdsOrganisationType.CharityPublicBodyNotForProfitId) {
+          Redirect(WhatIsYourOrganisationsAddressController.showForm(service))
+        } else {
+          Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+        }
+      }
     )
 
   private def matchNotFoundBadRequest(

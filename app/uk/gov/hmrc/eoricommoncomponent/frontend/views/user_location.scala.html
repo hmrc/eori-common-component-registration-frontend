@@ -45,7 +45,7 @@
     userLocationForm(field),
     options.map { option => (option._1, option._2) },
     options.flatMap(option => option._3.map(option._1 -> _)).toMap,
-    None,
+    Some(Html(messages("cds.registration.user-location.hint"))),
     None,
     '_divClass -> "govuk-form-group",
     '_legend -> title,

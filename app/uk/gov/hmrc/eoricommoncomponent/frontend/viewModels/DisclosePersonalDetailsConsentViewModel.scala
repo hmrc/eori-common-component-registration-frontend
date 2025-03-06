@@ -28,9 +28,9 @@ case class DisclosePersonalDetailsConsentViewModel @Inject() (requestSessionData
   def textPara2()(implicit messages: Messages, request: Request[AnyContent]): String = {
     val org = requestSessionData.userSelectedOrganisationType.getOrElse(CdsOrganisationType.Individual)
     org match {
-      case CdsOrganisationType.Company =>
+      case CdsOrganisationType.Company | CdsOrganisationType.LimitedLiabilityPartnership =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.org.para2")
-      case CdsOrganisationType.Partnership | CdsOrganisationType.LimitedLiabilityPartnership =>
+      case CdsOrganisationType.Partnership =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.para2")
       case CdsOrganisationType.CharityPublicBodyNotForProfit | CdsOrganisationType.ThirdCountryOrganisation =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.para2")
@@ -41,9 +41,9 @@ case class DisclosePersonalDetailsConsentViewModel @Inject() (requestSessionData
   def questionLabel()(implicit messages: Messages, request: Request[AnyContent]): String = {
     val org = requestSessionData.userSelectedOrganisationType.getOrElse(CdsOrganisationType.Individual)
     org match {
-      case CdsOrganisationType.Company =>
+      case CdsOrganisationType.Company | CdsOrganisationType.LimitedLiabilityPartnership =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.org.question")
-      case CdsOrganisationType.Partnership | CdsOrganisationType.LimitedLiabilityPartnership =>
+      case CdsOrganisationType.Partnership =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.partnership.question")
       case CdsOrganisationType.CharityPublicBodyNotForProfit | CdsOrganisationType.ThirdCountryOrganisation =>
         messages("ecc.subscription.organisation-disclose-personal-details-consent.charity.question")

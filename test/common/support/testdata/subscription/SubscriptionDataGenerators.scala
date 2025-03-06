@@ -60,6 +60,8 @@ trait SubscriptionDataGenerators {
     "ZZ"
   )
 
+  val formBundleNumberGenerator: Gen[String] = Gen.listOfN(12, Gen.choose(0, 9)).map(_.mkString(""))
+
   val subscriptionContactDetailsWithoutPostcodeGenerator: Gen[ContactDetails] = for {
     faxOption <- Gen.option("07893345672")
   } yield ContactDetails(

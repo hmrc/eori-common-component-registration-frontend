@@ -23,7 +23,10 @@ import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
-case class VatDetails(postcode: String, number: String)
+case class VatDetails(postcode: String, number: String) {
+
+  def isGiant: Boolean = number.startsWith("654") || number.startsWith("8888")
+}
 
 object VatDetails {
   implicit val format: Format[VatDetails] = Json.format[VatDetails]

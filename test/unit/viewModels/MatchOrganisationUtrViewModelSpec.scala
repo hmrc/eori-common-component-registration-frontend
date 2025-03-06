@@ -25,6 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
   ThirdCountryOrganisationId,
   ThirdCountrySoleTraderId
 }
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.MatchOrganisationUtrViewModel
 import util.ControllerSpec
 
@@ -36,7 +37,7 @@ class MatchOrganisationUtrViewModelSpec extends UnitSpec with ControllerSpec {
     (ThirdCountrySoleTraderId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
     (IndividualId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
     (SoleTraderId, messages("ecc.matching.row-sole-trader-individual.utr.title-and-heading")),
-    (CharityPublicBodyNotForProfitId, messages("cds.matching.organisation.utr.title-and-heading"))
+    (CharityPublicBodyNotForProfitId, messages("cds.matching.row-charity-public-body.utr.title-and-heading"))
   )
 
   val isNotSoleTraderExpected = Seq[(String, Boolean)](
@@ -50,7 +51,10 @@ class MatchOrganisationUtrViewModelSpec extends UnitSpec with ControllerSpec {
   "headerAndTitle" should {
     headerAndTitleExpected.foreach { expectedHeaderAndTitle =>
       s"return correct header and title for cdsOrgType: ${expectedHeaderAndTitle._1}" in {
-        MatchOrganisationUtrViewModel.headerAndTitle(expectedHeaderAndTitle._1) shouldBe expectedHeaderAndTitle._2
+        MatchOrganisationUtrViewModel.headerAndTitle(
+          expectedHeaderAndTitle._1,
+          UserLocation.Uk
+        ) shouldBe expectedHeaderAndTitle._2
       }
     }
   }

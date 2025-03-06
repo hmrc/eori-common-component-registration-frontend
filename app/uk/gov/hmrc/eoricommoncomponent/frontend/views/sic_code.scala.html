@@ -41,6 +41,8 @@
 @dynamicSicCodeContent= {
     @if(selectedUserLocation.contains(UserLocation.ThirdCountry) || selectedUserLocation.contains(UserLocation.ThirdCountryIncEU)){
         @p(messages("cds.subscription.sic.link.company-house.row"))
+    } else if(cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)) {
+        <br>
     } else {
         @govukDetails(Details(
             summary = Text(dontKnowSicDropDownContent(cdsOrgType)),
@@ -57,9 +59,9 @@
 
         @CSRF.formField
 
-        @p(messages("cds.subscription.sic.description.para1"), Some("description"))
-
-        @dynamicSicCodeContent
+        @p(messages("cds.subscription.sic.description.para1"), Some("description-part-1"))
+        @p(messages("cds.subscription.sic.description.charity-public-body-not-for-profit.para2"), Some("description-part-2"))
+        @p(messages("cds.subscription.sic.description.charity-public-body-not-for-profit.para3"), Some("description-part-3"))
 
         @inputText(
             form = sicCodeForm,
@@ -67,7 +69,7 @@
             name = "sic",
             classes = Some("govuk-!-width-one-half"),
             label = secondHeading(cdsOrgType, selectedUserLocation),
-            labelClasses = Some("govuk-!-font-weight-bold"),
+            labelClasses = Some("govuk-!-font-weight-bold govuk-!-font-size-24"),
             isPageHeading = false,
             hint = Some(hintTextForSic(selectedUserLocation)),
         )

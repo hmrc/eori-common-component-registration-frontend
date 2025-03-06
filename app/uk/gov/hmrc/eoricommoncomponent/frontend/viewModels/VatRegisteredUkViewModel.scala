@@ -19,6 +19,8 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.viewModels
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredUkController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 object VatRegisteredUkViewModel {
@@ -26,11 +28,19 @@ object VatRegisteredUkViewModel {
   def formAction(isInReviewMode: Boolean, service: Service): Call =
     VatRegisteredUkController.submit(isInReviewMode, service)
 
-  def titleAndHeadingLabel(isIndividualSubscriptionFlow: Boolean, isPartnership: Boolean)(implicit
-    messages: Messages
-  ): String =
-    if (isIndividualSubscriptionFlow) messages("cds.subscription.vat-question-uk.individual")
-    else if (isPartnership) messages("cds.subscription.vat-registered-uk.partnership.title-and-heading")
+  def titleAndHeadingLabel(isIndividualSubscriptionFlow: Boolean, isPartnership: Boolean, userLocation: UserLocation)(
+    implicit messages: Messages
+  ): String = {
+    if (isIndividualSubscriptionFlow && userLocation == Iom)
+      messages("cds.subscription.vat-registered.individual.title-and-heading")
+    else if (isIndividualSubscriptionFlow && userLocation != Iom)
+      messages("cds.subscription.vat-question-uk.individual")
+    else if (isPartnership && userLocation != Iom)
+      messages("cds.subscription.vat-registered-uk.partnership.title-and-heading")
+    else if (isPartnership && userLocation == Iom)
+      messages("cds.subscription.vat-registered.partnership.title-and-heading")
+    else if (userLocation == Iom) messages("cds.subscription.vat-registered.title-and-heading")
     else messages("cds.subscription.vat-registered-uk.title-and-heading")
+  }
 
 }

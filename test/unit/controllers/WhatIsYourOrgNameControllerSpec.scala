@@ -25,6 +25,7 @@ import org.scalatest.prop.Tables.Table
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameOrganisationMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -45,9 +46,16 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockNameOrganisationMatchModel = mock[NameOrganisationMatchModel]
   private val whatIsYourOrgNameView          = inject[what_is_your_org_name]
+  private val mockAppConfig                  = mock[AppConfig]
 
   private val controller =
-    new WhatIsYourOrgNameController(mockAuthAction, mcc, whatIsYourOrgNameView, mockSubscriptionDetailsService)
+    new WhatIsYourOrgNameController(
+      mockAuthAction,
+      mcc,
+      whatIsYourOrgNameView,
+      mockSubscriptionDetailsService,
+      mockAppConfig
+    )
 
   private val organisationTypeOrganisations =
     Table(
@@ -134,7 +142,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         showForm(reviewMode) { result =>
           status(result) shouldBe OK
           val page = CdsPage(contentAsString(result))
-          page.getElementsText(labelForNameOuter) shouldBe "What is the organisation’s name?"
+          page.getElementsText(labelForNameOuter) shouldBe "What is your registered company name?"
         }
       }
     }
@@ -175,8 +183,8 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
         }
 
         s"redirect to the next page when successful when organisation type is $organisationType and reviewMode is $reviewMode" in {
-          when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any[Request[_]])).thenReturn(
-            Future.successful((): Unit)
+          when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrgName(any())(any[Request[_]])).thenReturn(
+            Future.unit
           )
           submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
             status(result) shouldBe SEE_OTHER

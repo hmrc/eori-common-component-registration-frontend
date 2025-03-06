@@ -441,4 +441,16 @@ object MatchingForms extends Mappings with Logging {
     )
   )
 
+  def contactAddressForm: Form[ContactAddressMatchModel] = {
+    Form(
+      mapping(
+        "line-1"      -> text.verifying(validLine1),
+        "line-2"      -> optional(text.verifying(validLine2)),
+        "townCity"    -> text.verifying(validLine3),
+        "postcode"    -> mandatoryPostCodeMapping,
+        "countryCode" -> default(text, countryCodeGB)
+      )(ContactAddressMatchModel.apply)(ContactAddressMatchModel.unapply)
+    )
+  }
+
 }

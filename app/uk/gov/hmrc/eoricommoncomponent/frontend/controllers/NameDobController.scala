@@ -17,15 +17,21 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.enterNameDobForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
+  DataUnavailableException,
+  RequestSessionData,
+  SessionCache
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +42,8 @@ class NameDobController @Inject() (
   mcc: MessagesControllerComponents,
   matchNameDobView: match_namedob,
   requestSessionData: RequestSessionData,
-  cdsFrontendDataCache: SessionCache
+  cdsFrontendDataCache: SessionCache,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -56,14 +63,31 @@ class NameDobController @Inject() (
       )
     }
 
-  private def submitNewDetails(formData: NameDobMatchModel, service: Service)(implicit
-    request: Request[_]
-  ): Future[Result] =
-    cdsFrontendDataCache.saveSubscriptionDetails(SubscriptionDetails(nameDobDetails = Some(formData))).map { _ =>
-      Redirect(
-        uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.HowCanWeIdentifyYouController
-          .createForm(service)
+  private def submitNewDetails(nameDob: NameDobMatchModel, service: Service)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] = {
+    cdsFrontendDataCache.saveSubscriptionDetails(
+      SubscriptionDetails(
+        nameDobDetails = Some(nameDob),
+        formData = FormData(organisationType = requestSessionData.userSelectedOrganisationType)
       )
+    ).map { _ =>
+      val userLocation = requestSessionData.selectedUserLocation.getOrElse(
+        throw DataUnavailableException("unable to obtain user location")
+      )
+
+      if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney) {
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrganisationsAddressController.showForm(
+            service
+          )
+        )
+      } else {
+        Redirect(
+          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.HowCanWeIdentifyYouController.createForm(service)
+        )
+      }
     }
+  }
 
 }

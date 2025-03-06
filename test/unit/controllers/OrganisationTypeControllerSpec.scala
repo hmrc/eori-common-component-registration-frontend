@@ -23,9 +23,11 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
+import play.api.Configuration
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{OrganisationTypeController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -49,6 +51,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockAppConfig                  = mock[AppConfig]
 
   private val organisationTypeView = inject[organisation_type]
 
@@ -58,7 +61,8 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     mcc,
     organisationTypeView,
     mockRegistrationDetailsService,
-    mockSubscriptionDetailsService
+    mockSubscriptionDetailsService,
+    mockAppConfig
   )
 
   private val ProblemWithSelectionError     = "Select what you want to apply as"
@@ -146,7 +150,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         (CdsOrganisationType.ThirdCountryOrganisation, "name/third-country-organisation"),
         (CdsOrganisationType.ThirdCountrySoleTrader, "row-name-date-of-birth/third-country-sole-trader"),
         (CdsOrganisationType.ThirdCountryIndividual, "row-name-date-of-birth/third-country-individual"),
-        (CdsOrganisationType.CharityPublicBodyNotForProfit, "charity-public-body-not-for-profit")
+        (CdsOrganisationType.CharityPublicBodyNotForProfit, "name/charity-public-body-not-for-profit")
       )
 
     val subscriptionPage: Map[CdsOrganisationType, SubscriptionPage] = Map(
@@ -166,6 +170,8 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
       s"return a redirect to the matching form for the correct organisation type when '$option' is selected" in {
         val updatedMockSession =
           Session(Map()) + (RequestSessionDataKeys.selectedOrganisationType -> option)
+
+        when(mockAppConfig.allowNoIdJourney).thenReturn(true)
 
         when(
           mockSubscriptionFlowManager

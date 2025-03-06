@@ -17,8 +17,14 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
+  CompanyId,
+  LimitedLiabilityPartnershipId,
+  PartnershipId
+}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationNameForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -33,7 +39,8 @@ class WhatIsYourOrgNameController @Inject() (
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
   whatIsYourOrgNameView: what_is_your_org_name,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  appConfig: AppConfig
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -70,9 +77,15 @@ class WhatIsYourOrgNameController @Inject() (
   )(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsService.cacheNameDetails(NameOrganisationMatchModel(formData.name)) flatMap { _ =>
       if (!isInReviewMode)
-        subscriptionDetailsService.updateSubscriptionDetailsOrganisation.map(
-          _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
-        )
+        subscriptionDetailsService.updateSubscriptionDetailsOrgName(formData.name).map { _ =>
+          if (
+            (organisationType == PartnershipId || organisationType == CompanyId || organisationType == LimitedLiabilityPartnershipId) && appConfig.allowNoIdJourney
+          ) {
+            Redirect(WhatIsYourOrganisationsAddressController.showForm(service))
+          } else {
+            Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
+          }
+        }
       else
         Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
     }

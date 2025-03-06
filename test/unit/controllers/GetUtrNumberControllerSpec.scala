@@ -229,6 +229,21 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
       when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
         .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
       when(
+        mockMatchingService.matchBusiness(meq(ValidUtr), meq(company), meq(None), any())(
+          any[Request[AnyContent]],
+          any[HeaderCarrier]
+        )
+      ).thenReturn(eitherT(()))
+      submitForm(ValidUtrRequest, CdsOrganisationType.CompanyId) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
+      }
+    }
+
+    "redirect to the organisation address page when match is successful" in {
+      when(mockSubscriptionDetailsService.cachedNameDetails(any[Request[_]]))
+        .thenReturn(Future.successful(Some(NameOrganisationMatchModel("orgName"))))
+      when(
         mockMatchingService.matchBusiness(
           meq(ValidUtr),
           meq(charityPublicBodyNotForProfitOrganisation),
@@ -238,7 +253,9 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
       ).thenReturn(eitherT(()))
       submitForm(ValidUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
         status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith("/customs-registration-services/atar/register/matching/confirm")
+        header("Location", result).value should endWith(
+          "/customs-registration-services/atar/register/your-organisation-address"
+        )
       }
     }
   }

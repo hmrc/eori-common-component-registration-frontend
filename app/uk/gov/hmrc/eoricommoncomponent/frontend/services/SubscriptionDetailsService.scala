@@ -50,10 +50,10 @@ class SubscriptionDetailsService @Inject() (
 
   def saveSubscriptionDetails(
     insertNewDetails: SubscriptionDetails => SubscriptionDetails
-  )(implicit request: Request[_]): Future[Unit] = sessionCache.subscriptionDetails flatMap {
-    subDetails =>
+  )(implicit request: Request[_]): Future[Unit] =
+    sessionCache.subscriptionDetails flatMap { subDetails =>
       sessionCache.saveSubscriptionDetails(insertNewDetails(subDetails)).map(_ => ())
-  }
+    }
 
   def cacheContactDetails(contactDetailsModel: ContactDetailsModel, isInReviewMode: Boolean = false)(implicit
     request: Request[_]
@@ -86,10 +86,30 @@ class SubscriptionDetailsService @Inject() (
     )
   }
 
+  def cacheAddressDetails(address: ContactAddressMatchModel)(implicit request: Request[_]): Future[Unit] = {
+    saveSubscriptionDetails(
+      sd =>
+        sd.copy(contactDetails =
+          sd.contactDetails.map(
+            cdm =>
+              cdm.copy(
+                street = Some(s"${address.lineOne} ${address.lineTwo.getOrElse("")}"),
+                city = Some(s"${address.townCity}"),
+                postcode = Some(s"${address.postcode}"),
+                countryCode = Some(s"${address.country}")
+              )
+          )
+        )
+    )
+  }
+
   def cacheNameDetails(
     nameOrganisationMatchModel: NameOrganisationMatchModel
   )(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(nameOrganisationDetails = Some(nameOrganisationMatchModel)))
+
+  def cacheEmbassyName(embassyName: String)(implicit request: Request[_]): Future[Unit] =
+    saveSubscriptionDetails(sd => sd.copy(embassyName = Some(embassyName)))
 
   def cachedNameDetails(implicit request: Request[_]): Future[Option[NameOrganisationMatchModel]] =
     sessionCache.subscriptionDetails map (_.nameOrganisationDetails)
@@ -145,7 +165,7 @@ class SubscriptionDetailsService @Inject() (
   )(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatControlListResponse = Some(vatControlListResponse)))
 
-  def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]) =
+  def cacheVatRegisteredUk(yesNoAnswer: YesNo)(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(vatRegisteredUk = Some(yesNoAnswer.isYes)))
 
   def cacheConsentToDisclosePersonalDetails(yesNoAnswer: YesNo)(implicit request: Request[_]): Future[Unit] =
@@ -163,7 +183,10 @@ class SubscriptionDetailsService @Inject() (
   def cachedCustomsId(implicit request: Request[_]): Future[Option[CustomsId]] =
     sessionCache.subscriptionDetails map (_.customsId)
 
-  private def updateSubscriptionDetails(implicit request: Request[_]) =
+  def cachedEmbassyName(implicit request: Request[_]): Future[Option[String]] =
+    sessionCache.subscriptionDetails map (_.embassyName)
+
+  private def updateSubscriptionDetails(implicit request: Request[_]): Future[Unit] =
     for {
       subDetails <- sessionCache.subscriptionDetails
       _          <- sessionCache.saveSub01Outcome(Sub01Outcome(""))
@@ -171,7 +194,8 @@ class SubscriptionDetailsService @Inject() (
         SubscriptionDetails(
           nameOrganisationDetails = subDetails.nameOrganisationDetails,
           nameDobDetails = subDetails.nameDobDetails,
-          formData = subDetails.formData
+          formData = subDetails.formData,
+          embassyName = subDetails.embassyName
         )
       )
     } yield ()
@@ -182,9 +206,23 @@ class SubscriptionDetailsService @Inject() (
       _ <- updateSubscriptionDetails
     } yield ()
 
+  def updateSubscriptionDetailsOrgName(orgName: String)(implicit request: Request[_]): Future[Unit] = {
+    sessionCache.registrationDetails.flatMap {
+      case rdo: RegistrationDetailsOrganisation =>
+        sessionCache.saveRegistrationDetails(rdo.copy(name = orgName))
+          .map(_ => updateSubscriptionDetails)
+    }
+  }
+
   def updateSubscriptionDetailsIndividual(implicit request: Request[_]): Future[Unit] =
     for {
       _ <- sessionCache.saveRegistrationDetails(RegistrationDetailsIndividual())
+      _ <- updateSubscriptionDetails
+    } yield ()
+
+  def updateSubscriptionDetailsEmbassyName(embassyName: String)(implicit request: Request[_]): Future[Unit] =
+    for {
+      _ <- sessionCache.saveRegistrationDetails(RegistrationDetailsEmbassy(embassyName))
       _ <- updateSubscriptionDetails
     } yield ()
 
