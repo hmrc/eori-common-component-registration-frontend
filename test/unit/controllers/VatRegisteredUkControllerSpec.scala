@@ -54,8 +54,8 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val mockSubscriptionFlow            = mock[SubscriptionFlow]
   private val mockSessionError                = mock[SessionError]
   private val mockRequestSession              = mock[RequestSessionData]
-  private val vatRegisteredUkView             = instanceOf[vat_registered_uk]
-  private val mockSessionCacheService         = instanceOf[SessionCacheService]
+  private val vatRegisteredUkView             = inject[vat_registered_uk]
+  private val mockSessionCacheService         = inject[SessionCacheService]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()

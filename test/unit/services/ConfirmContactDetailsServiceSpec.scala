@@ -16,15 +16,14 @@
 
 package unit.services
 
-import base.Injector
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.data.Form
 import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.{AnyContent, Request, Session}
-import play.api.test.FakeRequest
 import play.api.test.Helpers.await
+import play.api.test.{FakeRequest, Injecting}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -44,7 +43,7 @@ import util.builders.SubscriptionFormBuilder.detailsHolderWithAllFields
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with Injector {
+class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with Injecting {
 
   implicit val hc: HeaderCarrier       = HeaderCarrier()
   implicit val rq: Request[AnyContent] = withFakeCSRF(FakeRequest())
@@ -53,7 +52,7 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
   private val mockRegistrationConfirmService = mock[RegistrationConfirmService]
   private val mockOrgTypeLookup              = mock[OrgTypeLookup]
   private val mockRequestSessionData         = mock[RequestSessionData]
-  private val confirmContactDetailsView      = instanceOf[confirm_contact_details]
+  private val confirmContactDetailsView      = inject[confirm_contact_details]
   private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
   private val mockTaxEnrolmentsService       = mock[TaxEnrolmentsService]
   private val mockSubscriptionPage           = mock[SubscriptionPage]

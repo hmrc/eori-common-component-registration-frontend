@@ -23,9 +23,9 @@ import util.ViewSpec
 
 class DateFormatterSpec extends ViewSpec {
 
-  private val dateFormatter = instanceOf[DateFormatter]
+  private val dateFormatter = inject[DateFormatter]
 
-  private val messageApi: MessagesApi = instanceOf[MessagesApi]
+  private val messageApi: MessagesApi = inject[MessagesApi]
 
   "DateFormatter" should {
 

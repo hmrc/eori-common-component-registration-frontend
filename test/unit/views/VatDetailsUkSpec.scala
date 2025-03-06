@@ -33,7 +33,7 @@ class VatDetailsUkSpec extends ViewSpec {
 
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  private val view = instanceOf[vat_details]
+  private val view = inject[vat_details]
 
   val form: Form[VatDetails] = vatDetailsForm
 

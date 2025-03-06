@@ -27,7 +27,7 @@ class Sub01OutcomeProcessingSpec extends ViewSpec {
 
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
 
-  private val view = instanceOf[sub01_outcome_processing]
+  private val view = inject[sub01_outcome_processing]
 
   val orgName       = "Test Organisation Name"
   val processedDate = "01 Jan 2019"

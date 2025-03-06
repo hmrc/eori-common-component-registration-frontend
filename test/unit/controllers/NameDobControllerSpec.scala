@@ -41,7 +41,7 @@ import scala.concurrent.Future
 class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with SubscriptionFlowTestSupport {
   protected override val formId: String      = NameDateOfBirthPage.formId
   val mockCdsFrontendDataCache: SessionCache = mock[SessionCache]
-  private val matchNameDobView               = instanceOf[match_namedob]
+  private val matchNameDobView               = inject[match_namedob]
   private val mockRequestSessionData         = mock[RequestSessionData]
   private val mockAppConfig                  = mock[AppConfig]
 

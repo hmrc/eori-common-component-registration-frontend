@@ -50,7 +50,7 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
   private val embassyAddressForm             = new EmbassyAddressForm()
-  private val embassyAddressView             = instanceOf[embassy_address]
+  private val embassyAddressView             = inject[embassy_address]
 
   private val fieldLevelErrorAddress         = "//p[@id='address-error' and @class='govuk-error-message']"
   private val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"

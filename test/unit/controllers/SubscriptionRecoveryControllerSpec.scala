@@ -66,8 +66,8 @@ class SubscriptionRecoveryControllerSpec
   private val contactDetails                        = mock[ContactDetailsModel]
   private val mockRequestSessionData                = mock[RequestSessionData]
   private val mockUpdateVerifiedEmailService        = mock[UpdateVerifiedEmailService]
-  private val errorTemplateView                     = instanceOf[error_template]
-  private val alreadyHaveEori                       = instanceOf[recovery_registration_exists]
+  private val errorTemplateView                     = inject[error_template]
+  private val alreadyHaveEori                       = inject[recovery_registration_exists]
 
   private val controller = new SubscriptionRecoveryController(
     mockAuthAction,

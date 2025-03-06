@@ -45,7 +45,7 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
   private val mockAuthAction                 = authAction(mockAuthConnector)
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockNameOrganisationMatchModel = mock[NameOrganisationMatchModel]
-  private val whatIsYourOrgNameView          = instanceOf[what_is_your_org_name]
+  private val whatIsYourOrgNameView          = inject[what_is_your_org_name]
   private val mockAppConfig                  = mock[AppConfig]
 
   private val controller =

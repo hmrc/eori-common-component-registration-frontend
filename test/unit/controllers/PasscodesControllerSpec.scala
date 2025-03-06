@@ -39,7 +39,7 @@ class PasscodesControllerSpec extends ControllerSpec with UnitSpec with MockitoS
 
   private val mockAuthConnector            = mock[AuthConnector]
   private val mockAuthAction               = authAction(mockAuthConnector)
-  private val messagesControllerComponents = instanceOf[MessagesControllerComponents]
+  private val messagesControllerComponents = inject[MessagesControllerComponents]
   private val emailVerificationConnector   = mock[EmailVerificationConnector]
 
   private val passcodesController =

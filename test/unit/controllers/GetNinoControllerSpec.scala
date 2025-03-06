@@ -48,10 +48,10 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   private val mockAuthAction                 = authAction(mockAuthConnector)
   private val mockMatchingService            = mock[MatchingService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val errorView                      = instanceOf[error_template]
-  private val mockRequestSessionData         = instanceOf[RequestSessionData]
+  private val errorView                      = inject[error_template]
+  private val mockRequestSessionData         = inject[RequestSessionData]
 
-  private val matchNinoRowIndividualView = instanceOf[how_can_we_identify_you_nino]
+  private val matchNinoRowIndividualView = inject[how_can_we_identify_you_nino]
 
   private val doYouHaveNinoController = new GetNinoController(
     mockAuthAction,

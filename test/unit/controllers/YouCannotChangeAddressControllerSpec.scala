@@ -39,8 +39,8 @@ class YouCannotChangeAddressControllerSpec extends ControllerSpec with AuthActio
   private val mockAuthAction         = authAction(mockAuthConnector)
   private val mockRequestSessionData = mock[RequestSessionData]
 
-  private val youCannotChangeAddressOrgView = instanceOf[you_cannot_change_address_organisation]
-  private val youCannotChangeAddressIndView = instanceOf[you_cannot_change_address_individual]
+  private val youCannotChangeAddressOrgView = inject[you_cannot_change_address_organisation]
+  private val youCannotChangeAddressIndView = inject[you_cannot_change_address_individual]
 
   val controller = new YouCannotChangeAddressController(
     mockAuthAction,

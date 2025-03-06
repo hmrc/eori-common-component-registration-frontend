@@ -36,10 +36,10 @@ class AddressInvalidControllerSpec extends ControllerSpec with AuthActionMock {
   private val mockAuthConnector       = mock[AuthConnector]
   private val mockAuthAction          = authAction(mockAuthConnector)
   private val mockRequestSessionData  = mock[RequestSessionData]
-  private val mockSessionCacheService = instanceOf[SessionCacheService]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
-  private val addressInvalidOrgView = instanceOf[address_invalid_organisation]
-  private val addressInvalidIndView = instanceOf[address_invalid_individual]
+  private val addressInvalidOrgView = inject[address_invalid_organisation]
+  private val addressInvalidIndView = inject[address_invalid_individual]
 
   val controller = new AddressInvalidController(
     mockAuthAction,

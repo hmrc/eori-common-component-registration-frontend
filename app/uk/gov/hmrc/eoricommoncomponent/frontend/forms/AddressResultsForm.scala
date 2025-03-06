@@ -18,17 +18,25 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
 import play.api.data.Form
 import play.api.data.Forms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.mandatoryString
 
 case class AddressResultsForm(address: String)
 
 object AddressResultsForm {
 
-  def form(allowedAddresses: Seq[String]): Form[AddressResultsForm] =
-    Form(
-      mapping("address" -> mandatoryString("ecc.address-lookup.postcode.address.error")(allowedAddresses.contains(_)))(
-        AddressResultsForm.apply
-      )(AddressResultsForm.unapply)
+  def form(allowedAddresses: Seq[Address]): Form[Address] =
+    Form[Address](
+      mapping(
+        "address" -> mandatoryString("ecc.address-lookup.postcode.address.error")(
+          allowedAddresses.map(_.dropDownView).contains(_)
+        )
+      )(
+        x =>
+          allowedAddresses.find(addr => addr.dropDownView.equalsIgnoreCase(x)).getOrElse(
+            throw new Exception("Can't match form value to addresses")
+          )
+      )(x => Some(x.dropDownView))
     )
 
 }

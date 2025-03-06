@@ -26,7 +26,7 @@ import util.ViewSpec
 
 class EnrolmentPendingForUserViewSpec extends ViewSpec {
 
-  private val view                   = instanceOf[enrolment_pending_for_user]
+  private val view                   = inject[enrolment_pending_for_user]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
   private val date                   = "2 August 2013"
 

@@ -53,7 +53,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockAppConfig                  = mock[AppConfig]
 
-  private val organisationTypeView = instanceOf[organisation_type]
+  private val organisationTypeView = inject[organisation_type]
 
   private val organisationTypeController = new OrganisationTypeController(
     mockAuthAction,

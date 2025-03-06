@@ -39,7 +39,7 @@ class VatRegisteredUkSpec extends ViewSpec {
 
   val isIndividualFlow = false
 
-  private val view                                      = instanceOf[vat_registered_uk]
+  private val view                                      = inject[vat_registered_uk]
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   lazy val doc: Document =

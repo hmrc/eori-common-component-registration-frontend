@@ -27,7 +27,7 @@ import util.ViewSpec
 class EmailConfirmedSpec extends ViewSpec {
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  val view: email_confirmed = instanceOf[email_confirmed]
+  val view: email_confirmed = inject[email_confirmed]
 
   "Email Address Confirmed page" should {
     "display correct title" in {

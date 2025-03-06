@@ -67,11 +67,11 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
   private val mockAppConfig                  = mock[AppConfig]
-  private val userLocationView               = instanceOf[user_location]
+  private val userLocationView               = inject[user_location]
 
-  private val sub01OutcomeProcessing = instanceOf[sub01_outcome_processing]
+  private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 
-  private val errorTemplate = instanceOf[error_template]
+  private val errorTemplate = inject[error_template]
 
   private val controller = new UserLocationController(
     mockAuthAction,

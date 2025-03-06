@@ -26,8 +26,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{
-  AddressLookup,
   AddressLookupFailure,
   AddressLookupSuccess,
   AddressRequestBody
@@ -100,9 +100,16 @@ class AddressLookupConnectorSpec
         val postcode = "AA11 1AA"
 
         val expectedFirstAddress =
-          AddressLookup("First Address Line 1, First Address Line 2", "First town", "AA11 1AA", "GB")
+          Address("First Address Line 1", None, None, Some("First town"), Some("AA11 1AA"), "GB")
         val expectedSecondAddress =
-          AddressLookup("Second Address Line 1, Second Address Line 2", "Second town", "AA11 1AA", "GB")
+          Address(
+            "Second Address Line 1",
+            Some("Second Address Line 2"),
+            Some("Second Address Line 3"),
+            Some("Second town"),
+            Some("AA11 1AA"),
+            "GB"
+          )
         val expectedResponse = AddressLookupSuccess(Seq(expectedFirstAddress, expectedSecondAddress))
 
         val result = connector.lookup(postcode, None)(hc)
@@ -119,7 +126,8 @@ class AddressLookupConnectorSpec
 
         val postcode = "AA11 1AA"
 
-        val expectedAddress  = AddressLookup("Address Line 1, Address Line 2", "Town", "AA11 1AA", "GB")
+        val expectedAddress =
+          Address("Address Line 1", Some("Address Line 2"), None, Some("Town"), Some("AA11 1AA"), "GB")
         val expectedResponse = AddressLookupSuccess(Seq(expectedAddress))
 
         val result = connector.lookup(postcode, None)(hc)
@@ -168,8 +176,7 @@ object AddressLookupConnectorSpec {
                                                          |        "uprn": 123,
                                                          |        "address": {
                                                          |            "lines": [
-                                                         |                "First Address Line 1",
-                                                         |                "First Address Line 2"
+                                                         |                "First Address Line 1"
                                                          |            ],
                                                          |            "town": "First town",
                                                          |            "county": "County",
@@ -195,7 +202,8 @@ object AddressLookupConnectorSpec {
                                                          |        "address": {
                                                          |            "lines": [
                                                          |                "Second Address Line 1",
-                                                         |                "Second Address Line 2"
+                                                         |                "Second Address Line 2",
+                                                         |                "Second Address Line 3"
                                                          |            ],
                                                          |            "town": "Second town",
                                                          |            "county": "County",

@@ -42,8 +42,8 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
   private val mockAuthAction              = authAction(mockAuthConnector)
   private val mockRequestSessionData      = mock[RequestSessionData]
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
-  private val confirmIndividualTypeView   = instanceOf[confirm_individual_type]
-  private val mockSessionCacheService     = instanceOf[SessionCacheService]
+  private val confirmIndividualTypeView   = inject[confirm_individual_type]
+  private val mockSessionCacheService     = inject[SessionCacheService]
 
   private val controller = new ConfirmIndividualTypeController(
     mockAuthAction,
