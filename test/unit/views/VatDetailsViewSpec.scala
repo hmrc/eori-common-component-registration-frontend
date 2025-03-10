@@ -18,22 +18,33 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{VatDetails, VatDetailsForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
 
 class VatDetailsViewSpec extends ViewSpec {
-
-  private val form: Form[VatDetails]                            = VatDetailsForm.vatDetailsForm
   private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
-  private val view                                              = inject[vat_details]
-  private val vatNumberLabel                                    = "label[for=vat-number]"
-  private val postcodeLabel                                     = "label[for=postcode]"
+
+  val mockAuditable: Auditable = mock[Auditable]
+
+  val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable) {
+    def isRestOfTheWorld: Boolean = false
+  }
+
+  private val form: Form[VatDetails] = new VatDetailsForm(mockRequestSessionData).vatDetailsForm
+
+  private val view           = inject[vat_details]
+  private val vatNumberLabel = "label[for=vat-number]"
+  private val postcodeLabel  = "label[for=postcode]"
 
   "VAT Details" should {
     "have the correct title for UK" in {
@@ -82,12 +93,14 @@ class VatDetailsViewSpec extends ViewSpec {
   }
 
   private lazy val doc: Document = {
-    val result = view(form, isInReviewMode = false, UserLocation.Uk, isIndividualOrSoleTrader = false, atarService)
+    val result =
+      view(form, isInReviewMode = false, UserLocation.Uk, isIndividualOrSoleTrader = false, isRow = false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   private lazy val iomDoc: Document = {
-    val result = view(form, isInReviewMode = false, UserLocation.Iom, isIndividualOrSoleTrader = false, atarService)
+    val result =
+      view(form, isInReviewMode = false, UserLocation.Iom, isIndividualOrSoleTrader = false, isRow = false, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

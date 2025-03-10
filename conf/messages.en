@@ -892,6 +892,7 @@ cds.subscription.vat-details.intro-text=You can find these on your VAT certifica
 cds.subscription.vat-details.intro-text.link=Sign in to your VAT online account (opens in new tab)
 cds.subscription.vat-details.intro-text.link.text = to view your VAT certificate.
 cds.subscription.vat-details.uk.postcode=What is the UK postcode where your organisation is registered for VAT?
+cds.subscription.vat-details.row.postcode=What is the postcode where your organisation is registered for VAT?
 cds.subscription.vat-details.postcode=What is the postcode where your organisation is registered for VAT?
 cds.subscription.vat-details.individual-sole-trader.postcode=What is the postcode where you are registered for VAT?
 cds.subscription.vat-details.vat-number=What is your VAT registration number?

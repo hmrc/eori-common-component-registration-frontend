@@ -121,6 +121,11 @@ class RequestSessionData @Inject() (audit: Auditable) {
       IndividualOrganisations.contains(orgType)
     }
 
+  def isRestOfTheWorld(implicit request: Request[AnyContent]): Boolean =
+    userSelectedOrganisationType.fold(false) { orgType =>
+      CdsOrganisationType.RestOfTheWorld.contains(orgType)
+    }
+
   private val registrationUkSubscriptionFlows =
     Seq(OrganisationSubscriptionFlow, PartnershipSubscriptionFlow, IndividualSubscriptionFlow)
 
