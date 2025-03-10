@@ -40,7 +40,7 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
   private val mockAuthAction                 = authAction(mockAuthConnector)
   private val mockRequestSessionData         = mock[RequestSessionData]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val whatIsYourContactAddressView   = instanceOf[what_is_your_contact_address]
+  private val whatIsYourContactAddressView   = inject[what_is_your_contact_address]
 
   private val controller = new WhatIsYourContactAddressController(
     mockAuthAction,

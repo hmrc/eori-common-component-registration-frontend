@@ -39,7 +39,7 @@ class ApplicationSubmissionControllerSpec extends ControllerSpec with BeforeAndA
   private val mockAuthConnector         = mock[AuthConnector]
   private val mockAuthAction            = authAction(mockAuthConnector)
   private val mockSessionCache          = mock[SessionCache]
-  private val applicationProcessingView = instanceOf[application_processing]
+  private val applicationProcessingView = inject[application_processing]
 
   private val controller =
     new ApplicationSubmissionController(mockAuthAction, mcc, mockSessionCache, applicationProcessingView)

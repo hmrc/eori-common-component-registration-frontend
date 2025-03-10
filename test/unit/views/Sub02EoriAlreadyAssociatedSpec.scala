@@ -32,7 +32,7 @@ class Sub02EoriAlreadyAssociatedSpec extends ViewSpec {
   private val pageHeadingExpectedText = s"Our records show that $name already has an EORI number."
   private val processDateExpectedText = s"Application received by HMRC on $processedDate"
 
-  private val view = instanceOf[sub02_eori_already_associated]
+  private val view = inject[sub02_eori_already_associated]
 
   "GYE EORI Already Associated outcome page" should {
     "have the correct page title" in {

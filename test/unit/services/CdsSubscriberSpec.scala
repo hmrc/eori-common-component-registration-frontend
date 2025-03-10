@@ -16,7 +16,7 @@
 
 package unit.services
 
-import base.{Injector, UnitSpec}
+import base.UnitSpec
 import common.support.testdata.TestData
 import common.support.testdata.subscription.SubscriptionContactDetailsBuilder
 import org.mockito.ArgumentMatchers.{eq => meq, _}
@@ -32,6 +32,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Request
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Injecting
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -46,7 +47,7 @@ import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures with BeforeAndAfterEach with Injector {
+class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures with BeforeAndAfterEach with Injecting {
 
   implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
@@ -64,7 +65,7 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
 
   implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
 
-  implicit val messages: Messages = MessagesImpl(defaultLang, instanceOf[MessagesApi])
+  implicit val messages: Messages = MessagesImpl(defaultLang, inject[MessagesApi])
 
   private val eori                       = "EORI-Number"
   private val formBundleId               = "Form-Bundle-Id"

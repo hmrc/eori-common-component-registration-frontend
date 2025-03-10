@@ -38,7 +38,7 @@ class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with
   private val expectedYesRedirectUrl = routes.VatGroupsCannotRegisterUsingThisServiceController.form(atarService).url
   private val expectedNoRedirectUrl  = EmailController.form(atarService).url
 
-  private val vatGroupView = instanceOf[vat_group]
+  private val vatGroupView = inject[vat_group]
 
   private val controller =
     new VatGroupController(mcc, vatGroupView)

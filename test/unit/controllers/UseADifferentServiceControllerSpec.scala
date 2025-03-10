@@ -25,7 +25,7 @@ import util.ControllerSpec
 
 class UseADifferentServiceControllerSpec extends ControllerSpec with BeforeAndAfterEach {
 
-  private val useADifferentService = instanceOf[use_a_different_service]
+  private val useADifferentService = inject[use_a_different_service]
 
   "useADifferentService" should {
 

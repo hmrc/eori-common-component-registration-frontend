@@ -52,7 +52,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
   private val mockSubscriptionDetailsService          = mock[SubscriptionDetailsService]
   private val mockSubscriptionFlowManager             = mock[SubscriptionFlowManager]
   private val mockRegistrationDetailsService          = mock[RegistrationDetailsService]
-  private val what_is__your_organisation_address_view = instanceOf[what_is_your_organisations_address]
+  private val what_is__your_organisation_address_view = inject[what_is_your_organisations_address]
 
   private val controller = new WhatIsYourOrganisationsAddressController(
     mockAuthAction,

@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION, CONTENT_TYPE, DATE}
-import play.api.http.MimeTypes
+import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
 import play.api.http.Status.{BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY}
 import play.api.libs.json.Json
+import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.transformer.FormDataCreateEoriSubscriptionRequestTransformer
@@ -29,12 +29,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.Subscription
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetails, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.CreateEoriSubscriptionNoIdentifier
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
-import java.net.URL
-import java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME
-import java.time.{LocalDateTime, ZoneOffset}
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -65,17 +62,9 @@ class TaxUDConnector @Inject() (
       service: Service
     )
 
-    val correlationId = UUID.randomUUID().toString
-
     httpClient
       .post(fullUrl)
-      .setHeader(
-        AUTHORIZATION    -> appConfig.internalAuthToken,
-        ACCEPT           -> MimeTypes.JSON,
-        CONTENT_TYPE     -> MimeTypes.JSON,
-        DATE             -> LocalDateTime.now().atOffset(ZoneOffset.UTC).format(RFC_1123_DATE_TIME),
-        X_CORRELATION_ID -> correlationId
-      )
+      .setHeader(AUTHORIZATION -> appConfig.internalAuthToken, ACCEPT -> MimeTypes.JSON, CONTENT_TYPE -> MimeTypes.JSON)
       .withBody(Json.toJson(createEoriSubscriptionRequest))
       .execute
       .flatMap { httpResponse =>
@@ -84,7 +73,7 @@ class TaxUDConnector @Inject() (
             handleResponse[CreateEoriSubscriptionResponse](httpResponse) match {
               case Left(_) =>
                 logger.error(
-                  s"Create EORI Subscription succeeded but could not parse response body, Correlation ID is: $correlationId"
+                  s"Create EORI Subscription succeeded but could not parse response body, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
                 )
                 Future.successful(InvalidResponse)
 
@@ -104,17 +93,23 @@ class TaxUDConnector @Inject() (
             }
 
           case UNPROCESSABLE_ENTITY =>
-            logger.error(s"422 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(
+              s"422 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
+            )
             Future.successful(ErrorResponse)
           case BAD_REQUEST =>
-            logger.error(s"400 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(
+              s"400 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
+            )
             Future.successful(ErrorResponse)
           case INTERNAL_SERVER_ERROR =>
-            logger.error(s"500 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}")
+            logger.error(
+              s"500 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
+            )
             Future.successful(ErrorResponse)
           case _ =>
             logger.error(
-              s"call to create eori subscription failed with status: ${httpResponse.status}, Correlation ID is: $correlationId"
+              s"call to create eori subscription failed with status: ${httpResponse.status}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
             )
             Future.successful(ErrorResponse)
         }

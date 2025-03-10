@@ -56,7 +56,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
     val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
     val mockRequestSessionData         = mock[RequestSessionData]
 
-    private val rowIndividualNameDob = instanceOf[row_individual_name_dob]
+    private val rowIndividualNameDob = inject[row_individual_name_dob]
     private val mockAuthAction       = authAction(mockAuthConnector)
 
     override val controller = new RowIndividualNameDateOfBirthController(

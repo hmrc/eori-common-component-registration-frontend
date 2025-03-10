@@ -33,7 +33,7 @@ class OrganisationTypePageSpec extends ViewSpec {
   private val thirdCountrySoleTraderLabel     = "label[for=organisation-type-third-country-sole-trader]"
   private val thirdCountryIndividualLabel     = "label[for=organisation-type-third-country-individual]"
 
-  private val view = instanceOf[organisation_type]
+  private val view = inject[organisation_type]
 
   "Rest of World (ROW) What do you want to apply as? page" should {
     "display 'an organisation' as an option" in {

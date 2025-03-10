@@ -42,7 +42,7 @@ import scala.concurrent.Future
 
 class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
 
-  private val mockDateOfVatRegistrationView   = instanceOf[date_of_vat_registration]
+  private val mockDateOfVatRegistrationView   = inject[date_of_vat_registration]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
   private val mockAppConfig                   = mock[AppConfig]
@@ -50,10 +50,10 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction    = authAction(mockAuthConnector)
 
-  private val mockVatReturnTotalView          = instanceOf[vat_return_total]
-  private val mockWeCannotConfirmYourIdentity = instanceOf[we_cannot_confirm_your_identity]
-  private val form                            = instanceOf[VatRegistrationDateFormProvider]
-  private val mockSessionCacheService         = instanceOf[SessionCacheService]
+  private val mockVatReturnTotalView          = inject[vat_return_total]
+  private val mockWeCannotConfirmYourIdentity = inject[we_cannot_confirm_your_identity]
+  private val form                            = inject[VatRegistrationDateFormProvider]
+  private val mockSessionCacheService         = inject[SessionCacheService]
 
   private val controller = new DateOfVatRegistrationController(
     mockAuthAction,

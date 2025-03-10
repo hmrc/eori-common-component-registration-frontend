@@ -29,7 +29,7 @@ import util.builders.AuthBuilder.withAuthorisedUser
 
 class YouNeedADifferentServiceControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val youNeedDifferenceServicePage = instanceOf[you_need_different_service]
+  private val youNeedDifferenceServicePage = inject[you_need_different_service]
   private val authConnector                = mock[AuthConnector]
   private val mockAuthAction               = authAction(authConnector)
 

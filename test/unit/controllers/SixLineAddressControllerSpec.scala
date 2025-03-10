@@ -61,8 +61,8 @@ class SixLineAddressControllerSpec
   private val mockRegistrationDetailsIndividual   = mock[RegistrationDetailsIndividual]
   private val mockRegistrationDetailsService      = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService      = mock[SubscriptionDetailsService]
-  private val sixLineAddressView                  = instanceOf[six_line_address]
-  private val mockSessionCacheService             = instanceOf[SessionCacheService]
+  private val sixLineAddressView                  = inject[six_line_address]
+  private val mockSessionCacheService             = inject[SessionCacheService]
 
   private val controller = new SixLineAddressController(
     mockAuthAction,

@@ -41,7 +41,7 @@ class EmbassyNameControllerSpec extends ControllerSpec with BeforeAndAfterEach w
   private val mockAuthAction                 = authAction(mockAuthConnector)
   private val form                           = new EmbassyNameForm()
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockEmbassyNameView            = instanceOf[what_is_your_embassy_name]
+  private val mockEmbassyNameView            = inject[what_is_your_embassy_name]
 
   private val embassyNameController =
     new EmbassyNameController(mockAuthAction, mcc, form, mockEmbassyNameView, mockSubscriptionDetailsService)

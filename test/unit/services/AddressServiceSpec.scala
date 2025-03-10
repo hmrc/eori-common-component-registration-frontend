@@ -50,9 +50,9 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
   private val mockSubscriptionFlowManager     = mock[SubscriptionFlowManager]
   private val mockSubscriptionPage            = mock[SubscriptionPage]
   private val mockFlowError                   = mock[FlowError]
-  private val mockAddress                     = instanceOf[address]
-  private val mockErrorTemplate               = instanceOf[error_template]
-  private val messagesControllerComponents    = instanceOf[MessagesControllerComponents]
+  private val mockAddress                     = inject[address]
+  private val mockErrorTemplate               = inject[error_template]
+  private val messagesControllerComponents    = inject[MessagesControllerComponents]
 
   private val subscriptionToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 

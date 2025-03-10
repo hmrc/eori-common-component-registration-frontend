@@ -56,9 +56,9 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockMatchingRequestHolder      = mock[MatchingRequestHolder]
   private val mockMatchingResponse           = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val matchOrganisationUtrView       = instanceOf[how_can_we_identify_you_utr]
-  private val errorView                      = instanceOf[error_template]
-  private val mockSessionCacheService        = instanceOf[SessionCacheService]
+  private val matchOrganisationUtrView       = inject[how_can_we_identify_you_utr]
+  private val errorView                      = inject[error_template]
+  private val mockSessionCacheService        = inject[SessionCacheService]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
