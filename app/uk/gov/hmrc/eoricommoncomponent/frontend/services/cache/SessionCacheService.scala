@@ -72,9 +72,9 @@ class SessionCacheService @Inject() (
     )
       cache.getNinoOrUtrDetails flatMap {
         case Some(ninoOrUtr) =>
-          cache.registrationDetails flatMap {
-            case regDetails if regDetails.address.postalCode.isDefined =>
-              matchOnId(ninoOrUtr, GroupId(groupId), regDetails.address.postalCode.get).fold(
+          cache.getPostcodeAndLine1Details flatMap {
+            case Some(postcodeViewModel) =>
+              matchOnId(ninoOrUtr, GroupId(groupId), postcodeViewModel.postcode).fold(
                 {
                   case MatchingServiceConnector.matchFailureResponse =>
                     logger.warn("Matching service returned Match Failure Response, cannot change address")
