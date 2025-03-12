@@ -61,9 +61,6 @@ class RequestSessionData @Inject() (audit: Auditable) {
   def userSelectedOrganisationType(implicit request: Request[AnyContent]): Option[CdsOrganisationType] =
     request.session.data.get(RequestSessionDataKeys.selectedOrganisationType).map(CdsOrganisationType.forId)
 
-  def mayBeUnMatchedUser(implicit request: Request[AnyContent]): Option[String] =
-    request.session.data.get(RequestSessionDataKeys.unmatchedUser)
-
   def sessionWithOrganisationTypeAdded(existingSession: Session, organisationType: CdsOrganisationType): Session =
     existingSession + (RequestSessionDataKeys.selectedOrganisationType -> organisationType.id)
 
@@ -106,10 +103,6 @@ class RequestSessionData @Inject() (audit: Auditable) {
 
   def isCharity(implicit request: Request[AnyContent]): Boolean =
     userSelectedOrganisationType.fold(false)(orgType => orgType == CdsOrganisationType.CharityPublicBodyNotForProfit)
-
-  def isCompany(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) { orgType =>
-    orgType == CdsOrganisationType.Company
-  }
 
   def isIndividualOrSoleTrader(implicit request: Request[AnyContent]): Boolean =
     userSelectedOrganisationType.fold(false) { orgType =>
