@@ -58,11 +58,12 @@ class VatReturnController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionBusinessService.getCachedVatControlListResponse.map {
-      case Some(response)
-          if response.lastNetDue.getOrElse(
-            Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
-          ) == vatReturnTotal.returnAmountInput.toDouble =>
-        Redirect(ContactDetailsController.createForm(service))
+      case Some(response) =>
+        if (response.lastNetDue.contains(vatReturnTotal.returnAmountInput.toDouble)) {
+          Redirect(ContactDetailsController.createForm(service))
+        } else {
+          Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
+        }
       case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }
 
