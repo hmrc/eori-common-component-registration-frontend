@@ -34,8 +34,8 @@ import scala.concurrent.Future
 
 class SecuritySignOutControllerSpec extends ControllerSpec with AuthActionMock {
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
-  private val mockSessionCache  = mock[SessionCache]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockSessionCache = mock[SessionCache]
 
   private val displaySignOutView = inject[display_sign_out]
 

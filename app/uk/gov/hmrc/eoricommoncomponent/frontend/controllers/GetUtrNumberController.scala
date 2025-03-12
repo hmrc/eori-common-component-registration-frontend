@@ -156,7 +156,7 @@ class GetUtrNumberController @Inject() (
     isInReviewMode: Boolean,
     service: Service
   )(implicit request: Request[AnyContent]): Result = {
-    val errorMsg  = organisationType match {
+    val errorMsg = organisationType match {
       case orgType if individualOrganisationIds.contains(orgType) =>
         Messages("cds.matching-error.individual-not-found")
       case _ => Messages("cds.matching-error-organisation.not-found")

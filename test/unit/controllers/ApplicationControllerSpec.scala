@@ -35,8 +35,8 @@ import scala.concurrent.Future
 class ApplicationControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
-  private val mockSessionCache  = mock[SessionCache]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockSessionCache = mock[SessionCache]
 
   private val startRegisterView = inject[start]
 

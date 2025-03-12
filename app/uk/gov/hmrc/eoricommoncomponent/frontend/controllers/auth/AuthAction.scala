@@ -50,7 +50,7 @@ class AuthAction @Inject() (
   private type RequestProcessorExtended =
     Request[AnyContent] => Option[String] => LoggedInUserWithEnrolments => Future[Result]
 
-  private val baseRetrievals     = ggEmail and credentialRole and affinityGroup
+  private val baseRetrievals = ggEmail and credentialRole and affinityGroup
   private val extendedRetrievals = baseRetrievals and internalId and allEnrolments and groupIdentifier and credentials
 
   def enrolledUserClearingCacheOnCompletionAction(requestProcessor: RequestProcessorSimple) =

@@ -30,9 +30,9 @@ object SubscriptionFormBuilder {
   val gbVatDetails: Option[VatDetails] =
     Some(VatDetails("SE28 1AA", "123456789"))
 
-  val LegalStatus     = "corporate-body-uk"
-  val ShortName       = "Short Name"
-  val sic             = "9999"
+  val LegalStatus = "corporate-body-uk"
+  val ShortName = "Short Name"
+  val sic = "9999"
   val DateEstablished = LocalDate.of(1900, 11, 11)
 
   private val contactDetailsModel = ContactDetailsModel(

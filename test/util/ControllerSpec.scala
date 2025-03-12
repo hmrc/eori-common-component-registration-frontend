@@ -123,7 +123,7 @@ trait ControllerSpec extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar
 
   trait AbstractControllerFixture[C <: FrontendController] {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val userId: String                   = defaultUserId
+    val userId: String = defaultUserId
 
     val controller: C
 

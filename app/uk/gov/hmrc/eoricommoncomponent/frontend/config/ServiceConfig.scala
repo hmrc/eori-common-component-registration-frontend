@@ -28,7 +28,7 @@ class ServiceConfig(configuration: Configuration) {
   private def serviceList: Set[Service] =
     serviceKeys.map { service =>
       val englishFriendlyName = configuration.get[String](s"services-config.$service.friendlyName").replace("_", " ")
-      val welshFriendlyName   =
+      val welshFriendlyName =
         configuration
           .getOptional[String](s"services-config.$service.friendlyNameWelsh")
           .map(

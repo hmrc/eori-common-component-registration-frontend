@@ -37,7 +37,7 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
   ec: ExecutionContext
 ) {
 
-  private val logger  = Logger(this.getClass)
+  private val logger = Logger(this.getClass)
   private val baseUrl = appConfig.getServiceUrl("subscription-status")
 
   def status(
@@ -75,7 +75,7 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
   )(implicit hc: HeaderCarrier, originatingService: Service): Unit = {
 
     val subscriptionStatusSubmitted = SubscriptionStatusSubmitted(request, originatingService.code)
-    val subscriptionStatusResult    = SubscriptionStatusResult(response)
+    val subscriptionStatusResult = SubscriptionStatusResult(response)
 
     audit.sendExtendedDataEvent(
       transactionName = "ecc-subscription-status",

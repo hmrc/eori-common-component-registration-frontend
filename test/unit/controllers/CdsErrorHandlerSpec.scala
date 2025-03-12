@@ -32,7 +32,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
   val configuration = mock[Configuration]
 
   private val errorTemplateView = inject[error_template]
-  private val notFoundView      = inject[notFound]
+  private val notFoundView = inject[notFound]
 
   val cdsErrorHandler =
     new CdsErrorHandler(messagesApi, configuration, errorTemplateView, notFoundView)

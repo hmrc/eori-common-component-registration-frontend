@@ -50,18 +50,18 @@ import scala.concurrent.Future
 
 class SixLineAddressControllerSpec extends ControllerSpec with BeforeAndAfter with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector                   = mock[AuthConnector]
-  private val mockAuthAction                      = authAction(mockAuthConnector)
-  private val mockRegistrationDetailsCreator      = mock[RegistrationDetailsCreator]
-  private val mockSubscriptionFlowManager         = mock[SubscriptionFlowManager]
-  private val mockSessionCache                    = mock[SessionCache]
-  private val mockRequestSessionData              = mock[RequestSessionData]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRegistrationDetailsCreator = mock[RegistrationDetailsCreator]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockRegistrationDetailsOrganisation = mock[RegistrationDetailsOrganisation]
-  private val mockRegistrationDetailsIndividual   = mock[RegistrationDetailsIndividual]
-  private val mockRegistrationDetailsService      = mock[RegistrationDetailsService]
-  private val mockSubscriptionDetailsService      = mock[SubscriptionDetailsService]
-  private val sixLineAddressView                  = inject[six_line_address]
-  private val mockSessionCacheService             = inject[SessionCacheService]
+  private val mockRegistrationDetailsIndividual = mock[RegistrationDetailsIndividual]
+  private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
+  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val sixLineAddressView = inject[six_line_address]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new SixLineAddressController(
     mockAuthAction,
@@ -75,18 +75,18 @@ class SixLineAddressControllerSpec extends ControllerSpec with BeforeAndAfter wi
     mockSessionCacheService
   )(global)
 
-  private val mockSubscriptionPage         = mock[SubscriptionPage]
+  private val mockSubscriptionPage = mock[SubscriptionPage]
   private val mockSubscriptionStartSession = mock[Session]
-  private val mockFlowStart                = (mockSubscriptionPage, mockSubscriptionStartSession)
+  private val mockFlowStart = (mockSubscriptionPage, mockSubscriptionStartSession)
 
-  private val testSessionData              = Map[String, String]("some_session_key" -> "some_session_value")
+  private val testSessionData = Map[String, String]("some_session_key" -> "some_session_value")
   private val testSubscriptionStartPageUrl = "some_page_url"
 
-  private val LineOne     = "Address line 1"
-  private val LineTwo     = "Address line 2 (optional)"
-  private val LineThree   = "Town or city"
-  private val LineFour    = "Region or state (optional)"
-  private val Postcode    = "Postcode"
+  private val LineOne = "Address line 1"
+  private val LineTwo = "Address line 2 (optional)"
+  private val LineThree = "Town or city"
+  private val LineFour = "Region or state (optional)"
+  private val Postcode = "Postcode"
   private val testAddress = Address(LineOne, Some(LineTwo), Some(LineThree), Some(LineFour), Some(Postcode), "FR")
 
   val organisationTypesData = Table(

@@ -38,17 +38,17 @@ import scala.concurrent.Future
 
 class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with ScalaFutures with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach {
 
-  private val mockConnector            = mock[EmailVerificationConnector]
+  private val mockConnector = mock[EmailVerificationConnector]
   private val mockAppConfig: AppConfig = mock[AppConfig]
 
-  implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
+  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
   implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
 
   val sut = new EmailVerificationService(mockConnector, mockAppConfig)
 
   implicit val messages: Messages = mock[Messages]
 
-  private val email          = "test@example.com"
+  private val email = "test@example.com"
   private val differentEmail = "different@example.com"
 
   override protected def beforeEach(): Unit = {
@@ -81,7 +81,7 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Locked where the input email has locked=true" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Locked)
+      val expected = Right(EmailVerificationStatus.Locked)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(
         VerificationStatusResponse(Seq(VerificationStatus(emailAddress = email, verified = false, locked = true)))
       )
@@ -96,7 +96,7 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Verified where the input email has verified=true" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Verified)
+      val expected = Right(EmailVerificationStatus.Verified)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(
         VerificationStatusResponse(Seq(VerificationStatus(emailAddress = email, verified = true, locked = false)))
       )
@@ -111,7 +111,7 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Unverified where it doesn't exist but a different email has verified=true" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Unverified)
+      val expected = Right(EmailVerificationStatus.Unverified)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(
         VerificationStatusResponse(
           Seq(VerificationStatus(emailAddress = differentEmail, verified = true, locked = false))
@@ -128,7 +128,7 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Unverified where it doesn't exist but a different email has locked=true" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Unverified)
+      val expected = Right(EmailVerificationStatus.Unverified)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(
         VerificationStatusResponse(
           Seq(VerificationStatus(emailAddress = differentEmail, verified = false, locked = true))
@@ -145,7 +145,7 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Unverified where an empty list is returned" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Unverified)
+      val expected = Right(EmailVerificationStatus.Unverified)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(VerificationStatusResponse(Nil))
       mockGetVerificationStatus(credId)(EitherT[Future, ResponseError, VerificationStatusResponse] {
         Future.successful(response)
@@ -158,8 +158,8 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Locked where the input email has locked=true and a different email exists" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Locked)
-      val sequence                                                    = Seq(
+      val expected = Right(EmailVerificationStatus.Locked)
+      val sequence = Seq(
         VerificationStatus(emailAddress = email, verified = false, locked = true),
         VerificationStatus(emailAddress = differentEmail, verified = true, locked = false)
       )
@@ -175,8 +175,8 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Verified where the input email has verified=true and a different email exists" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Verified)
-      val sequence                                                    = Seq(
+      val expected = Right(EmailVerificationStatus.Verified)
+      val sequence = Seq(
         VerificationStatus(emailAddress = email, verified = true, locked = false),
         VerificationStatus(emailAddress = differentEmail, verified = false, locked = true)
       )
@@ -192,8 +192,8 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Verified where they return a verified email all lowercase, but the email in our cache is upper case" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Verified)
-      val sequence                                                    = Seq(VerificationStatus(emailAddress = "test@test.com", verified = true, locked = false))
+      val expected = Right(EmailVerificationStatus.Verified)
+      val sequence = Seq(VerificationStatus(emailAddress = "test@test.com", verified = true, locked = false))
       val response: Either[ResponseError, VerificationStatusResponse] = Right(VerificationStatusResponse(sequence))
       mockGetVerificationStatus(credId)(EitherT[Future, ResponseError, VerificationStatusResponse] {
         Future.successful(response)

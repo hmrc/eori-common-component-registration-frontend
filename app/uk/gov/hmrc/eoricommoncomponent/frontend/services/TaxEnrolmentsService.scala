@@ -38,8 +38,8 @@ class TaxEnrolmentsService @Inject() (taxEnrolmentsConnector: TaxEnrolmentsConne
   def issuerCall(formBundleId: String, eori: Eori, dateOfEstablishment: Option[LocalDate], service: Service)(implicit
     hc: HeaderCarrier
   ): Future[Int] = {
-    val identifiers          = List(KeyValue(key = "EORINUMBER", value = eori.id))
-    val verifiers            =
+    val identifiers = List(KeyValue(key = "EORINUMBER", value = eori.id))
+    val verifiers =
       dateOfEstablishment.map(doe => List(KeyValue(key = "DATEOFESTABLISHMENT", value = pattern.format(doe))))
     val taxEnrolmentsRequest =
       TaxEnrolmentsRequest(
@@ -55,8 +55,8 @@ class TaxEnrolmentsService @Inject() (taxEnrolmentsConnector: TaxEnrolmentsConne
     hc: HeaderCarrier
   ): Future[Int] = {
 
-    val identifiers          = List(KeyValue(key = "SAFEID", value = safeId.id))
-    val verifiers            =
+    val identifiers = List(KeyValue(key = "SAFEID", value = safeId.id))
+    val verifiers =
       dateOfEstablishment.map(doe => List(KeyValue(key = "DATEOFESTABLISHMENT", value = pattern.format(doe))))
     val taxEnrolmentsRequest =
       TaxEnrolmentsRequest(

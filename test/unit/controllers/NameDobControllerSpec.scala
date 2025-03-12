@@ -39,11 +39,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with SubscriptionFlowTestSupport {
-  override protected val formId: String      = NameDateOfBirthPage.formId
+  override protected val formId: String = NameDateOfBirthPage.formId
   val mockCdsFrontendDataCache: SessionCache = mock[SessionCache]
-  private val matchNameDobView               = inject[match_namedob]
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockAppConfig                  = mock[AppConfig]
+  private val matchNameDobView = inject[match_namedob]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockAppConfig = mock[AppConfig]
 
   private def nameDobController =
     new NameDobController(
@@ -56,7 +56,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     )(global)
 
   val defaultOrganisationType = "individual"
-  val soleTraderType          = "sole-trader"
+  val soleTraderType = "sole-trader"
 
   def maxLengthError(maxLength: Int, field: String): String =
     s"The $field name must be $maxLength characters or less"
@@ -184,7 +184,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     }
 
     "not be in the future" in {
-      val tomorrow        = LocalDate.now().plusDays(1)
+      val tomorrow = LocalDate.now().plusDays(1)
       val futureDateError = "Year must be between 1900 and this year"
       when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
       when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)

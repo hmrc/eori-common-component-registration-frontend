@@ -49,8 +49,8 @@ sealed trait RegistrationDetails {
   def address: Address
 
   def dateOfEstablishmentOption: Option[LocalDate] = None
-  def dateOfBirthOption: Option[LocalDate]         = None
-  def orgType: Option[String]                      = None
+  def dateOfBirthOption: Option[LocalDate] = None
+  def orgType: Option[String] = None
 }
 
 case class RegistrationDetailsOrganisation(
@@ -127,8 +127,8 @@ object RegistrationDetails {
   def rdSafeId(safeId: SafeId): RegistrationDetailsSafeId =
     RegistrationDetailsSafeId(safeId, Address("", Some(""), Some(""), Some(""), Some(""), ""), TaxPayerId(""), None, "")
 
-  private val orgFormat: OFormat[RegistrationDetailsOrganisation]          = Json.format[RegistrationDetailsOrganisation]
-  private val individualFormat: OFormat[RegistrationDetailsIndividual]     = Json.format[RegistrationDetailsIndividual]
+  private val orgFormat: OFormat[RegistrationDetailsOrganisation] = Json.format[RegistrationDetailsOrganisation]
+  private val individualFormat: OFormat[RegistrationDetailsIndividual] = Json.format[RegistrationDetailsIndividual]
   private val registrationSafeIdFormat: OFormat[RegistrationDetailsSafeId] = Json.format[RegistrationDetailsSafeId]
 
   /** TODO in the future change this to always read the orgType & create the corresponding registration details object based on it.

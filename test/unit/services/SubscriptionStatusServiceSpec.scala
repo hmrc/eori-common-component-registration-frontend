@@ -40,13 +40,13 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
-  private val mockConnector                                      = mock[SubscriptionStatusConnector]
+  private val mockConnector = mock[SubscriptionStatusConnector]
   private val mockRequestCommonGenerator: RequestCommonGenerator = mock[RequestCommonGenerator]
-  private val mockSessionCache                                   = mock[SessionCache]
-  private val mockConfig                                         = mock[Configuration]
-  private val AValidTaxPayerID                                   = "123456789"
-  private val MDGZeroPaddedTaxPayerId                            = AValidTaxPayerID + "000000000000000000000000000000000"
-  private val receiptDate                                        = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 0)
+  private val mockSessionCache = mock[SessionCache]
+  private val mockConfig = mock[Configuration]
+  private val AValidTaxPayerID = "123456789"
+  private val MDGZeroPaddedTaxPayerId = AValidTaxPayerID + "000000000000000000000000000000000"
+  private val receiptDate = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 0)
 
   private val request =
     SubscriptionStatusQueryParams(receiptDate = receiptDate, regime = "CDS", "taxPayerID", MDGZeroPaddedTaxPayerId)
@@ -54,9 +54,9 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
   lazy val service =
     new SubscriptionStatusService(mockConnector, mockRequestCommonGenerator, mockSessionCache)(global)
 
-  implicit val hc: HeaderCarrier           = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val priginatingService: Service = Service.cds
-  implicit val mockRequest: Request[Any]   = mock[Request[Any]]
+  implicit val mockRequest: Request[Any] = mock[Request[Any]]
 
   override protected def beforeEach(): Unit = {
     reset(mockConfig)

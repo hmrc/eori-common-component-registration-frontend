@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.{postcodeMa
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 object AddressDetailsForm {
-  private val Length2     = 2
+  private val Length2 = 2
   private val noTagsRegex = "^[^<>]+$"
 
   def addressDetailsCreateForm(): Form[AddressViewModel] =

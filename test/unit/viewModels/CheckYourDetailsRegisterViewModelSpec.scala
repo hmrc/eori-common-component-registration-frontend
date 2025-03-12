@@ -27,8 +27,8 @@ import util.builders.RegistrationDetailsBuilder.{limitedLiabilityPartnershipRegi
 
 class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec with SubscriptionServiceTestData {
 
-  val mockDateFormatter: DateFormatter         = mock[DateFormatter]
-  val mockSessionCache: SessionCache           = mock[SessionCache]
+  val mockDateFormatter: DateFormatter = mock[DateFormatter]
+  val mockSessionCache: SessionCache = mock[SessionCache]
   val mockRegistrationData: RequestSessionData = mock[RequestSessionData]
 
   private val organisationToTest =

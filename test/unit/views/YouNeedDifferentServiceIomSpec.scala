@@ -26,7 +26,7 @@ import util.ViewSpec
 
 class YouNeedDifferentServiceIomSpec extends ViewSpec {
 
-  private val view                                      = inject[you_need_different_service_iom]
+  private val view = inject[you_need_different_service_iom]
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   "The 'You need to use a different service' Page" should {

@@ -33,7 +33,7 @@ object UserLocation extends Enumerable.Implicits {
   implicit def convert(location: UserLocation): String =
     location.toString
 
-  val values: Seq[UserLocation]   = Seq(Uk, Iom, ThirdCountry, ThirdCountryIncEU, Islands)
+  val values: Seq[UserLocation] = Seq(Uk, Iom, ThirdCountry, ThirdCountryIncEU, Islands)
   val validLocations: Set[String] = values.map(_.toString).toSet
 
   private val rowLocations: Set[UserLocation] = Set(ThirdCountry, ThirdCountryIncEU, Islands)

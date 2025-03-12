@@ -47,7 +47,7 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
     .build()
 
   private lazy val enrolmentStoreProxyConnector = app.injector.instanceOf[EnrolmentStoreProxyConnector]
-  private val groupId                           = "2e4589d9-484c-468a-8099-02a06fb1cd8c"
+  private val groupId = "2e4589d9-484c-468a-8099-02a06fb1cd8c"
 
   private val expectedGetUrl =
     s"/enrolment-store-proxy/enrolment-store/groups/$groupId/enrolments?type=principal"

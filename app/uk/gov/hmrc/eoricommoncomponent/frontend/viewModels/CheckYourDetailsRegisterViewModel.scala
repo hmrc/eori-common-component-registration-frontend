@@ -90,7 +90,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         cdsOrgType.contains(CdsOrganisationType.Individual) ||
         cdsOrgType.contains(CdsOrganisationType.EUIndividual) ||
         cdsOrgType.contains(CdsOrganisationType.ThirdCountryIndividual)
-    val orgNameLabel      = cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
+    val orgNameLabel = cdsOrgType.contains(CdsOrganisationType.ThirdCountryOrganisation)
 
     val charityPublicBodyLabel = cdsOrgType.contains(CdsOrganisationType.CharityPublicBodyNotForProfit)
 
@@ -149,7 +149,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       subscription <- sessionCache.subscriptionDetails
     } yield {
 
-      val cdsOrgType    = requestSessionData.userSelectedOrganisationType
+      val cdsOrgType = requestSessionData.userSelectedOrganisationType
       val isPartnership = cdsOrgType.contains(CdsOrganisationType.Partnership)
 
       val isIndividual = cdsOrgType.contains(CdsOrganisationType.Individual) ||
@@ -189,8 +189,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       )
 
       for {
-        providedDetailsList   <- providedDetails
-        vatDetails             = getVatDetails(isEmbassy, subscription)
+        providedDetailsList <- providedDetails
+        vatDetails = getVatDetails(isEmbassy, subscription)
         providedContactDetails = getProvidedContactDetails(subscription, service)
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
     }
@@ -207,8 +207,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   )(implicit messages: Messages): Option[SummaryList] = {
 
     def individualName: Option[String] = subscription.nameDobDetails.map(_.name) orElse Option(registration.name)
-    def orgName: Option[String]        = subscription.nameOrganisationDetails.map(_.name) orElse subscription.name
-    val nameOpt: Option[String]        = if (isIndividual || isSoleTrader) individualName else orgName
+    def orgName: Option[String] = subscription.nameOrganisationDetails.map(_.name) orElse subscription.name
+    val nameOpt: Option[String] = if (isIndividual || isSoleTrader) individualName else orgName
 
     nameOpt.map { name =>
       val isRowSoleTraderIndividual = cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
@@ -440,7 +440,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     } else Seq.empty[SummaryListRow]
 
   private def addressViewModelHtml(ad: AddressViewModel)(implicit messages: Messages): Html = Html {
-    val lines                            = Seq(
+    val lines = Seq(
       noMarginParagraph(StringEscapeUtils.escapeXml11(ad.street)),
       noMarginParagraph(StringEscapeUtils.escapeXml11(ad.city))
     )

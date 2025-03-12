@@ -44,16 +44,16 @@ import scala.concurrent.Future
 
 class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockMatchingService            = mock[MatchingService]
-  private val mockMatchingConnector          = mock[MatchingServiceConnector]
-  private val mockMatchingRequestHolder      = mock[MatchingRequestHolder]
-  private val mockMatchingResponse           = mock[MatchingResponse]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
+  private val mockMatchingConnector = mock[MatchingServiceConnector]
+  private val mockMatchingRequestHolder = mock[MatchingRequestHolder]
+  private val mockMatchingResponse = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val matchOrganisationUtrView       = inject[how_can_we_identify_you_utr]
-  private val errorView                      = inject[error_template]
-  private val mockSessionCacheService        = inject[SessionCacheService]
+  private val matchOrganisationUtrView = inject[how_can_we_identify_you_utr]
+  private val errorView = inject[error_template]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
@@ -67,7 +67,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     mockSessionCacheService
   )(global)
 
-  private val UtrInvalidErrorPage  = messages("cds.matching-error.utr.invalid")
+  private val UtrInvalidErrorPage = messages("cds.matching-error.utr.invalid")
   private val UtrInvalidErrorField = s"Error: ${messages("cds.matching-error.utr.invalid")}"
 
   private val BusinessNotMatchedError =

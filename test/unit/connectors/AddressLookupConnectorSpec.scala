@@ -37,7 +37,7 @@ import scala.concurrent.Future
 class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with IntegrationPatience {
 
   private val httpClient = mock[HttpClient]
-  private val appConfig  = mock[AppConfig]
+  private val appConfig = mock[AppConfig]
 
   private val connector = new AddressLookupConnector(httpClient, appConfig)(global)
 
@@ -65,7 +65,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
       val postcode = "AA11 1AA"
 
       val expectedResponse = AddressLookupSuccess(Seq.empty)
-      val expectedUrl      = "http://localhost:6754/lookup"
+      val expectedUrl = "http://localhost:6754/lookup"
 
       val urlCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
@@ -94,7 +94,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         val postcode = "AA11 1AA"
 
-        val expectedFirstAddress  =
+        val expectedFirstAddress =
           Address("First Address Line 1", None, None, Some("First town"), Some("AA11 1AA"), "GB")
         val expectedSecondAddress =
           Address(
@@ -105,7 +105,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
             Some("AA11 1AA"),
             "GB"
           )
-        val expectedResponse      = AddressLookupSuccess(Seq(expectedFirstAddress, expectedSecondAddress))
+        val expectedResponse = AddressLookupSuccess(Seq(expectedFirstAddress, expectedSecondAddress))
 
         val result = connector.lookup(postcode, None)(hc)
 
@@ -121,7 +121,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         val postcode = "AA11 1AA"
 
-        val expectedAddress  =
+        val expectedAddress =
           Address("Address Line 1", Some("Address Line 2"), None, Some("Town"), Some("AA11 1AA"), "GB")
         val expectedResponse = AddressLookupSuccess(Seq(expectedAddress))
 

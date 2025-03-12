@@ -45,19 +45,19 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with Injecting {
 
-  implicit val hc: HeaderCarrier       = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val rq: Request[AnyContent] = withFakeCSRF(FakeRequest())
 
-  private val mockSessionCache               = mock[SessionCache]
+  private val mockSessionCache = mock[SessionCache]
   private val mockRegistrationConfirmService = mock[RegistrationConfirmService]
-  private val mockOrgTypeLookup              = mock[OrgTypeLookup]
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val confirmContactDetailsView      = inject[confirm_contact_details]
-  private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
-  private val mockTaxEnrolmentsService       = mock[TaxEnrolmentsService]
-  private val mockSubscriptionPage           = mock[SubscriptionPage]
-  private val mockSubscriptionStartSession   = mock[Session]
-  private val mockFlowStart                  = (mockSubscriptionPage, mockSubscriptionStartSession)
+  private val mockOrgTypeLookup = mock[OrgTypeLookup]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val confirmContactDetailsView = inject[confirm_contact_details]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
+  private val mockTaxEnrolmentsService = mock[TaxEnrolmentsService]
+  private val mockSubscriptionPage = mock[SubscriptionPage]
+  private val mockSubscriptionStartSession = mock[Session]
+  private val mockFlowStart = (mockSubscriptionPage, mockSubscriptionStartSession)
 
   private val yesNoWrongAddressForm: Form[YesNoWrongAddress] =
     YesNoWrongAddress.createForm().bind(Map("yes-no-answer" -> ""))

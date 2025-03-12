@@ -29,14 +29,14 @@ trait DisclosePersonalDetailsConsentPage extends WebPage {
 
   val formId: String = "disclose-personal-details-createForm"
 
-  val consentOpeningXpath   = "//*[@id='consent-opening']"
-  val consentBodyXpath      = "//*[@id='consent-body']"
+  val consentOpeningXpath = "//*[@id='consent-opening']"
+  val consentBodyXpath = "//*[@id='consent-body']"
   val consentInfoPara2Xpath = "//p[@id='personal-details-consent-para2']"
 
-  val yesToDiscloseXpath      = "//label[@for='yes-no-answer-true']"
-  val noToDiscloseXpath       = "//label[@for='yes-no-answer-false']"
+  val yesToDiscloseXpath = "//label[@for='yes-no-answer-true']"
+  val noToDiscloseXpath = "//label[@for='yes-no-answer-false']"
   val yesToDiscloseInputXpath = "//*[@id='yes-no-answer-true']"
-  val noToDiscloseInputXpath  = "//*[@id='yes-no-answer-false']"
+  val noToDiscloseInputXpath = "//*[@id='yes-no-answer-false']"
 
   val continueButtonXpath = "//*[@id='continue-button']"
 

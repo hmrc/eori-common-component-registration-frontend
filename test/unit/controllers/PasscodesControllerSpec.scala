@@ -37,10 +37,10 @@ class PasscodesControllerSpec extends ControllerSpec with UnitSpec with MockitoS
 
   implicit val ex: ExecutionContext = ExecutionContext.Implicits.global
 
-  private val mockAuthConnector            = mock[AuthConnector]
-  private val mockAuthAction               = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val messagesControllerComponents = inject[MessagesControllerComponents]
-  private val emailVerificationConnector   = mock[EmailVerificationConnector]
+  private val emailVerificationConnector = mock[EmailVerificationConnector]
 
   private val passcodesController =
     new PasscodesController(mockAuthAction, messagesControllerComponents, emailVerificationConnector)

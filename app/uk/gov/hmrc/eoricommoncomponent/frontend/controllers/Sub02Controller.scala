@@ -55,8 +55,8 @@ class Sub02Controller @Inject() (
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
       val selectedOrganisationType: Option[CdsOrganisationType] =
         requestSessionData.userSelectedOrganisationType
-      val internalId                                            = InternalId(loggedInUser.internalId)
-      val groupId                                               = GroupId(loggedInUser.groupId)
+      val internalId = InternalId(loggedInUser.internalId)
+      val groupId = GroupId(loggedInUser.groupId)
       cdsSubscriber
         .subscribeWithCachedDetails(selectedOrganisationType, service)
         .flatMap { subscribeResult =>

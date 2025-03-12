@@ -38,9 +38,9 @@ import scala.concurrent.Future
 class ManualAddressControllerSpec extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport {
 
   val defaultOrganisationType = "individual"
-  val soleTraderType          = "sole-trader"
+  val soleTraderType = "sole-trader"
 
-  val form: Map[String, String]        = Map("street" -> "1", "city" -> "Tel", "postcode" -> "SE12 1AA", "countryCode" -> "Uk")
+  val form: Map[String, String] = Map("street" -> "1", "city" -> "Tel", "postcode" -> "SE12 1AA", "countryCode" -> "Uk")
   val invalidForm: Map[String, String] = Map("street" -> "1", "city" -> "Tel", "postcode" -> "SE1a")
 
   override protected val formId: String = AddressPage.formId
@@ -49,8 +49,8 @@ class ManualAddressControllerSpec extends SubscriptionFlowTestSupport with Befor
     ManualAddressController.submit(atarService).url
 
   private val mockAddressService = mock[AddressService]
-  private val mockSessionCache   = mock[SessionCache]
-  private val view               = inject[manual_address]
+  private val mockSessionCache = mock[SessionCache]
+  private val view = inject[manual_address]
 
   private val controller =
     new ManualAddressController(mockAuthAction, view, mcc, mockSessionCache)

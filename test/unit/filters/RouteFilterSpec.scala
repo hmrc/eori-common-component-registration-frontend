@@ -36,13 +36,13 @@ import scala.concurrent.Future
 
 class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
-  val env: Environment          = Environment.simple()
+  val env: Environment = Environment.simple()
   val realConfig: Configuration = Configuration.load(env)
 
-  implicit val system: ActorSystem       = ActorSystem()
-  implicit val mat: NoMaterializer.type  = NoMaterializer
-  val mockErrorHandler: CdsErrorHandler  = mock[CdsErrorHandler]
-  val mockConfig: Configuration          = spy(realConfig)
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val mat: NoMaterializer.type = NoMaterializer
+  val mockErrorHandler: CdsErrorHandler = mock[CdsErrorHandler]
+  val mockConfig: Configuration = spy(realConfig)
   val mockServicesConfig: ServicesConfig = mock[ServicesConfig]
 
   private def filter =
@@ -112,7 +112,7 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
   private def thenRouteIsBlocked(url: String) = {
     val request = FakeRequest("GET", url)
-    val result  = filter.apply(okAction)(request)
+    val result = filter.apply(okAction)(request)
     status(result) shouldBe 404
   }
 

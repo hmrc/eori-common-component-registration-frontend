@@ -24,44 +24,44 @@ class SubscriptionExistingDetailsReviewPage extends WebPage {
   val BusinessNameValueXpath = "//dd[@id='review-tbl__business-name']"
 
   val UKVatIdentificationNumbersXpathLabel = "//dt[@id='review-tbl__gb-vat-number_heading']"
-  val UKVatIdentificationNumbersXpath      = "//dd[@id='review-tbl__gb-vat-number']"
+  val UKVatIdentificationNumbersXpath = "//dd[@id='review-tbl__gb-vat-number']"
 
   val UKVatIdentificationPostcodeXpathLabel = "//dt[@id='review-tbl__gb-vat-postcode_heading']"
-  val UKVatIdentificationPostcodeXpath      = "//dd[@id='review-tbl__gb-vat-postcode']"
+  val UKVatIdentificationPostcodeXpath = "//dd[@id='review-tbl__gb-vat-postcode']"
 
   val UKVatIdentificationDateXpathLabel = "//dt[@id='review-tbl__gb-vat-date_heading']"
-  val UKVatIdentificationDateXpath      = "//dd[@id='review-tbl__gb-vat-date']"
+  val UKVatIdentificationDateXpath = "//dd[@id='review-tbl__gb-vat-date']"
 
-  val UKVatIdentificationNumbersReviewLinkXpath  = "//a[@id='review-tbl__gb-vat-number_change']"
+  val UKVatIdentificationNumbersReviewLinkXpath = "//a[@id='review-tbl__gb-vat-number_change']"
   val UKVatIdentificationPostcodeReviewLinkXpath = "//a[@id='review-tbl__gb-vat-postcode_change']"
-  val UKVatIdentificationDateReviewLinkXpath     = "//a[@id='review-tbl__gb-vat-date_change']"
+  val UKVatIdentificationDateReviewLinkXpath = "//a[@id='review-tbl__gb-vat-date_change']"
 
   val ContactDetailsXPathLabel = "//dt[@id='review-tbl__contact_heading']"
-  val ContactDetailsXPath      = "//dd[@id='review-tbl__contact']"
+  val ContactDetailsXPath = "//dd[@id='review-tbl__contact']"
 
   val ContactDetailsReviewLinkXPath = "//a[@id='review-tbl__contact_change']"
 
   val ConfirmAndRegisterInfoXpath = "//p[@id='disclaimer-content']"
 
   val EUDisclosureConsentXPathLabel = "//dt[@id='review-tbl__disclosure_heading']"
-  val EUDisclosureConsentXPath      = "//dd[@id='review-tbl__disclosure']"
-  val EUDisclosureReviewLinkXpath   = "//a[@id='review-tbl__disclosure_change']"
+  val EUDisclosureConsentXPath = "//dd[@id='review-tbl__disclosure']"
+  val EUDisclosureReviewLinkXpath = "//a[@id='review-tbl__disclosure_change']"
 
-  val ShortNameXPathLabel      = "//dt[@id='review-tbl__short-name_heading']"
-  val ShortNameXPath           = "//dd[@id='review-tbl__short-name']"
+  val ShortNameXPathLabel = "//dt[@id='review-tbl__short-name_heading']"
+  val ShortNameXPath = "//dd[@id='review-tbl__short-name']"
   val ShortNameReviewLinkXPath = "//a[@id='review-tbl__short-name_change']"
 
-  val NatureOfBusinessXPathLabel      = "//dt[@id='review-tbl__activity_heading']"
-  val NatureOfBusinessXPath           = "//dd[@id='review-tbl__activity']"
+  val NatureOfBusinessXPathLabel = "//dt[@id='review-tbl__activity_heading']"
+  val NatureOfBusinessXPath = "//dd[@id='review-tbl__activity']"
   val NatureOfBusinessReviewLinkXPath = "//a[@id='review-tbl__activity_change']"
 
   val startAgainLinkXPath = "//a[@id='review-tbl__start-again']"
 
-  val UtrNoLabelXPath      = "//dt[@id='review-tbl__nino-or-utr_heading']"
+  val UtrNoLabelXPath = "//dt[@id='review-tbl__nino-or-utr_heading']"
   val UtrNoLabelValueXPath = "//dd[@id='review-tbl__nino-or-utr']"
 
-  val DateOfEstablishmentLabelXPath      = "//dt[@id='review-tbl__doe_heading']"
-  val DateOfEstablishmentXPath           = "//dd[@id='review-tbl__doe']"
+  val DateOfEstablishmentLabelXPath = "//dt[@id='review-tbl__doe_heading']"
+  val DateOfEstablishmentXPath = "//dd[@id='review-tbl__doe']"
   val DateOfEstablishmentReviewLinkXPath = "//a[@id='review-tbl__doe_change']"
 
   val LimitedAddressLabelXpath = "//dt[@id='review-tbl__address_heading']"

@@ -30,7 +30,7 @@ import scala.concurrent.duration.Duration
 class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
 
   private val mockConfig: Configuration = spy(config)
-  private val mockServiceConfig         = mock[ServicesConfig]
+  private val mockServiceConfig = mock[ServicesConfig]
 
   override def beforeEach(): Unit = {
     super.beforeEach()

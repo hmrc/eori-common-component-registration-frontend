@@ -59,13 +59,13 @@ class VatDetailsControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockVatDetailsService       = mock[VatDetailsService]
-  private val vatDetailsView              = inject[vat_details]
-  private val errorTemplate               = inject[error_template]
+  private val mockVatDetailsService = mock[VatDetailsService]
+  private val vatDetailsView = inject[vat_details]
+  private val errorTemplate = inject[error_template]
   private val weCannotConfirmYourIdentity = inject[date_of_vat_registration]
-  private val form                        = inject[VatRegistrationDateFormProvider]
-  private val mockSessionCacheService     = inject[SessionCacheService]
-  private val mockRequestSession          = mock[RequestSessionData]
+  private val form = inject[VatRegistrationDateFormProvider]
+  private val mockSessionCacheService = inject[SessionCacheService]
+  private val mockRequestSession = mock[RequestSessionData]
 
   private val controller = new VatDetailsController(
     mockAuthAction,

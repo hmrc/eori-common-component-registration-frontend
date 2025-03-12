@@ -56,11 +56,11 @@ class AppConfig @Inject() (
   def companiesHouseRegister()(implicit messages: Messages): String =
     config.get[String](s"external-url.company-house-register-$languageKey")
 
-  val checkEORINumber: String                            = config.get[String]("external-url.check-eori-number")
-  val hmrcChangeDetails: String                          = config.get[String]("external-url.hmrc-change-details")
-  val getAccessToCDS: String                             = config.get[String]("external-url.get-access-to-cds")
-  val cdsServices: String                                = config.get[String]("external-url.cds-services")
-  val addAccessToTeamMember: String                      = config.get[String]("external-url.adding-access-to-team-member")
+  val checkEORINumber: String = config.get[String]("external-url.check-eori-number")
+  val hmrcChangeDetails: String = config.get[String]("external-url.hmrc-change-details")
+  val getAccessToCDS: String = config.get[String]("external-url.get-access-to-cds")
+  val cdsServices: String = config.get[String]("external-url.cds-services")
+  val addAccessToTeamMember: String = config.get[String]("external-url.adding-access-to-team-member")
   def callCharges()(implicit messages: Messages): String = config.get[String](s"external-url.call-charges-$languageKey")
 
   val blockedRoutesRegex: Seq[Regex] =
@@ -77,7 +77,7 @@ class AppConfig @Inject() (
     s"$contactBaseUrl/contact/problem_reports_nonjs?service=$serviceIdentifierRegister-${service.code}"
 
   // email verification service
-  val emailVerificationEnabled: Boolean          = config.get[Boolean]("microservice.services.email-verification.enabled")
+  val emailVerificationEnabled: Boolean = config.get[Boolean]("microservice.services.email-verification.enabled")
   val emailVerificationContinueUrlPrefix: String = config.get[String]("external-url.email-verification.continue-url")
 
   val emailVerificationBaseUrl: String = servicesConfig.baseUrl("email-verification")
@@ -120,7 +120,7 @@ class AppConfig @Inject() (
   val standaloneServiceCode: String = config.get[String]("application.standalone.service.code")
 
   def getServiceUrl(proxyServiceName: String): String = {
-    val baseUrl        = servicesConfig.baseUrl("eori-common-component-hods-proxy")
+    val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
     val serviceContext =
       config.get[String](s"microservice.services.eori-common-component-hods-proxy.$proxyServiceName.context")
     s"$baseUrl/$serviceContext"

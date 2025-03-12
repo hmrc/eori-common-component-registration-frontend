@@ -79,11 +79,11 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
             for {
               _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id))))
               ind <- sessionCacheService.retrieveNameDobFromCache()
-              _    = matchingService.matchIndividualWithNino(
-                       ninoForm.id,
-                       ind,
-                       GroupId(loggedInUser.groupId.getOrElse(throw new Exception("GroupId does not exists")))
-                     )
+              _ = matchingService.matchIndividualWithNino(
+                    ninoForm.id,
+                    ind,
+                    GroupId(loggedInUser.groupId.getOrElse(throw new Exception("GroupId does not exists")))
+                  )
             } yield Redirect(PostCodeController.createForm(service))
         )
     }

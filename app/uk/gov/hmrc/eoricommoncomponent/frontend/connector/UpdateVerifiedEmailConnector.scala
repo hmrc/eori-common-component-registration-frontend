@@ -34,7 +34,7 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, httpClient: 
   ec: ExecutionContext
 ) {
 
-  private val url    = url"${appConfig.getServiceUrl("update-verified-email")}"
+  private val url = url"${appConfig.getServiceUrl("update-verified-email")}"
   private val logger = Logger(this.getClass)
 
   def updateVerifiedEmail(

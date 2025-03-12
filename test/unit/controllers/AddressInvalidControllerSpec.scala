@@ -33,9 +33,9 @@ import scala.concurrent.Future
 
 class AddressInvalidControllerSpec extends ControllerSpec with AuthActionMock {
 
-  private val mockAuthConnector       = mock[AuthConnector]
-  private val mockAuthAction          = authAction(mockAuthConnector)
-  private val mockRequestSessionData  = mock[RequestSessionData]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSessionCacheService = inject[SessionCacheService]
 
   private val addressInvalidOrgView = inject[address_invalid_organisation]

@@ -105,7 +105,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
     service: Service
   ): CreateEoriSubscriptionRequest = {
     val cdsOrgType = subDetails.formData.organisationType.head
-    val org        = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
+    val org = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
 
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
@@ -146,7 +146,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
     service: Service
   ): CreateEoriSubscriptionRequest = {
     val cdsOrgType = subDetails.formData.organisationType.head
-    val org        = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
+    val org = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
 
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
@@ -187,8 +187,8 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
     userLocation: UserLocation,
     service: Service
   ): CreateEoriSubscriptionRequest = {
-    val cdsOrgType  = subDetails.formData.organisationType.head
-    val org         = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
+    val cdsOrgType = subDetails.formData.organisationType.head
+    val org = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
     val countryCode = userLocation match {
       case UserLocation.Uk => "GB"
       case UserLocation.Iom => "IM"

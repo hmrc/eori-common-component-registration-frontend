@@ -20,17 +20,17 @@ import play.api.Logging
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 
 object EtmpTypeOfPerson {
-  val NaturalPerson       = "1"
-  val LegalPerson         = "2"
+  val NaturalPerson = "1"
+  val LegalPerson = "2"
   val AssociationOfPerson = "3"
 }
 
 object EtmpLegalStatus {
-  val CorporateBody      = "Corporate Body"
+  val CorporateBody = "Corporate Body"
   val UnincorporatedBody = "Unincorporated Body"
-  val Llp                = "LLP"
-  val Partnership        = "Partnership"
-  val Embassy            = "diplomatic mission"
+  val Llp = "LLP"
+  val Partnership = "Partnership"
+  val Embassy = "diplomatic mission"
 }
 
 case class OrganisationTypeConfiguration(typeOfPerson: String, legalStatus: String)

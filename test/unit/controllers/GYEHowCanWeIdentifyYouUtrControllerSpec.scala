@@ -44,13 +44,13 @@ import scala.concurrent.Future
 
 class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector      = mock[AuthConnector]
-  private val mockAuthAction         = authAction(mockAuthConnector)
-  private val mockMatchingService    = mock[MatchingService]
-  private val mockFrontendDataCache  = mock[SessionCache]
-  private val mockOrgTypeLookup      = mock[OrgTypeLookup]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
+  private val mockFrontendDataCache = mock[SessionCache]
+  private val mockOrgTypeLookup = mock[OrgTypeLookup]
   private val mockRequestSessionData = mock[RequestSessionData]
-  private val errorView              = inject[error_template]
+  private val errorView = inject[error_template]
 
   private val sessionCacheService =
     new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)

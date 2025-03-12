@@ -53,7 +53,7 @@ class DoYouHaveAUtrNumberController @Inject() (
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
         subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>
-          val form                       = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
+          val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
           val userLocation: UserLocation = requestSessionData.selectedUserLocation.getOrElse(
             throw new RuntimeException("Unable to find user location in session")
           )

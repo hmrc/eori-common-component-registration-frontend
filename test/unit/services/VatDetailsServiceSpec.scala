@@ -34,8 +34,8 @@ import scala.concurrent.Future
 
 class VatDetailsServiceSpec extends IntegrationTestsSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures {
 
-  implicit val hc: HeaderCarrier                            = HeaderCarrier()
-  private val mockAppConfig: AppConfig                      = mock[AppConfig]
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+  private val mockAppConfig: AppConfig = mock[AppConfig]
   private val mockVatListConnector: VatControlListConnector = mock[VatControlListConnector]
 
   private val mockGetVatCustomerInfoConnector: GetVatCustomerInformationConnector =

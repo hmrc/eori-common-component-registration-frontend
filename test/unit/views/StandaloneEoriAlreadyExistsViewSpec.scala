@@ -27,7 +27,7 @@ import util.ViewSpec
 
 class StandaloneEoriAlreadyExistsViewSpec extends ViewSpec {
 
-  private val view                   = inject[standalone_already_have_eori]
+  private val view = inject[standalone_already_have_eori]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 
   "Standalone Eori Already Exists page" should {

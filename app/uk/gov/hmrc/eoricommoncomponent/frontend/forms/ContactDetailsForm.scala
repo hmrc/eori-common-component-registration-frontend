@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewM
 
 object ContactDetailsForm {
 
-  val userFullName  = "full-name"
+  val userFullName = "full-name"
   val userTelephone = "telephone"
 
   def contactDetailsCreateForm(): Form[ContactDetailsViewModel] =

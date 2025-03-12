@@ -23,7 +23,7 @@ trait NewUserSession {
 
   def newUserSession(implicit request: Request[_]): Session = {
 
-    val currentSessionData: Map[String, String]   = request.session.data
+    val currentSessionData: Map[String, String] = request.session.data
     val cleanedUpSessionData: Map[String, String] =
       currentSessionData -- Seq(
         selectedUserLocation,

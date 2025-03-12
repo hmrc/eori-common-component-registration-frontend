@@ -45,7 +45,7 @@ class TaxUDConnector @Inject() (
 )(implicit ec: ExecutionContext)
     extends HandleResponses {
 
-  private val fullUrl          = url"${appConfig.getServiceUrl("register-subscribe-without-id")}"
+  private val fullUrl = url"${appConfig.getServiceUrl("register-subscribe-without-id")}"
   private val X_CORRELATION_ID = "x-correlation-id"
 
   def createEoriSubscription(

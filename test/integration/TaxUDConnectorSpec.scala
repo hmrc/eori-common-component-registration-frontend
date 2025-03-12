@@ -60,7 +60,7 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
     .build()
 
   private lazy val taxUdConnector = app.injector.instanceOf[TaxUDConnector]
-  val txe13Url: String            = "/register-subscribe-without-id"
+  val txe13Url: String = "/register-subscribe-without-id"
 
   private lazy val mockRequest =
     """

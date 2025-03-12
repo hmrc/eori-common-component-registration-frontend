@@ -43,18 +43,18 @@ import scala.concurrent.Future
 class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with MatchingServiceTestData {
 
   private val mockMatchingServiceConnector = mock[MatchingServiceConnector]
-  private val mockDetailsCreator           = mock[RegistrationDetailsCreator]
-  private val mockRequestSessionData       = mock[RequestSessionData]
-  private val mockDetails                  = mock[RegistrationDetails]
+  private val mockDetailsCreator = mock[RegistrationDetailsCreator]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockDetails = mock[RegistrationDetails]
 
   private val mockRequest = mock[Request[AnyContent]]
 
-  private val mockHeaderCarrier          = mock[HeaderCarrier]
+  private val mockHeaderCarrier = mock[HeaderCarrier]
   private val mockRequestCommonGenerator = mock[RequestCommonGenerator]
-  private val mockCache                  = mock[SessionCache]
-  private val loggedInCtUser             = mock[LoggedInUserWithEnrolments]
-  private val mockGroupId                = mock[GroupId]
-  implicit val request: Request[Any]     = mock[Request[Any]]
+  private val mockCache = mock[SessionCache]
+  private val loggedInCtUser = mock[LoggedInUserWithEnrolments]
+  private val mockGroupId = mock[GroupId]
+  implicit val request: Request[Any] = mock[Request[Any]]
 
   private val service = new MatchingService(
     mockMatchingServiceConnector,
@@ -97,7 +97,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT[MatchingResponse](ResponseError(INTERNAL_SERVER_ERROR, "failure")))
 
       val expected = Left(ResponseError(INTERNAL_SERVER_ERROR, "failure"))
-      val result   = service.matchBusiness(
+      val result = service.matchBusiness(
         Utr("some-utr"),
         Organisation("name", CorporateBody),
         establishmentDate = None,
@@ -114,7 +114,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT(matchSuccessResponse))
 
       val expected = Right(())
-      val result   =
+      val result =
         service.matchBusiness(utr, Organisation("someOrg", Partnership), establishmentDate = None, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
@@ -136,7 +136,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT(matchSuccessResponse))
 
       val expected = Right(())
-      val result   = service.matchBusiness(
+      val result = service.matchBusiness(
         Utr(utrId + "K"),
         Organisation("someOrg", Partnership),
         establishmentDate = None,
@@ -159,7 +159,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT(matchSuccessResponse))
 
       val expected = Right(())
-      val result   = service.matchBusiness(
+      val result = service.matchBusiness(
         Utr(utrId + "k"),
         Organisation("someOrg", Partnership),
         establishmentDate = None,
@@ -182,7 +182,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT(matchSuccessResponse))
 
       val expected = Right(())
-      val result   =
+      val result =
         service.matchBusiness(eori, Organisation("someOrg", UnincorporatedBody), someEstablishmentDate, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
@@ -211,7 +211,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(mockDetails)
 
       val expected = Right(())
-      val result   =
+      val result =
         service.matchBusiness(utr, Organisation("someOrg", Partnership), establishmentDate = None, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
@@ -392,7 +392,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(mockDetails)
 
       val expected = Right(matchIndividualSuccessResponse)
-      val result   =
+      val result =
         service.matchIndividualWithNino(ninoId, NinoFormBuilder.asIndividual, mockGroupId)(mockHeaderCarrier, request)
       result.value.futureValue shouldBe expected
 

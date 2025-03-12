@@ -42,7 +42,7 @@ class CreateEoriSubscriptionResponseSpec extends AnyWordSpec with Matchers with 
   "reads" should {
     "read body" in {
       val createEoriSubscriptionResponse = Json.parse(successResponse).as[CreateEoriSubscriptionResponse]
-      val innerBody                      = createEoriSubscriptionResponse.success
+      val innerBody = createEoriSubscriptionResponse.success
       innerBody.safeId mustEqual "XR0000100051093"
       innerBody.position mustEqual "WORKLIST"
       innerBody.formBundleNumber mustEqual "93000022142"

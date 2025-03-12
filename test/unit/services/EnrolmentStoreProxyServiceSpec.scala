@@ -37,7 +37,7 @@ class EnrolmentStoreProxyServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val mockEnrolmentStoreProxyConnector =
     mock[EnrolmentStoreProxyConnector]
 
-  private val service                               = new EnrolmentStoreProxyService(mockEnrolmentStoreProxyConnector)
+  private val service = new EnrolmentStoreProxyService(mockEnrolmentStoreProxyConnector)
   implicit private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   before {
@@ -45,9 +45,9 @@ class EnrolmentStoreProxyServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   private val serviceName = "HMRC-CUS-ORG"
-  private val state       = "Activated"
-  private val identifier  = KeyValue("EORINumber", "10000000000000001")
-  private val groupId     = GroupId("groupId")
+  private val state = "Activated"
+  private val identifier = KeyValue("EORINumber", "10000000000000001")
+  private val groupId = GroupId("groupId")
 
   private val enrolmentResponse =
     EnrolmentResponse(serviceName, state, List(identifier))

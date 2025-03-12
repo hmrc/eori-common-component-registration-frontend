@@ -48,8 +48,8 @@ class TaxEnrolmentsConnectorSpec extends IntegrationTestsSpec with ScalaFutures 
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  private val formBundleId                = "bundle-id"
-  private val expectedPutUrl              = s"/tax-enrolments/subscriptions/$formBundleId/issuer"
+  private val formBundleId = "bundle-id"
+  private val expectedPutUrl = s"/tax-enrolments/subscriptions/$formBundleId/issuer"
   private lazy val taxEnrolmentsConnector = app.injector.instanceOf[TaxEnrolmentsConnector]
 
   private val taxEnrolmentsRequest = validTaxEnrolmentsIssuerRequestJson.as[TaxEnrolmentsRequest]

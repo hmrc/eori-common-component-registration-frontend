@@ -35,10 +35,10 @@ import scala.concurrent.Future
 class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val yesNoInputName = "yes-no-answer"
-  private val answerYes      = true.toString
+  private val answerYes = true.toString
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockAuthAction = authAction(mockAuthConnector)
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 

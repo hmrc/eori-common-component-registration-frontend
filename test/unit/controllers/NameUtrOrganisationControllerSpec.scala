@@ -46,17 +46,17 @@ import scala.concurrent.Future
 
 class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector             = mock[AuthConnector]
-  private val mockAuthAction                = authAction(mockAuthConnector)
-  private val mockMatchingService           = mock[MatchingService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
   private val mockSubscriptionDetailService = mock[SubscriptionDetailsService]
-  private val matchNameIdOrganisationView   = inject[match_name_id_organisation]
+  private val matchNameIdOrganisationView = inject[match_name_id_organisation]
 
-  private val partnershipId                   = CdsOrganisationType.PartnershipId
-  private val companyId                       = CdsOrganisationType.CompanyId
-  private val limitedLiabilityPartnershipId   = CdsOrganisationType.LimitedLiabilityPartnershipId
+  private val partnershipId = CdsOrganisationType.PartnershipId
+  private val companyId = CdsOrganisationType.CompanyId
+  private val limitedLiabilityPartnershipId = CdsOrganisationType.LimitedLiabilityPartnershipId
   private val charityPublicBodyNotForProfitId = CdsOrganisationType.CharityPublicBodyNotForProfitId
-  private val errorView                       = inject[error_template]
+  private val errorView = inject[error_template]
 
   private val controller =
     new NameIdOrganisationController(
@@ -79,9 +79,9 @@ class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar
 
   private val NameMaxLength = 105
 
-  private val UtrInvalidErrorPage      = messages("cds.matching-error.utr.invalid")
-  private val UtrInvalidErrorField     = s"Error: ${messages("cds.matching-error.utr.invalid")}"
-  private val UtrWrongLengthErrorPage  = messages("cds.matching-error.utr.length")
+  private val UtrInvalidErrorPage = messages("cds.matching-error.utr.invalid")
+  private val UtrInvalidErrorField = s"Error: ${messages("cds.matching-error.utr.invalid")}"
+  private val UtrWrongLengthErrorPage = messages("cds.matching-error.utr.length")
   private val UtrWrongLengthErrorField = s"Error: ${messages("cds.matching-error.utr.length")}"
 
   private val BusinessNotMatchedError =
@@ -124,7 +124,7 @@ class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar
 
     "ensure a valid Organisation Type has been passed" in {
       val invalidOrganisationType = UUID.randomUUID.toString
-      val thrown                  = intercept[InvalidUrlValueException] {
+      val thrown = intercept[InvalidUrlValueException] {
         showForm(invalidOrganisationType) { result =>
           await(result)
         }
@@ -154,7 +154,7 @@ class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar
 
     "ensure a valid Organisation Type has been passed" in {
       val invalidOrganisationType = UUID.randomUUID.toString
-      val thrown                  = intercept[InvalidUrlValueException] {
+      val thrown = intercept[InvalidUrlValueException] {
         showForm(invalidOrganisationType) { result =>
           await(result)
         }
@@ -290,7 +290,7 @@ class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar
         )
       ).thenReturn(eitherT(()))
 
-      val requestUtr  = "21 08 83 45 03k"
+      val requestUtr = "21 08 83 45 03k"
       val expectedUtr = "2108834503K"
       submitForm(Map("name" -> "My company name", "utr" -> requestUtr)) { result =>
         await(result)

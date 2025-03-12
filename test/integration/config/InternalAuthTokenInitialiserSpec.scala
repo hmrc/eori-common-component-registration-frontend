@@ -64,7 +64,7 @@ class InternalAuthTokenInitialiserSpec
     "must initialise the internal-auth token if it is not already initialised" in {
 
       val authToken = "authToken1"
-      val appName   = "appName1"
+      val appName = "appName1"
 
       val expectedRequest = Json.obj(
         "token"       -> authToken,
@@ -116,7 +116,7 @@ class InternalAuthTokenInitialiserSpec
     "must return an exception if the internal auth service responds to create with a different status" in {
 
       val authToken = "authToken2"
-      val appName   = "appName2"
+      val appName = "appName2"
 
       val expectedRequest = Json.obj(
         "token"       -> authToken,
@@ -171,7 +171,7 @@ class InternalAuthTokenInitialiserSpec
     "must not initialise the internal-auth token if it is already initialised" in {
 
       val authToken = "authToken"
-      val appName   = "appName"
+      val appName = "appName"
 
       server.stubFor(
         get(urlMatching("/test-only/token"))
@@ -208,7 +208,7 @@ class InternalAuthTokenInitialiserSpec
     "must not make the relevant calls to internal-auth" in {
 
       val authToken = "authToken"
-      val appName   = "appName"
+      val appName = "appName"
 
       server.stubFor(
         get(urlMatching("/test-only/token"))

@@ -26,7 +26,7 @@ object EmailVerificationStubService {
   private val expectedPostUrl = "/email-verification/verify-email"
 
   val verifyEmailSuccessResponse: JsValue = Json.parse("""{"redirectUri": "google.com"}""")
-  val verifyEmailFailureResponse          = "Something went wrong"
+  val verifyEmailFailureResponse = "Something went wrong"
   val verifyEmailInvalidResponse: JsValue = Json.parse("""{"something": "google.com"}""")
 
   def stubVerifyEmailResponse(response: String, status: Int): Unit =

@@ -105,7 +105,7 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
   ): Unit = {
 
     val subscriptionDisplaySubmitted = SubscriptionDisplaySubmitted.applyAndAlignKeys(request.toMap)
-    val subscriptionDisplayResult    = SubscriptionDisplayResult(response)
+    val subscriptionDisplayResult = SubscriptionDisplayResult(response)
 
     audit.sendExtendedDataEvent(
       transactionName = "ecc-subscription-display",

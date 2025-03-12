@@ -29,9 +29,9 @@ class EisErrorSpec extends AnyFreeSpec with Matchers with OptionValues with Txe1
     "unprocessable entity" - {
       "should read Existing Active Subscription error" in {
         val etmpErrorCode: EtmpErrorCode = Json.parse(existingActiveSubscription).as[EtmpErrorCode]
-        val etmpError                    = etmpErrorCode.errorCode
-        val etmpErrorValue               = etmpError.value
-        val etmpErrorDetail              = etmpErrorValue.errorDetail
+        val etmpError = etmpErrorCode.errorCode
+        val etmpErrorValue = etmpError.value
+        val etmpErrorDetail = etmpErrorValue.errorDetail
 
         etmpError.summary mustEqual "Business Partner already has an active Subscription"
         etmpErrorDetail.errorCode mustEqual "422"
@@ -46,9 +46,9 @@ class EisErrorSpec extends AnyFreeSpec with Matchers with OptionValues with Txe1
 
       "should read Application Already In Progress error" in {
         val etmpErrorCode: EtmpErrorCode = Json.parse(applicationAlreadyInProgress).as[EtmpErrorCode]
-        val etmpError                    = etmpErrorCode.errorCode
-        val etmpErrorValue               = etmpError.value
-        val etmpErrorDetail              = etmpErrorValue.errorDetail
+        val etmpError = etmpErrorCode.errorCode
+        val etmpErrorValue = etmpError.value
+        val etmpErrorDetail = etmpErrorValue.errorDetail
 
         etmpError.summary mustEqual "Application already in progress"
         etmpErrorDetail.errorCode mustEqual "422"
@@ -61,9 +61,9 @@ class EisErrorSpec extends AnyFreeSpec with Matchers with OptionValues with Txe1
 
       "should read Duplicate Submission error" in {
         val etmpErrorCode: EtmpErrorCode = Json.parse(duplicateSubmission).as[EtmpErrorCode]
-        val etmpError                    = etmpErrorCode.errorCode
-        val etmpErrorValue               = etmpError.value
-        val etmpErrorDetail              = etmpErrorValue.errorDetail
+        val etmpError = etmpErrorCode.errorCode
+        val etmpErrorValue = etmpError.value
+        val etmpErrorDetail = etmpErrorValue.errorDetail
 
         etmpError.summary mustEqual "Duplicate submission reference"
         etmpErrorDetail.errorCode mustEqual "422"
@@ -76,9 +76,9 @@ class EisErrorSpec extends AnyFreeSpec with Matchers with OptionValues with Txe1
 
       "should read Invalid Edge Case Type error" in {
         val etmpErrorCode: EtmpErrorCode = Json.parse(invalidEdgeCaseType).as[EtmpErrorCode]
-        val etmpError                    = etmpErrorCode.errorCode
-        val etmpErrorValue               = etmpError.value
-        val etmpErrorDetail              = etmpErrorValue.errorDetail
+        val etmpError = etmpErrorCode.errorCode
+        val etmpErrorValue = etmpError.value
+        val etmpErrorDetail = etmpErrorValue.errorDetail
 
         etmpError.summary mustEqual "Invalid Edge Case Type"
         etmpErrorDetail.errorCode mustEqual "422"
@@ -91,9 +91,9 @@ class EisErrorSpec extends AnyFreeSpec with Matchers with OptionValues with Txe1
 
       "should read Invalid Regime error" in {
         val etmpErrorCode: EtmpErrorCode = Json.parse(invalidRegime).as[EtmpErrorCode]
-        val etmpError                    = etmpErrorCode.errorCode
-        val etmpErrorValue               = etmpError.value
-        val etmpErrorDetail              = etmpErrorValue.errorDetail
+        val etmpError = etmpErrorCode.errorCode
+        val etmpErrorValue = etmpError.value
+        val etmpErrorDetail = etmpErrorValue.errorDetail
 
         etmpError.summary mustEqual "Invalid Regime"
         etmpErrorDetail.errorCode mustEqual "422"

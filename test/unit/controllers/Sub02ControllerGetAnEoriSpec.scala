@@ -44,27 +44,27 @@ import scala.concurrent.Future
 
 class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockSessionCache               = mock[SessionCache]
-  private val mockCdsSubscriber              = mock[CdsSubscriber]
-  private val mockCdsOrganisationType        = mock[CdsOrganisationType]
-  private val mockRegDetails                 = mock[RegistrationDetails]
-  private val mockSubscribeOutcome           = mock[Sub02Outcome]
-  private val mockSubscribe01Outcome         = mock[Sub01Outcome]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockCdsSubscriber = mock[CdsSubscriber]
+  private val mockCdsOrganisationType = mock[CdsOrganisationType]
+  private val mockRegDetails = mock[RegistrationDetails]
+  private val mockSubscribeOutcome = mock[Sub02Outcome]
+  private val mockSubscribe01Outcome = mock[Sub01Outcome]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockSubscriptionDetails        = mock[SubscriptionDetails]
+  private val mockSubscriptionDetails = mock[SubscriptionDetails]
 
-  private val sub01OutcomeView                = inject[sub01_outcome_processing]
-  private val sub02RequestNotProcessed        = inject[sub02_request_not_processed]
+  private val sub01OutcomeView = inject[sub01_outcome_processing]
+  private val sub02RequestNotProcessed = inject[sub02_request_not_processed]
   private val sub02SubscriptionInProgressView = inject[sub02_subscription_in_progress]
-  private val sub02EoriAlreadyAssociatedView  = inject[sub02_eori_already_associated]
-  private val sub02EoriAlreadyExists          = inject[sub02_eori_already_exists]
+  private val sub02EoriAlreadyAssociatedView = inject[sub02_eori_already_associated]
+  private val sub02EoriAlreadyExists = inject[sub02_eori_already_exists]
 
-  private val standAloneOutcomeView   = inject[standalone_subscription_outcome]
+  private val standAloneOutcomeView = inject[standalone_subscription_outcome]
   private val subscriptionOutcomeView = inject[subscription_outcome]
-  private val EORI                    = "ZZZ1ZZZZ23ZZZZZZZ"
+  private val EORI = "ZZZ1ZZZZ23ZZZZZZZ"
 
   private val subscriptionController = new Sub02Controller(
     mockAuthAction,
@@ -82,11 +82,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     mockCdsSubscriber
   )(global)
 
-  val eoriNumberResponse: String                = "EORI-Number"
-  val formBundleIdResponse: String              = "Form-Bundle-Id"
-  private val processingDate                    = "12 May 2018"
+  val eoriNumberResponse: String = "EORI-Number"
+  val formBundleIdResponse: String = "Form-Bundle-Id"
+  private val processingDate = "12 May 2018"
   val emailVerificationTimestamp: LocalDateTime = TestData.emailVerificationTimestamp
-  val emulatedFailure                           = new UnsupportedOperationException("Emulated service call failure.")
+  val emulatedFailure = new UnsupportedOperationException("Emulated service call failure.")
 
   override def beforeEach(): Unit = {
     super.beforeEach()

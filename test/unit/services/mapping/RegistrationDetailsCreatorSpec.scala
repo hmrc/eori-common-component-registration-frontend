@@ -31,8 +31,8 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
 
   "RegistrationDetailsCreator" should {
     "return registration details individual for RegistrationDisplayResponse" in {
-      val individual      = IndividualResponse("fname", "lname", Some("2019-01-01"))
-      val responseDetail  = ResponseDetail(
+      val individual = IndividualResponse("fname", "lname", Some("2019-01-01"))
+      val responseDetail = ResponseDetail(
         "SAFEID",
         None,
         None,
@@ -44,8 +44,8 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         Address("Line1", None, None, None, None, "GB"),
         ContactResponse()
       )
-      val responseCommon  = ResponseCommon("status", None, "date", None, Some("taxPayerId"))
-      val response        = RegistrationDisplayResponse(responseCommon, Some(responseDetail))
+      val responseCommon = ResponseCommon("status", None, "date", None, Some("taxPayerId"))
+      val response = RegistrationDisplayResponse(responseCommon, Some(responseDetail))
       val expectedDetails = RegistrationDetailsIndividual(
         None,
         TaxPayerId("taxPayerId"),
@@ -59,8 +59,8 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
     }
 
     "return registration details organisation for RegistrationDisplayResponse" in {
-      val organisation    = OrganisationResponse("orgname", Some("code"), None, Some("LLP"))
-      val responseDetail  = ResponseDetail(
+      val organisation = OrganisationResponse("orgname", Some("code"), None, Some("LLP"))
+      val responseDetail = ResponseDetail(
         "SAFEID",
         None,
         None,
@@ -72,8 +72,8 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         Address("Line1", None, None, None, None, "GB"),
         ContactResponse()
       )
-      val responseCommon  = ResponseCommon("status", None, "date", None, Some("taxPayerId"))
-      val response        = RegistrationDisplayResponse(responseCommon, Some(responseDetail))
+      val responseCommon = ResponseCommon("status", None, "date", None, Some("taxPayerId"))
+      val response = RegistrationDisplayResponse(responseCommon, Some(responseDetail))
       val expectedDetails = RegistrationDetailsOrganisation(
         None,
         TaxPayerId("taxPayerId"),

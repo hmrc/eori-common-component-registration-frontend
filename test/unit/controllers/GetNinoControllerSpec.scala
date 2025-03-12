@@ -44,12 +44,12 @@ import scala.concurrent.Future
 
 class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockMatchingService            = mock[MatchingService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val errorView                      = inject[error_template]
-  private val mockRequestSessionData         = inject[RequestSessionData]
+  private val errorView = inject[error_template]
+  private val mockRequestSessionData = inject[RequestSessionData]
 
   private val matchNinoRowIndividualView = inject[how_can_we_identify_you_nino]
 
@@ -69,10 +69,10 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   override def beforeEach(): Unit =
     reset(mockMatchingService)
 
-  val validNino                         = Nino(NinoFormBuilder.Nino)
-  val yesNinoSubmitData                 = Map("nino" -> NinoFormBuilder.Nino)
-  val yesNinoNotProvidedSubmitData      = Map("nino" -> "")
-  val yesNinoWrongFormatSubmitData      = Map("nino" -> "ABZ")
+  val validNino = Nino(NinoFormBuilder.Nino)
+  val yesNinoSubmitData = Map("nino" -> NinoFormBuilder.Nino)
+  val yesNinoNotProvidedSubmitData = Map("nino" -> "")
+  val yesNinoWrongFormatSubmitData = Map("nino" -> "ABZ")
   val mandatoryNinoFields: IdMatchModel = subscriptionNinoForm.bind(yesNinoSubmitData).value.get
 
   "Viewing the NINO Individual/Sole trader Rest of World Matching form" should {
@@ -141,7 +141,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page               = CdsPage(contentAsString(result))
+        val page = CdsPage(contentAsString(result))
         status(result) shouldBe BAD_REQUEST
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
@@ -184,7 +184,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page               = CdsPage(contentAsString(result))
+        val page = CdsPage(contentAsString(result))
         status(result) shouldBe OK
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
@@ -209,7 +209,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page               = CdsPage(contentAsString(result))
+        val page = CdsPage(contentAsString(result))
         status(result) shouldBe INTERNAL_SERVER_ERROR
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(

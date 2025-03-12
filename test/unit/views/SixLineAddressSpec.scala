@@ -32,13 +32,13 @@ import util.ViewSpec
 
 class SixLineAddressSpec extends ViewSpec {
 
-  private val form: Form[SixLineAddressMatchModel]              = thirdCountrySixLineAddressForm
-  private val isInReviewMode                                    = false
+  private val form: Form[SixLineAddressMatchModel] = thirdCountrySixLineAddressForm
+  private val isInReviewMode = false
   implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
-  private val ThirdCountryOrganisationId                        = "third-country-organisation"
-  private val viewSixLineAddress                                = SixLineAddressViewModel
+  private val ThirdCountryOrganisationId = "third-country-organisation"
+  private val viewSixLineAddress = SixLineAddressViewModel
 
-  private val servicesToTest   = Seq(ThirdCountryIndividualId, ThirdCountrySoleTraderId)
+  private val servicesToTest = Seq(ThirdCountryIndividualId, ThirdCountrySoleTraderId)
   private val anyOtherServices = ThirdCountryOrganisationId
 
   private val aFewCountries = List(

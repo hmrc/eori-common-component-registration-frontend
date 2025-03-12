@@ -30,7 +30,7 @@ class SubscriptionOutcomeFailSpec extends ViewSpec {
 
   private val view = inject[subscription_outcome_fail]
 
-  val orgName       = "Test Organisation Name"
+  val orgName = "Test Organisation Name"
   val processedDate = "01 Jan 2019"
 
   "'Subscription Fail' Page" should {

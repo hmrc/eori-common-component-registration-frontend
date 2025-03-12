@@ -21,24 +21,24 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 sealed trait AddressDetailsPage extends WebPage {
 
-  override val title     = "Your details"
+  override val title = "Your details"
   val manualAddressTitle = "Enter your address manually"
 
   val formId: String = "addressDetailsForm"
 
   val continueButtonXpath = "//*[@id='continue-button']"
 
-  val streetFieldXPath           = "//*[@id='street']"
+  val streetFieldXPath = "//*[@id='street']"
   val streetFieldLevelErrorXPath = "//p[@id='street-error' and @class='govuk-error-message']"
 
-  val cityFieldXPath           = "//*[@id='city']"
+  val cityFieldXPath = "//*[@id='city']"
   val cityFieldLevelErrorXPath = "//p[@id='city-error' and @class='govuk-error-message']"
 
   val countryFieldLevelErrorXPath = "//p[@id='countryCode-error' and @class='govuk-error-message']"
 
   val countryCodeFieldXPath = "//*[@id='countryCode']"
 
-  val postcodeFieldXPath           = "//*[@id='postcode']"
+  val postcodeFieldXPath = "//*[@id='postcode']"
   val postcodeFieldLevelErrorXPath = "//p[@id='postcode-error' and @class='govuk-error-message']"
 
   val filledValues =

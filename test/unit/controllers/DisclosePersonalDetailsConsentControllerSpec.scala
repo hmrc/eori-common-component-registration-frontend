@@ -250,7 +250,7 @@ class DisclosePersonalDetailsConsentControllerSpec extends ControllerSpec with S
             isPartnership = isPartnership,
             isCharity = isCharity
           ) { result =>
-            val orgType      =
+            val orgType =
               if (isIndividual) CdsOrganisationType.Individual
               else if (isPartnership) CdsOrganisationType.Partnership
               else if (isCharity) CdsOrganisationType.CharityPublicBodyNotForProfit

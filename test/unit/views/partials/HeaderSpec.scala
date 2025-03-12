@@ -34,10 +34,10 @@ import scala.concurrent.Future
 
 class HeaderSpec extends ControllerSpec with AuthActionMock with CSRFTest {
 
-  private val mockAuthConnector    = mock[AuthConnector]
-  private val mockAuthAction       = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val mockCdsFrontendCache = mock[SessionCache]
-  private val viewStartRegister    = inject[start]
+  private val viewStartRegister = inject[start]
 
   private val controller =
     new ApplicationController(mockAuthAction, mcc, viewStartRegister, mockCdsFrontendCache, appConfig)

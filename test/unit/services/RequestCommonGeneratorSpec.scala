@@ -28,12 +28,12 @@ import java.time.{Clock, Instant, LocalDateTime, ZoneId}
 class RequestCommonGeneratorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
   private val mockUUIDGenerator = mock[RandomUUIDGenerator]
-  private val mockClock         = mock[UtcClock](RETURNS_DEEP_STUBS)
+  private val mockClock = mock[UtcClock](RETURNS_DEEP_STUBS)
   private val expectedReference = "a83f4bfed34d445cba186c2e97f7d133"
 
   private val generator = new RequestCommonGenerator(mockUUIDGenerator, mockClock)
 
-  private val instant: Instant  = Instant.now(Clock.systemUTC())
+  private val instant: Instant = Instant.now(Clock.systemUTC())
   private val in: LocalDateTime = LocalDateTime.ofInstant(instant, ZoneId.of("Europe/London"))
 
   override def beforeEach(): Unit = {

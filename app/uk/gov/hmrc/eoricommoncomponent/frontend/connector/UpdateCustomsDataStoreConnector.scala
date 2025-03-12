@@ -38,7 +38,7 @@ class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appCo
 ) {
 
   val LoggerComponentId = "UpdateCustomsDataStoreConnector"
-  private val logger    = Logger(this.getClass)
+  private val logger = Logger(this.getClass)
 
   def updateCustomsDataStore(request: CustomsDataStoreRequest)(implicit hc: HeaderCarrier): Future[Unit] = {
     val url = url"${appConfig.handleSubscriptionBaseUrl}/customs/update/datastore"
@@ -79,7 +79,7 @@ class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appCo
   private def auditCall(url: String, request: CustomsDataStoreRequest, response: HttpResponse)(implicit
     hc: HeaderCarrier
   ): Unit = {
-    val updateRequest  = UpdateRequest(request)
+    val updateRequest = UpdateRequest(request)
     val updateResponse = UpdateResponse(response)
     audit.sendExtendedDataEvent(
       transactionName = "customs-data-store",

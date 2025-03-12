@@ -42,16 +42,16 @@ import scala.concurrent.Future
 
 class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector               = mock[AuthConnector]
-  private val mockAuthAction                  = authAction(mockAuthConnector)
-  private val mockSubscriptionFlowManager     = mock[SubscriptionFlowManager]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
-  private val mockSubscriptionFlow            = mock[SubscriptionFlow]
-  private val mockSessionError                = mock[SessionError]
-  private val mockRequestSession              = mock[RequestSessionData]
-  private val vatRegisteredUkView             = inject[vat_registered_uk]
-  private val mockSessionCacheService         = inject[SessionCacheService]
+  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockSubscriptionFlow = mock[SubscriptionFlow]
+  private val mockSessionError = mock[SessionError]
+  private val mockRequestSession = mock[RequestSessionData]
+  private val vatRegisteredUkView = inject[vat_registered_uk]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -276,7 +276,7 @@ class VatRegisteredUkControllerSpec extends ControllerSpec with BeforeAndAfterEa
   }
 
   private def subscriptionFlowUrl(url: String) = {
-    val mockSubscriptionPage     = mock[SubscriptionPage]
+    val mockSubscriptionPage = mock[SubscriptionPage]
     val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
     when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
       .thenReturn(Right(mockSubscriptionFlowInfo))

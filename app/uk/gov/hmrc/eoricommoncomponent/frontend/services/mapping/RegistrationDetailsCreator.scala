@@ -35,7 +35,7 @@ class RegistrationDetailsCreator {
     capturedDate: Option[LocalDate]
   ): RegistrationDetails = {
     val responseDetail = response.getResponseDetail
-    val sapNumber      = extractSapNumber(response.responseCommon.returnParameters)
+    val sapNumber = extractSapNumber(response.responseCommon.returnParameters)
     if (responseDetail.isAnIndividual)
       convertIndividualMatchingResponse(
         responseDetail.individual.get,
@@ -71,7 +71,7 @@ class RegistrationDetailsCreator {
     dateOfBirth: Option[LocalDate]
   ): RegistrationDetailsIndividual = {
     val name = individualResponse.fullName
-    val dob  =
+    val dob =
       individualResponse.dateOfBirth.flatMap(toLocalDate).orElse(dateOfBirth)
     dob.fold(ifEmpty =
       throw new IllegalArgumentException(
@@ -91,7 +91,7 @@ class RegistrationDetailsCreator {
     address: Address,
     dateOfEstablishment: Option[LocalDate]
   ): RegistrationDetailsOrganisation = {
-    val name                 = organisationResponse.organisationName
+    val name = organisationResponse.organisationName
     val etmpOrganisationType =
       organisationResponse.organisationType.map(EtmpOrganisationType.apply)
     RegistrationDetails.organisation(
@@ -111,7 +111,7 @@ class RegistrationDetailsCreator {
     orgAddress: SixLineAddressMatchModel
   ): RegistrationDetailsOrganisation = {
     val sapNumber = extractSapNumber(response.responseCommon.returnParameters)
-    val address   = Address(
+    val address = Address(
       orgAddress.lineOne,
       orgAddress.lineTwo,
       Some(orgAddress.lineThree),
@@ -171,8 +171,8 @@ class RegistrationDetailsCreator {
     add: SixLineAddressMatchModel
   ): RegistrationDetailsIndividual = {
     val sapNumber = extractSapNumber(response.responseCommon.returnParameters)
-    val address   = Address(add.lineOne, add.lineTwo, Some(add.lineThree), add.lineFour, add.postcode, add.country)
-    val name      = ind.fullName
+    val address = Address(add.lineOne, add.lineTwo, Some(add.lineThree), add.lineFour, add.postcode, add.country)
+    val name = ind.fullName
 
     RegistrationDetails.individual(
       sapNumber,

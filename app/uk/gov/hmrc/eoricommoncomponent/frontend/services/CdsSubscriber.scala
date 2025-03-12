@@ -82,18 +82,18 @@ class CdsSubscriber @Inject() (
   )(implicit hc: HeaderCarrier, messages: Messages, request: Request[_]): Future[Unit] =
     subscriptionResult match {
       case success: SubscriptionSuccessful =>
-        val safeId                                 = regDetails.safeId
+        val safeId = regDetails.safeId
         val contactDetails: Option[ContactDetails] = subscriptionDetails
           .flatMap(_.contactDetails.map(_.contactDetails))
-        val contactName                            = contactDetails.map(_.fullName)
-        val cdsFullName                            = Some(regDetails.name)
-        val email                                  = contactDetails.map(_.emailAddress).getOrElse {
+        val contactName = contactDetails.map(_.fullName)
+        val cdsFullName = Some(regDetails.name)
+        val email = contactDetails.map(_.emailAddress).getOrElse {
           // $COVERAGE-OFF$Loggers
           logger.warn("Email not found within contactDetails")
           // $COVERAGE-ON
           throw new IllegalStateException("Email required")
         }
-        val mayBeEori                              = Some(success.eori)
+        val mayBeEori = Some(success.eori)
 
         completeSubscription(
           service,
@@ -109,18 +109,18 @@ class CdsSubscriber @Inject() (
         )
 
       case pending: SubscriptionPending =>
-        val safeId                                 = regDetails.safeId
+        val safeId = regDetails.safeId
         val contactDetails: Option[ContactDetails] = subscriptionDetails
           .flatMap(_.contactDetails.map(_.contactDetails))
-        val contactName                            = contactDetails.map(_.fullName)
-        val cdsFullName                            = Some(regDetails.name)
-        val email                                  = contactDetails.map(_.emailAddress).getOrElse {
+        val contactName = contactDetails.map(_.fullName)
+        val cdsFullName = Some(regDetails.name)
+        val email = contactDetails.map(_.emailAddress).getOrElse {
           // $COVERAGE-OFF$Loggers
           logger.warn("Email not found within contactDetails")
           // $COVERAGE-ON
           throw new IllegalStateException("Email required")
         }
-        val mayBeEori                              = None
+        val mayBeEori = None
         completeSubscription(
           service,
           regDetails.name,

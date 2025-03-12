@@ -36,7 +36,7 @@ class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig:
 ) {
 
   private val logger = Logger(this.getClass)
-  private val url    = url"${appConfig.getServiceUrl("register-without-id")}"
+  private val url = url"${appConfig.getServiceUrl("register-without-id")}"
 
   def register(request: RegisterWithoutIDRequest)(implicit hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {
 

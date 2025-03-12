@@ -40,8 +40,8 @@ object EisError {
   case class Value(errorDetail: ErrorDetail)
 
   implicit val sourceFaultDetailReads: Reads[SourceFaultDetail] = Json.reads[SourceFaultDetail]
-  implicit val errorDetailReads: Reads[ErrorDetail]             = Json.reads[ErrorDetail]
-  implicit val valueReads: Reads[Value]                         = Json.reads[Value]
+  implicit val errorDetailReads: Reads[ErrorDetail] = Json.reads[ErrorDetail]
+  implicit val valueReads: Reads[Value] = Json.reads[Value]
 
   implicit val etmpErrorReads: Reads[EisError] = {
     (
@@ -50,7 +50,7 @@ object EisError {
     )((s, v) =>
       new EisError {
         override val summary: String = s
-        override val value: Value    = v
+        override val value: Value = v
       }
     )
   }

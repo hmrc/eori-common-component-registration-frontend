@@ -22,5 +22,5 @@ case class SubscriptionRequest(subscriptionCreateRequest: SubscriptionCreateRequ
 
 object SubscriptionRequest {
   implicit val jsonFormat: OFormat[SubscriptionRequest] = Json.format[SubscriptionRequest]
-  val principalEconomicActivityLength                   = 4
+  val principalEconomicActivityLength = 4
 }

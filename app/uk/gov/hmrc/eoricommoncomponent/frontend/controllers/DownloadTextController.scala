@@ -36,7 +36,7 @@ class DownloadTextController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  private val plainText          = "plain/text"
+  private val plainText = "plain/text"
   private val attachmentTextFile = "attachment; filename=EORI-number.txt"
 
   def download(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>

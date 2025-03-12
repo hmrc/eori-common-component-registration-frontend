@@ -70,14 +70,14 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
 
   "startVerificationJourney" should {
 
-    val credId  = "123"
+    val credId = "123"
     val service = Service.cds
-    val email   = "123@abc.com"
+    val email = "123@abc.com"
 
     "return a Right containing the URI when a CREATED is returned" in {
       EmailVerificationStubService.stubVerifyEmailResponse(verifyEmailSuccessResponse.toString(), CREATED)
 
-      val expected                                       = Right(ResponseWithURI("google.com"))
+      val expected = Right(ResponseWithURI("google.com"))
       val result: Either[ResponseError, ResponseWithURI] =
         await(connector.startVerificationJourney(credId, service, email).value)
 
@@ -87,7 +87,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     "return a Left containing the response details when anything but CREATED is returned" in {
       EmailVerificationStubService.stubVerifyEmailResponse(verifyEmailFailureResponse, INTERNAL_SERVER_ERROR)
 
-      val expected                                       = Left(ResponseError(500, "Unexpected response from verify-email: Something went wrong"))
+      val expected = Left(ResponseError(500, "Unexpected response from verify-email: Something went wrong"))
       val result: Either[ResponseError, ResponseWithURI] =
         await(connector.startVerificationJourney(credId, service, email).value)
 
@@ -97,7 +97,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     "return a Left describing that the json was invalid when CREATED is returned but the JSON is not in the expected format" in {
       EmailVerificationStubService.stubVerifyEmailResponse(verifyEmailInvalidResponse.toString, CREATED)
 
-      val expected                                       = Left(
+      val expected = Left(
         ResponseError(
           500,
           """Invalid JSON returned: List((/redirectUri,List(JsonValidationError(List(error.path.missing),List()))))"""
@@ -127,7 +127,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         VerificationStatus(emailAddress = "somename@live.com", verified = false, locked = true)
       )
 
-      val expected                                                  = Right(VerificationStatusResponse(emailVerificationStatuses))
+      val expected = Right(VerificationStatusResponse(emailVerificationStatuses))
       val result: Either[ResponseError, VerificationStatusResponse] =
         await(connector.getVerificationStatus(credId).value)
 
@@ -141,7 +141,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         credId
       )
 
-      val expected                                                  = Left(ResponseError(500, "Unexpected response from verification-status: Something went wrong"))
+      val expected = Left(ResponseError(500, "Unexpected response from verification-status: Something went wrong"))
       val result: Either[ResponseError, VerificationStatusResponse] =
         await(connector.getVerificationStatus(credId).value)
 
@@ -151,7 +151,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     "return a Left describing that the json was invalid when OK is returned but the JSON is not in the expected format" in {
       EmailVerificationStubService.stubVerificationStatusResponse(verifyEmailInvalidResponse.toString, OK, credId)
 
-      val expected                                                  = Left(
+      val expected = Left(
         ResponseError(
           500,
           """Invalid JSON returned: List((/emails,List(JsonValidationError(List(error.path.missing),List()))))"""
@@ -167,7 +167,7 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
 
       EmailVerificationStubService.stubVerificationStatusResponse("", NOT_FOUND, credId)
 
-      val expected                                                  = Right(VerificationStatusResponse(List()))
+      val expected = Right(VerificationStatusResponse(List()))
       val result: Either[ResponseError, VerificationStatusResponse] =
         await(connector.getVerificationStatus(credId).value)
 

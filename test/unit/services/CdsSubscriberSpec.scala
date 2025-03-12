@@ -56,24 +56,24 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
   implicit override val patienceConfig: PatienceConfig =
     PatienceConfig(timeout = scaled(Span(10, Seconds)), interval = scaled(Span(15, Millis)))
 
-  private val mockSubscriptionService                      = mock[SubscriptionService]
-  private val mockCdsFrontendDataCache                     = mock[SessionCache]
-  private val mockRegistrationConfirmService               = mock[RegistrationConfirmService]
-  private val mockSubscriptionFlowManager                  = mock[SubscriptionFlowManager]
-  private val mockHandleSubscriptionService                = mock[HandleSubscriptionService]
+  private val mockSubscriptionService = mock[SubscriptionService]
+  private val mockCdsFrontendDataCache = mock[SessionCache]
+  private val mockRegistrationConfirmService = mock[RegistrationConfirmService]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
+  private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
   private val mockRegistrationDetails: RegistrationDetails = mock[RegistrationDetails]
 
   implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
 
   implicit val messages: Messages = MessagesImpl(defaultLang, inject[MessagesApi])
 
-  private val eori                       = "EORI-Number"
-  private val formBundleId               = "Form-Bundle-Id"
-  private val processingDate             = "19 April 2018"
+  private val eori = "EORI-Number"
+  private val formBundleId = "Form-Bundle-Id"
+  private val processingDate = "19 April 2018"
   private val emailVerificationTimestamp = TestData.emailVerificationTimestamp
-  private val mockCdsOrganisationType    = mock[Option[CdsOrganisationType]]
-  private val mockContactDetailsModel    = mock[ContactDetailsModel]
-  private val contactDetails             = SubscriptionContactDetailsBuilder.contactDetailsWithMandatoryValuesOnly
+  private val mockCdsOrganisationType = mock[Option[CdsOrganisationType]]
+  private val mockContactDetailsModel = mock[ContactDetailsModel]
+  private val contactDetails = SubscriptionContactDetailsBuilder.contactDetailsWithMandatoryValuesOnly
 
   private val subscriptionDetails = SubscriptionDetails(
     contactDetails = Some(mockContactDetailsModel),
@@ -181,7 +181,7 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
     }
 
     "call handle-subscription service when subscription successful" in {
-      val expectedOrgName   = "My Successful Org"
+      val expectedOrgName = "My Successful Org"
       val expectedRecipient = RecipientDetails(
         atarService,
         "john.doe@example.com",
@@ -216,7 +216,7 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
     }
 
     "call handle-subscription service when subscription returns pending status" in {
-      val expectedOrgName   = "My Pending Org"
+      val expectedOrgName = "My Pending Org"
       val expectedRecipient =
         RecipientDetails(atarService, "john.doe@example.com", "John Doe", Some("My Pending Org"), Some("19 April 2018"))
       mockPendingSubscribe(mockRegistrationDetails, expectedOrgName)

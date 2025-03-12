@@ -33,9 +33,9 @@ import scala.concurrent.Future
 
 class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSugar {
 
-  private val mockCache          = mock[SessionCache]
+  private val mockCache = mock[SessionCache]
   private val mockReqSessionData = mock[RequestSessionData]
-  private val req                = mock[Request[AnyContent]]
+  private val req = mock[Request[AnyContent]]
 
   override def beforeEach(): Unit = {
     reset(mockCache)

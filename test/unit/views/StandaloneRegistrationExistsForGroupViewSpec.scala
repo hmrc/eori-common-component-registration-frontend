@@ -26,7 +26,7 @@ import util.ViewSpec
 
 class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
-  private val view                   = inject[enrolment_exists_group_standalone]
+  private val view = inject[enrolment_exists_group_standalone]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 
   "Standalone Registration Exists page" should {

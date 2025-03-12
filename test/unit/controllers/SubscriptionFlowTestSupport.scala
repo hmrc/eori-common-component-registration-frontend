@@ -33,17 +33,17 @@ trait SubscriptionFlowTestSupport extends ControllerSpec with AuthActionMock {
 
   protected def formId: String
 
-  protected val nextPageUrl                = "next-page-url"
+  protected val nextPageUrl = "next-page-url"
   protected val nextPage: SubscriptionPage = mock[SubscriptionPage]
 
   protected val subscriptionFlowStepInfo: SubscriptionFlowInfo =
     SubscriptionFlowInfo(stepNumber = 7, totalSteps = 10, nextPage = nextPage)
 
-  protected val mockSubscriptionFlowManager: SubscriptionFlowManager         = mock[SubscriptionFlowManager]
-  protected val mockAuthConnector: AuthConnector                             = mock[AuthConnector]
-  protected val mockAuthAction: AuthAction                                   = authAction(mockAuthConnector)
+  protected val mockSubscriptionFlowManager: SubscriptionFlowManager = mock[SubscriptionFlowManager]
+  protected val mockAuthConnector: AuthConnector = mock[AuthConnector]
+  protected val mockAuthAction: AuthAction = authAction(mockAuthConnector)
   protected val mockSubscriptionBusinessService: SubscriptionBusinessService = mock[SubscriptionBusinessService]
-  protected val mockSubscriptionDetailsService: SubscriptionDetailsService   = mock[SubscriptionDetailsService]
+  protected val mockSubscriptionDetailsService: SubscriptionDetailsService = mock[SubscriptionDetailsService]
 
   def setupMockSubscriptionFlowManager(currentPage: SubscriptionPage): Unit = {
     when(nextPage.url(any[Service])).thenReturn(nextPageUrl)

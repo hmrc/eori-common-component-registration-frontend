@@ -33,7 +33,7 @@ class FormValidationSpec extends UnitSpec {
   def randomNino: String = new Generator(new Random()).nextNino.nino
 
   lazy val nameDobForm: Form[NameDobMatchModel] = MatchingForms.enterNameDobForm
-  lazy val ninoForm: Form[NinoMatch]            = MatchingForms.ninoForm
+  lazy val ninoForm: Form[NinoMatch] = MatchingForms.ninoForm
 
   lazy val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] =
     MatchingForms.thirdCountryIndividualNameDateOfBirthForm
@@ -81,37 +81,37 @@ class FormValidationSpec extends UnitSpec {
 
     "only accept valid form" in {
       val data = formData
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept first-name with ' apostrophe" in {
       val data = formData.updated("first-name", "apos'trophe")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept last-name with ' apostrophe" in {
       val data = formData.updated("last-name", "apos'trophe")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept middle-name with ' apostrophe" in {
       val data = formData.updated("middle-name", "apos'trophe")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "fail when a First Name is invalid" in {
       val data = formData.updated("first-name", "")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors should not be empty
     }
     "fail when a Last Name is invalid" in {
       val data = formData.updated("last-name", "")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors should not be empty
     }
     "fail when date of birth - day and month missing" in {
       val data = formData.updated("date-of-birth.day", "").updated("date-of-birth.month", "")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-birth.day", List("date-of-birth.day-date-of-birth.month.empty"), List()),
         FormError("date-of-birth.month", List(""), List())
@@ -119,7 +119,7 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when date of birth - day and year missing" in {
       val data = formData.updated("date-of-birth.day", "").updated("date-of-birth.year", "")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-birth.day", List("date-of-birth.day-date-of-birth.year.empty"), List()),
         FormError("date-of-birth.year", List(""), List())
@@ -127,7 +127,7 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when date of birth - year and month missing" in {
       val data = formData.updated("date-of-birth.year", "").updated("date-of-birth.month", "")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-birth.month", List("date-of-birth.month-date-of-birth.year.empty"), List()),
         FormError("date-of-birth.year", List(""), List())
@@ -135,27 +135,27 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when date of birth - day missing" in {
       val data = formData.updated("date-of-birth.day", "")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth.day", List("date-of-birth.day.empty"), List()))
     }
     "fail when date of birth - month missing" in {
       val data = formData.updated("date-of-birth.month", "")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth.month", List("date-of-birth.month.empty"), List()))
     }
     "fail when date of birth - year missing" in {
       val data = formData.updated("date-of-birth.year", "")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth.year", List("date-of-birth.year.empty"), List()))
     }
     "fail when date of birth - year 3 digits" in {
       val data = formData.updated("date-of-birth.year", "899")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth.year", List("date-invalid-year-too-short"), List()))
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data            =
+      val data =
         formData
           .updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay))
           .updated(
@@ -163,17 +163,17 @@ class FormValidationSpec extends UnitSpec {
             DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
           )
           .updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
-      val res             = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
     "fail when a date of birth year invalid" in {
       val data = formData.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth.year", Seq("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formData.updated("date-of-birth.year", "1800")
-      val res  = nameDobForm.bind(data)
+      val res = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
 
@@ -183,32 +183,32 @@ class FormValidationSpec extends UnitSpec {
 
     "only accept valid form" in {
       val data = formDataNino
-      val res  = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept first-name with ' apostrophe" in {
       val data = formDataNino.updated("first-name", "apos'trophe")
-      val res  = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept last-name with ' apostrophe" in {
       val data = formDataNino.updated("last-name", "apos'trophe")
-      val res  = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "fail when a First Name is invalid" in {
       val data = formDataNino.updated("first-name", "")
-      val res  = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors should not be empty
     }
     "fail when a Last Name is invalid" in {
       val data = formDataNino.updated("last-name", "")
-      val res  = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors should not be empty
     }
     "fail when date of birth - day and year is missing" in {
       val data = formDataNino.updated("date-of-birth.day", "").updated("date-of-birth.year", "")
-      val res  = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-birth.day", List("date-of-birth.day-date-of-birth.year.empty"), List()),
         FormError("date-of-birth.year", List(""), List())
@@ -216,7 +216,7 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data            =
+      val data =
         formDataNino
           .updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay))
           .updated(
@@ -224,17 +224,17 @@ class FormValidationSpec extends UnitSpec {
             DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
           )
           .updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
-      val res             = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
     "fail when a date of birth year invalid" in {
       val data = formDataNino.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
-      val res  = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth.year", Seq("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formDataNino.updated("date-of-birth.year", "1800")
-      val res  = ninoForm.bind(data)
+      val res = ninoForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
   }
@@ -243,37 +243,37 @@ class FormValidationSpec extends UnitSpec {
 
     "only accept valid form" in {
       val data = formDataRow
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept Given name with ' apostrophe" in {
       val data = formDataRow.updated("given-name", "apos'trophe")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept Family name with ' apostrophe" in {
       val data = formDataRow.updated("family-name", "apos'trophe")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept middle name with ' apostrophe" in {
       val data = formDataRow.updated("middle-name", "apos'trophe")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "fail when a Given Name is invalid" in {
       val data = formDataRow.updated("given-name", "")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors should not be empty
     }
     "fail when a Family Name is invalid" in {
       val data = formDataRow.updated("family-name", "")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors should not be empty
     }
     "fail when date of birth - day and month is missing" in {
       val data = formDataRow.updated("date-of-birth.day", "").updated("date-of-birth.month", "")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-birth.day", List("date-of-birth.day-date-of-birth.month.empty"), List()),
         FormError("date-of-birth.month", List(""), List())
@@ -281,7 +281,7 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data            =
+      val data =
         formDataRow
           .updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay))
           .updated(
@@ -289,17 +289,17 @@ class FormValidationSpec extends UnitSpec {
             DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
           )
           .updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
-      val res             = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
     "fail when a date of birth year invalid" in {
       val data = formDataRow.updated("date-of-birth.year", Year.now.plusYears(1).getValue.toString)
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth.year", List("date.year.error"), List()))
     }
     "fail when a date of birth too early" in {
       val data = formDataRow.updated("date-of-birth.year", "1800")
-      val res  = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
   }
@@ -307,7 +307,7 @@ class FormValidationSpec extends UnitSpec {
   "Date of establishment form" should {
     "only accept valid form" in {
       val data = formDataDoE
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "fail when date of establishment is missing" in {
@@ -318,13 +318,13 @@ class FormValidationSpec extends UnitSpec {
           ""
         )
         .updated("date-of-establishment.year", "")
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", List("doe.error.empty-date"), List()))
 
     }
     "fail when date of establishment in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data            = formDataDoE
+      val data = formDataDoE
         .updated(
           "date-of-establishment.day",
           DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
@@ -334,17 +334,17 @@ class FormValidationSpec extends UnitSpec {
           "date-of-establishment.year",
           DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
         )
-      val res             = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.minMax"), ArraySeq("1000")))
     }
     "fail when date of establishment year invalid" in {
       val data = formDataDoE.updated("date-of-establishment.year", Year.now.plusYears(1).getValue.toString)
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.year", List("date.year.error"), List()))
     }
     "fail when date of establishment too late" in {
       val data = formDataDoE.updated("date-of-establishment.year", "9999")
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.year", List("date.year.error"), List()))
     }
     "fail with a month error, when month is populated with blanks" in {
@@ -353,7 +353,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> " ",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-establishment.month", List("date-of-establishment.month.empty"), List())
       )
@@ -365,7 +365,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "2",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", List("doe.error.invalid-date"), List()))
     }
 
@@ -375,7 +375,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "1",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Nil
     }
 
@@ -385,7 +385,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "1",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()))
     }
 
@@ -395,7 +395,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "12",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Nil
     }
 
@@ -405,7 +405,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "13",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq()))
     }
 
@@ -415,7 +415,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "13",
         "date-of-establishment.year"  -> "2019"
       )
-      val res  = dateOfEstablishmentForm.bind(data)
+      val res = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()),
         FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq())
@@ -428,42 +428,42 @@ class FormValidationSpec extends UnitSpec {
 
     "only accept valid form" in {
       val data = formDataSic
-      val res  = sicCodeForm.bind(data)
+      val res = sicCodeForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept sic code with leading whitespace" in {
       val data = formDataSic.updated("sic", " 10009")
-      val res  = sicCodeForm.bind(data)
+      val res = sicCodeForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept sic code with trailing whitespace" in {
       val data = formDataSic.updated("sic", "10009 ")
-      val res  = sicCodeForm.bind(data)
+      val res = sicCodeForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "accept sic code with multiple whitespaces" in {
       val data = formDataSic.updated("sic", " 100 09 ")
-      val res  = sicCodeForm.bind(data)
+      val res = sicCodeForm.bind(data)
       res.errors shouldBe Seq.empty
     }
     "fail sic code with only whitespaces - empty string" in {
       val data = formDataSic.updated("sic", "    ")
-      val res  = sicCodeForm.bind(data)
+      val res = sicCodeForm.bind(data)
       res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.empty")))
     }
     "fail sic code with invalid characters - wrong format" in {
       val data = formDataSic.updated("sic", "111k2")
-      val res  = sicCodeForm.bind(data)
+      val res = sicCodeForm.bind(data)
       res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.wrong-format")))
     }
     "fail sic code too short" in {
       val data = formDataSic.updated("sic", "111")
-      val res  = sicCodeForm.bind(data)
+      val res = sicCodeForm.bind(data)
       res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.too-short")))
     }
     "fail sic code too long" in {
       val data = formDataSic.updated("sic", "111111")
-      val res  = sicCodeForm.bind(data)
+      val res = sicCodeForm.bind(data)
       res.errors shouldBe Seq(FormError("sic", Seq("cds.subscription.sic.error.too-long")))
     }
   }

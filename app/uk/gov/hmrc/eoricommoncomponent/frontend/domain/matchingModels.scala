@@ -38,7 +38,7 @@ case class SafeId(override val id: String) extends CustomsId
 
 case class TaxPayerId(override val id: String) extends CustomsId {
   private val MDGTaxPayerIdLength = 42
-  val mdgTaxPayerId: String       = id + "0" * (MDGTaxPayerIdLength - id.length)
+  val mdgTaxPayerId: String = id + "0" * (MDGTaxPayerIdLength - id.length)
 }
 
 object TaxPayerId {
@@ -46,7 +46,7 @@ object TaxPayerId {
 }
 
 object SafeId {
-  implicit val format: OFormat[SafeId]               = Json.format[SafeId]
+  implicit val format: OFormat[SafeId] = Json.format[SafeId]
   implicit def toJsonFormat(safeId: SafeId): JsValue = Json.toJson(safeId)
 }
 
@@ -94,27 +94,27 @@ object CacheIds extends Logging {
       // $COVERAGE-ON
       throw new IllegalArgumentException(error)
     })
-    val safeId     = SafeId(mayBeSafeId.getOrElse {
+    val safeId = SafeId(mayBeSafeId.getOrElse {
       val error = "SafeId is missing"
       // $COVERAGE-OFF$Loggers
       logger.warn(error)
       // $COVERAGE-ON
       throw new IllegalArgumentException(error)
     })
-    val service    = mayBeService.map(_.code)
+    val service = mayBeService.map(_.code)
 
     new CacheIds(internalId, safeId, service)
   }
 
-  implicit val jsonFormat: OFormat[CacheIds]             = Json.format[CacheIds]
+  implicit val jsonFormat: OFormat[CacheIds] = Json.format[CacheIds]
   implicit def toJsonFormat(cacheIds: CacheIds): JsValue = Json.toJson(cacheIds)
 }
 
 object CustomsId extends Logging {
-  val utr        = "utr"
-  val eori       = "eori"
-  val nino       = "nino"
-  val safeId     = "safeId"
+  val utr = "utr"
+  val eori = "eori"
+  val nino = "nino"
+  val safeId = "safeId"
   val taxPayerId = "taxPayerId"
   val taxPayerID = "taxPayerID"
 
@@ -191,7 +191,7 @@ case class YesNo(isYes: Boolean) {
 
 object YesNo {
   val yesAndNoAnswer = "yes-no-answer"
-  val answerTrue     = "yes-no-answer-true"
+  val answerTrue = "yes-no-answer-true"
 }
 
 case class VatVerificationOption(isDateOption: Boolean) {

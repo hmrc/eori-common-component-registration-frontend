@@ -41,7 +41,7 @@ class ApplicationController @Inject() (
 
   def startRegister(service: Service): Action[AnyContent] = Action { implicit request =>
     val headingAndTitleText = s"ecc.start-page.title.${service.code}"
-    val bullet2             = s"ecc.start-page.para1.bullet2.${service.code}"
+    val bullet2 = s"ecc.start-page.para1.bullet2.${service.code}"
     if (service.code == eoriOnly.code) Redirect(EmailController.form(service))
     else Ok(viewStartRegister(service, headingAndTitleText, bullet2))
   }

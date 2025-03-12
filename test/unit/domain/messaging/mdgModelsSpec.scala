@@ -29,7 +29,7 @@ class mdgModelsSpec extends UnitSpec with OptionValues {
     val addressLine2 = "some street"
     val addressLine3 = "some area"
     val addressLine4 = "some town"
-    val countryCode  = "GB"
+    val countryCode = "GB"
 
     def addressSetter(postCodeVal: String) =
       Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), Some(postCodeVal), countryCode)
@@ -53,7 +53,7 @@ class mdgModelsSpec extends UnitSpec with OptionValues {
     }
 
     "supplied with a valid countryCode no postCode required should be true" in {
-      val countryGen              = Countries.thirdIncEu
+      val countryGen = Countries.thirdIncEu
       val validCountryCodeAddress =
         Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), None, "AA")
       countryGen.foreach(country => validCountryCodeAddress.copy(countryCode = country.countryCode).isValidAddress shouldBe true)

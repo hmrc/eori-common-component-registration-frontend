@@ -70,7 +70,7 @@ case class OrgRegistrationInfo(
 ) extends RegistrationInfo
 
 object RegistrationInfo {
-  private val formatsOrganisation: OFormat[OrgRegistrationInfo]      = Json.format[OrgRegistrationInfo]
+  private val formatsOrganisation: OFormat[OrgRegistrationInfo] = Json.format[OrgRegistrationInfo]
   private val formatsIndividual: OFormat[IndividualRegistrationInfo] = Json.format[IndividualRegistrationInfo]
 
   implicit val formats: Format[RegistrationInfo] = Format[RegistrationInfo](

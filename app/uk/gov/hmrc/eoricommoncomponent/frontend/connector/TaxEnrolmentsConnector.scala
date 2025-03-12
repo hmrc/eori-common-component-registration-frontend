@@ -35,8 +35,8 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
   ec: ExecutionContext
 ) {
 
-  private val logger         = Logger(this.getClass)
-  private val baseUrl        = appConfig.taxEnrolmentsBaseUrl
+  private val logger = Logger(this.getClass)
+  private val baseUrl = appConfig.taxEnrolmentsBaseUrl
   val serviceContext: String = appConfig.taxEnrolmentsServiceContext
 
   def getEnrolments(safeId: String)(implicit hc: HeaderCarrier): Future[List[TaxEnrolmentsResponse]] = {
@@ -71,7 +71,7 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
   private def auditCall(url: String, request: TaxEnrolmentsRequest, response: HttpResponse)(implicit
     hc: HeaderCarrier
   ): Unit = {
-    val issuerRequest  = IssuerRequest(request)
+    val issuerRequest = IssuerRequest(request)
     val issuerResponse = IssuerResponse(response)
 
     audit.sendExtendedDataEvent(

@@ -34,28 +34,28 @@ import java.time.{LocalDate, LocalDateTime, ZoneId}
 
 trait SubscriptionServiceTestData extends TestData {
 
-  val sapNumber                          = "0123456789"
-  val expectedTaxPayerId                 = "012345678900000000000000000000000000000000"
-  val businessName                       = "Test Business Name not really a Ltd"
-  val shortName                          = "tbnnraltd"
-  val individualName                     = "John Doe"
-  val dateOfBirthString                  = "1970-12-31"
-  val dateOfBirth: LocalDate             = LocalDate.parse(dateOfBirthString)
-  val dateEstablishedString              = "1963-05-01"
-  val dateOfEstablishment: LocalDate     = LocalDate.parse(dateEstablishedString)
+  val sapNumber = "0123456789"
+  val expectedTaxPayerId = "012345678900000000000000000000000000000000"
+  val businessName = "Test Business Name not really a Ltd"
+  val shortName = "tbnnraltd"
+  val individualName = "John Doe"
+  val dateOfBirthString = "1970-12-31"
+  val dateOfBirth: LocalDate = LocalDate.parse(dateOfBirthString)
+  val dateEstablishedString = "1963-05-01"
+  val dateOfEstablishment: LocalDate = LocalDate.parse(dateEstablishedString)
   val dateEstablishedStringForPublicBody = "1900-01-01"
-  val principalEconomicActivity          = "A123"
-  val ukVatDetails: Option[VatDetails]   = Some(VatDetails("SE28 1AA", "123456789"))
+  val principalEconomicActivity = "A123"
+  val ukVatDetails: Option[VatDetails] = Some(VatDetails("SE28 1AA", "123456789"))
 
-  val contactName        = "John Doe"
-  val contactStreet      = "Line 1"
-  val contactCity        = "city name"
-  val contactPostalCode  = "SE28 1AA"
+  val contactName = "John Doe"
+  val contactStreet = "Line 1"
+  val contactCity = "city name"
+  val contactPostalCode = "SE28 1AA"
   val contactCountryCode = "GB"
-  val contactFax         = "01632961235"
-  val contactTelephone   = "01632961234"
-  val contactEmail       = "john.doe@example.com"
-  val capturedEmail      = "captured@email.com"
+  val contactFax = "01632961235"
+  val contactTelephone = "01632961234"
+  val contactEmail = "john.doe@example.com"
+  val capturedEmail = "captured@email.com"
 
   val EmptyVatIds: List[VatIdentification] = Nil
 
@@ -83,11 +83,11 @@ trait SubscriptionServiceTestData extends TestData {
     Some(contactCountryCode)
   )
 
-  val responseEoriNumber                        = "ZZZ1ZZZZ23ZZZZZZZ"
-  val responseFormBundleId: String              = "Form-Bundle-Id"
-  val processingDateResponse: String            = "18 Aug 2016"
+  val responseEoriNumber = "ZZZ1ZZZZ23ZZZZZZZ"
+  val responseFormBundleId: String = "Form-Bundle-Id"
+  val processingDateResponse: String = "18 Aug 2016"
   val emailVerificationTimestamp: LocalDateTime = TestData.emailVerificationTimestamp
-  val eori: Eori                                = Eori(responseEoriNumber)
+  val eori: Eori = Eori(responseEoriNumber)
 
   val subscriptionSuccessResult: SubscriptionSuccessful =
     SubscriptionSuccessful(eori, responseFormBundleId, processingDateResponse, Some(emailVerificationTimestamp))
@@ -181,10 +181,10 @@ trait SubscriptionServiceTestData extends TestData {
   )
 
   def createVatIdentificationsGenerator: Gen[List[VatIdentification]] = {
-    val CountryCodeLength          = 2
-    val VatNumberMaxLength         = 15
-    val vatNumberGenerator         = Gen.numStr retryUntil (_.length <= VatNumberMaxLength)
-    val countryCodeGenerator       = Gen.listOfN(CountryCodeLength, Gen.alphaChar) map (_.mkString)
+    val CountryCodeLength = 2
+    val VatNumberMaxLength = 15
+    val vatNumberGenerator = Gen.numStr retryUntil (_.length <= VatNumberMaxLength)
+    val countryCodeGenerator = Gen.listOfN(CountryCodeLength, Gen.alphaChar) map (_.mkString)
     val vatIdentificationGenerator = for {
       countryCode <- Gen.option(countryCodeGenerator)
       vatNumber   <- Gen.option(vatNumberGenerator)
@@ -206,7 +206,7 @@ trait SubscriptionServiceTestData extends TestData {
         postalCode = Some("SE28 1AA"),
         countryCode = "GB"
       )
-    val responseData         = ResponseData(
+    val responseData = ResponseData(
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
       establishmentAddress = establishmentAddress,
@@ -214,7 +214,7 @@ trait SubscriptionServiceTestData extends TestData {
       startDate = "2018-01-01",
       dateOfEstablishmentBirth = Some(dateEstablishedString)
     )
-    val responseDetail       = RegisterWithEoriAndIdResponseDetail(
+    val responseDetail = RegisterWithEoriAndIdResponseDetail(
       outcome = Some(outcomeType),
       caseNumber = Some("case no 1"),
       responseData = Some(responseData)
@@ -228,7 +228,7 @@ trait SubscriptionServiceTestData extends TestData {
   def stubRegisterWithPartialResponseWithNoDoe(outcomeType: String = "PASS"): RegisterWithEoriAndIdResponse = {
     val establishmentAddress =
       EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = Some("NE1 1BG"), countryCode = "GB")
-    val responseData         = ResponseData(
+    val responseData = ResponseData(
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
       establishmentAddress = establishmentAddress,
@@ -236,7 +236,7 @@ trait SubscriptionServiceTestData extends TestData {
       startDate = "2018-01-01",
       dateOfEstablishmentBirth = None
     )
-    val responseDetail       = RegisterWithEoriAndIdResponseDetail(
+    val responseDetail = RegisterWithEoriAndIdResponseDetail(
       outcome = Some(outcomeType),
       caseNumber = Some("case no 1"),
       responseData = Some(responseData)
@@ -248,10 +248,10 @@ trait SubscriptionServiceTestData extends TestData {
   }
 
   def stubRegisterWithCompleteResponse(outcomeType: String = "PASS"): RegisterWithEoriAndIdResponse = {
-    val processingDate       = LocalDateTime.now(ZoneId.of("Europe/London"))
+    val processingDate = LocalDateTime.now(ZoneId.of("Europe/London"))
     val contactDetailAddress =
       EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = Some("NE1 1BG"), countryCode = "GB")
-    val responseData         = ResponseData(
+    val responseData = ResponseData(
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
       establishmentAddress = EstablishmentAddress(
@@ -528,7 +528,7 @@ trait SubscriptionServiceTestData extends TestData {
     expectedDateOfBirthString: String = dateOfBirthString
   ): JsValue = {
 
-    val typeOfPersonJson: String      =
+    val typeOfPersonJson: String =
       determineTypeOfPersonJson(
         organisationType.map(x => EtmpOrganisationType.apply(x)),
         isOrganisationEvenIfOrganisationTypeIsNone = false
@@ -589,7 +589,7 @@ trait SubscriptionServiceTestData extends TestData {
     isOrganisationEvenIfOrganisationTypeIsNone: Boolean = false,
     expectedDateEstablishedString: String = dateEstablishedString
   ): JsValue = {
-    val typeOfPersonJson: String      =
+    val typeOfPersonJson: String =
       determineTypeOfPersonJson(organisationType, isOrganisationEvenIfOrganisationTypeIsNone)
     val typeOfLegalStatusJson: String =
       determineLegalStatus(organisationType, isOrganisationEvenIfOrganisationTypeIsNone)

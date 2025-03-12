@@ -47,11 +47,11 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
     .build()
 
   private val subscriptionStatusConnector = app.injector.instanceOf[SubscriptionStatusConnector]
-  private val AValidTaxPayerID            = "1234567890"
-  private val taxPayerId                  = TaxPayerId(AValidTaxPayerID).mdgTaxPayerId
-  private val Regime                      = "CDS"
-  private val receiptDate                 = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 114)
-  private val colon: String               = "%3A"
+  private val AValidTaxPayerID = "1234567890"
+  private val taxPayerId = TaxPayerId(AValidTaxPayerID).mdgTaxPayerId
+  private val Regime = "CDS"
+  private val receiptDate = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 114)
+  private val colon: String = "%3A"
 
   private val expectedGetUrl =
     s"/subscription-status?receiptDate=2016-03-17T09${colon}30${colon}47Z&regime=$Regime&taxPayerID=$taxPayerId"
@@ -60,7 +60,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
     SubscriptionStatusQueryParams(receiptDate, Regime, "taxPayerID", TaxPayerId(AValidTaxPayerID).mdgTaxPayerId)
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-  implicit val service: Service  = Service.cds
+  implicit val service: Service = Service.cds
 
   val responseWithOk: JsValue =
     Json.parse("""

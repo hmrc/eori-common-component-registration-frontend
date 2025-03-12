@@ -31,8 +31,8 @@ import scala.concurrent.Future
 
 class DetermineReviewPageControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector      = mock[AuthConnector]
-  private val mockAuthAction         = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val mockRequestSessionData = mock[RequestSessionData]
 
   private val controller = new DetermineReviewPageController(mockAuthAction, mcc)

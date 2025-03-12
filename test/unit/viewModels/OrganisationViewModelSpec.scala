@@ -29,7 +29,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
     "return valid options for UK user location" in {
 
       val selectedUserLocation = Some(UserLocation.Uk)
-      val viewModel            = OrganisationViewModel
+      val viewModel = OrganisationViewModel
 
       val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
@@ -50,7 +50,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
 
     "return uk options without embassy when no id journey not allowed" in {
       val selectedUserLocation = Some(UserLocation.Uk)
-      val viewModel            = OrganisationViewModel
+      val viewModel = OrganisationViewModel
 
       val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = false)
 
@@ -70,7 +70,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
 
     "return valid options for third-country user location" in {
       val selectedUserLocation = Some(UserLocation.ThirdCountry)
-      val viewModel            = OrganisationViewModel
+      val viewModel = OrganisationViewModel
 
       val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
@@ -89,7 +89,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
 
     "return valid options for third-country including EU user location" in {
       val selectedUserLocation = Some(UserLocation.ThirdCountryIncEU)
-      val viewModel            = OrganisationViewModel
+      val viewModel = OrganisationViewModel
 
       val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
@@ -108,7 +108,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
 
     "return valid options for any other location user location" in {
       val selectedUserLocation = Some(UserLocation.Islands)
-      val viewModel            = OrganisationViewModel
+      val viewModel = OrganisationViewModel
 
       val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
@@ -129,8 +129,8 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
 
     "return hint text options for non-UK user location" in {
       val userLocation = Some(UserLocation.ThirdCountry)
-      val viewModel    = OrganisationViewModel
-      val result       = viewModel.hintTextOptions(userLocation)(messages)
+      val viewModel = OrganisationViewModel
+      val result = viewModel.hintTextOptions(userLocation)(messages)
 
       val expectedResult = Seq(
         CdsOrganisationType.ThirdCountryOrganisationId -> messages(
@@ -149,7 +149,7 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
 
     "return hint text options for UK-option user location" in {
       val userLocation = Some(UserLocation.Uk)
-      val viewModel    = OrganisationViewModel
+      val viewModel = OrganisationViewModel
 
       val result = viewModel.hintTextOptions(userLocation)(messages)
 

@@ -209,7 +209,7 @@ trait SubscriptionDataGenerators {
     } yield vatIds
   }
 
-  val yesNoOrOtherGenerator   = Gen.oneOf("yEs", "Yes", "YES", "yes", "No", "no", "NO", "nO", "other", None)
+  val yesNoOrOtherGenerator = Gen.oneOf("yEs", "Yes", "YES", "yes", "No", "no", "NO", "nO", "other", None)
   val oneZeroOrOtherGenerator = Gen.option(Gen.oneOf("1", "0", "other"))
 
   val tenCharStringGen: Gen[String] = for {

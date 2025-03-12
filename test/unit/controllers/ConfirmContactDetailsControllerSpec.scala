@@ -47,14 +47,14 @@ import scala.concurrent.Future
 
 class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector                = mock[AuthConnector]
-  private val mockAuthAction                   = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val mockConfirmContactDetailsService = mock[ConfirmContactDetailsService]
-  private val mockSessionCache                 = mock[SessionCache]
-  private val mockRequestSessionData           = mock[RequestSessionData]
-  private val mockMatchingService              = mock[MatchingService]
-  private val sub01OutcomeProcessingView       = inject[sub01_outcome_processing]
-  private val error_view                       = inject[error_template]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockMatchingService = mock[MatchingService]
+  private val sub01OutcomeProcessingView = inject[sub01_outcome_processing]
+  private val error_view = inject[error_template]
 
   private val sessionCacheService =
     new SessionCacheService(mockSessionCache, mockRequestSessionData, mockMatchingService, error_view)
@@ -69,7 +69,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   )(global)
 
   private val mockSub01Outcome = mock[Sub01Outcome]
-  private val mockRegDetails   = mock[RegistrationDetails]
+  private val mockRegDetails = mock[RegistrationDetails]
 
   private val testSubscriptionDetails =
     SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.now())))

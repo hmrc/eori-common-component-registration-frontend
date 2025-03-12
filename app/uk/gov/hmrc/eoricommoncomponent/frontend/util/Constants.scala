@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.util
 
 object Constants {
-  val ONE                = 1
+  val ONE = 1
   val INVALID_PATH_PARAM = "invalid value"
-  val NO_CSRF_FOUND      = "No CSRF token"
+  val NO_CSRF_FOUND = "No CSRF token"
 }

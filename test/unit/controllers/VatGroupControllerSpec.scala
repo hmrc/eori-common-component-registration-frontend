@@ -32,11 +32,11 @@ import scala.concurrent.Future
 
 class VatGroupControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val yesNoInputName         = "yes-no-answer"
-  private val answerYes              = true.toString
-  private val answerNo               = false.toString
+  private val yesNoInputName = "yes-no-answer"
+  private val answerYes = true.toString
+  private val answerNo = false.toString
   private val expectedYesRedirectUrl = routes.VatGroupsCannotRegisterUsingThisServiceController.form(atarService).url
-  private val expectedNoRedirectUrl  = EmailController.form(atarService).url
+  private val expectedNoRedirectUrl = EmailController.form(atarService).url
 
   private val vatGroupView = inject[vat_group]
 

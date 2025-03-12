@@ -26,7 +26,7 @@ import util.ViewSpec
 class AddressInvalidOrganisationSpec extends ViewSpec {
 
   implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
-  private val addressInvalidOrgView                             = inject[address_invalid_organisation]
+  private val addressInvalidOrgView = inject[address_invalid_organisation]
 
   "Address Invalid Organisation page" should {
 

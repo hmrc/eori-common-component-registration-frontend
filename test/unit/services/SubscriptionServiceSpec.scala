@@ -61,8 +61,8 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
   "Calling Subscribe" should {
 
     "call connector with correct values when organisation type has been manually selected" in {
-      val cdsOrganisationTypeGenerator             = Gen.oneOf(cdsOrganisationTypeToTypeOfPersonMap.keys.toSeq)
-      val etmpOrganisationTypeGenerator            = Gen.oneOf(etmpOrganisationTypeToTypeOfPersonMap.keys.toSeq)
+      val cdsOrganisationTypeGenerator = Gen.oneOf(cdsOrganisationTypeToTypeOfPersonMap.keys.toSeq)
+      val etmpOrganisationTypeGenerator = Gen.oneOf(etmpOrganisationTypeToTypeOfPersonMap.keys.toSeq)
       val vatIdsGenerator: List[VatIdentification] = List(VatIdentification(Some("GB"), Some("123456789")))
       check(Prop.forAllNoShrink(cdsOrganisationTypeGenerator, etmpOrganisationTypeGenerator, vatIdsGenerator) {
         (cdsOrganisationType, etmpOrganisationType, vatIds) =>
@@ -78,7 +78,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
     }
 
     "call connector with correct person type when user is an organisation and organisation type has not been manually selected" in {
-      val etmpOrganisationTypeGenerator            = Gen.oneOf(etmpOrganisationTypeToTypeOfPersonMap.keys.toSeq)
+      val etmpOrganisationTypeGenerator = Gen.oneOf(etmpOrganisationTypeToTypeOfPersonMap.keys.toSeq)
       val vatIdsGenerator: List[VatIdentification] = List(VatIdentification(Some("GB"), Some("123456789")))
 
       check(Prop.forAllNoShrink(etmpOrganisationTypeGenerator, vatIdsGenerator) { (etmpOrganisationType, vatIds) =>
@@ -110,7 +110,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
     }
 
     "call connector with correct person type when user is an individual and organisation type has not been manually selected" in {
-      val vatIdsGenerator                = Gen.oneOf(List(VatIdentification(Some("GB"), Some("123456789"))))
+      val vatIdsGenerator = Gen.oneOf(List(VatIdentification(Some("GB"), Some("123456789"))))
       val vatDetails: Option[VatDetails] = ukVatDetails
 
       check(Prop.forAllNoShrink(vatIdsGenerator) { vatIds =>
@@ -127,7 +127,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "call connector with date of birth captured in subscription flow when user is an individual" in {
       val capturedDateOfBirth = dateOfBirth
-      val expectedRequest     = requestJsonIndividual(
+      val expectedRequest = requestJsonIndividual(
         name = individualName,
         vatIds = EmptyVatIds,
         organisationType = None,
@@ -160,7 +160,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
         when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
           .thenReturn(Future.successful(subscriptionResponseWithoutPosition))
       )
-      val caught  = intercept[IllegalStateException] {
+      val caught = intercept[IllegalStateException] {
         await(
           service
             .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
@@ -179,7 +179,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
               Future.successful(subscriptionResponseWithoutFormBundleIdJson(positionValue).as[SubscriptionResponse])
             )
         )
-        val caught  = intercept[IllegalStateException] {
+        val caught = intercept[IllegalStateException] {
           await(
             service
               .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
@@ -410,40 +410,40 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "truncate sic code to 4 numbers by removing the rightmost number" in {
       val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
-      val req     = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
+      val holder = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
+      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.principalEconomicActivity shouldBe Some("1275")
     }
 
     "replace empty city with a dash" in {
       val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetails.copy(addressDetails = Some(AddressViewModel("some street", "", Some("AB99 3DW"), "GB")))
-      val req     = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
+      val holder = fullyPopulatedSubscriptionDetails.copy(addressDetails = Some(AddressViewModel("some street", "", Some("AB99 3DW"), "GB")))
+      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.CDSEstablishmentAddress.city shouldBe "-"
     }
 
     "replace empty postcode with a None" in {
       val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetails.copy(addressDetails = Some(AddressViewModel("some street", "", Some(""), "GB")))
-      val req     = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
+      val holder = fullyPopulatedSubscriptionDetails.copy(addressDetails = Some(AddressViewModel("some street", "", Some(""), "GB")))
+      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.CDSEstablishmentAddress.postalCode shouldBe None
     }
 
     "have correct person type for Individual Subscription" in {
       val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
-      val req     = service.createRequest(individualRegistrationDetails, holder, None, atarService)
+      val holder = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
+      val req = service.createRequest(individualRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.typeOfPerson shouldBe Some(EtmpTypeOfPerson.NaturalPerson)
     }
 
     "throw an exception when unexpected registration details received" in {
       val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
-      val thrown  = intercept[IllegalStateException] {
+      val holder = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
+      val thrown = intercept[IllegalStateException] {
         service.createRequest(RegistrationDetails.rdSafeId(SafeId("safeid")), holder, None, atarService)
       }
       thrown.getMessage shouldBe "Incomplete cache cannot complete journey"
@@ -451,8 +451,8 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "populate the SubscriptionCreate Request when there is a plus (+) sign in the request on telephone number" in {
       val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone
-      val req     = service.createRequest(
+      val holder = fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone
+      val req = service.createRequest(
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
@@ -466,8 +466,8 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "populate the SubscriptionCreate Request when there is a plus (+) sign in the request on fax number" in {
       val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetailsWithPlusSignInFaxNumber
-      val req     = service.createRequest(
+      val holder = fullyPopulatedSubscriptionDetailsWithPlusSignInFaxNumber
+      val req = service.createRequest(
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
@@ -478,8 +478,8 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "populate the SubscriptionCreate Request when there is a plus (+) sign in the request on telephone and fax number" in {
       val service = constructService(_ => None)
-      val holder  = fullyPopulatedSubscriptionDetailsWithPlusSignInTelAndFaxNumber
-      val req     = service.createRequest(
+      val holder = fullyPopulatedSubscriptionDetailsWithPlusSignInTelAndFaxNumber
+      val req = service.createRequest(
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
@@ -567,7 +567,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
   ): SubscriptionCallResult = {
 
     val subscribeDataCaptor = ArgumentCaptor.forClass(classOf[SubscriptionRequest])
-    val service             = constructService(connectorMock =>
+    val service = constructService(connectorMock =>
       when(connectorMock.subscribe(subscribeDataCaptor.capture())(ArgumentMatchers.any()))
         .thenReturn(Future.successful(subscriptionResponse))
     )
@@ -577,7 +577,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
         mockHeaderCarrier
       )
     )
-    val actualConnectorRequest  = subscribeDataCaptor.getValue
+    val actualConnectorRequest = subscribeDataCaptor.getValue
     SubscriptionCallResult(actualServiceCallResult, actualConnectorRequest)
   }
 
@@ -589,7 +589,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   private def assertSameJson(json: JsValue, expectedJson: JsValue) = {
     def assertSameRequestCommon = {
-      val commonJson         = (json \ "subscriptionCreateRequest" \ "requestCommon")
+      val commonJson = (json \ "subscriptionCreateRequest" \ "requestCommon")
         .as[JsObject] - "receiptDate" - "acknowledgementReference"
       val expectedCommonJson = (expectedJson \ "subscriptionCreateRequest" \ "requestCommon")
         .as[JsObject] - "receiptDate" - "acknowledgementReference"
@@ -597,7 +597,7 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
     }
 
     def assertSameRequestDetail = {
-      val detailJson         = (json \ "subscriptionCreateRequest" \ "requestDetail").as[JsObject] - "contactInformation"
+      val detailJson = (json \ "subscriptionCreateRequest" \ "requestDetail").as[JsObject] - "contactInformation"
       val expectedDetailJson = (expectedJson \ "subscriptionCreateRequest" \ "requestDetail")
         .as[JsObject] - "contactInformation"
       detailJson shouldEqual expectedDetailJson

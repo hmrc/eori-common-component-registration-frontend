@@ -126,9 +126,9 @@ class RequestSessionData @Inject() (audit: Auditable) {
 }
 
 object RequestSessionDataKeys {
-  val selectedOrganisationType  = "selected-organisation-type"
-  val selectedUserLocation      = "selected-user-location"
-  val subscriptionFlow          = "subscription-flow"
+  val selectedOrganisationType = "selected-organisation-type"
+  val selectedUserLocation = "selected-user-location"
+  val subscriptionFlow = "subscription-flow"
   val uriBeforeSubscriptionFlow = "uri-before-subscription-flow"
-  val unmatchedUser             = "unmatched-user"
+  val unmatchedUser = "unmatched-user"
 }

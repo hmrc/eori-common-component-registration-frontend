@@ -59,8 +59,8 @@ class DateOfEstablishmentControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockOrgTypeLookup       = mock[OrgTypeLookup]
-  private val mockRequestSessionData  = mock[RequestSessionData]
+  private val mockOrgTypeLookup = mock[OrgTypeLookup]
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSessionCacheService = inject[SessionCacheService]
 
   private val dateOfEstablishmentView = inject[date_of_establishment]
@@ -78,7 +78,7 @@ class DateOfEstablishmentControllerSpec
   )(global)
 
   private val DateOfEstablishmentString = "1962-05-12"
-  private val DateOfEstablishment       = LocalDate.parse(DateOfEstablishmentString)
+  private val DateOfEstablishment = LocalDate.parse(DateOfEstablishmentString)
 
   private val ValidRequest = Map(
     "date-of-establishment.day"   -> DateOfEstablishment.getDayOfMonth.toString,
@@ -88,12 +88,12 @@ class DateOfEstablishmentControllerSpec
 
   val existingSubscriptionDetailsHolder: SubscriptionDetails = SubscriptionDetails()
 
-  private val DateOfEstablishmentMissingErrorPage     = "Enter your date of establishment"
-  private val DateOfEstablishmentMissingErrorField    = "Error: Enter your date of establishment"
-  private val DateOfEstablishmentInvalidDayErrorPage  = messages("date.day.error")
+  private val DateOfEstablishmentMissingErrorPage = "Enter your date of establishment"
+  private val DateOfEstablishmentMissingErrorField = "Error: Enter your date of establishment"
+  private val DateOfEstablishmentInvalidDayErrorPage = messages("date.day.error")
   private val DateOfEstablishmentInvalidDayErrorField = s"Error: $DateOfEstablishmentInvalidDayErrorPage"
-  private val DateOfEstablishmentInFutureErrorPage    = "Year must be between 1000 and this year"
-  private val DateOfEstablishmentInFutureErrorField   = "Error: Year must be between 1000 and this year"
+  private val DateOfEstablishmentInFutureErrorPage = "Year must be between 1000 and this year"
+  private val DateOfEstablishmentInFutureErrorField = "Error: Year must be between 1000 and this year"
 
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager)

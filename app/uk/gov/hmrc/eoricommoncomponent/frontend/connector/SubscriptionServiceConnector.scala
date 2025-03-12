@@ -36,7 +36,7 @@ class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfi
 ) {
 
   private val logger = Logger(this.getClass)
-  private val url    = url"${appConfig.getServiceUrl("subscribe")}"
+  private val url = url"${appConfig.getServiceUrl("subscribe")}"
 
   def subscribe(request: SubscriptionRequest)(implicit hc: HeaderCarrier): Future[SubscriptionResponse] = {
 
@@ -70,7 +70,7 @@ class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfi
   private def auditCall(url: String, request: SubscriptionRequest, response: SubscriptionResponse)(implicit
     hc: HeaderCarrier
   ): Unit = {
-    val subscriptionRequest  = SubscriptionSubmitted(request)
+    val subscriptionRequest = SubscriptionSubmitted(request)
     val subscriptionResponse = SubscriptionResult(response)
 
     audit.sendExtendedDataEvent(

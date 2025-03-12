@@ -37,18 +37,18 @@ import scala.concurrent.Future
 class PostCodeControllerSpec extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport {
 
   val defaultOrganisationType = "individual"
-  val soleTraderType          = "sole-trader"
+  val soleTraderType = "sole-trader"
 
   override protected val formId: String = "addressDetailsForm"
 
-  val form: Map[String, String]        = Map("postcode" -> "TF3 2BX", "addressLine1" -> "addressline 1")
+  val form: Map[String, String] = Map("postcode" -> "TF3 2BX", "addressLine1" -> "addressline 1")
   val invalidForm: Map[String, String] = Map("addressLine1" -> "addressline 1")
 
   def submitInCreateModeUrl: String =
     PostCodeController.submit(atarService).url
 
   private val mockSessionCache = mock[SessionCache]
-  private val view             = inject[postcode]
+  private val view = inject[postcode]
 
   private val controller = new PostCodeController(mockAuthAction, view, mcc, mockSessionCache)
 

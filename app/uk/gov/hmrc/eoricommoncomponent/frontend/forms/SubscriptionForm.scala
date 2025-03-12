@@ -42,7 +42,7 @@ object SubscriptionForm extends Mappings {
   val subscriptionDateOfEstablishmentForm: Form[LocalDate] = {
 
     val minimumDate = LocalDate.of(DateConverter.earliestYearDateOfEstablishment, 1, 1)
-    val today       = LocalDate.now()
+    val today = LocalDate.now()
 
     Form(
       "date-of-establishment" -> localDate(

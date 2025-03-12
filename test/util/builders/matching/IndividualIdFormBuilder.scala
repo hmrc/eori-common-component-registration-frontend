@@ -21,21 +21,21 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, Utr}
 
 object IndividualIdFormBuilder {
 
-  val ValidUtrId            = "2108834503"
-  val ValidEoriId           = "GB012345678912345"
-  val validUtr              = Utr(ValidUtrId)
-  val ValidEori             = Eori(ValidEoriId)
-  val ValidFirstName        = "John"
-  val ValidLastName         = "Doe"
-  val ValidDateOfBirthDay   = "23"
+  val ValidUtrId = "2108834503"
+  val ValidEoriId = "GB012345678912345"
+  val validUtr = Utr(ValidUtrId)
+  val ValidEori = Eori(ValidEoriId)
+  val ValidFirstName = "John"
+  val ValidLastName = "Doe"
+  val ValidDateOfBirthDay = "23"
   val ValidDateOfBirthMonth = "07"
-  val ValidDateOfBirthYear  = "1980"
-  val validDateOfBirth      = s"$ValidDateOfBirthYear-$ValidDateOfBirthMonth-$ValidDateOfBirthDay"
-  val ValidAddressLine1     = "Address Line 1"
-  val ValidAddressLine2     = "Address line 2"
-  val ValidPostcode         = "SE28 1AA"
-  val ValidCountry          = "GB"
-  val ThirdCountry          = "Algeria"
+  val ValidDateOfBirthYear = "1980"
+  val validDateOfBirth = s"$ValidDateOfBirthYear-$ValidDateOfBirthMonth-$ValidDateOfBirthDay"
+  val ValidAddressLine1 = "Address Line 1"
+  val ValidAddressLine2 = "Address line 2"
+  val ValidPostcode = "SE28 1AA"
+  val ValidCountry = "GB"
+  val ThirdCountry = "Algeria"
 
   val ValidRequest = Map(
     "first-name"          -> ValidFirstName,

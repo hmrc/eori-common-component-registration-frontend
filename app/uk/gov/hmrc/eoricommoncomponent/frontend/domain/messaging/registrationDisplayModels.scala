@@ -28,10 +28,10 @@ case class RegistrationInfoRequest(regime: String = Service.regimeCDS, idType: S
 object RegistrationInfoRequest extends Logging {
   implicit val jsonFormat: OFormat[RegistrationInfoRequest] = Json.format[RegistrationInfoRequest]
 
-  val UTR    = "UTR"
-  val EORI   = "EORI"
-  val NINO   = "NINO"
-  val SAFE   = "SAFE"
+  val UTR = "UTR"
+  val EORI = "EORI"
+  val NINO = "NINO"
+  val SAFE = "SAFE"
   val SAFEID = "SAFEID"
 
   def forCustomsId(customsId: CustomsId): RegistrationInfoRequest = {

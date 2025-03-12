@@ -52,7 +52,7 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
     .build()
 
   private lazy val registerWithoutIdConnector = app.injector.instanceOf[RegisterWithoutIdConnector]
-  val expectedPostUrl: String                 = "/register-without-id"
+  val expectedPostUrl: String = "/register-without-id"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 

@@ -46,7 +46,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
     .build()
 
   private lazy val matchingServiceConnector = app.injector.instanceOf[MatchingServiceConnector]
-  val expectedPostUrl                       = "/register-with-id"
+  val expectedPostUrl = "/register-with-id"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -269,7 +269,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       )
 
       val expected = Right(serviceResponseJsonOrganisationWithOptionalParams.as[MatchingResponse])
-      val result   = matchingServiceConnector.lookup(serviceRequestJsonNino.as[MatchingRequestHolder])
+      val result = matchingServiceConnector.lookup(serviceRequestJsonNino.as[MatchingRequestHolder])
 
       result.value.futureValue mustBe expected
 
@@ -283,7 +283,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       )
 
       val expected = Right(serviceResponseJsonIndividualWithOptionalParams.as[MatchingResponse])
-      val result   = matchingServiceConnector.lookup(serviceRequestJsonEori.as[MatchingRequestHolder])
+      val result = matchingServiceConnector.lookup(serviceRequestJsonEori.as[MatchingRequestHolder])
 
       result.value.futureValue mustBe expected
     }
@@ -297,7 +297,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       )
 
       val expected = Left(MatchingServiceConnector.matchFailureResponse)
-      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+      val result = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
 
       result.value.futureValue mustBe expected
     }
@@ -311,7 +311,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       )
 
       val expected = Left(MatchingServiceConnector.matchFailureResponse)
-      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+      val result = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
 
       result.value.futureValue mustBe expected
     }
@@ -325,7 +325,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
       )
 
       val expected = Left(MatchingServiceConnector.downstreamFailureResponse)
-      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+      val result = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
 
       result.value.futureValue mustBe expected
     }
@@ -338,7 +338,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         INTERNAL_SERVER_ERROR
       )
 
-      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+      val result = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
       val expected =
         Left(ResponseError(INTERNAL_SERVER_ERROR, s"REG01 Lookup failed with reason: $match500ErrorResponse"))
 
@@ -353,7 +353,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         FORBIDDEN
       )
 
-      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+      val result = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
       val expected = Left(ResponseError(FORBIDDEN, s"REG01 Lookup failed with reason: Forbidden"))
 
       result.value.futureValue mustBe expected

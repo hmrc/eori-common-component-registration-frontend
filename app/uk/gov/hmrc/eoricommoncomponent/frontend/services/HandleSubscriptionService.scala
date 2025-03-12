@@ -41,7 +41,7 @@ class HandleSubscriptionService @Inject() (handleSubscriptionConnector: HandleSu
       emailVerificationTimestamp.getOrElse(
         LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London"))
       )
-    val zonedDateTime  = timestampValue.atZone(ZoneOffset.UTC)
+    val zonedDateTime = timestampValue.atZone(ZoneOffset.UTC)
 
     handleSubscriptionConnector.call(
       HandleSubscriptionRequest(

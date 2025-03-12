@@ -36,7 +36,7 @@ case class CdsPage(html: String) {
 
   def getElementValueForLabel(labelXpath: String): String = {
     val elementId = getElementAttributeFor(labelXpath)
-    val element   = Option(page.getElementById(elementId))
+    val element = Option(page.getElementById(elementId))
       .getOrElse(throw new IllegalStateException(s"Input element with ID '$elementId' was not found on the page."))
     element.`val`()
   }
@@ -49,7 +49,7 @@ case class CdsPage(html: String) {
       .fold("")(_.getElementsByClass("govuk-summary-list__value").text())
 
   def getPanelTitle: String = selectElements("//h1[@class='govuk-panel__title']").text()
-  def getPanelBody: String  = selectElements("//div[@class='govuk-panel__body']").text()
+  def getPanelBody: String = selectElements("//div[@class='govuk-panel__body']").text()
 
   def getSummaryListLink(xpath: String, key: String, action: String): String =
     selectElements(xpath)

@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 class EnrolmentExtractorSpec extends UnitSpec {
 
   private val eori = Eori("GB123456789012")
-  private val utr  = Utr("1111111111K")
+  private val utr = Utr("1111111111K")
   private val nino = Nino("NINO")
 
   private def loggedInUser(enrolments: Set[Enrolment]) =
@@ -164,7 +164,7 @@ class EnrolmentExtractorSpec extends UnitSpec {
 
       "user has enrolment with an EORI" in {
 
-        val userEnrolments                           = Set(Enrolment("HMRC-TEST-ORG").withIdentifier("EORINumber", eori.id))
+        val userEnrolments = Set(Enrolment("HMRC-TEST-ORG").withIdentifier("EORINumber", eori.id))
         val groupEnrolments: List[EnrolmentResponse] = List.empty
 
         val result = enrolmentExtractor.existingEoriForUserOrGroup(loggedInUser(userEnrolments), groupEnrolments)
@@ -174,7 +174,7 @@ class EnrolmentExtractorSpec extends UnitSpec {
 
       "user's group has enrolment with an EORI" in {
 
-        val userEnrolments                           = Set(Enrolment("HMRC-NI").withIdentifier("NINO", nino.id))
+        val userEnrolments = Set(Enrolment("HMRC-NI").withIdentifier("NINO", nino.id))
         val groupEnrolments: List[EnrolmentResponse] =
           List(EnrolmentResponse("HMRC-GROUP-ORG", "Active", List(KeyValue("EORINumber", eori.id))))
 
@@ -185,7 +185,7 @@ class EnrolmentExtractorSpec extends UnitSpec {
 
       "user has no enrolment with EORI nor group enrolment with EORI" in {
 
-        val userEnrolments  = Set(Enrolment("HMRC-NI").withIdentifier("NINO", nino.id))
+        val userEnrolments = Set(Enrolment("HMRC-NI").withIdentifier("NINO", nino.id))
         val groupEnrolments =
           List(EnrolmentResponse("HMRC-GROUP-ORG", "Active", List(KeyValue("OtherIdentifierKey", "SomeValue"))))
 
@@ -196,7 +196,7 @@ class EnrolmentExtractorSpec extends UnitSpec {
 
       "user enrolments or group enrolments" in {
 
-        val userEnrolments: Set[Enrolment]           = Set.empty
+        val userEnrolments: Set[Enrolment] = Set.empty
         val groupEnrolments: List[EnrolmentResponse] = List.empty
 
         val result = enrolmentExtractor.existingEoriForUserOrGroup(loggedInUser(userEnrolments), groupEnrolments)

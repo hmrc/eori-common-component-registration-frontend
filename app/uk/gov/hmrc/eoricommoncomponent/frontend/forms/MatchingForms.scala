@@ -34,24 +34,24 @@ import java.time.LocalDate
 
 object MatchingForms extends Mappings with Logging {
 
-  val Length35            = 35
-  private val Length2     = 2
-  private val nameRegex   = "[a-zA-Z0-9-' ]*"
+  val Length35 = 35
+  private val Length2 = 2
+  private val nameRegex = "[a-zA-Z0-9-' ]*"
   private val noTagsRegex = "^[^<>]+$"
 
   private def validUtrFormat(utr: Option[String]): Boolean = {
 
-    val ZERO  = 0
-    val ONE   = 1
-    val TWO   = 2
+    val ZERO = 0
+    val ONE = 1
+    val TWO = 2
     val THREE = 3
-    val FOUR  = 4
-    val FIVE  = 5
-    val SIX   = 6
+    val FOUR = 4
+    val FIVE = 5
+    val SIX = 6
     val SEVEN = 7
     val EIGHT = 8
-    val NINE  = 9
-    val TEN   = 10
+    val NINE = 9
+    val TEN = 10
 
     def isValidUtr(remainder: Int, checkDigit: Int): Boolean = {
       val mapOfRemainders = Map(
@@ -74,13 +74,13 @@ object MatchingForms extends Mappings with Logging {
       case Some(u) =>
         val utrWithoutK = u.trim.stripSuffix("K").stripSuffix("k")
         utrWithoutK.length == TEN && utrWithoutK.forall(_.isDigit) && {
-          val actualUtr   = utrWithoutK.toList
-          val checkDigit  = actualUtr.head.asDigit
-          val restOfUtr   = actualUtr.tail
-          val weights     = List(SIX, SEVEN, EIGHT, NINE, TEN, FIVE, FOUR, THREE, TWO)
+          val actualUtr = utrWithoutK.toList
+          val checkDigit = actualUtr.head.asDigit
+          val restOfUtr = actualUtr.tail
+          val weights = List(SIX, SEVEN, EIGHT, NINE, TEN, FIVE, FOUR, THREE, TWO)
           val weightedUtr = for ((w1, u1) <- weights zip restOfUtr) yield w1 * u1.asDigit
-          val total       = weightedUtr.sum
-          val remainder   = total % 11
+          val total = weightedUtr.sum
+          val remainder = total % 11
           isValidUtr(remainder, checkDigit)
         }
       case None => false
@@ -259,7 +259,7 @@ object MatchingForms extends Mappings with Logging {
   private def validateDateOfBirth = {
 
     val minimumDate = LocalDate.of(DateConverter.earliestYearDateOfBirth, 1, 1)
-    val today       = LocalDate.now()
+    val today = LocalDate.now()
 
     "date-of-birth" -> localDate(emptyKey = "dob.error.empty-date", invalidKey = "dob.error.invalid-date")
       .verifying(

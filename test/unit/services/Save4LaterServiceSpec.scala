@@ -38,17 +38,17 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
   private val mockSave4LaterConnector = mock[Save4LaterConnector]
 
   implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
-  private val safeId                     = SafeId("safeId")
-  private val groupId                    = GroupId("groupId-123")
+  private val safeId = SafeId("safeId")
+  private val groupId = GroupId("groupId-123")
 
   private val organisationType: CdsOrganisationType =
     CdsOrganisationType.Company
 
   private val emailStatus = EmailStatus(Some("test@example.com"))
 
-  private val safeIdKey  = "safeId"
+  private val safeIdKey = "safeId"
   private val orgTypeKey = "orgType"
-  private val emailKey   = "email"
+  private val emailKey = "email"
 
   private val service =
     new Save4LaterService(mockSave4LaterConnector)

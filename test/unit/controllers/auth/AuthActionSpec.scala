@@ -56,12 +56,12 @@ class AuthActionSpec extends AnyWordSpec with MockitoSugar with BeforeAndAfterEa
       |services-config.gvms.friendlyNameWelsh=Symud_Cerbydau_Nwyddau_(GVMS)
       """.stripMargin)
 
-  val config                       = Configuration(configuration)
-  val environment                  = Environment.simple()
-  val actionBuilder                = DefaultActionBuilder(stubBodyParser(AnyContentAsEmpty))(global)
-  val mockBodyParsers              = mock[BodyParsers.Default]
-  val mockSessionCache             = mock[SessionCache]
-  val mockAuthConnector            = mock[AuthConnector]
+  val config = Configuration(configuration)
+  val environment = Environment.simple()
+  val actionBuilder = DefaultActionBuilder(stubBodyParser(AnyContentAsEmpty))(global)
+  val mockBodyParsers = mock[BodyParsers.Default]
+  val mockSessionCache = mock[SessionCache]
+  val mockAuthConnector = mock[AuthConnector]
   val cacheClearOnCompletionAction = new CacheClearOnCompletionAction(mockSessionCache, mockBodyParsers)
 
   val authAction = new AuthAction(

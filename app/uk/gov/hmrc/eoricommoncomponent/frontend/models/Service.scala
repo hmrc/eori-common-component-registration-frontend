@@ -36,9 +36,9 @@ object Service {
 
   val regimeCDS = "CDS"
 
-  val cdsCode                  = "cds"
-  val cds: Service             = Service(cdsCode, "HMRC-CUS-ORG", "", None, "", "", None)
-  val eoriOnly: Service        = Service("eori-only", "HMRC-CUS-ORG", "", None, "", "", None)
+  val cdsCode = "cds"
+  val cds: Service = Service(cdsCode, "HMRC-CUS-ORG", "", None, "", "", None)
+  val eoriOnly: Service = Service("eori-only", "HMRC-CUS-ORG", "", None, "", "", None)
   val goodsVehicleMovementCode = "gagmr"
 
   val gagmr: Service = Service(
@@ -72,7 +72,7 @@ object Service {
   }
 
   def serviceFromRequest(implicit request: Request[_]): Option[Service] = {
-    val path       = request.path
+    val path = request.path
     val serviceKey = supportedServicesMap.keys.find(serviceKey => path.contains(s"/$serviceKey"))
 
     serviceKey.map(supportedServicesMap(_))

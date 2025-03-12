@@ -34,14 +34,14 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegistrationDisplayServiceSpec extends UnitSpec with MockitoSugar {
-  val mockCache                      = mock[SessionCache]
-  val mockConnector                  = mock[RegistrationDisplayConnector]
-  val mockCreator                    = mock[RegistrationDetailsCreator]
-  val testService                    = new RegistrationDisplayService(mockCache, mockConnector, mockCreator)
+  val mockCache = mock[SessionCache]
+  val mockConnector = mock[RegistrationDisplayConnector]
+  val mockCreator = mock[RegistrationDetailsCreator]
+  val testService = new RegistrationDisplayService(mockCache, mockConnector, mockCreator)
   implicit val request: Request[Any] = mock[Request[Any]]
-  val mockResponseCommon             = mock[ResponseCommon]
-  val mockResponseDetail             = mock[ResponseDetail]
-  val mockDisplayResponse            = mock[RegistrationDisplayResponse]
+  val mockResponseCommon = mock[ResponseCommon]
+  val mockResponseDetail = mock[ResponseDetail]
+  val mockDisplayResponse = mock[RegistrationDisplayResponse]
 
   "RegistrationDisplayService" should {
     "successfully request details from registration display service" in {

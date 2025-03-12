@@ -48,24 +48,24 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
-  private val mockRegisterWithoutIdService  = mock[RegisterWithoutIdService]
-  private val mockSessionCache              = mock[SessionCache]
-  private val mockRequestSessionData        = mock[RequestSessionData]
-  private val mockSub02Controller           = mock[Sub02Controller]
-  private val mockOrgTypeLookup             = mock[OrgTypeLookup]
-  private val mockRegistrationDetails       = mock[RegistrationDetails]
-  private val mockTaxudConnector            = mock[TaxUDConnector]
+  private val mockRegisterWithoutIdService = mock[RegisterWithoutIdService]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSub02Controller = mock[Sub02Controller]
+  private val mockOrgTypeLookup = mock[OrgTypeLookup]
+  private val mockRegistrationDetails = mock[RegistrationDetails]
+  private val mockTaxudConnector = mock[TaxUDConnector]
   private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
-  private val mockSave4LaterService         = mock[Save4LaterService]
-  private val mockAppConfig                 = mock[AppConfig]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockAppConfig = mock[AppConfig]
 
-  implicit private val hc: HeaderCarrier       = mock[HeaderCarrier]
+  implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
   implicit private val rq: Request[AnyContent] = mock[Request[AnyContent]]
-  implicit private val msg: Messages           = mock[Messages]
+  implicit private val msg: Messages = mock[Messages]
 
-  private val loggedInUserId   = java.util.UUID.randomUUID.toString
+  private val loggedInUserId = java.util.UUID.randomUUID.toString
   private val mockLoggedInUser = mock[LoggedInUserWithEnrolments]
-  private val emulatedFailure  = new RuntimeException("something bad happened")
+  private val emulatedFailure = new RuntimeException("something bad happened")
 
   private val okResponse = RegisterWithoutIDResponse(
     ResponseCommon(StatusOK, Some("All OK"), LocalDateTime.now(ZoneId.of("Europe/London"))),

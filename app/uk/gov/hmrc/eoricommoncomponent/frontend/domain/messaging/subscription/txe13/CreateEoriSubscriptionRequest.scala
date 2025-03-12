@@ -76,19 +76,19 @@ object CreateEoriSubscriptionRequest {
 
   case class VatIdentification(countryCode: String, vatIdentificationNumber: String)
 
-  implicit val individualReads: Reads[Individual]    = Json.reads[Individual]
+  implicit val individualReads: Reads[Individual] = Json.reads[Individual]
   implicit val individualWrites: OWrites[Individual] = Json.writes[Individual]
 
-  implicit val organisationReads: Reads[Organisation]    = Json.reads[Organisation]
+  implicit val organisationReads: Reads[Organisation] = Json.reads[Organisation]
   implicit val organisationWrites: OWrites[Organisation] = Json.writes[Organisation]
 
-  implicit val cdsEstablishmentAddressReads: Reads[CdsEstablishmentAddress]    = Json.reads[CdsEstablishmentAddress]
+  implicit val cdsEstablishmentAddressReads: Reads[CdsEstablishmentAddress] = Json.reads[CdsEstablishmentAddress]
   implicit val cdsEstablishmentAddressWrites: OWrites[CdsEstablishmentAddress] = Json.writes[CdsEstablishmentAddress]
 
-  implicit val contactInformationReads: Reads[ContactInformation]    = Json.reads[ContactInformation]
+  implicit val contactInformationReads: Reads[ContactInformation] = Json.reads[ContactInformation]
   implicit val contactInformationWrites: OWrites[ContactInformation] = Json.writes[ContactInformation]
 
-  implicit val idReads: Reads[Id]    = Json.reads[Id]
+  implicit val idReads: Reads[Id] = Json.reads[Id]
   implicit val idWrites: OWrites[Id] = Json.writes[Id]
 
   implicit val thirdCountryUniqueIdentificationNumberReads: Reads[ThirdCountryUniqueIdentificationNumber] =
@@ -97,7 +97,7 @@ object CreateEoriSubscriptionRequest {
   implicit val thirdCountryUniqueIdentificationNumberWrites: OWrites[ThirdCountryUniqueIdentificationNumber] =
     Json.writes[ThirdCountryUniqueIdentificationNumber]
 
-  implicit val vatIdentificationReads: Reads[VatIdentification]    = Json.reads[VatIdentification]
+  implicit val vatIdentificationReads: Reads[VatIdentification] = Json.reads[VatIdentification]
   implicit val vatIdentificationWrites: OWrites[VatIdentification] = Json.writes[VatIdentification]
 
   implicit val createEoriSubscriptionRequestReads: Reads[CreateEoriSubscriptionRequest] =

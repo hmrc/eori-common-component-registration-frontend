@@ -29,27 +29,27 @@ trait NameDobSoleTraderPage extends WebPage {
 
   val pageTitleXPath = "//*[@id=\"content\"]/div/div/h1"
 
-  val firstNameFieldXPath           = "//*[@id='first-name']"
+  val firstNameFieldXPath = "//*[@id='first-name']"
   val firstNameFieldLevelErrorXPath = "//*[@id='first-name-outer']//span[@class='error-message']"
-  val firstNameFieldLabel           = "First name"
-  val firstNameFieldId              = "first-name"
-  val firstNameFieldName            = "first-name"
+  val firstNameFieldLabel = "First name"
+  val firstNameFieldId = "first-name"
+  val firstNameFieldName = "first-name"
 
-  val lastNameFieldXPath           = "//*[@id='last-name']"
+  val lastNameFieldXPath = "//*[@id='last-name']"
   val lastNameFieldLevelErrorXPath = "//*[@id='last-name-outer']//span[@class='error-message']"
-  val lastNameFieldLabel           = "Last name"
-  val lastNameFieldId              = "last-name"
-  val lastNameFieldName            = "last-name"
+  val lastNameFieldLabel = "Last name"
+  val lastNameFieldId = "last-name"
+  val lastNameFieldName = "last-name"
 
-  val dobFieldLevelErrorXPath    = "//*[@id='date-of-birth']//span[@class='error-message']"
-  val dateOfBirthDayFieldXPath   = "//*[@id='date-of-birth.day']"
+  val dobFieldLevelErrorXPath = "//*[@id='date-of-birth']//span[@class='error-message']"
+  val dateOfBirthDayFieldXPath = "//*[@id='date-of-birth.day']"
   val dateOfBirthMonthFieldXPath = "//*[@id='date-of-birth.month']"
-  val dateOfBirthYearFieldXPath  = "//*[@id='date-of-birth.year']"
+  val dateOfBirthYearFieldXPath = "//*[@id='date-of-birth.year']"
 
-  val dobFieldName      = "date-of-birth"
-  val dobDayFieldName   = "date-of-birth.day"
+  val dobFieldName = "date-of-birth"
+  val dobDayFieldName = "date-of-birth.day"
   val dobMonthFieldName = "date-of-birth.month"
-  val dobYearFieldName  = "date-of-birth.year"
+  val dobYearFieldName = "date-of-birth.year"
 
   val continueButtonXpath = "//*[@class='button']"
 

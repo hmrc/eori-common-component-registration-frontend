@@ -78,7 +78,7 @@ class VatRegisteredUkController @Inject() (
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       (for {
         isVatRegisteredUk <- subscriptionBusinessService.getCachedVatRegisteredUk
-        yesNo: YesNo       = YesNo(isVatRegisteredUk)
+        yesNo: YesNo = YesNo(isVatRegisteredUk)
       } yield isIndividualFlow match {
         case Right(individual) =>
           val location =

@@ -159,7 +159,7 @@ class RegistrationDetailsCreatorWithIdSpec extends RegistrationDetailsCreatorTes
 
     "throw if organisation response does not provide SAP number" in testWithGen(organisationWithIdTestCases) {
       case ((validResponse, customsId, capturedDate), _) =>
-        val withoutSap         = validResponse.responseCommon.copy(returnParameters = None)
+        val withoutSap = validResponse.responseCommon.copy(returnParameters = None)
         val responseWithoutSap = validResponse.copy(responseCommon = withoutSap)
 
         val caught = intercept[IllegalArgumentException] {
@@ -170,7 +170,7 @@ class RegistrationDetailsCreatorWithIdSpec extends RegistrationDetailsCreatorTes
     }
 
     "throw if individual response does not provide SAP number" in testWithGen(individualWithIdTestCases) { case ((validResponse, customsId, capturedDate), _) =>
-      val withoutSap         = validResponse.responseCommon.copy(returnParameters = None)
+      val withoutSap = validResponse.responseCommon.copy(returnParameters = None)
       val responseWithoutSap = validResponse.copy(responseCommon = withoutSap)
 
       val caught = intercept[IllegalArgumentException] {
@@ -183,10 +183,10 @@ class RegistrationDetailsCreatorWithIdSpec extends RegistrationDetailsCreatorTes
     "throw if individual date of birth neither found in RegisterWithIDResponse nor provided" in testWithGen(
       individualWithIdTestCases
     ) { case ((validResponse, customsId, _), _) =>
-      val responseDetail            = validResponse.getResponseDetail
-      val withoutDateOfBirth        = responseDetail.individual.map(_.copy(dateOfBirth = None))
+      val responseDetail = validResponse.getResponseDetail
+      val withoutDateOfBirth = responseDetail.individual.map(_.copy(dateOfBirth = None))
       val responseDetailWithoutDate = responseDetail.copy(individual = withoutDateOfBirth)
-      val response                  = validResponse.copy(responseDetail = Some(responseDetailWithoutDate))
+      val response = validResponse.copy(responseDetail = Some(responseDetailWithoutDate))
 
       val caught = intercept[IllegalArgumentException] {
         registrationDetailsCreator.registrationDetails(response, customsId, capturedDate = None)

@@ -45,8 +45,8 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
-  private lazy val connector                  = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
-  private val requestTaxPayerId               = "GBE9XSDF10BCKEYAX"
+  private lazy val connector = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
+  private val requestTaxPayerId = "GBE9XSDF10BCKEYAX"
   private val requestAcknowledgementReference = "1234567890ABCDEFG"
 
   private val expectedResponse = Json

@@ -36,9 +36,9 @@ import scala.concurrent.Future
 
 class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val vatVerificationOptionView      = inject[vat_verification_option]
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
+  private val vatVerificationOptionView = inject[vat_verification_option]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
   private val controller =
@@ -91,11 +91,11 @@ class VatVerificationOptionControllerSpec extends ControllerSpec with BeforeAndA
 
 object VatVerificationOptionBuilder {
   private val dateOrAmountInput = "vat-verification-option"
-  private val answerDate        = true.toString
-  private val answerAmount      = false.toString
-  private val invalidOption     = ""
+  private val answerDate = true.toString
+  private val answerAmount = false.toString
+  private val invalidOption = ""
 
-  val validRequestDate: Map[String, String]   = Map(dateOrAmountInput -> answerDate)
+  val validRequestDate: Map[String, String] = Map(dateOrAmountInput -> answerDate)
   val validRequestAmount: Map[String, String] = Map(dateOrAmountInput -> answerAmount)
-  val invalidRequest: Map[String, String]     = Map(dateOrAmountInput -> invalidOption)
+  val invalidRequest: Map[String, String] = Map(dateOrAmountInput -> invalidOption)
 }

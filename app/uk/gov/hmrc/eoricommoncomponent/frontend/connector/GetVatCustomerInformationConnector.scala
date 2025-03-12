@@ -50,7 +50,7 @@ class GetVatCustomerInformationConnector @Inject() (httpClient: HttpClientV2, ap
         // $COVERAGE-ON
         response.status match {
           case OK =>
-            val vatResponse      = response.json.as[GetVatInformationResponse]
+            val vatResponse = response.json.as[GetVatInformationResponse]
             val registrationDate = vatResponse.effectiveRegistrationDate.map(date => format.format(date))
             Right(VatControlListResponse(postcode = vatResponse.postCode, dateOfReg = registrationDate))
           case _ =>

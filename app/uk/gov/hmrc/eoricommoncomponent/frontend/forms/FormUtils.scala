@@ -24,7 +24,7 @@ object FormUtils {
 
   val messageKeyMandatoryField = "cds.error.mandatory.field"
 
-  def formatInput(value: String): String                      = value.replaceAll(" ", "").toUpperCase
+  def formatInput(value: String): String = value.replaceAll(" ", "").toUpperCase
   def formatInput(maybeValue: Option[String]): Option[String] = maybeValue.map(value => formatInput(value))
 
   def mandatoryString(

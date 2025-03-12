@@ -37,18 +37,18 @@ import scala.concurrent.Future
 
 class EmbassyNameControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val form                           = new EmbassyNameForm()
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val form = new EmbassyNameForm()
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockEmbassyNameView            = inject[what_is_your_embassy_name]
+  private val mockEmbassyNameView = inject[what_is_your_embassy_name]
 
   private val embassyNameController =
     new EmbassyNameController(mockAuthAction, mcc, form, mockEmbassyNameView, mockSubscriptionDetailsService)
 
-  private val fieldLevelErrorName            = "//p[@id='name-error' and @class='govuk-error-message']"
+  private val fieldLevelErrorName = "//p[@id='name-error' and @class='govuk-error-message']"
   private val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"
-  private val nameFieldError                 = "//p[@id='name-error' and @class='govuk-error-message']"
+  private val nameFieldError = "//p[@id='name-error' and @class='govuk-error-message']"
 
   "showForm" should {
     "show the embassy name form" in {

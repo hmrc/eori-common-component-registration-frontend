@@ -39,7 +39,7 @@ class VatDetailsFormSpec extends UnitSpec {
 
     "fail when mandatory fields are empty" in {
       val data = Map("postcode" -> "", "vat-number" -> "")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(
         FormError("postcode", "cds.subscription.vat-details.postcode.required.error"),
         FormError("vat-number", List("cds.subscription.vat-uk.required.error"))
@@ -48,27 +48,27 @@ class VatDetailsFormSpec extends UnitSpec {
 
     "accept a valid postcode and vat-number" in {
       val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "123456789")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq.empty
       res.value shouldBe Some(VatDetails("AA1 1AA", "123456789"))
     }
 
     "accept a valid postcode and vat-number with spaces" in {
       val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "1 2 3 4 5 6 7 8 9")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq.empty
       res.value shouldBe Some(VatDetails("AA1 1AA", "123456789"))
     }
 
     "fail when vat-number is too long" in {
       val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "1 2 3 4 5 6 7 8 96666")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-number", "cds.subscription.vat-uk.length.error"))
     }
 
     "fail when vat-number contains invalid vat number" in {
       val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "123456£78")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-number", "cds.subscription.vat-uk.length.error"))
     }
 

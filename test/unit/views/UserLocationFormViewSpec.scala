@@ -39,16 +39,16 @@ import scala.concurrent.Future
 
 class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockSessionCache               = mock[SessionCache]
-  private val mockSave4LaterService          = mock[Save4LaterService]
-  private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockSubscriptionStatusService = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
-  private val mockSave4LaterConnector        = mock[Save4LaterConnector]
-  private val userLocationView               = inject[user_location]
-  private val mockAppConfig                  = mock[AppConfig]
+  private val mockSave4LaterConnector = mock[Save4LaterConnector]
+  private val userLocationView = inject[user_location]
+  private val mockAppConfig = mock[AppConfig]
 
   private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 

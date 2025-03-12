@@ -66,7 +66,7 @@ class MatchingService @Inject() (
     val orgWithCode = org.copy(organisationType = EtmpOrganisationType.orgTypeToEtmpOrgCode(org.organisationType))
     for {
       response <- matchingConnector.lookup(idAndNameMatchRequest(stripKFromUtr(customsId), orgWithCode))
-      details   = convert(customsId, establishmentDate)(response)
+      details = convert(customsId, establishmentDate)(response)
       _        <- EitherT[Future, ResponseError, Unit](
                     cache.saveRegistrationDetails(details, groupId, requestSessionData.userSelectedOrganisationType).map(_ => Right(()))
                   )
@@ -80,7 +80,7 @@ class MatchingService @Inject() (
   ): EitherT[Future, ResponseError, MatchingResponse] =
     for {
       response <- matchingConnector.lookup(individualIdMatchRequest(customsId, individual))
-      details   = convert(customsId, toLocalDate(individual.dateOfBirth))(response)
+      details = convert(customsId, toLocalDate(individual.dateOfBirth))(response)
       resp     <- EitherT[Future, ResponseError, MatchingResponse](
                     cache.saveRegistrationDetails(details, groupId).map(_ => Right(response))
                   )
@@ -92,7 +92,7 @@ class MatchingService @Inject() (
   ): EitherT[Future, ResponseError, MatchingResponse] =
     for {
       response <- matchingConnector.lookup(individualNinoMatchRequest(nino, individual))
-      details   = convert(customsId = Nino(nino), capturedDate = toLocalDate(individual.dateOfBirth))(response)
+      details = convert(customsId = Nino(nino), capturedDate = toLocalDate(individual.dateOfBirth))(response)
       resp     <- EitherT[Future, ResponseError, MatchingResponse](
                     cache.saveRegistrationDetails(details, groupId).map(_ => Right(response))
                   )

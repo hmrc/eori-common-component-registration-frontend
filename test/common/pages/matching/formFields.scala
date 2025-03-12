@@ -18,16 +18,16 @@ package common.pages.matching
 
 trait IndividualNameDateFields {
 
-  val GivenName      = "Given name"
+  val GivenName = "Given name"
   val givenNameField = "given-name"
 
-  val FamilyName      = "Family name"
+  val FamilyName = "Family name"
   val familyNameField = "family-name"
 
-  val DateOfBirth           = "Date of birth"
-  val dateOfBirthDayField   = "date-of-birth.day"
+  val DateOfBirth = "Date of birth"
+  val dateOfBirthDayField = "date-of-birth.day"
   val dateOfBirthMonthField = "date-of-birth.month"
-  val dateOfBirthYearField  = "date-of-birth.year"
+  val dateOfBirthYearField = "date-of-birth.year"
 
   val dateOfBirthFields = Set(dateOfBirthDayField, dateOfBirthMonthField, dateOfBirthYearField)
 }

@@ -44,14 +44,14 @@ import scala.concurrent.Future
 
 class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector           = mock[AuthConnector]
-  private val mockAuthAction              = authAction(mockAuthConnector)
-  private val mockRequestSessionData      = mock[RequestSessionData]
-  private val mockSessionCache            = mock[SessionCache]
-  private val mockOrgTypeLookup           = mock[OrgTypeLookup]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockOrgTypeLookup = mock[OrgTypeLookup]
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
-  private val mockSave4LaterService       = mock[Save4LaterService]
-  private val mockSessionCacheService     = inject[SessionCacheService]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val businessDetailsRecoveryView = inject[business_details_recovery]
 
@@ -123,7 +123,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def assertAndTestBasedOnTheLocationForIndividual(location: UserLocation): Unit =
     s"redirect to contactDetailsPage when orgType is found in cache for Individual and location is selected to $location" in {
-      val mockSession   = mock[Session]
+      val mockSession = mock[Session]
       val mockFlowStart =
         (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 
@@ -149,7 +149,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def assertAndTestBasedOnTheLocationForSafeIdDetails(): Unit =
     s"throw an exception" in {
-      val mockSession   = mock[Session]
+      val mockSession = mock[Session]
       val mockFlowStart =
         (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 
@@ -174,7 +174,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def assertAndTestBasedOnTheLocationForOrganisation(location: UserLocation): Unit =
     s"redirect to dateOfEstablishment when orgType is found in cache for Organisation and location is selected to $location" in {
-      val mockSession   = mock[Session]
+      val mockSession = mock[Session]
       val mockFlowStart = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
 
       when(
@@ -202,8 +202,8 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
   private def assertAndTestThrowsExceptionForInvalidLocationOrganisation(): Unit =
     "throw IllegalStateException when passing invalid location" in {
       val location: String = "invalid-location"
-      val mockSession      = mock[Session]
-      val mockFlowStart    = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
+      val mockSession = mock[Session]
+      val mockFlowStart = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
 
       when(
         mockSubscriptionFlowManager.startSubscriptionFlow(

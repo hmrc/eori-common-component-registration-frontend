@@ -38,11 +38,11 @@ import scala.concurrent.Future
 
 class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector                    = mock[AuthConnector]
-  private val mockAuthAction                       = authAction(mockAuthConnector)
-  private val mockSubscriptionBusinessService      = mock[SubscriptionBusinessService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsHolderService = mock[SubscriptionDetailsService]
-  private val mockRequestSessionData               = inject[RequestSessionData]
+  private val mockRequestSessionData = inject[RequestSessionData]
 
   private val howCanWeIdentifyYouView = inject[how_can_we_identify_you]
 

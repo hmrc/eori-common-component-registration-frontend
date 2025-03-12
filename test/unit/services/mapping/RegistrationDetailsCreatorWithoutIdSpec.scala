@@ -248,7 +248,7 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
 
     "throw if organisation response does not provide SAP number" in testWithGen(organisationWithoutIdTestCases) {
       case ((validResponse, organisationName, organisationAddress), _) =>
-        val withoutSap         = validResponse.responseCommon.copy(returnParameters = None)
+        val withoutSap = validResponse.responseCommon.copy(returnParameters = None)
         val responseWithoutSap = validResponse.copy(responseCommon = withoutSap)
 
         val caught = intercept[IllegalArgumentException] {
@@ -260,7 +260,7 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
 
     "throw if individual response does not provide SAP number" in testWithGen(individualWithoutIdTestCases) {
       case ((validResponse, individualNameAndDateOfBirth, individualSoleTraderAddressData), _) =>
-        val withoutSap         = validResponse.responseCommon.copy(returnParameters = None)
+        val withoutSap = validResponse.responseCommon.copy(returnParameters = None)
         val responseWithoutSap = validResponse.copy(responseCommon = withoutSap)
 
         val caught = intercept[IllegalArgumentException] {

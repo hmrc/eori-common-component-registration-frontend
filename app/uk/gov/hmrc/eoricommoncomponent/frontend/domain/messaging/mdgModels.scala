@@ -170,7 +170,7 @@ trait CommonHeader extends Logging {
 
   }
 
-  implicit val dateTimeReads: Reads[LocalDateTime]   = dateTimeReadsIso
+  implicit val dateTimeReads: Reads[LocalDateTime] = dateTimeReadsIso
   implicit val dateTimeWrites: Writes[LocalDateTime] = dateTimeWritesIsoUtc
 }
 
@@ -180,10 +180,10 @@ object MessagingServiceParam {
   implicit val formats: OFormat[MessagingServiceParam] = Json.format[MessagingServiceParam]
 
   val positionParamName = "POSITION"
-  val Generate          = "GENERATE"
-  val Link              = "LINK"
-  val Pending           = "WORKLIST"
-  val Fail              = "FAIL"
+  val Generate = "GENERATE"
+  val Link = "LINK"
+  val Pending = "WORKLIST"
+  val Fail = "FAIL"
 
   val formBundleIdParamName = "ETMPFORMBUNDLENUMBER"
 }
@@ -204,7 +204,7 @@ case class RequestCommon(
 
 object RequestCommon extends CommonHeader {
   implicit val requestParamFormat: OFormat[RequestParameter] = Json.format[RequestParameter]
-  implicit val formats: OFormat[RequestCommon]               = Json.format[RequestCommon]
+  implicit val formats: OFormat[RequestCommon] = Json.format[RequestCommon]
 }
 
 case class ResponseCommon(
@@ -215,7 +215,7 @@ case class ResponseCommon(
 )
 
 object ResponseCommon extends CommonHeader {
-  val StatusOK                                  = "OK"
-  val StatusNotOK                               = "NOT_OK"
+  val StatusOK = "OK"
+  val StatusNotOK = "NOT_OK"
   implicit val formats: OFormat[ResponseCommon] = Json.format[ResponseCommon]
 }

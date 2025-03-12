@@ -157,7 +157,7 @@ class NameIdOrganisationController @Inject() (
     formData: M,
     service: Service
   )(implicit request: Request[AnyContent]): Result = {
-    val errorMsg  = Messages("cds.matching-error.not-found")
+    val errorMsg = Messages("cds.matching-error.not-found")
     val errorForm = conf.form.withGlobalError(errorMsg).fill(formData)
     BadRequest(view(organisationType, conf, errorForm, service))
   }
@@ -190,10 +190,10 @@ class NameIdOrganisationController @Inject() (
 }
 
 object NameIdOrganisationModel {
-  val CompanyDM              = "company"
-  val RegisteredCompanyDM    = "registered-company"
-  val PartnershipDM          = "partnership"
-  val OrganisationModeDM     = "organisation"
+  val CompanyDM = "company"
+  val RegisteredCompanyDM = "registered-company"
+  val PartnershipDM = "partnership"
+  val OrganisationModeDM = "organisation"
   val CharityPublicBodyNFPDM = "charity-public-body-not-for-profit"
-  val PartnershipLLpDM       = "limited-liability-partnership"
+  val PartnershipLLpDM = "limited-liability-partnership"
 }

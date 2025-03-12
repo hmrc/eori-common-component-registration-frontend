@@ -54,8 +54,8 @@ class SixLineAddressController @Inject() (
     service: Service,
     user: LoggedInUserWithEnrolments
   )(implicit request: Request[AnyContent]): Future[Result] = {
-    val formByOrgType                                  = formsByOrganisationTypes(request)(organisationType)
-    lazy val form                                      = address.map(ad => createSixLineAddress(ad)).fold(formByOrgType)(formByOrgType.fill)
+    val formByOrgType = formsByOrganisationTypes(request)(organisationType)
+    lazy val form = address.map(ad => createSixLineAddress(ad)).fold(formByOrgType)(formByOrgType.fill)
     val (countriesToInclude, countriesInCountryPicker) =
       Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
     sessionCacheService.individualAndSoleTraderRouter(

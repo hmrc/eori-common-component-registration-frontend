@@ -31,27 +31,27 @@ class DateOfEstablishmentViewModelSpec extends UnitSpec with ControllerSpec {
   "DateOfEstablishmentViewModel" should {
 
     "return the correct header and title for Partnership and isRestOfWorldJourney true" in {
-      val orgType              = Partnership
+      val orgType = Partnership
       val isRestOfWorldJourney = true
-      val result               = DateOfEstablishmentViewModel.headerAndTitle(orgType, isRestOfWorldJourney)
+      val result = DateOfEstablishmentViewModel.headerAndTitle(orgType, isRestOfWorldJourney)
       result shouldBe "cds.subscription.partnership.date-of-establishment.title-and-heading"
     }
     "return the correct header and title for CorporateBody and isRestOfWorldJourney is false" in {
-      val orgType              = CorporateBody
+      val orgType = CorporateBody
       val isRestOfWorldJourney = false
-      val result               = DateOfEstablishmentViewModel.headerAndTitle(orgType, isRestOfWorldJourney)
+      val result = DateOfEstablishmentViewModel.headerAndTitle(orgType, isRestOfWorldJourney)
       result shouldBe "cds.subscription.date-of-establishment.company.title-and-heading"
     }
     "return the correct header and title for any other cases" in {
-      val orgType              = UnincorporatedBody
+      val orgType = UnincorporatedBody
       val isRestOfWorldJourney = true
-      val result               = DateOfEstablishmentViewModel.headerAndTitle(orgType, isRestOfWorldJourney)
+      val result = DateOfEstablishmentViewModel.headerAndTitle(orgType, isRestOfWorldJourney)
       result shouldBe "cds.subscription.date-of-establishment.title-and-heading"
     }
 
     "should update and bring correct form with errors " in {
       val form: Form[time.LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
-      val updatedForm                = DateOfEstablishmentViewModel.updateFormErrors(form)
+      val updatedForm = DateOfEstablishmentViewModel.updateFormErrors(form)
       updatedForm.errors shouldBe DateConverter.updateDateOfEstablishmentErrors(form.errors)
     }
 

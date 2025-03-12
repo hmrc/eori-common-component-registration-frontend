@@ -35,8 +35,8 @@ import scala.concurrent.Future
 
 class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter {
 
-  private val mockUpdateVerifiedEmailConnector                   = mock[UpdateVerifiedEmailConnector]
-  private val mockUpdateCustomsDataStoreConnector                = mock[UpdateCustomsDataStoreConnector]
+  private val mockUpdateVerifiedEmailConnector = mock[UpdateVerifiedEmailConnector]
+  private val mockUpdateCustomsDataStoreConnector = mock[UpdateCustomsDataStoreConnector]
   private val mockRequestCommonGenerator: RequestCommonGenerator = mock[RequestCommonGenerator]
 
   private val service = new UpdateVerifiedEmailService(
@@ -52,7 +52,7 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   val dateTime: LocalDateTime = LocalDateTime.now()
-  private val eori            = "GBXXXXXXXXX0000"
+  private val eori = "GBXXXXXXXXX0000"
 
   private val verifiedEmailResponse = VerifiedEmailResponse(
     UpdateVerifiedEmailResponse(

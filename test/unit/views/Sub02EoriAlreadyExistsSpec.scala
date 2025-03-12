@@ -26,9 +26,9 @@ import util.ViewSpec
 
 class Sub02EoriAlreadyExistsSpec extends ViewSpec {
 
-  private val name                    = "John Doe"
-  private val processedDate           = "1 March 2019"
-  private val pageTitleExpectedText   = "You already have an EORI"
+  private val name = "John Doe"
+  private val processedDate = "1 March 2019"
+  private val pageTitleExpectedText = "You already have an EORI"
   private val pageHeadingExpectedText = s"Our records show that $name already has an EORI number."
   private val processDateExpectedText = s"Application received by HMRC on $processedDate"
 

@@ -25,25 +25,25 @@ import util.builders.matching.NinoFormBuilder
 import java.time.{LocalDate, LocalDateTime}
 
 trait MatchingServiceTestData {
-  val ninoId: String                        = NinoFormBuilder.Nino
-  val establishmentDate: LocalDate          = LocalDate.parse("1961-04-12")
-  val CorporateBody                         = "Corporate Body"
-  val Partnership                           = "Partnership"
-  val UnincorporatedBody                    = "Unincorporated Body"
-  val individualFirstName                   = "John"
-  val individualLastName                    = "Doe"
-  val individualDateOfBirth                 = "1999-12-20"
+  val ninoId: String = NinoFormBuilder.Nino
+  val establishmentDate: LocalDate = LocalDate.parse("1961-04-12")
+  val CorporateBody = "Corporate Body"
+  val Partnership = "Partnership"
+  val UnincorporatedBody = "Unincorporated Body"
+  val individualFirstName = "John"
+  val individualLastName = "Doe"
+  val individualDateOfBirth = "1999-12-20"
   val individualLocalDateOfBirth: LocalDate = LocalDate.parse(individualDateOfBirth)
-  val individual: Individual                = Individual.noMiddle(individualFirstName, individualLastName, individualDateOfBirth)
+  val individual: Individual = Individual.noMiddle(individualFirstName, individualLastName, individualDateOfBirth)
 
   val individualWithMiddleName =
     Individual(individualFirstName, individualLastName, individualDateOfBirth)
 
-  val utrId                 = "2108834503"
-  val utr                   = Utr(utrId)
-  val eoriId                = "eor-123"
-  val eori                  = Eori(eoriId)
-  val nino                  = Nino(ninoId)
+  val utrId = "2108834503"
+  val utr = Utr(utrId)
+  val eoriId = "eor-123"
+  val eori = Eori(eoriId)
+  val nino = Nino(ninoId)
   val someEstablishmentDate = Some(establishmentDate)
 
   val ExpectedRequestCommon =

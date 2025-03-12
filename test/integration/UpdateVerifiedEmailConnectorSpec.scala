@@ -63,7 +63,7 @@ class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFu
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
-  private val connector          = app.injector.instanceOf[UpdateVerifiedEmailConnector]
+  private val connector = app.injector.instanceOf[UpdateVerifiedEmailConnector]
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val responseWithOk: JsValue =
@@ -90,10 +90,10 @@ class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
   val expectedUrl = "/update-verified-email"
 
-  val dateTime: LocalDateTime      = LocalDateTime.now()
-  private val requestDetail        = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
-  private val requestDateInd       = LocalDateTime.of(2001, 12, 17, 9, 30, 47, 0)
-  private val requestCommon        = RequestCommon("CDS", requestDateInd, "012345678901234")
+  val dateTime: LocalDateTime = LocalDateTime.now()
+  private val requestDetail = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
+  private val requestDateInd = LocalDateTime.of(2001, 12, 17, 9, 30, 47, 0)
+  private val requestCommon = RequestCommon("CDS", requestDateInd, "012345678901234")
   private val verifiedEmailRequest = VerifiedEmailRequest(UpdateVerifiedEmailRequest(requestCommon, requestDetail))
 
   "updateVerifiedEmail" should {

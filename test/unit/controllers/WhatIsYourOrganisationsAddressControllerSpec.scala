@@ -40,12 +40,12 @@ import scala.concurrent.Future
 
 class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector                       = mock[AuthConnector]
-  private val mockAuthAction                          = authAction(mockAuthConnector)
-  private val mockRequestSessionData                  = mock[RequestSessionData]
-  private val mockSubscriptionDetailsService          = mock[SubscriptionDetailsService]
-  private val mockSubscriptionFlowManager             = mock[SubscriptionFlowManager]
-  private val mockRegistrationDetailsService          = mock[RegistrationDetailsService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
+  private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val what_is__your_organisation_address_view = inject[what_is_your_organisations_address]
 
   private val controller = new WhatIsYourOrganisationsAddressController(
@@ -58,11 +58,11 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
     what_is__your_organisation_address_view
   )
 
-  private val fieldLevelErrorAddress         = "//p[@id='address-error' and @class='govuk-error-message']"
+  private val fieldLevelErrorAddress = "//p[@id='address-error' and @class='govuk-error-message']"
   private val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"
 
-  private val lineOneFieldError  = "//p[@id='line-1-error' and @class='govuk-error-message']"
-  private val lineTwoFieldError  = "//p[@id='line-2-error' and @class='govuk-error-message']"
+  private val lineOneFieldError = "//p[@id='line-1-error' and @class='govuk-error-message']"
+  private val lineTwoFieldError = "//p[@id='line-2-error' and @class='govuk-error-message']"
   private val townCityFieldError = "//p[@id='townCity-error' and @class='govuk-error-message']"
   private val postcodeFieldError = "//p[@id='postcode-error' and @class='govuk-error-message']"
 
@@ -165,7 +165,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
             .createForm(eoriOnlyService)
             .url
-        val userId      = UUID.randomUUID().toString
+        val userId = UUID.randomUUID().toString
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
@@ -203,7 +203,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
             .createForm(eoriOnlyService)
             .url
-        val userId      = UUID.randomUUID().toString
+        val userId = UUID.randomUUID().toString
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
@@ -243,7 +243,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
             .createForm(eoriOnlyService)
             .url
-        val userId      = UUID.randomUUID().toString
+        val userId = UUID.randomUUID().toString
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
@@ -283,7 +283,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
             .createForm(eoriOnlyService)
             .url
-        val userId      = UUID.randomUUID().toString
+        val userId = UUID.randomUUID().toString
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)

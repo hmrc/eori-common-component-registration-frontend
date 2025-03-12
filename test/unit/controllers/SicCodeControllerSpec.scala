@@ -61,8 +61,8 @@ class SicCodeControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockRequestSessionData  = mock[RequestSessionData]
-  private val sicCodeView             = inject[sic_code]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val sicCodeView = inject[sic_code]
   private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new SicCodeController(
@@ -100,7 +100,7 @@ class SicCodeControllerSpec
 
   private val mandatoryFieldsMap = Map("sic" -> sic)
 
-  private val populatedSicCodeFieldsMap   = Map("sic" -> sic)
+  private val populatedSicCodeFieldsMap = Map("sic" -> sic)
   private val unpopulatedSicCodeFieldsMap = Map("sic" -> "")
 
   "Subscription Sic Code form in create mode" should {

@@ -24,9 +24,9 @@ import scala.util.{Failure, Success, Try}
 
 class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String] = Seq.empty) extends Formatter[LocalDate] with Formatters {
 
-  private val dayKey                  = "day"
-  private val monthKey                = "month"
-  private val yearKey                 = "year"
+  private val dayKey = "day"
+  private val monthKey = "month"
+  private val yearKey = "year"
   private val fieldKeys: List[String] = List(dayKey, monthKey, yearKey)
 
   private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =

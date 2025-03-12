@@ -95,7 +95,7 @@ class BusinessDetailsRecoveryController @Inject() (
     subscriptionFlowManager.startSubscriptionFlow(Some(BusinessDetailsRecoveryPage), organisationType, service) map { case (page, newSession) =>
       val sessionWithOrganisationType = requestSessionData
         .sessionWithOrganisationTypeAdded(newSession, organisationType)
-      val session                     =
+      val session =
         requestSessionData.existingSessionWithUserLocationAdded(sessionWithOrganisationType, location)
       Redirect(page.url(service)).withSession(session)
     }

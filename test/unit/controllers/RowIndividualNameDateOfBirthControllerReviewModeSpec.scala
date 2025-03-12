@@ -52,12 +52,12 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
 
   class ControllerFixture(organisationType: String, form: Form[IndividualNameAndDateOfBirth])
       extends AbstractControllerFixture[RowIndividualNameDateOfBirthController] {
-    val mockRegistrationInfo           = mock[IndividualRegistrationInfo]
+    val mockRegistrationInfo = mock[IndividualRegistrationInfo]
     val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-    val mockRequestSessionData         = mock[RequestSessionData]
+    val mockRequestSessionData = mock[RequestSessionData]
 
     private val rowIndividualNameDob = inject[row_individual_name_dob]
-    private val mockAuthAction       = authAction(mockAuthConnector)
+    private val mockAuthAction = authAction(mockAuthConnector)
 
     override val controller = new RowIndividualNameDateOfBirthController(
       mockAuthAction,

@@ -41,14 +41,14 @@ import scala.concurrent.Future
 
 class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with MatchingServiceTestData {
 
-  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
+  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  private val mockSubscriptionFlowManager     = mock[SubscriptionFlowManager]
-  private val mockSubscriptionPage            = mock[SubscriptionPage]
-  private val mockFlowError                   = mock[FlowError]
-  private val mockAddress                     = inject[address]
-  private val mockErrorTemplate               = inject[error_template]
-  private val messagesControllerComponents    = inject[MessagesControllerComponents]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
+  private val mockSubscriptionPage = mock[SubscriptionPage]
+  private val mockFlowError = mock[FlowError]
+  private val mockAddress = inject[address]
+  private val mockErrorTemplate = inject[error_template]
+  private val messagesControllerComponents = inject[MessagesControllerComponents]
 
   private val subscriptionToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 

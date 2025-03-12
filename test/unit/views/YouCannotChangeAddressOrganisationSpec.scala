@@ -26,7 +26,7 @@ import util.ViewSpec
 class YouCannotChangeAddressOrganisationSpec extends ViewSpec {
 
   implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
-  private val youCantChangeAddressOrgView                       = inject[you_cannot_change_address_organisation]
+  private val youCantChangeAddressOrgView = inject[you_cannot_change_address_organisation]
 
   "You cannot change address for Organisation page" should {
 

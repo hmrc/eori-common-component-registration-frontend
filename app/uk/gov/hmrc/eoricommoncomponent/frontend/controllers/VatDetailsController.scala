@@ -51,7 +51,7 @@ class VatDetailsController @Inject() (
     extends CdsController(mcc) {
 
   val dateForm: Form[VatRegistrationDate] = form()
-  val vatDetailsForm                      = new VatDetailsForm(requestSessionData)
+  val vatDetailsForm = new VatDetailsForm(requestSessionData)
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>

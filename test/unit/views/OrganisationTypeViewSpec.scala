@@ -41,13 +41,13 @@ import scala.concurrent.Future
 
 class OrganisationTypeViewSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val organisationTypeView           = inject[organisation_type]
-  private val mockAppConfig                  = mock[AppConfig]
+  private val organisationTypeView = inject[organisation_type]
+  private val mockAppConfig = mock[AppConfig]
 
   private val organisationTypeController = new OrganisationTypeController(
     mockAuthAction,
@@ -92,7 +92,7 @@ class OrganisationTypeViewSpec extends ControllerSpec with MockitoSugar with Bef
       Table("userLocation", Some(UserLocation.Uk), Some(UserLocation.ThirdCountry))
 
     forAll(userLocations) { userLocation =>
-      val forUk           = userLocation.fold(true)(_ == UserLocation.Uk)
+      val forUk = userLocation.fold(true)(_ == UserLocation.Uk)
       val forThirdCountry = userLocation.fold(true)(_ == UserLocation.ThirdCountry)
 
       s"have all the required input fields while on main screen for user location ${userLocation.getOrElse("None")}" in {

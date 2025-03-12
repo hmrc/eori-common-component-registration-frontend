@@ -32,8 +32,8 @@ import scala.concurrent.Future
 
 class YouCannotChangeAddressControllerSpec extends ControllerSpec with AuthActionMock {
 
-  private val mockAuthConnector      = mock[AuthConnector]
-  private val mockAuthAction         = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val mockRequestSessionData = mock[RequestSessionData]
 
   private val youCannotChangeAddressOrgView = inject[you_cannot_change_address_organisation]

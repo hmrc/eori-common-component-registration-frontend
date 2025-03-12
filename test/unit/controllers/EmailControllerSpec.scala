@@ -47,17 +47,17 @@ import scala.concurrent.Future
 
 class EmailControllerSpec extends ControllerSpec with AddressPageFactoring with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector                  = mock[AuthConnector]
-  private val mockAuthAction                     = authAction(mockAuthConnector)
-  private val mockAppConfig                      = mock[AppConfig]
-  private val mockEmailVerificationService       = mock[EmailVerificationService]
-  private val mockSave4LaterService              = mock[Save4LaterService]
-  private val mockSessionCache                   = mock[SessionCache]
-  private val mockSubscriptionStatusService      = mock[SubscriptionStatusService]
-  private val groupEnrolmentExtractor            = mock[GroupEnrolmentExtractor]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockAppConfig = mock[AppConfig]
+  private val mockEmailVerificationService = mock[EmailVerificationService]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockSubscriptionStatusService = mock[SubscriptionStatusService]
+  private val groupEnrolmentExtractor = mock[GroupEnrolmentExtractor]
   private val enrolmentPendingAgainstGroupIdView = inject[enrolment_pending_against_group_id]
-  private val enrolmentPendingForUserView        = inject[enrolment_pending_for_user]
-  private val errorView                          = inject[error_template]
+  private val enrolmentPendingForUserView = inject[enrolment_pending_for_user]
+  private val errorView = inject[error_template]
 
   private val userGroupIdSubscriptionStatusCheckService =
     new UserGroupIdSubscriptionStatusCheckService(mockSubscriptionStatusService, mockSave4LaterService)

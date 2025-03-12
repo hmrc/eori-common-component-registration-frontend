@@ -35,12 +35,12 @@ import scala.concurrent.Future
 
 class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
 
-  private val mockVatReturnTotalView          = inject[vat_return_total]
+  private val mockVatReturnTotalView = inject[vat_return_total]
   private val mockWeCannotConfirmYourIdentity = inject[we_cannot_confirm_your_identity]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
 
   val mockAuthConnector = mock[AuthConnector]
-  val mockAuthAction    = authAction(mockAuthConnector)
+  val mockAuthAction = authAction(mockAuthConnector)
 
   private val controller = new VatReturnController(
     mockAuthAction,

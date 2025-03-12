@@ -63,7 +63,7 @@ object DateTimeUtil {
 
   }
 
-  implicit val dateTimeReads: Reads[LocalDateTime]   = dateTimeReadsIso
+  implicit val dateTimeReads: Reads[LocalDateTime] = dateTimeReadsIso
   implicit val dateTimeWrites: Writes[LocalDateTime] = dateTimeWritesIsoUtc
 
 }

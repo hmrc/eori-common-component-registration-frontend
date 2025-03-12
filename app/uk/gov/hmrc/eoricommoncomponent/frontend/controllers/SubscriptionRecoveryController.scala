@@ -72,7 +72,7 @@ class SubscriptionRecoveryController @Inject() (
   )(implicit ec: ExecutionContext, request: Request[AnyContent]): Future[Result] = {
     val result = for {
       registrationDetails <- sessionCache.registrationDetails
-      safeId               = registrationDetails.safeId.id
+      safeId = registrationDetails.safeId.id
       sub09Result         <- SUB09Connector.subscriptionDisplay(safeId, uuidGenerator.generateUUIDAsString)
       sub01Outcome        <- sessionCache.sub01Outcome
     } yield sub09Result match {
@@ -143,9 +143,9 @@ class SubscriptionRecoveryController @Inject() (
         .getOrElse(throw new IllegalStateException("NO ETMPFORMBUNDLENUMBER specified"))
 
     // As the result of migration person of contact is likely to be empty use string Customer
-    val recipientFullName          =
+    val recipientFullName =
       subscriptionDisplayResponse.responseDetail.contactInformation.flatMap(_.personOfContact).getOrElse("Customer")
-    val name                       = subscriptionDisplayResponse.responseDetail.CDSFullName
+    val name = subscriptionDisplayResponse.responseDetail.CDSFullName
     val emailVerificationTimestamp =
       subscriptionDisplayResponse.responseDetail.contactInformation.flatMap(_.emailVerificationTimestamp)
 
@@ -243,7 +243,7 @@ class SubscriptionRecoveryController @Inject() (
     dateOfBirthCaptured: Option[LocalDate]
   )(implicit request: Request[AnyContent]): Option[LocalDate] = {
     val isIndividualOrSoleTrader = requestSessionData.isIndividualOrSoleTrader
-    val dateOfEstablishment      = response.responseDetail.dateOfEstablishment // Date we hold
+    val dateOfEstablishment = response.responseDetail.dateOfEstablishment // Date we hold
     (isIndividualOrSoleTrader, dateOfEstablishment, dateOfEstablishmentCaptured, dateOfBirthCaptured) match {
       case (_, Some(date), _, _) => Some(date)
       case (false, _, Some(date), _) => Some(date)

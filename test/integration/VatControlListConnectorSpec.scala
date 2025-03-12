@@ -57,9 +57,9 @@ class VatControlListConnectorSpec extends IntegrationTestsSpec with ScalaFutures
     stopMockServer()
 
   private lazy val vatControlListConnector = app.injector.instanceOf[VatControlListConnector]
-  private val AValidVatRegistrationNumber  = "123456789"
-  private val expectedGetUrl               = s"/vat-known-facts-control-list?vrn=$AValidVatRegistrationNumber"
-  private val request                      = VatControlListRequest(vrn = AValidVatRegistrationNumber)
+  private val AValidVatRegistrationNumber = "123456789"
+  private val expectedGetUrl = s"/vat-known-facts-control-list?vrn=$AValidVatRegistrationNumber"
+  private val request = VatControlListRequest(vrn = AValidVatRegistrationNumber)
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 

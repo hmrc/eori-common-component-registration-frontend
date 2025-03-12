@@ -109,7 +109,7 @@ class GetNinoController @Inject() (
   private def matchNotFoundBadRequest(formData: IdMatchModel, service: Service)(implicit
     request: Request[AnyContent]
   ): Result = {
-    val errorMsg  = Messages("cds.matching-error.individual-not-found")
+    val errorMsg = Messages("cds.matching-error.individual-not-found")
     val errorForm = subscriptionNinoForm.withGlobalError(errorMsg).fill(formData)
     BadRequest(
       matchNinoRowIndividualView(errorForm, isInReviewMode = false, routes.GetNinoController.submit(service), service)

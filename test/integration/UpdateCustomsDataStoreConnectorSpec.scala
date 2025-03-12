@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext
 
 class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
   implicit val ex: ExecutionContext = ExecutionContext.Implicits.global
-  implicit val hc: HeaderCarrier    = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val email = "a@example.com"
 

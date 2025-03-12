@@ -48,15 +48,15 @@ class EmbassyAddressController @Inject() (
   def showForm(isInReviewMode: Boolean = false, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.registrationDetails.map { regDetails =>
-        val addr                                           = regDetails.address
-        val embassyAddrModel                               = EmbassyAddressMatchModel(
+        val addr = regDetails.address
+        val embassyAddrModel = EmbassyAddressMatchModel(
           addr.addressLine1,
           addr.addressLine2,
           addr.addressLine3.getOrElse(""),
           addr.postalCode.getOrElse(""),
           addr.countryCode
         )
-        val filledForm                                     = embassyAddressForm.form.fill(embassyAddrModel)
+        val filledForm = embassyAddressForm.form.fill(embassyAddrModel)
         val (countriesToInclude, countriesInCountryPicker) =
           Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
         Ok(

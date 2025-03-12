@@ -51,15 +51,15 @@ import scala.concurrent.Future
 class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockAuthAction = authAction(mockAuthConnector)
 
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockSessionCache               = mock[SessionCache]
-  private val mockSave4LaterService          = mock[Save4LaterService]
-  private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockSubscriptionStatusService = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
-  private val mockAppConfig                  = mock[AppConfig]
-  private val userLocationView               = inject[user_location]
+  private val mockAppConfig = mock[AppConfig]
+  private val userLocationView = inject[user_location]
 
   private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 
@@ -176,7 +176,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   }
 
   "cacheAndRedirect when registrationDisplay is Enabled" should {
-    val controller                                                = new UserLocationController(
+    val controller = new UserLocationController(
       mockAuthAction,
       mockRequestSessionData,
       mockSave4LaterService,
@@ -205,7 +205,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         mock[ContactResponse]
       )
 
-      val test   =
+      val test =
         controller.cacheAndRedirect(atarService, UserLocation.ThirdCountry, GroupId("GroupId"))
       val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
@@ -227,7 +227,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
         mock[ContactResponse]
       )
 
-      val test   =
+      val test =
         controller.cacheAndRedirect(atarService, UserLocation.ThirdCountry, GroupId("GroupId"))
       val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
@@ -236,7 +236,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     }
 
     "return service unavailable response when failed to retrieve registration display response" in {
-      val test   =
+      val test =
         controller.cacheAndRedirect(atarService, UserLocation.ThirdCountry, GroupId("GroupId"))
       val result = test(Left(ServiceUnavailableResponse))
 
@@ -279,7 +279,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private def subscriptionStatus(location: UserLocation = UserLocation.Iom)(test: Future[Result] => Any) = {
 
     val subStatus: PreSubscriptionStatus = NewSubscription
-    implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
+    implicit val hc: HeaderCarrier = mock[HeaderCarrier]
     implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
 
     test(controller.subscriptionStatus(subStatus, GroupId("GroupId"), atarService, location)(rq, hc))

@@ -23,7 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisation
 
 object OrganisationNameFormBuilder {
 
-  val ValidName        = "orgName"
+  val ValidName = "orgName"
   val ValidNameRequest = Map("name" -> ValidName)
 
   val companyNameBasedOnExpectedSubscriptionOutcome: Map[RegistrationOutcome, String] =
@@ -39,5 +39,5 @@ object OrganisationNameFormBuilder {
     organisationNameForm.bind(validIncorporatedNameUtrRequest(expectedRegOutcome.getOrElse(PROCESSING))).value.get
 
   val CharityPublicBodyNotForProfitOrganisation = Organisation(ValidName, "Unincorporated Body")
-  val ThirdCountryOrg                           = Organisation(ValidName, "Unincorporated Body")
+  val ThirdCountryOrg = Organisation(ValidName, "Unincorporated Body")
 }

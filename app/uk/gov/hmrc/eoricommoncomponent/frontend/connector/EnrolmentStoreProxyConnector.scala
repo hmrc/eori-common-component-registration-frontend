@@ -33,7 +33,7 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
   ec: ExecutionContext
 ) extends HandleResponses {
 
-  private val baseUrl        = appConfig.enrolmentStoreProxyBaseUrl
+  private val baseUrl = appConfig.enrolmentStoreProxyBaseUrl
   private val serviceContext = appConfig.enrolmentStoreProxyServiceContext
 
   def getEnrolmentByGroupId(groupId: String)(implicit

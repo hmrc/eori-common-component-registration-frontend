@@ -25,14 +25,14 @@ trait DoYouHaveNinoPage extends WebPage {
   override val title = "Do you have a National Insurance number"
 
   val yesRadioButton = "//*[@id='have-nino-true']"
-  val yesLabel       = "//label[@for='have-nino-true']"
+  val yesLabel = "//label[@for='have-nino-true']"
 
   val noRadioButton = "//*[@id='have-nino-false']"
-  val noLabel       = "//label[@for='have-nino-false']"
+  val noLabel = "//label[@for='have-nino-false']"
 
   val ninoLabelBold = "//label[@class='form-label-bold']"
-  val ninoHint      = "//*[@id='nino-hint']"
-  val ninoInput     = "//*[@id='nino']"
+  val ninoHint = "//*[@id='nino-hint']"
+  val ninoInput = "//*[@id='nino']"
 
 }
 

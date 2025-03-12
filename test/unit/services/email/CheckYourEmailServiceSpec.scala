@@ -42,16 +42,16 @@ import scala.concurrent.Future
 
 class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injecting {
 
-  implicit val hc: HeaderCarrier       = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val rq: Request[AnyContent] = withFakeCSRF(FakeRequest())
 
-  private val mockSave4LaterService        = mock[Save4LaterService]
-  private val mockEmailJourneyService      = mock[EmailJourneyService]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockEmailJourneyService = mock[EmailJourneyService]
   private val messagesControllerComponents = inject[MessagesControllerComponents]
 
   private val checkYourEmailView = inject[check_your_email]
   private val emailConfirmedView = inject[email_confirmed]
-  private val verifyYourEmail    = inject[verify_your_email]
+  private val verifyYourEmail = inject[verify_your_email]
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 

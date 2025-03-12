@@ -46,15 +46,15 @@ import scala.concurrent.Future
 
 class DoYouHaveAUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockMatchingConnector          = mock[MatchingServiceConnector]
-  private val mockMatchingRequestHolder      = mock[MatchingRequestHolder]
-  private val mockMatchingResponse           = mock[MatchingResponse]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingConnector = mock[MatchingServiceConnector]
+  private val mockMatchingRequestHolder = mock[MatchingRequestHolder]
+  private val mockMatchingResponse = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val matchOrganisationUtrView       = inject[match_organisation_utr]
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockAppConfig                  = mock[AppConfig]
+  private val matchOrganisationUtrView = inject[match_organisation_utr]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockAppConfig = mock[AppConfig]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 

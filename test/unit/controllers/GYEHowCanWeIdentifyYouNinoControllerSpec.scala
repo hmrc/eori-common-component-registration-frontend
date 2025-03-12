@@ -43,10 +43,10 @@ import scala.concurrent.Future
 
 class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector      = mock[AuthConnector]
-  private val mockAuthAction         = authAction(mockAuthConnector)
-  private val mockMatchingService    = mock[MatchingService]
-  private val mockFrontendDataCache  = mock[SessionCache]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
+  private val mockFrontendDataCache = mock[SessionCache]
   private val mockRequestSessionData = mock[RequestSessionData]
 
   private val errorView = inject[error_template]

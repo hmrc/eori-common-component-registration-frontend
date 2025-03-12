@@ -26,7 +26,7 @@ import util.ViewSpec
 class AddressInvalidIndividualSpec extends ViewSpec {
 
   implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
-  private val addressInvalidIndView                             = inject[address_invalid_individual]
+  private val addressInvalidIndView = inject[address_invalid_individual]
 
   "Address invalid Individual page" should {
 

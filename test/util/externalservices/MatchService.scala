@@ -24,11 +24,11 @@ import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status._
 
 object MatchService {
-  val registerWithId        = "/register-with-id"
+  val registerWithId = "/register-with-id"
   val registerWithEoriAndId = "/register-with-eori-and-id"
-  val subscribe             = "/subscribe"
-  val handleSubscription    = "/handle-subscription"
-  val feedBack              = "/feedback"
+  val subscribe = "/subscribe"
+  val handleSubscription = "/handle-subscription"
+  val feedBack = "/feedback"
 
   private val RegistrationWithIdPath: UrlPattern = urlMatching("/register-with-id")
 
