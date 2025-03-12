@@ -30,7 +30,7 @@ import util.ViewSpec
 class ContactDetailsViewSpec extends ViewSpec {
 
   private val form: Form[ContactDetailsViewModel]               = contactDetailsCreateForm()
-  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
+  implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
   private val view                                              = inject[contact_details]
   private val fullNameLabel                                     = "label[for=full-name]"
   private val telephoneLabel                                    = "label[for=telephone]"

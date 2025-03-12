@@ -137,10 +137,9 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
         )
       )
 
-      submitForm(Map("utr" -> utr)) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
+      submitForm(Map("utr" -> utr)) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
       }
     }
 
@@ -181,11 +180,10 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
         )
       )
 
-      submitForm(Map("utr" -> utr)) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText("title") should startWith("Error: ")
+      submitForm(Map("utr" -> utr)) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
   }

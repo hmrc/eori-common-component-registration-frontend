@@ -64,12 +64,12 @@ class GetUtrNumberController @Inject() (
 
   def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      subscriptionUtrForm.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, organisationType, isInReviewMode, service))),
-        formData =>
-          matchBusinessOrIndividual(formData, isInReviewMode, service, organisationType, GroupId(loggedInUser.groupId))
-      )
+      subscriptionUtrForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, organisationType, isInReviewMode, service))),
+          formData => matchBusinessOrIndividual(formData, isInReviewMode, service, organisationType, GroupId(loggedInUser.groupId))
+        )
     }
 
   private def matchBusiness(
@@ -98,17 +98,19 @@ class GetUtrNumberController @Inject() (
   ): EitherT[Future, ResponseError, MatchingResponse] = EitherT {
     subscriptionDetailsService.cachedNameDobDetails flatMap {
       case Some(details) =>
-        matchingService.matchIndividualWithId(
-          id,
-          Individual.withLocalDate(details.firstName, details.lastName, details.dateOfBirth),
-          groupId
-        ).value
+        matchingService
+          .matchIndividualWithId(
+            id,
+            Individual.withLocalDate(details.firstName, details.lastName, details.dateOfBirth),
+            groupId
+          )
+          .value
       case None => Future.successful(Left(matchFailureResponse))
     }
   }
 
-  private def view(form: Form[IdMatchModel], organisationType: String, isInReviewMode: Boolean, service: Service)(
-    implicit request: Request[AnyContent]
+  private def view(form: Form[IdMatchModel], organisationType: String, isInReviewMode: Boolean, service: Service)(implicit
+    request: Request[AnyContent]
   ): HtmlFormat.Appendable =
     matchOrganisationUtrView(
       form,
@@ -137,7 +139,7 @@ class GetUtrNumberController @Inject() (
         case MatchingServiceConnector.matchFailureResponse =>
           matchNotFoundBadRequest(organisationType, formData, isInReviewMode, service)
         case MatchingServiceConnector.downstreamFailureResponse => InternalServerError(errorView(service))
-        case _                                                  => InternalServerError(errorView(service))
+        case _ => InternalServerError(errorView(service))
       },
       _ => {
         if (organisationType == CdsOrganisationType.CharityPublicBodyNotForProfitId) {
@@ -154,7 +156,7 @@ class GetUtrNumberController @Inject() (
     isInReviewMode: Boolean,
     service: Service
   )(implicit request: Request[AnyContent]): Result = {
-    val errorMsg = organisationType match {
+    val errorMsg  = organisationType match {
       case orgType if individualOrganisationIds.contains(orgType) =>
         Messages("cds.matching-error.individual-not-found")
       case _ => Messages("cds.matching-error-organisation.not-found")

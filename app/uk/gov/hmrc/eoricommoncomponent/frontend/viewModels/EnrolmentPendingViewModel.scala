@@ -23,9 +23,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName
 object EnrolmentPendingViewModel {
 
   private def processingServiceName(processingService: Option[Service])(implicit messages: Messages) =
-    processingService.map(other => ServiceName.longName(other)).getOrElse(
-      messages("cds.enrolment.pending.otherService")
-    )
+    processingService
+      .map(other => ServiceName.longName(other))
+      .getOrElse(
+        messages("cds.enrolment.pending.otherService")
+      )
 
   def title(processingService: Option[Service], service: Service)(implicit messages: Messages): String =
     if (processingService.contains(service))

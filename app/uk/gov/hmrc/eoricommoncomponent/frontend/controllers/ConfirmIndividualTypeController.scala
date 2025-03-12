@@ -52,18 +52,19 @@ class ConfirmIndividualTypeController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      confirmIndividualTypeForm.bindFromRequest().fold(
-        invalidForm => Future.successful(BadRequest(confirmIndividualTypeView(invalidForm, service))),
-        selectedIndividualType =>
-          subscriptionFlowManager
-            .startSubscriptionFlow(Some(ConfirmIndividualTypePage), selectedIndividualType, service) map {
-            case (page, newSession) =>
+      confirmIndividualTypeForm
+        .bindFromRequest()
+        .fold(
+          invalidForm => Future.successful(BadRequest(confirmIndividualTypeView(invalidForm, service))),
+          selectedIndividualType =>
+            subscriptionFlowManager
+              .startSubscriptionFlow(Some(ConfirmIndividualTypePage), selectedIndividualType, service) map { case (page, newSession) =>
               val sessionWithOrganisationType =
                 requestSessionData.sessionWithOrganisationTypeAdded(newSession, selectedIndividualType)
 
               Redirect(page.url(service)).withSession(sessionWithOrganisationType)
-          }
-      )
+            }
+        )
     }
 
 }

@@ -46,15 +46,18 @@ class ManualAddressController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      addressDetailsCreateForm().bindFromRequest()
+      addressDetailsCreateForm()
+        .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, Countries.all, service))),
           validAddress =>
-            sessionCache.savePostcodeAndLine1Details(
-              PostcodeViewModel(validAddress.postcode.getOrElse(throw PostcodeException), Some(validAddress.street))
-            ).map { _ =>
-              Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-            }
+            sessionCache
+              .savePostcodeAndLine1Details(
+                PostcodeViewModel(validAddress.postcode.getOrElse(throw PostcodeException), Some(validAddress.street))
+              )
+              .map { _ =>
+                Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+              }
         )
     }
 

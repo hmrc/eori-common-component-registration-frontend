@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{__, Json, Reads}
+import play.api.libs.json.{Json, Reads, __}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.EisError.Value
 
 sealed trait EisError {
@@ -47,12 +47,11 @@ object EisError {
     (
       (__ \ "summary").read[String] and
         (__ \ "value").read[Value]
-    )(
-      (s, v) =>
-        new EisError {
-          override val summary: String = s
-          override val value: Value    = v
-        }
+    )((s, v) =>
+      new EisError {
+        override val summary: String = s
+        override val value: Value    = v
+      }
     )
   }
 

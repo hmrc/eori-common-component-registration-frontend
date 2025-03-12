@@ -17,11 +17,7 @@
 package unit.controllers
 
 import common.pages.subscription.SubscriptionContactDetailsPage._
-import common.pages.subscription.{
-  SubscriptionDateOfBirthPage,
-  SubscriptionDateOfEstablishmentPage,
-  SubscriptionPartnershipDateOfEstablishmentPage
-}
+import common.pages.subscription.{SubscriptionDateOfBirthPage, SubscriptionDateOfEstablishmentPage, SubscriptionPartnershipDateOfEstablishmentPage}
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -32,10 +28,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfEstablishmentController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  DateOfEstablishmentSubscriptionFlowPage,
-  SubscriptionDetails
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{DateOfEstablishmentSubscriptionFlowPage, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -49,17 +42,19 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DateOfEstablishmentControllerSpec
-    extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
+    extends SubscriptionFlowTestSupport
+    with BeforeAndAfterEach
+    with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  protected override val formId: String = SubscriptionDateOfBirthPage.formId
+  override protected val formId: String = SubscriptionDateOfBirthPage.formId
 
-  protected override val submitInCreateModeUrl: String =
+  override protected val submitInCreateModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController
       .submit(isInReviewMode = false, atarService)
       .url
 
-  protected override val submitInReviewModeUrl: String =
+  override protected val submitInReviewModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController
       .submit(isInReviewMode = true, atarService)
       .url
@@ -341,10 +336,9 @@ class DateOfEstablishmentControllerSpec
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
         .thenReturn(Left(FlowNotFound()))
 
-      submitFormInCreateMode(ValidRequest) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).value shouldBe "/customs-registration-services/atar/register"
+      submitFormInCreateMode(ValidRequest) { result =>
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).value shouldBe "/customs-registration-services/atar/register"
       }
     }
   }

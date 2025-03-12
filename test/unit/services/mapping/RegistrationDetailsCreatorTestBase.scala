@@ -23,8 +23,7 @@ import util.scalacheck.TestDataGenerators
 
 import java.time._
 
-private[mapping] abstract class RegistrationDetailsCreatorTestBase
-    extends UnitSpec with GenTestRunner with TestDataGenerators {
+abstract private[mapping] class RegistrationDetailsCreatorTestBase extends UnitSpec with GenTestRunner with TestDataGenerators {
 
   protected def uuid() = java.util.UUID.randomUUID.toString
 

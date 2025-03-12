@@ -19,11 +19,7 @@ package unit.domain.messaging
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
-  ContactInformation,
-  SubscriptionCreateRequest,
-  VatId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{ContactInformation, SubscriptionCreateRequest, VatId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 
@@ -87,7 +83,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
         sicCode = Some("12345"),
         dateEstablished = Some(dateOfBirthOrEstablishment)
       )
-      val cdsOrgType = CdsOrganisationType.Company
+      val cdsOrgType          = CdsOrganisationType.Company
 
       val request = SubscriptionCreateRequest.fromOrganisation(
         registrationDetails,
@@ -135,7 +131,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
         businessShortName = Some(BusinessShortName("short name")),
         sicCode = Some("12345")
       )
-      val cdsOrgType = CdsOrganisationType.Company
+      val cdsOrgType          = CdsOrganisationType.Company
 
       val request = SubscriptionCreateRequest.fromIndividual(
         registrationDetails,

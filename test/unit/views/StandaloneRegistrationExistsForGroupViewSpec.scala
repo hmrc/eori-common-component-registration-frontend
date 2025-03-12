@@ -72,9 +72,12 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
       }
 
       "display correct heading" in {
-        standardDoc.body().getElementsByTag(
-          "h1"
-        ).text() mustBe "Your business or organisation already has an EORI number"
+        standardDoc
+          .body()
+          .getElementsByTag(
+            "h1"
+          )
+          .text() mustBe "Your business or organisation already has an EORI number"
       }
 
       "have the correct class on the h1" in {

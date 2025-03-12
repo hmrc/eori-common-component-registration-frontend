@@ -17,16 +17,18 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{__, JsPath, Writes}
+import play.api.libs.json.{JsPath, Writes, __}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegisterWithoutIDRequest, RegisterWithoutIdResponseHolder}
 
 case class RegisterWithoutId(`type`: String, request: RegisterWithoutIdSubmitted, response: RegisterWithoutIdResult)
 
 object RegisterWithoutId {
 
-  //writes for flattened Audit event
+  // writes for flattened Audit event
   implicit val writes: Writes[RegisterWithoutId] =
-    (__ \ "type").write[String].and(JsPath.write[RegisterWithoutIdSubmitted])
+    (__ \ "type")
+      .write[String]
+      .and(JsPath.write[RegisterWithoutIdSubmitted])
       .and(JsPath.write[RegisterWithoutIdResult])(unlift(RegisterWithoutId.unapply))
 
   def apply(request: RegisterWithoutIDRequest, response: RegisterWithoutIdResponseHolder): RegisterWithoutId =

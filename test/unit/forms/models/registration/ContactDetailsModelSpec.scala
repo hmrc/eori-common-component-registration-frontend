@@ -58,7 +58,7 @@ class ContactDetailsModelSpec extends UnitSpec {
 
     "correctly convert ContactDetailsViewModel and update ContactDetailsModel" in {
 
-      val contactDetails =
+      val contactDetails      =
         ContactDetailsViewModel("Full name", Some("email"), "01234123123")
       val contactDetailsModel =
         ContactDetailsModel(

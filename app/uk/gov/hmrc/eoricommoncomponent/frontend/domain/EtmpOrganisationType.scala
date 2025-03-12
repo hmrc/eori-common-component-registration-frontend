@@ -71,9 +71,9 @@ object EtmpOrganisationType extends Logging {
   def apply(cdsOrgType: CdsOrganisationType): EtmpOrganisationType = cdsToEtmpOrgType.getOrElse(cdsOrgType.id, NA)
 
   def apply(id: String): EtmpOrganisationType = id match {
-    case "Partnership"         => Partnership
-    case "LLP"                 => LLP
-    case "Corporate Body"      => CorporateBody
+    case "Partnership" => Partnership
+    case "LLP" => LLP
+    case "Corporate Body" => CorporateBody
     case "Unincorporated Body" => UnincorporatedBody
     case invalidId =>
       val error =
@@ -85,11 +85,11 @@ object EtmpOrganisationType extends Logging {
   }
 
   private def unapply(id: EtmpOrganisationType): String = id match {
-    case Partnership        => "Partnership"
-    case LLP                => "LLP"
-    case CorporateBody      => "Corporate Body"
+    case Partnership => "Partnership"
+    case LLP => "LLP"
+    case CorporateBody => "Corporate Body"
     case UnincorporatedBody => "Unincorporated Body"
-    case _                  => "N/A"
+    case _ => "N/A"
   }
 
   def orgTypeToEtmpOrgCode(id: String): String = apply(id).etmpOrgTypeCode

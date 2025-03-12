@@ -61,29 +61,31 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      subscriptionNinoForm.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(
-              howCanWeIdentifyYouView(
-                formWithErrors,
-                isInReviewMode = false,
-                routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
-                service = service
+      subscriptionNinoForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(
+                howCanWeIdentifyYouView(
+                  formWithErrors,
+                  isInReviewMode = false,
+                  routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+                  service = service
+                )
               )
-            )
-          ),
-        ninoForm =>
-          for {
-            _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id))))
-            ind <- sessionCacheService.retrieveNameDobFromCache()
-            _ = matchingService.matchIndividualWithNino(
-              ninoForm.id,
-              ind,
-              GroupId(loggedInUser.groupId.getOrElse(throw new Exception("GroupId does not exists")))
-            )
-          } yield Redirect(PostCodeController.createForm(service))
-      )
+            ),
+          ninoForm =>
+            for {
+              _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id))))
+              ind <- sessionCacheService.retrieveNameDobFromCache()
+              _    = matchingService.matchIndividualWithNino(
+                       ninoForm.id,
+                       ind,
+                       GroupId(loggedInUser.groupId.getOrElse(throw new Exception("GroupId does not exists")))
+                     )
+            } yield Redirect(PostCodeController.createForm(service))
+        )
     }
 
 }

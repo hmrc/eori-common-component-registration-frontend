@@ -37,7 +37,10 @@ class YouCannotUseServiceController @Inject() (
   unauthorisedView: unauthorized,
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) with AuthorisedFunctions with AuthRedirectSupport with EnrolmentExtractor {
+    extends CdsController(mcc)
+    with AuthorisedFunctions
+    with AuthRedirectSupport
+    with EnrolmentExtractor {
 
   def page(service: Service): Action[AnyContent] = Action.async { implicit request =>
     authorised(AuthProviders(GovernmentGateway))

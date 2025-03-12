@@ -37,7 +37,8 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
   )(userIsInProcess: => Future[Result])(
     otherUserWithinGroupIsInProcess: => Future[Result]
   )(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] =
-    save4Later.fetchCacheIds(groupId)
+    save4Later
+      .fetchCacheIds(groupId)
       .flatMap {
         case Some(cacheIds) =>
           val sameUser    = cacheIds.internalId == internalId
@@ -51,7 +52,7 @@ class UserGroupIdSubscriptionStatusCheckService @Inject() (
                   save4Later.deleteCachedGroupId(groupId).flatMap(_ => continue)
                 else
                   save4Later.deleteCacheIds(groupId).flatMap(_ => continue)
-              case SubscriptionProcessing => //Processing is defined as 01, 11 or 14 subscriptionStatus code
+              case SubscriptionProcessing => // Processing is defined as 01, 11 or 14 subscriptionStatus code
                 if (sameUser)
                   userIsInProcess
                 else

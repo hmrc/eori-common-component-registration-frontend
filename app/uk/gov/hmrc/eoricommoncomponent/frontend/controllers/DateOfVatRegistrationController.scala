@@ -60,8 +60,7 @@ class DateOfVatRegistrationController @Inject() (
     request: Request[AnyContent]
   ): Future[Result] = {
     subscriptionBusinessService.getCachedVatControlListResponse.map {
-      case Some(response)
-          if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
+      case Some(response) if LocalDate.parse(response.dateOfReg.getOrElse("")) == vatRegistrationDateInput.dateOfRegistration =>
         Redirect(ContactDetailsController.createForm(service))
       case _ =>
         Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
@@ -70,22 +69,25 @@ class DateOfVatRegistrationController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      vatRegistrationDateForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
-        formData =>
-          subscriptionDetailsService.cachedOrganisationType.flatMap { optOrgType =>
-            optOrgType.filter(_ == CharityPublicBodyNotForProfit && appConfig.allowNoIdJourney) match {
-              case Some(_) => saveDateOfRegAndRedirect(formData.dateOfRegistration, service)
-              case None    => lookupDateOfVatRegistration(formData, service)
+      vatRegistrationDateForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
+          formData =>
+            subscriptionDetailsService.cachedOrganisationType.flatMap { optOrgType =>
+              optOrgType.filter(_ == CharityPublicBodyNotForProfit && appConfig.allowNoIdJourney) match {
+                case Some(_) => saveDateOfRegAndRedirect(formData.dateOfRegistration, service)
+                case None => lookupDateOfVatRegistration(formData, service)
+              }
             }
-          }
-      )
+        )
     }
 
   private def saveDateOfRegAndRedirect(dateOfReg: LocalDate, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] = {
-    subscriptionDetailsService.cacheVatControlListResponse(VatControlListResponse(dateOfReg = Some(dateOfReg.toString)))
+    subscriptionDetailsService
+      .cacheVatControlListResponse(VatControlListResponse(dateOfReg = Some(dateOfReg.toString)))
       .map(_ => Redirect(ContactDetailsController.createForm(service)))
   }
 

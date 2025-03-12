@@ -36,7 +36,7 @@ case class CdsPage(html: String) {
 
   def getElementValueForLabel(labelXpath: String): String = {
     val elementId = getElementAttributeFor(labelXpath)
-    val element = Option(page.getElementById(elementId))
+    val element   = Option(page.getElementById(elementId))
       .getOrElse(throw new IllegalStateException(s"Input element with ID '$elementId' was not found on the page."))
     element.`val`()
   }
@@ -56,24 +56,33 @@ case class CdsPage(html: String) {
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
       .fold("")(
         _.getElementsByClass("govuk-summary-list__actions")
-          .select("a.govuk-link").find(e => e.text().contains(action)).fold("")(_.text())
+          .select("a.govuk-link")
+          .find(e => e.text().contains(action))
+          .fold("")(_.text())
       )
 
   def getSummaryListHref(xpath: String, key: String, action: String): String =
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
-      .get.getElementsByClass("govuk-summary-list__actions")
-      .select("a.govuk-link").find(e => e.text().contains(action)).fold("")(_.attr("href"))
+      .get
+      .getElementsByClass("govuk-summary-list__actions")
+      .select("a.govuk-link")
+      .find(e => e.text().contains(action))
+      .fold("")(_.attr("href"))
 
   def summaryListElementPresent(xpath: String, key: String) =
     selectElements(xpath)
-      .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key).isDefined
+      .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
+      .isDefined
 
   def summaryListHrefPresent(xpath: String, key: String, action: String): Boolean =
     selectElements(xpath)
       .find(row => row.getElementsByClass("govuk-summary-list__key").text() == key)
-      .get.getElementsByClass("govuk-summary-list__actions")
-      .select("a.govuk-link").find(e => e.text().contains(action)).fold(false)(_ => true)
+      .get
+      .getElementsByClass("govuk-summary-list__actions")
+      .select("a.govuk-link")
+      .find(e => e.text().contains(action))
+      .fold(false)(_ => true)
 
   def getElementText(xpath: String): String =
     selectElement(xpath).text()
@@ -106,9 +115,7 @@ case class CdsPage(html: String) {
 
   def formAction(formId: String): String = {
     val element = Option(page.getElementById(formId))
-    element.fold(throw new IllegalStateException(s"Element with ID $formId was not found on the page."))(
-      x => x.attr("action")
-    )
+    element.fold(throw new IllegalStateException(s"Element with ID $formId was not found on the page."))(x => x.attr("action"))
   }
 
   private def selectElement(xpath: String): Element = {

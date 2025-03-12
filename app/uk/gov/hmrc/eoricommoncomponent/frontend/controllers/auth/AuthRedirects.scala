@@ -30,7 +30,7 @@ trait AuthRedirects {
   def env: Environment
   private def ggLoginUrl: String = config.get[String]("bas-gateway-frontend.sign-in")
 
-  private final lazy val defaultOrigin: String =
+  final private lazy val defaultOrigin: String =
     config
       .getOptional[String]("sosOrigin")
       .orElse(config.getOptional[String]("appName"))

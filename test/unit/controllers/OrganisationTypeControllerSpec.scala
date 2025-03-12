@@ -188,7 +188,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
       s"store the correct organisation type when '$option' is selected" in {
         submitForm(Map("organisation-type" -> option), organisationType = Some(cdsOrganisationType)) { result =>
-          await(result) //this is needed to ensure the future is completed before the verify is called
+          await(result) // this is needed to ensure the future is completed before the verify is called
           verify(mockRequestSessionData).sessionWithOrganisationTypeAdded(ArgumentMatchers.eq(cdsOrganisationType))(
             any[Request[AnyContent]]
           )
@@ -206,7 +206,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
           Map("organisation-type" -> CdsOrganisationType.Company.id),
           organisationType = Some(CdsOrganisationType.Company)
         ) { result =>
-          await(result) //this is needed to ensure the future is completed before the verify is called
+          await(result) // this is needed to ensure the future is completed before the verify is called
         }
       )
     }

@@ -44,8 +44,7 @@ import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class NameUtrOrganisationControllerSpec
-    extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
+class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector             = mock[AuthConnector]
   private val mockAuthAction                = authAction(mockAuthConnector)
@@ -125,7 +124,7 @@ class NameUtrOrganisationControllerSpec
 
     "ensure a valid Organisation Type has been passed" in {
       val invalidOrganisationType = UUID.randomUUID.toString
-      val thrown = intercept[InvalidUrlValueException] {
+      val thrown                  = intercept[InvalidUrlValueException] {
         showForm(invalidOrganisationType) { result =>
           await(result)
         }
@@ -155,7 +154,7 @@ class NameUtrOrganisationControllerSpec
 
     "ensure a valid Organisation Type has been passed" in {
       val invalidOrganisationType = UUID.randomUUID.toString
-      val thrown = intercept[InvalidUrlValueException] {
+      val thrown                  = intercept[InvalidUrlValueException] {
         showForm(invalidOrganisationType) { result =>
           await(result)
         }
@@ -195,33 +194,32 @@ class NameUtrOrganisationControllerSpec
       }
 
       s"ensure name does not exceed maximum length when organisation type is $organisationType" in {
-        submitForm(form = ValidNameUtrRequest + ("name" -> oversizedString(NameMaxLength)), organisationType) {
-          result =>
-            status(result) shouldBe BAD_REQUEST
-            val page = CdsPage(contentAsString(result))
-            if (organisationType == partnershipId || organisationType == limitedLiabilityPartnershipId) {
-              page.getElementsText(
-                pageLevelErrorSummaryListXPath
-              ) shouldBe "The partnership name must be 105 characters or less"
-              page.getElementsText(
-                fieldLevelErrorName
-              ) shouldBe "Error: The partnership name must be 105 characters or less"
-            } else if (organisationType == companyId) {
-              page.getElementsText(
-                pageLevelErrorSummaryListXPath
-              ) shouldBe "The company name must be 105 characters or less"
-              page.getElementsText(
-                fieldLevelErrorName
-              ) shouldBe s"Error: The company name must be 105 characters or less"
-            } else {
-              page.getElementsText(
-                pageLevelErrorSummaryListXPath
-              ) shouldBe "The organisation name must be 105 characters or less"
-              page.getElementsText(
-                fieldLevelErrorName
-              ) shouldBe "Error: The organisation name must be 105 characters or less"
-            }
-            page.getElementsText("title") should startWith("Error: ")
+        submitForm(form = ValidNameUtrRequest + ("name" -> oversizedString(NameMaxLength)), organisationType) { result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          if (organisationType == partnershipId || organisationType == limitedLiabilityPartnershipId) {
+            page.getElementsText(
+              pageLevelErrorSummaryListXPath
+            ) shouldBe "The partnership name must be 105 characters or less"
+            page.getElementsText(
+              fieldLevelErrorName
+            ) shouldBe "Error: The partnership name must be 105 characters or less"
+          } else if (organisationType == companyId) {
+            page.getElementsText(
+              pageLevelErrorSummaryListXPath
+            ) shouldBe "The company name must be 105 characters or less"
+            page.getElementsText(
+              fieldLevelErrorName
+            ) shouldBe s"Error: The company name must be 105 characters or less"
+          } else {
+            page.getElementsText(
+              pageLevelErrorSummaryListXPath
+            ) shouldBe "The organisation name must be 105 characters or less"
+            page.getElementsText(
+              fieldLevelErrorName
+            ) shouldBe "Error: The organisation name must be 105 characters or less"
+          }
+          page.getElementsText("title") should startWith("Error: ")
         }
       }
 

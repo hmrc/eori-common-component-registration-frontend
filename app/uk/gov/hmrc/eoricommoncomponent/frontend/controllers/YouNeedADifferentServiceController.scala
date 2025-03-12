@@ -32,9 +32,8 @@ class YouNeedADifferentServiceController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def form(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(youNeedDifferentServiceView(service)))
+  def form(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    Future.successful(Ok(youNeedDifferentServiceView(service)))
   }
 
 }

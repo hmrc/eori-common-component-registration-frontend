@@ -35,7 +35,7 @@ trait HandleResponses extends Logging {
   def convertFromJson[A](response: HttpResponse)(implicit reads: Reads[A]): Option[A] =
     response.json.validate[A] match {
       case JsSuccess(a, _) => Some(a)
-      case _               => None
+      case _ => None
     }
 
 }

@@ -37,7 +37,7 @@ import java.time.LocalDateTime
 
 class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.eori-common-component-hods-proxy.host"                        -> Host,
@@ -92,7 +92,8 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
   )
 
   private val organisationRequestJsonString =
-    Json.parse("""
+    Json
+      .parse("""
         |{
         |  "registerWithoutIDRequest": {
         |    "requestCommon": {
@@ -119,7 +120,8 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         |    }
         |  }
         |}
-      """.stripMargin).toString
+      """.stripMargin)
+      .toString
 
   val individualReq: RegisterWithoutIDRequest = RegisterWithoutIDRequest(
     RequestCommon("CDS", requestDate, "abcdefg1234567890hijklmnop0987654"),
@@ -131,7 +133,8 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
   )
 
   private val individualRequestJsonString =
-    Json.parse("""
+    Json
+      .parse("""
         |{
         | "registerWithoutIDRequest":{
         |   "requestCommon":{
@@ -160,7 +163,8 @@ class RegisterWithoutIdConnectorSpec extends IntegrationTestsSpec with ScalaFutu
         |   }
         | }
         |}
-      """.stripMargin).toString
+      """.stripMargin)
+      .toString
 
   private val processingDate = LocalDateTime.of(2016, 3, 17, 9, 31, 5, 0)
 

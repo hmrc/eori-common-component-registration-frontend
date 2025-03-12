@@ -23,12 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.BusinessDeta
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache,
-  SessionCacheService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 
 import javax.inject.{Inject, Singleton}
@@ -97,13 +92,12 @@ class BusinessDetailsRecoveryController @Inject() (
 
     val organisationType = orgType.getOrElse(throw DataUnavailableException("OrganisationType not found in cache"))
 
-    subscriptionFlowManager.startSubscriptionFlow(Some(BusinessDetailsRecoveryPage), organisationType, service) map {
-      case (page, newSession) =>
-        val sessionWithOrganisationType = requestSessionData
-          .sessionWithOrganisationTypeAdded(newSession, organisationType)
-        val session =
-          requestSessionData.existingSessionWithUserLocationAdded(sessionWithOrganisationType, location)
-        Redirect(page.url(service)).withSession(session)
+    subscriptionFlowManager.startSubscriptionFlow(Some(BusinessDetailsRecoveryPage), organisationType, service) map { case (page, newSession) =>
+      val sessionWithOrganisationType = requestSessionData
+        .sessionWithOrganisationTypeAdded(newSession, organisationType)
+      val session                     =
+        requestSessionData.existingSessionWithUserLocationAdded(sessionWithOrganisationType, location)
+      Redirect(page.url(service)).withSession(session)
     }
   }
 

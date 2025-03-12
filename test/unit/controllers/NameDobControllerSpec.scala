@@ -39,7 +39,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with SubscriptionFlowTestSupport {
-  protected override val formId: String      = NameDateOfBirthPage.formId
+  override protected val formId: String      = NameDateOfBirthPage.formId
   val mockCdsFrontendDataCache: SessionCache = mock[SessionCache]
   private val matchNameDobView               = inject[match_namedob]
   private val mockRequestSessionData         = mock[RequestSessionData]
@@ -116,13 +116,12 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
       when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
       val firstNameMaxLength = 35
-      submitForm(ValidRequest ++ Map("first-name" -> oversizedString(firstNameMaxLength)), defaultOrganisationType) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(firstNameMaxLength, "first")
-          page.getElementsText(fieldLevelErrorFirstName) shouldBe s"Error: ${maxLengthError(firstNameMaxLength, "first")}"
-          page.getElementsText("title") should startWith("Error: ")
+      submitForm(ValidRequest ++ Map("first-name" -> oversizedString(firstNameMaxLength)), defaultOrganisationType) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe maxLengthError(firstNameMaxLength, "first")
+        page.getElementsText(fieldLevelErrorFirstName) shouldBe s"Error: ${maxLengthError(firstNameMaxLength, "first")}"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
   }

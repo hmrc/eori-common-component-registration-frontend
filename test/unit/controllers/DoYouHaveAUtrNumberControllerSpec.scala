@@ -44,8 +44,7 @@ import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DoYouHaveAUtrNumberControllerSpec
-    extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
+class DoYouHaveAUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector              = mock[AuthConnector]
   private val mockAuthAction                 = authAction(mockAuthConnector)
@@ -234,10 +233,9 @@ class DoYouHaveAUtrNumberControllerSpec
       when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
       when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
 
-      submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId, isInReviewMode = true) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value should endWith("/register/your-organisation-address")
+      submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId, isInReviewMode = true) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value should endWith("/register/your-organisation-address")
       }
     }
   }

@@ -85,9 +85,8 @@ class WhatIsYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
     "be restricted to 50 characters for email length" in {
       val maxEmail = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@xxxxxxxxxx"
-      submitFormInCreateMode(unpopulatedEmailFieldsMap ++ Map("email" -> maxEmail)) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
+      submitFormInCreateMode(unpopulatedEmailFieldsMap ++ Map("email" -> maxEmail)) { result =>
+        status(result) shouldBe BAD_REQUEST
 
       }
     }

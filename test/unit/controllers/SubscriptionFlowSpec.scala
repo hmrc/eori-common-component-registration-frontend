@@ -19,5 +19,7 @@ package unit.controllers
 import util.ControllerSpec
 
 trait SubscriptionFlowSpec
-    extends ControllerSpec with SubscriptionFlowTestSupport with SubscriptionFlowCreateModeTestSupport
+    extends ControllerSpec
+    with SubscriptionFlowTestSupport
+    with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport

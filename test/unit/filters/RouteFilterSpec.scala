@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{RequestHeader, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
-import play.api.{mvc, Configuration, Environment}
+import play.api.{Configuration, Environment, mvc}
 import uk.gov.hmrc.eoricommoncomponent.frontend.CdsErrorHandler
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.filters.RouteFilter
@@ -119,7 +119,6 @@ class RouteFilterSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
   private def whenRoutesToBlock(routes: Option[String]) =
     when(mockConfig.getOptional[String]("routes-to-block")).thenReturn(routes)
 
-  private val okAction: RequestHeader => Future[mvc.Results.Status] = (_: RequestHeader) =>
-    Future.successful(Results.Ok)
+  private val okAction: RequestHeader => Future[mvc.Results.Status] = (_: RequestHeader) => Future.successful(Results.Ok)
 
 }

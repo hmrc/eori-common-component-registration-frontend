@@ -38,9 +38,8 @@ class VatVerificationOptionController @Inject() (
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(vatVerificationView(vatVerificationOptionAnswerForm(), service)))
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(Ok(vatVerificationView(vatVerificationOptionAnswerForm(), service)))
     }
 
   def submit(service: Service): Action[AnyContent] =
@@ -52,7 +51,7 @@ class VatVerificationOptionController @Inject() (
           vatVerificationOption =>
             subscriptionDetailsService.cacheVatVerificationOption(vatVerificationOption).flatMap { _ =>
               vatVerificationOption.isDateOption match {
-                case true  => Future.successful(Redirect(DateOfVatRegistrationController.createForm(service)))
+                case true => Future.successful(Redirect(DateOfVatRegistrationController.createForm(service)))
                 case false => Future.successful(Redirect(VatReturnController.createForm(service)))
               }
             }

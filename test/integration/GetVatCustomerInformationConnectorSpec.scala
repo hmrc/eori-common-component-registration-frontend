@@ -78,7 +78,7 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
     "return successful GetVatInformationResponse response with OK status" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseOK()
 
-      val expected = Right(VatControlListResponse(Some("SE28 1AA"), Some("2021-01-31")))
+      val expected                                              = Right(VatControlListResponse(Some("SE28 1AA"), Some("2021-01-31")))
       val result: Either[ResponseError, VatControlListResponse] =
         await(connector.getVatCustomerInformation(vrn).value)
 

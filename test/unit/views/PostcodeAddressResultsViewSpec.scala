@@ -87,9 +87,11 @@ class PostcodeAddressResultsViewSpec extends ViewSpec {
     "display error summary" in {
 
       docWithErrorSummary.getElementsByClass("govuk-error-summary__title").text() mustBe "There is a problem"
-      docWithErrorSummary.getElementsByClass(
-        "govuk-error-summary__list"
-      ).text() mustBe "Please select address from the list"
+      docWithErrorSummary
+        .getElementsByClass(
+          "govuk-error-summary__list"
+        )
+        .text() mustBe "Please select address from the list"
     }
   }
 }

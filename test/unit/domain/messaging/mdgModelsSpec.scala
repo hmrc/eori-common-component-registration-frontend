@@ -53,12 +53,10 @@ class mdgModelsSpec extends UnitSpec with OptionValues {
     }
 
     "supplied with a valid countryCode no postCode required should be true" in {
-      val countryGen = Countries.thirdIncEu
+      val countryGen              = Countries.thirdIncEu
       val validCountryCodeAddress =
         Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), None, "AA")
-      countryGen.foreach(
-        country => validCountryCodeAddress.copy(countryCode = country.countryCode).isValidAddress shouldBe true
-      )
+      countryGen.foreach(country => validCountryCodeAddress.copy(countryCode = country.countryCode).isValidAddress shouldBe true)
     }
   }
 }

@@ -24,15 +24,8 @@ import play.api.mvc.Request
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{RegistrationDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.ResponseDetail
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
-  RegistrationDisplayResponse,
-  ResponseCommon
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  RegistrationDetailsIndividual,
-  RegistrationDetailsOrganisation,
-  SafeId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayResponse, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetailsIndividual, RegistrationDetailsOrganisation, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDisplayService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator

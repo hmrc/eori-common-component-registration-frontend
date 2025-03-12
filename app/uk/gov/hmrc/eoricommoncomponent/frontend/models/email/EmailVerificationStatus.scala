@@ -20,6 +20,6 @@ sealed trait EmailVerificationStatus
 
 object EmailVerificationStatus {
   case object Unverified extends EmailVerificationStatus
-  case object Verified   extends EmailVerificationStatus
-  case object Locked     extends EmailVerificationStatus
+  case object Verified extends EmailVerificationStatus
+  case object Locked extends EmailVerificationStatus
 }

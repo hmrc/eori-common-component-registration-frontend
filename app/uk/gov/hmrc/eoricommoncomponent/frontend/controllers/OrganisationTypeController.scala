@@ -45,9 +45,7 @@ class OrganisationTypeController @Inject() (
     extends CdsController(mcc) {
 
   private def nameIdOrganisationMatching(orgType: String, service: Service, userLocation: UserLocation): Call = {
-    if (
-      (userLocation == UserLocation.Iom || orgType == CharityPublicBodyNotForProfitId) && appConfig.allowNoIdJourney
-    ) {
+    if ((userLocation == UserLocation.Iom || orgType == CharityPublicBodyNotForProfitId) && appConfig.allowNoIdJourney) {
       WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
     } else {
       NameIdOrganisationController.form(orgType, service)
@@ -68,47 +66,47 @@ class OrganisationTypeController @Inject() (
 
   private def matchingDestinations(service: Service, userLocation: UserLocation): Map[CdsOrganisationType, Call] =
     Map[CdsOrganisationType, Call](
-      Company                     -> nameIdOrganisationMatching(CompanyId, service, userLocation),
-      SoleTrader                  -> individualMatching(SoleTraderId, service),
-      Individual                  -> individualMatching(IndividualId, service),
-      Partnership                 -> nameIdOrganisationMatching(PartnershipId, service, userLocation),
-      LimitedLiabilityPartnership -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service, userLocation),
+      Company                       -> nameIdOrganisationMatching(CompanyId, service, userLocation),
+      SoleTrader                    -> individualMatching(SoleTraderId, service),
+      Individual                    -> individualMatching(IndividualId, service),
+      Partnership                   -> nameIdOrganisationMatching(PartnershipId, service, userLocation),
+      LimitedLiabilityPartnership   -> nameIdOrganisationMatching(LimitedLiabilityPartnershipId, service, userLocation),
       CharityPublicBodyNotForProfit -> nameIdOrganisationMatching(
         CharityPublicBodyNotForProfitId,
         service,
         userLocation
       ),
-      ThirdCountryOrganisation -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
-      ThirdCountrySoleTrader   -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
-      ThirdCountryIndividual   -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),
-      Embassy                  -> embassyMatching(EmbassyId, service)
+      ThirdCountryOrganisation      -> organisationWhatIsYourOrgName(ThirdCountryOrganisationId, service),
+      ThirdCountrySoleTrader        -> thirdCountryIndividualMatching(ThirdCountrySoleTraderId, service),
+      ThirdCountryIndividual        -> thirdCountryIndividualMatching(ThirdCountryIndividualId, service),
+      Embassy                       -> embassyMatching(EmbassyId, service)
     )
 
   def form(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        subscriptionDetailsService.cachedOrganisationType map { orgType =>
-          def filledForm = orgType.map(organisationTypeDetailsForm.fill).getOrElse(organisationTypeDetailsForm)
-          requestSessionData.selectedUserLocation match {
-            case Some(_) =>
-              Ok(
-                organisationTypeView(
-                  filledForm,
-                  requestSessionData.selectedUserLocation,
-                  appConfig.allowNoIdJourney,
-                  service
-                )
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      subscriptionDetailsService.cachedOrganisationType map { orgType =>
+        def filledForm = orgType.map(organisationTypeDetailsForm.fill).getOrElse(organisationTypeDetailsForm)
+        requestSessionData.selectedUserLocation match {
+          case Some(_) =>
+            Ok(
+              organisationTypeView(
+                filledForm,
+                requestSessionData.selectedUserLocation,
+                appConfig.allowNoIdJourney,
+                service
               )
-            case None =>
-              Ok(organisationTypeView(filledForm, Some(UserLocation.Uk), appConfig.allowNoIdJourney, service))
-          }
+            )
+          case None =>
+            Ok(organisationTypeView(filledForm, Some(UserLocation.Uk), appConfig.allowNoIdJourney, service))
         }
+      }
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        organisationTypeDetailsForm.bindFromRequest().fold(
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      organisationTypeDetailsForm
+        .bindFromRequest()
+        .fold(
           formWithErrors => {
             val userLocation = requestSessionData.selectedUserLocation
             Future.successful(

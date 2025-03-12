@@ -60,9 +60,11 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
       "display tell user about CDS access and link for accessing CDS services" in {
         val link = adminDoc.body.getElementById("cds-info1")
         link.text mustBe "You can now use any of the online customs services for the Customs Declaration Service (CDS) ."
-        link.getElementsByTag("a").attr(
-          "href"
-        ) mustBe "https://www.gov.uk/government/collections/customs-declaration-service"
+        link
+          .getElementsByTag("a")
+          .attr(
+            "href"
+          ) mustBe "https://www.gov.uk/government/collections/customs-declaration-service"
       }
 
       "display tell admin user on how to add CDS access for the team members" in {
@@ -100,9 +102,11 @@ class StandaloneRegistrationExistsViewSpec extends ViewSpec {
       "display tell user about CDS access and link for accessing CDS services" in {
         val link = standardDoc.body.getElementById("cds-info1")
         link.text mustBe "You can now use any of the online customs services for the Customs Declaration Service (CDS) ."
-        link.getElementsByTag("a").attr(
-          "href"
-        ) mustBe "https://www.gov.uk/government/collections/customs-declaration-service"
+        link
+          .getElementsByTag("a")
+          .attr(
+            "href"
+          ) mustBe "https://www.gov.uk/government/collections/customs-declaration-service"
       }
     }
   }

@@ -47,7 +47,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
   private val timestamp = "timestamp"
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.handle-subscription.host" -> Host,

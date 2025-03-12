@@ -37,7 +37,7 @@ class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val mockTaxEnrolmentsConnector = mock[TaxEnrolmentsConnector]
 
   private val service                               = new TaxEnrolmentsService(mockTaxEnrolmentsConnector)
-  private implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
+  implicit private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   before {
     reset(mockTaxEnrolmentsConnector)

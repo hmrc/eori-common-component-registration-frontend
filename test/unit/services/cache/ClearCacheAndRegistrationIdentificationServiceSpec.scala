@@ -24,10 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Request
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUser
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  ClearCacheAndRegistrationIdentificationService,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{ClearCacheAndRegistrationIdentificationService, SessionCache}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.global

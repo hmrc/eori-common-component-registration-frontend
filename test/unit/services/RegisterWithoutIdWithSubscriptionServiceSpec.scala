@@ -40,12 +40,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  HandleSubscriptionService,
-  RegisterWithoutIdService,
-  RegisterWithoutIdWithSubscriptionService,
-  Save4LaterService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RegisterWithoutIdService, RegisterWithoutIdWithSubscriptionService, Save4LaterService}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.{LocalDate, LocalDateTime, ZoneId}
@@ -64,9 +59,9 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
   private val mockSave4LaterService         = mock[Save4LaterService]
   private val mockAppConfig                 = mock[AppConfig]
 
-  private implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
-  private implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
-  private implicit val msg: Messages           = mock[Messages]
+  implicit private val hc: HeaderCarrier       = mock[HeaderCarrier]
+  implicit private val rq: Request[AnyContent] = mock[Request[AnyContent]]
+  implicit private val msg: Messages           = mock[Messages]
 
   private val loggedInUserId   = java.util.UUID.randomUUID.toString
   private val mockLoggedInUser = mock[LoggedInUserWithEnrolments]
@@ -197,8 +192,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     when(mockSessionCache.subscriptionDetails(any[Request[_]])).thenReturn(
       Future.successful(
         SubscriptionDetails(
-          nameDobDetails =
-            Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31))),
+          nameDobDetails = Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31))),
           contactDetails = Some(contactDetails)
         )
       )
@@ -334,8 +328,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
 
       val registrationDetailsEmbassy = RegistrationDetailsEmbassy(
         embassyName = "Embassy Of Japan",
-        embassyAddress =
-          Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SE28 1AA"), "GB"),
+        embassyAddress = Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SE28 1AA"), "GB"),
         embassyCustomsId = None,
         embassySafeId = SafeId("")
       )
@@ -405,8 +398,7 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
 
       val registrationDetailsEmbassy = RegistrationDetailsEmbassy(
         embassyName = "Embassy Of Japan",
-        embassyAddress =
-          Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SE28 1AA"), "GB"),
+        embassyAddress = Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SE28 1AA"), "GB"),
         embassyCustomsId = None,
         embassySafeId = SafeId("")
       )

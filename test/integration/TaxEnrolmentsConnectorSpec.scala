@@ -32,7 +32,7 @@ import util.externalservices.TaxEnrolmentsService._
 
 class TaxEnrolmentsConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.tax-enrolments.host"    -> Host,

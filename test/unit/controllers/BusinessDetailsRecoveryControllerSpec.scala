@@ -22,26 +22,14 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ContactDetailsController,
-  DateOfEstablishmentController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ContactDetailsController, DateOfEstablishmentController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{BusinessDetailsRecoveryController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  BusinessDetailsRecoveryPage,
-  ContactDetailsSubscriptionFlowPageGetEori,
-  DateOfEstablishmentSubscriptionFlowPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessDetailsRecoveryPage, ContactDetailsSubscriptionFlowPageGetEori, DateOfEstablishmentSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache,
-  SessionCacheService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 import uk.gov.hmrc.http.HeaderCarrier
@@ -135,7 +123,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def assertAndTestBasedOnTheLocationForIndividual(location: UserLocation): Unit =
     s"redirect to contactDetailsPage when orgType is found in cache for Individual and location is selected to $location" in {
-      val mockSession = mock[Session]
+      val mockSession   = mock[Session]
       val mockFlowStart =
         (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 
@@ -161,7 +149,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def assertAndTestBasedOnTheLocationForSafeIdDetails(): Unit =
     s"throw an exception" in {
-      val mockSession = mock[Session]
+      val mockSession   = mock[Session]
       val mockFlowStart =
         (ContactDetailsSubscriptionFlowPageGetEori, mockSession)
 

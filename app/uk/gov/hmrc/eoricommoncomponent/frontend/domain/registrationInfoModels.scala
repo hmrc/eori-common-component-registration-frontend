@@ -77,12 +77,12 @@ object RegistrationInfo {
     Reads { js =>
       formatsIndividual.reads(js) match {
         case individual: JsSuccess[IndividualRegistrationInfo] => individual
-        case _                                                 => formatsOrganisation.reads(js)
+        case _ => formatsOrganisation.reads(js)
       }
     },
     Writes {
       case individual: IndividualRegistrationInfo => formatsIndividual.writes(individual)
-      case organisation: OrgRegistrationInfo      => formatsOrganisation.writes(organisation)
+      case organisation: OrgRegistrationInfo => formatsOrganisation.writes(organisation)
     }
   )
 

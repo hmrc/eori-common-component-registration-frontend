@@ -27,11 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Constants.ONE
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -75,14 +71,14 @@ class SubscriptionFlowManager @Inject() (
   ): Either[FlowError, SubscriptionFlow] =
     requestSessionData.userSubscriptionFlow match {
       case Left(_: DataNotFound) => Left(FlowNotFound())
-      case Right(flow)           => Right(flow)
+      case Right(flow) => Right(flow)
     }
 
   def stepInformation(
     currentPage: SubscriptionPage
   )(implicit request: Request[AnyContent], hc: HeaderCarrier): Either[FlowError, SubscriptionFlowInfo] =
-    currentSubscriptionFlow map {
-      flow => SubscriptionFlows(flow).stepInformation(currentPage)
+    currentSubscriptionFlow map { flow =>
+      SubscriptionFlows(flow).stepInformation(currentPage)
     }
 
   def startSubscriptionFlow(
@@ -162,11 +158,11 @@ class SubscriptionFlowManager @Inject() (
         case (rdo: RegistrationDetailsOrganisation, loc) =>
           (rdo.etmpOrganisationType, loc) match {
             case (Some(UnincorporatedBody), Iom) => SubscriptionFlow(CharityPublicBodySubscriptionFlowIom.name)
-            case (Some(UnincorporatedBody), _)   => SubscriptionFlow(CharityPublicBodySubscriptionFlow.name)
-            case (Some(Partnership), Iom)        => SubscriptionFlow(PartnershipSubscriptionFlowIom.name)
-            case (Some(Partnership), _)          => SubscriptionFlow(PartnershipSubscriptionFlow.name)
-            case (_, Iom)                        => throw new Exception("to be done in DDCYLS-6242")
-            case _                               => SubscriptionFlow(OrganisationSubscriptionFlow.name)
+            case (Some(UnincorporatedBody), _) => SubscriptionFlow(CharityPublicBodySubscriptionFlow.name)
+            case (Some(Partnership), Iom) => SubscriptionFlow(PartnershipSubscriptionFlowIom.name)
+            case (Some(Partnership), _) => SubscriptionFlow(PartnershipSubscriptionFlow.name)
+            case (_, Iom) => throw new Exception("to be done in DDCYLS-6242")
+            case _ => SubscriptionFlow(OrganisationSubscriptionFlow.name)
           }
         case (_: RegistrationDetailsIndividual, Iom) =>
           SubscriptionFlow(IndividualSubscriptionFlow.name)
@@ -178,9 +174,7 @@ class SubscriptionFlowManager @Inject() (
       }
     }
 
-    maybeOrgType.fold(selectedFlow)(
-      orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow)
-    )
+    maybeOrgType.fold(selectedFlow)(orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow))
   }
 
   private def oldFlow(
@@ -196,9 +190,7 @@ class SubscriptionFlowManager @Inject() (
         case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
       }
 
-    maybeOrgType.fold(selectedFlow)(
-      orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow)
-    )
+    maybeOrgType.fold(selectedFlow)(orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow))
   }
 
 }

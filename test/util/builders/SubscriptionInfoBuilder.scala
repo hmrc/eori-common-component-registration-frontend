@@ -48,7 +48,7 @@ object SubscriptionInfoBuilder {
   val VATIdCountryList = List("GB", "FR", "ES", "PT", "IN")
 
   val vatIDList = for {
-    index <- VATIdNoList.indices
+    index     <- VATIdNoList.indices
     vatCountry = VATIdCountryList lift index
     vatID      = VATIdNoList lift index
     vatList    = SubscriptionInfoVatId(vatCountry, vatID)
@@ -147,13 +147,10 @@ object SubscriptionInfoBuilder {
     fullyPopulatedResponseDetail.copy(contactInformation = Some(partiallyPopulatedContactInformation))
 
   val responseDetailWithUnverifiedEmail =
-    fullyPopulatedResponseDetail.copy(contactInformation =
-      Some(fullyPopulatedContactInformation.copy(emailVerificationTimestamp = None))
-    )
+    fullyPopulatedResponseDetail.copy(contactInformation = Some(fullyPopulatedContactInformation.copy(emailVerificationTimestamp = None)))
 
-  val responseDetailWithoutPersonOfContact = fullyPopulatedResponseDetail.copy(contactInformation =
-    Some(partiallyPopulatedContactInformation.copy(emailAddress = Some(emailAddress)))
-  )
+  val responseDetailWithoutPersonOfContact =
+    fullyPopulatedResponseDetail.copy(contactInformation = Some(partiallyPopulatedContactInformation.copy(emailAddress = Some(emailAddress))))
 
   val sampleResponseCommon = ResponseCommon(
     "OK",

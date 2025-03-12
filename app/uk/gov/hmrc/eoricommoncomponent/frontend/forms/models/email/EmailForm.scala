@@ -33,7 +33,7 @@ object EmailForm {
   def validEmail: Constraint[String] =
     Constraint({
       case e if e.trim.isEmpty => Invalid(ValidationError("cds.subscription.contact-details.form-error.email"))
-      case e if e.length > 50  => Invalid(ValidationError("cds.subscription.contact-details.form-error.email.too-long"))
+      case e if e.length > 50 => Invalid(ValidationError("cds.subscription.contact-details.form-error.email.too-long"))
       case e if !EmailAddress.isValid(e) =>
         Invalid(ValidationError("cds.subscription.contact-details.form-error.email.wrong-format"))
       case _ => Valid

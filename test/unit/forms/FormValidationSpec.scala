@@ -155,12 +155,15 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data =
-        formData.updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)).updated(
-          "date-of-birth.month",
-          DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
-        ).updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
-      val res = nameDobForm.bind(data)
+      val data            =
+        formData
+          .updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay))
+          .updated(
+            "date-of-birth.month",
+            DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
+          )
+          .updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
+      val res             = nameDobForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
     "fail when a date of birth year invalid" in {
@@ -213,12 +216,15 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data =
-        formDataNino.updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)).updated(
-          "date-of-birth.month",
-          DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
-        ).updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
-      val res = ninoForm.bind(data)
+      val data            =
+        formDataNino
+          .updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay))
+          .updated(
+            "date-of-birth.month",
+            DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
+          )
+          .updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
+      val res             = ninoForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
     "fail when a date of birth year invalid" in {
@@ -275,12 +281,15 @@ class FormValidationSpec extends UnitSpec {
     }
     "fail when a date of birth in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data =
-        formDataRow.updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)).updated(
-          "date-of-birth.month",
-          DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
-        ).updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
-      val res = thirdCountryIndividualNameDateOfBirthForm.bind(data)
+      val data            =
+        formDataRow
+          .updated("date-of-birth.day", DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay))
+          .updated(
+            "date-of-birth.month",
+            DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)
+          )
+          .updated("date-of-birth.year", DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay))
+      val res             = thirdCountryIndividualNameDateOfBirthForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-birth", Seq("dob.error.minMax"), ArraySeq("1900")))
     }
     "fail when a date of birth year invalid" in {
@@ -302,24 +311,30 @@ class FormValidationSpec extends UnitSpec {
       res.errors shouldBe Seq.empty
     }
     "fail when date of establishment is missing" in {
-      val data = formDataDoE.updated("date-of-establishment.day", "").updated(
-        "date-of-establishment.month",
-        ""
-      ).updated("date-of-establishment.year", "")
-      val res = dateOfEstablishmentForm.bind(data)
+      val data = formDataDoE
+        .updated("date-of-establishment.day", "")
+        .updated(
+          "date-of-establishment.month",
+          ""
+        )
+        .updated("date-of-establishment.year", "")
+      val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", List("doe.error.empty-date"), List()))
 
     }
     "fail when date of establishment in future" in {
       val todayPlusOneDay = LocalDate.now().plusDays(1)
-      val data = formDataDoE.updated(
-        "date-of-establishment.day",
-        DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
-      ).updated("date-of-establishment.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)).updated(
-        "date-of-establishment.year",
-        DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
-      )
-      val res = dateOfEstablishmentForm.bind(data)
+      val data            = formDataDoE
+        .updated(
+          "date-of-establishment.day",
+          DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
+        )
+        .updated("date-of-establishment.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay))
+        .updated(
+          "date-of-establishment.year",
+          DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
+        )
+      val res             = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", Seq("doe.error.minMax"), ArraySeq("1000")))
     }
     "fail when date of establishment year invalid" in {
@@ -338,7 +353,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> " ",
         "date-of-establishment.year"  -> "2019"
       )
-      val res = dateOfEstablishmentForm.bind(data)
+      val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-establishment.month", List("date-of-establishment.month.empty"), List())
       )
@@ -350,7 +365,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "2",
         "date-of-establishment.year"  -> "2019"
       )
-      val res = dateOfEstablishmentForm.bind(data)
+      val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", List("doe.error.invalid-date"), List()))
     }
 
@@ -360,7 +375,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "1",
         "date-of-establishment.year"  -> "2019"
       )
-      val res = dateOfEstablishmentForm.bind(data)
+      val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Nil
     }
 
@@ -370,7 +385,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "1",
         "date-of-establishment.year"  -> "2019"
       )
-      val res = dateOfEstablishmentForm.bind(data)
+      val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()))
     }
 
@@ -380,7 +395,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "12",
         "date-of-establishment.year"  -> "2019"
       )
-      val res = dateOfEstablishmentForm.bind(data)
+      val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Nil
     }
 
@@ -390,7 +405,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "13",
         "date-of-establishment.year"  -> "2019"
       )
-      val res = dateOfEstablishmentForm.bind(data)
+      val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq()))
     }
 
@@ -400,7 +415,7 @@ class FormValidationSpec extends UnitSpec {
         "date-of-establishment.month" -> "13",
         "date-of-establishment.year"  -> "2019"
       )
-      val res = dateOfEstablishmentForm.bind(data)
+      val res  = dateOfEstablishmentForm.bind(data)
       res.errors shouldBe Seq(
         FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()),
         FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq())

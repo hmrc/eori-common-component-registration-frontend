@@ -28,12 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.Su
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  HandleSubscriptionService,
-  RandomUUIDGenerator,
-  TaxEnrolmentsService,
-  UpdateVerifiedEmailService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator, TaxEnrolmentsService, UpdateVerifiedEmailService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, recovery_registration_exists}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -66,11 +61,10 @@ class SubscriptionRecoveryController @Inject() (
     }
 
   def eoriExist(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithServiceAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        for {
-          eori <- sessionCache.eori
-        } yield Ok(alreadyHaveEori(eori, service))
+    authAction.ggAuthorisedUserWithServiceAction { implicit request => _: LoggedInUserWithEnrolments =>
+      for {
+        eori <- sessionCache.eori
+      } yield Ok(alreadyHaveEori(eori, service))
     }
 
   private def subscribeGetAnEori(
@@ -78,9 +72,9 @@ class SubscriptionRecoveryController @Inject() (
   )(implicit ec: ExecutionContext, request: Request[AnyContent]): Future[Result] = {
     val result = for {
       registrationDetails <- sessionCache.registrationDetails
-      safeId = registrationDetails.safeId.id
-      sub09Result  <- SUB09Connector.subscriptionDisplay(safeId, uuidGenerator.generateUUIDAsString)
-      sub01Outcome <- sessionCache.sub01Outcome
+      safeId               = registrationDetails.safeId.id
+      sub09Result         <- SUB09Connector.subscriptionDisplay(safeId, uuidGenerator.generateUUIDAsString)
+      sub01Outcome        <- sessionCache.sub01Outcome
     } yield sub09Result match {
       case Right(subscriptionDisplayResponse) =>
         val eori = subscriptionDisplayResponse.responseDetail.EORINo
@@ -90,27 +84,29 @@ class SubscriptionRecoveryController @Inject() (
           val mayBeEmail = subscriptionDisplayResponse.responseDetail.contactInformation
             .flatMap(c => c.emailAddress.filter(EmailAddress.isValid(_) && c.emailVerificationTimestamp.isDefined))
 
-          mayBeEmail.map { email =>
-            onSUB09Success(
-              sub01Outcome.processedDate,
-              email,
-              safeId,
-              Eori(eori),
-              subscriptionDisplayResponse,
-              getDateOfBirthOrDateOfEstablishment(
+          mayBeEmail
+            .map { email =>
+              onSUB09Success(
+                sub01Outcome.processedDate,
+                email,
+                safeId,
+                Eori(eori),
                 subscriptionDisplayResponse,
-                registrationDetails.dateOfEstablishmentOption,
-                registrationDetails.dateOfBirthOption
-              ),
-              service
-            )(Redirect(Sub02Controller.end(service)))
+                getDateOfBirthOrDateOfEstablishment(
+                  subscriptionDisplayResponse,
+                  registrationDetails.dateOfEstablishmentOption,
+                  registrationDetails.dateOfBirthOption
+                ),
+                service
+              )(Redirect(Sub02Controller.end(service)))
 
-          }.getOrElse {
-            // $COVERAGE-OFF$Loggers
-            logger.info("Email Missing")
-            // $COVERAGE-ON
-            Future.successful(Redirect(SubscriptionRecoveryController.eoriExist(service)))
-          }
+            }
+            .getOrElse {
+              // $COVERAGE-OFF$Loggers
+              logger.info("Email Missing")
+              // $COVERAGE-ON
+              Future.successful(Redirect(SubscriptionRecoveryController.eoriExist(service)))
+            }
         }
       case Left(_) =>
         Future.successful(InternalServerError(errorTemplateView(service)))
@@ -146,10 +142,10 @@ class SubscriptionRecoveryController @Inject() (
         .flatMap(_.find(_.paramName.equals("ETMPFORMBUNDLENUMBER")).map(_.paramValue))
         .getOrElse(throw new IllegalStateException("NO ETMPFORMBUNDLENUMBER specified"))
 
-    //As the result of migration person of contact is likely to be empty use string Customer
-    val recipientFullName =
+    // As the result of migration person of contact is likely to be empty use string Customer
+    val recipientFullName          =
       subscriptionDisplayResponse.responseDetail.contactInformation.flatMap(_.personOfContact).getOrElse("Customer")
-    val name = subscriptionDisplayResponse.responseDetail.CDSFullName
+    val name                       = subscriptionDisplayResponse.responseDetail.CDSFullName
     val emailVerificationTimestamp =
       subscriptionDisplayResponse.responseDetail.contactInformation.flatMap(_.emailVerificationTimestamp)
 
@@ -179,17 +175,17 @@ class SubscriptionRecoveryController @Inject() (
   )(implicit hc: HeaderCarrier, request: Request[_], messages: Messages): Future[Result] =
     for {
       // Update Recovered Subscription Information
-      _ <- updateSubscription(subscriptionInformation)
+      _   <- updateSubscription(subscriptionInformation)
       // Update Email
-      _ <- if (service.enrolmentKey == Service.cds.enrolmentKey) updateEmail(subscriptionInformation)
-      else Future.successful(None)
+      _   <- if (service.enrolmentKey == Service.cds.enrolmentKey) updateEmail(subscriptionInformation)
+             else Future.successful(None)
       // Subscribe Call for enrolment
-      _ <- subscribe(service, subscriptionInformation)(hc, messages)
+      _   <- subscribe(service, subscriptionInformation)(hc, messages)
       // Issuer Call for enrolment
       res <- issue(service, subscriptionInformation)
     } yield res match {
       case NO_CONTENT => redirect
-      case _          => throw new IllegalArgumentException("Tax Enrolment issuer call failed")
+      case _ => throw new IllegalArgumentException("Tax Enrolment issuer call failed")
     }
 
   private def updateEmail(
@@ -199,7 +195,7 @@ class SubscriptionRecoveryController @Inject() (
       .updateVerifiedEmail(newEmail = subscriptionInformation.email, eori = subscriptionInformation.eori.id)
       .map {
         case true => Some(true)
-        case _    => throw new IllegalArgumentException("UpdateEmail failed")
+        case _ => throw new IllegalArgumentException("UpdateEmail failed")
       }
 
   private def updateSubscription(subscriptionInformation: SubscriptionInformation)(implicit request: Request[_]) =
@@ -249,10 +245,10 @@ class SubscriptionRecoveryController @Inject() (
     val isIndividualOrSoleTrader = requestSessionData.isIndividualOrSoleTrader
     val dateOfEstablishment      = response.responseDetail.dateOfEstablishment // Date we hold
     (isIndividualOrSoleTrader, dateOfEstablishment, dateOfEstablishmentCaptured, dateOfBirthCaptured) match {
-      case (_, Some(date), _, _)     => Some(date)
+      case (_, Some(date), _, _) => Some(date)
       case (false, _, Some(date), _) => Some(date)
-      case (true, _, _, Some(date))  => Some(date)
-      case _                         => throw MissingDateException()
+      case (true, _, _, Some(date)) => Some(date)
+      case _ => throw MissingDateException()
     }
   }
 

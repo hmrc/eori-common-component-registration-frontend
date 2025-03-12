@@ -48,7 +48,7 @@ object FormUtils {
   def lift[T](c: Constraint[T]): Constraint[Option[T]] =
     Constraint(c.name, c.args) {
       case Some(value) => c(value)
-      case None        => Valid
+      case None => Valid
     }
 
 }

@@ -62,9 +62,11 @@ class StandaloneEoriAlreadyExistsViewSpec extends ViewSpec {
       "display tell user about CDS access and link for accessing CDS services" in {
         val link = orgDoc.body.getElementById("info2")
         link.text mustBe "You can subscribe to CDS and give access to other team members."
-        link.getElementsByTag("a").attr(
-          "href"
-        ) mustBe "https://www.gov.uk/guidance/get-access-to-the-customs-declaration-service"
+        link
+          .getElementsByTag("a")
+          .attr(
+            "href"
+          ) mustBe "https://www.gov.uk/guidance/get-access-to-the-customs-declaration-service"
       }
 
     }

@@ -28,8 +28,8 @@ object VatRegisteredUkViewModel {
   def formAction(isInReviewMode: Boolean, service: Service): Call =
     VatRegisteredUkController.submit(isInReviewMode, service)
 
-  def titleAndHeadingLabel(isIndividualSubscriptionFlow: Boolean, isPartnership: Boolean, userLocation: UserLocation)(
-    implicit messages: Messages
+  def titleAndHeadingLabel(isIndividualSubscriptionFlow: Boolean, isPartnership: Boolean, userLocation: UserLocation)(implicit
+    messages: Messages
   ): String = {
     if (isIndividualSubscriptionFlow && userLocation == Iom)
       messages("cds.subscription.vat-registered.individual.title-and-heading")

@@ -17,14 +17,7 @@
 package unit.viewModels
 
 import base.UnitSpec
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  CharityPublicBodyNotForProfitId,
-  IndividualId,
-  SoleTraderId,
-  ThirdCountryIndividualId,
-  ThirdCountryOrganisationId,
-  ThirdCountrySoleTraderId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfitId, IndividualId, SoleTraderId, ThirdCountryIndividualId, ThirdCountryOrganisationId, ThirdCountrySoleTraderId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.MatchOrganisationUtrViewModel
 import util.ControllerSpec

@@ -21,17 +21,11 @@ import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.Session
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, header, status, LOCATION}
+import play.api.test.Helpers.{LOCATION, contentAsString, defaultAwaitTimeout, header, status}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
-  SubscriptionFlowManager,
-  WhatIsYourOrganisationsAddressController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, WhatIsYourOrganisationsAddressController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  EoriConsentSubscriptionFlowPage,
-  SicCodeSubscriptionFlowPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{EoriConsentSubscriptionFlowPage, SicCodeSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, UtrMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
@@ -82,7 +76,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
       )
 
       // When
-      val result = controller.showForm(isInReviewMode = false, eoriOnlyService)
+      val result = controller
+        .showForm(isInReviewMode = false, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -108,7 +103,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
         withAuthorisedUser(userId, mockAuthConnector)
 
         // When
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -134,7 +130,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
         withAuthorisedUser(userId, mockAuthConnector)
 
         // When
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -168,7 +165,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
             .createForm(eoriOnlyService)
             .url
-        val userId = UUID.randomUUID().toString
+        val userId      = UUID.randomUUID().toString
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
@@ -182,7 +179,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
         )
 
-        val result = controller.submit(isInReviewMode = true, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = true, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -205,7 +203,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
             .createForm(eoriOnlyService)
             .url
-        val userId = UUID.randomUUID().toString
+        val userId      = UUID.randomUUID().toString
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
@@ -219,7 +217,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
         )
 
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -244,7 +243,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
             .createForm(eoriOnlyService)
             .url
-        val userId = UUID.randomUUID().toString
+        val userId      = UUID.randomUUID().toString
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
@@ -260,7 +259,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           Future.successful((SicCodeSubscriptionFlowPage, Session(Map.empty[String, String])))
         )
 
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -283,7 +283,7 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DisclosePersonalDetailsConsentController
             .createForm(eoriOnlyService)
             .url
-        val userId = UUID.randomUUID().toString
+        val userId      = UUID.randomUUID().toString
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockRegistrationDetailsService.cacheAddress(any())(any())).thenReturn(Future.successful(true))
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
@@ -299,7 +299,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
         )
 
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,

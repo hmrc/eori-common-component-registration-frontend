@@ -21,20 +21,15 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
-  EmailVerificationStatus,
-  ResponseWithURI,
-  VerificationStatus,
-  VerificationStatusResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{EmailVerificationStatus, ResponseWithURI, VerificationStatus, VerificationStatusResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EmailVerificationService @Inject() (emailVerificationConnector: EmailVerificationConnector, appConfig: AppConfig)(
-  implicit ec: ExecutionContext
+class EmailVerificationService @Inject() (emailVerificationConnector: EmailVerificationConnector, appConfig: AppConfig)(implicit
+  ec: ExecutionContext
 ) {
 
   private val verifiedResponse: Future[Either[ResponseError, EmailVerificationStatus]] =
@@ -48,9 +43,9 @@ class EmailVerificationService @Inject() (emailVerificationConnector: EmailVerif
         val emailStatus: Option[VerificationStatus] = findEmailInResponse(email, statusResponse)
 
         emailStatus match {
-          case Some(status) if status.locked   => EmailVerificationStatus.Locked
+          case Some(status) if status.locked => EmailVerificationStatus.Locked
           case Some(status) if status.verified => EmailVerificationStatus.Verified
-          case _                               => EmailVerificationStatus.Unverified
+          case _ => EmailVerificationStatus.Unverified
         }
       }
     else EitherT(verifiedResponse)

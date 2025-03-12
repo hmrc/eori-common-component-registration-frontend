@@ -30,20 +30,13 @@ import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
-  EmailVerificationStatus,
-  ResponseWithURI,
-  VerificationStatus,
-  VerificationStatusResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{EmailVerificationStatus, ResponseWithURI, VerificationStatus, VerificationStatusResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class EmailVerificationServiceSpec
-    extends AsyncWordSpec with Matchers with ScalaFutures with MockitoSugar with BeforeAndAfterAll
-    with BeforeAndAfterEach {
+class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with ScalaFutures with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach {
 
   private val mockConnector            = mock[EmailVerificationConnector]
   private val mockAppConfig: AppConfig = mock[AppConfig]
@@ -88,7 +81,7 @@ class EmailVerificationServiceSpec
 
     "return Locked where the input email has locked=true" in {
 
-      val expected = Right(EmailVerificationStatus.Locked)
+      val expected                                                    = Right(EmailVerificationStatus.Locked)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(
         VerificationStatusResponse(Seq(VerificationStatus(emailAddress = email, verified = false, locked = true)))
       )
@@ -103,7 +96,7 @@ class EmailVerificationServiceSpec
 
     "return Verified where the input email has verified=true" in {
 
-      val expected = Right(EmailVerificationStatus.Verified)
+      val expected                                                    = Right(EmailVerificationStatus.Verified)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(
         VerificationStatusResponse(Seq(VerificationStatus(emailAddress = email, verified = true, locked = false)))
       )
@@ -118,7 +111,7 @@ class EmailVerificationServiceSpec
 
     "return Unverified where it doesn't exist but a different email has verified=true" in {
 
-      val expected = Right(EmailVerificationStatus.Unverified)
+      val expected                                                    = Right(EmailVerificationStatus.Unverified)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(
         VerificationStatusResponse(
           Seq(VerificationStatus(emailAddress = differentEmail, verified = true, locked = false))
@@ -135,7 +128,7 @@ class EmailVerificationServiceSpec
 
     "return Unverified where it doesn't exist but a different email has locked=true" in {
 
-      val expected = Right(EmailVerificationStatus.Unverified)
+      val expected                                                    = Right(EmailVerificationStatus.Unverified)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(
         VerificationStatusResponse(
           Seq(VerificationStatus(emailAddress = differentEmail, verified = false, locked = true))
@@ -165,8 +158,8 @@ class EmailVerificationServiceSpec
 
     "return Locked where the input email has locked=true and a different email exists" in {
 
-      val expected = Right(EmailVerificationStatus.Locked)
-      val sequence = Seq(
+      val expected                                                    = Right(EmailVerificationStatus.Locked)
+      val sequence                                                    = Seq(
         VerificationStatus(emailAddress = email, verified = false, locked = true),
         VerificationStatus(emailAddress = differentEmail, verified = true, locked = false)
       )
@@ -182,8 +175,8 @@ class EmailVerificationServiceSpec
 
     "return Verified where the input email has verified=true and a different email exists" in {
 
-      val expected = Right(EmailVerificationStatus.Verified)
-      val sequence = Seq(
+      val expected                                                    = Right(EmailVerificationStatus.Verified)
+      val sequence                                                    = Seq(
         VerificationStatus(emailAddress = email, verified = true, locked = false),
         VerificationStatus(emailAddress = differentEmail, verified = false, locked = true)
       )

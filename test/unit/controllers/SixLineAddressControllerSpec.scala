@@ -48,8 +48,7 @@ import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SixLineAddressControllerSpec
-    extends ControllerSpec with BeforeAndAfter with BeforeAndAfterEach with AuthActionMock {
+class SixLineAddressControllerSpec extends ControllerSpec with BeforeAndAfter with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector                   = mock[AuthConnector]
   private val mockAuthAction                      = authAction(mockAuthConnector)

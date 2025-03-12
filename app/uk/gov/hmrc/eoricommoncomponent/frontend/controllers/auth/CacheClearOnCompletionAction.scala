@@ -25,7 +25,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CacheClearOnCompletionAction @Inject() (sessionCache: SessionCache, parser: BodyParsers.Default)(implicit
   ec: ExecutionContext
-) extends ActionBuilderImpl(parser) with NewUserSession {
+) extends ActionBuilderImpl(parser)
+    with NewUserSession {
 
   override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = {
     implicit val req = request

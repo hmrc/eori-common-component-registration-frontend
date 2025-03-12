@@ -16,11 +16,7 @@
 
 package unit.controllers
 
-import common.pages.matching.{
-  IndividualNameAndDateOfBirthPage,
-  ThirdCountryIndividualNameAndDateOfBirthPage,
-  ThirdCountrySoleTraderNameAndDateOfBirthPage
-}
+import common.pages.matching.{IndividualNameAndDateOfBirthPage, ThirdCountryIndividualNameAndDateOfBirthPage, ThirdCountrySoleTraderNameAndDateOfBirthPage}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop
@@ -45,7 +41,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RowIndividualNameDateOfBirthControllerSpec
-    extends ControllerSpec with TestDataGenerators with Checkers with BeforeAndAfterEach with ScalaFutures
+    extends ControllerSpec
+    with TestDataGenerators
+    with Checkers
+    with BeforeAndAfterEach
+    with ScalaFutures
     with AuthActionMock {
 
   class ControllerFixture(organisationType: String, form: Form[IndividualNameAndDateOfBirth])
@@ -102,24 +102,23 @@ class RowIndividualNameDateOfBirthControllerSpec
         )
       }
 
-      "show the form without errors when user hasn't been registered yet" in withControllerFixture {
-        controllerFixture =>
-          controllerFixture.showForm { result =>
-            status(result) shouldBe OK
-            val page = CdsPage(contentAsString(result))
-            page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+      "show the form without errors when user hasn't been registered yet" in withControllerFixture { controllerFixture =>
+        controllerFixture.showForm { result =>
+          status(result) shouldBe OK
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
 
-            val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
+          val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
 
-            assertPresentOnPage(webPage.givenNameElement)
-            assertPresentOnPage(webPage.familyNameElement)
-            assertPresentOnPage(webPage.dateOfBirthElement)
-            page.getElementAttributeAction(
-              webPage.formElement
-            ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController
-              .form(organisationType, atarService)
-              .url
-          }
+          assertPresentOnPage(webPage.givenNameElement)
+          assertPresentOnPage(webPage.familyNameElement)
+          assertPresentOnPage(webPage.dateOfBirthElement)
+          page.getElementAttributeAction(
+            webPage.formElement
+          ) shouldBe uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController
+            .form(organisationType, atarService)
+            .url
+        }
       }
     }
 
@@ -132,69 +131,65 @@ class RowIndividualNameDateOfBirthControllerSpec
         )
       }
 
-      "redirect to correct page for orgType" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          saveRegistrationDetailsMockSuccess()
-          when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any[Request[_]])).thenReturn(
-            Future.successful((): Unit)
-          )
-          if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual") {
-            submitForm(formData(individualNameAndDateOfBirth)) { result =>
-              CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
-              status(result) shouldBe SEE_OTHER
-              result.futureValue.header.headers(
-                LOCATION
-              ) shouldBe s"/customs-registration-services/atar/register/matching/utr/$organisationType"
-            }
-            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
-          } else {
-            submitForm(formData(individualNameAndDateOfBirth)) { result =>
-              CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
-              status(result) shouldBe SEE_OTHER
-              result.futureValue.header.headers(
-                LOCATION
-              ) shouldBe s"/customs-registration-services/atar/register/matching/address/$organisationType"
-            }
-            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
+      "redirect to correct page for orgType" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        saveRegistrationDetailsMockSuccess()
+        when(mockSubscriptionDetailsService.updateSubscriptionDetailsIndividual(any[Request[_]])).thenReturn(
+          Future.successful((): Unit)
+        )
+        if (organisationType == "third-country-sole-trader" || organisationType == "third-country-individual") {
+          submitForm(formData(individualNameAndDateOfBirth)) { result =>
+            CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+            status(result) shouldBe SEE_OTHER
+            result.futureValue.header.headers(
+              LOCATION
+            ) shouldBe s"/customs-registration-services/atar/register/matching/utr/$organisationType"
           }
+          verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
+        } else {
+          submitForm(formData(individualNameAndDateOfBirth)) { result =>
+            CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+            status(result) shouldBe SEE_OTHER
+            result.futureValue.header.headers(
+              LOCATION
+            ) shouldBe s"/customs-registration-services/atar/register/matching/address/$organisationType"
+          }
+          verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
+        }
       }
 
-      "wait until the registration request is completed" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          registerIndividualMockFailure(emulatedFailure)
+      "wait until the registration request is completed" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        registerIndividualMockFailure(emulatedFailure)
 
-          val caught = intercept[RuntimeException] {
-            submitForm(formData(individualNameAndDateOfBirth)) { result =>
-              await(result)
-            }
+        val caught = intercept[RuntimeException] {
+          submitForm(formData(individualNameAndDateOfBirth)) { result =>
+            await(result)
           }
-          caught shouldBe emulatedFailure
+        }
+        caught shouldBe emulatedFailure
       }
     }
 
     "given name" should {
       import webPage.{fieldLevelErrorGivenName, givenNameField, GivenName}
 
-      "be mandatory" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> ""), webPage)(
-            givenNameField,
-            fieldLevelErrorGivenName,
-            "Enter your given name"
-          )
+      "be mandatory" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        assertInvalidField(formData(individualNameAndDateOfBirth) + (givenNameField -> ""), webPage)(
+          givenNameField,
+          fieldLevelErrorGivenName,
+          "Enter your given name"
+        )
       }
 
-      "not be empty" in testControllerWithModel(validFormModelGens.copy(firstNameGen = emptyString)) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
-            givenNameField,
-            fieldLevelErrorGivenName,
-            "Enter your given name"
-          )
+      "not be empty" in testControllerWithModel(validFormModelGens.copy(firstNameGen = emptyString)) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
+          givenNameField,
+          fieldLevelErrorGivenName,
+          "Enter your given name"
+        )
       }
 
       "not allow invalid characters" in testControllerWithModel(validFormModelGens.copy(firstNameGen = emptyString)) {
@@ -222,34 +217,31 @@ class RowIndividualNameDateOfBirthControllerSpec
     "family name" should {
       import webPage.{familyNameField, fieldLevelErrorFamilyName, FamilyName}
 
-      "be mandatory" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> ""), webPage)(
-            familyNameField,
-            fieldLevelErrorFamilyName,
-            "Enter your family name"
-          )
+      "be mandatory" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> ""), webPage)(
+          familyNameField,
+          fieldLevelErrorFamilyName,
+          "Enter your family name"
+        )
       }
 
-      "not be empty" in testControllerWithModel(validFormModelGens.copy(lastNameGen = emptyString)) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
-            familyNameField,
-            fieldLevelErrorFamilyName,
-            "Enter your family name"
-          )
+      "not be empty" in testControllerWithModel(validFormModelGens.copy(lastNameGen = emptyString)) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        assertInvalidField(formData(individualNameAndDateOfBirth), webPage)(
+          familyNameField,
+          fieldLevelErrorFamilyName,
+          "Enter your family name"
+        )
       }
 
-      "not allow invalid characters" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> "!!!!!!''''!!!"), webPage)(
-            familyNameField,
-            fieldLevelErrorFamilyName,
-            "Enter a family name without invalid characters"
-          )
+      "not allow invalid characters" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        assertInvalidField(formData(individualNameAndDateOfBirth) + (familyNameField -> "!!!!!!''''!!!"), webPage)(
+          familyNameField,
+          fieldLevelErrorFamilyName,
+          "Enter a family name without invalid characters"
+        )
       }
 
       "be restricted to 35 characters" in testControllerWithModel(
@@ -267,60 +259,55 @@ class RowIndividualNameDateOfBirthControllerSpec
     "date of birth" should {
       import webPage._
 
-      "be mandatory" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          assertInvalidField(
-            formData(individualNameAndDateOfBirth).view.filterKeys(!webPage.dateOfBirthFields.contains(_)).toMap,
-            webPage
-          )(DateOfBirth, fieldLevelErrorDateOfBirth, "Enter your date of birth")
+      "be mandatory" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        assertInvalidField(
+          formData(individualNameAndDateOfBirth).view.filterKeys(!webPage.dateOfBirthFields.contains(_)).toMap,
+          webPage
+        )(DateOfBirth, fieldLevelErrorDateOfBirth, "Enter your date of birth")
       }
 
-      "not be empty" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          val emptyDateFields: Map[String, String] = webPage.dateOfBirthFields.map(_ -> "").toMap
-          assertInvalidField(formData(individualNameAndDateOfBirth) ++ emptyDateFields, webPage)(
-            DateOfBirth,
-            fieldLevelErrorDateOfBirth,
-            "Enter your date of birth"
-          )
+      "not be empty" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        val emptyDateFields: Map[String, String] = webPage.dateOfBirthFields.map(_ -> "").toMap
+        assertInvalidField(formData(individualNameAndDateOfBirth) ++ emptyDateFields, webPage)(
+          DateOfBirth,
+          fieldLevelErrorDateOfBirth,
+          "Enter your date of birth"
+        )
       }
 
-      "be a valid date" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          assertInvalidField(formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> "32"), webPage)(
-            DateOfBirth,
-            fieldLevelErrorDateOfBirth,
-            messages("date.day.error")
-          )
+      "be a valid date" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        assertInvalidField(formData(individualNameAndDateOfBirth) + (dateOfBirthDayField -> "32"), webPage)(
+          DateOfBirth,
+          fieldLevelErrorDateOfBirth,
+          messages("date.day.error")
+        )
       }
 
-      "not be in the future " in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          val tomorrow   = LocalDate.now().plusDays(1)
-          val FutureDate = "Year must be between 1900 and this year"
-          import controllerFixture._
-          assertInvalidField(
-            formData(individualNameAndDateOfBirth) ++ Map(
-              dateOfBirthDayField   -> tomorrow.getDayOfMonth.toString,
-              dateOfBirthMonthField -> tomorrow.getMonthValue.toString,
-              dateOfBirthYearField  -> tomorrow.getYear.toString
-            ),
-            webPage
-          )(DateOfBirth, fieldLevelErrorDateOfBirth, FutureDate)
+      "not be in the future " in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        val tomorrow   = LocalDate.now().plusDays(1)
+        val FutureDate = "Year must be between 1900 and this year"
+        import controllerFixture._
+        assertInvalidField(
+          formData(individualNameAndDateOfBirth) ++ Map(
+            dateOfBirthDayField   -> tomorrow.getDayOfMonth.toString,
+            dateOfBirthMonthField -> tomorrow.getMonthValue.toString,
+            dateOfBirthYearField  -> tomorrow.getYear.toString
+          ),
+          webPage
+        )(DateOfBirth, fieldLevelErrorDateOfBirth, FutureDate)
       }
 
-      "reject letters entered instead of numbers" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          val lettersDateFields: Map[String, String] = webPage.dateOfBirthFields.zip(List("1", "May", "2000")).toMap
-          assertInvalidField(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
-            DateOfBirth,
-            fieldLevelErrorDateOfBirth,
-            "Date of birth must be a real date"
-          )
+      "reject letters entered instead of numbers" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        val lettersDateFields: Map[String, String] = webPage.dateOfBirthFields.zip(List("1", "May", "2000")).toMap
+        assertInvalidField(formData(individualNameAndDateOfBirth) ++ lettersDateFields, webPage)(
+          DateOfBirth,
+          fieldLevelErrorDateOfBirth,
+          "Date of birth must be a real date"
+        )
       }
     }
 
@@ -341,15 +328,14 @@ class RowIndividualNameDateOfBirthControllerSpec
         }
       }
 
-      "accept empty string" in testControllerWithModel(emptyFieldModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          saveRegistrationDetailsMockSuccess()
+      "accept empty string" in testControllerWithModel(emptyFieldModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        saveRegistrationDetailsMockSuccess()
 
-          submitForm(formData(individualNameAndDateOfBirth)) { result =>
-            status(result) shouldBe SEE_OTHER
-            CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
-          }
+        submitForm(formData(individualNameAndDateOfBirth)) { result =>
+          status(result) shouldBe SEE_OTHER
+          CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+        }
       }
     }
 
@@ -372,11 +358,9 @@ class RowIndividualNameDateOfBirthControllerSpec
         validFormModelGens = individualNameAndDateOfBirthGens()
       ) {}
 
-  case object ThirdCountrySoleTraderBehavior
-      extends ThirdCountryIndividualBehaviour(ThirdCountrySoleTraderNameAndDateOfBirthPage)
+  case object ThirdCountrySoleTraderBehavior extends ThirdCountryIndividualBehaviour(ThirdCountrySoleTraderNameAndDateOfBirthPage)
 
-  case object ThirdCountryIndividualBehavior
-      extends ThirdCountryIndividualBehaviour(ThirdCountryIndividualNameAndDateOfBirthPage)
+  case object ThirdCountryIndividualBehavior extends ThirdCountryIndividualBehaviour(ThirdCountryIndividualNameAndDateOfBirthPage)
 
   "The third country sole trader case" when (behave like ThirdCountrySoleTraderBehavior)
 

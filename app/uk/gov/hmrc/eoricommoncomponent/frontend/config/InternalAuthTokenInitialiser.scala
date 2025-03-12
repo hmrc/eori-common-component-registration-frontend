@@ -49,7 +49,8 @@ class InternalAuthTokenInitialiserImpl @Inject() (
   httpClient: HttpClientV2,
   servicesConfig: ServicesConfig
 )(implicit ec: ExecutionContext)
-    extends InternalAuthTokenInitialiser with Logging {
+    extends InternalAuthTokenInitialiser
+    with Logging {
 
   private val internalAuthService =
     servicesConfig.baseUrl("internal-auth")
@@ -76,17 +77,18 @@ class InternalAuthTokenInitialiserImpl @Inject() (
 
   private def createClientAuthToken(): Future[Done] = {
     logger.info("Initialising auth token")
-    httpClient.post(url"$internalAuthService/test-only/token")(HeaderCarrier())
+    httpClient
+      .post(url"$internalAuthService/test-only/token")(HeaderCarrier())
       .withBody(
         Json.obj(
-          "token"     -> authToken,
-          "principal" -> appName,
+          "token"       -> authToken,
+          "principal"   -> appName,
           "permissions" -> Seq(
             Json.obj("resourceType" -> "eori-common-component", "resourceLocation" -> "*", "actions" -> List("WRITE")),
             Json.obj(
-              "resourceType"     -> "eori-common-component-hods-proxy",
-              "resourceLocation" -> "*",
-              "actions"          -> List("WRITE")
+              "resourceType"        -> "eori-common-component-hods-proxy",
+              "resourceLocation"    -> "*",
+              "actions"             -> List("WRITE")
             )
           )
         )
@@ -104,7 +106,8 @@ class InternalAuthTokenInitialiserImpl @Inject() (
 
   private def authTokenIsValid: Future[Boolean] = {
     logger.info("Checking auth token")
-    httpClient.get(url"$internalAuthService/test-only/token")(HeaderCarrier())
+    httpClient
+      .get(url"$internalAuthService/test-only/token")(HeaderCarrier())
       .setHeader(AUTHORIZATION -> authToken)
       .execute
       .map(_.status == 200)

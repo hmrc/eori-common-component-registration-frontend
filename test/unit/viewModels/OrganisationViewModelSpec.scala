@@ -34,17 +34,17 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
       options should contain theSameElementsAs Seq(
-        CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
-        CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
-        CdsOrganisationType.IndividualId  -> messages("cds.matching.organisation-type.radio.individual.label"),
-        CdsOrganisationType.PartnershipId -> messages("cds.matching.organisation-type.radio.partnership.label"),
-        CdsOrganisationType.LimitedLiabilityPartnershipId -> messages(
+        CdsOrganisationType.CompanyId                       -> messages("cds.matching.organisation-type.radio.company.label"),
+        CdsOrganisationType.SoleTraderId                    -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
+        CdsOrganisationType.IndividualId                    -> messages("cds.matching.organisation-type.radio.individual.label"),
+        CdsOrganisationType.PartnershipId                   -> messages("cds.matching.organisation-type.radio.partnership.label"),
+        CdsOrganisationType.LimitedLiabilityPartnershipId   -> messages(
           "cds.matching.organisation-type.radio.limited-liability-partnership.label"
         ),
         CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
           "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
         ),
-        CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
+        CdsOrganisationType.EmbassyId                       -> messages("cds.matching.organisation-type.radio.embassy.label")
       )
     }
 
@@ -55,11 +55,11 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = false)
 
       options should contain theSameElementsAs Seq(
-        CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
-        CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
-        CdsOrganisationType.IndividualId  -> messages("cds.matching.organisation-type.radio.individual.label"),
-        CdsOrganisationType.PartnershipId -> messages("cds.matching.organisation-type.radio.partnership.label"),
-        CdsOrganisationType.LimitedLiabilityPartnershipId -> messages(
+        CdsOrganisationType.CompanyId                       -> messages("cds.matching.organisation-type.radio.company.label"),
+        CdsOrganisationType.SoleTraderId                    -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
+        CdsOrganisationType.IndividualId                    -> messages("cds.matching.organisation-type.radio.individual.label"),
+        CdsOrganisationType.PartnershipId                   -> messages("cds.matching.organisation-type.radio.partnership.label"),
+        CdsOrganisationType.LimitedLiabilityPartnershipId   -> messages(
           "cds.matching.organisation-type.radio.limited-liability-partnership.label"
         ),
         CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
@@ -78,10 +78,10 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
         CdsOrganisationType.ThirdCountryOrganisationId -> messages(
           "cds.matching.organisation-type.radio.organisation.label"
         ),
-        CdsOrganisationType.ThirdCountrySoleTraderId -> messages(
+        CdsOrganisationType.ThirdCountrySoleTraderId   -> messages(
           "cds.matching.organisation-type.radio.sole-trader.label"
         ),
-        CdsOrganisationType.ThirdCountryIndividualId -> messages(
+        CdsOrganisationType.ThirdCountryIndividualId   -> messages(
           "cds.matching.organisation-type.radio.individual.label"
         )
       )
@@ -97,10 +97,10 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
         CdsOrganisationType.ThirdCountryOrganisationId -> messages(
           "cds.matching.organisation-type.radio.organisation.label"
         ),
-        CdsOrganisationType.ThirdCountrySoleTraderId -> messages(
+        CdsOrganisationType.ThirdCountrySoleTraderId   -> messages(
           "cds.matching.organisation-type.radio.sole-trader.label"
         ),
-        CdsOrganisationType.ThirdCountryIndividualId -> messages(
+        CdsOrganisationType.ThirdCountryIndividualId   -> messages(
           "cds.matching.organisation-type.radio.individual.label"
         )
       )
@@ -113,17 +113,17 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
 
       options should contain theSameElementsAs Seq(
-        CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
-        CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
-        CdsOrganisationType.IndividualId  -> messages("cds.matching.organisation-type.radio.individual.label"),
-        CdsOrganisationType.PartnershipId -> messages("cds.matching.organisation-type.radio.partnership.label"),
-        CdsOrganisationType.LimitedLiabilityPartnershipId -> messages(
+        CdsOrganisationType.CompanyId                       -> messages("cds.matching.organisation-type.radio.company.label"),
+        CdsOrganisationType.SoleTraderId                    -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
+        CdsOrganisationType.IndividualId                    -> messages("cds.matching.organisation-type.radio.individual.label"),
+        CdsOrganisationType.PartnershipId                   -> messages("cds.matching.organisation-type.radio.partnership.label"),
+        CdsOrganisationType.LimitedLiabilityPartnershipId   -> messages(
           "cds.matching.organisation-type.radio.limited-liability-partnership.label"
         ),
         CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
           "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
         ),
-        CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
+        CdsOrganisationType.EmbassyId                       -> messages("cds.matching.organisation-type.radio.embassy.label")
       )
     }
 
@@ -136,10 +136,10 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
         CdsOrganisationType.ThirdCountryOrganisationId -> messages(
           "cds.matching.organisation-type.radio.organisation.hint-text"
         ),
-        CdsOrganisationType.ThirdCountrySoleTraderId -> messages(
+        CdsOrganisationType.ThirdCountrySoleTraderId   -> messages(
           "cds.matching.organisation-type.radio.sole-trader.hint-text"
         ),
-        CdsOrganisationType.ThirdCountryIndividualId -> messages(
+        CdsOrganisationType.ThirdCountryIndividualId   -> messages(
           "cds.matching.organisation-type.radio.individual.hint-text"
         )
       )

@@ -30,10 +30,10 @@ case class AddressLookupSuccess(addresses: Seq[Address]) extends AddressLookupRe
 
       def sort(zipped: Seq[(Option[Int], Option[Int])]): Boolean = zipped match {
         case (Some(nA), Some(nB)) :: tail if nA == nB => sort(tail)
-        case (Some(nA), Some(nB)) :: _                => nA < nB
-        case (Some(_), None) :: _                     => true
-        case (None, Some(_)) :: _                     => false
-        case _                                        => a.addressLine1.toLowerCase < b.addressLine1.toLowerCase
+        case (Some(nA), Some(nB)) :: _ => nA < nB
+        case (Some(_), None) :: _ => true
+        case (None, Some(_)) :: _ => false
+        case _ => a.addressLine1.toLowerCase < b.addressLine1.toLowerCase
       }
 
       sort(numbersInA.zipAll(numbersInB, None, None).toList)

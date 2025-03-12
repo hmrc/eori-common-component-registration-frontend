@@ -27,11 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Messa
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionSuccessful
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
-  EtmpLegalStatus,
-  EtmpTypeOfPerson,
-  OrganisationTypeConfiguration
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{EtmpLegalStatus, EtmpTypeOfPerson, OrganisationTypeConfiguration}
 import util.TestData
 
 import java.time.{LocalDate, LocalDateTime, ZoneId}
@@ -102,9 +98,9 @@ trait SubscriptionServiceTestData extends TestData {
     CdsOrganisationType("limited-liability-partnership") -> OrganisationTypeConfiguration.LimitedLiabilityPartnership,
     CdsOrganisationType(
       "charity-public-body-not-for-profit"
-    )                                                 -> OrganisationTypeConfiguration.CharityPublicBodyNotForProfit,
-    CdsOrganisationType("eu-organisation")            -> OrganisationTypeConfiguration.EUOrganisation,
-    CdsOrganisationType("third-country-organisation") -> OrganisationTypeConfiguration.ThirdCountryOrganisation
+    )                                                    -> OrganisationTypeConfiguration.CharityPublicBodyNotForProfit,
+    CdsOrganisationType("eu-organisation")               -> OrganisationTypeConfiguration.EUOrganisation,
+    CdsOrganisationType("third-country-organisation")    -> OrganisationTypeConfiguration.ThirdCountryOrganisation
   )
 
   val etmpOrganisationTypeToTypeOfPersonMap: Map[EtmpOrganisationType, OrganisationTypeConfiguration] = Map(
@@ -185,10 +181,10 @@ trait SubscriptionServiceTestData extends TestData {
   )
 
   def createVatIdentificationsGenerator: Gen[List[VatIdentification]] = {
-    val CountryCodeLength    = 2
-    val VatNumberMaxLength   = 15
-    val vatNumberGenerator   = Gen.numStr retryUntil (_.length <= VatNumberMaxLength)
-    val countryCodeGenerator = Gen.listOfN(CountryCodeLength, Gen.alphaChar) map (_.mkString)
+    val CountryCodeLength          = 2
+    val VatNumberMaxLength         = 15
+    val vatNumberGenerator         = Gen.numStr retryUntil (_.length <= VatNumberMaxLength)
+    val countryCodeGenerator       = Gen.listOfN(CountryCodeLength, Gen.alphaChar) map (_.mkString)
     val vatIdentificationGenerator = for {
       countryCode <- Gen.option(countryCodeGenerator)
       vatNumber   <- Gen.option(vatNumberGenerator)
@@ -210,7 +206,7 @@ trait SubscriptionServiceTestData extends TestData {
         postalCode = Some("SE28 1AA"),
         countryCode = "GB"
       )
-    val responseData = ResponseData(
+    val responseData         = ResponseData(
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
       establishmentAddress = establishmentAddress,
@@ -218,7 +214,7 @@ trait SubscriptionServiceTestData extends TestData {
       startDate = "2018-01-01",
       dateOfEstablishmentBirth = Some(dateEstablishedString)
     )
-    val responseDetail = RegisterWithEoriAndIdResponseDetail(
+    val responseDetail       = RegisterWithEoriAndIdResponseDetail(
       outcome = Some(outcomeType),
       caseNumber = Some("case no 1"),
       responseData = Some(responseData)
@@ -232,7 +228,7 @@ trait SubscriptionServiceTestData extends TestData {
   def stubRegisterWithPartialResponseWithNoDoe(outcomeType: String = "PASS"): RegisterWithEoriAndIdResponse = {
     val establishmentAddress =
       EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = Some("NE1 1BG"), countryCode = "GB")
-    val responseData = ResponseData(
+    val responseData         = ResponseData(
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
       establishmentAddress = establishmentAddress,
@@ -240,7 +236,7 @@ trait SubscriptionServiceTestData extends TestData {
       startDate = "2018-01-01",
       dateOfEstablishmentBirth = None
     )
-    val responseDetail = RegisterWithEoriAndIdResponseDetail(
+    val responseDetail       = RegisterWithEoriAndIdResponseDetail(
       outcome = Some(outcomeType),
       caseNumber = Some("case no 1"),
       responseData = Some(responseData)
@@ -252,10 +248,10 @@ trait SubscriptionServiceTestData extends TestData {
   }
 
   def stubRegisterWithCompleteResponse(outcomeType: String = "PASS"): RegisterWithEoriAndIdResponse = {
-    val processingDate = LocalDateTime.now(ZoneId.of("Europe/London"))
+    val processingDate       = LocalDateTime.now(ZoneId.of("Europe/London"))
     val contactDetailAddress =
       EstablishmentAddress(streetAndNumber = "Street", city = "city", postalCode = Some("NE1 1BG"), countryCode = "GB")
-    val responseData = ResponseData(
+    val responseData         = ResponseData(
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
       establishmentAddress = EstablishmentAddress(
@@ -310,12 +306,12 @@ trait SubscriptionServiceTestData extends TestData {
       case VatIdentification(Some(countryCode), Some(vatNumber)) =>
         Some(s"""{"countryCode": "$countryCode", "vatID": "$vatNumber"}""")
       case VatIdentification(Some(countryCode), None) => Some(s"""{"countryCode": "$countryCode"}""")
-      case VatIdentification(None, Some(vatNumber))   => Some(s"""{"vatID": "$vatNumber"}""")
+      case VatIdentification(None, Some(vatNumber)) => Some(s"""{"vatID": "$vatNumber"}""")
     }
 
     vatIds.filter(vatIdent => vatIdent.number.isDefined || vatIdent.countryCode.isDefined) match {
       case Nil => ""
-      case vs  => s""""vatIDs": [${(vs flatMap vatIdJson).mkString(", ")}],"""
+      case vs => s""""vatIDs": [${(vs flatMap vatIdJson).mkString(", ")}],"""
     }
   }
 
@@ -532,7 +528,7 @@ trait SubscriptionServiceTestData extends TestData {
     expectedDateOfBirthString: String = dateOfBirthString
   ): JsValue = {
 
-    val typeOfPersonJson: String =
+    val typeOfPersonJson: String      =
       determineTypeOfPersonJson(
         organisationType.map(x => EtmpOrganisationType.apply(x)),
         isOrganisationEvenIfOrganisationTypeIsNone = false
@@ -593,7 +589,7 @@ trait SubscriptionServiceTestData extends TestData {
     isOrganisationEvenIfOrganisationTypeIsNone: Boolean = false,
     expectedDateEstablishedString: String = dateEstablishedString
   ): JsValue = {
-    val typeOfPersonJson: String =
+    val typeOfPersonJson: String      =
       determineTypeOfPersonJson(organisationType, isOrganisationEvenIfOrganisationTypeIsNone)
     val typeOfLegalStatusJson: String =
       determineLegalStatus(organisationType, isOrganisationEvenIfOrganisationTypeIsNone)
@@ -647,13 +643,13 @@ trait SubscriptionServiceTestData extends TestData {
     isOrganisationEvenIfOrganisationTypeIsNone: Boolean
   ): String = {
     val typeOfPerson = organisationType match {
-      case Some(o: EtmpOrganisationType)                      => Some(etmpOrganisationTypeToTypeOfPersonMap(o).typeOfPerson)
+      case Some(o: EtmpOrganisationType) => Some(etmpOrganisationTypeToTypeOfPersonMap(o).typeOfPerson)
       case None if isOrganisationEvenIfOrganisationTypeIsNone => None
-      case _                                                  => Some(EtmpTypeOfPerson.NaturalPerson)
+      case _ => Some(EtmpTypeOfPerson.NaturalPerson)
     }
 
     typeOfPerson match {
-      case None             => ""
+      case None => ""
       case Some(personType) => s""""typeOfPerson": "$personType", """
     }
   }
@@ -664,11 +660,11 @@ trait SubscriptionServiceTestData extends TestData {
   ): String = {
     val legalStatus = organisationType match {
       case Some(o: EtmpOrganisationType) => Some(etmpOrganisationTypeToTypeOfPersonMap(o).legalStatus)
-      case None                          => if (isOrganisationEvenIfOrganisationTypeIsNone) None else Some(EtmpLegalStatus.UnincorporatedBody)
+      case None => if (isOrganisationEvenIfOrganisationTypeIsNone) None else Some(EtmpLegalStatus.UnincorporatedBody)
     }
 
     legalStatus match {
-      case None         => ""
+      case None => ""
       case Some(status) => s""""typeOfLegalEntity": "$status","""
     }
   }

@@ -25,7 +25,7 @@ import util.ViewSpec
 
 class YouCannotChangeAddressIndividualSpec extends ViewSpec {
 
-  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
+  implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
   private val youCantChangeAddressIndView                       = inject[you_cannot_change_address_individual]
 
   "You cannot change address for individual" should {
@@ -48,7 +48,8 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
         .text mustBe "You can try entering your details again."
 
       indDoc.body
-        .getElementById("try_again_link").attr(
+        .getElementById("try_again_link")
+        .attr(
           "href"
         ) mustBe "/customs-registration-services/atar/register/matching/organisation-type"
 
@@ -57,7 +58,8 @@ class YouCannotChangeAddressIndividualSpec extends ViewSpec {
         .text mustBe "If any of your personal details have changed, you need to tell HMRC what has changed (opens in new tab). You can then continue with your EORI number application."
 
       indDoc.body
-        .getElementById("contact_link").attr("href") mustBe "https://www.gov.uk/tell-hmrc-change-of-details"
+        .getElementById("contact_link")
+        .attr("href") mustBe "https://www.gov.uk/tell-hmrc-change-of-details"
     }
 
   }

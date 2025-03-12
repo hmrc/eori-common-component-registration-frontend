@@ -26,9 +26,13 @@ case class SubscriptionStatusQueryParams(receiptDate: LocalDateTime, regime: Str
 
   def queryParams: Seq[(String, String)] = {
     val receiptDateAsString =
-      receiptDate.atZone(ZoneId.of("Europe/London")).withZoneSameInstant(ZoneOffset.UTC).withNano(0).format(
-        DateTimeFormatter.ISO_DATE_TIME
-      )
+      receiptDate
+        .atZone(ZoneId.of("Europe/London"))
+        .withZoneSameInstant(ZoneOffset.UTC)
+        .withNano(0)
+        .format(
+          DateTimeFormatter.ISO_DATE_TIME
+        )
 
     Seq("receiptDate" -> receiptDateAsString, "regime" -> regime, idType -> id)
   }

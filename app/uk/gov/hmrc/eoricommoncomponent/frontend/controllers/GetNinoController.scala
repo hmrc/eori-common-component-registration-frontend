@@ -20,11 +20,7 @@ import play.api.i18n.Messages
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ConfirmContactDetailsController,
-  EmailController,
-  IndStCannotRegisterUsingThisServiceController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, EmailController, IndStCannotRegisterUsingThisServiceController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
@@ -68,9 +64,10 @@ class GetNinoController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        subscriptionNinoForm.bindFromRequest().fold(
+    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      subscriptionNinoForm
+        .bindFromRequest()
+        .fold(
           formWithErrors =>
             Future.successful(
               BadRequest(
@@ -100,9 +97,9 @@ class GetNinoController @Inject() (
           )
           .fold(
             {
-              case MatchingServiceConnector.matchFailureResponse      => matchNotFoundBadRequest(formData, service)
+              case MatchingServiceConnector.matchFailureResponse => matchNotFoundBadRequest(formData, service)
               case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-              case _                                                  => InternalServerError(errorView(service))
+              case _ => InternalServerError(errorView(service))
             },
             _ => Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
           )

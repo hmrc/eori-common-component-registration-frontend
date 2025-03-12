@@ -23,18 +23,24 @@ import java.time.format.DateTimeFormatter
 
 object DateTimeUtil {
 
-  def dateTime: LocalDateTime = LocalDateTime.ofInstant(
-    Clock.systemUTC().instant,
-    ZoneId.of("Europe/London")
-  ).truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
+  def dateTime: LocalDateTime = LocalDateTime
+    .ofInstant(
+      Clock.systemUTC().instant,
+      ZoneId.of("Europe/London")
+    )
+    .truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
 
   private def dateTimeWritesIsoUtc: Writes[LocalDateTime] = new Writes[LocalDateTime] {
 
     def writes(d: LocalDateTime): JsValue =
       JsString(
-        ZonedDateTime.of(d, ZoneId.of("Europe/London")).withNano(0).withZoneSameInstant(ZoneOffset.UTC).format(
-          DateTimeFormatter.ISO_DATE_TIME
-        )
+        ZonedDateTime
+          .of(d, ZoneId.of("Europe/London"))
+          .withNano(0)
+          .withZoneSameInstant(ZoneOffset.UTC)
+          .format(
+            DateTimeFormatter.ISO_DATE_TIME
+          )
       )
 
   }
@@ -42,11 +48,15 @@ object DateTimeUtil {
   private def dateTimeReadsIso: Reads[LocalDateTime] = new Reads[LocalDateTime] {
 
     def reads(value: JsValue): JsResult[LocalDateTime] =
-      try JsSuccess(
-        ZonedDateTime.parse(value.as[String], DateTimeFormatter.ISO_DATE_TIME).withZoneSameInstant(
-          ZoneId.of("Europe/London")
-        ).toLocalDateTime
-      )
+      try
+        JsSuccess(
+          ZonedDateTime
+            .parse(value.as[String], DateTimeFormatter.ISO_DATE_TIME)
+            .withZoneSameInstant(
+              ZoneId.of("Europe/London")
+            )
+            .toLocalDateTime
+        )
       catch {
         case e: Exception => JsError(s"Could not parse '${value.toString()}' as an ISO date. Reason: ${e.getMessage}")
       }

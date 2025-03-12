@@ -46,7 +46,7 @@ class EnrolmentPendingViewSpec extends UnitSpec with ControllerSpec {
       when(mockMessages(messages("cds.enrolment.pending.title.user.processingService", atarService))).thenReturn(
         "Other Service"
       )
-      val result = viewModel.title(someOtherService, service)
+      val result           = viewModel.title(someOtherService, service)
 
       result shouldEqual messages("cds.enrolment.pending.user.title.other-service")
     }
@@ -57,7 +57,7 @@ class EnrolmentPendingViewSpec extends UnitSpec with ControllerSpec {
       when(mockMessages(messages("cds.enrolment.pending.title.user.processingService", atarService))).thenReturn(
         "Other Service"
       )
-      val result = viewModel.title(someOtherService, service)
+      val result           = viewModel.title(someOtherService, service)
 
       result shouldEqual messages("cds.enrolment.pending.user.title")
     }

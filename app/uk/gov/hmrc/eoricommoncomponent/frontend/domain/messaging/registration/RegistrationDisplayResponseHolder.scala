@@ -18,11 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration
 
 import play.api.Logging
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  ContactResponse,
-  IndividualResponse,
-  OrganisationResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, OrganisationResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, MessagingServiceParam, NonUKIdentification}
 
 case class ResponseDetail(
@@ -58,8 +54,7 @@ object ResponseCommon {
   implicit val format: OFormat[ResponseCommon] = Json.format[ResponseCommon]
 }
 
-case class RegistrationDisplayResponse(responseCommon: ResponseCommon, responseDetail: Option[ResponseDetail])
-    extends Logging {
+case class RegistrationDisplayResponse(responseCommon: ResponseCommon, responseDetail: Option[ResponseDetail]) extends Logging {
 
   def getResponseDetail: ResponseDetail = responseDetail match {
     case Some(detail) => detail

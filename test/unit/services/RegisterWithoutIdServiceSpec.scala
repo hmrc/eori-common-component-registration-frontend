@@ -40,8 +40,7 @@ import java.time.{LocalDate, LocalDateTime, ZoneId}
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class RegisterWithoutIdServiceSpec
-    extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach {
+class RegisterWithoutIdServiceSpec extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach {
   private val mockConnector          = mock[RegisterWithoutIdConnector]
   private val mockReqCommonGen       = mock[RequestCommonGenerator]
   private val mockDetailsCreator     = mock[RegistrationDetailsCreator]

@@ -36,30 +36,28 @@ class YouAlreadyHaveEoriController @Inject() (
   standAloneEoriExistsView: standalone_already_have_eori,
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
-    extends FrontendController(mcc) with I18nSupport {
+    extends FrontendController(mcc)
+    with I18nSupport {
 
   // Note: permitted for user with service enrolment
   def display(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithServiceAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(eoriExistsView(service)))
+    authAction.ggAuthorisedUserWithServiceAction { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(Ok(eoriExistsView(service)))
     }
 
   // Note: permitted for user with service enrolment
   def displayStandAlone(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithServiceAction {
-      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        sessionCache.eori.map(
-          eoriNumber =>
-            Ok(
-              standAloneEoriExistsView(
-                eoriNumber,
-                loggedInUser.isAdminUser,
-                service,
-                StandaloneAlreadyHaveEoriViewModel(loggedInUser.isAdminUser)
-              )
-            )
+    authAction.ggAuthorisedUserWithServiceAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      sessionCache.eori.map(eoriNumber =>
+        Ok(
+          standAloneEoriExistsView(
+            eoriNumber,
+            loggedInUser.isAdminUser,
+            service,
+            StandaloneAlreadyHaveEoriViewModel(loggedInUser.isAdminUser)
+          )
         )
+      )
     }
 
 }

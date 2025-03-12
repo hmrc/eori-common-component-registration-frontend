@@ -23,7 +23,7 @@ case class Subscription(request: SubscriptionSubmitted, response: SubscriptionRe
 
 object Subscription {
 
-  //writes for flattened Audit event
+  // writes for flattened Audit event
   implicit val writes: Writes[Subscription] =
     JsPath
       .write[SubscriptionSubmitted]

@@ -30,26 +30,17 @@ import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
-  SubscriptionRequest,
-  SubscriptionResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{SubscriptionRequest, SubscriptionResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpTypeOfPerson
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  SubscriptionFailed,
-  SubscriptionResult,
-  SubscriptionService,
-  SubscriptionSuccessful
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionFailed, SubscriptionResult, SubscriptionService, SubscriptionSuccessful}
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SubscriptionServiceSpec
-    extends UnitSpec with MockitoSugar with BeforeAndAfterAll with Checkers with SubscriptionServiceTestData {
+class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll with Checkers with SubscriptionServiceTestData {
   private val mockHeaderCarrier = mock[HeaderCarrier]
 
   override def beforeAll() = {
@@ -136,7 +127,7 @@ class SubscriptionServiceSpec
 
     "call connector with date of birth captured in subscription flow when user is an individual" in {
       val capturedDateOfBirth = dateOfBirth
-      val expectedRequest = requestJsonIndividual(
+      val expectedRequest     = requestJsonIndividual(
         name = individualName,
         vatIds = EmptyVatIds,
         organisationType = None,
@@ -147,10 +138,9 @@ class SubscriptionServiceSpec
     }
 
     "return failed future for matchBusinessWithOrganisationName when connector fails to return result" in {
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(Future.failed(UpstreamErrorResponse("failure", INTERNAL_SERVER_ERROR, 1)))
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(Future.failed(UpstreamErrorResponse("failure", INTERNAL_SERVER_ERROR, 1)))
       )
 
       val caught = intercept[UpstreamErrorResponse] {
@@ -166,12 +156,11 @@ class SubscriptionServiceSpec
     }
 
     "return failed future if response does not contain POSITION parameter" in {
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(Future.successful(subscriptionResponseWithoutPosition))
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(Future.successful(subscriptionResponseWithoutPosition))
       )
-      val caught = intercept[IllegalStateException] {
+      val caught  = intercept[IllegalStateException] {
         await(
           service
             .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
@@ -184,14 +173,13 @@ class SubscriptionServiceSpec
 
     forAll(successfulPositionValues) { positionValue =>
       s"return failed future if response with POSITION $positionValue does not contain form bundle id parameter" in {
-        val service = constructService(
-          connectorMock =>
-            when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-              .thenReturn(
-                Future.successful(subscriptionResponseWithoutFormBundleIdJson(positionValue).as[SubscriptionResponse])
-              )
+        val service = constructService(connectorMock =>
+          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+            .thenReturn(
+              Future.successful(subscriptionResponseWithoutFormBundleIdJson(positionValue).as[SubscriptionResponse])
+            )
         )
-        val caught = intercept[IllegalStateException] {
+        val caught  = intercept[IllegalStateException] {
           await(
             service
               .subscribe(organisationRegistrationDetails, fullyPopulatedSubscriptionDetails, None, atarService)(
@@ -212,10 +200,9 @@ class SubscriptionServiceSpec
           "18 Aug 2016"
         )
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(Future.successful(subscriptionFailedResponseJson(errorFromEIS).as[SubscriptionResponse]))
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(Future.successful(subscriptionFailedResponseJson(errorFromEIS).as[SubscriptionResponse]))
       )
 
       val res = await(
@@ -231,10 +218,9 @@ class SubscriptionServiceSpec
     "return a valid fail response when subscription fails due to eori already exists" in {
       val failResponse = SubscriptionFailed(EoriAlreadyExists, "18 Aug 2016")
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(Future.successful(subscriptionFailedResponseJson(EoriAlreadyExists).as[SubscriptionResponse]))
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(Future.successful(subscriptionFailedResponseJson(EoriAlreadyExists).as[SubscriptionResponse]))
       )
 
       val res = await(
@@ -250,14 +236,13 @@ class SubscriptionServiceSpec
     "return a valid fail response when subscription fails due to eori already exists - ignoring letter case" in {
       val failResponse = SubscriptionFailed(EoriAlreadyExists, "18 Aug 2016")
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(
-              Future.successful(
-                subscriptionFailedResponseJson("069 - EORI Already Exists FOR the VAT Number").as[SubscriptionResponse]
-              )
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(
+            Future.successful(
+              subscriptionFailedResponseJson("069 - EORI Already Exists FOR the VAT Number").as[SubscriptionResponse]
             )
+          )
       )
 
       val res = await(
@@ -273,10 +258,9 @@ class SubscriptionServiceSpec
     "return a valid fail response when subscription fails due to request could not be processed" in {
       val failResponse = SubscriptionFailed(RequestNotProcessed, "18 Aug 2016")
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(Future.successful(subscriptionFailedResponseJson(RequestNotProcessed).as[SubscriptionResponse]))
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(Future.successful(subscriptionFailedResponseJson(RequestNotProcessed).as[SubscriptionResponse]))
       )
 
       val res = await(
@@ -292,12 +276,11 @@ class SubscriptionServiceSpec
     "return a valid fail response when subscription fails with unexpected case " in {
       val failResponse = SubscriptionFailed("Unknown error returned for a SUB02: Create Subscription", "18 Aug 2016")
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(
-              Future.successful(subscriptionFailedResponseJson("Error case", "UNKNOWN").as[SubscriptionResponse])
-            )
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(
+            Future.successful(subscriptionFailedResponseJson("Error case", "UNKNOWN").as[SubscriptionResponse])
+          )
       )
 
       val res = await(
@@ -313,14 +296,13 @@ class SubscriptionServiceSpec
     "return a valid fail response when subscription fails due to request could not be processed - ignoring letter case" in {
       val failResponse = SubscriptionFailed(RequestNotProcessed, "18 Aug 2016")
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(
-              Future.successful(
-                subscriptionFailedResponseJson("003 - Request Could Not Be Processed").as[SubscriptionResponse]
-              )
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(
+            Future.successful(
+              subscriptionFailedResponseJson("003 - Request Could Not Be Processed").as[SubscriptionResponse]
             )
+          )
       )
 
       val res = await(
@@ -336,12 +318,11 @@ class SubscriptionServiceSpec
     "return a valid fail response when subscription fails due to subscription already in-progress" in {
       val failResponse = SubscriptionFailed(SubscriptionInProgress, "18 Aug 2016")
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(
-              Future.successful(subscriptionFailedResponseJson(SubscriptionInProgress).as[SubscriptionResponse])
-            )
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(
+            Future.successful(subscriptionFailedResponseJson(SubscriptionInProgress).as[SubscriptionResponse])
+          )
       )
 
       val res = await(
@@ -358,16 +339,15 @@ class SubscriptionServiceSpec
       val failResponse = SubscriptionFailed(SubscriptionInProgress, "18 Aug 2016")
 
       val service =
-        constructService(
-          connectorMock =>
-            when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-              .thenReturn(
-                Future.successful(
-                  subscriptionFailedResponseJson("068 - Subscription Already IN-Progress or active").as[
-                    SubscriptionResponse
-                  ]
-                )
+        constructService(connectorMock =>
+          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+            .thenReturn(
+              Future.successful(
+                subscriptionFailedResponseJson("068 - Subscription Already IN-Progress or active").as[
+                  SubscriptionResponse
+                ]
               )
+            )
         )
 
       val res = await(
@@ -383,12 +363,11 @@ class SubscriptionServiceSpec
     "return a valid fail response when subscription fails due to eori already associated to different business partner record" in {
       val failResponse = SubscriptionFailed(EoriAlreadyAssociated, "18 Aug 2016")
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(
-              Future.successful(subscriptionFailedResponseJson(EoriAlreadyAssociated).as[SubscriptionResponse])
-            )
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(
+            Future.successful(subscriptionFailedResponseJson(EoriAlreadyAssociated).as[SubscriptionResponse])
+          )
       )
 
       val res = await(
@@ -404,16 +383,15 @@ class SubscriptionServiceSpec
     "return a valid fail response when subscription fails due to eori already associated to different business partner record - ignoring letter case" in {
       val failResponse = SubscriptionFailed(EoriAlreadyAssociated, "18 Aug 2016")
 
-      val service = constructService(
-        connectorMock =>
-          when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
-            .thenReturn(
-              Future.successful(
-                subscriptionFailedResponseJson(
-                  "070 - There IS Another EORI already associated TO this Business partner"
-                ).as[SubscriptionResponse]
-              )
+      val service = constructService(connectorMock =>
+        when(connectorMock.subscribe(ArgumentMatchers.any())(ArgumentMatchers.any()))
+          .thenReturn(
+            Future.successful(
+              subscriptionFailedResponseJson(
+                "070 - There IS Another EORI already associated TO this Business partner"
+              ).as[SubscriptionResponse]
             )
+          )
       )
 
       val res = await(
@@ -440,20 +418,16 @@ class SubscriptionServiceSpec
 
     "replace empty city with a dash" in {
       val service = constructService(_ => None)
-      val holder = fullyPopulatedSubscriptionDetails.copy(addressDetails =
-        Some(AddressViewModel("some street", "", Some("AB99 3DW"), "GB"))
-      )
-      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
+      val holder  = fullyPopulatedSubscriptionDetails.copy(addressDetails = Some(AddressViewModel("some street", "", Some("AB99 3DW"), "GB")))
+      val req     = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.CDSEstablishmentAddress.city shouldBe "-"
     }
 
     "replace empty postcode with a None" in {
       val service = constructService(_ => None)
-      val holder = fullyPopulatedSubscriptionDetails.copy(addressDetails =
-        Some(AddressViewModel("some street", "", Some(""), "GB"))
-      )
-      val req = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
+      val holder  = fullyPopulatedSubscriptionDetails.copy(addressDetails = Some(AddressViewModel("some street", "", Some(""), "GB")))
+      val req     = service.createRequest(organisationRegistrationDetails, holder, None, atarService)
 
       req.subscriptionCreateRequest.requestDetail.CDSEstablishmentAddress.postalCode shouldBe None
     }
@@ -469,7 +443,7 @@ class SubscriptionServiceSpec
     "throw an exception when unexpected registration details received" in {
       val service = constructService(_ => None)
       val holder  = fullyPopulatedSubscriptionDetails.copy(sicCode = Some("12750"))
-      val thrown = intercept[IllegalStateException] {
+      val thrown  = intercept[IllegalStateException] {
         service.createRequest(RegistrationDetails.rdSafeId(SafeId("safeid")), holder, None, atarService)
       }
       thrown.getMessage shouldBe "Incomplete cache cannot complete journey"
@@ -478,7 +452,7 @@ class SubscriptionServiceSpec
     "populate the SubscriptionCreate Request when there is a plus (+) sign in the request on telephone number" in {
       val service = constructService(_ => None)
       val holder  = fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone
-      val req = service.createRequest(
+      val req     = service.createRequest(
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
@@ -493,7 +467,7 @@ class SubscriptionServiceSpec
     "populate the SubscriptionCreate Request when there is a plus (+) sign in the request on fax number" in {
       val service = constructService(_ => None)
       val holder  = fullyPopulatedSubscriptionDetailsWithPlusSignInFaxNumber
-      val req = service.createRequest(
+      val req     = service.createRequest(
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
@@ -505,7 +479,7 @@ class SubscriptionServiceSpec
     "populate the SubscriptionCreate Request when there is a plus (+) sign in the request on telephone and fax number" in {
       val service = constructService(_ => None)
       val holder  = fullyPopulatedSubscriptionDetailsWithPlusSignInTelAndFaxNumber
-      val req = service.createRequest(
+      val req     = service.createRequest(
         organisationRegistrationDetails,
         holder,
         Some(CdsOrganisationType("company")),
@@ -593,10 +567,9 @@ class SubscriptionServiceSpec
   ): SubscriptionCallResult = {
 
     val subscribeDataCaptor = ArgumentCaptor.forClass(classOf[SubscriptionRequest])
-    val service = constructService(
-      connectorMock =>
-        when(connectorMock.subscribe(subscribeDataCaptor.capture())(ArgumentMatchers.any()))
-          .thenReturn(Future.successful(subscriptionResponse))
+    val service             = constructService(connectorMock =>
+      when(connectorMock.subscribe(subscribeDataCaptor.capture())(ArgumentMatchers.any()))
+        .thenReturn(Future.successful(subscriptionResponse))
     )
 
     val actualServiceCallResult = await(
@@ -604,7 +577,7 @@ class SubscriptionServiceSpec
         mockHeaderCarrier
       )
     )
-    val actualConnectorRequest = subscribeDataCaptor.getValue
+    val actualConnectorRequest  = subscribeDataCaptor.getValue
     SubscriptionCallResult(actualServiceCallResult, actualConnectorRequest)
   }
 
@@ -616,7 +589,7 @@ class SubscriptionServiceSpec
 
   private def assertSameJson(json: JsValue, expectedJson: JsValue) = {
     def assertSameRequestCommon = {
-      val commonJson = (json \ "subscriptionCreateRequest" \ "requestCommon")
+      val commonJson         = (json \ "subscriptionCreateRequest" \ "requestCommon")
         .as[JsObject] - "receiptDate" - "acknowledgementReference"
       val expectedCommonJson = (expectedJson \ "subscriptionCreateRequest" \ "requestCommon")
         .as[JsObject] - "receiptDate" - "acknowledgementReference"
@@ -624,7 +597,7 @@ class SubscriptionServiceSpec
     }
 
     def assertSameRequestDetail = {
-      val detailJson = (json \ "subscriptionCreateRequest" \ "requestDetail").as[JsObject] - "contactInformation"
+      val detailJson         = (json \ "subscriptionCreateRequest" \ "requestDetail").as[JsObject] - "contactInformation"
       val expectedDetailJson = (expectedJson \ "subscriptionCreateRequest" \ "requestDetail")
         .as[JsObject] - "contactInformation"
       detailJson shouldEqual expectedDetailJson

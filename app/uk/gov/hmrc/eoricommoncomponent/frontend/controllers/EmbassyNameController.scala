@@ -19,10 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  DetermineReviewPageController,
-  EmbassyAddressController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, EmbassyAddressController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.embassy.EmbassyNameForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -53,21 +50,23 @@ class EmbassyNameController @Inject() (
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(whatIsYourEmbassyNameView(isInReviewMode, formWithErrors, organisationType, service))
-          ),
-        embassyNameFormData =>
-          subscriptionDetailsService.cacheEmbassyName(embassyNameFormData).flatMap { _ =>
-            if (!isInReviewMode)
-              subscriptionDetailsService.updateSubscriptionDetailsEmbassyName(embassyNameFormData).map(
-                _ => Redirect(EmbassyAddressController.showForm(isInReviewMode = false, service))
-              )
-            else
-              Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
-          }
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(whatIsYourEmbassyNameView(isInReviewMode, formWithErrors, organisationType, service))
+            ),
+          embassyNameFormData =>
+            subscriptionDetailsService.cacheEmbassyName(embassyNameFormData).flatMap { _ =>
+              if (!isInReviewMode)
+                subscriptionDetailsService
+                  .updateSubscriptionDetailsEmbassyName(embassyNameFormData)
+                  .map(_ => Redirect(EmbassyAddressController.showForm(isInReviewMode = false, service)))
+              else
+                Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))
+            }
+        )
     }
 
 }

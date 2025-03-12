@@ -32,7 +32,7 @@ class AddressDetailsFormSpec extends UnitSpec {
       }
 
       "street is longer than 70 characters" in {
-        val formData = Map(
+        val formData                    = Map(
           "street"      -> "ofdwbagfpdisjafbddshfgdlsjgfdsaiuwpafdbsldgfsfjdofdwbagfpdisjafbddshfgdlsjgfdsaiuwpafdbsldgfsfjd",
           "city"        -> "London",
           "postcode"    -> "SW3 5DA",
@@ -51,14 +51,14 @@ class AddressDetailsFormSpec extends UnitSpec {
 
     "fail country validation" when {
       "country code length is not 2" in {
-        val formData =
+        val formData                    =
           Map("street" -> "Chambers Lane", "city" -> "London", "postcode" -> "SW3 5DA", "countryCode" -> "GBC")
         val res: Form[AddressViewModel] = AddressDetailsForm.addressDetailsCreateForm().bind(formData)
         res.errors shouldBe Seq(FormError("countryCode", "cds.matching-error.country.invalid"))
       }
 
       "country code is empty" in {
-        val formData =
+        val formData                    =
           Map("street" -> "Chambers Lane", "city" -> "London", "postcode" -> "SW3 5DA", "countryCode" -> "")
         val res: Form[AddressViewModel] = AddressDetailsForm.addressDetailsCreateForm().bind(formData)
         res.errors shouldBe Seq(FormError("countryCode", "cds.matching-error.country.invalid"))

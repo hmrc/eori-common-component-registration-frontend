@@ -37,7 +37,7 @@ import scala.concurrent.Future
 class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures {
   private val mockSave4LaterConnector = mock[Save4LaterConnector]
 
-  private implicit val hc: HeaderCarrier = mock[HeaderCarrier]
+  implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
   private val safeId                     = SafeId("safeId")
   private val groupId                    = GroupId("groupId-123")
 
@@ -53,7 +53,7 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
   private val service =
     new Save4LaterService(mockSave4LaterConnector)
 
-  override implicit def patienceConfig: PatienceConfig =
+  implicit override def patienceConfig: PatienceConfig =
     super.patienceConfig.copy(timeout = Span(defaultTimeout.toMillis, Millis))
 
   override protected def beforeEach(): Unit =

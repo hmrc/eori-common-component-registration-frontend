@@ -47,7 +47,7 @@ class AppConfig @Inject() (
 
   private def languageKey(implicit messages: Messages) = messages.lang.language match {
     case "cy" => "cy"
-    case _    => "en"
+    case _ => "en"
   }
 
   def findLostUtr()(implicit messages: Messages): String =
@@ -66,17 +66,17 @@ class AppConfig @Inject() (
   val blockedRoutesRegex: Seq[Regex] =
     config.getOptional[String]("routes-to-block") match {
       case Some(routes) if routes.nonEmpty => routes.split(',').map(_.r).toSeq
-      case _                               => Seq.empty
+      case _ => Seq.empty
     }
 
-  //get help link feedback for Register journey
+  // get help link feedback for Register journey
   def reportAProblemPartialUrlRegister(service: Service): String =
     s"$contactBaseUrl/contact/problem_reports_ajax?service=$serviceIdentifierRegister-${service.code}"
 
   def reportAProblemNonJSUrlRegister(service: Service): String =
     s"$contactBaseUrl/contact/problem_reports_nonjs?service=$serviceIdentifierRegister-${service.code}"
 
-  //email verification service
+  // email verification service
   val emailVerificationEnabled: Boolean          = config.get[Boolean]("microservice.services.email-verification.enabled")
   val emailVerificationContinueUrlPrefix: String = config.get[String]("external-url.email-verification.continue-url")
 
@@ -94,7 +94,7 @@ class AppConfig @Inject() (
   val emailVerificationLinkExpiryDuration: String =
     config.get[String]("microservice.services.email-verification.linkExpiryDuration")
 
-  //Eori Common Component
+  // Eori Common Component
   val handleSubscriptionBaseUrl: String = servicesConfig.baseUrl("handle-subscription")
 
   val handleSubscriptionServiceContext: String =
@@ -120,7 +120,7 @@ class AppConfig @Inject() (
   val standaloneServiceCode: String = config.get[String]("application.standalone.service.code")
 
   def getServiceUrl(proxyServiceName: String): String = {
-    val baseUrl = servicesConfig.baseUrl("eori-common-component-hods-proxy")
+    val baseUrl        = servicesConfig.baseUrl("eori-common-component-hods-proxy")
     val serviceContext =
       config.get[String](s"microservice.services.eori-common-component-hods-proxy.$proxyServiceName.context")
     s"$baseUrl/$serviceContext"

@@ -31,7 +31,7 @@ import util.ViewSpec
 class ContactAddressViewSpec extends ViewSpec {
 
   private val form: Form[YesNo]                                 = MatchingForms.contactAddressDetailsYesNoAnswerForm()
-  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
+  implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
   private val view                                              = inject[contact_address]
 
   private val addressViewModel =

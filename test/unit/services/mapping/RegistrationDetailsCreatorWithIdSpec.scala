@@ -124,8 +124,8 @@ class RegistrationDetailsCreatorWithIdSpec extends RegistrationDetailsCreatorTes
 
       individualResponseDetail <- individualResponseDetailGen(individualResponse, address)
       customsId                <- customsIdGen
-      capturedDate <- if (dateOfBirthInResponse.isEmpty) dateOfBirthGenerator.asMandatoryOption
-      else dateOfBirthGenerator.asOption
+      capturedDate             <- if (dateOfBirthInResponse.isEmpty) dateOfBirthGenerator.asMandatoryOption
+                                  else dateOfBirthGenerator.asOption
     } yield (RegisterWithIDResponse(responseCommon, Some(individualResponseDetail)), customsId, capturedDate) ->
       RegistrationDetailsIndividual(
         customsId = Some(customsId),
@@ -169,32 +169,30 @@ class RegistrationDetailsCreatorWithIdSpec extends RegistrationDetailsCreatorTes
         caught.getMessage shouldBe "Invalid Response. SAP Number not returned by Messaging."
     }
 
-    "throw if individual response does not provide SAP number" in testWithGen(individualWithIdTestCases) {
-      case ((validResponse, customsId, capturedDate), _) =>
-        val withoutSap         = validResponse.responseCommon.copy(returnParameters = None)
-        val responseWithoutSap = validResponse.copy(responseCommon = withoutSap)
+    "throw if individual response does not provide SAP number" in testWithGen(individualWithIdTestCases) { case ((validResponse, customsId, capturedDate), _) =>
+      val withoutSap         = validResponse.responseCommon.copy(returnParameters = None)
+      val responseWithoutSap = validResponse.copy(responseCommon = withoutSap)
 
-        val caught = intercept[IllegalArgumentException] {
-          registrationDetailsCreator.registrationDetails(responseWithoutSap, customsId, capturedDate)
-        }
+      val caught = intercept[IllegalArgumentException] {
+        registrationDetailsCreator.registrationDetails(responseWithoutSap, customsId, capturedDate)
+      }
 
-        caught.getMessage shouldBe "Invalid Response. SAP Number not returned by Messaging."
+      caught.getMessage shouldBe "Invalid Response. SAP Number not returned by Messaging."
     }
 
     "throw if individual date of birth neither found in RegisterWithIDResponse nor provided" in testWithGen(
       individualWithIdTestCases
-    ) {
-      case ((validResponse, customsId, _), _) =>
-        val responseDetail            = validResponse.getResponseDetail
-        val withoutDateOfBirth        = responseDetail.individual.map(_.copy(dateOfBirth = None))
-        val responseDetailWithoutDate = responseDetail.copy(individual = withoutDateOfBirth)
-        val response                  = validResponse.copy(responseDetail = Some(responseDetailWithoutDate))
+    ) { case ((validResponse, customsId, _), _) =>
+      val responseDetail            = validResponse.getResponseDetail
+      val withoutDateOfBirth        = responseDetail.individual.map(_.copy(dateOfBirth = None))
+      val responseDetailWithoutDate = responseDetail.copy(individual = withoutDateOfBirth)
+      val response                  = validResponse.copy(responseDetail = Some(responseDetailWithoutDate))
 
-        val caught = intercept[IllegalArgumentException] {
-          registrationDetailsCreator.registrationDetails(response, customsId, capturedDate = None)
-        }
+      val caught = intercept[IllegalArgumentException] {
+        registrationDetailsCreator.registrationDetails(response, customsId, capturedDate = None)
+      }
 
-        caught.getMessage shouldBe "Date of Birth is neither provided in registration response nor captured in the application page"
+      caught.getMessage shouldBe "Date of Birth is neither provided in registration response nor captured in the application page"
     }
   }
 }

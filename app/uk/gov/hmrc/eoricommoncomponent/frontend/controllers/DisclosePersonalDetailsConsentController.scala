@@ -19,10 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ApplicationController,
-  DetermineReviewPageController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, DetermineReviewPageController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
@@ -51,43 +48,41 @@ class DisclosePersonalDetailsConsentController @Inject() (
   private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => user: LoggedInUserWithEnrolments =>
-        sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-          service,
-          Ok(
-            disclosePersonalDetailsConsentView(
-              isInReviewMode = false,
-              disclosePersonalDetailsYesNoAnswerForm(),
-              requestSessionData,
-              disclosePersonalDetailsConsentViewModel,
-              service
-            )
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
+        Ok(
+          disclosePersonalDetailsConsentView(
+            isInReviewMode = false,
+            disclosePersonalDetailsYesNoAnswerForm(),
+            requestSessionData,
+            disclosePersonalDetailsConsentViewModel,
+            service
           )
         )
+      )
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => user: LoggedInUserWithEnrolments =>
-        subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.flatMap {
-          case Some(isConsentDisclosed) =>
-            sessionCacheService.individualAndSoleTraderRouter(
-              user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-              service,
-              Ok(
-                disclosePersonalDetailsConsentView(
-                  isInReviewMode = true,
-                  disclosePersonalDetailsYesNoAnswerForm().fill(YesNo(isConsentDisclosed)),
-                  requestSessionData,
-                  disclosePersonalDetailsConsentViewModel,
-                  service
-                )
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.flatMap {
+        case Some(isConsentDisclosed) =>
+          sessionCacheService.individualAndSoleTraderRouter(
+            user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+            service,
+            Ok(
+              disclosePersonalDetailsConsentView(
+                isInReviewMode = true,
+                disclosePersonalDetailsYesNoAnswerForm().fill(YesNo(isConsentDisclosed)),
+                requestSessionData,
+                disclosePersonalDetailsConsentViewModel,
+                service
               )
             )
-          case None => Future.successful(Redirect(routes.EmailController.form(service)))
-        }
+          )
+        case None => Future.successful(Redirect(routes.EmailController.form(service)))
+      }
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =

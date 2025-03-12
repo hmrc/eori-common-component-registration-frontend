@@ -66,40 +66,37 @@ class SubscriptionDetailsService @Inject() (
     request: Request[_]
   ): Future[Unit] = {
     val updatedAddress = address.copy(postcode = address.postcode.filter(_.nonEmpty))
-    saveSubscriptionDetails(
-      sd =>
-        sd.copy(contactDetails =
-          Some(
-            ContactDetailsModel(
-              contactDetails.fullName,
-              contactDetails.emailAddress,
-              contactDetails.telephone,
-              contactDetails.fax,
-              contactDetails.useAddressFromRegistrationDetails,
-              Some(updatedAddress.street),
-              Some(updatedAddress.city),
-              updatedAddress.postcode,
-              Some(updatedAddress.countryCode)
-            )
+    saveSubscriptionDetails(sd =>
+      sd.copy(contactDetails =
+        Some(
+          ContactDetailsModel(
+            contactDetails.fullName,
+            contactDetails.emailAddress,
+            contactDetails.telephone,
+            contactDetails.fax,
+            contactDetails.useAddressFromRegistrationDetails,
+            Some(updatedAddress.street),
+            Some(updatedAddress.city),
+            updatedAddress.postcode,
+            Some(updatedAddress.countryCode)
           )
         )
+      )
     )
   }
 
   def cacheAddressDetails(address: ContactAddressMatchModel)(implicit request: Request[_]): Future[Unit] = {
-    saveSubscriptionDetails(
-      sd =>
-        sd.copy(contactDetails =
-          sd.contactDetails.map(
-            cdm =>
-              cdm.copy(
-                street = Some(s"${address.lineOne} ${address.lineTwo.getOrElse("")}"),
-                city = Some(s"${address.townCity}"),
-                postcode = Some(s"${address.postcode}"),
-                countryCode = Some(s"${address.country}")
-              )
+    saveSubscriptionDetails(sd =>
+      sd.copy(contactDetails =
+        sd.contactDetails.map(cdm =>
+          cdm.copy(
+            street = Some(s"${address.lineOne} ${address.lineTwo.getOrElse("")}"),
+            city = Some(s"${address.townCity}"),
+            postcode = Some(s"${address.postcode}"),
+            countryCode = Some(s"${address.country}")
           )
         )
+      )
     )
   }
 
@@ -141,9 +138,7 @@ class SubscriptionDetailsService @Inject() (
     saveSubscriptionDetails(sd => sd.copy(vatVerificationOption = Some(verificationOption.isDateOption)))
 
   def cacheNinoOrUtrChoice(ninoOrUtrChoice: NinoOrUtrChoice)(implicit request: Request[_]): Future[Unit] =
-    saveSubscriptionDetails(
-      sd => sd.copy(formData = sd.formData.copy(ninoOrUtrChoice = ninoOrUtrChoice.ninoOrUtrRadio))
-    )
+    saveSubscriptionDetails(sd => sd.copy(formData = sd.formData.copy(ninoOrUtrChoice = ninoOrUtrChoice.ninoOrUtrRadio)))
 
   def cacheUtrMatch(utrMatch: Option[UtrMatchModel])(implicit request: Request[_]): Future[Unit] =
     saveSubscriptionDetails(sd => sd.copy(formData = sd.formData.copy(utrMatch = utrMatch)))
@@ -190,14 +185,14 @@ class SubscriptionDetailsService @Inject() (
     for {
       subDetails <- sessionCache.subscriptionDetails
       _          <- sessionCache.saveSub01Outcome(Sub01Outcome(""))
-      _ <- sessionCache.saveSubscriptionDetails(
-        SubscriptionDetails(
-          nameOrganisationDetails = subDetails.nameOrganisationDetails,
-          nameDobDetails = subDetails.nameDobDetails,
-          formData = subDetails.formData,
-          embassyName = subDetails.embassyName
-        )
-      )
+      _          <- sessionCache.saveSubscriptionDetails(
+                      SubscriptionDetails(
+                        nameOrganisationDetails = subDetails.nameOrganisationDetails,
+                        nameDobDetails = subDetails.nameDobDetails,
+                        formData = subDetails.formData,
+                        embassyName = subDetails.embassyName
+                      )
+                    )
     } yield ()
 
   def updateSubscriptionDetailsOrganisation(implicit request: Request[_]): Future[Unit] =
@@ -207,10 +202,10 @@ class SubscriptionDetailsService @Inject() (
     } yield ()
 
   def updateSubscriptionDetailsOrgName(orgName: String)(implicit request: Request[_]): Future[Unit] = {
-    sessionCache.registrationDetails.flatMap {
-      case rdo: RegistrationDetailsOrganisation =>
-        sessionCache.saveRegistrationDetails(rdo.copy(name = orgName))
-          .map(_ => updateSubscriptionDetails)
+    sessionCache.registrationDetails.flatMap { case rdo: RegistrationDetailsOrganisation =>
+      sessionCache
+        .saveRegistrationDetails(rdo.copy(name = orgName))
+        .map(_ => updateSubscriptionDetails)
     }
   }
 

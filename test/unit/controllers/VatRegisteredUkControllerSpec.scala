@@ -26,11 +26,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, VatRegisteredUkController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  SubscriptionFlow,
-  SubscriptionFlowInfo,
-  SubscriptionPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlow, SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}

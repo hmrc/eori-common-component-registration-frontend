@@ -101,9 +101,9 @@ object CdsToEtmpOrganisationType extends Logging {
   )
 
   private def etmpTypeOfPersonMap(orgType: EtmpOrganisationType) = orgType match {
-    case Partnership        => OrganisationTypeConfiguration.EtmpPartnership
-    case LLP                => OrganisationTypeConfiguration.EtmpLlp
-    case CorporateBody      => OrganisationTypeConfiguration.EtmpCorporateBody
+    case Partnership => OrganisationTypeConfiguration.EtmpPartnership
+    case LLP => OrganisationTypeConfiguration.EtmpLlp
+    case CorporateBody => OrganisationTypeConfiguration.EtmpCorporateBody
     case UnincorporatedBody => OrganisationTypeConfiguration.EtmpUnincorporatedBody
     case invalid =>
       val error = s"Invalid ETMP orgType: $invalid"

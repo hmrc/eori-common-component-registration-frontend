@@ -59,11 +59,10 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
       }
       auditCall(url, groupId, parsedResponse)
       parsedResponse
-    } recover {
-      case e: Throwable =>
-        val error = s"enrolment-store-proxy failed. url: $url, error: $e"
-        logger.error(error, e)
-        Left(ResponseError(INTERNAL_SERVER_ERROR, error))
+    } recover { case e: Throwable =>
+      val error = s"enrolment-store-proxy failed. url: $url, error: $e"
+      logger.error(error, e)
+      Left(ResponseError(INTERNAL_SERVER_ERROR, error))
     }
   }
 
@@ -76,8 +75,8 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
 
   // $COVERAGE-ON
 
-  private def auditCall(url: String, groupId: String, response: Either[ResponseError, EnrolmentStoreProxyResponse])(
-    implicit hc: HeaderCarrier
+  private def auditCall(url: String, groupId: String, response: Either[ResponseError, EnrolmentStoreProxyResponse])(implicit
+    hc: HeaderCarrier
   ): Unit = {
 
     val auditDetails = response

@@ -16,11 +16,7 @@
 
 package unit.controllers
 
-import common.pages.matching.{
-  IndividualNameAndDateOfBirthPage,
-  ThirdCountryIndividualNameAndDateOfBirthPage,
-  ThirdCountrySoleTraderNameAndDateOfBirthPage
-}
+import common.pages.matching.{IndividualNameAndDateOfBirthPage, ThirdCountryIndividualNameAndDateOfBirthPage, ThirdCountrySoleTraderNameAndDateOfBirthPage}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Prop
@@ -47,7 +43,11 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class RowIndividualNameDateOfBirthControllerReviewModeSpec
-    extends ControllerSpec with Checkers with TestDataGenerators with BeforeAndAfterEach with ScalaFutures
+    extends ControllerSpec
+    with Checkers
+    with TestDataGenerators
+    with BeforeAndAfterEach
+    with ScalaFutures
     with AuthActionMock {
 
   class ControllerFixture(organisationType: String, form: Form[IndividualNameAndDateOfBirth])
@@ -94,69 +94,66 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
           controllerFixture.controller.reviewForm(organisationType, atarService)
         )
       }
-      "redirect to you you cannot use this service page" in withControllerFixture {
-        controllerFixture =>
-          import controllerFixture._
+      "redirect to you you cannot use this service page" in withControllerFixture { controllerFixture =>
+        import controllerFixture._
 
-          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
-          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
+        when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
 
-          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
-            .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
+        when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
+          .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
 
-          controllerFixture.showForm { result =>
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(
-              "/customs-registration-services/atar/register/ind-st-use-a-different-service"
-            )
-          }
+        controllerFixture.showForm { result =>
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(
+            "/customs-registration-services/atar/register/ind-st-use-a-different-service"
+          )
+        }
       }
 
-      "show the form in review mode without errors, the input fields are prepopulated from the cache" in withControllerFixture {
-        controllerFixture =>
-          import controllerFixture._
+      "show the form in review mode without errors, the input fields are prepopulated from the cache" in withControllerFixture { controllerFixture =>
+        import controllerFixture._
 
-          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
-          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+        when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
 
-          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
-            .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
+        when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]]))
+          .thenReturn(Future.successful(Some(NameDobMatchModel("firstName", "lastName", LocalDate.of(1980, 3, 31)))))
 
-          controllerFixture.showForm { result =>
-            status(result) shouldBe OK
-            val page = CdsPage(contentAsString(result))
-            page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+        controllerFixture.showForm { result =>
+          status(result) shouldBe OK
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
 
-            val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
+          val assertPresentOnPage = controllerFixture.assertPresentOnPage(page) _
 
-            assertPresentOnPage(webPage.givenNameElement)
-            assertPresentOnPage(webPage.familyNameElement)
-            assertPresentOnPage(webPage.dateOfBirthElement)
-            page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthController
-              .reviewForm(organisationType, atarService)
-              .url
+          assertPresentOnPage(webPage.givenNameElement)
+          assertPresentOnPage(webPage.familyNameElement)
+          assertPresentOnPage(webPage.dateOfBirthElement)
+          page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthController
+            .reviewForm(organisationType, atarService)
+            .url
 
-            page.getElementValue(webPage.givenNameElement) shouldBe "firstName"
-            page.getElementValue(webPage.familyNameElement) shouldBe "lastName"
-            page.getElementValue(webPage.dobDayElement) shouldBe "31"
-            page.getElementValue(webPage.dobMonthElement) shouldBe "3"
-            page.getElementValue(webPage.dobYearElement) shouldBe "1980"
-          }
+          page.getElementValue(webPage.givenNameElement) shouldBe "firstName"
+          page.getElementValue(webPage.familyNameElement) shouldBe "lastName"
+          page.getElementValue(webPage.dobDayElement) shouldBe "31"
+          page.getElementValue(webPage.dobMonthElement) shouldBe "3"
+          page.getElementValue(webPage.dobYearElement) shouldBe "1980"
+        }
       }
 
-      "should redirect to sign out page if cachedNameDobDetails not found" in withControllerFixture {
-        controllerFixture =>
-          import controllerFixture._
+      "should redirect to sign out page if cachedNameDobDetails not found" in withControllerFixture { controllerFixture =>
+        import controllerFixture._
 
-          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
-          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+        when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
 
-          when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
+        when(mockSubscriptionDetailsService.cachedNameDobDetails(any[Request[_]])).thenReturn(Future.successful(None))
 
-          controllerFixture.showForm { result =>
-            status(result) shouldBe SEE_OTHER
-            result.futureValue.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/sign-out"
-          }
+        controllerFixture.showForm { result =>
+          status(result) shouldBe SEE_OTHER
+          result.futureValue.header.headers(LOCATION) shouldBe "/customs-registration-services/atar/register/sign-out"
+        }
       }
     }
 
@@ -169,20 +166,19 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
         )
       }
 
-      "redirect to 'review' page" in testControllerWithModel(validFormModelGens) {
-        (controllerFixture, individualNameAndDateOfBirth) =>
-          import controllerFixture._
-          when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
-            .thenReturn(Future.successful(()))
+      "redirect to 'review' page" in testControllerWithModel(validFormModelGens) { (controllerFixture, individualNameAndDateOfBirth) =>
+        import controllerFixture._
+        when(mockSubscriptionDetailsService.cacheNameDobDetails(any[NameDobMatchModel])(any[Request[_]]))
+          .thenReturn(Future.successful(()))
 
-          submitForm(formData(individualNameAndDateOfBirth)) { result =>
-            CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
-            status(result) shouldBe SEE_OTHER
-            result.futureValue.header.headers(
-              LOCATION
-            ) shouldBe "/customs-registration-services/atar/register/matching/review-determine"
-            verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
-          }
+        submitForm(formData(individualNameAndDateOfBirth)) { result =>
+          CdsPage(contentAsString(result)).getElementsHtml(webPage.pageLevelErrorSummaryListXPath) shouldBe empty
+          status(result) shouldBe SEE_OTHER
+          result.futureValue.header.headers(
+            LOCATION
+          ) shouldBe "/customs-registration-services/atar/register/matching/review-determine"
+          verify(mockSubscriptionDetailsService).cacheNameDobDetails(any())(any())
+        }
       }
     }
 
@@ -208,11 +204,9 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
         validFormModelGens = individualNameAndDateOfBirthGens()
       ) {}
 
-  case object ThirdCountrySoleTraderBehavior
-      extends ThirdCountryIndividualBehaviour(ThirdCountrySoleTraderNameAndDateOfBirthPage)
+  case object ThirdCountrySoleTraderBehavior extends ThirdCountryIndividualBehaviour(ThirdCountrySoleTraderNameAndDateOfBirthPage)
 
-  case object ThirdCountryIndividualBehavior
-      extends ThirdCountryIndividualBehaviour(ThirdCountryIndividualNameAndDateOfBirthPage)
+  case object ThirdCountryIndividualBehavior extends ThirdCountryIndividualBehaviour(ThirdCountryIndividualNameAndDateOfBirthPage)
 
   "The third country sole trader case" when (behave like ThirdCountrySoleTraderBehavior)
 

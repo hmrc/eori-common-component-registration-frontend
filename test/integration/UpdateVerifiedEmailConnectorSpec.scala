@@ -51,7 +51,7 @@ import java.time.LocalDateTime
 
 class UpdateVerifiedEmailConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.eori-common-component-hods-proxy.port"                          -> Port,

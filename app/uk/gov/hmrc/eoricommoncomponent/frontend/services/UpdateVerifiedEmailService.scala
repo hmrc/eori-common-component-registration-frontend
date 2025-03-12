@@ -18,10 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.Logger
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  UpdateCustomsDataStoreConnector,
-  UpdateVerifiedEmailConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{UpdateCustomsDataStoreConnector, UpdateVerifiedEmailConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
@@ -41,13 +38,13 @@ class UpdateVerifiedEmailService @Inject() (
 
   def updateVerifiedEmail(newEmail: String, eori: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
 
-    val requestDetail = RequestDetail(
+    val requestDetail           = RequestDetail(
       IDType = RegistrationInfoRequest.EORI,
       IDNumber = eori,
       emailAddress = newEmail,
       emailVerificationTimestamp = DateTimeUtil.dateTime
     )
-    val request = VerifiedEmailRequest(UpdateVerifiedEmailRequest(reqCommonGenerator.generate(), requestDetail))
+    val request                 = VerifiedEmailRequest(UpdateVerifiedEmailRequest(reqCommonGenerator.generate(), requestDetail))
     val customsDataStoreRequest =
       CustomsDataStoreRequest(eori, newEmail, requestDetail.emailVerificationTimestamp.atZone(ZoneOffset.UTC).toString)
     updateVerifiedEmailConnector.updateVerifiedEmail(request).map {

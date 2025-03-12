@@ -24,11 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CorporateBody, Partnership}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import util.builders.RegistrationDetailsBuilder
 

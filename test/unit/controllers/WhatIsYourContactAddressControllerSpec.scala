@@ -64,7 +64,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
       withAuthorisedUser(userId, mockAuthConnector)
 
       // When
-      val result = controller.showForm(isInReviewMode = false, eoriOnlyService)
+      val result = controller
+        .showForm(isInReviewMode = false, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -90,7 +91,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
         withAuthorisedUser(userId, mockAuthConnector)
 
         // When
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -116,7 +118,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
         withAuthorisedUser(userId, mockAuthConnector)
 
         // When
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -150,7 +153,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
 
-        val result = controller.submit(isInReviewMode = true, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = true, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -176,7 +180,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
 
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,

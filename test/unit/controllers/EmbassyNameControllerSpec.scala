@@ -58,7 +58,8 @@ class EmbassyNameControllerSpec extends ControllerSpec with BeforeAndAfterEach w
       when(mockSubscriptionDetailsService.cachedEmbassyName(any())).thenReturn(Future.successful(None))
 
       // When
-      val result = embassyNameController.showForm(isInReviewMode = false, EmbassyId, eoriOnlyService)
+      val result = embassyNameController
+        .showForm(isInReviewMode = false, EmbassyId, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -78,7 +79,8 @@ class EmbassyNameControllerSpec extends ControllerSpec with BeforeAndAfterEach w
       when(mockSubscriptionDetailsService.cachedEmbassyName(any())).thenReturn(Future.successful(Some("U.S. Embassy")))
 
       // When
-      val result = embassyNameController.showForm(isInReviewMode = false, EmbassyId, eoriOnlyService)
+      val result = embassyNameController
+        .showForm(isInReviewMode = false, EmbassyId, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then

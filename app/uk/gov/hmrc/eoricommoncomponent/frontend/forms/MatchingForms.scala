@@ -93,7 +93,7 @@ object MatchingForms extends Mappings with Logging {
       case s if !s.matches(nameRegex) =>
         Invalid(ValidationError("cds.subscription.family-name.error.wrong-format"))
       case s if s.length > 35 => Invalid(ValidationError("cds.subscription.family-name.error.too-long"))
-      case _                  => Valid
+      case _ => Valid
     })
 
   private def validGivenName: Constraint[String] =
@@ -102,7 +102,7 @@ object MatchingForms extends Mappings with Logging {
       case s if !s.matches(nameRegex) =>
         Invalid(ValidationError("cds.subscription.given-name.error.wrong-format"))
       case s if s.length > 35 => Invalid(ValidationError("cds.subscription.given-name.error.too-long"))
-      case _                  => Valid
+      case _ => Valid
     })
 
   val organisationTypeDetailsForm: Form[CdsOrganisationType] = Form(
@@ -172,7 +172,7 @@ object MatchingForms extends Mappings with Logging {
 
   private def validBusinessName: Constraint[String] =
     Constraint({
-      case s if s.isEmpty      => Invalid(ValidationError("cds.matching-error.business-details.business-name.isEmpty"))
+      case s if s.isEmpty => Invalid(ValidationError("cds.matching-error.business-details.business-name.isEmpty"))
       case s if s.length > 105 => Invalid(ValidationError("cds.matching-error.business-details.business-name.too-long"))
       case s if !s.matches(noTagsRegex) =>
         Invalid(ValidationError("cds.matching-error.business-details.business-name.invalid-chars"))
@@ -191,7 +191,7 @@ object MatchingForms extends Mappings with Logging {
 
   private def validCompanyName: Constraint[String] =
     Constraint({
-      case s if s.isEmpty      => Invalid(ValidationError("cds.matching-error.business-details.company-name.isEmpty"))
+      case s if s.isEmpty => Invalid(ValidationError("cds.matching-error.business-details.company-name.isEmpty"))
       case s if s.length > 105 => Invalid(ValidationError("cds.matching-error.business-details.company-name.too-long"))
       case s if !s.matches(noTagsRegex) =>
         Invalid(ValidationError("cds.matching-error.business-details.company-name.invalid-chars"))
@@ -200,7 +200,7 @@ object MatchingForms extends Mappings with Logging {
 
   private def validOrganisationName: Constraint[String] =
     Constraint({
-      case s if s.isEmpty      => Invalid(ValidationError("cds.matching.organisation-name.error.name"))
+      case s if s.isEmpty => Invalid(ValidationError("cds.matching.organisation-name.error.name"))
       case s if s.length > 105 => Invalid(ValidationError("cds.matching-error.business-details.business-name.too-long"))
       case s if !s.matches(noTagsRegex) =>
         Invalid(ValidationError("cds.matching-error.business-details.business-name.invalid-chars"))
@@ -212,10 +212,10 @@ object MatchingForms extends Mappings with Logging {
     def validLength: String => Boolean = s => s.length == 10 || (s.endsWith("k") || s.endsWith("K") && s.length == 11)
 
     Constraint({
-      case s if formatInput(s).isEmpty                => Invalid(ValidationError("cds.matching-error.business-details.utr.isEmpty"))
-      case s if !validLength(formatInput(s))          => Invalid(ValidationError("cds.matching-error.utr.length"))
+      case s if formatInput(s).isEmpty => Invalid(ValidationError("cds.matching-error.business-details.utr.isEmpty"))
+      case s if !validLength(formatInput(s)) => Invalid(ValidationError("cds.matching-error.utr.length"))
       case s if !validUtrFormat(Some(formatInput(s))) => Invalid(ValidationError("cds.matching-error.utr.invalid"))
-      case _                                          => Valid
+      case _ => Valid
     })
   }
 
@@ -243,7 +243,7 @@ object MatchingForms extends Mappings with Logging {
         "first-name" -> text.verifying(validFirstName),
         "last-name"  -> text.verifying(validLastName),
         validateDateOfBirth,
-        "nino" -> text.verifying(validNino)
+        "nino"       -> text.verifying(validNino)
       )(NinoMatch.apply)(NinoMatch.unapply)
     )
 
@@ -261,9 +261,10 @@ object MatchingForms extends Mappings with Logging {
     val minimumDate = LocalDate.of(DateConverter.earliestYearDateOfBirth, 1, 1)
     val today       = LocalDate.now()
 
-    "date-of-birth" -> localDate(emptyKey = "dob.error.empty-date", invalidKey = "dob.error.invalid-date").verifying(
-      minDate(minimumDate, "dob.error.minMax", DateConverter.earliestYearDateOfBirth.toString)
-    )
+    "date-of-birth" -> localDate(emptyKey = "dob.error.empty-date", invalidKey = "dob.error.invalid-date")
+      .verifying(
+        minDate(minimumDate, "dob.error.minMax", DateConverter.earliestYearDateOfBirth.toString)
+      )
       .verifying(maxDate(today, "dob.error.minMax", DateConverter.earliestYearDateOfBirth.toString))
   }
 
@@ -273,7 +274,7 @@ object MatchingForms extends Mappings with Logging {
       case s if !s.matches(nameRegex) =>
         Invalid(ValidationError("cds.subscription.first-name.error.wrong-format"))
       case s if s.length > 35 => Invalid(ValidationError("cds.subscription.first-name.error.too-long"))
-      case _                  => Valid
+      case _ => Valid
     })
 
   private def validLastName: Constraint[String] =
@@ -282,16 +283,16 @@ object MatchingForms extends Mappings with Logging {
       case s if !s.matches(nameRegex) =>
         Invalid(ValidationError("cds.subscription.last-name.error.wrong-format"))
       case s if s.length > 35 => Invalid(ValidationError("cds.subscription.last-name.error.too-long"))
-      case _                  => Valid
+      case _ => Valid
     })
 
   private def validNino: Constraint[String] =
     Constraint({
-      case s if formatInput(s).isEmpty                  => Invalid(ValidationError("cds.subscription.nino.error.empty"))
-      case s if formatInput(s).length != 9              => Invalid(ValidationError("cds.subscription.nino.error.wrong-length"))
+      case s if formatInput(s).isEmpty => Invalid(ValidationError("cds.subscription.nino.error.empty"))
+      case s if formatInput(s).length != 9 => Invalid(ValidationError("cds.subscription.nino.error.wrong-length"))
       case s if !formatInput(s).matches("[a-zA-Z0-9]*") => Invalid(ValidationError("cds.matching.nino.invalid"))
-      case s if !Nino.isValid(formatInput(s))           => Invalid(ValidationError("cds.matching.nino.invalid"))
-      case _                                            => Valid
+      case s if !Nino.isValid(formatInput(s)) => Invalid(ValidationError("cds.matching.nino.invalid"))
+      case _ => Valid
     })
 
   val subscriptionNinoForm: Form[IdMatchModel] = Form(
@@ -316,7 +317,7 @@ object MatchingForms extends Mappings with Logging {
 
   private val rejectGB: Constraint[String] = Constraint {
     case `countryCodeGB` => Invalid("cds.matching-error.country.unacceptable")
-    case _               => Valid
+    case _ => Valid
   }
 
   val thirdCountrySixLineAddressForm: Form[SixLineAddressMatchModel] = sixLineAddressFormFactory(rejectGB)
@@ -348,11 +349,11 @@ object MatchingForms extends Mappings with Logging {
   private def sixLineAddressFormFactory(countryConstraints: Constraint[String]*): Form[SixLineAddressMatchModel] =
     Form(
       mapping(
-        "line-1"   -> text.verifying(validLine1),
-        "line-2"   -> optional(text.verifying(validLine2)),
-        "line-3"   -> text.verifying(validLine3),
-        "line-4"   -> optional(text.verifying(validLine4)),
-        "postcode" -> postcodeMapping,
+        "line-1"      -> text.verifying(validLine1),
+        "line-2"      -> optional(text.verifying(validLine2)),
+        "line-3"      -> text.verifying(validLine3),
+        "line-4"      -> optional(text.verifying(validLine4)),
+        "postcode"    -> postcodeMapping,
         "countryCode" -> mandatoryString("cds.matching-error.country.invalid")(s => s.length == Length2)
           .verifying(countryConstraints: _*)
       )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
@@ -422,7 +423,7 @@ object MatchingForms extends Mappings with Logging {
   private def validHaveUtr: Constraint[Option[Boolean]] =
     Constraint({
       case None => Invalid(ValidationError("cds.matching.organisation-utr.field-error.have-utr"))
-      case _    => Valid
+      case _ => Valid
     })
 
   val haveUtrForm: Form[UtrMatchModel] = Form(
@@ -432,13 +433,11 @@ object MatchingForms extends Mappings with Logging {
   private def validHaveNino: Constraint[Option[Boolean]] =
     Constraint({
       case None => Invalid(ValidationError("cds.matching.nino.row.yes-no.error"))
-      case _    => Valid
+      case _ => Valid
     })
 
   val haveRowIndividualsNinoForm: Form[NinoMatchModel] = Form(
-    mapping("have-nino" -> optional(boolean).verifying(validHaveNino))(NinoMatchModel.apply)(
-      model => Some(model.haveNino)
-    )
+    mapping("have-nino" -> optional(boolean).verifying(validHaveNino))(NinoMatchModel.apply)(model => Some(model.haveNino))
   )
 
   def contactAddressForm: Form[ContactAddressMatchModel] = {

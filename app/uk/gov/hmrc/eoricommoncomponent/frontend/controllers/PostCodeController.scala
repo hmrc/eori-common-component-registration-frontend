@@ -44,7 +44,8 @@ class PostCodeController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      postCodeCreateForm.bindFromRequest()
+      postCodeCreateForm
+        .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(postcodeView(formWithErrors, service))),
           validPostcodeAndLine1 =>

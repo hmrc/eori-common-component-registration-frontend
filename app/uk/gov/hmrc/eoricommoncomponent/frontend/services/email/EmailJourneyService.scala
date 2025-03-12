@@ -77,23 +77,25 @@ class EmailJourneyService @Inject() (
     messages: Messages,
     hc: HeaderCarrier
   ): Future[Result] =
-    emailVerificationService.getVerificationStatus(email, credId).foldF(
-      (_ => Future.successful(InternalServerError(errorPage(service)))),
-      {
-        case EmailVerificationStatus.Verified =>
-          onVerifiedEmail(service, email, emailStatus, GroupId(userWithEnrolments.groupId))
-        case EmailVerificationStatus.Unverified =>
-          // $COVERAGE-OFF$Loggers
-          logger.info("Email address was not verified")
-          // $COVERAGE-ON
-          submitNewDetails(email, service, credId)
-        case EmailVerificationStatus.Locked =>
-          // $COVERAGE-OFF$Loggers
-          logger.warn("Email address is locked")
-          // $COVERAGE-ON
-          Future.successful(Redirect(emailRoutes.LockedEmailController.onPageLoad(service)))
-      }
-    )
+    emailVerificationService
+      .getVerificationStatus(email, credId)
+      .foldF(
+        (_ => Future.successful(InternalServerError(errorPage(service)))),
+        {
+          case EmailVerificationStatus.Verified =>
+            onVerifiedEmail(service, email, emailStatus, GroupId(userWithEnrolments.groupId))
+          case EmailVerificationStatus.Unverified =>
+            // $COVERAGE-OFF$Loggers
+            logger.info("Email address was not verified")
+            // $COVERAGE-ON
+            submitNewDetails(email, service, credId)
+          case EmailVerificationStatus.Locked =>
+            // $COVERAGE-OFF$Loggers
+            logger.warn("Email address is locked")
+            // $COVERAGE-ON
+            Future.successful(Redirect(emailRoutes.LockedEmailController.onPageLoad(service)))
+        }
+      )
 
   private def onVerifiedEmail(service: Service, email: String, emailStatus: EmailStatus, groupId: GroupId)(implicit
     request: Request[AnyContent],
@@ -109,11 +111,13 @@ class EmailJourneyService @Inject() (
     messages: Messages,
     hc: HeaderCarrier
   ): Future[Result] =
-    emailVerificationService.startVerificationJourney(credId, service, email).fold(
-      _ => InternalServerError(errorPage(service)),
-      { responseWithUri: ResponseWithURI =>
-        Redirect(s"${appConfig.emailVerificationFrontendBaseUrl}${responseWithUri.redirectUri}")
-      }
-    )
+    emailVerificationService
+      .startVerificationJourney(credId, service, email)
+      .fold(
+        _ => InternalServerError(errorPage(service)),
+        { responseWithUri: ResponseWithURI =>
+          Redirect(s"${appConfig.emailVerificationFrontendBaseUrl}${responseWithUri.redirectUri}")
+        }
+      )
 
 }

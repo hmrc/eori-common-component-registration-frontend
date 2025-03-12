@@ -40,13 +40,13 @@ trait AccessController {
     def isPermittedUserType: Boolean =
       affinityGroup match {
         case Some(Agent) => false
-        case _           => true
+        case _ => true
       }
 
     def isPermittedCredentialRole: Boolean =
       credentialRole match {
         case Some(User) => true
-        case _          => false
+        case _ => false
       }
 
     if (!isPermittedUserType)

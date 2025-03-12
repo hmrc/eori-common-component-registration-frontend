@@ -58,9 +58,11 @@ class GroupEnrolmentExtractorSpec extends UnitSpec with MockitoSugar with Before
         Future.successful(rightValueForEitherT)
       })
 
-      groupEnrolmentExtractor.groupIdEnrolments(groupId)(hc).value.futureValue.map(
-        res => res shouldBe List(EnrolmentResponse("HMRC-CUS-ORG", "ACTIVATED", List.empty))
-      )
+      groupEnrolmentExtractor
+        .groupIdEnrolments(groupId)(hc)
+        .value
+        .futureValue
+        .map(res => res shouldBe List(EnrolmentResponse("HMRC-CUS-ORG", "ACTIVATED", List.empty)))
     }
   }
 

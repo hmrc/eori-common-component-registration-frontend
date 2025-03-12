@@ -19,11 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation
 import play.api.Logging
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EtmpOrganisationType, RegistrationDetailsOrganisation}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

@@ -39,8 +39,7 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class OrganisationTypeViewSpec
-    extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with BeforeAndAfter with AuthActionMock {
+class OrganisationTypeViewSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with BeforeAndAfter with AuthActionMock {
 
   private val mockAuthConnector              = mock[AuthConnector]
   private val mockAuthAction                 = authAction(mockAuthConnector)
@@ -128,9 +127,11 @@ class OrganisationTypeViewSpec
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
 
-    val request = maybeOrgType.map { orgType =>
-      SessionBuilder.buildRequestWithSessionAndOrgType(userId, orgType.id)
-    }.getOrElse(SessionBuilder.buildRequestWithSession(userId))
+    val request = maybeOrgType
+      .map { orgType =>
+        SessionBuilder.buildRequestWithSessionAndOrgType(userId, orgType.id)
+      }
+      .getOrElse(SessionBuilder.buildRequestWithSession(userId))
     test(organisationTypeController.form(atarService).apply(request))
   }
 

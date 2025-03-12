@@ -26,16 +26,16 @@ class ContactInformationSpec extends UnitSpec {
   "ContactInformation" should {
     "convert contact Details to ContactInformation" in {
       val date: LocalDateTime = LocalDateTime.now()
-      val contactDetail = ContactDetail(
+      val contactDetail       = ContactDetail(
         EstablishmentAddress("Line 1", "City Name", Some("SE28 1AA"), "GB"),
         "John Contact Doe",
         Some("1234567"),
         Some("89067"),
         Some("john.doe@example.com")
       )
-      val result =
+      val result              =
         ContactInformation.createContactInformation(contactDetail).copy(emailVerificationTimestamp = Some(date))
-      val expectedResult = ContactInformation(
+      val expectedResult      = ContactInformation(
         Some("John Contact Doe"),
         Some(true),
         Some("Line 1"),

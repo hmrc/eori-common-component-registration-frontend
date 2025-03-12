@@ -141,7 +141,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page = CdsPage(contentAsString(result))
+        val page               = CdsPage(contentAsString(result))
         status(result) shouldBe BAD_REQUEST
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
@@ -184,7 +184,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page = CdsPage(contentAsString(result))
+        val page               = CdsPage(contentAsString(result))
         status(result) shouldBe OK
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(
@@ -209,7 +209,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
 
       submitForm(yesNinoSubmitData) { result =>
         await(result)
-        val page = CdsPage(contentAsString(result))
+        val page               = CdsPage(contentAsString(result))
         status(result) shouldBe INTERNAL_SERVER_ERROR
         val expectedIndividual = Individual.withLocalDate("First name", "Last name", LocalDate.of(2015, 10, 15))
         verify(mockMatchingService).matchIndividualWithId(meq(validNino), meq(expectedIndividual), any())(

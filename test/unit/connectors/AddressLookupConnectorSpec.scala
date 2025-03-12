@@ -27,19 +27,14 @@ import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{
-  AddressLookupFailure,
-  AddressLookupSuccess,
-  AddressRequestBody
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupSuccess, AddressRequestBody}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import unit.connectors.AddressLookupConnectorSpec.{jsonResponseWithOneResult, jsonResponseWithTwoResults}
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class AddressLookupConnectorSpec
-    extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with IntegrationPatience {
+class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with IntegrationPatience {
 
   private val httpClient = mock[HttpClient]
   private val appConfig  = mock[AppConfig]
@@ -99,7 +94,7 @@ class AddressLookupConnectorSpec
 
         val postcode = "AA11 1AA"
 
-        val expectedFirstAddress =
+        val expectedFirstAddress  =
           Address("First Address Line 1", None, None, Some("First town"), Some("AA11 1AA"), "GB")
         val expectedSecondAddress =
           Address(
@@ -110,7 +105,7 @@ class AddressLookupConnectorSpec
             Some("AA11 1AA"),
             "GB"
           )
-        val expectedResponse = AddressLookupSuccess(Seq(expectedFirstAddress, expectedSecondAddress))
+        val expectedResponse      = AddressLookupSuccess(Seq(expectedFirstAddress, expectedSecondAddress))
 
         val result = connector.lookup(postcode, None)(hc)
 
@@ -126,7 +121,7 @@ class AddressLookupConnectorSpec
 
         val postcode = "AA11 1AA"
 
-        val expectedAddress =
+        val expectedAddress  =
           Address("Address Line 1", Some("Address Line 2"), None, Some("Town"), Some("AA11 1AA"), "GB")
         val expectedResponse = AddressLookupSuccess(Seq(expectedAddress))
 

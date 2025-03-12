@@ -53,7 +53,7 @@ class DoYouHaveAUtrNumberController @Inject() (
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
         subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>
-          val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
+          val form                       = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
           val userLocation: UserLocation = requestSessionData.selectedUserLocation.getOrElse(
             throw new RuntimeException("Unable to find user location in session")
           )
@@ -65,10 +65,12 @@ class DoYouHaveAUtrNumberController @Inject() (
 
   def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      haveUtrForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(view(organisationType, formWithErrors, service))),
-        formData => destinationsByAnswer(formData, organisationType, service, isInReviewMode)
-      )
+      haveUtrForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(organisationType, formWithErrors, service))),
+          formData => destinationsByAnswer(formData, organisationType, service, isInReviewMode)
+        )
     }
 
   private def destinationsByAnswer(
@@ -80,9 +82,8 @@ class DoYouHaveAUtrNumberController @Inject() (
     subscriptionDetailsService.cachedUtrMatch.flatMap { cachedUtrOpt =>
       formData.haveUtr match {
         case Some(true) =>
-          subscriptionDetailsService.cacheUtrMatch(Some(formData)).map {
-            _ =>
-              Redirect(GetUtrNumberController.form(organisationType, service, isInReviewMode))
+          subscriptionDetailsService.cacheUtrMatch(Some(formData)).map { _ =>
+            Redirect(GetUtrNumberController.form(organisationType, service, isInReviewMode))
           }
         case Some(false) if cachedUtrOpt.exists(_.haveUtr.exists(_ == false)) =>
           Future.successful(noUtrDestination(organisationType, service, isInReviewMode))

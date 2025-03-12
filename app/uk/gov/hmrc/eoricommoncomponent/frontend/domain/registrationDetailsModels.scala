@@ -131,9 +131,7 @@ object RegistrationDetails {
   private val individualFormat: OFormat[RegistrationDetailsIndividual]     = Json.format[RegistrationDetailsIndividual]
   private val registrationSafeIdFormat: OFormat[RegistrationDetailsSafeId] = Json.format[RegistrationDetailsSafeId]
 
-  /**
-    * TODO in the future change this to always read the orgType & create the corresponding registration details
-    * object based on it.
+  /** TODO in the future change this to always read the orgType & create the corresponding registration details object based on it.
     */
   implicit val formats: Format[RegistrationDetails] = Format[RegistrationDetails](
     Reads { js =>
@@ -145,16 +143,16 @@ object RegistrationDetails {
             case _ =>
               orgFormat.reads(js) match {
                 case ok: JsSuccess[RegistrationDetailsOrganisation] => ok
-                case _                                              => registrationSafeIdFormat.reads(js)
+                case _ => registrationSafeIdFormat.reads(js)
               }
           }
       }
     },
     Writes {
-      case individual: RegistrationDetailsIndividual     => individualFormat.writes(individual)
+      case individual: RegistrationDetailsIndividual => individualFormat.writes(individual)
       case organisation: RegistrationDetailsOrganisation => orgFormat.writes(organisation)
-      case regSafeId: RegistrationDetailsSafeId          => registrationSafeIdFormat.writes(regSafeId)
-      case embassy: RegistrationDetailsEmbassy           => embassyWrites.writes(embassy)
+      case regSafeId: RegistrationDetailsSafeId => registrationSafeIdFormat.writes(regSafeId)
+      case embassy: RegistrationDetailsEmbassy => embassyWrites.writes(embassy)
     }
   )
 

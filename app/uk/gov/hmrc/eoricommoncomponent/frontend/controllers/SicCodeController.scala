@@ -69,36 +69,34 @@ class SicCodeController @Inject() (
   }
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => user: LoggedInUserWithEnrolments =>
-        subscriptionBusinessService.cachedSicCode.flatMap(populateView(_, isInReviewMode = false, service, user))
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      subscriptionBusinessService.cachedSicCode.flatMap(populateView(_, isInReviewMode = false, service, user))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => user: LoggedInUserWithEnrolments =>
-        subscriptionBusinessService.getCachedSicCode.flatMap(
-          sic => populateView(Some(sic), isInReviewMode = true, service, user)
-        )
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      subscriptionBusinessService.getCachedSicCode.flatMap(sic => populateView(Some(sic), isInReviewMode = true, service, user))
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      sicCodeform.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(
-              sicCodeView(
-                formWithErrors,
-                isInReviewMode,
-                requestSessionData.userSelectedOrganisationType,
-                service,
-                requestSessionData.selectedUserLocation
+      sicCodeform
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(
+                sicCodeView(
+                  formWithErrors,
+                  isInReviewMode,
+                  requestSessionData.userSelectedOrganisationType,
+                  service,
+                  requestSessionData.selectedUserLocation
+                )
               )
-            )
-          ),
-        formData => submitNewDetails(formData, isInReviewMode, service)
-      )
+            ),
+          formData => submitNewDetails(formData, isInReviewMode, service)
+        )
     }
 
   private def submitNewDetails(formData: SicCodeViewModel, isInReviewMode: Boolean, service: Service)(implicit
@@ -106,18 +104,17 @@ class SicCodeController @Inject() (
   ): Future[Result] =
     subscriptionDetailsHolderService
       .cacheSicCode(formData.sicCode.filterNot(_.isWhitespace))
-      .map(
-        _ =>
-          subscriptionFlowManager.stepInformation(SicCodeSubscriptionFlowPage) match {
-            case Right(flowInfo) =>
-              if (isInReviewMode)
-                Redirect(routes.DetermineReviewPageController.determineRoute(service))
-              else
-                Redirect(flowInfo.nextPage.url(service))
-            case Left(_) =>
-              logger.warn(s"Unable to identify subscription flow: key not found in cache")
-              Redirect(ApplicationController.startRegister(service))
-          }
+      .map(_ =>
+        subscriptionFlowManager.stepInformation(SicCodeSubscriptionFlowPage) match {
+          case Right(flowInfo) =>
+            if (isInReviewMode)
+              Redirect(routes.DetermineReviewPageController.determineRoute(service))
+            else
+              Redirect(flowInfo.nextPage.url(service))
+          case Left(_) =>
+            logger.warn(s"Unable to identify subscription flow: key not found in cache")
+            Redirect(ApplicationController.startRegister(service))
+        }
       )
 
 }

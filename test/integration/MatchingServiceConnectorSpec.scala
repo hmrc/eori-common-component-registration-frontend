@@ -31,7 +31,7 @@ import util.externalservices.{AuditService, MatchService}
 
 class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.eori-common-component-hods-proxy.host"          -> Host,
@@ -338,7 +338,7 @@ class MatchingServiceConnectorSpec extends IntegrationTestsSpec with ScalaFuture
         INTERNAL_SERVER_ERROR
       )
 
-      val result = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
+      val result   = matchingServiceConnector.lookup(serviceRequestJson.as[MatchingRequestHolder])
       val expected =
         Left(ResponseError(INTERNAL_SERVER_ERROR, s"REG01 Lookup failed with reason: $match500ErrorResponse"))
 

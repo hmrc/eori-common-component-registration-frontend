@@ -34,7 +34,9 @@ trait IndividualNameAndDateOfBirthXPath extends AddressPageFactoring {
 }
 
 abstract class IndividualNameAndDateOfBirthPage(val organisationType: String)
-    extends WebPage with IndividualNameAndDateOfBirthXPath with IndividualNameDateFields {
+    extends WebPage
+    with IndividualNameAndDateOfBirthXPath
+    with IndividualNameDateFields {
 
   override val pageLevelErrorSummaryListXPath: String = AddressPageFactoring.PageLevelErrorSummaryListXPath
 

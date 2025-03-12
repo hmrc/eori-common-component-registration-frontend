@@ -32,11 +32,10 @@ trait EnrolmentExtractor {
   ): Option[String] =
     loggedInUser.enrolments
       .getEnrolment(enrolmentKey)
-      .flatMap(
-        enrolment =>
-          enrolment
-            .getIdentifier(identifierName)
-            .map(identifier => identifier.value)
+      .flatMap(enrolment =>
+        enrolment
+          .getIdentifier(identifierName)
+          .map(identifier => identifier.value)
       )
 
   def enrolledForService(loggedInUser: LoggedInUserWithEnrolments, service: Service): Option[Eori] =
@@ -68,9 +67,7 @@ trait EnrolmentExtractor {
 
   def existingEoriForUser(loggedInUserEnrolments: Set[Enrolment]): Option[ExistingEori] = {
     val userEnrolmentWithEori = loggedInUserEnrolments.find(_.identifiers.exists(_.key == EoriIdentifier))
-    userEnrolmentWithEori.map(
-      enrolment => ExistingEori(enrolment.getIdentifier(EoriIdentifier).map(_.value), enrolment.key)
-    )
+    userEnrolmentWithEori.map(enrolment => ExistingEori(enrolment.getIdentifier(EoriIdentifier).map(_.value), enrolment.key))
   }
 
   def existingEoriForGroup(groupEnrolments: List[EnrolmentResponse]): Option[ExistingEori] =

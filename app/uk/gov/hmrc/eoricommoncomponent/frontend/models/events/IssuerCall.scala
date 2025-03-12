@@ -23,7 +23,7 @@ case class IssuerCall(request: IssuerRequest, response: IssuerResponse)
 
 object IssuerCall {
 
-  //writes for flattened Audit event
+  // writes for flattened Audit event
   implicit val writes: Writes[IssuerCall] =
     JsPath
       .write[IssuerRequest]

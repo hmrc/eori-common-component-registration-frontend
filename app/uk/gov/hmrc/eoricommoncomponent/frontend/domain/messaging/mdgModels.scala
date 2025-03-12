@@ -46,7 +46,7 @@ case class Address(
   private def hasValidPostcode: Boolean =
     this.postalCode match {
       case Some(pCode) if pCode.nonEmpty => pCode.replaceAll("\\s+", " ").matches(postcodeRegex.regex)
-      case _                             => false
+      case _ => false
     }
 
   private def isPostcodeRequired: Boolean = postCodeMandatoryCountryCodes.contains(countryCode)
@@ -100,10 +100,10 @@ object Address {
   private def applyFromLookup(lines: Seq[String], town: String, postcode: String, countryCode: String): Address = {
     val code = if (countryCode == "UK") "GB" else countryCode
     lines match {
-      case Seq(first)                => Address(first, None, None, Some(town), Some(postcode), code)
-      case Seq(first, second)        => Address(first, Some(second), None, Some(town), Some(postcode), code)
+      case Seq(first) => Address(first, None, None, Some(town), Some(postcode), code)
+      case Seq(first, second) => Address(first, Some(second), None, Some(town), Some(postcode), code)
       case Seq(first, second, third) => Address(first, Some(second), Some(third), Some(town), Some(postcode), code)
-      case x                         => throw new IllegalArgumentException(s"Cannot construct address from ${x.size} address lines")
+      case x => throw new IllegalArgumentException(s"Cannot construct address from ${x.size} address lines")
     }
   }
 
@@ -136,9 +136,13 @@ trait CommonHeader extends Logging {
 
     def writes(d: LocalDateTime): JsValue =
       JsString(
-        ZonedDateTime.of(d, ZoneId.of("Europe/London")).withNano(0).withZoneSameInstant(ZoneOffset.UTC).format(
-          DateTimeFormatter.ISO_DATE_TIME
-        )
+        ZonedDateTime
+          .of(d, ZoneId.of("Europe/London"))
+          .withNano(0)
+          .withZoneSameInstant(ZoneOffset.UTC)
+          .format(
+            DateTimeFormatter.ISO_DATE_TIME
+          )
       )
 
   }
@@ -146,11 +150,15 @@ trait CommonHeader extends Logging {
   private def dateTimeReadsIso: Reads[LocalDateTime] = new Reads[LocalDateTime] {
 
     def reads(value: JsValue): JsResult[LocalDateTime] =
-      try JsSuccess(
-        ZonedDateTime.parse(value.as[String], DateTimeFormatter.ISO_DATE_TIME).withZoneSameInstant(
-          ZoneId.of("Europe/London")
-        ).toLocalDateTime
-      )
+      try
+        JsSuccess(
+          ZonedDateTime
+            .parse(value.as[String], DateTimeFormatter.ISO_DATE_TIME)
+            .withZoneSameInstant(
+              ZoneId.of("Europe/London")
+            )
+            .toLocalDateTime
+        )
       catch {
         case e: Exception =>
           val error = s"Could not parse '${value.toString()}' as an ISO date. Reason: $e"

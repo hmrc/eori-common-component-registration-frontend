@@ -41,10 +41,10 @@ object YesNoWrongAddress {
 case class YesNoWrongAddress(yesNoWrongAddress: Option[String]) {
 
   def areDetailsCorrect: YesNoWrong = yesNoWrongAddress match {
-    case Some("yes")           => Yes
-    case Some("no")            => No
+    case Some("yes") => Yes
+    case Some("no") => No
     case Some("wrong-address") => WrongAddress
-    case _                     => InvalidAddress
+    case _ => InvalidAddress
   }
 
 }

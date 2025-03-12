@@ -89,8 +89,8 @@ object TestDataGenerators {
 
       def oversized(maxLength: Int)(extraGen: Gen[Char]): Gen[String] =
         for {
-          s: String <- strings
-          toOversize = 0 max (maxLength - s.length + 1)
+          s: String   <- strings
+          toOversize   = 0 max (maxLength - s.length + 1)
           extraLength <- Gen.chooseNum(toOversize, maxLength)
           extraString <- Gen.listOfN(extraLength, extraGen) map (_.mkString)
         } yield s + extraString

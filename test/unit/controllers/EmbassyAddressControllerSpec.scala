@@ -81,7 +81,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
       )
 
       // When
-      val result = embassyAddressController.showForm(isInReviewMode = false, eoriOnlyService)
+      val result = embassyAddressController
+        .showForm(isInReviewMode = false, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -114,7 +115,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
       )
 
       // When
-      val result = embassyAddressController.showForm(isInReviewMode = false, eoriOnlyService)
+      val result = embassyAddressController
+        .showForm(isInReviewMode = false, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -143,7 +145,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
         )
 
         // When
-        val result = embassyAddressController.submit(isInReviewMode = false, eoriOnlyService)
+        val result = embassyAddressController
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -172,7 +175,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
         )
 
         // When
-        val result = embassyAddressController.submit(isInReviewMode = false, eoriOnlyService)
+        val result = embassyAddressController
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -209,7 +213,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
           Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SW3 5DA"), "GB")
         )
 
-        val result = embassyAddressController.submit(isInReviewMode = true, eoriOnlyService)
+        val result = embassyAddressController
+          .submit(isInReviewMode = true, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -241,7 +246,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
           Future.successful((EoriConsentSubscriptionFlowPage, Session()))
         )
 
-        val result = embassyAddressController.submit(isInReviewMode = false, eoriOnlyService)
+        val result = embassyAddressController
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,

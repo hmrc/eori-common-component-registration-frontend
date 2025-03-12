@@ -20,9 +20,9 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.{UpdateVerifiedEmailRequest, UpdateVerifiedEmailResponse}
 
 sealed trait HttpErrorResponse
-case object BadRequest         extends HttpErrorResponse
+case object BadRequest extends HttpErrorResponse
 case object ServiceUnavailable extends HttpErrorResponse
-case object Forbidden          extends HttpErrorResponse
+case object Forbidden extends HttpErrorResponse
 case object UnhandledException extends HttpErrorResponse
 
 sealed trait HttpSuccessResponse

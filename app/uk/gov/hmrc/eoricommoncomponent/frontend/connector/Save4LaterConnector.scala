@@ -62,10 +62,9 @@ class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClien
           None
         case _ => throw new BadRequestException(s"Status:${response.status}")
       }
-    } recoverWith {
-      case NonFatal(e) =>
-        logFailure("Get", url.toString, e)
-        Future.failed(e)
+    } recoverWith { case NonFatal(e) =>
+      logFailure("Get", url.toString, e)
+      Future.failed(e)
     }
   }
 
@@ -84,12 +83,11 @@ class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClien
       logSuccess("Put", url.toString)
       response.status match {
         case NO_CONTENT | CREATED | OK => ()
-        case _                         => throw new BadRequestException(s"Status:${response.status}")
+        case _ => throw new BadRequestException(s"Status:${response.status}")
       }
-    } recoverWith {
-      case NonFatal(e) =>
-        logFailure("Put", url.toString, e)
-        Future.failed(e)
+    } recoverWith { case NonFatal(e) =>
+      logFailure("Put", url.toString, e)
+      Future.failed(e)
     }
   }
 
@@ -107,12 +105,11 @@ class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClien
       logSuccess("Delete", url.toString)
       response.status match {
         case NO_CONTENT => ()
-        case _          => throw new BadRequestException(s"Status:${response.status}")
+        case _ => throw new BadRequestException(s"Status:${response.status}")
       }
-    } recoverWith {
-      case NonFatal(e) =>
-        logFailure("Delete", url.toString, e)
-        Future.failed(e)
+    } recoverWith { case NonFatal(e) =>
+      logFailure("Delete", url.toString, e)
+      Future.failed(e)
     }
   }
 
@@ -130,12 +127,11 @@ class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClien
       logSuccess("Delete key", url.toString)
       response.status match {
         case NO_CONTENT => ()
-        case _          => throw new BadRequestException(s"Status:${response.status}")
+        case _ => throw new BadRequestException(s"Status:${response.status}")
       }
-    } recoverWith {
-      case NonFatal(e) =>
-        logFailure("Delete key", url.toString, e)
-        Future.failed(e)
+    } recoverWith { case NonFatal(e) =>
+      logFailure("Delete key", url.toString, e)
+      Future.failed(e)
     }
   }
 

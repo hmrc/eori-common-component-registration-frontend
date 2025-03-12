@@ -33,8 +33,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(
-  implicit ec: ExecutionContext
+class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
+  ec: ExecutionContext
 ) {
 
   val LoggerComponentId = "UpdateCustomsDataStoreConnector"

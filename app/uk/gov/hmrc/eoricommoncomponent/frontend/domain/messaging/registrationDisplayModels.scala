@@ -36,9 +36,9 @@ object RegistrationInfoRequest extends Logging {
 
   def forCustomsId(customsId: CustomsId): RegistrationInfoRequest = {
     val idType = customsId match {
-      case _: Eori   => EORI
-      case _: Utr    => UTR
-      case _: Nino   => NINO
+      case _: Eori => EORI
+      case _: Utr => UTR
+      case _: Nino => NINO
       case _: SafeId => SAFE
       case _: TaxPayerId =>
         val error = "TaxPayerId is not supported by RegistrationInfo service"
@@ -58,8 +58,7 @@ object RegistrationInfoResponseCommon extends CommonHeader {
   implicit val jsonFormat: OFormat[RegistrationInfoResponseCommon] = Json.format[RegistrationInfoResponseCommon]
 }
 
-case class RegistrationInfoIndividual(firstName: String, lastName: String, dateOfBirth: Option[String])
-    extends IndividualName
+case class RegistrationInfoIndividual(firstName: String, lastName: String, dateOfBirth: Option[String]) extends IndividualName
 
 object RegistrationInfoIndividual {
   implicit val jsonFormat: OFormat[RegistrationInfoIndividual] = Json.format[RegistrationInfoIndividual]

@@ -56,7 +56,7 @@ class VatRegistrationDateFormSpec extends UnitSpec with MockitoSugar with Before
         "vat-registration-date.month" -> "01",
         "vat-registration-date.year"  -> "2023"
       )
-      val res = form.bind(data)
+      val res  = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-registration-date", "vat.error.minMax", ArraySeq("1970")))
 
       when(mockTimeService.getTodaysDate).thenReturn(LocalDate.of(2023, 1, 24))
@@ -90,14 +90,17 @@ class VatRegistrationDateFormSpec extends UnitSpec with MockitoSugar with Before
 
     "fail when effective date in future" in {
       val todayPlusOneDay = LocalDate.of(2023, 1, 24)
-      val data = formDataVAT.updated(
-        "vat-registration-date.day",
-        DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
-      ).updated("vat-registration-date.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)).updated(
-        "vat-registration-date.year",
-        DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
-      )
-      val res = form.bind(data)
+      val data            = formDataVAT
+        .updated(
+          "vat-registration-date.day",
+          DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
+        )
+        .updated("vat-registration-date.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay))
+        .updated(
+          "vat-registration-date.year",
+          DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
+        )
+      val res             = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.minMax"), ArraySeq("1970")))
     }
     "fail when effective date year invalid" in {

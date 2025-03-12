@@ -94,14 +94,14 @@ object CacheIds extends Logging {
       // $COVERAGE-ON
       throw new IllegalArgumentException(error)
     })
-    val safeId = SafeId(mayBeSafeId.getOrElse {
+    val safeId     = SafeId(mayBeSafeId.getOrElse {
       val error = "SafeId is missing"
       // $COVERAGE-OFF$Loggers
       logger.warn(error)
       // $COVERAGE-ON
       throw new IllegalArgumentException(error)
     })
-    val service = mayBeService.map(_.code)
+    val service    = mayBeService.map(_.code)
 
     new CacheIds(internalId, safeId, service)
   }
@@ -128,26 +128,27 @@ object CustomsId extends Logging {
 
   implicit val formats: Format[CustomsId] = Format[CustomsId](
     fjs = Reads { js =>
-      idTypeMapping.view.flatMap {
-        case (jsFieldName, idConstruct) =>
+      idTypeMapping.view
+        .flatMap { case (jsFieldName, idConstruct) =>
           for (id <- (js \ jsFieldName).asOpt[String]) yield idConstruct(id)
-      }.headOption
+        }
+        .headOption
         .fold[JsResult[CustomsId]](JsError("No matching id type and value found"))(customsId => JsSuccess(customsId))
     },
     tjs = Writes {
-      case Utr(id)        => Json.obj(utr -> id)
-      case Eori(id)       => Json.obj(eori -> id)
-      case Nino(id)       => Json.obj(nino -> id)
-      case SafeId(id)     => Json.obj(safeId -> id)
+      case Utr(id) => Json.obj(utr -> id)
+      case Eori(id) => Json.obj(eori -> id)
+      case Nino(id) => Json.obj(nino -> id)
+      case SafeId(id) => Json.obj(safeId -> id)
       case TaxPayerId(id) => Json.obj(taxPayerId -> id)
     }
   )
 
   def apply(idType: String, idNumber: String): CustomsId =
     idType match {
-      case RegistrationInfoRequest.NINO   => Nino(idNumber)
-      case RegistrationInfoRequest.UTR    => Utr(idNumber)
-      case RegistrationInfoRequest.EORI   => Eori(idNumber)
+      case RegistrationInfoRequest.NINO => Nino(idNumber)
+      case RegistrationInfoRequest.UTR => Utr(idNumber)
+      case RegistrationInfoRequest.EORI => Eori(idNumber)
       case RegistrationInfoRequest.SAFEID => SafeId(idNumber)
       case _ =>
         val error = s"Unknown Identifier: $idType. Expected Nino, UTR or EORI number"
@@ -287,8 +288,7 @@ case class ContactAddressMatchModel(
   country: String
 )
 
-case class IndividualNameAndDateOfBirth(firstName: String, lastName: String, dateOfBirth: LocalDate)
-    extends IndividualName
+case class IndividualNameAndDateOfBirth(firstName: String, lastName: String, dateOfBirth: LocalDate) extends IndividualName
 
 case class EoriAndIdNameAndAddress(fullName: String, address: EstablishmentAddress)
 

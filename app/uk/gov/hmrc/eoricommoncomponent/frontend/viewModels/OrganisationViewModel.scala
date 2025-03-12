@@ -27,11 +27,11 @@ object OrganisationViewModel {
   ): Seq[(String, String)] = {
 
     lazy val ukOptionsFirstScreen = Seq(
-      CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
-      CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
-      CdsOrganisationType.IndividualId  -> messages("cds.matching.organisation-type.radio.individual.label"),
-      CdsOrganisationType.PartnershipId -> messages("cds.matching.organisation-type.radio.partnership.label"),
-      CdsOrganisationType.LimitedLiabilityPartnershipId -> messages(
+      CdsOrganisationType.CompanyId                       -> messages("cds.matching.organisation-type.radio.company.label"),
+      CdsOrganisationType.SoleTraderId                    -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
+      CdsOrganisationType.IndividualId                    -> messages("cds.matching.organisation-type.radio.individual.label"),
+      CdsOrganisationType.PartnershipId                   -> messages("cds.matching.organisation-type.radio.partnership.label"),
+      CdsOrganisationType.LimitedLiabilityPartnershipId   -> messages(
         "cds.matching.organisation-type.radio.limited-liability-partnership.label"
       ),
       CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
@@ -40,11 +40,11 @@ object OrganisationViewModel {
     )
 
     lazy val iomOptions = Seq(
-      CdsOrganisationType.CompanyId     -> messages("cds.matching.organisation-type.radio.company.label"),
-      CdsOrganisationType.SoleTraderId  -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
-      CdsOrganisationType.IndividualId  -> messages("cds.matching.organisation-type.radio.individual.label"),
-      CdsOrganisationType.PartnershipId -> messages("cds.matching.organisation-type.radio.partnership.label"),
-      CdsOrganisationType.LimitedLiabilityPartnershipId -> messages(
+      CdsOrganisationType.CompanyId                       -> messages("cds.matching.organisation-type.radio.company.label"),
+      CdsOrganisationType.SoleTraderId                    -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
+      CdsOrganisationType.IndividualId                    -> messages("cds.matching.organisation-type.radio.individual.label"),
+      CdsOrganisationType.PartnershipId                   -> messages("cds.matching.organisation-type.radio.partnership.label"),
+      CdsOrganisationType.LimitedLiabilityPartnershipId   -> messages(
         "cds.matching.organisation-type.radio.limited-liability-partnership.label"
       ),
       CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
@@ -56,14 +56,14 @@ object OrganisationViewModel {
       CdsOrganisationType.ThirdCountryOrganisationId -> messages(
         "cds.matching.organisation-type.radio.organisation.label"
       ),
-      CdsOrganisationType.ThirdCountrySoleTraderId -> messages(
+      CdsOrganisationType.ThirdCountrySoleTraderId   -> messages(
         "cds.matching.organisation-type.radio.sole-trader.label"
       ),
-      CdsOrganisationType.ThirdCountryIndividualId -> messages("cds.matching.organisation-type.radio.individual.label")
+      CdsOrganisationType.ThirdCountryIndividualId   -> messages("cds.matching.organisation-type.radio.individual.label")
     )
 
     userLocation match {
-      case Some(UserLocation.Iom)                                                 => iomOptions
+      case Some(UserLocation.Iom) => iomOptions
       case Some(UserLocation.ThirdCountry) | Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
       case _ =>
         if (allowNoIdJourney) {
@@ -82,10 +82,10 @@ object OrganisationViewModel {
       CdsOrganisationType.ThirdCountryOrganisationId -> messages(
         "cds.matching.organisation-type.radio.organisation.hint-text"
       ),
-      CdsOrganisationType.ThirdCountrySoleTraderId -> messages(
+      CdsOrganisationType.ThirdCountrySoleTraderId   -> messages(
         "cds.matching.organisation-type.radio.sole-trader.hint-text"
       ),
-      CdsOrganisationType.ThirdCountryIndividualId -> messages(
+      CdsOrganisationType.ThirdCountryIndividualId   -> messages(
         "cds.matching.organisation-type.radio.individual.hint-text"
       )
     )

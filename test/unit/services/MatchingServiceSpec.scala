@@ -27,11 +27,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  MatchingRequestHolder,
-  MatchingResponse,
-  Organisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse, Organisation}
 import util.builders.matching.NinoFormBuilder
 import play.api.libs.json._
 import play.api.mvc.{AnyContent, Request}
@@ -101,7 +97,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT[MatchingResponse](ResponseError(INTERNAL_SERVER_ERROR, "failure")))
 
       val expected = Left(ResponseError(INTERNAL_SERVER_ERROR, "failure"))
-      val result = service.matchBusiness(
+      val result   = service.matchBusiness(
         Utr("some-utr"),
         Organisation("name", CorporateBody),
         establishmentDate = None,
@@ -118,7 +114,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT(matchSuccessResponse))
 
       val expected = Right(())
-      val result =
+      val result   =
         service.matchBusiness(utr, Organisation("someOrg", Partnership), establishmentDate = None, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
@@ -140,7 +136,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT(matchSuccessResponse))
 
       val expected = Right(())
-      val result = service.matchBusiness(
+      val result   = service.matchBusiness(
         Utr(utrId + "K"),
         Organisation("someOrg", Partnership),
         establishmentDate = None,
@@ -163,7 +159,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT(matchSuccessResponse))
 
       val expected = Right(())
-      val result = service.matchBusiness(
+      val result   = service.matchBusiness(
         Utr(utrId + "k"),
         Organisation("someOrg", Partnership),
         establishmentDate = None,
@@ -186,7 +182,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(eitherT(matchSuccessResponse))
 
       val expected = Right(())
-      val result =
+      val result   =
         service.matchBusiness(eori, Organisation("someOrg", UnincorporatedBody), someEstablishmentDate, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
@@ -215,7 +211,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(mockDetails)
 
       val expected = Right(())
-      val result =
+      val result   =
         service.matchBusiness(utr, Organisation("someOrg", Partnership), establishmentDate = None, mockGroupId)(
           mockRequest,
           mockHeaderCarrier
@@ -396,7 +392,7 @@ class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       ).thenReturn(mockDetails)
 
       val expected = Right(matchIndividualSuccessResponse)
-      val result =
+      val result   =
         service.matchIndividualWithNino(ninoId, NinoFormBuilder.asIndividual, mockGroupId)(mockHeaderCarrier, request)
       result.value.futureValue shouldBe expected
 

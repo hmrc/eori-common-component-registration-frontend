@@ -41,7 +41,7 @@ object SicCodeViewModel {
   def hintTextForSic(selectedUserLocation: Option[UserLocation])(implicit messages: Messages): String =
     selectedUserLocation match {
       case Some(UserLocation.ThirdCountryIncEU | UserLocation.ThirdCountry) => messages("cds.subscription.sic.hint.row")
-      case _                                                                => messages("cds.subscription.sic.hint.uk")
+      case _ => messages("cds.subscription.sic.hint.uk")
     }
 
 }

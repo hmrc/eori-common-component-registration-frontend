@@ -61,7 +61,7 @@ object SubscriptionCreateRequest {
     dateEstablished: Option[LocalDate],
     service: Option[Service]
   ): SubscriptionRequest = {
-    val org = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
+    val org                                      = CdsToEtmpOrganisationType(cdsOrgType) orElse CdsToEtmpOrganisationType(reg)
     val ukVatId: Option[List[VatIdentification]] =
       sub.ukVatDetails.map(vd => List(VatIdentification(Some("GB"), Some(vd.number))))
 
@@ -78,8 +78,7 @@ object SubscriptionCreateRequest {
           contactInformation = sub.contactDetails.map(c => createContactInformation(c.contactDetails)),
           vatIDs = createVatIds(ukVatId),
           consentToDisclosureOfPersonalData = sub.personalDataDisclosureConsent.map(bool => if (bool) "1" else "0"),
-          shortName =
-            None, //sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
+          shortName = None, // sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
           dateOfEstablishment = dateEstablished,
           typeOfPerson = org.map(_.typeOfPerson),
           principalEconomicActivity = sub.sicCode.map(_.take(principalEconomicActivityLength)),
@@ -115,12 +114,12 @@ object SubscriptionCreateRequest {
   private def createVatIds(vis: Option[List[VatIdentification]]): Option[List[VatId]] = {
     def removeEmpty: List[VatIdentification] => List[VatId] = _.flatMap {
       case VatIdentification(None, None) => None
-      case VatIdentification(cc, n)      => Some(VatId(cc, n))
+      case VatIdentification(cc, n) => Some(VatId(cc, n))
     }
 
     def removeEmptyList(): List[VatId] => Option[List[VatId]] = {
       case Nil => None
-      case vs  => Some(vs)
+      case vs => Some(vs)
     }
 
     vis map removeEmpty flatMap removeEmptyList()

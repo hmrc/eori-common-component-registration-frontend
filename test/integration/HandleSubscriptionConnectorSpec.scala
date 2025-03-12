@@ -47,7 +47,7 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
   private val emailVerificationTimestamp = "timestamp"
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.handle-subscription.host" -> Host,

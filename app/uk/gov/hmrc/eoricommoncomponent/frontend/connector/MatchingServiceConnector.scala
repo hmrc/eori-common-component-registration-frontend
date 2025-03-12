@@ -23,11 +23,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
-  RegisterWithId,
-  RegisterWithIdConfirmation,
-  RegisterWithIdSubmitted
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{RegisterWithId, RegisterWithIdConfirmation, RegisterWithIdSubmitted}
 import uk.gov.hmrc.http.{HeaderCarrier, _}
 import uk.gov.hmrc.http.client.HttpClientV2
 

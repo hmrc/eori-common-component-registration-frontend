@@ -19,21 +19,11 @@ package unit.domain.messaging.subscription.transformer
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  CharityPublicBodyNotForProfit,
-  Company,
-  Embassy,
-  Individual,
-  LimitedLiabilityPartnership,
-  SoleTrader
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, Company, Embassy, Individual, LimitedLiabilityPartnership, SoleTrader}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.transformer.FormDataCreateEoriSubscriptionRequestTransformer
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{
-  ContactInformation,
-  VatIdentification
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{ContactInformation, VatIdentification}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.{Iom, Uk}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
@@ -43,8 +33,7 @@ import util.TestData
 
 import java.time.LocalDate
 
-class FormDataCreateEoriSubscriptionRequestTransformerSpec
-    extends AnyFreeSpec with Matchers with TestData with OptionValues {
+class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec with Matchers with TestData with OptionValues {
 
   val transformer = new FormDataCreateEoriSubscriptionRequestTransformer
 
@@ -368,8 +357,7 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
   private def givenRegistrationDetailsEmbassy: RegistrationDetailsEmbassy = {
     RegistrationDetailsEmbassy(
       embassyName = "Embassy Of Japan",
-      embassyAddress =
-        Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("W1J 7JT"), "GB"),
+      embassyAddress = Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("W1J 7JT"), "GB"),
       embassyCustomsId = None,
       embassySafeId = SafeId("")
     )
@@ -392,15 +380,13 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec
   }
 
   private def givenRegistrationDetailsSoleTrader: RegistrationDetailsIndividual = {
-    RegistrationDetailsIndividual(fullName = "Thomas Tell", dateOfBirth = LocalDate.of(1980, 12, 12)).copy(address =
-      Address("Bay view road", Some("Bay Place"), Some("Port St. Mary"), None, Some("IM9 5AQ"), "GB")
-    )
+    RegistrationDetailsIndividual(fullName = "Thomas Tell", dateOfBirth = LocalDate.of(1980, 12, 12))
+      .copy(address = Address("Bay view road", Some("Bay Place"), Some("Port St. Mary"), None, Some("IM9 5AQ"), "GB"))
   }
 
   private def givenRegistrationDetailsIndividual: RegistrationDetailsIndividual = {
-    RegistrationDetailsIndividual(fullName = "Phillip Bailis", dateOfBirth = LocalDate.of(1999, 12, 12)).copy(address =
-      Address("Bay view road", Some("Bay Place"), Some("Port St. Mary"), None, Some("IM9 5AQ"), "GB")
-    )
+    RegistrationDetailsIndividual(fullName = "Phillip Bailis", dateOfBirth = LocalDate.of(1999, 12, 12))
+      .copy(address = Address("Bay view road", Some("Bay Place"), Some("Port St. Mary"), None, Some("IM9 5AQ"), "GB"))
   }
 
   private def givenRegistrationDetailsPartnership: RegistrationDetailsOrganisation = {

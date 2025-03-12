@@ -38,7 +38,7 @@ object AddressDetailsForm {
 
   private def validStreet: Constraint[String] =
     Constraint({
-      case s if s.trim.isEmpty     => Invalid(ValidationError("cds.subscription.address-details.street.empty.error"))
+      case s if s.trim.isEmpty => Invalid(ValidationError("cds.subscription.address-details.street.empty.error"))
       case s if s.trim.length > 70 => Invalid(ValidationError("cds.subscription.address-details.street.too-long.error"))
       case s if !s.matches(noTagsRegex) =>
         Invalid(ValidationError("cds.subscription.address-details.street.error.invalid-chars"))
@@ -47,7 +47,7 @@ object AddressDetailsForm {
 
   private def validCountry: Constraint[String] =
     Constraint({
-      case s if s.trim.isEmpty           => Invalid(ValidationError("cds.matching-error.country.invalid"))
+      case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching-error.country.invalid"))
       case s if s.trim.length != Length2 => Invalid(ValidationError("cds.matching-error.country.invalid"))
       case s if !s.matches(noTagsRegex) =>
         Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))

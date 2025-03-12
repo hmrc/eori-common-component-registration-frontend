@@ -29,9 +29,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
-class IntegrationTestsSpec
-    extends PlaySpec with BeforeAndAfter with BeforeAndAfterAll with Eventually with IntegrationPatience
-    with WireMockRunner {
+class IntegrationTestsSpec extends PlaySpec with BeforeAndAfter with BeforeAndAfterAll with Eventually with IntegrationPatience with WireMockRunner {
 
   implicit val defaultTimeout: FiniteDuration = 5 seconds
 

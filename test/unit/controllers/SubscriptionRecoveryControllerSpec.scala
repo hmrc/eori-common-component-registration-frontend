@@ -23,22 +23,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  SUB09SubscriptionDisplayConnector,
-  ServiceUnavailableResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  HandleSubscriptionService,
-  RandomUUIDGenerator,
-  TaxEnrolmentsService,
-  UpdateVerifiedEmailService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator, TaxEnrolmentsService, UpdateVerifiedEmailService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, recovery_registration_exists}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -50,8 +42,7 @@ import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class SubscriptionRecoveryControllerSpec
-    extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
+class SubscriptionRecoveryControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector                     = mock[AuthConnector]
   private val mockAuthAction                        = authAction(mockAuthConnector)
@@ -84,8 +75,8 @@ class SubscriptionRecoveryControllerSpec
   )(global)
 
   def registerWithEoriAndIdResponseDetail: Option[RegisterWithEoriAndIdResponseDetail] = {
-    val trader               = Trader(fullName = "New trading", shortName = "nt")
-    val establishmentAddress = EstablishmentAddress(streetAndNumber = "new street", city = "leeds", countryCode = "GB")
+    val trader                     = Trader(fullName = "New trading", shortName = "nt")
+    val establishmentAddress       = EstablishmentAddress(streetAndNumber = "new street", city = "leeds", countryCode = "GB")
     val responseData: ResponseData = ResponseData(
       SAFEID = "SomeSafeId",
       trader = trader,

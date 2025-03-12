@@ -35,7 +35,7 @@ object AddressViewModel {
     new AddressViewModel(street.trim, city.trim, postcode.map(_.trim), countryCode)
 
   def apply(sixLineAddress: Address): AddressViewModel = {
-    val line1 = (sixLineAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength) + " " + sixLineAddress.addressLine2
+    val line1       = (sixLineAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength) + " " + sixLineAddress.addressLine2
       .getOrElse("")
       .trim
       .take(sixLineAddressLine2MaxLength)).trim

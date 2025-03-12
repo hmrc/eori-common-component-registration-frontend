@@ -133,10 +133,9 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
         )
       )
 
-      submitForm(Map("nino" -> nino)) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
+      submitForm(Map("nino" -> nino)) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
       }
     }
     "Load Nino page with errors" in {
@@ -174,11 +173,10 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
         )
       )
 
-      submitForm(Map("nino" -> nino)) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText("title") should startWith("Error: ")
+      submitForm(Map("nino" -> nino)) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
   }

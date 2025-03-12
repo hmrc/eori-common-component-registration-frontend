@@ -62,9 +62,12 @@ class PostcodeViewSpec extends ViewSpec {
 
     "display line 1 input with label" in {
 
-      doc().body().getElementsByClass(
-        "govuk-label govuk-!-font-weight-bold"
-      ).text() mustBe "House number or name (optional)"
+      doc()
+        .body()
+        .getElementsByClass(
+          "govuk-label govuk-!-font-weight-bold"
+        )
+        .text() mustBe "House number or name (optional)"
     }
 
     "display Find Address button" in {

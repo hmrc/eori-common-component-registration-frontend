@@ -60,9 +60,11 @@ class CompanyRegisteredCountrySpec extends UnitSpec with Injecting {
 
       "input has empty value" in {
 
-        val form = CompanyRegisteredCountry.form("errorMessage").bind(
-          Map("countryCode" -> "cds.subscription.address-details.country.emptyValueText")
-        )
+        val form = CompanyRegisteredCountry
+          .form("errorMessage")
+          .bind(
+            Map("countryCode" -> "cds.subscription.address-details.country.emptyValueText")
+          )
 
         val expectedErrors = Seq(FormError("countryCode", "errorMessage"))
 

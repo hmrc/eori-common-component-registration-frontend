@@ -63,9 +63,9 @@ class RegisterWithoutIdService @Inject() (
     )
 
     for {
-      response <- connector.register(requestWithoutId)
+      response           <- connector.register(requestWithoutId)
       registrationDetails = detailsCreator.registrationDetails(response, orgName, createSixLineAddress(address))
-      _ <- save(registrationDetails, loggedInUser, orgType)
+      _                  <- save(registrationDetails, loggedInUser, orgType)
     } yield response
   }
 
@@ -77,9 +77,9 @@ class RegisterWithoutIdService @Inject() (
     orgType: Option[CdsOrganisationType] = None
   )(implicit request: Request[_], hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {
     import individualNameAndDateOfBirth._
-    val individual =
+    val individual       =
       Individual.withLocalDate(firstName, lastName, dateOfBirth)
-    val reqDetails = RegisterWithoutIdReqDetails.individual(
+    val reqDetails       = RegisterWithoutIdReqDetails.individual(
       address = address,
       individual = individual,
       contactDetail = contactDetail.getOrElse {
@@ -93,13 +93,13 @@ class RegisterWithoutIdService @Inject() (
     val requestWithoutId =
       RegisterWithoutIDRequest(requestCommonGenerator.generate(), reqDetails)
     for {
-      response <- connector.register(requestWithoutId)
+      response           <- connector.register(requestWithoutId)
       registrationDetails = detailsCreator.registrationDetails(
-        response,
-        individualNameAndDateOfBirth,
-        createSixLineAddress(address)
-      )
-      _ <- save(registrationDetails, loggedInUser, orgType)
+                              response,
+                              individualNameAndDateOfBirth,
+                              createSixLineAddress(address)
+                            )
+      _                  <- save(registrationDetails, loggedInUser, orgType)
 
     } yield response
 

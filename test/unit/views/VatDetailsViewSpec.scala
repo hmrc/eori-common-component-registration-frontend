@@ -32,7 +32,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
 
 class VatDetailsViewSpec extends ViewSpec {
-  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
+  implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   val mockAuditable: Auditable = mock[Auditable]
 

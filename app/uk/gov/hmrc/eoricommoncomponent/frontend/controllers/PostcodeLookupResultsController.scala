@@ -21,10 +21,7 @@ import play.api.mvc._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ConfirmContactDetailsController,
-  ManualAddressController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, ManualAddressController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
@@ -58,22 +55,25 @@ class PostcodeLookupResultsController @Inject() (
   private def displayPage(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
     sessionCache.getPostcodeAndLine1Details.flatMap {
       case Some(addressLookupParams) =>
-        addressLookupConnector.lookup(
-          addressLookupParams.postcode.replaceAll(" ", ""),
-          addressLookupParams.addressLine1
-        ).flatMap {
-          case AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
-            Future.successful(
-              Ok(prepareView(AddressResultsForm.form(addresses), addressLookupParams, addresses, service))
-            )
-          case AddressLookupSuccess(_) if addressLookupParams.addressLine1.exists(_.nonEmpty) =>
-            repeatQueryWithoutLine1(addressLookupParams, service)
-          case AddressLookupSuccess(_) =>
+        addressLookupConnector
+          .lookup(
+            addressLookupParams.postcode.replaceAll(" ", ""),
+            addressLookupParams.addressLine1
+          )
+          .flatMap {
+            case AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
+              Future.successful(
+                Ok(prepareView(AddressResultsForm.form(addresses), addressLookupParams, addresses, service))
+              )
+            case AddressLookupSuccess(_) if addressLookupParams.addressLine1.exists(_.nonEmpty) =>
+              repeatQueryWithoutLine1(addressLookupParams, service)
+            case AddressLookupSuccess(_) =>
+              Future.successful(redirectToManualAddressPage(service))
+            case AddressLookupFailure => throw AddressLookupException
+          }
+          .recoverWith { case _: AddressLookupException.type =>
             Future.successful(redirectToManualAddressPage(service))
-          case AddressLookupFailure => throw AddressLookupException
-        }.recoverWith {
-          case _: AddressLookupException.type => Future.successful(redirectToManualAddressPage(service))
-        }
+          }
       case _ => Future.successful(redirectToManualAddressPage(service))
     }
 
@@ -97,7 +97,7 @@ class PostcodeLookupResultsController @Inject() (
           Ok(prepareView(AddressResultsForm.form(addresses), addressLookupParamsWithoutLine1, addresses, service))
         }
       case AddressLookupSuccess(_) => Future.successful(redirectToManualAddressPage(service))
-      case AddressLookupFailure    => throw AddressLookupException
+      case AddressLookupFailure => throw AddressLookupException
     }
   }
 
@@ -105,24 +105,29 @@ class PostcodeLookupResultsController @Inject() (
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       sessionCache.getPostcodeAndLine1Details.flatMap {
         case Some(addressLookupParams) =>
-          addressLookupConnector.lookup(
-            addressLookupParams.postcode.replaceAll(" ", ""),
-            addressLookupParams.addressLine1
-          ).flatMap {
-            case AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
-              AddressResultsForm.form(addresses).bindFromRequest().fold(
-                formWithErrors =>
-                  Future.successful(BadRequest(prepareView(formWithErrors, addressLookupParams, addresses, service))),
-                address =>
-                  registrationDetailsService.cacheAddress(address) map { _ =>
-                    Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-                  }
-              )
-            case AddressLookupSuccess(_) => Future.successful(redirectToManualAddressPage(service))
-            case AddressLookupFailure    => throw AddressLookupException
-          }.recoverWith {
-            case _: AddressLookupException.type => Future.successful(redirectToManualAddressPage(service))
-          }
+          addressLookupConnector
+            .lookup(
+              addressLookupParams.postcode.replaceAll(" ", ""),
+              addressLookupParams.addressLine1
+            )
+            .flatMap {
+              case AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
+                AddressResultsForm
+                  .form(addresses)
+                  .bindFromRequest()
+                  .fold(
+                    formWithErrors => Future.successful(BadRequest(prepareView(formWithErrors, addressLookupParams, addresses, service))),
+                    address =>
+                      registrationDetailsService.cacheAddress(address) map { _ =>
+                        Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+                      }
+                  )
+              case AddressLookupSuccess(_) => Future.successful(redirectToManualAddressPage(service))
+              case AddressLookupFailure => throw AddressLookupException
+            }
+            .recoverWith { case _: AddressLookupException.type =>
+              Future.successful(redirectToManualAddressPage(service))
+            }
         case _ => Future.successful(redirectToManualAddressPage(service))
 
       }

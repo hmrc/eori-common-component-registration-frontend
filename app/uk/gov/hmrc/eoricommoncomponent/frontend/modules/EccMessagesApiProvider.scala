@@ -35,12 +35,13 @@ class EccMessagesApiProvider @Inject() (
       .map(_.code)
       .map { code =>
         (code, loadMessageFiles(s".$code"))
-      }.to(Map): Map[String, Map[String, String]])
+      }
+      .to(Map): Map[String, Map[String, String]])
       .+("default" -> loadMessageFiles("")) + ("default.play" -> loadMessageFiles(".default"))
 
   private def loadMessageFiles(suffix: String): Map[String, String] =
-    config.get[Seq[String]]("messages.file.names").foldLeft(Map.empty[String, String]) {
-      case (acc, name) => acc ++ loadMessages(name + suffix)
+    config.get[Seq[String]]("messages.file.names").foldLeft(Map.empty[String, String]) { case (acc, name) =>
+      acc ++ loadMessages(name + suffix)
     }
 
 }

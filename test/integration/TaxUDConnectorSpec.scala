@@ -25,12 +25,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  ErrorResponse,
-  ServiceUnavailableResponse,
-  SuccessResponse,
-  TaxUDConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{ErrorResponse, ServiceUnavailableResponse, SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Embassy
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.transformer.FormDataCreateEoriSubscriptionRequestTransformer
@@ -50,7 +45,7 @@ import java.time.format.DateTimeFormatter
 
 class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.eori-common-component-hods-proxy.host"                                  -> Host,
@@ -101,8 +96,7 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
   val registrationDetails: RegistrationDetailsEmbassy = RegistrationDetailsEmbassy(
     embassyName = "Embassy Of Japan",
-    embassyAddress =
-      Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SE28 1AA"), "GB"),
+    embassyAddress = Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SE28 1AA"), "GB"),
     embassyCustomsId = None,
     embassySafeId = SafeId("")
   )

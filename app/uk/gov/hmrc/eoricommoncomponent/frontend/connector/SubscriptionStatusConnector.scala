@@ -23,11 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
-  SubscriptionStatus,
-  SubscriptionStatusResult,
-  SubscriptionStatusSubmitted
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{SubscriptionStatus, SubscriptionStatusResult, SubscriptionStatusSubmitted}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -64,12 +60,11 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
 
       auditCall(baseUrl, request, resp)
       resp.subscriptionStatusResponse
-    } recover {
-      case e: Throwable =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
-        // $COVERAGE-ON
-        throw e
+    } recover { case e: Throwable =>
+      // $COVERAGE-OFF$Loggers
+      logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
+      // $COVERAGE-ON
+      throw e
     }
   }
 

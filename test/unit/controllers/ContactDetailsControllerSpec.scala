@@ -44,13 +44,13 @@ import scala.concurrent.Future
 
 class ContactDetailsControllerSpec extends SubscriptionFlowSpec with BeforeAndAfterEach {
 
-  protected override val mockSubscriptionFlowManager: SubscriptionFlowManager = mock[SubscriptionFlowManager]
-  protected override val formId: String                                       = SubscriptionContactDetailsPage.formId
+  override protected val mockSubscriptionFlowManager: SubscriptionFlowManager = mock[SubscriptionFlowManager]
+  override protected val formId: String                                       = SubscriptionContactDetailsPage.formId
 
-  protected override val submitInCreateModeUrl: String =
+  override protected val submitInCreateModeUrl: String =
     ContactDetailsController.submit(isInReviewMode = false, atarService).url
 
-  protected override val submitInReviewModeUrl: String =
+  override protected val submitInReviewModeUrl: String =
     ContactDetailsController.submit(isInReviewMode = true, atarService).url
 
   private val mockRequestSessionData  = mock[RequestSessionData]

@@ -25,7 +25,7 @@ import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{Sub02Controller, routes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
@@ -490,9 +490,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     withAuthorisedUser(userId, mockAuthConnector)
     mockSessionCacheForOutcomePage
     test(
-      subscriptionController.end(eoriOnlyService).apply(
-        SessionBuilder.buildRequestWithSessionAndPath("/eori-only/subscribe", userId)
-      )
+      subscriptionController
+        .end(eoriOnlyService)
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/eori-only/subscribe", userId)
+        )
     )
   }
 
@@ -502,9 +504,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     withAuthorisedUser(userId, mockAuthConnector)
     mockSessionCacheForOutcomePage
     test(
-      subscriptionController.end(atarService).apply(
-        SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)
-      )
+      subscriptionController
+        .end(atarService)
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)
+        )
     )
   }
 
@@ -533,27 +537,33 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private def invokeSubscriptionInProgress(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
-      subscriptionController.subscriptionInProgress(atarService).apply(
-        SessionBuilder.buildRequestWithSession(defaultUserId)
-      )
+      subscriptionController
+        .subscriptionInProgress(atarService)
+        .apply(
+          SessionBuilder.buildRequestWithSession(defaultUserId)
+        )
     )
   }
 
   private def invokeEoriAlreadyAssociated(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
-      subscriptionController.eoriAlreadyAssociated(atarService).apply(
-        SessionBuilder.buildRequestWithSession(defaultUserId)
-      )
+      subscriptionController
+        .eoriAlreadyAssociated(atarService)
+        .apply(
+          SessionBuilder.buildRequestWithSession(defaultUserId)
+        )
     )
   }
 
   private def invokeRequestNotProcessed(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
-      subscriptionController.requestNotProcessed(atarService).apply(
-        SessionBuilder.buildRequestWithSession(defaultUserId)
-      )
+      subscriptionController
+        .requestNotProcessed(atarService)
+        .apply(
+          SessionBuilder.buildRequestWithSession(defaultUserId)
+        )
     )
   }
 

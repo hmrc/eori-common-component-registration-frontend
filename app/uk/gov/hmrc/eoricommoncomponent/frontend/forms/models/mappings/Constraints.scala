@@ -23,12 +23,11 @@ import java.time.LocalDate
 trait Constraints {
 
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
-    Constraint {
-      input =>
-        constraints
-          .map(_.apply(input))
-          .find(_ != Valid)
-          .getOrElse(Valid)
+    Constraint { input =>
+      constraints
+        .map(_.apply(input))
+        .find(_ != Valid)
+        .getOrElse(Valid)
     }
 
   protected def maxDate(maximum: => LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =

@@ -45,7 +45,7 @@ class VatRegisteredUkKanaController @Inject() (
 
   def destinationsByAnswer(yesNoAnswer: YesNo): String = yesNoAnswer match {
     case theAnswer if theAnswer.isYes => "https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes"
-    case _                            => "https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no"
+    case _ => "https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no"
   }
 
 }

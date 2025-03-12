@@ -26,11 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationMo
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.{
-  nameUtrCompanyForm,
-  nameUtrOrganisationForm,
-  nameUtrPartnershipForm
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.{nameUtrCompanyForm, nameUtrOrganisationForm, nameUtrPartnershipForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require._
@@ -72,18 +68,18 @@ class NameIdOrganisationController @Inject() (
 
     val form: Form[NameIdOrganisationMatchModel] = matchingServiceType match {
       case mST if mST == "Partnership" || mST == "LLP" => nameUtrPartnershipForm
-      case mST if mST == "Corporate Body"              => nameUtrCompanyForm
-      case _                                           => nameUtrOrganisationForm
+      case mST if mST == "Corporate Body" => nameUtrCompanyForm
+      case _ => nameUtrOrganisationForm
     }
 
     def createCustomsId(utr: String): Utr = Utr(utr)
   }
 
   private val OrganisationTypeConfigurations: Map[String, Configuration[_ <: NameIdOrganisationMatch]] = Map(
-    CdsOrganisationType.CompanyId                     -> UtrConfiguration("Company", displayMode = CompanyDM),
-    CdsOrganisationType.CompanyId                     -> UtrConfiguration("Corporate Body", displayMode = RegisteredCompanyDM),
-    CdsOrganisationType.PartnershipId                 -> UtrConfiguration("Partnership", displayMode = PartnershipDM),
-    CdsOrganisationType.LimitedLiabilityPartnershipId -> UtrConfiguration("LLP", displayMode = PartnershipLLpDM),
+    CdsOrganisationType.CompanyId                       -> UtrConfiguration("Company", displayMode = CompanyDM),
+    CdsOrganisationType.CompanyId                       -> UtrConfiguration("Corporate Body", displayMode = RegisteredCompanyDM),
+    CdsOrganisationType.PartnershipId                   -> UtrConfiguration("Partnership", displayMode = PartnershipDM),
+    CdsOrganisationType.LimitedLiabilityPartnershipId   -> UtrConfiguration("LLP", displayMode = PartnershipLLpDM),
     CdsOrganisationType.CharityPublicBodyNotForProfitId -> UtrConfiguration(
       "Unincorporated Body",
       displayMode = OrganisationModeDM
@@ -115,7 +111,8 @@ class NameIdOrganisationController @Inject() (
     service: Service,
     groupId: GroupId
   )(implicit request: Request[AnyContent]): Future[Result] =
-    conf.form.bindFromRequest()
+    conf.form
+      .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(organisationType, conf, formWithErrors, service))),
         formData =>
@@ -179,8 +176,8 @@ class NameIdOrganisationController @Inject() (
       service
     )
 
-  private def view[M <: NameIdOrganisationMatch](organisationType: String, conf: Configuration[M], service: Service)(
-    implicit request: Request[AnyContent]
+  private def view[M <: NameIdOrganisationMatch](organisationType: String, conf: Configuration[M], service: Service)(implicit
+    request: Request[AnyContent]
   ): HtmlFormat.Appendable =
     matchNameIdOrganisationView(
       conf.form,

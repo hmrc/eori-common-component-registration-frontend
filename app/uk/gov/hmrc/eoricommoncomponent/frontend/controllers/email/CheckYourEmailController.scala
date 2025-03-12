@@ -35,33 +35,28 @@ class CheckYourEmailController @Inject() (
 ) extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction {
-      implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
-        checkYourEmailService.fetchEmailAndPopulateView(userWithEnrolments, service)
+    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
+      checkYourEmailService.fetchEmailAndPopulateView(userWithEnrolments, service)
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction {
-      implicit request => implicit userWithEnrolments: LoggedInUserWithEnrolments =>
-        confirmEmailYesNoAnswerForm()
-          .bindFromRequest()
-          .fold(
-            formWithErrors =>
-              checkYourEmailService.handleFormWithErrors(userWithEnrolments, formWithErrors, isInReviewMode, service),
-            yesNoAnswer => checkYourEmailService.locationByAnswer(yesNoAnswer, service)
-          )
+    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => implicit userWithEnrolments: LoggedInUserWithEnrolments =>
+      confirmEmailYesNoAnswerForm()
+        .bindFromRequest()
+        .fold(
+          formWithErrors => checkYourEmailService.handleFormWithErrors(userWithEnrolments, formWithErrors, isInReviewMode, service),
+          yesNoAnswer => checkYourEmailService.locationByAnswer(yesNoAnswer, service)
+        )
     }
 
   def verifyEmailView(service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction {
-      implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
-        checkYourEmailService.fetchEmailAndPopulateView(userWithEnrolments, service, emailVerificationView = true)
+    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
+      checkYourEmailService.fetchEmailAndPopulateView(userWithEnrolments, service, emailVerificationView = true)
     }
 
   def emailConfirmed(service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction {
-      implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
-        checkYourEmailService.emailConfirmed(userWithEnrolments, service)
+    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
+      checkYourEmailService.emailConfirmed(userWithEnrolments, service)
     }
 
   def emailConfirmedContinue(service: Service): Action[AnyContent] =

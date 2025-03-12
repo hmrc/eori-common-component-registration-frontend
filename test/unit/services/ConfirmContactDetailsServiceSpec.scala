@@ -96,99 +96,94 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
 
     }
 
-    "get cached details and redirect to OrganisationTypeController when individual with No selected" in subscriptionToTest.foreach {
-      testService =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-          Future.successful(RegistrationDetailsBuilder.individualRegistrationDetails)
-        )
-        when(mockRegistrationConfirmService.clearRegistrationData()).thenReturn(Future.successful((): Unit))
+    "get cached details and redirect to OrganisationTypeController when individual with No selected" in subscriptionToTest.foreach { testService =>
+      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+        Future.successful(RegistrationDetailsBuilder.individualRegistrationDetails)
+      )
+      when(mockRegistrationConfirmService.clearRegistrationData()).thenReturn(Future.successful((): Unit))
 
-        val result = await(
-          service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(noAnswered)))
-        )
-        result.header.headers(
-          "Location"
-        ) mustBe s"/customs-registration-services/${testService.code}/register/matching/organisation-type"
-
-    }
-
-    "redirect a onNewSubscription to startSubscriptionFlow when organisation and answer is yes" in subscriptionToTest.foreach {
-      testService =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-          Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
-        )
-        when(
-          mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
-        ).thenReturn(Future.successful(NewSubscription))
-        when(mockSubscriptionFlowManager.startSubscriptionFlow(any())(any[Request[AnyContent]])).thenReturn(
-          Future.successful(mockFlowStart)
-        )
-        when(mockSubscriptionPage.url(any())).thenReturn("/test")
-
-        val result = await(
-          service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
-        )
-        result.header.status mustBe SEE_OTHER
+      val result = await(
+        service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(noAnswered)))
+      )
+      result.header.headers(
+        "Location"
+      ) mustBe s"/customs-registration-services/${testService.code}/register/matching/organisation-type"
 
     }
 
-    "redirect a SubscriptionProcessing to ConfirmContactDetailsController when organisation and answer is yes" in subscriptionToTest.foreach {
-      testService =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-          Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
-        )
-        when(
-          mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
-        ).thenReturn(Future.successful(SubscriptionProcessing))
+    "redirect a onNewSubscription to startSubscriptionFlow when organisation and answer is yes" in subscriptionToTest.foreach { testService =>
+      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+        Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
+      )
+      when(
+        mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
+      ).thenReturn(Future.successful(NewSubscription))
+      when(mockSubscriptionFlowManager.startSubscriptionFlow(any())(any[Request[AnyContent]])).thenReturn(
+        Future.successful(mockFlowStart)
+      )
+      when(mockSubscriptionPage.url(any())).thenReturn("/test")
 
-        val result = await(
-          service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
-        )
-        result.header.headers(
-          "Location"
-        ) mustBe s"/customs-registration-services/${testService.code}/register/processing"
-
-    }
-
-    "redirect a SubscriptionExists to SignInWithDifferentDetailsController when enrolment exists" in subscriptionToTest.foreach {
-      testService =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-          Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
-        )
-        when(
-          mockTaxEnrolmentsService.doesPreviousEnrolmentExists(any())(any[HeaderCarrier], any[ExecutionContext])
-        ).thenReturn(Future.successful(true))
-        when(
-          mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
-        ).thenReturn(Future.successful(SubscriptionExists))
-
-        val result = await(
-          service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
-        )
-        result.header.headers(
-          "Location"
-        ) mustBe s"/customs-registration-services/${testService.code}/register/you-need-to-sign-in-with-different-details"
+      val result = await(
+        service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
+      )
+      result.header.status mustBe SEE_OTHER
 
     }
 
-    "redirect a SubscriptionExists to SubscriptionRecoveryController when enrolment does not exist" in subscriptionToTest.foreach {
-      testService =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-          Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
-        )
-        when(
-          mockTaxEnrolmentsService.doesPreviousEnrolmentExists(any())(any[HeaderCarrier], any[ExecutionContext])
-        ).thenReturn(Future.successful(false))
-        when(
-          mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
-        ).thenReturn(Future.successful(SubscriptionExists))
+    "redirect a SubscriptionProcessing to ConfirmContactDetailsController when organisation and answer is yes" in subscriptionToTest.foreach { testService =>
+      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+        Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
+      )
+      when(
+        mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
+      ).thenReturn(Future.successful(SubscriptionProcessing))
 
-        val result = await(
-          service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
-        )
-        result.header.headers(
-          "Location"
-        ) mustBe s"/customs-registration-services/${testService.code}/register/complete-enrolment"
+      val result = await(
+        service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
+      )
+      result.header.headers(
+        "Location"
+      ) mustBe s"/customs-registration-services/${testService.code}/register/processing"
+
+    }
+
+    "redirect a SubscriptionExists to SignInWithDifferentDetailsController when enrolment exists" in subscriptionToTest.foreach { testService =>
+      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+        Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
+      )
+      when(
+        mockTaxEnrolmentsService.doesPreviousEnrolmentExists(any())(any[HeaderCarrier], any[ExecutionContext])
+      ).thenReturn(Future.successful(true))
+      when(
+        mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
+      ).thenReturn(Future.successful(SubscriptionExists))
+
+      val result = await(
+        service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
+      )
+      result.header.headers(
+        "Location"
+      ) mustBe s"/customs-registration-services/${testService.code}/register/you-need-to-sign-in-with-different-details"
+
+    }
+
+    "redirect a SubscriptionExists to SubscriptionRecoveryController when enrolment does not exist" in subscriptionToTest.foreach { testService =>
+      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+        Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
+      )
+      when(
+        mockTaxEnrolmentsService.doesPreviousEnrolmentExists(any())(any[HeaderCarrier], any[ExecutionContext])
+      ).thenReturn(Future.successful(false))
+      when(
+        mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
+      ).thenReturn(Future.successful(SubscriptionExists))
+
+      val result = await(
+        service.checkAddressDetails(testService, isInReviewMode = false, YesNoWrongAddress.apply(Some(yesAnswered)))
+      )
+      result.header.headers(
+        "Location"
+      ) mustBe s"/customs-registration-services/${testService.code}/register/complete-enrolment"
 
     }
 
@@ -210,19 +205,18 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
 
     }
 
-    "redirect to DetermineReviewPageController when 'isInReview' and orgType is empty" in subscriptionToTest.foreach {
-      testService =>
-        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-          Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
-        )
-        when(
-          mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
-        ).thenReturn(Future.successful(NewSubscription))
+    "redirect to DetermineReviewPageController when 'isInReview' and orgType is empty" in subscriptionToTest.foreach { testService =>
+      when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+        Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
+      )
+      when(
+        mockRegistrationConfirmService.currentSubscriptionStatus(any[HeaderCarrier], any(), any[Request[_]])
+      ).thenReturn(Future.successful(NewSubscription))
 
-        val result = await(
-          service.checkAddressDetails(testService, isInReviewMode = true, YesNoWrongAddress.apply(Some(yesAnswered)))
-        )
-        result.header.status mustBe SEE_OTHER
+      val result = await(
+        service.checkAddressDetails(testService, isInReviewMode = true, YesNoWrongAddress.apply(Some(yesAnswered)))
+      )
+      result.header.status mustBe SEE_OTHER
 
     }
 
@@ -244,85 +238,75 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
 
     "handleAddressAndPopulateView" should {
 
-      "Redirect to AddressInvalidController when invalid address submitted for individual" in subscriptionToTest.foreach {
-        testService =>
-          when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-            Future.successful(
-              RegistrationDetailsBuilder.individualRegistrationDetails.copy(address =
-                Address.apply("", None, None, None, None, "")
-              )
-            )
+      "Redirect to AddressInvalidController when invalid address submitted for individual" in subscriptionToTest.foreach { testService =>
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(
+            RegistrationDetailsBuilder.individualRegistrationDetails.copy(address = Address.apply("", None, None, None, None, ""))
           )
+        )
 
-          val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          result.header.headers(
-            "Location"
-          ) mustBe s"/customs-registration-services/${testService.code}/register/address-invalid"
+        val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
+        result.header.headers(
+          "Location"
+        ) mustBe s"/customs-registration-services/${testService.code}/register/address-invalid"
       }
 
-      "Populate confirmContactDetailsView when valid address submitted for individual" in subscriptionToTest.foreach {
-        testService =>
-          when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-            Future.successful(RegistrationDetailsBuilder.individualRegistrationDetails)
-          )
+      "Populate confirmContactDetailsView when valid address submitted for individual" in subscriptionToTest.foreach { testService =>
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(RegistrationDetailsBuilder.individualRegistrationDetails)
+        )
 
-          val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          result.header.status mustBe OK
+        val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
+        result.header.status mustBe OK
       }
 
-      "Redirect to AddressInvalidController when invalid address submitted for organisation" in subscriptionToTest.foreach {
-        testService =>
-          when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-            Future.successful(
-              RegistrationDetailsBuilder.organisationRegistrationDetails.copy(address =
-                Address.apply("", None, None, None, None, "")
-              )
-            )
+      "Redirect to AddressInvalidController when invalid address submitted for organisation" in subscriptionToTest.foreach { testService =>
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(
+            RegistrationDetailsBuilder.organisationRegistrationDetails.copy(address = Address.apply("", None, None, None, None, ""))
           )
+        )
 
-          val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          result.header.headers(
-            "Location"
-          ) mustBe s"/customs-registration-services/${testService.code}/register/address-invalid"
+        val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
+        result.header.headers(
+          "Location"
+        ) mustBe s"/customs-registration-services/${testService.code}/register/address-invalid"
       }
 
-      "Populate confirmContactDetailsView when valid address submitted for organisation" in subscriptionToTest.foreach {
-        testService =>
-          when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-            Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
-          )
-          when(mockOrgTypeLookup.etmpOrgTypeOpt).thenReturn(Future.successful(Some(CorporateBody)))
-          when(mockRequestSessionData.selectedUserLocation).thenReturn(Some(UserLocation.Uk))
+      "Populate confirmContactDetailsView when valid address submitted for organisation" in subscriptionToTest.foreach { testService =>
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
+        )
+        when(mockOrgTypeLookup.etmpOrgTypeOpt).thenReturn(Future.successful(Some(CorporateBody)))
+        when(mockRequestSessionData.selectedUserLocation).thenReturn(Some(UserLocation.Uk))
 
-          val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          result.header.status mustBe OK
+        val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
+        result.header.status mustBe OK
       }
 
-      "Populate confirmContactDetailsView when valid address submitted for UnincorporatedBody" in subscriptionToTest.foreach {
-        testService =>
-          when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-            Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
-          )
-          when(mockOrgTypeLookup.etmpOrgTypeOpt).thenReturn(Future.successful(Some(UnincorporatedBody)))
-          when(mockRequestSessionData.selectedUserLocation).thenReturn(Some(UserLocation.Uk))
+      "Populate confirmContactDetailsView when valid address submitted for UnincorporatedBody" in subscriptionToTest.foreach { testService =>
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(RegistrationDetailsBuilder.organisationRegistrationDetails)
+        )
+        when(mockOrgTypeLookup.etmpOrgTypeOpt).thenReturn(Future.successful(Some(UnincorporatedBody)))
+        when(mockRequestSessionData.selectedUserLocation).thenReturn(Some(UserLocation.Uk))
 
-          val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          result.header.status mustBe OK
+        val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
+        result.header.status mustBe OK
       }
 
-      "Populate confirmContactDetailsView when valid address submitted for None type" in subscriptionToTest.foreach {
-        testService =>
-          when(mockOrgTypeLookup.etmpOrgTypeOpt).thenReturn(Future.successful(None))
-          when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
-            Future.successful(RegistrationDetailsBuilder.emptyETMPOrgTypeRegistrationDetails)
-          )
-          when(mockSessionCache.remove).thenReturn(Future.successful(true))
+      "Populate confirmContactDetailsView when valid address submitted for None type" in subscriptionToTest.foreach { testService =>
+        when(mockOrgTypeLookup.etmpOrgTypeOpt).thenReturn(Future.successful(None))
+        when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(
+          Future.successful(RegistrationDetailsBuilder.emptyETMPOrgTypeRegistrationDetails)
+        )
+        when(mockSessionCache.remove).thenReturn(Future.successful(true))
 
-          val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
-          result.header.status mustBe SEE_OTHER
-          result.header.headers(
-            "Location"
-          ) mustBe s"/customs-registration-services/${testService.code}/register/matching/organisation-type"
+        val result = await(service.handleAddressAndPopulateView(testService, isInReviewMode = false))
+        result.header.status mustBe SEE_OTHER
+        result.header.headers(
+          "Location"
+        ) mustBe s"/customs-registration-services/${testService.code}/register/matching/organisation-type"
       }
     }
   }

@@ -39,22 +39,21 @@ class DownloadTextController @Inject() (
   private val plainText          = "plain/text"
   private val attachmentTextFile = "attachment; filename=EORI-number.txt"
 
-  def download(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      for {
-        Some(eori) <- cdsFrontendDataCache.sub02Outcome.map(_.eori)
-        name       <- cdsFrontendDataCache.sub02Outcome.map(_.fullName.replaceAll("\\s+", " "))
-        processedDate <- cdsFrontendDataCache.sub02Outcome
-          .map(_.processedDate)
-      } yield
-        if (service.code.equalsIgnoreCase(Service.eoriOnly.code))
-          Ok(eoriNumberTextDownloadView(eori, name, processedDate))
-            .as(plainText)
-            .withHeaders(CONTENT_DISPOSITION -> attachmentTextFile)
-        else
-          Ok(subscriptionTextDownloadView(eori, processedDate))
-            .as(plainText)
-            .withHeaders(CONTENT_DISPOSITION -> attachmentTextFile)
+  def download(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    for {
+      Some(eori)    <- cdsFrontendDataCache.sub02Outcome.map(_.eori)
+      name          <- cdsFrontendDataCache.sub02Outcome.map(_.fullName.replaceAll("\\s+", " "))
+      processedDate <- cdsFrontendDataCache.sub02Outcome
+                         .map(_.processedDate)
+    } yield
+      if (service.code.equalsIgnoreCase(Service.eoriOnly.code))
+        Ok(eoriNumberTextDownloadView(eori, name, processedDate))
+          .as(plainText)
+          .withHeaders(CONTENT_DISPOSITION -> attachmentTextFile)
+      else
+        Ok(subscriptionTextDownloadView(eori, processedDate))
+          .as(plainText)
+          .withHeaders(CONTENT_DISPOSITION -> attachmentTextFile)
   }
 
 }

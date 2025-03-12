@@ -40,7 +40,8 @@ class AddressService @Inject() (
   errorTemplate: error_template,
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) with Logging {
+    extends CdsController(mcc)
+    with Logging {
 
   private def saveAddress(ad: AddressViewModel)(implicit request: Request[AnyContent]) =
     for {
@@ -75,18 +76,18 @@ class AddressService @Inject() (
   def handleFormDataAndRedirect(form: Form[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ) =
-    form.bindFromRequest()
+    form
+      .bindFromRequest()
       .fold(
         formWithErrors => populateCountriesToInclude(isInReviewMode, service, formWithErrors, BadRequest),
         address =>
-          saveAddress(address).flatMap(
-            _ =>
-              subscriptionFlowManager.stepInformation(ContactDetailsSubscriptionFlowPageGetEori) match {
-                case Right(flowInfo) => Future.successful(Redirect(flowInfo.nextPage.url(service)))
-                case Left(_) =>
-                  logger.warn(s"Unable to identify subscription flow: key not found in cache")
-                  Future.successful(Redirect(ApplicationController.startRegister(service)))
-              }
+          saveAddress(address).flatMap(_ =>
+            subscriptionFlowManager.stepInformation(ContactDetailsSubscriptionFlowPageGetEori) match {
+              case Right(flowInfo) => Future.successful(Redirect(flowInfo.nextPage.url(service)))
+              case Left(_) =>
+                logger.warn(s"Unable to identify subscription flow: key not found in cache")
+                Future.successful(Redirect(ApplicationController.startRegister(service)))
+            }
           )
       )
 

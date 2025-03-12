@@ -31,11 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon.
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -71,8 +67,8 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     )
 
     for {
-      rd <- sessionCache.registrationDetails
-      sd <- sessionCache.subscriptionDetails.recover({ case _ => SubscriptionDetails() })
+      rd     <- sessionCache.registrationDetails
+      sd     <- sessionCache.subscriptionDetails.recover({ case _ => SubscriptionDetails() })
       result <-
         if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney)
           createSubscription(loggedInUser, rd, userLocation, service)
@@ -104,17 +100,19 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     service: Service
   )(implicit request: Request[AnyContent], hc: HeaderCarrier, messages: Messages): Future[Result] = {
     sessionCache.subscriptionDetails.flatMap { subDetails =>
-      taxudConnector.createEoriSubscription(regDetails, subDetails, userLocation, service)
+      taxudConnector
+        .createEoriSubscription(regDetails, subDetails, userLocation, service)
         .flatMap {
           case SuccessResponse(formBundleNumber, sid, processingDate) =>
             val updatedRegDetails = regDetails match {
-              case rde: RegistrationDetailsEmbassy      => rde.copy(safeId = sid)
+              case rde: RegistrationDetailsEmbassy => rde.copy(safeId = sid)
               case rdo: RegistrationDetailsOrganisation => rdo.copy(safeId = sid)
-              case rdi: RegistrationDetailsIndividual   => rdi.copy(safeId = sid)
-              case rds: RegistrationDetailsSafeId       => rds.copy(safeId = sid)
+              case rdi: RegistrationDetailsIndividual => rdi.copy(safeId = sid)
+              case rds: RegistrationDetailsSafeId => rds.copy(safeId = sid)
             }
 
-            sessionCache.saveRegistrationDetails(updatedRegDetails)
+            sessionCache
+              .saveRegistrationDetails(updatedRegDetails)
               .flatMap { _ =>
                 sessionCache.saveTxe13ProcessedDate(processingDate.toString).flatMap { saved =>
                   save4LaterService.fetchEmail(GroupId(loggedInUser.groupId)).flatMap { optEmailStatus =>
@@ -190,26 +188,25 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     subscriptionDetails: SubscriptionDetails,
     orgType: Option[CdsOrganisationType]
   )(implicit hc: HeaderCarrier, request: Request[AnyContent]) =
-    subscriptionDetails.nameDobDetails.map(
-      details =>
-        registerWithoutIdService
-          .registerIndividual(
-            IndividualNameAndDateOfBirth(details.firstName, details.lastName, details.dateOfBirth),
-            registrationDetails.address,
-            subscriptionDetails.contactDetails,
-            loggedInUser,
-            orgType
-          )
-          .flatMap {
-            case RegisterWithoutIDResponse(ResponseCommon(status, _, _, _), _) if status == StatusOK =>
-              sub02Controller.subscribe(service)(request)
-            case _ =>
-              val error = "Registration of individual FAILED"
-              // $COVERAGE-OFF$Loggers
-              logger.warn(error)
-              // $COVERAGE-ON
-              throw new RuntimeException(error)
-          }
+    subscriptionDetails.nameDobDetails.map(details =>
+      registerWithoutIdService
+        .registerIndividual(
+          IndividualNameAndDateOfBirth(details.firstName, details.lastName, details.dateOfBirth),
+          registrationDetails.address,
+          subscriptionDetails.contactDetails,
+          loggedInUser,
+          orgType
+        )
+        .flatMap {
+          case RegisterWithoutIDResponse(ResponseCommon(status, _, _, _), _) if status == StatusOK =>
+            sub02Controller.subscribe(service)(request)
+          case _ =>
+            val error = "Registration of individual FAILED"
+            // $COVERAGE-OFF$Loggers
+            logger.warn(error)
+            // $COVERAGE-ON
+            throw new RuntimeException(error)
+        }
     ) match {
       case Some(f) => f
       case None =>

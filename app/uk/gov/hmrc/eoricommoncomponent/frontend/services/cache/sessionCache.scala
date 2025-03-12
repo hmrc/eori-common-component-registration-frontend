@@ -201,18 +201,21 @@ class SessionCache @Inject() (
   }
 
   def fetchSafeIdFromReg06Response(implicit request: Request[_]): Future[Option[SafeId]] =
-    registerWithEoriAndIdResponse.map(
-      response =>
-        response.responseDetail.flatMap(_.responseData.map(_.SAFEID))
+    registerWithEoriAndIdResponse
+      .map(response =>
+        response.responseDetail
+          .flatMap(_.responseData.map(_.SAFEID))
           .map(SafeId(_))
-    ).recoverWith {
-      case NonFatal(_) => Future.successful(None)
-    }
+      )
+      .recoverWith { case NonFatal(_) =>
+        Future.successful(None)
+      }
 
   def fetchSafeIdFromRegDetails(implicit request: Request[_]): Future[Option[SafeId]] =
-    registrationDetails.map(response => if (response.safeId.id.nonEmpty) Some(response.safeId) else None)
-      .recoverWith {
-        case NonFatal(_) => Future.successful(None)
+    registrationDetails
+      .map(response => if (response.safeId.id.nonEmpty) Some(response.safeId) else None)
+      .recoverWith { case NonFatal(_) =>
+        Future.successful(None)
       }
 
   def registrationDetails(implicit request: Request[_]): Future[RegistrationDetails] =
@@ -246,8 +249,8 @@ class SessionCache @Inject() (
 
   def remove(implicit request: Request[_]): Future[Boolean] =
     preservingMdc {
-      cacheRepo.deleteEntity(request).map(_ => true).recoverWith {
-        case _ => Future.successful(false)
+      cacheRepo.deleteEntity(request).map(_ => true).recoverWith { case _ =>
+        Future.successful(false)
       }
     }
 
@@ -257,4 +260,4 @@ class SessionCache @Inject() (
 }
 
 case class SessionTimeOutException(errorMessage: String) extends NoStackTrace
-case class DataUnavailableException(message: String)     extends RuntimeException(message)
+case class DataUnavailableException(message: String) extends RuntimeException(message)

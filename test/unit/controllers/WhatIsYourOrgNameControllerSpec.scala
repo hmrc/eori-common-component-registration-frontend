@@ -150,48 +150,47 @@ class WhatIsYourOrgNameControllerSpec extends ControllerSpec with BeforeAndAfter
 
   "Submitting the form" should {
 
-    forAll(organisationTypeOrganisations) {
-      (organisationType, _, nameDescription, submitLocation, _, reviewMode, _) =>
-        assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
-          mockAuthConnector,
-          controller.submit(reviewMode, organisationType, atarService),
-          s", for reviewMode $reviewMode and organisationType $organisationType"
+    forAll(organisationTypeOrganisations) { (organisationType, _, nameDescription, submitLocation, _, reviewMode, _) =>
+      assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(
+        mockAuthConnector,
+        controller.submit(reviewMode, organisationType, atarService),
+        s", for reviewMode $reviewMode and organisationType $organisationType"
+      )
+
+      s"ensure name cannot be empty when organisation type is $organisationType and reviewMode is $reviewMode" in {
+        submitForm(reviewMode, form = Map("name" -> ""), organisationType) { result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe nameError(nameDescription)
+          page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered organisation name"
+          page.getElementsText("title") should startWith("Error: ")
+        }
+      }
+
+      s"ensure name does not exceed maximum length when organisation type is $organisationType and reviewMode is $reviewMode" in {
+        submitForm(reviewMode, form = Map("name" -> oversizedString(NameMaxLength)), organisationType) { result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          page.getElementsText(
+            pageLevelErrorSummaryListXPath
+          ) shouldBe "The organisation name must be 105 characters or less"
+          page.getElementsText(
+            fieldLevelErrorName
+          ) shouldBe "Error: The organisation name must be 105 characters or less"
+          page.getElementsText("title") should startWith("Error: ")
+        }
+      }
+
+      s"redirect to the next page when successful when organisation type is $organisationType and reviewMode is $reviewMode" in {
+        when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrgName(any())(any[Request[_]])).thenReturn(
+          Future.unit
         )
-
-        s"ensure name cannot be empty when organisation type is $organisationType and reviewMode is $reviewMode" in {
-          submitForm(reviewMode, form = Map("name" -> ""), organisationType) { result =>
-            status(result) shouldBe BAD_REQUEST
-            val page = CdsPage(contentAsString(result))
-            page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe nameError(nameDescription)
-            page.getElementsText(fieldLevelErrorName) shouldBe "Error: Enter your registered organisation name"
-            page.getElementsText("title") should startWith("Error: ")
-          }
+        submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
+          status(result) shouldBe SEE_OTHER
+          header("Location", result).value should endWith(submitLocation)
+          verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any[Request[_]])
         }
-
-        s"ensure name does not exceed maximum length when organisation type is $organisationType and reviewMode is $reviewMode" in {
-          submitForm(reviewMode, form = Map("name" -> oversizedString(NameMaxLength)), organisationType) { result =>
-            status(result) shouldBe BAD_REQUEST
-            val page = CdsPage(contentAsString(result))
-            page.getElementsText(
-              pageLevelErrorSummaryListXPath
-            ) shouldBe "The organisation name must be 105 characters or less"
-            page.getElementsText(
-              fieldLevelErrorName
-            ) shouldBe "Error: The organisation name must be 105 characters or less"
-            page.getElementsText("title") should startWith("Error: ")
-          }
-        }
-
-        s"redirect to the next page when successful when organisation type is $organisationType and reviewMode is $reviewMode" in {
-          when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrgName(any())(any[Request[_]])).thenReturn(
-            Future.unit
-          )
-          submitForm(reviewMode, form = ValidNameRequest, organisationType) { result =>
-            status(result) shouldBe SEE_OTHER
-            header("Location", result).value should endWith(submitLocation)
-            verify(mockSubscriptionDetailsService).cacheNameDetails(any())(any[Request[_]])
-          }
-        }
+      }
     }
   }
 

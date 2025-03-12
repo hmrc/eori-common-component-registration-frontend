@@ -22,18 +22,14 @@ import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
-import play.api.test.Helpers.{defaultAwaitTimeout, header, status, LOCATION}
+import play.api.test.Helpers.{LOCATION, defaultAwaitTimeout, header, status}
 import sttp.model.StatusCode.{InternalServerError, Ok}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  AddressService,
-  SubscriptionBusinessService,
-  SubscriptionDetailsService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{AddressService, SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -85,16 +81,15 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
     }
   }
 
-  "Should 'successfully' display InternalServerError when data not found in cache" in subscriptionToTest.foreach {
-    subscription =>
-      when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(
-        Future.successful(None)
-      )
-      val result = service.populateViewIfContactDetailsCached(subscription)(
-        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
-      )
+  "Should 'successfully' display InternalServerError when data not found in cache" in subscriptionToTest.foreach { subscription =>
+    when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(
+      Future.successful(None)
+    )
+    val result = service.populateViewIfContactDetailsCached(subscription)(
+      SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
+    )
 
-      status(result) mustBe InternalServerError.code
+    status(result) mustBe InternalServerError.code
   }
 
   "handleFormDataAndRedirect" should {

@@ -35,7 +35,7 @@ class MatchingFormsSpec extends UnitSpec {
         "postcode"    -> "   1  1   1111   111   ",
         "countryCode" -> "LV"
       )
-      val res = addressForm.bind(data)
+      val res  = addressForm.bind(data)
       res.errors shouldBe Seq.empty
       res.value shouldBe Some(
         SixLineAddressMatchModel(

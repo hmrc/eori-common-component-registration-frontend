@@ -68,51 +68,56 @@ class UserLocationController @Inject() (
     request: Request[AnyContent],
     hc: HeaderCarrier
   ) =
-    subscriptionStatusBasedOnSafeId(groupId)(hc, service, request).map {
-      case (NewSubscription | SubscriptionRejected, Some(safeId)) =>
-        registrationDisplayService
-          .requestDetails(safeId)
-          .flatMap(cacheAndRedirect(service, location, groupId))
-      case (status, _) =>
-        subscriptionStatus(status, groupId, service, location)
-    }.flatMap(identity _)
+    subscriptionStatusBasedOnSafeId(groupId)(hc, service, request)
+      .map {
+        case (NewSubscription | SubscriptionRejected, Some(safeId)) =>
+          registrationDisplayService
+            .requestDetails(safeId)
+            .flatMap(cacheAndRedirect(service, location, groupId))
+        case (status, _) =>
+          subscriptionStatus(status, groupId, service, location)
+      }
+      .flatMap(identity _)
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      userLocationForm.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup)))
-          ),
-        location =>
-          (location, loggedInUser.groupId) match {
-            case (location, Some(id)) if UserLocation.isRow(location) =>
-              forRow(service, GroupId(id), location)
-            case (UserLocation.Iom, Some(_)) if !appConfig.allowNoIdJourney =>
-              Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
-            case _ =>
-              save4LaterService.saveUserLocation(GroupId(loggedInUser.groupId.head), location)
-                .map { _ =>
-                  Redirect(OrganisationTypeController.form(service))
-                    .withSession(
-                      requestSessionData
-                        .sessionWithUserLocationAdded(location)
-                    )
-                }
-          }
-      )
+      userLocationForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup)))
+            ),
+          location =>
+            (location, loggedInUser.groupId) match {
+              case (location, Some(id)) if UserLocation.isRow(location) =>
+                forRow(service, GroupId(id), location)
+              case (UserLocation.Iom, Some(_)) if !appConfig.allowNoIdJourney =>
+                Future.successful(Redirect(YouNeedADifferentServiceIomController.form(service)))
+              case _ =>
+                save4LaterService
+                  .saveUserLocation(GroupId(loggedInUser.groupId.head), location)
+                  .map { _ =>
+                    Redirect(OrganisationTypeController.form(service))
+                      .withSession(
+                        requestSessionData
+                          .sessionWithUserLocationAdded(location)
+                      )
+                  }
+            }
+        )
     }
 
   private def subscriptionStatusBasedOnSafeId(
     groupId: GroupId
   )(implicit hc: HeaderCarrier, service: Service, request: Request[_]) =
     for {
-      mayBeSafeId <- save4LaterService.fetchSafeId(groupId)
+      mayBeSafeId           <- save4LaterService.fetchSafeId(groupId)
       preSubscriptionStatus <- mayBeSafeId match {
-        case Some(safeId) =>
-          subscriptionStatusService.getStatus(RegistrationInfoRequest.SAFE, safeId.id)
-        case None => Future.successful(NewSubscription)
-      }
+                                 case Some(safeId) =>
+                                   subscriptionStatusService.getStatus(RegistrationInfoRequest.SAFE, safeId.id)
+                                 case None => Future.successful(NewSubscription)
+                               }
     } yield (preSubscriptionStatus, mayBeSafeId)
 
   private def handleExistingSubscription(groupId: GroupId, service: Service)(implicit
@@ -121,11 +126,10 @@ class UserLocationController @Inject() (
   ): Future[Result] =
     save4LaterService
       .fetchSafeId(groupId)
-      .flatMap(
-        safeId =>
-          sessionCache
-            .saveRegistrationDetails(RegistrationDetails.rdSafeId(safeId.get))
-            .map(_ => Redirect(SubscriptionRecoveryController.complete(service)))
+      .flatMap(safeId =>
+        sessionCache
+          .saveRegistrationDetails(RegistrationDetails.rdSafeId(safeId.get))
+          .map(_ => Redirect(SubscriptionRecoveryController.complete(service)))
       )
 
   def subscriptionStatus(

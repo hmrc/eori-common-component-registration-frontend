@@ -35,7 +35,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.InternalAuthTokenInitiali
 import scala.util.Try
 
 class InternalAuthTokenInitialiserSpec
-    extends AnyFreeSpec with Matchers with ScalaFutures with IntegrationPatience with BeforeAndAfterAll
+    extends AnyFreeSpec
+    with Matchers
+    with ScalaFutures
+    with IntegrationPatience
+    with BeforeAndAfterAll
     with BeforeAndAfterEach {
 
   protected val server: WireMockServer = new WireMockServer(wireMockConfig().dynamicPort())
@@ -63,14 +67,14 @@ class InternalAuthTokenInitialiserSpec
       val appName   = "appName1"
 
       val expectedRequest = Json.obj(
-        "token"     -> authToken,
-        "principal" -> appName,
+        "token"       -> authToken,
+        "principal"   -> appName,
         "permissions" -> Seq(
           Json.obj("resourceType" -> "eori-common-component", "resourceLocation" -> "*", "actions" -> List("WRITE")),
           Json.obj(
-            "resourceType"     -> "eori-common-component-hods-proxy",
-            "resourceLocation" -> "*",
-            "actions"          -> List("WRITE")
+            "resourceType"        -> "eori-common-component-hods-proxy",
+            "resourceLocation"    -> "*",
+            "actions"             -> List("WRITE")
           )
         )
       )
@@ -115,14 +119,14 @@ class InternalAuthTokenInitialiserSpec
       val appName   = "appName2"
 
       val expectedRequest = Json.obj(
-        "token"     -> authToken,
-        "principal" -> appName,
+        "token"       -> authToken,
+        "principal"   -> appName,
         "permissions" -> Seq(
           Json.obj("resourceType" -> "eori-common-component", "resourceLocation" -> "*", "actions" -> List("WRITE")),
           Json.obj(
-            "resourceType"     -> "eori-common-component-hods-proxy",
-            "resourceLocation" -> "*",
-            "actions"          -> List("WRITE")
+            "resourceType"        -> "eori-common-component-hods-proxy",
+            "resourceLocation"    -> "*",
+            "actions"             -> List("WRITE")
           )
         )
       )

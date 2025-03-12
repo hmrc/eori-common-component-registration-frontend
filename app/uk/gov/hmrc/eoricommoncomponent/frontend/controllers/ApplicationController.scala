@@ -46,9 +46,8 @@ class ApplicationController @Inject() (
     else Ok(viewStartRegister(service, headingAndTitleText, bullet2))
   }
 
-  def logout(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      cache.remove.map(_ => Redirect(appConfig.feedbackUrl(service)).withNewSession)
+  def logout(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction { implicit request => _: LoggedInUserWithEnrolments =>
+    cache.remove.map(_ => Redirect(appConfig.feedbackUrl(service)).withNewSession)
   }
 
   def keepAlive(): Action[AnyContent] = Action.async { implicit request =>

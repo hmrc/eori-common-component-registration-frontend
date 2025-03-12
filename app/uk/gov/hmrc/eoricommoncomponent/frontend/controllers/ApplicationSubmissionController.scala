@@ -18,15 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  CharityPublicBodyNotForProfit,
-  Company,
-  Embassy,
-  Individual,
-  LimitedLiabilityPartnership,
-  Partnership,
-  SoleTrader
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, Company, Embassy, Individual, LimitedLiabilityPartnership, Partnership, SoleTrader}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -47,31 +39,31 @@ class ApplicationSubmissionController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def processing(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      sessionCache.subscriptionDetails.flatMap { sd =>
-        sessionCache.txe13ProcessingDate.map { txe13ProcessedDate =>
-          val name = sd.formData.organisationType.flatMap {
+  def processing(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction { implicit request => _: LoggedInUserWithEnrolments =>
+    sessionCache.subscriptionDetails.flatMap { sd =>
+      sessionCache.txe13ProcessingDate.map { txe13ProcessedDate =>
+        val name = sd.formData.organisationType
+          .flatMap {
             case SoleTrader | Individual => sd.nameDobDetails.map(model => s"${model.firstName} ${model.lastName}")
             case Company | LimitedLiabilityPartnership | Partnership | CharityPublicBodyNotForProfit =>
               sd.nameOrganisationDetails.map(_.name)
             case Embassy => sd.embassyName
-            case _       => Some("")
+            case _ => Some("")
           }
-            .getOrElse("")
+          .getOrElse("")
 
-          val email = sd.contactDetails.map(_.emailAddress).getOrElse("")
+        val email = sd.contactDetails.map(_.emailAddress).getOrElse("")
 
-          Ok(
-            application_processing_view(
-              name,
-              email,
-              LocalDateTime.parse(txe13ProcessedDate).atOffset(UTC).format(ofPattern("dd MMMM yyyy")),
-              service
-            )
+        Ok(
+          application_processing_view(
+            name,
+            email,
+            LocalDateTime.parse(txe13ProcessedDate).atOffset(UTC).format(ofPattern("dd MMMM yyyy")),
+            service
           )
-        }
+        )
       }
+    }
   }
 
 }

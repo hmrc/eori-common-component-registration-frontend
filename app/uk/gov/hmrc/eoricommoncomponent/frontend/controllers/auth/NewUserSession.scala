@@ -17,18 +17,13 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys.{
-  selectedOrganisationType,
-  selectedUserLocation,
-  subscriptionFlow,
-  uriBeforeSubscriptionFlow
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys.{selectedOrganisationType, selectedUserLocation, subscriptionFlow, uriBeforeSubscriptionFlow}
 
 trait NewUserSession {
 
   def newUserSession(implicit request: Request[_]): Session = {
 
-    val currentSessionData: Map[String, String] = request.session.data
+    val currentSessionData: Map[String, String]   = request.session.data
     val cleanedUpSessionData: Map[String, String] =
       currentSessionData -- Seq(
         selectedUserLocation,

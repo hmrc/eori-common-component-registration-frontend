@@ -27,11 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  RegistrationDisplayService,
-  Save4LaterService,
-  SubscriptionStatusService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDisplayService, Save4LaterService, SubscriptionStatusService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
 import unit.controllers.CdsPage
 import util.ControllerSpec

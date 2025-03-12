@@ -38,7 +38,7 @@ class HandleSubscriptionServiceSpec extends UnitSpec with MockitoSugar with Befo
   private val mockHandleSubscriptionConnector = mock[HandleSubscriptionConnector]
 
   private val service                    = new HandleSubscriptionService(mockHandleSubscriptionConnector)
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit private val hc: HeaderCarrier = HeaderCarrier()
 
   before {
     reset(mockHandleSubscriptionConnector)

@@ -174,7 +174,7 @@ class EnrolmentExtractorSpec extends UnitSpec {
 
       "user's group has enrolment with an EORI" in {
 
-        val userEnrolments = Set(Enrolment("HMRC-NI").withIdentifier("NINO", nino.id))
+        val userEnrolments                           = Set(Enrolment("HMRC-NI").withIdentifier("NINO", nino.id))
         val groupEnrolments: List[EnrolmentResponse] =
           List(EnrolmentResponse("HMRC-GROUP-ORG", "Active", List(KeyValue("EORINumber", eori.id))))
 
@@ -185,7 +185,7 @@ class EnrolmentExtractorSpec extends UnitSpec {
 
       "user has no enrolment with EORI nor group enrolment with EORI" in {
 
-        val userEnrolments = Set(Enrolment("HMRC-NI").withIdentifier("NINO", nino.id))
+        val userEnrolments  = Set(Enrolment("HMRC-NI").withIdentifier("NINO", nino.id))
         val groupEnrolments =
           List(EnrolmentResponse("HMRC-GROUP-ORG", "Active", List(KeyValue("OtherIdentifierKey", "SomeValue"))))
 

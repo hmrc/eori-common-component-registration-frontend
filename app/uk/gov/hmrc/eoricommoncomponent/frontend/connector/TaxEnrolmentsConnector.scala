@@ -42,22 +42,19 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
   def getEnrolments(safeId: String)(implicit hc: HeaderCarrier): Future[List[TaxEnrolmentsResponse]] = {
     val url = s"$baseUrl/$serviceContext/businesspartners/$safeId/subscriptions"
 
-    http.GET[List[TaxEnrolmentsResponse]](url).recover {
-      case NonFatal(e) =>
-        logger.error(s"[GetEnrolments failed: $url, hc: $hc]", e)
-        throw e
+    http.GET[List[TaxEnrolmentsResponse]](url).recover { case NonFatal(e) =>
+      logger.error(s"[GetEnrolments failed: $url, hc: $hc]", e)
+      throw e
     }
   }
 
-  /**
-    *
-    * @param request
+  /** @param request
     * @param formBundleId
     * @param hc
     * @param e
     * @return
-    *  This is a issuer call which ETMP makes but we will do this for migrated users
-    *  when subscription status((Subscription Create Api CALL)) is 04 (SubscriptionExists)
+    *   This is a issuer call which ETMP makes but we will do this for migrated users when subscription status((Subscription Create Api CALL)) is 04
+    *   (SubscriptionExists)
     */
   def enrol(request: TaxEnrolmentsRequest, formBundleId: String)(implicit hc: HeaderCarrier): Future[Int] = {
     val url = s"$baseUrl/$serviceContext/subscriptions/$formBundleId/issuer"

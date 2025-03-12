@@ -35,8 +35,7 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
     responseDetail <- registerWithoutIdResponseDetailGen
   } yield RegisterWithoutIDResponse(responseCommon, Some(responseDetail))
 
-  private val organisationWithoutIdTestCases
-    : Gen[((RegisterWithoutIDResponse, String, SixLineAddressMatchModel), RegistrationDetailsOrganisation)] = {
+  private val organisationWithoutIdTestCases: Gen[((RegisterWithoutIDResponse, String, SixLineAddressMatchModel), RegistrationDetailsOrganisation)] = {
     val organisationAddressGen = for {
       addressLine1 <- Gen.alphaStr
       addressLine2 <- Gen.alphaStr.asOption
@@ -223,19 +222,16 @@ class RegistrationDetailsCreatorWithoutIdSpec extends RegistrationDetailsCreator
         ) shouldBe expectedOrganisationDetails
     }
 
-    "create Address from OrganisationAddress" in testWithGen(addressFromOrganisationAddressTestCases) {
-      case (organisationAddress, expectedAddress) =>
-        registrationDetailsCreator.registrationAddress(organisationAddress) shouldBe expectedAddress
+    "create Address from OrganisationAddress" in testWithGen(addressFromOrganisationAddressTestCases) { case (organisationAddress, expectedAddress) =>
+      registrationDetailsCreator.registrationAddress(organisationAddress) shouldBe expectedAddress
     }
 
-    "create Address from EmbassyAddress" in testWithGen(addressFromEmbassyAddressTestCases) {
-      case (embassyAddress, expectedAddress) =>
-        registrationDetailsCreator.registrationAddressEmbassyAddress(embassyAddress) shouldBe expectedAddress
+    "create Address from EmbassyAddress" in testWithGen(addressFromEmbassyAddressTestCases) { case (embassyAddress, expectedAddress) =>
+      registrationDetailsCreator.registrationAddressEmbassyAddress(embassyAddress) shouldBe expectedAddress
     }
 
-    "create Address from AddressViewModel" in testWithGen(addressFromAddressViewModelTestCases) {
-      case (addressViewModel, expectedAddress) =>
-        registrationDetailsCreator.registrationAddressFromAddressViewModel(addressViewModel) shouldBe expectedAddress
+    "create Address from AddressViewModel" in testWithGen(addressFromAddressViewModelTestCases) { case (addressViewModel, expectedAddress) =>
+      registrationDetailsCreator.registrationAddressFromAddressViewModel(addressViewModel) shouldBe expectedAddress
     }
 
     "create individual registration details" in testWithGen(individualWithoutIdTestCases) {

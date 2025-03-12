@@ -40,7 +40,8 @@ class CheckYourEmailService @Inject() (
   emailConfirmedView: email_confirmed,
   emailJourneyService: EmailJourneyService
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) with Logging {
+    extends CdsController(mcc)
+    with Logging {
 
   def fetchEmailAndPopulateView(
     userWithEnrolments: LoggedInUserWithEnrolments,
@@ -127,7 +128,7 @@ class CheckYourEmailService @Inject() (
     userWithEnrolments: LoggedInUserWithEnrolments
   ): Future[Result] = yesNoAnswer match {
     case theAnswer if theAnswer.isYes => emailJourneyService.continue(service)
-    case _                            => Future(Redirect(WhatIsYourEmailController.createForm(service)))
+    case _ => Future(Redirect(WhatIsYourEmailController.createForm(service)))
   }
 
 }

@@ -18,10 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Writes}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.{
-  CreateEoriSubscriptionRequest,
-  CreateEoriSubscriptionResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.{CreateEoriSubscriptionRequest, CreateEoriSubscriptionResponse}
 
 case class CreateEoriSubscriptionNoIdentifier(
   createEoriSubscriptionRequest: CreateEoriSubscriptionRequest,

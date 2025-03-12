@@ -20,12 +20,7 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  CdsOrganisationType,
-  LoggedInUser,
-  LoggedInUserWithEnrolments,
-  SixLineAddressMatchModel
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUser, LoggedInUserWithEnrolments, SixLineAddressMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
@@ -59,8 +54,8 @@ class SixLineAddressController @Inject() (
     service: Service,
     user: LoggedInUserWithEnrolments
   )(implicit request: Request[AnyContent]): Future[Result] = {
-    val formByOrgType = formsByOrganisationTypes(request)(organisationType)
-    lazy val form     = address.map(ad => createSixLineAddress(ad)).fold(formByOrgType)(formByOrgType.fill)
+    val formByOrgType                                  = formsByOrganisationTypes(request)(organisationType)
+    lazy val form                                      = address.map(ad => createSixLineAddress(ad)).fold(formByOrgType)(formByOrgType.fill)
     val (countriesToInclude, countriesInCountryPicker) =
       Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
     sessionCacheService.individualAndSoleTraderRouter(
@@ -82,9 +77,7 @@ class SixLineAddressController @Inject() (
   def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       assertOrganisationTypeIsValid(organisationType)
-      sessionCache.registrationDetails.flatMap(
-        rd => populateView(Some(rd.address), isInReviewMode, organisationType, service, user)
-      )
+      sessionCache.registrationDetails.flatMap(rd => populateView(Some(rd.address), isInReviewMode, organisationType, service, user))
     }
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
@@ -92,26 +85,28 @@ class SixLineAddressController @Inject() (
       val (countriesToInclude, countriesInCountryPicker) =
         Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
       assertOrganisationTypeIsValid(organisationType)(request)
-      formsByOrganisationTypes(request)(organisationType).bindFromRequest().fold(
-        invalidForm =>
-          Future.successful(
-            BadRequest(
-              sixLineAddressView(
-                isInReviewMode,
-                invalidForm,
-                countriesToInclude,
-                countriesInCountryPicker,
-                organisationType,
-                service
+      formsByOrganisationTypes(request)(organisationType)
+        .bindFromRequest()
+        .fold(
+          invalidForm =>
+            Future.successful(
+              BadRequest(
+                sixLineAddressView(
+                  isInReviewMode,
+                  invalidForm,
+                  countriesToInclude,
+                  countriesInCountryPicker,
+                  organisationType,
+                  service
+                )
               )
-            )
-          ),
-        formData => submitAddressDetails(isInReviewMode, formData, service)
-      )
+            ),
+          formData => submitAddressDetails(isInReviewMode, formData, service)
+        )
     }
 
-  private def submitAddressDetails(isInReviewMode: Boolean, formData: SixLineAddressMatchModel, service: Service)(
-    implicit request: Request[AnyContent]
+  private def submitAddressDetails(isInReviewMode: Boolean, formData: SixLineAddressMatchModel, service: Service)(implicit
+    request: Request[AnyContent]
   ): Future[Result] =
     if (isInReviewMode)
       registrationDetailsService
@@ -120,8 +115,8 @@ class SixLineAddressController @Inject() (
     else
       registrationDetailsService.cacheAddress(regDetailsCreator.registrationAddress(formData)).flatMap { _ =>
         subscriptionFlowManager.startSubscriptionFlow(service)
-      } map {
-        case (firstSubscriptionPage, session) => Redirect(firstSubscriptionPage.url(service)).withSession(session)
+      } map { case (firstSubscriptionPage, session) =>
+        Redirect(firstSubscriptionPage.url(service)).withSession(session)
       }
 
   private def assertOrganisationTypeIsValid(organisationType: String)(implicit request: Request[AnyContent]): Unit =
@@ -132,9 +127,9 @@ class SixLineAddressController @Inject() (
 
   private def formsByOrganisationTypes(implicit request: Request[AnyContent]) = {
     val form = requestSessionData.selectedUserLocationWithIslands(request) match {
-      case Some(UserLocation.Uk)      => ukSixLineAddressForm
+      case Some(UserLocation.Uk) => ukSixLineAddressForm
       case Some(UserLocation.Islands) => channelIslandSixLineAddressForm
-      case _                          => thirdCountrySixLineAddressForm
+      case _ => thirdCountrySixLineAddressForm
     }
 
     Map(

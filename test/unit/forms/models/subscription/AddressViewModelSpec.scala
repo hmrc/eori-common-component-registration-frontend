@@ -42,7 +42,7 @@ class AddressViewModelSpec extends UnitSpec {
 
     "trim six line address" in {
       def pad(line: String) = s" $line "
-      val address = Address(
+      val address           = Address(
         pad(addressLine1),
         Some(pad(addressLine2)),
         Some(pad(addressLine3)),

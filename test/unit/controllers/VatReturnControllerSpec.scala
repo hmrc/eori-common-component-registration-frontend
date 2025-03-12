@@ -117,10 +117,9 @@ class VatReturnControllerSpec extends ControllerSpec with AuthActionMock with Be
     )
 
     "display redirectToCannotConfirmIdentity" in {
-      redirectToCannotConfirmIdentity() {
-        result =>
-          status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title() should startWith("We cannot verify your VAT details")
+      redirectToCannotConfirmIdentity() { result =>
+        status(result) shouldBe OK
+        CdsPage(contentAsString(result)).title() should startWith("We cannot verify your VAT details")
       }
     }
   }

@@ -17,15 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13
 
 import play.api.libs.json.{Json, OWrites, Reads}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{
-  CdsEstablishmentAddress,
-  ContactInformation,
-  Id,
-  Individual,
-  Organisation,
-  ThirdCountryUniqueIdentificationNumber,
-  VatIdentification
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{CdsEstablishmentAddress, ContactInformation, Id, Individual, Organisation, ThirdCountryUniqueIdentificationNumber, VatIdentification}
 
 case class CreateEoriSubscriptionRequest(
   edgeCaseType: String,
