@@ -21,7 +21,7 @@ import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.data.{Form, FormError}
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -30,7 +30,7 @@ class VatDetailsFormSpec extends UnitSpec {
 
   implicit val request: FakeRequest[AnyContent] = FakeRequest()
 
-  val mockAuditable: Auditable = mock[Auditable]
+  val mockAuditable: Auditor = mock[Auditor]
 
   val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable)
 

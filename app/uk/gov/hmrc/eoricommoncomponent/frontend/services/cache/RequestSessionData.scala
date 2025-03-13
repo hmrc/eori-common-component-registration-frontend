@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 
 import play.api.libs.json.Json
 import play.api.mvc.{AnyContent, Request, Session}
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.IndividualOrganisations
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{IndividualSubscriptionFlow, OrganisationSubscriptionFlow, PartnershipSubscriptionFlow, SubscriptionFlow}
@@ -30,7 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RequestSessionData @Inject() (audit: Auditable) {
+class RequestSessionData @Inject() (audit: Auditor) {
 
   def storeUserSubscriptionFlow(subscriptionFlow: SubscriptionFlow, uriBeforeSubscriptionFlow: String)(implicit
     request: Request[AnyContent]
@@ -45,18 +45,9 @@ class RequestSessionData @Inject() (audit: Auditable) {
     request.session.data.get(RequestSessionDataKeys.subscriptionFlow) match {
       case Some(flowName) => Right(SubscriptionFlow(flowName))
       case None =>
-        auditSessionFailure(request.session)
+        audit.sendSubscriptionFlowSessionFailureEvent(Json.toJson(request.session.data))
         Left(DataNotFound(RequestSessionDataKeys.subscriptionFlow))
-
     }
-
-  private def auditSessionFailure(session: Session)(implicit hc: HeaderCarrier): Unit =
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-registration-subscription-flow-session-failure",
-      path = "",
-      details = Json.toJson(session.data),
-      eventType = "SubscriptionFlowSessionFailure"
-    )
 
   def userSelectedOrganisationType(implicit request: Request[AnyContent]): Option[CdsOrganisationType] =
     request.session.data.get(RequestSessionDataKeys.selectedOrganisationType).map(CdsOrganisationType.forId)

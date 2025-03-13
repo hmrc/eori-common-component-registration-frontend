@@ -59,30 +59,28 @@ class Sub02Controller @Inject() (
       val groupId = GroupId(loggedInUser.groupId)
       cdsSubscriber
         .subscribeWithCachedDetails(selectedOrganisationType, service)
-        .flatMap { subscribeResult =>
-          subscribeResult match {
-            case _: SubscriptionSuccessful =>
-              subscriptionDetailsService
-                .saveKeyIdentifiers(groupId, internalId, service)
-                .map(_ => Redirect(Sub02Controller.end(service)))
-            case _: SubscriptionPending =>
-              subscriptionDetailsService
-                .saveKeyIdentifiers(groupId, internalId, service)
-                .map(_ => Redirect(Sub02Controller.pending(service)))
-            case SubscriptionFailed(EoriAlreadyExists, _) =>
-              Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
-            case SubscriptionFailed(EoriAlreadyAssociated, _) =>
-              Future.successful(Redirect(Sub02Controller.eoriAlreadyAssociated(service)))
-            case SubscriptionFailed(SubscriptionInProgress, _) =>
-              Future.successful(Redirect(Sub02Controller.subscriptionInProgress(service)))
-            case SubscriptionFailed(RequestNotProcessed, _) =>
-              Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
-            case res: SubscriptionFailed =>
-              // $COVERAGE-OFF$Loggers
-              logger.warn(s"Unexpected response returned from SUB02: ${res.failureReason}")
-              // $COVERAGE-ON
-              throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
-          }
+        .flatMap {
+          case _: SubscriptionSuccessful =>
+            subscriptionDetailsService
+              .saveKeyIdentifiers(groupId, internalId, service)
+              .map(_ => Redirect(Sub02Controller.end(service)))
+          case _: SubscriptionPending =>
+            subscriptionDetailsService
+              .saveKeyIdentifiers(groupId, internalId, service)
+              .map(_ => Redirect(Sub02Controller.pending(service)))
+          case SubscriptionFailed(EoriAlreadyExists, _) =>
+            Future.successful(Redirect(Sub02Controller.eoriAlreadyExists(service)))
+          case SubscriptionFailed(EoriAlreadyAssociated, _) =>
+            Future.successful(Redirect(Sub02Controller.eoriAlreadyAssociated(service)))
+          case SubscriptionFailed(SubscriptionInProgress, _) =>
+            Future.successful(Redirect(Sub02Controller.subscriptionInProgress(service)))
+          case SubscriptionFailed(RequestNotProcessed, _) =>
+            Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+          case res: SubscriptionFailed =>
+            // $COVERAGE-OFF$Loggers
+            logger.warn(s"Unexpected response returned from SUB02: ${res.failureReason}")
+            // $COVERAGE-ON
+            throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
         } recoverWith { case e: Exception =>
         val error = "Subscription Error. "
         // $COVERAGE-OFF$Loggers

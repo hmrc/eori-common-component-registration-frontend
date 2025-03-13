@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 import cats.data.EitherT
 import play.api.libs.json.{Json, Reads}
 import play.mvc.Http.Status.{INTERNAL_SERVER_ERROR, NO_CONTENT, OK}
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.EnrolmentStoreProxyEvent
@@ -29,7 +29,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
+class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) extends HandleResponses {
 
@@ -57,7 +57,15 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
         case status =>
           Left(ResponseError(status, s"Enrolment Store Proxy Response : ${response.body}}"))
       }
-      auditCall(url, groupId, parsedResponse)
+
+      val auditDetails =
+        parsedResponse
+          .fold(
+            Json.toJson(_),
+            proxyResponse => Json.toJson(EnrolmentStoreProxyEvent(groupId = groupId, enrolments = proxyResponse.enrolments))
+          )
+      audit.sendEnrolmentStoreCallEvent(url, auditDetails)
+
       parsedResponse
     } recover { case e: Throwable =>
       val error = s"enrolment-store-proxy failed. url: $url, error: $e"
@@ -74,23 +82,4 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
       logger.warn(s"GetEnrolmentByGroupId request is failed with response $response")
 
   // $COVERAGE-ON
-
-  private def auditCall(url: String, groupId: String, response: Either[ResponseError, EnrolmentStoreProxyResponse])(implicit
-    hc: HeaderCarrier
-  ): Unit = {
-
-    val auditDetails = response
-      .fold(
-        Json.toJson(_),
-        proxyResponse => Json.toJson(EnrolmentStoreProxyEvent(groupId = groupId, enrolments = proxyResponse.enrolments))
-      )
-
-    audit.sendExtendedDataEvent(
-      transactionName = "Enrolment-Store-Proxy-Call",
-      path = url,
-      details = auditDetails,
-      eventType = "EnrolmentStoreProxyCall"
-    )
-  }
-
 }

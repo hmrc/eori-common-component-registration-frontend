@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import play.api.Logger
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{TaxEnrolmentsRequest, TaxEnrolmentsResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{IssuerCall, IssuerRequest, IssuerResponse}
@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditable)(implicit
+class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) {
 
@@ -63,23 +63,10 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
     // $COVERAGE-ON
     http.PUT[TaxEnrolmentsRequest, HttpResponse](url, request) map { response: HttpResponse =>
       logResponse("Enrol", response)
-      auditCall(url, request, response)
+      val detail = Json.toJson(IssuerCall(IssuerRequest(request), IssuerResponse(response)))
+      audit.sendTaxEnrolmentIssuerCallEvent(url, detail)
       response.status
     }
-  }
-
-  private def auditCall(url: String, request: TaxEnrolmentsRequest, response: HttpResponse)(implicit
-    hc: HeaderCarrier
-  ): Unit = {
-    val issuerRequest = IssuerRequest(request)
-    val issuerResponse = IssuerResponse(response)
-
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-issuer-call",
-      path = url,
-      details = Json.toJson(IssuerCall(issuerRequest, issuerResponse)),
-      eventType = "IssuerCall"
-    )
   }
 
   // $COVERAGE-OFF$Loggers

@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{SubscriptionDisplayFailureResponseHolder, SubscriptionDisplayResponse, SubscriptionDisplayResponseHolder}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
+class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) extends HandleResponses {
 
@@ -62,15 +62,15 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
               )
               // $COVERAGE-ON
 
-              auditCall(
-                url.toString,
-                Seq(
-                  "regime"                   -> Service.regimeCDS,
-                  "taxPayerID"               -> safeId,
-                  "acknowledgementReference" -> acknowledgementReference
-                ),
-                resp
+              val request = Map(
+                "regime"                   -> Service.regimeCDS,
+                "taxPayerID"               -> safeId,
+                "acknowledgementReference" -> acknowledgementReference
               )
+
+              val detail = Json.toJson(SubscriptionDisplay(SubscriptionDisplaySubmitted.applyAndAlignKeys(request), SubscriptionDisplayResult(resp)))
+              audit.sendSubscriptionDisplayEvent(url.toString, detail)
+
               Right(resp.subscriptionDisplayResponse)
             case None =>
               logFailure(response)
@@ -97,22 +97,5 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
         )
       case None =>
         logger.error(s"SubscriptionDisplay SUB09 failed. error: $responseBody")
-
     }
-
-  private def auditCall(url: String, request: Seq[(String, String)], response: SubscriptionDisplayResponseHolder)(implicit
-    hc: HeaderCarrier
-  ): Unit = {
-
-    val subscriptionDisplaySubmitted = SubscriptionDisplaySubmitted.applyAndAlignKeys(request.toMap)
-    val subscriptionDisplayResult = SubscriptionDisplayResult(response)
-
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-subscription-display",
-      path = url,
-      details = Json.toJson(SubscriptionDisplay(subscriptionDisplaySubmitted, subscriptionDisplayResult)),
-      eventType = "SubscriptionDisplay"
-    )
-  }
-
 }

@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 import play.api.Logger
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegisterWithoutId
@@ -31,7 +31,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
+class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) {
 
@@ -53,7 +53,7 @@ class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig:
       logger.debug(s"Register: responseCommon: ${response.registerWithoutIDResponse.responseCommon}")
       // $COVERAGE-ON
 
-      auditCall(url.toString, request, response)
+      audit.sendRegistrationDataEvent(url.toString, Json.toJson(RegisterWithoutId(request, response)))
       response.registerWithoutIDResponse
     } recover { case e: Throwable =>
       // $COVERAGE-OFF$Loggers
@@ -64,15 +64,4 @@ class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig:
       throw e
     }
   }
-
-  private def auditCall(url: String, request: RegisterWithoutIDRequest, response: RegisterWithoutIdResponseHolder)(implicit
-    hc: HeaderCarrier
-  ): Unit =
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-registration",
-      path = url,
-      details = Json.toJson(RegisterWithoutId(request, response)),
-      eventType = "Registration"
-    )
-
 }
