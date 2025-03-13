@@ -32,9 +32,8 @@ class SignInWithDifferentDetailsController @Inject() (
   mcc: MessagesControllerComponents
 ) extends CdsController(mcc) {
 
-  def form(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(signInWithDifferentDetailsView(service)))
+  def form(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    Future.successful(Ok(signInWithDifferentDetailsView(service)))
   }
 
 }

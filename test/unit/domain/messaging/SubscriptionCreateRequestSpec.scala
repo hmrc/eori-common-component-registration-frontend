@@ -19,11 +19,7 @@ package unit.domain.messaging
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
-  ContactInformation,
-  SubscriptionCreateRequest,
-  VatId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{ContactInformation, SubscriptionCreateRequest, VatId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 
@@ -32,12 +28,12 @@ import java.time.{LocalDate, LocalDateTime}
 class SubscriptionCreateRequestSpec extends UnitSpec {
   private val email = "john.doe@example.com"
 
-  private val taxPayerId                 = TaxPayerId("taxPayerId")
-  private val safeId                     = SafeId("safeId")
-  private val fullName                   = "Full name"
-  private val address                    = Address("addressLine1", None, Some("city"), None, Some("postcode"), "GB")
-  private val establishmentAddress       = EstablishmentAddress("addressLine1", "city", Some("postcode"), "GB")
-  private val addressViewModel           = AddressViewModel(address)
+  private val taxPayerId = TaxPayerId("taxPayerId")
+  private val safeId = SafeId("safeId")
+  private val fullName = "Full name"
+  private val address = Address("addressLine1", None, Some("city"), None, Some("postcode"), "GB")
+  private val establishmentAddress = EstablishmentAddress("addressLine1", "city", Some("postcode"), "GB")
+  private val addressViewModel = AddressViewModel(address)
   private val dateOfBirthOrEstablishment = LocalDate.now()
 
   private val emailAddress = Some("john.doe@example.com")
@@ -96,7 +92,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
         Some(atarService)
       )
 
-      val requestCommon  = request.subscriptionCreateRequest.requestCommon
+      val requestCommon = request.subscriptionCreateRequest.requestCommon
       val requestDetails = request.subscriptionCreateRequest.requestDetail
 
       requestCommon.regime shouldBe "CDS"
@@ -144,7 +140,7 @@ class SubscriptionCreateRequestSpec extends UnitSpec {
         Some(atarService)
       )
 
-      val requestCommon  = request.subscriptionCreateRequest.requestCommon
+      val requestCommon = request.subscriptionCreateRequest.requestCommon
       val requestDetails = request.subscriptionCreateRequest.requestDetail
 
       requestCommon.regime shouldBe "CDS"

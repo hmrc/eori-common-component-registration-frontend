@@ -21,12 +21,7 @@ import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.IndividualOrganisations
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  IndividualSubscriptionFlow,
-  OrganisationSubscriptionFlow,
-  PartnershipSubscriptionFlow,
-  SubscriptionFlow
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{IndividualSubscriptionFlow, OrganisationSubscriptionFlow, PartnershipSubscriptionFlow, SubscriptionFlow}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.http.HeaderCarrier
@@ -66,9 +61,6 @@ class RequestSessionData @Inject() (audit: Auditable) {
   def userSelectedOrganisationType(implicit request: Request[AnyContent]): Option[CdsOrganisationType] =
     request.session.data.get(RequestSessionDataKeys.selectedOrganisationType).map(CdsOrganisationType.forId)
 
-  def mayBeUnMatchedUser(implicit request: Request[AnyContent]): Option[String] =
-    request.session.data.get(RequestSessionDataKeys.unmatchedUser)
-
   def sessionWithOrganisationTypeAdded(existingSession: Session, organisationType: CdsOrganisationType): Session =
     existingSession + (RequestSessionDataKeys.selectedOrganisationType -> organisationType.id)
 
@@ -91,8 +83,8 @@ class RequestSessionData @Inject() (audit: Auditable) {
 
     userLocation match {
       case Some("islands") => Some(UserLocation.ThirdCountry)
-      case Some("eu")      => Some(UserLocation.ThirdCountry)
-      case location        => location.flatMap(UserLocation.enumerable.withName)
+      case Some("eu") => Some(UserLocation.ThirdCountry)
+      case location => location.flatMap(UserLocation.enumerable.withName)
     }
   }
 
@@ -105,16 +97,12 @@ class RequestSessionData @Inject() (audit: Auditable) {
   def existingSessionWithUserLocationAdded(existingSession: Session, userLocation: String): Session =
     existingSession + (RequestSessionDataKeys.selectedUserLocation -> userLocation)
 
-  def isPartnership(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) {
-    orgType => orgType == CdsOrganisationType.Partnership
+  def isPartnership(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) { orgType =>
+    orgType == CdsOrganisationType.Partnership
   }
 
   def isCharity(implicit request: Request[AnyContent]): Boolean =
     userSelectedOrganisationType.fold(false)(orgType => orgType == CdsOrganisationType.CharityPublicBodyNotForProfit)
-
-  def isCompany(implicit request: Request[AnyContent]): Boolean = userSelectedOrganisationType.fold(false) { orgType =>
-    orgType == CdsOrganisationType.Company
-  }
 
   def isIndividualOrSoleTrader(implicit request: Request[AnyContent]): Boolean =
     userSelectedOrganisationType.fold(false) { orgType =>
@@ -132,15 +120,15 @@ class RequestSessionData @Inject() (audit: Auditable) {
   def isRegistrationUKJourney(implicit request: Request[AnyContent]): Boolean =
     request.session.data.get(RequestSessionDataKeys.subscriptionFlow) match {
       case Some(flowName) => registrationUkSubscriptionFlows.contains(SubscriptionFlow(flowName))
-      case None           => false
+      case None => false
     }
 
 }
 
 object RequestSessionDataKeys {
-  val selectedOrganisationType  = "selected-organisation-type"
-  val selectedUserLocation      = "selected-user-location"
-  val subscriptionFlow          = "subscription-flow"
+  val selectedOrganisationType = "selected-organisation-type"
+  val selectedUserLocation = "selected-user-location"
+  val subscriptionFlow = "subscription-flow"
   val uriBeforeSubscriptionFlow = "uri-before-subscription-flow"
-  val unmatchedUser             = "unmatched-user"
+  val unmatchedUser = "unmatched-user"
 }

@@ -20,11 +20,7 @@ import play.api.Logging
 import play.api.i18n.Messages
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  ContactDetails,
-  RecipientDetails,
-  SubscriptionDetails
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{ContactDetails, RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.http.HeaderCarrier
@@ -54,13 +50,13 @@ class CdsSubscriber @Inject() (
     request: Request[_]
   ): Future[SubscriptionResult] =
     for {
-      registrationDetails <- sessionCache.registrationDetails
+      registrationDetails                            <- sessionCache.registrationDetails
       (subscriptionResult, maybeSubscriptionDetails) <- fetchOtherDetailsFromCacheAndSubscribe(
-        registrationDetails,
-        cdsOrganisationType,
-        service
-      )
-      _ <- onSubscriptionResult(subscriptionResult, registrationDetails, maybeSubscriptionDetails, service)
+                                                          registrationDetails,
+                                                          cdsOrganisationType,
+                                                          service
+                                                        )
+      _                                              <- onSubscriptionResult(subscriptionResult, registrationDetails, maybeSubscriptionDetails, service)
     } yield subscriptionResult
 
   private def fetchOtherDetailsFromCacheAndSubscribe(
@@ -70,12 +66,12 @@ class CdsSubscriber @Inject() (
   )(implicit hc: HeaderCarrier, request: Request[_]): Future[(SubscriptionResult, Option[SubscriptionDetails])] =
     for {
       subscriptionDetailsHolder <- sessionCache.subscriptionDetails
-      subscriptionResult <- subscriptionService.subscribe(
-        registrationDetails,
-        subscriptionDetailsHolder,
-        mayBeCdsOrganisationType,
-        service
-      )
+      subscriptionResult        <- subscriptionService.subscribe(
+                                     registrationDetails,
+                                     subscriptionDetailsHolder,
+                                     mayBeCdsOrganisationType,
+                                     service
+                                   )
     } yield (subscriptionResult, Some(subscriptionDetailsHolder))
 
   private def onSubscriptionResult(
@@ -154,20 +150,22 @@ class CdsSubscriber @Inject() (
     formBundleId: String,
     emailVerificationTimestamp: Option[LocalDateTime]
   )(implicit hc: HeaderCarrier, messages: Messages, request: Request[_]): Future[Unit] =
-    sessionCache.saveSub02Outcome(
-      Sub02Outcome(processingDate, cdsFullName.getOrElse(name), maybeEori.map(_.id))
-    ).flatMap { _ =>
-      val recipientDetails =
-        RecipientDetails(service, email, contactName.getOrElse(""), cdsFullName, Some(processingDate))
-
-      handleSubscriptionService.handleSubscription(
-        formBundleId,
-        recipientDetails,
-        TaxPayerId(safeId.id),
-        maybeEori,
-        emailVerificationTimestamp,
-        safeId
+    sessionCache
+      .saveSub02Outcome(
+        Sub02Outcome(processingDate, cdsFullName.getOrElse(name), maybeEori.map(_.id))
       )
-    }
+      .flatMap { _ =>
+        val recipientDetails =
+          RecipientDetails(service, email, contactName.getOrElse(""), cdsFullName, Some(processingDate))
+
+        handleSubscriptionService.handleSubscription(
+          formBundleId,
+          recipientDetails,
+          TaxPayerId(safeId.id),
+          maybeEori,
+          emailVerificationTimestamp,
+          safeId
+        )
+      }
 
 }

@@ -26,23 +26,15 @@ import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
-  ResponseWithURI,
-  VerificationStatus,
-  VerificationStatusResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{ResponseWithURI, VerificationStatus, VerificationStatusResponse}
 import uk.gov.hmrc.http._
 import util.externalservices.EmailVerificationStubService
-import util.externalservices.EmailVerificationStubService.{
-  verificationStatusSuccessResponse,
-  verifyEmailFailureResponse,
-  verifyEmailInvalidResponse
-}
+import util.externalservices.EmailVerificationStubService.{verificationStatusSuccessResponse, verifyEmailFailureResponse, verifyEmailInvalidResponse}
 import util.externalservices.ExternalServicesConfig._
 
 class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.email-verification.host"               -> Host,
@@ -78,9 +70,9 @@ class EmailVerificationConnectorSpec extends IntegrationTestsSpec with ScalaFutu
 
   "startVerificationJourney" should {
 
-    val credId  = "123"
+    val credId = "123"
     val service = Service.cds
-    val email   = "123@abc.com"
+    val email = "123@abc.com"
 
     "return a Right containing the URI when a CREATED is returned" in {
       EmailVerificationStubService.stubVerifyEmailResponse(verifyEmailSuccessResponse.toString(), CREATED)

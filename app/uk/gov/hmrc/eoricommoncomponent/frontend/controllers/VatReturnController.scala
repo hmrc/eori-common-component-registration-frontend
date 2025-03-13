@@ -18,11 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ContactDetailsController,
-  VatDetailsController,
-  VatReturnController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ContactDetailsController, VatDetailsController, VatReturnController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotal
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatReturnTotalForm.vatReturnTotalForm
@@ -44,28 +40,30 @@ class VatReturnController @Inject() (
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(vatReturnTotalView(vatReturnTotalForm, service)))
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(Ok(vatReturnTotalView(vatReturnTotalForm, service)))
     }
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      vatReturnTotalForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(vatReturnTotalView(formWithErrors, service))),
-        formData => lookupVatReturn(formData, service)
-      )
+      vatReturnTotalForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(vatReturnTotalView(formWithErrors, service))),
+          formData => lookupVatReturn(formData, service)
+        )
     }
 
   private def lookupVatReturn(vatReturnTotal: VatReturnTotal, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
     subscriptionBusinessService.getCachedVatControlListResponse.map {
-      case Some(response)
-          if response.lastNetDue.getOrElse(
-            Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
-          ) == vatReturnTotal.returnAmountInput.toDouble =>
-        Redirect(ContactDetailsController.createForm(service))
+      case Some(response) =>
+        if (response.lastNetDue.contains(vatReturnTotal.returnAmountInput.toDouble)) {
+          Redirect(ContactDetailsController.createForm(service))
+        } else {
+          Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
+        }
       case _ => Redirect(VatReturnController.redirectToCannotConfirmIdentity(service))
     }
 

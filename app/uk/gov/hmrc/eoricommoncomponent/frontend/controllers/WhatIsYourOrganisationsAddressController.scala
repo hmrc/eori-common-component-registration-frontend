@@ -18,23 +18,10 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  Company,
-  Individual,
-  LimitedLiabilityPartnership,
-  Partnership,
-  SoleTrader
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Individual, LimitedLiabilityPartnership, Partnership, SoleTrader}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  CharityPublicBodySubscriptionFlow,
-  CharityPublicBodySubscriptionNoUtrFlow,
-  CompanyLlpFlowIom,
-  IndividualSoleTraderFlowIom,
-  PartnershipSubscriptionFlowIom,
-  SubscriptionFlow
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{CharityPublicBodySubscriptionFlow, CharityPublicBodySubscriptionNoUtrFlow, CompanyLlpFlowIom, IndividualSoleTraderFlowIom, PartnershipSubscriptionFlowIom, SubscriptionFlow}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.contactAddressForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -104,25 +91,28 @@ class WhatIsYourOrganisationsAddressController @Inject() (
           )
         else {
           val addr = filledForm.value.head
-          registrationDetailsService.cacheAddress(
-            Address(addr.lineOne, addr.lineTwo, Some(addr.townCity), None, Some(addr.postcode), addr.country)
-          ).flatMap { _ =>
-            subscriptionDetailsService.cacheAddressDetails(filledForm.value.head)
-              .flatMap { _ =>
-                subscriptionDetailsService.cachedUtrMatch.flatMap { optUtrMatchModel =>
-                  val hasUtr = optUtrMatchModel.exists(_.haveUtr.contains(true))
-                  subscriptionFlowManager.startSubscriptionFlowWithPage(
-                    None,
-                    service,
-                    redirectFlowLocation(orgType, hasUtr)
-                  )
+          registrationDetailsService
+            .cacheAddress(
+              Address(addr.lineOne, addr.lineTwo, Some(addr.townCity), None, Some(addr.postcode), addr.country)
+            )
+            .flatMap { _ =>
+              subscriptionDetailsService
+                .cacheAddressDetails(filledForm.value.head)
+                .flatMap { _ =>
+                  subscriptionDetailsService.cachedUtrMatch.flatMap { optUtrMatchModel =>
+                    val hasUtr = optUtrMatchModel.exists(_.haveUtr.contains(true))
+                    subscriptionFlowManager.startSubscriptionFlowWithPage(
+                      None,
+                      service,
+                      redirectFlowLocation(orgType, hasUtr)
+                    )
+                  }
                 }
-              }
-              .map {
-                case (flowPageOne, session) => Redirect(flowPageOne.url(service)).withSession(session)
-              }
+                .map { case (flowPageOne, session) =>
+                  Redirect(flowPageOne.url(service)).withSession(session)
+                }
 
-          }
+            }
         }
       }
     }
@@ -132,10 +122,10 @@ class WhatIsYourOrganisationsAddressController @Inject() (
     request: Request[AnyContent]
   ): SubscriptionFlow = {
     (requestSessionData.selectedUserLocation, cdsOrganisationType) match {
-      case (Some(UserLocation.Iom), Partnership)                 => PartnershipSubscriptionFlowIom
-      case (Some(UserLocation.Iom), Individual)                  => IndividualSoleTraderFlowIom
-      case (Some(UserLocation.Iom), SoleTrader)                  => IndividualSoleTraderFlowIom
-      case (Some(UserLocation.Iom), Company)                     => CompanyLlpFlowIom
+      case (Some(UserLocation.Iom), Partnership) => PartnershipSubscriptionFlowIom
+      case (Some(UserLocation.Iom), Individual) => IndividualSoleTraderFlowIom
+      case (Some(UserLocation.Iom), SoleTrader) => IndividualSoleTraderFlowIom
+      case (Some(UserLocation.Iom), Company) => CompanyLlpFlowIom
       case (Some(UserLocation.Iom), LimitedLiabilityPartnership) => CompanyLlpFlowIom
       case _ =>
         if (hasUtr) {

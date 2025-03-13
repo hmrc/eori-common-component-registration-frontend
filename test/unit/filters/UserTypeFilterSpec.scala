@@ -34,10 +34,10 @@ import scala.concurrent.Future
 
 class UserTypeFilterSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector            = mock[AuthConnector]
-  private val mockAuthAction               = authAction(mockAuthConnector)
-  private val mockCache                    = mock[SessionCache]
-  private val eoriNumberTextDownloadView   = inject[eori_number_text_download]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockCache = mock[SessionCache]
+  private val eoriNumberTextDownloadView = inject[eori_number_text_download]
   private val subscriptionTextDownloadView = inject[subscription_text_download]
 
   private val controller =

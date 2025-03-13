@@ -22,26 +22,14 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  ContactDetailsController,
-  DateOfEstablishmentController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ContactDetailsController, DateOfEstablishmentController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{BusinessDetailsRecoveryController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  BusinessDetailsRecoveryPage,
-  ContactDetailsSubscriptionFlowPageGetEori,
-  DateOfEstablishmentSubscriptionFlowPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessDetailsRecoveryPage, ContactDetailsSubscriptionFlowPageGetEori, DateOfEstablishmentSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache,
-  SessionCacheService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.business_details_recovery
 import uk.gov.hmrc.http.HeaderCarrier
@@ -56,14 +44,14 @@ import scala.concurrent.Future
 
 class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector           = mock[AuthConnector]
-  private val mockAuthAction              = authAction(mockAuthConnector)
-  private val mockRequestSessionData      = mock[RequestSessionData]
-  private val mockSessionCache            = mock[SessionCache]
-  private val mockOrgTypeLookup           = mock[OrgTypeLookup]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockOrgTypeLookup = mock[OrgTypeLookup]
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
-  private val mockSave4LaterService       = mock[Save4LaterService]
-  private val mockSessionCacheService     = inject[SessionCacheService]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val businessDetailsRecoveryView = inject[business_details_recovery]
 
@@ -186,7 +174,7 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
 
   private def assertAndTestBasedOnTheLocationForOrganisation(location: UserLocation): Unit =
     s"redirect to dateOfEstablishment when orgType is found in cache for Organisation and location is selected to $location" in {
-      val mockSession   = mock[Session]
+      val mockSession = mock[Session]
       val mockFlowStart = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
 
       when(
@@ -214,8 +202,8 @@ class BusinessDetailsRecoveryControllerSpec extends ControllerSpec with BeforeAn
   private def assertAndTestThrowsExceptionForInvalidLocationOrganisation(): Unit =
     "throw IllegalStateException when passing invalid location" in {
       val location: String = "invalid-location"
-      val mockSession      = mock[Session]
-      val mockFlowStart    = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
+      val mockSession = mock[Session]
+      val mockFlowStart = (DateOfEstablishmentSubscriptionFlowPage, mockSession)
 
       when(
         mockSubscriptionFlowManager.startSubscriptionFlow(

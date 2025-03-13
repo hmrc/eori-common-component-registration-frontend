@@ -28,12 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnect
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  MatchingRequestHolder,
-  MatchingResponse,
-  Organisation,
-  RegisterWithIDResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse, Organisation, RegisterWithIDResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
@@ -49,16 +44,16 @@ import scala.concurrent.Future
 
 class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockMatchingService            = mock[MatchingService]
-  private val mockMatchingConnector          = mock[MatchingServiceConnector]
-  private val mockMatchingRequestHolder      = mock[MatchingRequestHolder]
-  private val mockMatchingResponse           = mock[MatchingResponse]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
+  private val mockMatchingConnector = mock[MatchingServiceConnector]
+  private val mockMatchingRequestHolder = mock[MatchingRequestHolder]
+  private val mockMatchingResponse = mock[MatchingResponse]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val matchOrganisationUtrView       = inject[how_can_we_identify_you_utr]
-  private val errorView                      = inject[error_template]
-  private val mockSessionCacheService        = inject[SessionCacheService]
+  private val matchOrganisationUtrView = inject[how_can_we_identify_you_utr]
+  private val errorView = inject[error_template]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
@@ -72,7 +67,7 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     mockSessionCacheService
   )(global)
 
-  private val UtrInvalidErrorPage  = messages("cds.matching-error.utr.invalid")
+  private val UtrInvalidErrorPage = messages("cds.matching-error.utr.invalid")
   private val UtrInvalidErrorField = s"Error: ${messages("cds.matching-error.utr.invalid")}"
 
   private val BusinessNotMatchedError =
@@ -106,14 +101,13 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     }
 
     "ensure the labels are correct for CdsOrganisationType.CharityPublicBodyNotForProfitId" in {
-      submitForm(form = Map("utr" -> ""), CdsOrganisationType.CharityPublicBodyNotForProfitId) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
+      submitForm(form = Map("utr" -> ""), CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
 
-          val errorMessage = s"Error: ${messages("cds.matching-error.business-details.utr.isEmpty")}"
+        val errorMessage = s"Error: ${messages("cds.matching-error.business-details.utr.isEmpty")}"
 
-          page.getElementsText(fieldLevelErrorUtr) shouldBe errorMessage
+        page.getElementsText(fieldLevelErrorUtr) shouldBe errorMessage
       }
     }
   }
@@ -126,27 +120,25 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     )
 
     "ensure UTR has been entered when organisation type is 'CdsOrganisationType.CharityPublicBodyNotForProfitId'" in {
-      submitForm(form = ValidUtrRequest + ("utr" -> ""), CdsOrganisationType.CharityPublicBodyNotForProfitId) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe messages(
-            "cds.matching-error.business-details.utr.isEmpty"
-          )
-          page.getElementsText(fieldLevelErrorUtr) shouldBe s"Error: ${messages("cds.matching-error.business-details.utr.isEmpty")}"
-          page.getElementsText("title") should startWith("Error: ")
+      submitForm(form = ValidUtrRequest + ("utr" -> ""), CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe messages(
+          "cds.matching-error.business-details.utr.isEmpty"
+        )
+        page.getElementsText(fieldLevelErrorUtr) shouldBe s"Error: ${messages("cds.matching-error.business-details.utr.isEmpty")}"
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
 
     "ensure when UTR is correctly formatted it is a valid UTR when organisation type is 'CdsOrganisationType.CharityPublicBodyNotForProfitId'" in {
       val invalidUtr = "0123456789"
-      submitForm(form = ValidUtrRequest + ("utr" -> invalidUtr), CdsOrganisationType.CharityPublicBodyNotForProfitId) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe UtrInvalidErrorPage
-          page.getElementsText(fieldLevelErrorUtr) shouldBe UtrInvalidErrorField
-          page.getElementsText("title") should startWith("Error: ")
+      submitForm(form = ValidUtrRequest + ("utr" -> invalidUtr), CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(pageLevelErrorSummaryListXPath) shouldBe UtrInvalidErrorPage
+        page.getElementsText(fieldLevelErrorUtr) shouldBe UtrInvalidErrorField
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
 

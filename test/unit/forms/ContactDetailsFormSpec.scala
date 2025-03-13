@@ -29,13 +29,13 @@ class ContactDetailsFormSpec extends UnitSpec {
 
     "map an empty phone number to a None" in {
       val data = Map("full-name" -> "Some name", "telephone" -> "")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("telephone", "cds.contact-details.page-error.telephone.isEmpty"))
     }
 
     "map a valid phone number to a Some" in {
       val data = Map("full-name" -> "Some name", "telephone" -> "012345678")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq.empty
       res.value shouldBe Some(
         ContactDetailsViewModel(fullName = "Some name", emailAddress = None, telephone = "012345678")
@@ -44,7 +44,7 @@ class ContactDetailsFormSpec extends UnitSpec {
 
     "return an error where the phone number is too long" in {
       val data = Map("full-name" -> "Some name", "telephone" -> "123456789012345678901234567890")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("telephone", "cds.contact-details.page-error.telephone.wrong-length.too-long"))
     }
 

@@ -27,11 +27,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  MatchingRequestHolder,
-  MatchingResponse,
-  Organisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse, Organisation}
 import util.builders.matching.NinoFormBuilder
 import play.api.libs.json._
 import play.api.mvc.{AnyContent, Request}
@@ -47,18 +43,18 @@ import scala.concurrent.Future
 class MatchingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with MatchingServiceTestData {
 
   private val mockMatchingServiceConnector = mock[MatchingServiceConnector]
-  private val mockDetailsCreator           = mock[RegistrationDetailsCreator]
-  private val mockRequestSessionData       = mock[RequestSessionData]
-  private val mockDetails                  = mock[RegistrationDetails]
+  private val mockDetailsCreator = mock[RegistrationDetailsCreator]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockDetails = mock[RegistrationDetails]
 
   private val mockRequest = mock[Request[AnyContent]]
 
-  private val mockHeaderCarrier          = mock[HeaderCarrier]
+  private val mockHeaderCarrier = mock[HeaderCarrier]
   private val mockRequestCommonGenerator = mock[RequestCommonGenerator]
-  private val mockCache                  = mock[SessionCache]
-  private val loggedInCtUser             = mock[LoggedInUserWithEnrolments]
-  private val mockGroupId                = mock[GroupId]
-  implicit val request: Request[Any]     = mock[Request[Any]]
+  private val mockCache = mock[SessionCache]
+  private val loggedInCtUser = mock[LoggedInUserWithEnrolments]
+  private val mockGroupId = mock[GroupId]
+  implicit val request: Request[Any] = mock[Request[Any]]
 
   private val service = new MatchingService(
     mockMatchingServiceConnector,

@@ -34,8 +34,10 @@ class EnrolmentStoreProxyService @Inject() (enrolmentStoreProxyConnector: Enrolm
   def enrolmentsForGroup(
     groupId: GroupId
   )(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, List[EnrolmentResponse]] =
-    enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId.id).map(
-      _.enrolments.filter(x => x.state == activatedState)
-    )
+    enrolmentStoreProxyConnector
+      .getEnrolmentByGroupId(groupId.id)
+      .map(
+        _.enrolments.filter(x => x.state == activatedState)
+      )
 
 }

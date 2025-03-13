@@ -46,10 +46,10 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
 
   val mockTimeStampSupport = new CurrentTimestampSupport()
 
-  private val mockSave4LaterService  = mock[Save4LaterService]
+  private val mockSave4LaterService = mock[Save4LaterService]
   implicit val request: Request[Any] = mock[Request[Any]]
-  val hc: HeaderCarrier              = mock[HeaderCarrier]
-  val sessionCache                   = new SessionCache(appConfig, mongoComponent, mockSave4LaterService, mockTimeStampSupport)
+  val hc: HeaderCarrier = mock[HeaderCarrier]
+  val sessionCache = new SessionCache(appConfig, mongoComponent, mockSave4LaterService, mockTimeStampSupport)
 
   "Session cache" should {
 

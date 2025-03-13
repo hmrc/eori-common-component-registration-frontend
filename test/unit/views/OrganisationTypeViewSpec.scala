@@ -39,16 +39,15 @@ import util.builders.{AuthActionMock, SessionBuilder}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class OrganisationTypeViewSpec
-    extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with BeforeAndAfter with AuthActionMock {
+class OrganisationTypeViewSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val organisationTypeView           = inject[organisation_type]
-  private val mockAppConfig                  = mock[AppConfig]
+  private val organisationTypeView = inject[organisation_type]
+  private val mockAppConfig = mock[AppConfig]
 
   private val organisationTypeController = new OrganisationTypeController(
     mockAuthAction,
@@ -93,7 +92,7 @@ class OrganisationTypeViewSpec
       Table("userLocation", Some(UserLocation.Uk), Some(UserLocation.ThirdCountry))
 
     forAll(userLocations) { userLocation =>
-      val forUk           = userLocation.fold(true)(_ == UserLocation.Uk)
+      val forUk = userLocation.fold(true)(_ == UserLocation.Uk)
       val forThirdCountry = userLocation.fold(true)(_ == UserLocation.ThirdCountry)
 
       s"have all the required input fields while on main screen for user location ${userLocation.getOrElse("None")}" in {
@@ -128,9 +127,11 @@ class OrganisationTypeViewSpec
     withAuthorisedUser(userId, mockAuthConnector)
     when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]])).thenReturn(userLocation)
 
-    val request = maybeOrgType.map { orgType =>
-      SessionBuilder.buildRequestWithSessionAndOrgType(userId, orgType.id)
-    }.getOrElse(SessionBuilder.buildRequestWithSession(userId))
+    val request = maybeOrgType
+      .map { orgType =>
+        SessionBuilder.buildRequestWithSessionAndOrgType(userId, orgType.id)
+      }
+      .getOrElse(SessionBuilder.buildRequestWithSession(userId))
     test(organisationTypeController.form(atarService).apply(request))
   }
 

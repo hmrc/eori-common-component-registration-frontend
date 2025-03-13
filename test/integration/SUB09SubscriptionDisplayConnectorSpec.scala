@@ -23,11 +23,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  InvalidResponse,
-  SUB09SubscriptionDisplayConnector,
-  ServiceUnavailableResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{InvalidResponse, SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponseHolder
 import uk.gov.hmrc.http._
 import util.externalservices.ExternalServicesConfig._
@@ -35,7 +31,7 @@ import util.externalservices.SubscriptionDisplayMessagingService
 
 class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.eori-common-component-hods-proxy.host"                         -> Host,
@@ -49,8 +45,8 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
     .build()
 
-  private lazy val connector                  = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
-  private val requestTaxPayerId               = "GBE9XSDF10BCKEYAX"
+  private lazy val connector = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
+  private val requestTaxPayerId = "GBE9XSDF10BCKEYAX"
   private val requestAcknowledgementReference = "1234567890ABCDEFG"
 
   private val expectedResponse = Json

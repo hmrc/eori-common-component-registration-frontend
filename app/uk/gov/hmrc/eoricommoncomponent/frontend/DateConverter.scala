@@ -27,17 +27,16 @@ object DateConverter {
 
   private val logger = Logger(this.getClass)
 
-  val earliestYearDateOfBirth         = 1900
-  val earliestYearEffectiveVatDate    = 1970
+  val earliestYearDateOfBirth = 1900
+  val earliestYearEffectiveVatDate = 1970
   val earliestYearDateOfEstablishment = 1000
 
   def toLocalDate(dateStr: String): Option[LocalDate] =
-    Try(LocalDate.parse(dateStr)).recoverWith {
-      case NonFatal(e) =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn(s"Could not parse the LocalDate '$dateStr': ${e.getMessage}", e)
-        // $COVERAGE-ON
-        Failure(e)
+    Try(LocalDate.parse(dateStr)).recoverWith { case NonFatal(e) =>
+      // $COVERAGE-OFF$Loggers
+      logger.warn(s"Could not parse the LocalDate '$dateStr': ${e.getMessage}", e)
+      // $COVERAGE-ON
+      Failure(e)
     }.toOption
 
   def updateDateOfBirthErrors(errors: Seq[FormError]): Seq[FormError] =
@@ -49,10 +48,9 @@ object DateConverter {
   def updateEffectiveVatDateErrors(errors: Seq[FormError]): Seq[FormError] =
     updateYearErrors(errors, earliestYearEffectiveVatDate)
 
-  private def updateYearErrors(errors: Seq[FormError], minYear: Int): Seq[FormError] = errors.map(
-    err =>
-      if (err.messages.contains("date.year.error")) err.copy(args = Seq(minYear.toString, Year.now.getValue.toString))
-      else err
+  private def updateYearErrors(errors: Seq[FormError], minYear: Int): Seq[FormError] = errors.map(err =>
+    if (err.messages.contains("date.year.error")) err.copy(args = Seq(minYear.toString, Year.now.getValue.toString))
+    else err
   )
 
 }

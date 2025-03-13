@@ -44,12 +44,12 @@ import scala.concurrent.Future
 
 class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockMatchingService            = mock[MatchingService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val errorView                      = inject[error_template]
-  private val mockRequestSessionData         = inject[RequestSessionData]
+  private val errorView = inject[error_template]
+  private val mockRequestSessionData = inject[RequestSessionData]
 
   private val matchNinoRowIndividualView = inject[how_can_we_identify_you_nino]
 
@@ -69,10 +69,10 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   override def beforeEach(): Unit =
     reset(mockMatchingService)
 
-  val validNino                         = Nino(NinoFormBuilder.Nino)
-  val yesNinoSubmitData                 = Map("nino" -> NinoFormBuilder.Nino)
-  val yesNinoNotProvidedSubmitData      = Map("nino" -> "")
-  val yesNinoWrongFormatSubmitData      = Map("nino" -> "ABZ")
+  val validNino = Nino(NinoFormBuilder.Nino)
+  val yesNinoSubmitData = Map("nino" -> NinoFormBuilder.Nino)
+  val yesNinoNotProvidedSubmitData = Map("nino" -> "")
+  val yesNinoWrongFormatSubmitData = Map("nino" -> "ABZ")
   val mandatoryNinoFields: IdMatchModel = subscriptionNinoForm.bind(yesNinoSubmitData).value.get
 
   "Viewing the NINO Individual/Sole trader Rest of World Matching form" should {

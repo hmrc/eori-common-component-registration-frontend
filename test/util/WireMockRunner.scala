@@ -24,7 +24,7 @@ import util.externalservices.ExternalServicesConfig._
 
 trait WireMockRunner {
 
-  lazy val wireMockUrl    = s"http://$Host:$Port"
+  lazy val wireMockUrl = s"http://$Host:$Port"
   lazy val wireMockServer = new WireMockServer(wireMockConfig().port(Port).notifier(new ConsoleNotifier(false)))
 
   def startMockServer(): Unit = {

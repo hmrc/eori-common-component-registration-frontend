@@ -25,38 +25,32 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
-import unit.controllers.{
-  SubscriptionFlowCreateModeTestSupport,
-  SubscriptionFlowReviewModeTestSupport,
-  SubscriptionFlowTestSupport
-}
+import unit.controllers.{SubscriptionFlowCreateModeTestSupport, SubscriptionFlowReviewModeTestSupport, SubscriptionFlowTestSupport}
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.SessionBuilder
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class AddressControllerSpec
-    extends SubscriptionFlowTestSupport with SubscriptionFlowCreateModeTestSupport
-    with SubscriptionFlowReviewModeTestSupport {
+class AddressControllerSpec extends SubscriptionFlowTestSupport with SubscriptionFlowCreateModeTestSupport with SubscriptionFlowReviewModeTestSupport {
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
-  private val mockAddressService      = mock[AddressService]
+  private val mockAddressService = mock[AddressService]
   private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new AddressController(mockAuthAction, mockAddressService, mockSessionCacheService, mcc)(
     global
   )
 
-  protected override val formId: String = "addressDetailsForm"
+  override protected val formId: String = "addressDetailsForm"
 
-  protected override val submitInCreateModeUrl: String =
+  override protected val submitInCreateModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
       .submit(isInReviewMode = false, atarService)
       .url
 
-  protected override val submitInReviewModeUrl: String =
+  override protected val submitInReviewModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
       .submit(isInReviewMode = true, atarService)
       .url

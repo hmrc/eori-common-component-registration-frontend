@@ -19,16 +19,8 @@ package unit.services.mapping
 import base.UnitSpec
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  ContactResponse,
-  IndividualResponse,
-  OrganisationResponse
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
-  RegistrationDisplayResponse,
-  ResponseCommon,
-  ResponseDetail
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, OrganisationResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayResponse, ResponseCommon, ResponseDetail}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
 
 import java.time.LocalDate
@@ -53,7 +45,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         ContactResponse()
       )
       val responseCommon = ResponseCommon("status", None, "date", None, Some("taxPayerId"))
-      val response       = RegistrationDisplayResponse(responseCommon, Some(responseDetail))
+      val response = RegistrationDisplayResponse(responseCommon, Some(responseDetail))
       val expectedDetails = RegistrationDetailsIndividual(
         None,
         TaxPayerId("taxPayerId"),
@@ -81,7 +73,7 @@ class RegistrationDetailsCreatorSpec extends UnitSpec {
         ContactResponse()
       )
       val responseCommon = ResponseCommon("status", None, "date", None, Some("taxPayerId"))
-      val response       = RegistrationDisplayResponse(responseCommon, Some(responseDetail))
+      val response = RegistrationDisplayResponse(responseCommon, Some(responseDetail))
       val expectedDetails = RegistrationDetailsOrganisation(
         None,
         TaxPayerId("taxPayerId"),

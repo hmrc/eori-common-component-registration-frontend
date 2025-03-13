@@ -27,8 +27,8 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
 
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
 
-  val eori       = "GB123445562"
-  val orgName    = "Test Organisation Name"
+  val eori = "GB123445562"
+  val orgName = "Test Organisation Name"
   val issuedDate = "01 Jan 2019"
 
   private val view = inject[standalone_subscription_outcome]
@@ -56,17 +56,23 @@ class StandaloneSubscriptionOutcomeSpec extends ViewSpec {
 
       val listItems = additionalInfoParagraph.getElementsByTag("li")
       listItems.get(0).text() mustBe "Download a text file of your EORI number (12kb)"
-      listItems.get(0).getElementsByTag("a").attr(
-        "href"
-      ) mustBe "/customs-registration-services/atar/register/download/text"
+      listItems
+        .get(0)
+        .getElementsByTag("a")
+        .attr(
+          "href"
+        ) mustBe "/customs-registration-services/atar/register/download/text"
     }
 
     "display whats happens next paragraph" in {
       val whatsNextParagraph = doc.body().getElementById("when-you-can")
       whatsNextParagraph.getElementsByTag("h2").get(0).text() mustBe "What happens next"
-      whatsNextParagraph.getElementsByTag("p").get(
-        0
-      ).text() mustBe "We will process your application. This can take up to 2 hours."
+      whatsNextParagraph
+        .getElementsByTag("p")
+        .get(
+          0
+        )
+        .text() mustBe "We will process your application. This can take up to 2 hours."
     }
   }
 }

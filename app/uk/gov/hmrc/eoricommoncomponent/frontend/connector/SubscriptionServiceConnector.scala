@@ -21,10 +21,7 @@ import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
-  SubscriptionRequest,
-  SubscriptionResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{SubscriptionRequest, SubscriptionResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{Subscription, SubscriptionResult, SubscriptionSubmitted}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http._
@@ -39,7 +36,7 @@ class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfi
 ) {
 
   private val logger = Logger(this.getClass)
-  private val url    = url"${appConfig.getServiceUrl("subscribe")}"
+  private val url = url"${appConfig.getServiceUrl("subscribe")}"
 
   def subscribe(request: SubscriptionRequest)(implicit hc: HeaderCarrier): Future[SubscriptionResponse] = {
 
@@ -60,21 +57,20 @@ class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfi
 
       auditCall(url.toString, request, response)
       response
-    } recoverWith {
-      case e: Throwable =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn(
-          s"Subscribe SUB02 request failed for acknowledgementReference : ${request.subscriptionCreateRequest.requestCommon.acknowledgementReference}. Reason: $e"
-        )
-        // $COVERAGE-ON
-        Future.failed(e)
+    } recoverWith { case e: Throwable =>
+      // $COVERAGE-OFF$Loggers
+      logger.warn(
+        s"Subscribe SUB02 request failed for acknowledgementReference : ${request.subscriptionCreateRequest.requestCommon.acknowledgementReference}. Reason: $e"
+      )
+      // $COVERAGE-ON
+      Future.failed(e)
     }
   }
 
   private def auditCall(url: String, request: SubscriptionRequest, response: SubscriptionResponse)(implicit
     hc: HeaderCarrier
   ): Unit = {
-    val subscriptionRequest  = SubscriptionSubmitted(request)
+    val subscriptionRequest = SubscriptionSubmitted(request)
     val subscriptionResponse = SubscriptionResult(response)
 
     audit.sendExtendedDataEvent(

@@ -26,8 +26,8 @@ import util.ViewSpec
 
 class YouCantUseServiceSpec extends ViewSpec {
 
-  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
-  private val youCantUseServiceView                             = inject[you_cant_use_service]
+  implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
+  private val youCantUseServiceView = inject[you_cant_use_service]
 
   "You cannot use this service page for users of type standard org" should {
 

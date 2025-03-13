@@ -36,8 +36,8 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
   private val logger = Logger(this.getClass)
 
   private val orgTypeKey = "orgType"
-  private val emailKey   = "email"
-  private val safeIdKey  = "safeId"
+  private val emailKey = "email"
+  private val safeIdKey = "safeId"
   private val userLocKey = "userLoc"
 
   def saveSafeId(groupId: GroupId, safeId: SafeId)(implicit hc: HeaderCarrier): Future[Unit] = {
@@ -115,7 +115,7 @@ class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
       .get[CacheIds](groupId.id, CachedData.groupIdKey)
       .map {
         case Some(cacheIds) => cacheIds.serviceCode.flatMap(Service.withName)
-        case _              => None
+        case _ => None
       }
 
   }

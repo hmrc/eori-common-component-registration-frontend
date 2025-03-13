@@ -30,9 +30,11 @@ class RequestDetailSpec extends AnyFreeSpec with Matchers {
     "serialise to json" in {
 
       val requestDetail = RequestDetail("idType", "idNumber", "test@email.com", dateTime)
-      Json.toJson(
-        requestDetail
-      ).toString() mustBe """{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17T09:30:47Z"}"""
+      Json
+        .toJson(
+          requestDetail
+        )
+        .toString() mustBe """{"IDType":"idType","IDNumber":"idNumber","emailAddress":"test@email.com","emailVerificationTimestamp":"2001-12-17T09:30:47Z"}"""
     }
 
     "de-serialise from json" in {

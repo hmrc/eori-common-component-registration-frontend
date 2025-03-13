@@ -23,22 +23,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  SUB09SubscriptionDisplayConnector,
-  ServiceUnavailableResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  HandleSubscriptionService,
-  RandomUUIDGenerator,
-  TaxEnrolmentsService,
-  UpdateVerifiedEmailService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{HandleSubscriptionService, RandomUUIDGenerator, TaxEnrolmentsService, UpdateVerifiedEmailService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, recovery_registration_exists}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
@@ -50,24 +42,23 @@ import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class SubscriptionRecoveryControllerSpec
-    extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
+class SubscriptionRecoveryControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector                     = mock[AuthConnector]
-  private val mockAuthAction                        = authAction(mockAuthConnector)
-  private val mockSessionCache: SessionCache        = mock[SessionCache]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockSessionCache: SessionCache = mock[SessionCache]
   private val mockSUB09SubscriptionDisplayConnector = mock[SUB09SubscriptionDisplayConnector]
-  private val mockSub01Outcome                      = mock[Sub01Outcome]
-  private val mockHandleSubscriptionService         = mock[HandleSubscriptionService]
-  private val mockTaxEnrolmentService               = mock[TaxEnrolmentsService]
-  private val mockOrgRegistrationDetails            = mock[RegistrationDetailsOrganisation]
-  private val mockSubscriptionDetailsHolder         = mock[SubscriptionDetails]
-  private val mockRandomUUIDGenerator               = mock[RandomUUIDGenerator]
-  private val contactDetails                        = mock[ContactDetailsModel]
-  private val mockRequestSessionData                = mock[RequestSessionData]
-  private val mockUpdateVerifiedEmailService        = mock[UpdateVerifiedEmailService]
-  private val errorTemplateView                     = inject[error_template]
-  private val alreadyHaveEori                       = inject[recovery_registration_exists]
+  private val mockSub01Outcome = mock[Sub01Outcome]
+  private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
+  private val mockTaxEnrolmentService = mock[TaxEnrolmentsService]
+  private val mockOrgRegistrationDetails = mock[RegistrationDetailsOrganisation]
+  private val mockSubscriptionDetailsHolder = mock[SubscriptionDetails]
+  private val mockRandomUUIDGenerator = mock[RandomUUIDGenerator]
+  private val contactDetails = mock[ContactDetailsModel]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockUpdateVerifiedEmailService = mock[UpdateVerifiedEmailService]
+  private val errorTemplateView = inject[error_template]
+  private val alreadyHaveEori = inject[recovery_registration_exists]
 
   private val controller = new SubscriptionRecoveryController(
     mockAuthAction,
@@ -84,7 +75,7 @@ class SubscriptionRecoveryControllerSpec
   )(global)
 
   def registerWithEoriAndIdResponseDetail: Option[RegisterWithEoriAndIdResponseDetail] = {
-    val trader               = Trader(fullName = "New trading", shortName = "nt")
+    val trader = Trader(fullName = "New trading", shortName = "nt")
     val establishmentAddress = EstablishmentAddress(streetAndNumber = "new street", city = "leeds", countryCode = "GB")
     val responseData: ResponseData = ResponseData(
       SAFEID = "SomeSafeId",

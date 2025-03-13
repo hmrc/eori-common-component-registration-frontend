@@ -27,13 +27,11 @@ class EmbassyNameFormSpec extends UnitSpec {
   "embassy name form" should {
     "fail" when {
       "name is empty" in {
-        form.bind(Map("name" -> ""))
-          .errors shouldBe List(FormError("name", List("cds.matching.embassy-name.error.name"), List()))
+        form.bind(Map("name" -> "")).errors shouldBe List(FormError("name", List("cds.matching.embassy-name.error.name"), List()))
       }
 
       "name contains tags" in {
-        form.bind(Map("name" -> "<name>"))
-          .errors shouldBe List(
+        form.bind(Map("name" -> "<name>")).errors shouldBe List(
           FormError("name", List("cds.matching-error.business-details.embassy-name.invalid-char"), List())
         )
 

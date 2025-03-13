@@ -32,7 +32,7 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
   val configuration = mock[Configuration]
 
   private val errorTemplateView = inject[error_template]
-  private val notFoundView      = inject[notFound]
+  private val notFoundView = inject[notFound]
 
   val cdsErrorHandler =
     new CdsErrorHandler(messagesApi, configuration, errorTemplateView, notFoundView)
@@ -49,9 +49,8 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
       }
     }
     "redirect to start page If when DataUnavailableException thrown  " in {
-      whenReady(cdsErrorHandler.onServerError(mockRequest, DataUnavailableException("DataUnavailableException"))) {
-        result =>
-          result.header.status shouldBe SEE_OTHER
+      whenReady(cdsErrorHandler.onServerError(mockRequest, DataUnavailableException("DataUnavailableException"))) { result =>
+        result.header.status shouldBe SEE_OTHER
       }
     }
 
@@ -71,9 +70,11 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         cdsErrorHandler.onClientError(mockSubRequest, statusCode = FORBIDDEN, message = "No CSRF token found in body")
       ) { result =>
         result.header.status shouldBe SEE_OTHER
-        result.header.headers.get(
-          LOCATION
-        ).value shouldBe "/customs-registration-services/atar/register/display-sign-out"
+        result.header.headers
+          .get(
+            LOCATION
+          )
+          .value shouldBe "/customs-registration-services/atar/register/display-sign-out"
       }
     }
 
@@ -88,9 +89,11 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
         )
       ) { result =>
         result.header.status shouldBe SEE_OTHER
-        result.header.headers.get(
-          LOCATION
-        ).value shouldBe "/customs-registration-services/atar/register/display-sign-out"
+        result.header.headers
+          .get(
+            LOCATION
+          )
+          .value shouldBe "/customs-registration-services/atar/register/display-sign-out"
       }
     }
 
@@ -99,9 +102,11 @@ class CdsErrorHandlerSpec extends ControllerSpec with ScalaFutures {
 
       whenReady(cdsErrorHandler.onServerError(mockRegisterRequest, SessionTimeOutException("xyz"))) { result =>
         result.header.status shouldBe SEE_OTHER
-        result.header.headers.get(
-          LOCATION
-        ).value shouldBe "/customs-registration-services/atar/register/display-sign-out"
+        result.header.headers
+          .get(
+            LOCATION
+          )
+          .value shouldBe "/customs-registration-services/atar/register/display-sign-out"
       }
     }
 

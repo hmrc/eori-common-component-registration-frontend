@@ -26,10 +26,10 @@ object ConfirmIndividualTypePage extends WebPage {
 
   val formId = "confirm-individual-type-form"
 
-  val soleTraderLabelXpath  = "//*label[@for='individual-type-sole-trader']"
+  val soleTraderLabelXpath = "//*label[@for='individual-type-sole-trader']"
   val optionSoleTraderXpath = "//*[@id='individual-type-sole-trader']"
 
-  val individualLabelXpath  = "//*label[@for='individual-type-individual']"
+  val individualLabelXpath = "//*label[@for='individual-type-individual']"
   val optionIndividualXpath = "//*[@id='individual-type-individual']"
 
 }

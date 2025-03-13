@@ -28,7 +28,6 @@ case object InvalidResponse extends EoriHttpResponse
 
 case object ServiceUnavailableResponse extends EoriHttpResponse
 
-case class SuccessResponse(formBundleNumber: String, safeId: SafeId, processingDate: LocalDateTime)
-    extends EoriHttpResponse
+case class SuccessResponse(formBundleNumber: String, safeId: SafeId, processingDate: LocalDateTime) extends EoriHttpResponse
 
 case object ErrorResponse extends EoriHttpResponse

@@ -38,12 +38,12 @@ import scala.concurrent.Future
 
 class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector           = mock[AuthConnector]
-  private val mockAuthAction              = authAction(mockAuthConnector)
-  private val mockRequestSessionData      = mock[RequestSessionData]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
-  private val confirmIndividualTypeView   = inject[confirm_individual_type]
-  private val mockSessionCacheService     = inject[SessionCacheService]
+  private val confirmIndividualTypeView = inject[confirm_individual_type]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new ConfirmIndividualTypeController(
     mockAuthAction,
@@ -55,18 +55,18 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
   )(global)
 
   private val mockSubscriptionPage = mock[SubscriptionPage]
-  private val mockSession          = mock[Session]
-  private val anotherMockSession   = mock[Session]
-  private val mockRequestHeader    = mock[RequestHeader]
-  private val mockFlowStart        = (mockSubscriptionPage, anotherMockSession)
+  private val mockSession = mock[Session]
+  private val anotherMockSession = mock[Session]
+  private val mockRequestHeader = mock[RequestHeader]
+  private val mockFlowStart = (mockSubscriptionPage, anotherMockSession)
 
-  private val testSessionData              = Map[String, String]("some_session_key" -> "some_session_value")
+  private val testSessionData = Map[String, String]("some_session_key" -> "some_session_value")
   private val testSubscriptionStartPageUrl = "some_page_url"
 
   private val ErrorSelectSoleTraderOrIndividual = "Select sole trader or individual"
 
   private val selectedIndividualType = CdsOrganisationType.Individual
-  private val validRequestData       = Map("individual-type" -> selectedIndividualType.id)
+  private val validRequestData = Map("individual-type" -> selectedIndividualType.id)
 
   before {
     reset(mockRequestSessionData)

@@ -28,12 +28,12 @@ import java.time.{Clock, Instant, LocalDateTime, ZoneId}
 class RequestCommonGeneratorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
   private val mockUUIDGenerator = mock[RandomUUIDGenerator]
-  private val mockClock         = mock[UtcClock](RETURNS_DEEP_STUBS)
+  private val mockClock = mock[UtcClock](RETURNS_DEEP_STUBS)
   private val expectedReference = "a83f4bfed34d445cba186c2e97f7d133"
 
   private val generator = new RequestCommonGenerator(mockUUIDGenerator, mockClock)
 
-  private val instant: Instant  = Instant.now(Clock.systemUTC())
+  private val instant: Instant = Instant.now(Clock.systemUTC())
   private val in: LocalDateTime = LocalDateTime.ofInstant(instant, ZoneId.of("Europe/London"))
 
   override def beforeEach(): Unit = {
@@ -59,9 +59,8 @@ class RequestCommonGeneratorSpec extends UnitSpec with MockitoSugar with BeforeA
         requestCommon.receiptDate.toString() shouldBe in.toString
       }
 
-      "create object with acknowledgementReference that is unique and of 32 characters" in withFixture {
-        requestCommon =>
-          requestCommon.acknowledgementReference shouldBe expectedReference
+      "create object with acknowledgementReference that is unique and of 32 characters" in withFixture { requestCommon =>
+        requestCommon.acknowledgementReference shouldBe expectedReference
       }
 
       "create object with no requestParameters when none are passed" in withFixture { requestCommon =>

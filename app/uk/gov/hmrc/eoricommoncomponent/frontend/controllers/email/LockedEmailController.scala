@@ -32,12 +32,12 @@ class LockedEmailController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   authAction: AuthAction,
   view: locked_email_view
-) extends FrontendBaseController with I18nSupport {
+) extends FrontendBaseController
+    with I18nSupport {
 
   def onPageLoad(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(view(service)))
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(Ok(view(service)))
     }
 
 }

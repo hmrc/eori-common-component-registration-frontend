@@ -17,12 +17,12 @@
 package util.builders.matching
 
 object EUOrganisationFormBuilder extends OrganisationAddressFormBuilder {
-  val Name        = "OrganisationInEU"
-  val LineOne     = "Line 1 eu"
-  val LineTwo     = "line 2 eu"
-  val LineThree   = "line 3 eu"
-  val LineFour    = "city name eu"
-  val Postcode    = "SE28 1AA"
-  val Country     = "EUCountry"
+  val Name = "OrganisationInEU"
+  val LineOne = "Line 1 eu"
+  val LineTwo = "line 2 eu"
+  val LineThree = "line 3 eu"
+  val LineFour = "city name eu"
+  val Postcode = "SE28 1AA"
+  val Country = "EUCountry"
   val CountryCode = "ZZ"
 }

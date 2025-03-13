@@ -28,7 +28,7 @@ object Save4LaterService {
 
   val responseJson: JsValue = Json.parse(body)
 
-  val id       = "id-12345678"
+  val id = "id-12345678"
   val emailKey = "email"
 
   case class User(name: String, tel: Int)
@@ -37,8 +37,8 @@ object Save4LaterService {
     implicit val jsonFormat: OFormat[User] = Json.format[User]
   }
 
-  val expectedUrl          = s"/save4later/$id/$emailKey"
-  val expectedDeleteUrl    = s"/save4later/$id"
+  val expectedUrl = s"/save4later/$id/$emailKey"
+  val expectedDeleteUrl = s"/save4later/$id"
   val expectedDeleteKeyUrl = s"/save4later/$id/$emailKey"
 
   def stubSave4LaterGET_OK(): Unit = stubSave4LaterGETResponse(expectedUrl, body, OK)

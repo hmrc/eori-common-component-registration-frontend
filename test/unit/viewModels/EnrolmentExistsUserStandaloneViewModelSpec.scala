@@ -27,9 +27,7 @@ class EnrolmentExistsUserStandaloneViewModelSpec extends UnitSpec with Controlle
   "titleAndHeaderLabel" should {
 
     "display correct message for admin user" in {
-      viewModel(isAdminUser =
-        true
-      ).titleAndHeaderLabel() shouldBe "Your business or organisation already has an EORI number"
+      viewModel(isAdminUser = true).titleAndHeaderLabel() shouldBe "Your business or organisation already has an EORI number"
     }
 
     "display correct message for standard user" in {

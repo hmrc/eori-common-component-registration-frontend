@@ -35,29 +35,26 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
   ec: ExecutionContext
 ) {
 
-  private val logger         = Logger(this.getClass)
-  private val baseUrl        = appConfig.taxEnrolmentsBaseUrl
+  private val logger = Logger(this.getClass)
+  private val baseUrl = appConfig.taxEnrolmentsBaseUrl
   val serviceContext: String = appConfig.taxEnrolmentsServiceContext
 
   def getEnrolments(safeId: String)(implicit hc: HeaderCarrier): Future[List[TaxEnrolmentsResponse]] = {
     val url = s"$baseUrl/$serviceContext/businesspartners/$safeId/subscriptions"
 
-    http.GET[List[TaxEnrolmentsResponse]](url).recover {
-      case NonFatal(e) =>
-        logger.error(s"[GetEnrolments failed: $url, hc: $hc]", e)
-        throw e
+    http.GET[List[TaxEnrolmentsResponse]](url).recover { case NonFatal(e) =>
+      logger.error(s"[GetEnrolments failed: $url, hc: $hc]", e)
+      throw e
     }
   }
 
-  /**
-    *
-    * @param request
+  /** @param request
     * @param formBundleId
     * @param hc
     * @param e
     * @return
-    *  This is a issuer call which ETMP makes but we will do this for migrated users
-    *  when subscription status((Subscription Create Api CALL)) is 04 (SubscriptionExists)
+    *   This is a issuer call which ETMP makes but we will do this for migrated users when subscription status((Subscription Create Api CALL)) is 04
+    *   (SubscriptionExists)
     */
   def enrol(request: TaxEnrolmentsRequest, formBundleId: String)(implicit hc: HeaderCarrier): Future[Int] = {
     val url = s"$baseUrl/$serviceContext/subscriptions/$formBundleId/issuer"
@@ -74,7 +71,7 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
   private def auditCall(url: String, request: TaxEnrolmentsRequest, response: HttpResponse)(implicit
     hc: HeaderCarrier
   ): Unit = {
-    val issuerRequest  = IssuerRequest(request)
+    val issuerRequest = IssuerRequest(request)
     val issuerResponse = IssuerResponse(response)
 
     audit.sendExtendedDataEvent(

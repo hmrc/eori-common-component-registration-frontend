@@ -57,19 +57,19 @@ object FormValidation {
   private def validPostcode: Constraint[String] =
     Constraint({
       case s if s.matches(postcodeRegex.regex) => Valid
-      case _                                   => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
+      case _ => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
     })
 
   private def validPostcodeRoW: Constraint[String] =
     Constraint({
       case s if s.trim().replaceAll("\\s", "").matches(postcodeRegex.regex) => Valid
-      case _                                                                => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
+      case _ => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
     })
 
   private def postcodeMax(limit: Int): Constraint[String] =
     Constraint({
       case s if s.length > limit => Invalid(ValidationError("cds.subscription.postcode.error.too-long." + limit))
-      case _                     => Valid
+      case _ => Valid
     })
 
   private def postcodeMaxRoW(limit: Int): Constraint[String] =

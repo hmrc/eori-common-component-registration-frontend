@@ -38,7 +38,7 @@ case class SafeId(override val id: String) extends CustomsId
 
 case class TaxPayerId(override val id: String) extends CustomsId {
   private val MDGTaxPayerIdLength = 42
-  val mdgTaxPayerId: String       = id + "0" * (MDGTaxPayerIdLength - id.length)
+  val mdgTaxPayerId: String = id + "0" * (MDGTaxPayerIdLength - id.length)
 }
 
 object TaxPayerId {
@@ -46,7 +46,7 @@ object TaxPayerId {
 }
 
 object SafeId {
-  implicit val format: OFormat[SafeId]               = Json.format[SafeId]
+  implicit val format: OFormat[SafeId] = Json.format[SafeId]
   implicit def toJsonFormat(safeId: SafeId): JsValue = Json.toJson(safeId)
 }
 
@@ -106,15 +106,15 @@ object CacheIds extends Logging {
     new CacheIds(internalId, safeId, service)
   }
 
-  implicit val jsonFormat: OFormat[CacheIds]             = Json.format[CacheIds]
+  implicit val jsonFormat: OFormat[CacheIds] = Json.format[CacheIds]
   implicit def toJsonFormat(cacheIds: CacheIds): JsValue = Json.toJson(cacheIds)
 }
 
 object CustomsId extends Logging {
-  val utr        = "utr"
-  val eori       = "eori"
-  val nino       = "nino"
-  val safeId     = "safeId"
+  val utr = "utr"
+  val eori = "eori"
+  val nino = "nino"
+  val safeId = "safeId"
   val taxPayerId = "taxPayerId"
   val taxPayerID = "taxPayerID"
 
@@ -128,26 +128,27 @@ object CustomsId extends Logging {
 
   implicit val formats: Format[CustomsId] = Format[CustomsId](
     fjs = Reads { js =>
-      idTypeMapping.view.flatMap {
-        case (jsFieldName, idConstruct) =>
+      idTypeMapping.view
+        .flatMap { case (jsFieldName, idConstruct) =>
           for (id <- (js \ jsFieldName).asOpt[String]) yield idConstruct(id)
-      }.headOption
+        }
+        .headOption
         .fold[JsResult[CustomsId]](JsError("No matching id type and value found"))(customsId => JsSuccess(customsId))
     },
     tjs = Writes {
-      case Utr(id)        => Json.obj(utr -> id)
-      case Eori(id)       => Json.obj(eori -> id)
-      case Nino(id)       => Json.obj(nino -> id)
-      case SafeId(id)     => Json.obj(safeId -> id)
+      case Utr(id) => Json.obj(utr -> id)
+      case Eori(id) => Json.obj(eori -> id)
+      case Nino(id) => Json.obj(nino -> id)
+      case SafeId(id) => Json.obj(safeId -> id)
       case TaxPayerId(id) => Json.obj(taxPayerId -> id)
     }
   )
 
   def apply(idType: String, idNumber: String): CustomsId =
     idType match {
-      case RegistrationInfoRequest.NINO   => Nino(idNumber)
-      case RegistrationInfoRequest.UTR    => Utr(idNumber)
-      case RegistrationInfoRequest.EORI   => Eori(idNumber)
+      case RegistrationInfoRequest.NINO => Nino(idNumber)
+      case RegistrationInfoRequest.UTR => Utr(idNumber)
+      case RegistrationInfoRequest.EORI => Eori(idNumber)
       case RegistrationInfoRequest.SAFEID => SafeId(idNumber)
       case _ =>
         val error = s"Unknown Identifier: $idType. Expected Nino, UTR or EORI number"
@@ -190,7 +191,7 @@ case class YesNo(isYes: Boolean) {
 
 object YesNo {
   val yesAndNoAnswer = "yes-no-answer"
-  val answerTrue     = "yes-no-answer-true"
+  val answerTrue = "yes-no-answer-true"
 }
 
 case class VatVerificationOption(isDateOption: Boolean) {
@@ -287,8 +288,7 @@ case class ContactAddressMatchModel(
   country: String
 )
 
-case class IndividualNameAndDateOfBirth(firstName: String, lastName: String, dateOfBirth: LocalDate)
-    extends IndividualName
+case class IndividualNameAndDateOfBirth(firstName: String, lastName: String, dateOfBirth: LocalDate) extends IndividualName
 
 case class EoriAndIdNameAndAddress(fullName: String, address: EstablishmentAddress)
 

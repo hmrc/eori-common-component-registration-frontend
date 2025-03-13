@@ -26,13 +26,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector.matchFailureResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ConfirmContactDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  ContactResponse,
-  IndividualResponse,
-  MatchingResponse,
-  RegisterWithIDResponse,
-  ResponseDetail
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, MatchingResponse, RegisterWithIDResponse, ResponseDetail}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
@@ -53,14 +47,14 @@ import scala.concurrent.Future
 
 class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector                = mock[AuthConnector]
-  private val mockAuthAction                   = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val mockConfirmContactDetailsService = mock[ConfirmContactDetailsService]
-  private val mockSessionCache                 = mock[SessionCache]
-  private val mockRequestSessionData           = mock[RequestSessionData]
-  private val mockMatchingService              = mock[MatchingService]
-  private val sub01OutcomeProcessingView       = inject[sub01_outcome_processing]
-  private val error_view                       = inject[error_template]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockMatchingService = mock[MatchingService]
+  private val sub01OutcomeProcessingView = inject[sub01_outcome_processing]
+  private val error_view = inject[error_template]
 
   private val sessionCacheService =
     new SessionCacheService(mockSessionCache, mockRequestSessionData, mockMatchingService, error_view)
@@ -75,7 +69,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
   )(global)
 
   private val mockSub01Outcome = mock[Sub01Outcome]
-  private val mockRegDetails   = mock[RegistrationDetails]
+  private val mockRegDetails = mock[RegistrationDetails]
 
   private val testSubscriptionDetails =
     SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.now())))
@@ -155,82 +149,79 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         status(result) shouldBe OK
       }
 
-      "Correctly redirect to You cannot use this service with PostCode not matching" in servicesToTest.foreach {
-        testService =>
-          when(mockSessionCache.subscriptionDetails(any())).thenReturn(Future.successful(testSubscriptionDetails))
+      "Correctly redirect to You cannot use this service with PostCode not matching" in servicesToTest.foreach { testService =>
+        when(mockSessionCache.subscriptionDetails(any())).thenReturn(Future.successful(testSubscriptionDetails))
 
-          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
-          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
-          when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
-            Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
-          )
-          when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeResponse)))
-          when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
-            eitherT[MatchingResponse](matchingResponse("SE28 2BB"))
-          )
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+        when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+        when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
+          Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
+        )
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeResponse)))
+        when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
+          eitherT[MatchingResponse](matchingResponse("SE28 2BB"))
+        )
 
-          when(
-            mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
-          ).thenReturn(Future.successful(Status(OK)))
+        when(
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+        ).thenReturn(Future.successful(Status(OK)))
 
-          val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+        val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(
-            s"/customs-registration-services/${testService.code}/register/you-cannot-change-address"
-          )
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(
+          s"/customs-registration-services/${testService.code}/register/you-cannot-change-address"
+        )
       }
 
-      "Correctly redirect to You cannot use this service with DOB not matching" in servicesToTest.foreach {
-        testService =>
-          when(mockSessionCache.subscriptionDetails(any())).thenReturn(Future.successful(testSubscriptionDetails))
+      "Correctly redirect to You cannot use this service with DOB not matching" in servicesToTest.foreach { testService =>
+        when(mockSessionCache.subscriptionDetails(any())).thenReturn(Future.successful(testSubscriptionDetails))
 
-          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
-          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
-          when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
-            Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
-          )
-          when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeResponse)))
-          when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
-            eitherT[MatchingResponse](matchingResponse("SE28 2AA", "1980-02-02"))
-          )
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+        when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+        when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
+          Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
+        )
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeResponse)))
+        when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
+          eitherT[MatchingResponse](matchingResponse("SE28 2AA", "1980-02-02"))
+        )
 
-          when(
-            mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
-          ).thenReturn(Future.successful(Status(OK)))
+        when(
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+        ).thenReturn(Future.successful(Status(OK)))
 
-          val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+        val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(
-            s"/customs-registration-services/${testService.code}/register/you-cannot-change-address"
-          )
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(
+          s"/customs-registration-services/${testService.code}/register/you-cannot-change-address"
+        )
       }
 
-      "Correctly redirect to You cannot use this service when matching service responds back with failure response" in servicesToTest.foreach {
-        testService =>
-          when(mockSessionCache.subscriptionDetails(any())).thenReturn(Future.successful(testSubscriptionDetails))
+      "Correctly redirect to You cannot use this service when matching service responds back with failure response" in servicesToTest.foreach { testService =>
+        when(mockSessionCache.subscriptionDetails(any())).thenReturn(Future.successful(testSubscriptionDetails))
 
-          when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
-          when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
-          when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
-            Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
-          )
-          when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeResponse)))
-          when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
-            eitherT[MatchingResponse](matchFailureResponse)
-          )
+        when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
+        when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
+        when(mockSessionCache.getNinoOrUtrDetails(any())).thenReturn(
+          Future.successful(Some(NinoOrUtr(Some(Nino("SX123412A")))))
+        )
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeResponse)))
+        when(mockMatchingService.matchIndividualWithNino(any(), any(), any())(any(), any())).thenReturn(
+          eitherT[MatchingResponse](matchFailureResponse)
+        )
 
-          when(
-            mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
-          ).thenReturn(Future.successful(Status(OK)))
+        when(
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+        ).thenReturn(Future.successful(Status(OK)))
 
-          val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+        val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(
-            s"/customs-registration-services/${testService.code}/register/you-cannot-change-address"
-          )
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(
+          s"/customs-registration-services/${testService.code}/register/you-cannot-change-address"
+        )
       }
     }
     "utr is selected" when {
@@ -329,9 +320,11 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockConfirmContactDetailsService.handleFormWithErrors(any(), any(), any())(any[Request[AnyContent]], any())
       ).thenReturn(Future.successful(Status(OK)))
 
-      val result = controller.submit(testService).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, validRequest + ("wrong-address" -> ""))
-      )
+      val result = controller
+        .submit(testService)
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, validRequest + ("wrong-address" -> ""))
+        )
 
       status(result) shouldBe OK
 
@@ -354,12 +347,14 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         mockConfirmContactDetailsService.checkAddressDetails(any(), any(), any())(any[Request[AnyContent]], any())
       ).thenReturn(Future.successful(Status(OK)))
 
-      val result = controller.submit(testService).apply(
-        SessionBuilder.buildRequestWithSessionAndFormValues(
-          defaultUserId,
-          validRequest + ("yes-no-wrong-address" -> wrongAddress)
+      val result = controller
+        .submit(testService)
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndFormValues(
+            defaultUserId,
+            validRequest + ("yes-no-wrong-address" -> wrongAddress)
+          )
         )
-      )
 
       status(result) shouldBe OK
 

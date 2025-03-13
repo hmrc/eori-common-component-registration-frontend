@@ -36,11 +36,11 @@ import scala.concurrent.Future
 
 class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val whatIsYourContactAddressView   = inject[what_is_your_contact_address]
+  private val whatIsYourContactAddressView = inject[what_is_your_contact_address]
 
   private val controller = new WhatIsYourContactAddressController(
     mockAuthAction,
@@ -50,12 +50,12 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
     whatIsYourContactAddressView
   )
 
-  private val fieldLevelErrorAddress         = "//p[@id='address-error' and @class='govuk-error-message']"
+  private val fieldLevelErrorAddress = "//p[@id='address-error' and @class='govuk-error-message']"
   private val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"
-  private val lineOneFieldError              = "//p[@id='line-1-error' and @class='govuk-error-message']"
-  private val lineTwoFieldError              = "//p[@id='line-2-error' and @class='govuk-error-message']"
-  private val townCityFieldError             = "//p[@id='townCity-error' and @class='govuk-error-message']"
-  private val postcodeFieldError             = "//p[@id='postcode-error' and @class='govuk-error-message']"
+  private val lineOneFieldError = "//p[@id='line-1-error' and @class='govuk-error-message']"
+  private val lineTwoFieldError = "//p[@id='line-2-error' and @class='govuk-error-message']"
+  private val townCityFieldError = "//p[@id='townCity-error' and @class='govuk-error-message']"
+  private val postcodeFieldError = "//p[@id='postcode-error' and @class='govuk-error-message']"
 
   "showForm" should {
     "render empty form with no data" in {
@@ -64,7 +64,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
       withAuthorisedUser(userId, mockAuthConnector)
 
       // When
-      val result = controller.showForm(isInReviewMode = false, eoriOnlyService)
+      val result = controller
+        .showForm(isInReviewMode = false, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -90,7 +91,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
         withAuthorisedUser(userId, mockAuthConnector)
 
         // When
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -116,7 +118,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
         withAuthorisedUser(userId, mockAuthConnector)
 
         // When
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -150,7 +153,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
 
-        val result = controller.submit(isInReviewMode = true, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = true, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -176,7 +180,8 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
         withAuthorisedUser(userId, mockAuthConnector)
         when(mockSubscriptionDetailsService.cacheAddressDetails(any())(any())).thenReturn(Future.unit)
 
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,

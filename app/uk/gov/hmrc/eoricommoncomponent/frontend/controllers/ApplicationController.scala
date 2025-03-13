@@ -41,14 +41,13 @@ class ApplicationController @Inject() (
 
   def startRegister(service: Service): Action[AnyContent] = Action { implicit request =>
     val headingAndTitleText = s"ecc.start-page.title.${service.code}"
-    val bullet2             = s"ecc.start-page.para1.bullet2.${service.code}"
+    val bullet2 = s"ecc.start-page.para1.bullet2.${service.code}"
     if (service.code == eoriOnly.code) Redirect(EmailController.form(service))
     else Ok(viewStartRegister(service, headingAndTitleText, bullet2))
   }
 
-  def logout(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction {
-    implicit request => _: LoggedInUserWithEnrolments =>
-      cache.remove.map(_ => Redirect(appConfig.feedbackUrl(service)).withNewSession)
+  def logout(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction { implicit request => _: LoggedInUserWithEnrolments =>
+    cache.remove.map(_ => Redirect(appConfig.feedbackUrl(service)).withNewSession)
   }
 
   def keepAlive(): Action[AnyContent] = Action.async { implicit request =>

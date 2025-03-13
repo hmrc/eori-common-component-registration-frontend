@@ -24,16 +24,16 @@ sealed trait UserLocation
 
 object UserLocation extends Enumerable.Implicits {
 
-  case object Uk                extends WithName("uk") with UserLocation
-  case object Iom               extends WithName("isle-of-man") with UserLocation
-  case object ThirdCountry      extends WithName("third-country") with UserLocation
+  case object Uk extends WithName("uk") with UserLocation
+  case object Iom extends WithName("isle-of-man") with UserLocation
+  case object ThirdCountry extends WithName("third-country") with UserLocation
   case object ThirdCountryIncEU extends WithName("third-country-inc-eu") with UserLocation
-  case object Islands           extends WithName("islands") with UserLocation
+  case object Islands extends WithName("islands") with UserLocation
 
   implicit def convert(location: UserLocation): String =
     location.toString
 
-  val values: Seq[UserLocation]   = Seq(Uk, Iom, ThirdCountry, ThirdCountryIncEU, Islands)
+  val values: Seq[UserLocation] = Seq(Uk, Iom, ThirdCountry, ThirdCountryIncEU, Islands)
   val validLocations: Set[String] = values.map(_.toString).toSet
 
   private val rowLocations: Set[UserLocation] = Set(ThirdCountry, ThirdCountryIncEU, Islands)
@@ -43,7 +43,7 @@ object UserLocation extends Enumerable.Implicits {
   def isRow(requestSessionData: RequestSessionData)(implicit request: Request[AnyContent]): Boolean =
     requestSessionData.selectedUserLocation match {
       case Some(location) => isRow(location)
-      case _              => false
+      case _ => false
     }
 
   def isRow(location: UserLocation): Boolean = rowLocations.contains(location)

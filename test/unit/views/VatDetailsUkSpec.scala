@@ -21,8 +21,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.data.Form
-import play.api.mvc.AnyContentAsEmpty
-import play.api.mvc.Request
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
@@ -41,9 +40,7 @@ class VatDetailsUkSpec extends ViewSpec {
 
   val mockAuditable: Auditable = mock[Auditable]
 
-  val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable) {
-    def isRestOfTheWorld: Boolean = false
-  }
+  val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable)
 
   def form: Form[VatDetails] = new VatDetailsForm(mockRequestSessionData).vatDetailsForm
 

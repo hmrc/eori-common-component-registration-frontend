@@ -226,14 +226,11 @@ case object PartnershipSubscriptionFlowIom extends SubscriptionFlow("Partnership
 
 case object IndividualSubscriptionFlow extends SubscriptionFlow("Individual", isIndividualFlow = true)
 
-case object ThirdCountryOrganisationSubscriptionFlow
-    extends SubscriptionFlow(ThirdCountryOrganisation.id, isIndividualFlow = false)
+case object ThirdCountryOrganisationSubscriptionFlow extends SubscriptionFlow(ThirdCountryOrganisation.id, isIndividualFlow = false)
 
-case object ThirdCountrySoleTraderSubscriptionFlow
-    extends SubscriptionFlow(ThirdCountrySoleTrader.id, isIndividualFlow = true)
+case object ThirdCountrySoleTraderSubscriptionFlow extends SubscriptionFlow(ThirdCountrySoleTrader.id, isIndividualFlow = true)
 
-case object ThirdCountryIndividualSubscriptionFlow
-    extends SubscriptionFlow(ThirdCountryIndividual.id, isIndividualFlow = true)
+case object ThirdCountryIndividualSubscriptionFlow extends SubscriptionFlow(ThirdCountryIndividual.id, isIndividualFlow = true)
 
 case object SoleTraderSubscriptionFlow extends SubscriptionFlow(SoleTrader.id, isIndividualFlow = true)
 
@@ -241,14 +238,11 @@ case object IndividualSoleTraderFlowIom extends SubscriptionFlow("IndividualSole
 
 case object CharityPublicBodySubscriptionFlow extends SubscriptionFlow("CharityPublicBody", isIndividualFlow = false)
 
-case object CharityPublicBodySubscriptionFlowIom
-    extends SubscriptionFlow("CharityPublicBodyIom", isIndividualFlow = false)
+case object CharityPublicBodySubscriptionFlowIom extends SubscriptionFlow("CharityPublicBodyIom", isIndividualFlow = false)
 
-case object CharityPublicBodySubscriptionNoUtrFlow
-    extends SubscriptionFlow("CharityPublicBodyNoUtr", isIndividualFlow = false)
+case object CharityPublicBodySubscriptionNoUtrFlow extends SubscriptionFlow("CharityPublicBodyNoUtr", isIndividualFlow = false)
 
-case object CharityPublicBodySubscriptionNoUtrFlowIom
-    extends SubscriptionFlow("CharityPublicBodyNoUtrIom", isIndividualFlow = false)
+case object CharityPublicBodySubscriptionNoUtrFlowIom extends SubscriptionFlow("CharityPublicBodyNoUtrIom", isIndividualFlow = false)
 
 case object CompanyLlpFlowIom extends SubscriptionFlow("CompanyLlpIom", isIndividualFlow = false)
 

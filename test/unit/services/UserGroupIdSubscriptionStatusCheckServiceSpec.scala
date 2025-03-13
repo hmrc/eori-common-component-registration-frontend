@@ -26,7 +26,7 @@ import org.scalatest.time.{Millis, Span}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{Request, Result}
-import play.api.test.Helpers.{defaultAwaitTimeout, header, LOCATION}
+import play.api.test.Helpers.{LOCATION, defaultAwaitTimeout, header}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CacheIds, GroupId, InternalId, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
@@ -36,28 +36,27 @@ import util.TestData
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UserGroupIdSubscriptionStatusCheckServiceSpec
-    extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with TestData {
+class UserGroupIdSubscriptionStatusCheckServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with TestData {
 
   private val mockSubscriptionStatusService = mock[SubscriptionStatusService]
-  private val mockSave4LaterService         = mock[Save4LaterService]
-  private implicit val hc: HeaderCarrier    = mock[HeaderCarrier]
-  private val safeId                        = SafeId("safeId")
-  private val groupId                       = GroupId("groupId-123")
-  private val internalId                    = InternalId("internalId-123")
-  private val cacheIds                      = CacheIds(internalId, safeId, Some("atar"))
-  implicit val request: Request[Any]        = mock[Request[Any]]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
+  private val safeId = SafeId("safeId")
+  private val groupId = GroupId("groupId-123")
+  private val internalId = InternalId("internalId-123")
+  private val cacheIds = CacheIds(internalId, safeId, Some("atar"))
+  implicit val request: Request[Any] = mock[Request[Any]]
 
   private val service =
     new UserGroupIdSubscriptionStatusCheckService(mockSubscriptionStatusService, mockSave4LaterService)
 
-  private def continue: Future[Result]        = Future.successful(Redirect("/continue"))
+  private def continue: Future[Result] = Future.successful(Redirect("/continue"))
   private def userIsInProcess: Future[Result] = Future.successful(Redirect("/blocked/userIsInProcess"))
 
   private def otherUserWithinGroupIsInProcess: Future[Result] =
     Future.successful(Redirect("/blocked/otherUserWithinGroupIsInProcess"))
 
-  override implicit def patienceConfig: PatienceConfig =
+  implicit override def patienceConfig: PatienceConfig =
     super.patienceConfig.copy(timeout = Span(defaultTimeout.toMillis, Millis))
 
   override def beforeEach(): Unit =

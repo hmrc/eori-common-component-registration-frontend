@@ -65,7 +65,7 @@ class RegisterWithoutIdService @Inject() (
     for {
       response <- connector.register(requestWithoutId)
       registrationDetails = detailsCreator.registrationDetails(response, orgName, createSixLineAddress(address))
-      _ <- save(registrationDetails, loggedInUser, orgType)
+      _        <- save(registrationDetails, loggedInUser, orgType)
     } yield response
   }
 
@@ -95,11 +95,11 @@ class RegisterWithoutIdService @Inject() (
     for {
       response <- connector.register(requestWithoutId)
       registrationDetails = detailsCreator.registrationDetails(
-        response,
-        individualNameAndDateOfBirth,
-        createSixLineAddress(address)
-      )
-      _ <- save(registrationDetails, loggedInUser, orgType)
+                              response,
+                              individualNameAndDateOfBirth,
+                              createSixLineAddress(address)
+                            )
+      _        <- save(registrationDetails, loggedInUser, orgType)
 
     } yield response
 

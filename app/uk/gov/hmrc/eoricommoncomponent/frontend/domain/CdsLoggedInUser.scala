@@ -27,7 +27,7 @@ sealed trait LoggedInUser extends Logging {
 
   def userId(): String = internalId match {
     case Some(id) => id
-    case _        =>
+    case _ =>
       // $COVERAGE-OFF$Loggers
       logger.warn("No internal id returned by Government Gateway.")
       // $COVERAGE-ON
@@ -48,7 +48,7 @@ case class LoggedInUserWithEnrolments(
 
   def isAdminUser: Boolean = (userCredentialRole, affinityGroup) match {
     case (Some(User), Some(AffinityGroup.Organisation)) => true
-    case _                                              => false
+    case _ => false
   }
 
 }

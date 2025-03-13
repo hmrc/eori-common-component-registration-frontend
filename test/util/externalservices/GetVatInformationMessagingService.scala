@@ -36,58 +36,70 @@ object GetVatInformationMessagingService {
       """.stripMargin)
 
   private val responseWithNotFound: String =
-    Json.parse("""{
+    Json
+      .parse("""{
         |  "failures": {
         |    "code": "NOT_FOUND",
         |    "reason": "The back end has indicated that No subscription can be found."
         |  }
-        |}""".stripMargin).toString()
+        |}""".stripMargin)
+      .toString()
 
   private val responseWithBadRequest: String =
-    Json.parse("""{
+    Json
+      .parse("""{
         |  "failures": {
         |    "code": "INVALID_IDVALUE",
         |    "reason": "Submission has not passed validation. Invalid path parameter idValue."
         |  }
-        |}""".stripMargin).toString()
+        |}""".stripMargin)
+      .toString()
 
   private val responseWithForbidden: String =
-    Json.parse(
-      """{
+    Json
+      .parse(
+        """{
         |  "failures": {
         |    "code": "MIGRATION",
         |    "reason": "The back end has indicated that a migration is in progress for this identification number"
         |  }
         |}""".stripMargin
-    ).toString()
+      )
+      .toString()
 
   private val responseWithInternalServerError: String =
-    Json.parse("""{
+    Json
+      .parse("""{
         |  "failures": {
         |    "code": "SERVER_ERROR.",
         |    "reason": "IF is currently experiencing problems that require live service intervention."
         |  }
-        |}""".stripMargin).toString()
+        |}""".stripMargin)
+      .toString()
 
   private val responseWithBadGateway: String =
-    Json.parse("""{
+    Json
+      .parse("""{
         |  "failures": [
         |    {
         |      "code": "BAD_GATEWAY",
         |      "reason": "Dependent systems are currently not responding."
         |    }
         |  ]
-        |}""".stripMargin).toString()
+        |}""".stripMargin)
+      .toString()
 
   private val responseWithServiceUnavailable: String =
-    Json.parse("""{
+    Json
+      .parse("""{
         |  "failures": [
         |    {
         |      "code": "SERVICE_UNAVAILABLE",
         |      "reason": "Dependent systems are currently not responding."
         |    }
         |  ]
-        |}""".stripMargin).toString()
+        |}""".stripMargin)
+      .toString()
 
   def returnTheVatCustomerInformationResponseOK(): Unit =
     stubGetVatInformationResponse(vatEndPoint, responseWithOk.toString(), OK)

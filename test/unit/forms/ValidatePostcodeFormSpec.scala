@@ -32,13 +32,13 @@ class ValidatePostcodeFormSpec extends AnyFreeSpec with Matchers {
     } yield s"For $countryCode" - {
       "only accept valid postcode " in {
         val data = Map("postcode" -> "N9 0DL", "countryCode" -> countryCode)
-        val res  = form.bind(data)
+        val res = form.bind(data)
         res.errors shouldBe Seq.empty
       }
 
       "fail when a postcode is invalid" in {
         val data = Map("postcode" -> "", "countryCode" -> countryCode)
-        val res  = form.bind(data)
+        val res = form.bind(data)
         res.errors should not be empty
       }
     }

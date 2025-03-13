@@ -32,7 +32,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_details
 import util.ViewSpec
 
 class VatDetailsViewSpec extends ViewSpec {
-  private implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
+  implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   val mockAuditable: Auditable = mock[Auditable]
 
@@ -42,9 +42,9 @@ class VatDetailsViewSpec extends ViewSpec {
 
   private val form: Form[VatDetails] = new VatDetailsForm(mockRequestSessionData).vatDetailsForm
 
-  private val view           = inject[vat_details]
+  private val view = inject[vat_details]
   private val vatNumberLabel = "label[for=vat-number]"
-  private val postcodeLabel  = "label[for=postcode]"
+  private val postcodeLabel = "label[for=postcode]"
 
   "VAT Details" should {
     "have the correct title for UK" in {

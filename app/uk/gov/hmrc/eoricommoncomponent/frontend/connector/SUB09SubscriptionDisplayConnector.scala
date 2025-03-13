@@ -20,17 +20,9 @@ import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
-  SubscriptionDisplayFailureResponseHolder,
-  SubscriptionDisplayResponse,
-  SubscriptionDisplayResponseHolder
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{SubscriptionDisplayFailureResponseHolder, SubscriptionDisplayResponse, SubscriptionDisplayResponseHolder}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
-  SubscriptionDisplay,
-  SubscriptionDisplayResult,
-  SubscriptionDisplaySubmitted
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{SubscriptionDisplay, SubscriptionDisplayResult, SubscriptionDisplaySubmitted}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
@@ -40,8 +32,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(
-  implicit ec: ExecutionContext
+class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
+  ec: ExecutionContext
 ) extends HandleResponses {
 
   private val baseUrl = appConfig.getServiceUrl("subscription-display")
@@ -88,10 +80,9 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
           logger.error(s"SubscriptionDisplay SUB09 failed. status: ${response.status}, error: ${response.body}")
           Left(ServiceUnavailableResponse)
         }
-      } recover {
-      case NonFatal(e) =>
-        logger.error(s"SubscriptionDisplay SUB09 failed. error: $e")
-        Left(ServiceUnavailableResponse)
+      } recover { case NonFatal(e) =>
+      logger.error(s"SubscriptionDisplay SUB09 failed. error: $e")
+      Left(ServiceUnavailableResponse)
     }
   }
 
@@ -109,12 +100,12 @@ class SUB09SubscriptionDisplayConnector @Inject() (httpClient: HttpClientV2, app
 
     }
 
-  private def auditCall(url: String, request: Seq[(String, String)], response: SubscriptionDisplayResponseHolder)(
-    implicit hc: HeaderCarrier
+  private def auditCall(url: String, request: Seq[(String, String)], response: SubscriptionDisplayResponseHolder)(implicit
+    hc: HeaderCarrier
   ): Unit = {
 
     val subscriptionDisplaySubmitted = SubscriptionDisplaySubmitted.applyAndAlignKeys(request.toMap)
-    val subscriptionDisplayResult    = SubscriptionDisplayResult(response)
+    val subscriptionDisplayResult = SubscriptionDisplayResult(response)
 
     audit.sendExtendedDataEvent(
       transactionName = "ecc-subscription-display",

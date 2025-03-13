@@ -28,11 +28,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  date_of_vat_registration,
-  vat_return_total,
-  we_cannot_confirm_your_identity
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, vat_return_total, we_cannot_confirm_your_identity}
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.{AuthActionMock, SessionBuilder}
@@ -42,18 +38,18 @@ import scala.concurrent.Future
 
 class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthActionMock with BeforeAndAfterEach {
 
-  private val mockDateOfVatRegistrationView   = inject[date_of_vat_registration]
+  private val mockDateOfVatRegistrationView = inject[date_of_vat_registration]
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
-  private val mockSubscriptionDetailsService  = mock[SubscriptionDetailsService]
-  private val mockAppConfig                   = mock[AppConfig]
+  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockAppConfig = mock[AppConfig]
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockAuthAction = authAction(mockAuthConnector)
 
-  private val mockVatReturnTotalView          = inject[vat_return_total]
+  private val mockVatReturnTotalView = inject[vat_return_total]
   private val mockWeCannotConfirmYourIdentity = inject[we_cannot_confirm_your_identity]
-  private val form                            = inject[VatRegistrationDateFormProvider]
-  private val mockSessionCacheService         = inject[SessionCacheService]
+  private val form = inject[VatRegistrationDateFormProvider]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new DateOfVatRegistrationController(
     mockAuthAction,
@@ -204,10 +200,9 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
     )
 
     "display redirectToCannotConfirmIdentity" in {
-      redirectToCannotConfirmIdentity() {
-        result =>
-          status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title() should startWith("We cannot verify your VAT details")
+      redirectToCannotConfirmIdentity() { result =>
+        status(result) shouldBe OK
+        CdsPage(contentAsString(result)).title() should startWith("We cannot verify your VAT details")
       }
     }
   }

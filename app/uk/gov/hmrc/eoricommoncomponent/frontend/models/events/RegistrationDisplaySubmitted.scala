@@ -26,9 +26,11 @@ object RegistrationDisplaySubmitted {
 
   def apply(request: RegistrationDisplayRequestHolder): RegistrationDisplaySubmitted =
     RegistrationDisplaySubmitted(safeId =
-      request.registrationDisplayRequest.requestCommon.requestParameters.find(_.paramName == "ID_Value").map(
-        _.paramValue
-      )
+      request.registrationDisplayRequest.requestCommon.requestParameters
+        .find(_.paramName == "ID_Value")
+        .map(
+          _.paramValue
+        )
     )
 
 }

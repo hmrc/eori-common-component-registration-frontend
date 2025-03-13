@@ -23,10 +23,7 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.{ServiceUnavailable, VerifiedEmailResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  UpdateCustomsDataStoreConnector,
-  UpdateVerifiedEmailConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{UpdateCustomsDataStoreConnector, UpdateVerifiedEmailConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.UpdateVerifiedEmailResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RequestCommonGenerator, UpdateVerifiedEmailService}
@@ -38,8 +35,8 @@ import scala.concurrent.Future
 
 class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter {
 
-  private val mockUpdateVerifiedEmailConnector                   = mock[UpdateVerifiedEmailConnector]
-  private val mockUpdateCustomsDataStoreConnector                = mock[UpdateCustomsDataStoreConnector]
+  private val mockUpdateVerifiedEmailConnector = mock[UpdateVerifiedEmailConnector]
+  private val mockUpdateCustomsDataStoreConnector = mock[UpdateCustomsDataStoreConnector]
   private val mockRequestCommonGenerator: RequestCommonGenerator = mock[RequestCommonGenerator]
 
   private val service = new UpdateVerifiedEmailService(
@@ -48,14 +45,14 @@ class UpdateVerifiedEmailServiceSpec extends UnitSpec with MockitoSugar with Bef
     mockUpdateCustomsDataStoreConnector
   )
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit private val hc: HeaderCarrier = HeaderCarrier()
 
   before {
     reset(mockUpdateVerifiedEmailConnector, mockUpdateCustomsDataStoreConnector)
   }
 
   val dateTime: LocalDateTime = LocalDateTime.now()
-  private val eori            = "GBXXXXXXXXX0000"
+  private val eori = "GBXXXXXXXXX0000"
 
   private val verifiedEmailResponse = VerifiedEmailResponse(
     UpdateVerifiedEmailResponse(

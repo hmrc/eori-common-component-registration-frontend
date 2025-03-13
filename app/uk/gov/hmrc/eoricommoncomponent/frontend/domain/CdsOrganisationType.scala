@@ -21,38 +21,38 @@ import play.api.libs.json.{JsValue, Json, OFormat}
 case class CdsOrganisationType(id: String)
 
 object CdsOrganisationType {
-  implicit val formats: OFormat[CdsOrganisationType]                            = Json.format[CdsOrganisationType]
+  implicit val formats: OFormat[CdsOrganisationType] = Json.format[CdsOrganisationType]
   implicit def toJsonFormat(mayBeOrgType: Option[CdsOrganisationType]): JsValue = Json.toJson(mayBeOrgType)
 
-  val CompanyId                       = "company"
-  val SoleTraderId                    = "sole-trader"
-  val IndividualId                    = "individual"
-  val PartnershipId                   = "partnership"
-  val LimitedLiabilityPartnershipId   = "limited-liability-partnership"
+  val CompanyId = "company"
+  val SoleTraderId = "sole-trader"
+  val IndividualId = "individual"
+  val PartnershipId = "partnership"
+  val LimitedLiabilityPartnershipId = "limited-liability-partnership"
   val CharityPublicBodyNotForProfitId = "charity-public-body-not-for-profit"
-  val EmbassyId                       = "embassy"
+  val EmbassyId = "embassy"
 
   val EUOrganisationId = "eu-organisation"
-  val EUIndividualId   = "eu-individual"
+  val EUIndividualId = "eu-individual"
 
   val ThirdCountryOrganisationId = "third-country-organisation"
-  val ThirdCountrySoleTraderId   = "third-country-sole-trader"
-  val ThirdCountryIndividualId   = "third-country-individual"
+  val ThirdCountrySoleTraderId = "third-country-sole-trader"
+  val ThirdCountryIndividualId = "third-country-individual"
 
-  val Company: CdsOrganisationType                       = CdsOrganisationType(CompanyId)
-  val SoleTrader: CdsOrganisationType                    = CdsOrganisationType(SoleTraderId)
-  val Individual: CdsOrganisationType                    = CdsOrganisationType(IndividualId)
-  val Partnership: CdsOrganisationType                   = CdsOrganisationType(PartnershipId)
-  val LimitedLiabilityPartnership: CdsOrganisationType   = CdsOrganisationType(LimitedLiabilityPartnershipId)
+  val Company: CdsOrganisationType = CdsOrganisationType(CompanyId)
+  val SoleTrader: CdsOrganisationType = CdsOrganisationType(SoleTraderId)
+  val Individual: CdsOrganisationType = CdsOrganisationType(IndividualId)
+  val Partnership: CdsOrganisationType = CdsOrganisationType(PartnershipId)
+  val LimitedLiabilityPartnership: CdsOrganisationType = CdsOrganisationType(LimitedLiabilityPartnershipId)
   val CharityPublicBodyNotForProfit: CdsOrganisationType = CdsOrganisationType(CharityPublicBodyNotForProfitId)
-  val Embassy: CdsOrganisationType                       = CdsOrganisationType(EmbassyId)
+  val Embassy: CdsOrganisationType = CdsOrganisationType(EmbassyId)
 
   val EUOrganisation: CdsOrganisationType = CdsOrganisationType(EUOrganisationId)
-  val EUIndividual: CdsOrganisationType   = CdsOrganisationType(EUIndividualId)
+  val EUIndividual: CdsOrganisationType = CdsOrganisationType(EUIndividualId)
 
   val ThirdCountryOrganisation: CdsOrganisationType = CdsOrganisationType(ThirdCountryOrganisationId)
-  val ThirdCountrySoleTrader: CdsOrganisationType   = CdsOrganisationType(ThirdCountrySoleTraderId)
-  val ThirdCountryIndividual: CdsOrganisationType   = CdsOrganisationType(ThirdCountryIndividualId)
+  val ThirdCountrySoleTrader: CdsOrganisationType = CdsOrganisationType(ThirdCountrySoleTraderId)
+  val ThirdCountryIndividual: CdsOrganisationType = CdsOrganisationType(ThirdCountryIndividualId)
 
   val validOrganisationTypes: Map[String, CdsOrganisationType] = Map(
     CompanyId                       -> Company,

@@ -67,12 +67,12 @@ class VatRegistrationDateFormSpec extends UnitSpec with MockitoSugar with Before
 
     "only accept valid form" in {
       val data = formDataVAT
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq.empty
     }
     "fail when effective date - year and month is missing" in {
       val data = formDataVAT.updated("vat-registration-date.year", "").updated("vat-registration-date.month", "")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(
         FormError(
           "vat-registration-date.month",
@@ -84,30 +84,33 @@ class VatRegistrationDateFormSpec extends UnitSpec with MockitoSugar with Before
     }
     "fail when effective date month invalid" in {
       val data = formDataVAT.updated("vat-registration-date.month", "13")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-registration-date.month", Seq("date.month.error")))
     }
 
     "fail when effective date in future" in {
       val todayPlusOneDay = LocalDate.of(2023, 1, 24)
-      val data = formDataVAT.updated(
-        "vat-registration-date.day",
-        DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
-      ).updated("vat-registration-date.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay)).updated(
-        "vat-registration-date.year",
-        DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
-      )
+      val data = formDataVAT
+        .updated(
+          "vat-registration-date.day",
+          DateTimeFormatter.ofPattern("dd").format(todayPlusOneDay)
+        )
+        .updated("vat-registration-date.month", DateTimeFormatter.ofPattern("MM").format(todayPlusOneDay))
+        .updated(
+          "vat-registration-date.year",
+          DateTimeFormatter.ofPattern("YYYY").format(todayPlusOneDay)
+        )
       val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.minMax"), ArraySeq("1970")))
     }
     "fail when effective date year invalid" in {
       val data = formDataVAT.updated("vat-registration-date.year", Year.now.plusYears(1).getValue.toString)
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-registration-date.year", List("date.year.error"), List()))
     }
     "fail when effective date too early" in {
       val data = formDataVAT.updated("vat-registration-date.year", "1000")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-registration-date", Seq("vat.error.minMax"), ArraySeq("1970")))
     }
 

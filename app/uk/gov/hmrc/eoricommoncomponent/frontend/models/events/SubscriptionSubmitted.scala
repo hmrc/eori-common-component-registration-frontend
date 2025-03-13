@@ -18,11 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EstablishmentAddress
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
-  ContactInformation,
-  SubscriptionRequest,
-  VatId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{ContactInformation, SubscriptionRequest, VatId}
 
 case class SubscriptionSubmitted(
   eori: Option[String],
@@ -62,8 +58,7 @@ object SubscriptionSubmitted {
       contactInformation = requestDetail.contactInformation,
       vatIDs = requestDetail.vatIDs,
       consentToDisclosureOfPersonalData = requestDetail.consentToDisclosureOfPersonalData,
-      shortName =
-        None, //sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
+      shortName = None, // sending and capturing businessShortName is removed: https://jira.tools.tax.service.gov.uk/browse/ECC-1367
       dateOfEstablishment = requestDetail.dateOfEstablishment.map(_.toString),
       typeOfPerson = requestDetail.typeOfPerson,
       principalEconomicActivity = requestDetail.principalEconomicActivity,

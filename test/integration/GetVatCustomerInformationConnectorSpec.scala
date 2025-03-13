@@ -70,7 +70,7 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
     stopMockServer()
 
   private lazy val connector = app.injector.instanceOf[GetVatCustomerInformationConnector]
-  private val vrn            = "123456789"
+  private val vrn = "123456789"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 

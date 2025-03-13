@@ -35,10 +35,10 @@ import scala.concurrent.Future
 class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val yesNoInputName = "yes-no-answer"
-  private val answerYes      = true.toString
+  private val answerYes = true.toString
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockAuthAction = authAction(mockAuthConnector)
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
@@ -65,12 +65,14 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         .thenReturn(Future.successful(Status(OK)))
 
       val result = await(
-        controller.submit(isInReviewMode = false, subscription).apply(
-          SessionBuilder.buildRequestWithSessionAndFormValues(
-            defaultUserId,
-            validRequest + (yesNoInputName -> answerYes)
+        controller
+          .submit(isInReviewMode = false, subscription)
+          .apply(
+            SessionBuilder.buildRequestWithSessionAndFormValues(
+              defaultUserId,
+              validRequest + (yesNoInputName -> answerYes)
+            )
           )
-        )
       )
       result.header.status shouldBe OK
     }
@@ -81,12 +83,14 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         .thenReturn(Future.successful(Status(OK)))
 
       val result = await(
-        controller.submit(isInReviewMode = true, subscription).apply(
-          SessionBuilder.buildRequestWithSessionAndFormValues(
-            defaultUserId,
-            validRequest + (yesNoInputName -> answerYes)
+        controller
+          .submit(isInReviewMode = true, subscription)
+          .apply(
+            SessionBuilder.buildRequestWithSessionAndFormValues(
+              defaultUserId,
+              validRequest + (yesNoInputName -> answerYes)
+            )
           )
-        )
       )
       result.header.status shouldBe OK
     }
@@ -97,9 +101,11 @@ class CheckYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEac
         .thenReturn(Future.successful(Status(BAD_REQUEST)))
 
       val result = await(
-        controller.submit(isInReviewMode = true, subscription).apply(
-          SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, validRequest + (yesNoInputName -> ""))
-        )
+        controller
+          .submit(isInReviewMode = true, subscription)
+          .apply(
+            SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, validRequest + (yesNoInputName -> ""))
+          )
       )
       result.header.status shouldBe BAD_REQUEST
     }

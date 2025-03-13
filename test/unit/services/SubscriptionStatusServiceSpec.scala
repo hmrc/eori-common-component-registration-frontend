@@ -29,12 +29,7 @@ import play.api.mvc.Request
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  Sub01Outcome,
-  SubscriptionStatusQueryParams,
-  SubscriptionStatusResponseHolder,
-  TaxPayerId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Sub01Outcome, SubscriptionStatusQueryParams, SubscriptionStatusResponseHolder, TaxPayerId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -45,13 +40,13 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
-  private val mockConnector                                      = mock[SubscriptionStatusConnector]
+  private val mockConnector = mock[SubscriptionStatusConnector]
   private val mockRequestCommonGenerator: RequestCommonGenerator = mock[RequestCommonGenerator]
-  private val mockSessionCache                                   = mock[SessionCache]
-  private val mockConfig                                         = mock[Configuration]
-  private val AValidTaxPayerID                                   = "123456789"
-  private val MDGZeroPaddedTaxPayerId                            = AValidTaxPayerID + "000000000000000000000000000000000"
-  private val receiptDate                                        = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 0)
+  private val mockSessionCache = mock[SessionCache]
+  private val mockConfig = mock[Configuration]
+  private val AValidTaxPayerID = "123456789"
+  private val MDGZeroPaddedTaxPayerId = AValidTaxPayerID + "000000000000000000000000000000000"
+  private val receiptDate = LocalDateTime.of(2016, 3, 17, 9, 30, 47, 0)
 
   private val request =
     SubscriptionStatusQueryParams(receiptDate = receiptDate, regime = "CDS", "taxPayerID", MDGZeroPaddedTaxPayerId)
@@ -59,9 +54,9 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
   lazy val service =
     new SubscriptionStatusService(mockConnector, mockRequestCommonGenerator, mockSessionCache)(global)
 
-  implicit val hc: HeaderCarrier           = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val priginatingService: Service = Service.cds
-  implicit val mockRequest: Request[Any]   = mock[Request[Any]]
+  implicit val mockRequest: Request[Any] = mock[Request[Any]]
 
   override protected def beforeEach(): Unit = {
     reset(mockConfig)
@@ -137,7 +132,8 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
     status: String,
     processingDate: String = "2016-03-17T09:30:47Z"
   ) =
-    Json.parse(s"""
+    Json
+      .parse(s"""
          |{
          |  "subscriptionStatusResponse": {
          |    "responseCommon": {
@@ -149,6 +145,7 @@ class SubscriptionStatusServiceSpec extends UnitSpec with MockitoSugar with Befo
          |    }
          |  }
          |}
-      """.stripMargin).as[SubscriptionStatusResponseHolder]
+      """.stripMargin)
+      .as[SubscriptionStatusResponseHolder]
 
 }

@@ -38,8 +38,8 @@ object Countries extends Logging {
     def fromJsonFile: List[Country] =
       Json.parse(getClass.getResourceAsStream("/location-autocomplete-canonical-list.json")) match {
         case JsArray(cs) =>
-          cs.toList.collect {
-            case JsArray(ArrayBuffer(c: JsString, cc: JsString)) => Country(c.value, countryCode(cc.value))
+          cs.toList.collect { case JsArray(ArrayBuffer(c: JsString, cc: JsString)) =>
+            Country(c.value, countryCode(cc.value))
           }
         case _ =>
           val error = "Could not read JSON array of countries from : location-autocomplete-canonical-list.json"
@@ -76,16 +76,16 @@ object Countries extends Logging {
     case Some(UserLocation.ThirdCountryIncEU) =>
       (thirdIncEu, ThirdCountriesIncEuInCountryPicker)
     case Some(UserLocation.Islands) => (islands, IslandsInCountryPicker)
-    case _                          => (allExceptIom, AllCountriesExceptIomInCountryPicker)
+    case _ => (allExceptIom, AllCountriesExceptIomInCountryPicker)
   }
 
 }
 
 sealed trait CountriesInCountryPicker
 
-case object AllCountriesInCountryPicker          extends CountriesInCountryPicker
+case object AllCountriesInCountryPicker extends CountriesInCountryPicker
 case object AllCountriesExceptIomInCountryPicker extends CountriesInCountryPicker
-case object ThirdCountriesInCountryPicker        extends CountriesInCountryPicker
-case object ThirdCountriesIncEuInCountryPicker   extends CountriesInCountryPicker
-case object IslandsInCountryPicker               extends CountriesInCountryPicker
-case object NoCountriesInCountryPicker           extends CountriesInCountryPicker
+case object ThirdCountriesInCountryPicker extends CountriesInCountryPicker
+case object ThirdCountriesIncEuInCountryPicker extends CountriesInCountryPicker
+case object IslandsInCountryPicker extends CountriesInCountryPicker
+case object NoCountriesInCountryPicker extends CountriesInCountryPicker

@@ -22,9 +22,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.oneOf
 
 object YesNoWrongAddress {
 
-  val yesAnswered  = "yes"
+  val yesAnswered = "yes"
   val wrongAddress = "wrong-address"
-  val noAnswered   = "no"
+  val noAnswered = "no"
 
   private val validYesNoWrongAddress = Set(yesAnswered, noAnswered, wrongAddress)
 
@@ -41,10 +41,10 @@ object YesNoWrongAddress {
 case class YesNoWrongAddress(yesNoWrongAddress: Option[String]) {
 
   def areDetailsCorrect: YesNoWrong = yesNoWrongAddress match {
-    case Some("yes")           => Yes
-    case Some("no")            => No
+    case Some("yes") => Yes
+    case Some("no") => No
     case Some("wrong-address") => WrongAddress
-    case _                     => InvalidAddress
+    case _ => InvalidAddress
   }
 
 }

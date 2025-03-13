@@ -20,8 +20,8 @@ import play.api.mvc._
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, internalId, email => ggEmail, _}
-import uk.gov.hmrc.auth.core.retrieve.{~, Credentials}
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, email => ggEmail, internalId, _}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -40,7 +40,9 @@ class AuthAction @Inject() (
   parser: BodyParsers.Default,
   cacheClearOnCompletionAction: CacheClearOnCompletionAction
 )(implicit ec: ExecutionContext)
-    extends AuthRedirectSupport with AuthorisedFunctions with AccessController {
+    extends AuthRedirectSupport
+    with AuthorisedFunctions
+    with AccessController {
 
   private type RequestProcessorSimple =
     Request[AnyContent] => LoggedInUserWithEnrolments => Future[Result]
@@ -48,7 +50,7 @@ class AuthAction @Inject() (
   private type RequestProcessorExtended =
     Request[AnyContent] => Option[String] => LoggedInUserWithEnrolments => Future[Result]
 
-  private val baseRetrievals     = ggEmail and credentialRole and affinityGroup
+  private val baseRetrievals = ggEmail and credentialRole and affinityGroup
   private val extendedRetrievals = baseRetrievals and internalId and allEnrolments and groupIdentifier and credentials
 
   def enrolledUserClearingCacheOnCompletionAction(requestProcessor: RequestProcessorSimple) =
@@ -59,24 +61,21 @@ class AuthAction @Inject() (
     filter.async(implicit request => authorise(requestProcessor))
   }
 
-  /**
-    * Allows Gov Gateway user with correct user type, affinity group and no enrolment to service
+  /** Allows Gov Gateway user with correct user type, affinity group and no enrolment to service
     */
   def ggAuthorisedUserWithEnrolmentsAction(requestProcessor: RequestProcessorSimple): Action[AnyContent] =
     action.async { implicit request =>
       authorise(requestProcessor)
     }
 
-  /**
-    * Allows Gov Gateway user with correct user type and affinity group but no check for enrolment to service
+  /** Allows Gov Gateway user with correct user type and affinity group but no check for enrolment to service
     */
   def ggAuthorisedUserWithServiceAction(requestProcessor: RequestProcessorSimple): Action[AnyContent] =
     action.async { implicit request =>
       authorise(requestProcessor, checkServiceEnrolment = false)
     }
 
-  /**
-    * Allows Gov Gateway user without checks for user type, affinity group or enrolment to service
+  /** Allows Gov Gateway user without checks for user type, affinity group or enrolment to service
     */
   def ggAuthorisedUserAction(requestProcessor: RequestProcessorSimple): Action[AnyContent] =
     action.async { implicit request =>

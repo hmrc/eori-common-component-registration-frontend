@@ -54,25 +54,22 @@ class MatchingService @Inject() (
   ): RegistrationDetails =
     detailsCreator.registrationDetails(response.registerWithIDResponse, customsId, capturedDate)
 
-  def matchBusiness(customsId: CustomsId, org: Organisation, establishmentDate: Option[LocalDate], groupId: GroupId)(
-    implicit
+  def matchBusiness(customsId: CustomsId, org: Organisation, establishmentDate: Option[LocalDate], groupId: GroupId)(implicit
     request: Request[AnyContent],
     hc: HeaderCarrier
   ): EitherT[Future, ResponseError, Unit] = {
     def stripKFromUtr: CustomsId => CustomsId = {
       case Utr(id) => Utr(id.stripSuffix("k").stripSuffix("K"))
-      case other   => other
+      case other => other
     }
 
     val orgWithCode = org.copy(organisationType = EtmpOrganisationType.orgTypeToEtmpOrgCode(org.organisationType))
     for {
       response <- matchingConnector.lookup(idAndNameMatchRequest(stripKFromUtr(customsId), orgWithCode))
       details = convert(customsId, establishmentDate)(response)
-      _ <- EitherT[Future, ResponseError, Unit](
-        cache.saveRegistrationDetails(details, groupId, requestSessionData.userSelectedOrganisationType).map(
-          _ => Right(())
-        )
-      )
+      _        <- EitherT[Future, ResponseError, Unit](
+                    cache.saveRegistrationDetails(details, groupId, requestSessionData.userSelectedOrganisationType).map(_ => Right(()))
+                  )
     } yield ()
 
   }
@@ -84,9 +81,9 @@ class MatchingService @Inject() (
     for {
       response <- matchingConnector.lookup(individualIdMatchRequest(customsId, individual))
       details = convert(customsId, toLocalDate(individual.dateOfBirth))(response)
-      resp <- EitherT[Future, ResponseError, MatchingResponse](
-        cache.saveRegistrationDetails(details, groupId).map(_ => Right(response))
-      )
+      resp     <- EitherT[Future, ResponseError, MatchingResponse](
+                    cache.saveRegistrationDetails(details, groupId).map(_ => Right(response))
+                  )
     } yield resp
 
   def matchIndividualWithNino(nino: String, individual: Individual, groupId: GroupId)(implicit
@@ -96,9 +93,9 @@ class MatchingService @Inject() (
     for {
       response <- matchingConnector.lookup(individualNinoMatchRequest(nino, individual))
       details = convert(customsId = Nino(nino), capturedDate = toLocalDate(individual.dateOfBirth))(response)
-      resp <- EitherT[Future, ResponseError, MatchingResponse](
-        cache.saveRegistrationDetails(details, groupId).map(_ => Right(response))
-      )
+      resp     <- EitherT[Future, ResponseError, MatchingResponse](
+                    cache.saveRegistrationDetails(details, groupId).map(_ => Right(response))
+                  )
     } yield resp
 
   private def idAndNameMatchRequest(customsId: CustomsId, org: Organisation): MatchingRequestHolder =

@@ -25,9 +25,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CompletedJourneyFilter @Inject() (service: Service, sessionCache: SessionCache, val parser: BodyParsers.Default)(
-  implicit val executionContext: ExecutionContext
-) extends ActionBuilder[Request, AnyContent] with ActionFilter[Request] with NewUserSession {
+class CompletedJourneyFilter @Inject() (service: Service, sessionCache: SessionCache, val parser: BodyParsers.Default)(implicit
+  val executionContext: ExecutionContext
+) extends ActionBuilder[Request, AnyContent]
+    with ActionFilter[Request]
+    with NewUserSession {
 
   override protected def filter[A](request: Request[A]) = {
     implicit val req = request

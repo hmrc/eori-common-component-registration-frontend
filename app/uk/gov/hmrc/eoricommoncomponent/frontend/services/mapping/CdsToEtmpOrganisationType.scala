@@ -20,17 +20,17 @@ import play.api.Logging
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 
 object EtmpTypeOfPerson {
-  val NaturalPerson       = "1"
-  val LegalPerson         = "2"
+  val NaturalPerson = "1"
+  val LegalPerson = "2"
   val AssociationOfPerson = "3"
 }
 
 object EtmpLegalStatus {
-  val CorporateBody      = "Corporate Body"
+  val CorporateBody = "Corporate Body"
   val UnincorporatedBody = "Unincorporated Body"
-  val Llp                = "LLP"
-  val Partnership        = "Partnership"
-  val Embassy            = "diplomatic mission"
+  val Llp = "LLP"
+  val Partnership = "Partnership"
+  val Embassy = "diplomatic mission"
 }
 
 case class OrganisationTypeConfiguration(typeOfPerson: String, legalStatus: String)
@@ -101,9 +101,9 @@ object CdsToEtmpOrganisationType extends Logging {
   )
 
   private def etmpTypeOfPersonMap(orgType: EtmpOrganisationType) = orgType match {
-    case Partnership        => OrganisationTypeConfiguration.EtmpPartnership
-    case LLP                => OrganisationTypeConfiguration.EtmpLlp
-    case CorporateBody      => OrganisationTypeConfiguration.EtmpCorporateBody
+    case Partnership => OrganisationTypeConfiguration.EtmpPartnership
+    case LLP => OrganisationTypeConfiguration.EtmpLlp
+    case CorporateBody => OrganisationTypeConfiguration.EtmpCorporateBody
     case UnincorporatedBody => OrganisationTypeConfiguration.EtmpUnincorporatedBody
     case invalid =>
       val error = s"Invalid ETMP orgType: $invalid"

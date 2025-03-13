@@ -19,11 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  IndividualResponse,
-  OrganisationResponse,
-  RegisterWithIDResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{IndividualResponse, OrganisationResponse, RegisterWithIDResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.RegistrationDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
@@ -39,7 +35,7 @@ class RegistrationDetailsCreator {
     capturedDate: Option[LocalDate]
   ): RegistrationDetails = {
     val responseDetail = response.getResponseDetail
-    val sapNumber      = extractSapNumber(response.responseCommon.returnParameters)
+    val sapNumber = extractSapNumber(response.responseCommon.returnParameters)
     if (responseDetail.isAnIndividual)
       convertIndividualMatchingResponse(
         responseDetail.individual.get,
@@ -81,10 +77,9 @@ class RegistrationDetailsCreator {
       throw new IllegalArgumentException(
         "Date of Birth is neither provided in registration response nor captured in the application page"
       )
-    )(
-      dateOfBirth =>
-        RegistrationDetails
-          .individual(sapNumber, safeId, name, address, dateOfBirth, customsId)
+    )(dateOfBirth =>
+      RegistrationDetails
+        .individual(sapNumber, safeId, name, address, dateOfBirth, customsId)
     )
   }
 
@@ -176,8 +171,8 @@ class RegistrationDetailsCreator {
     add: SixLineAddressMatchModel
   ): RegistrationDetailsIndividual = {
     val sapNumber = extractSapNumber(response.responseCommon.returnParameters)
-    val address   = Address(add.lineOne, add.lineTwo, Some(add.lineThree), add.lineFour, add.postcode, add.country)
-    val name      = ind.fullName
+    val address = Address(add.lineOne, add.lineTwo, Some(add.lineThree), add.lineFour, add.postcode, add.country)
+    val name = ind.fullName
 
     RegistrationDetails.individual(
       sapNumber,
@@ -217,9 +212,7 @@ class RegistrationDetailsCreator {
     customsId: Option[CustomsId]
   ): RegistrationDetailsIndividual = {
     val name = List(Some(individualResponse.firstName), Some(individualResponse.lastName)).flatten mkString " "
-    individualResponse.dateOfBirth.fold(ifEmpty =
-      throw new IllegalArgumentException("Date of Birth is not provided in registration info response")
-    )(
+    individualResponse.dateOfBirth.fold(ifEmpty = throw new IllegalArgumentException("Date of Birth is not provided in registration info response"))(
       dateOfBirth =>
         RegistrationDetails
           .individual(individualResponse.taxPayerId.id, SafeId(""), name, address, dateOfBirth, customsId = customsId)

@@ -17,12 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth
 
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys.{
-  selectedOrganisationType,
-  selectedUserLocation,
-  subscriptionFlow,
-  uriBeforeSubscriptionFlow
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionDataKeys.{selectedOrganisationType, selectedUserLocation, subscriptionFlow, uriBeforeSubscriptionFlow}
 
 trait NewUserSession {
 

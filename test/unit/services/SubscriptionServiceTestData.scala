@@ -27,39 +27,35 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Messa
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel, VatDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionSuccessful
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{
-  EtmpLegalStatus,
-  EtmpTypeOfPerson,
-  OrganisationTypeConfiguration
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{EtmpLegalStatus, EtmpTypeOfPerson, OrganisationTypeConfiguration}
 import util.TestData
 
 import java.time.{LocalDate, LocalDateTime, ZoneId}
 
 trait SubscriptionServiceTestData extends TestData {
 
-  val sapNumber                          = "0123456789"
-  val expectedTaxPayerId                 = "012345678900000000000000000000000000000000"
-  val businessName                       = "Test Business Name not really a Ltd"
-  val shortName                          = "tbnnraltd"
-  val individualName                     = "John Doe"
-  val dateOfBirthString                  = "1970-12-31"
-  val dateOfBirth: LocalDate             = LocalDate.parse(dateOfBirthString)
-  val dateEstablishedString              = "1963-05-01"
-  val dateOfEstablishment: LocalDate     = LocalDate.parse(dateEstablishedString)
+  val sapNumber = "0123456789"
+  val expectedTaxPayerId = "012345678900000000000000000000000000000000"
+  val businessName = "Test Business Name not really a Ltd"
+  val shortName = "tbnnraltd"
+  val individualName = "John Doe"
+  val dateOfBirthString = "1970-12-31"
+  val dateOfBirth: LocalDate = LocalDate.parse(dateOfBirthString)
+  val dateEstablishedString = "1963-05-01"
+  val dateOfEstablishment: LocalDate = LocalDate.parse(dateEstablishedString)
   val dateEstablishedStringForPublicBody = "1900-01-01"
-  val principalEconomicActivity          = "A123"
-  val ukVatDetails: Option[VatDetails]   = Some(VatDetails("SE28 1AA", "123456789"))
+  val principalEconomicActivity = "A123"
+  val ukVatDetails: Option[VatDetails] = Some(VatDetails("SE28 1AA", "123456789"))
 
-  val contactName        = "John Doe"
-  val contactStreet      = "Line 1"
-  val contactCity        = "city name"
-  val contactPostalCode  = "SE28 1AA"
+  val contactName = "John Doe"
+  val contactStreet = "Line 1"
+  val contactCity = "city name"
+  val contactPostalCode = "SE28 1AA"
   val contactCountryCode = "GB"
-  val contactFax         = "01632961235"
-  val contactTelephone   = "01632961234"
-  val contactEmail       = "john.doe@example.com"
-  val capturedEmail      = "captured@email.com"
+  val contactFax = "01632961235"
+  val contactTelephone = "01632961234"
+  val contactEmail = "john.doe@example.com"
+  val capturedEmail = "captured@email.com"
 
   val EmptyVatIds: List[VatIdentification] = Nil
 
@@ -87,11 +83,11 @@ trait SubscriptionServiceTestData extends TestData {
     Some(contactCountryCode)
   )
 
-  val responseEoriNumber                        = "ZZZ1ZZZZ23ZZZZZZZ"
-  val responseFormBundleId: String              = "Form-Bundle-Id"
-  val processingDateResponse: String            = "18 Aug 2016"
+  val responseEoriNumber = "ZZZ1ZZZZ23ZZZZZZZ"
+  val responseFormBundleId: String = "Form-Bundle-Id"
+  val processingDateResponse: String = "18 Aug 2016"
   val emailVerificationTimestamp: LocalDateTime = TestData.emailVerificationTimestamp
-  val eori: Eori                                = Eori(responseEoriNumber)
+  val eori: Eori = Eori(responseEoriNumber)
 
   val subscriptionSuccessResult: SubscriptionSuccessful =
     SubscriptionSuccessful(eori, responseFormBundleId, processingDateResponse, Some(emailVerificationTimestamp))
@@ -102,9 +98,9 @@ trait SubscriptionServiceTestData extends TestData {
     CdsOrganisationType("limited-liability-partnership") -> OrganisationTypeConfiguration.LimitedLiabilityPartnership,
     CdsOrganisationType(
       "charity-public-body-not-for-profit"
-    )                                                 -> OrganisationTypeConfiguration.CharityPublicBodyNotForProfit,
-    CdsOrganisationType("eu-organisation")            -> OrganisationTypeConfiguration.EUOrganisation,
-    CdsOrganisationType("third-country-organisation") -> OrganisationTypeConfiguration.ThirdCountryOrganisation
+    )                                                    -> OrganisationTypeConfiguration.CharityPublicBodyNotForProfit,
+    CdsOrganisationType("eu-organisation")               -> OrganisationTypeConfiguration.EUOrganisation,
+    CdsOrganisationType("third-country-organisation")    -> OrganisationTypeConfiguration.ThirdCountryOrganisation
   )
 
   val etmpOrganisationTypeToTypeOfPersonMap: Map[EtmpOrganisationType, OrganisationTypeConfiguration] = Map(
@@ -185,9 +181,9 @@ trait SubscriptionServiceTestData extends TestData {
   )
 
   def createVatIdentificationsGenerator: Gen[List[VatIdentification]] = {
-    val CountryCodeLength    = 2
-    val VatNumberMaxLength   = 15
-    val vatNumberGenerator   = Gen.numStr retryUntil (_.length <= VatNumberMaxLength)
+    val CountryCodeLength = 2
+    val VatNumberMaxLength = 15
+    val vatNumberGenerator = Gen.numStr retryUntil (_.length <= VatNumberMaxLength)
     val countryCodeGenerator = Gen.listOfN(CountryCodeLength, Gen.alphaChar) map (_.mkString)
     val vatIdentificationGenerator = for {
       countryCode <- Gen.option(countryCodeGenerator)
@@ -310,12 +306,12 @@ trait SubscriptionServiceTestData extends TestData {
       case VatIdentification(Some(countryCode), Some(vatNumber)) =>
         Some(s"""{"countryCode": "$countryCode", "vatID": "$vatNumber"}""")
       case VatIdentification(Some(countryCode), None) => Some(s"""{"countryCode": "$countryCode"}""")
-      case VatIdentification(None, Some(vatNumber))   => Some(s"""{"vatID": "$vatNumber"}""")
+      case VatIdentification(None, Some(vatNumber)) => Some(s"""{"vatID": "$vatNumber"}""")
     }
 
     vatIds.filter(vatIdent => vatIdent.number.isDefined || vatIdent.countryCode.isDefined) match {
       case Nil => ""
-      case vs  => s""""vatIDs": [${(vs flatMap vatIdJson).mkString(", ")}],"""
+      case vs => s""""vatIDs": [${(vs flatMap vatIdJson).mkString(", ")}],"""
     }
   }
 
@@ -647,13 +643,13 @@ trait SubscriptionServiceTestData extends TestData {
     isOrganisationEvenIfOrganisationTypeIsNone: Boolean
   ): String = {
     val typeOfPerson = organisationType match {
-      case Some(o: EtmpOrganisationType)                      => Some(etmpOrganisationTypeToTypeOfPersonMap(o).typeOfPerson)
+      case Some(o: EtmpOrganisationType) => Some(etmpOrganisationTypeToTypeOfPersonMap(o).typeOfPerson)
       case None if isOrganisationEvenIfOrganisationTypeIsNone => None
-      case _                                                  => Some(EtmpTypeOfPerson.NaturalPerson)
+      case _ => Some(EtmpTypeOfPerson.NaturalPerson)
     }
 
     typeOfPerson match {
-      case None             => ""
+      case None => ""
       case Some(personType) => s""""typeOfPerson": "$personType", """
     }
   }
@@ -664,11 +660,11 @@ trait SubscriptionServiceTestData extends TestData {
   ): String = {
     val legalStatus = organisationType match {
       case Some(o: EtmpOrganisationType) => Some(etmpOrganisationTypeToTypeOfPersonMap(o).legalStatus)
-      case None                          => if (isOrganisationEvenIfOrganisationTypeIsNone) None else Some(EtmpLegalStatus.UnincorporatedBody)
+      case None => if (isOrganisationEvenIfOrganisationTypeIsNone) None else Some(EtmpLegalStatus.UnincorporatedBody)
     }
 
     legalStatus match {
-      case None         => ""
+      case None => ""
       case Some(status) => s""""typeOfLegalEntity": "$status","""
     }
   }

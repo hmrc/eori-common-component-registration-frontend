@@ -34,7 +34,7 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, httpClient: 
   ec: ExecutionContext
 ) {
 
-  private val url    = url"${appConfig.getServiceUrl("update-verified-email")}"
+  private val url = url"${appConfig.getServiceUrl("update-verified-email")}"
   private val logger = Logger(this.getClass)
 
   def updateVerifiedEmail(
@@ -48,7 +48,7 @@ class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, httpClient: 
       Right(resp)
     } recover {
       case _: BadRequestException | UpstreamErrorResponse(_, BAD_REQUEST, _, _) => Left(BadRequest)
-      case _: ForbiddenException | UpstreamErrorResponse(_, FORBIDDEN, _, _)    => Left(Forbidden)
+      case _: ForbiddenException | UpstreamErrorResponse(_, FORBIDDEN, _, _) => Left(Forbidden)
       case _: InternalServerException | UpstreamErrorResponse(_, INTERNAL_SERVER_ERROR, _, _) =>
         Left(ServiceUnavailable)
       case NonFatal(e) =>

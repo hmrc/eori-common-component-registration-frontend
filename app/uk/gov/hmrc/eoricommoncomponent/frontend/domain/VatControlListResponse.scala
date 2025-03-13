@@ -31,7 +31,7 @@ case class VatControlListResponse(
   def isPostcodeAssociatedWithVrn(vatDetails: VatDetails, isRestOfTheWorld: Boolean): Boolean = {
     postcode match {
       case Some(pc) => stripSpaces(pc) equalsIgnoreCase stripSpaces(vatDetails.postcode)
-      case None     => isRestOfTheWorld
+      case None => isRestOfTheWorld
     }
   }
 

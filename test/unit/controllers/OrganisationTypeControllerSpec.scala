@@ -23,7 +23,6 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
-import play.api.Configuration
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -45,13 +44,13 @@ import scala.concurrent.Future
 
 class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockAppConfig                  = mock[AppConfig]
+  private val mockAppConfig = mock[AppConfig]
 
   private val organisationTypeView = inject[organisation_type]
 
@@ -65,13 +64,13 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     mockAppConfig
   )
 
-  private val ProblemWithSelectionError     = "Select what you want to apply as"
+  private val ProblemWithSelectionError = "Select what you want to apply as"
   private val thirdCountryOrganisationXpath = "//*[@id='organisation-type-third-country-organisation']"
-  private val thirdCountrySoleTraderXpath   = "//*[@id='organisation-type-third-country-sole-trader']"
-  private val thirdCountryIndividualXpath   = "//*[@id='organisation-type-third-country-individual']"
-  private val companyXpath                  = "//*[@id='organisation-type-company']"
-  private val soleTraderXpath               = "//*[@id='organisation-type-sole-trader']"
-  private val individualXpath               = "//*[@id='organisation-type-individual']"
+  private val thirdCountrySoleTraderXpath = "//*[@id='organisation-type-third-country-sole-trader']"
+  private val thirdCountryIndividualXpath = "//*[@id='organisation-type-third-country-individual']"
+  private val companyXpath = "//*[@id='organisation-type-company']"
+  private val soleTraderXpath = "//*[@id='organisation-type-sole-trader']"
+  private val individualXpath = "//*[@id='organisation-type-individual']"
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -102,9 +101,9 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
       s"show correct options when user has selected location of $userLocation" in {
         showFormWithAuthenticatedUser(userLocation = Some(userLocation)) { result =>
           status(result) shouldBe OK
-          val includeUk           = userLocation.toString == UserLocation.Uk.toString
+          val includeUk = userLocation.toString == UserLocation.Uk.toString
           val includeThirdCountry = userLocation.toString == UserLocation.ThirdCountry.toString
-          val page                = CdsPage(contentAsString(result))
+          val page = CdsPage(contentAsString(result))
           page.elementIsPresent(companyXpath) shouldBe includeUk
           page.elementIsPresent(soleTraderXpath) shouldBe includeUk
           page.elementIsPresent(individualXpath) shouldBe includeUk
@@ -165,7 +164,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
     forAll(urlParameters) { (cdsOrganisationType, urlParameter) =>
       val option: String = cdsOrganisationType.id
-      val page           = subscriptionPage(cdsOrganisationType)
+      val page = subscriptionPage(cdsOrganisationType)
 
       s"return a redirect to the matching form for the correct organisation type when '$option' is selected" in {
         val updatedMockSession =
@@ -188,7 +187,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
 
       s"store the correct organisation type when '$option' is selected" in {
         submitForm(Map("organisation-type" -> option), organisationType = Some(cdsOrganisationType)) { result =>
-          await(result) //this is needed to ensure the future is completed before the verify is called
+          await(result) // this is needed to ensure the future is completed before the verify is called
           verify(mockRequestSessionData).sessionWithOrganisationTypeAdded(ArgumentMatchers.eq(cdsOrganisationType))(
             any[Request[AnyContent]]
           )
@@ -206,7 +205,7 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
           Map("organisation-type" -> CdsOrganisationType.Company.id),
           organisationType = Some(CdsOrganisationType.Company)
         ) { result =>
-          await(result) //this is needed to ensure the future is completed before the verify is called
+          await(result) // this is needed to ensure the future is completed before the verify is called
         }
       )
     }

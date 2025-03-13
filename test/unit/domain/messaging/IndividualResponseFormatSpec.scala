@@ -24,7 +24,7 @@ class IndividualResponseFormatSpec extends UnitSpec {
 
   import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.IndividualResponse.formats
 
-  val individualResponseFull   = IndividualResponse("John", "Doe", Some("1999-12-20"))
+  val individualResponseFull = IndividualResponse("John", "Doe", Some("1999-12-20"))
   val individualResponseNoDate = individualResponseFull.copy(dateOfBirth = None)
 
   val individualResponseJsonFull = Json.parse("""

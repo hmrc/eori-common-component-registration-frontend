@@ -21,10 +21,10 @@ import org.scalatest.matchers.must.Matchers
 
 trait WebPage extends Matchers {
 
-  val backLinkXPath: String          = "//*[@id='back-link']"
+  val backLinkXPath: String = "//*[@id='back-link']"
   val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"
-  val countryCodeCss                 = By.xpath("//*[@id='countryCode']")
-  val countrySuggestion              = By.xpath("//*[@id='countryCode__option--0']")
+  val countryCodeCss = By.xpath("//*[@id='countryCode']")
+  val countrySuggestion = By.xpath("//*[@id='countryCode__option--0']")
 
   protected def fieldLevelErrorXpath(fieldName: String) =
     s"//p[contains(@id, '$fieldName-error') and contains(@class, 'error-message')]"

@@ -23,11 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
-  SubscriptionStatus,
-  SubscriptionStatusResult,
-  SubscriptionStatusSubmitted
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{SubscriptionStatus, SubscriptionStatusResult, SubscriptionStatusSubmitted}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -41,7 +37,7 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
   ec: ExecutionContext
 ) {
 
-  private val logger  = Logger(this.getClass)
+  private val logger = Logger(this.getClass)
   private val baseUrl = appConfig.getServiceUrl("subscription-status")
 
   def status(
@@ -64,12 +60,11 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
 
       auditCall(baseUrl, request, resp)
       resp.subscriptionStatusResponse
-    } recover {
-      case e: Throwable =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
-        // $COVERAGE-ON
-        throw e
+    } recover { case e: Throwable =>
+      // $COVERAGE-OFF$Loggers
+      logger.warn(s"Status SUB01 failed. url: $url, error: $e", e)
+      // $COVERAGE-ON
+      throw e
     }
   }
 
@@ -80,7 +75,7 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
   )(implicit hc: HeaderCarrier, originatingService: Service): Unit = {
 
     val subscriptionStatusSubmitted = SubscriptionStatusSubmitted(request, originatingService.code)
-    val subscriptionStatusResult    = SubscriptionStatusResult(response)
+    val subscriptionStatusResult = SubscriptionStatusResult(response)
 
     audit.sendExtendedDataEvent(
       transactionName = "ecc-subscription-status",

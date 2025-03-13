@@ -51,8 +51,8 @@ class TaxEnrolmentsService @Inject() (taxEnrolmentsConnector: TaxEnrolmentsConne
     taxEnrolmentsConnector.enrol(taxEnrolmentsRequest, formBundleId)
   }
 
-  def issuerCallSafeId(formBundleId: String, safeId: SafeId, dateOfEstablishment: Option[LocalDate], service: Service)(
-    implicit hc: HeaderCarrier
+  def issuerCallSafeId(formBundleId: String, safeId: SafeId, dateOfEstablishment: Option[LocalDate], service: Service)(implicit
+    hc: HeaderCarrier
   ): Future[Int] = {
 
     val identifiers = List(KeyValue(key = "SAFEID", value = safeId.id))

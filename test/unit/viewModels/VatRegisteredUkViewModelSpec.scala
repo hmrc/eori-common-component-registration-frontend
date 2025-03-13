@@ -64,10 +64,12 @@ class VatRegisteredUkViewModelSpec extends UnitSpec with ControllerSpec {
 
   "formAction" should {
     "call VatRegisteredUkController submit" in servicesToTest.foreach { service =>
-      viewModel.formAction(
-        isInReviewMode = false,
-        service
-      ).url shouldBe s"/customs-registration-services/${service.code}/register/vat-registered-uk"
+      viewModel
+        .formAction(
+          isInReviewMode = false,
+          service
+        )
+        .url shouldBe s"/customs-registration-services/${service.code}/register/vat-registered-uk"
     }
   }
 

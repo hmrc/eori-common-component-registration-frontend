@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext
 
 class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
   implicit val ex: ExecutionContext = ExecutionContext.Implicits.global
-  implicit val hc: HeaderCarrier    = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val email = "a@example.com"
 
@@ -47,7 +47,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
   private val timestamp = "timestamp"
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.handle-subscription.host" -> Host,

@@ -44,20 +44,19 @@ import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class NameUtrOrganisationControllerSpec
-    extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
+class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector             = mock[AuthConnector]
-  private val mockAuthAction                = authAction(mockAuthConnector)
-  private val mockMatchingService           = mock[MatchingService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
   private val mockSubscriptionDetailService = mock[SubscriptionDetailsService]
-  private val matchNameIdOrganisationView   = inject[match_name_id_organisation]
+  private val matchNameIdOrganisationView = inject[match_name_id_organisation]
 
-  private val partnershipId                   = CdsOrganisationType.PartnershipId
-  private val companyId                       = CdsOrganisationType.CompanyId
-  private val limitedLiabilityPartnershipId   = CdsOrganisationType.LimitedLiabilityPartnershipId
+  private val partnershipId = CdsOrganisationType.PartnershipId
+  private val companyId = CdsOrganisationType.CompanyId
+  private val limitedLiabilityPartnershipId = CdsOrganisationType.LimitedLiabilityPartnershipId
   private val charityPublicBodyNotForProfitId = CdsOrganisationType.CharityPublicBodyNotForProfitId
-  private val errorView                       = inject[error_template]
+  private val errorView = inject[error_template]
 
   private val controller =
     new NameIdOrganisationController(
@@ -80,9 +79,9 @@ class NameUtrOrganisationControllerSpec
 
   private val NameMaxLength = 105
 
-  private val UtrInvalidErrorPage      = messages("cds.matching-error.utr.invalid")
-  private val UtrInvalidErrorField     = s"Error: ${messages("cds.matching-error.utr.invalid")}"
-  private val UtrWrongLengthErrorPage  = messages("cds.matching-error.utr.length")
+  private val UtrInvalidErrorPage = messages("cds.matching-error.utr.invalid")
+  private val UtrInvalidErrorField = s"Error: ${messages("cds.matching-error.utr.invalid")}"
+  private val UtrWrongLengthErrorPage = messages("cds.matching-error.utr.length")
   private val UtrWrongLengthErrorField = s"Error: ${messages("cds.matching-error.utr.length")}"
 
   private val BusinessNotMatchedError =
@@ -195,33 +194,32 @@ class NameUtrOrganisationControllerSpec
       }
 
       s"ensure name does not exceed maximum length when organisation type is $organisationType" in {
-        submitForm(form = ValidNameUtrRequest + ("name" -> oversizedString(NameMaxLength)), organisationType) {
-          result =>
-            status(result) shouldBe BAD_REQUEST
-            val page = CdsPage(contentAsString(result))
-            if (organisationType == partnershipId || organisationType == limitedLiabilityPartnershipId) {
-              page.getElementsText(
-                pageLevelErrorSummaryListXPath
-              ) shouldBe "The partnership name must be 105 characters or less"
-              page.getElementsText(
-                fieldLevelErrorName
-              ) shouldBe "Error: The partnership name must be 105 characters or less"
-            } else if (organisationType == companyId) {
-              page.getElementsText(
-                pageLevelErrorSummaryListXPath
-              ) shouldBe "The company name must be 105 characters or less"
-              page.getElementsText(
-                fieldLevelErrorName
-              ) shouldBe s"Error: The company name must be 105 characters or less"
-            } else {
-              page.getElementsText(
-                pageLevelErrorSummaryListXPath
-              ) shouldBe "The organisation name must be 105 characters or less"
-              page.getElementsText(
-                fieldLevelErrorName
-              ) shouldBe "Error: The organisation name must be 105 characters or less"
-            }
-            page.getElementsText("title") should startWith("Error: ")
+        submitForm(form = ValidNameUtrRequest + ("name" -> oversizedString(NameMaxLength)), organisationType) { result =>
+          status(result) shouldBe BAD_REQUEST
+          val page = CdsPage(contentAsString(result))
+          if (organisationType == partnershipId || organisationType == limitedLiabilityPartnershipId) {
+            page.getElementsText(
+              pageLevelErrorSummaryListXPath
+            ) shouldBe "The partnership name must be 105 characters or less"
+            page.getElementsText(
+              fieldLevelErrorName
+            ) shouldBe "Error: The partnership name must be 105 characters or less"
+          } else if (organisationType == companyId) {
+            page.getElementsText(
+              pageLevelErrorSummaryListXPath
+            ) shouldBe "The company name must be 105 characters or less"
+            page.getElementsText(
+              fieldLevelErrorName
+            ) shouldBe s"Error: The company name must be 105 characters or less"
+          } else {
+            page.getElementsText(
+              pageLevelErrorSummaryListXPath
+            ) shouldBe "The organisation name must be 105 characters or less"
+            page.getElementsText(
+              fieldLevelErrorName
+            ) shouldBe "Error: The organisation name must be 105 characters or less"
+          }
+          page.getElementsText("title") should startWith("Error: ")
         }
       }
 
@@ -292,7 +290,7 @@ class NameUtrOrganisationControllerSpec
         )
       ).thenReturn(eitherT(()))
 
-      val requestUtr  = "21 08 83 45 03k"
+      val requestUtr = "21 08 83 45 03k"
       val expectedUtr = "2108834503K"
       submitForm(Map("name" -> "My company name", "utr" -> requestUtr)) { result =>
         await(result)

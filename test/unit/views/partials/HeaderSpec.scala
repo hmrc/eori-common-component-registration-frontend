@@ -34,10 +34,10 @@ import scala.concurrent.Future
 
 class HeaderSpec extends ControllerSpec with AuthActionMock with CSRFTest {
 
-  private val mockAuthConnector    = mock[AuthConnector]
-  private val mockAuthAction       = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val mockCdsFrontendCache = mock[SessionCache]
-  private val viewStartRegister    = inject[start]
+  private val viewStartRegister = inject[start]
 
   private val controller =
     new ApplicationController(mockAuthAction, mcc, viewStartRegister, mockCdsFrontendCache, appConfig)
@@ -82,9 +82,12 @@ class HeaderSpec extends ControllerSpec with AuthActionMock with CSRFTest {
       implicit val request = withFakeCSRF(fakeAtarRegisterRequest)
 
       val doc = Jsoup.parse(contentAsString(viewStartRegister(atarService, "test", "test")))
-      doc.body().getElementsByClass("govuk-link hmrc-sign-out-nav__link").attr(
-        "href"
-      ) shouldBe "/customs-registration-services/atar/register/logout"
+      doc
+        .body()
+        .getElementsByClass("govuk-link hmrc-sign-out-nav__link")
+        .attr(
+          "href"
+        ) shouldBe "/customs-registration-services/atar/register/logout"
     }
 
     "take to the feedback page" in {

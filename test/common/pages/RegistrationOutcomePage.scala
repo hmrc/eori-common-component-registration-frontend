@@ -19,17 +19,16 @@ package common.pages
 import common.support.Env
 
 trait XPathRegistrationOutcomePage {
-  val pageHeadingXpath  = "//*[@id='page-heading']"
+  val pageHeadingXpath = "//*[@id='page-heading']"
   val panelHeadingXpath = "//h1[@class='govuk-panel__title']"
-  val activeFromXpath   = "//*[@id='active-from']"
-  val issuedDateXpath   = "//*[@id='issued-date']"
-  val eoriNumberXpath   = "//*[@id='eori-number']"
+  val activeFromXpath = "//*[@id='active-from']"
+  val issuedDateXpath = "//*[@id='issued-date']"
+  val eoriNumberXpath = "//*[@id='eori-number']"
 
   val additionalInformationXpath = "//*[@id='additional-information']"
-  val whatHappensNextXpath       = "//*[@id='what-happens-next']"
+  val whatHappensNextXpath = "//*[@id='what-happens-next']"
 }
 
-abstract class RegistrationOutcomePage(val registrationOutcome: String)
-    extends WebPage with XPathRegistrationOutcomePage {
+abstract class RegistrationOutcomePage(val registrationOutcome: String) extends WebPage with XPathRegistrationOutcomePage {
   protected val baseUrl: String = Env.frontendHost + s"/customs-registration-services/register/$registrationOutcome"
 }

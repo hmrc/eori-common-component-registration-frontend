@@ -31,9 +31,10 @@ object AddressResultsForm {
         "address" -> mandatoryString("ecc.address-lookup.postcode.address.error")(
           allowedAddresses.map(_.dropDownView).contains(_)
         )
-      )(
-        x =>
-          allowedAddresses.find(addr => addr.dropDownView.equalsIgnoreCase(x)).getOrElse(
+      )(x =>
+        allowedAddresses
+          .find(addr => addr.dropDownView.equalsIgnoreCase(x))
+          .getOrElse(
             throw new Exception("Can't match form value to addresses")
           )
       )(x => Some(x.dropDownView))

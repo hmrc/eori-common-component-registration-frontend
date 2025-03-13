@@ -24,11 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CorporateBody, Partnership}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import util.builders.RegistrationDetailsBuilder
 
@@ -37,9 +33,9 @@ import scala.concurrent.Future
 
 class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSugar {
 
-  private val mockCache          = mock[SessionCache]
+  private val mockCache = mock[SessionCache]
   private val mockReqSessionData = mock[RequestSessionData]
-  private val req                = mock[Request[AnyContent]]
+  private val req = mock[Request[AnyContent]]
 
   override def beforeEach(): Unit = {
     reset(mockCache)

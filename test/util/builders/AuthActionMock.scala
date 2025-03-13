@@ -35,8 +35,8 @@ trait AuthActionMock extends AnyWordSpec with MockitoSugar with Injecting {
 
   implicit val app: Application
 
-  val configuration             = inject[Configuration]
-  val environment               = Environment.simple()
+  val configuration = inject[Configuration]
+  val environment = Environment.simple()
   val mockedSessionCacheForAuth = mock[SessionCache]
   when(mockedSessionCacheForAuth.emailOpt(any[Request[AnyContent]]))
     .thenReturn(Future.successful(Some("some@email.com")))

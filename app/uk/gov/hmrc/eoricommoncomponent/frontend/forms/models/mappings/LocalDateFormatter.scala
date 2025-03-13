@@ -22,12 +22,11 @@ import play.api.data.format.Formatter
 import java.time.LocalDate
 import scala.util.{Failure, Success, Try}
 
-class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String] = Seq.empty)
-    extends Formatter[LocalDate] with Formatters {
+class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String] = Seq.empty) extends Formatter[LocalDate] with Formatters {
 
-  private val dayKey                  = "day"
-  private val monthKey                = "month"
-  private val yearKey                 = "year"
+  private val dayKey = "day"
+  private val monthKey = "month"
+  private val yearKey = "year"
   private val fieldKeys: List[String] = List(dayKey, monthKey, yearKey)
 
   private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
@@ -62,7 +61,7 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
 
     errors match {
       case Nil => Right(())
-      case _   => Left(errors)
+      case _ => Left(errors)
     }
 
   }
@@ -71,9 +70,8 @@ class LocalDateFormatter(emptyKey: String, invalidKey: String, args: Seq[String]
 
     val trimmedData = data.map(d => d._1 -> d._2.trim)
 
-    val fields = fieldKeys.map {
-      field =>
-        field -> trimmedData.get(s"$key.$field").filter(_.nonEmpty)
+    val fields = fieldKeys.map { field =>
+      field -> trimmedData.get(s"$key.$field").filter(_.nonEmpty)
     }.toMap
 
     lazy val missingFields = fields

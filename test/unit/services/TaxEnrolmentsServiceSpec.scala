@@ -36,19 +36,19 @@ class TaxEnrolmentsServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
   private val mockTaxEnrolmentsConnector = mock[TaxEnrolmentsConnector]
 
-  private val service                               = new TaxEnrolmentsService(mockTaxEnrolmentsConnector)
-  private implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
+  private val service = new TaxEnrolmentsService(mockTaxEnrolmentsConnector)
+  implicit private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   before {
     reset(mockTaxEnrolmentsConnector)
   }
 
-  val testService           = Service.cds
+  val testService = Service.cds
   val nonExistingServiceKey = "Test-Service-Don't-Exist"
-  val safeId                = SafeId("safeid")
-  val eori                  = Eori("GB99999999")
-  val formBundleId          = "884736281923"
-  val date                  = LocalDate.parse("2010-04-28")
+  val safeId = SafeId("safeid")
+  val eori = Eori("GB99999999")
+  val formBundleId = "884736281923"
+  val date = LocalDate.parse("2010-04-28")
 
   "TaxEnrolmentsService" should {
 

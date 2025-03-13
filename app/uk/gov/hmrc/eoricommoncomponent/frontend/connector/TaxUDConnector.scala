@@ -32,7 +32,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.CreateEoriSubscrip
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
-import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
@@ -46,7 +45,7 @@ class TaxUDConnector @Inject() (
 )(implicit ec: ExecutionContext)
     extends HandleResponses {
 
-  private val fullUrl          = url"${appConfig.getServiceUrl("register-subscribe-without-id")}"
+  private val fullUrl = url"${appConfig.getServiceUrl("register-subscribe-without-id")}"
   private val X_CORRELATION_ID = "x-correlation-id"
 
   def createEoriSubscription(
@@ -78,17 +77,17 @@ class TaxUDConnector @Inject() (
                 Future.successful(InvalidResponse)
 
               case Right(response: CreateEoriSubscriptionResponse) =>
-                audit.sendSubscriptionDataEvent(
-                  fullUrl.toString,
-                  Json.toJson(CreateEoriSubscriptionNoIdentifier(createEoriSubscriptionRequest, response))
-                )
-                  .map(
-                    _ =>
-                      SuccessResponse(
-                        response.success.formBundleNumber,
-                        SafeId(response.success.safeId),
-                        response.success.processingDate
-                      )
+                audit
+                  .sendSubscriptionDataEvent(
+                    fullUrl.toString,
+                    Json.toJson(CreateEoriSubscriptionNoIdentifier(createEoriSubscriptionRequest, response))
+                  )
+                  .map(_ =>
+                    SuccessResponse(
+                      response.success.formBundleNumber,
+                      SafeId(response.success.safeId),
+                      response.success.processingDate
+                    )
                   )
             }
 
@@ -114,10 +113,9 @@ class TaxUDConnector @Inject() (
             Future.successful(ErrorResponse)
         }
       }
-      .recover {
-        case NonFatal(e) =>
-          logger.error(s"call to create eori subscription failed: $e")
-          ServiceUnavailableResponse
+      .recover { case NonFatal(e) =>
+        logger.error(s"call to create eori subscription failed: $e")
+        ServiceUnavailableResponse
       }
   }
 

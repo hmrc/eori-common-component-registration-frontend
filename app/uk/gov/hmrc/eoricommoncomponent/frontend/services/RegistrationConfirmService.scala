@@ -18,11 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  ClearCacheAndRegistrationIdentificationService,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{ClearCacheAndRegistrationIdentificationService, RequestSessionData, SessionCache}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}

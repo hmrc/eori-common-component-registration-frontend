@@ -20,8 +20,8 @@ import common.pages.WebPage
 
 trait VatRegisterUKPage extends WebPage {
   val fieldLevelErrorYesNoAnswerForUKVat = "//*[@id='yes-no-answer-field']/*[@class='error-message']"
-  val ukVatNoXpath                       = "//*[@id='yes-no-answer-false']"
-  val ukVatYesXpath                      = "//*[@id='yes-no-answer-true']"
+  val ukVatNoXpath = "//*[@id='yes-no-answer-false']"
+  val ukVatYesXpath = "//*[@id='yes-no-answer-true']"
 }
 
 object VatRegisterUKPage extends VatRegisterUKPage {

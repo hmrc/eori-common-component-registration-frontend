@@ -46,10 +46,10 @@ class RegistrationDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   private val mockSessionCache = mock[SessionCache]
 
-  private val startingOrgName      = "BEFORE Blank"
-  private val startingSafeId       = SafeId("SAFEID")
+  private val startingOrgName = "BEFORE Blank"
+  private val startingSafeId = SafeId("SAFEID")
   private val startingBlankAddress = Address("BLANK", None, None, None, None, "BLANK")
-  private val updatedAddress       = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
+  private val updatedAddress = Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
 
   private val startingBlankFullName = "BEFORE Blank full name"
 

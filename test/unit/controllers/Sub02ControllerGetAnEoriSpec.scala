@@ -25,7 +25,7 @@ import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{Sub02Controller, routes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
@@ -44,27 +44,27 @@ import scala.concurrent.Future
 
 class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockSessionCache               = mock[SessionCache]
-  private val mockCdsSubscriber              = mock[CdsSubscriber]
-  private val mockCdsOrganisationType        = mock[CdsOrganisationType]
-  private val mockRegDetails                 = mock[RegistrationDetails]
-  private val mockSubscribeOutcome           = mock[Sub02Outcome]
-  private val mockSubscribe01Outcome         = mock[Sub01Outcome]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockCdsSubscriber = mock[CdsSubscriber]
+  private val mockCdsOrganisationType = mock[CdsOrganisationType]
+  private val mockRegDetails = mock[RegistrationDetails]
+  private val mockSubscribeOutcome = mock[Sub02Outcome]
+  private val mockSubscribe01Outcome = mock[Sub01Outcome]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val mockSubscriptionDetails        = mock[SubscriptionDetails]
+  private val mockSubscriptionDetails = mock[SubscriptionDetails]
 
-  private val sub01OutcomeView                = inject[sub01_outcome_processing]
-  private val sub02RequestNotProcessed        = inject[sub02_request_not_processed]
+  private val sub01OutcomeView = inject[sub01_outcome_processing]
+  private val sub02RequestNotProcessed = inject[sub02_request_not_processed]
   private val sub02SubscriptionInProgressView = inject[sub02_subscription_in_progress]
-  private val sub02EoriAlreadyAssociatedView  = inject[sub02_eori_already_associated]
-  private val sub02EoriAlreadyExists          = inject[sub02_eori_already_exists]
+  private val sub02EoriAlreadyAssociatedView = inject[sub02_eori_already_associated]
+  private val sub02EoriAlreadyExists = inject[sub02_eori_already_exists]
 
-  private val standAloneOutcomeView   = inject[standalone_subscription_outcome]
+  private val standAloneOutcomeView = inject[standalone_subscription_outcome]
   private val subscriptionOutcomeView = inject[subscription_outcome]
-  private val EORI                    = "ZZZ1ZZZZ23ZZZZZZZ"
+  private val EORI = "ZZZ1ZZZZ23ZZZZZZZ"
 
   private val subscriptionController = new Sub02Controller(
     mockAuthAction,
@@ -82,11 +82,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     mockCdsSubscriber
   )(global)
 
-  val eoriNumberResponse: String                = "EORI-Number"
-  val formBundleIdResponse: String              = "Form-Bundle-Id"
-  private val processingDate                    = "12 May 2018"
+  val eoriNumberResponse: String = "EORI-Number"
+  val formBundleIdResponse: String = "Form-Bundle-Id"
+  private val processingDate = "12 May 2018"
   val emailVerificationTimestamp: LocalDateTime = TestData.emailVerificationTimestamp
-  val emulatedFailure                           = new UnsupportedOperationException("Emulated service call failure.")
+  val emulatedFailure = new UnsupportedOperationException("Emulated service call failure.")
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -490,9 +490,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     withAuthorisedUser(userId, mockAuthConnector)
     mockSessionCacheForOutcomePage
     test(
-      subscriptionController.end(eoriOnlyService).apply(
-        SessionBuilder.buildRequestWithSessionAndPath("/eori-only/subscribe", userId)
-      )
+      subscriptionController
+        .end(eoriOnlyService)
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/eori-only/subscribe", userId)
+        )
     )
   }
 
@@ -502,9 +504,11 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
     withAuthorisedUser(userId, mockAuthConnector)
     mockSessionCacheForOutcomePage
     test(
-      subscriptionController.end(atarService).apply(
-        SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)
-      )
+      subscriptionController
+        .end(atarService)
+        .apply(
+          SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId)
+        )
     )
   }
 
@@ -533,27 +537,33 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
   private def invokeSubscriptionInProgress(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
-      subscriptionController.subscriptionInProgress(atarService).apply(
-        SessionBuilder.buildRequestWithSession(defaultUserId)
-      )
+      subscriptionController
+        .subscriptionInProgress(atarService)
+        .apply(
+          SessionBuilder.buildRequestWithSession(defaultUserId)
+        )
     )
   }
 
   private def invokeEoriAlreadyAssociated(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
-      subscriptionController.eoriAlreadyAssociated(atarService).apply(
-        SessionBuilder.buildRequestWithSession(defaultUserId)
-      )
+      subscriptionController
+        .eoriAlreadyAssociated(atarService)
+        .apply(
+          SessionBuilder.buildRequestWithSession(defaultUserId)
+        )
     )
   }
 
   private def invokeRequestNotProcessed(test: Future[Result] => Any) = {
     withAuthorisedUser(defaultUserId, mockAuthConnector)
     test(
-      subscriptionController.requestNotProcessed(atarService).apply(
-        SessionBuilder.buildRequestWithSession(defaultUserId)
-      )
+      subscriptionController
+        .requestNotProcessed(atarService)
+        .apply(
+          SessionBuilder.buildRequestWithSession(defaultUserId)
+        )
     )
   }
 

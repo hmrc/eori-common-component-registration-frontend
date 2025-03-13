@@ -79,11 +79,12 @@ class ContactDetailsController @Inject() (
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       cdsFrontendDataCache.email flatMap { email =>
-        contactDetailsCreateForm().bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(contactDetailsView(formWithErrors, Some(email), isInReviewMode, service))),
-          formData => storeContactDetails(formData, email, isInReviewMode, service)
-        )
+        contactDetailsCreateForm()
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(contactDetailsView(formWithErrors, Some(email), isInReviewMode, service))),
+            formData => storeContactDetails(formData, email, isInReviewMode, service)
+          )
       }
     }
 
@@ -105,28 +106,26 @@ class ContactDetailsController @Inject() (
     inReviewMode: Boolean,
     service: Service
   )(implicit request: Request[AnyContent]): Future[Result] =
-    subscriptionBusinessService.cachedContactDetailsModel flatMap {
-      contactDetails =>
-        subscriptionDetailsService
-          .cacheContactDetails(
-            formData.copy(emailAddress = Some(email)).toContactInfoDetailsModel(contactDetails),
-            isInReviewMode = inReviewMode
-          )
-          .map(
-            _ =>
-              if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
-              else
-                subscriptionFlowManager.stepInformation(ContactDetailsSubscriptionFlowPageGetEori) match {
-                  case Right(flowInfo) =>
-                    Redirect(
-                      flowInfo.nextPage
-                        .url(service)
-                    )
-                  case Left(_) =>
-                    logger.warn(s"Unable to identify subscription flow: key not found in cache")
-                    Redirect(ApplicationController.startRegister(service))
-                }
-          )
+    subscriptionBusinessService.cachedContactDetailsModel flatMap { contactDetails =>
+      subscriptionDetailsService
+        .cacheContactDetails(
+          formData.copy(emailAddress = Some(email)).toContactInfoDetailsModel(contactDetails),
+          isInReviewMode = inReviewMode
+        )
+        .map(_ =>
+          if (inReviewMode) Redirect(DetermineReviewPageController.determineRoute(service))
+          else
+            subscriptionFlowManager.stepInformation(ContactDetailsSubscriptionFlowPageGetEori) match {
+              case Right(flowInfo) =>
+                Redirect(
+                  flowInfo.nextPage
+                    .url(service)
+                )
+              case Left(_) =>
+                logger.warn(s"Unable to identify subscription flow: key not found in cache")
+                Redirect(ApplicationController.startRegister(service))
+            }
+        )
     }
 
 }

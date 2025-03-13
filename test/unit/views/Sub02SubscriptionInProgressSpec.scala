@@ -26,7 +26,7 @@ import util.ViewSpec
 
 class Sub02SubscriptionInProgressSpec extends ViewSpec {
 
-  private val processedDate           = "1 March 2019"
+  private val processedDate = "1 March 2019"
   private val pageHeadingExpectedText = "You've already applied"
   private val processDateExpectedText = s"HMRC received your application on $processedDate"
 

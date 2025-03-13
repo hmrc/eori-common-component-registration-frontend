@@ -17,11 +17,11 @@
 package util.externalservices
 
 object ExternalServicesConfig {
-  val Port: Int              = sys.env.getOrElse("WIREMOCK_SERVICE_LOCATOR_PORT", "11111").toInt
-  val Host                   = "localhost"
-  val sessionCacheDomain     = "test-only/keystore"
-  val shortLivedCacheDomain  = "test-only/save4later"
-  val cdsFrontendSource      = "cds-frontend"
+  val Port: Int = sys.env.getOrElse("WIREMOCK_SERVICE_LOCATOR_PORT", "11111").toInt
+  val Host = "localhost"
+  val sessionCacheDomain = "test-only/keystore"
+  val shortLivedCacheDomain = "test-only/save4later"
+  val cdsFrontendSource = "cds-frontend"
   val subscriptionEoriNumber = "ZZZ1ZZZZ23ZZZZZZZ"
-  val etmpFormBundleId       = "077063075008"
+  val etmpFormBundleId = "077063075008"
 }

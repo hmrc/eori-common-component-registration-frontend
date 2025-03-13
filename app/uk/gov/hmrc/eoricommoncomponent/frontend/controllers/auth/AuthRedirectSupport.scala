@@ -32,8 +32,8 @@ trait AuthRedirectSupport extends AuthRedirects {
     s"$baseUrl/${service.code}/register"
   }
 
-  def withAuthRecovery(implicit request: Request[AnyContent]): PartialFunction[Throwable, Result] = {
-    case _: NoActiveSession => toGGLogin(continueUrl = continueUrl)
+  def withAuthRecovery(implicit request: Request[AnyContent]): PartialFunction[Throwable, Result] = { case _: NoActiveSession =>
+    toGGLogin(continueUrl = continueUrl)
   }
 
 }

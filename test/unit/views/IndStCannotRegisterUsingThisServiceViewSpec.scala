@@ -47,31 +47,43 @@ class IndStCannotRegisterUsingThisServiceViewSpec extends ViewSpec {
 
     "display line 1 with text" in {
 
-      doc().body().getElementById("para1")
+      doc()
+        .body()
+        .getElementById("para1")
         .text() mustBe "This service is not available to individuals or sole traders."
     }
 
     "display line 2 with text" in {
 
-      doc().body().getElementById("para2")
+      doc()
+        .body()
+        .getElementById("para2")
         .text() mustBe "You can:"
     }
 
     "display link 1 with KANA form VAT Registered" in {
 
-      doc().body().getElementById("link1")
+      doc()
+        .body()
+        .getElementById("link1")
         .text() mustBe "apply for an EORI number if you are VAT registered"
 
-      doc().body().getElementById("link1")
+      doc()
+        .body()
+        .getElementById("link1")
         .attr("href") mustBe "https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes"
     }
 
     "display link 1 with KANA form non-VAT Registered" in {
 
-      doc().body().getElementById("link2")
+      doc()
+        .body()
+        .getElementById("link2")
         .text() mustBe "apply for an EORI number if you are not VAT registered"
 
-      doc().body().getElementById("link2")
+      doc()
+        .body()
+        .getElementById("link2")
         .attr("href") mustBe "https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no"
     }
   }

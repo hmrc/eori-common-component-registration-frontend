@@ -20,14 +20,14 @@ import common.pages.WebPage
 
 trait OrganisationUtrPage extends WebPage {
 
-  val fieldLevelErrorUtr     = "//p[@id='utr-error' and @class='govuk-error-message']"
-  val labelForUtrXpath       = "//*[@id='utr-outer']/label"
+  val fieldLevelErrorUtr = "//p[@id='utr-error' and @class='govuk-error-message']"
+  val labelForUtrXpath = "//*[@id='utr-outer']/label"
   val linkInUtrHintTextXpath = "//*[@id='utr-hint']/a"
 
   override val title = "Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) number?"
 
   val haveUtrYesRadioButtonXpath = "//*[@id='have-utr-yes']"
-  val haveUtrNoRadioButtonXpath  = "//*[@id='have-utr-no']"
+  val haveUtrNoRadioButtonXpath = "//*[@id='have-utr-no']"
 
 }
 
@@ -35,10 +35,10 @@ object OrganisationUtrPage extends OrganisationUtrPage
 
 object SubscriptionRowIndividualsUtr extends OrganisationUtrPage {
   override val title = "Do you have a Self Assessment Unique Taxpayer Reference (UTR) issued in the UK?"
-  val formId         = "SubscriptionUtrForm"
+  val formId = "SubscriptionUtrForm"
 }
 
 object SubscriptionRowCompanyUtr extends OrganisationUtrPage {
   override val title = "Does your organisation have a Corporation Tax Unique Taxpayer Reference (UTR) issued in the UK?"
-  val formId         = "SubscriptionUtrForm"
+  val formId = "SubscriptionUtrForm"
 }

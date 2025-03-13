@@ -18,12 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  DetermineReviewPageController,
-  DoYouHaveAUtrNumberController,
-  IndStCannotRegisterUsingThisServiceController,
-  SecuritySignOutController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, DoYouHaveAUtrNumberController, IndStCannotRegisterUsingThisServiceController, SecuritySignOutController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
@@ -85,13 +80,15 @@ class RowIndividualNameDateOfBirthController @Inject() (
   def submit(isInReviewMode: Boolean, organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
       assertOrganisationTypeIsValid(organisationType)
-      thirdCountryIndividualNameDateOfBirthForm.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, isInReviewMode))
-          ),
-        form => submitDetails(isInReviewMode, form, organisationType, service)
-      )
+      thirdCountryIndividualNameDateOfBirthForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(rowIndividualNameDob(formWithErrors, organisationType, service, isInReviewMode))
+            ),
+          form => submitDetails(isInReviewMode, form, organisationType, service)
+        )
     }
 
   private def assertOrganisationTypeIsValid(cdsOrganisationType: String): Unit =
@@ -110,8 +107,8 @@ class RowIndividualNameDateOfBirthController @Inject() (
 
     subscriptionDetailsService.cacheNameDobDetails(nameDobMatchModel) flatMap { _ =>
       if (!isInReviewMode)
-        subscriptionDetailsService.updateSubscriptionDetailsIndividual.map(
-          _ => Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
+        subscriptionDetailsService.updateSubscriptionDetailsIndividual.map(_ =>
+          Redirect(DoYouHaveAUtrNumberController.form(organisationType, service, isInReviewMode = false))
         )
       else
         Future.successful(Redirect(DetermineReviewPageController.determineRoute(service)))

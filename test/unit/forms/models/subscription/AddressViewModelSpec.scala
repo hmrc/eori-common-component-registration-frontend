@@ -26,8 +26,8 @@ class AddressViewModelSpec extends UnitSpec {
   val addressLine2 = "some street"
   val addressLine3 = "some area"
   val addressLine4 = "some town"
-  val postCode     = "PC55 5AA"
-  val countryCode  = "EN"
+  val postCode = "PC55 5AA"
+  val countryCode = "EN"
 
   val actualAddress =
     Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), Some(postCode), countryCode)

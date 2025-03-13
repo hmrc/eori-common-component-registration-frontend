@@ -21,17 +21,11 @@ import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.Session
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, header, status, LOCATION}
+import play.api.test.Helpers.{LOCATION, contentAsString, defaultAwaitTimeout, header, status}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{
-  SubscriptionFlowManager,
-  WhatIsYourOrganisationsAddressController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowManager, WhatIsYourOrganisationsAddressController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  EoriConsentSubscriptionFlowPage,
-  SicCodeSubscriptionFlowPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{EoriConsentSubscriptionFlowPage, SicCodeSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, UtrMatchModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
@@ -46,12 +40,12 @@ import scala.concurrent.Future
 
 class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector                       = mock[AuthConnector]
-  private val mockAuthAction                          = authAction(mockAuthConnector)
-  private val mockRequestSessionData                  = mock[RequestSessionData]
-  private val mockSubscriptionDetailsService          = mock[SubscriptionDetailsService]
-  private val mockSubscriptionFlowManager             = mock[SubscriptionFlowManager]
-  private val mockRegistrationDetailsService          = mock[RegistrationDetailsService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
+  private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val what_is__your_organisation_address_view = inject[what_is_your_organisations_address]
 
   private val controller = new WhatIsYourOrganisationsAddressController(
@@ -64,11 +58,11 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
     what_is__your_organisation_address_view
   )
 
-  private val fieldLevelErrorAddress         = "//p[@id='address-error' and @class='govuk-error-message']"
+  private val fieldLevelErrorAddress = "//p[@id='address-error' and @class='govuk-error-message']"
   private val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"
 
-  private val lineOneFieldError  = "//p[@id='line-1-error' and @class='govuk-error-message']"
-  private val lineTwoFieldError  = "//p[@id='line-2-error' and @class='govuk-error-message']"
+  private val lineOneFieldError = "//p[@id='line-1-error' and @class='govuk-error-message']"
+  private val lineTwoFieldError = "//p[@id='line-2-error' and @class='govuk-error-message']"
   private val townCityFieldError = "//p[@id='townCity-error' and @class='govuk-error-message']"
   private val postcodeFieldError = "//p[@id='postcode-error' and @class='govuk-error-message']"
 
@@ -82,7 +76,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
       )
 
       // When
-      val result = controller.showForm(isInReviewMode = false, eoriOnlyService)
+      val result = controller
+        .showForm(isInReviewMode = false, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -108,7 +103,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
         withAuthorisedUser(userId, mockAuthConnector)
 
         // When
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -134,7 +130,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
         withAuthorisedUser(userId, mockAuthConnector)
 
         // When
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -182,7 +179,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
         )
 
-        val result = controller.submit(isInReviewMode = true, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = true, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -219,7 +217,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
         )
 
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -260,7 +259,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           Future.successful((SicCodeSubscriptionFlowPage, Session(Map.empty[String, String])))
         )
 
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -299,7 +299,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
           Future.successful((EoriConsentSubscriptionFlowPage, Session(Map.empty[String, String])))
         )
 
-        val result = controller.submit(isInReviewMode = false, eoriOnlyService)
+        val result = controller
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,

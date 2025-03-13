@@ -20,8 +20,8 @@ object RegistrationOutcome extends Enumeration {
 
   type RegistrationOutcome = Value
 
-  val PENDING    = Value("pending")
+  val PENDING = Value("pending")
   val PROCESSING = Value("processing")
-  val REJECTED   = Value("rejected")
-  val REVIEW     = Value("review")
+  val REJECTED = Value("rejected")
+  val REVIEW = Value("review")
 }

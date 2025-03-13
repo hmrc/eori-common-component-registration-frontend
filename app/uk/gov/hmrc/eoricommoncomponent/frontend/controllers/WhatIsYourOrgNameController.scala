@@ -20,11 +20,7 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  CompanyId,
-  LimitedLiabilityPartnershipId,
-  PartnershipId
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CompanyId, LimitedLiabilityPartnershipId, PartnershipId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationNameForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -44,8 +40,8 @@ class WhatIsYourOrgNameController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  private def populateView(name: Option[String], isInReviewMode: Boolean, organisationType: String, service: Service)(
-    implicit request: Request[AnyContent]
+  private def populateView(name: Option[String], isInReviewMode: Boolean, organisationType: String, service: Service)(implicit
+    request: Request[AnyContent]
   ): Future[Result] = {
     val form = name.map(n => NameMatchModel(n)).fold(organisationNameForm)(organisationNameForm.fill)
     Future.successful(Ok(whatIsYourOrgNameView(isInReviewMode, form, organisationType, service)))
@@ -53,20 +49,20 @@ class WhatIsYourOrgNameController @Inject() (
 
   def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionDetailsService.cachedNameDetails.flatMap(
-        details => populateView(details.map(_.name), isInReviewMode, organisationType, service)
-      )
+      subscriptionDetailsService.cachedNameDetails.flatMap(details => populateView(details.map(_.name), isInReviewMode, organisationType, service))
     }
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      organisationNameForm.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(whatIsYourOrgNameView(isInReviewMode, formWithErrors, organisationType, service))
-          ),
-        formData => submitOrgNameDetails(isInReviewMode, formData, organisationType, service)
-      )
+      organisationNameForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(whatIsYourOrgNameView(isInReviewMode, formWithErrors, organisationType, service))
+            ),
+          formData => submitOrgNameDetails(isInReviewMode, formData, organisationType, service)
+        )
     }
 
   private def submitOrgNameDetails(

@@ -23,11 +23,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.enterNameDobForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController
@@ -57,37 +53,41 @@ class NameDobController @Inject() (
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      enterNameDobForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),
-        formData => submitNewDetails(formData, service)
-      )
+      enterNameDobForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),
+          formData => submitNewDetails(formData, service)
+        )
     }
 
   private def submitNewDetails(nameDob: NameDobMatchModel, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] = {
-    cdsFrontendDataCache.saveSubscriptionDetails(
-      SubscriptionDetails(
-        nameDobDetails = Some(nameDob),
-        formData = FormData(organisationType = requestSessionData.userSelectedOrganisationType)
+    cdsFrontendDataCache
+      .saveSubscriptionDetails(
+        SubscriptionDetails(
+          nameDobDetails = Some(nameDob),
+          formData = FormData(organisationType = requestSessionData.userSelectedOrganisationType)
+        )
       )
-    ).map { _ =>
-      val userLocation = requestSessionData.selectedUserLocation.getOrElse(
-        throw DataUnavailableException("unable to obtain user location")
-      )
+      .map { _ =>
+        val userLocation = requestSessionData.selectedUserLocation.getOrElse(
+          throw DataUnavailableException("unable to obtain user location")
+        )
 
-      if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney) {
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrganisationsAddressController.showForm(
-            service
+        if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney) {
+          Redirect(
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrganisationsAddressController.showForm(
+              service
+            )
           )
-        )
-      } else {
-        Redirect(
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.HowCanWeIdentifyYouController.createForm(service)
-        )
+        } else {
+          Redirect(
+            uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.HowCanWeIdentifyYouController.createForm(service)
+          )
+        }
       }
-    }
   }
 
 }

@@ -26,7 +26,7 @@ import util.ViewSpec
 
 class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
 
-  private val view                   = inject[enrolment_exists_group_standalone]
+  private val view = inject[enrolment_exists_group_standalone]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 
   "Standalone Registration Exists page" should {
@@ -72,9 +72,12 @@ class StandaloneRegistrationExistsForGroupViewSpec extends ViewSpec {
       }
 
       "display correct heading" in {
-        standardDoc.body().getElementsByTag(
-          "h1"
-        ).text() mustBe "Your business or organisation already has an EORI number"
+        standardDoc
+          .body()
+          .getElementsByTag(
+            "h1"
+          )
+          .text() mustBe "Your business or organisation already has an EORI number"
       }
 
       "have the correct class on the h1" in {

@@ -23,15 +23,12 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.CheckYourDetailsRegis
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.helpers.DateFormatter
 import unit.services.SubscriptionServiceTestData
 import util.ControllerSpec
-import util.builders.RegistrationDetailsBuilder.{
-  limitedLiabilityPartnershipRegistrationDetails,
-  partnershipRegistrationDetails
-}
+import util.builders.RegistrationDetailsBuilder.{limitedLiabilityPartnershipRegistrationDetails, partnershipRegistrationDetails}
 
 class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec with SubscriptionServiceTestData {
 
-  val mockDateFormatter: DateFormatter         = mock[DateFormatter]
-  val mockSessionCache: SessionCache           = mock[SessionCache]
+  val mockDateFormatter: DateFormatter = mock[DateFormatter]
+  val mockSessionCache: SessionCache = mock[SessionCache]
   val mockRegistrationData: RequestSessionData = mock[RequestSessionData]
 
   private val organisationToTest =
@@ -77,10 +74,9 @@ class CheckYourDetailsRegisterViewModelSpec extends UnitSpec with ControllerSpec
       val result = constructorInstance.orgNameLabel(test, isPartnership = true)
       result shouldBe "Registered partnership name"
     }
-    "return correct messages for orgType" ignore organisationWithCharityToTest.foreach {
-      test => // todo unicode u2019 comparison not working
-        val result = constructorInstance.orgNameLabel(test, isPartnership = false)
-        result shouldBe "Organisation’s name"
+    "return correct messages for orgType" ignore organisationWithCharityToTest.foreach { test => // todo unicode u2019 comparison not working
+      val result = constructorInstance.orgNameLabel(test, isPartnership = false)
+      result shouldBe "Organisation’s name"
     }
     "return correct messages for any other " in individualToTest.foreach { test =>
       val result = constructorInstance.orgNameLabel(test, isPartnership = false)

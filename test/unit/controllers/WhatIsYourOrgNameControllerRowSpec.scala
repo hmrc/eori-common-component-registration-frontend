@@ -36,11 +36,11 @@ import scala.concurrent.Future
 
 class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
-  private val whatIsYourOrgNameView          = inject[what_is_your_org_name]
-  private val mockAppConfig                  = mock[AppConfig]
+  private val whatIsYourOrgNameView = inject[what_is_your_org_name]
+  private val mockAppConfig = mock[AppConfig]
 
   private val controller =
     new WhatIsYourOrgNameController(

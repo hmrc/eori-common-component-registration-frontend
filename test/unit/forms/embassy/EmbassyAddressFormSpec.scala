@@ -40,41 +40,35 @@ class EmbassyAddressFormSpec extends UnitSpec {
 
     "fail" when {
       "line one is empty" in {
-        form.bind(validAddress.updated("line-1", ""))
-          .errors shouldBe List(FormError("line-1", List("cds.matching.embassy-address.line-1.error.empty"), List()))
+        form.bind(validAddress.updated("line-1", "")).errors shouldBe List(FormError("line-1", List("cds.matching.embassy-address.line-1.error.empty"), List()))
       }
 
       "line one contains tags" in {
-        form.bind(validAddress.updated("line-1", "<108 Lily Drive>"))
-          .errors shouldBe List(
+        form.bind(validAddress.updated("line-1", "<108 Lily Drive>")).errors shouldBe List(
           FormError("line-1", List("cds.matching.embassy-address.line.error.invalid-chars"), List())
         )
       }
 
       "line two contains tags" in {
-        form.bind(validAddress.updated("line-2", "<108 Lily Drive>"))
-          .errors shouldBe List(
+        form.bind(validAddress.updated("line-2", "<108 Lily Drive>")).errors shouldBe List(
           FormError("line-2", List("cds.matching.embassy-address.line.error.invalid-chars"), List())
         )
       }
 
       "town is empty" in {
-        form.bind(validAddress.updated("townCity", ""))
-          .errors shouldBe List(
+        form.bind(validAddress.updated("townCity", "")).errors shouldBe List(
           FormError("townCity", List("cds.matching.embassy-address.town-city.error.empty"), List())
         )
       }
 
       "town is too long" in {
-        form.bind(validAddress.updated("townCity", "A much longer than usual town city name"))
-          .errors shouldBe List(
+        form.bind(validAddress.updated("townCity", "A much longer than usual town city name")).errors shouldBe List(
           FormError("townCity", List("cds.matching.embassy-address.town-city.error.too-long"), List())
         )
       }
 
       "town contains tags" in {
-        form.bind(validAddress.updated("townCity", "<London>"))
-          .errors shouldBe List(
+        form.bind(validAddress.updated("townCity", "<London>")).errors shouldBe List(
           FormError("townCity", List("cds.matching.embassy-address.line.error.invalid-chars"), List())
         )
       }

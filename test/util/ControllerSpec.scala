@@ -31,11 +31,7 @@ import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Injecting}
 import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.{
-  AppConfig,
-  InternalAuthTokenInitialiser,
-  NoOpInternalAuthTokenInitialiser
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.{AppConfig, InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import unit.controllers.CdsPage
@@ -46,9 +42,7 @@ import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 import scala.util.Random
 
-trait ControllerSpec
-    extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with I18nSupport with Injecting with TestData
-    with ResponseErrorEitherT {
+trait ControllerSpec extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with I18nSupport with Injecting with TestData with ResponseErrorEitherT {
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(bind[InternalAuthTokenInitialiser].to[NoOpInternalAuthTokenInitialiser])
@@ -129,7 +123,7 @@ trait ControllerSpec
 
   trait AbstractControllerFixture[C <: FrontendController] {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val userId: String                   = defaultUserId
+    val userId: String = defaultUserId
 
     val controller: C
 

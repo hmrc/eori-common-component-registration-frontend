@@ -27,11 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.{
-  RegistrationDisplayService,
-  Save4LaterService,
-  SubscriptionStatusService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDisplayService, Save4LaterService, SubscriptionStatusService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
 import unit.controllers.CdsPage
 import util.ControllerSpec
@@ -43,16 +39,16 @@ import scala.concurrent.Future
 
 class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockSessionCache               = mock[SessionCache]
-  private val mockSave4LaterService          = mock[Save4LaterService]
-  private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockSubscriptionStatusService = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
-  private val mockSave4LaterConnector        = mock[Save4LaterConnector]
-  private val userLocationView               = inject[user_location]
-  private val mockAppConfig                  = mock[AppConfig]
+  private val mockSave4LaterConnector = mock[Save4LaterConnector]
+  private val userLocationView = inject[user_location]
+  private val mockAppConfig = mock[AppConfig]
 
   private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 

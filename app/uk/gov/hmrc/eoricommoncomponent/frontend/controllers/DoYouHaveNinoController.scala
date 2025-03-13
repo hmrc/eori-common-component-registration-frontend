@@ -18,12 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  EmailController,
-  GetNinoController,
-  IndStCannotRegisterUsingThisServiceController,
-  SixLineAddressController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EmailController, GetNinoController, IndStCannotRegisterUsingThisServiceController, SixLineAddressController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveRowIndividualsNinoForm
@@ -57,9 +52,10 @@ class DoYouHaveNinoController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        haveRowIndividualsNinoForm.bindFromRequest().fold(
+    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+      haveRowIndividualsNinoForm
+        .bindFromRequest()
+        .fold(
           formWithErrors => Future.successful(BadRequest(matchNinoRowIndividualView(formWithErrors, service))),
           formData =>
             subscriptionDetailsService.cachedNinoMatch.flatMap { cachedNinoOpt =>

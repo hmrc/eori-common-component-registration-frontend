@@ -97,13 +97,14 @@ class EmbassyAddressController @Inject() (
           .cacheAddress(regDetailsCreator.registrationAddressEmbassyAddress(filledForm.value.head))
           .map(_ => Redirect(routes.DetermineReviewPageController.determineRoute(service)))
       else
-        registrationDetailsService.cacheAddress(
-          regDetailsCreator.registrationAddressEmbassyAddress(filledForm.value.head)
-        ).flatMap {
-          _ =>
+        registrationDetailsService
+          .cacheAddress(
+            regDetailsCreator.registrationAddressEmbassyAddress(filledForm.value.head)
+          )
+          .flatMap { _ =>
             subscriptionFlowManager.startSubscriptionFlow(service)
-        } map {
-          case (firstSubscriptionPage, session) => Redirect(firstSubscriptionPage.url(service)).withSession(session)
+          } map { case (firstSubscriptionPage, session) =>
+          Redirect(firstSubscriptionPage.url(service)).withSession(session)
         }
     }
 

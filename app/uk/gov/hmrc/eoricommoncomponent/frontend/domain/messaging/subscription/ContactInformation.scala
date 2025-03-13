@@ -52,7 +52,7 @@ object ContactInformation extends CommonHeader {
   def createContactInformation(cd: ContactDetail): ContactInformation =
     ContactInformation(
       personOfContact = Some(cd.contactName),
-      sepCorrAddrIndicator = Some(true), //ASSUMPTION
+      sepCorrAddrIndicator = Some(true), // ASSUMPTION
       streetAndNumber = Some(cd.address.streetAndNumber),
       city = Some(dashForEmpty(cd.address.city)),
       postalCode = cd.address.postalCode,

@@ -36,7 +36,7 @@ class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig:
 ) {
 
   private val logger = Logger(this.getClass)
-  private val url    = url"${appConfig.getServiceUrl("register-without-id")}"
+  private val url = url"${appConfig.getServiceUrl("register-without-id")}"
 
   def register(request: RegisterWithoutIDRequest)(implicit hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {
 
@@ -55,19 +55,18 @@ class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig:
 
       auditCall(url.toString, request, response)
       response.registerWithoutIDResponse
-    } recover {
-      case e: Throwable =>
-        // $COVERAGE-OFF$Loggers
-        logger.warn(
-          s"Failure. postUrl: $url, acknowledgement ref: ${request.requestCommon.acknowledgementReference}, error: $e"
-        )
-        // $COVERAGE-ON
-        throw e
+    } recover { case e: Throwable =>
+      // $COVERAGE-OFF$Loggers
+      logger.warn(
+        s"Failure. postUrl: $url, acknowledgement ref: ${request.requestCommon.acknowledgementReference}, error: $e"
+      )
+      // $COVERAGE-ON
+      throw e
     }
   }
 
-  private def auditCall(url: String, request: RegisterWithoutIDRequest, response: RegisterWithoutIdResponseHolder)(
-    implicit hc: HeaderCarrier
+  private def auditCall(url: String, request: RegisterWithoutIDRequest, response: RegisterWithoutIdResponseHolder)(implicit
+    hc: HeaderCarrier
   ): Unit =
     audit.sendExtendedDataEvent(
       transactionName = "ecc-registration",

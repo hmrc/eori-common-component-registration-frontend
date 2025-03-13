@@ -56,8 +56,7 @@ class RegistrationDisplayService @Inject() (
     )
 
   def cacheDetails(response: RegistrationDisplayResponse)(implicit request: Request[_]): Future[Boolean] = {
-    val registrationDetails: RegistrationDisplayResponse => RegistrationDetails = details =>
-      creator.registrationDetails(details)
+    val registrationDetails: RegistrationDisplayResponse => RegistrationDetails = details => creator.registrationDetails(details)
     sessionCache.saveRegistrationDetails(registrationDetails(response))
   }
 

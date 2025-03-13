@@ -21,27 +21,14 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  CharityPublicBodyNotForProfit,
-  Company,
-  Embassy,
-  Individual,
-  LimitedLiabilityPartnership,
-  Partnership,
-  SoleTrader
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, Company, Embassy, Individual, LimitedLiabilityPartnership, Partnership, SoleTrader}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCache,
-  SessionCacheService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_address
 
@@ -145,9 +132,8 @@ class ContactAddressController @Inject() (
   private def populateOkView(isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
-    fetchContactDetails() map {
-      contactDetails =>
-        Ok(contactAddressView(contactDetails, isInReviewMode, contactAddressDetailsYesNoAnswerForm(), service))
+    fetchContactDetails() map { contactDetails =>
+      Ok(contactAddressView(contactDetails, isInReviewMode, contactAddressDetailsYesNoAnswerForm(), service))
     }
 
   private def locationByAnswer(isInReviewMode: Boolean, yesNoAnswer: YesNo, service: Service)(implicit
@@ -158,7 +144,7 @@ class ContactAddressController @Inject() (
         (optOrgType.contains(Embassy) || optOrgType.contains(CharityPublicBodyNotForProfit) || optOrgType.contains(
           Partnership
         ) || optOrgType.contains(Individual) || optOrgType.contains(SoleTrader) || optOrgType.contains(Company)
-        || optOrgType.contains(LimitedLiabilityPartnership)) && appConfig.allowNoIdJourney
+          || optOrgType.contains(LimitedLiabilityPartnership)) && appConfig.allowNoIdJourney
       ) {
         if (yesNoAnswer.isYes) {
           Redirect(DetermineReviewPageController.determineRoute(service))

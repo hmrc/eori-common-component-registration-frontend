@@ -35,12 +35,12 @@ import scala.concurrent.Future
 
 class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActionMock {
 
-  private val mockAuthConnector                    = mock[AuthConnector]
-  private val mockAuthAction                       = authAction(mockAuthConnector)
-  private val mockSubscriptionBusinessService      = mock[SubscriptionBusinessService]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsHolderService = mock[SubscriptionDetailsService]
-  private val howCanWeIdentifyYouView              = inject[how_can_we_identify_you]
-  private val mockRequestSessionData               = inject[RequestSessionData]
+  private val howCanWeIdentifyYouView = inject[how_can_we_identify_you]
+  private val mockRequestSessionData = inject[RequestSessionData]
 
   private val controller = new HowCanWeIdentifyYouController(
     mockAuthAction,

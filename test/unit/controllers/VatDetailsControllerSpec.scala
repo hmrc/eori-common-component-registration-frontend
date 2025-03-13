@@ -42,28 +42,30 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class VatDetailsControllerSpec
-    extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
+    extends SubscriptionFlowTestSupport
+    with BeforeAndAfterEach
+    with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  protected override val formId: String = "vat-details-form"
+  override protected val formId: String = "vat-details-form"
 
-  protected override val submitInCreateModeUrl: String =
+  override protected val submitInCreateModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
       .submit(isInReviewMode = false, atarService)
       .url
 
-  protected override val submitInReviewModeUrl: String =
+  override protected val submitInReviewModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatDetailsController
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockVatDetailsService       = mock[VatDetailsService]
-  private val vatDetailsView              = inject[vat_details]
-  private val errorTemplate               = inject[error_template]
+  private val mockVatDetailsService = mock[VatDetailsService]
+  private val vatDetailsView = inject[vat_details]
+  private val errorTemplate = inject[error_template]
   private val weCannotConfirmYourIdentity = inject[date_of_vat_registration]
-  private val form                        = inject[VatRegistrationDateFormProvider]
-  private val mockSessionCacheService     = inject[SessionCacheService]
-  private val mockRequestSession          = mock[RequestSessionData]
+  private val form = inject[VatRegistrationDateFormProvider]
+  private val mockSessionCacheService = inject[SessionCacheService]
+  private val mockRequestSession = mock[RequestSessionData]
 
   private val controller = new VatDetailsController(
     mockAuthAction,
@@ -344,10 +346,9 @@ class VatDetailsControllerSpec
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.vatDetailsNotMatched(atarService))
 
     "display weCannotConfirmYourIdentity" in {
-      vatDetailsNotMatched() {
-        result =>
-          status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title() should startWith("When did you become VAT registered")
+      vatDetailsNotMatched() { result =>
+        status(result) shouldBe OK
+        CdsPage(contentAsString(result)).title() should startWith("When did you become VAT registered")
       }
     }
   }
@@ -356,10 +357,9 @@ class VatDetailsControllerSpec
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.vatDetailsNotMatched(atarService))
 
     "display weCannotConfirmYourIdentity isInReviewMode true" in {
-      vatDetailsNotMatched() {
-        result =>
-          status(result) shouldBe OK
-          CdsPage(contentAsString(result)).title() should startWith("When did you become VAT registered")
+      vatDetailsNotMatched() { result =>
+        status(result) shouldBe OK
+        CdsPage(contentAsString(result)).title() should startWith("When did you become VAT registered")
       }
     }
   }

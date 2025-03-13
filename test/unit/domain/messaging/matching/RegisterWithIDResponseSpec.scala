@@ -25,7 +25,7 @@ class RegisterWithIDResponseSpec extends UnitSpec with MatchingServiceTestData {
   "getResponseDetail" should {
 
     "return response details for the valid input" in {
-      val response                = matchSuccessResponse.registerWithIDResponse
+      val response = matchSuccessResponse.registerWithIDResponse
       val details: ResponseDetail = response.getResponseDetail
       details shouldBe response.responseDetail.value
     }

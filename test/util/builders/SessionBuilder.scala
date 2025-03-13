@@ -84,7 +84,7 @@ object SessionBuilder {
     FakeRequest(method, path).withSession(sessionMap(authToken): _*).withFormUrlEncodedBody(form.toList: _*)
 
   def buildRequestWithSessionAndOrgType(authToken: String, orgTypeId: String): FakeRequest[AnyContentAsEmpty.type] = {
-    val list    = (RequestSessionDataKeys.selectedOrganisationType -> orgTypeId) :: sessionMap(authToken)
+    val list = (RequestSessionDataKeys.selectedOrganisationType -> orgTypeId) :: sessionMap(authToken)
     val request = FakeRequest().withSession(list: _*)
     addToken(request)
   }

@@ -40,28 +40,28 @@ import scala.util.Random
 
 class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
-  implicit val hc: HeaderCarrier     = mock[HeaderCarrier]
+  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
   implicit val request: Request[Any] = mock[Request[Any]]
 
-  private val mockSessionCache               = mock[SessionCache]
+  private val mockSessionCache = mock[SessionCache]
   private val mockRegistrationDetailsCreator = mock[RegistrationDetailsCreator]
-  private val registrationInfo               = mock[RegistrationInfo]
-  private val mockRegistrationDetails        = mock[RegistrationDetails]
-  private val mockSave4LaterConnector        = mock[Save4LaterConnector]
+  private val registrationInfo = mock[RegistrationInfo]
+  private val mockRegistrationDetails = mock[RegistrationDetails]
+  private val mockSave4LaterConnector = mock[Save4LaterConnector]
 
-  private val mockContactDetailsAdaptor         = mock[ContactDetailsAdaptor]
-  private val mockSubscriptionDetailsHolder     = mock[SubscriptionDetails]
+  private val mockContactDetailsAdaptor = mock[ContactDetailsAdaptor]
+  private val mockSubscriptionDetailsHolder = mock[SubscriptionDetails]
   private val mockpersonalDataDisclosureConsent = mock[Option[Boolean]]
 
-  private val utrMatch  = UtrMatchModel(Some(true), Some("utrxxxxx"))
+  private val utrMatch = UtrMatchModel(Some(true), Some("utrxxxxx"))
   private val ninoMatch = NinoMatchModel(Some(true), Some("ninoxxxxx"))
 
   private val subscriptionDetailsHolderService =
     new SubscriptionDetailsService(mockSessionCache, mockContactDetailsAdaptor, mockSave4LaterConnector)(global)
 
   private val eoriNumericLength = 15
-  private val eoriId            = "GB" + Random.nextString(eoriNumericLength)
-  private val eori              = Eori(eoriId)
+  private val eoriId = "GB" + Random.nextString(eoriNumericLength)
+  private val eori = Eori(eoriId)
 
   override def beforeEach(): Unit = {
     reset(mockSessionCache)
@@ -93,11 +93,11 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   "Calling saveKeyIdentifiers" should {
     "save saveKeyIdentifiers in mongo" in {
-      val groupId    = GroupId("groupId")
+      val groupId = GroupId("groupId")
       val internalId = InternalId("internalId")
-      val safeId     = SafeId("safeId")
-      val key        = "cachedGroupId"
-      val cacheIds   = CacheIds(internalId, safeId, Some("atar"))
+      val safeId = SafeId("safeId")
+      val key = "cachedGroupId"
+      val cacheIds = CacheIds(internalId, safeId, Some("atar"))
       when(mockSessionCache.safeId).thenReturn(Future.successful(SafeId("safeId")))
       when(
         mockSave4LaterConnector.put[CacheIds](
@@ -419,13 +419,13 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
         when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
         await(subscriptionDetailsHolderService.updateSubscriptionDetailsIndividual(request))
 
-        val requestCaptor  = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
         val requestCaptorR = ArgumentCaptor.forClass(classOf[RegistrationDetails])
 
         verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
         verify(mockSessionCache).saveRegistrationDetails(requestCaptorR.capture())(ArgumentMatchers.eq(request))
 
-        val holder: SubscriptionDetails  = requestCaptor.getValue
+        val holder: SubscriptionDetails = requestCaptor.getValue
         val holderR: RegistrationDetails = requestCaptorR.getValue
 
         holder.nameDobDetails shouldBe subscriptionDetails.nameDobDetails
@@ -455,13 +455,13 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
         when(mockSessionCache.saveSub01Outcome(any())(any())) thenReturn Future.successful(true)
         await(subscriptionDetailsHolderService.updateSubscriptionDetailsEmbassyName("U.S. Embassy"))
 
-        val requestCaptor  = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
         val requestCaptorR = ArgumentCaptor.forClass(classOf[RegistrationDetails])
 
         verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
         verify(mockSessionCache).saveRegistrationDetails(requestCaptorR.capture())(ArgumentMatchers.eq(request))
 
-        val holder: SubscriptionDetails  = requestCaptor.getValue
+        val holder: SubscriptionDetails = requestCaptor.getValue
         val holderR: RegistrationDetails = requestCaptorR.getValue
 
         holder.embassyName shouldBe subscriptionDetails.embassyName
@@ -481,7 +481,7 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
     "updateSubscriptionDetailsOrgName" should {
       "update organisation name in subscription" in {
         // Given
-        val rdo     = RegistrationDetailsOrganisation.apply()
+        val rdo = RegistrationDetailsOrganisation.apply()
         val orgName = "Solutions Ltd"
         when(mockSessionCache.registrationDetails(any[Request[_]])).thenReturn(Future.successful(rdo))
         when(mockSessionCache.saveRegistrationDetails(rdo.copy(name = orgName))).thenReturn(Future.successful(true))

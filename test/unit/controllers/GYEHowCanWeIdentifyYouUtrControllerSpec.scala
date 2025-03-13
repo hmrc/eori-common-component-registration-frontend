@@ -44,13 +44,13 @@ import scala.concurrent.Future
 
 class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector      = mock[AuthConnector]
-  private val mockAuthAction         = authAction(mockAuthConnector)
-  private val mockMatchingService    = mock[MatchingService]
-  private val mockFrontendDataCache  = mock[SessionCache]
-  private val mockOrgTypeLookup      = mock[OrgTypeLookup]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
+  private val mockFrontendDataCache = mock[SessionCache]
+  private val mockOrgTypeLookup = mock[OrgTypeLookup]
   private val mockRequestSessionData = mock[RequestSessionData]
-  private val errorView              = inject[error_template]
+  private val errorView = inject[error_template]
 
   private val sessionCacheService =
     new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
@@ -137,10 +137,9 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
         )
       )
 
-      submitForm(Map("utr" -> utr)) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
+      submitForm(Map("utr" -> utr)) { result =>
+        status(result) shouldBe SEE_OTHER
+        header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
       }
     }
 
@@ -181,11 +180,10 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
         )
       )
 
-      submitForm(Map("utr" -> utr)) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
-          val page = CdsPage(contentAsString(result))
-          page.getElementsText("title") should startWith("Error: ")
+      submitForm(Map("utr" -> utr)) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText("title") should startWith("Error: ")
       }
     }
   }

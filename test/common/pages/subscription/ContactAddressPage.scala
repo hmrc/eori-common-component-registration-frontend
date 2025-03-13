@@ -24,9 +24,9 @@ trait ContactAddressPage extends WebPage {
 
   val fieldLevelErrorYesNoAnswer = "//*[@id='yes-no-answer-error']"
 
-  val addressXpath        = "//*[@id='contact-address']"
-  val addressNoXpath      = "//*[@id='yes-no-answer-false']"
-  val addressYesXpath     = "//*[@id='yes-no-answer-true']"
+  val addressXpath = "//*[@id='contact-address']"
+  val addressNoXpath = "//*[@id='yes-no-answer-false']"
+  val addressYesXpath = "//*[@id='yes-no-answer-true']"
   val continueButtonXpath = "//*[@id='continue-button']"
 }
 

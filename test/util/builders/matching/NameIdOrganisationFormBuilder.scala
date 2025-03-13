@@ -27,16 +27,16 @@ object NameIdOrganisationFormBuilder {
 
   val ValidUtrId: String = "1111111111"
 
-  val ValidUtr               = Utr(ValidUtrId)
-  val ValidName              = "SA Partnership 3 For Digital"
-  val ValidNameUtrRequest    = Map("name" -> ValidName, "utr" -> ValidUtrId)
+  val ValidUtr = Utr(ValidUtrId)
+  val ValidName = "SA Partnership 3 For Digital"
+  val ValidNameUtrRequest = Map("name" -> ValidName, "utr" -> ValidUtrId)
   val ValidIncorporatedUtrId = "9160817001"
 
   val companyNameBasedOnExpectedSubscriptionOutcome: Map[RegistrationOutcome, String] =
     Map(PENDING -> "reg01-Pending Reg Corporate Body").withDefaultValue("reg01-Corporate Body-default")
 
-  val ValidEoriId                      = "GB1234567890"
-  val ValidEori                        = Eori(ValidEoriId)
+  val ValidEoriId = "GB1234567890"
+  val ValidEori = Eori(ValidEoriId)
   val ValidDateEstabilished: LocalDate = LocalDate.parse("2015-10-15")
 
   val ValidNameEoriRequest = Map(
@@ -52,8 +52,8 @@ object NameIdOrganisationFormBuilder {
     .value
     .getOrElse(throw new IllegalArgumentException("Invalid request : " + ValidNameUtrRequest))
 
-  val CompanyOrganisation                       = Organisation(ValidName, "Corporate Body")
-  val LimitedLiabilityPartnershipOrganisation   = Organisation(ValidName, "LLP")
-  val PartnershipOrganisation                   = Organisation(ValidName, "Partnership")
+  val CompanyOrganisation = Organisation(ValidName, "Corporate Body")
+  val LimitedLiabilityPartnershipOrganisation = Organisation(ValidName, "LLP")
+  val PartnershipOrganisation = Organisation(ValidName, "Partnership")
   val CharityPublicBodyNotForProfitOrganisation = Organisation(ValidName, "Unincorporated Body")
 }

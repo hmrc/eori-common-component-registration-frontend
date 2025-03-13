@@ -19,25 +19,14 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import cats.implicits.toTraverseOps
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{
-  AuthAction,
-  EnrolmentExtractor,
-  GroupEnrolmentExtractor
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  EnrolmentAlreadyExistsController,
-  YouAlreadyHaveEoriController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor, GroupEnrolmentExtractor}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EnrolmentAlreadyExistsController, YouAlreadyHaveEoriController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{Eori, GroupId, InternalId, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailJourneyService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{Save4LaterService, UserGroupIdSubscriptionStatusCheckService}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  enrolment_pending_against_group_id,
-  enrolment_pending_for_user,
-  error_template
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{enrolment_pending_against_group_id, enrolment_pending_for_user, error_template}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -57,7 +46,8 @@ class EmailController @Inject() (
   errorPage: error_template,
   save4LaterService: Save4LaterService
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) with EnrolmentExtractor {
+    extends CdsController(mcc)
+    with EnrolmentExtractor {
 
   def form(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => implicit user: LoggedInUserWithEnrolments =>
@@ -67,7 +57,8 @@ class EmailController @Inject() (
   private def startRegisterJourney(
     service: Service
   )(implicit hc: HeaderCarrier, request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
-    groupEnrolment.groupIdEnrolments(user.groupId.getOrElse(throw MissingGroupId()))
+    groupEnrolment
+      .groupIdEnrolments(user.groupId.getOrElse(throw MissingGroupId()))
       .foldF(
         _ => Future.successful(InternalServerError(errorPage(service))),
         enrolmentResponseList =>
@@ -82,9 +73,7 @@ class EmailController @Inject() (
             existingEoriForUserOrGroup(user, enrolmentResponseList) match {
               case Some(eori) =>
                 if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
-                  sessionCache.saveEori(Eori(eori.id)).map(
-                    _ => Redirect(YouAlreadyHaveEoriController.displayStandAlone(service))
-                  )
+                  sessionCache.saveEori(Eori(eori.id)).map(_ => Redirect(YouAlreadyHaveEoriController.displayStandAlone(service)))
                 else
                   Future.successful(Redirect(YouAlreadyHaveEoriController.display(service)))
               case None =>

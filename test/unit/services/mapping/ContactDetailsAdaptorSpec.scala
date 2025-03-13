@@ -18,11 +18,7 @@ package unit.services.mapping
 
 import base.UnitSpec
 import common.support.testdata.GenTestRunner
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel.{
-  sixLineAddressLine1MaxLength,
-  sixLineAddressLine2MaxLength,
-  townCityMaxLength
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel.{sixLineAddressLine1MaxLength, sixLineAddressLine2MaxLength, townCityMaxLength}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.ContactDetailsAdaptor
 
 class ContactDetailsAdaptorSpec extends UnitSpec with GenTestRunner {
@@ -32,32 +28,30 @@ class ContactDetailsAdaptorSpec extends UnitSpec with GenTestRunner {
   "ContactDetailsAdaptor" should {
 
     "convert user inputs from Subscription Contact Details page and registered address" in {
-      testWithGen(contactDetailsCreateViewModelAndAddressGenerator) {
-        case (getContactDetailsModel, genAddress) =>
-          val actual =
-            contactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(getContactDetailsModel, genAddress)
-          actual.fullName shouldBe getContactDetailsModel.fullName
-          actual.emailAddress shouldBe getContactDetailsModel.emailAddress
-          actual.telephone shouldBe getContactDetailsModel.telephone
-          actual.fax shouldBe getContactDetailsModel.fax
-          actual.street shouldBe Some(
-            (genAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength) + " " + genAddress.addressLine2
-              .getOrElse("")
-              .trim
-              .take(sixLineAddressLine2MaxLength)).trim
-          )
-          actual.city shouldBe Some(genAddress.addressLine3.getOrElse("").trim.take(townCityMaxLength))
-          actual.postcode shouldBe genAddress.postalCode
-          actual.countryCode shouldBe Some(genAddress.countryCode)
+      testWithGen(contactDetailsCreateViewModelAndAddressGenerator) { case (getContactDetailsModel, genAddress) =>
+        val actual =
+          contactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(getContactDetailsModel, genAddress)
+        actual.fullName shouldBe getContactDetailsModel.fullName
+        actual.emailAddress shouldBe getContactDetailsModel.emailAddress
+        actual.telephone shouldBe getContactDetailsModel.telephone
+        actual.fax shouldBe getContactDetailsModel.fax
+        actual.street shouldBe Some(
+          (genAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength) + " " + genAddress.addressLine2
+            .getOrElse("")
+            .trim
+            .take(sixLineAddressLine2MaxLength)).trim
+        )
+        actual.city shouldBe Some(genAddress.addressLine3.getOrElse("").trim.take(townCityMaxLength))
+        actual.postcode shouldBe genAddress.postalCode
+        actual.countryCode shouldBe Some(genAddress.countryCode)
       }
     }
 
     "convert user inputs from Subscription Contact Details page and registered address with empty postcode" in {
-      testWithGen(contactDetailsCreateViewModelAndAddressWithEmptyPostcodeGenerator) {
-        case (createViewModel, addressOverride) =>
-          val actual =
-            contactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(createViewModel, addressOverride)
-          actual.postcode shouldBe None
+      testWithGen(contactDetailsCreateViewModelAndAddressWithEmptyPostcodeGenerator) { case (createViewModel, addressOverride) =>
+        val actual =
+          contactDetailsAdaptor.toContactDetailsModelWithRegistrationAddress(createViewModel, addressOverride)
+        actual.postcode shouldBe None
       }
     }
   }

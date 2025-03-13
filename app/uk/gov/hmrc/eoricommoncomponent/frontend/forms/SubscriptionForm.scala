@@ -42,7 +42,7 @@ object SubscriptionForm extends Mappings {
   val subscriptionDateOfEstablishmentForm: Form[LocalDate] = {
 
     val minimumDate = LocalDate.of(DateConverter.earliestYearDateOfEstablishment, 1, 1)
-    val today       = LocalDate.now()
+    val today = LocalDate.now()
 
     Form(
       "date-of-establishment" -> localDate(
@@ -80,7 +80,7 @@ object SubscriptionForm extends Mappings {
       case s if !s.matches(nameRegex) =>
         Invalid(ValidationError("cds.subscription.contact-details.form-error.full-name.wrong-format"))
       case s if s.length > 70 => Invalid(ValidationError("cds.subscription.full-name.error.too-long"))
-      case _                  => Valid
+      case _ => Valid
     })
 
 }

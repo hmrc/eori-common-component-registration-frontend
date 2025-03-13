@@ -44,10 +44,10 @@ import scala.concurrent.Future
 
 class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthActionMock {
 
-  private val mockAuthConnector       = mock[AuthConnector]
-  private val mockAuthAction          = authAction(mockAuthConnector)
-  private val mockMatchingService     = mock[MatchingService]
-  private val errorView               = inject[error_template]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockMatchingService = mock[MatchingService]
+  private val errorView = inject[error_template]
   private val mockSessionCacheService = inject[SessionCacheService]
 
   private val matchNinoView = inject[match_nino]
@@ -63,15 +63,15 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
   val defaultOrganisationType = "individual"
 
-  val FirstNamePage  = "Enter your first name"
+  val FirstNamePage = "Enter your first name"
   val FirstNameField = "Error: Enter your first name"
-  val LastNamePage   = "Enter your last name"
-  val LastNameField  = "Error: Enter your last name"
-  val NinoPage       = "Enter your National Insurance number"
-  val NinoField      = "Error: Enter your National Insurance number"
-  val DateOfBirth    = "Date of birth"
+  val LastNamePage = "Enter your last name"
+  val LastNameField = "Error: Enter your last name"
+  val NinoPage = "Enter your National Insurance number"
+  val NinoField = "Error: Enter your National Insurance number"
+  val DateOfBirth = "Date of birth"
 
-  val InvalidNinoPage  = "This is not a real National Insurance number. Enter a real National Insurance number."
+  val InvalidNinoPage = "This is not a real National Insurance number. Enter a real National Insurance number."
   val InvalidNinoField = "Error: This is not a real National Insurance number. Enter a real National Insurance number."
 
   "loading the page" should {

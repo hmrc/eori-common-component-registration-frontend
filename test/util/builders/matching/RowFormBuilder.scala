@@ -17,11 +17,11 @@
 package util.builders.matching
 
 object RowFormBuilder extends OrganisationAddressFormBuilder {
-  val LineOne     = "Line 1"
-  val LineTwo     = "line 2"
-  val LineThree   = "line 3"
-  val LineFour    = "line 4"
-  val Postcode    = "SE28 1AA"
-  val Country     = "Kiribati"
+  val LineOne = "Line 1"
+  val LineTwo = "line 2"
+  val LineThree = "line 3"
+  val LineFour = "line 4"
+  val Postcode = "SE28 1AA"
+  val Country = "Kiribati"
   val CountryCode = "KI"
 }

@@ -47,7 +47,7 @@ class AppConfig @Inject() (
 
   private def languageKey(implicit messages: Messages) = messages.lang.language match {
     case "cy" => "cy"
-    case _    => "en"
+    case _ => "en"
   }
 
   def findLostUtr()(implicit messages: Messages): String =
@@ -56,28 +56,28 @@ class AppConfig @Inject() (
   def companiesHouseRegister()(implicit messages: Messages): String =
     config.get[String](s"external-url.company-house-register-$languageKey")
 
-  val checkEORINumber: String                            = config.get[String]("external-url.check-eori-number")
-  val hmrcChangeDetails: String                          = config.get[String]("external-url.hmrc-change-details")
-  val getAccessToCDS: String                             = config.get[String]("external-url.get-access-to-cds")
-  val cdsServices: String                                = config.get[String]("external-url.cds-services")
-  val addAccessToTeamMember: String                      = config.get[String]("external-url.adding-access-to-team-member")
+  val checkEORINumber: String = config.get[String]("external-url.check-eori-number")
+  val hmrcChangeDetails: String = config.get[String]("external-url.hmrc-change-details")
+  val getAccessToCDS: String = config.get[String]("external-url.get-access-to-cds")
+  val cdsServices: String = config.get[String]("external-url.cds-services")
+  val addAccessToTeamMember: String = config.get[String]("external-url.adding-access-to-team-member")
   def callCharges()(implicit messages: Messages): String = config.get[String](s"external-url.call-charges-$languageKey")
 
   val blockedRoutesRegex: Seq[Regex] =
     config.getOptional[String]("routes-to-block") match {
       case Some(routes) if routes.nonEmpty => routes.split(',').map(_.r).toSeq
-      case _                               => Seq.empty
+      case _ => Seq.empty
     }
 
-  //get help link feedback for Register journey
+  // get help link feedback for Register journey
   def reportAProblemPartialUrlRegister(service: Service): String =
     s"$contactBaseUrl/contact/problem_reports_ajax?service=$serviceIdentifierRegister-${service.code}"
 
   def reportAProblemNonJSUrlRegister(service: Service): String =
     s"$contactBaseUrl/contact/problem_reports_nonjs?service=$serviceIdentifierRegister-${service.code}"
 
-  //email verification service
-  val emailVerificationEnabled: Boolean          = config.get[Boolean]("microservice.services.email-verification.enabled")
+  // email verification service
+  val emailVerificationEnabled: Boolean = config.get[Boolean]("microservice.services.email-verification.enabled")
   val emailVerificationContinueUrlPrefix: String = config.get[String]("external-url.email-verification.continue-url")
 
   val emailVerificationBaseUrl: String = servicesConfig.baseUrl("email-verification")
@@ -94,7 +94,7 @@ class AppConfig @Inject() (
   val emailVerificationLinkExpiryDuration: String =
     config.get[String]("microservice.services.email-verification.linkExpiryDuration")
 
-  //Eori Common Component
+  // Eori Common Component
   val handleSubscriptionBaseUrl: String = servicesConfig.baseUrl("handle-subscription")
 
   val handleSubscriptionServiceContext: String =

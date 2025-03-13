@@ -28,8 +28,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.check_your_emai
 import util.ViewSpec
 
 class CheckYourEmailSpec extends ViewSpec {
-  val isInReviewMode    = false
-  val previousPageUrl   = "/"
+  val isInReviewMode = false
+  val previousPageUrl = "/"
   val form: Form[YesNo] = EmailForm.confirmEmailYesNoAnswerForm()
 
   val view: check_your_email = inject[check_your_email]
@@ -49,7 +49,7 @@ class CheckYourEmailSpec extends ViewSpec {
   }
 
   lazy val doc: Document = {
-    val email  = "test@example.com"
+    val email = "test@example.com"
     val result = view(Some(email), form, isInReviewMode, atarService)
     Jsoup.parse(contentAsString(result))
   }

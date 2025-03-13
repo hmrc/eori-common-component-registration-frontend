@@ -42,22 +42,22 @@ import scala.concurrent.Future
 
 class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockSessionCache               = mock[SessionCache]
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockRegDetailsCreator          = mock[RegistrationDetailsCreator]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockSessionCache = mock[SessionCache]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockRegDetailsCreator = mock[RegistrationDetailsCreator]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
-  private val mockSubscriptionFlowManager    = mock[SubscriptionFlowManager]
-  private val embassyAddressForm             = new EmbassyAddressForm()
-  private val embassyAddressView             = inject[embassy_address]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
+  private val embassyAddressForm = new EmbassyAddressForm()
+  private val embassyAddressView = inject[embassy_address]
 
-  private val fieldLevelErrorAddress         = "//p[@id='address-error' and @class='govuk-error-message']"
+  private val fieldLevelErrorAddress = "//p[@id='address-error' and @class='govuk-error-message']"
   private val pageLevelErrorSummaryListXPath = "//ul[@class='govuk-list govuk-error-summary__list']"
-  private val lineOneFieldError              = "//p[@id='line-1-error' and @class='govuk-error-message']"
-  private val lineTwoFieldError              = "//p[@id='line-2-error' and @class='govuk-error-message']"
-  private val townCityFieldError             = "//p[@id='townCity-error' and @class='govuk-error-message']"
-  private val postcodeFieldError             = "//p[@id='postcode-error' and @class='govuk-error-message']"
+  private val lineOneFieldError = "//p[@id='line-1-error' and @class='govuk-error-message']"
+  private val lineTwoFieldError = "//p[@id='line-2-error' and @class='govuk-error-message']"
+  private val townCityFieldError = "//p[@id='townCity-error' and @class='govuk-error-message']"
+  private val postcodeFieldError = "//p[@id='postcode-error' and @class='govuk-error-message']"
 
   private val embassyAddressController = new EmbassyAddressController(
     mockAuthAction,
@@ -81,7 +81,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
       )
 
       // When
-      val result = embassyAddressController.showForm(isInReviewMode = false, eoriOnlyService)
+      val result = embassyAddressController
+        .showForm(isInReviewMode = false, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -114,7 +115,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
       )
 
       // When
-      val result = embassyAddressController.showForm(isInReviewMode = false, eoriOnlyService)
+      val result = embassyAddressController
+        .showForm(isInReviewMode = false, eoriOnlyService)
         .apply(SessionBuilder.buildRequestWithSession(userId))
 
       // Then
@@ -143,7 +145,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
         )
 
         // When
-        val result = embassyAddressController.submit(isInReviewMode = false, eoriOnlyService)
+        val result = embassyAddressController
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -172,7 +175,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
         )
 
         // When
-        val result = embassyAddressController.submit(isInReviewMode = false, eoriOnlyService)
+        val result = embassyAddressController
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -209,7 +213,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
           Address("101-104 Piccadilly", Some("Greater London"), Some("London"), None, Some("SW3 5DA"), "GB")
         )
 
-        val result = embassyAddressController.submit(isInReviewMode = true, eoriOnlyService)
+        val result = embassyAddressController
+          .submit(isInReviewMode = true, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,
@@ -241,7 +246,8 @@ class EmbassyAddressControllerSpec extends ControllerSpec with BeforeAndAfterEac
           Future.successful((EoriConsentSubscriptionFlowPage, Session()))
         )
 
-        val result = embassyAddressController.submit(isInReviewMode = false, eoriOnlyService)
+        val result = embassyAddressController
+          .submit(isInReviewMode = false, eoriOnlyService)
           .apply(
             SessionBuilder.buildRequestWithSessionAndFormValues(
               userId,

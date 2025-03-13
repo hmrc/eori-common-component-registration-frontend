@@ -90,9 +90,9 @@ class RegistrationDetailsFormatSpec extends UnitSpec {
     """.stripMargin)
 
   val dateOfBirth: LocalDate = {
-    val year  = 1961
+    val year = 1961
     val month = 4
-    val day   = 12
+    val day = 12
     LocalDate.of(year, month, day)
   }
 

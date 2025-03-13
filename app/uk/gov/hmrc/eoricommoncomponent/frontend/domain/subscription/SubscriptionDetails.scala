@@ -21,12 +21,7 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{
-  AddressViewModel,
-  CompanyRegisteredCountry,
-  ContactDetailsModel,
-  VatDetails
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, CompanyRegisteredCountry, ContactDetailsModel, VatDetails}
 
 import java.time.LocalDate
 
@@ -58,9 +53,9 @@ case class SubscriptionDetails(
 
   def name: Option[String] = {
     val idOrgDetailsName = nameIdOrganisationDetails.map(_.name)
-    val orgDetailsName   = nameOrganisationDetails.map(_.name)
-    val dobDetailsName   = nameDobDetails.map(_.name)
-    val nameDetailsName  = nameDetails.map(_.name)
+    val orgDetailsName = nameOrganisationDetails.map(_.name)
+    val dobDetailsName = nameDobDetails.map(_.name)
+    val nameDetailsName = nameDetails.map(_.name)
 
     idOrgDetailsName orElse orgDetailsName orElse dobDetailsName orElse nameDetailsName orElse embassyName
   }

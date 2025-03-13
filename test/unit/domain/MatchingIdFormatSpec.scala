@@ -22,17 +22,17 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 
 class MatchingIdFormatSpec extends UnitSpec {
 
-  val id           = java.util.UUID.randomUUID.toString
-  val UTR          = Utr(id)
-  val EORI         = Eori(id)
-  val NINO         = Nino(id)
-  val SAFE_ID      = SafeId(id)
+  val id = java.util.UUID.randomUUID.toString
+  val UTR = Utr(id)
+  val EORI = Eori(id)
+  val NINO = Nino(id)
+  val SAFE_ID = SafeId(id)
   val TAX_PAYER_ID = TaxPayerId(id)
 
-  val utrJson        = Json.parse(s"""{ "utr": "$id" }""")
-  val eoriJson       = Json.parse(s"""{ "eori": "$id" }""")
-  val ninoJson       = Json.parse(s"""{ "nino": "$id" }""")
-  val safeIdJson     = Json.parse(s"""{ "safeId": "$id" }""")
+  val utrJson = Json.parse(s"""{ "utr": "$id" }""")
+  val eoriJson = Json.parse(s"""{ "eori": "$id" }""")
+  val ninoJson = Json.parse(s"""{ "nino": "$id" }""")
+  val safeIdJson = Json.parse(s"""{ "safeId": "$id" }""")
   val taxPayerIdJson = Json.parse(s"""{ "taxPayerId": "$id" }""")
 
   "UTR" should {

@@ -27,11 +27,7 @@ import org.scalatest.prop.Tables.Table
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SicCodeController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  Company,
-  SoleTrader,
-  ThirdCountryOrganisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, SoleTrader, ThirdCountryOrganisation}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SicCodeSubscriptionFlowPage
@@ -47,23 +43,26 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SicCodeControllerSpec
-    extends SubscriptionFlowTestSupport with BusinessDatesOrganisationTypeTables with BeforeAndAfterEach
-    with SubscriptionFlowCreateModeTestSupport with SubscriptionFlowReviewModeTestSupport {
+    extends SubscriptionFlowTestSupport
+    with BusinessDatesOrganisationTypeTables
+    with BeforeAndAfterEach
+    with SubscriptionFlowCreateModeTestSupport
+    with SubscriptionFlowReviewModeTestSupport {
 
-  protected override val formId: String = SicCodePage.formId
+  override protected val formId: String = SicCodePage.formId
 
-  protected override def submitInCreateModeUrl: String =
+  override protected def submitInCreateModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
       .submit(isInReviewMode = false, atarService)
       .url
 
-  protected override def submitInReviewModeUrl: String =
+  override protected def submitInReviewModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.SicCodeController
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockRequestSessionData  = mock[RequestSessionData]
-  private val sicCodeView             = inject[sic_code]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val sicCodeView = inject[sic_code]
   private val mockSessionCacheService = inject[SessionCacheService]
 
   private val controller = new SicCodeController(
@@ -101,7 +100,7 @@ class SicCodeControllerSpec
 
   private val mandatoryFieldsMap = Map("sic" -> sic)
 
-  private val populatedSicCodeFieldsMap   = Map("sic" -> sic)
+  private val populatedSicCodeFieldsMap = Map("sic" -> sic)
   private val unpopulatedSicCodeFieldsMap = Map("sic" -> "")
 
   "Subscription Sic Code form in create mode" should {

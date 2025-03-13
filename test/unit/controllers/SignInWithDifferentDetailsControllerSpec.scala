@@ -30,13 +30,12 @@ import util.builders.SessionBuilder
 
 import scala.concurrent.Future
 
-class SignInWithDifferentDetailsControllerSpec
-    extends ControllerSpec with BeforeAndAfterEach with SubscriptionFlowReviewModeTestSupport {
+class SignInWithDifferentDetailsControllerSpec extends ControllerSpec with BeforeAndAfterEach with SubscriptionFlowReviewModeTestSupport {
 
-  protected override val formId: String                = ShortNamePage.formId
-  protected override val submitInReviewModeUrl: String = ""
+  override protected val formId: String = ShortNamePage.formId
+  override protected val submitInReviewModeUrl: String = ""
 
-  private val mockCdsFrontendDataCache       = mock[SessionCache]
+  private val mockCdsFrontendDataCache = mock[SessionCache]
   private val signInWithDifferentDetailsView = inject[sign_in_with_different_details]
 
   private val controller = new SignInWithDifferentDetailsController(mockAuthAction, signInWithDifferentDetailsView, mcc)

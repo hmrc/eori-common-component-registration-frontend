@@ -30,11 +30,11 @@ import scala.concurrent.Future
 
 class VatRegisteredUkKanaControllerSpec extends ControllerSpec with AuthActionMock {
 
-  private val yesNoInputName         = "yes-no-answer"
-  private val answerYes              = true.toString
-  private val answerNo               = false.toString
+  private val yesNoInputName = "yes-no-answer"
+  private val answerYes = true.toString
+  private val answerNo = false.toString
   private val expectedYesRedirectUrl = s"https://www.tax.service.gov.uk/shortforms/form/EORIVAT?details=&vat=yes"
-  private val expectedNoRedirectUrl  = s"https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no"
+  private val expectedNoRedirectUrl = s"https://www.tax.service.gov.uk/shortforms/form/EORINonVATImport?details=&vat=no"
 
   private val vatRegisteredUkView = inject[vat_registered_uk_kana]
 

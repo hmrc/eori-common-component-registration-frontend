@@ -39,7 +39,7 @@ import scala.concurrent.Future
 class WhatIsYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockAuthAction = authAction(mockAuthConnector)
 
   private val mockSave4LaterService = mock[Save4LaterService]
 
@@ -48,10 +48,10 @@ class WhatIsYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEa
   private val controller =
     new WhatIsYourEmailController(mockAuthAction, mcc, whatIsYourEmailView, mockSave4LaterService)
 
-  val email       = "test@example.com"
+  val email = "test@example.com"
   val emailStatus = EmailStatus(Some(email))
 
-  val EmailFieldsMap            = Map("email" -> email)
+  val EmailFieldsMap = Map("email" -> email)
   val unpopulatedEmailFieldsMap = Map("email" -> "")
 
   override def beforeEach(): Unit = {
@@ -85,9 +85,8 @@ class WhatIsYourEmailControllerSpec extends ControllerSpec with BeforeAndAfterEa
 
     "be restricted to 50 characters for email length" in {
       val maxEmail = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@xxxxxxxxxx"
-      submitFormInCreateMode(unpopulatedEmailFieldsMap ++ Map("email" -> maxEmail)) {
-        result =>
-          status(result) shouldBe BAD_REQUEST
+      submitFormInCreateMode(unpopulatedEmailFieldsMap ++ Map("email" -> maxEmail)) { result =>
+        status(result) shouldBe BAD_REQUEST
 
       }
     }

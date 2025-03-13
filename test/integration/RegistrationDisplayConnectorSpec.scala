@@ -24,10 +24,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{RegistrationDisplayConnector, ServiceUnavailableResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
-  RegistrationDisplayRequestHolder,
-  RegistrationDisplayResponseHolder
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayRequestHolder, RegistrationDisplayResponseHolder}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, RegistrationDisplay}
@@ -36,7 +33,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.eori-common-component-hods-proxy.host"                         -> Host,
@@ -291,8 +288,7 @@ class RegistrationDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
       await(Connector.registrationDisplay(serviceRequestJson.as[RegistrationDisplayRequestHolder])) must be(
         Right(
-          serviceRegistrationError200ResponseWithErrorJson.as[RegistrationDisplayResponseHolder]
-            .registrationDisplayResponse
+          serviceRegistrationError200ResponseWithErrorJson.as[RegistrationDisplayResponseHolder].registrationDisplayResponse
         )
       )
     }

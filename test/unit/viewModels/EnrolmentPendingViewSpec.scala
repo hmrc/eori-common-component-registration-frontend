@@ -23,14 +23,14 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.EnrolmentPendingViewM
 import util.ControllerSpec
 
 class EnrolmentPendingViewSpec extends UnitSpec with ControllerSpec {
-  val mockMessages: Messages                    = mock[Messages]
+  val mockMessages: Messages = mock[Messages]
   val viewModel: EnrolmentPendingViewModel.type = EnrolmentPendingViewModel
 
   "EnrolmentPendingViewModel" should {
 
     "return the appropriate title when the other service is the same as the current service" in {
       val someOtherService = Some(atarService)
-      val service          = otherService
+      val service = otherService
 
       when(mockMessages(messages("cds.enrolment.pending.title.user.sameService", otherService))).thenReturn(
         "Some Service"
@@ -42,7 +42,7 @@ class EnrolmentPendingViewSpec extends UnitSpec with ControllerSpec {
 
     "return the appropriate title when the other service is the same as the other services" in {
       val someOtherService = Some(otherService)
-      val service          = atarService
+      val service = atarService
       when(mockMessages(messages("cds.enrolment.pending.title.user.processingService", atarService))).thenReturn(
         "Other Service"
       )
@@ -53,7 +53,7 @@ class EnrolmentPendingViewSpec extends UnitSpec with ControllerSpec {
 
     "return the appropriate title when the service is the same as processingService" in {
       val someOtherService = Some(atarService)
-      val service          = atarService
+      val service = atarService
       when(mockMessages(messages("cds.enrolment.pending.title.user.processingService", atarService))).thenReturn(
         "Other Service"
       )
@@ -64,15 +64,15 @@ class EnrolmentPendingViewSpec extends UnitSpec with ControllerSpec {
 
     "return the correct service name for paragraph when the other service is the same as the other services" in {
       val someOtherService = Some(otherService)
-      val viewModel        = EnrolmentPendingViewModel
-      val result           = viewModel.otherServiceParagraph(someOtherService)
+      val viewModel = EnrolmentPendingViewModel
+      val result = viewModel.otherServiceParagraph(someOtherService)
 
       result shouldEqual "Other Service"
     }
 
     "return the correct service name for paragraph when processingService is 'None'" in {
       val viewModel = EnrolmentPendingViewModel
-      val result    = viewModel.otherServiceParagraph(None)
+      val result = viewModel.otherServiceParagraph(None)
 
       result shouldEqual "cds.enrolment.pending.otherService"
     }

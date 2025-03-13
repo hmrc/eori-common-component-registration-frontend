@@ -18,16 +18,13 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Writes}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
-  RegistrationDisplayRequestHolder,
-  RegistrationDisplayResponseHolder
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayRequestHolder, RegistrationDisplayResponseHolder}
 
 case class RegistrationDisplay(request: RegistrationDisplaySubmitted, response: RegistrationDisplayResult)
 
 object RegistrationDisplay {
 
-  //writes for flattened Audit event
+  // writes for flattened Audit event
   implicit val writes: Writes[RegistrationDisplay] =
     JsPath
       .write[RegistrationDisplaySubmitted]

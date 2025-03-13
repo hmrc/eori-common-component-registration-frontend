@@ -67,15 +67,14 @@ class HowCanWeIdentifyYouController @Inject() (
   private def storeChoice(formData: NinoOrUtrChoice, service: Service)(implicit request: Request[_]): Future[Result] =
     subscriptionDetailsHolderService
       .cacheNinoOrUtrChoice(formData)
-      .map(
-        _ =>
-          formData.ninoOrUtrRadio match {
-            case Some(CustomsId.nino) =>
-              Redirect(GYEHowCanWeIdentifyYouNinoController.form(service))
-            case Some(CustomsId.utr) =>
-              Redirect(GYEHowCanWeIdentifyYouUtrController.form(service))
-            case _ => throw new IllegalArgumentException("Required formData to include nino or utr selection")
-          }
+      .map(_ =>
+        formData.ninoOrUtrRadio match {
+          case Some(CustomsId.nino) =>
+            Redirect(GYEHowCanWeIdentifyYouNinoController.form(service))
+          case Some(CustomsId.utr) =>
+            Redirect(GYEHowCanWeIdentifyYouUtrController.form(service))
+          case _ => throw new IllegalArgumentException("Required formData to include nino or utr selection")
+        }
       )
 
 }

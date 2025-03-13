@@ -39,9 +39,9 @@ import scala.concurrent.Future
 
 class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
-  private val mockAuthConnector              = mock[AuthConnector]
-  private val mockAuthAction                 = authAction(mockAuthConnector)
-  private val mockRequestSessionData         = mock[RequestSessionData]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
 
   private val matchNinoRowIndividualView = inject[match_nino_row_individual]
@@ -73,7 +73,7 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
   }
 
   val yesNinoSubmitData: Map[String, String] = Map("have-nino" -> "true")
-  val noNinoSubmitData: Map[String, String]  = Map("have-nino" -> "false")
+  val noNinoSubmitData: Map[String, String] = Map("have-nino" -> "false")
 
   "Viewing the NINO Individual/Sole trader Rest of World Matching form" should {
 

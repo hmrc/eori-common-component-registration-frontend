@@ -65,9 +65,10 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
-      orgTypeLookup.etmpOrgType.flatMap(
-        orgType =>
-          subscriptionUtrForm.bindFromRequest().fold(
+      orgTypeLookup.etmpOrgType.flatMap(orgType =>
+        subscriptionUtrForm
+          .bindFromRequest()
+          .fold(
             formWithErrors =>
               Future.successful(
                 BadRequest(
@@ -85,10 +86,10 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                 _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Utr(formData.id))))
                 ind <- sessionCacheService.retrieveNameDobFromCache()
                 _ = matchingService.matchIndividualWithNino(
-                  formData.id,
-                  ind,
-                  GroupId(user.groupId.getOrElse(throw new Exception("GroupId does not exists")))
-                )
+                      formData.id,
+                      ind,
+                      GroupId(user.groupId.getOrElse(throw new Exception("GroupId does not exists")))
+                    )
               } yield Redirect(PostCodeController.createForm(service))
           )
       )

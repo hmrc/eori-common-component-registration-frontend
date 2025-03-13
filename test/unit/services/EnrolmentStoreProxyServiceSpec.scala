@@ -25,12 +25,7 @@ import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EnrolmentStoreProxyConnector, ResponseError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  EnrolmentResponse,
-  EnrolmentStoreProxyResponse,
-  GroupId,
-  KeyValue
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse, GroupId, KeyValue}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.EnrolmentStoreProxyService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -42,17 +37,17 @@ class EnrolmentStoreProxyServiceSpec extends UnitSpec with MockitoSugar with Bef
   private val mockEnrolmentStoreProxyConnector =
     mock[EnrolmentStoreProxyConnector]
 
-  private val service                               = new EnrolmentStoreProxyService(mockEnrolmentStoreProxyConnector)
-  private implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
+  private val service = new EnrolmentStoreProxyService(mockEnrolmentStoreProxyConnector)
+  implicit private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   before {
     reset(mockEnrolmentStoreProxyConnector)
   }
 
   private val serviceName = "HMRC-CUS-ORG"
-  private val state       = "Activated"
-  private val identifier  = KeyValue("EORINumber", "10000000000000001")
-  private val groupId     = GroupId("groupId")
+  private val state = "Activated"
+  private val identifier = KeyValue("EORINumber", "10000000000000001")
+  private val groupId = GroupId("groupId")
 
   private val enrolmentResponse =
     EnrolmentResponse(serviceName, state, List(identifier))

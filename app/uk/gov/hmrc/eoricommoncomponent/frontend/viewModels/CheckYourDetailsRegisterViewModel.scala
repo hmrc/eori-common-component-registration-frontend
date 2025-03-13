@@ -76,7 +76,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       case (true, false, false, false) => messages("cds.organisation-name.label")
       case (false, false, false, true) => messages("cds.charity-public-body-name.label")
       case (false, false, true, false) => messages("cds.embassy-name.label")
-      case (_, _, _, _)                => messages("cds.business-name.label")
+      case (_, _, _, _) => messages("cds.business-name.label")
 
     }
   }
@@ -102,7 +102,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       case (false, false, true, false, false) => messages("cds.form.organisation-address")
       case (false, false, false, false, true) => messages("cds.form.charity-public-body-address")
       case (false, false, false, true, false) => messages("cds.form.embassy-address")
-      case (_, _, _, _, _)                    => messages("cds.form.business-details")
+      case (_, _, _, _, _) => messages("cds.form.business-details")
     }
   }
 
@@ -135,7 +135,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
           messages("cds.company.utr.label")
       case Some(Nino(_)) => messages("cds.nino.label")
       case Some(Eori(_)) => messages("cds.subscription.enter-eori-number.eori-number.label")
-      case _             => messages("cds.nino.label")
+      case _ => messages("cds.nino.label")
     }
   }
 
@@ -149,7 +149,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       subscription <- sessionCache.subscriptionDetails
     } yield {
 
-      val cdsOrgType    = requestSessionData.userSelectedOrganisationType
+      val cdsOrgType = requestSessionData.userSelectedOrganisationType
       val isPartnership = cdsOrgType.contains(CdsOrganisationType.Partnership)
 
       val isIndividual = cdsOrgType.contains(CdsOrganisationType.Individual) ||
@@ -190,7 +190,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
       for {
         providedDetailsList <- providedDetails
-        vatDetails             = getVatDetails(isEmbassy, subscription)
+        vatDetails = getVatDetails(isEmbassy, subscription)
         providedContactDetails = getProvidedContactDetails(subscription, service)
       } yield CheckYourDetailsRegisterViewModel(headerTitle, providedDetailsList, vatDetails, providedContactDetails)
     }
@@ -207,8 +207,8 @@ class CheckYourDetailsRegisterConstructor @Inject() (
   )(implicit messages: Messages): Option[SummaryList] = {
 
     def individualName: Option[String] = subscription.nameDobDetails.map(_.name) orElse Option(registration.name)
-    def orgName: Option[String]        = subscription.nameOrganisationDetails.map(_.name) orElse subscription.name
-    val nameOpt: Option[String]        = if (isIndividual || isSoleTrader) individualName else orgName
+    def orgName: Option[String] = subscription.nameOrganisationDetails.map(_.name) orElse subscription.name
+    val nameOpt: Option[String] = if (isIndividual || isSoleTrader) individualName else orgName
 
     nameOpt.map { name =>
       val isRowSoleTraderIndividual = cdsOrgType.contains(CdsOrganisationType.ThirdCountrySoleTrader) ||
@@ -220,9 +220,9 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
       val formattedIndividualDateOfBirth = {
         val dateOfBirth: Option[LocalDate] = (subscription.nameDobDetails, registration) match {
-          case (Some(nameDobDetails), _)                         => Some(nameDobDetails.dateOfBirth)
+          case (Some(nameDobDetails), _) => Some(nameDobDetails.dateOfBirth)
           case (None, individual: RegistrationDetailsIndividual) => Some(individual.dateOfBirth)
-          case _                                                 => None
+          case _ => None
         }
         dateOfBirth.map(formatDate)
       }
@@ -279,9 +279,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
             summaryListRow(
               key = messages("cds.company.utr.label"),
               value = Some(Html(messages("cds.not-entered.label"))),
-              call = cdsOrgType.map(
-                orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false)
-              )
+              call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false))
             )
           )
         else Seq.empty[SummaryListRow]
@@ -302,9 +300,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
             summaryListRow(
               key = messages("cds.utr.label"),
               value = Some(Html(messages("cds.not-entered.label"))),
-              call = cdsOrgType.map(
-                orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false)
-              )
+              call = cdsOrgType.map(orgType => DoYouHaveAUtrNumberController.form(orgType.id, service, isInReviewMode = false))
             ),
             summaryListRow(
               key = messages("cds.nino.label"),
@@ -382,8 +378,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       summaryListRow(
         key = messages("cds.form.check-answers.contact-name"),
         value = Some(Text(cd.fullName).asHtml),
-        call =
-          Some(ContactDetailsController.reviewForm(service))
+        call = Some(ContactDetailsController.reviewForm(service))
       )
     }).flatten
 
@@ -399,8 +394,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       summaryListRow(
         key = messages("cds.form.check-answers.contact-telephone"),
         value = Some(Html(cd.telephone)),
-        call =
-          Some(ContactDetailsController.reviewForm(service))
+        call = Some(ContactDetailsController.reviewForm(service))
       )
     }).flatten
 
@@ -408,8 +402,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       summaryListRow(
         key = messages("cds.form.customs-contact-address"),
         value = Some(contactDetailsHtml(contactDetails)),
-        call =
-          Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.reviewForm(service))
+        call = Some(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.reviewForm(service))
       )
     }).flatten
 
@@ -437,8 +430,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         ),
         summaryListRowNoChangeOption(
           key = messages("cds.form.gb-vat-postcode"),
-          value =
-            Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label"))))
+          value = Some(Html(subscription.ukVatDetails.map(_.postcode).getOrElse(messages("cds.not-entered.label"))))
         ),
         summaryListRowNoChangeOption(
           key = messages("cds.form.gb-vat-date"),
@@ -454,9 +446,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     )
     val optionalLines: Seq[Option[Html]] = Seq(
       ad.postcode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
-      transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(
-        s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))
-      )
+      transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
     )
     (lines ++ optionalLines.flatten).map(_.toString).mkString("")
   }
@@ -469,9 +459,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       ad.addressLine3.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
       ad.addressLine4.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
       ad.postalCode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
-      transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(
-        s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))
-      )
+      transformCountryCodeToOptionalLabel(Some(ad.countryCode)).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
     )
     (lines ++ optionalLines.flatten).map(_.toString).mkString("")
   }
@@ -481,9 +469,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       details.street.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
       details.city.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
       details.postcode.map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))),
-      transformCountryCodeToOptionalLabel(details.countryCode).map(
-        s => noMarginParagraph(StringEscapeUtils.escapeXml11(s))
-      )
+      transformCountryCodeToOptionalLabel(details.countryCode).map(s => noMarginParagraph(StringEscapeUtils.escapeXml11(s)))
     )
     lines.flatten.map(_.toString).mkString("")
   }
@@ -494,19 +480,18 @@ class CheckYourDetailsRegisterConstructor @Inject() (
     SummaryListRow(
       key = Key(content = Text(messages(key))),
       value = Value(content = HtmlContent(value.getOrElse("").toString)),
-      actions = call.flatMap(
-        c =>
-          Some(
-            Actions(items =
-              Seq(
-                ActionItem(
-                  href = c.url,
-                  content = Text(messages("cds.form.change")),
-                  visuallyHiddenText = Some(messages(key))
-                )
+      actions = call.flatMap(c =>
+        Some(
+          Actions(items =
+            Seq(
+              ActionItem(
+                href = c.url,
+                content = Text(messages("cds.form.change")),
+                visuallyHiddenText = Some(messages(key))
               )
             )
           )
+        )
       ),
       classes = classes
     )
@@ -532,9 +517,9 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
   private def transformCountryCodeToOptionalLabel(code: Option[String])(implicit messages: Messages) = code match {
     case Some(MatchingForms.countryCodeGB) => Some(messages("cds.country.GB"))
-    case Some(c) if isEUCountryCode(c)     => Some(euCountry(c))
-    case Some(nonEuCode)                   => Some(nonEuCode)
-    case _                                 => None
+    case Some(c) if isEUCountryCode(c) => Some(euCountry(c))
+    case Some(nonEuCode) => Some(nonEuCode)
+    case _ => None
   }
 
   private def formatDate(date: LocalDate)(implicit messages: Messages) = dateFormatter.formatLocalDate(date)

@@ -30,32 +30,25 @@ import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
-  EmailVerificationStatus,
-  ResponseWithURI,
-  VerificationStatus,
-  VerificationStatusResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{EmailVerificationStatus, ResponseWithURI, VerificationStatus, VerificationStatusResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.email.EmailVerificationService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class EmailVerificationServiceSpec
-    extends AsyncWordSpec with Matchers with ScalaFutures with MockitoSugar with BeforeAndAfterAll
-    with BeforeAndAfterEach {
+class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with ScalaFutures with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach {
 
-  private val mockConnector            = mock[EmailVerificationConnector]
+  private val mockConnector = mock[EmailVerificationConnector]
   private val mockAppConfig: AppConfig = mock[AppConfig]
 
-  implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
+  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
   implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
 
   val sut = new EmailVerificationService(mockConnector, mockAppConfig)
 
   implicit val messages: Messages = mock[Messages]
 
-  private val email          = "test@example.com"
+  private val email = "test@example.com"
   private val differentEmail = "different@example.com"
 
   override protected def beforeEach(): Unit = {
@@ -152,7 +145,7 @@ class EmailVerificationServiceSpec
 
     "return Unverified where an empty list is returned" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Unverified)
+      val expected = Right(EmailVerificationStatus.Unverified)
       val response: Either[ResponseError, VerificationStatusResponse] = Right(VerificationStatusResponse(Nil))
       mockGetVerificationStatus(credId)(EitherT[Future, ResponseError, VerificationStatusResponse] {
         Future.successful(response)
@@ -199,8 +192,8 @@ class EmailVerificationServiceSpec
 
     "return Verified where they return a verified email all lowercase, but the email in our cache is upper case" in {
 
-      val expected                                                    = Right(EmailVerificationStatus.Verified)
-      val sequence                                                    = Seq(VerificationStatus(emailAddress = "test@test.com", verified = true, locked = false))
+      val expected = Right(EmailVerificationStatus.Verified)
+      val sequence = Seq(VerificationStatus(emailAddress = "test@test.com", verified = true, locked = false))
       val response: Either[ResponseError, VerificationStatusResponse] = Right(VerificationStatusResponse(sequence))
       mockGetVerificationStatus(credId)(EitherT[Future, ResponseError, VerificationStatusResponse] {
         Future.successful(response)

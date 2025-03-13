@@ -36,7 +36,7 @@ class HandleSubscriptionConnector @Inject() (httpClient: HttpClientV2, appConfig
 ) {
 
   private val logger = Logger(this.getClass)
-  private val url    = url"${appConfig.handleSubscriptionBaseUrl}/${appConfig.handleSubscriptionServiceContext}"
+  private val url = url"${appConfig.handleSubscriptionBaseUrl}/${appConfig.handleSubscriptionServiceContext}"
 
   def call(request: HandleSubscriptionRequest)(implicit hc: HeaderCarrier): Future[Unit] = {
 

@@ -18,10 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.Logger
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  UpdateCustomsDataStoreConnector,
-  UpdateVerifiedEmailConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{UpdateCustomsDataStoreConnector, UpdateVerifiedEmailConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}

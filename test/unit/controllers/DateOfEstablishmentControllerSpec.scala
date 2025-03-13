@@ -17,11 +17,7 @@
 package unit.controllers
 
 import common.pages.subscription.SubscriptionContactDetailsPage._
-import common.pages.subscription.{
-  SubscriptionDateOfBirthPage,
-  SubscriptionDateOfEstablishmentPage,
-  SubscriptionPartnershipDateOfEstablishmentPage
-}
+import common.pages.subscription.{SubscriptionDateOfBirthPage, SubscriptionDateOfEstablishmentPage, SubscriptionPartnershipDateOfEstablishmentPage}
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -32,10 +28,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfEstablishmentController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  DateOfEstablishmentSubscriptionFlowPage,
-  SubscriptionDetails
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{DateOfEstablishmentSubscriptionFlowPage, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -49,23 +42,25 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DateOfEstablishmentControllerSpec
-    extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
+    extends SubscriptionFlowTestSupport
+    with BeforeAndAfterEach
+    with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  protected override val formId: String = SubscriptionDateOfBirthPage.formId
+  override protected val formId: String = SubscriptionDateOfBirthPage.formId
 
-  protected override val submitInCreateModeUrl: String =
+  override protected val submitInCreateModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController
       .submit(isInReviewMode = false, atarService)
       .url
 
-  protected override val submitInReviewModeUrl: String =
+  override protected val submitInReviewModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockOrgTypeLookup       = mock[OrgTypeLookup]
-  private val mockRequestSessionData  = mock[RequestSessionData]
+  private val mockOrgTypeLookup = mock[OrgTypeLookup]
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSessionCacheService = inject[SessionCacheService]
 
   private val dateOfEstablishmentView = inject[date_of_establishment]
@@ -83,7 +78,7 @@ class DateOfEstablishmentControllerSpec
   )(global)
 
   private val DateOfEstablishmentString = "1962-05-12"
-  private val DateOfEstablishment       = LocalDate.parse(DateOfEstablishmentString)
+  private val DateOfEstablishment = LocalDate.parse(DateOfEstablishmentString)
 
   private val ValidRequest = Map(
     "date-of-establishment.day"   -> DateOfEstablishment.getDayOfMonth.toString,
@@ -93,12 +88,12 @@ class DateOfEstablishmentControllerSpec
 
   val existingSubscriptionDetailsHolder: SubscriptionDetails = SubscriptionDetails()
 
-  private val DateOfEstablishmentMissingErrorPage     = "Enter your date of establishment"
-  private val DateOfEstablishmentMissingErrorField    = "Error: Enter your date of establishment"
-  private val DateOfEstablishmentInvalidDayErrorPage  = messages("date.day.error")
+  private val DateOfEstablishmentMissingErrorPage = "Enter your date of establishment"
+  private val DateOfEstablishmentMissingErrorField = "Error: Enter your date of establishment"
+  private val DateOfEstablishmentInvalidDayErrorPage = messages("date.day.error")
   private val DateOfEstablishmentInvalidDayErrorField = s"Error: $DateOfEstablishmentInvalidDayErrorPage"
-  private val DateOfEstablishmentInFutureErrorPage    = "Year must be between 1000 and this year"
-  private val DateOfEstablishmentInFutureErrorField   = "Error: Year must be between 1000 and this year"
+  private val DateOfEstablishmentInFutureErrorPage = "Year must be between 1000 and this year"
+  private val DateOfEstablishmentInFutureErrorField = "Error: Year must be between 1000 and this year"
 
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager)
@@ -341,10 +336,9 @@ class DateOfEstablishmentControllerSpec
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
         .thenReturn(Left(FlowNotFound()))
 
-      submitFormInCreateMode(ValidRequest) {
-        result =>
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).value shouldBe "/customs-registration-services/atar/register"
+      submitFormInCreateMode(ValidRequest) { result =>
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).value shouldBe "/customs-registration-services/atar/register"
       }
     }
   }

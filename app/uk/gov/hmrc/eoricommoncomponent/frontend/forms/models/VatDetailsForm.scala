@@ -39,9 +39,9 @@ object VatDetailsForm extends Mappings {
   def validPostcode(requestSessionData: RequestSessionData)(implicit request: Request[AnyContent]): Constraint[String] =
     Constraint("constraints.postcode") { pcode =>
       pcode.filterNot(_.isWhitespace) match {
-        case s if s.matches(postcodeRegex.regex)      => Valid
+        case s if s.matches(postcodeRegex.regex) => Valid
         case _ if requestSessionData.isRestOfTheWorld => Valid
-        case _                                        => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
+        case _ => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
       }
 
     }
@@ -49,9 +49,9 @@ object VatDetailsForm extends Mappings {
   private def validVatNumber: Constraint[String] =
     Constraint("constraints.vat-number") { vat =>
       vat.filterNot(_.isWhitespace) match {
-        case s if s.trim.isEmpty             => Invalid(ValidationError("cds.subscription.vat-uk.required.error"))
+        case s if s.trim.isEmpty => Invalid(ValidationError("cds.subscription.vat-uk.required.error"))
         case s if !s.matches("^([0-9]{9})$") => Invalid(ValidationError("cds.subscription.vat-uk.length.error"))
-        case _                               => Valid
+        case _ => Valid
       }
 
     }

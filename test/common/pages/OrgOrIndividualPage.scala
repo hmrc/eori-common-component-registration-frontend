@@ -30,5 +30,5 @@ trait OrgOrIndividualPage extends WebPage {
 object EuOrgOrIndividualPage extends OrgOrIndividualPage {
 
   override val organisationXpath = "//*[@id='organisation-type-eu-organisation']"
-  override val individualXpath   = "//*[@id='organisation-type-eu-individual']"
+  override val individualXpath = "//*[@id='organisation-type-eu-individual']"
 }

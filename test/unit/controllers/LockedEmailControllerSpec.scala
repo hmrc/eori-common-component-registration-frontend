@@ -30,9 +30,9 @@ import util.builders.{AuthActionMock, SessionBuilder}
 class LockedEmailControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockAuthAction = authAction(mockAuthConnector)
 
-  private val view                         = inject[locked_email_view]
+  private val view = inject[locked_email_view]
   private val messagesControllerComponents = inject[MessagesControllerComponents]
 
   private val controller = new LockedEmailController(messagesApi, messagesControllerComponents, mockAuthAction, view)

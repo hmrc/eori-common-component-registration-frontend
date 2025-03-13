@@ -92,32 +92,34 @@ class DateOfEstablishmentController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionDateOfEstablishmentForm.bindFromRequest().fold(
-        formWithErrors =>
-          orgTypeLookup.etmpOrgType map { orgType =>
-            BadRequest(
-              dateOfEstablishmentView(
-                formWithErrors,
-                isInReviewMode,
-                orgType,
-                UserLocation.isRow(requestSessionData),
-                service
+      subscriptionDateOfEstablishmentForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            orgTypeLookup.etmpOrgType map { orgType =>
+              BadRequest(
+                dateOfEstablishmentView(
+                  formWithErrors,
+                  isInReviewMode,
+                  orgType,
+                  UserLocation.isRow(requestSessionData),
+                  service
+                )
               )
-            )
-          },
-        date =>
-          saveDateEstablished(date).map { _ =>
-            if (isInReviewMode)
-              Redirect(DetermineReviewPageController.determineRoute(service))
-            else
-              subscriptionFlowManager.stepInformation(DateOfEstablishmentSubscriptionFlowPage) match {
-                case Right(flowInfo) => Redirect(flowInfo.nextPage.url(service))
-                case Left(_) =>
-                  logger.warn(s"Unable to identify subscription flow: key not found in cache")
-                  Redirect(ApplicationController.startRegister(service))
-              }
-          }
-      )
+            },
+          date =>
+            saveDateEstablished(date).map { _ =>
+              if (isInReviewMode)
+                Redirect(DetermineReviewPageController.determineRoute(service))
+              else
+                subscriptionFlowManager.stepInformation(DateOfEstablishmentSubscriptionFlowPage) match {
+                  case Right(flowInfo) => Redirect(flowInfo.nextPage.url(service))
+                  case Left(_) =>
+                    logger.warn(s"Unable to identify subscription flow: key not found in cache")
+                    Redirect(ApplicationController.startRegister(service))
+                }
+            }
+        )
     }
 
   private def saveDateEstablished(date: LocalDate)(implicit request: Request[_]) =

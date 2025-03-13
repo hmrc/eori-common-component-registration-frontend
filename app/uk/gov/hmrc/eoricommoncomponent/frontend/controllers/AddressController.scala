@@ -38,24 +38,28 @@ class AddressController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
-      addressService.populateOkView(None, isInReviewMode = false, service).flatMap(
-        sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-          service,
-          _
+      addressService
+        .populateOkView(None, isInReviewMode = false, service)
+        .flatMap(
+          sessionCacheService.individualAndSoleTraderRouter(
+            user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+            service,
+            _
+          )
         )
-      )
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
-      addressService.populateViewIfContactDetailsCached(service).flatMap(
-        sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-          service,
-          _
+      addressService
+        .populateViewIfContactDetailsCached(service)
+        .flatMap(
+          sessionCacheService.individualAndSoleTraderRouter(
+            user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+            service,
+            _
+          )
         )
-      )
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =

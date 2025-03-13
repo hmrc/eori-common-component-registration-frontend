@@ -28,11 +28,11 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_y
 import util.ViewSpec
 
 class HowCanWeIdentifyYouSpec extends ViewSpec {
-  val form: Form[NinoOrUtrChoice]                    = ninoOrUtrChoiceForm
+  val form: Form[NinoOrUtrChoice] = ninoOrUtrChoiceForm
   val formWithNothingSelected: Form[NinoOrUtrChoice] = ninoOrUtrChoiceForm.bind(Map("ninoOrUtrRadio" -> ""))
 
-  val isInReviewMode                                    = false
-  val previousPageUrl                                   = "/"
+  val isInReviewMode = false
+  val previousPageUrl = "/"
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   private val view = inject[how_can_we_identify_you]

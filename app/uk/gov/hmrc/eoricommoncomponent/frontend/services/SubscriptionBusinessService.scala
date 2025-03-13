@@ -28,8 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext)
-    extends Logging {
+class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext) extends Logging {
 
   def cachedContactDetailsModel(implicit request: Request[_]): Future[Option[ContactDetailsModel]] =
     sessionCache.subscriptionDetails map (_.contactDetails)
@@ -92,8 +91,8 @@ class SubscriptionBusinessService @Inject() (sessionCache: SessionCache)(implici
     }
 
   def getCachedVatControlListResponse(implicit request: Request[_]): Future[Option[VatControlListResponse]] =
-    sessionCache.subscriptionDetails map {
-      subscriptionDetails => subscriptionDetails.vatControlListResponse
+    sessionCache.subscriptionDetails map { subscriptionDetails =>
+      subscriptionDetails.vatControlListResponse
     }
 
   def retrieveSubscriptionDetailsHolder(implicit request: Request[_]): Future[SubscriptionDetails] =

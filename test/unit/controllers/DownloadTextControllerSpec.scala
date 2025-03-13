@@ -36,10 +36,10 @@ import scala.concurrent.Future
 
 class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
   val mockAuthConnector = mock[AuthConnector]
-  val mockAuthAction    = authAction(mockAuthConnector)
-  val mockCache         = mock[SessionCache]
+  val mockAuthAction = authAction(mockAuthConnector)
+  val mockCache = mock[SessionCache]
 
-  private val eoriNumberTextDownloadView   = inject[eori_number_text_download]
+  private val eoriNumberTextDownloadView = inject[eori_number_text_download]
   private val subscriptionTextDownloadView = inject[subscription_text_download]
 
   override def beforeEach(): Unit = {
@@ -87,7 +87,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
         controller.download(eoriOnlyService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       val content = contentAsString(result)
-      val lines   = content.split('\n').drop(1)
+      val lines = content.split('\n').drop(1)
       lines.length shouldBe 4
       lines.forall(_.endsWith('\r'.toString)) shouldBe true
     }
@@ -125,7 +125,7 @@ class DownloadTextControllerSpec extends ControllerSpec with BeforeAndAfterEach 
         controller.download(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       val content = contentAsString(result)
-      val lines   = content.split('\n').drop(1)
+      val lines = content.split('\n').drop(1)
       lines.length shouldBe 6
       lines.forall(_.endsWith('\r'.toString)) shouldBe true
     }

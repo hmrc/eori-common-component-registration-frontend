@@ -42,16 +42,16 @@ import scala.concurrent.Future
 
 class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injecting {
 
-  implicit val hc: HeaderCarrier       = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val rq: Request[AnyContent] = withFakeCSRF(FakeRequest())
 
-  private val mockSave4LaterService        = mock[Save4LaterService]
-  private val mockEmailJourneyService      = mock[EmailJourneyService]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockEmailJourneyService = mock[EmailJourneyService]
   private val messagesControllerComponents = inject[MessagesControllerComponents]
 
   private val checkYourEmailView = inject[check_your_email]
   private val emailConfirmedView = inject[email_confirmed]
-  private val verifyYourEmail    = inject[verify_your_email]
+  private val verifyYourEmail = inject[verify_your_email]
 
   private val servicesToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
@@ -114,14 +114,13 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injectin
 
   "emailConfirmed" should {
 
-    "fetch email successfully and display confirmed page" in servicesToTest.foreach {
-      subscription =>
-        when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(Some(emailStatus())))
+    "fetch email successfully and display confirmed page" in servicesToTest.foreach { subscription =>
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(emailStatus())))
 
-        val result = await(service.emailConfirmed(loggedInUser, subscription))
-        result.header.status mustBe OK
-        doc().body().getElementsByTag("h1").text() mustBe messages("cds.email-confirmed.title-and-heading")
+      val result = await(service.emailConfirmed(loggedInUser, subscription))
+      result.header.status mustBe OK
+      doc().body().getElementsByTag("h1").text() mustBe messages("cds.email-confirmed.title-and-heading")
 
     }
 
@@ -134,74 +133,70 @@ class CheckYourEmailServiceSpec extends ViewSpec with MockitoSugar with Injectin
       result.header.headers("Location") mustBe s"/customs-registration-services/${subscription.code}/register/sign-out"
     }
 
-    "fetch and save email successfully then populate emailConfirmedView when not confirmed" in servicesToTest.foreach {
-      subscription =>
-        when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(Some(emailStatus(false))))
+    "fetch and save email successfully then populate emailConfirmedView when not confirmed" in servicesToTest.foreach { subscription =>
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(emailStatus(false))))
 
-        when(mockSave4LaterService.saveEmail(any[GroupId], any())(any[HeaderCarrier]))
-          .thenReturn(Future.successful((): Unit))
+      when(mockSave4LaterService.saveEmail(any[GroupId], any())(any[HeaderCarrier]))
+        .thenReturn(Future.successful((): Unit))
 
-        val result = await(service.emailConfirmed(loggedInUser, subscription))
-        result.header.status mustBe OK
+      val result = await(service.emailConfirmed(loggedInUser, subscription))
+      result.header.status mustBe OK
     }
   }
 
   "handleFormWithErrors" should {
 
-    "fetch email successfully and populate checkYourEmailView and throw bad request" in servicesToTest.foreach {
-      subscription =>
-        when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(Some(emailStatus())))
+    "fetch email successfully and populate checkYourEmailView and throw bad request" in servicesToTest.foreach { subscription =>
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(emailStatus())))
 
-        val result = await(
-          service.handleFormWithErrors(
-            loggedInUser,
-            confirmEmailYesNoAnswerForm(),
-            isInReviewMode = false,
-            subscription
-          )
+      val result = await(
+        service.handleFormWithErrors(
+          loggedInUser,
+          confirmEmailYesNoAnswerForm(),
+          isInReviewMode = false,
+          subscription
         )
-        result.header.status mustBe BAD_REQUEST
+      )
+      result.header.status mustBe BAD_REQUEST
     }
 
-    "populate checkYourEmailView without email when not cached and throw bad request" in servicesToTest.foreach {
-      subscription =>
-        when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(None))
+    "populate checkYourEmailView without email when not cached and throw bad request" in servicesToTest.foreach { subscription =>
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(None))
 
-        val result = await(
-          service.handleFormWithErrors(
-            loggedInUser,
-            confirmEmailYesNoAnswerForm(),
-            isInReviewMode = false,
-            subscription
-          )
+      val result = await(
+        service.handleFormWithErrors(
+          loggedInUser,
+          confirmEmailYesNoAnswerForm(),
+          isInReviewMode = false,
+          subscription
         )
-        result.header.status mustBe BAD_REQUEST
+      )
+      result.header.status mustBe BAD_REQUEST
     }
 
   }
 
   "locationByAnswer" should {
 
-    "redirect to CheckYourEmailController when answer is yes and email is cached and email not previously verified" in servicesToTest.foreach {
-      subscription =>
-        when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(Some(emailStatus())))
+    "redirect to CheckYourEmailController when answer is yes and email is cached and email not previously verified" in servicesToTest.foreach { subscription =>
+      when(mockSave4LaterService.fetchEmail(any[GroupId])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(emailStatus())))
 
-        when(mockEmailJourneyService.continue(any())(any(), any(), any(), any()))
-          .thenReturn(
-            Future.successful(
-              Redirect(s"/customs-registration-services/${subscription.code}/register/matching/verify-your-email")
-            )
+      when(mockEmailJourneyService.continue(any())(any(), any(), any(), any()))
+        .thenReturn(
+          Future.successful(
+            Redirect(s"/customs-registration-services/${subscription.code}/register/matching/verify-your-email")
           )
+        )
 
-        val result = await(service.locationByAnswer(YesNo.apply(isYes = true), subscription))
-        result.header.status mustBe SEE_OTHER
-        result.header.headers(
-          "Location"
-        ) mustBe s"/customs-registration-services/${subscription.code}/register/matching/verify-your-email"
+      val result = await(service.locationByAnswer(YesNo.apply(isYes = true), subscription))
+      result.header.status mustBe SEE_OTHER
+      result.header.headers(
+        "Location"
+      ) mustBe s"/customs-registration-services/${subscription.code}/register/matching/verify-your-email"
     }
 
     "redirect to WhatIsYourEmailController when answer is no" in servicesToTest.foreach { subscription =>

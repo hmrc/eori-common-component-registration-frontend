@@ -26,7 +26,7 @@ import util.ViewSpec
 
 class EnrolmentPendingAgainstGroupIdViewSpec extends ViewSpec {
 
-  private val view                   = inject[enrolment_pending_against_group_id]
+  private val view = inject[enrolment_pending_against_group_id]
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 
   "Enrolment Pending against group id page for different service" should {
@@ -96,6 +96,6 @@ class EnrolmentPendingAgainstGroupIdViewSpec extends ViewSpec {
   }
 
   private lazy val otherServiceDoc: Document = Jsoup.parse(contentAsString(view(atarService, Some(otherService))))
-  private lazy val sameServiceDoc: Document  = Jsoup.parse(contentAsString(view(atarService, Some(atarService))))
+  private lazy val sameServiceDoc: Document = Jsoup.parse(contentAsString(view(atarService, Some(atarService))))
 
 }

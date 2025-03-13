@@ -24,12 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.email.{routes => emailRoutes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{
-  ResponseWithURI,
-  StartVerificationJourneyEmail,
-  StartVerificationJourneyRequest,
-  VerificationStatusResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.email.{ResponseWithURI, StartVerificationJourneyEmail, StartVerificationJourneyRequest, VerificationStatusResponse}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
@@ -68,7 +63,8 @@ class EmailVerificationConnector @Inject() (httpClient: HttpClientV2, appConfig:
       )
     )
 
-    httpClient.post(verifyEmailUrl)
+    httpClient
+      .post(verifyEmailUrl)
       .withBody(Json.toJson(request))
       .execute
       .map { response =>
@@ -90,11 +86,12 @@ class EmailVerificationConnector @Inject() (httpClient: HttpClientV2, appConfig:
     lazy val url: URL =
       url"${appConfig.emailVerificationBaseUrl}/${appConfig.emailVerificationServiceContext}/verification-status/$credId"
 
-    httpClient.get(url)
+    httpClient
+      .get(url)
       .execute
       .map { response =>
         response.status match {
-          case OK        => handleResponse[VerificationStatusResponse](response)
+          case OK => handleResponse[VerificationStatusResponse](response)
           case NOT_FOUND => Right(VerificationStatusResponse(Nil))
           case _ =>
             val error = s"Unexpected response from verification-status: ${response.body}"
@@ -105,20 +102,19 @@ class EmailVerificationConnector @Inject() (httpClient: HttpClientV2, appConfig:
 
   }
 
-  //For testing email-verification in non-production environments
+  // For testing email-verification in non-production environments
   def getPasscodes(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     lazy val url: URL = url"${appConfig.emailVerificationBaseUrl}/test-only/passcodes"
 
-    httpClient.get(url)
-      .execute
+    httpClient.get(url).execute
   }
 
 }
 
 object EmailVerificationKeys {
-  val EmailKey              = "email"
-  val TemplateIdKey         = "templateId"
+  val EmailKey = "email"
+  val TemplateIdKey = "templateId"
   val TemplateParametersKey = "templateParameters"
   val LinkExpiryDurationKey = "linkExpiryDuration"
-  val ContinueUrlKey        = "continueUrl"
+  val ContinueUrlKey = "continueUrl"
 }

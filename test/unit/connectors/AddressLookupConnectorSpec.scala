@@ -27,22 +27,17 @@ import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{
-  AddressLookupFailure,
-  AddressLookupSuccess,
-  AddressRequestBody
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupSuccess, AddressRequestBody}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import unit.connectors.AddressLookupConnectorSpec.{jsonResponseWithOneResult, jsonResponseWithTwoResults}
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class AddressLookupConnectorSpec
-    extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with IntegrationPatience {
+class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with IntegrationPatience {
 
   private val httpClient = mock[HttpClient]
-  private val appConfig  = mock[AppConfig]
+  private val appConfig = mock[AppConfig]
 
   private val connector = new AddressLookupConnector(httpClient, appConfig)(global)
 
@@ -70,7 +65,7 @@ class AddressLookupConnectorSpec
       val postcode = "AA11 1AA"
 
       val expectedResponse = AddressLookupSuccess(Seq.empty)
-      val expectedUrl      = "http://localhost:6754/lookup"
+      val expectedUrl = "http://localhost:6754/lookup"
 
       val urlCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 

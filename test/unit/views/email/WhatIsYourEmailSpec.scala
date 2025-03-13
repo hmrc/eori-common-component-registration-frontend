@@ -27,9 +27,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.email.what_is_your_em
 import util.ViewSpec
 
 class WhatIsYourEmailSpec extends ViewSpec {
-  val form: Form[EmailViewModel]                        = EmailForm.emailForm
-  val formWithError: Form[EmailViewModel]               = EmailForm.emailForm.bind(Map("email" -> "invalid"))
-  val previousPageUrl                                   = "/"
+  val form: Form[EmailViewModel] = EmailForm.emailForm
+  val formWithError: Form[EmailViewModel] = EmailForm.emailForm.bind(Map("email" -> "invalid"))
+  val previousPageUrl = "/"
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
   val view: what_is_your_email = inject[what_is_your_email]
@@ -46,9 +46,12 @@ class WhatIsYourEmailSpec extends ViewSpec {
         .text() mustBe "What is your email address?"
     }
     "have the correct hint text" in {
-      GYEDoc.body().getElementById(
-        "email-hint"
-      ).text() mustBe "We will use this to send you the result of your application."
+      GYEDoc
+        .body()
+        .getElementById(
+          "email-hint"
+        )
+        .text() mustBe "We will use this to send you the result of your application."
     }
     "have an input of type 'email'" in {
       GYEDoc.body().getElementById("email").attr("type") mustBe "email"

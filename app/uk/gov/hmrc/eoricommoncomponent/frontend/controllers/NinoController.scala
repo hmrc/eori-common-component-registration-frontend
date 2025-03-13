@@ -53,32 +53,36 @@ class NinoController @Inject() (
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      ninoForm.bindFromRequest().fold(
-        invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
-        form =>
-          matchingService.matchIndividualWithNino(
-            form.nino,
-            Individual.withLocalDate(form.firstName, form.lastName, form.dateOfBirth),
-            GroupId(loggedInUser.groupId)
-          ).fold(
-            {
-              case MatchingServiceConnector.matchFailureResponse =>
-                val errorForm = ninoForm
-                  .withGlobalError(Messages("cds.matching-error.individual-not-found"))
-                  .fill(form)
-                BadRequest(matchNinoView(errorForm, organisationType, service))
-              case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
-              case _                                                  => InternalServerError(errorView(service))
-            },
-            _ =>
-              Redirect(
-                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.form(
-                  service,
-                  isInReviewMode = false
-                )
+      ninoForm
+        .bindFromRequest()
+        .fold(
+          invalidForm => Future.successful(BadRequest(matchNinoView(invalidForm, organisationType, service))),
+          form =>
+            matchingService
+              .matchIndividualWithNino(
+                form.nino,
+                Individual.withLocalDate(form.firstName, form.lastName, form.dateOfBirth),
+                GroupId(loggedInUser.groupId)
               )
-          )
-      )
+              .fold(
+                {
+                  case MatchingServiceConnector.matchFailureResponse =>
+                    val errorForm = ninoForm
+                      .withGlobalError(Messages("cds.matching-error.individual-not-found"))
+                      .fill(form)
+                    BadRequest(matchNinoView(errorForm, organisationType, service))
+                  case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+                  case _ => InternalServerError(errorView(service))
+                },
+                _ =>
+                  Redirect(
+                    uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.form(
+                      service,
+                      isInReviewMode = false
+                    )
+                  )
+              )
+        )
     }
 
 }

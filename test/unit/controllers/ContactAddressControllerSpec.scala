@@ -27,11 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ContactAddressController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{
-  SubscriptionDetails,
-  SubscriptionFlowInfo,
-  SubscriptionPage
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
@@ -46,16 +42,18 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ContactAddressControllerSpec
-    extends SubscriptionFlowTestSupport with BeforeAndAfterEach with SubscriptionFlowCreateModeTestSupport
+    extends SubscriptionFlowTestSupport
+    with BeforeAndAfterEach
+    with SubscriptionFlowCreateModeTestSupport
     with SubscriptionFlowReviewModeTestSupport {
 
-  private val mockRequestSessionData   = mock[RequestSessionData]
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockCdsFrontendDataCache = mock[SessionCache]
-  private val mockSubscriptionFlow     = mock[SubscriptionFlowManager]
+  private val mockSubscriptionFlow = mock[SubscriptionFlowManager]
   private val mockSubscriptionFlowInfo = mock[SubscriptionFlowInfo]
-  private val mockSubscriptionPage     = mock[SubscriptionPage]
-  private val mockAppConfig            = mock[AppConfig]
-  private val mockSessionCacheService  = inject[SessionCacheService]
+  private val mockSubscriptionPage = mock[SubscriptionPage]
+  private val mockAppConfig = mock[AppConfig]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val viewContactAddress = inject[contact_address]
 
@@ -338,14 +336,14 @@ class ContactAddressControllerSpec
     )
   }
 
-  protected override val formId: String = "addressDetailsForm"
+  override protected val formId: String = "addressDetailsForm"
 
-  protected override val submitInCreateModeUrl: String =
+  override protected val submitInCreateModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
       .submit(isInReviewMode = false, atarService)
       .url
 
-  protected override val submitInReviewModeUrl: String =
+  override protected val submitInReviewModeUrl: String =
     uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
       .submit(isInReviewMode = true, atarService)
       .url

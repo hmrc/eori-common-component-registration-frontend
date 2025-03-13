@@ -19,22 +19,24 @@ package common.pages.matching
 import common.pages.WebPage
 
 trait IndividualNameAndDateOfBirthXPath extends AddressPageFactoring {
-  val fieldLevelErrorGivenName  = "//p[@class='govuk-error-message' and @id='given-name-error]"
+  val fieldLevelErrorGivenName = "//p[@class='govuk-error-message' and @id='given-name-error]"
   val fieldLevelErrorFamilyName = "//p[@class='govuk-error-message' and @id='family-name-error]"
 
   val fieldLevelErrorDateOfBirth =
     "//p[contains(@id, 'date-of-birth-error') and contains(@class, 'govuk-error-message')]"
 
-  val givenNameElement   = "//*[@id='given-name']"
-  val familyNameElement  = "//*[@id='family-name']"
+  val givenNameElement = "//*[@id='given-name']"
+  val familyNameElement = "//*[@id='family-name']"
   val dateOfBirthElement = "//*[@id='date-of-birth']"
-  val dobDayElement      = "//*[@id='date-of-birth.day']"
-  val dobMonthElement    = "//*[@id='date-of-birth.month']"
-  val dobYearElement     = "//*[@id='date-of-birth.year']"
+  val dobDayElement = "//*[@id='date-of-birth.day']"
+  val dobMonthElement = "//*[@id='date-of-birth.month']"
+  val dobYearElement = "//*[@id='date-of-birth.year']"
 }
 
 abstract class IndividualNameAndDateOfBirthPage(val organisationType: String)
-    extends WebPage with IndividualNameAndDateOfBirthXPath with IndividualNameDateFields {
+    extends WebPage
+    with IndividualNameAndDateOfBirthXPath
+    with IndividualNameDateFields {
 
   override val pageLevelErrorSummaryListXPath: String = AddressPageFactoring.PageLevelErrorSummaryListXPath
 

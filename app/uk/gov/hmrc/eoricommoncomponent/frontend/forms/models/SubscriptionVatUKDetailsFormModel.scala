@@ -23,7 +23,7 @@ case class SubscriptionVatUKDetailsFormModel(hasGbVats: Boolean, gbVats: Option[
 
   lazy val toVatIds: List[VatIdentification] = (hasGbVats, gbVats) match {
     case (true, Some(list)) => list
-    case _                  => Nil
+    case _ => Nil
   }
 
 }

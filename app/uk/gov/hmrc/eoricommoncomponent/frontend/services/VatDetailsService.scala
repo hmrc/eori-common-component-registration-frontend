@@ -18,11 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import cats.data.EitherT
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{
-  GetVatCustomerInformationConnector,
-  ResponseError,
-  VatControlListConnector
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError, VatControlListConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{VatControlListRequest, VatControlListResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 

@@ -25,12 +25,12 @@ object SixLineAddressViewModel {
   def postCodeLabel(countriesInCountryPicker: CountriesInCountryPicker)(implicit messages: Messages) =
     countriesInCountryPicker match {
       case IslandsInCountryPicker => messages("cds.matching.organisation-address.postcode")
-      case _                      => messages("cds.matching.organisation-address.postcode-optional")
+      case _ => messages("cds.matching.organisation-address.postcode-optional")
     }
 
   def headerLabel(cdsOrgType: String)(implicit messages: Messages) = cdsOrgType match {
     case _ if rowIndividualOrganisationIds.contains(cdsOrgType) => messages("cds.matching.individual-address.header")
-    case _                                                      => messages("cds.matching.organisation-address.header")
+    case _ => messages("cds.matching.organisation-address.header")
   }
 
 }

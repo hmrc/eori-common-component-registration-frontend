@@ -42,12 +42,12 @@ class ConfirmContactDetailsController @Inject() (
   def form(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       for {
-        res <- confirmContactDetailsService.handleAddressAndPopulateView(service, isInReviewMode)
+        res    <- confirmContactDetailsService.handleAddressAndPopulateView(service, isInReviewMode)
         result <- sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-          service,
-          res
-        )
+                    user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+                    service,
+                    res
+                  )
       } yield result
     }
 
@@ -58,8 +58,7 @@ class ConfirmContactDetailsController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => confirmContactDetailsService.handleFormWithErrors(isInReviewMode, formWithErrors, service),
-          areDetailsCorrectAnswer =>
-            confirmContactDetailsService.checkAddressDetails(service, isInReviewMode, areDetailsCorrectAnswer)
+          areDetailsCorrectAnswer => confirmContactDetailsService.checkAddressDetails(service, isInReviewMode, areDetailsCorrectAnswer)
         )
     }
 

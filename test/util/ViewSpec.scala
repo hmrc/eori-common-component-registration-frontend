@@ -40,7 +40,7 @@ trait ViewSpec extends PlaySpec with CSRFTest with Injecting with TestData {
   implicit val messages: Messages = MessagesImpl(defaultLang, messageApi)
 
   implicit val timeout: Timeout = 30.seconds
-  val userId: String            = "someUserId"
+  val userId: String = "someUserId"
 }
 
 import play.api.test.FakeRequest

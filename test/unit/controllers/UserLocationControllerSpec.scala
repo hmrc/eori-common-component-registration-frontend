@@ -32,16 +32,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationControll
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{
-  ContactResponse,
-  IndividualResponse,
-  OrganisationResponse
-}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{
-  RegistrationDisplayResponse,
-  ResponseCommon,
-  ResponseDetail
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, OrganisationResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayResponse, ResponseCommon, ResponseDetail}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
@@ -59,15 +51,15 @@ import scala.concurrent.Future
 class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
 
   private val mockAuthConnector = mock[AuthConnector]
-  private val mockAuthAction    = authAction(mockAuthConnector)
+  private val mockAuthAction = authAction(mockAuthConnector)
 
-  private val mockRequestSessionData         = mock[RequestSessionData]
-  private val mockSessionCache               = mock[SessionCache]
-  private val mockSave4LaterService          = mock[Save4LaterService]
-  private val mockSubscriptionStatusService  = mock[SubscriptionStatusService]
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSessionCache = mock[SessionCache]
+  private val mockSave4LaterService = mock[Save4LaterService]
+  private val mockSubscriptionStatusService = mock[SubscriptionStatusService]
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
-  private val mockAppConfig                  = mock[AppConfig]
-  private val userLocationView               = inject[user_location]
+  private val mockAppConfig = mock[AppConfig]
+  private val userLocationView = inject[user_location]
 
   private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 
@@ -278,7 +270,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     withAuthorisedUser(userId, mockAuthConnector)
 
     test(
-      controller.processing(atarService)
+      controller
+        .processing(atarService)
         .apply(SessionBuilder.buildRequestWithSessionAndPath("/atar/subscribe", userId))
     )
   }
@@ -286,7 +279,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private def subscriptionStatus(location: UserLocation = UserLocation.Iom)(test: Future[Result] => Any) = {
 
     val subStatus: PreSubscriptionStatus = NewSubscription
-    implicit val hc: HeaderCarrier       = mock[HeaderCarrier]
+    implicit val hc: HeaderCarrier = mock[HeaderCarrier]
     implicit val rq: Request[AnyContent] = mock[Request[AnyContent]]
 
     test(controller.subscriptionStatus(subStatus, GroupId("GroupId"), atarService, location)(rq, hc))

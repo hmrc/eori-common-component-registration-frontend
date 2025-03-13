@@ -32,7 +32,7 @@ import util.externalservices.ExternalServicesConfig._
 
 class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFutures with MockitoSugar {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.enrolment-store-proxy.host"    -> Host,
@@ -47,7 +47,7 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
     .build()
 
   private lazy val enrolmentStoreProxyConnector = app.injector.instanceOf[EnrolmentStoreProxyConnector]
-  private val groupId                           = "2e4589d9-484c-468a-8099-02a06fb1cd8c"
+  private val groupId = "2e4589d9-484c-468a-8099-02a06fb1cd8c"
 
   private val expectedGetUrl =
     s"/enrolment-store-proxy/enrolment-store/groups/$groupId/enrolments?type=principal"
@@ -100,19 +100,16 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
   "EnrolmentStoreProxy" should {
     "return successful response with OK status when Enrolment Store Proxy returns 200" in {
       EnrolmentStoreProxyService.returnEnrolmentStoreProxyResponseOk("2e4589d9-484c-468a-8099-02a06fb1cd8c")
-      enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value.futureValue.map(
-        res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse])
-      )
+      enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value.futureValue.map(res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse]))
     }
 
     "return No Content status when no data is returned in response" in {
       EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", NO_CONTENT)
-      enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value.futureValue.map(
-        res =>
-          res mustBe EnrolmentStoreProxyResponse(enrolments =
-            List.empty[EnrolmentResponse]
-          )
-      )
+      enrolmentStoreProxyConnector
+        .getEnrolmentByGroupId(groupId)
+        .value
+        .futureValue
+        .map(res => res mustBe EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
     }
 
     "return left when Service unavailable" in {

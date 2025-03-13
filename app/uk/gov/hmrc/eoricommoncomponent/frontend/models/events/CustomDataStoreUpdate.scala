@@ -45,7 +45,7 @@ case class CustomsDataStoreUpdate(request: UpdateRequest, response: UpdateRespon
 
 object CustomsDataStoreUpdate {
 
-  //writes for flattened Audit event
+  // writes for flattened Audit event
   implicit val writes: Writes[CustomsDataStoreUpdate] =
     JsPath
       .write[UpdateRequest]

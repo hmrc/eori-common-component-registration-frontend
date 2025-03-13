@@ -24,12 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolment
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.EnrolmentExistsUserStandaloneViewModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{
-  enrolment_exists_group_standalone,
-  enrolment_exists_user_standalone,
-  registration_exists,
-  registration_exists_group
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{enrolment_exists_group_standalone, enrolment_exists_user_standalone, registration_exists, registration_exists_group}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -45,47 +40,43 @@ class EnrolmentAlreadyExistsController @Inject() (
   enrolmentExistsForGroupStandaloneView: enrolment_exists_group_standalone,
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
-    extends FrontendController(mcc) with I18nSupport with EnrolmentExtractor {
+    extends FrontendController(mcc)
+    with I18nSupport
+    with EnrolmentExtractor {
 
   // Note: permitted for user with service enrolment
   def enrolmentAlreadyExists(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
-          Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service)))
-        else
-          Future.successful(Ok(registrationExistsView(service)))
+    authAction.ggAuthorisedUserAction { implicit request => _: LoggedInUserWithEnrolments =>
+      if (service.code.equalsIgnoreCase(appConfig.standaloneServiceCode))
+        Future.successful(Redirect(routes.EnrolmentAlreadyExistsController.enrolmentAlreadyExistsStandalone(service)))
+      else
+        Future.successful(Ok(registrationExistsView(service)))
     }
 
   // Note: permitted for user with service enrolment
   def enrolmentAlreadyExistsForGroup(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserAction {
-      implicit request => _: LoggedInUserWithEnrolments =>
-        Future.successful(Ok(registrationExistsForGroupView(service)))
+    authAction.ggAuthorisedUserAction { implicit request => _: LoggedInUserWithEnrolments =>
+      Future.successful(Ok(registrationExistsForGroupView(service)))
     }
 
   def enrolmentAlreadyExistsStandalone(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserAction {
-      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        val eoriNumber = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
-        Future.successful(
-          Ok(
-            enrolmentExistsStandaloneView(
-              eoriNumber,
-              loggedInUser.isAdminUser,
-              EnrolmentExistsUserStandaloneViewModel(loggedInUser.isAdminUser),
-              service
-            )
+    authAction.ggAuthorisedUserAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      val eoriNumber = existingEoriForUser(loggedInUser.enrolments.enrolments).map(_.id)
+      Future.successful(
+        Ok(
+          enrolmentExistsStandaloneView(
+            eoriNumber,
+            loggedInUser.isAdminUser,
+            EnrolmentExistsUserStandaloneViewModel(loggedInUser.isAdminUser),
+            service
           )
         )
+      )
     }
 
   def enrolmentAlreadyExistsForGroupStandalone(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserAction {
-      implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-        sessionCache.eori.map(
-          eoriNumber => Ok(enrolmentExistsForGroupStandaloneView(eoriNumber, loggedInUser.isAdminUser, service))
-        )
+    authAction.ggAuthorisedUserAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+      sessionCache.eori.map(eoriNumber => Ok(enrolmentExistsForGroupStandaloneView(eoriNumber, loggedInUser.isAdminUser, service)))
 
     }
 

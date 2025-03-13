@@ -27,7 +27,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{routes, CheckYourDetailsRegisterController}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CheckYourDetailsRegisterController, routes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Partnership, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionDetails, SubscriptionFlow}
@@ -40,13 +40,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.check_your_details_re
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.RegistrationDetailsBuilder.{
-  incorporatedRegistrationDetails,
-  individualRegistrationDetails,
-  individualRegistrationDetailsNotIdentifiedByReg01,
-  organisationRegistrationDetails,
-  partnershipRegistrationDetails
-}
+import util.builders.RegistrationDetailsBuilder.{incorporatedRegistrationDetails, individualRegistrationDetails, individualRegistrationDetailsNotIdentifiedByReg01, organisationRegistrationDetails, partnershipRegistrationDetails}
 import util.builders.SubscriptionFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
@@ -55,20 +49,23 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CheckYourDetailsRegisterControllerSpec
-    extends ControllerSpec with BusinessDatesOrganisationTypeTables with ReviewPageOrganisationTypeTables
-    with BeforeAndAfterEach with AuthActionMock {
+    extends ControllerSpec
+    with BusinessDatesOrganisationTypeTables
+    with ReviewPageOrganisationTypeTables
+    with BeforeAndAfterEach
+    with AuthActionMock {
 
-  private val mockAuthConnector                     = mock[AuthConnector]
-  private val mockAuthAction                        = authAction(mockAuthConnector)
-  private val mockSessionCache                      = mock[SessionCache]
-  val dateFormatter: DateFormatter                  = inject[DateFormatter]
-  private val mockSubscriptionDetails               = mock[SubscriptionDetails]
+  private val mockAuthConnector = mock[AuthConnector]
+  private val mockAuthAction = authAction(mockAuthConnector)
+  private val mockSessionCache = mock[SessionCache]
+  val dateFormatter: DateFormatter = inject[DateFormatter]
+  private val mockSubscriptionDetails = mock[SubscriptionDetails]
   private val mockRegisterWithoutIdWithSubscription = mock[RegisterWithoutIdWithSubscriptionService]
-  private val mockSubscriptionFlow                  = mock[SubscriptionFlow]
-  private val mockVatControlListDetails             = mock[VatControlListResponse]
-  private val mockRequestSession                    = mock[RequestSessionData]
-  private val checkYourDetailsRegisterView          = inject[check_your_details_register]
-  private val mockSessionCacheService               = inject[SessionCacheService]
+  private val mockSubscriptionFlow = mock[SubscriptionFlow]
+  private val mockVatControlListDetails = mock[VatControlListResponse]
+  private val mockRequestSession = mock[RequestSessionData]
+  private val checkYourDetailsRegisterView = inject[check_your_details_register]
+  private val mockSessionCacheService = inject[SessionCacheService]
 
   private val viewModelConstructor =
     new CheckYourDetailsRegisterConstructor(dateFormatter, mockSessionCache, mockRequestSession)
@@ -372,8 +369,8 @@ class CheckYourDetailsRegisterControllerSpec
       }
 
       val UtrLabelText = organisationType match {
-        case LimitedLiabilityPartnership   => "Corporation Tax Unique Taxpayer Reference (UTR)"
-        case Partnership                   => "Partnership Self Assessment UTR"
+        case LimitedLiabilityPartnership => "Corporation Tax Unique Taxpayer Reference (UTR)"
+        case Partnership => "Partnership Self Assessment UTR"
         case CharityPublicBodyNotForProfit => "Organisation’s UTR"
         case _ =>
           "Corporation Tax UTR"
@@ -394,7 +391,7 @@ class CheckYourDetailsRegisterControllerSpec
       s"contact details label displayed for ${organisationType.id}" in {
         val subscriptionFlow = organisationType match {
           case SoleTrader => SubscriptionFlow("Organisation")
-          case _          => SubscriptionFlow("Individual")
+          case _ => SubscriptionFlow("Individual")
         }
         when(mockRequestSession.userSubscriptionFlow(any[Request[AnyContent]], any[HeaderCarrier])).thenReturn(
           Right(subscriptionFlow)
@@ -856,7 +853,7 @@ class CheckYourDetailsRegisterControllerSpec
     assertUkVatDetailsShowValues(page)
 
     val countryString = expectedCountry match {
-      case None    => ""
+      case None => ""
       case Some(x) => x
     }
 
@@ -874,7 +871,7 @@ class CheckYourDetailsRegisterControllerSpec
   }
 
   private def assertUkVatDetailsShowValues(page: CdsPage): Unit = {
-    //VAT number
+    // VAT number
     page.getSummaryListValue(RegistrationReviewPage.SummaryListRowXPath, "VAT number") shouldBe "123456789"
     page.getSummaryListValue(
       RegistrationReviewPage.SummaryListRowXPath,
@@ -905,9 +902,7 @@ class CheckYourDetailsRegisterControllerSpec
 
     when(mockRequestSession.userSelectedOrganisationType(any[Request[AnyContent]]))
       .thenReturn(Some(userSelectedOrgType))
-    if (
-      userSelectedOrgType.id == CdsOrganisationType.PartnershipId || userSelectedOrgType.id == CdsOrganisationType.LimitedLiabilityPartnershipId
-    )
+    if (userSelectedOrgType.id == CdsOrganisationType.PartnershipId || userSelectedOrgType.id == CdsOrganisationType.LimitedLiabilityPartnershipId)
       when(mockRequestSession.isPartnership(any[Request[AnyContent]])).thenReturn(true)
 
     when(mockSubscriptionFlow.isIndividualFlow).thenReturn(isIndividualSubscriptionFlow)

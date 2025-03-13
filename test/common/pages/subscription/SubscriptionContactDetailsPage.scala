@@ -24,53 +24,53 @@ trait SubscriptionContactDetailsPage extends WebPage {
 
   val formId = "contactDetailsForm"
 
-  val headingXPath        = "//*[@id='contactDetailsForm']/fieldset/legend/h1"
-  val introXPathRegister  = "//*[@id='contact-details-intro']"
+  val headingXPath = "//*[@id='contactDetailsForm']/fieldset/legend/h1"
+  val introXPathRegister = "//*[@id='contact-details-intro']"
   val introXPathSubscribe = "//*[@id='contactDetailsForm']/fieldset/p"
 
-  val fullNameFieldXPath           = "//*[@id='full-name']"
+  val fullNameFieldXPath = "//*[@id='full-name']"
   val fullNameFieldLevelErrorXPath = "//p[@id='full-name-error' and @class='govuk-error-message']"
-  val fullNameFieldLabel           = "Full name"
-  val fullNameFieldId              = "full-name"
+  val fullNameFieldLabel = "Full name"
+  val fullNameFieldId = "full-name"
 
-  val emailFieldXPath                  = "//*[@id='email']"
+  val emailFieldXPath = "//*[@id='email']"
   val emailAddressFieldLevelErrorXPath = "//p[@id='email-error' and @class='govuk-error-message']"
-  val emailAddressFieldLabel           = "Email address"
-  val emailAddressFieldId              = "email"
+  val emailAddressFieldLabel = "Email address"
+  val emailAddressFieldId = "email"
 
   val emailReadOnlyFieldXPath = "//*[@id='email-read-only']"
-  val emailLabelXPath         = "//*[@id='email-outer']/span"
+  val emailLabelXPath = "//*[@id='email-outer']/span"
 
-  val telephoneFieldXPath           = "//*[@id='telephone']"
+  val telephoneFieldXPath = "//*[@id='telephone']"
   val telephoneFieldLevelErrorXPath = "//p[@id='telephone-error' and @class='govuk-error-message']"
-  val telephoneFieldLabel           = "Telephone"
-  val telephoneHintText             = "For international numbers include the country code."
-  val telephoneFieldId              = "telephone"
+  val telephoneFieldLabel = "Telephone"
+  val telephoneHintText = "For international numbers include the country code."
+  val telephoneFieldId = "telephone"
 
-  val faxFieldXPath           = "//*[@id='fax']"
+  val faxFieldXPath = "//*[@id='fax']"
   val faxFieldLevelErrorXPath = "//p[@id='fax-error' and @class='govuk-error-message']"
-  val faxFieldLabel           = "Fax (optional)"
-  val faxHintText             = "For international numbers include the country code."
-  val faxFieldId              = "fax"
+  val faxFieldLabel = "Fax (optional)"
+  val faxHintText = "For international numbers include the country code."
+  val faxFieldId = "fax"
 
   val useRegisteredAddressLabel = "Enter address"
 
-  val streetFieldXPath           = "//*[@id='street']"
+  val streetFieldXPath = "//*[@id='street']"
   val streetFieldLevelErrorXPath = "//p[@id='street-error' and @class='govuk-error-message']"
-  val streetFieldLabel           = "Street"
+  val streetFieldLabel = "Street"
 
-  val cityFieldXPath           = "//*[@id='city']"
+  val cityFieldXPath = "//*[@id='city']"
   val cityFieldLevelErrorXPath = "//p[@id='city-error' and @class='govuk-error-message']"
-  val cityFieldLabel           = "Town or city"
+  val cityFieldLabel = "Town or city"
 
   val countryFieldLevelErrorXPath = "//p[@id='countryCode-error' and @class='govuk-error-message']"
-  val countryFieldLabel           = "Country"
+  val countryFieldLabel = "Country"
 
   val countryCodeSelectedOptionXPath = "//*[@id='countryCode']/option[@selected]"
 
-  val postcodeFieldXPath           = "//*[@id='postcode']"
+  val postcodeFieldXPath = "//*[@id='postcode']"
   val postcodeFieldLevelErrorXPath = "//p[@id='postcode-error' and @class='govuk-error-message']"
-  val postcodeFieldLabel           = "Postcode"
+  val postcodeFieldLabel = "Postcode"
 
   val registeredAddressQuestionXPath =
     "//fieldset[@class='govuk-fieldset' and @aria-describedby='use-registered-address-hint']/legend/h1"
@@ -79,12 +79,12 @@ trait SubscriptionContactDetailsPage extends WebPage {
     "//fieldset[@class='govuk-fieldset' and @aria-describedby='use-registered-address-hint']/div[@id='use-registered-address-hint']"
 
   val useRegisteredAddressYesRadioButtonXPath = "//*[@id='use-registered-address-yes']"
-  val useRegisteredAddressNoRadioButtonXPath  = "//*[@id='use-registered-address-no']"
+  val useRegisteredAddressNoRadioButtonXPath = "//*[@id='use-registered-address-no']"
 
   val continueButtonXpath = "//*[@id='continue-button']"
 
   val hintTextFaxXpath = "//*[@id='fax-hint']"
-  val stepsXpath       = "//*[@id='steps-heading']"
+  val stepsXpath = "//*[@id='steps-heading']"
 
 }
 

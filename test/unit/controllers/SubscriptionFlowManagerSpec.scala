@@ -30,12 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowMana
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Embassy}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{
-  CdsOrganisationType,
-  RegistrationDetailsEmbassy,
-  RegistrationDetailsIndividual,
-  RegistrationDetailsOrganisation
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, RegistrationDetailsEmbassy, RegistrationDetailsIndividual, RegistrationDetailsOrganisation}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -45,21 +40,20 @@ import util.ControllerSpec
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class SubscriptionFlowManagerSpec
-    extends UnitSpec with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach with ControllerSpec {
+class SubscriptionFlowManagerSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach with ControllerSpec {
 
-  private val mockRequestSessionData     = mock[RequestSessionData]
-  private val mockCdsFrontendDataCache   = mock[SessionCache]
-  private val mockAppConfig              = mock[AppConfig]
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
+  private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockCdsFrontendDataCache = mock[SessionCache]
+  private val mockAppConfig = mock[AppConfig]
+  implicit private val hc: HeaderCarrier = HeaderCarrier()
 
   val controller =
     new SubscriptionFlowManager(mockRequestSessionData, mockCdsFrontendDataCache, mockAppConfig)(global)
 
-  private val mockOrgRegistrationDetails        = mock[RegistrationDetailsOrganisation]
+  private val mockOrgRegistrationDetails = mock[RegistrationDetailsOrganisation]
   private val mockIndividualRegistrationDetails = mock[RegistrationDetailsIndividual]
-  private val mockEmbassyRegistrationDetails    = mock[RegistrationDetailsEmbassy]
-  private val mockSession                       = mock[Session]
+  private val mockEmbassyRegistrationDetails = mock[RegistrationDetailsEmbassy]
+  private val mockSession = mock[Session]
 
   private val mockRequest = mock[Request[AnyContent]]
 

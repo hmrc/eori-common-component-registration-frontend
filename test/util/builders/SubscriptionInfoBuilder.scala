@@ -26,40 +26,40 @@ import java.time.{LocalDate, LocalDateTime, ZoneId}
 
 object SubscriptionInfoBuilder {
 
-  val eori           = Some("12345")
-  val CDSOrgName     = "orgName"
-  val orgStreetName  = "Line 1"
-  val orgCity        = "line 2"
-  val orgPostalCode  = Some("SE28 1AA")
+  val eori = Some("12345")
+  val CDSOrgName = "orgName"
+  val orgStreetName = "Line 1"
+  val orgCity = "line 2"
+  val orgPostalCode = Some("SE28 1AA")
   val orgCountryCode = "ZZ"
 
-  val contactName                  = "John Doe"
-  val contactStreet                = "Line 1"
-  val contactCity                  = "city name"
-  val contactPostalCode            = "SE28 1AA"
-  val contactCountry               = "ZZ"
-  val telephoneNumber              = "01632961234"
-  val faxNumber                    = "01632961235"
-  val emailAddress                 = "john.doe@example.com"
+  val contactName = "John Doe"
+  val contactStreet = "Line 1"
+  val contactCity = "city name"
+  val contactPostalCode = "SE28 1AA"
+  val contactCountry = "ZZ"
+  val telephoneNumber = "01632961234"
+  val faxNumber = "01632961235"
+  val emailAddress = "john.doe@example.com"
   val dateOfEstablishmentFormatted = "31 December 2015"
-  val dateOfEstablishment          = LocalDate.parse(dateOfEstablishmentFormatted, DateTimeFormatter.ofPattern("d MMMM yyyy"))
+  val dateOfEstablishment = LocalDate.parse(dateOfEstablishmentFormatted, DateTimeFormatter.ofPattern("d MMMM yyyy"))
 
-  val VATIdNoList      = List("VAT-1", "VAT-2", "VAT-3", "VAT-4", "VAT-5")
+  val VATIdNoList = List("VAT-1", "VAT-2", "VAT-3", "VAT-4", "VAT-5")
   val VATIdCountryList = List("GB", "FR", "ES", "PT", "IN")
 
   val vatIDList = for {
     index <- VATIdNoList.indices
     vatCountry = VATIdCountryList lift index
-    vatID      = VATIdNoList lift index
-    vatList    = SubscriptionInfoVatId(vatCountry, vatID)
+    vatID = VATIdNoList lift index
+    vatList = SubscriptionInfoVatId(vatCountry, vatID)
   } yield vatList
 
-  val shortName                                = "ltd"
-  val legalEntityValue                         = "0001"
-  val typeOfPerson                             = "1"
-  val principalEconomicActivity                = "100"
+  val shortName = "ltd"
+  val legalEntityValue = "0001"
+  val typeOfPerson = "1"
+  val principalEconomicActivity = "100"
   val consentToDisclosureOfPersonalDataGranted = "1"
-  val consentToDisclosureOfPersonalDataDenied  = "0"
+  val consentToDisclosureOfPersonalDataDenied = "0"
 
   private def thirdCountryUniqueIdentificationNumber(index: Int) = s"000$index"
 
@@ -147,13 +147,10 @@ object SubscriptionInfoBuilder {
     fullyPopulatedResponseDetail.copy(contactInformation = Some(partiallyPopulatedContactInformation))
 
   val responseDetailWithUnverifiedEmail =
-    fullyPopulatedResponseDetail.copy(contactInformation =
-      Some(fullyPopulatedContactInformation.copy(emailVerificationTimestamp = None))
-    )
+    fullyPopulatedResponseDetail.copy(contactInformation = Some(fullyPopulatedContactInformation.copy(emailVerificationTimestamp = None)))
 
-  val responseDetailWithoutPersonOfContact = fullyPopulatedResponseDetail.copy(contactInformation =
-    Some(partiallyPopulatedContactInformation.copy(emailAddress = Some(emailAddress)))
-  )
+  val responseDetailWithoutPersonOfContact =
+    fullyPopulatedResponseDetail.copy(contactInformation = Some(partiallyPopulatedContactInformation.copy(emailAddress = Some(emailAddress))))
 
   val sampleResponseCommon = ResponseCommon(
     "OK",

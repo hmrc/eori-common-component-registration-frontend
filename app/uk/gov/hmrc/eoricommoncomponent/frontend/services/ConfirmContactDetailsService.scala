@@ -86,12 +86,11 @@ class ConfirmContactDetailsService @Inject() (
       case No =>
         registrationConfirmService
           .clearRegistrationData()
-          .map(
-            _ =>
-              Redirect(
-                uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.OrganisationTypeController
-                  .form(service)
-              )
+          .map(_ =>
+            Redirect(
+              uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.OrganisationTypeController
+                .form(service)
+            )
           )
       case WrongAddress =>
         Future.successful(
@@ -129,8 +128,8 @@ class ConfirmContactDetailsService @Inject() (
             )
           )
         case _ =>
-          subscriptionFlowManager.startSubscriptionFlow(service).map {
-            case (page, newSession) => Redirect(page.url(service)).withSession(newSession)
+          subscriptionFlowManager.startSubscriptionFlow(service).map { case (page, newSession) =>
+            Redirect(page.url(service)).withSession(newSession)
           }
       }
   }
@@ -165,17 +164,17 @@ class ConfirmContactDetailsService @Inject() (
   ) =
     orgType match {
       case orgType if isPartnershipOrLLP(orgType) => messages("confirm-business-details.partnership.title-and-heading")
-      case orgType if isIndividual(orgType)       => messages("confirm-business-details.individual.title-and-heading")
-      case _ if !isUk                             => messages("confirm-business-details.row.title-and-heading")
+      case orgType if isIndividual(orgType) => messages("confirm-business-details.individual.title-and-heading")
+      case _ if !isUk => messages("confirm-business-details.row.title-and-heading")
       case orgType if isCharityPublicBodyNotForProfit(orgType) =>
         messages("confirm-business-details.row.title-and-heading")
       case _ => messages("confirm-business-details.title-and-heading")
     }
 
   private def countryCodeToLabel(countryCode: String)(implicit messages: Messages) = countryCode match {
-    case MatchingForms.countryCodeGB   => messages("cds.country.GB")
+    case MatchingForms.countryCodeGB => messages("cds.country.GB")
     case code if isEUCountryCode(code) => messageKeyForEUCountryCode(countryCode)
-    case nonEuCode                     => nonEuCode
+    case nonEuCode => nonEuCode
   }
 
   private def displayInputRadioGroupOptions(orgType: Option[EtmpOrganisationType])(implicit messages: Messages) =
@@ -184,8 +183,8 @@ class ConfirmContactDetailsService @Inject() (
   private def radioGroupWrongAddressText(orgType: Option[EtmpOrganisationType])(implicit messages: Messages): String =
     orgType match {
       case orgType if isPartnershipOrLLP(orgType) => messages("confirm-business-details.partnership.yes-wrong-address")
-      case orgType if isIndividual(orgType)       => messages("cds.no")
-      case _                                      => messages("confirm-business-details.yes-wrong-address")
+      case orgType if isIndividual(orgType) => messages("cds.no")
+      case _ => messages("confirm-business-details.yes-wrong-address")
     }
 
   def handleAddressAndPopulateView(service: Service, isInReviewMode: Boolean)(implicit

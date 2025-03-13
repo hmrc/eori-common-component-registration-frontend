@@ -27,20 +27,16 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  ClearCacheAndRegistrationIdentificationService,
-  RequestSessionData,
-  SessionCache
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{ClearCacheAndRegistrationIdentificationService, RequestSessionData, SessionCache}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
 class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll with BeforeAndAfterEach {
-  private val mockCdsFrontendDataCache                           = mock[SessionCache]
-  private val mockSubscriptionStatusService                      = mock[SubscriptionStatusService]
-  private val mockRequestSessionData                             = mock[RequestSessionData]
+  private val mockCdsFrontendDataCache = mock[SessionCache]
+  private val mockSubscriptionStatusService = mock[SubscriptionStatusService]
+  private val mockRequestSessionData = mock[RequestSessionData]
   private val mockClearCacheAndRegistrationIdentificationService = mock[ClearCacheAndRegistrationIdentificationService]
 
   val service = new RegistrationConfirmService(
@@ -50,14 +46,14 @@ class RegistrationConfirmServiceSpec extends UnitSpec with MockitoSugar with Bef
     mockClearCacheAndRegistrationIdentificationService
   )(global)
 
-  implicit val hc: HeaderCarrier                = mock[HeaderCarrier]
-  implicit val originatingService: Service      = mock[Service]
-  implicit val mockLoggedInUser: LoggedInUser   = mock[LoggedInUser]
+  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
+  implicit val originatingService: Service = mock[Service]
+  implicit val mockLoggedInUser: LoggedInUser = mock[LoggedInUser]
   implicit val mockRequest: Request[AnyContent] = mock[Request[AnyContent]]
 
   private val mockRegistrationDetailsFunction = mock[RegistrationDetails => String]
-  val registrationDetailsFunctionResult       = "Success!"
-  private val mockRegistrationDetails         = mock[RegistrationDetails]
+  val registrationDetailsFunctionResult = "Success!"
+  private val mockRegistrationDetails = mock[RegistrationDetails]
 
   val emulatedFailure = new UnsupportedOperationException("Emulated service call failure.")
 

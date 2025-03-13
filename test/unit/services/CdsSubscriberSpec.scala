@@ -56,24 +56,24 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
   implicit override val patienceConfig: PatienceConfig =
     PatienceConfig(timeout = scaled(Span(10, Seconds)), interval = scaled(Span(15, Millis)))
 
-  private val mockSubscriptionService                      = mock[SubscriptionService]
-  private val mockCdsFrontendDataCache                     = mock[SessionCache]
-  private val mockRegistrationConfirmService               = mock[RegistrationConfirmService]
-  private val mockSubscriptionFlowManager                  = mock[SubscriptionFlowManager]
-  private val mockHandleSubscriptionService                = mock[HandleSubscriptionService]
+  private val mockSubscriptionService = mock[SubscriptionService]
+  private val mockCdsFrontendDataCache = mock[SessionCache]
+  private val mockRegistrationConfirmService = mock[RegistrationConfirmService]
+  private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
+  private val mockHandleSubscriptionService = mock[HandleSubscriptionService]
   private val mockRegistrationDetails: RegistrationDetails = mock[RegistrationDetails]
 
   implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
 
   implicit val messages: Messages = MessagesImpl(defaultLang, inject[MessagesApi])
 
-  private val eori                       = "EORI-Number"
-  private val formBundleId               = "Form-Bundle-Id"
-  private val processingDate             = "19 April 2018"
+  private val eori = "EORI-Number"
+  private val formBundleId = "Form-Bundle-Id"
+  private val processingDate = "19 April 2018"
   private val emailVerificationTimestamp = TestData.emailVerificationTimestamp
-  private val mockCdsOrganisationType    = mock[Option[CdsOrganisationType]]
-  private val mockContactDetailsModel    = mock[ContactDetailsModel]
-  private val contactDetails             = SubscriptionContactDetailsBuilder.contactDetailsWithMandatoryValuesOnly
+  private val mockCdsOrganisationType = mock[Option[CdsOrganisationType]]
+  private val mockContactDetailsModel = mock[ContactDetailsModel]
+  private val contactDetails = SubscriptionContactDetailsBuilder.contactDetailsWithMandatoryValuesOnly
 
   private val subscriptionDetails = SubscriptionDetails(
     contactDetails = Some(mockContactDetailsModel),
@@ -115,23 +115,22 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
       val inOrder =
         org.mockito.Mockito.inOrder(mockCdsFrontendDataCache, mockSubscriptionService, mockRegistrationConfirmService)
 
-      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) {
-        subscriptionResult =>
-          subscriptionResult shouldBe SubscriptionSuccessful(
-            Eori(eori),
-            formBundleId,
-            processingDate,
-            Some(emailVerificationTimestamp)
-          )
-          inOrder.verify(mockCdsFrontendDataCache).registrationDetails(any[Request[_]])
-          inOrder
-            .verify(mockSubscriptionService)
-            .subscribe(
-              meq(mockRegistrationDetails),
-              meq(subscriptionDetails),
-              meq(mockCdsOrganisationType),
-              any[Service]
-            )(any[HeaderCarrier])
+      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) { subscriptionResult =>
+        subscriptionResult shouldBe SubscriptionSuccessful(
+          Eori(eori),
+          formBundleId,
+          processingDate,
+          Some(emailVerificationTimestamp)
+        )
+        inOrder.verify(mockCdsFrontendDataCache).registrationDetails(any[Request[_]])
+        inOrder
+          .verify(mockSubscriptionService)
+          .subscribe(
+            meq(mockRegistrationDetails),
+            meq(subscriptionDetails),
+            meq(mockCdsOrganisationType),
+            any[Service]
+          )(any[HeaderCarrier])
       }
     }
 
@@ -141,19 +140,18 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
         .thenReturn(Future.successful(true))
       val inOrder = org.mockito.Mockito.inOrder(mockCdsFrontendDataCache, mockSubscriptionService)
 
-      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) {
-        result =>
-          result shouldBe SubscriptionPending(formBundleId, processingDate, Some(emailVerificationTimestamp))
-          inOrder.verify(mockCdsFrontendDataCache).registrationDetails(any[Request[_]])
-          inOrder
-            .verify(mockSubscriptionService)
-            .subscribe(
-              meq(mockRegistrationDetails),
-              meq(subscriptionDetails),
-              any[Option[CdsOrganisationType]],
-              any[Service]
-            )(any[HeaderCarrier])
-          verify(mockCdsFrontendDataCache, never).remove(any[Request[_]])
+      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) { result =>
+        result shouldBe SubscriptionPending(formBundleId, processingDate, Some(emailVerificationTimestamp))
+        inOrder.verify(mockCdsFrontendDataCache).registrationDetails(any[Request[_]])
+        inOrder
+          .verify(mockSubscriptionService)
+          .subscribe(
+            meq(mockRegistrationDetails),
+            meq(subscriptionDetails),
+            any[Option[CdsOrganisationType]],
+            any[Service]
+          )(any[HeaderCarrier])
+        verify(mockCdsFrontendDataCache, never).remove(any[Request[_]])
       }
     }
 
@@ -193,28 +191,27 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
       )
 
       mockSuccessfulSubscribeGYEJourney(mockRegistrationDetails, subscriptionDetails, expectedOrgName)
-      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) {
-        result =>
-          result shouldBe SubscriptionSuccessful(
-            Eori(eori),
-            formBundleId,
-            processingDate,
-            Some(emailVerificationTimestamp)
-          )
-          val inOrder = org.mockito.Mockito.inOrder(mockCdsFrontendDataCache, mockHandleSubscriptionService)
-          inOrder
-            .verify(mockCdsFrontendDataCache)
-            .saveSub02Outcome(meq(Sub02Outcome(processingDate, expectedOrgName, Some(eori))))(meq(request))
-          inOrder
-            .verify(mockHandleSubscriptionService)
-            .handleSubscription(
-              meq(formBundleId),
-              meq(expectedRecipient),
-              any[TaxPayerId],
-              meq(Some(Eori(eori))),
-              meq(Some(emailVerificationTimestamp)),
-              any[SafeId]
-            )(any[HeaderCarrier])
+      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) { result =>
+        result shouldBe SubscriptionSuccessful(
+          Eori(eori),
+          formBundleId,
+          processingDate,
+          Some(emailVerificationTimestamp)
+        )
+        val inOrder = org.mockito.Mockito.inOrder(mockCdsFrontendDataCache, mockHandleSubscriptionService)
+        inOrder
+          .verify(mockCdsFrontendDataCache)
+          .saveSub02Outcome(meq(Sub02Outcome(processingDate, expectedOrgName, Some(eori))))(meq(request))
+        inOrder
+          .verify(mockHandleSubscriptionService)
+          .handleSubscription(
+            meq(formBundleId),
+            meq(expectedRecipient),
+            any[TaxPayerId],
+            meq(Some(Eori(eori))),
+            meq(Some(emailVerificationTimestamp)),
+            any[SafeId]
+          )(any[HeaderCarrier])
       }
     }
 
@@ -236,23 +233,22 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
         )(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
 
-      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) {
-        result =>
-          result shouldBe SubscriptionPending(formBundleId, processingDate, Some(emailVerificationTimestamp))
-          val inOrder = org.mockito.Mockito.inOrder(mockCdsFrontendDataCache, mockHandleSubscriptionService)
-          inOrder
-            .verify(mockCdsFrontendDataCache)
-            .saveSub02Outcome(meq(Sub02Outcome(processingDate, expectedOrgName)))(meq(request))
-          inOrder
-            .verify(mockHandleSubscriptionService)
-            .handleSubscription(
-              meq(formBundleId),
-              meq(expectedRecipient),
-              any[TaxPayerId],
-              meq(None),
-              meq(Some(emailVerificationTimestamp)),
-              any[SafeId]
-            )(any[HeaderCarrier])
+      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) { result =>
+        result shouldBe SubscriptionPending(formBundleId, processingDate, Some(emailVerificationTimestamp))
+        val inOrder = org.mockito.Mockito.inOrder(mockCdsFrontendDataCache, mockHandleSubscriptionService)
+        inOrder
+          .verify(mockCdsFrontendDataCache)
+          .saveSub02Outcome(meq(Sub02Outcome(processingDate, expectedOrgName)))(meq(request))
+        inOrder
+          .verify(mockHandleSubscriptionService)
+          .handleSubscription(
+            meq(formBundleId),
+            meq(expectedRecipient),
+            any[TaxPayerId],
+            meq(None),
+            meq(Some(emailVerificationTimestamp)),
+            any[SafeId]
+          )(any[HeaderCarrier])
       }
     }
 
@@ -261,13 +257,12 @@ class CdsSubscriberSpec extends UnitSpec with MockitoSugar with ScalaFutures wit
       mockFailedSubscribe(mockRegistrationDetails, subscriptionDetails, expectedName)
       when(mockCdsFrontendDataCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]]))
         .thenReturn(Future.successful(true))
-      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) {
-        result =>
-          result shouldBe SubscriptionFailed("EORI already exists", processingDate)
-          verify(mockCdsFrontendDataCache).saveSub02Outcome(meq(Sub02Outcome(processingDate, expectedName)))(
-            meq(request)
-          )
-          verifyNoInteractions(mockHandleSubscriptionService)
+      whenReady(cdsSubscriber.subscribeWithCachedDetails(mockCdsOrganisationType, atarService)) { result =>
+        result shouldBe SubscriptionFailed("EORI already exists", processingDate)
+        verify(mockCdsFrontendDataCache).saveSub02Outcome(meq(Sub02Outcome(processingDate, expectedName)))(
+          meq(request)
+        )
+        verifyNoInteractions(mockHandleSubscriptionService)
       }
     }
 

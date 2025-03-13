@@ -27,11 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatD
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{
-  DataUnavailableException,
-  RequestSessionData,
-  SessionCacheService
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -55,35 +51,34 @@ class VatDetailsController @Inject() (
     extends CdsController(mcc) {
 
   val dateForm: Form[VatRegistrationDate] = form()
-  val vatDetailsForm                      = new VatDetailsForm(requestSessionData)
+  val vatDetailsForm = new VatDetailsForm(requestSessionData)
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => user: LoggedInUserWithEnrolments =>
-        val userLocation =
-          requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
-        sessionCacheService.individualAndSoleTraderRouter(
-          user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-          service,
-          Ok(
-            vatDetailsView(
-              vatDetailsForm.vatDetailsForm,
-              isInReviewMode = false,
-              userLocation,
-              requestSessionData.isIndividualOrSoleTrader,
-              requestSessionData.isRestOfTheWorld,
-              service
-            )
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      val userLocation =
+        requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
+      sessionCacheService.individualAndSoleTraderRouter(
+        user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+        service,
+        Ok(
+          vatDetailsView(
+            vatDetailsForm.vatDetailsForm,
+            isInReviewMode = false,
+            userLocation,
+            requestSessionData.isIndividualOrSoleTrader,
+            requestSessionData.isRestOfTheWorld,
+            service
           )
         )
+      )
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) {
-      implicit request => user: LoggedInUserWithEnrolments =>
-        val userLocation =
-          requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
-        subscriptionBusinessService.getCachedUkVatDetails.map {
+    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+      val userLocation =
+        requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
+      subscriptionBusinessService.getCachedUkVatDetails
+        .map {
           case Some(vatDetails) =>
             Ok(
               vatDetailsView(
@@ -106,7 +101,8 @@ class VatDetailsController @Inject() (
                 service
               )
             )
-        }.flatMap(
+        }
+        .flatMap(
           sessionCacheService.individualAndSoleTraderRouter(
             user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
             service,
@@ -119,42 +115,45 @@ class VatDetailsController @Inject() (
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       val userLocation =
         requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
-      vatDetailsForm.vatDetailsForm.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(
-              vatDetailsView(
-                formWithErrors,
-                isInReviewMode,
-                userLocation,
-                requestSessionData.isIndividualOrSoleTrader,
-                requestSessionData.isRestOfTheWorld,
-                service
+      vatDetailsForm.vatDetailsForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(
+                vatDetailsView(
+                  formWithErrors,
+                  isInReviewMode,
+                  userLocation,
+                  requestSessionData.isIndividualOrSoleTrader,
+                  requestSessionData.isRestOfTheWorld,
+                  service
+                )
               )
-            )
-          ),
-        formData => lookupVatDetails(formData, isInReviewMode, service)
-      )
+            ),
+          formData => lookupVatDetails(formData, isInReviewMode, service)
+        )
     }
 
   private def lookupVatDetails(vatForm: VatDetails, isInReviewMode: Boolean, service: Service)(implicit
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
-    VatDetailsService.getVatCustomerInformation(vatForm.number).foldF(
-      responseError =>
-        responseError.status match {
-          case NOT_FOUND | BAD_REQUEST =>
-            Future.successful(Redirect(redirectNext(service)))
-          case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
-          case _                   => Future.successful(Results.InternalServerError(errorTemplate(service)))
-        },
-      response =>
-        if (response.isPostcodeAssociatedWithVrn(vatForm, requestSessionData.isRestOfTheWorld))
-          subscriptionDetailsService
-            .cacheUkVatDetails(vatForm)
-            .map {
-              _ =>
+    VatDetailsService
+      .getVatCustomerInformation(vatForm.number)
+      .foldF(
+        responseError =>
+          responseError.status match {
+            case NOT_FOUND | BAD_REQUEST =>
+              Future.successful(Redirect(redirectNext(service)))
+            case SERVICE_UNAVAILABLE => Future.successful(Results.ServiceUnavailable(errorTemplate(service)))
+            case _ => Future.successful(Results.InternalServerError(errorTemplate(service)))
+          },
+        response =>
+          if (response.isPostcodeAssociatedWithVrn(vatForm, requestSessionData.isRestOfTheWorld))
+            subscriptionDetailsService
+              .cacheUkVatDetails(vatForm)
+              .map { _ =>
                 subscriptionDetailsService.cacheVatControlListResponse(response)
                 if (isInReviewMode)
                   Redirect(
@@ -163,12 +162,10 @@ class VatDetailsController @Inject() (
                   )
                 else
                   Redirect(DateOfVatRegistrationController.createForm(service))
-            }
-        else
-          subscriptionDetailsService.clearCachedVatControlListResponse().flatMap(
-            _ => Future.successful(Redirect(redirectNext(service)))
-          )
-    )
+              }
+          else
+            subscriptionDetailsService.clearCachedVatControlListResponse().flatMap(_ => Future.successful(Redirect(redirectNext(service))))
+      )
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>

@@ -17,10 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{
-  EmailController,
-  VatGroupsCannotRegisterUsingThisServiceController
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EmailController, VatGroupsCannotRegisterUsingThisServiceController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
@@ -28,8 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.vat_group
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group)
-    extends CdsController(mcc) {
+class VatGroupController @Inject() (mcc: MessagesControllerComponents, vatGroupView: vat_group) extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] = Action { implicit request =>
     Ok(vatGroupView(vatGroupYesNoAnswerForm(), service))

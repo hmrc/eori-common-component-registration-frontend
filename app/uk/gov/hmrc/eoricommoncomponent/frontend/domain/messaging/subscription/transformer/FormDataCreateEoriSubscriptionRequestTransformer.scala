@@ -16,34 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.transformer
 
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{
-  CharityPublicBodyNotForProfit,
-  Company,
-  Embassy,
-  Individual,
-  LimitedLiabilityPartnership,
-  Partnership,
-  SoleTrader
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, Company, Embassy, Individual, LimitedLiabilityPartnership, Partnership, SoleTrader}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionRequest.principalEconomicActivityLength
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{
-  CdsEstablishmentAddress,
-  ContactInformation,
-  Id,
-  Organisation,
-  VatIdentification
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{CdsEstablishmentAddress, ContactInformation, Id, Organisation, VatIdentification}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, RegistrationDetails, Utr}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, RegistrationDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpLegalStatus.{
-  CorporateBody,
-  Llp,
-  UnincorporatedBody
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpLegalStatus.{CorporateBody, Llp, UnincorporatedBody}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.{CdsToEtmpOrganisationType, EtmpLegalStatus}
 
 import java.time.format.DateTimeFormatter
@@ -74,9 +56,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
         case CharityPublicBodyNotForProfit =>
           transformCharityPublicBodyNotForProfit(regDetails, subDetails, userLocation, service)
       }
-    } else if (
-      userLocation == UserLocation.Uk && subDetails.formData.organisationType.contains(CharityPublicBodyNotForProfit)
-    ) {
+    } else if (userLocation == UserLocation.Uk && subDetails.formData.organisationType.contains(CharityPublicBodyNotForProfit)) {
       transformCharityPublicBodyNotForProfit(regDetails, subDetails, userLocation, service)
     } else {
       throw new UnsupportedOperationException(
@@ -125,7 +105,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
     service: Service
   ): CreateEoriSubscriptionRequest = {
     val cdsOrgType = subDetails.formData.organisationType.head
-    val org        = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
+    val org = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
 
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
@@ -166,7 +146,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
     service: Service
   ): CreateEoriSubscriptionRequest = {
     val cdsOrgType = subDetails.formData.organisationType.head
-    val org        = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
+    val org = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
 
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
@@ -208,9 +188,9 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
     service: Service
   ): CreateEoriSubscriptionRequest = {
     val cdsOrgType = subDetails.formData.organisationType.head
-    val org        = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
+    val org = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
     val countryCode = userLocation match {
-      case UserLocation.Uk  => "GB"
+      case UserLocation.Uk => "GB"
       case UserLocation.Iom => "IM"
     }
     CreateEoriSubscriptionRequest(
@@ -242,10 +222,10 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
 
   private def legalStatusFromOrgType(cdsOrganisationType: CdsOrganisationType): String = {
     cdsOrganisationType match {
-      case Company                       => CorporateBody
-      case LimitedLiabilityPartnership   => Llp
-      case SoleTrader | Individual       => UnincorporatedBody
-      case Partnership                   => EtmpLegalStatus.Partnership
+      case Company => CorporateBody
+      case LimitedLiabilityPartnership => Llp
+      case SoleTrader | Individual => UnincorporatedBody
+      case Partnership => EtmpLegalStatus.Partnership
       case CharityPublicBodyNotForProfit => UnincorporatedBody
     }
   }

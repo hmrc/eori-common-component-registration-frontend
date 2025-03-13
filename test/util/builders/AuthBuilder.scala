@@ -128,7 +128,7 @@ object AuthBuilder {
     val noBearerTokenMatcher: ArgumentMatcher[HeaderCarrier] = new ArgumentMatcher[HeaderCarrier] {
       def matches(item: HeaderCarrier): Boolean = item match {
         case hc: HeaderCarrier if hc.authorization.isEmpty => true
-        case _                                             => false
+        case _ => false
       }
     }
 

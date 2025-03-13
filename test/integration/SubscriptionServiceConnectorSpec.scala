@@ -24,17 +24,14 @@ import play.api.libs.json.{JsValue, Json}
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{
-  SubscriptionRequest,
-  SubscriptionResponse
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{SubscriptionRequest, SubscriptionResponse}
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
-import util.externalservices.ExternalServicesConfig.{etmpFormBundleId, Host, Port}
+import util.externalservices.ExternalServicesConfig.{Host, Port, etmpFormBundleId}
 import util.externalservices.{AuditService, SubscriptionService}
 
 class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Map(
         "microservice.services.eori-common-component-hods-proxy.host"              -> Host,

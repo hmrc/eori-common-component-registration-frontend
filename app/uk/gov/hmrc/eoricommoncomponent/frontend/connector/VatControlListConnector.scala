@@ -29,8 +29,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext)
-    extends HandleResponses {
+class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext) extends HandleResponses {
 
   private val baseUrl = appConfig.getServiceUrl("vat-known-facts-control-list")
 
@@ -48,7 +47,7 @@ class VatControlListConnector @Inject() (httpClient: HttpClientV2, appConfig: Ap
       logger.debug(s"vat-known-facts-control-list successful. url: $url")
       // $COVERAGE-ON
       response.status match {
-        case OK        => handleResponse[VatControlListResponse](response)
+        case OK => handleResponse[VatControlListResponse](response)
         case NOT_FOUND =>
           // $COVERAGE-OFF$Loggers
           logger.warn(

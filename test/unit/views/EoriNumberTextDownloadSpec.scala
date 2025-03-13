@@ -27,8 +27,8 @@ class EoriNumberTextDownloadSpec extends ViewSpec {
 
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(fakeAtarRegisterRequest)
 
-  val eori       = "GB123445562"
-  val orgName    = "Test Organisation Name"
+  val eori = "GB123445562"
+  val orgName = "Test Organisation Name"
   val issuedDate = "01 Jan 2019"
 
   private val view = inject[eori_number_text_download]

@@ -43,7 +43,7 @@ class Save4LaterConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
     .build()
 
   private lazy val save4LaterConnector = app.injector.instanceOf[Save4LaterConnector]
-  implicit val hc: HeaderCarrier       = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   before {
     resetMockServer()

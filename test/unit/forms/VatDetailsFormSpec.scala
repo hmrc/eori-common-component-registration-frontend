@@ -18,8 +18,7 @@ package unit.forms
 
 import base.UnitSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
-import play.api.data.Form
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
@@ -33,16 +32,14 @@ class VatDetailsFormSpec extends UnitSpec {
 
   val mockAuditable: Auditable = mock[Auditable]
 
-  val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable) {
-    def isRestOfTheWorld: Boolean = false
-  }
+  val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable)
 
   def form: Form[VatDetails] = new VatDetailsForm(mockRequestSessionData).vatDetailsForm
   "contactDetailsCreateForm" should {
 
     "fail when mandatory fields are empty" in {
       val data = Map("postcode" -> "", "vat-number" -> "")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(
         FormError("postcode", "cds.subscription.vat-details.postcode.required.error"),
         FormError("vat-number", List("cds.subscription.vat-uk.required.error"))
@@ -51,27 +48,27 @@ class VatDetailsFormSpec extends UnitSpec {
 
     "accept a valid postcode and vat-number" in {
       val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "123456789")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq.empty
       res.value shouldBe Some(VatDetails("AA1 1AA", "123456789"))
     }
 
     "accept a valid postcode and vat-number with spaces" in {
       val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "1 2 3 4 5 6 7 8 9")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq.empty
       res.value shouldBe Some(VatDetails("AA1 1AA", "123456789"))
     }
 
     "fail when vat-number is too long" in {
       val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "1 2 3 4 5 6 7 8 96666")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-number", "cds.subscription.vat-uk.length.error"))
     }
 
     "fail when vat-number contains invalid vat number" in {
       val data = Map("postcode" -> "AA1 1AA", "vat-number" -> "123456£78")
-      val res  = form.bind(data)
+      val res = form.bind(data)
       res.errors shouldBe Seq(FormError("vat-number", "cds.subscription.vat-uk.length.error"))
     }
 

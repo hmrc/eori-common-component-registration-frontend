@@ -23,11 +23,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{
-  RegisterWithId,
-  RegisterWithIdConfirmation,
-  RegisterWithIdSubmitted
-}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{RegisterWithId, RegisterWithIdConfirmation, RegisterWithIdSubmitted}
 import uk.gov.hmrc.http.{HeaderCarrier, _}
 import uk.gov.hmrc.http.client.HttpClientV2
 
@@ -93,7 +89,7 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
   private def auditCall(url: String, request: MatchingRequestHolder, response: MatchingResponse)(implicit
     hc: HeaderCarrier
   ): Unit = {
-    val registerWithIdSubmitted    = RegisterWithIdSubmitted(request)
+    val registerWithIdSubmitted = RegisterWithIdSubmitted(request)
     val registerWithIdConfirmation = RegisterWithIdConfirmation(response)
 
     audit.sendExtendedDataEvent(
@@ -107,9 +103,9 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
 }
 
 object MatchingServiceConnector {
-  val NoMatchFound                             = "002 - No match found"
-  val DownstreamFailure                        = "001 - Request could not be processed"
-  val matchFailureResponse: ResponseError      = ResponseError(OK, NoMatchFound)
+  val NoMatchFound = "002 - No match found"
+  val DownstreamFailure = "001 - Request could not be processed"
+  val matchFailureResponse: ResponseError = ResponseError(OK, NoMatchFound)
   val downstreamFailureResponse: ResponseError = ResponseError(OK, DownstreamFailure)
-  val otherErrorHappen: ResponseError          = ResponseError(INTERNAL_SERVER_ERROR, "Unknown error occurred.")
+  val otherErrorHappen: ResponseError = ResponseError(INTERNAL_SERVER_ERROR, "Unknown error occurred.")
 }

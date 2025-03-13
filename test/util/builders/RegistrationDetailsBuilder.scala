@@ -24,7 +24,7 @@ import java.time.LocalDate
 object RegistrationDetailsBuilder {
 
   val defaultCountryName = "United Kingdom"
-  val defaultEmail       = "john.doe@example.com"
+  val defaultEmail = "john.doe@example.com"
 
   val defaultAddress: Address =
     Address("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), Some("SE28 1AA"), "GB")
