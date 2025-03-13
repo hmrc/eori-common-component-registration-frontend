@@ -72,7 +72,7 @@ class ApplicationSubmissionControllerSpec extends ControllerSpec with BeforeAndA
           "masahiro.moro@gmail.com",
           "07806674501",
           None,
-          true,
+          useAddressFromRegistrationDetails = true,
           None,
           None,
           None,

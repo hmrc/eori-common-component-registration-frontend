@@ -20,18 +20,18 @@ import cats.data.EitherT
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{RegisterWithId, RegisterWithIdConfirmation, RegisterWithIdSubmitted}
-import uk.gov.hmrc.http.{HeaderCarrier, _}
+import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
+class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) extends HandleResponses {
 
@@ -49,7 +49,8 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
           response.status match {
             case OK =>
               handleResponse[MatchingResponse](response).flatMap { matchingResponse =>
-                auditCall(url.toString, req, matchingResponse)
+                val details = Json.toJson(RegisterWithId(RegisterWithIdSubmitted(req), RegisterWithIdConfirmation(matchingResponse)))
+                audit.sendRegistrationDataEvent(url.toString, details)
                 val idResponse = matchingResponse.registerWithIDResponse
 
                 if (idResponse.responseDetail.isEmpty) {
@@ -85,21 +86,6 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
 
         }
     }
-
-  private def auditCall(url: String, request: MatchingRequestHolder, response: MatchingResponse)(implicit
-    hc: HeaderCarrier
-  ): Unit = {
-    val registerWithIdSubmitted = RegisterWithIdSubmitted(request)
-    val registerWithIdConfirmation = RegisterWithIdConfirmation(response)
-
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-registration",
-      path = url,
-      details = Json.toJson(RegisterWithId(registerWithIdSubmitted, registerWithIdConfirmation)),
-      eventType = "Registration"
-    )
-  }
-
 }
 
 object MatchingServiceConnector {

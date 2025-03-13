@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 import play.api.Logger
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{SubscriptionRequest, SubscriptionResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{Subscription, SubscriptionResult, SubscriptionSubmitted}
@@ -31,7 +31,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
+class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) {
 
@@ -55,7 +55,7 @@ class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfi
       logger.debug(s"[Subscribe SUB02: responseCommon: ${response.subscriptionCreateResponse.responseCommon}")
       // $COVERAGE-ON
 
-      auditCall(url.toString, request, response)
+      audit.sendSubscriptionDataEvent(url.toString, Json.toJson(Subscription(SubscriptionSubmitted(request), SubscriptionResult(response))))
       response
     } recoverWith { case e: Throwable =>
       // $COVERAGE-OFF$Loggers
@@ -66,19 +66,4 @@ class SubscriptionServiceConnector @Inject() (httpClient: HttpClientV2, appConfi
       Future.failed(e)
     }
   }
-
-  private def auditCall(url: String, request: SubscriptionRequest, response: SubscriptionResponse)(implicit
-    hc: HeaderCarrier
-  ): Unit = {
-    val subscriptionRequest = SubscriptionSubmitted(request)
-    val subscriptionResponse = SubscriptionResult(response)
-
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-subscription",
-      path = url,
-      details = Json.toJson(Subscription(subscriptionRequest, subscriptionResponse)),
-      eventType = "Subscription"
-    )
-  }
-
 }

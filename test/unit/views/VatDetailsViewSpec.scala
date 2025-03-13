@@ -23,7 +23,7 @@ import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
@@ -34,7 +34,7 @@ import util.ViewSpec
 class VatDetailsViewSpec extends ViewSpec {
   implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
-  val mockAuditable: Auditable = mock[Auditable]
+  val mockAuditable: Auditor = mock[Auditor]
 
   val mockRequestSessionData: RequestSessionData = new RequestSessionData(mockAuditable) {
     def isRestOfTheWorld: Boolean = false

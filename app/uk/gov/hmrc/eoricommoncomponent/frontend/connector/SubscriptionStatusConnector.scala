@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 import play.api.Logger
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -33,7 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
+class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) {
 
@@ -58,7 +58,9 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
       logger.debug(s"Status SUB01: responseCommon: ${resp.subscriptionStatusResponse.responseCommon}")
       // $COVERAGE-ON
 
-      auditCall(baseUrl, request, resp)
+      val detail = Json.toJson(SubscriptionStatus(SubscriptionStatusSubmitted(request, originatingService.code), SubscriptionStatusResult(resp)))
+      audit.sendSubscriptionStatusEvent(baseUrl, detail)
+
       resp.subscriptionStatusResponse
     } recover { case e: Throwable =>
       // $COVERAGE-OFF$Loggers
@@ -68,26 +70,8 @@ class SubscriptionStatusConnector @Inject() (httpClient: HttpClientV2, appConfig
     }
   }
 
-  private def auditCall(
-    url: String,
-    request: SubscriptionStatusQueryParams,
-    response: SubscriptionStatusResponseHolder
-  )(implicit hc: HeaderCarrier, originatingService: Service): Unit = {
-
-    val subscriptionStatusSubmitted = SubscriptionStatusSubmitted(request, originatingService.code)
-    val subscriptionStatusResult = SubscriptionStatusResult(response)
-
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-subscription-status",
-      path = url,
-      details = Json.toJson(SubscriptionStatus(subscriptionStatusSubmitted, subscriptionStatusResult)),
-      eventType = "SubscriptionStatus"
-    )
-  }
-
   private def makeQueryString(queryParams: Seq[(String, String)]) = {
     val paramPairs = queryParams.map { case (k, v) => s"$k=${URLEncoder.encode(v, "utf-8")}" }
     if (paramPairs.isEmpty) "" else paramPairs.mkString("&")
   }
-
 }

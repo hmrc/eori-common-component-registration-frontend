@@ -21,7 +21,7 @@ import play.api.http.HeaderNames._
 import play.api.libs.json.Json
 import play.mvc.Http.MimeTypes
 import play.mvc.Http.Status.{NO_CONTENT, OK}
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{CustomsDataStoreUpdate, UpdateRequest, UpdateResponse}
@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable)(implicit
+class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) {
 
@@ -53,7 +53,9 @@ class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appCo
       .setHeader(CONTENT_TYPE -> MimeTypes.JSON)
       .setHeader(AUTHORIZATION -> appConfig.internalAuthToken)
       .execute[HttpResponse] map { response =>
-      auditCall(url.toString, request, response)
+      val detail = Json.toJson(CustomsDataStoreUpdate(UpdateRequest(request), UpdateResponse(response)))
+      audit.sendCustomsDataStoreEvent(url.toString, detail)
+
       response.status match {
         case OK | NO_CONTENT =>
           // $COVERAGE-OFF$Loggers
@@ -75,18 +77,4 @@ class UpdateCustomsDataStoreConnector @Inject() (httpClient: HttpClientV2, appCo
         Future.failed(e)
     }
   }
-
-  private def auditCall(url: String, request: CustomsDataStoreRequest, response: HttpResponse)(implicit
-    hc: HeaderCarrier
-  ): Unit = {
-    val updateRequest = UpdateRequest(request)
-    val updateResponse = UpdateResponse(response)
-    audit.sendExtendedDataEvent(
-      transactionName = "customs-data-store",
-      path = url,
-      details = Json.toJson(CustomsDataStoreUpdate(updateRequest, updateResponse)),
-      eventType = "CustomsDataStoreUpdate"
-    )
-  }
-
 }

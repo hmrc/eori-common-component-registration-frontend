@@ -17,6 +17,8 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
 import play.api.Logger
+import play.api.libs.json.{JsObject, Json}
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
@@ -31,7 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(implicit ec: ExecutionContext) {
+class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, auditor: Auditor)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
 
@@ -40,8 +42,13 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector)(im
     subscription: SubscriptionDetails,
     cdsOrganisationType: Option[CdsOrganisationType],
     service: Service
-  )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
-    subscribeWithConnector(createRequest(registration, subscription, cdsOrganisationType, service))
+  )(implicit hc: HeaderCarrier): Future[SubscriptionResult] = {
+    val subRequest = createRequest(registration, subscription, cdsOrganisationType, service)
+    val detail =
+      JsObject.apply(Seq(("regDetails", Json.toJson(registration)), ("subDetails", Json.toJson(subscription)), ("subRequest", Json.toJson(subRequest))))
+    auditor.sendSubscriptionFlowSessionFailureEvent(detail)
+    subscribeWithConnector(subRequest)
+  }
 
   def createRequest(
     reg: RegistrationDetails,

@@ -27,6 +27,7 @@ import org.scalatestplus.scalacheck.Checkers
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.mvc.Http.Status._
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
@@ -583,8 +584,9 @@ class SubscriptionServiceSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   private def constructService(setupServiceConnector: SubscriptionServiceConnector => Unit) = {
     val mockSubscriptionServiceConnector = mock[SubscriptionServiceConnector]
+    val mockAuditor = mock[Auditor]
     setupServiceConnector(mockSubscriptionServiceConnector)
-    new SubscriptionService(mockSubscriptionServiceConnector)
+    new SubscriptionService(mockSubscriptionServiceConnector, mockAuditor)
   }
 
   private def assertSameJson(json: JsValue, expectedJson: JsValue) = {

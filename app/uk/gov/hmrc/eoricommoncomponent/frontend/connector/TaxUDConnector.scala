@@ -20,13 +20,13 @@ import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
 import play.api.http.Status.{BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY}
 import play.api.libs.json.Json
 import play.mvc.Http.MimeTypes
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.RegistrationDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.transformer.FormDataCreateEoriSubscriptionRequestTransformer
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetails, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.CreateEoriSubscriptionNoIdentifier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -40,7 +40,7 @@ import scala.util.control.NonFatal
 class TaxUDConnector @Inject() (
   httpClient: HttpClientV2,
   appConfig: AppConfig,
-  audit: Auditable,
+  audit: Auditor,
   formDataToRequestTransformer: FormDataCreateEoriSubscriptionRequestTransformer
 )(implicit ec: ExecutionContext)
     extends HandleResponses {
@@ -71,50 +71,43 @@ class TaxUDConnector @Inject() (
           case CREATED =>
             handleResponse[CreateEoriSubscriptionResponse](httpResponse) match {
               case Left(_) =>
+                // $COVERAGE-OFF$Loggers
                 logger.error(
                   s"Create EORI Subscription succeeded but could not parse response body, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
                 )
+                // $COVERAGE-ON
                 Future.successful(InvalidResponse)
-
               case Right(response: CreateEoriSubscriptionResponse) =>
                 audit
                   .sendSubscriptionDataEvent(
                     fullUrl.toString,
                     Json.toJson(CreateEoriSubscriptionNoIdentifier(createEoriSubscriptionRequest, response))
                   )
-                  .map(_ =>
-                    SuccessResponse(
-                      response.success.formBundleNumber,
-                      SafeId(response.success.safeId),
-                      response.success.processingDate
-                    )
-                  )
+                  .map(_ => SuccessResponse.apply(response))
             }
 
-          case UNPROCESSABLE_ENTITY =>
+          case UNPROCESSABLE_ENTITY | BAD_REQUEST | INTERNAL_SERVER_ERROR =>
+            // $COVERAGE-OFF$Loggers
             logger.error(
-              s"422 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
+              s"${httpResponse.status} received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
             )
-            Future.successful(ErrorResponse)
-          case BAD_REQUEST =>
-            logger.error(
-              s"400 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
-            )
-            Future.successful(ErrorResponse)
-          case INTERNAL_SERVER_ERROR =>
-            logger.error(
-              s"500 received from EIS, error is: ${Json.prettyPrint(httpResponse.json)}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
-            )
+            // $COVERAGE-ON
             Future.successful(ErrorResponse)
           case _ =>
+            // $COVERAGE-OFF$Loggers
             logger.error(
               s"call to create eori subscription failed with status: ${httpResponse.status}, Correlation ID is: ${httpResponse.header(X_CORRELATION_ID)}"
             )
+            // $COVERAGE-ON
+
             Future.successful(ErrorResponse)
         }
       }
       .recover { case NonFatal(e) =>
+        // $COVERAGE-OFF$Loggers
         logger.error(s"call to create eori subscription failed: $e")
+        // $COVERAGE-ON
+
         ServiceUnavailableResponse
       }
   }

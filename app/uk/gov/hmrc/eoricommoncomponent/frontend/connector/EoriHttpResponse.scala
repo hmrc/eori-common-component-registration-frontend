@@ -17,6 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SafeId
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionResponse
 
 import java.time.LocalDateTime
 
@@ -29,5 +30,11 @@ case object InvalidResponse extends EoriHttpResponse
 case object ServiceUnavailableResponse extends EoriHttpResponse
 
 case class SuccessResponse(formBundleNumber: String, safeId: SafeId, processingDate: LocalDateTime) extends EoriHttpResponse
+
+object SuccessResponse {
+  def apply(response: CreateEoriSubscriptionResponse): SuccessResponse = {
+    SuccessResponse(response.success.formBundleNumber, SafeId(response.success.safeId), response.success.processingDate)
+  }
+}
 
 case object ErrorResponse extends EoriHttpResponse

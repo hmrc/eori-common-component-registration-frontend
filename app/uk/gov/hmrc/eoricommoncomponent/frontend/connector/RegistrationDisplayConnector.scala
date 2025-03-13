@@ -19,19 +19,19 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 import play.api.Logger
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
-import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditable
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegistrationDisplay
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, _}
+import uk.gov.hmrc.http._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-class RegistrationDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditable) {
+class RegistrationDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor) {
 
   private val logger = Logger(this.getClass)
 
@@ -56,7 +56,8 @@ class RegistrationDisplayConnector @Inject() (httpClient: HttpClientV2, appConfi
       logger.debug(s"[RegistrationDisplay: response: $response")
       // $COVERAGE-ON
 
-      auditCall(url.toString, request, response)
+      val detail = Json.toJson(RegistrationDisplay(request, response))
+      audit.sendRegistrationDisplayEvent(url.toString, detail)
       Right(response.registrationDisplayResponse)
     } recover { case NonFatal(e) =>
       // $COVERAGE-OFF$Loggers
@@ -65,17 +66,4 @@ class RegistrationDisplayConnector @Inject() (httpClient: HttpClientV2, appConfi
       Left(ServiceUnavailableResponse)
     }
   }
-
-  private def auditCall(
-    url: String,
-    request: RegistrationDisplayRequestHolder,
-    response: RegistrationDisplayResponseHolder
-  )(implicit hc: HeaderCarrier): Unit =
-    audit.sendExtendedDataEvent(
-      transactionName = "ecc-registration-display",
-      path = url,
-      details = Json.toJson(RegistrationDisplay(request, response)),
-      eventType = "RegistrationDisplay"
-    )
-
 }
