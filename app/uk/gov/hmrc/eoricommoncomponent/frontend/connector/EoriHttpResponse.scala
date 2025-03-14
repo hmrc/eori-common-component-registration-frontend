@@ -23,8 +23,6 @@ import java.time.LocalDateTime
 
 sealed trait EoriHttpResponse
 
-case object NotFoundResponse extends EoriHttpResponse
-
 case object InvalidResponse extends EoriHttpResponse
 
 case object ServiceUnavailableResponse extends EoriHttpResponse

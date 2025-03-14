@@ -54,12 +54,7 @@ class TaxUDConnector @Inject() (
     userLocation: UserLocation,
     service: Service
   )(implicit hc: HeaderCarrier): Future[EoriHttpResponse] = {
-    val createEoriSubscriptionRequest = formDataToRequestTransformer.transform(
-      regDetails: RegistrationDetails,
-      subDetails: SubscriptionDetails,
-      userLocation: UserLocation,
-      service: Service
-    )
+    val createEoriSubscriptionRequest = formDataToRequestTransformer.transform(regDetails, subDetails, userLocation, service)
 
     httpClient
       .post(fullUrl)
