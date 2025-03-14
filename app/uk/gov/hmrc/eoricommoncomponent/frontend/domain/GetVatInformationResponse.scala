@@ -23,8 +23,6 @@ import java.util.Date
 case class GetVatInformationResponse(effectiveRegistrationDate: Option[Date], postCode: Option[String])
 
 object GetVatInformationResponse {
-
   implicit val getVatInformationResponseFormat: OFormat[GetVatInformationResponse] =
     Json.format[GetVatInformationResponse]
-
 }

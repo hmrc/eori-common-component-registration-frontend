@@ -113,8 +113,4 @@ class EmailVerificationConnector @Inject() (httpClient: HttpClientV2, appConfig:
 
 object EmailVerificationKeys {
   val EmailKey = "email"
-  val TemplateIdKey = "templateId"
-  val TemplateParametersKey = "templateParameters"
-  val LinkExpiryDurationKey = "linkExpiryDuration"
-  val ContinueUrlKey = "continueUrl"
 }

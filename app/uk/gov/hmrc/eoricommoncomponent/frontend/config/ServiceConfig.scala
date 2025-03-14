@@ -31,9 +31,7 @@ class ServiceConfig(configuration: Configuration) {
       val welshFriendlyName =
         configuration
           .getOptional[String](s"services-config.$service.friendlyNameWelsh")
-          .map(
-            _.replace("_", " ")
-          )
+          .map(_.replace("_", " "))
           .filter(_.nonEmpty)
           .getOrElse(englishFriendlyName)
 

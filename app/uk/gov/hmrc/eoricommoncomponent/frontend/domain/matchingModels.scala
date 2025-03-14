@@ -176,7 +176,6 @@ object NameIdOrganisationMatchModel {
 
   def apply(name: String, id: String): NameIdOrganisationMatchModel =
     new NameIdOrganisationMatchModel(name, formatInput(id))
-
 }
 
 case class NameOrganisationMatchModel(name: String) extends NameOrganisationMatch
@@ -194,9 +193,7 @@ object YesNo {
   val answerTrue = "yes-no-answer-true"
 }
 
-case class VatVerificationOption(isDateOption: Boolean) {
-  def isAmountOption: Boolean = !isDateOption
-}
+case class VatVerificationOption(isDateOption: Boolean)
 
 case class NinoMatch(firstName: String, lastName: String, dateOfBirth: LocalDate, nino: String)
 
@@ -231,7 +228,6 @@ object NinoOrUtr {
 
   def apply(ninoOrUtrRadio: Option[CustomsId]): NinoOrUtr =
     new NinoOrUtr(ninoOrUtrRadio)
-
 }
 
 case class NinoOrUtrChoice(ninoOrUtrRadio: Option[String])
@@ -290,8 +286,6 @@ case class ContactAddressMatchModel(
 
 case class IndividualNameAndDateOfBirth(firstName: String, lastName: String, dateOfBirth: LocalDate) extends IndividualName
 
-case class EoriAndIdNameAndAddress(fullName: String, address: EstablishmentAddress)
-
 trait IdMatch {
   def id: String
 }
@@ -339,5 +333,4 @@ object ExistingEori {
 
   def apply(id: Option[String], enrolmentKey: String): ExistingEori =
     new ExistingEori(id.getOrElse(throw new IllegalArgumentException("EORI is missing")), enrolmentKey)
-
 }

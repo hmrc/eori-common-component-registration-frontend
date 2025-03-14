@@ -22,7 +22,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType._
 
 sealed trait EtmpOrganisationType {
   def etmpOrgTypeCode: String
-
 }
 
 case object Partnership extends EtmpOrganisationType {
@@ -66,7 +65,7 @@ object EtmpOrganisationType extends Logging {
     ThirdCountryOrganisationId      -> CorporateBody
   )
 
-  val values = Seq(Partnership, CorporateBody, LLP, UnincorporatedBody, NA)
+  val values: Seq[EtmpOrganisationType] = Seq(Partnership, CorporateBody, LLP, UnincorporatedBody, NA)
 
   def apply(cdsOrgType: CdsOrganisationType): EtmpOrganisationType = cdsToEtmpOrgType.getOrElse(cdsOrgType.id, NA)
 
@@ -94,12 +93,8 @@ object EtmpOrganisationType extends Logging {
 
   def orgTypeToEtmpOrgCode(id: String): String = apply(id).etmpOrgTypeCode
 
-  implicit val etmpOrgReads: Reads[EtmpOrganisationType] = new Reads[EtmpOrganisationType] {
-    def reads(value: JsValue): JsResult[EtmpOrganisationType] = JsSuccess(apply((value \ "id").as[String]))
-  }
+  implicit val etmpOrgReads: Reads[EtmpOrganisationType] = (value: JsValue) => JsSuccess(apply((value \ "id").as[String]))
 
-  implicit val etmpOrgWrites: Writes[EtmpOrganisationType] = new Writes[EtmpOrganisationType] {
-    def writes(org: EtmpOrganisationType): JsValue = Json.toJson(CdsOrganisationType(unapply(org)))
-  }
+  implicit val etmpOrgWrites: Writes[EtmpOrganisationType] = (org: EtmpOrganisationType) => Json.toJson(CdsOrganisationType(unapply(org)))
 
 }
