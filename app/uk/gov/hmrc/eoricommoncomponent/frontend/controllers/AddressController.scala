@@ -19,7 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
@@ -30,6 +30,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class AddressController @Inject() (
   authorise: AuthAction,
+  addressDetailsForm: AddressDetailsForm,
   addressService: AddressService,
   sessionCacheService: SessionCacheService,
   mcc: MessagesControllerComponents
@@ -64,7 +65,7 @@ class AddressController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      addressService.handleFormDataAndRedirect(addressDetailsCreateForm(), isInReviewMode, service)
+      addressService.handleFormDataAndRedirect(addressDetailsForm.addressDetailsCreateForm(), isInReviewMode, service)
     }
 
 }

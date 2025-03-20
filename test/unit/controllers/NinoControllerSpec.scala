@@ -27,15 +27,16 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NinoController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NinoMatch
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingResponse, RegisterWithIDResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_nino}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.matching.NinoFormBuilder
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import java.time.LocalDate
@@ -49,17 +50,30 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
   private val mockMatchingService = mock[MatchingService]
   private val errorView = inject[error_template]
   private val mockSessionCacheService = inject[SessionCacheService]
+  private val mockNinoFormProvider = mock[NinoFormProvider]
+  when(mockNinoFormProvider.ninoForm).thenReturn(new NinoFormProvider().ninoForm)
 
   private val matchNinoView = inject[match_nino]
 
   val controller =
-    new NinoController(mockAuthAction, mcc, matchNinoView, mockMatchingService, errorView, mockSessionCacheService)(
+    new NinoController(mockAuthAction, mcc, matchNinoView, mockMatchingService, errorView, mockSessionCacheService, mockNinoFormProvider)(
       global
     )
 
   before {
     Mockito.reset(mockMatchingService)
   }
+
+  val FirstName = "first"
+  val LastName = "last"
+  val dob: LocalDate = LocalDate.of(1980, 3, 31)
+  val Nino = "AB123456C"
+
+  def asNinoMatch: NinoMatch = NinoMatch(FirstName, LastName, dob, Nino)
+
+  def asForm: Map[String, String] = new NinoFormProvider().ninoForm.mapping.unbind(asNinoMatch)
+
+  def asIndividual: Individual = Individual.noMiddle(FirstName, LastName, dob.toString)
 
   val defaultOrganisationType = "individual"
 
@@ -93,7 +107,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
   "first name" should {
 
     "be mandatory" in {
-      submitForm(NinoFormBuilder.asForm + ("first-name" -> "")) { result =>
+      submitForm(asForm + ("first-name" -> "")) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe FirstNamePage
@@ -102,7 +116,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     }
 
     "be restricted to 35 characters" in {
-      submitForm(NinoFormBuilder.asForm + ("first-name" -> oversizedString(35))) { result =>
+      submitForm(asForm + ("first-name" -> oversizedString(35))) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(
@@ -118,7 +132,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
   "last name" should {
 
     "be mandatory" in {
-      submitForm(NinoFormBuilder.asForm + ("last-name" -> "")) { result =>
+      submitForm(asForm + ("last-name" -> "")) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe LastNamePage
@@ -127,7 +141,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     }
 
     "be restricted to 35 characters" in {
-      submitForm(NinoFormBuilder.asForm + ("last-name" -> oversizedString(35))) { result =>
+      submitForm(asForm + ("last-name" -> oversizedString(35))) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(
@@ -144,7 +158,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
     "be mandatory" in {
       submitForm(
-        NinoFormBuilder.asForm ++ Map(
+        asForm ++ Map(
           "date-of-birth.day"   -> "",
           "date-of-birth.month" -> "",
           "date-of-birth.year"  -> ""
@@ -158,7 +172,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     }
 
     "be a valid date" in {
-      submitForm(NinoFormBuilder.asForm + ("date-of-birth.day" -> "32")) { result =>
+      submitForm(asForm + ("date-of-birth.day" -> "32")) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe messages("date.day.error")
@@ -169,7 +183,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     "not be in the future " in {
       val tomorrow = LocalDate.now().plusDays(1)
       submitForm(
-        NinoFormBuilder.asForm ++ Map(
+        asForm ++ Map(
           "date-of-birth.day"   -> tomorrow.getDayOfMonth.toString,
           "date-of-birth.month" -> tomorrow.getMonthValue.toString,
           "date-of-birth.year"  -> tomorrow.getYear.toString
@@ -186,7 +200,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
 
   "NINO" should {
     "be mandatory" in {
-      submitForm(NinoFormBuilder.asForm + ("nino" -> "")) { result =>
+      submitForm(asForm + ("nino" -> "")) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe NinoPage
@@ -195,7 +209,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     }
 
     "be valid" in {
-      submitForm(NinoFormBuilder.asForm + ("nino" -> "AB123456E")) { result =>
+      submitForm(asForm + ("nino" -> "AB123456E")) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe InvalidNinoPage
@@ -214,8 +228,8 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     "redirect to the confirm page when there's a successful match" in {
       when(
         mockMatchingService.matchIndividualWithNino(
-          ArgumentMatchers.eq(NinoFormBuilder.Nino),
-          ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
+          ArgumentMatchers.eq(Nino),
+          ArgumentMatchers.eq(asIndividual),
           any()
         )(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(
@@ -234,7 +248,7 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
         )
       )
 
-      submitForm(form = NinoFormBuilder.asForm) { result =>
+      submitForm(form = asForm) { result =>
         val page = CdsPage(contentAsString(result))
         page.getElementsText(NinoMatchPage.pageLevelErrorSummaryListXPath) shouldBe empty
 
@@ -248,13 +262,13 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     "redisplay the nino matching page with the error displayed when there's no match" in {
       when(
         mockMatchingService.matchIndividualWithNino(
-          ArgumentMatchers.eq(NinoFormBuilder.Nino),
-          ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
+          ArgumentMatchers.eq(Nino),
+          ArgumentMatchers.eq(asIndividual),
           any()
         )(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.matchFailureResponse))
 
-      submitForm(form = NinoFormBuilder.asForm) { result =>
+      submitForm(form = asForm) { result =>
         status(result) shouldBe BAD_REQUEST
         val page = CdsPage(contentAsString(result))
         page.getElementsText(
@@ -268,13 +282,13 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     "redirect to error-template page when downstreamFailureResponse occurred" in {
       when(
         mockMatchingService.matchIndividualWithNino(
-          ArgumentMatchers.eq(NinoFormBuilder.Nino),
-          ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
+          ArgumentMatchers.eq(Nino),
+          ArgumentMatchers.eq(asIndividual),
           any()
         )(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.downstreamFailureResponse))
 
-      submitForm(form = NinoFormBuilder.asForm) { result =>
+      submitForm(form = asForm) { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))
         page.getElementsHtml("h1") shouldBe messages("cds.error.title")
@@ -286,13 +300,13 @@ class NinoControllerSpec extends ControllerSpec with BeforeAndAfter with AuthAct
     "redirect to error-template page when other errors occurred" in {
       when(
         mockMatchingService.matchIndividualWithNino(
-          ArgumentMatchers.eq(NinoFormBuilder.Nino),
-          ArgumentMatchers.eq(NinoFormBuilder.asIndividual),
+          ArgumentMatchers.eq(Nino),
+          ArgumentMatchers.eq(asIndividual),
           any()
         )(any[HeaderCarrier], any[Request[_]])
       ).thenReturn(eitherT[MatchingResponse](MatchingServiceConnector.otherErrorHappen))
 
-      submitForm(form = NinoFormBuilder.asForm) { result =>
+      submitForm(form = asForm) { result =>
         status(result) shouldBe INTERNAL_SERVER_ERROR
         val page = CdsPage(contentAsString(result))
         page.getElementsHtml("h1") shouldBe messages("cds.error.title")

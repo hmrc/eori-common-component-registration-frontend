@@ -22,8 +22,7 @@ import play.api.data.{Form, FormError}
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.{VatDetails, VatDetailsForm}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 
 class VatDetailsFormSpec extends UnitSpec {

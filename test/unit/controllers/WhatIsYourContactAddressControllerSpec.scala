@@ -23,6 +23,7 @@ import play.api.http.Status.OK
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourContactAddressController
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactAddressFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_contact_address
@@ -41,13 +42,16 @@ class WhatIsYourContactAddressControllerSpec extends ControllerSpec with BeforeA
   private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val whatIsYourContactAddressView = inject[what_is_your_contact_address]
+  private val mockContactAddressFormProvider = mock[ContactAddressFormProvider]
+  when(mockContactAddressFormProvider.contactAddressForm).thenReturn(new ContactAddressFormProvider().contactAddressForm)
 
   private val controller = new WhatIsYourContactAddressController(
     mockAuthAction,
     mcc,
     mockRequestSessionData,
     mockSubscriptionDetailsService,
-    whatIsYourContactAddressView
+    whatIsYourContactAddressView,
+    mockContactAddressFormProvider
   )
 
   private val fieldLevelErrorAddress = "//p[@id='address-error' and @class='govuk-error-message']"

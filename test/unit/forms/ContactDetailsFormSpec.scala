@@ -17,13 +17,13 @@
 package unit.forms
 
 import base.UnitSpec
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 
 class ContactDetailsFormSpec extends UnitSpec {
 
-  def form = ContactDetailsForm.contactDetailsCreateForm()
+  def form: Form[ContactDetailsViewModel] = new ContactDetailsForm().contactDetailsCreateForm()
 
   "contactDetailsCreateForm" should {
 

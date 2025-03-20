@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.forms
+package uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.registrationdate
 
 import play.api.Logging
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.TimeService
 
 import java.time.LocalDate
 import javax.inject.Inject
-
-case class VatRegistrationDate(dateOfRegistration: LocalDate)
-
-object VatRegistrationDate {
-  implicit val format: Format[VatRegistrationDate] = Json.format[VatRegistrationDate]
-}
 
 class VatRegistrationDateFormProvider @Inject() (timeService: TimeService) extends Mappings with Logging {
 

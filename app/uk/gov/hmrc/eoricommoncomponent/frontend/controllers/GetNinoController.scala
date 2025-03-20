@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
@@ -24,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmConta
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionNinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
@@ -42,9 +43,12 @@ class GetNinoController @Inject() (
   matchNinoRowIndividualView: how_can_we_identify_you_nino,
   subscriptionDetailsService: SubscriptionDetailsService,
   errorView: error_template,
-  requestSessionData: RequestSessionData
+  requestSessionData: RequestSessionData,
+  subscriptionNinoFormProvider: SubscriptionNinoFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val form: Form[IdMatchModel] = subscriptionNinoFormProvider.subscriptionNinoForm
 
   def displayForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
@@ -54,7 +58,7 @@ class GetNinoController @Inject() (
         Future.successful(
           Ok(
             matchNinoRowIndividualView(
-              subscriptionNinoForm,
+              form,
               isInReviewMode = false,
               routes.GetNinoController.submit(service),
               service = service
@@ -65,7 +69,7 @@ class GetNinoController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      subscriptionNinoForm
+      form
         .bindFromRequest()
         .fold(
           formWithErrors =>
@@ -110,7 +114,7 @@ class GetNinoController @Inject() (
     request: Request[AnyContent]
   ): Result = {
     val errorMsg = Messages("cds.matching-error.individual-not-found")
-    val errorForm = subscriptionNinoForm.withGlobalError(errorMsg).fill(formData)
+    val errorForm = form.withGlobalError(errorMsg).fill(formData)
     BadRequest(
       matchNinoRowIndividualView(errorForm, isInReviewMode = false, routes.GetNinoController.submit(service), service)
     )

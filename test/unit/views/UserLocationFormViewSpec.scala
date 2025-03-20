@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.UserLocationFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDisplayService, Save4LaterService, SubscriptionStatusService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, sub01_outcome_processing, user_location}
@@ -49,6 +50,8 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
   private val mockSave4LaterConnector = mock[Save4LaterConnector]
   private val userLocationView = inject[user_location]
   private val mockAppConfig = mock[AppConfig]
+  private val mockUserLocationFormProvider = mock[UserLocationFormProvider]
+  when(mockUserLocationFormProvider.userLocationForm).thenReturn(new UserLocationFormProvider().userLocationForm)
 
   private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 
@@ -65,7 +68,8 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
     userLocationView,
     sub01OutcomeProcessing,
     errorTemplate,
-    mockAppConfig
+    mockAppConfig,
+    mockUserLocationFormProvider
   )
 
   override def beforeEach(): Unit = {

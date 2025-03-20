@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionNinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
@@ -38,9 +39,12 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   howCanWeIdentifyYouView: how_can_we_identify_you_nino,
   requestSessionData: RequestSessionData,
   matchingService: MatchingService,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  subscriptionNinoFormProvider: SubscriptionNinoFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val form: Form[IdMatchModel] = subscriptionNinoFormProvider.subscriptionNinoForm
 
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
@@ -50,7 +54,7 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
         Future.successful(
           Ok(
             howCanWeIdentifyYouView(
-              subscriptionNinoForm,
+              form,
               isInReviewMode = false,
               routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
               service = service
@@ -61,7 +65,7 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      subscriptionNinoForm
+      form
         .bindFromRequest()
         .fold(
           formWithErrors =>

@@ -23,6 +23,7 @@ import org.mockito.Mockito._
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
+import play.api.data.Form
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -30,7 +31,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SixLineAddressContr
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Country
@@ -38,6 +38,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDet
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.sixlineaddress.SixLineAddressFormProvider
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
 import util.builders.RegistrationDetailsBuilder.defaultAddress
@@ -62,6 +63,12 @@ class SixLineAddressControllerSpec extends ControllerSpec with BeforeAndAfter wi
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val sixLineAddressView = inject[six_line_address]
   private val mockSessionCacheService = inject[SessionCacheService]
+  private val mockSixLineAddressFormProvider = mock[SixLineAddressFormProvider]
+  private val ukSixLineAddressForm: Form[SixLineAddressMatchModel] = new SixLineAddressFormProvider().ukSixLineAddressForm
+  when(mockSixLineAddressFormProvider.ukSixLineAddressForm).thenReturn(ukSixLineAddressForm)
+  when(mockSixLineAddressFormProvider.channelIslandSixLineAddressForm).thenReturn(new SixLineAddressFormProvider().channelIslandSixLineAddressForm)
+  private val thirdCountrySixLineAddressForm: Form[SixLineAddressMatchModel] = new SixLineAddressFormProvider().thirdCountrySixLineAddressForm
+  when(mockSixLineAddressFormProvider.thirdCountrySixLineAddressForm).thenReturn(thirdCountrySixLineAddressForm)
 
   private val controller = new SixLineAddressController(
     mockAuthAction,
@@ -72,7 +79,8 @@ class SixLineAddressControllerSpec extends ControllerSpec with BeforeAndAfter wi
     mcc,
     sixLineAddressView,
     mockRegistrationDetailsService,
-    mockSessionCacheService
+    mockSessionCacheService,
+    mockSixLineAddressFormProvider
   )(global)
 
   private val mockSubscriptionPage = mock[SubscriptionPage]

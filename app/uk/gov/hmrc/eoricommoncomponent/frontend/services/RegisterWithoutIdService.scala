@@ -21,7 +21,6 @@ import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.RegisterWithoutIdConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Address, Individual}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.createSixLineAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.RegistrationDetailsCreator
@@ -119,4 +118,14 @@ class RegisterWithoutIdService @Inject() (
     else
       sessionCache.saveRegistrationDetails(registrationDetails: RegistrationDetails)
 
+  private def createSixLineAddress(addr: Address): SixLineAddressMatchModel = {
+    SixLineAddressMatchModel(
+      addr.addressLine1,
+      addr.addressLine2,
+      addr.addressLine3.getOrElse(""),
+      addr.addressLine4,
+      addr.postalCode,
+      addr.countryCode
+    )
+  }
 }

@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, Me
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{NameDobMatchModel, Nino, NinoOrUtr}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionNinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_nino}
@@ -48,6 +49,8 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
   private val mockMatchingService = mock[MatchingService]
   private val mockFrontendDataCache = mock[SessionCache]
   private val mockRequestSessionData = mock[RequestSessionData]
+  private val mockSubscriptionNinoFormProvider = mock[SubscriptionNinoFormProvider]
+  when(mockSubscriptionNinoFormProvider.subscriptionNinoForm).thenReturn(new SubscriptionNinoFormProvider().subscriptionNinoForm)
 
   private val errorView = inject[error_template]
 
@@ -63,7 +66,8 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     howCanWeIdentifyYouView,
     mockRequestSessionData,
     mockMatchingService,
-    sessionCacheService
+    sessionCacheService,
+    mockSubscriptionNinoFormProvider
   )(global)
 
   "Viewing the form " should {

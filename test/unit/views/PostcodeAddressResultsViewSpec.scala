@@ -41,10 +41,10 @@ class PostcodeAddressResultsViewSpec extends ViewSpec {
       Address("Line 1", None, None, Some("City2"), Some("BB11 1BC"), "GB")
     )
 
-  private val form = AddressResultsForm.form(allowedAddress)
+  private val form = new AddressResultsForm().form(allowedAddress)
 
   private val formWithError =
-    AddressResultsForm.form(allowedAddress).bind(Map("address" -> "invalid"))
+    new AddressResultsForm().form(allowedAddress).bind(Map("address" -> "invalid"))
 
   private def doc(): Document =
     Jsoup.parse(contentAsString(view(form, params, allowedAddress, atarService)))

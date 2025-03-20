@@ -21,13 +21,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.enterNameDobForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.IndStCannotRegisterUsingThisServiceController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NameDobFormProvider
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,21 +39,24 @@ class NameDobController @Inject() (
   matchNameDobView: match_namedob,
   requestSessionData: RequestSessionData,
   cdsFrontendDataCache: SessionCache,
-  appConfig: AppConfig
+  appConfig: AppConfig,
+  nameDobFormProvider: NameDobFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val nameDobForm = nameDobFormProvider.enterNameDobForm
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
-        Future.successful(Ok(matchNameDobView(enterNameDobForm, organisationType, service)))
+        Future.successful(Ok(matchNameDobView(nameDobForm, organisationType, service)))
     }
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      enterNameDobForm
+      nameDobForm
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(matchNameDobView(formWithErrors, organisationType, service))),

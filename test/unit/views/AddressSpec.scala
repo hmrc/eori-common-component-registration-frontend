@@ -18,19 +18,17 @@ package unit.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.address
 import util.ViewSpec
 
 class AddressSpec extends ViewSpec {
 
-  private val form: Form[AddressViewModel] = addressDetailsCreateForm()
+  private val form: AddressDetailsForm = new AddressDetailsForm()
   private val isInReviewMode = false
   implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
@@ -94,12 +92,12 @@ class AddressSpec extends ViewSpec {
 
   private lazy val doc: Document = {
     val result =
-      view(form, aFewCountries, isInReviewMode, atarService)
+      view(form.addressDetailsCreateForm(), aFewCountries, isInReviewMode, atarService)
     Jsoup.parse(contentAsString(result))
   }
 
   private lazy val docWithErrors = {
-    val result = view(form, aFewCountries, isInReviewMode = true, atarService)
+    val result = view(form.addressDetailsCreateForm(), aFewCountries, isInReviewMode = true, atarService)
     Jsoup.parse(contentAsString(result))
   }
 

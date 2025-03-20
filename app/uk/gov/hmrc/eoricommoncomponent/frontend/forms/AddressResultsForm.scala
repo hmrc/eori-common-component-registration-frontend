@@ -21,9 +21,10 @@ import play.api.data.Forms._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.mandatoryString
 
-case class AddressResultsForm(address: String)
+import javax.inject.Singleton
 
-object AddressResultsForm {
+@Singleton
+class AddressResultsForm() {
 
   def form(allowedAddresses: Seq[Address]): Form[Address] =
     Form[Address](

@@ -24,14 +24,14 @@ import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, LLP}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.DateOfEstablishmentForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
 import util.ViewSpec
 
 import java.time
 
 class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
-  val form: Form[time.LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
+  val form: Form[time.LocalDate] = new DateOfEstablishmentForm().form()
   val isInReviewMode = false
   implicit val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
 
@@ -41,15 +41,19 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     "display correct title" in {
       doc.title() must startWith("When was the organisation established?")
     }
+
     "have the correct h1 text" in {
       doc.body.getElementsByTag("h1").text() mustBe "When was the organisation established?"
     }
+
     "have the correct h2 text" in {
       doc.body.getElementsByTag("h2").text() startsWith "When was the organisation established?"
     }
+
     "have the correct class on the legend" in {
       doc.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
+
     "have the correct text in the hint" in {
       doc.body.getElementById("date-of-establishment-hint").text() must include("For example, 31 03 1980")
     }
@@ -59,12 +63,15 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     "display correct title" in {
       docRestOfWorld.title must startWith("When was the organisation established?")
     }
+
     "have the correct h1 text" in {
       docRestOfWorld.body.getElementsByTag("legend").text() mustBe "When was the organisation established?"
     }
+
     "have the correct class on the legend" in {
       docRestOfWorld.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
+
     "have the correct text in the description" in {
       docRestOfWorld.body
         .getElementById("date-of-establishment-hint")
@@ -76,13 +83,14 @@ class DateOfEstablishmentSpec extends ViewSpec with MockitoSugar {
     "display correct title" in {
       docLlp.title must startWith("When was the organisation established?")
     }
+
     "have the correct legend text" in {
       docLlp.body.getElementsByTag("legend").text() mustBe "When was the organisation established?"
     }
+
     "have the correct class on the legend" in {
       docLlp.body.getElementsByTag("legend").hasClass("govuk-fieldset__legend") mustBe true
     }
-
   }
 
   lazy val doc: Document = {

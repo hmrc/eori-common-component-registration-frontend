@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CompanyId, LimitedLiabilityPartnershipId, PartnershipId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationNameForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.OrganisationNameFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
@@ -36,14 +36,17 @@ class WhatIsYourOrgNameController @Inject() (
   mcc: MessagesControllerComponents,
   whatIsYourOrgNameView: what_is_your_org_name,
   subscriptionDetailsService: SubscriptionDetailsService,
-  appConfig: AppConfig
+  appConfig: AppConfig,
+  orgNameFormProvider: OrganisationNameFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val orgNameForm = orgNameFormProvider.organisationNameForm
 
   private def populateView(name: Option[String], isInReviewMode: Boolean, organisationType: String, service: Service)(implicit
     request: Request[AnyContent]
   ): Future[Result] = {
-    val form = name.map(n => NameMatchModel(n)).fold(organisationNameForm)(organisationNameForm.fill)
+    val form = name.map(n => NameMatchModel(n)).fold(orgNameForm)(orgNameForm.fill)
     Future.successful(Ok(whatIsYourOrgNameView(isInReviewMode, form, organisationType, service)))
   }
 
@@ -54,7 +57,7 @@ class WhatIsYourOrgNameController @Inject() (
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      organisationNameForm
+      orgNameForm
         .bindFromRequest()
         .fold(
           formWithErrors =>

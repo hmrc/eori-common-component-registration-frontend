@@ -21,7 +21,8 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, CompanyRegisteredCountry, ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, CompanyRegisteredCountry, ContactDetailsModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 
 import java.time.LocalDate
 

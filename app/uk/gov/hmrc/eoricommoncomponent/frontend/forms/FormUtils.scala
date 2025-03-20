@@ -27,17 +27,16 @@ object FormUtils {
   def formatInput(value: String): String = value.replaceAll(" ", "").toUpperCase
   def formatInput(maybeValue: Option[String]): Option[String] = maybeValue.map(value => formatInput(value))
 
-  def mandatoryString(
-    onEmptyError: String
-  )(constraintFunction: String => Boolean, error: => String = onEmptyError): Mapping[String] = {
+  def mandatoryString(onEmptyError: String)(constraintFunction: String => Boolean, error: => String = onEmptyError): Mapping[String] = {
     val constraint = Constraint((s: String) => if (constraintFunction.apply(s)) Valid else Invalid(error))
     mandatoryString(onEmptyError, Seq(constraint))
   }
 
-  def mandatoryString(onEmptyError: String, constraints: Seq[Constraint[String]]): Mapping[String] =
+  def mandatoryString(onEmptyError: String, constraints: Seq[Constraint[String]]): Mapping[String] = {
     optional(text.verifying(nonEmptyString(onEmptyError)).verifying(constraints: _*))
       .verifying(onEmptyError, _.isDefined)
       .transform[String](o => o.get, s => Some(s))
+  }
 
   def nonEmptyString(error: => String = messageKeyMandatoryField): Constraint[String] = Constraint { s =>
     Option(s).filter(_.trim.nonEmpty).fold[ValidationResult](ifEmpty = Invalid(error))(_ => Valid)
@@ -45,10 +44,11 @@ object FormUtils {
 
   def oneOf[T](validValues: Set[T]): T => Boolean = validValues.contains
 
-  def lift[T](c: Constraint[T]): Constraint[Option[T]] =
+  def lift[T](c: Constraint[T]): Constraint[Option[T]] = {
     Constraint(c.name, c.args) {
       case Some(value) => c(value)
       case None => Valid
     }
+  }
 
 }

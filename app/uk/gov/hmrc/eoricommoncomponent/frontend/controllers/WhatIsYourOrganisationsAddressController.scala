@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Individual, LimitedLiabilityPartnership, Partnership, SoleTrader}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{CharityPublicBodySubscriptionFlow, CharityPublicBodySubscriptionNoUtrFlow, CompanyLlpFlowIom, IndividualSoleTraderFlowIom, PartnershipSubscriptionFlowIom, SubscriptionFlow}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUserWithEnrolments}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.contactAddressForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, ContactAddressMatchModel, LoggedInUserWithEnrolments}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactAddressFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.Countries
@@ -41,9 +42,12 @@ class WhatIsYourOrganisationsAddressController @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService,
   subscriptionFlowManager: SubscriptionFlowManager,
   registrationDetailsService: RegistrationDetailsService,
-  what_is_your_organisations_address_view: what_is_your_organisations_address
+  what_is_your_organisations_address_view: what_is_your_organisations_address,
+  contactAddressFormProvider: ContactAddressFormProvider
 )(implicit executionContext: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val contactAddressForm: Form[ContactAddressMatchModel] = contactAddressFormProvider.contactAddressForm
 
   def showForm(isInReviewMode: Boolean = false, service: Service): Action[AnyContent] = {
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>

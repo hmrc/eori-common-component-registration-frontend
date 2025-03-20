@@ -27,8 +27,9 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetUtrNumberController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse, Organisation, RegisterWithIDResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionUtrFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_utr}
@@ -54,6 +55,8 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
   private val matchOrganisationUtrView = inject[how_can_we_identify_you_utr]
   private val errorView = inject[error_template]
   private val mockSessionCacheService = inject[SessionCacheService]
+  private val mockSubscriptionUtrFormProvider = mock[SubscriptionUtrFormProvider]
+  when(mockSubscriptionUtrFormProvider.subscriptionUtrForm).thenReturn(new SubscriptionUtrFormProvider().subscriptionUtrForm)
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
@@ -64,7 +67,8 @@ class GetUtrNumberControllerSpec extends ControllerSpec with MockitoSugar with B
     matchOrganisationUtrView,
     mockSubscriptionDetailsService,
     errorView,
-    mockSessionCacheService
+    mockSessionCacheService,
+    mockSubscriptionUtrFormProvider
   )(global)
 
   private val UtrInvalidErrorPage = messages("cds.matching-error.utr.invalid")

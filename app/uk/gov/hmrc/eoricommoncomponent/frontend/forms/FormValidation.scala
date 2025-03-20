@@ -38,21 +38,17 @@ object FormValidation {
   val postcodeRegex: Regex =
     "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
 
-  private val noTagsRegex = "^[^<>]+$"
-
-  val amountRegex: Regex = "^([0-9]+\\.[0-9]{2})$".r
-
-  def mandatoryPostCodeMapping: Mapping[String] = text.verifying(validPostcode)
+  private val postcodeMaxLength = 9
 
   def mandatoryOptPostCodeMapping: Mapping[Option[String]] =
-    MandatoryOptionalMapping(text.verifying(validPostcode)).verifying(lift(postcodeMax(9)))
+    MandatoryOptionalMapping(text.verifying(validPostcode)).verifying(lift(postcodeMax))
 
   def postcodeMapping: Mapping[Option[String]] =
     ConditionalMapping(
       condition = isAnyOf("countryCode", postCodeMandatoryCountryCodes),
       wrapped = MandatoryOptionalMapping(text.verifying(validPostcodeRoW)),
       elseValue = (key, data) => data.get(key)
-    ).transform[Option[String]](_.map(_.filterNot(_.isWhitespace)), identity).verifying(lift(postcodeMaxRoW(9)))
+    ).transform[Option[String]](_.map(_.filterNot(_.isWhitespace)), identity).verifying(lift(postcodeMaxRoW))
 
   private def validPostcode: Constraint[String] =
     Constraint({
@@ -66,27 +62,16 @@ object FormValidation {
       case _ => Invalid(ValidationError("cds.subscription.contact-details.error.postcode"))
     })
 
-  private def postcodeMax(limit: Int): Constraint[String] =
+  private def postcodeMax: Constraint[String] =
     Constraint({
-      case s if s.length > limit => Invalid(ValidationError("cds.subscription.postcode.error.too-long." + limit))
+      case s if s.length > postcodeMaxLength => Invalid(ValidationError("cds.subscription.postcode.error.too-long." + postcodeMaxLength))
       case _ => Valid
     })
 
-  private def postcodeMaxRoW(limit: Int): Constraint[String] =
+  private def postcodeMaxRoW: Constraint[String] =
     Constraint({
-      case s if s.trim().replaceAll("\\s", "").length > limit =>
-        Invalid(ValidationError("cds.subscription.postcode.error.too-long." + limit))
+      case s if s.trim().replaceAll("\\s", "").length > postcodeMaxLength =>
+        Invalid(ValidationError("cds.subscription.postcode.error.too-long." + postcodeMaxLength))
       case _ => Valid
     })
-
-  def validCity: Constraint[String] =
-    Constraint({
-      case s if s.trim.isEmpty => Invalid(ValidationError("cds.subscription.address-details.page-error.city"))
-      case s if s.trim.length > 35 =>
-        Invalid(ValidationError("cds.subscription.address-details.page-error.city.too-long"))
-      case s if !s.matches(noTagsRegex) =>
-        Invalid(ValidationError("cds.subscription.address-details.city.error.invalid-chars"))
-      case _ => Valid
-    })
-
 }

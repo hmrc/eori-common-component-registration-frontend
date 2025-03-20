@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.RegistrationInfoRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.RegistrationDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.UserLocationFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -47,9 +47,12 @@ class UserLocationController @Inject() (
   userLocationView: user_location,
   sub01OutcomeProcessing: sub01_outcome_processing,
   errorTemplate: error_template,
-  appConfig: AppConfig
+  appConfig: AppConfig,
+  userLocationFormProvider: UserLocationFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val form = userLocationFormProvider.userLocationForm
 
   private def isAffinityOrganisation(affinityGroup: Option[AffinityGroup]): Boolean =
     affinityGroup.contains(AffinityGroup.Organisation)
@@ -57,7 +60,7 @@ class UserLocationController @Inject() (
   private def continue(
     service: Service
   )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
-    Future.successful(Ok(userLocationView(userLocationForm, service, isAffinityOrganisation(user.affinityGroup))))
+    Future.successful(Ok(userLocationView(form, service, isAffinityOrganisation(user.affinityGroup))))
 
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => implicit user: LoggedInUserWithEnrolments =>
@@ -81,7 +84,7 @@ class UserLocationController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
-      userLocationForm
+      form
         .bindFromRequest()
         .fold(
           formWithErrors =>

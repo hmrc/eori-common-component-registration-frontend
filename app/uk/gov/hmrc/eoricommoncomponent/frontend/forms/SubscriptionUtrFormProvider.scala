@@ -14,6 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
+package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
-case class SicCodeViewModel(sicCode: String)
+import play.api.data.Form
+import play.api.data.Forms.{mapping, text}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.IdMatchModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Constraints
+
+import javax.inject.Singleton
+
+@Singleton
+class SubscriptionUtrFormProvider() extends Constraints {
+
+  def subscriptionUtrForm: Form[IdMatchModel] = {
+    Form(mapping("utr" -> text.verifying(validUtr))(IdMatchModel.apply)(IdMatchModel.unapply))
+  }
+}

@@ -25,7 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveUtrForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.HaveUtrFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -41,11 +41,13 @@ class DoYouHaveAUtrNumberController @Inject() (
   requestSessionData: RequestSessionData,
   matchOrganisationUtrView: match_organisation_utr,
   subscriptionDetailsService: SubscriptionDetailsService,
-  appConfig: AppConfig
+  appConfig: AppConfig,
+  haveUtrFormProvider: HaveUtrFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   private val OrganisationModeDM = "organisation"
+  private val haveUtrForm = haveUtrFormProvider.haveUtrForm
 
   def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
@@ -53,7 +55,7 @@ class DoYouHaveAUtrNumberController @Inject() (
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
         subscriptionDetailsService.cachedUtrMatch.map { cachedUtrOpt =>
-          val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill(_))
+          val form = cachedUtrOpt.fold(haveUtrForm)(haveUtrForm.fill)
           val userLocation: UserLocation = requestSessionData.selectedUserLocation.getOrElse(
             throw new RuntimeException("Unable to find user location in session")
           )

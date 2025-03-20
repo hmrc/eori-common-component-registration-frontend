@@ -21,7 +21,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{EmailController, GetNinoController, IndStCannotRegisterUsingThisServiceController, SixLineAddressController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.haveRowIndividualsNinoForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.HaveNinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -36,9 +36,12 @@ class DoYouHaveNinoController @Inject() (
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
   matchNinoRowIndividualView: match_nino_row_individual,
-  subscriptionDetailsService: SubscriptionDetailsService
+  subscriptionDetailsService: SubscriptionDetailsService,
+  haveNinoFormProvider: HaveNinoFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val haveNinoForm = haveNinoFormProvider.haveRowIndividualsNinoForm
 
   def displayForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
@@ -46,14 +49,14 @@ class DoYouHaveNinoController @Inject() (
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
         subscriptionDetailsService.cachedNinoMatch.map { cachedNinoOpt =>
-          val form = cachedNinoOpt.fold(haveRowIndividualsNinoForm)(haveRowIndividualsNinoForm.fill)
+          val form = cachedNinoOpt.fold(haveNinoForm)(haveNinoForm.fill)
           Ok(matchNinoRowIndividualView(form, service))
         }
     }
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      haveRowIndividualsNinoForm
+      haveNinoForm
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(matchNinoRowIndividualView(formWithErrors, service))),

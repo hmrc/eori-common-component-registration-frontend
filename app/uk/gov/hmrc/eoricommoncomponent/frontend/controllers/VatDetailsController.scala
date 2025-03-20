@@ -22,9 +22,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetailsForm.VatDetailsForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.{VatDetails, VatDetailsForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.registrationdate.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCacheService}

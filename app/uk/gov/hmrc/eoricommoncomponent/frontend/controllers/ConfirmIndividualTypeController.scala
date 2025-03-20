@@ -20,7 +20,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ConfirmIndividualTypePage
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm.confirmIndividualTypeForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ConfirmIndividualTypeForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_individual_type
@@ -35,16 +35,19 @@ class ConfirmIndividualTypeController @Inject() (
   subscriptionFlowManager: SubscriptionFlowManager,
   confirmIndividualTypeView: confirm_individual_type,
   mcc: MessagesControllerComponents,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  confirmIndividualTypeForm: ConfirmIndividualTypeForm
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val form = confirmIndividualTypeForm.form()
 
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
       sessionCacheService.individualAndSoleTraderRouter(
         user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
         service,
-        Ok(confirmIndividualTypeView(confirmIndividualTypeForm, service)).withSession(
+        Ok(confirmIndividualTypeView(form, service)).withSession(
           requestSessionData.sessionWithoutOrganisationType
         )
       )
@@ -52,7 +55,7 @@ class ConfirmIndividualTypeController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      confirmIndividualTypeForm
+      form
         .bindFromRequest()
         .fold(
           invalidForm => Future.successful(BadRequest(confirmIndividualTypeView(invalidForm, service))),

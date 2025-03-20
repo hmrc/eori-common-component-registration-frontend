@@ -21,13 +21,15 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
 import play.api.test.Helpers.{LOCATION, defaultAwaitTimeout, header, status}
 import sttp.model.StatusCode.{InternalServerError, Ok}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{AddressService, SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
@@ -49,6 +51,8 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
   private val mockAddress = inject[address]
   private val mockErrorTemplate = inject[error_template]
   private val messagesControllerComponents = inject[MessagesControllerComponents]
+  private val mockAddressDetailsForm = mock[AddressDetailsForm]
+  private val mockFormAddressViewModel = mock[Form[AddressViewModel]]
 
   private val subscriptionToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 
@@ -56,6 +60,7 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
     Map("street" -> "street", "city" -> "city", "postcode" -> "SE28 1AA", "countryCode" -> "GB")
 
   val service = new AddressService(
+    mockAddressDetailsForm,
     mockSubscriptionDetailsService,
     mockSubscriptionBusinessService,
     mockSubscriptionFlowManager,
@@ -66,6 +71,7 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
 
   "populateViewIfContactDetailsCached" should {
     "Successfully populate view when details are cached" in {
+      when(mockAddressDetailsForm.addressDetailsCreateForm()).thenCallRealMethod()
 
       subscriptionToTest.foreach { subscription =>
         when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(
@@ -93,6 +99,8 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
   }
 
   "handleFormDataAndRedirect" should {
+    when(mockAddressDetailsForm.addressDetailsCreateForm()).thenCallRealMethod()
+
     "successfully redirect when correct input provided" in subscriptionToTest.foreach { subscription =>
       when(mockSubscriptionBusinessService.cachedContactDetailsModel(any[Request[_]])).thenReturn(
         Future.successful(Some(contactDetailsModel))
@@ -103,7 +111,7 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
         .thenReturn(Right(subscriptionFlowInfo))
       when(subscriptionFlowInfo.nextPage.url(any[Service])).thenReturn("/nextPage")
 
-      val result = service.handleFormDataAndRedirect(addressDetailsCreateForm(), isInReviewMode = false, subscription)(
+      val result = service.handleFormDataAndRedirect(mockAddressDetailsForm.addressDetailsCreateForm(), isInReviewMode = false, subscription)(
         SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
       )
 
@@ -118,7 +126,7 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
       when(mockSubscriptionFlowManager.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
         .thenReturn(Left(mockFlowError))
 
-      val result = service.handleFormDataAndRedirect(addressDetailsCreateForm(), isInReviewMode = false, subscription)(
+      val result = service.handleFormDataAndRedirect(mockAddressDetailsForm.addressDetailsCreateForm(), isInReviewMode = false, subscription)(
         SessionBuilder.buildRequestWithSessionAndFormValues(defaultUserId, formMappings)
       )
 

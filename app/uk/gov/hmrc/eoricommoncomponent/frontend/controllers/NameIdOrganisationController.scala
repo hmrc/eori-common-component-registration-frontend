@@ -26,7 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationMo
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.{nameUtrCompanyForm, nameUtrOrganisationForm, nameUtrPartnershipForm}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NameIdOrganisationFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.Require._
@@ -44,7 +44,8 @@ class NameIdOrganisationController @Inject() (
   matchNameIdOrganisationView: match_name_id_organisation,
   matchingService: MatchingService,
   subscriptionDetailsService: SubscriptionDetailsService,
-  errorView: error_template
+  errorView: error_template,
+  nameIdOrganisationFormProvider: NameIdOrganisationFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -67,9 +68,9 @@ class NameIdOrganisationController @Inject() (
   ) extends Configuration[NameIdOrganisationMatchModel] {
 
     val form: Form[NameIdOrganisationMatchModel] = matchingServiceType match {
-      case mST if mST == "Partnership" || mST == "LLP" => nameUtrPartnershipForm
-      case mST if mST == "Corporate Body" => nameUtrCompanyForm
-      case _ => nameUtrOrganisationForm
+      case mST if mST == "Partnership" || mST == "LLP" => nameIdOrganisationFormProvider.nameUtrPartnershipForm
+      case mST if mST == "Corporate Body" => nameIdOrganisationFormProvider.nameUtrCompanyForm
+      case _ => nameIdOrganisationFormProvider.nameUtrOrganisationForm
     }
 
     def createCustomsId(utr: String): Utr = Utr(utr)

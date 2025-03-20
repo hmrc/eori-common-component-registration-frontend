@@ -25,10 +25,10 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GetNinoController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingResponse, RegisterWithIDResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IdMatchModel, NameDobMatchModel, Nino}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionNinoForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionNinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, how_can_we_identify_you_nino}
@@ -50,6 +50,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val errorView = inject[error_template]
   private val mockRequestSessionData = inject[RequestSessionData]
+  private val mockSubscriptionNinoFormProvider = mock[SubscriptionNinoFormProvider]
+  when(mockSubscriptionNinoFormProvider.subscriptionNinoForm).thenReturn(new SubscriptionNinoFormProvider().subscriptionNinoForm)
 
   private val matchNinoRowIndividualView = inject[how_can_we_identify_you_nino]
 
@@ -60,7 +62,8 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
     matchNinoRowIndividualView,
     mockSubscriptionDetailsService,
     errorView,
-    mockRequestSessionData
+    mockRequestSessionData,
+    mockSubscriptionNinoFormProvider
   )(global)
 
   private val notMatchedError =
@@ -73,7 +76,7 @@ class GetNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   val yesNinoSubmitData = Map("nino" -> NinoFormBuilder.Nino)
   val yesNinoNotProvidedSubmitData = Map("nino" -> "")
   val yesNinoWrongFormatSubmitData = Map("nino" -> "ABZ")
-  val mandatoryNinoFields: IdMatchModel = subscriptionNinoForm.bind(yesNinoSubmitData).value.get
+  val mandatoryNinoFields: IdMatchModel = new SubscriptionNinoFormProvider().subscriptionNinoForm.bind(yesNinoSubmitData).value.get
 
   "Viewing the NINO Individual/Sole trader Rest of World Matching form" should {
 

@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{PostcodeLookupResultsController, routes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupSuccess}
@@ -58,6 +59,7 @@ class PostcodeLookupResultsControllerSpec extends SubscriptionFlowTestSupport wi
   private val mockAddressLookupConnector = mock[AddressLookupConnector]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val view = mock[postcode_address_result]
+  private val mockAddressResultsForm = mock[AddressResultsForm]
 
   private val controller =
     new PostcodeLookupResultsController(
@@ -66,7 +68,8 @@ class PostcodeLookupResultsControllerSpec extends SubscriptionFlowTestSupport wi
       mockRegistrationDetailsService,
       mockAddressLookupConnector,
       mcc,
-      view
+      view,
+      mockAddressResultsForm
     )
 
   override def beforeEach(): Unit = {
@@ -77,6 +80,7 @@ class PostcodeLookupResultsControllerSpec extends SubscriptionFlowTestSupport wi
       .thenReturn(HtmlFormat.empty)
     when(mockRegistrationDetailsService.cacheAddress(any())(any()))
       .thenReturn(Future.successful(true))
+    when(mockAddressResultsForm.form(any())).thenCallRealMethod()
   }
 
   override protected def afterEach(): Unit =
