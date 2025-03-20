@@ -76,19 +76,6 @@ class ContactDetailsController @Inject() (
               _
             )
           )
-
-//        populateOkView(
-//          contactDetails.map(_.toContactInfoViewModel),
-//          Some(email),
-//          isInReviewMode = isInReviewMode,
-//          service
-//        ).flatMap(
-//          sessionCacheService.individualAndSoleTraderRouter(
-//            user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-//            service,
-//            _
-//          )
-//        )
       }
     }
 
@@ -104,18 +91,6 @@ class ContactDetailsController @Inject() (
           )
       }
     }
-
-//  private def populateOkView(
-//    contactDetailsModel: Option[ContactDetailsViewModel],
-//    email: Option[String],
-//    isInReviewMode: Boolean,
-//    service: Service
-//  )(implicit request: Request[AnyContent]): Future[Result] = {
-//    val form = contactDetailsModel
-//      .fold(contactDetailsForm.contactDetailsCreateForm())(f => contactDetailsForm.contactDetailsCreateForm().fill(f))
-//
-//    Future.successful(Ok(contactDetailsView(form, email, isInReviewMode, service)))
-//  }
 
   private def storeContactDetails(
     formData: ContactDetailsViewModel,
