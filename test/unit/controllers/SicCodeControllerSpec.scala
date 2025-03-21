@@ -89,7 +89,6 @@ class SicCodeControllerSpec
     when(mockSubscriptionBusinessService.cachedSicCode(any[Request[_]])).thenReturn(Future.successful(None))
     registerSaveDetailsMockSuccess()
     setupMockSubscriptionFlowManager(SicCodeSubscriptionFlowPage)
-//    when(mockSicCodeForm.form()).thenReturn(new SicCodeForm().form())
   }
 
   override protected def afterEach(): Unit = {
