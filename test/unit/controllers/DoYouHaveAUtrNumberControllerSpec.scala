@@ -31,6 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveAUtrNumberC
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingRequestHolder, MatchingResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.HaveUtrFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
@@ -55,6 +56,8 @@ class DoYouHaveAUtrNumberControllerSpec extends ControllerSpec with MockitoSugar
   private val matchOrganisationUtrView = inject[match_organisation_utr]
   private val mockRequestSessionData = mock[RequestSessionData]
   private val mockAppConfig = mock[AppConfig]
+  private val mockHaveUtrFormProvider = mock[HaveUtrFormProvider]
+  when(mockHaveUtrFormProvider.haveUtrForm).thenReturn(new HaveUtrFormProvider().haveUtrForm)
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
@@ -65,7 +68,8 @@ class DoYouHaveAUtrNumberControllerSpec extends ControllerSpec with MockitoSugar
       mockRequestSessionData,
       matchOrganisationUtrView,
       mockSubscriptionDetailsService,
-      mockAppConfig
+      mockAppConfig,
+      mockHaveUtrFormProvider
     )(global)
 
   override protected def beforeEach(): Unit = {

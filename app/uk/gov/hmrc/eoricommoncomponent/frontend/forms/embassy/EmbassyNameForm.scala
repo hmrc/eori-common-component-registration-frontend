@@ -21,19 +21,19 @@ import play.api.data.Forms.{mapping, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 
+import javax.inject.Singleton
+
+@Singleton
 class EmbassyNameForm() extends Mappings {
 
-  private val noTagsRegex = "^[^<>]+$"
-
-  def embassyNameForm(): Form[String] = Form(
-    mapping("name" -> text.verifying(validEmbassyName))(name => name)(name => Some(name))
-  )
+  def embassyNameForm(): Form[String] = {
+    Form(mapping("name" -> text.verifying(validEmbassyName))(name => name)(name => Some(name)))
+  }
 
   private def validEmbassyName: Constraint[String] =
     Constraint({
       case s if s.isEmpty => Invalid(ValidationError("cds.matching.embassy-name.error.name"))
-      case s if !s.matches(noTagsRegex) =>
-        Invalid(ValidationError("cds.matching-error.business-details.embassy-name.invalid-char"))
+      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching-error.business-details.embassy-name.invalid-char"))
       case _ => Valid
     })
 

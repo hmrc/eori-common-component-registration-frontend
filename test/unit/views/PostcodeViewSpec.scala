@@ -32,7 +32,7 @@ class PostcodeViewSpec extends ViewSpec {
 
   implicit val request: Request[Any] = withFakeCSRF(FakeRequest())
 
-  private val form = PostcodeForm.postCodeCreateForm
+  private val form = new PostcodeForm().postCodeCreateForm
 
   private val formWithError = form.bind(Map("postcode" -> "invalid"))
 

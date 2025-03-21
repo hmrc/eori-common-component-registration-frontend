@@ -23,13 +23,13 @@ import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NameMatchModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.OrganisationNameFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
 import util.ViewSpec
 
 class MatchOrganisationNameSpec extends ViewSpec {
-  val form: Form[NameMatchModel] = organisationNameForm
-  val formWithError: Form[NameMatchModel] = organisationNameForm.bind(Map("name" -> ""))
+  val form: Form[NameMatchModel] = new OrganisationNameFormProvider().organisationNameForm
+  val formWithError: Form[NameMatchModel] = new OrganisationNameFormProvider().organisationNameForm.bind(Map("name" -> ""))
   val isInReviewMode = false
   val previousPageUrl = "/"
   val organisationType = "charity-public-body-not-for-profit"

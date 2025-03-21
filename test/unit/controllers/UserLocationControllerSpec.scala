@@ -35,6 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, OrganisationResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayResponse, ResponseCommon, ResponseDetail}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.UserLocationFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
@@ -60,6 +61,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
   private val mockRegistrationDisplayService = mock[RegistrationDisplayService]
   private val mockAppConfig = mock[AppConfig]
   private val userLocationView = inject[user_location]
+  private val mockUserLocationFormProvider = mock[UserLocationFormProvider]
+  when(mockUserLocationFormProvider.userLocationForm).thenReturn(new UserLocationFormProvider().userLocationForm)
 
   private val sub01OutcomeProcessing = inject[sub01_outcome_processing]
 
@@ -76,7 +79,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     userLocationView,
     sub01OutcomeProcessing,
     errorTemplate,
-    mockAppConfig
+    mockAppConfig,
+    mockUserLocationFormProvider
   )
 
   private val ProblemWithSelectionError = "Select where you are based"
@@ -187,7 +191,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       userLocationView,
       sub01OutcomeProcessing,
       errorTemplate,
-      mockAppConfig
+      mockAppConfig,
+      mockUserLocationFormProvider
     ) {}
     implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
@@ -353,7 +358,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           userLocationView,
           sub01OutcomeProcessing,
           errorTemplate,
-          mockAppConfig
+          mockAppConfig,
+          mockUserLocationFormProvider
         ) {}
 
         val result = controller
@@ -395,7 +401,8 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           userLocationView,
           sub01OutcomeProcessing,
           errorTemplate,
-          mockAppConfig
+          mockAppConfig,
+          mockUserLocationFormProvider
         ) {}
 
         val result = controller

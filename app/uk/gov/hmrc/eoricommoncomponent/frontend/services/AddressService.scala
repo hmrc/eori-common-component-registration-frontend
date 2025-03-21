@@ -22,7 +22,7 @@ import play.api.mvc.{AnyContent, MessagesControllerComponents, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{CdsController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetailsSubscriptionFlowPageGetEori
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.DataUnavailableException
@@ -33,6 +33,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressService @Inject() (
+  addressDetailsForm: AddressDetailsForm,
   subscriptionDetailsService: SubscriptionDetailsService,
   subscriptionBusinessService: SubscriptionBusinessService,
   subscriptionFlowManager: SubscriptionFlowManager,
@@ -43,7 +44,7 @@ class AddressService @Inject() (
     extends CdsController(mcc)
     with Logging {
 
-  private def saveAddress(ad: AddressViewModel)(implicit request: Request[AnyContent]) =
+  private def saveAddress(ad: AddressViewModel)(implicit request: Request[AnyContent]): Future[Future[Unit]] =
     for {
       contactDetails <- subscriptionBusinessService.cachedContactDetailsModel
     } yield subscriptionDetailsService.cacheContactAddressDetails(
@@ -62,7 +63,7 @@ class AddressService @Inject() (
     service: Service,
     form: Form[AddressViewModel],
     status: Status
-  )(implicit request: Request[AnyContent]) =
+  )(implicit request: Request[AnyContent]): Future[Result] =
     Future.successful(status(addressView(form, Countries.all, isInReviewMode, service)))
 
   def populateViewIfContactDetailsCached(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
@@ -75,7 +76,7 @@ class AddressService @Inject() (
 
   def handleFormDataAndRedirect(form: Form[AddressViewModel], isInReviewMode: Boolean, service: Service)(implicit
     request: Request[AnyContent]
-  ) =
+  ): Future[Result] =
     form
       .bindFromRequest()
       .fold(
@@ -95,8 +96,8 @@ class AddressService @Inject() (
     request: Request[AnyContent]
   ): Future[Result] =
     if (isInReviewMode) {
-      lazy val form = address.fold(addressDetailsCreateForm())(addressDetailsCreateForm().fill(_))
+      lazy val form = address.fold(addressDetailsForm.addressDetailsCreateForm())(addressDetailsForm.addressDetailsCreateForm().fill(_))
       populateCountriesToInclude(isInReviewMode, service, form, Ok)
-    } else populateCountriesToInclude(isInReviewMode, service, addressDetailsCreateForm(), Ok)
+    } else populateCountriesToInclude(isInReviewMode, service, addressDetailsForm.addressDetailsCreateForm(), Ok)
 
 }

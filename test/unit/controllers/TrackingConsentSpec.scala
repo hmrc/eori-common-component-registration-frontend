@@ -23,6 +23,7 @@ import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.HowCanWeIdentifyYouController
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NinoOrUtrChoiceFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
@@ -41,6 +42,8 @@ class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActi
   private val mockSubscriptionDetailsHolderService = mock[SubscriptionDetailsService]
   private val howCanWeIdentifyYouView = inject[how_can_we_identify_you]
   private val mockRequestSessionData = inject[RequestSessionData]
+  private val mockNinoOrUtrChoiceFormProvider = mock[NinoOrUtrChoiceFormProvider]
+  when(mockNinoOrUtrChoiceFormProvider.ninoOrUtrChoiceForm).thenReturn(new NinoOrUtrChoiceFormProvider().ninoOrUtrChoiceForm)
 
   private val controller = new HowCanWeIdentifyYouController(
     mockAuthAction,
@@ -48,7 +51,8 @@ class TrackingConsentSpec extends ControllerSpec with MockitoSugar with AuthActi
     mcc,
     howCanWeIdentifyYouView,
     mockSubscriptionDetailsHolderService,
-    mockRequestSessionData
+    mockRequestSessionData,
+    mockNinoOrUtrChoiceFormProvider
   )(global)
 
   "Tracking Consent Snippet" should {

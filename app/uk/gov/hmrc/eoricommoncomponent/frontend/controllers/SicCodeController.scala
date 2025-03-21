@@ -17,13 +17,13 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.Logger
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm.sicCodeform
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.SicCodeViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.siccode.{SicCodeForm, SicCodeViewModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
@@ -41,10 +41,13 @@ class SicCodeController @Inject() (
   mcc: MessagesControllerComponents,
   sicCodeView: sic_code,
   requestSessionData: RequestSessionData,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  sicCodeForm: SicCodeForm
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
+
+  val scForm: Form[SicCodeViewModel] = sicCodeForm.form()
 
   private def populateView(
     sicCode: Option[String],
@@ -52,7 +55,7 @@ class SicCodeController @Inject() (
     service: Service,
     user: LoggedInUserWithEnrolments
   )(implicit request: Request[AnyContent]): Future[Result] = {
-    lazy val form = sicCode.map(SicCodeViewModel).fold(sicCodeform)(sicCodeform.fill)
+    lazy val form = sicCode.map(SicCodeViewModel).fold(scForm)(scForm.fill)
     sessionCacheService.individualAndSoleTraderRouter(
       user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
       service,
@@ -80,7 +83,7 @@ class SicCodeController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      sicCodeform
+      scForm
         .bindFromRequest()
         .fold(
           formWithErrors =>

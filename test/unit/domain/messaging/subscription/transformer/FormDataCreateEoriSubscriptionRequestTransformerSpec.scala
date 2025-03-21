@@ -26,7 +26,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.tr
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionRequest.{ContactInformation, VatIdentification}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.{Iom, Uk}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service.gagmr
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping.EtmpLegalStatus
 import util.TestData

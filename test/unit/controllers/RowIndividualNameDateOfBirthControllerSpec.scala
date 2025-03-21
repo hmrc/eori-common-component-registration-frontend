@@ -28,7 +28,7 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.RowIndividualNameDateOfBirthController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{IndividualNameAndDateOfBirth, NameDobMatchModel}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.RowCountryIndividualNameDateOfBirthFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
@@ -50,18 +50,21 @@ class RowIndividualNameDateOfBirthControllerSpec
 
   class ControllerFixture(organisationType: String, form: Form[IndividualNameAndDateOfBirth])
       extends AbstractControllerFixture[RowIndividualNameDateOfBirthController] {
-    val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+    val mockSubscriptionDetailsService: SubscriptionDetailsService = mock[SubscriptionDetailsService]
 
     private val rowIndividualNameDob = inject[row_individual_name_dob]
     private val mockAuthAction = authAction(mockAuthConnector)
     private val mockRequestSessionData = inject[RequestSessionData]
+    private val mockRowCountryIndividualNameDateOfBirthFormProvider = mock[RowCountryIndividualNameDateOfBirthFormProvider]
+    when(mockRowCountryIndividualNameDateOfBirthFormProvider.form).thenReturn(new RowCountryIndividualNameDateOfBirthFormProvider().form)
 
     override val controller = new RowIndividualNameDateOfBirthController(
       mockAuthAction,
       mockSubscriptionDetailsService,
       mockRequestSessionData,
       mcc,
-      rowIndividualNameDob
+      rowIndividualNameDob,
+      mockRowCountryIndividualNameDateOfBirthFormProvider
     )(global)
 
     def saveRegistrationDetailsMockSuccess(): Unit =
@@ -354,7 +357,7 @@ class RowIndividualNameDateOfBirthControllerSpec
   abstract class ThirdCountryIndividualBehaviour(webPage: IndividualNameAndDateOfBirthPage)
       extends IndividualNameAndDateOfBirthBehaviour(
         webPage,
-        form = MatchingForms.thirdCountryIndividualNameDateOfBirthForm,
+        form = new RowCountryIndividualNameDateOfBirthFormProvider().form,
         validFormModelGens = individualNameAndDateOfBirthGens()
       ) {}
 

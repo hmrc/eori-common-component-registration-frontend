@@ -19,12 +19,12 @@ package unit.forms
 import base.UnitSpec
 import play.api.data.Form
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SixLineAddressMatchModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.sixlineaddress.SixLineAddressFormProvider
 
 class MatchingFormsSpec extends UnitSpec {
 
   "thirdCountrySixLineAddressForm" should {
-    def addressForm: Form[SixLineAddressMatchModel] = MatchingForms.thirdCountrySixLineAddressForm
+    def addressForm: Form[SixLineAddressMatchModel] = new SixLineAddressFormProvider().thirdCountrySixLineAddressForm
 
     "remove any white space from postcode" in {
       val data = Map(

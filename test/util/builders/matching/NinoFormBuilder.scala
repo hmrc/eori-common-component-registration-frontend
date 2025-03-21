@@ -18,7 +18,7 @@ package util.builders.matching
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NinoMatch
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NinoFormProvider
 
 import java.time.LocalDate
 
@@ -31,7 +31,7 @@ object NinoFormBuilder {
 
   def asNinoMatch: NinoMatch = NinoMatch(FirstName, LastName, DateOfBirth, Nino)
 
-  def asForm: Map[String, String] = ninoForm.mapping.unbind(asNinoMatch)
+  def asForm: Map[String, String] = new NinoFormProvider().ninoForm.mapping.unbind(asNinoMatch)
 
   def asIndividual: Individual = Individual.noMiddle(FirstName, LastName, DateOfBirth.toString)
 }

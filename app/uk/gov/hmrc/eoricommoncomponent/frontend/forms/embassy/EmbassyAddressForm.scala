@@ -20,46 +20,43 @@ import play.api.data.Form
 import play.api.data.Forms.{default, mapping, optional, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.EmbassyAddressMatchModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.mandatoryPostCodeMapping
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.countryCodeGB
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Constraints
 
-class EmbassyAddressForm() {
+import javax.inject.Singleton
 
-  private val noTagsRegex = "^[^<>]+$"
+@Singleton
+class EmbassyAddressForm() extends Constraints {
 
   def form: Form[EmbassyAddressMatchModel] =
     Form {
       mapping(
-        "line-1"      -> text.verifying(validLine1),
-        "line-2"      -> optional(text.verifying(validLine2)),
+        "line-1"      -> text.verifying(validLineOne),
+        "line-2"      -> optional(text.verifying(validLineTwo)),
         "townCity"    -> text.verifying(validLineTownCity),
-        "postcode"    -> mandatoryPostCodeMapping,
+        "postcode"    -> text.verifying(validPostcode),
         "countryCode" -> default(text, countryCodeGB)
       )(EmbassyAddressMatchModel.apply)(EmbassyAddressMatchModel.unapply)
     }
 
-  private def validLine1: Constraint[String] =
+  private def validLineOne: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.embassy-address.line-1.error.empty"))
-      case s if !s.matches(noTagsRegex) =>
-        Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
+      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
       case _ => Valid
     })
 
-  private def validLine2: Constraint[String] =
+  private def validLineTwo: Constraint[String] =
     Constraint({
-      case s if !s.matches(noTagsRegex) =>
-        Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
+      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
       case _ => Valid
     })
 
   private def validLineTownCity: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.embassy-address.town-city.error.empty"))
-      case s if s.trim.length > 34 =>
-        Invalid(ValidationError("cds.matching.embassy-address.town-city.error.too-long"))
-      case s if !s.matches(noTagsRegex) =>
-        Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
+      case s if s.trim.length > 34 => Invalid(ValidationError("cds.matching.embassy-address.town-city.error.too-long"))
+      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
       case _ => Valid
     })
 

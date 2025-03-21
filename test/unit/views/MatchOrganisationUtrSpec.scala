@@ -24,13 +24,13 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.UtrMatchModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.HaveUtrFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_organisation_utr
 import util.ViewSpec
 
 class MatchOrganisationUtrSpec extends ViewSpec {
-  val form: Form[UtrMatchModel] = haveUtrForm
-  val formWithNoSelectionError: Form[UtrMatchModel] = haveUtrForm.bind(Map.empty[String, String])
+  val form: Form[UtrMatchModel] = new HaveUtrFormProvider().haveUtrForm
+  val formWithNoSelectionError: Form[UtrMatchModel] = form.bind(Map.empty[String, String])
   val isInReviewMode = false
   val previousPageUrl = "/"
   val nonSoleTraderType = "charity-public-body-not-for-profit"

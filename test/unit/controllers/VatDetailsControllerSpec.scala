@@ -28,8 +28,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.VatRegistrationDateFormProvider
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.registrationdate.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.VatDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details}

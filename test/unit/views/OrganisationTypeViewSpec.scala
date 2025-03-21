@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.OrganisationTypeController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.OrganisationTypeDetailsFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
@@ -48,6 +49,8 @@ class OrganisationTypeViewSpec extends ControllerSpec with MockitoSugar with Bef
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val organisationTypeView = inject[organisation_type]
   private val mockAppConfig = mock[AppConfig]
+  private val mockOrganisationTypeDetailsFormProviderSpec = mock[OrganisationTypeDetailsFormProvider]
+  when(mockOrganisationTypeDetailsFormProviderSpec.form()).thenReturn(new OrganisationTypeDetailsFormProvider().form())
 
   private val organisationTypeController = new OrganisationTypeController(
     mockAuthAction,
@@ -56,7 +59,8 @@ class OrganisationTypeViewSpec extends ControllerSpec with MockitoSugar with Bef
     organisationTypeView,
     mockRegistrationDetailsService,
     mockSubscriptionDetailsService,
-    mockAppConfig
+    mockAppConfig,
+    mockOrganisationTypeDetailsFormProviderSpec
   )
 
   override protected def beforeEach(): Unit = {

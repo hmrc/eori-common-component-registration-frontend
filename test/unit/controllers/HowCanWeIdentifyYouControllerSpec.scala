@@ -26,6 +26,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.HowCanWeIdentifyYouController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NinoOrUtrChoiceFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.how_can_we_identify_you
@@ -43,6 +44,8 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
   private val mockSubscriptionBusinessService = mock[SubscriptionBusinessService]
   private val mockSubscriptionDetailsHolderService = mock[SubscriptionDetailsService]
   private val mockRequestSessionData = inject[RequestSessionData]
+  private val mockNinoOrUtrChoiceFormProvider = mock[NinoOrUtrChoiceFormProvider]
+  when(mockNinoOrUtrChoiceFormProvider.ninoOrUtrChoiceForm).thenReturn(new NinoOrUtrChoiceFormProvider().ninoOrUtrChoiceForm)
 
   private val howCanWeIdentifyYouView = inject[how_can_we_identify_you]
 
@@ -52,7 +55,8 @@ class HowCanWeIdentifyYouControllerSpec extends ControllerSpec with BeforeAndAft
     mcc,
     howCanWeIdentifyYouView,
     mockSubscriptionDetailsHolderService,
-    mockRequestSessionData
+    mockRequestSessionData,
+    mockNinoOrUtrChoiceFormProvider
   )(global)
 
   override def beforeEach(): Unit = {

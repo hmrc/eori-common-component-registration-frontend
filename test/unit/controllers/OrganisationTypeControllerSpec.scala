@@ -31,6 +31,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{OrganisationTypeCon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.OrganisationTypeDetailsFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, RequestSessionDataKeys}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
@@ -51,6 +52,8 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val mockAppConfig = mock[AppConfig]
+  private val mockOrganisationTypeDetailsFormProviderSpec = mock[OrganisationTypeDetailsFormProvider]
+  when(mockOrganisationTypeDetailsFormProviderSpec.form()).thenReturn(new OrganisationTypeDetailsFormProvider().form())
 
   private val organisationTypeView = inject[organisation_type]
 
@@ -61,7 +64,8 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
     organisationTypeView,
     mockRegistrationDetailsService,
     mockSubscriptionDetailsService,
-    mockAppConfig
+    mockAppConfig,
+    mockOrganisationTypeDetailsFormProviderSpec
   )
 
   private val ProblemWithSelectionError = "Select what you want to apply as"

@@ -20,8 +20,9 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
+
+import scala.util.matching.Regex
 
 case class VatReturnTotal(returnAmountInput: String)
 
@@ -30,6 +31,8 @@ object VatReturnTotal {
 }
 
 object VatReturnTotalForm extends Mappings {
+
+  val amountRegex: Regex = "^([0-9]+\\.[0-9]{2})$".r
 
   def validReturnAmount: Constraint[String] =
     Constraint({
@@ -40,7 +43,7 @@ object VatReturnTotalForm extends Mappings {
       case amount if amount.matches(amountRegex.regex) => Valid
     })
 
-  val vatReturnTotalForm =
+  val vatReturnTotalForm: Form[VatReturnTotal] =
     Form(mapping("vat-return-total" -> text.verifying(validReturnAmount))(VatReturnTotal.apply)(VatReturnTotal.unapply))
 
 }

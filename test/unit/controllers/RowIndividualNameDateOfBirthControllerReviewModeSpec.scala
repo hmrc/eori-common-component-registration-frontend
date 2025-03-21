@@ -30,7 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.RowIndividualNameDat
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.RowCountryIndividualNameDateOfBirthFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.row_individual_name_dob
@@ -58,13 +58,16 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
 
     private val rowIndividualNameDob = inject[row_individual_name_dob]
     private val mockAuthAction = authAction(mockAuthConnector)
+    private val mockRowCountryIndividualNameDateOfBirthFormProvider = mock[RowCountryIndividualNameDateOfBirthFormProvider]
+    when(mockRowCountryIndividualNameDateOfBirthFormProvider.form).thenReturn(new RowCountryIndividualNameDateOfBirthFormProvider().form)
 
     override val controller = new RowIndividualNameDateOfBirthController(
       mockAuthAction,
       mockSubscriptionDetailsService,
       mockRequestSessionData,
       mcc,
-      rowIndividualNameDob
+      rowIndividualNameDob,
+      mockRowCountryIndividualNameDateOfBirthFormProvider
     )(global)
 
     protected def show(с: RowIndividualNameDateOfBirthController): Action[AnyContent] =
@@ -200,7 +203,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
   abstract class ThirdCountryIndividualBehaviour(webPage: IndividualNameAndDateOfBirthPage)
       extends IndividualNameAndDateOfBirthBehaviour(
         webPage,
-        form = MatchingForms.thirdCountryIndividualNameDateOfBirthForm,
+        form = new RowCountryIndividualNameDateOfBirthFormProvider().form,
         validFormModelGens = individualNameAndDateOfBirthGens()
       ) {}
 

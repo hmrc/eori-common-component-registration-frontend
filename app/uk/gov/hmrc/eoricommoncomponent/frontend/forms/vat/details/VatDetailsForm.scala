@@ -14,58 +14,47 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
+package uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details
 
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import play.api.libs.json.{Format, Json}
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation._
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Mappings
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 
-case class VatDetails(postcode: String, number: String) {
+import javax.inject.Singleton
 
-  def isGiant: Boolean = number.startsWith("654") || number.startsWith("8888")
-}
+@Singleton
+class VatDetailsForm(requestSessionData: RequestSessionData) extends Mappings {
 
-object VatDetails {
-  implicit val format: Format[VatDetails] = Json.format[VatDetails]
-}
+  def vatDetailsForm(implicit request: Request[AnyContent]): Form[VatDetails] = {
+    Form(
+      mapping(
+        "postcode"   -> text.verifying(validPostcode(requestSessionData)),
+        "vat-number" -> text.verifying(validVatNumber)
+      )((postCode, vat) => VatDetails.apply(postCode, vat.filterNot(_.isWhitespace)))(VatDetails.unapply)
+    )
+  }
 
-object VatDetailsForm extends Mappings {
-
-  def validPostcode(requestSessionData: RequestSessionData)(implicit request: Request[AnyContent]): Constraint[String] =
+  private def validPostcode(requestSessionData: RequestSessionData)(implicit request: Request[AnyContent]): Constraint[String] = {
     Constraint("constraints.postcode") { pcode =>
       pcode.filterNot(_.isWhitespace) match {
         case s if s.matches(postcodeRegex.regex) => Valid
         case _ if requestSessionData.isRestOfTheWorld => Valid
         case _ => Invalid(ValidationError("cds.subscription.vat-details.postcode.required.error"))
       }
-
     }
+  }
 
-  private def validVatNumber: Constraint[String] =
+  private def validVatNumber: Constraint[String] = {
     Constraint("constraints.vat-number") { vat =>
       vat.filterNot(_.isWhitespace) match {
         case s if s.trim.isEmpty => Invalid(ValidationError("cds.subscription.vat-uk.required.error"))
         case s if !s.matches("^([0-9]{9})$") => Invalid(ValidationError("cds.subscription.vat-uk.length.error"))
         case _ => Valid
       }
-
     }
-
-  class VatDetailsForm(requestSessionData: RequestSessionData) {
-
-    def vatDetailsForm(implicit request: Request[AnyContent]): Form[VatDetails] =
-      Form(
-        mapping(
-          "postcode"   -> text.verifying(validPostcode(requestSessionData)),
-          "vat-number" -> text.verifying(validVatNumber)
-        )((postCode, vat) => VatDetails.apply(postCode, vat.filterNot(_.isWhitespace)))(VatDetails.unapply)
-      )
-
   }
-
 }

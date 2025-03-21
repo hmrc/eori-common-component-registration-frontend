@@ -24,11 +24,11 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.WhatIsYourOrgNameController
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.OrganisationNameFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_org_name
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.matching.OrganisationNameFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -36,11 +36,14 @@ import scala.concurrent.Future
 
 class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAfterEach with AuthActionMock {
 
+  private val ValidNameRequest = Map("name" -> "orgName")
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction = authAction(mockAuthConnector)
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
   private val whatIsYourOrgNameView = inject[what_is_your_org_name]
   private val mockAppConfig = mock[AppConfig]
+  private val mockOrgNameFormProvider = mock[OrganisationNameFormProvider]
+  when(mockOrgNameFormProvider.organisationNameForm).thenReturn(new OrganisationNameFormProvider().organisationNameForm)
 
   private val controller =
     new WhatIsYourOrgNameController(
@@ -48,7 +51,8 @@ class WhatIsYourOrgNameControllerRowSpec extends ControllerSpec with BeforeAndAf
       mcc,
       whatIsYourOrgNameView,
       mockSubscriptionDetailsService,
-      mockAppConfig
+      mockAppConfig,
+      mockOrgNameFormProvider
     )
 
   override protected def afterEach(): Unit = {

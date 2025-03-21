@@ -23,11 +23,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 
 class AddressDetailsFormSpec extends UnitSpec {
 
+  val addressDetailsForm: AddressDetailsForm = new AddressDetailsForm()
+
   "Address Details Form" should {
     "fail street validation" when {
       "street is empty" in {
         val formData = Map("street" -> "", "city" -> "London", "postcode" -> "SW3 5DA", "countryCode" -> "GB")
-        val res: Form[AddressViewModel] = AddressDetailsForm.addressDetailsCreateForm().bind(formData)
+        val res: Form[AddressViewModel] = addressDetailsForm.addressDetailsCreateForm().bind(formData)
         res.errors shouldBe Seq(FormError("street", "cds.subscription.address-details.street.empty.error"))
       }
 
@@ -38,13 +40,13 @@ class AddressDetailsFormSpec extends UnitSpec {
           "postcode"    -> "SW3 5DA",
           "countryCode" -> "GB"
         )
-        val res: Form[AddressViewModel] = AddressDetailsForm.addressDetailsCreateForm().bind(formData)
+        val res: Form[AddressViewModel] = addressDetailsForm.addressDetailsCreateForm().bind(formData)
         res.errors shouldBe Seq(FormError("street", "cds.subscription.address-details.street.too-long.error"))
       }
 
       "street contains invalid characters" in {
         val formData = Map("street" -> "^[^<>]+$", "city" -> "London", "postcode" -> "SW3 5DA", "countryCode" -> "GB")
-        val res: Form[AddressViewModel] = AddressDetailsForm.addressDetailsCreateForm().bind(formData)
+        val res: Form[AddressViewModel] = addressDetailsForm.addressDetailsCreateForm().bind(formData)
         res.errors shouldBe Seq(FormError("street", "cds.subscription.address-details.street.error.invalid-chars"))
       }
     }
@@ -53,14 +55,14 @@ class AddressDetailsFormSpec extends UnitSpec {
       "country code length is not 2" in {
         val formData =
           Map("street" -> "Chambers Lane", "city" -> "London", "postcode" -> "SW3 5DA", "countryCode" -> "GBC")
-        val res: Form[AddressViewModel] = AddressDetailsForm.addressDetailsCreateForm().bind(formData)
+        val res: Form[AddressViewModel] = addressDetailsForm.addressDetailsCreateForm().bind(formData)
         res.errors shouldBe Seq(FormError("countryCode", "cds.matching-error.country.invalid"))
       }
 
       "country code is empty" in {
         val formData =
           Map("street" -> "Chambers Lane", "city" -> "London", "postcode" -> "SW3 5DA", "countryCode" -> "")
-        val res: Form[AddressViewModel] = AddressDetailsForm.addressDetailsCreateForm().bind(formData)
+        val res: Form[AddressViewModel] = addressDetailsForm.addressDetailsCreateForm().bind(formData)
         res.errors shouldBe Seq(FormError("countryCode", "cds.matching-error.country.invalid"))
       }
     }

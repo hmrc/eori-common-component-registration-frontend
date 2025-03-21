@@ -17,13 +17,14 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.Logger
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EtmpOrganisationType, LoggedInUserWithEnrolments}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.DateOfEstablishmentForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -44,10 +45,13 @@ class DateOfEstablishmentController @Inject() (
   mcc: MessagesControllerComponents,
   dateOfEstablishmentView: date_of_establishment,
   orgTypeLookup: OrgTypeLookup,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  dateOfEstablishmentForm: DateOfEstablishmentForm
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
+
+  val doeForm: Form[LocalDate] = dateOfEstablishmentForm.form()
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
@@ -69,7 +73,7 @@ class DateOfEstablishmentController @Inject() (
     orgType: EtmpOrganisationType,
     service: Service
   )(implicit request: Request[AnyContent]): Result = {
-    val form = cachedDate.fold(subscriptionDateOfEstablishmentForm)(subscriptionDateOfEstablishmentForm.fill)
+    val form = cachedDate.fold(doeForm)(doeForm.fill)
     Ok(dateOfEstablishmentView(form, isInReviewMode, orgType, UserLocation.isRow(requestSessionData), service))
   }
 
@@ -92,7 +96,7 @@ class DateOfEstablishmentController @Inject() (
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      subscriptionDateOfEstablishmentForm
+      doeForm
         .bindFromRequest()
         .fold(
           formWithErrors =>

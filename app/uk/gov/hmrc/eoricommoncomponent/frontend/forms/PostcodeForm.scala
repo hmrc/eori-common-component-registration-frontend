@@ -19,27 +19,30 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormValidation.mandatoryPostCodeMapping
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.mappings.Constraints
 
-object PostcodeForm {
+import javax.inject.Singleton
 
-  private val noTagsRegex = "^[^<>]+$"
+@Singleton
+class PostcodeForm() extends Constraints {
 
   def postCodeCreateForm: Form[PostcodeViewModel] =
     Form(
-      mapping("postcode" -> mandatoryPostCodeMapping, "addressLine1" -> optional(text.verifying(addressLine1)))(
-        PostcodeViewModel.apply
-      )(PostcodeViewModel.unapply)
+      mapping(
+        "postcode"     -> text.verifying(validPostcode),
+        "addressLine1" -> optional(text.verifying(addressLine1))
+      )(PostcodeViewModel.apply)(PostcodeViewModel.unapply)
     )
 
   private def addressLine1: Constraint[String] =
     Constraint({
-      case s if s.trim.length > 35 =>
-        Invalid(ValidationError("ecc.address-lookup.postcode.line1.too-long.error"))
-      case s if !s.matches(noTagsRegex) =>
-        Invalid(ValidationError("ecc.address-lookup.postcode.line1.invalid-chars.error"))
+      case s if s.trim.length > 35 => Invalid(ValidationError("ecc.address-lookup.postcode.line1.too-long.error"))
+      case s if !s.matches(PostcodeForm.noTagsRegex) => Invalid(ValidationError("ecc.address-lookup.postcode.line1.invalid-chars.error"))
       case _ => Valid
     })
+}
 
+object PostcodeForm {
+  val noTagsRegex = "^[^<>]+$"
 }

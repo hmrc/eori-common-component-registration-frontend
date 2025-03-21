@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{GroupId, LoggedInUserWithEnrolments, NinoMatch}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
@@ -38,9 +39,12 @@ class NinoController @Inject() (
   matchNinoView: match_nino,
   matchingService: MatchingService,
   errorView: error_template,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  ninoFormProvider: NinoFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val ninoForm: Form[NinoMatch] = ninoFormProvider.ninoForm
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>

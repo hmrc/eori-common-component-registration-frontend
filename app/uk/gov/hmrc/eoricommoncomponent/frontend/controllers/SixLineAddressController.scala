@@ -21,7 +21,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, LoggedInUser, LoggedInUserWithEnrolments, SixLineAddressMatchModel}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.sixlineaddress.SixLineAddressFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
@@ -43,9 +43,21 @@ class SixLineAddressController @Inject() (
   mcc: MessagesControllerComponents,
   sixLineAddressView: six_line_address,
   registrationDetailsService: RegistrationDetailsService,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  sixLineAddressFormProvider: SixLineAddressFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private def createSixLineAddress(addr: Address): SixLineAddressMatchModel = {
+    SixLineAddressMatchModel(
+      addr.addressLine1,
+      addr.addressLine2,
+      addr.addressLine3.getOrElse(""),
+      addr.addressLine4,
+      addr.postalCode,
+      addr.countryCode
+    )
+  }
 
   private def populateView(
     address: Option[Address],
@@ -127,9 +139,9 @@ class SixLineAddressController @Inject() (
 
   private def formsByOrganisationTypes(implicit request: Request[AnyContent]) = {
     val form = requestSessionData.selectedUserLocationWithIslands(request) match {
-      case Some(UserLocation.Uk) => ukSixLineAddressForm
-      case Some(UserLocation.Islands) => channelIslandSixLineAddressForm
-      case _ => thirdCountrySixLineAddressForm
+      case Some(UserLocation.Uk) => sixLineAddressFormProvider.ukSixLineAddressForm
+      case Some(UserLocation.Islands) => sixLineAddressFormProvider.channelIslandSixLineAddressForm
+      case _ => sixLineAddressFormProvider.thirdCountrySixLineAddressForm
     }
 
     Map(

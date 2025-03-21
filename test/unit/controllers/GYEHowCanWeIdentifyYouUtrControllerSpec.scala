@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, Me
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, NameDobMatchModel, NinoOrUtr, Utr}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionUtrFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
@@ -51,6 +52,8 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
   private val mockOrgTypeLookup = mock[OrgTypeLookup]
   private val mockRequestSessionData = mock[RequestSessionData]
   private val errorView = inject[error_template]
+  private val mockSubscriptionUtrFormProvider = mock[SubscriptionUtrFormProvider]
+  when(mockSubscriptionUtrFormProvider.subscriptionUtrForm).thenReturn(new SubscriptionUtrFormProvider().subscriptionUtrForm)
 
   private val sessionCacheService =
     new SessionCacheService(mockFrontendDataCache, mockRequestSessionData, mockMatchingService, errorView)(global)
@@ -65,7 +68,8 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     mockFrontendDataCache,
     mockRequestSessionData,
     sessionCacheService,
-    mockMatchingService
+    mockMatchingService,
+    mockSubscriptionUtrFormProvider
   )(global)
 
   "Viewing the form " should {

@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{ConfirmIndividualTypeController, SubscriptionFlowManager}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionPage
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ConfirmIndividualTypeForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.confirm_individual_type
@@ -44,6 +45,8 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
   private val confirmIndividualTypeView = inject[confirm_individual_type]
   private val mockSessionCacheService = inject[SessionCacheService]
+  private val mockConfirmIndividualTypeForm = mock[ConfirmIndividualTypeForm]
+  when(mockConfirmIndividualTypeForm.form()).thenReturn(new ConfirmIndividualTypeForm().form())
 
   private val controller = new ConfirmIndividualTypeController(
     mockAuthAction,
@@ -51,7 +54,8 @@ class ConfirmIndividualTypeControllerSpec extends ControllerSpec with BeforeAndA
     mockSubscriptionFlowManager,
     confirmIndividualTypeView,
     mcc,
-    mockSessionCacheService
+    mockSessionCacheService,
+    mockConfirmIndividualTypeForm
   )(global)
 
   private val mockSubscriptionPage = mock[SubscriptionPage]

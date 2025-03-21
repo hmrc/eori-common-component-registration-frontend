@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.VatDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 
 case class VatControlListResponse(
   postcode: Option[String] = None,

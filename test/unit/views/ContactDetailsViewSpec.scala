@@ -22,14 +22,14 @@ import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm.contactDetailsCreateForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.contact_details
 import util.ViewSpec
 
 class ContactDetailsViewSpec extends ViewSpec {
 
-  private val form: Form[ContactDetailsViewModel] = contactDetailsCreateForm()
+  private val form: Form[ContactDetailsViewModel] = new ContactDetailsForm().contactDetailsCreateForm()
   implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
   private val view = inject[contact_details]
   private val fullNameLabel = "label[for=full-name]"

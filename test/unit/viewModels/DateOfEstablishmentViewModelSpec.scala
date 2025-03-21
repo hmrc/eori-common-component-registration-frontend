@@ -20,7 +20,7 @@ import base.UnitSpec
 import play.api.data.Form
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CorporateBody, Partnership, UnincorporatedBody}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.DateOfEstablishmentForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.DateOfEstablishmentViewModel
 import util.ControllerSpec
 
@@ -50,7 +50,7 @@ class DateOfEstablishmentViewModelSpec extends UnitSpec with ControllerSpec {
     }
 
     "should update and bring correct form with errors " in {
-      val form: Form[time.LocalDate] = SubscriptionForm.subscriptionDateOfEstablishmentForm
+      val form: Form[time.LocalDate] = new DateOfEstablishmentForm().form()
       val updatedForm = DateOfEstablishmentViewModel.updateFormErrors(form)
       updatedForm.errors shouldBe DateConverter.updateDateOfEstablishmentErrors(form.errors)
     }

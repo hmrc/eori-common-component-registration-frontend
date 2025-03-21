@@ -20,7 +20,8 @@ import play.api.Logging
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
 
 import java.time.LocalDate

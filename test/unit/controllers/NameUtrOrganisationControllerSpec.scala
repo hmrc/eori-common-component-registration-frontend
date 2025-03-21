@@ -30,13 +30,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnec
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameIdOrganisationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameOrganisationMatchModel, Utr}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NameIdOrganisationFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.InvalidUrlValueException
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, match_name_id_organisation}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.matching.NameIdOrganisationFormBuilder._
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import java.time.{LocalDate, LocalDateTime}
@@ -45,6 +45,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar with BeforeAndAfterEach with AuthActionMock {
+
+  private val ValidUtrId: String = "1111111111"
+  private val ValidUtr: Utr = Utr(ValidUtrId)
+  private val ValidName = "SA Partnership 3 For Digital"
+  private val CompanyOrganisation = Organisation("SA Partnership 3 For Digital", "Corporate Body")
+  private val ValidNameUtrRequest = Map("name" -> ValidName, "utr" -> ValidUtrId)
 
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction = authAction(mockAuthConnector)
@@ -57,6 +63,10 @@ class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar
   private val limitedLiabilityPartnershipId = CdsOrganisationType.LimitedLiabilityPartnershipId
   private val charityPublicBodyNotForProfitId = CdsOrganisationType.CharityPublicBodyNotForProfitId
   private val errorView = inject[error_template]
+  private val mockNameIdOrgFormProvider = mock[NameIdOrganisationFormProvider]
+  when(mockNameIdOrgFormProvider.nameUtrOrganisationForm).thenReturn(new NameIdOrganisationFormProvider().nameUtrOrganisationForm)
+  when(mockNameIdOrgFormProvider.nameUtrCompanyForm).thenReturn(new NameIdOrganisationFormProvider().nameUtrCompanyForm)
+  when(mockNameIdOrgFormProvider.nameUtrPartnershipForm).thenReturn(new NameIdOrganisationFormProvider().nameUtrPartnershipForm)
 
   private val controller =
     new NameIdOrganisationController(
@@ -65,16 +75,17 @@ class NameUtrOrganisationControllerSpec extends ControllerSpec with MockitoSugar
       matchNameIdOrganisationView,
       mockMatchingService,
       mockSubscriptionDetailService,
-      errorView
+      errorView,
+      mockNameIdOrgFormProvider
     )
 
   private val organisationTypeOrganisations =
     Table(
       ("organisationType", "organisation"),
-      (companyId, CompanyOrganisation),
-      (partnershipId, PartnershipOrganisation),
-      (limitedLiabilityPartnershipId, LimitedLiabilityPartnershipOrganisation),
-      (charityPublicBodyNotForProfitId, CharityPublicBodyNotForProfitOrganisation)
+      (companyId, Organisation("SA Partnership 3 For Digital", "Corporate Body")),
+      (partnershipId, Organisation("SA Partnership 3 For Digital", "Partnership")),
+      (limitedLiabilityPartnershipId, Organisation("SA Partnership 3 For Digital", "LLP")),
+      (charityPublicBodyNotForProfitId, Organisation("SA Partnership 3 For Digital", "Unincorporated Body"))
     )
 
   private val NameMaxLength = 105

@@ -18,7 +18,8 @@ package util.builders
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{ContactDetailsModel, VatDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 
 import java.time.LocalDate
 

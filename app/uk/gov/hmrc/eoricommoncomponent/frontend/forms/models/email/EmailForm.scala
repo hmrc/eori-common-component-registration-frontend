@@ -23,10 +23,9 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.emailaddress.EmailAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationKeys
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.oneOf
 
 object EmailForm {
-
-  private def oneOf[T](validValues: Set[T]): T => Boolean = validValues.contains
 
   private val validYesNoAnswerOptions = Set("true", "false")
 

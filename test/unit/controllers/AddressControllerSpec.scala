@@ -22,6 +22,7 @@ import play.api.mvc.Results.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.AddressController
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
@@ -38,8 +39,9 @@ class AddressControllerSpec extends SubscriptionFlowTestSupport with Subscriptio
 
   private val mockAddressService = mock[AddressService]
   private val mockSessionCacheService = inject[SessionCacheService]
+  private val mockAddressDetailsForm = mock[AddressDetailsForm]
 
-  private val controller = new AddressController(mockAuthAction, mockAddressService, mockSessionCacheService, mcc)(
+  private val controller = new AddressController(mockAuthAction, mockAddressDetailsForm, mockAddressService, mockSessionCacheService, mcc)(
     global
   )
 

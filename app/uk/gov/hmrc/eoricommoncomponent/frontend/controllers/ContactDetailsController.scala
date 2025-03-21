@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetailsSubscriptionFlowPageGetEori
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm.contactDetailsCreateForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{SessionCache, SessionCacheService}
@@ -41,7 +41,8 @@ class ContactDetailsController @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService,
   mcc: MessagesControllerComponents,
   contactDetailsView: contact_details,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  contactDetailsForm: ContactDetailsForm
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
   private val logger = Logger(this.getClass)
@@ -61,25 +62,28 @@ class ContactDetailsController @Inject() (
   )(implicit request: Request[AnyContent]): Future[Result] =
     subscriptionBusinessService.cachedContactDetailsModel.flatMap { contactDetails =>
       cdsFrontendDataCache.email.flatMap { email =>
-        populateOkView(
-          contactDetails.map(_.toContactInfoViewModel),
-          Some(email),
-          isInReviewMode = isInReviewMode,
-          service
-        ).flatMap(
-          sessionCacheService.individualAndSoleTraderRouter(
-            user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
-            service,
-            _
+        val form =
+          contactDetails
+            .map(_.toContactInfoViewModel)
+            .fold(contactDetailsForm.contactDetailsCreateForm())(f => contactDetailsForm.contactDetailsCreateForm().fill(f))
+
+        Future
+          .successful(Ok(contactDetailsView(form, Some(email), isInReviewMode, service)))
+          .flatMap(
+            sessionCacheService.individualAndSoleTraderRouter(
+              user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
+              service,
+              _
+            )
           )
-        )
       }
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       cdsFrontendDataCache.email flatMap { email =>
-        contactDetailsCreateForm()
+        contactDetailsForm
+          .contactDetailsCreateForm()
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(contactDetailsView(formWithErrors, Some(email), isInReviewMode, service))),
@@ -87,18 +91,6 @@ class ContactDetailsController @Inject() (
           )
       }
     }
-
-  private def populateOkView(
-    contactDetailsModel: Option[ContactDetailsViewModel],
-    email: Option[String],
-    isInReviewMode: Boolean,
-    service: Service
-  )(implicit request: Request[AnyContent]): Future[Result] = {
-    val form = contactDetailsModel
-      .fold(contactDetailsCreateForm())(f => contactDetailsCreateForm().fill(f))
-
-    Future.successful(Ok(contactDetailsView(form, email, isInReviewMode, service)))
-  }
 
   private def storeContactDetails(
     formData: ContactDetailsViewModel,

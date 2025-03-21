@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{ThirdCountryIndividualId, ThirdCountrySoleTraderId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.SixLineAddressMatchModel
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.sixlineaddress.SixLineAddressFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries._
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.SixLineAddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.six_line_address
@@ -32,7 +32,7 @@ import util.ViewSpec
 
 class SixLineAddressSpec extends ViewSpec {
 
-  private val form: Form[SixLineAddressMatchModel] = thirdCountrySixLineAddressForm
+  private val form: Form[SixLineAddressMatchModel] = new SixLineAddressFormProvider().thirdCountrySixLineAddressForm
   private val isInReviewMode = false
   implicit private val request: Request[AnyContentAsEmpty.type] = withFakeCSRF(FakeRequest())
   private val ThirdCountryOrganisationId = "third-country-organisation"

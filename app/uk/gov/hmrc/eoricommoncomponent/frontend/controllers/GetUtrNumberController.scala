@@ -29,7 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.indiv
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Individual
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingResponse, Organisation}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionUtrFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{MatchingService, SubscriptionDetailsService}
@@ -49,9 +49,12 @@ class GetUtrNumberController @Inject() (
   matchOrganisationUtrView: how_can_we_identify_you_utr,
   subscriptionDetailsService: SubscriptionDetailsService,
   errorView: error_template,
-  sessionCacheService: SessionCacheService
+  sessionCacheService: SessionCacheService,
+  subscriptionUtrFormProvider: SubscriptionUtrFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val subscriptionUtrForm: Form[IdMatchModel] = subscriptionUtrFormProvider.subscriptionUtrForm
 
   def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>

@@ -21,7 +21,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.data.{Form, FormError}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.registrationdate.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.TimeService
 
 import java.time.format.DateTimeFormatter

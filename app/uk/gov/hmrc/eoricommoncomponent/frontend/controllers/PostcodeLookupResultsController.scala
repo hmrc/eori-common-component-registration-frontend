@@ -43,7 +43,8 @@ class PostcodeLookupResultsController @Inject() (
   registrationDetailsService: RegistrationDetailsService,
   addressLookupConnector: AddressLookupConnector,
   mcc: MessagesControllerComponents,
-  addressLookupResultsPage: postcode_address_result
+  addressLookupResultsPage: postcode_address_result,
+  addressResultsForm: AddressResultsForm
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -63,7 +64,7 @@ class PostcodeLookupResultsController @Inject() (
           .flatMap {
             case AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
               Future.successful(
-                Ok(prepareView(AddressResultsForm.form(addresses), addressLookupParams, addresses, service))
+                Ok(prepareView(addressResultsForm.form(addresses), addressLookupParams, addresses, service))
               )
             case AddressLookupSuccess(_) if addressLookupParams.addressLine1.exists(_.nonEmpty) =>
               repeatQueryWithoutLine1(addressLookupParams, service)
@@ -94,7 +95,7 @@ class PostcodeLookupResultsController @Inject() (
     addressLookupConnector.lookup(addressLookupParamsWithoutLine1.postcode.replaceAll(" ", ""), None).flatMap {
       case AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
         sessionCache.savePostcodeAndLine1Details(addressLookupParamsWithoutLine1).map { _ =>
-          Ok(prepareView(AddressResultsForm.form(addresses), addressLookupParamsWithoutLine1, addresses, service))
+          Ok(prepareView(addressResultsForm.form(addresses), addressLookupParamsWithoutLine1, addresses, service))
         }
       case AddressLookupSuccess(_) => Future.successful(redirectToManualAddressPage(service))
       case AddressLookupFailure => throw AddressLookupException
@@ -112,7 +113,7 @@ class PostcodeLookupResultsController @Inject() (
             )
             .flatMap {
               case AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
-                AddressResultsForm
+                addressResultsForm
                   .form(addresses)
                   .bindFromRequest()
                   .fold(

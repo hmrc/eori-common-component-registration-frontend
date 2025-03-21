@@ -23,12 +23,12 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.OrganisationTypeDetailsFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.organisation_type
 import util.ViewSpec
 
 class OrganisationTypePageSpec extends ViewSpec {
-  private val form: Form[CdsOrganisationType] = organisationTypeDetailsForm
+  private val form: Form[CdsOrganisationType] = new OrganisationTypeDetailsFormProvider().form()
   private val thirdCountryOrganisationLabel = "label[for=organisation-type-third-country-organisation]"
   private val thirdCountrySoleTraderLabel = "label[for=organisation-type-third-country-sole-trader]"
   private val thirdCountryIndividualLabel = "label[for=organisation-type-third-country-individual]"

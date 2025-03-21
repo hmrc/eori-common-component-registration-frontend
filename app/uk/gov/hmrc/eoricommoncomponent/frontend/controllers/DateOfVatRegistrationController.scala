@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.CharityPublicBodyNotForProfit
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, VatControlListResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.{VatRegistrationDate, VatRegistrationDateFormProvider}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.registrationdate.{VatRegistrationDate, VatRegistrationDateFormProvider}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCacheService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}

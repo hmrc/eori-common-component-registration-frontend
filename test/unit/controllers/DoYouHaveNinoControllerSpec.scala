@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DoYouHaveNinoController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, NameDobMatchModel, NinoMatchModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.HaveNinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_nino_row_individual
@@ -43,6 +44,8 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
   private val mockAuthAction = authAction(mockAuthConnector)
   private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSubscriptionDetailsService = mock[SubscriptionDetailsService]
+  private val mockHaveNinoFormProvider = mock[HaveNinoFormProvider]
+  when(mockHaveNinoFormProvider.haveRowIndividualsNinoForm).thenReturn(new HaveNinoFormProvider().haveRowIndividualsNinoForm)
 
   private val matchNinoRowIndividualView = inject[match_nino_row_individual]
 
@@ -51,7 +54,8 @@ class DoYouHaveNinoControllerSpec extends ControllerSpec with BeforeAndAfterEach
     mockRequestSessionData,
     mcc,
     matchNinoRowIndividualView,
-    mockSubscriptionDetailsService
+    mockSubscriptionDetailsService,
+    mockHaveNinoFormProvider
   )
 
   override protected def beforeEach(): Unit = {

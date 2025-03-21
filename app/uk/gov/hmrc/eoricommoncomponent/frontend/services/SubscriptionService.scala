@@ -72,7 +72,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, au
   private def subscribeWithConnector(
     request: SubscriptionRequest
   )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
-    connector.subscribe(request) map { response =>
+    connector.subscribe(request) map { response: SubscriptionResponse =>
       val responseCommon = response.subscriptionCreateResponse.responseCommon
       val processingDate = DateTimeFormatter.ofPattern("d MMM y").format(responseCommon.processingDate)
       val emailVerificationTimestamp =

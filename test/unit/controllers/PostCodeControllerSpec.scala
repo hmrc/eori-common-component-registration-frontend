@@ -24,6 +24,7 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.PostCodeController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostCodeController
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.PostcodeForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -44,13 +45,13 @@ class PostCodeControllerSpec extends SubscriptionFlowTestSupport with BeforeAndA
   val form: Map[String, String] = Map("postcode" -> "TF3 2BX", "addressLine1" -> "addressline 1")
   val invalidForm: Map[String, String] = Map("addressLine1" -> "addressline 1")
 
-  def submitInCreateModeUrl: String =
-    PostCodeController.submit(atarService).url
+  def submitInCreateModeUrl: String = PostCodeController.submit(atarService).url
 
   private val mockSessionCache = mock[SessionCache]
   private val view = inject[postcode]
+  private val mockPostcodeForm = mock[PostcodeForm]
 
-  private val controller = new PostCodeController(mockAuthAction, view, mcc, mockSessionCache)
+  private val controller = new PostCodeController(mockAuthAction, view, mcc, mockSessionCache, mockPostcodeForm)
 
   override def beforeEach(): Unit =
     super.beforeEach()
@@ -59,6 +60,8 @@ class PostCodeControllerSpec extends SubscriptionFlowTestSupport with BeforeAndA
     super.afterEach()
 
   "Address Lookup Postcode Controller" should {
+    when(mockPostcodeForm.postCodeCreateForm).thenReturn(new PostcodeForm().postCodeCreateForm)
+
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.createForm(atarService))
 
     "return 200 (OK)" when {

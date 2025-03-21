@@ -20,7 +20,7 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.PostcodeForm._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.PostcodeForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.postcode
@@ -33,18 +33,19 @@ class PostCodeController @Inject() (
   authorise: AuthAction,
   postcodeView: postcode,
   mcc: MessagesControllerComponents,
-  cache: SessionCache
+  cache: SessionCache,
+  postcodeForm: PostcodeForm
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(postcodeView(postCodeCreateForm, service)))
+      Future.successful(Ok(postcodeView(postcodeForm.postCodeCreateForm, service)))
     }
 
   def submit(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      postCodeCreateForm
+      postcodeForm.postCodeCreateForm
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(postcodeView(formWithErrors, service))),

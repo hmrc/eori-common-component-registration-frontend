@@ -25,6 +25,7 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ManualAddressController
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -51,12 +52,15 @@ class ManualAddressControllerSpec extends SubscriptionFlowTestSupport with Befor
   private val mockAddressService = mock[AddressService]
   private val mockSessionCache = mock[SessionCache]
   private val view = inject[manual_address]
+  private val mockAddressDetailsForm = mock[AddressDetailsForm]
 
   private val controller =
-    new ManualAddressController(mockAuthAction, view, mcc, mockSessionCache)
+    new ManualAddressController(mockAuthAction, mockAddressDetailsForm, view, mcc, mockSessionCache)
 
-  override def beforeEach(): Unit =
+  override def beforeEach(): Unit = {
     super.beforeEach()
+    when(mockAddressDetailsForm.addressDetailsCreateForm()).thenCallRealMethod()
+  }
 
   override protected def afterEach(): Unit = {
     reset(mockAddressService)

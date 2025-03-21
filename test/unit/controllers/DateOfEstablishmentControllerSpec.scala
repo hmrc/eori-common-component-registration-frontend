@@ -30,6 +30,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.DateOfEstablishmentC
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{DateOfEstablishmentSubscriptionFlowPage, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.DateOfEstablishmentForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.date_of_establishment
@@ -62,8 +63,10 @@ class DateOfEstablishmentControllerSpec
   private val mockOrgTypeLookup = mock[OrgTypeLookup]
   private val mockRequestSessionData = mock[RequestSessionData]
   private val mockSessionCacheService = inject[SessionCacheService]
+  private val mockDateOfEstablishmentForm = mock[DateOfEstablishmentForm]
 
   private val dateOfEstablishmentView = inject[date_of_establishment]
+  when(mockDateOfEstablishmentForm.form()).thenReturn(new DateOfEstablishmentForm().form())
 
   private val controller = new DateOfEstablishmentController(
     mockAuthAction,
@@ -74,7 +77,8 @@ class DateOfEstablishmentControllerSpec
     mcc,
     dateOfEstablishmentView,
     mockOrgTypeLookup,
-    mockSessionCacheService
+    mockSessionCacheService,
+    mockDateOfEstablishmentForm
   )(global)
 
   private val DateOfEstablishmentString = "1962-05-12"

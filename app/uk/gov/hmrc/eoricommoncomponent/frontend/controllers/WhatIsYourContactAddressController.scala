@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.EmbassyId
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.contactAddressForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{ContactAddressMatchModel, LoggedInUserWithEnrolments}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactAddressFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -37,9 +38,12 @@ class WhatIsYourContactAddressController @Inject() (
   mcc: MessagesControllerComponents,
   requestSessionData: RequestSessionData,
   subscriptionDetailsService: SubscriptionDetailsService,
-  what_is_your_contact_address_view: what_is_your_contact_address
+  what_is_your_contact_address_view: what_is_your_contact_address,
+  contactAddressFormProvider: ContactAddressFormProvider
 )(implicit executionContext: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val contactAddressForm: Form[ContactAddressMatchModel] = contactAddressFormProvider.contactAddressForm
 
   def showForm(isInReviewMode: Boolean = false, service: Service): Action[AnyContent] = {
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>

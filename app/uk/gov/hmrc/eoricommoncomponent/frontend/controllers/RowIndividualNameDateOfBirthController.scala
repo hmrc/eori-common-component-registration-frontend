@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{DetermineReviewPageController, DoYouHaveAUtrNumberController, IndStCannotRegisterUsingThisServiceController, SecuritySignOutController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.thirdCountryIndividualNameDateOfBirthForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.RowCountryIndividualNameDateOfBirthFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
@@ -37,9 +38,12 @@ class RowIndividualNameDateOfBirthController @Inject() (
   subscriptionDetailsService: SubscriptionDetailsService,
   requestSessionData: RequestSessionData,
   mcc: MessagesControllerComponents,
-  rowIndividualNameDob: row_individual_name_dob
+  rowIndividualNameDob: row_individual_name_dob,
+  rowCountryIndividualNameDateOfBirthFormProvider: RowCountryIndividualNameDateOfBirthFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] = rowCountryIndividualNameDateOfBirthFormProvider.form
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>

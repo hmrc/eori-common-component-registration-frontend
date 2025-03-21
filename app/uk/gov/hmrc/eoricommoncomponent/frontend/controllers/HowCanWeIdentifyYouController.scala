@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.ninoOrUtrChoiceForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NinoOrUtrChoiceFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
@@ -37,9 +38,12 @@ class HowCanWeIdentifyYouController @Inject() (
   mcc: MessagesControllerComponents,
   howCanWeIdentifyYouView: how_can_we_identify_you,
   subscriptionDetailsHolderService: SubscriptionDetailsService,
-  requestSessionData: RequestSessionData
+  requestSessionData: RequestSessionData,
+  ninoOrUtrChoiceFormProvider: NinoOrUtrChoiceFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val ninoOrUtrChoiceForm: Form[NinoOrUtrChoice] = ninoOrUtrChoiceFormProvider.ninoOrUtrChoiceForm
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>

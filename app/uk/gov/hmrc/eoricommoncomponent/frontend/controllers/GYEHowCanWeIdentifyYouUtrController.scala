@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.subscriptionUtrForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionUtrFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
@@ -41,9 +42,12 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   sessionCache: SessionCache,
   requestSessionData: RequestSessionData,
   sessionCacheService: SessionCacheService,
-  matchingService: MatchingService
+  matchingService: MatchingService,
+  subscriptionUtrFormProvider: SubscriptionUtrFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  val subscriptionUtrForm: Form[IdMatchModel] = subscriptionUtrFormProvider.subscriptionUtrForm
 
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>

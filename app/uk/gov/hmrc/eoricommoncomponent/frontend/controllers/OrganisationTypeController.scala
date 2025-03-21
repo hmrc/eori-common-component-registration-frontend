@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
@@ -23,7 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{Company, Partnership, _}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.organisationTypeDetailsForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.OrganisationTypeDetailsFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
@@ -40,9 +41,12 @@ class OrganisationTypeController @Inject() (
   organisationTypeView: organisation_type,
   registrationDetailsService: RegistrationDetailsService,
   subscriptionDetailsService: SubscriptionDetailsService,
-  appConfig: AppConfig
+  appConfig: AppConfig,
+  organisationTypeDetailsFormProvider: OrganisationTypeDetailsFormProvider
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
+
+  private val form = organisationTypeDetailsFormProvider.form()
 
   private def nameIdOrganisationMatching(orgType: String, service: Service, userLocation: UserLocation): Call = {
     if ((userLocation == UserLocation.Iom || orgType == CharityPublicBodyNotForProfitId) && appConfig.allowNoIdJourney) {
@@ -85,7 +89,7 @@ class OrganisationTypeController @Inject() (
   def form(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
       subscriptionDetailsService.cachedOrganisationType map { orgType =>
-        def filledForm = orgType.map(organisationTypeDetailsForm.fill).getOrElse(organisationTypeDetailsForm)
+        def filledForm: Form[CdsOrganisationType] = orgType.map(form.fill).getOrElse(form)
         requestSessionData.selectedUserLocation match {
           case Some(_) =>
             Ok(
@@ -104,7 +108,7 @@ class OrganisationTypeController @Inject() (
 
   def submit(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      organisationTypeDetailsForm
+      form
         .bindFromRequest()
         .fold(
           formWithErrors => {

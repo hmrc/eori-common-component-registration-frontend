@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{SubscriptionFlowMan
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{EoriConsentSubscriptionFlowPage, SicCodeSubscriptionFlowPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, UtrMatchModel}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.ContactAddressFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDetailsService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.what_is_your_organisations_address
@@ -47,6 +48,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
   private val mockSubscriptionFlowManager = mock[SubscriptionFlowManager]
   private val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   private val what_is__your_organisation_address_view = inject[what_is_your_organisations_address]
+  private val mockContactAddressFormProvider = mock[ContactAddressFormProvider]
+  when(mockContactAddressFormProvider.contactAddressForm).thenReturn(new ContactAddressFormProvider().contactAddressForm)
 
   private val controller = new WhatIsYourOrganisationsAddressController(
     mockAuthAction,
@@ -55,7 +58,8 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
     mockSubscriptionDetailsService,
     mockSubscriptionFlowManager,
     mockRegistrationDetailsService,
-    what_is__your_organisation_address_view
+    what_is__your_organisation_address_view,
+    mockContactAddressFormProvider
   )
 
   private val fieldLevelErrorAddress = "//p[@id='address-error' and @class='govuk-error-message']"

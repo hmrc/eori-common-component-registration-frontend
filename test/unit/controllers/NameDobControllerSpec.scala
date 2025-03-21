@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.NameDobController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NameDobFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.match_namedob
 import util.ControllerSpec
@@ -44,6 +45,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
   private val matchNameDobView = inject[match_namedob]
   private val mockRequestSessionData = mock[RequestSessionData]
   private val mockAppConfig = mock[AppConfig]
+  private val mockNameDobFormProvider = mock[NameDobFormProvider]
+  when(mockNameDobFormProvider.enterNameDobForm).thenReturn(new NameDobFormProvider().enterNameDobForm)
 
   private def nameDobController =
     new NameDobController(
@@ -52,7 +55,8 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       matchNameDobView,
       mockRequestSessionData,
       mockCdsFrontendDataCache,
-      mockAppConfig
+      mockAppConfig,
+      mockNameDobFormProvider
     )(global)
 
   val defaultOrganisationType = "individual"

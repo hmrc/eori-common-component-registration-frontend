@@ -19,14 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.forms.models
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatIdentification
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms
 
-case class SubscriptionVatUKDetailsFormModel(hasGbVats: Boolean, gbVats: Option[List[VatIdentification]]) {
-
-  lazy val toVatIds: List[VatIdentification] = (hasGbVats, gbVats) match {
-    case (true, Some(list)) => list
-    case _ => Nil
-  }
-
-}
+case class SubscriptionVatUKDetailsFormModel(hasGbVats: Boolean, gbVats: Option[List[VatIdentification]])
 
 object SubscriptionVatUKDetailsFormModel {
 

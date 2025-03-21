@@ -18,10 +18,10 @@ package util.builders.matching
 
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Utr
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.Organisation
-import util.builders.matching.OrganisationNameFormBuilder.ValidName
 
 object OrganisationUtrFormBuilder {
 
+  val ValidName = "orgName"
   val ValidUtrId: String = "2108834503"
 
   val ValidUtr = Utr(ValidUtrId)

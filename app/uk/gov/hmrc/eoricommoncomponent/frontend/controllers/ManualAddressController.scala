@@ -20,7 +20,7 @@ import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm.addressDetailsCreateForm
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -33,6 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ManualAddressController @Inject() (
   authorise: AuthAction,
+  addressDetailsService: AddressDetailsForm,
   view: manual_address,
   mcc: MessagesControllerComponents,
   sessionCache: SessionCache
@@ -41,12 +42,13 @@ class ManualAddressController @Inject() (
 
   def createForm(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      Future.successful(Ok(view(addressDetailsCreateForm(), Countries.all, service)))
+      Future.successful(Ok(view(addressDetailsService.addressDetailsCreateForm(), Countries.all, service)))
     }
 
   def submit(service: Service): Action[AnyContent] =
     authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
-      addressDetailsCreateForm()
+      addressDetailsService
+        .addressDetailsCreateForm()
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, Countries.all, service))),
