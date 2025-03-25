@@ -45,13 +45,13 @@ class EmbassyAddressFormSpec extends UnitSpec {
 
       "line one contains tags" in {
         form.bind(validAddress.updated("line-1", "<108 Lily Drive>")).errors shouldBe List(
-          FormError("line-1", List("cds.matching.embassy-address.line.error.invalid-chars"), List())
+          FormError("line-1", List("cds.matching.embassy-address.line-1.error.invalid-chars"), List())
         )
       }
 
       "line two contains tags" in {
         form.bind(validAddress.updated("line-2", "<108 Lily Drive>")).errors shouldBe List(
-          FormError("line-2", List("cds.matching.embassy-address.line.error.invalid-chars"), List())
+          FormError("line-2", List("cds.matching.embassy-address.line-2.error.invalid-chars"), List())
         )
       }
 
@@ -69,7 +69,7 @@ class EmbassyAddressFormSpec extends UnitSpec {
 
       "town contains tags" in {
         form.bind(validAddress.updated("townCity", "<London>")).errors shouldBe List(
-          FormError("townCity", List("cds.matching.embassy-address.line.error.invalid-chars"), List())
+          FormError("townCity", List("cds.matching.embassy-address.line-3.error.invalid-chars"), List())
         )
       }
     }

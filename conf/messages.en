@@ -631,6 +631,10 @@ cds.matching.organisation-address.line.error.invalid-chars=Address line cannot c
 
 cds.matching.organisation-address.line-2.error.too-long=The second line of the address must be 34 characters or less
 cds.matching.organisation-address.line-4.error.too-long=The Region or state must be 35 characters or less
+cds.matching.organisation-address.line-1.error.invalid-chars=The first line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+cds.matching.organisation-address.line-2.error.invalid-chars=The second line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+cds.matching.organisation-address.line-3.error.invalid-chars=The town or city must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+cds.matching.organisation-address.line-4.error.invalid-chars=The region or state must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 cds.matching.organisation-address.postcode.error.empty=Enter a valid postcode
 cds.matching.organisation-address.country.error.empty=Enter your country
 
@@ -1278,9 +1282,9 @@ cds.subscription.address-details.countryCode-auto-complete.label=Country
 cds.subscription.address-details.country.label=Country
 cds.subscription.address-details.street.empty.error=Enter the first line of your address
 cds.subscription.address-details.street.too-long.error=The first line of the address must be 70 characters or less
-cds.subscription.address-details.street.error.invalid-chars=Address cannot contain ''<'' or ''>''
+cds.subscription.address-details.street.error.invalid-chars=The first line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 cds.subscription.address-details.city.error.label=Enter your town or city
-cds.subscription.address-details.city.error.invalid-chars=Town or city cannot contain ''<'' or ''>''
+cds.subscription.address-details.city.error.invalid-chars=The town or city must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 cds.subscription.address-details.postcode.error.label=Enter a valid postcode
 cds.subscription.address-details.page-error.street=Enter the first line of your address
 
@@ -1842,7 +1846,7 @@ ecc.address-lookup.postcode.hint = For example, AA3 1AB
 ecc.address-lookup.postcode.line1.label = House number or name (optional)
 ecc.address-lookup.postcode.link.text = Enter your address manually
 ecc.address-lookup.postcode.line1.too-long.error = Property name or number cannot have more than 35 characters
-ecc.address-lookup.postcode.line1.invalid-chars.error = Address line cannot contain ''<'' or ''>''
+ecc.address-lookup.postcode.line1.invalid-chars.error = Property name or number must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 ecc.address-lookup.postcode.summary.label = Postcode
 ecc.address-lookup.postcode.line1.summary.label = Property name or number
 ecc.address-lookup.postcode.address.label = Select your address
@@ -2118,7 +2122,9 @@ cds.matching.embassy-address.line-2=Address line 2 (optional)
 cds.matching.embassy-address.town-city=Town or city
 cds.matching.embassy-address.postcode=Postcode
 cds.matching.embassy-address.line-1.error.empty=Enter the first line of your address
-cds.matching.embassy-address.line.error.invalid-chars=Address line cannot contain ''<'' or ''>''
+cds.matching.embassy-address.line-1.error.invalid-chars=The first line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+cds.matching.embassy-address.line-2.error.invalid-chars=The second line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+cds.matching.embassy-address.line-3.error.invalid-chars=The town or city must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 cds.matching.embassy-address.town-city.error.empty=Enter your town or city
 cds.matching.embassy-address.town-city.error.too-long=The town or city must be 35 characters or less
 

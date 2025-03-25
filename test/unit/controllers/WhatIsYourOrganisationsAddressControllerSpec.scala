@@ -154,9 +154,13 @@ class WhatIsYourOrganisationsAddressControllerSpec extends ControllerSpec with B
         val page = CdsPage(contentAsString(result))
         page.getElementsText(
           pageLevelErrorSummaryListXPath
-        ) shouldBe "Address line cannot contain '<' or '>' Address line cannot contain '<' or '>' The town or city must be 35 characters or less Enter a valid postcode"
-        page.getElementsText(lineOneFieldError) shouldBe "Error: Address line cannot contain '<' or '>'"
-        page.getElementsText(lineTwoFieldError) shouldBe "Error: Address line cannot contain '<' or '>'"
+        ) shouldBe "The first line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces The second line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces The town or city must be 35 characters or less Enter a valid postcode"
+        page.getElementsText(
+          lineOneFieldError
+        ) shouldBe "Error: The first line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces"
+        page.getElementsText(
+          lineTwoFieldError
+        ) shouldBe "Error: The second line of the address must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces"
         page.getElementsText(townCityFieldError) shouldBe "Error: The town or city must be 35 characters or less"
         page.getElementsText(postcodeFieldError) shouldBe "Error: Enter a valid postcode"
         page.getElementsText("title") should startWith("Error: ")

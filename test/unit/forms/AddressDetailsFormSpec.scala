@@ -49,6 +49,18 @@ class AddressDetailsFormSpec extends UnitSpec {
         val res: Form[AddressViewModel] = addressDetailsForm.addressDetailsCreateForm().bind(formData)
         res.errors shouldBe Seq(FormError("street", "cds.subscription.address-details.street.error.invalid-chars"))
       }
+
+      "street contains more invalid characters" in {
+        val formData = Map("street" -> "#1", "city" -> "London", "postcode" -> "SW3 5DA", "countryCode" -> "GB")
+        val res: Form[AddressViewModel] = addressDetailsForm.addressDetailsCreateForm().bind(formData)
+        res.errors shouldBe Seq(FormError("street", "cds.subscription.address-details.street.error.invalid-chars"))
+      }
+
+      "city contains invalid characters" in {
+        val formData = Map("street" -> "1", "city" -> "#London", "postcode" -> "SW3 5DA", "countryCode" -> "GB")
+        val res: Form[AddressViewModel] = addressDetailsForm.addressDetailsCreateForm().bind(formData)
+        res.errors shouldBe Seq(FormError("city", "cds.subscription.address-details.city.error.invalid-chars"))
+      }
     }
 
     "fail country validation" when {
