@@ -44,6 +44,10 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
       val createEoriSubscriptionRequest =
         transformer.transform(givenRegistrationDetailsEmbassy, givenSubscriptionDetailsEmbassy, Uk, gagmr)
 
+      "should have embassy name as the cdsFullName" in {
+        createEoriSubscriptionRequest.cdsFullName shouldBe "Embassy Of Japan"
+      }
+
       "should have legal status 'diplomatic mission'" in {
         createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.Embassy
       }
@@ -81,6 +85,10 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
       "Company" - {
         val createEoriSubscriptionRequest =
           transformer.transform(givenRegistrationDetailsCompany, givenSubscriptionDetailsCompany, Iom, gagmr)
+
+        "should have company name as the cdsFullName" in {
+          createEoriSubscriptionRequest.cdsFullName shouldBe "Solutions Ltd"
+        }
 
         "should have legal status Corporate Body" in {
           createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.CorporateBody
@@ -120,6 +128,10 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
         val createEoriSubscriptionRequest =
           transformer.transform(givenRegistrationDetailsLlp, givenSubscriptionDetailsLLP, Iom, gagmr)
 
+        "should have company name as the cdsFullName" in {
+          createEoriSubscriptionRequest.cdsFullName shouldBe "Top Lawyers"
+        }
+
         "should have legal status Llp" in {
           createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.Llp
         }
@@ -158,6 +170,10 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
         val createEoriSubscriptionRequest =
           transformer.transform(givenRegistrationDetailsSoleTrader, givenSubscriptionDetailsSoleTrader, Iom, gagmr)
 
+        "should use the Sole Trader's full name as the cdsFullName" in {
+          createEoriSubscriptionRequest.cdsFullName shouldBe "Thomas Tell"
+        }
+
         "should have legal status Llp" in {
           createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.UnincorporatedBody
         }
@@ -194,6 +210,10 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
         val createEoriSubscriptionRequest =
           transformer.transform(givenRegistrationDetailsIndividual, givenSubscriptionDetailsIndividual, Iom, gagmr)
 
+        "should use the Sole Trader's full name as the cdsFullName" in {
+          createEoriSubscriptionRequest.cdsFullName shouldBe "Phillip Bailis"
+        }
+
         "should have legal status Llp" in {
           createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.UnincorporatedBody
         }
@@ -229,6 +249,10 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
       "Partnership" - {
         val createEoriSubscriptionRequest =
           transformer.transform(givenRegistrationDetailsPartnership, givenSubscriptionDetailsPartnership, Iom, gagmr)
+
+        "should use the Sole Trader's full name as the cdsFullName" in {
+          createEoriSubscriptionRequest.cdsFullName shouldBe "Trust Partners"
+        }
 
         "should have legal status Corporate Body" in {
           createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.Partnership
@@ -272,6 +296,10 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
             Iom,
             gagmr
           )
+
+        "should use the Charity name as the cdsFullName" in {
+          createEoriSubscriptionRequest.cdsFullName shouldBe "Wish Upon A Dream"
+        }
 
         "should have legal status Unincorporated" in {
           createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.UnincorporatedBody
@@ -321,6 +349,10 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
           Uk,
           gagmr
         )
+
+      "should use the Charity name as the cdsFullName" in {
+        createEoriSubscriptionRequest.cdsFullName shouldBe "Government Dept"
+      }
 
       "should have legal status Unincorporated Body" in {
         createEoriSubscriptionRequest.legalStatus shouldBe EtmpLegalStatus.UnincorporatedBody
