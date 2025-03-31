@@ -150,7 +150,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
 
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
-      regDetails.name,
+      subDetails.nameDobDetails.map(details => s"${details.firstName} ${details.lastName}").getOrElse(regDetails.name),
       None,
       Some(
         CreateEoriSubscriptionRequest.Individual(
