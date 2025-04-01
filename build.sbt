@@ -11,7 +11,7 @@ Universal / mappings ++= directory(baseDirectory.value / "public")
 name := "eori-common-component-registration-frontend"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.13"
+ThisBuild / scalaVersion := "2.13.16"
 
 PlayKeys.devSettings := Seq("play.server.http.port" -> "6751")
 
@@ -116,7 +116,7 @@ scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 libraryDependencies ++= AppDependencies()
 
 lazy val silencerSettings: Seq[Setting[_]] = {
-  val silencerVersion = "1.7.16"
+  val silencerVersion = "1.7.19"
   Seq(
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full)
