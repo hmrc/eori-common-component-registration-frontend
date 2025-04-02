@@ -27,6 +27,7 @@ trait Constraints {
 
   protected val noTagsRegex = "^[^<>]+$"
   protected val nameRegex = "[a-zA-Z0-9-' ]*"
+  protected val validCharsRegex = """^[A-Za-z0-9 \-,.&']+$"""
   protected val postcodeRegex: Regex =
     "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
 
@@ -52,7 +53,7 @@ trait Constraints {
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.organisation-address.line-1.error.empty"))
       case s if s.trim.length > 35 => Invalid(ValidationError("cds.matching.organisation-address.line-1.error.too-long"))
-      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
+      case s if !s.matches(validCharsRegex) => Invalid(ValidationError("cds.matching.organisation-address.line-1.error.invalid-chars"))
       case _ => Valid
     })
   }
@@ -60,7 +61,7 @@ trait Constraints {
   def validLine2: Constraint[String] = {
     Constraint({
       case s if s.trim.length > 34 => Invalid(ValidationError("cds.matching.organisation-address.line-2.error.too-long"))
-      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
+      case s if !s.matches(validCharsRegex) => Invalid(ValidationError("cds.matching.organisation-address.line-2.error.invalid-chars"))
       case _ => Valid
     })
   }
@@ -69,7 +70,7 @@ trait Constraints {
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.organisation-address.line-3.error.empty"))
       case s if s.trim.length > 34 => Invalid(ValidationError("cds.matching.organisation-address.line-3.error.too-long"))
-      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
+      case s if !s.matches(validCharsRegex) => Invalid(ValidationError("cds.matching.organisation-address.line-3.error.invalid-chars"))
       case _ => Valid
     })
   }
@@ -77,7 +78,7 @@ trait Constraints {
   def validLine4: Constraint[String] = {
     Constraint({
       case s if s.trim.length > 35 => Invalid(ValidationError("cds.matching.organisation-address.line-4.error.too-long"))
-      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.organisation-address.line.error.invalid-chars"))
+      case s if !s.matches(validCharsRegex) => Invalid(ValidationError("cds.matching.organisation-address.line-4.error.invalid-chars"))
       case _ => Valid
     })
   }

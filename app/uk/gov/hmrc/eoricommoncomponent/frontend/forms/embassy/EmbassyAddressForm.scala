@@ -42,13 +42,13 @@ class EmbassyAddressForm() extends Constraints {
   private def validLineOne: Constraint[String] =
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.embassy-address.line-1.error.empty"))
-      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
+      case s if !s.matches(validCharsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line-1.error.invalid-chars"))
       case _ => Valid
     })
 
   private def validLineTwo: Constraint[String] =
     Constraint({
-      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
+      case s if !s.matches(validCharsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line-2.error.invalid-chars"))
       case _ => Valid
     })
 
@@ -56,7 +56,7 @@ class EmbassyAddressForm() extends Constraints {
     Constraint({
       case s if s.trim.isEmpty => Invalid(ValidationError("cds.matching.embassy-address.town-city.error.empty"))
       case s if s.trim.length > 34 => Invalid(ValidationError("cds.matching.embassy-address.town-city.error.too-long"))
-      case s if !s.matches(noTagsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line.error.invalid-chars"))
+      case s if !s.matches(validCharsRegex) => Invalid(ValidationError("cds.matching.embassy-address.line-3.error.invalid-chars"))
       case _ => Valid
     })
 

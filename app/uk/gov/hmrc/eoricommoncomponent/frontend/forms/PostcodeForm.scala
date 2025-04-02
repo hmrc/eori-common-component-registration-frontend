@@ -38,11 +38,11 @@ class PostcodeForm() extends Constraints {
   private def addressLine1: Constraint[String] =
     Constraint({
       case s if s.trim.length > 35 => Invalid(ValidationError("ecc.address-lookup.postcode.line1.too-long.error"))
-      case s if !s.matches(PostcodeForm.noTagsRegex) => Invalid(ValidationError("ecc.address-lookup.postcode.line1.invalid-chars.error"))
+      case s if !s.matches(PostcodeForm.validCharsRegex) => Invalid(ValidationError("ecc.address-lookup.postcode.line1.invalid-chars.error"))
       case _ => Valid
     })
 }
 
 object PostcodeForm {
-  val noTagsRegex = "^[^<>]+$"
+  val validCharsRegex = """^[A-Za-z0-9 \-,.&']+$"""
 }
