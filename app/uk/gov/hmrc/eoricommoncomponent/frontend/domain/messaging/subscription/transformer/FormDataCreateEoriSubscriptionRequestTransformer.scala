@@ -109,7 +109,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
 
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
-      regDetails.name,
+      subDetails.nameOrganisationDetails.map(_.name).getOrElse(regDetails.name),
       Some(
         Organisation(
           subDetails.dateEstablished.map(_.format(DateTimeFormatter.ISO_DATE)),
@@ -195,7 +195,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
     }
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
-      regDetails.name,
+      subDetails.nameOrganisationDetails.map(_.name).getOrElse(regDetails.name),
       Some(Organisation(None, subDetails.nameOrganisationDetails.head.name)),
       None,
       CdsEstablishmentAddress(
