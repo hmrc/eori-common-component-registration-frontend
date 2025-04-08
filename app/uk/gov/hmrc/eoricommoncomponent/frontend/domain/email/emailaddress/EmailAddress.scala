@@ -30,7 +30,7 @@ case class EmailAddress(value: String) extends StringValue {
 
   val (mailbox, domain): (Mailbox, Domain) = value match {
     case validEmail(m, d) => (Mailbox(m), Domain(d))
-    case invalidEmail     => throw new IllegalArgumentException(s"'$invalidEmail' is not a valid email address")
+    case invalidEmail => throw new IllegalArgumentException(s"'$invalidEmail' is not a valid email address")
   }
 
   lazy val obfuscated: ObfuscatedEmailAddress = ObfuscatedEmailAddress.apply(value)
@@ -67,7 +67,7 @@ class EmailAddressValidation extends EmailValidation {
       case _ =>
         getAttributeValue(domain, "A") match {
           case Right(value) => value.nonEmpty
-          case Left(_)      => false
+          case Left(_) => false
         }
     }
   }
@@ -75,7 +75,7 @@ class EmailAddressValidation extends EmailValidation {
   def isValid(email: String): Boolean =
     email match {
       case validEmail(_, _) if isHostMailServer(EmailAddress(email).domain) => true
-      case _                                                                => false
+      case _ => false
     }
 }
 
