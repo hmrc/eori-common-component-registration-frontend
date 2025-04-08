@@ -19,11 +19,11 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc._
-import uk.gov.hmrc.emailaddress.EmailAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SUB09SubscriptionDisplayConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.EmailAddressValidation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -40,6 +40,7 @@ import scala.util.Random
 @Singleton
 class SubscriptionRecoveryController @Inject() (
   authAction: AuthAction,
+  emailValidation: EmailAddressValidation,
   handleSubscriptionService: HandleSubscriptionService,
   taxEnrolmentService: TaxEnrolmentsService,
   updateVerifiedEmailService: UpdateVerifiedEmailService,
@@ -82,7 +83,7 @@ class SubscriptionRecoveryController @Inject() (
 
         sessionCache.saveEori(Eori(eori)).flatMap { _ =>
           val mayBeEmail = subscriptionDisplayResponse.responseDetail.contactInformation
-            .flatMap(c => c.emailAddress.filter(EmailAddress.isValid(_) && c.emailVerificationTimestamp.isDefined))
+            .flatMap(c => c.emailAddress.filter(emailValidation.isValid(_) && c.emailVerificationTimestamp.isDefined))
 
           mayBeEmail
             .map { email =>

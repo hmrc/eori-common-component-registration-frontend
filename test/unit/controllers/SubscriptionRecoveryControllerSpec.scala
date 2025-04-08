@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.EmailAddressValidation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -46,6 +47,7 @@ class SubscriptionRecoveryControllerSpec extends ControllerSpec with MockitoSuga
 
   private val mockAuthConnector = mock[AuthConnector]
   private val mockAuthAction = authAction(mockAuthConnector)
+  private val emailAddressValidation = new EmailAddressValidation
   private val mockSessionCache: SessionCache = mock[SessionCache]
   private val mockSUB09SubscriptionDisplayConnector = mock[SUB09SubscriptionDisplayConnector]
   private val mockSub01Outcome = mock[Sub01Outcome]
@@ -62,6 +64,7 @@ class SubscriptionRecoveryControllerSpec extends ControllerSpec with MockitoSuga
 
   private val controller = new SubscriptionRecoveryController(
     mockAuthAction,
+    emailAddressValidation,
     mockHandleSubscriptionService,
     mockTaxEnrolmentService,
     mockUpdateVerifiedEmailService,
