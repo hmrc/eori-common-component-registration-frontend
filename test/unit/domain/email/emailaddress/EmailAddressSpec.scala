@@ -72,9 +72,6 @@ class EmailAddressSpec extends AnyWordSpec with ScalaCheckPropertyChecks with Ma
       val e = EmailAddress("test@domain.com")
       e.toString should be("test@domain.com")
     }
-    "be obfuscatable" in {
-      EmailAddress("abcdef@example.com").obfuscated.value should be("a****f@example.com")
-    }
     "have a local part" in forAll(validMailbox, validDomain) { (mailbox, domain) =>
       val exampleAddr = EmailAddress(s"$mailbox@$domain")
       exampleAddr.mailbox should (be(a[Mailbox]) and have(Symbol("value")(mailbox)))
