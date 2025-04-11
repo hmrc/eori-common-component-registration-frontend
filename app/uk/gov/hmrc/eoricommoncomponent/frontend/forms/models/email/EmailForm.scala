@@ -20,25 +20,26 @@ import play.api.data.Forms._
 import play.api.data.validation._
 import play.api.data.{Form, Forms}
 import play.api.i18n.Messages
-import uk.gov.hmrc.emailaddress.EmailAddress
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.EmailVerificationKeys
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.YesNo
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.EmailAddressValidation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.oneOf
 
 object EmailForm {
 
   private val validYesNoAnswerOptions = Set("true", "false")
+  private val emailAddressValidation = new EmailAddressValidation
 
   def validEmail: Constraint[String] =
     Constraint({
       case e if e.trim.isEmpty => Invalid(ValidationError("cds.subscription.contact-details.form-error.email"))
       case e if e.length > 50 => Invalid(ValidationError("cds.subscription.contact-details.form-error.email.too-long"))
-      case e if !EmailAddress.isValid(e) =>
+      case e if !emailAddressValidation.isValid(e) =>
         Invalid(ValidationError("cds.subscription.contact-details.form-error.email.wrong-format"))
       case _ => Valid
     })
 
-  val emailForm = Form(
+  val emailForm: Form[EmailViewModel] = Form(
     Forms.mapping(EmailVerificationKeys.EmailKey -> text.verifying(validEmail))(EmailViewModel.apply)(
       EmailViewModel.unapply
     )
