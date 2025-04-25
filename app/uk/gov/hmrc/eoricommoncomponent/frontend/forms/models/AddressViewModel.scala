@@ -35,10 +35,12 @@ object AddressViewModel {
     new AddressViewModel(street.trim, city.trim, postcode.map(_.trim), countryCode)
 
   def apply(sixLineAddress: Address): AddressViewModel = {
-    val line1 = (sixLineAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength) + " " + sixLineAddress.addressLine2
-      .getOrElse("")
-      .trim
-      .take(sixLineAddressLine2MaxLength)).trim
+    val line1 = Seq(
+      sixLineAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength),
+      sixLineAddress.addressLine2.map(_.trim.take(sixLineAddressLine2MaxLength)).getOrElse("")
+    )
+      .filter(_.nonEmpty)
+      .mkString(", ")
     val townCity = sixLineAddress.addressLine3.getOrElse("").trim.take(townCityMaxLength)
     val postCode = sixLineAddress.postalCode.map(_.trim)
     val countryCode = sixLineAddress.countryCode

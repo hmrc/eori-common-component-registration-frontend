@@ -32,7 +32,7 @@ class AddressViewModelSpec extends UnitSpec {
   val actualAddress =
     Address(addressLine1, Some(addressLine2), Some(addressLine3), Some(addressLine4), Some(postCode), countryCode)
 
-  val expectedAddress = AddressViewModel(addressLine1 + " " + addressLine2, addressLine3, Some(postCode), countryCode)
+  val expectedAddress = AddressViewModel(addressLine1 + ", " + addressLine2, addressLine3, Some(postCode), countryCode)
 
   "AddressViewModel" should {
 
@@ -67,7 +67,7 @@ class AddressViewModelSpec extends UnitSpec {
       )
 
       val expectedAddressWithSpecial =
-        AddressViewModel(addressLine1WithSpecial + " " + addressLine2, addressLine3, Some(postCode), countryCode)
+        AddressViewModel(addressLine1WithSpecial + ", " + addressLine2, addressLine3, Some(postCode), countryCode)
 
       AddressViewModel(address) shouldEqual expectedAddressWithSpecial
     }
@@ -86,5 +86,21 @@ class AddressViewModelSpec extends UnitSpec {
       )
       AddressViewModel(longAddress).city.length shouldEqual 35
     }
+
+    "handle empty line 2" in {
+      val address = Address(
+        addressLine1,
+        None,
+        Some(addressLine3),
+        Some(addressLine4),
+        Some(postCode),
+        countryCode
+      )
+
+      val expectedAddress = AddressViewModel(addressLine1, addressLine3, Some(postCode), countryCode)
+
+      AddressViewModel(address) shouldEqual expectedAddress
+    }
+
   }
 }
