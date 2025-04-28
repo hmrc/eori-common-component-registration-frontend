@@ -91,6 +91,10 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, au
         case MessagingServiceParam.Fail if responseCommon.statusText.exists(_.equalsIgnoreCase(EoriAlreadyExists)) =>
           SubscriptionFailed(EoriAlreadyExists, processingDate)
         case MessagingServiceParam.Fail if responseCommon.statusText.exists(_.equalsIgnoreCase(RequestNotProcessed)) =>
+          val message =
+            s"Response status of FAIL returned for a SUB02: Create Subscription. statusText: ${responseCommon.statusText.getOrElse("")}. returnParameters : ${responseCommon.returnParameters
+                .mkString(", ")}"
+          logger.warn(message)
           SubscriptionFailed(RequestNotProcessed, processingDate)
         case MessagingServiceParam.Fail if responseCommon.statusText.exists(_.equalsIgnoreCase(EoriAlreadyAssociated)) =>
           SubscriptionFailed(EoriAlreadyAssociated, processingDate)

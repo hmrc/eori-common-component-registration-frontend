@@ -138,7 +138,7 @@ trait SubscriptionServiceTestData extends TestData {
     sicCode = Some(principalEconomicActivity),
     email = Some(capturedEmail),
     eoriNumber = Some("GB123456789000"),
-    addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
+    addressDetails = Some(AddressViewModel("Line 1, line 2", "city name", Some("SE28 1AA"), "GB"))
   )
 
   val fullyPopulatedSubscriptionDetailsAllOrgTypes: SubscriptionDetails = SubscriptionDetails(
@@ -151,7 +151,7 @@ trait SubscriptionServiceTestData extends TestData {
     eoriNumber = Some("GB123456789000"),
     nameDobDetails = Some(NameDobMatchModel("John", "Doe", LocalDate.parse(dateOfBirthString))),
     nameOrganisationDetails = Some(NameOrganisationMatchModel("orgName")),
-    addressDetails = Some(AddressViewModel("Line 1 line 2", "city name", Some("SE28 1AA"), "GB"))
+    addressDetails = Some(AddressViewModel("Line 1, line 2", "city name", Some("SE28 1AA"), "GB"))
   )
 
   val fullyPopulatedSubscriptionDetailsWithPlusSignInTelephone: SubscriptionDetails = SubscriptionDetails(
@@ -202,7 +202,7 @@ trait SubscriptionServiceTestData extends TestData {
   def stubRegisterWithPartialResponse(outcomeType: String = "PASS"): RegisterWithEoriAndIdResponse = {
     val establishmentAddress =
       EstablishmentAddress(
-        streetAndNumber = "Line 1 line 2",
+        streetAndNumber = "Line 1, line 2",
         city = "city name",
         postalCode = Some("SE28 1AA"),
         countryCode = "GB"
@@ -256,7 +256,7 @@ trait SubscriptionServiceTestData extends TestData {
       SAFEID = "SafeID123",
       trader = Trader(fullName = "Name", shortName = "nt"),
       establishmentAddress = EstablishmentAddress(
-        streetAndNumber = "Line 1 line 2",
+        streetAndNumber = "Line 1, line 2",
         city = "city name",
         postalCode = Some("SE28 1AA"),
         countryCode = "GB"
@@ -331,7 +331,7 @@ trait SubscriptionServiceTestData extends TestData {
          |         "EORINo":"$responseEoriNumber",
          |         "CDSFullName":"$individualName",
          |         "CDSEstablishmentAddress":{
-         |            "streetAndNumber":"Line 1 line 2",
+         |            "streetAndNumber":"Line 1, line 2",
          |            "city":"city name",
          |            "postalCode":"SE28 1AA",
          |            "countryCode":"GB"
@@ -372,7 +372,7 @@ trait SubscriptionServiceTestData extends TestData {
          |         "EORINo":"$responseEoriNumber",
          |         "CDSFullName":"$individualName",
          |         "CDSEstablishmentAddress":{
-         |            "streetAndNumber":"Line 1 line 2",
+         |            "streetAndNumber":"Line 1, line 2",
          |            "city":"city name",
          |            "postalCode":"SE28 1AA",
          |            "countryCode":"GB"
@@ -400,7 +400,7 @@ trait SubscriptionServiceTestData extends TestData {
 
   def organisationAutomaticExistingRegistrationRequestJson(contactEmail: String): JsValue =
     Json.parse(
-      s"""{"subscriptionCreateRequest":{"requestCommon":{"regime":"CDS","receiptDate":"2016-08-18T14:00:05Z","acknowledgementReference":"4482baa81c844d23a8db3fc180325e7a","originatingSystem":"MDTP"},"requestDetail":{"SAFE":"SafeID123","EORINo":"GB123456789000","CDSFullName":"Name","CDSEstablishmentAddress":{"streetAndNumber":"Line 1 line 2","city":"city name","postalCode":"SE28 1AA","countryCode":"GB"},"contactInformation":{"city":"-","emailAddress":"$contactEmail", "emailVerificationTimestamp": "$emailVerificationTimestamp"},"shortName":"nt","dateOfEstablishment":"1963-05-01","serviceName":"${atarService.enrolmentKey}"}}}""".stripMargin
+      s"""{"subscriptionCreateRequest":{"requestCommon":{"regime":"CDS","receiptDate":"2016-08-18T14:00:05Z","acknowledgementReference":"4482baa81c844d23a8db3fc180325e7a","originatingSystem":"MDTP"},"requestDetail":{"SAFE":"SafeID123","EORINo":"GB123456789000","CDSFullName":"Name","CDSEstablishmentAddress":{"streetAndNumber":"Line 1, line 2","city":"city name","postalCode":"SE28 1AA","countryCode":"GB"},"contactInformation":{"city":"-","emailAddress":"$contactEmail", "emailVerificationTimestamp": "$emailVerificationTimestamp"},"shortName":"nt","dateOfEstablishment":"1963-05-01","serviceName":"${atarService.enrolmentKey}"}}}""".stripMargin
     )
 
   def existingRegistrationSubcriptionRequestJson(contactEmail: String): JsValue =
@@ -417,7 +417,7 @@ trait SubscriptionServiceTestData extends TestData {
          |      "EORINo": "GB123456789000",
          |      "CDSFullName": "Name",
          |      "CDSEstablishmentAddress": {
-         |        "streetAndNumber": "Line 1 line 2",
+         |        "streetAndNumber": "Line 1, line 2",
          |        "city": "city name",
          |        "postalCode": "SE28 1AA",
          |        "countryCode": "GB"
@@ -456,7 +456,7 @@ trait SubscriptionServiceTestData extends TestData {
          |         "EORINo":"$responseEoriNumber",
          |         "CDSFullName":"$businessName",
          |         "CDSEstablishmentAddress":{
-         |            "streetAndNumber":"Line 1 line 2",
+         |            "streetAndNumber":"Line 1, line 2",
          |            "city":"city name",
          |            "postalCode":"SE28 1AA",
          |            "countryCode":"GB"
@@ -497,7 +497,7 @@ trait SubscriptionServiceTestData extends TestData {
                   |         "EORINo":"$responseEoriNumber",
                   |         "CDSFullName":"$businessName",
                   |         "CDSEstablishmentAddress":{
-                  |            "streetAndNumber":"Line 1 line 2",
+                  |            "streetAndNumber":"Line 1, line 2",
                   |            "city":"city name",
                   |            "postalCode":"SE28 1AA",
                   |            "countryCode":"GB"
@@ -553,7 +553,7 @@ trait SubscriptionServiceTestData extends TestData {
          | "SAFE": "safe-id",
          | "CDSFullName": "$name",
          | "CDSEstablishmentAddress": {
-         | "streetAndNumber": "Line 1 line 2",
+         | "streetAndNumber": "Line 1, line 2",
          | "city": "city name",
          | "postalCode": "SE28 1AA",
          | "countryCode": "GB"
@@ -608,7 +608,7 @@ trait SubscriptionServiceTestData extends TestData {
          | "SAFE": "safe-id",
          | "CDSFullName": "$name",
          | "CDSEstablishmentAddress": {
-         | "streetAndNumber": "Line 1 line 2",
+         | "streetAndNumber": "Line 1, line 2",
          | "city": "city name",
          | "postalCode": "SE28 1AA",
          | "countryCode": "GB"

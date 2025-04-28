@@ -35,12 +35,12 @@ class ContactDetailsAdaptorSpec extends UnitSpec with GenTestRunner {
         actual.emailAddress shouldBe getContactDetailsModel.emailAddress
         actual.telephone shouldBe getContactDetailsModel.telephone
         actual.fax shouldBe getContactDetailsModel.fax
-        actual.street shouldBe Some(
-          (genAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength) + " " + genAddress.addressLine2
-            .getOrElse("")
-            .trim
-            .take(sixLineAddressLine2MaxLength)).trim
-        )
+        val str = genAddress.addressLine2
+          .getOrElse("")
+          .trim
+          .take(sixLineAddressLine2MaxLength)
+        val line2 = Option(str).filter(_.nonEmpty).map(_.prependedAll(", ")).getOrElse("")
+        actual.street shouldBe Some(genAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength) + line2)
         actual.city shouldBe Some(genAddress.addressLine3.getOrElse("").trim.take(townCityMaxLength))
         actual.postcode shouldBe genAddress.postalCode
         actual.countryCode shouldBe Some(genAddress.countryCode)

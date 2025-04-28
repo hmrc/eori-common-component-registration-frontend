@@ -154,7 +154,7 @@ class ContactAddressControllerSpec
       )
       showCreateForm() { result =>
         val page = CdsPage(contentAsString(result))
-        page.getElementsText(ContactAddressPage.addressXpath) shouldBe "Line 1 line 2 line 3 SE28 1AA United Kingdom"
+        page.getElementsText(ContactAddressPage.addressXpath) shouldBe "Line 1, line 2 line 3 SE28 1AA United Kingdom"
       }
     }
 
