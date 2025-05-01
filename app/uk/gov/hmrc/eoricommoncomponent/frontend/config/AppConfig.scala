@@ -130,6 +130,8 @@ class AppConfig @Inject() (
 
   val vatDetailsFeatureFlag: Boolean = config.get[Boolean]("vat-details-feature-flag")
 
+  val validateUkIomGiantVrnFeatureFlag: Boolean = config.get[Boolean]("validate-iom-uk-giantvrn-feature-flag")
+
   private val addressLookupBaseUrl: String = servicesConfig.baseUrl("address-lookup")
   private val addressLookupContext: String = config.get[String]("microservice.services.address-lookup.context")
 
