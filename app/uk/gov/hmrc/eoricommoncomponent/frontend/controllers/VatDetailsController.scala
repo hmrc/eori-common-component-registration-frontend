@@ -51,6 +51,7 @@ class VatDetailsController @Inject() (
 
   val dateForm: Form[VatRegistrationDate] = form()
   val vatDetailsForm = new VatDetailsForm(requestSessionData)
+  val s = ""
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
