@@ -23,6 +23,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
@@ -60,6 +61,7 @@ class VatDetailsControllerSpec
       .url
 
   private val mockVatDetailsService = mock[VatDetailsService]
+  private val mockAppConfig = mock[AppConfig]
   private val vatDetailsView = inject[vat_details]
   private val errorTemplate = inject[error_template]
   private val weCannotConfirmYourIdentity = inject[date_of_vat_registration]
@@ -69,6 +71,7 @@ class VatDetailsControllerSpec
 
   private val controller = new VatDetailsController(
     mockAuthAction,
+    mockAppConfig,
     mockVatDetailsService,
     mockSubscriptionBusinessService,
     mcc,

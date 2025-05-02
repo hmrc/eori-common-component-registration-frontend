@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.data.Form
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
@@ -36,6 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsController @Inject() (
   authAction: AuthAction,
+  appConfig: AppConfig,
   VatDetailsService: VatDetailsService,
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
@@ -130,7 +132,14 @@ class VatDetailsController @Inject() (
                 )
               )
             ),
-          formData => lookupVatDetails(formData, isInReviewMode, service)
+          formData => {
+            if (requestSessionData.bypassIomUkVatLookup(appConfig, userLocation, requestSessionData, formData)) {
+              subscriptionDetailsService.cacheUkVatDetails(formData)
+              Future.successful(Redirect(ContactDetailsController.createForm(service)))
+            } else {
+              lookupVatDetails(formData, isInReviewMode, service)
+            }
+          }
         )
     }
 

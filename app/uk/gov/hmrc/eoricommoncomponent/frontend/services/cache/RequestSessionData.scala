@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.cache
 import play.api.libs.json.Json
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.IndividualOrganisations
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{IndividualSubscriptionFlow, OrganisationSubscriptionFlow, PartnershipSubscriptionFlow, SubscriptionFlow}
@@ -26,6 +27,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 
 import javax.inject.{Inject, Singleton}
 
@@ -104,6 +107,22 @@ class RequestSessionData @Inject() (audit: Auditor) {
     userSelectedOrganisationType.fold(false) { orgType =>
       CdsOrganisationType.RestOfTheWorld.contains(orgType)
     }
+
+  def bypassIomUkVatLookup(
+    appConfig: AppConfig,
+    userLocation: UserLocation,
+    requestSessionData: RequestSessionData,
+    formData: VatDetails
+  )(implicit request: Request[AnyContent]): Boolean = {
+    def isIomOrCharityGiant: Boolean = {
+      userLocation == Iom || requestSessionData.userSelectedOrganisationType.fold(false) {
+        case CdsOrganisationType.CharityPublicBodyNotForProfit => formData.isGiant
+        case _ => false
+      }
+    }
+
+    !appConfig.validateUkIomGiantVrnFeatureFlag && isIomOrCharityGiant
+  }
 
   private val registrationUkSubscriptionFlows =
     Seq(OrganisationSubscriptionFlow, PartnershipSubscriptionFlow, IndividualSubscriptionFlow)
