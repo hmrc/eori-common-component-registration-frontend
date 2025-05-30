@@ -37,7 +37,8 @@ class CdsErrorHandler @Inject() (
   val configuration: Configuration,
   errorTemplateView: error_template,
   notFoundView: notFound
-)(implicit val ec: ExecutionContext) extends FrontendErrorHandler {
+)(implicit val ec: ExecutionContext)
+    extends FrontendErrorHandler {
 
   private val logger = Logger(this.getClass)
 
