@@ -25,13 +25,15 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{IssuerCall, Issue
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
 
+import java.net.URI
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditor)(implicit
+class TaxEnrolmentsConnector @Inject() (http: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) {
 
@@ -42,10 +44,13 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
   def getEnrolments(safeId: String)(implicit hc: HeaderCarrier): Future[List[TaxEnrolmentsResponse]] = {
     val url = s"$baseUrl/$serviceContext/businesspartners/$safeId/subscriptions"
 
-    http.GET[List[TaxEnrolmentsResponse]](url).recover { case NonFatal(e) =>
-      logger.error(s"[GetEnrolments failed: $url, hc: $hc]", e)
-      throw e
-    }
+    http
+      .get(new URI(url).toURL)
+      .execute[List[TaxEnrolmentsResponse]]
+      .recover { case NonFatal(e) =>
+        logger.error(s"[GetEnrolments failed: $url, hc: $hc]", e)
+        throw e
+      }
   }
 
   /** @param request
@@ -61,20 +66,23 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClient, appConfig: AppConfig, 
     // $COVERAGE-OFF$Loggers
     logger.debug(s"[Enrol: $url, body: $request and hc: $hc")
     // $COVERAGE-ON
-    http.PUT[TaxEnrolmentsRequest, HttpResponse](url, request) map { response: HttpResponse =>
-      logResponse("Enrol", response)
-      val detail = Json.toJson(IssuerCall(IssuerRequest(request), IssuerResponse(response)))
-      audit.sendTaxEnrolmentIssuerCallEvent(url, detail)
-      response.status
-    }
+    http
+      .put(new URI(url).toURL)
+      .withBody(Json.toJson(request))
+      .execute[HttpResponse]
+      .map { response: HttpResponse =>
+        logResponse(response)
+        val detail = Json.toJson(IssuerCall(IssuerRequest(request), IssuerResponse(response)))
+        audit.sendTaxEnrolmentIssuerCallEvent(url, detail)
+        response.status
+      }
   }
 
   // $COVERAGE-OFF$Loggers
-  private def logResponse(service: String, response: HttpResponse): Unit =
+  private def logResponse(response: HttpResponse): Unit =
     if (HttpStatusCheck.is2xx(response.status))
-      logger.debug(s"$service request is successful")
+      logger.debug("Enrol request is successful")
     else
-      logger.warn(s"$service request is failed with response $response")
-
+      logger.warn(s"Enrol request is failed with response $response")
   // $COVERAGE-ON
 }

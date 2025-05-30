@@ -24,12 +24,14 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.EnrolmentStoreProxyEvent
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import java.net.URI
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppConfig, audit: Auditor)(implicit
+class EnrolmentStoreProxyConnector @Inject() (http: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
 ) extends HandleResponses {
 
@@ -47,27 +49,30 @@ class EnrolmentStoreProxyConnector @Inject() (http: HttpClient, appConfig: AppCo
     logger.debug(s"GetEnrolmentByGroupId: $url and hc: $hc")
     // $COVERAGE-ON
 
-    http.GET[HttpResponse](url) map { response =>
-      logResponse(response)
+    http
+      .get(new URI(url).toURL)
+      .execute[HttpResponse]
+      .map { response =>
+        logResponse(response)
 
-      val parsedResponse = response.status match {
-        case OK => handleResponse[EnrolmentStoreProxyResponse](response)
-        case NO_CONTENT =>
-          Right(EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
-        case status =>
-          Left(ResponseError(status, s"Enrolment Store Proxy Response : ${response.body}}"))
-      }
+        val parsedResponse = response.status match {
+          case OK => handleResponse[EnrolmentStoreProxyResponse](response)
+          case NO_CONTENT =>
+            Right(EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
+          case status =>
+            Left(ResponseError(status, s"Enrolment Store Proxy Response : ${response.body}}"))
+        }
 
-      val auditDetails =
+        val auditDetails =
+          parsedResponse
+            .fold(
+              Json.toJson(_),
+              proxyResponse => Json.toJson(EnrolmentStoreProxyEvent(groupId = groupId, enrolments = proxyResponse.enrolments))
+            )
+        audit.sendEnrolmentStoreCallEvent(url, auditDetails)
+
         parsedResponse
-          .fold(
-            Json.toJson(_),
-            proxyResponse => Json.toJson(EnrolmentStoreProxyEvent(groupId = groupId, enrolments = proxyResponse.enrolments))
-          )
-      audit.sendEnrolmentStoreCallEvent(url, auditDetails)
-
-      parsedResponse
-    } recover { case e: Throwable =>
+      } recover { case e: Throwable =>
       val error = s"enrolment-store-proxy failed. url: $url, error: $e"
       logger.error(error, e)
       Left(ResponseError(INTERNAL_SERVER_ERROR, error))

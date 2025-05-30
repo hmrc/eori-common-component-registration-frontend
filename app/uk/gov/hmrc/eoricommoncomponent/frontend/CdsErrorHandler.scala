@@ -30,20 +30,21 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, notF
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
 import javax.inject.Inject
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CdsErrorHandler @Inject() (
   val messagesApi: MessagesApi,
   val configuration: Configuration,
   errorTemplateView: error_template,
   notFoundView: notFound
-) extends FrontendErrorHandler {
+)(implicit val ec: ExecutionContext)
+    extends FrontendErrorHandler {
 
   private val logger = Logger(this.getClass)
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
-    request: Request[_]
-  ): Html = throw new IllegalStateException("This method must not be used any more.")
+    request: RequestHeader
+  ): Future[Html] = throw new IllegalStateException("This method must not be used any more.")
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = {
     // $COVERAGE-OFF$Loggers
