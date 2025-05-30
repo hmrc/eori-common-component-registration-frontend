@@ -4,14 +4,14 @@ object AppDependencies {
   import play.core.PlayVersion
 
   val mongoDbVersion   = "2.6.0"
-  val bootstrapVersion = "8.6.0"
+  val bootstrapVersion = "9.13.0"
   val playVersion      = 30
 
   val compileDependencies: Seq[ModuleID] = Seq(
     "org.typelevel"     %% "cats-core"                                        % "2.10.0",
     "uk.gov.hmrc"       %% s"bootstrap-frontend-play-$playVersion"            % bootstrapVersion,
-    "uk.gov.hmrc"       %% s"play-conditional-form-mapping-play-$playVersion" % "2.0.0",
-    "uk.gov.hmrc"       %% s"domain-play-$playVersion"                        % "9.0.0",
+    "uk.gov.hmrc"       %% s"play-conditional-form-mapping-play-$playVersion" % "3.3.0",
+    "uk.gov.hmrc"       %% s"domain-play-$playVersion"                        % "11.0.0",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-play-$playVersion"                    % mongoDbVersion,
     "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "9.11.0",
     "uk.gov.hmrc"       %% s"internal-auth-client-play-$playVersion"          % "2.0.0"
