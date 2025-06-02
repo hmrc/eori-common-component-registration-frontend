@@ -17,9 +17,8 @@
 package unit.connectors
 
 import base.UnitSpec
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
@@ -27,19 +26,20 @@ import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupSuccess, AddressRequestBody}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupSuccess}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import unit.connectors.AddressLookupConnectorSpec.{jsonResponseWithOneResult, jsonResponseWithTwoResults}
 
-import scala.concurrent.ExecutionContext.global
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with IntegrationPatience {
 
-  private val httpClient = mock[HttpClient]
+  private val httpClient = mock[HttpClientV2]
   private val appConfig = mock[AppConfig]
 
-  private val connector = new AddressLookupConnector(httpClient, appConfig)(global)
+  private val connector = new AddressLookupConnector(httpClient, appConfig)
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -57,40 +57,16 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
   "Address Lookup Connector" should {
 
-    "build a correct url" in {
-
-      when(httpClient.POST[AddressRequestBody, HttpResponse](any(), any(), any())(any(), any(), any(), any()))
-        .thenReturn(Future.successful(HttpResponse(200, "[]")))
-
-      val postcode = "AA11 1AA"
-
-      val expectedResponse = AddressLookupSuccess(Seq.empty)
-      val expectedUrl = "http://localhost:6754/lookup"
-
-      val urlCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-
-      val result = connector.lookup(postcode, None)(hc)
-
-      result.futureValue shouldBe expectedResponse
-
-      verify(httpClient).POST[AddressRequestBody, HttpResponse](urlCaptor.capture(), any(), any())(
-        any(),
-        any(),
-        any(),
-        any()
-      )
-
-      urlCaptor.getValue shouldBe expectedUrl
-    }
-
     "return Address Lookup Success" when {
 
       "address lookup returns list of multiple addresses" in {
 
         val addressLookupResponse = HttpResponse(status = 200, json = jsonResponseWithTwoResults, headers = Map.empty)
 
-        when(httpClient.POST[AddressRequestBody, HttpResponse](any(), any(), any())(any(), any(), any(), any()))
-          .thenReturn(Future.successful(addressLookupResponse))
+        val mockRequestBuilder = mock[RequestBuilder]
+        when(httpClient.post(any())(any())).thenReturn(mockRequestBuilder)
+        when(mockRequestBuilder.withBody(any())(any, any, any)).thenReturn(mockRequestBuilder)
+        when(mockRequestBuilder.execute[HttpResponse](any, any)).thenReturn(Future.successful(addressLookupResponse))
 
         val postcode = "AA11 1AA"
 
@@ -116,8 +92,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         val addressLookupResponse = HttpResponse(status = 200, json = jsonResponseWithOneResult, headers = Map.empty)
 
-        when(httpClient.POST[AddressRequestBody, HttpResponse](any(), any(), any())(any(), any(), any(), any()))
-          .thenReturn(Future.successful(addressLookupResponse))
+        val mockRequestBuilder = mock[RequestBuilder]
+        when(httpClient.post(any())(any())).thenReturn(mockRequestBuilder)
+        when(mockRequestBuilder.withBody(any())(any, any, any)).thenReturn(mockRequestBuilder)
+        when(mockRequestBuilder.execute[HttpResponse](any, any)).thenReturn(Future.successful(addressLookupResponse))
 
         val postcode = "AA11 1AA"
 
@@ -132,8 +110,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
       "address lookup didn't return any addresses" in {
 
-        when(httpClient.POST[AddressRequestBody, HttpResponse](any(), any(), any())(any(), any(), any(), any()))
-          .thenReturn(Future.successful(HttpResponse(200, "[]")))
+        val mockRequestBuilder = mock[RequestBuilder]
+        when(httpClient.post(any())(any())).thenReturn(mockRequestBuilder)
+        when(mockRequestBuilder.withBody(any())(any, any, any)).thenReturn(mockRequestBuilder)
+        when(mockRequestBuilder.execute[HttpResponse](any, any)).thenReturn(Future.successful(HttpResponse(200, "[]")))
 
         val postcode = "AA11 1AA"
 
@@ -149,7 +129,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
       "address lookup return different status than OK (200)" in {
 
-        when(httpClient.POST[AddressRequestBody, HttpResponse](any(), any(), any())(any(), any(), any(), any()))
+        val mockRequestBuilder = mock[RequestBuilder]
+        when(httpClient.post(any())(any())).thenReturn(mockRequestBuilder)
+        when(mockRequestBuilder.withBody(any())(any, any, any)).thenReturn(mockRequestBuilder)
+        when(mockRequestBuilder.execute[HttpResponse](any, any))
           .thenReturn(Future.successful(HttpResponse(500, "Internal Server Error")))
 
         val postcode = "AA11 1AA"

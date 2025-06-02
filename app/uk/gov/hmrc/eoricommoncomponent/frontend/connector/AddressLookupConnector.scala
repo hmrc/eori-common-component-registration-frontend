@@ -17,17 +17,20 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
 import play.api.Logger
+import play.api.libs.json.Json
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupResponse, AddressLookupSuccess, AddressRequestBody}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import java.net.URI
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AddressLookupConnector @Inject() (http: HttpClient, appConfig: AppConfig)(implicit ec: ExecutionContext) {
+class AddressLookupConnector @Inject() (http: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
 
@@ -43,14 +46,18 @@ class AddressLookupConnector @Inject() (http: HttpClient, appConfig: AppConfig)(
     logger.debug(s"Address lookup url: $url, body: $body")
     // $COVERAGE-ON
 
-    http.POST[AddressRequestBody, HttpResponse](url, body) map { response =>
-      response.status match {
-        case OK => AddressLookupSuccess(response.json.as[Seq[Address]](Address.lookupReads)).sorted()
-        case _ =>
-          logger.warn(s"Address lookup respond with status ${response.status} and body: ${response.body}")
-          AddressLookupFailure
+    http
+      .post(new URI(url).toURL)
+      .withBody(Json.toJson(body))
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+          case OK => AddressLookupSuccess(response.json.as[Seq[Address]](Address.lookupReads)).sorted()
+          case _ =>
+            logger.warn(s"Address lookup respond with status ${response.status} and body: ${response.body}")
+            AddressLookupFailure
+        }
       }
-    }
   }
 
 }
