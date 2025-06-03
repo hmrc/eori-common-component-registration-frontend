@@ -19,8 +19,10 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.Messages
+import play.api.libs.json.Json
 import play.api.mvc.Results.{BadRequest, Ok, Redirect}
 import play.api.mvc.{AnyContent, Request, Result}
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
@@ -45,7 +47,7 @@ class ConfirmContactDetailsService @Inject() (
   confirmContactDetailsView: confirm_contact_details,
   subscriptionFlowManager: SubscriptionFlowManager,
   taxEnrolmentsService: TaxEnrolmentsService
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, auditor: Auditor)
     extends Logging {
 
   def checkAddressDetails(
@@ -189,18 +191,20 @@ class ConfirmContactDetailsService @Inject() (
 
   def handleAddressAndPopulateView(service: Service, isInReviewMode: Boolean)(implicit
     request: Request[AnyContent],
-    messages: Messages
+    messages: Messages,
+    headerCarrier: HeaderCarrier
   ): Future[Result] =
     sessionCache.registrationDetails.flatMap {
       case individual: RegistrationDetailsIndividual =>
-        if (!individual.address.isValidAddress)
+        if (!individual.address.isValidAddress) {
+          auditor.sendAddressValidationFailureEvent(Json.toJson(individual.address))
           Future.successful(
             Redirect(
               uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
                 .page(service)
             )
           )
-        else
+        } else
           Future.successful(
             Ok(
               confirmContactDetailsView(
@@ -215,14 +219,15 @@ class ConfirmContactDetailsService @Inject() (
             )
           )
       case org: RegistrationDetailsOrganisation =>
-        if (!org.address.isValidAddress)
+        if (!org.address.isValidAddress) {
+          auditor.sendAddressValidationFailureEvent(Json.toJson(org.address))
           Future.successful(
             Redirect(
               uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressInvalidController
                 .page(service)
             )
           )
-        else
+        } else
           orgTypeLookup.etmpOrgTypeOpt.flatMap {
             case Some(ot) =>
               Future.successful(

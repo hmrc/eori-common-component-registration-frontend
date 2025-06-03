@@ -111,7 +111,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
     "user selects row and individual" when {
       "redirect to you need to use a different service page" in servicesToTest.foreach { testService =>
         when(
-          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any(), any())
         ).thenReturn(Future.successful(Status(OK)))
 
         when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.ThirdCountry))
@@ -141,7 +141,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         )
 
         when(
-          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any(), any())
         ).thenReturn(Future.successful(Status(OK)))
 
         val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
@@ -163,7 +163,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         )
 
         when(
-          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any(), any())
         ).thenReturn(Future.successful(Status(OK)))
 
         val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
@@ -188,7 +188,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         )
 
         when(
-          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any(), any())
         ).thenReturn(Future.successful(Status(OK)))
 
         val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
@@ -213,7 +213,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         )
 
         when(
-          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any(), any())
         ).thenReturn(Future.successful(Status(OK)))
 
         val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
@@ -239,7 +239,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         )
 
         when(
-          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any(), any())
         ).thenReturn(Future.successful(Status(OK)))
 
         val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
@@ -261,7 +261,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         )
 
         when(
-          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any(), any())
         ).thenReturn(Future.successful(Status(OK)))
 
         val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
@@ -286,7 +286,7 @@ class ConfirmContactDetailsControllerSpec extends ControllerSpec with BeforeAndA
         )
 
         when(
-          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any())
+          mockConfirmContactDetailsService.handleAddressAndPopulateView(any(), any())(any[Request[AnyContent]], any(), any())
         ).thenReturn(Future.successful(Status(OK)))
 
         val result = controller.form(testService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
