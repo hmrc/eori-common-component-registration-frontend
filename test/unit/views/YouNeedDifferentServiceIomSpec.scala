@@ -32,7 +32,7 @@ class YouNeedDifferentServiceIomSpec extends ViewSpec {
   "The 'You need to use a different service' Page" should {
 
     "display correct heading" in {
-      doc.body().getElementsByTag("h1").text() mustBe "You need to use a different online service"
+      doc.body().getElementsByTag("h1").text() mustBe "You need to use a different service"
     }
 
     "have the heading in the title" in {
@@ -47,11 +47,11 @@ class YouNeedDifferentServiceIomSpec extends ViewSpec {
       doc
         .body()
         .getElementById("info")
-        .text mustBe "To apply for an EORI number as a trader from the Isle of Man you need to use an online form, depending on whether you're:"
+        .text mustBe "To apply for an EORI number as a trader from the Isle of Man, you need to use an online form."
     }
 
     "have the correct 'vat registered' link" in {
-      doc.body().getElementById("vat-registered").text() mustBe "VAT-registered"
+      doc.body().getElementById("vat-registered").text() mustBe "apply for an EORI number if you are VAT registered"
       doc
         .body()
         .getElementById("vat-registered")
@@ -59,7 +59,7 @@ class YouNeedDifferentServiceIomSpec extends ViewSpec {
     }
 
     "have the correct 'not vat registered' link" in {
-      doc.body().getElementById("not-vat-registered").text() mustBe "not VAT-registered"
+      doc.body().getElementById("not-vat-registered").text() mustBe "apply for an EORI number if you are not VAT registered"
       doc
         .body()
         .getElementById("not-vat-registered")

@@ -490,10 +490,10 @@ cds.registration.based-in-uk.page-error.yes-no-answer = Rhowch wybod i ni a ydyc
 cds.registration.vat-registered-uk.title = A yw’ch sefydliad wedi’i gofrestru ar gyfer TAW yn y DU?
 cds.registration.vat-registered-uk.error.yes-no-answer = Dewiswch ‘Iawn’ os yw’ch sefydliad wedi’i gofrestru ar gyfer TAW yn y DU
 cds.registration.vat-registered-uk.partnership.error.yes-no-answer = Rhowch wybod i ni a yw’ch partneriaeth wedi’i chofrestru ar gyfer TAW yn y DU
-cds.registration.you-need-a-different-service-iom.title = Rhaid i chi ddefnyddio gwasanaeth ar-lein gwahanol
-cds.registration.you-need-a-different-service-iom.info = I wneud cais am rif EORI fel masnachwr o Ynys Manaw, mae angen i chi ddefnyddio ffurflen ar-lein, yn dibynnu a ydych chi:
-cds.registration.you-need-a-different-service-iom.vat-registered = wedi cofrestru ar gyfer TAW
-cds.registration.you-need-a-different-service-iom.not-vat-registered = heb gofrestru ar gyfer TAW
+cds.registration.you-need-a-different-service-iom.title = Rhaid i chi ddefnyddio gwasanaeth gwahanol
+cds.registration.you-need-a-different-service-iom.info = I wneud cais am rif EORI fel masnachwr o Ynys Manaw, mae angen i chi ddefnyddio ffurflen ar-lein.
+cds.registration.you-need-a-different-service-iom.vat-registered = gwneud cais am rif EORI os ydych wedi’ch cofrestru ar gyfer TAW
+cds.registration.you-need-a-different-service-iom.not-vat-registered = gwneud cais am rif EORI os nad ydych wedi’ch cofrestru ar gyfer TAW
 vat.error.minMax=Mae’n rhaid i’r flwyddyn fod rhwng {0} ac eleni
 
 cds.registration.use-a-different-service.title=Rhaid i chi ddefnyddio gwasanaeth ar-lein gwahanol
