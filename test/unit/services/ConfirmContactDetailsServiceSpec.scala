@@ -24,6 +24,7 @@ import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.mvc.{AnyContent, Request, Session}
 import play.api.test.Helpers.await
 import play.api.test.{FakeRequest, Injecting}
+import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowManager
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
@@ -47,6 +48,7 @@ class ConfirmContactDetailsServiceSpec extends ViewSpec with MockitoSugar with I
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val rq: Request[AnyContent] = withFakeCSRF(FakeRequest())
+  implicit val auditor: Auditor = mock[Auditor]
 
   private val mockSessionCache = mock[SessionCache]
   private val mockRegistrationConfirmService = mock[RegistrationConfirmService]
