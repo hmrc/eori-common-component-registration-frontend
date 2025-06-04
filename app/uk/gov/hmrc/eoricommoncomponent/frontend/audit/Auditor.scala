@@ -85,4 +85,7 @@ class Auditor @Inject() (auditConnector: AuditConnector, appConfig: AppConfig)(i
   def sendSubscriptionFlowSessionFailureEvent(detail: JsValue)(implicit hc: HeaderCarrier): Future[AuditResult] = {
     sendExtendedDataEvent("ecc-registration-subscription-flow-session-failure", "", detail, "SubscriptionFlowSessionFailure")
   }
+  def sendAddressValidationFailureEvent(details: JsValue)(implicit hc: HeaderCarrier): Future[AuditResult] = {
+    sendExtendedDataEvent("ecc-registration-address-validation", "", details, "AddressValidationFailure")
+  }
 }
