@@ -537,10 +537,10 @@ cds.registration.vat-registered-uk.title=Is your organisation VAT registered in 
 cds.registration.vat-registered-uk.error.yes-no-answer=Select yes if your organisation is VAT registered in the UK
 cds.registration.vat-registered-uk.partnership.error.yes-no-answer=Tell us if your partnership is VAT registered in the UK
 
-cds.registration.you-need-a-different-service-iom.title=You need to use a different online service
-cds.registration.you-need-a-different-service-iom.info=To apply for an EORI number as a trader from the Isle of Man you need to use an online form, depending on whether you''re:
-cds.registration.you-need-a-different-service-iom.vat-registered=VAT-registered
-cds.registration.you-need-a-different-service-iom.not-vat-registered=not VAT-registered
+cds.registration.you-need-a-different-service-iom.title=You need to use a different service
+cds.registration.you-need-a-different-service-iom.info=To apply for an EORI number as a trader from the Isle of Man, you need to use an online form.
+cds.registration.you-need-a-different-service-iom.vat-registered=apply for an EORI number if you are VAT registered
+cds.registration.you-need-a-different-service-iom.not-vat-registered=apply for an EORI number if you are not VAT registered
 
 cds.registration.use-a-different-service.title=You need to use a different online service
 cds.registration.use-a-different-service.info=To apply for an EORI number as a public body and not for profit without a UTR you need to use an online form, depending on whether you''re:
