@@ -44,18 +44,31 @@ class OrgTypeLookup @Inject() (requestSessionData: RequestSessionData, sessionCa
         }
     }
 
-  def etmpOrgType(implicit request: Request[AnyContent]): Future[EtmpOrganisationType] =
+  def etmpOrgType(implicit request: Request[AnyContent]): Future[EtmpOrganisationType] = {
     requestSessionData.userSelectedOrganisationType match {
       case Some(cdsOrgType) => Future.successful(EtmpOrganisationType(cdsOrgType))
       case None =>
-        sessionCache.registrationDetails map {
-          case RegistrationDetailsOrganisation(_, _, _, _, _, _, Some(orgType)) => orgType
-          case RegistrationDetailsOrganisation(_, _, _, _, _, _, _) =>
-            val error = "Unable to retrieve Org Type from the cache"
-            // $COVERAGE-OFF$Loggers
-            logger.warn(error)
-            // $COVERAGE-ON
-            throw new IllegalStateException(error)
+        sessionCache.registrationDetails.flatMap {
+          case RegistrationDetailsOrganisation(_, _, _, _, _, _, Some(orgType)) => Future.successful(orgType)
+          case rdo @ RegistrationDetailsOrganisation(_, _, _, _, _, _, _) =>
+            sessionCache.subscriptionDetails.flatMap { sd =>
+              sd.formData.organisationType match {
+                case Some(orgType) =>
+                  val etmpOrgType = EtmpOrganisationType(orgType)
+                  val updatedRegOrgDetails = rdo.copy(etmpOrganisationType = Some(etmpOrgType))
+
+                  sessionCache.saveRegistrationDetails(updatedRegOrgDetails).map {
+                    case true => etmpOrgType
+                    case false => throw new RuntimeException("Unable to save updated Registration Details with ETMP Org Type")
+                  }
+                case None =>
+                  val error = "Unable to retrieve Org Type from the cache"
+                  // $COVERAGE-OFF$Loggers
+                  logger.warn(error)
+                  // $COVERAGE-ON
+                  throw new IllegalStateException(error)
+              }
+            }
           case _ =>
             val error = "No Registration details in cache."
             // $COVERAGE-OFF$Loggers
@@ -64,5 +77,6 @@ class OrgTypeLookup @Inject() (requestSessionData: RequestSessionData, sessionCa
             throw new IllegalStateException(error)
         }
     }
+  }
 
 }

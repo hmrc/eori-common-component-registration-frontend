@@ -26,7 +26,7 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{CdsOrganisationType, CorporateBody, Partnership}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
-import util.builders.RegistrationDetailsBuilder
+import util.builders.{RegistrationDetailsBuilder, SubscriptionFormBuilder}
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
@@ -70,11 +70,48 @@ class OrgTypeLookupSpec extends UnitSpec with BeforeAndAfterEach with MockitoSug
       when(mockCache.registrationDetails(any[Request[_]]))
         .thenReturn(Future.successful(RegistrationDetailsBuilder.emptyETMPOrgTypeRegistrationDetails))
 
+      when(mockCache.subscriptionDetails(any[Request[_]]))
+        .thenReturn(Future.successful(SubscriptionFormBuilder.detailsHolderWithAllFields))
+
       val thrown = intercept[IllegalStateException] {
         await(lookup.etmpOrgType(req))
       }
 
       thrown.getMessage shouldBe "Unable to retrieve Org Type from the cache"
+    }
+
+    "get details from subscription instead of registration and save them" in {
+      when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
+      when(mockCache.registrationDetails(any[Request[_]]))
+        .thenReturn(Future.successful(RegistrationDetailsBuilder.emptyETMPOrgTypeRegistrationDetails))
+
+      when(mockCache.subscriptionDetails(any[Request[_]]))
+        .thenReturn(Future.successful(SubscriptionFormBuilder.detailsWithOrgTypeField))
+
+      when(mockCache.saveRegistrationDetails(any())(any[Request[_]]))
+        .thenReturn(Future.successful(true))
+
+      val orgType = await(lookup.etmpOrgType(req))
+
+      orgType shouldBe CorporateBody
+    }
+
+    "throw an exception when details are not saved from subscription and are not retrieved from registration" in {
+      when(mockReqSessionData.userSelectedOrganisationType(any[Request[AnyContent]])).thenReturn(None)
+      when(mockCache.registrationDetails(any[Request[_]]))
+        .thenReturn(Future.successful(RegistrationDetailsBuilder.emptyETMPOrgTypeRegistrationDetails))
+
+      when(mockCache.subscriptionDetails(any[Request[_]]))
+        .thenReturn(Future.successful(SubscriptionFormBuilder.detailsWithOrgTypeField))
+
+      when(mockCache.saveRegistrationDetails(any())(any[Request[_]]))
+        .thenReturn(Future.successful(false))
+
+      val thrown = intercept[RuntimeException] {
+        await(lookup.etmpOrgType(req))
+      }
+
+      thrown.getMessage shouldBe "Unable to save updated Registration Details with ETMP Org Type"
     }
 
     "throw an exception when different type of registration details is retrieved" in {

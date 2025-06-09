@@ -118,10 +118,7 @@ class PostcodeLookupResultsController @Inject() (
                   .bindFromRequest()
                   .fold(
                     formWithErrors => Future.successful(BadRequest(prepareView(formWithErrors, addressLookupParams, addresses, service))),
-                    address =>
-                      registrationDetailsService.cacheAddress(address) map { _ =>
-                        Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
-                      }
+                    address => Future.successful(Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false)))
                   )
               case AddressLookupSuccess(_) => Future.successful(redirectToManualAddressPage(service))
               case AddressLookupFailure => throw AddressLookupException
