@@ -16,8 +16,9 @@
 
 package util.builders
 
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.ThirdCountryOrganisation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 
@@ -91,4 +92,14 @@ object SubscriptionFormBuilder {
     vatControlListResponse = vatControlListResponseDetails
   )
 
+  val detailsWithOrgTypeField = SubscriptionDetails(
+    personalDataDisclosureConsent = Some(true),
+    contactDetails = Some(contactDetailsModel),
+    businessShortName = Some(BusinessShortName(ShortName)),
+    dateEstablished = Some(DateEstablished),
+    sicCode = Some(sic),
+    ukVatDetails = None,
+    vatControlListResponse = vatControlListResponseDetails,
+    formData = FormData(organisationType = Some(ThirdCountryOrganisation))
+  )
 }
