@@ -86,7 +86,8 @@ class AppConfigSpec extends ControllerSpec with BeforeAndAfterEach {
     }
 
     "have feedbackLink defined for register" in {
-      appConfig.feedbackUrl(atarService) shouldBe "http://localhost:9514/feedback/eori-common-component-register-atar"
+      val basGatewayUrl: String = "http://localhost:9553/bas-gateway/sign-out-without-state"
+      appConfig.feedbackUrl(atarService) shouldBe s"$basGatewayUrl?continue=http://localhost:9514/feedback/eori-common-component-register-atar"
     }
 
     "have reportAProblemPartialUrl defined for register" in {
