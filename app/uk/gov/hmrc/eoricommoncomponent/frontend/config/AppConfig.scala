@@ -42,8 +42,9 @@ class AppConfig @Inject() (
     config.get[String]("microservice.services.contact-frontend.serviceIdentifierRegister")
 
   private val feedbackLink = config.get[String]("external-url.feedback-survey")
+  private val signOutLink = config.get[String]("bas-gateway-frontend.sign-out")
 
-  def feedbackUrl(service: Service) = s"$feedbackLink-${service.code}"
+  def feedbackUrl(service: Service) = s"$signOutLink?continue=$feedbackLink-${service.code}"
 
   private def languageKey(implicit messages: Messages) = messages.lang.language match {
     case "cy" => "cy"
