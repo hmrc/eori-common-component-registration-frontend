@@ -26,7 +26,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, paragraph: helpers.paragraph)
+@this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, h1: helpers.h1, paragraph: helpers.paragraph, formWithCSRF: FormWithCSRF)
 
 @(
     isInReviewMode: Boolean,
@@ -40,9 +40,7 @@
     <div>
         @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-        @helpers.form(DisclosePersonalDetailsConsentController.submit(isInReviewMode, service), "disclose-personal-details-createForm") {
-
-            @CSRF.formField
+        @formWithCSRF(DisclosePersonalDetailsConsentController.submit(isInReviewMode, service), 'id -> "disclose-personal-details-createForm") {
 
             @h1(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"))
 

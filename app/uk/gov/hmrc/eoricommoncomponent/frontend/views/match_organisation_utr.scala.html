@@ -26,12 +26,15 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukDetails}
 @import views.html.helper._
 
-@this(layout_di: layout,
+@this(
+        layout_di: layout,
         inputRadioGroup: helpers.inputRadioGroup,
         govukButton: GovukButton,
         errorSummary: helpers.errorSummary,
         appConfig: AppConfig,
-        govukDetails : GovukDetails)
+        govukDetails : GovukDetails,
+        formWithCSRF: FormWithCSRF
+)
 
 
 @(matchOrgIdForm: Form[UtrMatchModel],  organisationType: String, userLocation: UserLocation, displayMode: String, service: Service, isInReviewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
@@ -52,8 +55,7 @@
 @layout_di(headerAndTitle(organisationType, userLocation), form = Some(matchOrgIdForm), service = service) {
         @errorSummary(matchOrgIdForm.errors, focusOverrides = Map("have-utr" -> "have-utr-true"))
 
-            @helpers.form(routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), "matchOrganisationUtrForm") {
-            @CSRF.formField
+            @formWithCSRF(routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), 'id -> "matchOrganisationUtrForm") {
             <div class="govuk-form-group">
                 @displayInputRadioGroup("have-utr",
                     Seq("true" -> messages("cds.yes"),

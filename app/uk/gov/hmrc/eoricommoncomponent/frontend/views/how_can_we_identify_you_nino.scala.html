@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(ninoForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -29,8 +29,7 @@
     <div>
         @errorSummary(ninoForm.errors)
 
-        @helpers.form(submit, "ninoForm") {
-            @CSRF.formField
+        @formWithCSRF(submit, 'id -> "ninoForm") {
 
             @inputText(
                 form = ninoForm,

@@ -31,9 +31,9 @@
         errorSummary: helpers.errorSummary,
         countryField: helpers.countryField,
         h1: helpers.h1,
-        govukInput: GovukInput
+        govukInput: GovukInput,
+        formWithCSRF: FormWithCSRF
 )
-
 
 @(isInReviewMode: Boolean,
         addressForm: Form[SixLineAddressMatchModel],
@@ -43,18 +43,13 @@
         service: Service
 )(implicit request: Request[AnyContent], messages: Messages)
 
-
-
-
 @layout_di(messages(headerLabel(cdsOrgType)), countriesInCountryPicker, form = Some(addressForm), service = service) {
 
         @errorSummary(addressForm.errors)
 
         @h1(messages(headerLabel(cdsOrgType)))
 
-
-        @helpers.form(routes.SixLineAddressController.submit(isInReviewMode, cdsOrgType, service), s"$cdsOrgType-form") {
-        @CSRF.formField
+        @formWithCSRF(routes.SixLineAddressController.submit(isInReviewMode, cdsOrgType, service), 'id -> s"$cdsOrgType-form") {
 
             @inputText(
                 form = addressForm,

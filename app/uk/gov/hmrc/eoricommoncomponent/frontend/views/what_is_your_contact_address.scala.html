@@ -31,7 +31,8 @@
         countryField: helpers.countryField,
         h1: helpers.h1,
         p: helpers.paragraph,
-        govukInput: GovukInput
+        govukInput: GovukInput,
+        formWithCSRF: FormWithCSRF
 )
 
 @(isInReviewMode: Boolean,
@@ -54,8 +55,7 @@
 
         <br>
 
-        @helpers.form(routes.WhatIsYourContactAddressController.submit(isInReviewMode, service), "your-contact-address-form") {
-        @CSRF.formField
+        @formWithCSRF(routes.WhatIsYourContactAddressController.submit(isInReviewMode, service), 'id -> "your-contact-address-form") {
 
             @inputText(
                 form = addressForm,

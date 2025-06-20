@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(email:Option[String],
     confirmEmailYesNoAnswerForm: Form[YesNo],
@@ -52,8 +52,7 @@
 <div>
     @errorSummary(confirmEmailYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-    @helpers.form(CheckYourEmailController.submit(service), "confirmEmailYesNoAnswerForm") {
-        @CSRF.formField
+    @formWithCSRF(CheckYourEmailController.submit(service), 'id -> "confirmEmailYesNoAnswerForm") {
 
         @displayInputRadioGroup(YesNo.yesAndNoAnswer,
         Seq("true" -> messages("subscription.check-your-email.yes"),

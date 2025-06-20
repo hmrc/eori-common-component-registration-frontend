@@ -30,7 +30,8 @@
         errorSummary: helpers.errorSummary,
         countryField: helpers.countryField,
         h1: helpers.h1,
-        govukInput: GovukInput
+        govukInput: GovukInput,
+        formWithCSRF: FormWithCSRF
 )
 
 @(isInReviewMode: Boolean,
@@ -47,8 +48,7 @@
 
         @h1(messages("cds.matching.embassy-address.header"))
 
-        @helpers.form(routes.EmbassyAddressController.submit(isInReviewMode, service), "embassy-form") {
-        @CSRF.formField
+        @formWithCSRF(routes.EmbassyAddressController.submit(isInReviewMode, service), 'id -> "embassy-form") {
 
             @inputText(
                 form = addressForm,
@@ -93,7 +93,6 @@
                 countries = countries,
                 labelClasses = None
             )
-
 
             @govukButton(Button(
                 content = Text(ViewHelper.continueButtonText(isInReviewMode)),

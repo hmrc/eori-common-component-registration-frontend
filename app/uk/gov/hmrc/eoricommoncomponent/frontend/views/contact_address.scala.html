@@ -34,8 +34,8 @@
     goveukFieldSet: GovukFieldset,
     govukRadios : GovukRadios,
     govukHint: GovukHint,
-        h1: helpers.h1
-
+    h1: helpers.h1,
+    formWithCSRF: FormWithCSRF
 )
 
 
@@ -92,9 +92,8 @@
 <div>
     @errorSummary(contactAddressDetailsYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-    @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.submit(isInReviewMode, service), "contactAddressDetailsYesNoAnswerForm") {
+    @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactAddressController.submit(isInReviewMode, service), 'id -> "contactAddressDetailsYesNoAnswerForm") {
 
-        @CSRF.formField
         @h1(messages("ecc.subscription.contact-address.heading"))
         @hintHtml
         @displayInputRadioGroup(YesNo.yesAndNoAnswer,

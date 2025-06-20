@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(isInReviewMode: Boolean, embassyNameForm: Form[_ <: String], organisationType: String, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -30,8 +30,7 @@
         @errorSummary(embassyNameForm.errors)
 
         <div class="govuk-form-group">
-            @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmbassyNameController.submit(isInReviewMode, organisationType, service), "embassyNameForm") {
-            @CSRF.formField
+            @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmbassyNameController.submit(isInReviewMode, organisationType, service), 'id -> "embassyNameForm") {
 
                 @inputText(
                     form = embassyNameForm,

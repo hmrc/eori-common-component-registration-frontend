@@ -22,10 +22,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-
-
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, p: helpers.paragraph)
-
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, p: helpers.paragraph, formWithCSRF: FormWithCSRF)
 
 @(matchNinoIdForm: Form[NinoMatchModel], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -51,8 +48,7 @@
     <div>
         @errorSummary(matchNinoIdForm.errors, focusOverrides = Map("have-nino" -> "have-nino-true"))
 
-        @helpers.form(DoYouHaveNinoController.submit(service), "matchRowIndividualsNinoForm") {
-            @CSRF.formField
+        @formWithCSRF(DoYouHaveNinoController.submit(service), 'id -> "matchRowIndividualsNinoForm") {
 
             <div class="govuk-form-group">
                 @displayInputRadioGroup("have-nino", Seq("true" -> messages("cds.yes"), "false" -> messages("cds.no")))

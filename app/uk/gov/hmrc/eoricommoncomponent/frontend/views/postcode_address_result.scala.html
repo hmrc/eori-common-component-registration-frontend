@@ -42,7 +42,8 @@
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         h1: helpers.h1,
-        p: helpers.paragraph
+        p: helpers.paragraph,
+        formWithCSRF: FormWithCSRF
 )
 
 @(addressResultsForm: Form[Address],
@@ -74,9 +75,7 @@
 
         @errorSummary(addressResultsForm.errors)
 
-        @helpers.form(PostcodeLookupResultsController.submit(service), "addressLookupPostcodeResultsForm") {
-
-            @CSRF.formField
+        @formWithCSRF(PostcodeLookupResultsController.submit(service), 'id -> "addressLookupPostcodeResultsForm") {
 
             @h1(messages("ecc.address-lookup.postcode.title"))
 

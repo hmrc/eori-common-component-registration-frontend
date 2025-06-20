@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(ninoUtrForm: Form[NinoOrUtrChoice], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -53,8 +53,7 @@
     <div>
         @errorSummary(ninoUtrForm.errors, focusOverrides = Map("ninoOrUtrRadio" -> "ninoOrUtrRadio-nino"))
 
-        @helpers.form(HowCanWeIdentifyYouController.submit(service), "nino-utr-form") {
-            @CSRF.formField
+        @formWithCSRF(HowCanWeIdentifyYouController.submit(service), 'id -> "nino-utr-form") {
 
             @displayInputRadioGroup("ninoOrUtrRadio", validOptions)
 

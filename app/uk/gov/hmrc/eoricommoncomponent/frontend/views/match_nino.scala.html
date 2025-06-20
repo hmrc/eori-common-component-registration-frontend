@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, inputDate_di: inputDate, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, inputDate_di: inputDate, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(ninoForm: Form[NinoMatch], organisationType: String, service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -38,8 +38,8 @@
 
         <h1>@messages("cds.matching.nino.header")</h1>
 
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NinoController.submit(organisationType, service), "nino-form") {
-            @CSRF.formField
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NinoController.submit(organisationType, service), 'id -> "nino-form") {
+
             @inputText(
                 form = ninoForm,
                 id = "first-name",

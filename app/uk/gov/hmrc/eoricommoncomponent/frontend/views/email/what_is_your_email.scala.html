@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(emailForm: Form[EmailViewModel],service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -31,9 +31,7 @@
 
             @errorSummary(emailForm.errors)
 
-            @helpers.form(WhatIsYourEmailController.submit(service),"emailForm") {
-
-                @CSRF.formField
+            @formWithCSRF(WhatIsYourEmailController.submit(service), 'id -> "emailForm") {
 
                 @if(service.enrolmentKey == Service.cds.enrolmentKey) {
 
