@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(vatGroupYesNoAnswerForm: Form[YesNo], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -47,9 +47,7 @@
     <div>
         @errorSummary(vatGroupYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-        @helpers.form(formAction, "vat-group-createForm") {
-
-            @CSRF.formField
+        @formWithCSRF(formAction, 'id -> "vat-group-createForm") {
 
             @displayInputRadioGroup(YesNo.yesAndNoAnswer,
                 Seq("true" -> messages("cds.yes"),

@@ -21,8 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
-
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(vatVerificationOptionAnswerForm: Form[VatVerificationOption], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -47,9 +46,7 @@
     <div>
         @errorSummary(vatVerificationOptionAnswerForm.errors, focusOverrides = Map("vat-verification-option" -> "date-amount-option-true"))
 
-        @helpers.form(formAction, "vat-verification-option-createForm") {
-
-            @CSRF.formField
+        @formWithCSRF(formAction, 'id -> "vat-verification-option-createForm") {
 
         @inputRadioGroup(
             vatVerificationOptionAnswerForm("vat-verification-option"),

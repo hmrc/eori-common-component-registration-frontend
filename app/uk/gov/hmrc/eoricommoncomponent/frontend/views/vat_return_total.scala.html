@@ -24,8 +24,7 @@
 @import views.html.helper.CSRF
 
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, appConfig: AppConfig)
-
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, appConfig: AppConfig, formWithCSRF: FormWithCSRF)
 
 @(vatReturnForm: Form[VatReturnTotal], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -37,11 +36,10 @@
 @layout_di(messages("cds.subscription.vat-registration.vat-return.title"), form = Some(vatReturnForm), service = service) {
   <div>
    @errorSummary(vatReturnForm.errors)
-   @helpers.form(vatFormAction,  "vat-return-form") {
+   @formWithCSRF(vatFormAction, 'id -> "vat-return-form") {
 
     <h1 class="govuk-heading-l">@messages("cds.subscription.vat-registration.vat-return.title")</h1>
     <p class="govuk-body">@messages("cds.subscription.vat-registration.vat-return.para1")</p>
-    @CSRF.formField
     @inputText(
      form = vatReturnForm,
      id = "vat-return-total",

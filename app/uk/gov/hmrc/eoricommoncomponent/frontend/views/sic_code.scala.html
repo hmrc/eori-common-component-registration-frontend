@@ -32,9 +32,9 @@
         inputText: helpers.inputText,
         govukDetails: GovukDetails,
         h1: helpers.h1,
-        p: helpers.paragraph
+        p: helpers.paragraph,
+        formWithCSRF: FormWithCSRF
 )
-
 
 @(sicCodeForm: Form[SicCodeViewModel],isInReviewMode: Boolean, cdsOrgType: Option[CdsOrganisationType], service: Service, selectedUserLocation: Option[UserLocation] )(implicit request: Request[_], messages: Messages)
 
@@ -55,9 +55,7 @@
 
     @h1(messages("cds.subscription.sic.page.heading"), Some("page-heading"))
 
-    @helpers.form(routes.SicCodeController.submit(isInReviewMode, service), "sicCodeform") {
-
-        @CSRF.formField
+    @formWithCSRF(routes.SicCodeController.submit(isInReviewMode, service), 'id -> "sicCodeform") {
 
         @p(messages("cds.subscription.sic.description.para1"), Some("description-part-1"))
         @p(messages("cds.subscription.sic.description.charity-public-body-not-for-profit.para2"), Some("description-part-2"))

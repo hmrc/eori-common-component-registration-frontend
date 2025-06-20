@@ -24,7 +24,7 @@
 @import views.html.helper._
 
 
-@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(
     isInReviewMode: Boolean,
@@ -52,8 +52,7 @@
     <div>
         @errorSummary(vatRegisteredUkYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-        @helpers.form(formAction(isInReviewMode, service), "vat-registered-uk-createForm") {
-            @CSRF.formField
+        @formWithCSRF(formAction(isInReviewMode, service), 'id -> "vat-registered-uk-createForm") {
 
             @displayInputRadioGroup(YesNo.yesAndNoAnswer,
                 Seq("true" -> messages("cds.yes"),

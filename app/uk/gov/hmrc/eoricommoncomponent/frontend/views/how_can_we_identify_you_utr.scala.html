@@ -23,7 +23,7 @@
 @import views.html.helper._
 
 
-@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h1: helpers.h1, h2 :helpers.h2, p: helpers.paragraph, link:helpers.link, errorSummary: helpers.errorSummary)
+@this(layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, h1: helpers.h1, h2 :helpers.h2, p: helpers.paragraph, link:helpers.link, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(utrForm: Form[IdMatchModel], isInReviewMode: Boolean, submit: Call, pageContent: Map[String,String], service: Service)(implicit request: Request[_], messages: Messages)
 
@@ -31,8 +31,7 @@
     <div>
         @errorSummary(utrForm.errors)
 
-        @helpers.form(submit, "utrForm") {
-            @CSRF.formField
+        @formWithCSRF(submit, 'id -> "utrForm") {
 
         @h1(messages(pageContent("headingMessage")))
         @p(messages(pageContent("message")))

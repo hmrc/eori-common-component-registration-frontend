@@ -23,10 +23,9 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import views.html.helper._
 
-@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary)
+@this(inputDate_di: inputDate, layout_di: layout, govukButton: GovukButton, inputText: helpers.inputText, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
 @(businessDetailsForm: Form[NameDobMatchModel], organisationType: String, service: Service)(implicit request: Request[_], messages: Messages)
-
 
 @updateFormErrors =@{
     businessDetailsForm.copy(errors = DateConverter.updateDateOfBirthErrors(businessDetailsForm.errors))
@@ -34,13 +33,11 @@
 
 @layout_di(messages("cds.matching.individual.title"), form = Some(businessDetailsForm), service = service) {
     <div>
-        @errorSummary(updateFormErrors.errors,
-            focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
+        @errorSummary(updateFormErrors.errors, focusOverrides = Map("date-of-birth" -> "date-of-birth.day"))
 
         <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>
 
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NameDobController.submit(organisationType, service), "matchIndividualForm") {
-            @CSRF.formField
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NameDobController.submit(organisationType, service), 'id -> "matchIndividualForm") {
 
             @inputText(
                 form = businessDetailsForm,

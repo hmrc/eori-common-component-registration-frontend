@@ -27,9 +27,9 @@
         inputRadioGroup: helpers.inputRadioGroup,
         govukButton: GovukButton,
         errorSummary: helpers.errorSummary,
-        h1: helpers.h1
+        h1: helpers.h1,
+        formWithCSRF: FormWithCSRF
 )
-
 
 @(
     isInReviewMode: Boolean,
@@ -61,7 +61,6 @@
             Symbol("_divClass") -> "govuk-form-group",
             Symbol("_legend") -> pageTitleAndHeading,
             Symbol("_isLegendH1") -> false
-
     )
 }
 
@@ -70,8 +69,7 @@
     @errorSummary(yesNoWrongAddress.errors, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 
     <div class="govuk-form-group">
-        @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service,isInReviewMode), "yes-no-wrong-address-form") {
-            @CSRF.formField
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service,isInReviewMode), 'id -> "yes-no-wrong-address-form") {
 
             @h1(pageTitleAndHeading)
             @addressHtml

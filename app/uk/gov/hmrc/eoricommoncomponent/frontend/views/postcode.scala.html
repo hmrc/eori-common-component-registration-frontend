@@ -31,7 +31,8 @@
     countryField: helpers.countryField,
     goveukFieldSet: GovukFieldset,
     govukHint: GovukHint,
-    p: helpers.paragraph
+    p: helpers.paragraph,
+    formWithCSRF: FormWithCSRF
 )
 
 @(
@@ -82,9 +83,7 @@
 <div>
     @errorSummary(postCodeForm.errors)
 
-    @helpers.form(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostCodeController.submit(service), "addressDetailsForm") {
-
-    @CSRF.formField
+    @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostCodeController.submit(service), 'id -> "addressDetailsForm") {
 
     @goveukFieldSet(
         Fieldset(
