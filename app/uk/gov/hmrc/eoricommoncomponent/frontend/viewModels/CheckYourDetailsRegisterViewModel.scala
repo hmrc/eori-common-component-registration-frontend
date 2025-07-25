@@ -179,6 +179,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
       val providedDetails = getProvidedDetails(
         isIndividual,
+        isEmbassy,
         isSoleTrader,
         isRowOrganisation,
         isPartnership,
@@ -197,6 +198,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
 
   private def getProvidedDetails(
     isIndividual: Boolean,
+    isEmbassy: Boolean,
     isSoleTrader: Boolean,
     isRowOrganisation: Boolean,
     isPartnership: Boolean,
@@ -260,7 +262,7 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         else Seq.empty[SummaryListRow]
 
       val organisationName =
-        if (!isIndividual && !isSoleTrader)
+        if (!isIndividual && !isSoleTrader && !isEmbassy)
           Seq(
             summaryListRow(
               key = orgNameLabel(cdsOrgType, isPartnership),
@@ -272,6 +274,19 @@ class CheckYourDetailsRegisterConstructor @Inject() (
             )
           )
         else Seq.empty[SummaryListRow]
+
+      val embassyName =
+        if (isEmbassy) {
+          Seq(
+            summaryListRow(
+              key = orgNameLabel(cdsOrgType, isPartnership = false),
+              value = Some(Text(name).asHtml),
+              call = Some(EmbassyNameController.showForm(isInReviewMode = true, orgType, service))
+            )
+          )
+        } else {
+          Seq.empty[SummaryListRow]
+        }
 
       val organisationUtr =
         if (isRowOrganisation && !isUserIdentifiedByRegService)
@@ -313,10 +328,17 @@ class CheckYourDetailsRegisterConstructor @Inject() (
       val registeredAddress = {
         val (value, call) = (isUserIdentifiedByRegService, subscription.addressDetails) match {
           case (true, None) | (false, _) =>
-            (
-              Some(addressHtml(registration.address)),
-              Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service))
-            )
+            if (isEmbassy) {
+              (
+                Some(addressHtml(registration.address)),
+                Some(EmbassyAddressController.showForm(isInReviewMode = true, service))
+              )
+            } else {
+              (
+                Some(addressHtml(registration.address)),
+                Some(SixLineAddressController.showForm(isInReviewMode = true, organisationType = orgType, service))
+              )
+            }
           case (true, Some(address)) =>
             (
               Some(addressViewModelHtml(address)),
@@ -355,9 +377,16 @@ class CheckYourDetailsRegisterConstructor @Inject() (
         )
       )
 
+      val orgName =
+        if (organisationName.isEmpty) {
+          embassyName
+        } else {
+          organisationName
+        }
+
       SummaryList(rows =
         individualNameDob ++
-          organisationName ++
+          orgName ++
           organisationUtr ++
           customsId ++
           individualUtr ++
