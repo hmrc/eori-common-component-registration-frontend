@@ -188,11 +188,7 @@ class RegistrationDetailsCreator extends Logging {
 
     RegistrationDetails.individual(
       sapNumber,
-      SafeId(
-        response.responseDetail
-          .getOrElse(throw new IllegalStateException("No responseDetail"))
-          .SAFEID
-      ),
+      SafeId(safeId),
       name,
       address,
       ind.dateOfBirth,
