@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping
 
+import org.apache.commons.lang3.StringUtils.isBlank
+import play.api.Logging
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
@@ -27,7 +29,7 @@ import java.time.LocalDate
 import javax.inject.Singleton
 
 @Singleton
-class RegistrationDetailsCreator {
+class RegistrationDetailsCreator extends Logging {
 
   def registrationDetails(
     response: RegisterWithIDResponse,
@@ -173,6 +175,16 @@ class RegistrationDetailsCreator {
     val sapNumber = extractSapNumber(response.responseCommon.returnParameters)
     val address = Address(add.lineOne, add.lineTwo, Some(add.lineThree), add.lineFour, add.postcode, add.country)
     val name = ind.fullName
+    val safeId = response.responseDetail
+      .getOrElse(throw new IllegalStateException("No responseDetail"))
+      .SAFEID
+
+    // $COVERAGE-OFF$Loggers
+    if (isBlank(safeId)) {
+      logger.warn("Safe ID not returned from the register-without-id downstream service. " +
+        "This is likely to be the cause of a JSON validation failure in DDCYLS-7014.")
+    }
+    // $COVERAGE-ON
 
     RegistrationDetails.individual(
       sapNumber,

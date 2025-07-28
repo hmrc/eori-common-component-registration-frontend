@@ -37,9 +37,11 @@ object Service {
   val regimeCDS = "CDS"
 
   val cdsCode = "cds"
-  val cds: Service = Service(cdsCode, "HMRC-CUS-ORG", "", None, "", "", None)
-  val eoriOnly: Service = Service("eori-only", "HMRC-CUS-ORG", "", None, "", "", None)
   val goodsVehicleMovementCode = "gagmr"
+  val eoriCode = "eori-only"
+
+  val cds: Service = Service(cdsCode, "HMRC-CUS-ORG", "CDS", None, "Customs Declaration Service", "Gwasanaeth Datganiad Tollau", None)
+  val eoriOnly: Service = Service(eoriCode, "HMRC-CUS-ORG", "EORI-Only", None, "EORI Registration", "Cofrestru EORI", None)
 
   val gagmr: Service = Service(
     goodsVehicleMovementCode,
