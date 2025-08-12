@@ -212,11 +212,11 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSub02Controller, times(1)).subscribe(any())
-      verify(mockRegisterWithoutIdService, times(1)).registerOrganisation(anyString(), any(), any(), any(), any())(
+      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
         any(),
         any()
       )
-      verify(mockRegisterWithoutIdService, never()).registerIndividual(any(), any(), any(), any(), any())(any(), any())
+      verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
     }
 
     "when CorporateBody and ROW and GYE, call SUB02, do not call Register without id" in {
@@ -234,11 +234,11 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
       await(service.rowRegisterWithoutIdWithSubscription(mockLoggedInUser, atarService)(hc, rq, msg))
 
       verify(mockSub02Controller, times(1)).subscribe(any())
-      verify(mockRegisterWithoutIdService, times(1)).registerOrganisation(anyString(), any(), any(), any(), any())(
+      verify(mockRegisterWithoutIdService, never).registerOrganisation(anyString(), any(), any(), any(), any())(
         any(),
         any()
       )
-      verify(mockRegisterWithoutIdService, never()).registerIndividual(any(), any(), any(), any(), any())(any(), any())
+      verify(mockRegisterWithoutIdService, never).registerIndividual(any(), any(), any(), any(), any())(any(), any())
     }
 
     "when NA and ROW, call SUB02, call registerIndividual, do not call registerOrganisation" in {

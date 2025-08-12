@@ -72,7 +72,7 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
       result <-
         if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney)
           createSubscription(loggedInUser, rd, userLocation, service)
-        else if (applicableForRegistration(rd)) registerWithoutId(loggedInUser, service)
+        else if (applicableForRegistration(rd)) rowServiceCall(loggedInUser, service)
         else if (rd.orgType.contains(EmbassyId) && appConfig.allowNoIdJourney)
           createSubscription(loggedInUser, rd, userLocation, service)
         else if (
@@ -86,9 +86,12 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
             _.haveUtr.exists(_ == false)
           ) && appConfig.allowNoIdJourney
         ) createSubscription(loggedInUser, rd, userLocation, service)
-        else registerWithoutId(loggedInUser, service)(hc, request)
+        else createSubscription(service)(request)
     } yield result
   }
+
+  def createSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
+    sub02Controller.subscribe(service)(request)
 
   private def createSubscription(
     loggedInUser: LoggedInUserWithEnrolments,
@@ -141,7 +144,7 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     }
   }
 
-  private def registerWithoutId(loggedInUser: LoggedInUserWithEnrolments, service: Service)(implicit
+  private def rowServiceCall(loggedInUser: LoggedInUserWithEnrolments, service: Service)(implicit
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ) = {
