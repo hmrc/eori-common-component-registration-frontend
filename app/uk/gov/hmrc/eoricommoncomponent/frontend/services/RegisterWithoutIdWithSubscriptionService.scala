@@ -87,20 +87,28 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
             _.haveUtr.exists(_ == false)
           ) && appConfig.allowNoIdJourney
         ) createSubscription(loggedInUser, rd, userLocation, service)
-        else createSubscription(service, userLocation, loggedInUser)(request, hc)
+        else createSubscription(service, userLocation, loggedInUser, sd, rd)(request, hc)
     } yield result
   }
 
-  def createSubscription(service: Service, userLocation: UserLocation, loggedInUser: LoggedInUserWithEnrolments)(implicit
+  def createSubscription(
+    service: Service,
+    userLocation: UserLocation,
+    loggedInUser: LoggedInUserWithEnrolments,
+    subDetails: SubscriptionDetails,
+    regDetails: RegistrationDetails
+  )(implicit
     request: Request[AnyContent],
     hc: HeaderCarrier
   ): Future[Result] = {
-    sessionCache.subscriptionDetails.flatMap { subDetails =>
-      if (userLocation == Uk && subDetails.formData.organisationType.contains(CharityPublicBodyNotForProfit)) {
-        rowServiceCall(loggedInUser, service)(hc, request).flatMap(_ => sub02Controller.subscribe(service)(request))
-      } else {
-        sub02Controller.subscribe(service)(request)
-      }
+    if (
+      userLocation == Uk && subDetails.formData.organisationType.contains(
+        CharityPublicBodyNotForProfit
+      ) && regDetails.sapNumber.id.isEmpty && regDetails.safeId.id.isEmpty
+    ) {
+      rowServiceCall(loggedInUser, service)(hc, request).flatMap(_ => sub02Controller.subscribe(service)(request))
+    } else {
+      sub02Controller.subscribe(service)(request)
     }
 
   }
