@@ -29,6 +29,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache}
@@ -86,12 +87,31 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
             _.haveUtr.exists(_ == false)
           ) && appConfig.allowNoIdJourney
         ) createSubscription(loggedInUser, rd, userLocation, service)
-        else createSubscription(service)(request)
+        else createSubscription(service, userLocation, loggedInUser, sd, rd)(request, hc)
     } yield result
   }
 
-  def createSubscription(service: Service)(implicit request: Request[AnyContent]): Future[Result] =
-    sub02Controller.subscribe(service)(request)
+  def createSubscription(
+    service: Service,
+    userLocation: UserLocation,
+    loggedInUser: LoggedInUserWithEnrolments,
+    subDetails: SubscriptionDetails,
+    regDetails: RegistrationDetails
+  )(implicit
+    request: Request[AnyContent],
+    hc: HeaderCarrier
+  ): Future[Result] = {
+    if (
+      userLocation == Uk && subDetails.formData.organisationType.contains(
+        CharityPublicBodyNotForProfit
+      ) && regDetails.sapNumber.id.isEmpty && regDetails.safeId.id.isEmpty
+    ) {
+      rowServiceCall(loggedInUser, service)(hc, request).flatMap(_ => sub02Controller.subscribe(service)(request))
+    } else {
+      sub02Controller.subscribe(service)(request)
+    }
+
+  }
 
   private def createSubscription(
     loggedInUser: LoggedInUserWithEnrolments,
