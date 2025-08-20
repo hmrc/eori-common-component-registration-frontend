@@ -13,8 +13,8 @@ object AppDependencies {
     "uk.gov.hmrc"       %% s"play-conditional-form-mapping-play-$playVersion" % "3.3.0",
     "uk.gov.hmrc"       %% s"domain-play-$playVersion"                        % "11.0.0",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-play-$playVersion"                    % mongoDbVersion,
-    "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "12.7.0",
-    "uk.gov.hmrc"       %% s"internal-auth-client-play-$playVersion"          % "4.0.0"
+    "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "12.8.0",
+    "uk.gov.hmrc"       %% s"internal-auth-client-play-$playVersion"          % "4.1.0"
   )
 
   val testDependencies: Seq[ModuleID] = Seq(
