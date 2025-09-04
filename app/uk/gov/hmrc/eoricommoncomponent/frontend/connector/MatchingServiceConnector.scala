@@ -22,6 +22,7 @@ import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector.{NoMatchFound, matchFailureResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{RegisterWithId, RegisterWithIdConfirmation, RegisterWithIdSubmitted}
 import uk.gov.hmrc.http._
@@ -36,6 +37,16 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
 ) extends HandleResponses {
 
   private val url = url"${appConfig.getServiceUrl("register-with-id")}"
+
+  private def logIfNotContains(matchingResponse: MatchingResponse, message: String): Unit = {
+    // $COVERAGE-OFF$Loggers
+    if (!matchingResponse.registerWithIDResponse.responseCommon.statusText.contains(message)) {
+      logger.warn(
+        s"REG01 failed Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
+      )
+    }
+    // $COVERAGE-ON
+  }
 
   def lookup(req: MatchingRequestHolder)(implicit hc: HeaderCarrier): EitherT[Future, ResponseError, MatchingResponse] =
     EitherT {
@@ -54,20 +65,12 @@ class MatchingServiceConnector @Inject() (httpClient: HttpClientV2, appConfig: A
                 val idResponse = matchingResponse.registerWithIDResponse
 
                 if (idResponse.responseDetail.isEmpty) {
-                  // $COVERAGE-OFF$Loggers
-                  logger.warn(
-                    s"REG01 failed Lookup: responseCommon: ${matchingResponse.registerWithIDResponse.responseCommon}"
-                  )
-                  // $COVERAGE-ON
+                  logIfNotContains(matchingResponse, NoMatchFound)
                   idResponse.responseCommon.statusText match {
-                    case Some(text) if text.equalsIgnoreCase(MatchingServiceConnector.NoMatchFound) =>
-                      Left(MatchingServiceConnector.matchFailureResponse)
-                    case Some(text) =>
-                      Left(ResponseError(OK, text))
-                    case None =>
-                      Left(ResponseError(OK, "Detail object not returned"))
+                    case Some(text) if text.equalsIgnoreCase(NoMatchFound) => Left(matchFailureResponse)
+                    case Some(text) => Left(ResponseError(OK, text))
+                    case None => Left(ResponseError(OK, "Detail object not returned"))
                   }
-
                 } else {
                   // $COVERAGE-OFF$Loggers
                   logger.debug(
