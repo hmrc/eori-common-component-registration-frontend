@@ -179,15 +179,6 @@ class RegistrationDetailsCreator extends Logging {
       .getOrElse(throw new IllegalStateException("No responseDetail"))
       .SAFEID
 
-    // $COVERAGE-OFF$Loggers
-    if (isBlank(safeId)) {
-      logger.warn(
-        "Safe ID not returned from the register-without-id downstream service. " +
-          "This is likely to be the cause of a JSON validation failure in DDCYLS-7014."
-      )
-    }
-    // $COVERAGE-ON
-
     RegistrationDetails.individual(
       sapNumber,
       SafeId(safeId),
