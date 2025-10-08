@@ -24,12 +24,13 @@
 
 @(service: Service)(implicit messages: Messages, request: Request[_])
 
-@layout_di(messages("cds.security-sign-out.heading"), service = service) {
+@layout_di(messages("cds.security-sign-out.heading"), displayBackLink = false, service = service) {
 <div>
     <h1 class="govuk-heading-l">@messages("cds.security-sign-out.heading")</h1>
 
     <p class="govuk-hint" id="hint">@messages("cds.security-sign-out.note")</p>
 
+    <br>
     @govukButton(Button(
         content = Text(messages("cds.security-sign-in")),
         href = Some(ApplicationController.startRegister(service).url),

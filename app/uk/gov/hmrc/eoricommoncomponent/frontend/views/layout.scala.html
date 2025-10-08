@@ -105,8 +105,8 @@
 @if(isLoggedIn) {
     @hmrcTimeoutDialogHelper(
         title = Some(messages("cds.timeout.message")),
-        timeout = Some(1200),
-        countdown = Some(300),
+        timeout = Some(900),
+        countdown = Some(120),
         keepAliveUrl = Some(keepAliveUrl),
         signOutUrl = logOutUrl,
         timeoutUrl = Some(signOutUrl),
