@@ -52,7 +52,7 @@ cds.proposition.name.cds=Get access to CDS
 cds.country.end-of-title= GOV.UK
 cds.sign.out=Sign out
 cds.security-sign-out.heading=For your security, we signed you out
-cds.security-sign-out.note=We did not save your answers.
+cds.security-sign-out.note=We saved your answers for 20 minutes.
 cds.you-cant-use-service-agent.hint1=You have signed in with an agent services account.
 cds.you-cant-use-service-agent.hint2=You need to sign in with the account for the organisation or individual that is applying for an EORI number.
 cds.you-cant-use-service-standard-organisation.hint1=You signed in to Government Gateway as a standard user. To apply for an EORI number you must be an administrator user.
@@ -1422,9 +1422,9 @@ cds.checking-status-page.bullet2=Unique Taxpayer Reference (UTR)
 cds.checking-status-page.bullet3=National Insurance number
 
 #timeout dialog
-cds.timeout.message=For your security, we will delete your answers and you will be signed out in
-cds.timeout.keep-alive-button=Get another 20 minutes
-cds.timeout.sign-out-button=Sign out now
+cds.timeout.message=You''re about to be signed out
+cds.timeout.keep-alive-button=Stay Signed in
+cds.timeout.sign-out-button=Sign out
 
 #footer
 footer.privacy-policy=Privacy policy

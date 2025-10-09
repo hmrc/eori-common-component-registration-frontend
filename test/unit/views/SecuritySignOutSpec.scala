@@ -37,7 +37,7 @@ class SecuritySignOutSpec extends ViewSpec {
     }
 
     "display hint" in {
-      doc.body.getElementById("hint").text mustBe "We did not save your answers."
+      doc.body.getElementById("hint").text mustBe "We saved your answers for 20 minutes."
     }
 
     "have a Sign in button with the correct href when journey is register" in {
