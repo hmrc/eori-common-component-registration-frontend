@@ -20,8 +20,9 @@ import play.api.Logger
 import play.api.libs.json.Json
 import play.mvc.Http.Status._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector.AddressLookupException
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupResponse, AddressLookupSuccess, AddressRequestBody}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupResponse, AddressLookupSuccess, AddressRequestBody}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
@@ -34,9 +35,7 @@ class AddressLookupConnector @Inject() (http: HttpClientV2, appConfig: AppConfig
 
   private val logger = Logger(this.getClass)
 
-  def lookup(postcode: String, firstLineOpt: Option[String])(implicit
-    hc: HeaderCarrier
-  ): Future[AddressLookupResponse] = {
+  def lookup(postcode: String, firstLineOpt: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
 
     val body = AddressRequestBody(postcode, firstLineOpt)
 
@@ -55,9 +54,12 @@ class AddressLookupConnector @Inject() (http: HttpClientV2, appConfig: AppConfig
           case OK => AddressLookupSuccess(response.json.as[Seq[Address]](Address.lookupReads)).sorted()
           case _ =>
             logger.warn(s"Address lookup respond with status ${response.status} and body: ${response.body}")
-            AddressLookupFailure
+            throw AddressLookupException
         }
       }
   }
+}
 
+object AddressLookupConnector {
+  case object AddressLookupException extends Exception("Address Lookup service is not available")
 }

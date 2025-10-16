@@ -46,5 +46,3 @@ case class AddressLookupSuccess(addresses: Seq[Address]) extends AddressLookupRe
     "([0-9]+)".r.findAllIn(address.addressLine1.toLowerCase).map(n => Try(n.toInt).toOption).toSeq.reverse :+ None
 
 }
-
-case object AddressLookupFailure extends AddressLookupResponse

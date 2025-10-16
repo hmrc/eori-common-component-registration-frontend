@@ -25,8 +25,9 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector.AddressLookupException
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupSuccess}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookupSuccess
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import unit.connectors.AddressLookupConnectorSpec.{jsonResponseWithOneResult, jsonResponseWithTwoResults}
@@ -125,7 +126,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
       }
     }
 
-    "return Address Lookup Failure" when {
+    "throws Address Lookup Exception" when {
 
       "address lookup return different status than OK (200)" in {
 
@@ -137,9 +138,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         val postcode = "AA11 1AA"
 
-        val result = connector.lookup(postcode, None)(hc)
+        val result: Future[Throwable] = connector.lookup(postcode, None)(hc).failed
 
-        result.futureValue shouldBe AddressLookupFailure
+        result.futureValue shouldEqual AddressLookupException
+
       }
     }
   }

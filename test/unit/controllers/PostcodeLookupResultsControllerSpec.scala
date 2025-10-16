@@ -24,13 +24,14 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{PostcodeLookupResultsController, routes}
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector.AddressLookupException
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{PostcodeLookupResultsController, routes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupSuccess}
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookupSuccess
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.postcode_address_result
@@ -186,7 +187,7 @@ class PostcodeLookupResultsControllerSpec extends SubscriptionFlowTestSupport wi
               ArgumentMatchers.eq(None)
             )(any())
           )
-            .thenReturn(Future.successful(AddressLookupFailure))
+            .thenReturn(Future.failed(AddressLookupException))
 
           showCreateForm(atarService) { result =>
             status(result) shouldBe SEE_OTHER
@@ -240,7 +241,7 @@ class PostcodeLookupResultsControllerSpec extends SubscriptionFlowTestSupport wi
               ArgumentMatchers.eq(None)
             )(any())
           )
-            .thenReturn(Future.successful(AddressLookupFailure))
+            .thenReturn(Future.failed(AddressLookupException))
 
           showCreateForm(atarService) { result =>
             status(result) shouldBe SEE_OTHER
@@ -292,7 +293,7 @@ class PostcodeLookupResultsControllerSpec extends SubscriptionFlowTestSupport wi
           Future.successful(Some(PostcodeViewModel("TF3 2BX", Some("addressLine 1"))))
         )
         when(mockAddressLookupConnector.lookup(any(), any())(any()))
-          .thenReturn(Future.successful(AddressLookupFailure))
+          .thenReturn(Future.failed(AddressLookupException))
 
         submitForm(form, atarService) { result =>
           status(result) shouldBe SEE_OTHER
