@@ -16,4 +16,120 @@
 
 package unit.services.postcodelookup
 
-class PostcodeLookupServiceSpec {}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito._
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar.mock
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector.AddressLookupException
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
+import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookupSuccess
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.postcodelookup.PostcodeLookupService
+import uk.gov.hmrc.http.HeaderCarrier
+import util.TestData
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+class PostcodeLookupServiceSpec extends AnyWordSpec with Matchers with TestData with OptionValues with ScalaFutures with BeforeAndAfterEach {
+
+  val mockSessionCache: SessionCache = mock[SessionCache]
+  val mockAddressLookupConnector: AddressLookupConnector = mock[AddressLookupConnector]
+
+  val postcodeLookupService = new PostcodeLookupService(mockSessionCache, mockAddressLookupConnector)
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+
+  val postcodeViewModel: PostcodeViewModel = PostcodeViewModel("NW11 5RP", Some("Rose Avenue"))
+  val fullAddress: Address = Address("Rose Avenue", Some("Chelsea"), Some("Kensington"), Some("London"), Some(postcodeViewModel.postcode), "GB")
+  val addressPartial: Address = Address("Rose Avenue", Some("Chelsea"), Some("Kensington"), None, Some(postcodeViewModel.postcode), "GB")
+
+  override protected def afterEach(): Unit = {
+    reset(mockAddressLookupConnector)
+  }
+
+  "lookup" should {
+    "return None" when {
+      "session cache contains no postcode and line 1 details" in {
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(None))
+        verifyNoInteractions(mockAddressLookupConnector)
+        postcodeLookupService.lookup().futureValue shouldEqual None
+      }
+
+      "address lookup service returns an error" in {
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeViewModel)))
+        when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.failed(AddressLookupException))
+        verifyNoMoreInteractions(mockAddressLookupConnector)
+        postcodeLookupService.lookup().futureValue shouldEqual None
+      }
+
+      "address lookup returns no addresses both times" in {
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeViewModel)))
+        when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.successful(AddressLookupSuccess(Seq())))
+        when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.successful(AddressLookupSuccess(Seq())))
+        postcodeLookupService.lookup().futureValue shouldEqual None
+      }
+    }
+
+    "return the addresses, the saved postcode & line 1 details" in {
+      when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeViewModel)))
+      val addressLookupSuccess = AddressLookupSuccess(Seq(fullAddress))
+      when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.successful(addressLookupSuccess))
+      postcodeLookupService.lookup().futureValue shouldEqual Some((addressLookupSuccess, postcodeViewModel))
+      verify(mockAddressLookupConnector, times(1)).lookup(any(), any())(any())
+    }
+
+    "retry" when {
+      "any one of the address fields are missing in the response from address lookup service" in {
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeViewModel)))
+        when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.successful(AddressLookupSuccess(Seq(addressPartial))))
+        when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.successful(AddressLookupSuccess(Seq(fullAddress))))
+        postcodeLookupService.lookup().futureValue shouldEqual Some((AddressLookupSuccess(Seq(fullAddress)), postcodeViewModel))
+      }
+    }
+  }
+
+  "lookupNoRepeat" should {
+    "return None" when {
+      "session cache contains no postcode and line 1 details" in {
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(None))
+        verifyNoInteractions(mockAddressLookupConnector)
+        postcodeLookupService.lookupNoRepeat().futureValue shouldEqual None
+      }
+
+      "address lookup service returns an error" in {
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeViewModel)))
+        when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.failed(AddressLookupException))
+        verifyNoMoreInteractions(mockAddressLookupConnector)
+        postcodeLookupService.lookupNoRepeat().futureValue shouldEqual None
+      }
+
+      "address lookup returns no addresses" in {
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeViewModel)))
+        when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.successful(AddressLookupSuccess(Seq())))
+        postcodeLookupService.lookupNoRepeat().futureValue shouldEqual None
+      }
+
+      "address lookup service returns addresses with some missing fields" in {
+        when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeViewModel)))
+        when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.successful(AddressLookupSuccess(Seq(addressPartial))))
+        postcodeLookupService.lookupNoRepeat().futureValue shouldEqual None
+      }
+    }
+
+    "return the addresses, the saved postcode & line 1 details" in {
+      when(mockSessionCache.getPostcodeAndLine1Details(any())).thenReturn(Future.successful(Some(postcodeViewModel)))
+      val addressLookupSuccess = AddressLookupSuccess(Seq(fullAddress))
+      when(mockAddressLookupConnector.lookup(any(), any())(any())).thenReturn(Future.successful(addressLookupSuccess))
+      postcodeLookupService.lookupNoRepeat().futureValue shouldEqual Some((addressLookupSuccess, postcodeViewModel))
+    }
+  }
+}
