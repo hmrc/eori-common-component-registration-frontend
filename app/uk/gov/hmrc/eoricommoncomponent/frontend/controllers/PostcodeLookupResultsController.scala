@@ -27,7 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.postcodelookup.Postcode
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.postcode_address_result
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PostcodeLookupResultsController @Inject() (
@@ -50,17 +50,19 @@ class PostcodeLookupResultsController @Inject() (
 
   def submit(service: Service): Action[AnyContent] = {
     authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
-      postcodeLookupService.lookupNoRepeat().map {
-        case None => Redirect(ManualAddressController.createForm(service))
+      postcodeLookupService.lookupNoRepeat().flatMap {
+        case None => Future.successful(Redirect(ManualAddressController.createForm(service)))
         case Some((addressLookupSuccess, postcodeViewModel)) => {
           addressResultsForm
             .form(addressLookupSuccess.addresses)
             .bindFromRequest()
             .fold(
-              formWithErrors => BadRequest(addressLookupResultsPage(formWithErrors, postcodeViewModel, addressLookupSuccess.addresses, service)),
+              formWithErrors =>
+                Future.successful(BadRequest(addressLookupResultsPage(formWithErrors, postcodeViewModel, addressLookupSuccess.addresses, service))),
               (address: Address) => {
-                // TODO save the address into the database to repopulate any missing data.
-                Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))
+                postcodeLookupService
+                  .ensuringAddressPopulated(address)
+                  .flatMap(_ => Future.successful(Redirect(ConfirmContactDetailsController.form(service, isInReviewMode = false))))
               }
             )
         }

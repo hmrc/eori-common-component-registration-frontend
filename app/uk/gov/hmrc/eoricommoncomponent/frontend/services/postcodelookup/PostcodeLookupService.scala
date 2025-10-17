@@ -19,6 +19,8 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.services.postcodelookup
 import play.api.mvc.Request
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector.AddressLookupException
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetailsEmbassy, RegistrationDetailsIndividual, RegistrationDetailsOrganisation, RegistrationDetailsSafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookupSuccess
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
@@ -72,6 +74,31 @@ class PostcodeLookupService @Inject() (sessionCache: SessionCache, addressLookup
             Future.successful(None)
           }
       }
+    }
+  }
+
+  def ensuringAddressPopulated(fetchedAddress: Address)(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] = {
+    sessionCache.registrationDetails.flatMap { regDetails =>
+      val updatedAddressWithCountryCode = if (regDetails.address.countryCode.isEmpty) {
+        regDetails.address.copy(countryCode = fetchedAddress.countryCode)
+      } else {
+        regDetails.address
+      }
+
+      val updatedAddressWithLine1 = if (updatedAddressWithCountryCode.addressLine1.isEmpty) {
+        updatedAddressWithCountryCode.copy(addressLine1 = fetchedAddress.addressLine1)
+      } else {
+        updatedAddressWithCountryCode
+      }
+
+      val updatedRegDetails = regDetails match {
+        case rde: RegistrationDetailsEmbassy => rde.copy(address = updatedAddressWithLine1)
+        case rdo: RegistrationDetailsOrganisation => rdo.copy(address = updatedAddressWithLine1)
+        case rdi: RegistrationDetailsIndividual => rdi.copy(address = updatedAddressWithLine1)
+        case rds: RegistrationDetailsSafeId => rds.copy(address = updatedAddressWithLine1)
+      }
+
+      sessionCache.saveRegistrationDetails(updatedRegDetails)
     }
   }
 }
