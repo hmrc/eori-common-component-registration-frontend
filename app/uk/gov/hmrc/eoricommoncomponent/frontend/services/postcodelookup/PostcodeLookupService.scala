@@ -61,11 +61,13 @@ class PostcodeLookupService @Inject() (sessionCache: SessionCache, addressLookup
     sessionCache.getPostcodeAndLine1Details.flatMap {
       case None => Future.successful(None)
       case Some(postcodeViewModel) => {
-        addressLookupConnector.lookup(postcodeViewModel.sanitisedPostcode, postcodeViewModel.addressLine1).flatMap {
-          case addressesResponse@AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
-            Future.successful(Some((addressesResponse, postcodeViewModel)))
-          case _ => Future.successful(None)
-        }
+        addressLookupConnector
+          .lookup(postcodeViewModel.sanitisedPostcode, postcodeViewModel.addressLine1)
+          .flatMap {
+            case addressesResponse @ AddressLookupSuccess(addresses) if addresses.nonEmpty && addresses.forall(_.lookupFieldsDefined) =>
+              Future.successful(Some((addressesResponse, postcodeViewModel)))
+            case _ => Future.successful(None)
+          }
           .recoverWith { case _: AddressLookupException.type =>
             Future.successful(None)
           }

@@ -17,31 +17,21 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector.AddressLookupException
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ConfirmContactDetailsController, ManualAddressController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookupSuccess
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.RegistrationDetailsService
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.SessionCache
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.postcodelookup.PostcodeLookupService
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.postcode_address_result
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class PostcodeLookupResultsController @Inject() (
   authAction: AuthAction,
-  sessionCache: SessionCache,
-  registrationDetailsService: RegistrationDetailsService,
-  addressLookupConnector: AddressLookupConnector,
   mcc: MessagesControllerComponents,
   addressLookupResultsPage: postcode_address_result,
   addressResultsForm: AddressResultsForm,
