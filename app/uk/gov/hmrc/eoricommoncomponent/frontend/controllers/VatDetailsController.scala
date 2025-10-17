@@ -19,6 +19,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.GetVatCustomerInformationConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
@@ -38,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatDetailsController @Inject() (
   authAction: AuthAction,
   appConfig: AppConfig,
-  VatDetailsService: VatDetailsService,
+  vatCustomerInfoConnector: GetVatCustomerInformationConnector,
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   vatDetailsView: vat_details,
@@ -147,7 +148,7 @@ class VatDetailsController @Inject() (
     hc: HeaderCarrier,
     request: Request[AnyContent]
   ): Future[Result] =
-    VatDetailsService
+    vatCustomerInfoConnector
       .getVatCustomerInformation(vatForm.number)
       .foldF(
         responseError =>

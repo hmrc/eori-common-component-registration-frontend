@@ -18,6 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
 import play.api.mvc._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.GetVatCustomerInformationConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.registrationdate.VatRegistrationDateFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -32,7 +33,7 @@ import scala.concurrent.ExecutionContext
 class YourVatDetailsController @Inject() (
   authAction: AuthAction,
   appConfig: AppConfig,
-  VatDetailsService: VatDetailsService,
+  vatCustomerInfoConnector: GetVatCustomerInformationConnector,
   subscriptionBusinessService: SubscriptionBusinessService,
   mcc: MessagesControllerComponents,
   vatDetailsView: vat_details,
@@ -46,7 +47,7 @@ class YourVatDetailsController @Inject() (
     extends VatDetailsController(
       authAction,
       appConfig,
-      VatDetailsService,
+      vatCustomerInfoConnector,
       subscriptionBusinessService,
       mcc,
       vatDetailsView,

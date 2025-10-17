@@ -129,8 +129,6 @@ class AppConfig @Inject() (
 
   val internalAuthToken: String = config.get[String]("internal-auth.token")
 
-  val vatDetailsFeatureFlag: Boolean = config.get[Boolean]("vat-details-feature-flag")
-
   val validateUkIomGiantVrnFeatureFlag: Boolean = config.get[Boolean]("validate-iom-uk-giantvrn-feature-flag")
 
   private val addressLookupBaseUrl: String = servicesConfig.baseUrl("address-lookup")
