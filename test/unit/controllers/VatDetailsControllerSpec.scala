@@ -24,14 +24,13 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.VatDetailsController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.VatDetailsSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.registrationdate.VatRegistrationDateFormProvider
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.VatDetailsService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{date_of_vat_registration, error_template, vat_details}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -60,7 +59,7 @@ class VatDetailsControllerSpec
       .submit(isInReviewMode = true, atarService)
       .url
 
-  private val mockVatDetailsService = mock[VatDetailsService]
+  private val mockGetVatCustomerInformationConnector = mock[GetVatCustomerInformationConnector]
   private val mockAppConfig = mock[AppConfig]
   private val vatDetailsView = inject[vat_details]
   private val errorTemplate = inject[error_template]
@@ -72,7 +71,7 @@ class VatDetailsControllerSpec
   private val controller = new VatDetailsController(
     mockAuthAction,
     mockAppConfig,
-    mockVatDetailsService,
+    mockGetVatCustomerInformationConnector,
     mockSubscriptionBusinessService,
     mcc,
     vatDetailsView,
@@ -91,7 +90,7 @@ class VatDetailsControllerSpec
 
   override protected def beforeEach(): Unit = {
     reset(mockSubscriptionFlowManager)
-    reset(mockVatDetailsService)
+    reset(mockGetVatCustomerInformationConnector)
     setupMockSubscriptionFlowManager(VatDetailsSubscriptionFlowPage)
     when(mockRequestSession.selectedUserLocation(any())).thenReturn(Some(UserLocation.Uk))
   }
@@ -431,6 +430,6 @@ class VatDetailsControllerSpec
   }
 
   def vatControlListMock()(response: EitherT[Future, ResponseError, VatControlListResponse]): Unit =
-    when(mockVatDetailsService.getVatCustomerInformation(any[String])(any[HeaderCarrier])) thenReturn response
+    when(mockGetVatCustomerInformationConnector.getVatCustomerInformation(any[String])(any[HeaderCarrier])) thenReturn response
 
 }
