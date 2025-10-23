@@ -91,7 +91,7 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
     } yield result
   }
 
-  def createSubscription(
+  private def createSubscription(
     service: Service,
     userLocation: UserLocation,
     loggedInUser: LoggedInUserWithEnrolments,
@@ -106,11 +106,10 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
         CharityPublicBodyNotForProfit
       ) && regDetails.sapNumber.id.isEmpty && regDetails.safeId.id.isEmpty
     ) {
-      rowServiceCall(loggedInUser, service)(hc, request).flatMap(_ => sub02Controller.subscribe(service)(request))
+      rowServiceCall(loggedInUser, service)(hc, request)
     } else {
       sub02Controller.subscribe(service)(request)
     }
-
   }
 
   private def createSubscription(
