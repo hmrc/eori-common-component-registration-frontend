@@ -147,12 +147,11 @@ class PostcodeLookupServiceSpec extends AnyWordSpec with Matchers with TestData 
       }
 
       "line 1 details or country code is missing and save new address" in {
-        val testRequest = FakeRequest()
-        when(mockSessionCache.registrationDetails(testRequest)).thenReturn(Future.successful(registrationDetails))
+        when(mockSessionCache.registrationDetails).thenReturn(Future.successful(registrationDetails))
         val newAddressDetails = registrationDetails.address.copy(addressLine1 = "Rose Avenue", countryCode = "GB")
-        val newRegistrationDetails = RegistrationDetailsIndividual().copy(address = newAddressDetails)
-        when(mockSessionCache.saveRegistrationDetails(newRegistrationDetails)(testRequest)).thenReturn(Future.successful(true))
-        postcodeLookupService.ensuringAddressPopulated(addressPartial)(testRequest).futureValue shouldEqual true
+        val updatedRegDetails = registrationDetails.asInstanceOf[RegistrationDetailsIndividual].copy(address = newAddressDetails)
+        when(mockSessionCache.saveRegistrationDetails(updatedRegDetails)).thenReturn(Future.successful(true))
+        postcodeLookupService.ensuringAddressPopulated(fullAddress).futureValue shouldEqual true
       }
     }
   }
