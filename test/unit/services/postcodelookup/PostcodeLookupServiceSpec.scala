@@ -18,15 +18,16 @@ package unit.services.postcodelookup
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector.AddressLookupException
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.AddressLookupSuccess
@@ -35,6 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.postcodelookup.Postcode
 import uk.gov.hmrc.http.HeaderCarrier
 import util.TestData
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -50,7 +52,9 @@ class PostcodeLookupServiceSpec extends AnyWordSpec with Matchers with TestData 
 
   val postcodeViewModel: PostcodeViewModel = PostcodeViewModel("NW11 5RP", Some("Rose Avenue"))
   val fullAddress: Address = Address("Rose Avenue", Some("Chelsea"), Some("Kensington"), Some("London"), Some(postcodeViewModel.postcode), "GB")
-  val addressPartial: Address = Address("Rose Avenue", Some("Chelsea"), Some("Kensington"), None, Some(postcodeViewModel.postcode), "GB")
+  val addressPartial: Address = Address("", Some("Chelsea"), Some("Kensington"), Some("London"), Some(postcodeViewModel.postcode), "")
+  val registrationDetails: RegistrationDetails =
+    RegistrationDetailsIndividual(None, TaxPayerId(""), SafeId(""), "John Doe", addressPartial, LocalDate.parse("1989-12-21"))
 
   override protected def afterEach(): Unit = {
     reset(mockAddressLookupConnector)
@@ -132,4 +136,25 @@ class PostcodeLookupServiceSpec extends AnyWordSpec with Matchers with TestData 
       postcodeLookupService.lookupNoRepeat().futureValue shouldEqual Some((addressLookupSuccess, postcodeViewModel))
     }
   }
+
+  "ensuringAddressPopulated" should {
+    "return Address" when {
+      "session cache contains whole address" in {
+        val newRegistrationDetails = RegistrationDetailsIndividual().copy(address = fullAddress)
+        when(mockSessionCache.registrationDetails(any())).thenReturn(Future.successful(newRegistrationDetails))
+        when(mockSessionCache.saveRegistrationDetails(newRegistrationDetails)).thenReturn(Future.successful(true))
+        postcodeLookupService.ensuringAddressPopulated(fullAddress).futureValue shouldEqual true
+      }
+
+      "line 1 details or country code is missing and save new address" in {
+        val testRequest = FakeRequest()
+        when(mockSessionCache.registrationDetails(testRequest)).thenReturn(Future.successful(registrationDetails))
+        val newAddressDetails = registrationDetails.address.copy(addressLine1 = "Rose Avenue", countryCode = "GB")
+        val newRegistrationDetails = RegistrationDetailsIndividual().copy(address = newAddressDetails)
+        when(mockSessionCache.saveRegistrationDetails(newRegistrationDetails)(testRequest)).thenReturn(Future.successful(true))
+        postcodeLookupService.ensuringAddressPopulated(addressPartial)(testRequest).futureValue shouldEqual true
+      }
+    }
+  }
+
 }

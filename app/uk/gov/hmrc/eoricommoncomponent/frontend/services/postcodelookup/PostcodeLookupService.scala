@@ -77,7 +77,7 @@ class PostcodeLookupService @Inject() (sessionCache: SessionCache, addressLookup
     }
   }
 
-  def ensuringAddressPopulated(fetchedAddress: Address)(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] = {
+  def ensuringAddressPopulated(fetchedAddress: Address)(implicit request: Request[_]): Future[Boolean] = {
     sessionCache.registrationDetails.flatMap { regDetails =>
       val updatedAddressWithCountryCode = if (regDetails.address.countryCode.isEmpty) {
         regDetails.address.copy(countryCode = fetchedAddress.countryCode)
