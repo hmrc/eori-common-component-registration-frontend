@@ -89,8 +89,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
               for {
                 _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Utr(formData.id))))
                 ind <- sessionCacheService.retrieveNameDobFromCache()
-                _ = matchingService.matchIndividualWithNino(
-                      formData.id,
+                _ = matchingService.matchIndividualWithId(
+                      Utr(formData.id),
                       ind,
                       GroupId(user.groupId.getOrElse(throw new Exception("GroupId does not exists")))
                     )
