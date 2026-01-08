@@ -730,7 +730,7 @@ cds.matching.different-service.para1=You do not have a UTR number so you cannot 
 cds.matching.cannot-register-using-service.title-and-heading=You need to use a different service
 cds.matching.cannot-register-using-service.para1=This service is not available to organisations that are part of a VAT group.
 cds.matching.cannot-register-using-service.para2=Use the
-cds.matching.cannot-register-using-service.link.text=EORI number application form.
+cds.matching.cannot-register-using-service.link.text=EORI number application form (opens in new tab).
 
 
 #Nino Match

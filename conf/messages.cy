@@ -648,7 +648,7 @@ cds.matching.different-service.para1 = Nid oes gennych Gyfeirnod Unigryw y Treth
 cds.matching.cannot-register-using-service.title-and-heading = Rhaid i chi ddefnyddio gwasanaeth gwahanol
 cds.matching.cannot-register-using-service.para1 = Nid yw’r gwasanaeth hwn ar gael i sefydliadau sy’n rhan o grŵp TAW.
 cds.matching.cannot-register-using-service.para2 = Defnyddiwch y
-cds.matching.cannot-register-using-service.link.text = ffurflen gais am rif EORI.
+cds.matching.cannot-register-using-service.link.text = ffurflen gais am rif EORI (yn agor tab newydd).
 
 
 cds.matching.nino.title = Nodwch eich manylion
