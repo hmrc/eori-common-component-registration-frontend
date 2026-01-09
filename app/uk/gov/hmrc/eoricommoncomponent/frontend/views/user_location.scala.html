@@ -24,7 +24,7 @@
 
 @this(layout_di: layout, appConfig: AppConfig, inputRadioGroup: helpers.inputRadioGroup, govukButton: GovukButton, errorSummary: helpers.errorSummary, formWithCSRF: FormWithCSRF)
 
-@(userLocationForm: Form[UserLocation], service: Service, isAffinityOrganisation: Boolean)(implicit request: Request[_], messages: Messages)
+@(userLocationForm: Form[UserLocation], service: Service, isAffinityOrganisation: Boolean, selectedUserLoc: Option[UserLocation])(implicit request: Request[_], messages: Messages)
 
 @title = @{
     if(isAffinityOrganisation) messages("cds.registration.user-location.organisation.title-and-heading")
@@ -42,7 +42,7 @@
 
 @displayInputRadioGroup(field: String, options: Seq[(String, String, Option[String])]) = {
 @inputRadioGroup(
-    userLocationForm(field),
+    userLocationForm(field).copy(value = selectedUserLoc.map(_.toString)),
     options.map { option => (option._1, option._2) },
     options.flatMap(option => option._3.map(option._1 -> _)).toMap,
     Some(Html(messages("cds.registration.user-location.hint"))),
