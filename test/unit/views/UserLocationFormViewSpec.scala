@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.UserLocationController
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.UserLocationFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{RegistrationDisplayService, Save4LaterService, SubscriptionStatusService}
@@ -76,6 +77,7 @@ class UserLocationFormViewSpec extends ControllerSpec with BeforeAndAfterEach wi
     reset(mockAuthConnector)
     when(mockSave4LaterConnector.get(any(), any())(any(), any()))
       .thenReturn(Future.successful(None))
+    when(mockSave4LaterService.fetchUserLocation(any())(any())).thenReturn(Future.successful(Some(UserLocation.Uk)))
   }
 
   "User location page" should {

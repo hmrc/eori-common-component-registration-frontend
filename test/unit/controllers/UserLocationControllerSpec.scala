@@ -35,6 +35,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{ContactResponse, IndividualResponse, OrganisationResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayResponse, ResponseCommon, ResponseDetail}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.UserLocationFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services._
@@ -116,6 +117,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
 
     assertNotLoggedInAndCdsEnrolmentChecksForGetAnEori(mockAuthConnector, controller.form(atarService))
     "display the form with no errors" in {
+      when(mockSave4LaterService.fetchUserLocation(any())(any())).thenReturn(Future.successful(Some(Uk)))
       showForm() { result =>
         status(result) shouldBe OK
         val page = CdsPage(contentAsString(result))

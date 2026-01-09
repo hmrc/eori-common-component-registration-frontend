@@ -57,15 +57,15 @@ class UserLocationController @Inject() (
   private def isAffinityOrganisation(affinityGroup: Option[AffinityGroup]): Boolean =
     affinityGroup.contains(AffinityGroup.Organisation)
 
-  private def continue(
-    service: Service
-  )(implicit request: Request[AnyContent], user: LoggedInUserWithEnrolments): Future[Result] =
-    Future.successful(Ok(userLocationView(form, service, isAffinityOrganisation(user.affinityGroup))))
-
-  def form(service: Service): Action[AnyContent] =
+  def form(service: Service): Action[AnyContent] = {
     authAction.enrolledUserWithSessionAction(service) { implicit request => implicit user: LoggedInUserWithEnrolments =>
-      continue(service)
+      save4LaterService
+        .fetchUserLocation(user.groupId.map(GroupId(_)).getOrElse(GroupId("")))
+        .flatMap { optUserLoc =>
+          Future.successful(Ok(userLocationView(form, service, isAffinityOrganisation(user.affinityGroup), optUserLoc)))
+        }
     }
+  }
 
   private def forRow(service: Service, groupId: GroupId, location: UserLocation)(implicit
     request: Request[AnyContent],
@@ -89,7 +89,7 @@ class UserLocationController @Inject() (
         .fold(
           formWithErrors =>
             Future.successful(
-              BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup)))
+              BadRequest(userLocationView(formWithErrors, service, isAffinityOrganisation(loggedInUser.affinityGroup), None))
             ),
           location =>
             (location, loggedInUser.groupId) match {
