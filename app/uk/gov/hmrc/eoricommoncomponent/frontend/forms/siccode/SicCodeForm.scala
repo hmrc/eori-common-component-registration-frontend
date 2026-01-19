@@ -27,8 +27,7 @@ class SicCodeForm() {
 
   def form(): Form[SicCodeViewModel] = {
     Form(
-      Forms.mapping("sic" -> text.verifying(validSicCode))
-        (SicCodeViewModel.apply)(sicCodeViewModel => Some(sicCodeViewModel.sicCode))
+      Forms.mapping("sic" -> text.verifying(validSicCode))(SicCodeViewModel.apply)(sicCodeViewModel => Some(sicCodeViewModel.sicCode))
     )
   }
 

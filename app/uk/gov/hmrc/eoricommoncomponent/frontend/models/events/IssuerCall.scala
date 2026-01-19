@@ -27,5 +27,5 @@ object IssuerCall {
   implicit val writes: Writes[IssuerCall] =
     JsPath
       .write[IssuerRequest]
-      .and(JsPath.write[IssuerResponse])((issuercall : IssuerCall) => (issuercall.request, issuercall.response))
+      .and(JsPath.write[IssuerResponse])((issuercall: IssuerCall) => (issuercall.request, issuercall.response))
 }

@@ -40,9 +40,8 @@ object EmailForm {
     })
 
   val emailForm: Form[EmailViewModel] = Form(
-    Forms.mapping(EmailVerificationKeys.EmailKey -> text.verifying(validEmail))
-      (EmailViewModel.apply)(emailViewModel => Some(emailViewModel.email))
-    )
+    Forms.mapping(EmailVerificationKeys.EmailKey -> text.verifying(validEmail))(EmailViewModel.apply)(emailViewModel => Some(emailViewModel.email))
+  )
 
   def confirmEmailYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] = Form(
     mapping(

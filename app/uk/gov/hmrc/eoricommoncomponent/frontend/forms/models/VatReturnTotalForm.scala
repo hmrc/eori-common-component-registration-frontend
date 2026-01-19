@@ -44,6 +44,5 @@ object VatReturnTotalForm extends Mappings {
     })
 
   val vatReturnTotalForm: Form[VatReturnTotal] =
-    Form(mapping("vat-return-total" -> text.verifying(validReturnAmount))
-      (VatReturnTotal.apply)(vatReturnTotal => Some(vatReturnTotal.returnAmountInput)))
+    Form(mapping("vat-return-total" -> text.verifying(validReturnAmount))(VatReturnTotal.apply)(vatReturnTotal => Some(vatReturnTotal.returnAmountInput)))
 }
