@@ -39,7 +39,7 @@ class ApplicationSubmissionController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def processing(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction { implicit request => _: LoggedInUserWithEnrolments =>
+  def processing(service: Service): Action[AnyContent] = authorise.ggAuthorisedUserAction { implicit request => (_: LoggedInUserWithEnrolments) =>
     sessionCache.subscriptionDetails.flatMap { sd =>
       sessionCache.txe13ProcessingDate.map { txe13ProcessedDate =>
         val name = sd.formData.organisationType

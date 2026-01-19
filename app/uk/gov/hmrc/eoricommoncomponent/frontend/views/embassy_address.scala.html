@@ -48,7 +48,7 @@
 
         @h1(messages("cds.matching.embassy-address.header"))
 
-        @formWithCSRF(routes.EmbassyAddressController.submit(isInReviewMode, service), 'id -> "embassy-form") {
+        @formWithCSRF(routes.EmbassyAddressController.submit(isInReviewMode, service), Symbol("id") -> "embassy-form") {
 
             @inputText(
                 form = addressForm,

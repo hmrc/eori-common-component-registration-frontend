@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class DetermineReviewPageController @Inject() (authAction: AuthAction, mcc: MessagesControllerComponents) extends CdsController(mcc) {
 
   def determineRoute(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { _: Request[AnyContent] => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { (_: Request[AnyContent] )=> (_: LoggedInUserWithEnrolments) =>
       Future.successful(Redirect(CheckYourDetailsRegisterController.reviewDetails(service).url))
     }
 

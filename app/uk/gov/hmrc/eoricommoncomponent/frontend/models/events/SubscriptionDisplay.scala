@@ -27,6 +27,5 @@ object SubscriptionDisplay {
   implicit val writes: Writes[SubscriptionDisplay] =
     JsPath
       .write[SubscriptionDisplaySubmitted]
-      .and(JsPath.write[SubscriptionDisplayResult])(unlift(SubscriptionDisplay.unapply))
-
+      .and(JsPath.write[SubscriptionDisplayResult])((subDisplay : SubscriptionDisplay) => (subDisplay.request, subDisplay.response))
 }

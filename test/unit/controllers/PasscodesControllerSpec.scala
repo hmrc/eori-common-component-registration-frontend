@@ -54,7 +54,7 @@ class PasscodesControllerSpec extends ControllerSpec with UnitSpec with MockitoS
         Future.successful(HttpResponse.apply(OK, "Some body"))
       )
       val result = await(
-        passcodesController.getEmailVerificationPasscodes().apply(SessionBuilder.buildRequestWithSession(defaultUserId))
+        passcodesController.getEmailVerificationPasscodes.apply(SessionBuilder.buildRequestWithSession(defaultUserId))
       )
       result.header.status shouldBe OK
 

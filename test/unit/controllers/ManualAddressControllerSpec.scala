@@ -24,7 +24,7 @@ import play.api.mvc.Results.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.ManualAddressController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController as ManualAddressControllerRoutes
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.AddressService
@@ -47,7 +47,7 @@ class ManualAddressControllerSpec extends SubscriptionFlowTestSupport with Befor
   override protected val formId: String = AddressPage.formId
 
   def submitInCreateModeUrl: String =
-    ManualAddressController.submit(atarService).url
+    ManualAddressControllerRoutes.submit(atarService).url
 
   private val mockAddressService = mock[AddressService]
   private val mockSessionCache = mock[SessionCache]

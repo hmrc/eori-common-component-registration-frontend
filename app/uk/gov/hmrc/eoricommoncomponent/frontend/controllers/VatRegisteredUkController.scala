@@ -47,7 +47,7 @@ class VatRegisteredUkController @Inject() (
   private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] = {
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       isIndividualFlow match {
         case Right(isIndividual) =>
           val location =
@@ -75,7 +75,7 @@ class VatRegisteredUkController @Inject() (
   }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       (for {
         isVatRegisteredUk <- subscriptionBusinessService.getCachedVatRegisteredUk
         yesNo: YesNo = YesNo(isVatRegisteredUk)
@@ -104,7 +104,7 @@ class VatRegisteredUkController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnership)
         .bindFromRequest()
         .fold(

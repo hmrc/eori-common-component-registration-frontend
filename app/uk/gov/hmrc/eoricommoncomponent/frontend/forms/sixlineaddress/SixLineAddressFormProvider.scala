@@ -42,7 +42,7 @@ class SixLineAddressFormProvider() extends Mappings {
         "line-4"      -> optional(text.verifying(validLine4)),
         "postcode"    -> mandatoryOptPostCodeMapping,
         "countryCode" -> default(text, countryCodeGB)
-      )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
+      )(SixLineAddressMatchModel.apply)(sixLineAddressMM => Some(sixLineAddressMM.lineOne, sixLineAddressMM.lineTwo, sixLineAddressMM.lineThree, sixLineAddressMM.lineFour, sixLineAddressMM.postcode, sixLineAddressMM.country))
     )
   }
 
@@ -55,7 +55,7 @@ class SixLineAddressFormProvider() extends Mappings {
         "line-4"      -> optional(text.verifying(validLine4)),
         "postcode"    -> mandatoryOptPostCodeMapping,
         "countryCode" -> mandatoryString("cds.matching-error.country.invalid")(s => s.length == 2)
-      )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
+      )(SixLineAddressMatchModel.apply)(sixLineAddressMM => Some(sixLineAddressMM.lineOne, sixLineAddressMM.lineTwo, sixLineAddressMM.lineThree, sixLineAddressMM.lineFour, sixLineAddressMM.postcode, sixLineAddressMM.country))
     )
   }
 
@@ -69,7 +69,7 @@ class SixLineAddressFormProvider() extends Mappings {
         "postcode"    -> postcodeMapping,
         "countryCode" -> mandatoryString("cds.matching-error.country.invalid")(s => s.length == 2)
           .verifying(rejectGB)
-      )(SixLineAddressMatchModel.apply)(SixLineAddressMatchModel.unapply)
+      )(SixLineAddressMatchModel.apply)(sixLineAddressMM => Some(sixLineAddressMM.lineOne, sixLineAddressMM.lineTwo, sixLineAddressMM.lineThree, sixLineAddressMM.lineFour, sixLineAddressMM.postcode, sixLineAddressMM.country))
     )
   }
 

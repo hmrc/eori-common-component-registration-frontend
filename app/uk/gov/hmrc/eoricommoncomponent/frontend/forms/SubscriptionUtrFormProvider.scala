@@ -27,6 +27,6 @@ import javax.inject.Singleton
 class SubscriptionUtrFormProvider() extends Constraints {
 
   def subscriptionUtrForm: Form[IdMatchModel] = {
-    Form(mapping("utr" -> text.verifying(validUtr))(IdMatchModel.apply)(IdMatchModel.unapply))
+    Form(mapping("utr" -> text.verifying(validUtr))(IdMatchModel.apply)(idMatchModel => Some(idMatchModel.id)))
   }
 }

@@ -37,17 +37,17 @@
     Map.empty,
     None,
     None,
-    '_divClass -> "createForm-group govuk-form-group inline",
-    '_legend -> messages("cds.subscription.vat-group.title-and-heading"),
-    '_isLegendH1 -> true,
-    '_hintText -> messages("cds.subscription.vat-group.intro-text"))
+    Symbol("_divClass") -> "createForm-group govuk-form-group inline",
+    Symbol("_legend") -> messages("cds.subscription.vat-group.title-and-heading"),
+    Symbol("_isLegendH1") -> true,
+    Symbol("_hintText") -> messages("cds.subscription.vat-group.intro-text"))
 }
 
 @layout_di(messages("cds.subscription.vat-group.title-and-heading"), form = Some(vatGroupYesNoAnswerForm), service = service) {
     <div>
         @errorSummary(vatGroupYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-        @formWithCSRF(formAction, 'id -> "vat-group-createForm") {
+        @formWithCSRF(formAction, Symbol("id") -> "vat-group-createForm") {
 
             @displayInputRadioGroup(YesNo.yesAndNoAnswer,
                 Seq("true" -> messages("cds.yes"),

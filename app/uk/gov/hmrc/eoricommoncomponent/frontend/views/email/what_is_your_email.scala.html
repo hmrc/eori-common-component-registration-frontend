@@ -31,7 +31,7 @@
 
             @errorSummary(emailForm.errors)
 
-            @formWithCSRF(WhatIsYourEmailController.submit(service), 'id -> "emailForm") {
+            @formWithCSRF(WhatIsYourEmailController.submit(service), Symbol("id") -> "emailForm") {
 
                 @if(service.enrolmentKey == Service.cds.enrolmentKey) {
 

@@ -27,6 +27,6 @@ import javax.inject.Singleton
 class SubscriptionNinoFormProvider() extends Constraints {
 
   def subscriptionNinoForm: Form[IdMatchModel] = {
-    Form(mapping("nino" -> text.verifying(validNino))(IdMatchModel.apply)(IdMatchModel.unapply))
+    Form(mapping("nino" -> text.verifying(validNino))(IdMatchModel.apply)(idMatchModel => Some(idMatchModel.id)))
   }
 }

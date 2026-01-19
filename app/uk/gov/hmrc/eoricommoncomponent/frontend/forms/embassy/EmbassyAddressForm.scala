@@ -36,7 +36,8 @@ class EmbassyAddressForm() extends Constraints {
         "townCity"    -> text.verifying(validLineTownCity),
         "postcode"    -> text.verifying(validPostcode),
         "countryCode" -> default(text, countryCodeGB)
-      )(EmbassyAddressMatchModel.apply)(EmbassyAddressMatchModel.unapply)
+      )(EmbassyAddressMatchModel.apply)(embAddMatchModel => 
+        Some(embAddMatchModel.lineOne, embAddMatchModel.lineTwo, embAddMatchModel.townCity, embAddMatchModel.postcode, embAddMatchModel.country))
     }
 
   private def validLineOne: Constraint[String] =

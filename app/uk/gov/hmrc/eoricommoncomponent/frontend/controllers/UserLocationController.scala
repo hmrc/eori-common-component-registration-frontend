@@ -83,7 +83,7 @@ class UserLocationController @Inject() (
       .flatMap(identity _)
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (loggedInUser: LoggedInUserWithEnrolments) =>
       form
         .bindFromRequest()
         .fold(
@@ -171,7 +171,7 @@ class UserLocationController @Inject() (
   }
 
   def processing(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
-    implicit request => _: LoggedInUserWithEnrolments =>
+    implicit request => (_: LoggedInUserWithEnrolments) =>
       sessionCache.sub01Outcome
         .map(_.processedDate)
         .map(processedDate => Ok(sub01OutcomeProcessing(processedDate, service)))

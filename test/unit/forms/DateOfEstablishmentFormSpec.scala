@@ -23,6 +23,8 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.DateOfEstablishmentForm
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, Year}
 import scala.collection.immutable.ArraySeq
+import org.scalatest.matchers.should.Matchers.*
+
 
 class DateOfEstablishmentFormSpec extends UnitSpec {
 
@@ -122,7 +124,7 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
         "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()))
+      res.errors shouldBe Seq(FormError("date-of-establishment.day", Seq("date.day.error"), Seq()))
     }
 
     "pass when the date has a month of 12" in {
@@ -142,7 +144,7 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
         "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
-      res.errors shouldBe Seq(FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq()))
+      res.errors shouldBe Seq(FormError("date-of-establishment.month", Seq("date.month.error"), Seq()))
     }
 
     "fail when the date contains a day greater than 31 and a month greater than 12" in {
@@ -153,8 +155,8 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
       )
       val res = form.bind(data)
       res.errors shouldBe Seq(
-        FormError("date-of-establishment.day", Seq("date.day.error"), ArraySeq()),
-        FormError("date-of-establishment.month", Seq("date.month.error"), ArraySeq())
+        FormError("date-of-establishment.day", Seq("date.day.error"), Seq()),
+        FormError("date-of-establishment.month", Seq("date.month.error"), Seq())
       )
     }
   }

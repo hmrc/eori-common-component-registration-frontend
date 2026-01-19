@@ -33,7 +33,7 @@ import scala.concurrent.Future
 
 trait AuthActionMock extends AnyWordSpec with MockitoSugar with Injecting {
 
-  implicit val app: Application
+  lazy val app: Application
 
   val configuration = inject[Configuration]
   val environment = Environment.simple()

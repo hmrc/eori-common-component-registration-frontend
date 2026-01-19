@@ -28,7 +28,7 @@ object RegistrationDisplay {
   implicit val writes: Writes[RegistrationDisplay] =
     JsPath
       .write[RegistrationDisplaySubmitted]
-      .and(JsPath.write[RegistrationDisplayResult])(unlift(RegistrationDisplay.unapply))
+      .and(JsPath.write[RegistrationDisplayResult])((regDisplay : RegistrationDisplay) => (regDisplay.request, regDisplay.response))
 
   def apply(
     request: RegistrationDisplayRequestHolder,

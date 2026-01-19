@@ -29,7 +29,7 @@
     <div>
         @errorSummary(ninoForm.errors)
 
-        @formWithCSRF(submit, 'id -> "ninoForm") {
+        @formWithCSRF(submit, Symbol("id") -> "ninoForm") {
 
             @inputText(
                 form = ninoForm,

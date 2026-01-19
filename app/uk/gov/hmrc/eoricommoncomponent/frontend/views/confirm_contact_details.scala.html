@@ -69,7 +69,7 @@
     @errorSummary(yesNoWrongAddress.errors, focusOverrides = Map("yes-no-wrong-address" -> "yes-no-wrong-address-yes"))
 
     <div class="govuk-form-group">
-        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service,isInReviewMode), 'id -> "yes-no-wrong-address-form") {
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmContactDetailsController.submit(service,isInReviewMode), Symbol("id") -> "yes-no-wrong-address-form") {
 
             @h1(pageTitleAndHeading)
             @addressHtml

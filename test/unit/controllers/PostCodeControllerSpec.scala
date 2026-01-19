@@ -23,7 +23,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.PostCodeController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostCodeController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostCodeController as PostCodeControllerRoutes
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.PostcodeForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -45,7 +45,7 @@ class PostCodeControllerSpec extends SubscriptionFlowTestSupport with BeforeAndA
   val form: Map[String, String] = Map("postcode" -> "TF3 2BX", "addressLine1" -> "addressline 1")
   val invalidForm: Map[String, String] = Map("addressLine1" -> "addressline 1")
 
-  def submitInCreateModeUrl: String = PostCodeController.submit(atarService).url
+  def submitInCreateModeUrl: String = PostCodeControllerRoutes.submit(atarService).url
 
   private val mockSessionCache = mock[SessionCache]
   private val view = inject[postcode]

@@ -94,7 +94,7 @@
 <div>
     @errorSummary(addressForm.errors)
 
-    @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController.submit(service), 'id -> "addressDetailsCreateForm") {
+    @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ManualAddressController.submit(service), Symbol("id") -> "addressDetailsCreateForm") {
 
     @goveukFieldSet(
         Fieldset(

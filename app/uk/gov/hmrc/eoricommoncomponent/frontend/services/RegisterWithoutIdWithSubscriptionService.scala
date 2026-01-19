@@ -23,11 +23,11 @@ import play.api.mvc.{AnyContent, Request, Result}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.Sub02Controller
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationSubmissionController, Sub02Controller}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationSubmissionController, Sub02Controller as RoutesSub02Controller}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, EmbassyId}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
@@ -153,12 +153,12 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
                         )
                         .flatMap(_ => Future.successful(Redirect(ApplicationSubmissionController.processing(service))))
                     } else {
-                      Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+                      Future.successful(Redirect(RoutesSub02Controller.requestNotProcessed(service)))
                     }
                   }
                 }
               }
-          case _ => Future.successful(Redirect(Sub02Controller.requestNotProcessed(service)))
+          case _ => Future.successful(Redirect(RoutesSub02Controller.requestNotProcessed(service)))
         }
     }
   }

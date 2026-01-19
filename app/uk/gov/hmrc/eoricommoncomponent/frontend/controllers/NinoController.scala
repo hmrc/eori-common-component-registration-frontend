@@ -47,7 +47,7 @@ class NinoController @Inject() (
   val ninoForm: Form[NinoMatch] = ninoFormProvider.ninoForm
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       sessionCacheService.individualAndSoleTraderRouter(
         user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
         service,
@@ -56,7 +56,7 @@ class NinoController @Inject() (
     }
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (loggedInUser: LoggedInUserWithEnrolments) =>
       ninoForm
         .bindFromRequest()
         .fold(

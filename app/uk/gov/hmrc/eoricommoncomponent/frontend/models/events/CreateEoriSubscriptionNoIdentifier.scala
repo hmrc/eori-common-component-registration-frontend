@@ -30,6 +30,5 @@ object CreateEoriSubscriptionNoIdentifier {
   implicit val writes: Writes[CreateEoriSubscriptionNoIdentifier] =
     JsPath
       .write[CreateEoriSubscriptionRequest]
-      .and(JsPath.write[CreateEoriSubscriptionResponse])(unlift(CreateEoriSubscriptionNoIdentifier.unapply))
-
+      .and(JsPath.write[CreateEoriSubscriptionResponse])((cesni : CreateEoriSubscriptionNoIdentifier) => (cesni.createEoriSubscriptionRequest, cesni.createEoriSubscriptionResponse))
 }

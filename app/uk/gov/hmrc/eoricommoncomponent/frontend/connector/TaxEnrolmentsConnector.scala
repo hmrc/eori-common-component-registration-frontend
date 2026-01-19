@@ -26,6 +26,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import java.net.URI
 import javax.inject.{Inject, Singleton}
@@ -70,7 +71,7 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClientV2, appConfig: AppConfig
       .put(new URI(url).toURL)
       .withBody(Json.toJson(request))
       .execute[HttpResponse]
-      .map { response: HttpResponse =>
+      .map { (response: HttpResponse) =>
         logResponse(response)
         val detail = Json.toJson(IssuerCall(IssuerRequest(request), IssuerResponse(response)))
         audit.sendTaxEnrolmentIssuerCallEvent(url, detail)

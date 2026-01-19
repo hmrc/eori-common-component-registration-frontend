@@ -87,7 +87,7 @@ class OrganisationTypeController @Inject() (
     )
 
   def form(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       subscriptionDetailsService.cachedOrganisationType map { orgType =>
         def filledForm: Form[CdsOrganisationType] = orgType.map(form.fill).getOrElse(form)
         requestSessionData.selectedUserLocation match {
@@ -107,7 +107,7 @@ class OrganisationTypeController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       form
         .bindFromRequest()
         .fold(

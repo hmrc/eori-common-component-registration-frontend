@@ -46,7 +46,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
   val thirdCountryIndividualNameDateOfBirthForm: Form[IndividualNameAndDateOfBirth] = rowCountryIndividualNameDateOfBirthFormProvider.form
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUser) =>
       if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else {
@@ -65,7 +65,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     }
 
   def reviewForm(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUser) =>
       if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else {
@@ -82,7 +82,7 @@ class RowIndividualNameDateOfBirthController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUser) =>
       assertOrganisationTypeIsValid(organisationType)
       thirdCountryIndividualNameDateOfBirthForm
         .bindFromRequest()

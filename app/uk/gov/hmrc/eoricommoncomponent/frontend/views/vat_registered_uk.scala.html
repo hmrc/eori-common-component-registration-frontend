@@ -42,9 +42,9 @@
         Map.empty,
         None,
         None,
-        '_divClass -> "createForm-group govuk-form-group",
-        '_legend -> titleAndHeadingLabel(isIndividualSubscriptionFlow, isPartnership, userLocation),
-        '_isLegendH1 -> true
+        Symbol("_divClass") -> "createForm-group govuk-form-group",
+        Symbol("_legend") -> titleAndHeadingLabel(isIndividualSubscriptionFlow, isPartnership, userLocation),
+        Symbol("_isLegendH1") -> true
     )
 }
 
@@ -52,7 +52,7 @@
     <div>
         @errorSummary(vatRegisteredUkYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-        @formWithCSRF(formAction(isInReviewMode, service), 'id -> "vat-registered-uk-createForm") {
+        @formWithCSRF(formAction(isInReviewMode, service), Symbol("id") -> "vat-registered-uk-createForm") {
 
             @displayInputRadioGroup(YesNo.yesAndNoAnswer,
                 Seq("true" -> messages("cds.yes"),

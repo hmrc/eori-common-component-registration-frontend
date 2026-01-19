@@ -31,7 +31,7 @@ object RegisterWithId {
         JsPath
           .write[RegisterWithIdSubmitted]
       )
-      .and(JsPath.write[RegisterWithIdConfirmation])(unlift(RegisterWithId.unapply))
+      .and(JsPath.write[RegisterWithIdConfirmation])((regWithId : RegisterWithId) => (regWithId.`type`, regWithId.request, regWithId.response))
 
   def apply(request: RegisterWithIdSubmitted, response: RegisterWithIdConfirmation): RegisterWithId =
     RegisterWithId(`type` = "RegisterWithId", request = request, response = response)

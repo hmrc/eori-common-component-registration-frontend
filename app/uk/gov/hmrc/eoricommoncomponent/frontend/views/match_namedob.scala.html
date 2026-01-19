@@ -37,7 +37,7 @@
 
         <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>
 
-        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NameDobController.submit(organisationType, service), 'id -> "matchIndividualForm") {
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NameDobController.submit(organisationType, service), Symbol("id") -> "matchIndividualForm") {
 
             @inputText(
                 form = businessDetailsForm,

@@ -61,7 +61,7 @@
     idPrefix = Some(field.id),
     name = field.name,
     hint = if(hasHint){
-        elements.args.get('_hintText).map(hintText => Hint(content = Text(hintText.toString), id = Some(hintId)))
+        elements.args.get(Symbol("_hintText")).map(hintText => Hint(content = Text(hintText.toString), id = Some(hintId)))
     } else {
         hintHtml.map(hintText => Hint(content = HtmlContent(hintText), classes = "govuk-body-s", id = Some(hintHtmlId)))
     },

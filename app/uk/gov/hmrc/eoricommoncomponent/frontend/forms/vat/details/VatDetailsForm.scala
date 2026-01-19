@@ -33,7 +33,7 @@ class VatDetailsForm(requestSessionData: RequestSessionData) extends Mappings {
       mapping(
         "postcode"   -> text.verifying(validPostcode(requestSessionData)),
         "vat-number" -> text.verifying(validVatNumber)
-      )((postCode, vat) => VatDetails.apply(postCode, vat.filterNot(_.isWhitespace)))(VatDetails.unapply)
+      )((postCode, vat) => VatDetails.apply(postCode, vat.filterNot(_.isWhitespace)))(vatDetails => Some(vatDetails.postcode, vatDetails.number))
     )
   }
 

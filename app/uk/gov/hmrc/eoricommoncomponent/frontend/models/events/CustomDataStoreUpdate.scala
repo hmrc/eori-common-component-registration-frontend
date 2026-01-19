@@ -49,6 +49,5 @@ object CustomsDataStoreUpdate {
   implicit val writes: Writes[CustomsDataStoreUpdate] =
     JsPath
       .write[UpdateRequest]
-      .and(JsPath.write[UpdateResponse])(unlift(CustomsDataStoreUpdate.unapply))
-
+      .and(JsPath.write[UpdateResponse])((cdsUpdate : CustomsDataStoreUpdate) => (cdsUpdate.request, cdsUpdate.response))
 }

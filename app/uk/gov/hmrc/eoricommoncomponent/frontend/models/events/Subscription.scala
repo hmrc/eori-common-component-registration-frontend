@@ -27,6 +27,5 @@ object Subscription {
   implicit val writes: Writes[Subscription] =
     JsPath
       .write[SubscriptionSubmitted]
-      .and(JsPath.write[SubscriptionResult])(unlift(Subscription.unapply))
-
+      .and(JsPath.write[SubscriptionResult])((sub : Subscription) => (sub.request, sub.response))
 }

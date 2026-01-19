@@ -54,7 +54,7 @@ class DateOfEstablishmentController @Inject() (
   val doeForm: Form[LocalDate] = dateOfEstablishmentForm.form()
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       (for {
         maybeCachedDateModel <- subscriptionBusinessService.maybeCachedDateEstablished
         orgType              <- orgTypeLookup.etmpOrgType
@@ -78,7 +78,7 @@ class DateOfEstablishmentController @Inject() (
   }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       (for {
         cachedDateModel <- fetchDate
         orgType         <- orgTypeLookup.etmpOrgType
@@ -95,7 +95,7 @@ class DateOfEstablishmentController @Inject() (
     subscriptionBusinessService.getCachedDateEstablished
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       doeForm
         .bindFromRequest()
         .fold(

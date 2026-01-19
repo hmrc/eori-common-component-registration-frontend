@@ -40,7 +40,7 @@ class ConfirmContactDetailsController @Inject() (
     extends CdsController(mcc) {
 
   def form(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       for {
         res    <- confirmContactDetailsService.handleAddressAndPopulateView(service, isInReviewMode)
         result <- sessionCacheService.individualAndSoleTraderRouter(
@@ -52,7 +52,7 @@ class ConfirmContactDetailsController @Inject() (
     }
 
   def submit(service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       YesNoWrongAddress
         .createForm()
         .bindFromRequest()
@@ -63,7 +63,7 @@ class ConfirmContactDetailsController @Inject() (
     }
 
   def processing(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
-    implicit request => _: LoggedInUserWithEnrolments =>
+    implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
       } yield Ok(sub01OutcomeProcessingView(processedDate, service))

@@ -56,7 +56,7 @@ object MatchingForms extends Mappings with Logging with Constraints {
       )
         .verifying(messages(invalidErrorMsgKey), _.isDefined)
         .transform[Boolean](str => str.get.toBoolean, bool => Option(String.valueOf(bool)))
-    )(VatVerificationOption.apply)(VatVerificationOption.unapply)
+    )(VatVerificationOption.apply)(vatVerificationOption => Some(vatVerificationOption.isDateOption))
   )
 
   private def createYesNoAnswerForm(invalidErrorMsgKey: String)(implicit messages: Messages): Form[YesNo] = Form(
@@ -64,7 +64,7 @@ object MatchingForms extends Mappings with Logging with Constraints {
       YesNo.yesAndNoAnswer -> optional(text.verifying(messages(invalidErrorMsgKey), oneOf(validYesNoAnswerOptions)))
         .verifying(messages(invalidErrorMsgKey), _.isDefined)
         .transform[Boolean](str => str.get.toBoolean, bool => Option(String.valueOf(bool)))
-    )(YesNo.apply)(YesNo.unapply)
+    )(YesNo.apply)(yesNo => Some(yesNo.isYes))
   )
 
   val countryCodeGB = "GB"

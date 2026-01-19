@@ -49,7 +49,7 @@ class PostcodeLookupResultsController @Inject() (
     extends CdsController(mcc) {
 
   def displayPage(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       displayPage(service)
     }
 
@@ -103,7 +103,7 @@ class PostcodeLookupResultsController @Inject() (
   }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       sessionCache.getPostcodeAndLine1Details.flatMap {
         case Some(addressLookupParams) =>
           addressLookupConnector

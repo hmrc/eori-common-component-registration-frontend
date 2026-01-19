@@ -47,7 +47,7 @@ class ValidatePostcodeFormSpec extends AnyFreeSpec with Matchers {
   case class Model(countryCode: String, postcode: Option[String])
 
   lazy val form = Form(
-    mapping("countryCode" -> nonEmptyText, "postcode" -> mandatoryOptPostCodeMapping)(Model.apply)(Model.unapply)
+    mapping("countryCode" -> nonEmptyText, "postcode" -> mandatoryOptPostCodeMapping)(Model.apply)(model => Some(model.countryCode, model.postcode))
   )
 
 }

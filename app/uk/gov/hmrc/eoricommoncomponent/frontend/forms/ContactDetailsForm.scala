@@ -34,7 +34,7 @@ class ContactDetailsForm() {
         "full-name"                    -> text.verifying(validFullName),
         EmailVerificationKeys.EmailKey -> optional(text),
         "telephone"                    -> text.verifying(validPhone)
-      )(ContactDetailsViewModel.apply)(ContactDetailsViewModel.unapply)
+      )(ContactDetailsViewModel.apply)(contactDetailsViewModel => Some(contactDetailsViewModel.fullName, contactDetailsViewModel.emailAddress, contactDetailsViewModel.telephone))
     )
 
   private def validPhone: Constraint[String] =
