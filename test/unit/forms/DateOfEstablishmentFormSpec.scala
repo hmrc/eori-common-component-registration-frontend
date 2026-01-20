@@ -25,15 +25,14 @@ import java.time.{LocalDate, Year}
 import scala.collection.immutable.ArraySeq
 import org.scalatest.matchers.should.Matchers.*
 
-
 class DateOfEstablishmentFormSpec extends UnitSpec {
 
   val form: Form[LocalDate] = new DateOfEstablishmentForm().form()
 
   val formDataDoE: Map[String, String] = Map(
-    "date-of-establishment.day" -> "1",
+    "date-of-establishment.day"   -> "1",
     "date-of-establishment.month" -> "1",
-    "date-of-establishment.year" -> "2019"
+    "date-of-establishment.year"  -> "2019"
   )
 
   "Date of establishment form" should {
@@ -87,9 +86,9 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
 
     "fail with a month error, when month is populated with blanks" in {
       val data = Map(
-        "date-of-establishment.day" -> "1",
+        "date-of-establishment.day"   -> "1",
         "date-of-establishment.month" -> " ",
-        "date-of-establishment.year" -> "2019"
+        "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
       res.errors shouldBe Seq(
@@ -99,9 +98,9 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
 
     "fail when the date is invalid" in {
       val data = Map(
-        "date-of-establishment.day" -> "31",
+        "date-of-establishment.day"   -> "31",
         "date-of-establishment.month" -> "2",
-        "date-of-establishment.year" -> "2019"
+        "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment", List("doe.error.invalid-date"), List()))
@@ -109,9 +108,9 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
 
     "pass when the date has a day of 31" in {
       val data = Map(
-        "date-of-establishment.day" -> "31",
+        "date-of-establishment.day"   -> "31",
         "date-of-establishment.month" -> "1",
-        "date-of-establishment.year" -> "2019"
+        "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
       res.errors shouldBe Nil
@@ -119,9 +118,9 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
 
     "fail when the date contains a day greater than 31" in {
       val data = Map(
-        "date-of-establishment.day" -> "32",
+        "date-of-establishment.day"   -> "32",
         "date-of-establishment.month" -> "1",
-        "date-of-establishment.year" -> "2019"
+        "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.day", Seq("date.day.error"), Seq()))
@@ -129,9 +128,9 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
 
     "pass when the date has a month of 12" in {
       val data = Map(
-        "date-of-establishment.day" -> "31",
+        "date-of-establishment.day"   -> "31",
         "date-of-establishment.month" -> "12",
-        "date-of-establishment.year" -> "2019"
+        "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
       res.errors shouldBe Nil
@@ -139,9 +138,9 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
 
     "fail when the date contains a month greater than 12" in {
       val data = Map(
-        "date-of-establishment.day" -> "31",
+        "date-of-establishment.day"   -> "31",
         "date-of-establishment.month" -> "13",
-        "date-of-establishment.year" -> "2019"
+        "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
       res.errors shouldBe Seq(FormError("date-of-establishment.month", Seq("date.month.error"), Seq()))
@@ -149,9 +148,9 @@ class DateOfEstablishmentFormSpec extends UnitSpec {
 
     "fail when the date contains a day greater than 31 and a month greater than 12" in {
       val data = Map(
-        "date-of-establishment.day" -> "32",
+        "date-of-establishment.day"   -> "32",
         "date-of-establishment.month" -> "13",
-        "date-of-establishment.year" -> "2019"
+        "date-of-establishment.year"  -> "2019"
       )
       val res = form.bind(data)
       res.errors shouldBe Seq(
