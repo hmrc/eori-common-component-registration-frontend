@@ -21,6 +21,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.ContactDetail
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.CommonHeader
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactDetails
 
+import java.time.temporal.ChronoUnit
 import java.time.{Clock, LocalDateTime, ZoneId}
 
 case class ContactInformation(
@@ -34,7 +35,7 @@ case class ContactInformation(
   faxNumber: Option[String] = None,
   emailAddress: Option[String] = None,
   emailVerificationTimestamp: Option[LocalDateTime] = Some(
-    LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London"))
+    LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London")).withNano(0)
   )
 ) {
 
