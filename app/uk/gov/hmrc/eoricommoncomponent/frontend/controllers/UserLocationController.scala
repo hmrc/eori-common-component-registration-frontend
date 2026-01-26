@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -161,10 +161,8 @@ class UserLocationController @Inject() (
     case rResponse @ Right(RegistrationDisplayResponse(_, Some(_))) =>
       registrationDisplayService.cacheDetails(rResponse.value).flatMap { _ =>
         save4LaterService.saveUserLocation(groupId, location).map { _ =>
-          Redirect(BusinessDetailsRecoveryController.form(service)).withSession(
-            requestSessionData.sessionWithUserLocationAdded(location)
-          )
-
+          Redirect(OrganisationTypeController.form(service))
+            .withSession(requestSessionData.sessionWithUserLocationAdded(location))
         }
       }
     case _ => Future.successful(InternalServerError(errorTemplate(service)))
