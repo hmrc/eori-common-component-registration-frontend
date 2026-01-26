@@ -198,7 +198,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
     ) {}
     implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
-    "cache registration display response and redirect to BusinessDetailsRecoveryPage for individual response" in {
+    "cache registration display response and redirect to OrganisationTypeController for individual response" in {
       val responseDetail = ResponseDetail(
         "",
         None,
@@ -217,10 +217,10 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+      header(LOCATION, result).value should endWith(OrganisationTypeController.form(atarService).url)
     }
 
-    "cache registration display response and redirect to BusinessDetailsRecoveryPage for organisation response" in {
+    "cache registration display response and redirect to OrganisationTypeController for organisation response" in {
       val responseDetail = ResponseDetail(
         "",
         None,
@@ -239,7 +239,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
       val result = test(Right(RegistrationDisplayResponse(mock[ResponseCommon], Some(responseDetail))))
 
       status(result) shouldBe SEE_OTHER
-      header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+      header(LOCATION, result).value should endWith(OrganisationTypeController.form(atarService).url)
     }
 
     "return service unavailable response when failed to retrieve registration display response" in {
@@ -334,7 +334,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           header(LOCATION, result).value should endWith(SubscriptionRecoveryController.complete(atarService).url)
         }
       }
-      s"redirect to BusinessDetailsRecoveryController when NewSubscription status and registration display is enabled and when '$selectedOptionValue' is selected" in {
+      s"redirect to OrganisationTypeController when NewSubscription status and registration display is enabled and when '$selectedOptionValue' is selected" in {
         val mockResponseCommon = mock[ResponseCommon]
         val mockResponseDetail = mock[ResponseDetail]
 
@@ -374,10 +374,10 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           )
 
         status(result) shouldBe SEE_OTHER
-        header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+        header(LOCATION, result).value should endWith(OrganisationTypeController.form(atarService).url)
       }
 
-      s"redirect to BusinessDetailsRecoveryController when SubscriptionRejected status and registration display is enabled and when '$selectedOptionValue' is selected" in {
+      s"redirect to OrganisationTypeController when SubscriptionRejected status and registration display is enabled and when '$selectedOptionValue' is selected" in {
         val mockResponseCommon = mock[ResponseCommon]
         val mockResponseDetail = mock[ResponseDetail]
 
@@ -417,7 +417,7 @@ class UserLocationControllerSpec extends ControllerSpec with MockitoSugar with B
           )
 
         status(result) shouldBe SEE_OTHER
-        header(LOCATION, result).value should endWith(BusinessDetailsRecoveryController.form(atarService).url)
+        header(LOCATION, result).value should endWith(OrganisationTypeController.form(atarService).url)
       }
 
     } else if (selectedOptionValue == UserLocation.Uk)

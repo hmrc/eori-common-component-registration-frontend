@@ -161,10 +161,8 @@ class UserLocationController @Inject() (
     case rResponse @ Right(RegistrationDisplayResponse(_, Some(_))) =>
       registrationDisplayService.cacheDetails(rResponse.value).flatMap { _ =>
         save4LaterService.saveUserLocation(groupId, location).map { _ =>
-          Redirect(BusinessDetailsRecoveryController.form(service)).withSession(
-            requestSessionData.sessionWithUserLocationAdded(location)
-          )
-
+          Redirect(OrganisationTypeController.form(service))
+            .withSession(requestSessionData.sessionWithUserLocationAdded(location))
         }
       }
     case _ => Future.successful(InternalServerError(errorTemplate(service)))
