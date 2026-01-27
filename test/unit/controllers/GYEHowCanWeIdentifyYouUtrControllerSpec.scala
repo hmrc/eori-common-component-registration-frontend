@@ -16,6 +16,8 @@
 
 package unit.controllers
 
+import cats.data.EitherT
+import common.pages.RegisterHowCanWeIdentifyYouPage
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -23,6 +25,7 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouUtrController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingResponse, RegisterWithIDResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
@@ -69,7 +72,8 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
     mockRequestSessionData,
     sessionCacheService,
     mockMatchingService,
-    mockSubscriptionUtrFormProvider
+    mockSubscriptionUtrFormProvider,
+    errorView
   )(global)
 
   "Viewing the form " should {
@@ -112,7 +116,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
 
       when(
-        mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Utr(utr)))))(any[Request[_]])
+        mockFrontendDataCache.saveNinoOrUtrDetails(any())(any[Request[_]])
       ).thenReturn(Future.successful(true))
 
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
@@ -126,24 +130,106 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
             any[Request[_]]
           )
       ).thenReturn(
-        eitherT[MatchingResponse](
-          MatchingResponse(
-            RegisterWithIDResponse(
-              ResponseCommon(
-                "OK",
-                Some("002 - No match found"),
-                LocalDate.now.atTime(8, 35, 2),
-                Some(List(MessagingServiceParam("POSITION", "FAIL")))
-              ),
-              None
+        EitherT.right(
+          Future {
+            MatchingResponse(
+              RegisterWithIDResponse(
+                ResponseCommon(
+                  "OK",
+                  Some("002 - No match found"),
+                  LocalDate.now.atTime(8, 35, 2),
+                  Some(List(MessagingServiceParam("POSITION", "FAIL")))
+                ),
+                None
+              )
             )
-          )
+          }
         )
       )
 
       submitForm(Map("utr" -> utr)) { result =>
         status(result) shouldBe SEE_OTHER
         header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
+      }
+    }
+
+    "give a page level error when a UTR is not matched" in {
+      val utr = "2108834503"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+
+      when(
+        mockFrontendDataCache.saveNinoOrUtrDetails(any())(any[Request[_]])
+      ).thenReturn(Future.successful(true))
+
+      when(
+        mockMatchingService
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      )
+        .thenReturn(EitherT.left(Future { MatchingServiceConnector.matchFailureResponse }))
+
+      submitForm(Map("utr" -> utr)) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
+        ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
+      }
+    }
+
+    "give a error-template page when a downstreamFailureResponse happens" in {
+      val utr = "2108834503"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+
+      when(
+        mockFrontendDataCache.saveNinoOrUtrDetails(any())(any[Request[_]])
+      ).thenReturn(Future.successful(true))
+
+      when(
+        mockMatchingService
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      )
+        .thenReturn(EitherT.left(Future { MatchingServiceConnector.downstreamFailureResponse }))
+
+      submitForm(Map("utr" -> utr)) { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+      }
+    }
+
+    "give a error-template page when a any other error occurred" in {
+      val utr = "2108834503"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+
+      when(
+        mockFrontendDataCache.saveNinoOrUtrDetails(any())(any[Request[_]])
+      ).thenReturn(Future.successful(true))
+
+      when(
+        mockMatchingService
+          .matchIndividualWithId(ArgumentMatchers.eq(Utr(utr)), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      )
+        .thenReturn(EitherT.left(Future { MatchingServiceConnector.otherErrorHappen }))
+
+      submitForm(Map("utr" -> utr)) { result =>
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
       }
     }
 
@@ -155,7 +241,7 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
       when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
 
       when(
-        mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Utr(utr)))))(any[Request[_]])
+        mockFrontendDataCache.saveNinoOrUtrDetails(any())(any[Request[_]])
       ).thenReturn(Future.successful(true))
 
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
@@ -169,18 +255,20 @@ class GYEHowCanWeIdentifyYouUtrControllerSpec extends ControllerSpec with Before
             any[Request[_]]
           )
       ).thenReturn(
-        eitherT[MatchingResponse](
-          MatchingResponse(
-            RegisterWithIDResponse(
-              ResponseCommon(
-                "OK",
-                Some("002 - No match found"),
-                LocalDate.now.atTime(8, 35, 2),
-                Some(List(MessagingServiceParam("POSITION", "FAIL")))
-              ),
-              None
+        EitherT.right(
+          Future {
+            MatchingResponse(
+              RegisterWithIDResponse(
+                ResponseCommon(
+                  "OK",
+                  Some("002 - No match found"),
+                  LocalDate.now.atTime(8, 35, 2),
+                  Some(List(MessagingServiceParam("POSITION", "FAIL")))
+                ),
+                None
+              )
             )
-          )
+          }
         )
       )
 
