@@ -45,7 +45,7 @@
         @errorSummary(matchOrgNameForm.errors)
 
         <div class="govuk-form-group">
-            @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrgNameController.submit(isInReviewMode, organisationType, service), 'id -> "matchOrganisationNameForm") {
+            @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrgNameController.submit(isInReviewMode, organisationType, service), Symbol("id") -> "matchOrganisationNameForm") {
 
                 @inputText(
                     form = matchOrgNameForm,

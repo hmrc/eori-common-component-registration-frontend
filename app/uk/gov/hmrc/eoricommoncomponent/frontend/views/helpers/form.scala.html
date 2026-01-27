@@ -16,4 +16,4 @@
 
 @(action: play.api.mvc.Call, id: String = "form")(body: => Html)
 
-@helper.form(action,'id -> id, 'novalidate -> "")(body)
+@helper.form(action,Symbol("id") -> id, Symbol("novalidate") -> "")(body)

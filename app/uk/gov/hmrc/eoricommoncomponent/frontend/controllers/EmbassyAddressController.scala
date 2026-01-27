@@ -46,7 +46,7 @@ class EmbassyAddressController @Inject() (
     extends CdsController(mcc) {
 
   def showForm(isInReviewMode: Boolean = false, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       sessionCache.registrationDetails.map { regDetails =>
         val addr = regDetails.address
         val embassyAddrModel = EmbassyAddressMatchModel(
@@ -73,7 +73,7 @@ class EmbassyAddressController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean = false, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       val filledForm = embassyAddressForm.form.bindFromRequest()
 
       val (countriesToInclude, countriesInCountryPicker) =

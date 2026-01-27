@@ -33,9 +33,8 @@ object YesNoWrongAddress {
       mapping(
         "yes-no-wrong-address" ->
           optional(text).verifying("yes-no-wrong-address.error", x => x.fold(false)(oneOf(validYesNoWrongAddress)))
-      )(YesNoWrongAddress.apply)(YesNoWrongAddress.unapply)
+      )(YesNoWrongAddress.apply)(yesNoWrongAddress => Some(yesNoWrongAddress.yesNoWrongAddress))
     )
-
 }
 
 case class YesNoWrongAddress(yesNoWrongAddress: Option[String]) {

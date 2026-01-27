@@ -39,7 +39,7 @@
 
         <h1 class="govuk-heading-l">@messages("cds.matching.individual.header")</h1>
 
-        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController.submit(isInReviewMode, organisationType, service), 'id -> s"$organisationType-form") {
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController.submit(isInReviewMode, organisationType, service), Symbol("id") -> s"$organisationType-form") {
             @inputText(
                 form = individualNameAndDateOfBirthForm,
                 id = "given-name",

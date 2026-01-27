@@ -35,7 +35,7 @@
 
         @errorSummary(DateConverter.updateDateOfEstablishmentErrors(dateForm.errors), focusOverrides = Map("date-of-establishment" -> "date-of-establishment.day"))
 
-        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController.submit(isInReviewMode, service), 'id -> "date-of-birth-form") {
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DateOfEstablishmentController.submit(isInReviewMode, service), Symbol("id") -> "date-of-birth-form") {
 
             @inputDate_di(
                 form = dateForm.copy(errors = DateConverter.updateDateOfEstablishmentErrors(dateForm.errors)),

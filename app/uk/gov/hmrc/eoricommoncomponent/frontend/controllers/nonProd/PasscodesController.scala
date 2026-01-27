@@ -35,7 +35,7 @@ class PasscodesController @Inject() (
     with EnrolmentExtractor {
 
   def getEmailVerificationPasscodes: Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       connector.getPasscodes.map(response => Ok(response.body))
     }
 

@@ -44,16 +44,16 @@
         options.flatMap(option => option._3.map(option._1 -> _)).toMap,
         None,
         None,
-        '_divClass -> "govuk-form-group",
-        '_legend -> title,
-        '_isLegendH1 -> true)
+        Symbol("_divClass") -> "govuk-form-group",
+        Symbol("_legend") -> title,
+        Symbol("_isLegendH1") -> true)
 }
 
 @layout_di(title, form = Some(ninoUtrForm), service = service) {
     <div>
         @errorSummary(ninoUtrForm.errors, focusOverrides = Map("ninoOrUtrRadio" -> "ninoOrUtrRadio-nino"))
 
-        @formWithCSRF(HowCanWeIdentifyYouController.submit(service), 'id -> "nino-utr-form") {
+        @formWithCSRF(HowCanWeIdentifyYouController.submit(service), Symbol("id") -> "nino-utr-form") {
 
             @displayInputRadioGroup("ninoOrUtrRadio", validOptions)
 

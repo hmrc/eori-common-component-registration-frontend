@@ -55,7 +55,7 @@
 @layout_di(headerAndTitle(organisationType, userLocation), form = Some(matchOrgIdForm), service = service) {
         @errorSummary(matchOrgIdForm.errors, focusOverrides = Map("have-utr" -> "have-utr-true"))
 
-            @formWithCSRF(routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), 'id -> "matchOrganisationUtrForm") {
+            @formWithCSRF(routes.DoYouHaveAUtrNumberController.submit(organisationType, service, isInReviewMode), Symbol("id") -> "matchOrganisationUtrForm") {
             <div class="govuk-form-group">
                 @displayInputRadioGroup("have-utr",
                     Seq("true" -> messages("cds.yes"),

@@ -25,7 +25,7 @@ import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.{PostcodeLookupResultsController, routes}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostcodeLookupResultsController as PostcodeLookupResultsControllerRoutes
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressResultsForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
@@ -53,7 +53,7 @@ class PostcodeLookupResultsControllerSpec extends SubscriptionFlowTestSupport wi
   val invalidForm: Map[String, String] = Map()
 
   def submitInCreateModeUrl: String =
-    PostcodeLookupResultsController.submit(atarService).url
+    PostcodeLookupResultsControllerRoutes.submit(atarService).url
 
   private val mockSessionCache = mock[SessionCache]
   private val mockAddressLookupConnector = mock[AddressLookupConnector]

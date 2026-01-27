@@ -33,9 +33,9 @@
     Map.empty,
     None,
     None,
-    '_divClass -> "govuk-form-group inline",
-    '_legend -> messages("cds.registration.vat-registered-uk.title"),
-    '_isLegendH1 -> true)
+    Symbol("_divClass") -> "govuk-form-group inline",
+    Symbol("_legend") -> messages("cds.registration.vat-registered-uk.title"),
+    Symbol("_isLegendH1") -> true)
 }
 
 @formAction = @{
@@ -46,7 +46,7 @@ uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.VatRegisteredUkKanaC
 <div>
     @errorSummary(vatRegisteredUkYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-    @formWithCSRF(formAction, 'id -> "yes-no-form") {
+    @formWithCSRF(formAction, Symbol("id") -> "yes-no-form") {
 
         @displayInputRadioGroup(
             YesNo.yesAndNoAnswer,

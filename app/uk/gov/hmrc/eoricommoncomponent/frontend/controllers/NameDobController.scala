@@ -47,7 +47,7 @@ class NameDobController @Inject() (
   private val nameDobForm = nameDobFormProvider.enterNameDobForm
 
   def form(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
@@ -55,7 +55,7 @@ class NameDobController @Inject() (
     }
 
   def submit(organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       nameDobForm
         .bindFromRequest()
         .fold(

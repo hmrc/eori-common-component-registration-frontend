@@ -47,16 +47,16 @@
     options.flatMap(option => option._3.map(option._1 -> _)).toMap,
     Some(Html(messages("cds.registration.user-location.hint"))),
     None,
-    '_divClass -> "govuk-form-group",
-    '_legend -> title,
-    '_isLegendH1 -> true)
+    Symbol("_divClass") -> "govuk-form-group",
+    Symbol("_legend") -> title,
+    Symbol("_isLegendH1") -> true)
 }
 
 @layout_di(title, form = Some(userLocationForm), service = service) {
     <div>
         @errorSummary(userLocationForm.errors, focusOverrides = Map("location" -> s"location-${validOptions.head._1}"))
 
-        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UserLocationController.submit(service), 'id -> "user-location-form") {
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.UserLocationController.submit(service), Symbol("id") -> "user-location-form") {
 
             @displayInputRadioGroup("location", validOptions)
 

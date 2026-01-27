@@ -37,7 +37,7 @@ class NameIdOrganisationFormProvider() extends Constraints {
           )
         ),
         "utr"  -> text.verifying(validUtr)
-      )(NameIdOrganisationMatchModel.apply)(NameIdOrganisationMatchModel.unapply)
+      )(NameIdOrganisationMatchModel.apply)(nameIdOrgMatchModel => Some(nameIdOrgMatchModel.name, nameIdOrgMatchModel.id))
     )
   }
 
@@ -52,7 +52,7 @@ class NameIdOrganisationFormProvider() extends Constraints {
           )
         ),
         "utr"  -> text.verifying(validUtr)
-      )(NameIdOrganisationMatchModel.apply)(NameIdOrganisationMatchModel.unapply)
+      )(NameIdOrganisationMatchModel.apply)(nameIdOrgMatchModel => Some(nameIdOrgMatchModel.name, nameIdOrgMatchModel.id))
     )
   }
 
@@ -67,7 +67,7 @@ class NameIdOrganisationFormProvider() extends Constraints {
           )
         ),
         "utr"  -> text.verifying(validUtr)
-      )(NameIdOrganisationMatchModel.apply)(NameIdOrganisationMatchModel.unapply)
+      )(NameIdOrganisationMatchModel.apply)(nameIdOrgMatchModel => Some(nameIdOrgMatchModel.name, nameIdOrgMatchModel.id))
     )
   }
 

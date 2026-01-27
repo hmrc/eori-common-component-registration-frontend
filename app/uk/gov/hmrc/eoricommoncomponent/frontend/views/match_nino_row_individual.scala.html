@@ -48,7 +48,7 @@
     <div>
         @errorSummary(matchNinoIdForm.errors, focusOverrides = Map("have-nino" -> "have-nino-true"))
 
-        @formWithCSRF(DoYouHaveNinoController.submit(service), 'id -> "matchRowIndividualsNinoForm") {
+        @formWithCSRF(DoYouHaveNinoController.submit(service), Symbol("id") -> "matchRowIndividualsNinoForm") {
 
             <div class="govuk-form-group">
                 @displayInputRadioGroup("have-nino", Seq("true" -> messages("cds.yes"), "false" -> messages("cds.no")))

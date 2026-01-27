@@ -36,7 +36,7 @@
 @layout_di(messages("cds.subscription.vat-registration.vat-return.title"), form = Some(vatReturnForm), service = service) {
   <div>
    @errorSummary(vatReturnForm.errors)
-   @formWithCSRF(vatFormAction, 'id -> "vat-return-form") {
+   @formWithCSRF(vatFormAction, Symbol("id") -> "vat-return-form") {
 
     <h1 class="govuk-heading-l">@messages("cds.subscription.vat-registration.vat-return.title")</h1>
     <p class="govuk-body">@messages("cds.subscription.vat-registration.vat-return.para1")</p>

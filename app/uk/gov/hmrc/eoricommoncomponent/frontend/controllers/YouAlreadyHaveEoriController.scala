@@ -41,13 +41,13 @@ class YouAlreadyHaveEoriController @Inject() (
 
   // Note: permitted for user with service enrolment
   def display(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithServiceAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithServiceAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       Future.successful(Ok(eoriExistsView(service)))
     }
 
   // Note: permitted for user with service enrolment
   def displayStandAlone(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithServiceAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithServiceAction { implicit request => (loggedInUser: LoggedInUserWithEnrolments) =>
       sessionCache.eori.map(eoriNumber =>
         Ok(
           standAloneEoriExistsView(

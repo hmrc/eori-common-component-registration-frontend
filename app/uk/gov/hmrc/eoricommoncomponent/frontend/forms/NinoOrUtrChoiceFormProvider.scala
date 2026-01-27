@@ -30,7 +30,7 @@ class NinoOrUtrChoiceFormProvider() {
       mapping(
         "ninoOrUtrRadio" -> optional(text)
           .verifying("cds.subscription.nino.utr.invalid", _.fold(false)(x => x.trim.nonEmpty))
-      )(NinoOrUtrChoice.apply)(NinoOrUtrChoice.unapply)
+      )(NinoOrUtrChoice.apply)(ninoUtrChoice => Some(ninoUtrChoice.ninoOrUtrRadio))
     )
   }
 }

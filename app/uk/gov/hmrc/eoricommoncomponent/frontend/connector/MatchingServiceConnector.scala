@@ -27,6 +27,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching._
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{RegisterWithId, RegisterWithIdConfirmation, RegisterWithIdSubmitted}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

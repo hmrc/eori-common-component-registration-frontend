@@ -37,16 +37,16 @@
         Map.empty,
         None,
         None,
-        '_divClass -> "form-group",
-        '_legend -> messages("cds.confirm-individual-type.heading"),
-        '_isLegendH1 -> true)
+        Symbol("_divClass") -> "form-group",
+        Symbol("_legend") -> messages("cds.confirm-individual-type.heading"),
+        Symbol("_isLegendH1") -> true)
 }
 
 @layout_di(messages("cds.confirm-individual-type.title"), form = Some(confirmationForm), service = service) {
     <div>
         @errorSummary(confirmationForm.errors, focusOverrides = Map("individual-type" -> s"individual-type-${validOptions.head._1}"))
 
-        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController.submit(service), 'id -> "confirm-individual-type-form") {
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ConfirmIndividualTypeController.submit(service), Symbol("id") -> "confirm-individual-type-form") {
 
             @displayInputRadioGroup("individual-type", validOptions)
 

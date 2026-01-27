@@ -52,7 +52,7 @@ class Sub02Controller @Inject() (
   private val logger = Logger(this.getClass)
 
   def subscribe(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (loggedInUser: LoggedInUserWithEnrolments) =>
       val selectedOrganisationType: Option[CdsOrganisationType] =
         requestSessionData.userSelectedOrganisationType
       val internalId = InternalId(loggedInUser.internalId)
@@ -93,7 +93,7 @@ class Sub02Controller @Inject() (
   def subscriptionNextSteps(service: Service): String =
     s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
 
-  def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+  def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
     for {
       sub02Outcome <- sessionCache.sub02Outcome
       sub01Outcome <- sessionCache.sub01Outcome
@@ -124,7 +124,7 @@ class Sub02Controller @Inject() (
   }
 
   def eoriAlreadyExists(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
@@ -133,7 +133,7 @@ class Sub02Controller @Inject() (
     }
 
   def eoriAlreadyAssociated(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
@@ -142,7 +142,7 @@ class Sub02Controller @Inject() (
     }
 
   def subscriptionInProgress(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         submissionCompleteDetails <- sessionCache.submissionCompleteDetails
         _                         <- sessionCache.journeyCompleted
@@ -150,13 +150,13 @@ class Sub02Controller @Inject() (
     }
 
   def requestNotProcessed(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         _ <- sessionCache.journeyCompleted
       } yield InternalServerError(sub02RequestNotProcessed(service))
     }
 
-  def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+  def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
     for {
       sub01Outcome <- sessionCache.sub01Outcome
       _            <- sessionCache.journeyCompleted

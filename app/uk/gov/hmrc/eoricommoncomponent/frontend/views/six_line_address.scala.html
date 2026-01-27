@@ -49,7 +49,7 @@
 
         @h1(messages(headerLabel(cdsOrgType)))
 
-        @formWithCSRF(routes.SixLineAddressController.submit(isInReviewMode, cdsOrgType, service), 'id -> s"$cdsOrgType-form") {
+        @formWithCSRF(routes.SixLineAddressController.submit(isInReviewMode, cdsOrgType, service), Symbol("id") -> s"$cdsOrgType-form") {
 
             @inputText(
                 form = addressForm,

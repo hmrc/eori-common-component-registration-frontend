@@ -32,7 +32,7 @@ class PostcodeForm() extends Constraints {
       mapping(
         "postcode"     -> text.verifying(validPostcode),
         "addressLine1" -> optional(text.verifying(addressLine1))
-      )(PostcodeViewModel.apply)(PostcodeViewModel.unapply)
+      )(PostcodeViewModel.apply)(postCodeVM => Some(postCodeVM.postcode, postCodeVM.addressLine1))
     )
 
   private def addressLine1: Constraint[String] =

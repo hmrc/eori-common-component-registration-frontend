@@ -57,12 +57,12 @@ class SubscriptionRecoveryController @Inject() (
   private val logger: Logger = Logger(this.getClass)
 
   def complete(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithServiceAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithServiceAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       subscribeGetAnEori(service)
     }
 
   def eoriExist(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithServiceAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithServiceAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         eori <- sessionCache.eori
       } yield Ok(alreadyHaveEori(eori, service))

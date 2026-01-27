@@ -61,7 +61,7 @@ appConfig:AppConfig, h1: helpers.h1, p: helpers.paragraph, link: helpers.linkWit
 }
 @layout_di(heading, form = Some(vatForm), service = service) {
         @errorSummary(vatForm.errors.reverse)
-        @formWithCSRF(formAction, 'id -> "vat-details-form") {
+        @formWithCSRF(formAction, Symbol("id") -> "vat-details-form") {
             @h1(heading)
             @p(messages("cds.subscription.vat-details.intro-text"), Some("intro-text"))
             @link(messages("cds.subscription.vat-details.intro-text.link"),

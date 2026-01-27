@@ -38,7 +38,7 @@ class RowCountryIndividualNameDateOfBirthFormProvider() extends Mappings {
           localDate(emptyKey = "dob.error.empty-date", invalidKey = "dob.error.invalid-date")
             .verifying(minDate(LocalDate.of(earliestYearDateOfBirth, 1, 1), "dob.error.minMax", earliestYearDateOfBirth.toString))
             .verifying(maxDate(LocalDate.now(), "dob.error.minMax", earliestYearDateOfBirth.toString))
-      )(IndividualNameAndDateOfBirth.apply)(IndividualNameAndDateOfBirth.unapply)
+      )(IndividualNameAndDateOfBirth.apply)(indNameDOB => Some(indNameDOB.firstName, indNameDOB.lastName, indNameDOB.dateOfBirth))
     )
   }
 

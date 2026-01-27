@@ -38,7 +38,7 @@ class AddressController @Inject() (
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
+    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => (user: LoggedInUserWithEnrolments) =>
       addressService
         .populateOkView(None, isInReviewMode = false, service)
         .flatMap(
@@ -51,7 +51,7 @@ class AddressController @Inject() (
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => user: LoggedInUserWithEnrolments =>
+    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => (user: LoggedInUserWithEnrolments) =>
       addressService
         .populateViewIfContactDetailsCached(service)
         .flatMap(
@@ -64,7 +64,7 @@ class AddressController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       addressService.handleFormDataAndRedirect(addressDetailsForm.addressDetailsCreateForm(), isInReviewMode, service)
     }
 
