@@ -16,17 +16,22 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import cats.data.EitherT
 import play.api.data.Form
+import play.api.i18n.Messages
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.MatchingResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionNinoFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.MatchingService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +45,8 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
   requestSessionData: RequestSessionData,
   matchingService: MatchingService,
   sessionCacheService: SessionCacheService,
-  subscriptionNinoFormProvider: SubscriptionNinoFormProvider
+  subscriptionNinoFormProvider: SubscriptionNinoFormProvider,
+  errorView: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -79,17 +85,47 @@ class GYEHowCanWeIdentifyYouNinoController @Inject() (
                 )
               )
             ),
-          ninoForm =>
-            for {
-              _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id))))
-              ind <- sessionCacheService.retrieveNameDobFromCache()
-              _ = matchingService.matchIndividualWithNino(
-                    ninoForm.id,
-                    ind,
-                    GroupId(loggedInUser.groupId.getOrElse(throw new Exception("GroupId does not exists")))
+          ninoForm => {
+            sessionCache
+              .saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(ninoForm.id))))
+              .flatMap { saved =>
+                matchOnId(ninoForm, GroupId(loggedInUser.groupId.getOrElse(throw new Exception("GroupId does not exists"))))
+                  .fold(
+                    {
+                      case MatchingServiceConnector.matchFailureResponse => matchNotFoundBadRequest(ninoForm, service)
+                      case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+                      case _ => InternalServerError(errorView(service))
+                    },
+                    matchingResponse => Redirect(PostCodeController.createForm(service))
                   )
-            } yield Redirect(PostCodeController.createForm(service))
+              }
+          }
         )
     }
+
+  private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
+    hc: HeaderCarrier,
+    request: Request[_]
+  ): EitherT[Future, ResponseError, MatchingResponse] = {
+
+    EitherT {
+      sessionCacheService
+        .retrieveNameDobFromCache()
+        .flatMap(ind => matchingService.matchIndividualWithNino(formData.id, ind, groupId).value)
+    }
+  }
+
+  private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service)(implicit request: Request[AnyContent]): Result = {
+    val errorForm = form.withGlobalError(Messages("cds.matching-error.individual-not-found")).fill(individualFormData)
+
+    BadRequest(
+      howCanWeIdentifyYouView(
+        errorForm,
+        isInReviewMode = false,
+        routes.GYEHowCanWeIdentifyYouNinoController.submit(service),
+        service = service
+      )
+    )
+  }
 
 }

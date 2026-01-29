@@ -22,9 +22,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 import scala.concurrent.Future
 
 trait ResponseErrorEitherT {
-  def eitherT[A](a: A) = EitherT[Future, ResponseError, A](Future.successful(Right(a)))
+  def eitherT[A](a: A): EitherT[Future, ResponseError, A] = EitherT[Future, ResponseError, A](Future.successful(Right(a)))
 
-  def eitherT[A](responseError: ResponseError) =
+  def eitherT[A](responseError: ResponseError): EitherT[Future, ResponseError, A] =
     EitherT[Future, ResponseError, A](Future.successful(Left(responseError)))
 
 }

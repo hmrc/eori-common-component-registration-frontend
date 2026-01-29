@@ -16,11 +16,15 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
+import cats.data.EitherT
 import play.api.data.Form
+import play.api.i18n.Messages
 import play.api.mvc._
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{MatchingServiceConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.MatchingResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.isRow
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.SubscriptionUtrFormProvider
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -29,6 +33,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionDa
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.organisation.OrgTypeLookup
 import uk.gov.hmrc.eoricommoncomponent.frontend.viewModels.HowCanWeIdentifyYouUtrViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +48,8 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   requestSessionData: RequestSessionData,
   sessionCacheService: SessionCacheService,
   matchingService: MatchingService,
-  subscriptionUtrFormProvider: SubscriptionUtrFormProvider
+  subscriptionUtrFormProvider: SubscriptionUtrFormProvider,
+  errorView: error_template
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
@@ -85,18 +91,53 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
                   )
                 )
               ),
-            formData =>
-              for {
-                _   <- sessionCache.saveNinoOrUtrDetails(NinoOrUtr(Some(Utr(formData.id))))
-                ind <- sessionCacheService.retrieveNameDobFromCache()
-                _ = matchingService.matchIndividualWithId(
-                      Utr(formData.id),
-                      ind,
-                      GroupId(user.groupId.getOrElse(throw new Exception("GroupId does not exists")))
+            formData => {
+              sessionCache
+                .saveNinoOrUtrDetails(NinoOrUtr(Some(Utr(formData.id))))
+                .flatMap { saved =>
+                  matchOnId(formData, GroupId(user.groupId.getOrElse(throw new Exception("GroupId does not exists"))))
+                    .fold(
+                      {
+                        case MatchingServiceConnector.matchFailureResponse => matchNotFoundBadRequest(formData, service, orgType)
+                        case MatchingServiceConnector.downstreamFailureResponse => Ok(errorView(service))
+                        case _ => InternalServerError(errorView(service))
+                      },
+                      matchingResponse => Redirect(PostCodeController.createForm(service))
                     )
-              } yield Redirect(PostCodeController.createForm(service))
+                }
+            }
           )
       )
     }
+
+  private def matchOnId(formData: IdMatchModel, groupId: GroupId)(implicit
+    hc: HeaderCarrier,
+    request: Request[_]
+  ): EitherT[Future, ResponseError, MatchingResponse] = {
+    EitherT {
+      sessionCacheService
+        .retrieveNameDobFromCache()
+        .flatMap(ind => matchingService.matchIndividualWithId(Utr(formData.id), ind, groupId).value)
+    }
+  }
+
+  private def matchNotFoundBadRequest(individualFormData: IdMatchModel, service: Service, etmpOrganisationType: EtmpOrganisationType)(implicit
+    request: Request[AnyContent]
+  ): Result = {
+
+    val errorForm = subscriptionUtrForm
+      .withGlobalError(Messages("cds.matching-error.individual-not-found"))
+      .fill(individualFormData)
+
+    BadRequest(
+      howCanWeIdentifyYouView(
+        errorForm,
+        isInReviewMode = false,
+        routes.GYEHowCanWeIdentifyYouUtrController.submit(service),
+        HowCanWeIdentifyYouUtrViewModel.getPageContent(etmpOrganisationType),
+        service = service
+      )
+    )
+  }
 
 }
