@@ -93,7 +93,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
               ),
             formData => {
               sessionCache
-                .saveNinoOrUtrDetails(NinoOrUtr(Some(Nino(formData.id))))
+                .saveNinoOrUtrDetails(NinoOrUtr(Some(Utr(formData.id))))
                 .flatMap { saved =>
                   matchOnId(formData, GroupId(user.groupId.getOrElse(throw new Exception("GroupId does not exists"))))
                     .fold(
