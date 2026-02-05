@@ -74,7 +74,7 @@
 <div>
     @errorSummary(contactForm.errors)
 
-    @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.submit(isInReviewMode, service), 'id -> "contactDetailsForm") {
+    @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ContactDetailsController.submit(isInReviewMode, service), Symbol("id") -> "contactDetailsForm") {
 
     @goveukFieldSet(
         Fieldset(

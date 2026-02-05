@@ -83,7 +83,7 @@
 <div>
     @errorSummary(postCodeForm.errors)
 
-    @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostCodeController.submit(service), 'id -> "addressDetailsForm") {
+    @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.PostCodeController.submit(service), Symbol("id") -> "addressDetailsForm") {
 
     @goveukFieldSet(
         Fieldset(

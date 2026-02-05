@@ -30,7 +30,7 @@
         @errorSummary(embassyNameForm.errors)
 
         <div class="govuk-form-group">
-            @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmbassyNameController.submit(isInReviewMode, organisationType, service), 'id -> "embassyNameForm") {
+            @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.EmbassyNameController.submit(isInReviewMode, organisationType, service), Symbol("id") -> "embassyNameForm") {
 
                 @inputText(
                     form = embassyNameForm,

@@ -48,7 +48,7 @@ class DateOfVatRegistrationController @Inject() (
   val vatRegistrationDateForm = form()
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       sessionCacheService.individualAndSoleTraderRouter(
         user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
         service,
@@ -68,7 +68,7 @@ class DateOfVatRegistrationController @Inject() (
   }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       vatRegistrationDateForm
         .bindFromRequest()
         .fold(

@@ -24,6 +24,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupResponse, AddressLookupSuccess, AddressRequestBody}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import java.net.URI
 import javax.inject.{Inject, Singleton}

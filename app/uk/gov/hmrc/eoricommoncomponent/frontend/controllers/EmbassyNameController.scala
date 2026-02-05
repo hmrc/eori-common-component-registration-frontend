@@ -41,7 +41,7 @@ class EmbassyNameController @Inject() (
   val form: Form[String] = embassyNameForm.embassyNameForm()
 
   def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       subscriptionDetailsService.cachedEmbassyName.flatMap { optEmbassyName =>
         val updatedForm = optEmbassyName.fold(form)(form.fill)
         Future.successful(Ok(whatIsYourEmbassyNameView(isInReviewMode, updatedForm, organisationType, service)))
@@ -49,7 +49,7 @@ class EmbassyNameController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       form
         .bindFromRequest()
         .fold(

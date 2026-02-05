@@ -56,7 +56,7 @@ class VatDetailsController @Inject() (
   val vatDetailsForm = new VatDetailsForm(requestSessionData)
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       val userLocation =
         requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
       sessionCacheService.individualAndSoleTraderRouter(
@@ -76,7 +76,7 @@ class VatDetailsController @Inject() (
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       val userLocation =
         requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
       subscriptionBusinessService.getCachedUkVatDetails
@@ -114,7 +114,7 @@ class VatDetailsController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       val userLocation =
         requestSessionData.selectedUserLocation.getOrElse(throw DataUnavailableException("User Location not set"))
       vatDetailsForm.vatDetailsForm
@@ -177,7 +177,7 @@ class VatDetailsController @Inject() (
       )
 
   def vatDetailsNotMatched(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       sessionCacheService.individualAndSoleTraderRouter(
         user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
         service,

@@ -37,16 +37,16 @@
     Map.empty,
     None,
     None,
-    '_divClass -> "createForm-group govuk-form-group inline",
-    '_legend -> messages("cds.subscription.vat-group.title-and-heading"),
-    '_isLegendH1 -> true)
+    Symbol("_divClass") -> "createForm-group govuk-form-group inline",
+    Symbol("_legend") -> messages("cds.subscription.vat-group.title-and-heading"),
+    Symbol("_isLegendH1") -> true)
 }
 
 @layout_di(messages("cds.subscription.vat-verification-option.title-and-heading"), form = Some(vatVerificationOptionAnswerForm), service = service) {
     <div>
         @errorSummary(vatVerificationOptionAnswerForm.errors, focusOverrides = Map("vat-verification-option" -> "date-amount-option-true"))
 
-        @formWithCSRF(formAction, 'id -> "vat-verification-option-createForm") {
+        @formWithCSRF(formAction, Symbol("id") -> "vat-verification-option-createForm") {
 
         @inputRadioGroup(
             vatVerificationOptionAnswerForm("vat-verification-option"),
@@ -57,9 +57,9 @@
         Map.empty,
         None,
         None,
-        '_divClass -> "createForm-group govuk-form-group",
-        '_legend -> messages("cds.subscription.vat-verification-option.title-and-heading"),
-        '_isLegendH1 -> true
+        Symbol("_divClass") -> "createForm-group govuk-form-group",
+        Symbol("_legend") -> messages("cds.subscription.vat-verification-option.title-and-heading"),
+        Symbol("_isLegendH1") -> true
         )
 
             @govukButton(Button(

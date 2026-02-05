@@ -56,7 +56,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
   val subscriptionUtrForm: Form[IdMatchModel] = subscriptionUtrFormProvider.subscriptionUtrForm
 
   def form(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
@@ -74,7 +74,7 @@ class GYEHowCanWeIdentifyYouUtrController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       orgTypeLookup.etmpOrgType.flatMap(orgType =>
         subscriptionUtrForm
           .bindFromRequest()

@@ -55,7 +55,7 @@
 
     @h1(messages("cds.subscription.sic.page.heading"), Some("page-heading"))
 
-    @formWithCSRF(routes.SicCodeController.submit(isInReviewMode, service), 'id -> "sicCodeform") {
+    @formWithCSRF(routes.SicCodeController.submit(isInReviewMode, service), Symbol("id") -> "sicCodeform") {
 
         @p(messages("cds.subscription.sic.description.para1"), Some("description-part-1"))
         @p(messages("cds.subscription.sic.description.charity-public-body-not-for-profit.para2"), Some("description-part-2"))

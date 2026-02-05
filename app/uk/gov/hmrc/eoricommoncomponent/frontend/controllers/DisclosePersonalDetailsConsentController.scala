@@ -48,7 +48,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
   private val logger = Logger(this.getClass)
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       sessionCacheService.individualAndSoleTraderRouter(
         user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
         service,
@@ -65,7 +65,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       subscriptionBusinessService.getCachedPersonalDataDisclosureConsent.flatMap {
         case Some(isConsentDisclosed) =>
           sessionCacheService.individualAndSoleTraderRouter(
@@ -86,7 +86,7 @@ class DisclosePersonalDetailsConsentController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       disclosePersonalDetailsYesNoAnswerForm()
         .bindFromRequest()
         .fold(

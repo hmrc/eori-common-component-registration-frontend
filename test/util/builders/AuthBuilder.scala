@@ -132,7 +132,7 @@ object AuthBuilder {
       }
     }
 
-    when(mockAuthConnector.authorise(any(), any[Retrieval[_]])(ArgumentMatchers.argThat(noBearerTokenMatcher), any()))
+    when(mockAuthConnector.authorise(any(), any[Retrieval[Option[String]]])(ArgumentMatchers.argThat(noBearerTokenMatcher), any()))
       .thenReturn(Future.failed(notLoggedInException))
   }
 

@@ -46,7 +46,7 @@ class HowCanWeIdentifyYouController @Inject() (
   val ninoOrUtrChoiceForm: Form[NinoOrUtrChoice] = ninoOrUtrChoiceFormProvider.ninoOrUtrChoiceForm
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       if (requestSessionData.selectedUserLocation.exists(isRow) && requestSessionData.isIndividualOrSoleTrader)
         Future.successful(Redirect(IndStCannotRegisterUsingThisServiceController.form(service)))
       else
@@ -59,7 +59,7 @@ class HowCanWeIdentifyYouController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       ninoOrUtrChoiceForm
         .bindFromRequest()
         .fold(

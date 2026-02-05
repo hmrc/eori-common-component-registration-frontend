@@ -75,7 +75,7 @@
 
         @errorSummary(addressResultsForm.errors)
 
-        @formWithCSRF(PostcodeLookupResultsController.submit(service), 'id -> "addressLookupPostcodeResultsForm") {
+        @formWithCSRF(PostcodeLookupResultsController.submit(service), Symbol("id") -> "addressLookupPostcodeResultsForm") {
 
             @h1(messages("ecc.address-lookup.postcode.title"))
 

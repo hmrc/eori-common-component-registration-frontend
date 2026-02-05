@@ -62,7 +62,7 @@
 
         @h1(header)
 
-        @formWithCSRF(routes.WhatIsYourOrganisationsAddressController.submit(isInReviewMode, service), 'id -> "your-organisation-address-form") {
+        @formWithCSRF(routes.WhatIsYourOrganisationsAddressController.submit(isInReviewMode, service), Symbol("id") -> "your-organisation-address-form") {
 
             @inputText(
                 form = addressForm,

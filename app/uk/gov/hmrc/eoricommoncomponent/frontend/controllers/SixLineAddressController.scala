@@ -87,13 +87,13 @@ class SixLineAddressController @Inject() (
   }
 
   def showForm(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       assertOrganisationTypeIsValid(organisationType)
       sessionCache.registrationDetails.flatMap(rd => populateView(Some(rd.address), isInReviewMode, organisationType, service, user))
     }
 
   def submit(isInReviewMode: Boolean = false, organisationType: String, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUser =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUser) =>
       val (countriesToInclude, countriesInCountryPicker) =
         Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
       assertOrganisationTypeIsValid(organisationType)(request)

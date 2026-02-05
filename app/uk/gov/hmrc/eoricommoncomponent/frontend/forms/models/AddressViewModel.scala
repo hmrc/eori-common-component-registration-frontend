@@ -34,6 +34,9 @@ object AddressViewModel {
   def apply(street: String, city: String, postcode: Option[String], countryCode: String): AddressViewModel =
     new AddressViewModel(street.trim, city.trim, postcode.map(_.trim), countryCode)
 
+  def unapply(addressViewModel: AddressViewModel): Option[(String, String, Option[String], String)] =
+    Some((addressViewModel.street, addressViewModel.city, addressViewModel.postcode, addressViewModel.countryCode))
+
   def apply(sixLineAddress: Address): AddressViewModel = {
     val line1 = Seq(
       sixLineAddress.addressLine1.trim.take(sixLineAddressLine1MaxLength),

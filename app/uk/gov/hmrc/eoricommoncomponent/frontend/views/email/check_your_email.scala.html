@@ -39,8 +39,8 @@
     Map.empty,
     Some(hintHtml),
     None,
-    '_legend -> messages("subscription.check-your-email.confirm.question", email.getOrElse("")),
-    '_isLegendH1 -> true)
+    Symbol("_legend") -> messages("subscription.check-your-email.confirm.question", email.getOrElse("")),
+    Symbol("_isLegendH1") -> true)
 }
 
 @hintHtml = {
@@ -52,7 +52,7 @@
 <div>
     @errorSummary(confirmEmailYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-    @formWithCSRF(CheckYourEmailController.submit(service), 'id -> "confirmEmailYesNoAnswerForm") {
+    @formWithCSRF(CheckYourEmailController.submit(service), Symbol("id") -> "confirmEmailYesNoAnswerForm") {
 
         @displayInputRadioGroup(YesNo.yesAndNoAnswer,
         Seq("true" -> messages("subscription.check-your-email.yes"),

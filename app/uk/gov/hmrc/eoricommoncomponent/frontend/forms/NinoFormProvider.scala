@@ -38,6 +38,6 @@ class NinoFormProvider() extends Mappings {
             .verifying(minDate(LocalDate.of(earliestYearDateOfBirth, 1, 1), "dob.error.minMax", earliestYearDateOfBirth.toString))
             .verifying(maxDate(LocalDate.now(), "dob.error.minMax", earliestYearDateOfBirth.toString)),
         "nino"          -> text.verifying(validNino)
-      )(NinoMatch.apply)(NinoMatch.unapply)
+      )(NinoMatch.apply)(ninoMatch => Some(ninoMatch.firstName, ninoMatch.lastName, ninoMatch.dateOfBirth, ninoMatch.nino))
     )
 }

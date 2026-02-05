@@ -36,7 +36,7 @@ class LockedEmailController @Inject() (
     with I18nSupport {
 
   def onPageLoad(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       Future.successful(Ok(view(service)))
     }
 

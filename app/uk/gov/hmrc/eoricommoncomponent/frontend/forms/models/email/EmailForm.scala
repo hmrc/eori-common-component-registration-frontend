@@ -40,9 +40,7 @@ object EmailForm {
     })
 
   val emailForm: Form[EmailViewModel] = Form(
-    Forms.mapping(EmailVerificationKeys.EmailKey -> text.verifying(validEmail))(EmailViewModel.apply)(
-      EmailViewModel.unapply
-    )
+    Forms.mapping(EmailVerificationKeys.EmailKey -> text.verifying(validEmail))(EmailViewModel.apply)(emailViewModel => Some(emailViewModel.email))
   )
 
   def confirmEmailYesNoAnswerForm()(implicit messages: Messages): Form[YesNo] = Form(
@@ -54,7 +52,6 @@ object EmailForm {
         )
       ).verifying(messages("cds.subscription.check-your-email.page-error.yes-no-answer"), _.isDefined)
         .transform[Boolean](str => str.get.toBoolean, bool => Option(String.valueOf(bool)))
-    )(YesNo.apply)(YesNo.unapply)
+    )(YesNo.apply)(yesNo => Some(yesNo.isYes))
   )
-
 }
