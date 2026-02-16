@@ -42,7 +42,9 @@ lazy val microservice = (project in file("."))
     playSettings,
     scoverageSettings,
     twirlSettings,
-    TwirlKeys.templateImports += "uk.gov.hmrc.eoricommoncomponent.frontend.models._"
+    TwirlKeys.templateImports += "uk.gov.hmrc.eoricommoncomponent.frontend.models._",
+    silencerSettings,
+    excludeDependencies += ExclusionRule("org.lz4", "lz4-java"),
   )
 
 def filterTestsOnPackageName(rootPackage: String): String => Boolean = {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package unit.controllers
 
+import cats.data.EitherT
+import common.pages.RegisterHowCanWeIdentifyYouPage
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -23,6 +25,7 @@ import org.scalatest.BeforeAndAfter
 import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.MatchingServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.GYEHowCanWeIdentifyYouNinoController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{MatchingResponse, RegisterWithIDResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{Individual, MessagingServiceParam, ResponseCommon}
@@ -67,7 +70,8 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
     mockRequestSessionData,
     mockMatchingService,
     sessionCacheService,
-    mockSubscriptionNinoFormProvider
+    mockSubscriptionNinoFormProvider,
+    errorView
   )(global)
 
   "Viewing the form " should {
@@ -109,12 +113,13 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
       when(mockRequestSessionData.isIndividualOrSoleTrader(any())).thenReturn(true)
 
       when(
-        mockFrontendDataCache.saveNinoOrUtrDetails(ArgumentMatchers.eq(NinoOrUtr(Some(Nino(nino)))))(any[Request[_]])
+        mockFrontendDataCache.saveNinoOrUtrDetails(any())(any[Request[_]])
       ).thenReturn(Future.successful(true))
 
       when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
         Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
       )
+
       when(
         mockMatchingService
           .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
@@ -142,6 +147,69 @@ class GYEHowCanWeIdentifyYouNinoControllerSpec extends ControllerSpec with Befor
         header("Location", result).value shouldBe "/customs-registration-services/atar/register/postcode"
       }
     }
+
+    "give a page level error when a nino is not matched" in {
+      val nino = "AB123456C"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      ).thenReturn(EitherT.left(Future { MatchingServiceConnector.matchFailureResponse }))
+
+      submitForm(Map("nino" -> nino)) { result =>
+        status(result) shouldBe BAD_REQUEST
+        val page = CdsPage(contentAsString(result))
+        page.getElementsText(
+          RegisterHowCanWeIdentifyYouPage.pageLevelErrorSummaryListXPath
+        ) shouldBe "Your details have not been found. Check that your details are correct and then try again."
+      }
+    }
+
+    "redirect to error_template when downstreamFailureResponse" in {
+      val nino = "AB123456C"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      ).thenReturn(EitherT.left(Future { MatchingServiceConnector.downstreamFailureResponse }))
+
+      submitForm(Map("nino" -> nino)) { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+      }
+    }
+
+    "redirect to error_template when any other error is case " in {
+      val nino = "AB123456C"
+      when(mockFrontendDataCache.subscriptionDetails(any[Request[_]])).thenReturn(
+        Future.successful(SubscriptionDetails(nameDobDetails = Some(NameDobMatchModel("test", "user", LocalDate.now))))
+      )
+      when(
+        mockMatchingService
+          .matchIndividualWithNino(ArgumentMatchers.eq(nino), any[Individual], any())(
+            any[HeaderCarrier],
+            any[Request[_]]
+          )
+      ).thenReturn(EitherT.left(Future { MatchingServiceConnector.otherErrorHappen }))
+
+      submitForm(Map("nino" -> nino)) { result =>
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        val page = CdsPage(contentAsString(result))
+        page.getElementsHtml("h1") shouldBe messages("cds.error.title")
+      }
+    }
+
     "Load Nino page with errors" in {
 
       val nino = ""

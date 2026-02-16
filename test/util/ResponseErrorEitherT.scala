@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.ResponseError
 import scala.concurrent.Future
 
 trait ResponseErrorEitherT {
-  def eitherT[A](a: A) = EitherT[Future, ResponseError, A](Future.successful(Right(a)))
+  def eitherT[A](a: A): EitherT[Future, ResponseError, A] = EitherT[Future, ResponseError, A](Future.successful(Right(a)))
 
-  def eitherT[A](responseError: ResponseError) =
+  def eitherT[A](responseError: ResponseError): EitherT[Future, ResponseError, A] =
     EitherT[Future, ResponseError, A](Future.successful(Left(responseError)))
 
 }

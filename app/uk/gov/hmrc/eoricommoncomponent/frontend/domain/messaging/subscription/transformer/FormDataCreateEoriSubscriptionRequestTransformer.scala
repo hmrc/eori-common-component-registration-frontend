@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,7 +135,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
       None,
       None,
       org.map(_.typeOfPerson),
-      subDetails.ukVatDetails.map(vd => List(VatIdentification("IM", vd.number)))
+      subDetails.ukVatDetails.map(vd => List(VatIdentification("GB", vd.number)))
     )
   }
 
@@ -177,7 +177,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
       None,
       None,
       org.map(_.typeOfPerson),
-      subDetails.ukVatDetails.map(vd => List(VatIdentification("IM", vd.number)))
+      subDetails.ukVatDetails.map(vd => List(VatIdentification("GB", vd.number)))
     )
   }
 
@@ -189,10 +189,7 @@ class FormDataCreateEoriSubscriptionRequestTransformer() {
   ): CreateEoriSubscriptionRequest = {
     val cdsOrgType = subDetails.formData.organisationType.head
     val org = CdsToEtmpOrganisationType(Some(cdsOrgType)).orElse(CdsToEtmpOrganisationType(regDetails))
-    val countryCode = userLocation match {
-      case UserLocation.Uk => "GB"
-      case UserLocation.Iom => "IM"
-    }
+    val countryCode = "GB"
     CreateEoriSubscriptionRequest(
       edgeCaseType(cdsOrgType, userLocation),
       subDetails.nameOrganisationDetails.map(_.name).getOrElse(regDetails.name),

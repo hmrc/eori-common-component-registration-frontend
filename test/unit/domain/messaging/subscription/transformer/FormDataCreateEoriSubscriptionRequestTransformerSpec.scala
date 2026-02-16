@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,7 +100,7 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
 
         "should have VAT identification when present" in {
           createEoriSubscriptionRequest.vatIdentificationNumbers.value shouldBe List(
-            VatIdentification("IM", "123456789")
+            VatIdentification("GB", "123456789")
           )
         }
 
@@ -142,7 +142,7 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
 
         "should have VAT identification when present" in {
           createEoriSubscriptionRequest.vatIdentificationNumbers.value shouldBe List(
-            VatIdentification("IM", "123456789")
+            VatIdentification("GB", "123456789")
           )
         }
 
@@ -184,7 +184,7 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
 
         "should have VAT identification when present" in {
           createEoriSubscriptionRequest.vatIdentificationNumbers.value shouldBe List(
-            VatIdentification("IM", "123456789")
+            VatIdentification("GB", "123456789")
           )
         }
 
@@ -224,7 +224,7 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
 
         "should have VAT identification when present" in {
           createEoriSubscriptionRequest.vatIdentificationNumbers.value shouldBe List(
-            VatIdentification("IM", "123456789")
+            VatIdentification("GB", "123456789")
           )
         }
 
@@ -264,7 +264,7 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
 
         "should have VAT identification when present" in {
           createEoriSubscriptionRequest.vatIdentificationNumbers.value shouldBe List(
-            VatIdentification("IM", "123456789")
+            VatIdentification("GB", "123456789")
           )
         }
 
@@ -311,7 +311,7 @@ class FormDataCreateEoriSubscriptionRequestTransformerSpec extends AnyFreeSpec w
 
         "should have VAT identification when present" in {
           createEoriSubscriptionRequest.vatIdentificationNumbers.value shouldBe List(
-            VatIdentification("IM", "123456789")
+            VatIdentification("GB", "123456789")
           )
         }
 
