@@ -9,12 +9,15 @@ object AppDependencies {
 
   val compileDependencies: Seq[ModuleID] = Seq(
     "org.typelevel"     %% "cats-core"                                        % "2.10.0",
-    "uk.gov.hmrc"       %% s"bootstrap-frontend-play-$playVersion"            % bootstrapVersion,
+    "uk.gov.hmrc"       %% s"bootstrap-frontend-play-$playVersion"            % bootstrapVersion exclude("org.apache.commons", "commons-lang3"),
     "uk.gov.hmrc"       %% s"play-conditional-form-mapping-play-$playVersion" % "3.4.0",
     "uk.gov.hmrc"       %% s"domain-play-$playVersion"                        % "11.0.0",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-play-$playVersion"                    % mongoDbVersion,
     "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "12.29.0",
-    "uk.gov.hmrc"       %% s"internal-auth-client-play-$playVersion"          % "4.3.0"
+    "uk.gov.hmrc"       %% s"internal-auth-client-play-$playVersion"          % "4.3.0",
+    "ch.qos.logback"     % "logback-core"                                     % "1.5.21",
+    "at.yawk.lz4"        %  "lz4-java"                                        % "1.10.3",
+    "org.apache.commons" % "commons-lang3"                                    % "3.18.0",
   )
 
   val testDependencies: Seq[ModuleID] = Seq(
