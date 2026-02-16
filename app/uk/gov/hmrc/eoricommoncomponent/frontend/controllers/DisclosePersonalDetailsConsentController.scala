@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, DetermineReviewPageController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.EoriConsentSubscriptionFlowPage
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
@@ -44,8 +44,8 @@ class DisclosePersonalDetailsConsentController @Inject() (
   disclosePersonalDetailsConsentViewModel: DisclosePersonalDetailsConsentViewModel,
   sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
-  private val logger = Logger(this.getClass)
+    extends CdsController(mcc)
+    with Logging {
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>

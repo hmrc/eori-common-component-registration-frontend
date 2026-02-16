@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EtmpOrganisationType, LoggedInUserWithEnrolments}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.DateOfEstablishmentForm
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
@@ -48,8 +48,8 @@ class DateOfEstablishmentController @Inject() (
   sessionCacheService: SessionCacheService,
   dateOfEstablishmentForm: DateOfEstablishmentForm
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
-  private val logger = Logger(this.getClass)
+    extends CdsController(mcc)
+    with Logging {
 
   val doeForm: Form[LocalDate] = dateOfEstablishmentForm.form()
 

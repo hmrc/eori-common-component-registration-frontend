@@ -68,6 +68,26 @@ class OrganisationViewModelSpec extends UnitSpec with ControllerSpec {
       )
     }
 
+    "return valid options for iom user location" in {
+      val selectedUserLocation = Some(UserLocation.Iom)
+      val viewModel = OrganisationViewModel
+
+      val options = viewModel.validOptions(selectedUserLocation, allowNoIdJourney = true)
+
+      options should contain theSameElementsAs Seq(
+        CdsOrganisationType.CompanyId                       -> messages("cds.matching.organisation-type.radio.company.label"),
+        CdsOrganisationType.SoleTraderId                    -> messages("cds.matching.organisation-type.radio.sole-trader.label"),
+        CdsOrganisationType.IndividualId                    -> messages("cds.matching.organisation-type.radio.individual.label"),
+        CdsOrganisationType.PartnershipId                   -> messages("cds.matching.organisation-type.radio.partnership.label"),
+        CdsOrganisationType.LimitedLiabilityPartnershipId   -> messages(
+          "cds.matching.organisation-type.radio.limited-liability-partnership.label"
+        ),
+        CdsOrganisationType.CharityPublicBodyNotForProfitId -> messages(
+          "cds.matching.organisation-type.radio.charity-public-body-not-for-profit.label"
+        )
+      )
+    }
+
     "return valid options for third-country user location" in {
       val selectedUserLocation = Some(UserLocation.ThirdCountry)
       val viewModel = OrganisationViewModel

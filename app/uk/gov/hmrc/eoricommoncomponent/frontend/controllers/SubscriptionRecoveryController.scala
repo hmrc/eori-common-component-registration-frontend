@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.Messages
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SUB09SubscriptionDisplayConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.EmailAddressValidation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.RecipientDetails
@@ -52,9 +52,8 @@ class SubscriptionRecoveryController @Inject() (
   requestSessionData: RequestSessionData,
   alreadyHaveEori: recovery_registration_exists
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
-
-  private val logger: Logger = Logger(this.getClass)
+    extends CdsController(mcc)
+    with Logging {
 
   def complete(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithServiceAction { implicit request => (_: LoggedInUserWithEnrolments) =>

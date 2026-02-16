@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError.FlowNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
@@ -61,9 +61,8 @@ class SubscriptionFlowManager @Inject() (
   requestSessionData: RequestSessionData,
   cdsFrontendDataCache: SessionCache,
   appConfig: AppConfig
-)(implicit ec: ExecutionContext) {
-
-  private val logger = Logger(this.getClass)
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   def currentSubscriptionFlow(implicit
     request: Request[AnyContent],

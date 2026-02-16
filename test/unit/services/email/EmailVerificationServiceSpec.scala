@@ -17,15 +17,15 @@
 package unit.services.email
 
 import cats.data.EitherT
+import org.mockito.*
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito._
-import org.mockito._
+import org.mockito.Mockito.*
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n._
+import play.api.i18n.*
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EmailVerificationConnector, ResponseError}
@@ -192,6 +192,21 @@ class EmailVerificationServiceSpec extends AsyncWordSpec with Matchers with Scal
 
     "return Verified where they return a verified email all lowercase, but the email in our cache is upper case" in {
 
+      val expected = Right(EmailVerificationStatus.Verified)
+      val sequence = Seq(VerificationStatus(emailAddress = "test@test.com", verified = true, locked = false))
+      val response: Either[ResponseError, VerificationStatusResponse] = Right(VerificationStatusResponse(sequence))
+      mockGetVerificationStatus(credId)(EitherT[Future, ResponseError, VerificationStatusResponse] {
+        Future.successful(response)
+      })
+
+      sut.getVerificationStatus("Test@TEST.com", credId).value.map { res =>
+        res shouldEqual expected
+      }
+    }
+
+    "return verified when emailVerificationEnabled is false" in {
+
+      when(mockAppConfig.emailVerificationEnabled).thenReturn(false)
       val expected = Right(EmailVerificationStatus.Verified)
       val sequence = Seq(VerificationStatus(emailAddress = "test@test.com", verified = true, locked = false))
       val response: Either[ResponseError, VerificationStatusResponse] = Right(VerificationStatusResponse(sequence))

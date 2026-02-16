@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
+import play.api.Logging
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
-import play.mvc.Http.Status._
-import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
-import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
-import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.client.HttpClientV2
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import play.mvc.Http.Status.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.*
+import uk.gov.hmrc.http.*
+import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,10 +33,9 @@ import scala.util.control.NonFatal
 
 class UpdateVerifiedEmailConnector @Inject() (appConfig: AppConfig, httpClient: HttpClientV2)(implicit
   ec: ExecutionContext
-) {
+) extends Logging {
 
   private val url = url"${appConfig.getServiceUrl("update-verified-email")}"
-  private val logger = Logger(this.getClass)
 
   def updateVerifiedEmail(
     request: VerifiedEmailRequest

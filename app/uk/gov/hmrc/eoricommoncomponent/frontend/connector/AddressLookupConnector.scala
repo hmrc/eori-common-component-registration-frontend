@@ -16,24 +16,22 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.Json
-import play.mvc.Http.Status._
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import play.mvc.Http.Status.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.address.{AddressLookupFailure, AddressLookupResponse, AddressLookupSuccess, AddressRequestBody}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import java.net.URI
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AddressLookupConnector @Inject() (http: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext) {
-
-  private val logger = Logger(this.getClass)
+class AddressLookupConnector @Inject() (http: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext) extends Logging {
 
   def lookup(postcode: String, firstLineOpt: Option[String])(implicit
     hc: HeaderCarrier

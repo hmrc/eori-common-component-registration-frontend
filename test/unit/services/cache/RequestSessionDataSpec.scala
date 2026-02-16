@@ -17,17 +17,17 @@
 package unit.services.cache
 
 import base.UnitSpec
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Session}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.OrganisationSubscriptionFlow
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError.DataNotFound
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.RequestSessionData
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
@@ -98,6 +98,22 @@ class RequestSessionDataSpec extends UnitSpec with MockitoSugar with BeforeAndAf
     "return session third country" in {
       when(mockRequest.session).thenReturn(Session(Map("selected-user-location" -> "isle-of-man")))
       requestSessionData.selectedUserLocationWithIslands shouldBe Some(UserLocation.Iom)
+    }
+    "return some third country for islands" in {
+      when(mockRequest.session).thenReturn(Session(Map("selected-user-location" -> "islands")))
+      requestSessionData.selectedUserLocation shouldBe Some(UserLocation.ThirdCountry)
+    }
+    "return some third country for eu" in {
+      when(mockRequest.session).thenReturn(Session(Map("selected-user-location" -> "eu")))
+      requestSessionData.selectedUserLocation shouldBe Some(UserLocation.ThirdCountry)
+    }
+    "add user location to session" in {
+      val newSession = requestSessionData.sessionWithUserLocationAdded("eu")
+      newSession shouldBe Session(existingSessionValues + ("selected-user-location" -> "eu"))
+    }
+    "add user location to existing session" in {
+      val newSession = requestSessionData.existingSessionWithUserLocationAdded(existingSession, "eu")
+      newSession shouldBe Session(existingSessionValues + ("selected-user-location" -> "eu"))
     }
     "return session without organisation-type, subscription-flow and uri-before-sub-flow" in {
       when(mockRequest.session).thenReturn(Session(existingSessionBeforeStartAgain))

@@ -16,20 +16,26 @@
 
 package integration
 
+import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.shouldBe
+import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.mvc.Http.Status._
+import play.mvc.Http.Status.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{InvalidResponse, SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionDisplayResponseHolder
-import uk.gov.hmrc.http._
-import util.externalservices.ExternalServicesConfig._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{SubscriptionDisplayResponse, SubscriptionDisplayResponseHolder}
+import uk.gov.hmrc.http.*
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
+import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.SubscriptionDisplayMessagingService
 
-class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
+import java.time.temporal.ChronoUnit
+
+class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -46,6 +52,11 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
     .build()
 
   private lazy val connector = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
+
+  private val connectorLogger: Logger =
+    LoggerFactory
+      .getLogger(classOf[SUB09SubscriptionDisplayConnector])
+      .asInstanceOf[Logger]
   private val requestTaxPayerId = "GBE9XSDF10BCKEYAX"
   private val requestAcknowledgementReference = "1234567890ABCDEFG"
 
@@ -74,9 +85,19 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestTaxPayerId,
         requestAcknowledgementReference
       )
-      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Right(
-        expectedResponse
-      )
+      val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result.map(truncateTimestamp) mustBe Right(truncateTimestamp(expectedResponse))
+        }
+      }
     }
 
     "return Service Unavailable Response when subscription display service returns an exception" in {
@@ -86,9 +107,19 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestAcknowledgementReference,
         returnedStatus = SERVICE_UNAVAILABLE
       )
-      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Left(
-        ServiceUnavailableResponse
-      )
+      val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "ERROR"
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result.map(truncateTimestamp) mustBe Left(ServiceUnavailableResponse)
+        }
+      }
     }
 
     "return InvalidResponse when subscription display service returns a failure" in {
@@ -97,9 +128,31 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
         requestTaxPayerId,
         requestAcknowledgementReference
       )
-      await(connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)) mustBe Left(
-        InvalidResponse
-      )
+      val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result.map(truncateTimestamp) mustBe Left(InvalidResponse)
+        }
+      }
     }
   }
+
+  private def truncateTimestamp(r: SubscriptionDisplayResponse): SubscriptionDisplayResponse =
+    r.copy(
+      responseDetail = r.responseDetail.copy(
+        contactInformation = r.responseDetail.contactInformation.map(ci =>
+          ci.copy(
+            emailVerificationTimestamp = Some(ci.emailVerificationTimestamp.get.truncatedTo(ChronoUnit.MINUTES))
+          )
+        )
+      )
+    )
+
 }

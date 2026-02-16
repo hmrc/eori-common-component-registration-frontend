@@ -16,25 +16,23 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
+import play.api.Logging
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegistrationDisplay
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.*
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http._
-import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-class RegistrationDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor) {
-
-  private val logger = Logger(this.getClass)
+class RegistrationDisplayConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor) extends Logging {
 
   protected val url = url"${appConfig.getServiceUrl("registration-display")}"
 

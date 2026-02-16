@@ -15,7 +15,6 @@
  */
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
-
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service

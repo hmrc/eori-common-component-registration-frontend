@@ -16,16 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend
 
-import play.api.Logger
+import play.api.Logging
 import play.api.data.FormError
 
 import java.time.{LocalDate, Year}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Try}
 
-object DateConverter {
-
-  private val logger = Logger(this.getClass)
+object DateConverter extends Logging {
 
   val earliestYearDateOfBirth = 1900
   val earliestYearEffectiveVatDate = 1970

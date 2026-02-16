@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
-import play.api.mvc._
+import play.api.Logging
+import play.api.mvc.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.{CharityPublicBodyNotForProfit, Company, Embassy, Individual, LimitedLiabilityPartnership, Partnership, SoleTrader}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.ContactAddressSubscriptionFlowPageGetEori
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCache, SessionCacheService}
@@ -48,9 +48,8 @@ class ContactAddressController @Inject() (
   contactAddressView: contact_address,
   appConfig: AppConfig
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
-
-  private val logger = Logger(this.getClass)
+    extends CdsController(mcc)
+    with Logging {
 
   def createForm(service: Service): Action[AnyContent] =
     authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>

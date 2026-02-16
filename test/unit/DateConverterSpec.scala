@@ -17,11 +17,14 @@
 package unit
 
 import base.UnitSpec
+import play.api.Logger
+import play.api.data.FormError
 import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 
-import java.time.LocalDate
+import java.time.{LocalDate, Year}
 
-class DateConverterSpec extends UnitSpec {
+class DateConverterSpec extends UnitSpec with LogCapturing {
 
   "Date converter" should {
 
@@ -32,6 +35,49 @@ class DateConverterSpec extends UnitSpec {
 
     "return None when an invalid date string is provided" in {
       DateConverter.toLocalDate("2010-04-38") shouldBe None
+    }
+  }
+
+  "DateConverter.toLocalDate" should {
+
+    "convert string date to local date" in {
+      val dt = LocalDate.parse("2010-04-28")
+      DateConverter.toLocalDate("2010-04-28") shouldBe Some(dt)
+    }
+
+    "return None and log warning when invalid date string is provided" in {
+
+      val logger = Logger("uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter")
+
+      withCaptureOfLoggingFrom(logger) { events =>
+
+        DateConverter.toLocalDate("invalid-date") shouldBe None
+
+        events.exists(_.getLevel.levelStr == "WARN") shouldBe true
+        events.exists(_.getMessage.contains("Could not parse the LocalDate")) shouldBe true
+      }
+    }
+
+    "DateConverter.updateDateOfBirthErrors" should {
+
+      "update args when error contains date.year.error" in {
+        val error = FormError("field", "date.year.error")
+
+        val result = DateConverter.updateDateOfBirthErrors(Seq(error))
+
+        result.head.args shouldBe Seq(
+          DateConverter.earliestYearDateOfBirth.toString,
+          Year.now.getValue.toString
+        )
+      }
+
+      "not modify non year errors" in {
+        val error = FormError("field", "other.error")
+
+        val result = DateConverter.updateDateOfBirthErrors(Seq(error))
+
+        result.head shouldBe error
+      }
     }
   }
 }

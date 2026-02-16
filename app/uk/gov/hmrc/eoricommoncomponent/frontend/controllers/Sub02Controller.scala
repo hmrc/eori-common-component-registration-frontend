@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
-import play.api.mvc._
+import play.api.Logging
+import play.api.mvc.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,9 +47,8 @@ class Sub02Controller @Inject() (
   cdsSubscriber: CdsSubscriber
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc)
-    with EnrolmentExtractor {
-
-  private val logger = Logger(this.getClass)
+    with EnrolmentExtractor
+    with Logging {
 
   def subscribe(service: Service): Action[AnyContent] =
     authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (loggedInUser: LoggedInUserWithEnrolments) =>

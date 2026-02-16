@@ -35,7 +35,7 @@ case class ContactInformation(
   faxNumber: Option[String] = None,
   emailAddress: Option[String] = None,
   emailVerificationTimestamp: Option[LocalDateTime] = Some(
-    LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London")).withNano(0)
+    LocalDateTime.ofInstant(Clock.systemUTC().instant, ZoneId.of("Europe/London"))
   )
 ) {
 

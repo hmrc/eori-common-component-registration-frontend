@@ -16,26 +16,30 @@
 
 package integration
 
+import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.shouldBe
+import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.UpdateCustomsDataStoreConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, CustomsDataStoreStubService}
 
 import scala.concurrent.ExecutionContext
 
-class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
+class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
   implicit val ex: ExecutionContext = ExecutionContext.Implicits.global
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -61,6 +65,11 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
     .build()
 
   private lazy val customsDataStoreConnector = app.injector.instanceOf[UpdateCustomsDataStoreConnector]
+
+  val connectorLogger: Logger =
+    LoggerFactory
+      .getLogger(classOf[UpdateCustomsDataStoreConnector])
+      .asInstanceOf[Logger]
 
   private val serviceRequestJson =
     Json.parse(s"""
@@ -121,13 +130,25 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      await(customsDataStoreConnector.updateCustomsDataStore(request))(defaultTimeout)
-      WireMock.verify(
-        postRequestedFor(urlEqualTo(expectedPostUrl))
-          .withRequestBody(equalToJson(serviceRequestJson.toString))
-          .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
-          .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
-      )
+      val res = customsDataStoreConnector.updateCustomsDataStore(request)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { _ =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "INFO"
+              event.getMessage.contains("[UpdateCustomsDataStoreConnector][call] complete for call to") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          WireMock.verify(
+            postRequestedFor(urlEqualTo(expectedPostUrl))
+              .withRequestBody(equalToJson(serviceRequestJson.toString))
+              .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
+              .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
+          )
+        }
+      }
     }
 
     "call audit endpoint with correct audit event" in {
@@ -136,8 +157,22 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      await(customsDataStoreConnector.updateCustomsDataStore(request))(defaultTimeout)
-      eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
+
+      val res = customsDataStoreConnector.updateCustomsDataStore(request)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { _ =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "INFO"
+              event.getMessage.contains("[UpdateCustomsDataStoreConnector][call] complete for call to") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
+        }
+      }
+
     }
 
     "return successful future when update email endpoint returns 204" in {
@@ -146,7 +181,20 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      customsDataStoreConnector.updateCustomsDataStore(request).futureValue mustBe ()
+
+      val res = customsDataStoreConnector.updateCustomsDataStore(request)
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "INFO"
+              event.getMessage.contains("[UpdateCustomsDataStoreConnector][call] complete for call to") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result mustBe ()
+        }
+      }
     }
 
     "return a failed future when update email endpoint returns 500" in {
@@ -156,8 +204,17 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
         INTERNAL_SERVER_ERROR
       )
 
-      a[BadRequestException] should be thrownBy {
-        await(customsDataStoreConnector.updateCustomsDataStore(request))
+      val res = customsDataStoreConnector.updateCustomsDataStore(request)
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        val ex = await(res.failed)
+
+        events
+          .collectFirst { case event =>
+            event.getLevel.levelStr shouldBe "WARN"
+          }
+          .getOrElse(fail("No log was captured"))
+
+        ex mustBe a[BadRequestException]
       }
     }
   }

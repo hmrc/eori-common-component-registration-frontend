@@ -18,7 +18,7 @@ package uk.gov.hmrc.eoricommoncomponent.frontend.playext.form
 
 import play.api.data.validation.Constraint
 import play.api.data.{FormError, Mapping}
-import uk.gov.voa.play.form._
+import uk.gov.voa.play.form.*
 
 case class ConditionalMapping[T](
   condition: Condition,
@@ -30,7 +30,7 @@ case class ConditionalMapping[T](
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 
-  val key = wrapped.key
+  val key: String = wrapped.key
 
   def verifying(addConstraints: Constraint[T]*): Mapping[T] =
     this.copy(constraints = constraints ++ addConstraints.toSeq)
