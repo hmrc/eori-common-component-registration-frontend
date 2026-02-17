@@ -71,6 +71,7 @@
             @formWithCSRF(CheckYourDetailsRegisterController.submitDetails(service)) {
 
                 @govukButton(Button(
+                    preventDoubleClick = Some(true),
                     content = Text(messages("cds.form.send")),
                     id = Some("continue-button")
                 ))
