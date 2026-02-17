@@ -34,7 +34,9 @@ lazy val microservice = (project in file("."))
       "-Wunused:locals",    // Warn if a local definition is unused.
       "-Wunused:explicits", // Warn if an explicit parameter is unused.
       "-Wunused:implicits", // Warn if an implicit parameter is unused.
-      "-Wunused:nowarn"     // Warn if unnecessary @nowarn annotations are used.
+      "-Wunused:nowarn",     // Warn if unnecessary @nowarn annotations are used.
+      "-Wconf:msg=unused import&src=html/.*:s",
+      "-Wconf:src=routes/.*:s"
     ),
     commonSettings,
     unitTestSettings,

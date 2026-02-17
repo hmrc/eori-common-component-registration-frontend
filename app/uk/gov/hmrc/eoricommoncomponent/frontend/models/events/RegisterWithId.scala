@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Writes, __}
 
 case class RegisterWithId(`type`: String, request: RegisterWithIdSubmitted, response: RegisterWithIdConfirmation)
