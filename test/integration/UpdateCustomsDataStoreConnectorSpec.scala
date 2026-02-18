@@ -208,6 +208,6 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       val ex = await(res.failed)
       ex mustBe a[BadRequestException]
-      }
+    }
   }
 }
