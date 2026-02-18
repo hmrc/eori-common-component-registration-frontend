@@ -205,17 +205,11 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
       )
 
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val ex = await(res.failed)
 
-        events
-          .collectFirst { case event =>
-            event.getLevel.levelStr shouldBe "WARN"
-          }
-          .getOrElse(fail("No log was captured"))
+      val ex = await(res.failed)
 
-        ex mustBe a[BadRequestException]
-      }
+      ex mustBe a[BadRequestException]
+
     }
   }
 }

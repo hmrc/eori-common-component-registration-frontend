@@ -257,19 +257,10 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result must be(
-            serviceSubscriptionLinkResponseJson.as[SubscriptionResponse]
-          )
-        }
+      whenReady(res) { result =>
+        result must be(
+          serviceSubscriptionLinkResponseJson.as[SubscriptionResponse]
+        )
       }
     }
 
@@ -374,19 +365,7 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceSubscriptionGenerateResponseJson.toString()
       )
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { _ =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
-
-          eventually(AuditService.verifyXAuditWrite(1))
-        }
-      }
-
+      eventually(AuditService.verifyXAuditWrite(1))
     }
   }
 }

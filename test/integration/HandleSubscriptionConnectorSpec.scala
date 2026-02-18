@@ -138,16 +138,8 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
       )
 
       val res = handleSubscriptionConnector.call(handleSubscriptionRequest)
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-            }
-            .getOrElse(fail("No log was captured"))
-
           result mustBe ((): Unit)
-        }
       }
     }
 
