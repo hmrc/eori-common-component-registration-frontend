@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
+import play.api.Logging
 import play.api.http.HeaderNames.AUTHORIZATION
 import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.RegisterWithoutId
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.*
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 
 import javax.inject.{Inject, Singleton}
@@ -33,9 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RegisterWithoutIdConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
-) {
-
-  private val logger = Logger(this.getClass)
+) extends Logging {
   private val url = url"${appConfig.getServiceUrl("register-without-id")}"
 
   def register(request: RegisterWithoutIDRequest)(implicit hc: HeaderCarrier): Future[RegisterWithoutIDResponse] = {

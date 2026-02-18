@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
-import play.api.mvc._
+import play.api.Logging
+import play.api.mvc.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.{AuthAction, EnrolmentExtractor}
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.services._
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCache}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html._
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,12 +47,11 @@ class Sub02Controller @Inject() (
   cdsSubscriber: CdsSubscriber
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc)
-    with EnrolmentExtractor {
-
-  private val logger = Logger(this.getClass)
+    with EnrolmentExtractor
+    with Logging {
 
   def subscribe(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (loggedInUser: LoggedInUserWithEnrolments) =>
       val selectedOrganisationType: Option[CdsOrganisationType] =
         requestSessionData.userSelectedOrganisationType
       val internalId = InternalId(loggedInUser.internalId)
@@ -93,7 +92,7 @@ class Sub02Controller @Inject() (
   def subscriptionNextSteps(service: Service): String =
     s"cds.subscription.outcomes.success.extra.information.next.new.${service.code}"
 
-  def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+  def end(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
     for {
       sub02Outcome <- sessionCache.sub02Outcome
       sub01Outcome <- sessionCache.sub01Outcome
@@ -124,7 +123,7 @@ class Sub02Controller @Inject() (
   }
 
   def eoriAlreadyExists(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
@@ -133,7 +132,7 @@ class Sub02Controller @Inject() (
     }
 
   def eoriAlreadyAssociated(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         name          <- sessionCache.subscriptionDetails.map(_.name)
         processedDate <- sessionCache.sub01Outcome.map(_.processedDate)
@@ -142,7 +141,7 @@ class Sub02Controller @Inject() (
     }
 
   def subscriptionInProgress(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         submissionCompleteDetails <- sessionCache.submissionCompleteDetails
         _                         <- sessionCache.journeyCompleted
@@ -150,13 +149,13 @@ class Sub02Controller @Inject() (
     }
 
   def requestNotProcessed(service: Service): Action[AnyContent] =
-    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       for {
         _ <- sessionCache.journeyCompleted
       } yield InternalServerError(sub02RequestNotProcessed(service))
     }
 
-  def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+  def pending(service: Service): Action[AnyContent] = authAction.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
     for {
       sub01Outcome <- sessionCache.sub01Outcome
       _            <- sessionCache.journeyCompleted

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Writes, __}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegisterWithoutIDRequest, RegisterWithoutIdResponseHolder}
 
@@ -29,7 +29,7 @@ object RegisterWithoutId {
     (__ \ "type")
       .write[String]
       .and(JsPath.write[RegisterWithoutIdSubmitted])
-      .and(JsPath.write[RegisterWithoutIdResult])(unlift(RegisterWithoutId.unapply))
+      .and(JsPath.write[RegisterWithoutIdResult])((regWithoutId: RegisterWithoutId) => (regWithoutId.`type`, regWithoutId.request, regWithoutId.response))
 
   def apply(request: RegisterWithoutIDRequest, response: RegisterWithoutIdResponseHolder): RegisterWithoutId =
     RegisterWithoutId(

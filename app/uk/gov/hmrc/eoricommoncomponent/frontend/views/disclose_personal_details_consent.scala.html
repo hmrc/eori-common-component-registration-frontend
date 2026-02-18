@@ -40,12 +40,12 @@
     <div>
         @errorSummary(disclosePersonalDetailsYesNoAnswerForm.errors, focusOverrides = Map(YesNo.yesAndNoAnswer -> YesNo.answerTrue))
 
-        @formWithCSRF(DisclosePersonalDetailsConsentController.submit(isInReviewMode, service), 'id -> "disclose-personal-details-createForm") {
+        @formWithCSRF(DisclosePersonalDetailsConsentController.submit(isInReviewMode, service), Symbol("id") -> "disclose-personal-details-createForm") {
 
             @h1(messages("ecc.subscription.organisation-disclose-personal-details-consent.title"))
 
             @paragraph(messages("ecc.subscription.organisation-disclose-personal-details-consent.para1"), Some("personal-details-consent-para1"))
-            @paragraph(viewModel.textPara2, Some("personal-details-consent-para2"))
+            @paragraph(viewModel.textPara2(), Some("personal-details-consent-para2"))
             @paragraph(messages("ecc.subscription.organisation-disclose-personal-details-consent.withdraw-consent.para"), Some("personal-details-consent-para3"))
 
             @inputRadioGroup(
@@ -57,9 +57,9 @@
                 Map.empty,
                 None,
                 None,
-                '_divClass -> "createForm-group govuk-form-group",
-                '_legend -> viewModel.questionLabel,
-                '_isLegendH1 -> false
+                Symbol("_divClass") -> "createForm-group govuk-form-group",
+                Symbol("_legend") -> viewModel.questionLabel(),
+                Symbol("_isLegendH1") -> false
             )
 
             @govukButton(Button(

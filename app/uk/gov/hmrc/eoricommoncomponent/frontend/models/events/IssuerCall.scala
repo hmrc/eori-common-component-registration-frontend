@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Writes}
 
 case class IssuerCall(request: IssuerRequest, response: IssuerResponse)
@@ -27,6 +27,5 @@ object IssuerCall {
   implicit val writes: Writes[IssuerCall] =
     JsPath
       .write[IssuerRequest]
-      .and(JsPath.write[IssuerResponse])(unlift(IssuerCall.unapply))
-
+      .and(JsPath.write[IssuerResponse])((issuercall: IssuerCall) => (issuercall.request, issuercall.response))
 }

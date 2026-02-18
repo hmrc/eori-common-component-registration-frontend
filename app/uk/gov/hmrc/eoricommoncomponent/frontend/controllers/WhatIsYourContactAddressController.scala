@@ -46,7 +46,7 @@ class WhatIsYourContactAddressController @Inject() (
   private val contactAddressForm: Form[ContactAddressMatchModel] = contactAddressFormProvider.contactAddressForm
 
   def showForm(isInReviewMode: Boolean = false, service: Service): Action[AnyContent] = {
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       val (countriesToInclude, countriesInCountryPicker) =
         Countries.getCountryParameters(requestSessionData.selectedUserLocationWithIslands)
 
@@ -66,7 +66,7 @@ class WhatIsYourContactAddressController @Inject() (
   }
 
   def submit(isInReviewMode: Boolean = false, service: Service): Action[AnyContent] = {
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       val filledForm = contactAddressForm.bindFromRequest()
 
       val (countriesToInclude, countriesInCountryPicker) =

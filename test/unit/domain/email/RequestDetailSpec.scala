@@ -51,7 +51,7 @@ class RequestDetailSpec extends AnyFreeSpec with Matchers {
       )
 
       val exception = intercept[JsResultException](json.as[RequestDetail])
-      exception.getMessage mustBe "JsResultException(errors:List((/emailVerificationTimestamp,List(JsonValidationError(List(Could not parse '\"2001-12-17111T09:30:47Z\"' as an ISO date. Reason: Text '2001-12-17111T09:30:47Z' could not be parsed at index 10),List())))))"
+      exception.getMessage mustBe "JsResultException(errors:List((/emailVerificationTimestamp,List(JsonValidationError(List(Could not parse '\"2001-12-17111T09:30:47Z\"' as an ISO date. Reason: Text '2001-12-17111T09:30:47Z' could not be parsed at index 10),ArraySeq())))))"
     }
   }
 }

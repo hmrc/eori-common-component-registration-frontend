@@ -35,7 +35,7 @@ class CheckYourEmailController @Inject() (
 ) extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => (userWithEnrolments: LoggedInUserWithEnrolments) =>
       checkYourEmailService.fetchEmailAndPopulateView(userWithEnrolments, service)
     }
 
@@ -50,12 +50,12 @@ class CheckYourEmailController @Inject() (
     }
 
   def verifyEmailView(service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => (userWithEnrolments: LoggedInUserWithEnrolments) =>
       checkYourEmailService.fetchEmailAndPopulateView(userWithEnrolments, service, emailVerificationView = true)
     }
 
   def emailConfirmed(service: Service): Action[AnyContent] =
-    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => userWithEnrolments: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserClearingCacheOnCompletionAction { implicit request => (userWithEnrolments: LoggedInUserWithEnrolments) =>
       checkYourEmailService.emailConfirmed(userWithEnrolments, service)
     }
 

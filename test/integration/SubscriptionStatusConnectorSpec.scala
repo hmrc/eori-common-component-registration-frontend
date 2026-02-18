@@ -16,7 +16,10 @@
 
 package integration
 
+import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.shouldBe
+import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -27,12 +30,13 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionStatusConn
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{SubscriptionStatusQueryParams, SubscriptionStatusResponseHolder, TaxPayerId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
-import util.externalservices.ExternalServicesConfig._
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
+import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.{AuditService, SubscriptionStatusMessagingService}
 
 import java.time.LocalDateTime
 
-class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
+class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -59,6 +63,11 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
   private val request =
     SubscriptionStatusQueryParams(receiptDate, Regime, "taxPayerID", TaxPayerId(AValidTaxPayerID).mdgTaxPayerId)
 
+  val connectorLogger: Logger =
+    LoggerFactory
+      .getLogger(classOf[SubscriptionStatusConnector])
+      .asInstanceOf[Logger]
+
   implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val service: Service = Service.cds
 
@@ -77,7 +86,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         |}
       """.stripMargin)
 
-  val auditEventBodyJson = Json.parse("""
+  val auditEventBodyJson: JsValue = Json.parse("""
     |{
     |  "auditSource" : "eori-common-component-registration-frontend",
     |  "auditType" : "SubscriptionStatus",
@@ -127,9 +136,22 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         expectedGetUrl,
         responseWithOk.toString
       )
-      await(subscriptionStatusConnector.status(request)) must be(
-        responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
-      )
+      val res = subscriptionStatusConnector.status(request)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("Status SUB01: responseCommon:") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result must be(
+            responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
+          )
+        }
+      }
     }
 
     "audit subscription status submitted event" in {
@@ -138,10 +160,23 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         expectedGetUrl,
         responseWithOk.toString
       )
-      await(subscriptionStatusConnector.status(request)) must be(
-        responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
-      )
-      eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
+      val res = subscriptionStatusConnector.status(request)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("Status SUB01: responseCommon:") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result must be(
+            responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
+          )
+          eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
+        }
+      }
     }
 
     "fail when Internal Server Error" in {
@@ -176,8 +211,20 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
         responseWithOk.toString
       )
 
-      await(subscriptionStatusConnector.status(request))
-      eventually(AuditService.verifyXAuditWrite(1))
+      val res = subscriptionStatusConnector.status(request)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { _ =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("Status SUB01: responseCommon:") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          eventually(AuditService.verifyXAuditWrite(1))
+        }
+      }
     }
   }
 }

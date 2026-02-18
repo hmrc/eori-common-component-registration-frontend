@@ -115,7 +115,7 @@ class EmailJourneyService @Inject() (
       .startVerificationJourney(credId, service, email)
       .fold(
         _ => InternalServerError(errorPage(service)),
-        { responseWithUri: ResponseWithURI =>
+        { (responseWithUri: ResponseWithURI) =>
           Redirect(s"${appConfig.emailVerificationFrontendBaseUrl}${responseWithUri.redirectUri}")
         }
       )

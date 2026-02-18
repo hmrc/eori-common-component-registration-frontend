@@ -36,7 +36,7 @@ class OrganisationNameFormProvider() extends Constraints {
             "cds.matching-error.business-details.business-name.invalid-chars"
           )
         )
-      )(NameMatchModel.apply)(NameMatchModel.unapply)
+      )(NameMatchModel.apply)(nameMatchModel => Some(nameMatchModel.name))
     )
   }
 }

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OFormat, Writes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.http.HttpResponse
@@ -49,6 +49,5 @@ object CustomsDataStoreUpdate {
   implicit val writes: Writes[CustomsDataStoreUpdate] =
     JsPath
       .write[UpdateRequest]
-      .and(JsPath.write[UpdateResponse])(unlift(CustomsDataStoreUpdate.unapply))
-
+      .and(JsPath.write[UpdateResponse])((cdsUpdate: CustomsDataStoreUpdate) => (cdsUpdate.request, cdsUpdate.response))
 }

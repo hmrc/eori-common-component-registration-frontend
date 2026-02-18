@@ -57,7 +57,7 @@ class GetUtrNumberController @Inject() (
   val subscriptionUtrForm: Form[IdMatchModel] = subscriptionUtrFormProvider.subscriptionUtrForm
 
   def form(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       sessionCacheService.individualAndSoleTraderRouter(
         user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
         service,
@@ -66,7 +66,7 @@ class GetUtrNumberController @Inject() (
     }
 
   def submit(organisationType: String, service: Service, isInReviewMode: Boolean = false): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (loggedInUser: LoggedInUserWithEnrolments) =>
       subscriptionUtrForm
         .bindFromRequest()
         .fold(

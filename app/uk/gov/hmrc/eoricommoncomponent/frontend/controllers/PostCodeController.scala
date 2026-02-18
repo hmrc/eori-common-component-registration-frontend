@@ -39,12 +39,12 @@ class PostCodeController @Inject() (
     extends CdsController(mcc) {
 
   def createForm(service: Service): Action[AnyContent] =
-    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       Future.successful(Ok(postcodeView(postcodeForm.postCodeCreateForm, service)))
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => _: LoggedInUserWithEnrolments =>
+    authorise.ggAuthorisedUserWithEnrolmentsAction { implicit request => (_: LoggedInUserWithEnrolments) =>
       postcodeForm.postCodeCreateForm
         .bindFromRequest()
         .fold(

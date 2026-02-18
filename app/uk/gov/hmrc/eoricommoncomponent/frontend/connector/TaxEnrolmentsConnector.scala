@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{TaxEnrolmentsRequest, TaxEnrolmentsResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.events.{IssuerCall, IssuerRequest, IssuerResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.HttpStatusCheck
+import uk.gov.hmrc.http.*
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
-import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.client.HttpClientV2
 
 import java.net.URI
@@ -35,9 +36,8 @@ import scala.util.control.NonFatal
 @Singleton
 class TaxEnrolmentsConnector @Inject() (http: HttpClientV2, appConfig: AppConfig, audit: Auditor)(implicit
   ec: ExecutionContext
-) {
+) extends Logging {
 
-  private val logger = Logger(this.getClass)
   private val baseUrl = appConfig.taxEnrolmentsBaseUrl
   val serviceContext: String = appConfig.taxEnrolmentsServiceContext
 
@@ -70,7 +70,7 @@ class TaxEnrolmentsConnector @Inject() (http: HttpClientV2, appConfig: AppConfig
       .put(new URI(url).toURL)
       .withBody(Json.toJson(request))
       .execute[HttpResponse]
-      .map { response: HttpResponse =>
+      .map { (response: HttpResponse) =>
         logResponse(response)
         val detail = Json.toJson(IssuerCall(IssuerRequest(request), IssuerResponse(response)))
         audit.sendTaxEnrolmentIssuerCallEvent(url, detail)

@@ -22,7 +22,9 @@ import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
-import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.{Countries, Country}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
+import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
 
 class CountriesSpec extends AnyWordSpec with Matchers {
 
@@ -44,6 +46,49 @@ class CountriesSpec extends AnyWordSpec with Matchers {
     "give all eu countries with codes in alphabetical order of country name with filtering according to permitted MDG EU values" in {
       Countries.eu should contain(Country("France", "FR"))
       Countries.eu should contain(Country("Germany", "DE"))
+    }
+
+    "getCountryParameters" should {
+
+      "return third countries when location is ThirdCountry" in {
+        val (countries, picker) =
+          Countries.getCountryParameters(Some(UserLocation.ThirdCountry))
+
+        countries shouldBe Countries.third
+        picker shouldBe ThirdCountriesInCountryPicker
+      }
+
+      "return thirdIncEu countries when location is ThirdCountryIncEU" in {
+        val (countries, picker) =
+          Countries.getCountryParameters(Some(UserLocation.ThirdCountryIncEU))
+
+        countries shouldBe Countries.thirdIncEu
+        picker shouldBe ThirdCountriesIncEuInCountryPicker
+      }
+
+      "return islands when location is Islands" in {
+        val (countries, picker) =
+          Countries.getCountryParameters(Some(UserLocation.Islands))
+
+        countries shouldBe Countries.islands
+        picker shouldBe IslandsInCountryPicker
+      }
+
+      "return allExceptIom when location is None" in {
+        val (countries, picker) =
+          Countries.getCountryParameters(None)
+
+        countries shouldBe Countries.allExceptIom
+        picker shouldBe AllCountriesExceptIomInCountryPicker
+      }
+
+      "return allExceptIom for unknown case (fallback branch)" in {
+        val (countries, picker) =
+          Countries.getCountryParameters(Some(null))
+
+        countries shouldBe Countries.allExceptIom
+        picker shouldBe AllCountriesExceptIomInCountryPicker
+      }
     }
   }
 }

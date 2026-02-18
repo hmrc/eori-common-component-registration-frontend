@@ -36,7 +36,7 @@ class ContactAddressFormProvider extends Constraints {
         "townCity"    -> text.verifying(validLine3),
         "postcode"    -> text.verifying(validPostcode),
         "countryCode" -> default(text, countryCodeGB)
-      )(ContactAddressMatchModel.apply)(ContactAddressMatchModel.unapply)
+      )(ContactAddressMatchModel.apply)(camm => Some(camm.lineOne, camm.lineTwo, camm.townCity, camm.postcode, camm.country))
     )
   }
 }

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.forms
 
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.data.Forms.{optional, text}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType
@@ -25,8 +25,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.oneOf
 import javax.inject.Singleton
 
 @Singleton
-class OrganisationTypeDetailsFormProvider {
-  private val logger = Logger(this.getClass)
+class OrganisationTypeDetailsFormProvider extends Logging {
 
   def form(): Form[CdsOrganisationType] = {
     Form(

@@ -31,7 +31,7 @@
     <div>
         @errorSummary(utrForm.errors)
 
-        @formWithCSRF(submit, 'id -> "utrForm") {
+        @formWithCSRF(submit, Symbol("id") -> "utrForm") {
 
         @h1(messages(pageContent("headingMessage")))
         @p(messages(pageContent("message")))

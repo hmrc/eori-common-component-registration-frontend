@@ -43,7 +43,7 @@ class ConfirmIndividualTypeController @Inject() (
   private val form = confirmIndividualTypeForm.form()
 
   def form(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       sessionCacheService.individualAndSoleTraderRouter(
         user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
         service,
@@ -54,7 +54,7 @@ class ConfirmIndividualTypeController @Inject() (
     }
 
   def submit(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       form
         .bindFromRequest()
         .fold(

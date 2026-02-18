@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.{ApplicationController, ContactDetailsController, VatDetailsController, YourVatDetailsController}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Iom
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{LoggedInUserWithEnrolments, YesNo}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.SessionError
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms._
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.MatchingForms.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, RequestSessionData, SessionCacheService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{SubscriptionBusinessService, SubscriptionDetailsService}
@@ -42,12 +42,11 @@ class VatRegisteredUkController @Inject() (
   vatRegisteredUkView: vat_registered_uk,
   sessionCacheService: SessionCacheService
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
-
-  private val logger = Logger(this.getClass)
+    extends CdsController(mcc)
+    with Logging {
 
   def createForm(service: Service): Action[AnyContent] = {
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       isIndividualFlow match {
         case Right(isIndividual) =>
           val location =
@@ -75,7 +74,7 @@ class VatRegisteredUkController @Inject() (
   }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       (for {
         isVatRegisteredUk <- subscriptionBusinessService.getCachedVatRegisteredUk
         yesNo: YesNo = YesNo(isVatRegisteredUk)
@@ -104,7 +103,7 @@ class VatRegisteredUkController @Inject() (
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       vatRegisteredUkYesNoAnswerForm(requestSessionData.isPartnership)
         .bindFromRequest()
         .fold(

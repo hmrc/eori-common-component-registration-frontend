@@ -16,9 +16,12 @@
 
 package integration
 
+import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.shouldBe
+import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
 import play.api.inject.bind
@@ -28,22 +31,20 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitial
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{ErrorResponse, ServiceUnavailableResponse, SuccessResponse, TaxUDConnector}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.CdsOrganisationType.Embassy
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.transformer.FormDataCreateEoriSubscriptionRequestTransformer
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionResponse
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.txe13.CreateEoriSubscriptionResponse.SubscriptionBody
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.Uk
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{RegistrationDetailsEmbassy, SafeId}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service.gagmr
 import uk.gov.hmrc.http.HeaderCarrier
-import util.externalservices.ExternalServicesConfig._
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
+import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.{AuditService, EtmpTxe13StubService}
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
+class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -61,6 +62,11 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
 
   private lazy val taxUdConnector = app.injector.instanceOf[TaxUDConnector]
   val txe13Url: String = "/register-subscribe-without-id"
+
+  val connectorLogger: Logger =
+    LoggerFactory
+      .getLogger(classOf[TaxUDConnector])
+      .asInstanceOf[Logger]
 
   private lazy val mockRequest =
     """
@@ -138,22 +144,6 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
   "TaxUDConnector" should {
 
     "return SuccessResponse when a successful known response object comes back from ETMP" in {
-      // Given
-      val expectedRequest = new FormDataCreateEoriSubscriptionRequestTransformer().transform(
-        registrationDetails,
-        subscriptionDetails,
-        Uk,
-        gagmr
-      )
-
-      val expectedResponse = CreateEoriSubscriptionResponse(
-        SubscriptionBody(
-          "93000022142",
-          "WORKLIST",
-          LocalDateTime.parse("2023-11-28T10:15:10Z", DateTimeFormatter.ISO_DATE_TIME),
-          "XR0000100051093"
-        )
-      )
 
       EtmpTxe13StubService.returnCreated(txe13Url, mockRequest)
 
@@ -175,46 +165,87 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
       "Unprocessable entity comes back from ETMP" in {
         EtmpTxe13StubService.returnUnprocessableEntity(txe13Url, mockRequest)
 
-        val eoriHttpResponse =
-          await(taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr))
+        val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
-        wiremockVerifyTxe13PostRequest()
+        withCaptureOfLoggingFrom(connectorLogger) { events =>
+          whenReady(eoriHttpResponse) { result =>
+            events
+              .collectFirst { case event =>
+                event.getLevel.levelStr shouldBe "ERROR"
+                event.getMessage.contains(s"received from EIS, error is") shouldBe true
+              }
+              .getOrElse(fail("No log was captured"))
 
-        eoriHttpResponse mustBe ErrorResponse
+            // Then
+            wiremockVerifyTxe13PostRequest()
+            result mustBe ErrorResponse
+          }
+        }
+
       }
 
       "Bad Request comes back from ETMP" in {
         EtmpTxe13StubService.returnBadRequestEntity(txe13Url, mockRequest)
 
-        val eoriHttpResponse =
-          await(taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr))
+        val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
-        wiremockVerifyTxe13PostRequest()
+        withCaptureOfLoggingFrom(connectorLogger) { events =>
+          whenReady(eoriHttpResponse) { result =>
+            events
+              .collectFirst { case event =>
+                event.getLevel.levelStr shouldBe "ERROR"
+                event.getMessage.contains(s"received from EIS, error is") shouldBe true
+              }
+              .getOrElse(fail("No log was captured"))
 
-        eoriHttpResponse mustBe ErrorResponse
+            // Then
+            wiremockVerifyTxe13PostRequest()
+            result mustBe ErrorResponse
+          }
+        }
       }
 
       "return InvalidResponse when a 500 Internal Server Error comes back from ETMP" in {
         EtmpTxe13StubService.returnInternalServerError(txe13Url, mockRequest)
 
-        val eoriHttpResponse =
-          await(taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr))
+        val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
-        wiremockVerifyTxe13PostRequest()
+        withCaptureOfLoggingFrom(connectorLogger) { events =>
+          whenReady(eoriHttpResponse) { result =>
+            events
+              .collectFirst { case event =>
+                event.getLevel.levelStr shouldBe "ERROR"
+                event.getMessage.contains(s"received from EIS, error is") shouldBe true
+              }
+              .getOrElse(fail("No log was captured"))
 
-        eoriHttpResponse mustBe ErrorResponse
+            // Then
+            wiremockVerifyTxe13PostRequest()
+            result mustBe ErrorResponse
+          }
+        }
       }
     }
 
     "return ServiceUnavailableResponse when" in {
       EtmpTxe13StubService.faultWithConnectionReset(txe13Url, mockRequest)
 
-      val eoriHttpResponse =
-        await(taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr))
+      val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
-      wiremockVerifyTxe13PostRequest()
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(eoriHttpResponse) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "ERROR"
+              event.getMessage.contains(s"call to create eori subscription failed") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
 
-      eoriHttpResponse mustBe ServiceUnavailableResponse
+          // Then
+          wiremockVerifyTxe13PostRequest()
+          result mustBe ServiceUnavailableResponse
+        }
+      }
     }
   }
 

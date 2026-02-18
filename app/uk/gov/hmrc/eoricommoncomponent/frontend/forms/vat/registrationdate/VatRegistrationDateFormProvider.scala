@@ -41,7 +41,6 @@ class VatRegistrationDateFormProvider @Inject() (timeService: TimeService) exten
           .verifying(
             maxDate(timeService.getTodaysDate, "vat.error.minMax", DateConverter.earliestYearEffectiveVatDate.toString)
           )
-      )(VatRegistrationDate.apply)(VatRegistrationDate.unapply)
+      )(VatRegistrationDate.apply)(vatRegDate => Some(vatRegDate.dateOfRegistration))
     )
-
 }

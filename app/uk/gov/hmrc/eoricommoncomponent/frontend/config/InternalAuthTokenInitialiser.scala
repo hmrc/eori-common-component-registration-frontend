@@ -29,6 +29,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+
 abstract class InternalAuthTokenInitialiser {
   val initialised: Future[Done]
 }

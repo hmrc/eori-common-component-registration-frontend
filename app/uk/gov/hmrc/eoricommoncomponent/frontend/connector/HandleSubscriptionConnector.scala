@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
-import play.api.http.HeaderNames._
+import play.api.Logging
+import play.api.http.HeaderNames.*
 import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.mvc.Http.MimeTypes
 import play.mvc.Http.Status.{NO_CONTENT, OK}
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.HandleSubscriptionRequest
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.*
 import uk.gov.hmrc.http.client.HttpClientV2
 
 import javax.inject.{Inject, Singleton}
@@ -33,9 +34,8 @@ import scala.util.control.NonFatal
 @Singleton
 class HandleSubscriptionConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit
   ec: ExecutionContext
-) {
+) extends Logging {
 
-  private val logger = Logger(this.getClass)
   private val url = url"${appConfig.handleSubscriptionBaseUrl}/${appConfig.handleSubscriptionServiceContext}"
 
   def call(request: HandleSubscriptionRequest)(implicit hc: HeaderCarrier): Future[Unit] = {

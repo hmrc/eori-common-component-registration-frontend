@@ -34,7 +34,7 @@ class NameDobFormProvider() extends Mappings {
         "first-name" -> text.verifying(validName("first-name")),
         "last-name"  -> text.verifying(validName("last-name")),
         validateDateOfBirth
-      )(NameDobMatchModel.apply)(NameDobMatchModel.unapply)
+      )(NameDobMatchModel.apply)(nameDOBMatchModel => Some(nameDOBMatchModel.firstName, nameDOBMatchModel.lastName, nameDOBMatchModel.dateOfBirth))
     )
 
   private def validateDateOfBirth: (String, Mapping[LocalDate]) = {

@@ -17,15 +17,15 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend
 
 import play.api.i18n.MessagesApi
-import play.api.mvc.Results._
-import play.api.mvc._
-import play.api.{Configuration, Logger}
-import play.mvc.Http.Status._
+import play.api.mvc.*
+import play.api.mvc.Results.*
+import play.api.{Configuration, Logging}
+import play.mvc.Http.Status.*
 import play.twirl.api.Html
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes._
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionTimeOutException}
 import uk.gov.hmrc.eoricommoncomponent.frontend.util.{Constants, InvalidUrlValueException}
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName._
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, notFound}
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
@@ -38,9 +38,8 @@ class CdsErrorHandler @Inject() (
   errorTemplateView: error_template,
   notFoundView: notFound
 )(implicit val ec: ExecutionContext)
-    extends FrontendErrorHandler {
-
-  private val logger = Logger(this.getClass)
+    extends FrontendErrorHandler
+    with Logging {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
     request: RequestHeader

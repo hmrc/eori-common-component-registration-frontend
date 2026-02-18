@@ -16,20 +16,24 @@
 
 package integration
 
+import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.shouldBe
+import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.mvc.Http.Status._
+import play.mvc.Http.Status.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.{SubscriptionRequest, SubscriptionResponse}
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.{Host, Port, etmpFormBundleId}
 import util.externalservices.{AuditService, SubscriptionService}
 
-class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
+class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -50,6 +54,11 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
   val expectedPostUrl: String = "/subscribe"
 
   val EORI: String = "ZZZ1ZZZZ23ZZZZZZZ"
+
+  val connectorLogger: Logger =
+    LoggerFactory
+      .getLogger(classOf[SubscriptionServiceConnector])
+      .asInstanceOf[Logger]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -221,9 +230,22 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceRequestJson.toString(),
         serviceSubscriptionGenerateResponseJson.toString()
       )
-      await(subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])) must be(
-        serviceSubscriptionGenerateResponseJson.as[SubscriptionResponse]
-      )
+      val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result must be(
+            serviceSubscriptionGenerateResponseJson.as[SubscriptionResponse]
+          )
+        }
+      }
       eventually(AuditService.verifyXAuditWrite(1))
     }
 
@@ -233,9 +255,22 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceRequestJson.toString(),
         serviceSubscriptionLinkResponseJson.toString()
       )
-      await(subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])) must be(
-        serviceSubscriptionLinkResponseJson.as[SubscriptionResponse]
-      )
+      val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result must be(
+            serviceSubscriptionLinkResponseJson.as[SubscriptionResponse]
+          )
+        }
+      }
     }
 
     "return subscription pending status successful response when subscription service returns 200" in {
@@ -244,9 +279,22 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceRequestJson.toString(),
         serviceSubscriptionPendingResponseJson.toString()
       )
-      await(subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])) must be(
-        serviceSubscriptionPendingResponseJson.as[SubscriptionResponse]
-      )
+      val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result must be(
+            serviceSubscriptionPendingResponseJson.as[SubscriptionResponse]
+          )
+        }
+      }
     }
 
     "return subscription failed status response when subscription service returns 200 and response has 'FAIL' as param value" in {
@@ -255,9 +303,21 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceRequestJson.toString(),
         serviceSubscriptionFailedResponseJson.toString()
       )
-      await(subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])) must be(
-        serviceSubscriptionFailedResponseJson.as[SubscriptionResponse]
-      )
+      val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result must be(
+            serviceSubscriptionFailedResponseJson.as[SubscriptionResponse]
+          )
+        }
+      }
     }
 
     "return Exception when Subscription service returns a downstream 500 response (Internal Service Error)" in {
@@ -313,9 +373,20 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceRequestJson.toString(),
         serviceSubscriptionGenerateResponseJson.toString()
       )
-      await(subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest]))
+      val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { _ =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
 
-      eventually(AuditService.verifyXAuditWrite(1))
+          eventually(AuditService.verifyXAuditWrite(1))
+        }
+      }
+
     }
   }
 }

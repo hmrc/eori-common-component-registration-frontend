@@ -55,7 +55,7 @@
 
         <br>
 
-        @formWithCSRF(routes.WhatIsYourContactAddressController.submit(isInReviewMode, service), 'id -> "your-contact-address-form") {
+        @formWithCSRF(routes.WhatIsYourContactAddressController.submit(isInReviewMode, service), Symbol("id") -> "your-contact-address-form") {
 
             @inputText(
                 form = addressForm,

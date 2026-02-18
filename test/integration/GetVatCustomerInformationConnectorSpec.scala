@@ -32,19 +32,23 @@ package integration
  * limitations under the License.
  */
 
+import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.shouldBe
+import org.slf4j.LoggerFactory
 import play.api.Application
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{GetVatCustomerInformationConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.VatControlListResponse
-import uk.gov.hmrc.http._
-import util.externalservices.ExternalServicesConfig._
+import uk.gov.hmrc.http.*
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
+import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.GetVatInformationMessagingService
 
-class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
+class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -72,6 +76,11 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
   private lazy val connector = app.injector.instanceOf[GetVatCustomerInformationConnector]
   private val vrn = "123456789"
 
+  val connectorLogger: Logger =
+    LoggerFactory
+      .getLogger(classOf[GetVatCustomerInformationConnector])
+      .asInstanceOf[Logger]
+
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   "getVatCustomerInformation" should {
@@ -79,22 +88,45 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseOK()
 
       val expected = Right(VatControlListResponse(Some("SE28 1AA"), Some("2021-01-31")))
-      val result: Either[ResponseError, VatControlListResponse] =
-        await(connector.getVatCustomerInformation(vrn).value)
 
-      result mustBe expected
+      val res = connector.getVatCustomerInformation(vrn).value
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains(s"vat-customer-information success. response status") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result mustBe expected
+        }
+      }
     }
 
     "return NOT FOUND response" in {
       GetVatInformationMessagingService.returnTheVatCustomerInformationResponseNotFound()
-      val result: Either[ResponseError, VatControlListResponse] =
-        await(connector.getVatCustomerInformation(vrn).value)
-      result mustBe Left(
-        ResponseError(
-          NOT_FOUND,
-          """{"failures":{"code":"NOT_FOUND","reason":"The back end has indicated that No subscription can be found."}}"""
-        )
-      )
+
+      val res = connector.getVatCustomerInformation(vrn).value
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains(s"vat-customer-information success. response status") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result mustBe Left(
+            ResponseError(
+              NOT_FOUND,
+              """{"failures":{"code":"NOT_FOUND","reason":"The back end has indicated that No subscription can be found."}}"""
+            )
+          )
+        }
+      }
     }
 
     "return BAD REQUEST response" in {

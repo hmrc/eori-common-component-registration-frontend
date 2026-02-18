@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Writes}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.{RegistrationDisplayRequestHolder, RegistrationDisplayResponseHolder}
 
@@ -28,7 +28,7 @@ object RegistrationDisplay {
   implicit val writes: Writes[RegistrationDisplay] =
     JsPath
       .write[RegistrationDisplaySubmitted]
-      .and(JsPath.write[RegistrationDisplayResult])(unlift(RegistrationDisplay.unapply))
+      .and(JsPath.write[RegistrationDisplayResult])((regDisplay: RegistrationDisplay) => (regDisplay.request, regDisplay.response))
 
   def apply(
     request: RegistrationDisplayRequestHolder,

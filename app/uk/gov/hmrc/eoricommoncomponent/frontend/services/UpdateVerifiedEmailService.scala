@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import play.api.Logger
-import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers._
+import play.api.Logging
+import uk.gov.hmrc.eoricommoncomponent.frontend.connector.httpparsers.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{UpdateCustomsDataStoreConnector, UpdateVerifiedEmailConnector}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.CustomsDataStoreRequest
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{MessagingServiceParam, RegistrationInfoRequest}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,9 +32,8 @@ class UpdateVerifiedEmailService @Inject() (
   reqCommonGenerator: RequestCommonGenerator,
   updateVerifiedEmailConnector: UpdateVerifiedEmailConnector,
   customsDataStoreConnector: UpdateCustomsDataStoreConnector
-)(implicit ec: ExecutionContext) {
-
-  private val logger = Logger(this.getClass)
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   def updateVerifiedEmail(newEmail: String, eori: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
 

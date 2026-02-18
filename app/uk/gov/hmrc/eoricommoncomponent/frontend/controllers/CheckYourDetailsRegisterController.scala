@@ -43,7 +43,7 @@ class CheckYourDetailsRegisterController @Inject() (
     with Logging {
 
   def reviewDetails(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       viewModelConstructor.generateViewModel(service).flatMap {
         case Some(viewModel) =>
           val result =
@@ -60,7 +60,7 @@ class CheckYourDetailsRegisterController @Inject() (
     }
 
   def submitDetails(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) {
-    implicit request => loggedInUser: LoggedInUserWithEnrolments =>
+    implicit request => (loggedInUser: LoggedInUserWithEnrolments) =>
       registerWithoutIdWithSubscription.rowRegisterWithoutIdWithSubscription(loggedInUser, service)
   }
 

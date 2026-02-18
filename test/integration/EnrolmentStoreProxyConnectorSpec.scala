@@ -16,21 +16,29 @@
 
 package integration
 
+import ch.qos.logback.classic.Logger
+import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.shouldBe
 import org.scalatestplus.mockito.MockitoSugar
+import org.slf4j.LoggerFactory
 import play.api.Application
+import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.mvc.Http.Status._
+import play.mvc.Http.MimeTypes
+import play.mvc.Http.Status.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EnrolmentStoreProxyConnector, ResponseError}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.{EnrolmentResponse, EnrolmentStoreProxyResponse}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.EnrolmentStoreProxyService
-import util.externalservices.ExternalServicesConfig._
+import util.externalservices.ExternalServicesConfig.*
 
-class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFutures with MockitoSugar {
+class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFutures with MockitoSugar with LogCapturing {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -51,6 +59,11 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
   private val expectedGetUrl =
     s"/enrolment-store-proxy/enrolment-store/groups/$groupId/enrolments?type=principal"
+
+  val connectorLogger: Logger =
+    LoggerFactory
+      .getLogger(classOf[EnrolmentStoreProxyConnector])
+      .asInstanceOf[Logger]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -100,30 +113,76 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
   "EnrolmentStoreProxy" should {
     "return successful response with OK status when Enrolment Store Proxy returns 200" in {
       EnrolmentStoreProxyService.returnEnrolmentStoreProxyResponseOk("2e4589d9-484c-468a-8099-02a06fb1cd8c")
-      enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value.futureValue.map(res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse]))
+      val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("GetEnrolmentByGroupId") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result.map(res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse]))
+        }
+      }
     }
 
     "return No Content status when no data is returned in response" in {
       EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", NO_CONTENT)
-      enrolmentStoreProxyConnector
-        .getEnrolmentByGroupId(groupId)
-        .value
-        .futureValue
-        .map(res => res mustBe EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
+      val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+              event.getMessage.contains("GetEnrolmentByGroupId") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result.map(res => res mustBe EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
+        }
+      }
     }
 
     "return left when Service unavailable" in {
       EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", SERVICE_UNAVAILABLE)
 
-      val result = await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value)
-      result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, "Enrolment Store Proxy Response : }"))
+      val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "WARN"
+              event.getMessage.contains("GetEnrolmentByGroupId") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, "Enrolment Store Proxy Response : }"))
+        }
+      }
     }
 
     "return left when 4xx status code is received" in {
       EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", BAD_REQUEST)
 
-      val result = await(enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value)
-      result mustBe Left(ResponseError(BAD_REQUEST, "Enrolment Store Proxy Response : }"))
+      val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "WARN"
+              event.getMessage.contains("GetEnrolmentByGroupId") shouldBe true
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result mustBe Left(ResponseError(BAD_REQUEST, "Enrolment Store Proxy Response : }"))
+        }
+      }
     }
   }
 }

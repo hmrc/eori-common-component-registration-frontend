@@ -85,7 +85,7 @@
         @p(messages("cds.matching.name-id-organisation.identity.verify"))
 
         <div class="govuk-form-group">
-        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NameIdOrganisationController.submit(organisationType, service), 'id -> "matchNameUtrOrganisationForm") {
+        @formWithCSRF(uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.NameIdOrganisationController.submit(organisationType, service), Symbol("id") -> "matchNameUtrOrganisationForm") {
 
             @h2(messages(s"cds.matching.name-id-organisation.$displayMode.name"))
             @Html(messages(s"cds.matching.name-id-organisation.$displayMode.name.para"))

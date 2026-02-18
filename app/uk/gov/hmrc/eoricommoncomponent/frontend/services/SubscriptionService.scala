@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.eoricommoncomponent.frontend.audit.Auditor
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.SubscriptionServiceConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.MessagingServiceParam
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.SubscriptionCreateResponse.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,9 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, auditor: Auditor)(implicit ec: ExecutionContext) {
-
-  private val logger = Logger(this.getClass)
+class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, auditor: Auditor)(implicit ec: ExecutionContext) extends Logging {
 
   def subscribe(
     registration: RegistrationDetails,
@@ -72,7 +70,7 @@ class SubscriptionService @Inject() (connector: SubscriptionServiceConnector, au
   private def subscribeWithConnector(
     request: SubscriptionRequest
   )(implicit hc: HeaderCarrier): Future[SubscriptionResult] =
-    connector.subscribe(request) map { response: SubscriptionResponse =>
+    connector.subscribe(request) map { (response: SubscriptionResponse) =>
       val responseCommon = response.subscriptionCreateResponse.responseCommon
       val processingDate = DateTimeFormatter.ofPattern("d MMM y").format(responseCommon.processingDate)
       val emailVerificationTimestamp =

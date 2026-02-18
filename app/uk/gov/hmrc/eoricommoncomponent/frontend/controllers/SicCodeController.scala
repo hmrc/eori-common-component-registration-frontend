@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.controllers
 
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.auth.AuthAction
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.LoggedInUserWithEnrolments
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.siccode.{SicCodeForm, SicCodeViewModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{RequestSessionData, SessionCacheService}
@@ -44,8 +44,8 @@ class SicCodeController @Inject() (
   sessionCacheService: SessionCacheService,
   sicCodeForm: SicCodeForm
 )(implicit ec: ExecutionContext)
-    extends CdsController(mcc) {
-  private val logger = Logger(this.getClass)
+    extends CdsController(mcc)
+    with Logging {
 
   val scForm: Form[SicCodeViewModel] = sicCodeForm.form()
 
@@ -72,17 +72,17 @@ class SicCodeController @Inject() (
   }
 
   def createForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       subscriptionBusinessService.cachedSicCode.flatMap(populateView(_, isInReviewMode = false, service, user))
     }
 
   def reviewForm(service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
       subscriptionBusinessService.getCachedSicCode.flatMap(sic => populateView(Some(sic), isInReviewMode = true, service, user))
     }
 
   def submit(isInReviewMode: Boolean, service: Service): Action[AnyContent] =
-    authAction.enrolledUserWithSessionAction(service) { implicit request => _: LoggedInUserWithEnrolments =>
+    authAction.enrolledUserWithSessionAction(service) { implicit request => (_: LoggedInUserWithEnrolments) =>
       scForm
         .bindFromRequest()
         .fold(

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Writes, __}
 
 case class RegisterWithId(`type`: String, request: RegisterWithIdSubmitted, response: RegisterWithIdConfirmation)
@@ -31,7 +31,7 @@ object RegisterWithId {
         JsPath
           .write[RegisterWithIdSubmitted]
       )
-      .and(JsPath.write[RegisterWithIdConfirmation])(unlift(RegisterWithId.unapply))
+      .and(JsPath.write[RegisterWithIdConfirmation])((regWithId: RegisterWithId) => (regWithId.`type`, regWithId.request, regWithId.response))
 
   def apply(request: RegisterWithIdSubmitted, response: RegisterWithIdConfirmation): RegisterWithId =
     RegisterWithId(`type` = "RegisterWithId", request = request, response = response)

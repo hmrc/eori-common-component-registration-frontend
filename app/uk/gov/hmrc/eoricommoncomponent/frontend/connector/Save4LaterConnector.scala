@@ -16,28 +16,27 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.connector
 
-import play.api.Logger
+import play.api.Logging
 import play.api.http.HeaderNames.AUTHORIZATION
-import play.api.libs.json._
-import play.mvc.Http.Status._
+import play.api.libs.json.*
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import play.mvc.Http.Status.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{BadRequestException, _}
+import uk.gov.hmrc.http.{BadRequestException, *}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClientV2)(implicit ec: ExecutionContext) {
-
-  private val logger = Logger(this.getClass)
+class Save4LaterConnector @Inject() (appConfig: AppConfig, httpClient: HttpClientV2)(implicit ec: ExecutionContext) extends Logging {
 
   // $COVERAGE-OFF$Loggers
-  private def logSuccess(method: String, url: String) =
+  private def logSuccess(method: String, url: String): Unit =
     logger.debug(s"$method complete for call to $url")
 
-  private def logFailure(method: String, url: String, e: Throwable) =
+  private def logFailure(method: String, url: String, e: Throwable): Unit =
     logger.warn(s"$method request failed for call to $url: ${e.getMessage}", e)
 
   // $COVERAGE-ON

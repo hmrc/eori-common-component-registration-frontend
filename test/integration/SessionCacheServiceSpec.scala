@@ -16,7 +16,7 @@
 
 package integration
 
-import common.support.testdata.registration.RegistrationInfoGenerator._
+import common.support.testdata.registration.RegistrationInfoGenerator.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -24,16 +24,17 @@ import play.api.libs.json.Json.toJson
 import play.api.mvc.{Request, Session}
 import play.libs.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.ResponseCommon
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{BusinessShortName, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.PostcodeViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{CachedData, DataUnavailableException, SessionCache}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.mongo.CurrentTimestampSupport
 import uk.gov.hmrc.mongo.cache.DataKey
 import uk.gov.hmrc.mongo.test.MongoSupport
-import util.builders.RegistrationDetailsBuilder._
+import util.builders.RegistrationDetailsBuilder.*
 
 import java.time.{LocalDate, LocalDateTime}
 import java.util.UUID
@@ -224,7 +225,19 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
       caught.getMessage mustBe s"regInfo is not cached in data for the sessionId: ${s.value}"
     }
 
+    "throw exception when session Id is None" in {
+      when(request.session).thenReturn(Session())
+
+      val caught = intercept[IllegalStateException] {
+        sessionCache.sessionId
+      }
+      caught.getMessage mustBe s"Session id is not available"
+    }
+
     "store Registration Details, Info and Subscription Details Holder correctly" in {
+
+      val s: SessionId = setupSession
+      when(request.session).thenReturn(Session(Map(("sessionId", s.value))))
 
       await(sessionCache.saveRegistrationDetails(organisationRegistrationDetails)(request))
       val holder = SubscriptionDetails()
@@ -385,6 +398,70 @@ class SessionCacheSpec extends IntegrationTestsSpec with MockitoSugar with Mongo
       cacheUpdate.data mustBe expectedJson
 
       await(sessionCache.email(request)) mustBe email
+    }
+
+    "email Opt correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val email = "email@email.com"
+
+      await(sessionCache.saveEmail(email)(request))
+
+      val cacheUpdate = await(sessionCache.cacheRepo.findById(request)).getOrElse(
+        throw new IllegalStateException("Cache returned None")
+      )
+      val expectedJson = toJson(CachedData(email = Some(email)))
+      cacheUpdate.data mustBe expectedJson
+
+      await(sessionCache.emailOpt(request)) mustBe Some(email)
+    }
+
+    "store and fetch eori correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val eori: Eori = Eori("GB1234567890")
+
+      await(sessionCache.saveEori(eori)(request))
+
+      val cacheUpdate = await(sessionCache.cacheRepo.findById(request)).getOrElse(
+        throw new IllegalStateException("Cache returned None")
+      )
+      val expectedJson = toJson(CachedData(eori = Some(eori.id)))
+      cacheUpdate.data mustBe expectedJson
+
+      await(sessionCache.eori(request)) mustBe Some(eori.id)
+    }
+
+    "store and fetch postcode and line 1 details correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val pcDetails = PostcodeViewModel("NE11AA", Some("Line 1"))
+
+      await(sessionCache.savePostcodeAndLine1Details(pcDetails)(request))
+
+      await(sessionCache.cacheRepo.findById(request)).getOrElse(
+        throw new IllegalStateException("Cache returned None")
+      )
+
+      await(sessionCache.getPostcodeAndLine1Details(request)) mustBe Some(pcDetails)
+    }
+
+    "store and fetch NinoOrUtr correctly" in {
+
+      when(request.session).thenReturn(Session(Map(("sessionId", "sessionId-" + UUID.randomUUID()))))
+
+      val ninoOrUtr: NinoOrUtr = NinoOrUtr(Some(Nino("SX123412A")))
+
+      await(sessionCache.saveNinoOrUtrDetails(ninoOrUtr)(request))
+
+      await(sessionCache.cacheRepo.findById(request)).getOrElse(
+        throw new IllegalStateException("Cache returned None")
+      )
+
+      await(sessionCache.getNinoOrUtrDetails(request)) mustBe Some(ninoOrUtr)
     }
 
     "store subscription details correctly" in {

@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.Json
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation.convert
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.email.EmailStatus
@@ -31,9 +31,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) {
-
-  private val logger = Logger(this.getClass)
+class Save4LaterService @Inject() (save4LaterConnector: Save4LaterConnector) extends Logging {
 
   private val orgTypeKey = "orgType"
   private val emailKey = "email"

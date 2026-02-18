@@ -37,7 +37,7 @@ class AddressInvalidController @Inject() (
 )(implicit ec: ExecutionContext)
     extends CdsController(mcc) {
 
-  def page(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) { implicit request => user: LoggedInUserWithEnrolments =>
+  def page(service: Service): Action[AnyContent] = authAction.enrolledUserWithSessionAction(service) { implicit request => (user: LoggedInUserWithEnrolments) =>
     val result =
       if (requestSessionData.isIndividualOrSoleTrader(request))
         Future.successful(Ok(addressInvalidIndividual(service)))

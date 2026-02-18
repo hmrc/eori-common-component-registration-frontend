@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.models.events
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Writes}
 
 case class Subscription(request: SubscriptionSubmitted, response: SubscriptionResult)
@@ -27,6 +27,5 @@ object Subscription {
   implicit val writes: Writes[Subscription] =
     JsPath
       .write[SubscriptionSubmitted]
-      .and(JsPath.write[SubscriptionResult])(unlift(Subscription.unapply))
-
+      .and(JsPath.write[SubscriptionResult])((sub: Subscription) => (sub.request, sub.response))
 }

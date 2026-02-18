@@ -16,7 +16,7 @@
 
 package unit.services
 
-import common.pages.NinoMatchPage.convertToAnyMustWrapper
+import common.pages.NinoMatchPage.mustBe
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach

@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.RowIndividualNameDateOfBirthController
-import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.RowIndividualNameDateOfBirthController as RowIndividualNameDateOfBirthControllerRoutes
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.RowCountryIndividualNameDateOfBirthFormProvider
@@ -133,7 +133,7 @@ class RowIndividualNameDateOfBirthControllerReviewModeSpec
           assertPresentOnPage(webPage.givenNameElement)
           assertPresentOnPage(webPage.familyNameElement)
           assertPresentOnPage(webPage.dateOfBirthElement)
-          page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthController
+          page.getElementAttributeAction(webPage.formElement) shouldBe RowIndividualNameDateOfBirthControllerRoutes
             .reviewForm(organisationType, atarService)
             .url
 

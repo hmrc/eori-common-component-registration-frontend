@@ -16,24 +16,28 @@
 
 package integration
 
+import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.shouldBe
+import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.HandleSubscriptionConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.subscription.HandleSubscriptionRequest
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
+import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, HandleSubscriptionService}
 
-class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFutures {
+class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -61,6 +65,11 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
     .build()
 
   private lazy val handleSubscriptionConnector = app.injector.instanceOf[HandleSubscriptionConnector]
+
+  val connectorLogger: Logger =
+    LoggerFactory
+      .getLogger(classOf[HandleSubscriptionConnector])
+      .asInstanceOf[Logger]
 
   private val serviceRequestJson =
     Json.parse(s"""
@@ -101,13 +110,24 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      await(handleSubscriptionConnector.call(handleSubscriptionRequest))(defaultTimeout)
-      WireMock.verify(
-        postRequestedFor(urlEqualTo(expectedPostUrl))
-          .withRequestBody(equalToJson(serviceRequestJson.toString))
-          .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
-          .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
-      )
+
+      val res = handleSubscriptionConnector.call(handleSubscriptionRequest)
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { _ =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+            }
+            .getOrElse(fail("No log was captured"))
+
+          WireMock.verify(
+            postRequestedFor(urlEqualTo(expectedPostUrl))
+              .withRequestBody(equalToJson(serviceRequestJson.toString))
+              .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
+              .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
+          )
+        }
+      }
     }
 
     "return successful future when handle subscription endpoint returns 204" in {
@@ -116,7 +136,19 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
         serviceRequestJson.toString,
         NO_CONTENT
       )
-      handleSubscriptionConnector.call(handleSubscriptionRequest).futureValue mustBe ((): Unit)
+
+      val res = handleSubscriptionConnector.call(handleSubscriptionRequest)
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        whenReady(res) { result =>
+          events
+            .collectFirst { case event =>
+              event.getLevel.levelStr shouldBe "DEBUG"
+            }
+            .getOrElse(fail("No log was captured"))
+
+          result mustBe ((): Unit)
+        }
+      }
     }
 
     "return a failed future when handle subscription endpoint returns 400" in {
@@ -126,8 +158,18 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
         BAD_REQUEST
       )
 
-      a[BadRequestException] should be thrownBy {
-        await(handleSubscriptionConnector.call(handleSubscriptionRequest))
+      val res = handleSubscriptionConnector.call(handleSubscriptionRequest)
+
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        val ex = await(res.failed)
+
+        events
+          .collectFirst { case event =>
+            event.getLevel.levelStr shouldBe "WARN"
+          }
+          .getOrElse(fail("No log was captured"))
+
+        ex mustBe a[BadRequestException]
       }
     }
   }
