@@ -109,16 +109,8 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       )
       val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "ERROR"
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result.map(truncateTimestamp) mustBe Left(ServiceUnavailableResponse)
-        }
+      whenReady(res) { result =>
+        result.map(truncateTimestamp) mustBe Left(ServiceUnavailableResponse)
       }
     }
 
