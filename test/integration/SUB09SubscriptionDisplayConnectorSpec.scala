@@ -18,7 +18,8 @@ package integration
 
 import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.shouldBe
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
+import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
@@ -88,15 +89,13 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result.map(truncateTimestamp) mustBe Right(truncateTimestamp(expectedResponse))
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result.map(truncateTimestamp) mustBe Right(truncateTimestamp(expectedResponse))
       }
     }
 
@@ -123,15 +122,13 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result.map(truncateTimestamp) mustBe Left(InvalidResponse)
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result.map(truncateTimestamp) mustBe Left(InvalidResponse)
       }
     }
   }

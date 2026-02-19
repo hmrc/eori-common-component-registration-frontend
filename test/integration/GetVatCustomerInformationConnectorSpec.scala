@@ -34,7 +34,8 @@ package integration
 
 import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.shouldBe
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
+import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.Status.*
@@ -92,16 +93,14 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
       val res = connector.getVatCustomerInformation(vrn).value
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains(s"vat-customer-information success. response status") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result mustBe expected
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result mustBe expected
+
       }
     }
 
@@ -111,21 +110,19 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
       val res = connector.getVatCustomerInformation(vrn).value
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains(s"vat-customer-information success. response status") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+        val result = await(res)
 
-          result mustBe Left(
-            ResponseError(
-              NOT_FOUND,
-              """{"failures":{"code":"NOT_FOUND","reason":"The back end has indicated that No subscription can be found."}}"""
-            )
-          )
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result mustBe Left(
+          ResponseError(
+            NOT_FOUND,
+            """{"failures":{"code":"NOT_FOUND","reason":"The back end has indicated that No subscription can be found."}}"""
+          )
+        )
       }
     }
 

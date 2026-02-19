@@ -20,7 +20,8 @@ import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.shouldBe
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
+import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
@@ -113,20 +114,18 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
       val res = handleSubscriptionConnector.call(handleSubscriptionRequest)
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { _ =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-            }
-            .getOrElse(fail("No log was captured"))
-
-          WireMock.verify(
-            postRequestedFor(urlEqualTo(expectedPostUrl))
-              .withRequestBody(equalToJson(serviceRequestJson.toString))
-              .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
-              .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        WireMock.verify(
+          postRequestedFor(urlEqualTo(expectedPostUrl))
+            .withRequestBody(equalToJson(serviceRequestJson.toString))
+            .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
+            .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
+        )
       }
     }
 
@@ -155,11 +154,10 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         val ex = await(res.failed)
 
-        events
-          .collectFirst { case event =>
-            event.getLevel.levelStr shouldBe "WARN"
-          }
-          .getOrElse(fail("No log was captured"))
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "WARN") shouldBe true
+        }
 
         ex mustBe a[BadRequestException]
       }

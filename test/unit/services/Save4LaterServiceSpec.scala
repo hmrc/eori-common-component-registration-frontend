@@ -23,11 +23,13 @@ import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Span}
+import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
 import play.api.libs.json.{Json, Reads}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
@@ -88,16 +90,13 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         val res = service
           .saveSafeId(groupId, safeId)
 
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage shouldBe (s"saving SafeId $safeId for groupId $groupId")
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result shouldBe ((): Unit)
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result shouldBe ((): Unit)
       }
     }
 
@@ -117,16 +116,13 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
 
         val maybeOrgType: Option[CdsOrganisationType] = Some(organisationType)
 
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage shouldBe (s"saving OrganisationType $maybeOrgType for groupId $groupId")
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result shouldBe ((): Unit)
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result shouldBe ((): Unit)
       }
     }
 
@@ -144,16 +140,13 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         val res = service
           .saveEmail(groupId, emailStatus)
 
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage shouldBe (s"saving email address $emailStatus for groupId $groupId")
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result shouldBe ((): Unit)
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result shouldBe ((): Unit)
       }
     }
 

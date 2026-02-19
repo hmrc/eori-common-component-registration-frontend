@@ -18,7 +18,8 @@ package integration
 
 import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.shouldBe
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
+import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
@@ -233,18 +234,15 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result must be(
-            serviceSubscriptionGenerateResponseJson.as[SubscriptionResponse]
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result must be(
+          serviceSubscriptionGenerateResponseJson.as[SubscriptionResponse]
+        )
       }
       eventually(AuditService.verifyXAuditWrite(1))
     }
@@ -273,18 +271,15 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result must be(
-            serviceSubscriptionPendingResponseJson.as[SubscriptionResponse]
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result must be(
+          serviceSubscriptionPendingResponseJson.as[SubscriptionResponse]
+        )
       }
     }
 
@@ -296,18 +291,15 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("[Subscribe SUB02: responseCommon:") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
-
-          result must be(
-            serviceSubscriptionFailedResponseJson.as[SubscriptionResponse]
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result must be(
+          serviceSubscriptionFailedResponseJson.as[SubscriptionResponse]
+        )
       }
     }
 

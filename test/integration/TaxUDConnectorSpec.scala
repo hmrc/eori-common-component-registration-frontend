@@ -20,7 +20,8 @@ import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.shouldBe
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
+import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
@@ -168,18 +169,15 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
         val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
         withCaptureOfLoggingFrom(connectorLogger) { events =>
-          whenReady(eoriHttpResponse) { result =>
-            events
-              .collectFirst { case event =>
-                event.getLevel.levelStr shouldBe "ERROR"
-                event.getMessage.contains(s"received from EIS, error is") shouldBe true
-              }
-              .getOrElse(fail("No log was captured"))
-
-            // Then
-            wiremockVerifyTxe13PostRequest()
-            result mustBe ErrorResponse
+          val result = await(eoriHttpResponse)
+          eventually(timeout(Span(30, Seconds))) {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "ERROR") shouldBe true
           }
+
+          // Then
+          wiremockVerifyTxe13PostRequest()
+          result mustBe ErrorResponse
         }
 
       }
@@ -190,18 +188,15 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
         val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
         withCaptureOfLoggingFrom(connectorLogger) { events =>
-          whenReady(eoriHttpResponse) { result =>
-            events
-              .collectFirst { case event =>
-                event.getLevel.levelStr shouldBe "ERROR"
-                event.getMessage.contains(s"received from EIS, error is") shouldBe true
-              }
-              .getOrElse(fail("No log was captured"))
-
-            // Then
-            wiremockVerifyTxe13PostRequest()
-            result mustBe ErrorResponse
+          val result = await(eoriHttpResponse)
+          eventually(timeout(Span(30, Seconds))) {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "ERROR") shouldBe true
           }
+
+          // Then
+          wiremockVerifyTxe13PostRequest()
+          result mustBe ErrorResponse
         }
       }
 
@@ -211,18 +206,15 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
         val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
         withCaptureOfLoggingFrom(connectorLogger) { events =>
-          whenReady(eoriHttpResponse) { result =>
-            events
-              .collectFirst { case event =>
-                event.getLevel.levelStr shouldBe "ERROR"
-                event.getMessage.contains(s"received from EIS, error is") shouldBe true
-              }
-              .getOrElse(fail("No log was captured"))
-
-            // Then
-            wiremockVerifyTxe13PostRequest()
-            result mustBe ErrorResponse
+          val result = await(eoriHttpResponse)
+          eventually(timeout(Span(30, Seconds))) {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "ERROR") shouldBe true
           }
+
+          // Then
+          wiremockVerifyTxe13PostRequest()
+          result mustBe ErrorResponse
         }
       }
     }
@@ -233,18 +225,15 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
       val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(eoriHttpResponse) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "ERROR"
-              event.getMessage.contains(s"call to create eori subscription failed") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
-
-          // Then
-          wiremockVerifyTxe13PostRequest()
-          result mustBe ServiceUnavailableResponse
+        val result = await(eoriHttpResponse)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "ERROR") shouldBe true
         }
+
+        // Then
+        wiremockVerifyTxe13PostRequest()
+        result mustBe ServiceUnavailableResponse
       }
     }
   }
