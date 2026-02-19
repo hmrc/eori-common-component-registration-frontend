@@ -134,19 +134,18 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { _ =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "INFO") shouldBe true
-          }
-
-          WireMock.verify(
-            postRequestedFor(urlEqualTo(expectedPostUrl))
-              .withRequestBody(equalToJson(serviceRequestJson.toString))
-              .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
-              .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
-          )
+        await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "INFO") shouldBe true
         }
+
+        WireMock.verify(
+          postRequestedFor(urlEqualTo(expectedPostUrl))
+            .withRequestBody(equalToJson(serviceRequestJson.toString))
+            .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
+            .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
+        )
       }
     }
 
@@ -160,14 +159,13 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { _ =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "INFO") shouldBe true
-          }
-
-          eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
+        await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "INFO") shouldBe true
         }
+
+        eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
       }
 
     }
@@ -181,14 +179,13 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "INFO") shouldBe true
-          }
-
-          result mustBe ()
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "INFO") shouldBe true
         }
+
+        result mustBe ()
       }
     }
 

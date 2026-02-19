@@ -89,14 +89,13 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result.map(truncateTimestamp) mustBe Right(truncateTimestamp(expectedResponse))
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result.map(truncateTimestamp) mustBe Right(truncateTimestamp(expectedResponse))
       }
     }
 
@@ -123,14 +122,13 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result.map(truncateTimestamp) mustBe Left(InvalidResponse)
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result.map(truncateTimestamp) mustBe Left(InvalidResponse)
       }
     }
   }

@@ -29,6 +29,7 @@ import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
 import play.api.libs.json.{Json, Reads}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.Save4LaterConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
@@ -89,14 +90,13 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         val res = service
           .saveSafeId(groupId, safeId)
 
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result shouldBe ((): Unit)
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result shouldBe ((): Unit)
       }
     }
 
@@ -116,14 +116,13 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
 
         val maybeOrgType: Option[CdsOrganisationType] = Some(organisationType)
 
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result shouldBe ((): Unit)
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result shouldBe ((): Unit)
       }
     }
 
@@ -141,14 +140,13 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         val res = service
           .saveEmail(groupId, emailStatus)
 
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result shouldBe ((): Unit)
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result shouldBe ((): Unit)
       }
     }
 

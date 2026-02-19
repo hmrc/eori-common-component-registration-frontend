@@ -117,14 +117,13 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
       val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result.map(res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse]))
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result.map(res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse]))
       }
     }
 
@@ -133,14 +132,14 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
       val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result.map(res => res mustBe EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result.map(res => res mustBe EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
+
       }
     }
 
@@ -150,14 +149,14 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
       val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "WARN") shouldBe true
-          }
-
-          result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, "Enrolment Store Proxy Response : }"))
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "WARN") shouldBe true
         }
+
+        result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, "Enrolment Store Proxy Response : }"))
+
       }
     }
 
@@ -167,14 +166,13 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
       val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "WARN") shouldBe true
-          }
-
-          result mustBe Left(ResponseError(BAD_REQUEST, "Enrolment Store Proxy Response : }"))
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "WARN") shouldBe true
         }
+
+        result mustBe Left(ResponseError(BAD_REQUEST, "Enrolment Store Proxy Response : }"))
       }
     }
   }

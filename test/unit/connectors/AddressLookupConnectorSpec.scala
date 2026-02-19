@@ -30,6 +30,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
 import play.api.http.HeaderNames
 import play.api.libs.json.{JsValue, Json}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.AddressLookupConnector
@@ -99,14 +100,13 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
-          whenReady(res) { result =>
-            eventually(timeout(Span(30, Seconds))) {
-              events should not be empty
-              events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-            }
-
-            result shouldBe expectedResponse
+          val result = await(res)
+          eventually(timeout(Span(30, Seconds))) {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
+
+          result shouldBe expectedResponse
         }
       }
 
@@ -127,14 +127,13 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
-          whenReady(res) { result =>
-            eventually(timeout(Span(30, Seconds))) {
-              events should not be empty
-              events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-            }
-
-            result shouldBe expectedResponse
+          val result = await(res)
+          eventually(timeout(Span(30, Seconds))) {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
+
+          result shouldBe expectedResponse
         }
       }
 
@@ -151,14 +150,13 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
-          whenReady(res) { result =>
-            eventually(timeout(Span(30, Seconds))) {
-              events should not be empty
-              events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-            }
-
-            result shouldBe expectedResponse
+          val result = await(res)
+          eventually(timeout(Span(30, Seconds))) {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
+
+          result shouldBe expectedResponse
         }
       }
     }
@@ -177,14 +175,13 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
-          whenReady(res) { result =>
-            eventually(timeout(Span(30, Seconds))) {
-              events should not be empty
-              events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-            }
-
-            result shouldBe AddressLookupFailure
+          val result = await(res)
+          eventually(timeout(Span(30, Seconds))) {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
+
+          result shouldBe AddressLookupFailure
         }
       }
     }

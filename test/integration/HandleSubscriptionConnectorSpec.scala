@@ -114,19 +114,18 @@ class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
       val res = handleSubscriptionConnector.call(handleSubscriptionRequest)
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { _ =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          WireMock.verify(
-            postRequestedFor(urlEqualTo(expectedPostUrl))
-              .withRequestBody(equalToJson(serviceRequestJson.toString))
-              .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
-              .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        WireMock.verify(
+          postRequestedFor(urlEqualTo(expectedPostUrl))
+            .withRequestBody(equalToJson(serviceRequestJson.toString))
+            .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
+            .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
+        )
       }
     }
 

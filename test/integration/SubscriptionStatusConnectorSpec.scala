@@ -140,16 +140,15 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       val res = subscriptionStatusConnector.status(request)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result must be(
-            responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result must be(
+          responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
+        )
       }
     }
 
@@ -162,17 +161,16 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       val res = subscriptionStatusConnector.status(request)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result must be(
-            responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
-          )
-          eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result must be(
+          responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
+        )
+        eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
       }
     }
 
@@ -211,14 +209,13 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       val res = subscriptionStatusConnector.status(request)
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { _ =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          eventually(AuditService.verifyXAuditWrite(1))
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        eventually(AuditService.verifyXAuditWrite(1))
       }
     }
   }

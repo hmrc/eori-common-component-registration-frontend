@@ -93,14 +93,14 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
       val res = connector.getVatCustomerInformation(vrn).value
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result mustBe expected
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result mustBe expected
+
       }
     }
 
@@ -110,19 +110,19 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
       val res = connector.getVatCustomerInformation(vrn).value
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
+        val result = await(res)
 
-          result mustBe Left(
-            ResponseError(
-              NOT_FOUND,
-              """{"failures":{"code":"NOT_FOUND","reason":"The back end has indicated that No subscription can be found."}}"""
-            )
-          )
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result mustBe Left(
+          ResponseError(
+            NOT_FOUND,
+            """{"failures":{"code":"NOT_FOUND","reason":"The back end has indicated that No subscription can be found."}}"""
+          )
+        )
       }
     }
 

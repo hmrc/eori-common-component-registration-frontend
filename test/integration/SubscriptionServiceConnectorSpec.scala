@@ -234,16 +234,15 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result must be(
-            serviceSubscriptionGenerateResponseJson.as[SubscriptionResponse]
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result must be(
+          serviceSubscriptionGenerateResponseJson.as[SubscriptionResponse]
+        )
       }
       eventually(AuditService.verifyXAuditWrite(1))
     }
@@ -272,16 +271,15 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result must be(
-            serviceSubscriptionPendingResponseJson.as[SubscriptionResponse]
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result must be(
+          serviceSubscriptionPendingResponseJson.as[SubscriptionResponse]
+        )
       }
     }
 
@@ -293,16 +291,15 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
       withCaptureOfLoggingFrom(connectorLogger) { events =>
-        whenReady(res) { result =>
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result must be(
-            serviceSubscriptionFailedResponseJson.as[SubscriptionResponse]
-          )
+        val result = await(res)
+        eventually(timeout(Span(30, Seconds))) {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
         }
+
+        result must be(
+          serviceSubscriptionFailedResponseJson.as[SubscriptionResponse]
+        )
       }
     }
 
