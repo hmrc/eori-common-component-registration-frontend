@@ -186,7 +186,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
             events.exists(_.getLevel.levelStr == "INFO") shouldBe true
           }
 
-          result mustBe()
+          result mustBe ()
         }
       }
     }
