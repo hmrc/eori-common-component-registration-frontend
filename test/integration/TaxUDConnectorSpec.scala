@@ -44,6 +44,8 @@ import util.externalservices.{AuditService, EtmpTxe13StubService}
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
 
 class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
@@ -130,6 +132,9 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
   }
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   before {
     resetMockServer()

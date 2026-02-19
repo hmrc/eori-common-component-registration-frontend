@@ -34,6 +34,9 @@ import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.{Host, Port, etmpFormBundleId}
 import util.externalservices.{AuditService, SubscriptionService}
 
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
+
 class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
@@ -62,6 +65,9 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       .asInstanceOf[Logger]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   before {
     resetMockServer()

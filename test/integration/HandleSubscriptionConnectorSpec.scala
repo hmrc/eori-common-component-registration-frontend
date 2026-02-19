@@ -38,9 +38,15 @@ import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, HandleSubscriptionService}
 
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
+
 class HandleSubscriptionConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   private val formBundleId = "bundle-id"
 

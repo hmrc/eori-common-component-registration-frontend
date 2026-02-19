@@ -36,6 +36,8 @@ import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.{AuditService, SubscriptionStatusMessagingService}
 
 import java.time.LocalDateTime
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
 
 class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
@@ -70,6 +72,10 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       .asInstanceOf[Logger]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
+
   implicit val service: Service = Service.cds
 
   val responseWithOk: JsValue =

@@ -9,6 +9,10 @@
         </encoder>
     </appender>
 
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>logs/eori-common-component-registration-frontend.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
