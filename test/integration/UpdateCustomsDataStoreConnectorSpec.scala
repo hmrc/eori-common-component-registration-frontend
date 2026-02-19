@@ -186,7 +186,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
             events.exists(_.getLevel.levelStr == "INFO") shouldBe true
           }
 
-          result mustBe ()
+          result mustBe()
         }
       }
     }
@@ -208,8 +208,8 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
           events.exists(_.getLevel.levelStr == "WARN") shouldBe true
         }
 
-      val ex = await(res.failed)
-      ex mustBe a[BadRequestException]
+        ex mustBe a[BadRequestException]
+      }
     }
   }
 }
