@@ -39,6 +39,9 @@ import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.EnrolmentStoreProxyService
 import util.externalservices.ExternalServicesConfig.*
 
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
+
 class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFutures with MockitoSugar with LogCapturing {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
@@ -67,6 +70,9 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
       .asInstanceOf[Logger]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   val responseWithOk: JsValue =
     Json.parse {

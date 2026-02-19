@@ -35,6 +35,8 @@ import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.SubscriptionDisplayMessagingService
 
 import java.time.temporal.ChronoUnit
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
 
 class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
@@ -67,6 +69,9 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
     .subscriptionDisplayResponse
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   before {
     resetMockServer()

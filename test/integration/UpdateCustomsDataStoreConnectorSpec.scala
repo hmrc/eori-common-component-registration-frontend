@@ -38,10 +38,13 @@ import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, CustomsDataStoreStubService}
 
+import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
 
 class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
-  implicit val ex: ExecutionContext = ExecutionContext.Implicits.global
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
+
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val email = "a@example.com"

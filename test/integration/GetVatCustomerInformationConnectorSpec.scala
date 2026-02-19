@@ -49,6 +49,9 @@ import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.GetVatInformationMessagingService
 
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
+
 class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
@@ -83,6 +86,8 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
       .asInstanceOf[Logger]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   "getVatCustomerInformation" should {
     "return successful GetVatInformationResponse response with OK status" in {
@@ -111,7 +116,6 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         val result = await(res)
-
         eventually(timeout(Span(30, Seconds))) {
           events should not be empty
           events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true

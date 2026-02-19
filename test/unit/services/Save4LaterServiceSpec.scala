@@ -38,13 +38,18 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.services.Save4LaterService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 
+import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with LogCapturing {
   private val mockSave4LaterConnector = mock[Save4LaterConnector]
 
   implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
+
+  implicit val testEC: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
+
   private val safeId = SafeId("safeId")
   private val groupId = GroupId("groupId-123")
 
