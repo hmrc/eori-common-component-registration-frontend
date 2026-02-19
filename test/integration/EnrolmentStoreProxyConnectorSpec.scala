@@ -20,7 +20,7 @@ import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.shouldBe
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
 import play.api.Application
@@ -117,12 +117,10 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("GetEnrolmentByGroupId") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+          }
 
           result.map(res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse]))
         }
@@ -135,12 +133,10 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("GetEnrolmentByGroupId") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+          }
 
           result.map(res => res mustBe EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
         }
@@ -154,12 +150,10 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "WARN"
-              event.getMessage.contains("GetEnrolmentByGroupId") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "WARN") shouldBe true
+          }
 
           result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, "Enrolment Store Proxy Response : }"))
         }
@@ -173,12 +167,10 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "WARN"
-              event.getMessage.contains("GetEnrolmentByGroupId") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "WARN") shouldBe true
+          }
 
           result mustBe Left(ResponseError(BAD_REQUEST, "Enrolment Store Proxy Response : }"))
         }

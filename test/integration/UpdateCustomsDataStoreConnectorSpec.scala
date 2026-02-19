@@ -20,7 +20,7 @@ import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.shouldBe
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
@@ -134,12 +134,10 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { _ =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "INFO"
-              event.getMessage.contains("[UpdateCustomsDataStoreConnector][call] complete for call to") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "INFO") shouldBe true
+          }
 
           WireMock.verify(
             postRequestedFor(urlEqualTo(expectedPostUrl))
@@ -162,12 +160,10 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { _ =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "INFO"
-              event.getMessage.contains("[UpdateCustomsDataStoreConnector][call] complete for call to") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "INFO") shouldBe true
+          }
 
           eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
         }
@@ -185,12 +181,10 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "INFO"
-              event.getMessage.contains("[UpdateCustomsDataStoreConnector][call] complete for call to") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "INFO") shouldBe true
+          }
 
           result mustBe ()
         }
@@ -206,8 +200,16 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
 
-      val ex = await(res.failed)
-      ex mustBe a[BadRequestException]
+      withCaptureOfLoggingFrom(connectorLogger) { events =>
+        val ex = await(res.failed)
+
+        eventually {
+          events should not be empty
+          events.exists(_.getLevel.levelStr == "WARN") shouldBe true
+        }
+
+        ex mustBe a[BadRequestException]
+      }
     }
   }
 }

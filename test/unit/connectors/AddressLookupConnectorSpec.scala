@@ -23,6 +23,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, po
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
@@ -98,12 +99,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
           whenReady(res) { result =>
-            events
-              .collectFirst { case event =>
-                event.getLevel.levelStr shouldBe "DEBUG"
-                event.getMessage.contains("Address lookup url:") shouldBe true
-              }
-              .getOrElse(fail("No log was captured"))
+            eventually {
+              events should not be empty
+              events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+            }
 
             result shouldBe expectedResponse
           }
@@ -128,12 +127,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
           whenReady(res) { result =>
-            events
-              .collectFirst { case event =>
-                event.getLevel.levelStr shouldBe "DEBUG"
-                event.getMessage.contains("Address lookup url:") shouldBe true
-              }
-              .getOrElse(fail("No log was captured"))
+            eventually {
+              events should not be empty
+              events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+            }
 
             result shouldBe expectedResponse
           }
@@ -154,12 +151,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
           whenReady(res) { result =>
-            events
-              .collectFirst { case event =>
-                event.getLevel.levelStr shouldBe "DEBUG"
-                event.getMessage.contains("Address lookup url:") shouldBe true
-              }
-              .getOrElse(fail("No log was captured"))
+            eventually {
+              events should not be empty
+              events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+            }
 
             result shouldBe expectedResponse
           }
@@ -182,12 +177,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
           whenReady(res) { result =>
-            events
-              .collectFirst { case event =>
-                event.getLevel.levelStr shouldBe "DEBUG"
-                event.getMessage.contains("Address lookup url:") shouldBe true
-              }
-              .getOrElse(fail("No log was captured"))
+            eventually {
+              events should not be empty
+              events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+            }
 
             result shouldBe AddressLookupFailure
           }

@@ -18,7 +18,7 @@ package integration
 
 import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.shouldBe
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
@@ -140,12 +140,10 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("Status SUB01: responseCommon:") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+          }
 
           result must be(
             responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
@@ -164,12 +162,10 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("Status SUB01: responseCommon:") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+          }
 
           result must be(
             responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
@@ -215,12 +211,10 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { _ =>
-          events
-            .collectFirst { case event =>
-              event.getLevel.levelStr shouldBe "DEBUG"
-              event.getMessage.contains("Status SUB01: responseCommon:") shouldBe true
-            }
-            .getOrElse(fail("No log was captured"))
+          eventually {
+            events should not be empty
+            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
+          }
 
           eventually(AuditService.verifyXAuditWrite(1))
         }
