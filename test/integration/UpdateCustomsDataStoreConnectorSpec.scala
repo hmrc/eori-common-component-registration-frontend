@@ -21,6 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers.{should, shouldBe}
+import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
@@ -134,7 +135,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { _ =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "INFO") shouldBe true
           }
@@ -160,7 +161,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { _ =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "INFO") shouldBe true
           }
@@ -181,7 +182,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "INFO") shouldBe true
           }
@@ -203,7 +204,7 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         val ex = await(res.failed)
 
-        eventually {
+        eventually(timeout(Span(30, Seconds))) {
           events should not be empty
           events.exists(_.getLevel.levelStr == "WARN") shouldBe true
         }

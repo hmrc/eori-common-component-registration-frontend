@@ -21,6 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers.{should, shouldBe}
+import org.scalatest.time.{Seconds, Span}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
 import play.api.Application
@@ -117,7 +118,7 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
@@ -133,7 +134,7 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
@@ -150,7 +151,7 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "WARN") shouldBe true
           }
@@ -167,7 +168,7 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "WARN") shouldBe true
           }

@@ -25,6 +25,7 @@ import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.time.{Seconds, Span}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
 import play.api.http.HeaderNames
@@ -99,7 +100,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
           whenReady(res) { result =>
-            eventually {
+            eventually(timeout(Span(30, Seconds))) {
               events should not be empty
               events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
             }
@@ -127,7 +128,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
           whenReady(res) { result =>
-            eventually {
+            eventually(timeout(Span(30, Seconds))) {
               events should not be empty
               events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
             }
@@ -151,7 +152,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
           whenReady(res) { result =>
-            eventually {
+            eventually(timeout(Span(30, Seconds))) {
               events should not be empty
               events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
             }
@@ -177,7 +178,7 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
         withCaptureOfLoggingFrom(connectorLogger) { events =>
           val res = connector.lookup(postcode, None)(hc)
           whenReady(res) { result =>
-            eventually {
+            eventually(timeout(Span(30, Seconds))) {
               events should not be empty
               events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
             }

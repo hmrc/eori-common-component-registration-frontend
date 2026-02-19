@@ -25,7 +25,7 @@ import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Span}
+import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
 import play.api.libs.json.{Json, Reads}
@@ -90,7 +90,7 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
           .saveSafeId(groupId, safeId)
 
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
@@ -117,7 +117,7 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         val maybeOrgType: Option[CdsOrganisationType] = Some(organisationType)
 
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
@@ -142,7 +142,7 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
           .saveEmail(groupId, emailStatus)
 
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }

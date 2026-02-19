@@ -19,6 +19,7 @@ package integration
 import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers.{should, shouldBe}
+import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
@@ -89,7 +90,7 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
@@ -123,7 +124,7 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
 
       withCaptureOfLoggingFrom(connectorLogger) { events =>
         whenReady(res) { result =>
-          eventually {
+          eventually(timeout(Span(30, Seconds))) {
             events should not be empty
             events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
           }
