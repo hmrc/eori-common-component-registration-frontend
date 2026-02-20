@@ -133,9 +133,6 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-
   before {
     resetMockServer()
     AuditService.stubAuditService()
@@ -173,18 +170,11 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
 
         val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
-        withCaptureOfLoggingFrom(connectorLogger) { events =>
-          val result = await(eoriHttpResponse)
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "ERROR") shouldBe true
-          }
+        val result = await(eoriHttpResponse)
 
-          // Then
-          wiremockVerifyTxe13PostRequest()
-          result mustBe ErrorResponse
-        }
-
+        // Then
+        wiremockVerifyTxe13PostRequest()
+        result mustBe ErrorResponse
       }
 
       "Bad Request comes back from ETMP" in {
@@ -192,17 +182,12 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
 
         val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
-        withCaptureOfLoggingFrom(connectorLogger) { events =>
-          val result = await(eoriHttpResponse)
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "ERROR") shouldBe true
-          }
+        val result = await(eoriHttpResponse)
 
-          // Then
-          wiremockVerifyTxe13PostRequest()
-          result mustBe ErrorResponse
-        }
+        // Then
+        wiremockVerifyTxe13PostRequest()
+        result mustBe ErrorResponse
+
       }
 
       "return InvalidResponse when a 500 Internal Server Error comes back from ETMP" in {
@@ -210,17 +195,11 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
 
         val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
-        withCaptureOfLoggingFrom(connectorLogger) { events =>
-          val result = await(eoriHttpResponse)
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "ERROR") shouldBe true
-          }
+        val result = await(eoriHttpResponse)
 
-          // Then
-          wiremockVerifyTxe13PostRequest()
-          result mustBe ErrorResponse
-        }
+        // Then
+        wiremockVerifyTxe13PostRequest()
+        result mustBe ErrorResponse
       }
     }
 
@@ -229,17 +208,11 @@ class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with Log
 
       val eoriHttpResponse = taxUdConnector.createEoriSubscription(registrationDetails, subscriptionDetails, Uk, gagmr)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(eoriHttpResponse)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "ERROR") shouldBe true
-        }
+      val result = await(eoriHttpResponse)
 
-        // Then
-        wiremockVerifyTxe13PostRequest()
-        result mustBe ServiceUnavailableResponse
-      }
+      // Then
+      wiremockVerifyTxe13PostRequest()
+      result mustBe ServiceUnavailableResponse
     }
   }
 

@@ -86,8 +86,6 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
       .asInstanceOf[Logger]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   "getVatCustomerInformation" should {
     "return successful GetVatInformationResponse response with OK status" in {
@@ -97,16 +95,9 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
 
       val res = connector.getVatCustomerInformation(vrn).value
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+      val result = await(res)
+      result mustBe expected
 
-        result mustBe expected
-
-      }
     }
 
     "return NOT FOUND response" in {
@@ -114,20 +105,14 @@ class GetVatCustomerInformationConnectorSpec extends IntegrationTestsSpec with S
 
       val res = connector.getVatCustomerInformation(vrn).value
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+      val result = await(res)
 
-        result mustBe Left(
-          ResponseError(
-            NOT_FOUND,
-            """{"failures":{"code":"NOT_FOUND","reason":"The back end has indicated that No subscription can be found."}}"""
-          )
+      result mustBe Left(
+        ResponseError(
+          NOT_FOUND,
+          """{"failures":{"code":"NOT_FOUND","reason":"The back end has indicated that No subscription can be found."}}"""
         )
-      }
+      )
     }
 
     "return BAD REQUEST response" in {

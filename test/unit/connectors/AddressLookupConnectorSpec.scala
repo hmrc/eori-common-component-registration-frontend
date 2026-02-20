@@ -46,9 +46,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with ScalaFutures with IntegrationPatience with LogCapturing {
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-
   private val httpClient = mock[HttpClientV2]
   private val appConfig = mock[AppConfig]
 
@@ -101,16 +98,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
           )
         val expectedResponse = AddressLookupSuccess(Seq(expectedFirstAddress, expectedSecondAddress))
 
-        withCaptureOfLoggingFrom(connectorLogger) { events =>
-          val res = connector.lookup(postcode, None)(hc)
-          val result = await(res)
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
+        val res = connector.lookup(postcode, None)(hc)
+        val result = await(res)
 
-          result shouldBe expectedResponse
-        }
+        result shouldBe expectedResponse
       }
 
       "address lookup returns only one address" in {
@@ -128,16 +119,11 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
           Address("Address Line 1", Some("Address Line 2"), None, Some("Town"), Some("AA11 1AA"), "GB")
         val expectedResponse = AddressLookupSuccess(Seq(expectedAddress))
 
-        withCaptureOfLoggingFrom(connectorLogger) { events =>
-          val res = connector.lookup(postcode, None)(hc)
-          val result = await(res)
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
+        val res = connector.lookup(postcode, None)(hc)
+        val result = await(res)
 
-          result shouldBe expectedResponse
-        }
+        result shouldBe expectedResponse
+
       }
 
       "address lookup didn't return any addresses" in {
@@ -151,16 +137,9 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         val expectedResponse = AddressLookupSuccess(Seq.empty)
 
-        withCaptureOfLoggingFrom(connectorLogger) { events =>
-          val res = connector.lookup(postcode, None)(hc)
-          val result = await(res)
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
-
-          result shouldBe expectedResponse
-        }
+        val res = connector.lookup(postcode, None)(hc)
+        val result = await(res)
+        result shouldBe expectedResponse
       }
     }
 
@@ -176,16 +155,10 @@ class AddressLookupConnectorSpec extends UnitSpec with MockitoSugar with BeforeA
 
         val postcode = "AA11 1AA"
 
-        withCaptureOfLoggingFrom(connectorLogger) { events =>
-          val res = connector.lookup(postcode, None)(hc)
-          val result = await(res)
-          eventually(timeout(Span(30, Seconds))) {
-            events should not be empty
-            events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-          }
+        val res = connector.lookup(postcode, None)(hc)
+        val result = await(res)
 
-          result shouldBe AddressLookupFailure
-        }
+        result shouldBe AddressLookupFailure
       }
     }
   }

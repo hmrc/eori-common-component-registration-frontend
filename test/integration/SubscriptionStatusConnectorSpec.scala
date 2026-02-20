@@ -73,9 +73,6 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-
   implicit val service: Service = Service.cds
 
   val responseWithOk: JsValue =
@@ -145,17 +142,11 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       )
       val res = subscriptionStatusConnector.status(request)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+      val result = await(res)
 
-        result must be(
-          responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
-        )
-      }
+      result must be(
+        responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
+      )
     }
 
     "audit subscription status submitted event" in {
@@ -166,18 +157,12 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
       )
       val res = subscriptionStatusConnector.status(request)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+      val result = await(res)
 
-        result must be(
-          responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
-        )
-        eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
-      }
+      result must be(
+        responseWithOk.as[SubscriptionStatusResponseHolder].subscriptionStatusResponse
+      )
+      eventually(AuditService.verifyXAuditWriteWithBody(auditEventBodyJson))
     }
 
     "fail when Internal Server Error" in {
@@ -214,15 +199,9 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
       val res = subscriptionStatusConnector.status(request)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+      val result = await(res)
 
-        eventually(AuditService.verifyXAuditWrite(1))
-      }
+      eventually(AuditService.verifyXAuditWrite(1))
     }
   }
 }

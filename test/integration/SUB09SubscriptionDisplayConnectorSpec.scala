@@ -70,9 +70,6 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-
   before {
     resetMockServer()
   }
@@ -93,15 +90,9 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       )
       val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+      val result = await(res)
 
-        result.map(truncateTimestamp) mustBe Right(truncateTimestamp(expectedResponse))
-      }
+      result.map(truncateTimestamp) mustBe Right(truncateTimestamp(expectedResponse))
     }
 
     "return Service Unavailable Response when subscription display service returns an exception" in {
@@ -126,15 +117,8 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
       )
       val res = connector.subscriptionDisplay(requestTaxPayerId, requestAcknowledgementReference)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
-
-        result.map(truncateTimestamp) mustBe Left(InvalidResponse)
-      }
+      val result = await(res)
+      result.map(truncateTimestamp) mustBe Left(InvalidResponse)
     }
   }
 

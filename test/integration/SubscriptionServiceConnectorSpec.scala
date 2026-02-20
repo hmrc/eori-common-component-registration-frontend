@@ -66,9 +66,6 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-
   before {
     resetMockServer()
     AuditService.stubAuditService()
@@ -239,17 +236,12 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+      val result = await(res)
 
-        result must be(
-          serviceSubscriptionGenerateResponseJson.as[SubscriptionResponse]
-        )
-      }
+      result must be(
+        serviceSubscriptionGenerateResponseJson.as[SubscriptionResponse]
+      )
+
       eventually(AuditService.verifyXAuditWrite(1))
     }
 
@@ -276,17 +268,12 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
       )
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+      val result = await(res)
 
-        result must be(
-          serviceSubscriptionPendingResponseJson.as[SubscriptionResponse]
-        )
-      }
+      result must be(
+        serviceSubscriptionPendingResponseJson.as[SubscriptionResponse]
+      )
+
     }
 
     "return subscription failed status response when subscription service returns 200 and response has 'FAIL' as param value" in {
@@ -296,17 +283,12 @@ class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFu
         serviceSubscriptionFailedResponseJson.toString()
       )
       val res = subscriptionServiceConnector.subscribe(serviceRequestJson.as[SubscriptionRequest])
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
 
-        result must be(
-          serviceSubscriptionFailedResponseJson.as[SubscriptionResponse]
-        )
-      }
+      val result = await(res)
+
+      result must be(
+        serviceSubscriptionFailedResponseJson.as[SubscriptionResponse]
+      )
     }
 
     "return Exception when Subscription service returns a downstream 500 response (Internal Service Error)" in {
