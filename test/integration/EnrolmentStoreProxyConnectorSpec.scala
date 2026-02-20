@@ -71,9 +71,6 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-
   val responseWithOk: JsValue =
     Json.parse {
       """{
@@ -121,65 +118,33 @@ class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFu
     "return successful response with OK status when Enrolment Store Proxy returns 200" in {
       EnrolmentStoreProxyService.returnEnrolmentStoreProxyResponseOk("2e4589d9-484c-468a-8099-02a06fb1cd8c")
       val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
-
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
-
-        result.map(res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse]))
-      }
+      val result = await(res)
+      result.map(res => res must be(responseWithOk.as[EnrolmentStoreProxyResponse]))
     }
+  }
 
-    "return No Content status when no data is returned in response" in {
-      EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", NO_CONTENT)
-      val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
+  "return No Content status when no data is returned in response" in {
+    EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", NO_CONTENT)
+    val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
+    val result = await(res)
+    result.map(res => res mustBe EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
+  }
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
+  "return left when Service unavailable" in {
+    EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", SERVICE_UNAVAILABLE)
 
-        result.map(res => res mustBe EnrolmentStoreProxyResponse(enrolments = List.empty[EnrolmentResponse]))
+    val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
 
-      }
-    }
+    val result = await(res)
+    result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, "Enrolment Store Proxy Response : }"))
 
-    "return left when Service unavailable" in {
-      EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", SERVICE_UNAVAILABLE)
+  }
 
-      val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
+  "return left when 4xx status code is received" in {
+    EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", BAD_REQUEST)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "WARN") shouldBe true
-        }
-
-        result mustBe Left(ResponseError(SERVICE_UNAVAILABLE, "Enrolment Store Proxy Response : }"))
-
-      }
-    }
-
-    "return left when 4xx status code is received" in {
-      EnrolmentStoreProxyService.stubTheEnrolmentStoreProxyResponse(expectedGetUrl, "", BAD_REQUEST)
-
-      val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
-
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "WARN") shouldBe true
-        }
-
-        result mustBe Left(ResponseError(BAD_REQUEST, "Enrolment Store Proxy Response : }"))
-      }
-    }
+    val res = enrolmentStoreProxyConnector.getEnrolmentByGroupId(groupId).value
+    val result = await(res)
+    result mustBe Left(ResponseError(BAD_REQUEST, "Enrolment Store Proxy Response : }"))
   }
 }

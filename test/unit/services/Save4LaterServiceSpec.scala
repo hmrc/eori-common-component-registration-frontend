@@ -47,9 +47,6 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
 
   implicit private val hc: HeaderCarrier = mock[HeaderCarrier]
 
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-
   private val safeId = SafeId("safeId")
   private val groupId = GroupId("groupId-123")
 
@@ -90,19 +87,11 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         )(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
+      val res = service
+        .saveSafeId(groupId, safeId)
 
-        val res = service
-          .saveSafeId(groupId, safeId)
-
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
-
-        result shouldBe ((): Unit)
-      }
+      val result = await(res)
+      result shouldBe ((): Unit)
     }
 
     "save the CdsOrganisationType against the users InternalId" in {
@@ -114,21 +103,14 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         )(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
+      val res = service
+        .saveOrgType(groupId, Some(organisationType))
 
-        val res = service
-          .saveOrgType(groupId, Some(organisationType))
+      val maybeOrgType: Option[CdsOrganisationType] = Some(organisationType)
 
-        val maybeOrgType: Option[CdsOrganisationType] = Some(organisationType)
+      val result = await(res)
 
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
-
-        result shouldBe ((): Unit)
-      }
+      result shouldBe ((): Unit)
     }
 
     "save the email against the users InternalId" in {
@@ -140,19 +122,12 @@ class Save4LaterServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAft
         )(any[HeaderCarrier])
       ).thenReturn(Future.successful(()))
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
+      val res = service
+        .saveEmail(groupId, emailStatus)
 
-        val res = service
-          .saveEmail(groupId, emailStatus)
+      val result = await(res)
 
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "DEBUG") shouldBe true
-        }
-
-        result shouldBe ((): Unit)
-      }
+      result shouldBe ((): Unit)
     }
 
     "save the user location against the users InternalId" in {

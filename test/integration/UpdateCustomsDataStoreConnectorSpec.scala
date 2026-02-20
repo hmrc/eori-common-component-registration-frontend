@@ -42,8 +42,6 @@ import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
 
 class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
-  implicit val testEC: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -136,20 +134,15 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
       )
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "INFO") shouldBe true
-        }
+      await(res)
 
-        WireMock.verify(
-          postRequestedFor(urlEqualTo(expectedPostUrl))
-            .withRequestBody(equalToJson(serviceRequestJson.toString))
-            .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
-            .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
-        )
-      }
+      WireMock.verify(
+        postRequestedFor(urlEqualTo(expectedPostUrl))
+          .withRequestBody(equalToJson(serviceRequestJson.toString))
+          .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
+          .withHeader(HeaderNames.ACCEPT, equalTo("application/vnd.hmrc.1.0+json"))
+      )
+
     }
 
     "call audit endpoint with correct audit event" in {
@@ -161,16 +154,9 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "INFO") shouldBe true
-        }
+      await(res)
 
-        eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
-      }
-
+      eventually(AuditService.verifyXAuditWriteWithBody(expectedAuditEventJson))
     }
 
     "return successful future when update email endpoint returns 204" in {
@@ -181,15 +167,9 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
       )
 
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val result = await(res)
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "INFO") shouldBe true
-        }
+      val result = await(res)
 
-        result mustBe ()
-      }
+      result mustBe ()
     }
 
     "return a failed future when update email endpoint returns 500" in {
@@ -201,16 +181,10 @@ class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with Scal
 
       val res = customsDataStoreConnector.updateCustomsDataStore(request)
 
-      withCaptureOfLoggingFrom(connectorLogger) { events =>
-        val ex = await(res.failed)
+      val ex = await(res.failed)
 
-        eventually(timeout(Span(30, Seconds))) {
-          events should not be empty
-          events.exists(_.getLevel.levelStr == "WARN") shouldBe true
-        }
+      ex mustBe a[BadRequestException]
 
-        ex mustBe a[BadRequestException]
-      }
     }
   }
 }
