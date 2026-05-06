@@ -10,7 +10,7 @@ object AppDependencies {
   val compileDependencies: Seq[ModuleID] = Seq(
     "org.typelevel"     %% "cats-core"                                        % "2.10.0",
     "uk.gov.hmrc"       %% s"bootstrap-frontend-play-$playVersion"            % bootstrapVersion exclude("org.apache.commons", "commons-lang3"),
-    "uk.gov.hmrc"       %% s"play-conditional-form-mapping-play-$playVersion" % "3.4.0",
+    "uk.gov.hmrc"       %% s"play-conditional-form-mapping-play-$playVersion" % "3.5.0",
     "uk.gov.hmrc"       %% s"domain-play-$playVersion"                        % "11.0.0",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-play-$playVersion"                    % mongoDbVersion,
     "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "13.4.0",
