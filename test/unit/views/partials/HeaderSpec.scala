@@ -72,7 +72,7 @@ class HeaderSpec extends ControllerSpec with AuthActionMock with CSRFTest {
       val result = controller.startRegister(atarService).apply(SessionBuilder.buildRequestWithSession(defaultUserId))
 
       val page = CdsPage(contentAsString(result))
-      page.elementIsPresent("//nav[@class='hmrc-language-select']") shouldBe true
+      page.elementIsPresent("//nav[@class='hmrc-service-navigation-language-select']") shouldBe true
     }
   }
 
