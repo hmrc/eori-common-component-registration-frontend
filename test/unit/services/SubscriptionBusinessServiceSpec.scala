@@ -25,7 +25,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Request
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.SubscriptionDetails
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{FormData, SubscriptionDetails}
+import uk.gov.hmrc.eoricommoncomponent.frontend.forms.vat.details.VatDetails
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.{AddressViewModel, ContactDetailsModel}
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.SubscriptionBusinessService
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.cache.{DataUnavailableException, SessionCache}
@@ -216,6 +217,50 @@ class SubscriptionBusinessServiceSpec extends UnitSpec with MockitoSugar with Be
       when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
       when(mockSubscriptionDetailsHolder.customsId).thenReturn(None)
       await(subscriptionBusinessService.getCachedCustomsId) shouldBe None
+    }
+  }
+
+  "Calling getCachedNinoOrUtrChoice" should {
+    "retrieve any previously cached nino or utr choice from the cdsFrontendCache" in {
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
+      when(mockSubscriptionDetailsHolder.formData).thenReturn(FormData(ninoOrUtrChoice = Some("nino")))
+      await(subscriptionBusinessService.getCachedNinoOrUtrChoice) shouldBe Some("nino")
+    }
+
+    "return None when there is no nino or utr choice in the cdsFrontendCache" in {
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
+      when(mockSubscriptionDetailsHolder.formData).thenReturn(FormData(ninoOrUtrChoice = None))
+      await(subscriptionBusinessService.getCachedNinoOrUtrChoice) shouldBe None
+    }
+  }
+
+  "Calling getCachedUkVatDetails" should {
+    "retrieve any previously cached UK VAT details from the cdsFrontendCache" in {
+      val vatDetails = VatDetails(postcode = "AA1 1AA", number = "123456789")
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
+      when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(Some(vatDetails))
+      await(subscriptionBusinessService.getCachedUkVatDetails) shouldBe Some(vatDetails)
+    }
+
+    "return None when there are no UK VAT details in the cdsFrontendCache" in {
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
+      when(mockSubscriptionDetailsHolder.ukVatDetails).thenReturn(None)
+      await(subscriptionBusinessService.getCachedUkVatDetails) shouldBe None
+    }
+  }
+
+  "Calling getCachedVatControlListResponse" should {
+    "retrieve any previously cached VAT control list response from the cdsFrontendCache" in {
+      val vatControlListResponse = VatControlListResponse(postcode = Some("AA1 1AA"), dateOfReg = Some("2020-01-01"))
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
+      when(mockSubscriptionDetailsHolder.vatControlListResponse).thenReturn(Some(vatControlListResponse))
+      await(subscriptionBusinessService.getCachedVatControlListResponse) shouldBe Some(vatControlListResponse)
+    }
+
+    "return None when there is no VAT control list response in the cdsFrontendCache" in {
+      when(mockCdsFrontendDataCache.subscriptionDetails).thenReturn(Future.successful(mockSubscriptionDetailsHolder))
+      when(mockSubscriptionDetailsHolder.vatControlListResponse).thenReturn(None)
+      await(subscriptionBusinessService.getCachedVatControlListResponse) shouldBe None
     }
   }
 

@@ -24,6 +24,8 @@ import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Request, Result}
+import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.MissingGroupId
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.Sub01Outcome
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.AppConfig
@@ -272,6 +274,32 @@ class EmailControllerSpec extends ControllerSpec with AddressPageFactoring with 
       showStandaloneFormRegister() { result =>
         status(result) shouldBe SEE_OTHER
         await(result).header.headers("Location") should endWith("/eori-only/register/already-have-an-eori")
+      }
+    }
+
+    "throw MissingGroupId when user has no groupId" in {
+      withAuthorisedUser(defaultUserId, mockAuthConnector, groupId = None)
+
+      the[MissingGroupId] thrownBy {
+        await(controller.form(atarService).apply(SessionBuilder.buildRequestWithSessionAndPath("/atar", defaultUserId)))
+      }
+    }
+
+    "show enrolment pending for user when same user's subscription is in progress" in {
+      val fixedUserId = "user-same-user-123"
+      when(mockSave4LaterService.fetchCacheIds(any())(any()))
+        .thenReturn(Future.successful(Some(CacheIds(InternalId(fixedUserId), SafeId("safe-id"), Some("atar")))))
+      when(mockSubscriptionStatusService.getStatus(any(), any())(any(), any(), any()))
+        .thenReturn(Future.successful(SubscriptionProcessing))
+      when(mockSave4LaterService.fetchProcessingService(any())(any(), any()))
+        .thenReturn(Future.successful(Some(atarService)))
+      when(mockSessionCache.sub01Outcome(any[Request[_]]))
+        .thenReturn(Future.successful(Sub01Outcome("01 May 2016")))
+
+      showFormRegister(userId = fixedUserId) { result =>
+        status(result) shouldBe OK
+        val page = CdsPage(contentAsString(result))
+        page.title() should startWith(messages("cds.enrolment.pending.user.title"))
       }
     }
 

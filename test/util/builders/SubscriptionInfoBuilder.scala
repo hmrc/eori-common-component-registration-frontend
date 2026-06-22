@@ -209,6 +209,9 @@ object SubscriptionInfoBuilder {
   val responseWithoutPersonOfContact =
     SubscriptionDisplayResponse(sampleResponseCommon, responseDetailWithoutPersonOfContact)
 
+  val responseWithEmailButNoDOE =
+    SubscriptionDisplayResponse(sampleResponseCommon, fullyPopulatedResponseDetail.copy(dateOfEstablishment = None))
+
   def fullyPopulatedContactDetails: ContactDetails =
     ContactDetails(
       contactName,

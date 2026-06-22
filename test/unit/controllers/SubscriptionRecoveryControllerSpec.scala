@@ -20,7 +20,8 @@ import org.mockito.ArgumentMatchers.{any, anyString, contains, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.{Request, Result}
+import play.api.mvc.{AnyContent, Request, Result}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
@@ -430,6 +431,207 @@ class SubscriptionRecoveryControllerSpec extends ControllerSpec with MockitoSuga
       meq(atarService)
     )(any[HeaderCarrier])
 
+  }
+
+  "call Enrolment Complete with issuerCall returning non-204 should throw IllegalArgumentException" in {
+
+    setupMockCommonForIssuerFailure()
+    when(
+      mockTaxEnrolmentService
+        .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
+    ).thenReturn(Future.successful(OK))
+
+    the[IllegalArgumentException] thrownBy {
+      callEnrolmentComplete() { result =>
+        await(result)
+      }
+    } should have message "Tax Enrolment issuer call failed"
+  }
+
+  "call Enrolment Complete with updateVerifiedEmail returning false should throw IllegalArgumentException" in {
+
+    setupMockCommonForIssuerFailure()
+    when(mockUpdateVerifiedEmailService.updateVerifiedEmail(any(), any())(any[HeaderCarrier]))
+      .thenReturn(Future.successful(false))
+    when(
+      mockTaxEnrolmentService
+        .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
+    ).thenReturn(Future.successful(NO_CONTENT))
+
+    the[IllegalArgumentException] thrownBy {
+      callEnrolmentCDSComplete() { result =>
+        await(result)
+      }
+    } should have message "UpdateEmail failed"
+  }
+
+  "call Enrolment Complete should throw MissingDateException when no date available for non-individual" in {
+
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
+      .thenReturn(Future.successful(mockOrgRegistrationDetails))
+    when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
+    when(mockOrgRegistrationDetails.dateOfEstablishmentOption).thenReturn(None)
+    when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
+      .thenReturn(Future.successful(true))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Right(responseWithEmailButNoDOE)))
+    when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
+    when(mockSub01Outcome.processedDate).thenReturn("01 May 2016")
+    when(mockRequestSessionData.isIndividualOrSoleTrader(any[Request[AnyContent]])).thenReturn(false)
+
+    the[SubscriptionRecoveryController#MissingDateException] thrownBy {
+      callEnrolmentComplete() { result =>
+        await(result)
+      }
+    }
+  }
+
+  "call Enrolment Complete should throw MissingDateException when individual has no date of birth" in {
+
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
+      .thenReturn(Future.successful(mockOrgRegistrationDetails))
+    when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
+    when(mockOrgRegistrationDetails.dateOfBirthOption).thenReturn(None)
+    when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
+      .thenReturn(Future.successful(true))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Right(responseWithEmailButNoDOE)))
+    when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
+    when(mockSub01Outcome.processedDate).thenReturn("01 May 2016")
+    when(mockRequestSessionData.isIndividualOrSoleTrader(any[Request[AnyContent]])).thenReturn(true)
+
+    the[SubscriptionRecoveryController#MissingDateException] thrownBy {
+      callEnrolmentComplete() { result =>
+        await(result)
+      }
+    }
+  }
+
+  "call Enrolment Complete should use dateOfEstablishment from registration details when not in response (org)" in {
+
+    val capturedDate = LocalDate.parse("2020-06-15")
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
+      .thenReturn(Future.successful(mockOrgRegistrationDetails))
+    when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
+    when(mockOrgRegistrationDetails.dateOfEstablishmentOption).thenReturn(Some(capturedDate))
+    when(mockOrgRegistrationDetails.dateOfBirthOption).thenReturn(None)
+    when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
+      .thenReturn(Future.successful(true))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Right(responseWithEmailButNoDOE)))
+    when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
+    when(mockSub01Outcome.processedDate).thenReturn("01 May 2016")
+    when(mockRequestSessionData.isIndividualOrSoleTrader(any[Request[AnyContent]])).thenReturn(false)
+    when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]]))
+      .thenReturn(Future.successful(true))
+    when(
+      mockHandleSubscriptionService.handleSubscription(
+        anyString,
+        any[RecipientDetails],
+        any[TaxPayerId],
+        any[Option[Eori]],
+        any[Option[LocalDateTime]],
+        any[SafeId]
+      )(any[HeaderCarrier])
+    ).thenReturn(Future.successful(result = ()))
+    when(
+      mockTaxEnrolmentService
+        .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
+    ).thenReturn(Future.successful(NO_CONTENT))
+
+    callEnrolmentComplete() { result =>
+      status(result) shouldBe SEE_OTHER
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
+    }
+
+    verify(mockTaxEnrolmentService).issuerCall(
+      anyString,
+      meq(Eori("12345")),
+      meq(Some(capturedDate)),
+      meq(atarService)
+    )(any[HeaderCarrier])
+  }
+
+  "call Enrolment Complete should use dateOfBirth from registration details for individual/sole trader" in {
+
+    val dateOfBirth = LocalDate.parse("1985-03-20")
+    val individualDetails = RegistrationDetailsIndividual(
+      customsId = None,
+      sapNumber = TaxPayerId(""),
+      safeId = SafeId("testsafeId"),
+      name = "Test Individual",
+      address = uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address("1 Test St", None, None, None, None, "GB"),
+      dateOfBirth = dateOfBirth
+    )
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
+      .thenReturn(Future.successful(individualDetails))
+    when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
+      .thenReturn(Future.successful(true))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Right(responseWithEmailButNoDOE)))
+    when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
+    when(mockSub01Outcome.processedDate).thenReturn("01 May 2016")
+    when(mockRequestSessionData.isIndividualOrSoleTrader(any[Request[AnyContent]])).thenReturn(true)
+    when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]]))
+      .thenReturn(Future.successful(true))
+    when(
+      mockHandleSubscriptionService.handleSubscription(
+        anyString,
+        any[RecipientDetails],
+        any[TaxPayerId],
+        any[Option[Eori]],
+        any[Option[LocalDateTime]],
+        any[SafeId]
+      )(any[HeaderCarrier])
+    ).thenReturn(Future.successful(result = ()))
+    when(
+      mockTaxEnrolmentService
+        .issuerCall(anyString, any[Eori], any[Option[LocalDate]], any[Service])(any[HeaderCarrier])
+    ).thenReturn(Future.successful(NO_CONTENT))
+
+    callEnrolmentComplete() { result =>
+      status(result) shouldBe SEE_OTHER
+      header(LOCATION, result) shouldBe Some("/customs-registration-services/atar/register/complete")
+    }
+
+    verify(mockTaxEnrolmentService).issuerCall(
+      anyString,
+      meq(Eori("12345")),
+      meq(Some(dateOfBirth)),
+      meq(atarService)
+    )(any[HeaderCarrier])
+  }
+
+  private def setupMockCommonForIssuerFailure(): Unit = {
+    when(mockSessionCache.subscriptionDetails(any[Request[_]]))
+      .thenReturn(Future.successful(mockSubscriptionDetailsHolder))
+    when(mockSUB09SubscriptionDisplayConnector.subscriptionDisplay(any(), any())(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Right(fullyPopulatedResponse)))
+    when(mockSubscriptionDetailsHolder.contactDetails).thenReturn(Some(contactDetails))
+    when(contactDetails.emailAddress).thenReturn("test@example.com")
+    when(mockSubscriptionDetailsHolder.email).thenReturn(Some("test@example.com"))
+    when(mockSessionCache.email(any[Request[_]])).thenReturn(Future.successful("test@example.com"))
+    when(mockSessionCache.sub01Outcome(any[Request[_]])).thenReturn(Future.successful(mockSub01Outcome))
+    when(mockSub01Outcome.processedDate).thenReturn("01 May 2016")
+    when(mockSessionCache.saveSub02Outcome(any[Sub02Outcome])(any[Request[_]]))
+      .thenReturn(Future.successful(true))
+    when(
+      mockHandleSubscriptionService.handleSubscription(
+        anyString,
+        any[RecipientDetails],
+        any[TaxPayerId],
+        any[Option[Eori]],
+        any[Option[LocalDateTime]],
+        any[SafeId]
+      )(any[HeaderCarrier])
+    ).thenReturn(Future.successful(result = ()))
+    when(mockSubscriptionDetailsHolder.nameDobDetails)
+      .thenReturn(Some(NameDobMatchModel("fname", "lname", LocalDate.parse("2019-01-01"))))
+    when(mockSessionCache.registrationDetails(any[Request[_]]))
+      .thenReturn(Future.successful(mockOrgRegistrationDetails))
+    when(mockOrgRegistrationDetails.safeId).thenReturn(SafeId("testsafeId"))
+    when(mockSessionCache.saveEori(any[Eori])(any[Request[_]]))
+      .thenReturn(Future.successful(true))
   }
 
   def callEnrolmentComplete(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {
