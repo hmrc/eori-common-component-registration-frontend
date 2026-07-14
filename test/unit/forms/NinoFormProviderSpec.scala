@@ -18,23 +18,19 @@ package unit.forms
 
 import base.UnitSpec
 import play.api.data.{Form, FormError}
-import uk.gov.hmrc.domain.Generator
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.NinoMatch
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.NinoFormProvider
 
 import java.time.{LocalDate, Year}
 import java.time.format.DateTimeFormatter
 import scala.collection.immutable.ArraySeq
-import scala.util.Random
 
 class NinoFormProviderSpec extends UnitSpec {
 
-  private def randomNino: String = new Generator(new Random()).nextNino.nino
-
-  private val formDataNino = Map(
+    private val formDataNino = Map(
     "first-name"          -> "ff",
     "last-name"           -> "ddd",
-    "nino"                -> randomNino,
+    "nino"                -> "AA123456B",
     "date-of-birth.day"   -> "22",
     "date-of-birth.month" -> "10",
     "date-of-birth.year"  -> "2019"
