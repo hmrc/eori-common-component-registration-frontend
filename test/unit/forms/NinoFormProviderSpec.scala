@@ -27,7 +27,7 @@ import scala.collection.immutable.ArraySeq
 
 class NinoFormProviderSpec extends UnitSpec {
 
-    private val formDataNino = Map(
+  private val formDataNino = Map(
     "first-name"          -> "ff",
     "last-name"           -> "ddd",
     "nino"                -> "AA123456B",
