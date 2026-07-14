@@ -4,17 +4,17 @@ object AppDependencies {
   import play.core.PlayVersion
 
   val mongoDbVersion   = "2.12.0"
-  val bootstrapVersion = "10.7.0"
+  val bootstrapVersion = "10.8.0"
   val playVersion      = 30
 
   val compileDependencies: Seq[ModuleID] = Seq(
     "org.typelevel"     %% "cats-core"                                        % "2.10.0",
     "uk.gov.hmrc"       %% s"bootstrap-frontend-play-$playVersion"            % bootstrapVersion exclude("org.apache.commons", "commons-lang3"),
     "uk.gov.hmrc"       %% s"play-conditional-form-mapping-play-$playVersion" % "3.5.0",
-    "uk.gov.hmrc"       %% s"domain-play-$playVersion"                        % "11.0.0",
+    "uk.gov.hmrc"       %% s"domain-play-$playVersion"                        % "13.0.0",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-play-$playVersion"                    % mongoDbVersion,
-    "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "13.4.0",
-    "uk.gov.hmrc"       %% s"internal-auth-client-play-$playVersion"          % "4.3.0",
+    "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "13.9.0",
+    "uk.gov.hmrc"       %% s"internal-auth-client-play-$playVersion"          % "4.4.0",
     "ch.qos.logback"     % "logback-core"                                     % "1.5.21",
     "at.yawk.lz4"        %  "lz4-java"                                        % "1.10.3",
     "org.apache.commons" % "commons-lang3"                                    % "3.18.0",
