@@ -35,7 +35,6 @@
         hmrcTimeoutDialog: HmrcTimeoutDialog,
         govukBackLink: GovukBackLink,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-        hmrcServiceNavigationLanguageSelectHelper: HmrcServiceNavigationLanguageSelectHelper,
         autocompleteCss: HmrcAccessibleAutocompleteCss,
         autocompleteJavascript: HmrcAccessibleAutocompleteJavascript
 )
@@ -118,7 +117,6 @@
 }
 
 @beforeContent = {
-    @hmrcServiceNavigationLanguageSelectHelper()
     @if(displayBackLink) {
         @govukBackLink(BackLink(href = "#", content = Text(messages("cds.navigation.back")), attributes = Map("id" -> "back-link")))
     }
