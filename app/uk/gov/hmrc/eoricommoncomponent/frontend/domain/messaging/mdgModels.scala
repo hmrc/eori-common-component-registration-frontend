@@ -75,7 +75,25 @@ object Address {
     )(applyFromLookup _)
   )
 
-  implicit val jsonFormat: OFormat[Address] = Json.format[Address]
+  implicit val writes: OWrites[Address] = OWrites { address =>
+    def optionalField(name: String, value: Option[String]): Seq[(String, JsValue)] =
+      value.filter(_.nonEmpty).map(v => name -> JsString(v)).toSeq
+
+    JsObject(
+      Seq(
+        "addressLine1" -> JsString(address.addressLine1)
+      ) ++
+        optionalField("addressLine2", address.addressLine2) ++
+        optionalField("addressLine3", address.addressLine3) ++
+        optionalField("addressLine4", address.addressLine4) ++
+        optionalField("postalCode", address.postalCode) ++
+        Seq("countryCode" -> JsString(address.countryCode))
+    )
+  }
+
+  implicit val reads: Reads[Address] = Json.reads[Address]
+
+  implicit val jsonFormat: OFormat[Address] = OFormat(reads, writes)
 
   def apply(
     addressLine1: String,
