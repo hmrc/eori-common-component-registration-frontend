@@ -47,7 +47,7 @@ class SicCodeController @Inject() (
     extends CdsController(mcc)
     with Logging {
 
-  val scForm: Form[SicCodeViewModel] = sicCodeForm.form()
+  private val scForm: Form[SicCodeViewModel] = sicCodeForm.form()
 
   private def populateView(
     sicCode: Option[String],
@@ -55,7 +55,7 @@ class SicCodeController @Inject() (
     service: Service,
     user: LoggedInUserWithEnrolments
   )(implicit request: Request[AnyContent]): Future[Result] = {
-    lazy val form = sicCode.map(SicCodeViewModel).fold(scForm)(scForm.fill)
+    lazy val form = sicCode.map(SicCodeViewModel.apply).fold(scForm)(scForm.fill)
     sessionCacheService.individualAndSoleTraderRouter(
       user.groupId.getOrElse(throw new Exception("GroupId does not exists")),
       service,

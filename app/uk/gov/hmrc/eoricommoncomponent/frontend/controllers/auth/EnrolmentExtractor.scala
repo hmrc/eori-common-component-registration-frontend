@@ -39,7 +39,7 @@ trait EnrolmentExtractor {
       )
 
   def enrolledForService(loggedInUser: LoggedInUserWithEnrolments, service: Service): Option[Eori] =
-    identifierFor(service.enrolmentKey, EoriIdentifier, loggedInUser).map(Eori)
+    identifierFor(service.enrolmentKey, EoriIdentifier, loggedInUser).map(Eori.apply)
 
   def activatedEnrolmentForService(loggedInUser: LoggedInUserWithEnrolments, service: Service): Option[Eori] =
     loggedInUser.enrolments
@@ -51,13 +51,13 @@ trait EnrolmentExtractor {
       }
 
   def enrolledCtUtr(loggedInUser: LoggedInUserWithEnrolments): Option[Utr] =
-    identifierFor("IR-CT", RegistrationInfoRequest.UTR, loggedInUser).map(Utr)
+    identifierFor("IR-CT", RegistrationInfoRequest.UTR, loggedInUser).map(Utr.apply)
 
   def enrolledSaUtr(loggedInUser: LoggedInUserWithEnrolments): Option[Utr] =
-    identifierFor("IR-SA", RegistrationInfoRequest.UTR, loggedInUser).map(Utr)
+    identifierFor("IR-SA", RegistrationInfoRequest.UTR, loggedInUser).map(Utr.apply)
 
   def enrolledNino(loggedInUser: LoggedInUserWithEnrolments): Option[Nino] =
-    identifierFor("HMRC-NI", RegistrationInfoRequest.NINO, loggedInUser).map(Nino)
+    identifierFor("HMRC-NI", RegistrationInfoRequest.NINO, loggedInUser).map(Nino.apply)
 
   def existingEoriForUserOrGroup(
     loggedInUser: LoggedInUserWithEnrolments,
@@ -70,7 +70,7 @@ trait EnrolmentExtractor {
     userEnrolmentWithEori.map(enrolment => ExistingEori(enrolment.getIdentifier(EoriIdentifier).map(_.value), enrolment.key))
   }
 
-  def existingEoriForGroup(groupEnrolments: List[EnrolmentResponse]): Option[ExistingEori] =
+  private def existingEoriForGroup(groupEnrolments: List[EnrolmentResponse]): Option[ExistingEori] =
     groupEnrolments.find(_.eori.exists(_.nonEmpty)).map(enrolment => ExistingEori(enrolment.eori, enrolment.service))
 
 }

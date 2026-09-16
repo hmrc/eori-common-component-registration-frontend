@@ -17,19 +17,13 @@
 package integration
 
 import ch.qos.logback.classic.Logger
-import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.{should, shouldBe}
-import org.scalatest.time.{Seconds, Span}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.LoggerFactory
 import play.api.Application
-import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.mvc.Http.MimeTypes
 import play.mvc.Http.Status.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{EnrolmentStoreProxyConnector, ResponseError}
@@ -38,9 +32,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.EnrolmentStoreProxyService
 import util.externalservices.ExternalServicesConfig.*
-
-import java.util.concurrent.Executors
-import scala.concurrent.ExecutionContext
 
 class EnrolmentStoreProxyConnectorSpec extends IntegrationTestsSpec with ScalaFutures with MockitoSugar with LogCapturing {
 

@@ -16,11 +16,7 @@
 
 package integration
 
-import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.{should, shouldBe}
-import org.scalatest.time.{Seconds, Span}
-import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -35,8 +31,6 @@ import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.SubscriptionDisplayMessagingService
 
 import java.time.temporal.ChronoUnit
-import java.util.concurrent.Executors
-import scala.concurrent.ExecutionContext
 
 class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
@@ -56,10 +50,6 @@ class SUB09SubscriptionDisplayConnectorSpec extends IntegrationTestsSpec with Sc
 
   private lazy val connector = app.injector.instanceOf[SUB09SubscriptionDisplayConnector]
 
-  private val connectorLogger: Logger =
-    LoggerFactory
-      .getLogger(classOf[SUB09SubscriptionDisplayConnector])
-      .asInstanceOf[Logger]
   private val requestTaxPayerId = "GBE9XSDF10BCKEYAX"
   private val requestAcknowledgementReference = "1234567890ABCDEFG"
 

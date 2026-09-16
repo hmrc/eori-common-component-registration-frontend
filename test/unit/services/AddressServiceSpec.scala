@@ -21,7 +21,6 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request}
 import play.api.test.Helpers.{LOCATION, defaultAwaitTimeout, header, status}
 import sttp.model.StatusCode.{InternalServerError, Ok}
@@ -29,7 +28,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionFlowMana
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{SubscriptionFlowInfo, SubscriptionPage}
 import uk.gov.hmrc.eoricommoncomponent.frontend.errors.FlowError
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.AddressDetailsForm
-import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.{AddressService, SubscriptionBusinessService, SubscriptionDetailsService}
 import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{address, error_template}
@@ -52,7 +50,6 @@ class AddressServiceSpec extends ControllerSpec with MockitoSugar with BeforeAnd
   private val mockErrorTemplate = inject[error_template]
   private val messagesControllerComponents = inject[MessagesControllerComponents]
   private val mockAddressDetailsForm = mock[AddressDetailsForm]
-  private val mockFormAddressViewModel = mock[Form[AddressViewModel]]
 
   private val subscriptionToTest = Seq(atarService, otherService, cdsService, eoriOnlyService)
 

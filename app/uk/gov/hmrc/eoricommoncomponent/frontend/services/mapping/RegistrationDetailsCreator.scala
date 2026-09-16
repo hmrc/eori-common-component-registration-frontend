@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.eoricommoncomponent.frontend.services.mapping
 
-import org.apache.commons.lang3.StringUtils.isBlank
 import play.api.Logging
-import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging._
+import uk.gov.hmrc.eoricommoncomponent.frontend.DateConverter.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.matching.{IndividualResponse, OrganisationResponse, RegisterWithIDResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.registration.RegistrationDisplayResponse
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.AddressViewModel

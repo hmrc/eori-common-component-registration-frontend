@@ -18,8 +18,6 @@ package integration
 
 import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.{should, shouldBe}
-import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
@@ -36,8 +34,6 @@ import util.externalservices.ExternalServicesConfig.*
 import util.externalservices.{AuditService, SubscriptionStatusMessagingService}
 
 import java.time.LocalDateTime
-import java.util.concurrent.Executors
-import scala.concurrent.ExecutionContext
 
 class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 
@@ -199,7 +195,7 @@ class SubscriptionStatusConnectorSpec extends IntegrationTestsSpec with ScalaFut
 
       val res = subscriptionStatusConnector.status(request)
 
-      val result = await(res)
+      await(res)
 
       eventually(AuditService.verifyXAuditWrite(1))
     }

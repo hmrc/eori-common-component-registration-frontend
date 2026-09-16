@@ -23,7 +23,6 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.forms.DateOfEstablishmentForm
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, Year}
 import scala.collection.immutable.ArraySeq
-import org.scalatest.matchers.should.Matchers.*
 
 class DateOfEstablishmentFormSpec extends UnitSpec {
 

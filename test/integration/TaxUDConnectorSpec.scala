@@ -20,8 +20,6 @@ import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.{should, shouldBe}
-import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
@@ -44,8 +42,6 @@ import util.externalservices.{AuditService, EtmpTxe13StubService}
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.concurrent.Executors
-import scala.concurrent.ExecutionContext
 
 class TaxUDConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 

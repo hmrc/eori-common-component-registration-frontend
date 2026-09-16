@@ -17,12 +17,13 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain
 
 import play.api.Logging
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.{IndividualName, RegistrationInfoRequest}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.FormUtils.formatInput
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
 
 import java.time.LocalDate
+import scala.language.implicitConversions
 
 sealed trait CustomsId {
   def id: String
@@ -119,9 +120,9 @@ object CustomsId extends Logging {
   val taxPayerID = "taxPayerID"
 
   private val idTypeMapping = Map[String, String => CustomsId](
-    utr        -> Utr,
-    eori       -> Eori,
-    nino       -> Nino,
+    utr        -> Utr.apply,
+    eori       -> Eori.apply,
+    nino       -> Nino.apply,
     safeId     -> (s => SafeId(s)),
     taxPayerId -> (s => TaxPayerId(s))
   )

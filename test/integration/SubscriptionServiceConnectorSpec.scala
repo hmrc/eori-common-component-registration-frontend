@@ -18,8 +18,6 @@ package integration
 
 import ch.qos.logback.classic.Logger
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.{should, shouldBe}
-import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.inject.bind
@@ -33,9 +31,6 @@ import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.{Host, Port, etmpFormBundleId}
 import util.externalservices.{AuditService, SubscriptionService}
-
-import java.util.concurrent.Executors
-import scala.concurrent.ExecutionContext
 
 class SubscriptionServiceConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 

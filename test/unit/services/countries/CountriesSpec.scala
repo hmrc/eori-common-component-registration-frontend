@@ -24,7 +24,6 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 import uk.gov.hmrc.eoricommoncomponent.frontend.services.countries.*
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.ServiceName.service
 
 class CountriesSpec extends AnyWordSpec with Matchers {
 

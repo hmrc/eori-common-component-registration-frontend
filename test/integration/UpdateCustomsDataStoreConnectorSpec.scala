@@ -20,8 +20,6 @@ import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{equalTo, equalToJson, postRequestedFor, urlEqualTo}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers.{should, shouldBe}
-import org.scalatest.time.{Seconds, Span}
 import org.slf4j.LoggerFactory
 import play.api.Application
 import play.api.http.HeaderNames
@@ -37,9 +35,6 @@ import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
 import uk.gov.hmrc.play.bootstrap.tools.LogCapturing
 import util.externalservices.ExternalServicesConfig.{Host, Port}
 import util.externalservices.{AuditService, CustomsDataStoreStubService}
-
-import java.util.concurrent.Executors
-import scala.concurrent.ExecutionContext
 
 class UpdateCustomsDataStoreConnectorSpec extends IntegrationTestsSpec with ScalaFutures with LogCapturing {
 

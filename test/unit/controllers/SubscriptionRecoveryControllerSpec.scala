@@ -16,17 +16,16 @@
 
 package unit.controllers
 
-import org.mockito.ArgumentMatchers.{any, anyString, contains, eq => meq}
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.{any, anyString, contains, eq as meq}
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request, Result}
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.messaging.Address
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.eoricommoncomponent.frontend.connector.{SUB09SubscriptionDisplayConnector, ServiceUnavailableResponse}
 import uk.gov.hmrc.eoricommoncomponent.frontend.controllers.SubscriptionRecoveryController
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain._
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.*
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.EmailAddressValidation
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.subscription.{RecipientDetails, SubscriptionDetails}
 import uk.gov.hmrc.eoricommoncomponent.frontend.forms.models.ContactDetailsModel
@@ -37,7 +36,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{error_template, reco
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ControllerSpec
 import util.builders.AuthBuilder.withAuthorisedUser
-import util.builders.SubscriptionInfoBuilder._
+import util.builders.SubscriptionInfoBuilder.*
 import util.builders.{AuthActionMock, SessionBuilder}
 
 import java.time.{LocalDate, LocalDateTime}
