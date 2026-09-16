@@ -1,6 +1,6 @@
 # EORI Common Component Registration Frontend
 
-Frontend application for the the ECC (EORI Common Component) Registration service. This service handles EORI Registration journey.
+Frontend application for the ECC (EORI Common Component) Registration service. This service handles EORI Registration journey.
 
 Other related ECC services:
 - Backend service: [EORI Common Component](https://github.com/hmrc/eori-common-component)

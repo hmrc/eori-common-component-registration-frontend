@@ -1225,6 +1225,8 @@ cds.form.check-answers-vat-details=VAT details
 cds.form.check-answers-contact-details=Contact details
 cds.form.date-of-birth.label=Date of birth
 cds.check-answers.error-heading=We are unable to process your application. To continue:
+cds.form.check-answers-prePrint=You can
+cds.form.check-answers-print=save or print a copy of your answers.
 cds.form.check-answers-declaration=Declaration
 cds.form.disclaimer=You confirm that, to the best of your knowledge, the details you are providing are correct.
 
