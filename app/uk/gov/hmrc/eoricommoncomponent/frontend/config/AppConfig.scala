@@ -64,6 +64,12 @@ class AppConfig @Inject() (
   val addAccessToTeamMember: String = config.get[String]("external-url.adding-access-to-team-member")
   def callCharges()(implicit messages: Messages): String = config.get[String](s"external-url.call-charges-$languageKey")
 
+  def userResearchBannerUrl()(implicit messages: Messages): String =
+    config.get[String](s"external-url.user-research-banner-$languageKey")
+
+  lazy val userResearchBannerEnabled: Boolean =
+    config.getOptional[Boolean]("features.user-research-banner").getOrElse(false)
+
   val blockedRoutesRegex: Seq[Regex] =
     config.getOptional[String]("routes-to-block") match {
       case Some(routes) if routes.nonEmpty => routes.split(',').map(_.r).toSeq
