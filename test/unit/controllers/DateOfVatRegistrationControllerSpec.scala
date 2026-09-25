@@ -113,7 +113,6 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
 
     "be successful when submitted with valid and save and redirect when feature switch is on" in {
       reset(mockSubscriptionBusinessService)
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.cachedOrganisationType(any[Request[_]]))
         .thenReturn(Future.successful(Some(CdsOrganisationType.CharityPublicBodyNotForProfit)))
 
@@ -131,33 +130,6 @@ class DateOfVatRegistrationControllerSpec extends ControllerSpec with AuthAction
       submitForm(validReturnTotal) { result =>
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some("/customs-registration-services/atar/register/contact-details")
-      }
-    }
-
-    "be successful when submitted with valid and save and redirect when feature switch is off" in {
-      reset(mockSubscriptionBusinessService)
-      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
-      when(mockSubscriptionDetailsService.cachedOrganisationType(any[Request[_]]))
-        .thenReturn(Future.successful(Some(CdsOrganisationType.CharityPublicBodyNotForProfit)))
-
-      when(mockSubscriptionDetailsService.cacheVatControlListResponse(any())(any[Request[_]]))
-        .thenReturn(Future.unit)
-
-      when(mockSubscriptionBusinessService.getCachedVatControlListResponse(any())).thenReturn(Future.successful(None))
-
-      val validReturnTotal: Map[String, String] = Map(
-        "vat-registration-date.day"   -> "01",
-        "vat-registration-date.month" -> "01",
-        "vat-registration-date.year"  -> "2017"
-      )
-
-      verify(mockSubscriptionBusinessService, never()).getCachedVatControlListResponse(any[Request[_]])
-
-      submitForm(validReturnTotal) { result =>
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(
-          "/customs-registration-services/atar/register/cannot-confirm-vat-details"
-        )
       }
     }
 

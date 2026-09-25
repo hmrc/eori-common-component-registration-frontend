@@ -245,8 +245,7 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
       }
     }
 
-    "redirect to the your organisation address page when successful for Isle Of Man and feature switch is on" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
+    "redirect to the your organisation address page when successful for Isle Of Man" in {
       when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
       submitForm(ValidRequest, defaultOrganisationType) { result =>
         status(result) shouldBe SEE_OTHER
@@ -255,18 +254,6 @@ class NameDobControllerSpec extends ControllerSpec with BeforeAndAfterEach with 
         )
       }
     }
-
-    "redirect to the confirm page when successful for Isle Of Man and feature switch is off" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
-      when(mockRequestSessionData.selectedUserLocation(any())).thenReturn(Some(UserLocation.Iom))
-      submitForm(ValidRequest, defaultOrganisationType) { result =>
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith(
-          "/customs-registration-services/atar/register/matching/chooseid"
-        )
-      }
-    }
-
   }
 
   def showForm(userId: String = defaultUserId)(test: Future[Result] => Any): Unit = {

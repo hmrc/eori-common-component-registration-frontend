@@ -22,7 +22,7 @@ import uk.gov.hmrc.eoricommoncomponent.frontend.domain.registration.UserLocation
 
 object OrganisationViewModel {
 
-  def validOptions(userLocation: Option[UserLocation], allowNoIdJourney: Boolean)(implicit
+  def validOptions(userLocation: Option[UserLocation])(implicit
     messages: Messages
   ): Seq[(String, String)] = {
 
@@ -66,13 +66,9 @@ object OrganisationViewModel {
       case Some(UserLocation.Iom) => iomOptions
       case Some(UserLocation.ThirdCountry) | Some(UserLocation.ThirdCountryIncEU) => thirdCountryOptions
       case _ =>
-        if (allowNoIdJourney) {
-          ukOptionsFirstScreen.:+(
-            CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
-          )
-        } else {
-          ukOptionsFirstScreen
-        }
+        ukOptionsFirstScreen.:+(
+          CdsOrganisationType.EmbassyId -> messages("cds.matching.organisation-type.radio.embassy.label")
+        )
     }
   }
 

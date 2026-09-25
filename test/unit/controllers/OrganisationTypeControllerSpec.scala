@@ -174,8 +174,6 @@ class OrganisationTypeControllerSpec extends ControllerSpec with BeforeAndAfterE
         val updatedMockSession =
           Session(Map()) + (RequestSessionDataKeys.selectedOrganisationType -> option)
 
-        when(mockAppConfig.allowNoIdJourney).thenReturn(true)
-
         when(
           mockSubscriptionFlowManager
             .startSubscriptionFlow(any(), any(), any[Service])(any[Request[AnyContent]]())

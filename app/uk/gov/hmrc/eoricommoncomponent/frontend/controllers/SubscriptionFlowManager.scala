@@ -128,11 +128,7 @@ class SubscriptionFlowManager @Inject() (
         throw new Exception("unable to start flow without user's location")
       )
 
-      val flow = if (appConfig.allowNoIdJourney) {
-        selectFlow(registrationDetails, orgType, userLocation)
-      } else {
-        oldFlow(registrationDetails, orgType)
-      }
+      val flow = selectFlow(registrationDetails, orgType, userLocation)
 
       // $COVERAGE-OFF$Loggers
       logger.info(s"select Subscription flow: ${flow.name}")

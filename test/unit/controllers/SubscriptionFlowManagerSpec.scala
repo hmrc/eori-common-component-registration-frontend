@@ -350,7 +350,6 @@ class SubscriptionFlowManagerSpec extends UnitSpec with MockitoSugar with Before
     }
 
     "start Embassy flow when cached registration details are for an Embassy and feature switch is on" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.userSelectedOrganisationType(mockRequest)).thenReturn(Some(Embassy))
 
       when(mockCdsFrontendDataCache.registrationDetails(mockRequest))

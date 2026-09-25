@@ -189,7 +189,6 @@ class ContactAddressControllerSpec
     }
 
     "redirect to next page if valid request is selected" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockSubscriptionPage.url(any())).thenReturn(
         "/customs-registration-services/atar/register/disclose-personal-details-consent"
       )
@@ -245,7 +244,6 @@ class ContactAddressControllerSpec
     }
 
     "embassy redirect to next page" when {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
 
       "yes is selected" in {
         when(mockSubscriptionPage.url(any())).thenReturn(
@@ -300,10 +298,9 @@ class ContactAddressControllerSpec
     }
   }
 
-  "locationByAnswer with allowNoIdJourney = true" should {
+  "locationByAnswer" should {
 
     "redirect to DetermineReviewPageController when LimitedLiabilityPartnership and yes is selected" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
         Future.successful(Some(CdsOrganisationType.LimitedLiabilityPartnership))
       )
@@ -312,68 +309,6 @@ class ContactAddressControllerSpec
         header(LOCATION, result).value shouldBe
           uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
             .determineRoute(atarService)
-            .url
-      }
-    }
-  }
-
-  "locationByAnswer with allowNoIdJourney = false" should {
-
-    "redirect to DetermineReviewPageController when yes is selected in review mode" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
-      when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
-        Future.successful(Some(CdsOrganisationType.Company))
-      )
-      submitFormInReviewMode(validRequest) { result =>
-        status(result) shouldBe SEE_OTHER
-        header(LOCATION, result).value shouldBe
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.DetermineReviewPageController
-            .determineRoute(atarService)
-            .url
-      }
-    }
-
-    "redirect to next flow page when yes is selected in create mode and stepInformation returns Right" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
-      when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
-        Future.successful(Some(CdsOrganisationType.Company))
-      )
-      when(mockSubscriptionPage.url(any())).thenReturn(
-        "/customs-registration-services/atar/register/disclose-personal-details-consent"
-      )
-      submitFormInCreateMode(validRequest) { result =>
-        status(result) shouldBe SEE_OTHER
-        header(LOCATION, result).value shouldBe
-          "/customs-registration-services/atar/register/disclose-personal-details-consent"
-      }
-    }
-
-    "redirect to ApplicationController.startRegister when yes is selected in create mode and stepInformation returns Left" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
-      when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
-        Future.successful(Some(CdsOrganisationType.Company))
-      )
-      when(mockSubscriptionFlow.stepInformation(any())(any[Request[AnyContent]], any[HeaderCarrier]))
-        .thenReturn(Left(new Exception("flow not found")))
-      submitFormInCreateMode(validRequest) { result =>
-        status(result) shouldBe SEE_OTHER
-        header(LOCATION, result).value shouldBe
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.ApplicationController
-            .startRegister(atarService)
-            .url
-      }
-    }
-
-    "redirect to AddressController.createForm when no is selected" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
-      when(mockSubscriptionDetailsService.cachedOrganisationType(any())).thenReturn(
-        Future.successful(Some(CdsOrganisationType.Company))
-      )
-      submitFormInCreateMode(validRequestNo) { result =>
-        status(result) shouldBe SEE_OTHER
-        header(LOCATION, result).value shouldBe
-          uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.AddressController
-            .createForm(atarService)
             .url
       }
     }

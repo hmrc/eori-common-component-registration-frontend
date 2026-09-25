@@ -79,7 +79,7 @@ class NameDobController @Inject() (
           throw DataUnavailableException("unable to obtain user location")
         )
 
-        if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney) {
+        if (userLocation == UserLocation.Iom) {
           Redirect(
             uk.gov.hmrc.eoricommoncomponent.frontend.controllers.routes.WhatIsYourOrganisationsAddressController.showForm(
               service

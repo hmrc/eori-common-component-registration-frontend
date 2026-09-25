@@ -71,21 +71,20 @@ class RegisterWithoutIdWithSubscriptionService @Inject() (
       rd     <- sessionCache.registrationDetails
       sd     <- sessionCache.subscriptionDetails.recover({ case _ => SubscriptionDetails() })
       result <-
-        if (userLocation == UserLocation.Iom && appConfig.allowNoIdJourney)
+        if (userLocation == UserLocation.Iom)
           createSubscription(loggedInUser, rd, userLocation, service)
         else if (applicableForRegistration(rd)) rowServiceCall(loggedInUser, service)
-        else if (rd.orgType.contains(EmbassyId) && appConfig.allowNoIdJourney)
+        else if (rd.orgType.contains(EmbassyId))
           createSubscription(loggedInUser, rd, userLocation, service)
         else if (
           userLocation == UserLocation.Uk &&
           sd.formData.organisationType.contains(CharityPublicBodyNotForProfit) &&
-          sd.ukVatDetails.exists(_.isGiant) &&
-          appConfig.allowNoIdJourney
+          sd.ukVatDetails.exists(_.isGiant)
         ) createSubscription(loggedInUser, rd, userLocation, service)
         else if (
           rd.safeId.id.isEmpty && sd.vatRegisteredUk.contains(false) && sd.formData.utrMatch.exists(
             _.haveUtr.exists(_ == false)
-          ) && appConfig.allowNoIdJourney
+          )
         ) createSubscription(loggedInUser, rd, userLocation, service)
         else createSubscription(service, userLocation, loggedInUser, sd, rd)(request, hc)
     } yield result
