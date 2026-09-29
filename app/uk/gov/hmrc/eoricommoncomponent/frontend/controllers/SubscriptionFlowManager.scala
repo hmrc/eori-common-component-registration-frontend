@@ -128,11 +128,7 @@ class SubscriptionFlowManager @Inject() (
         throw new Exception("unable to start flow without user's location")
       )
 
-      val flow = if (appConfig.allowNoIdJourney) {
-        selectFlow(registrationDetails, orgType, userLocation)
-      } else {
-        oldFlow(registrationDetails, orgType)
-      }
+      val flow = selectFlow(registrationDetails, orgType, userLocation)
 
       // $COVERAGE-OFF$Loggers
       logger.info(s"select Subscription flow: ${flow.name}")
@@ -172,22 +168,6 @@ class SubscriptionFlowManager @Inject() (
         case _ => throw DataUnavailableException("Incomplete cache cannot complete journey")
       }
     }
-
-    maybeOrgType.fold(selectedFlow)(orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow))
-  }
-
-  private def oldFlow(
-    registrationDetails: RegistrationDetails,
-    maybeOrgType: => Option[CdsOrganisationType]
-  ): SubscriptionFlow = {
-    val selectedFlow: SubscriptionFlow =
-      registrationDetails match {
-        case _: RegistrationDetailsOrganisation =>
-          SubscriptionFlow(OrganisationSubscriptionFlow.name)
-        case _: RegistrationDetailsIndividual =>
-          SubscriptionFlow(IndividualSubscriptionFlow.name)
-        case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
-      }
 
     maybeOrgType.fold(selectedFlow)(orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow))
   }

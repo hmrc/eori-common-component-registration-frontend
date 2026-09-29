@@ -197,8 +197,7 @@ class DoYouHaveAUtrNumberControllerSpec extends ControllerSpec with MockitoSugar
       }
     }
 
-    "redirect to Address page based on NO answer & feature switch on" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
+    "redirect to Address page based on NO answer " in {
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
         Future.successful((): Unit)
       )
@@ -213,24 +212,7 @@ class DoYouHaveAUtrNumberControllerSpec extends ControllerSpec with MockitoSugar
       }
     }
 
-    "redirect to UK VAT page based on NO answer & feature switch off" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(false)
-      when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
-        Future.successful((): Unit)
-      )
-      when(mockSubscriptionDetailsService.cachedUtrMatch(any())).thenReturn(Future.successful(None))
-      when(mockSubscriptionDetailsService.cacheUtrMatch(any())(any())).thenReturn(Future.successful((): Unit))
-
-      submitForm(form = NoUtrRequest, CdsOrganisationType.CharityPublicBodyNotForProfitId) { result =>
-        status(result) shouldBe SEE_OTHER
-        header("Location", result).value should endWith(
-          s"/customs-registration-services/atar/register/are-you-vat-registered-in-uk"
-        )
-      }
-    }
-
     "redirect to Review page while on review mode" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
         Future.successful((): Unit)
       )

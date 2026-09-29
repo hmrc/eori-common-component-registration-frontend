@@ -140,10 +140,10 @@ class ContactAddressController @Inject() (
   ): Future[Result] = {
     subscriptionDetailsService.cachedOrganisationType.map { optOrgType =>
       if (
-        (optOrgType.contains(Embassy) || optOrgType.contains(CharityPublicBodyNotForProfit) || optOrgType.contains(
+        optOrgType.contains(Embassy) || optOrgType.contains(CharityPublicBodyNotForProfit) || optOrgType.contains(
           Partnership
         ) || optOrgType.contains(Individual) || optOrgType.contains(SoleTrader) || optOrgType.contains(Company)
-          || optOrgType.contains(LimitedLiabilityPartnership)) && appConfig.allowNoIdJourney
+        || optOrgType.contains(LimitedLiabilityPartnership)
       ) {
         if (yesNoAnswer.isYes) {
           Redirect(DetermineReviewPageController.determineRoute(service))

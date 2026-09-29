@@ -75,7 +75,7 @@ class DateOfVatRegistrationController @Inject() (
           formWithErrors => Future.successful(BadRequest(dateOfVatRegistrationView(formWithErrors, service))),
           formData =>
             subscriptionDetailsService.cachedOrganisationType.flatMap { optOrgType =>
-              optOrgType.filter(_ == CharityPublicBodyNotForProfit && appConfig.allowNoIdJourney) match {
+              optOrgType.filter(_ == CharityPublicBodyNotForProfit) match {
                 case Some(_) => saveDateOfRegAndRedirect(formData.dateOfRegistration, service)
                 case None => lookupDateOfVatRegistration(formData, service)
               }

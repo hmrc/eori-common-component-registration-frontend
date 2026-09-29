@@ -49,7 +49,7 @@ class OrganisationTypeController @Inject() (
   private val form = organisationTypeDetailsFormProvider.form()
 
   private def nameIdOrganisationMatching(orgType: String, service: Service, userLocation: UserLocation): Call = {
-    if ((userLocation == UserLocation.Iom || orgType == CharityPublicBodyNotForProfitId) && appConfig.allowNoIdJourney) {
+    if (userLocation == UserLocation.Iom || orgType == CharityPublicBodyNotForProfitId) {
       WhatIsYourOrgNameController.showForm(isInReviewMode = false, orgType, service)
     } else {
       NameIdOrganisationController.form(orgType, service)
@@ -96,12 +96,11 @@ class OrganisationTypeController @Inject() (
               organisationTypeView(
                 filledForm,
                 requestSessionData.selectedUserLocation,
-                appConfig.allowNoIdJourney,
                 service
               )
             )
           case None =>
-            Ok(organisationTypeView(filledForm, Some(UserLocation.Uk), appConfig.allowNoIdJourney, service))
+            Ok(organisationTypeView(filledForm, Some(UserLocation.Uk), service))
         }
       }
     }
@@ -114,7 +113,7 @@ class OrganisationTypeController @Inject() (
           formWithErrors => {
             val userLocation = requestSessionData.selectedUserLocation
             Future.successful(
-              BadRequest(organisationTypeView(formWithErrors, userLocation, appConfig.allowNoIdJourney, service))
+              BadRequest(organisationTypeView(formWithErrors, userLocation, service))
             )
           },
           organisationType => {

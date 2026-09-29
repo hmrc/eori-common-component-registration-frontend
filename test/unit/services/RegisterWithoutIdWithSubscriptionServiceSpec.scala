@@ -322,7 +322,6 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     }
 
     "when Embassy and txe13 call is successful" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.Uk))
 
@@ -392,7 +391,6 @@ class RegisterWithoutIdWithSubscriptionServiceSpec extends UnitSpec with Mockito
     }
 
     "when Embassy" in {
-      when(mockAppConfig.allowNoIdJourney).thenReturn(true)
       when(mockRequestSessionData.selectedUserLocation(any[Request[AnyContent]]))
         .thenReturn(Some(UserLocation.Uk))
 
