@@ -172,20 +172,4 @@ class SubscriptionFlowManager @Inject() (
     maybeOrgType.fold(selectedFlow)(orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow))
   }
 
-  private def oldFlow(
-    registrationDetails: RegistrationDetails,
-    maybeOrgType: => Option[CdsOrganisationType]
-  ): SubscriptionFlow = {
-    val selectedFlow: SubscriptionFlow =
-      registrationDetails match {
-        case _: RegistrationDetailsOrganisation =>
-          SubscriptionFlow(OrganisationSubscriptionFlow.name)
-        case _: RegistrationDetailsIndividual =>
-          SubscriptionFlow(IndividualSubscriptionFlow.name)
-        case _ => throw new IllegalStateException("Incomplete cache cannot complete journey")
-      }
-
-    maybeOrgType.fold(selectedFlow)(orgType => SubscriptionFlows.flows.keys.find(_.name == orgType.id).getOrElse(selectedFlow))
-  }
-
 }

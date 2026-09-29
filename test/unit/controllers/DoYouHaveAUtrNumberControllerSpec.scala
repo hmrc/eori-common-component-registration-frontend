@@ -198,7 +198,6 @@ class DoYouHaveAUtrNumberControllerSpec extends ControllerSpec with MockitoSugar
     }
 
     "redirect to Address page based on NO answer " in {
-
       when(mockSubscriptionDetailsService.updateSubscriptionDetailsOrganisation(any())).thenReturn(
         Future.successful((): Unit)
       )

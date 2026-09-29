@@ -303,6 +303,17 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
 
   }
 
+  "cacheVatVerificationOption" should {
+    val verificationOption = VatVerificationOption(isDateOption = true)
+    "save subscription details with vat verification option" in {
+      await(subscriptionDetailsHolderService.cacheVatVerificationOption(verificationOption))
+      val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+      verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+      val holder: SubscriptionDetails = requestCaptor.getValue
+      holder.vatVerificationOption shouldBe Some(true)
+    }
+  }
+
   "cacheNinoOrUtrChoice" should {
     val ninoOrUtrChoice = NinoOrUtrChoice(ninoOrUtrRadio = Some("utr"))
     "save subscription details with nino or utr choice" in {
@@ -476,6 +487,17 @@ class SubscriptionDetailsServiceSpec extends UnitSpec with MockitoSugar with Bef
         val subscriptionDetails = SubscriptionDetails(embassyName = Some("Embassy Of Japan"))
         when(mockSessionCache.subscriptionDetails).thenReturn(Future.successful(subscriptionDetails))
         await(subscriptionDetailsHolderService.cachedEmbassyName(request)) shouldBe Some("Embassy Of Japan")
+      }
+    }
+
+    "cache embassy name" should {
+      val embassyName = "embassyName"
+      "save subscription details with embassy name" in {
+        await(subscriptionDetailsHolderService.cacheEmbassyName(embassyName))
+        val requestCaptor = ArgumentCaptor.forClass(classOf[SubscriptionDetails])
+        verify(mockSessionCache).saveSubscriptionDetails(requestCaptor.capture())(ArgumentMatchers.eq(request))
+        val holder: SubscriptionDetails = requestCaptor.getValue
+        holder.embassyName shouldBe Some(embassyName)
       }
     }
 
