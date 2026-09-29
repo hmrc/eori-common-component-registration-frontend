@@ -28,7 +28,7 @@ import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.eoricommoncomponent.frontend.config.{InternalAuthTokenInitialiser, NoOpInternalAuthTokenInitialiser}
 import uk.gov.hmrc.eoricommoncomponent.frontend.models.Service
-import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.{standalone_subscription_outcome, subscription_outcome, subscription_outcome_fail}
+import uk.gov.hmrc.eoricommoncomponent.frontend.views.html.*
 import util.{CSRFTest, TestData}
 
 class UserResearchBannerSpec extends PlaySpec with CSRFTest with TestData {
@@ -65,7 +65,13 @@ class UserResearchBannerSpec extends PlaySpec with CSRFTest with TestData {
         .instanceOf[standalone_subscription_outcome]
         .apply("GB123456789012", "01 Jan 2019", eoriOnlyService),
       "subscription_outcome (gagmr)"                -> subscriptionOutcome(app, Service.gagmr),
-      "subscription_outcome (atar)"                 -> subscriptionOutcome(app, atarService)
+      "subscription_outcome (atar)"                 -> subscriptionOutcome(app, atarService),
+      "you_cannot_change_address_individual"        -> app.injector
+        .instanceOf[you_cannot_change_address_individual]
+        .apply(atarService),
+      "you_cannot_change_address_organisation"      -> app.injector
+        .instanceOf[you_cannot_change_address_organisation]
+        .apply(atarService)
     )
 
   private def doc(html: HtmlFormat.Appendable): Document = Jsoup.parse(contentAsString(html))
