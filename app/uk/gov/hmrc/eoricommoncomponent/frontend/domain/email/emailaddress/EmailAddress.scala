@@ -17,31 +17,51 @@
 package uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress
 
 import com.google.inject.ImplementedBy
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.DomainModel.{Domain, EmailAddress, Mailbox}
 import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.EmailAddressValidation.validEmail
 
-import javax.naming.Context.{INITIAL_CONTEXT_FACTORY => ICF}
+import javax.naming.Context.INITIAL_CONTEXT_FACTORY as ICF
 import javax.inject.Singleton
 import javax.naming.directory.InitialDirContext
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 import scala.util.Try
 import scala.util.matching.Regex
 
-case class EmailAddress(value: String) extends StringValue {
+object DomainModel:
+  opaque type EmailAddress <: String = String
+  opaque type Mailbox <: String = String
+  opaque type Domain <: String = String
 
-  val (mailbox, domain): (Mailbox, Domain) = value match {
-    case validEmail(m, d) => (Mailbox(m), Domain(d))
-    case invalidEmail => throw new IllegalArgumentException(s"'$invalidEmail' is not a valid email address")
+  extension (emailAddress: EmailAddress)
+    def mailbox: Mailbox = emailAddress match {
+      case EmailAddressValidation.validEmail(m, _) => Mailbox(m)
+      case _ => throw new IllegalStateException("EmailAddress contains an invalid email address")
+    }
+
+    def domain: Domain = emailAddress match {
+      case EmailAddressValidation.validEmail(_, d) => Domain(d)
+      case _ => throw new IllegalStateException("EmailAddress contains an invalid email address")
+    }
+
+object EmailAddress:
+  def apply(value: String): EmailAddress = value match {
+    case EmailAddressValidation.validEmail(_, d) =>
+      Domain(d)
+      value.asInstanceOf[EmailAddress]
+    case invalidEmail =>
+      throw new IllegalArgumentException(s"'$invalidEmail' is not a valid email address")
   }
 
-}
-case class Mailbox(value: String) extends StringValue
+object Mailbox:
+  def apply(value: String): Mailbox = value.asInstanceOf[Mailbox]
 
-case class Domain(value: String) extends StringValue {
-  value match {
-    case EmailAddressValidation.validDomain(_) => //
-    case invalidDomain => throw new IllegalArgumentException(s"'$invalidDomain' is not a valid email domain")
+object Domain:
+  def apply(value: String): Domain = value match {
+    case EmailAddressValidation.validDomain(_) => value.asInstanceOf[Domain]
+    case invalidDomain =>
+      throw new IllegalArgumentException(s"'$invalidDomain' is not a valid email domain")
   }
-}
+
 @ImplementedBy(classOf[EmailAddressValidation])
 trait EmailValidation {
   def isValid(email: String): Boolean
