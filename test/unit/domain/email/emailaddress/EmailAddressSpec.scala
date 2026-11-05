@@ -19,14 +19,15 @@ package unit.domain.email.emailaddress
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.{Domain, EmailAddress, EmailAddressValidation, Mailbox}
+import uk.gov.hmrc.eoricommoncomponent.frontend.domain.email.emailaddress.{Domain, EmailAddress, EmailAddressValidation}
 
 class EmailAddressSpec extends AnyWordSpec with ScalaCheckPropertyChecks with Matchers with EmailAddressGenerators {
 
   "Creating an EmailAddress class" should {
     "work for a valid email" in {
       forAll(validEmailAddresses()) { address =>
-        EmailAddress(address).value should be(address)
+        val email: String = EmailAddress(address)
+        email should be(address)
       }
     }
 
@@ -70,21 +71,25 @@ class EmailAddressSpec extends AnyWordSpec with ScalaCheckPropertyChecks with Ma
     }
     "toString to a String of the address" in {
       val e = EmailAddress("test@domain.com")
-      e.toString should be("test@domain.com")
+      e should be("test@domain.com")
     }
     "have a local part" in forAll(validMailbox, validDomain) { (mailbox, domain) =>
       val exampleAddr = EmailAddress(s"$mailbox@$domain")
-      exampleAddr.mailbox should (be(a[Mailbox]) and have(Symbol("value")(mailbox)))
-      exampleAddr.domain should (be(a[Domain]) and have(Symbol("value")(domain)))
+      val extractedMailbox: String = exampleAddr.mailbox
+      val extractedDomain: String = exampleAddr.domain
+      extractedMailbox should be(mailbox)
+      extractedDomain should be(domain)
     }
   }
 
   "A email address domain" should {
     "be extractable from an address" in forAll(validMailbox, validDomain) { (mailbox, domain) =>
-      EmailAddress(s"$mailbox@$domain").domain should (be(a[Domain]) and have(Symbol("value")(domain)))
+      val extractedDomain: String = EmailAddress(s"$mailbox@$domain").domain
+      extractedDomain should be(domain)
     }
     "be creatable for a valid domain" in forAll(validDomain) { domain =>
-      Domain(domain) should (be(a[Domain]) and have(Symbol("value")(domain)))
+      val emailDomain: String = Domain(domain)
+      emailDomain should be(domain)
     }
     "not create for invalid domains" in {
       an[IllegalArgumentException] should be thrownBy Domain("")
@@ -122,7 +127,8 @@ class EmailAddressSpec extends AnyWordSpec with ScalaCheckPropertyChecks with Ma
   "A email address mailbox" should {
 
     "be extractable from an address" in forAll(validMailbox, validDomain) { (mailbox, domain) =>
-      EmailAddress(s"$mailbox@$domain").mailbox should (be(a[Mailbox]) and have(Symbol("value")(mailbox)))
+      val extractedMailbox: String = EmailAddress(s"$mailbox@$domain").mailbox
+      extractedMailbox should be(mailbox)
     }
     "compare equal" in forAll(validMailbox, validDomain, validDomain) { (mailbox, domainA, domainB) =>
       val exampleA = EmailAddress(s"$mailbox@$domainA")

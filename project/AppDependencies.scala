@@ -3,7 +3,7 @@ import sbt.*
 object AppDependencies {
   import play.core.PlayVersion
 
-  val mongoDbVersion   = "2.13.0"
+  val mongoDbVersion   = "2.14.0"
   val bootstrapVersion = "10.8.0"
   val playVersion      = 30
 
@@ -13,7 +13,7 @@ object AppDependencies {
     "uk.gov.hmrc"       %% s"play-conditional-form-mapping-play-$playVersion" % "3.5.0",
     "uk.gov.hmrc"       %% s"domain-play-$playVersion"                        % "13.0.0",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-play-$playVersion"                    % mongoDbVersion,
-    "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "13.13.0",
+    "uk.gov.hmrc"       %% s"play-frontend-hmrc-play-$playVersion"            % "13.16.0",
     "uk.gov.hmrc"       %% s"internal-auth-client-play-$playVersion"          % "4.4.0",
     "ch.qos.logback"     % "logback-core"                                     % "1.5.21",
     "at.yawk.lz4"        %  "lz4-java"                                        % "1.11.3",
