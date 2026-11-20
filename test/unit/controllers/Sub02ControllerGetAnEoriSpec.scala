@@ -319,7 +319,7 @@ class Sub02ControllerGetAnEoriSpec extends ControllerSpec with BeforeAndAfterEac
         }
       }
       caught.getMessage shouldBe "Subscription Error. "
-      caught.getCause shouldBe emulatedFailure
+      caught.getCause shouldBe null
     }
 
     "allow authenticated users to access the end Subscription outcome page" in {

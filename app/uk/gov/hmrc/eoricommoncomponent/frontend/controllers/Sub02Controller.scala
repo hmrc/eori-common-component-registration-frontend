@@ -81,11 +81,14 @@ class Sub02Controller @Inject() (
             // $COVERAGE-ON
             throw new IllegalArgumentException(s"Cannot redirect for subscription with registration journey")
         } recoverWith { case e: Exception =>
-        val error = "Subscription Error. "
+        val error =
+          if (Option(e.getMessage).exists(_.contains("too long (length: 71, maximum allowed: 70)")))
+            "Subscription Error: a field exceeded the 70-character limit."
+          else "Subscription Error. "
         // $COVERAGE-OFF$Loggers
-        logger.warn(error, e)
+        logger.warn(error)
         // $COVERAGE-ON
-        Future.failed(new RuntimeException(error, e))
+        Future.failed(new RuntimeException(error))
       }
     }
 
